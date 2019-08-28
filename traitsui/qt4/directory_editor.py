@@ -20,7 +20,8 @@ from pyface.qt import QtGui
 from traitsui.editors.directory_editor import ToolkitEditorFactory
 
 from .file_editor import (
-    SimpleEditor as SimpleFileEditor, CustomEditor as CustomFileEditor
+    SimpleEditor as SimpleFileEditor,
+    CustomEditor as CustomFileEditor,
 )
 import six
 
@@ -49,7 +50,7 @@ class CustomEditor(CustomFileEditor):
     def init(self, parent):
         super(CustomEditor, self).init(parent)
         self._model.setNameFilterDisables(True)
-        self._model.setNameFilters([''])
+        self._model.setNameFilters([""])
 
     def update_object(self, idx):
         """ Handles the user changing the contents of the edit control.

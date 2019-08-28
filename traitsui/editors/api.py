@@ -1,4 +1,3 @@
-
 from __future__ import absolute_import
 
 from ..toolkit import toolkit
@@ -12,8 +11,10 @@ except ImportError:
         import numpy
     except ImportError:
         import warnings
-        warnings.warn('ArrayEditor is not available due to missing numpy',
-                      ImportWarning)
+
+        warnings.warn(
+            "ArrayEditor is not available due to missing numpy", ImportWarning
+        )
     else:
         del numpy
         raise

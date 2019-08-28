@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,14 +13,11 @@
 #  Author: Evan Patterson
 #  Date:   08/04/2009
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ A Traits UI editor for datetime.time objects.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import, print_function
 
@@ -31,19 +28,10 @@ from pyface.qt import QtCore, QtGui
 from .editor import Editor
 from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Simple Traits UI time editor that wraps QTimeEdit.
     """
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -52,10 +40,6 @@ class SimpleEditor(Editor):
         self.control = QtGui.QTimeEdit()
 
         self.control.timeChanged.connect(self.update_object)
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -66,10 +50,6 @@ class SimpleEditor(Editor):
             q_date = QtCore.QTime(value.hour, value.minute, value.second)
             self.control.setTime(q_date)
 
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
-
     def update_object(self, q_time):
         """ Handles the user entering input data in the edit control.
         """
@@ -79,12 +59,13 @@ class SimpleEditor(Editor):
         try:
             self.value = datetime.time(hour, minute, second)
         except ValueError:
-            print('Invalid time:', hour, minute, second)
+            print("Invalid time:", hour, minute, second)
             raise
 
-#------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
 # 'ReadonlyEditor' class:
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 
 class ReadonlyEditor(BaseReadonlyEditor):

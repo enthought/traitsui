@@ -1,4 +1,3 @@
-
 from __future__ import absolute_import
 
 from traits.api import Bool, Constant
@@ -10,12 +9,12 @@ class ToolkitEditorFactory(DateEditor):
     containing two dates (start date, end date)
     """
 
-    # This must be set to true for setting a date range.
+    #: This must be set to true for setting a date range.
     multi_select = Constant(True)
 
-    # Whether it is possible to unset the date range.
-    # If true, then the date range will be set to (None, None)
-    # when all the dates are unselected.
+    #: Whether it is possible to unset the date range.
+    #: If true, then the date range will be set to (None, None)
+    #: when all the dates are unselected.
     allow_no_selection = Bool(False)
 
 

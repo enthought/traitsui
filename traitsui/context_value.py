@@ -2,7 +2,7 @@
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -94,6 +94,7 @@ CV = ContextValue
 
 # Trait definitions useful in defining bindable editor traits ---------------
 
+
 def CVType(type, **metadata):
     """ Factory that creates an Either type or ContextValue trait.
 
@@ -113,7 +114,7 @@ def CVType(type, **metadata):
         A trait which can either hold a constant of the specified
         type or an instance of the ContextValue class.
     """
-    metadata.setdefault('sync_value', 'to')
+    metadata.setdefault("sync_value", "to")
     return Either(type, InstanceOfContextValue, **metadata)
 
 

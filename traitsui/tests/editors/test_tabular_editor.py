@@ -1,13 +1,13 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2017, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 from __future__ import absolute_import
 import contextlib
@@ -28,11 +28,9 @@ class Person(HasTraits):
     def __repr__(self):
         return "Person(name={self.name!r}, age={self.age!r})".format(self=self)
 
+
 class ReportAdapter(TabularAdapter):
-    columns = [
-        ('Name', 'name'),
-        ('Age', 'age'),
-    ]
+    columns = [("Name", "name"), ("Age", "age")]
 
 
 class Report(HasTraits):
@@ -50,20 +48,19 @@ class Report(HasTraits):
 
     traits_view = View(
         Item(
-            name='people',
+            name="people",
             editor=TabularEditor(
                 adapter=ReportAdapter(),
-                selected='selected',
-                selected_row='selected_row',
-                refresh='refresh',
-                update='update',
+                selected="selected",
+                selected_row="selected_row",
+                refresh="refresh",
+                update="update",
             ),
-        ),
+        )
     )
 
 
 class TestTabularEditor(UnittestTools, unittest.TestCase):
-
     @skip_if_null
     def test_selected_reacts_to_model_changes(self):
         with self.report_and_editor() as (report, editor):
@@ -91,15 +88,15 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
     @skip_if_null
     def test_event_synchronization(self):
         with self.report_and_editor() as (report, editor):
-            with self.assertTraitChanges(editor, 'refresh', count=1):
+            with self.assertTraitChanges(editor, "refresh", count=1):
                 report.refresh = True
             # Should happen every time.
-            with self.assertTraitChanges(editor, 'refresh', count=1):
+            with self.assertTraitChanges(editor, "refresh", count=1):
                 report.refresh = True
 
-            with self.assertTraitChanges(editor, 'update', count=1):
+            with self.assertTraitChanges(editor, "update", count=1):
                 report.update = True
-            with self.assertTraitChanges(editor, 'update', count=1):
+            with self.assertTraitChanges(editor, "update", count=1):
                 report.update = True
 
     @contextlib.contextmanager
@@ -110,13 +107,13 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
         """
         report = Report(
             people=[
-                Person(name='Theresa', age=60),
-                Person(name='Arlene', age=46),
-            ],
+                Person(name="Theresa", age=60),
+                Person(name="Arlene", age=46),
+            ]
         )
         ui = report.edit_traits()
         try:
-            editor, = ui.get_editors('people')
+            editor, = ui.get_editors("people")
             yield report, editor
         finally:
             ui.dispose()

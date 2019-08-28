@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2016, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -12,7 +12,7 @@
 #
 #  Author: Corran Webster
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ A column class for for the TableEditor that displays progress bars. """
 
@@ -23,7 +23,7 @@ from traits.api import Bool, Int, Str
 from traitsui.table_column import ObjectColumn
 
 
-if ETSConfig.toolkit == 'qt4':
+if ETSConfig.toolkit == "qt4":
     from traitsui.qt4.extra.progress_renderer import ProgressRenderer
 else:
     raise NotImplementedError("No pregress column renderer for backend")
@@ -37,7 +37,7 @@ class ProgressColumn(ObjectColumn):
     """
 
     #: Format string to apply to column values.
-    format = Str('%s%%')
+    format = Str("%s%%")
 
     #: The minimum value for a progress bar.
     minimum = Int(0)

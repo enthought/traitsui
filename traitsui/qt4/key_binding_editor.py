@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,70 +8,53 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the key binding editor for use with the KeyBinding class. This is a
 specialized editor used to associate a particular key with a control (i.e., the
 key binding editor).
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
-from traits.api \
-    import Bool, Event
+from traits.api import Bool, Event
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.key_binding_editor file.
-from traitsui.editors.key_binding_editor \
-    import KeyBindingEditor as ToolkitEditorFactory
+from traitsui.editors.key_binding_editor import (
+    KeyBindingEditor as ToolkitEditorFactory,
+)
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .key_event_to_name \
-    import key_event_to_name
-
-#-------------------------------------------------------------------------
-#  'KeyBindingEditor' class:
-#-------------------------------------------------------------------------
+from .key_event_to_name import key_event_to_name
 
 
 class KeyBindingEditor(Editor):
     """ An editor for modifying bindings of keys to controls.
     """
-    #-------------------------------------------------------------------------
-    #  Trait definitions:
-    #-------------------------------------------------------------------------
 
-    # Does the editor's control have focus currently?
+    # -------------------------------------------------------------------------
+    #  Trait definitions:
+    # -------------------------------------------------------------------------
+
+    #: Does the editor's control have focus currently?
     has_focus = Bool(False)
 
-    # Keyboard event
+    #: Keyboard event
     key = Event
 
-    # Clear field event
+    #: Clear field event
     clear = Event
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         self.control = KeyBindingCtrl(self)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self, event):
         """ Handles the user entering input data in the edit control.
@@ -82,19 +65,11 @@ class KeyBindingEditor(Editor):
         except:
             pass
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         self.control.setText(self.value)
-
-    #-------------------------------------------------------------------------
-    #  Updates the current focus setting of the control:
-    #-------------------------------------------------------------------------
 
     def update_focus(self, has_focus):
         """ Updates the current focus setting of the control.
@@ -103,10 +78,6 @@ class KeyBindingEditor(Editor):
             self._binding.border_size = 1
             self.object.owner.focus_owner = self._binding
 
-    #-------------------------------------------------------------------------
-    #  Handles a keyboard event:
-    #-------------------------------------------------------------------------
-
     def _key_changed(self, event):
         """ Handles a keyboard event.
         """
@@ -114,39 +85,31 @@ class KeyBindingEditor(Editor):
         key_name = key_event_to_name(event)
         cur_binding = binding.owner.key_binding_for(binding, key_name)
         if cur_binding is not None:
-            if QtGui.QMessageBox.question(
-                self.control,
-                "Duplicate Key Definition",
-                "'%s' has already been assigned to '%s'.\n"
-                "Do you wish to continue?" %
-                (key_name,
-                 cur_binding.description),
-                QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
-                    QtGui.QMessageBox.No) != QtGui.QMessageBox.Yes:
+            if (
+                QtGui.QMessageBox.question(
+                    self.control,
+                    "Duplicate Key Definition",
+                    "'%s' has already been assigned to '%s'.\n"
+                    "Do you wish to continue?"
+                    % (key_name, cur_binding.description),
+                    QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
+                    QtGui.QMessageBox.No,
+                )
+                != QtGui.QMessageBox.Yes
+            ):
                 return
 
         self.value = key_name
 
-    #-------------------------------------------------------------------------
-    #  Handles a clear field event:
-    #-------------------------------------------------------------------------
-
     def _clear_changed(self):
         """ Handles a clear field event.
         """
-        self.value = ''
-
-#-------------------------------------------------------------------------
-#  'KeyBindingCtrl' class:
-#-------------------------------------------------------------------------
+        self.value = ""
 
 
 class KeyBindingCtrl(QtGui.QLabel):
     """ PyQt control for editing key bindings.
     """
-    #-------------------------------------------------------------------------
-    #  Initialize the object:
-    #-------------------------------------------------------------------------
 
     def __init__(self, editor, parent=None):
         super(KeyBindingCtrl, self).__init__(parent)
@@ -166,20 +129,12 @@ class KeyBindingCtrl(QtGui.QLabel):
         # Indicate we don't have the focus right now:
         editor.has_focus = False
 
-    #-------------------------------------------------------------------------
-    #  Handle keyboard keys being pressed:
-    #-------------------------------------------------------------------------
-
     def keyPressEvent(self, event):
         """ Handle keyboard keys being pressed.
         """
         # Ignore presses of the control and shift keys.
         if event.key() not in (QtCore.Qt.Key_Control, QtCore.Qt.Key_Shift):
             self.editor.key = event
-
-    #-------------------------------------------------------------------------
-    #  Do a GUI toolkit specific screen update:
-    #-------------------------------------------------------------------------
 
     def paintEvent(self, event):
         """ Updates the screen.
@@ -192,7 +147,7 @@ class KeyBindingCtrl(QtGui.QLabel):
 
         if self.editor.has_focus:
             p.setRenderHint(QtGui.QPainter.Antialiasing, True)
-            pen = QtGui.QPen(QtGui.QColor('tomato'))
+            pen = QtGui.QPen(QtGui.QColor("tomato"))
             pen.setWidth(2)
             p.setPen(pen)
             p.drawRect(1, 1, w - 2, h - 2)
@@ -201,10 +156,6 @@ class KeyBindingCtrl(QtGui.QLabel):
             p.drawRect(0, 0, w - 1, h - 1)
 
         p.end()
-
-    #-------------------------------------------------------------------------
-    #  Handles getting/losing the focus:
-    #-------------------------------------------------------------------------
 
     def focusInEvent(self, event):
         """ Handles getting the focus.
@@ -217,10 +168,6 @@ class KeyBindingCtrl(QtGui.QLabel):
         """
         self.editor.has_focus = False
         self.update()
-
-    #-------------------------------------------------------------------------
-    #  Handles the user double clicking the control to clear its contents:
-    #-------------------------------------------------------------------------
 
     def mouseDoubleClickEvent(self, event):
         """ Handles the user double clicking the control to clear its contents.

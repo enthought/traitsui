@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,14 +13,11 @@
 #  Author: Evan Patterson
 #  Date:   08/03/2009
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ A Traits UI editor for datetime.date objects.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import, print_function
 
@@ -35,58 +32,51 @@ from traitsui.editors.date_editor import CellFormat
 
 import six
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Simple Traits UI date editor that wraps QDateEdit.
     """
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         self.control = QtGui.QDateEdit()
-        if hasattr(self.factory, 'qt_date_format'):
+        if hasattr(self.factory, "qt_date_format"):
             self.control.setDisplayFormat(self.factory.qt_date_format)
 
         if not self.factory.allow_future:
             self.control.setMaximumDate(QtCore.QDate.currentDate())
 
-        if getattr(self.factory, 'maximum_date_name', None):
+        if getattr(self.factory, "maximum_date_name", None):
             obj, extended_name, func = self.parse_extended_name(
-                self.factory.maximum_date_name)
+                self.factory.maximum_date_name
+            )
             self.factory.maximum_date = func()
 
-        if getattr(self.factory, 'minimum_date_name', None):
+        if getattr(self.factory, "minimum_date_name", None):
             obj, extended_name, func = self.parse_extended_name(
-                self.factory.minimum_date_name)
+                self.factory.minimum_date_name
+            )
             self.factory.minimum_date = func()
 
-        if getattr(self.factory, 'minimum_date', None):
-            min_date = QtCore.QDate(self.factory.minimum_date.year,
-                                    self.factory.minimum_date.month,
-                                    self.factory.minimum_date.day)
+        if getattr(self.factory, "minimum_date", None):
+            min_date = QtCore.QDate(
+                self.factory.minimum_date.year,
+                self.factory.minimum_date.month,
+                self.factory.minimum_date.day,
+            )
             self.control.setMinimumDate(min_date)
 
-        if getattr(self.factory, 'maximum_date', None):
-            max_date = QtCore.QDate(self.factory.maximum_date.year,
-                                    self.factory.maximum_date.month,
-                                    self.factory.maximum_date.day)
+        if getattr(self.factory, "maximum_date", None):
+            max_date = QtCore.QDate(
+                self.factory.maximum_date.year,
+                self.factory.maximum_date.month,
+                self.factory.maximum_date.day,
+            )
             self.control.setMaximumDate(max_date)
 
         self.control.dateChanged.connect(self.update_object)
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -97,35 +87,22 @@ class SimpleEditor(Editor):
             q_date = QtCore.QDate(value.year, value.month, value.day)
             self.control.setDate(q_date)
 
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
-
     def update_object(self, q_date):
         """ Handles the user entering input data in the edit control.
         """
         self.value = datetime.date(q_date.year(), q_date.month(), q_date.day())
-
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
 
 
 class CustomEditor(Editor):
     """ Custom Traits UI date editor that wraps QCalendarWidget.
     """
 
-    # Style used for when a date is unselected.
-    # Mapping from datetime.date to CellFormat
+    #: Style used for when a date is unselected.
+    #: Mapping from datetime.date to CellFormat
     _unselected_styles = Dict(Date, Instance(CellFormat))
 
-    # Selected dates (used when multi_select is true)
+    #: Selected dates (used when multi_select is true)
     _selected = Set(Date)
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -137,10 +114,6 @@ class CustomEditor(Editor):
             self.control.setMaximumDate(QtCore.QDate.currentDate())
 
         self.control.clicked.connect(self.update_object)
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -156,10 +129,6 @@ class CustomEditor(Editor):
                 for date in value:
                     self.apply_style(self.factory.selected_style, date)
                 self._selected = set(value)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self, q_date):
         """ Handles the user entering input data in the edit control.
@@ -183,10 +152,6 @@ class CustomEditor(Editor):
     def select_date(self, date):
         self._selected.add(date)
         self.apply_style(self.factory.selected_style, date)
-
-    #-------------------------------------------------------------------------
-    #  Helper methods for applying styling
-    #-------------------------------------------------------------------------
 
     def set_unselected_style(self, style, date):
         """ Set the style used for a date when it is not selected."""
@@ -219,9 +184,10 @@ class CustomEditor(Editor):
         for date in self._selected:
             self.apply_unselected_style(date)
 
-#------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
 # 'ReadonlyEditor' class:
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 
 class ReadonlyEditor(BaseReadonlyEditor):
@@ -237,9 +203,9 @@ class ReadonlyEditor(BaseReadonlyEditor):
             return self.value.strftime(self.factory.strftime)
 
 
-#------------------------------------------------------------------------
+# ------------------------------------------------------------------------
 # Helper functions for styling
-#------------------------------------------------------------------------
+# ------------------------------------------------------------------------
 
 
 def _apply_cellformat(cf, textformat):
@@ -295,11 +261,8 @@ def _color_to_brush(color):
 
 
 def _brush_to_color(brush):
-    if brush.style() == 0:   # Qt.BrushStyle.NoBrush
+    if brush.style() == 0:  # Qt.BrushStyle.NoBrush
         return None
 
     color = brush.color()
-    return (
-        color.red(), color.green(), color.blue(), color.alpha()
-    )
-
+    return (color.red(), color.green(), color.blue(), color.alpha())
