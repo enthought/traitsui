@@ -2,7 +2,7 @@
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -14,9 +14,7 @@
 import unittest
 
 from pyface.toolkit import toolkit_object
-from traits.api import (
-    Any, Bool, Event, Float, HasTraits, Int, List, Undefined
-)
+from traits.api import Any, Bool, Event, Float, HasTraits, Int, List, Undefined
 from traits.trait_base import xgetattr
 
 from traitsui.context_value import ContextValue, CVFloat, CVInt
@@ -26,8 +24,8 @@ from traitsui.handler import default_handler
 from traitsui.ui import UI
 
 
-GuiTestAssistant = toolkit_object('util.gui_test_assistant:GuiTestAssistant')
-no_gui_test_assistant = (GuiTestAssistant.__name__ == 'Unimplemented')
+GuiTestAssistant = toolkit_object("util.gui_test_assistant:GuiTestAssistant")
+no_gui_test_assistant = GuiTestAssistant.__name__ == "Unimplemented"
 if no_gui_test_assistant:
 
     # ensure null toolkit has an inheritable GuiTestAssistant
@@ -97,7 +95,7 @@ class StubEditor(Editor):
     auxiliary_event = Event
 
     #: An auxiliary int we want to synchronize with a context value.
-    auxiliary_cv_int = Int(sync_value='from')
+    auxiliary_cv_int = Int(sync_value="from")
 
     #: An auxiliary float we want to synchronize with a context value.
     auxiliary_cv_float = Float
@@ -106,17 +104,19 @@ class StubEditor(Editor):
         self.control = FakeControl()
         self.is_event = self.factory.is_event
         if self.is_event:
-            self.control.on_trait_change(self.update_object, 'control_event')
+            self.control.on_trait_change(self.update_object, "control_event")
         else:
-            self.control.on_trait_change(self.update_object, 'control_value')
+            self.control.on_trait_change(self.update_object, "control_value")
 
     def dispose(self):
         if self.is_event:
-            self.control.on_trait_change(self.update_object, 'control_event',
-                                         remove=True)
+            self.control.on_trait_change(
+                self.update_object, "control_event", remove=True
+            )
         else:
-            self.control.on_trait_change(self.update_object, 'control_value',
-                                         remove=True)
+            self.control.on_trait_change(
+                self.update_object, "control_value", remove=True
+            )
         super(StubEditor, self).dispose()
 
     def update_editor(self):
@@ -142,36 +142,38 @@ class UserObject(HasTraits):
     """ A simple HasTraits class with a variety of state. """
 
     #: The value being edited.
-    user_value = Any('test')
+    user_value = Any("test")
 
     #: An auxiliary user value
     user_auxiliary = Any(10)
 
     #: An list user value
-    user_list = List(['one', 'two', 'three'])
+    user_list = List(["one", "two", "three"])
 
     #: An event user value
     user_event = Event
 
 
-@unittest.skipIf(no_gui_test_assistant, 'No GuiTestAssistant')
+@unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
 class TestEditor(GuiTestAssistant, unittest.TestCase):
-
-    def create_editor(self, context=None, object_name='object',
-                      name='user_value', factory=None, is_event=False):
+    def create_editor(
+        self,
+        context=None,
+        object_name="object",
+        name="user_value",
+        factory=None,
+        is_event=False,
+    ):
         if context is None:
             user_object = UserObject()
-            context = {'object': user_object}
-        elif '.' in object_name:
-            context_name, xname = object_name.split('.', 1)
+            context = {"object": user_object}
+        elif "." in object_name:
+            context_name, xname = object_name.split(".", 1)
             context_object = context[context_name]
             user_object = xgetattr(context_object, xname)
         else:
             user_object = context[object_name]
-        ui = UI(
-            context=context,
-            handler=default_handler(),
-        )
+        ui = UI(context=context, handler=default_handler())
 
         if factory is None:
             factory = StubEditorFactory()
@@ -189,9 +191,9 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
     def change_user_value(self, editor, object, name, value):
         if editor.is_event:
-            control_name = 'control_event'
+            control_name = "control_event"
         else:
-            control_name = 'control_value'
+            control_name = "control_value"
 
         # test the value in the control changes
         with self.assertTraitChanges(editor.control, control_name, count=1):
@@ -200,9 +202,9 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
     def change_control_value(self, editor, object, name, value):
         if editor.is_event:
-            control_name = 'control_event'
+            control_name = "control_event"
         else:
-            control_name = 'control_value'
+            control_name = "control_value"
 
         # test the value in the user object changes
         with self.assertTraitChanges(object, name, count=1):
@@ -212,33 +214,35 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
     def test_lifecycle(self):
         editor = self.create_editor()
 
-        self.assertEqual(editor.old_value, 'test')
-        self.assertEqual(editor.name, 'user_value')
-        self.assertEqual(editor.extended_name, 'user_value')
-        self.assertEqual(editor.value, 'test')
-        self.assertEqual(editor.str_value, 'test')
-        self.assertIs(editor.value_trait, editor.object.trait('user_value'))
-        self.assertIs(editor.context_object, editor.ui.context['object'])
+        self.assertEqual(editor.old_value, "test")
+        self.assertEqual(editor.name, "user_value")
+        self.assertEqual(editor.extended_name, "user_value")
+        self.assertEqual(editor.value, "test")
+        self.assertEqual(editor.str_value, "test")
+        self.assertIs(editor.value_trait, editor.object.trait("user_value"))
+        self.assertIs(editor.context_object, editor.ui.context["object"])
 
         editor.prepare(None)
 
         # preparation creates the control and sets the control value
-        self.assertEqual(editor.value, 'test')
-        self.assertEqual(editor.control.control_value, 'test')
+        self.assertEqual(editor.value, "test")
+        self.assertEqual(editor.control.control_value, "test")
 
-        with self.assertTraitChanges(editor.ui, 'modified', count=1):
-            self.change_user_value(editor, editor.object, 'user_value',
-                                   'new test')
+        with self.assertTraitChanges(editor.ui, "modified", count=1):
+            self.change_user_value(
+                editor, editor.object, "user_value", "new test"
+            )
 
-        self.assertEqual(editor.value, 'new test')
-        self.assertEqual(editor.control.control_value, 'new test')
+        self.assertEqual(editor.value, "new test")
+        self.assertEqual(editor.control.control_value, "new test")
         self.assertTrue(editor.ui.modified)
 
-        self.change_control_value(editor, editor.object, 'user_value',
-                               'even newer test')
+        self.change_control_value(
+            editor, editor.object, "user_value", "even newer test"
+        )
 
-        self.assertEqual(editor.value, 'even newer test')
-        self.assertEqual(editor.object.user_value, 'even newer test')
+        self.assertEqual(editor.value, "even newer test")
+        self.assertEqual(editor.object.user_value, "even newer test")
 
         editor.dispose()
 
@@ -247,108 +251,109 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         self.assertIsNone(editor.control)
 
     def test_context_object(self):
-        user_object = UserObject(user_value='other_test')
-        context = {'object': UserObject(), 'other_object': user_object}
+        user_object = UserObject(user_value="other_test")
+        context = {"object": UserObject(), "other_object": user_object}
         editor = self.create_editor(
-            context=context,
-            object_name='other_object',
+            context=context, object_name="other_object"
         )
 
-        self.assertEqual(editor.old_value, 'other_test')
-        self.assertEqual(editor.name, 'user_value')
-        self.assertEqual(editor.extended_name, 'user_value')
-        self.assertIs(editor.context_object, editor.ui.context['other_object'])
+        self.assertEqual(editor.old_value, "other_test")
+        self.assertEqual(editor.name, "user_value")
+        self.assertEqual(editor.extended_name, "user_value")
+        self.assertIs(editor.context_object, editor.ui.context["other_object"])
 
         editor.prepare(None)
 
         # preparation creates the control and sets the control value
-        self.assertEqual(editor.value, 'other_test')
-        self.assertEqual(editor.control.control_value, 'other_test')
+        self.assertEqual(editor.value, "other_test")
+        self.assertEqual(editor.control.control_value, "other_test")
 
-        self.change_user_value(editor, user_object, 'user_value', 'new test')
+        self.change_user_value(editor, user_object, "user_value", "new test")
 
-        self.assertEqual(editor.value, 'new test')
-        self.assertEqual(editor.control.control_value, 'new test')
+        self.assertEqual(editor.value, "new test")
+        self.assertEqual(editor.control.control_value, "new test")
 
-        self.change_control_value(editor, user_object, 'user_value',
-                                  'even newer test')
+        self.change_control_value(
+            editor, user_object, "user_value", "even newer test"
+        )
 
-        self.assertEqual(editor.value, 'even newer test')
-        self.assertEqual(editor.object.user_value, 'even newer test')
+        self.assertEqual(editor.value, "even newer test")
+        self.assertEqual(editor.object.user_value, "even newer test")
 
         editor.dispose()
 
     def test_event_trait(self):
-        editor = self.create_editor(name='user_event', is_event=True)
+        editor = self.create_editor(name="user_event", is_event=True)
         user_object = editor.object
 
-        self.assertEqual(editor.name, 'user_event')
-        self.assertEqual(editor.extended_name, 'user_event')
-        self.assertIs(editor.context_object, editor.ui.context['object'])
+        self.assertEqual(editor.name, "user_event")
+        self.assertEqual(editor.extended_name, "user_event")
+        self.assertIs(editor.context_object, editor.ui.context["object"])
 
         editor.prepare(None)
 
         # preparation creates the control and sets the control value
         self.assertIs(editor.value, Undefined)
 
-        self.change_user_value(editor, user_object, 'user_event', True)
-        self.change_control_value(editor, user_object, 'user_event', True)
+        self.change_user_value(editor, user_object, "user_event", True)
+        self.change_control_value(editor, user_object, "user_event", True)
 
         editor.dispose()
 
     def test_chained_object(self):
         context = {
-            'object': UserObject(
-                user_auxiliary=UserObject(user_value='other_test'),
+            "object": UserObject(
+                user_auxiliary=UserObject(user_value="other_test")
             )
         }
-        user_object = context['object'].user_auxiliary
+        user_object = context["object"].user_auxiliary
         editor = self.create_editor(
-            context=context,
-            object_name='object.user_auxiliary',
+            context=context, object_name="object.user_auxiliary"
         )
 
-        self.assertEqual(editor.old_value, 'other_test')
-        self.assertEqual(editor.name, 'user_value')
-        self.assertEqual(editor.extended_name, 'user_auxiliary.user_value')
-        self.assertIs(editor.context_object, editor.ui.context['object'])
+        self.assertEqual(editor.old_value, "other_test")
+        self.assertEqual(editor.name, "user_value")
+        self.assertEqual(editor.extended_name, "user_auxiliary.user_value")
+        self.assertIs(editor.context_object, editor.ui.context["object"])
 
         editor.prepare(None)
 
         # preparation creates the control and sets the control value
-        self.assertEqual(editor.value, 'other_test')
-        self.assertEqual(editor.control.control_value, 'other_test')
+        self.assertEqual(editor.value, "other_test")
+        self.assertEqual(editor.control.control_value, "other_test")
 
-        self.change_user_value(editor, user_object, 'user_value', 'new test')
+        self.change_user_value(editor, user_object, "user_value", "new test")
 
-        self.assertEqual(editor.value, 'new test')
-        self.assertEqual(editor.control.control_value, 'new test')
+        self.assertEqual(editor.value, "new test")
+        self.assertEqual(editor.control.control_value, "new test")
 
-        self.change_control_value(editor, user_object, 'user_value',
-                                  'even newer test')
+        self.change_control_value(
+            editor, user_object, "user_value", "even newer test"
+        )
 
-        self.assertEqual(editor.value, 'even newer test')
-        self.assertEqual(editor.object.user_value, 'even newer test')
+        self.assertEqual(editor.value, "even newer test")
+        self.assertEqual(editor.object.user_value, "even newer test")
 
         # test changing the chained object
-        new_user_object = UserObject(user_value='new object')
-        with self.assertTraitChanges(editor, 'object', count=1):
-            self.change_user_value(editor, context['object'], 'user_auxiliary',
-                                   new_user_object)
+        new_user_object = UserObject(user_value="new object")
+        with self.assertTraitChanges(editor, "object", count=1):
+            self.change_user_value(
+                editor, context["object"], "user_auxiliary", new_user_object
+            )
 
-        self.assertEqual(editor.value, 'new object')
+        self.assertEqual(editor.value, "new object")
         self.assertIs(editor.object, new_user_object)
-        self.assertEqual(editor.object.user_value, 'new object')
+        self.assertEqual(editor.object.user_value, "new object")
 
         editor.dispose()
 
     def test_factory_sync_simple(self):
-        factory = StubEditorFactory(auxiliary_value='test')
+        factory = StubEditorFactory(auxiliary_value="test")
         editor = self.create_editor(factory=factory)
         editor.prepare(None)
 
         # preparation copies the auxiliary value from the factory
-        self.assertIs(editor.auxiliary_value, 'test')
+        self.assertIs(editor.auxiliary_value, "test")
 
         editor.dispose()
 
@@ -364,39 +369,41 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
     def test_parse_extended_name(self):
         context = {
-            'object': UserObject(
-                user_auxiliary=UserObject(user_value='other_test'),
+            "object": UserObject(
+                user_auxiliary=UserObject(user_value="other_test")
             ),
-            'other_object': UserObject(user_value='another_test'),
+            "other_object": UserObject(user_value="another_test"),
         }
         editor = self.create_editor(context=context)
         editor.prepare(None)
 
         # test simple name
-        object, name, getter = editor.parse_extended_name('user_value')
+        object, name, getter = editor.parse_extended_name("user_value")
         value = getter()
 
-        self.assertIs(object, context['object'])
-        self.assertEqual(name, 'user_value')
-        self.assertEqual(value, 'test')
+        self.assertIs(object, context["object"])
+        self.assertEqual(name, "user_value")
+        self.assertEqual(value, "test")
 
         # test different context object name
         object, name, getter = editor.parse_extended_name(
-                'other_object.user_value')
+            "other_object.user_value"
+        )
         value = getter()
 
-        self.assertIs(object, context['other_object'])
-        self.assertEqual(name, 'user_value')
-        self.assertEqual(value, 'another_test')
+        self.assertIs(object, context["other_object"])
+        self.assertEqual(name, "user_value")
+        self.assertEqual(value, "another_test")
 
         # test chained name
         object, name, getter = editor.parse_extended_name(
-                'object.user_auxiliary.user_value')
+            "object.user_auxiliary.user_value"
+        )
         value = getter()
 
-        self.assertIs(object, context['object'])
-        self.assertEqual(name, 'user_auxiliary.user_value')
-        self.assertEqual(value, 'other_test')
+        self.assertIs(object, context["object"])
+        self.assertEqual(name, "user_auxiliary.user_value")
+        self.assertEqual(value, "other_test")
 
         editor.dispose()
 
@@ -407,20 +414,21 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         user_object = editor.object
         editor.prepare(None)
 
-        with self.assertTraitChanges(editor, 'auxiliary_value', count=1):
+        with self.assertTraitChanges(editor, "auxiliary_value", count=1):
             editor.sync_value(
-                'object.user_auxiliary', 'auxiliary_value', 'from')
+                "object.user_auxiliary", "auxiliary_value", "from"
+            )
 
         self.assertEqual(editor.auxiliary_value, 10)
 
-        with self.assertTraitChanges(editor, 'auxiliary_value', count=1):
+        with self.assertTraitChanges(editor, "auxiliary_value", count=1):
             user_object.user_auxiliary = 11
 
         self.assertEqual(editor.auxiliary_value, 11)
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(editor, 'auxiliary_value'):
+        with self.assertTraitDoesNotChange(editor, "auxiliary_value"):
             user_object.user_auxiliary = 12
 
     def test_sync_value_from_object(self):
@@ -428,78 +436,73 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         user_object = editor.object
         editor.prepare(None)
 
-        with self.assertTraitChanges(editor, 'auxiliary_value', count=1):
-            editor.sync_value(
-                'user_auxiliary', 'auxiliary_value', 'from')
+        with self.assertTraitChanges(editor, "auxiliary_value", count=1):
+            editor.sync_value("user_auxiliary", "auxiliary_value", "from")
 
         self.assertEqual(editor.auxiliary_value, 10)
 
-        with self.assertTraitChanges(editor, 'auxiliary_value', count=1):
+        with self.assertTraitChanges(editor, "auxiliary_value", count=1):
             user_object.user_auxiliary = 11
 
         self.assertEqual(editor.auxiliary_value, 11)
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(editor, 'auxiliary_value'):
+        with self.assertTraitDoesNotChange(editor, "auxiliary_value"):
             user_object.user_auxiliary = 12
 
     def test_sync_value_from_context(self):
         # set up the editor
         user_object = UserObject()
         other_object = UserObject(user_auxiliary=20)
-        context = {
-            'object': user_object,
-            'other_object': other_object,
-        }
+        context = {"object": user_object, "other_object": other_object}
         editor = self.create_editor(context=context)
         editor.prepare(None)
 
-        with self.assertTraitChanges(editor, 'auxiliary_value', count=1):
+        with self.assertTraitChanges(editor, "auxiliary_value", count=1):
             editor.sync_value(
-                'other_object.user_auxiliary', 'auxiliary_value', 'from')
+                "other_object.user_auxiliary", "auxiliary_value", "from"
+            )
 
         self.assertEqual(editor.auxiliary_value, 20)
 
-        with self.assertTraitChanges(editor, 'auxiliary_value', count=1):
+        with self.assertTraitChanges(editor, "auxiliary_value", count=1):
             other_object.user_auxiliary = 11
 
         self.assertEqual(editor.auxiliary_value, 11)
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(editor, 'auxiliary_value'):
+        with self.assertTraitDoesNotChange(editor, "auxiliary_value"):
             other_object.user_auxiliary = 12
 
     def test_sync_value_from_chained(self):
         # set up the editor
-        user_object = UserObject(
-            user_auxiliary=UserObject(user_value=20),
-        )
-        context = {'object': user_object}
+        user_object = UserObject(user_auxiliary=UserObject(user_value=20))
+        context = {"object": user_object}
         editor = self.create_editor(context=context)
         editor.prepare(None)
 
-        with self.assertTraitChanges(editor, 'auxiliary_value', count=1):
+        with self.assertTraitChanges(editor, "auxiliary_value", count=1):
             editor.sync_value(
-                'object.user_auxiliary.user_value', 'auxiliary_value', 'from'
+                "object.user_auxiliary.user_value", "auxiliary_value", "from"
             )
 
         self.assertEqual(editor.auxiliary_value, 20)
 
-        with self.assertTraitChanges(editor, 'auxiliary_value', count=1):
+        with self.assertTraitChanges(editor, "auxiliary_value", count=1):
             user_object.user_auxiliary.user_value = 11
 
         self.assertEqual(editor.auxiliary_value, 11)
 
-        with self.assertTraitChanges(editor, 'auxiliary_value', count=1):
+        with self.assertTraitChanges(editor, "auxiliary_value", count=1):
             user_object.user_auxiliary = UserObject(user_value=12)
 
         self.assertEqual(editor.auxiliary_value, 12)
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(editor, 'auxiliary_value'):
+        with self.assertTraitDoesNotChange(editor, "auxiliary_value"):
             user_object.user_auxiliary.user_value = 13
 
     def test_sync_value_from_list(self):
@@ -507,64 +510,66 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         user_object = editor.object
         editor.prepare(None)
 
-        with self.assertTraitChanges(editor, 'auxiliary_list', count=1):
+        with self.assertTraitChanges(editor, "auxiliary_list", count=1):
             editor.sync_value(
-                'object.user_list', 'auxiliary_list', 'from', is_list=True)
+                "object.user_list", "auxiliary_list", "from", is_list=True
+            )
 
-        self.assertEqual(editor.auxiliary_list, ['one', 'two', 'three'])
+        self.assertEqual(editor.auxiliary_list, ["one", "two", "three"])
 
-        with self.assertTraitChanges(editor, 'auxiliary_list', count=1):
-            user_object.user_list = ['one', 'two']
+        with self.assertTraitChanges(editor, "auxiliary_list", count=1):
+            user_object.user_list = ["one", "two"]
 
-        self.assertEqual(editor.auxiliary_list, ['one', 'two'])
+        self.assertEqual(editor.auxiliary_list, ["one", "two"])
 
-        with self.assertTraitChanges(editor, 'auxiliary_list_items', count=1):
-            user_object.user_list[1:] = ['four', 'five']
+        with self.assertTraitChanges(editor, "auxiliary_list_items", count=1):
+            user_object.user_list[1:] = ["four", "five"]
 
-        self.assertEqual(editor.auxiliary_list, ['one', 'four', 'five'])
+        self.assertEqual(editor.auxiliary_list, ["one", "four", "five"])
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(editor, 'auxiliary_list'):
-            user_object.user_list = ['one', 'two', 'three']
+        with self.assertTraitDoesNotChange(editor, "auxiliary_list"):
+            user_object.user_list = ["one", "two", "three"]
 
     def test_sync_value_from_event(self):
         editor = self.create_editor()
         user_object = editor.object
         editor.prepare(None)
 
-        with self.assertTraitDoesNotChange(editor, 'auxiliary_event'):
+        with self.assertTraitDoesNotChange(editor, "auxiliary_event"):
             editor.sync_value(
-                'object.user_event', 'auxiliary_event', 'from', is_event=True)
+                "object.user_event", "auxiliary_event", "from", is_event=True
+            )
 
-        with self.assertTraitChanges(editor, 'auxiliary_event', count=1):
+        with self.assertTraitChanges(editor, "auxiliary_event", count=1):
             user_object.user_event = True
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(editor, 'auxiliary_event'):
+        with self.assertTraitDoesNotChange(editor, "auxiliary_event"):
             user_object.user_event = True
 
     def test_sync_value_from_cv(self):
         factory = StubEditorFactory(
-            auxiliary_cv_int=ContextValue('object.user_auxiliary')
+            auxiliary_cv_int=ContextValue("object.user_auxiliary")
         )
         editor = self.create_editor(factory=factory)
         user_object = editor.object
 
-        with self.assertTraitChanges(editor, 'auxiliary_cv_int', count=1):
+        with self.assertTraitChanges(editor, "auxiliary_cv_int", count=1):
             editor.prepare(None)
 
         self.assertEqual(editor.auxiliary_cv_int, 10)
 
-        with self.assertTraitChanges(editor, 'auxiliary_cv_int', count=1):
+        with self.assertTraitChanges(editor, "auxiliary_cv_int", count=1):
             user_object.user_auxiliary = 11
 
         self.assertEqual(editor.auxiliary_cv_int, 11)
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(editor, 'auxiliary_cv_int'):
+        with self.assertTraitDoesNotChange(editor, "auxiliary_cv_int"):
             user_object.user_auxiliary = 12
 
     # Testing sync_value "to" -----------------------------------------------
@@ -575,20 +580,19 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         editor.prepare(None)
         editor.auxiliary_value = 20
 
-        with self.assertTraitChanges(user_object, 'user_auxiliary', count=1):
-            editor.sync_value(
-                'object.user_auxiliary', 'auxiliary_value', 'to')
+        with self.assertTraitChanges(user_object, "user_auxiliary", count=1):
+            editor.sync_value("object.user_auxiliary", "auxiliary_value", "to")
 
         self.assertEqual(user_object.user_auxiliary, 20)
 
-        with self.assertTraitChanges(user_object, 'user_auxiliary', count=1):
+        with self.assertTraitChanges(user_object, "user_auxiliary", count=1):
             editor.auxiliary_value = 11
 
         self.assertEqual(user_object.user_auxiliary, 11)
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(user_object, 'user_auxiliary'):
+        with self.assertTraitDoesNotChange(user_object, "user_auxiliary"):
             editor.auxiliary_value = 12
 
     def test_sync_value_to_object(self):
@@ -597,75 +601,75 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         editor.prepare(None)
         editor.auxiliary_value = 20
 
-        with self.assertTraitChanges(user_object, 'user_auxiliary', count=1):
-            editor.sync_value(
-                'user_auxiliary', 'auxiliary_value', 'to')
+        with self.assertTraitChanges(user_object, "user_auxiliary", count=1):
+            editor.sync_value("user_auxiliary", "auxiliary_value", "to")
 
         self.assertEqual(user_object.user_auxiliary, 20)
 
-        with self.assertTraitChanges(user_object, 'user_auxiliary', count=1):
+        with self.assertTraitChanges(user_object, "user_auxiliary", count=1):
             editor.auxiliary_value = 11
 
         self.assertEqual(user_object.user_auxiliary, 11)
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(user_object, 'user_auxiliary'):
+        with self.assertTraitDoesNotChange(user_object, "user_auxiliary"):
             editor.auxiliary_value = 12
 
     def test_sync_value_to_context(self):
         # set up the editor
         user_object = UserObject()
         other_object = UserObject()
-        context = {
-            'object': user_object,
-            'other_object': other_object,
-        }
+        context = {"object": user_object, "other_object": other_object}
         editor = self.create_editor(context=context)
         editor.prepare(None)
         editor.auxiliary_value = 20
 
-        with self.assertTraitChanges(other_object, 'user_auxiliary', count=1):
+        with self.assertTraitChanges(other_object, "user_auxiliary", count=1):
             editor.sync_value(
-                'other_object.user_auxiliary', 'auxiliary_value', 'to')
+                "other_object.user_auxiliary", "auxiliary_value", "to"
+            )
 
         self.assertEqual(other_object.user_auxiliary, 20)
 
-        with self.assertTraitChanges(other_object, 'user_auxiliary', count=1):
+        with self.assertTraitChanges(other_object, "user_auxiliary", count=1):
             editor.auxiliary_value = 11
 
         self.assertEqual(other_object.user_auxiliary, 11)
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(other_object, 'user_auxiliary'):
+        with self.assertTraitDoesNotChange(other_object, "user_auxiliary"):
             editor.auxiliary_value = 12
 
     def test_sync_value_to_chained(self):
-        user_object = UserObject(
-            user_auxiliary=UserObject(),
-        )
-        context = {'object': user_object}
+        user_object = UserObject(user_auxiliary=UserObject())
+        context = {"object": user_object}
         editor = self.create_editor(context=context)
         editor.prepare(None)
         editor.auxiliary_value = 20
 
-        with self.assertTraitChanges(user_object.user_auxiliary, 'user_value', count=1):
+        with self.assertTraitChanges(
+            user_object.user_auxiliary, "user_value", count=1
+        ):
             editor.sync_value(
-                'object.user_auxiliary.user_value', 'auxiliary_value', 'to')
+                "object.user_auxiliary.user_value", "auxiliary_value", "to"
+            )
 
         self.assertEqual(user_object.user_auxiliary.user_value, 20)
 
-        with self.assertTraitChanges(user_object.user_auxiliary, 'user_value',
-                                     count=1):
+        with self.assertTraitChanges(
+            user_object.user_auxiliary, "user_value", count=1
+        ):
             editor.auxiliary_value = 11
 
         self.assertEqual(user_object.user_auxiliary.user_value, 11)
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(user_object.user_auxiliary,
-                                           'user_value'):
+        with self.assertTraitDoesNotChange(
+            user_object.user_auxiliary, "user_value"
+        ):
             editor.auxiliary_value = 12
 
     def test_sync_value_to_list(self):
@@ -673,65 +677,67 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         user_object = editor.object
         editor.prepare(None)
 
-        with self.assertTraitChanges(user_object, 'user_list', count=1):
+        with self.assertTraitChanges(user_object, "user_list", count=1):
             editor.sync_value(
-                'object.user_list', 'auxiliary_list', 'to', is_list=True)
+                "object.user_list", "auxiliary_list", "to", is_list=True
+            )
 
         self.assertEqual(user_object.user_list, [])
 
-        with self.assertTraitChanges(user_object, 'user_list', count=1):
-            editor.auxiliary_list = ['one', 'two']
+        with self.assertTraitChanges(user_object, "user_list", count=1):
+            editor.auxiliary_list = ["one", "two"]
 
-        self.assertEqual(user_object.user_list, ['one', 'two'])
+        self.assertEqual(user_object.user_list, ["one", "two"])
 
-        with self.assertTraitChanges(user_object, 'user_list_items', count=1):
-            editor.auxiliary_list[1:] = ['four', 'five']
+        with self.assertTraitChanges(user_object, "user_list_items", count=1):
+            editor.auxiliary_list[1:] = ["four", "five"]
 
-        self.assertEqual(user_object.user_list, ['one', 'four', 'five'])
+        self.assertEqual(user_object.user_list, ["one", "four", "five"])
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(user_object, 'user_list'):
-            editor.auxiliary_list = ['one', 'two', 'three']
+        with self.assertTraitDoesNotChange(user_object, "user_list"):
+            editor.auxiliary_list = ["one", "two", "three"]
 
     def test_sync_value_to_event(self):
         editor = self.create_editor()
         user_object = editor.object
         editor.prepare(None)
 
-        with self.assertTraitDoesNotChange(user_object, 'user_event'):
+        with self.assertTraitDoesNotChange(user_object, "user_event"):
             editor.sync_value(
-                'object.user_event', 'auxiliary_event', 'to', is_event=True)
+                "object.user_event", "auxiliary_event", "to", is_event=True
+            )
 
-        with self.assertTraitChanges(user_object, 'user_event', count=1):
+        with self.assertTraitChanges(user_object, "user_event", count=1):
             editor.auxiliary_event = True
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(user_object, 'user_event'):
+        with self.assertTraitDoesNotChange(user_object, "user_event"):
             editor.auxiliary_event = True
 
     def test_sync_value_to_cv(self):
         factory = StubEditorFactory(
-            auxiliary_cv_float=ContextValue('object.user_auxiliary')
+            auxiliary_cv_float=ContextValue("object.user_auxiliary")
         )
         editor = self.create_editor(factory=factory)
         user_object = editor.object
         editor.auxiliary_cv_float = 20.0
 
-        with self.assertTraitChanges(user_object, 'user_auxiliary', count=1):
+        with self.assertTraitChanges(user_object, "user_auxiliary", count=1):
             editor.prepare(None)
 
         self.assertEqual(user_object.user_auxiliary, 20)
 
-        with self.assertTraitChanges(user_object, 'user_auxiliary', count=1):
+        with self.assertTraitChanges(user_object, "user_auxiliary", count=1):
             editor.auxiliary_cv_float = 11.0
 
         self.assertEqual(user_object.user_auxiliary, 11)
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(user_object, 'user_auxiliary'):
+        with self.assertTraitDoesNotChange(user_object, "user_auxiliary"):
             editor.auxiliary_cv_float = 12.0
 
     # Testing sync_value "both" -----------------------------------------------
@@ -741,26 +747,27 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         user_object = editor.object
         editor.prepare(None)
 
-        with self.assertTraitChanges(editor, 'auxiliary_value', count=1):
+        with self.assertTraitChanges(editor, "auxiliary_value", count=1):
             editor.sync_value(
-                'object.user_auxiliary', 'auxiliary_value', 'both')
+                "object.user_auxiliary", "auxiliary_value", "both"
+            )
 
         self.assertEqual(editor.auxiliary_value, 10)
 
-        with self.assertTraitChanges(editor, 'auxiliary_value', count=1):
+        with self.assertTraitChanges(editor, "auxiliary_value", count=1):
             user_object.user_auxiliary = 11
 
         self.assertEqual(editor.auxiliary_value, 11)
 
-        with self.assertTraitChanges(user_object, 'user_auxiliary', count=1):
+        with self.assertTraitChanges(user_object, "user_auxiliary", count=1):
             editor.auxiliary_value = 12
 
         self.assertEqual(user_object.user_auxiliary, 12)
 
         editor.dispose()
 
-        with self.assertTraitDoesNotChange(editor, 'auxiliary_value'):
+        with self.assertTraitDoesNotChange(editor, "auxiliary_value"):
             user_object.user_auxiliary = 13
 
-        with self.assertTraitDoesNotChange(user_object, 'user_auxiliary'):
+        with self.assertTraitDoesNotChange(user_object, "user_auxiliary"):
             editor.auxiliary_value = 14

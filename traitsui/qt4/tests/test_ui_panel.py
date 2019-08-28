@@ -16,11 +16,12 @@ class FooPanel(HasTraits):
 
     def default_traits_view(self):
         view = View(
-            Item(name='my_int'),
-            Item(name='my_str'),
+            Item(name="my_int"),
+            Item(name="my_str"),
             title="FooPanel",
             buttons=["OK", "Cancel"],
-            toolbar=self.toolbar)
+            toolbar=self.toolbar,
+        )
         return view
 
     def _toolbar_default(self):
@@ -33,10 +34,8 @@ class FooDialog(HasTraits):
     panel2 = Instance(FooPanel)
 
     view = View(
-        Group(Item("panel1"),
-              Item("panel2"),
-              layout="split",
-              style="custom"))
+        Group(Item("panel1"), Item("panel2"), layout="split", style="custom")
+    )
 
     def _panel1_default(self):
         return FooPanel()
@@ -47,7 +46,6 @@ class FooDialog(HasTraits):
 
 @skip_if_not_qt4
 class TestUIPanel(unittest.TestCase):
-
     def setup_qt4_dock_window(self):
         from pyface.qt import QtGui
 

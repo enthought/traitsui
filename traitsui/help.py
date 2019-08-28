@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,23 +13,16 @@
 #  Author: David C. Morrill
 #  Date:   02/04/2005
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the help interface for displaying the help associated with a
     Traits UI View object.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
 from .toolkit import toolkit
-
-#-------------------------------------------------------------------------
-#  Default handler for showing the help associated with a view:
-#-------------------------------------------------------------------------
 
 
 def default_show_help(info, control):
@@ -37,12 +30,9 @@ def default_show_help(info, control):
     """
     toolkit().show_help(info.ui, control)
 
+
 # The default handler for showing help
 show_help = default_show_help
-
-#-------------------------------------------------------------------------
-#  Allows an application to change the default show help handler:
-#-------------------------------------------------------------------------
 
 
 def on_help_call(new_show_help=None):

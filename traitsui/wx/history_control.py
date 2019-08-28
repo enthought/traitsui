@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,65 +13,64 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the a text entry field (actually a combo-box) with a drop-down list
     of values previously entered into the control.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 import wx
 
-from traits.api \
-    import HasPrivateTraits, Instance, Str, List, Int, Bool
+from traits.api import HasPrivateTraits, Instance, Str, List, Int, Bool
 
-from pyface.timer.api \
-    import do_later
+from pyface.timer.api import do_later
 
-from .constants \
-    import OKColor, ErrorColor
+from .constants import OKColor, ErrorColor
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'HistoryControl' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class HistoryControl(HasPrivateTraits):
 
-    # The UI control:
+    #: The UI control:
     control = Instance(wx.Window)
 
-    # The current value of the control:
+    #: The current value of the control:
     value = Str
 
-    # Should 'value' be updated on every keystroke?
+    #: Should 'value' be updated on every keystroke?
     auto_set = Bool(False)
 
-    # The current history of the control:
+    #: The current history of the control:
     history = List(Str)
 
-    # The maximum number of history entries allowed:
+    #: The maximum number of history entries allowed:
     entries = Int(10)
 
-    # Is the current value valid?
+    #: Is the current value valid?
     error = Bool(False)
 
-    #-- Public Methods -------------------------------------------------------
+    # -- Public Methods -------------------------------------------------------
 
     def create_control(self, parent):
         """ Creates the control.
         """
-        self.control = control = wx.ComboBox(parent, -1, self.value,
-                                             wx.Point(0, 0), wx.Size(-1, -1),
-                                             self.history, style=wx.CB_DROPDOWN)
+        self.control = control = wx.ComboBox(
+            parent,
+            -1,
+            self.value,
+            wx.Point(0, 0),
+            wx.Size(-1, -1),
+            self.history,
+            style=wx.CB_DROPDOWN,
+        )
         wx.EVT_COMBOBOX(parent, control.GetId(), self._update_value)
         wx.EVT_KILL_FOCUS(control, self._kill_focus)
-        wx.EVT_TEXT_ENTER(parent, control.GetId(),
-                          self._update_text_value)
+        wx.EVT_TEXT_ENTER(parent, control.GetId(), self._update_text_value)
         if self.auto_set:
             wx.EVT_TEXT(parent, control.GetId(), self._update_value_only)
 
@@ -91,7 +90,7 @@ class HistoryControl(HasPrivateTraits):
         """
         self._update(value)
 
-    #-- Traits Event Handlers ------------------------------------------------
+    # -- Traits Event Handlers ------------------------------------------------
 
     def _value_changed(self, value):
         """ Handles the 'value' trait being changed.
@@ -108,7 +107,7 @@ class HistoryControl(HasPrivateTraits):
         if not self._no_update:
             if self._first_time is None:
                 self._first_time = False
-                if (self.value == '') and (len(self.history) > 0):
+                if (self.value == "") and (len(self.history) > 0):
                     self.value = self.history[0]
 
             self._load_history(select=False)
@@ -123,7 +122,7 @@ class HistoryControl(HasPrivateTraits):
 
         self.control.Refresh()
 
-    #-- Wx Event Handlers ----------------------------------------------------
+    # -- Wx Event Handlers ----------------------------------------------------
 
     def _update_value(self, event):
         """ Handles the user selecting something from the drop-down list of the
@@ -151,20 +150,20 @@ class HistoryControl(HasPrivateTraits):
         self._update_text_value(event, False)
         event.Skip()
 
-    #-- Private Methods ------------------------------------------------------
+    # -- Private Methods ------------------------------------------------------
 
     def _update(self, value, select=True):
         """ Updates the value and history list based on a specified value.
         """
         self._no_update = True
 
-        if value.strip() != '':
+        if value.strip() != "":
             history = self.history
             if (len(history) == 0) or (value != history[0]):
                 if value in history:
                     history.remove(value)
                 history.insert(0, value)
-                del history[self.entries:]
+                del history[self.entries :]
                 self._load_history(value, select)
 
         self.value = value

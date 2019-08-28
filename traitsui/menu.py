@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,15 +13,12 @@
 #  Author: David C. Morrill
 #  Date:   12/19/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the standard menu bar for use with Traits UI windows and panels,
     and standard actions and buttons.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -34,18 +31,18 @@ from pyface.action.api import MenuManager as Menu
 from pyface.action.api import Group as ActionGroup
 from pyface.action.api import Action as PyFaceAction
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'Action' class (extends the core pyface Action class):
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class Action(PyFaceAction):
     """ An action on a menu bar in a Traits UI window or panel.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Pre-condition for showing the action. If the expression evaluates to False,
     #: the action is not visible (and disappears if it was previously visible).
@@ -80,90 +77,80 @@ class Action(PyFaceAction):
     #: the correct name, for each Action defined on the View for that window.
     action = Str
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Standard actions and menu bar definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 #: Menu separator
 Separator = ActionGroup
 
 #: The standard "close window" action
-CloseAction = Action(
-    name='Close',
-    action='_on_close'
-)
+CloseAction = Action(name="Close", action="_on_close")
 
 #: The standard "undo last change" action
 UndoAction = Action(
-    name='Undo',
-    action='_on_undo',
-    defined_when='ui.history is not None',
-    enabled_when='ui.history.can_undo'
+    name="Undo",
+    action="_on_undo",
+    defined_when="ui.history is not None",
+    enabled_when="ui.history.can_undo",
 )
 
 #: The standard "redo last undo" action
 RedoAction = Action(
-    name='Redo',
-    action='_on_redo',
-    defined_when='ui.history is not None',
-    enabled_when='ui.history.can_redo'
+    name="Redo",
+    action="_on_redo",
+    defined_when="ui.history is not None",
+    enabled_when="ui.history.can_redo",
 )
 
 #: The standard "revert all changes" action
 RevertAction = Action(
-    name='Revert',
-    action='_on_revert',
-    defined_when='ui.history is not None',
-    enabled_when='ui.history.can_undo'
+    name="Revert",
+    action="_on_revert",
+    defined_when="ui.history is not None",
+    enabled_when="ui.history.can_undo",
 )
 
 #: The standard "show help" action
-HelpAction = Action(
-    name='Help',
-    action='show_help'
-)
+HelpAction = Action(name="Help", action="show_help")
 
 #: The standard Traits UI menu bar
 StandardMenuBar = MenuBar(
-    Menu(CloseAction,
-         name='File'),
-    Menu(UndoAction,
-         RedoAction,
-         RevertAction,
-         name='Edit'),
-    Menu(HelpAction,
-         name='Help')
+    Menu(CloseAction, name="File"),
+    Menu(UndoAction, RedoAction, RevertAction, name="Edit"),
+    Menu(HelpAction, name="Help"),
 )
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Standard buttons (i.e. actions):
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
-NoButton = Action(name='')
+NoButton = Action(name="")
 
 #: Appears as two buttons: **Undo** and **Redo**. When **Undo** is clicked, the
 #: most recent change to the data is cancelled, restoring the previous value.
 #: **Redo** cancels the most recent "undo" operation.
-UndoButton = Action(name='Undo')
+UndoButton = Action(name="Undo")
 
 #: When the user clicks the **Revert** button, all changes made in the window are
 #: cancelled and the original values are restored. If the changes have been
 #: applied to the model (because the user clicked **Apply** or because the window
 #: is live), the model data is restored as well. The window remains open.
-RevertButton = Action(name='Revert')
+RevertButton = Action(name="Revert")
 
 #: When the user clicks the **Apply** button, all changes made in the window are
 #: applied to the model. This option is meaningful only for modal windows.
-ApplyButton = Action(name='Apply')
+ApplyButton = Action(name="Apply")
 
 #: When the user clicks the **OK** button, all changes made in the window are
 #: applied to the model, and the window is closed.
-OKButton = Action(name='OK')
+OKButton = Action(name="OK")
 
 #: When the user clicks the **Cancel** button, all changes made in the window
 #: are discarded; if the window is live, the model is restored to the values it
 #: held before the window was opened. The window is then closed.
-CancelButton = Action(name='Cancel')
+CancelButton = Action(name="Cancel")
 
 #: When the user clicks the **Help** button, the current help handler is
 #: invoked. If the default help handler is used, a pop-up window is displayed,
@@ -171,7 +158,7 @@ CancelButton = Action(name='Cancel')
 #: the items in the view. If the default help handler has been overridden,
 #: the action is determined by the custom help handler. See
 #: **traitsui.help**.
-HelpButton = Action(name='Help')
+HelpButton = Action(name="Help")
 
 OKCancelButtons = [OKButton, CancelButton]
 ModalButtons = [ApplyButton, RevertButton, OKButton, CancelButton, HelpButton]

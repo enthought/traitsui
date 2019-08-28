@@ -1,17 +1,17 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2012, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Author: Pietro Berkes
 #  Date:   Jan 2012
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 from __future__ import absolute_import, print_function
 
@@ -37,8 +37,8 @@ class ListOfFloatsWithCSVEditor(ModelView):
 
     traits_view = View(
         Item(label="Close the window to append data"),
-        Item('model.data', editor=CSVListEditor()),
-        buttons=['OK']
+        Item("model.data", editor=CSVListEditor()),
+        buttons=["OK"],
     )
 
 
@@ -69,11 +69,12 @@ def test_csv_editor_external_append():
     # list externally
 
     def _wx_get_text_value(ui):
-        txt_ctrl = ui.control.FindWindowByName('text')
+        txt_ctrl = ui.control.FindWindowByName("text")
         return txt_ctrl.GetValue()
 
     def _qt_get_text_value(ui):
         from pyface import qt
+
         txt_ctrl = ui.control.findChild(qt.QtGui.QLineEdit)
         return txt_ctrl.text()
 
@@ -97,7 +98,7 @@ def test_csv_editor_external_append():
         press_ok_button(ui)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Executing the file opens the dialog for manual testing
     list_of_floats = ListOfFloats(data=[1, 2, 3])
     csv_view = ListOfFloatsWithCSVEditor(model=list_of_floats)

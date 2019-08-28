@@ -6,39 +6,45 @@ from pyface.gui import GUI
 from traits.api import Enum, HasTraits
 from traitsui.api import EnumEditor, UItem, View
 from traitsui.tests._tools import (
-    is_current_backend_qt4, is_current_backend_wx, skip_if_null,
-    store_exceptions_on_all_threads)
+    is_current_backend_qt4,
+    is_current_backend_wx,
+    skip_if_null,
+    store_exceptions_on_all_threads,
+)
 
 
-is_windows = (platform.system() == 'Windows')
+is_windows = platform.system() == "Windows"
 
 
 class EnumModel(HasTraits):
 
-    value = Enum('one', 'two', 'three', 'four')
+    value = Enum("one", "two", "three", "four")
 
 
-simple_view = View(
-    UItem('value', style='simple'),
-    resizable=True
-)
+simple_view = View(UItem("value", style="simple"), resizable=True)
 
 
 simple_evaluate_view = View(
     UItem(
-        'value',
-        editor=EnumEditor(evaluate=True, values=['one', 'two', 'three', 'four']),
-        style='simple'),
-    resizable=True
+        "value",
+        editor=EnumEditor(
+            evaluate=True, values=["one", "two", "three", "four"]
+        ),
+        style="simple",
+    ),
+    resizable=True,
 )
 
 
 simple_evaluate_view_popup = View(
     UItem(
-        'value',
-        editor=EnumEditor(evaluate=True, values=['one', 'two', 'three', 'four']),
-        style='simple'),
-    resizable=True
+        "value",
+        editor=EnumEditor(
+            evaluate=True, values=["one", "two", "three", "four"]
+        ),
+        style="simple",
+    ),
+    resizable=True,
 )
 
 
@@ -46,6 +52,7 @@ def get_combobox_text(combobox):
     """ Return the text given a combobox control """
     if is_current_backend_wx():
         import wx
+
         if isinstance(combobox, wx.Choice):
             return combobox.GetString(combobox.GetSelection())
         else:
@@ -58,6 +65,7 @@ def set_combobox_text(combobox, text):
     """ Set the text given a combobox control """
     if is_current_backend_wx():
         import wx
+
         if isinstance(combobox, wx.Choice):
             event_type = wx.EVT_CHOICE.typeId
             event = wx.CommandEvent(event_type, combobox.GetId())
@@ -78,6 +86,7 @@ def set_combobox_index(combobox, idx):
     """ Set the choice index given a combobox control and index number """
     if is_current_backend_wx():
         import wx
+
         if isinstance(combobox, wx.Choice):
             event_type = wx.EVT_CHOICE.typeId
         else:
@@ -93,7 +102,6 @@ def set_combobox_index(combobox, idx):
 
 
 class TestEnumEditor(unittest.TestCase):
-
     def check_enum_text_update(self, view):
         gui = GUI()
         enum_edit = EnumModel()

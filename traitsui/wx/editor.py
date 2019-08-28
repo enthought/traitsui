@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,20 +13,16 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the base class for wxPython editors.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 import wx
 
-from traits.api \
-    import HasTraits, Int, Instance, Str, Callable
+from traits.api import HasTraits, Int, Instance, Str, Callable
 
 # CIRCULAR IMPORT FIXME:
 # We are importing from the source instead of from the api in order to
@@ -37,34 +33,24 @@ from traits.api \
 # to an import of the wx 'toolkit' causing a circular import problem.
 # Another solution could be to move the GroupEditor object from helper to this
 # file.
-from traitsui.editor \
-    import Editor as UIEditor
+from traitsui.editor import Editor as UIEditor
 
-from .constants \
-    import WindowColor, OKColor, ErrorColor
-
-#-------------------------------------------------------------------------
-#  'Editor' class:
-#-------------------------------------------------------------------------
+from .constants import WindowColor, OKColor, ErrorColor
 
 
 class Editor(UIEditor):
     """ Base class for wxPython editors for Traits-based UIs.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # Style for embedding control in a sizer:
+    #: Style for embedding control in a sizer:
     layout_style = Int(wx.EXPAND)
 
-    # The maximum extra padding that should be allowed around the editor:
+    #: The maximum extra padding that should be allowed around the editor:
     border_size = Int(4)
-
-    #-------------------------------------------------------------------------
-    #  Handles the 'control' trait being set:
-    #-------------------------------------------------------------------------
 
     def _control_changed(self, control):
         """ Handles the **control** trait being set.
@@ -72,19 +58,11 @@ class Editor(UIEditor):
         if control is not None:
             control._editor = self
 
-    #-------------------------------------------------------------------------
-    #  Assigns focus to the editor's underlying toolkit widget:
-    #-------------------------------------------------------------------------
-
     def set_focus(self):
         """ Assigns focus to the editor's underlying toolkit widget.
         """
         if self.control is not None:
             self.control.SetFocus()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -94,35 +72,30 @@ class Editor(UIEditor):
         if self.control.GetValue() != new_value:
             self.control.SetValue(new_value)
 
-    #-------------------------------------------------------------------------
-    #  Handles an error that occurs while setting the object's trait value:
-    #-------------------------------------------------------------------------
-
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
-        dlg = wx.MessageDialog(self.control, str(excp),
-                               self.description + ' value error',
-                               wx.OK | wx.ICON_INFORMATION)
+        dlg = wx.MessageDialog(
+            self.control,
+            str(excp),
+            self.description + " value error",
+            wx.OK | wx.ICON_INFORMATION,
+        )
         dlg.ShowModal()
         dlg.Destroy()
-
-    #-------------------------------------------------------------------------
-    #  Sets the tooltip for a specified control:
-    #-------------------------------------------------------------------------
 
     def set_tooltip(self, control=None):
         """ Sets the tooltip for a specified control.
         """
         desc = self.description
-        if desc == '':
+        if desc == "":
             desc = self.object.base_trait(self.name).tooltip
             if desc is None:
                 desc = self.object.base_trait(self.name).desc
                 if desc is None:
                     return False
 
-                desc = 'Specifies ' + desc
+                desc = "Specifies " + desc
 
         if control is None:
             control = self.control
@@ -130,10 +103,6 @@ class Editor(UIEditor):
         control.SetToolTipString(desc)
 
         return True
-
-    #-------------------------------------------------------------------------
-    #  Handles the 'enabled' state of the editor being changed:
-    #-------------------------------------------------------------------------
 
     def _enabled_changed(self, enabled):
         """ Handles the **enabled** state of the editor being changed.
@@ -146,10 +115,6 @@ class Editor(UIEditor):
             self.label_control.Enable(enabled)
             self.label_control.Refresh()
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'visible' state of the editor being changed:
-    #-------------------------------------------------------------------------
-
     def _visible_changed(self, visible):
         """ Handles the **visible** state of the editor being changed.
         """
@@ -160,6 +125,7 @@ class Editor(UIEditor):
         # notebook page:
         sizer = parent.GetSizer()
         from pyface.dock.api import DockSizer
+
         if isinstance(sizer, DockSizer):
             dock_controls = sizer.GetContents().get_controls(False)
             for dock_control in dock_controls:
@@ -179,27 +145,15 @@ class Editor(UIEditor):
             else:
                 parent.Layout()
 
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
-
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
         """
         return self.control
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the editor is in an error state:
-    #-------------------------------------------------------------------------
-
     def in_error_state(self):
         """ Returns whether or not the editor is in an error state.
         """
         return False
-
-    #-------------------------------------------------------------------------
-    #  Sets the editor's current error state:
-    #-------------------------------------------------------------------------
 
     def set_error_state(self, state=None, control=None):
         """ Sets the editor's current error state.
@@ -217,10 +171,10 @@ class Editor(UIEditor):
         for item in control:
             if state:
                 color = ErrorColor
-                if getattr(item, '_ok_color', None) is None:
+                if getattr(item, "_ok_color", None) is None:
                     item._ok_color = item.GetBackgroundColour()
             else:
-                color = getattr(item, '_ok_color', None)
+                color = getattr(item, "_ok_color", None)
                 if color is None:
                     color = OKColor
                     if isinstance(item, wx.Panel):
@@ -229,99 +183,71 @@ class Editor(UIEditor):
             item.SetBackgroundColour(color)
             item.Refresh()
 
-    #-------------------------------------------------------------------------
-    #  Handles the editor's invalid state changing:
-    #-------------------------------------------------------------------------
-
     def _invalid_changed(self, state):
         """ Handles the editor's invalid state changing.
         """
         self.set_error_state()
 
-#-------------------------------------------------------------------------
-#  'EditorWithList' class:
-#-------------------------------------------------------------------------
-
 
 class EditorWithList(Editor):
     """ Editor for an object that contains a list.
     """
-    #-------------------------------------------------------------------------
-    #  Trait definitions:
-    #-------------------------------------------------------------------------
 
-    # Object containing the list being monitored
+    # -------------------------------------------------------------------------
+    #  Trait definitions:
+    # -------------------------------------------------------------------------
+
+    #: Object containing the list being monitored
     list_object = Instance(HasTraits)
 
-    # Name of the monitored trait
+    #: Name of the monitored trait
     list_name = Str
 
-    # Function used to evaluate the current list object value:
+    #: Function used to evaluate the current list object value:
     list_value = Callable
-
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Initializes the object.
         """
         factory = self.factory
         name = factory.name
-        if name != '':
-            self.list_object, self.list_name, self.list_value = \
-                self.parse_extended_name(name)
+        if name != "":
+            self.list_object, self.list_name, self.list_value = self.parse_extended_name(
+                name
+            )
         else:
-            self.list_object, self.list_name = factory, 'values'
+            self.list_object, self.list_name = factory, "values"
             self.list_value = lambda: factory.values
 
         self.list_object.on_trait_change(
-            self._list_updated, self.list_name + '[]', dispatch='ui')
+            self._list_updated, self.list_name + "[]", dispatch="ui"
+        )
 
         self._list_updated()
-
-    #-------------------------------------------------------------------------
-    #  Disconnects the listeners set up by the constructor:
-    #-------------------------------------------------------------------------
 
     def dispose(self):
         """ Disconnects the listeners set up by the constructor.
         """
         self.list_object.on_trait_change(
-            self._list_updated, self.list_name + '[]', remove=True)
+            self._list_updated, self.list_name + "[]", remove=True
+        )
 
         super(EditorWithList, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Handles the monitored trait being updated:
-    #-------------------------------------------------------------------------
 
     def _list_updated(self):
         """ Handles the monitored trait being updated.
         """
         self.list_updated(self.list_value())
 
-    #-------------------------------------------------------------------------
-    #  Handles the monitored list being updated:
-    #-------------------------------------------------------------------------
-
     def list_updated(self, values):
         """ Handles the monitored list being updated.
         """
         raise NotImplementedError
 
-#-------------------------------------------------------------------------
-#  'EditorFromView' class:
-#-------------------------------------------------------------------------
-
 
 class EditorFromView(Editor):
     """ An editor generated from a View object.
     """
-
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Initializes the object.
@@ -332,20 +258,11 @@ class EditorFromView(Editor):
 
         self.control = ui.control
 
-    #-------------------------------------------------------------------------
-    #  Creates and returns the traits UI defined by this editor:
-    #  (Must be overridden by a subclass):
-    #-------------------------------------------------------------------------
-
     def init_ui(self, parent):
         """ Creates and returns the traits UI defined by this editor.
             (Must be overridden by a subclass).
         """
         raise NotImplementedError
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -354,10 +271,6 @@ class EditorFromView(Editor):
         # Normally nothing needs to be done here, since it should all be handled
         # by the editor's internally created traits UI:
         pass
-
-    #-------------------------------------------------------------------------
-    #  Dispose of the editor:
-    #-------------------------------------------------------------------------
 
     def dispose(self):
         """ Disposes of the editor.

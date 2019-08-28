@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,15 +8,12 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Creates a PyQt specific modal dialog user interface that runs as a
 complete application, using information from the specified UI object.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 # Standard library imports.
 from __future__ import absolute_import
@@ -26,8 +23,10 @@ import os
 from pyface.qt import QtGui
 
 # ETS imports.
-from pyface.util.guisupport import is_event_loop_running_qt4, \
-    start_event_loop_qt4
+from pyface.util.guisupport import (
+    is_event_loop_running_qt4,
+    start_event_loop_qt4,
+)
 
 
 KEEP_ALIVE_UIS = set()
@@ -36,17 +35,18 @@ KEEP_ALIVE_UIS = set()
 def on_ui_destroyed(object, name, old, destroyed):
     """ Remove the UI object from KEEP_ALIVE_UIS.
     """
-    assert name == 'destroyed'
+    assert name == "destroyed"
     if destroyed:
         assert object in KEEP_ALIVE_UIS
         KEEP_ALIVE_UIS.remove(object)
-        object.on_trait_change(on_ui_destroyed, 'destroyed', remove=True)
+        object.on_trait_change(on_ui_destroyed, "destroyed", remove=True)
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Creates a 'stand-alone' PyQt application to display a specified traits UI
 #  View:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
 
 def view_application(context, view, kind, handler, id, scrollable, args):
     """ Creates a stand-alone PyQt application to display a specified traits UI
@@ -76,39 +76,35 @@ def view_application(context, view, kind, handler, id, scrollable, args):
 
 
     """
-    if (kind == 'panel') or ((kind is None) and (view.kind == 'panel')):
-        kind = 'modal'
+    if (kind == "panel") or ((kind is None) and (view.kind == "panel")):
+        kind = "modal"
 
     app = QtGui.QApplication.instance()
     if app is None or not is_event_loop_running_qt4(app):
-        return ViewApplication(context, view, kind, handler, id,
-                               scrollable, args).ui.result
+        return ViewApplication(
+            context, view, kind, handler, id, scrollable, args
+        ).ui.result
 
-    ui = view.ui(context,
-                 kind=kind,
-                 handler=handler,
-                 id=id,
-                 scrollable=scrollable,
-                 args=args)
+    ui = view.ui(
+        context,
+        kind=kind,
+        handler=handler,
+        id=id,
+        scrollable=scrollable,
+        args=args,
+    )
 
     # If the UI has not been closed yet, we need to keep a reference to
     # it until it does close.
     if not ui.destroyed:
         KEEP_ALIVE_UIS.add(ui)
-        ui.on_trait_change(on_ui_destroyed, 'destroyed')
+        ui.on_trait_change(on_ui_destroyed, "destroyed")
     return ui.result
-
-#-------------------------------------------------------------------------
-#  'ViewApplication' class:
-#-------------------------------------------------------------------------
 
 
 class ViewApplication(object):
     """ Modal window that contains a stand-alone application.
     """
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
 
     def __init__(self, context, view, kind, handler, id, scrollable, args):
         """ Initializes the object.
@@ -122,13 +118,15 @@ class ViewApplication(object):
         self.args = args
 
         # this will block for modal dialogs, but not non-modals
-        self.ui = self.view.ui(self.context,
-                               kind=self.kind,
-                               handler=self.handler,
-                               id=self.id,
-                               scrollable=self.scrollable,
-                               args=self.args)
+        self.ui = self.view.ui(
+            self.context,
+            kind=self.kind,
+            handler=self.handler,
+            id=self.id,
+            scrollable=self.scrollable,
+            args=self.args,
+        )
 
         # only non-modal UIs need to have an event loop started for them
-        if kind not in {'modal', 'livemodal'}:
+        if kind not in {"modal", "livemodal"}:
             start_event_loop_qt4()

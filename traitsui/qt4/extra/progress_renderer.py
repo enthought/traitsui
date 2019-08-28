@@ -1,15 +1,15 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2016, Enthought, Inc.
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
+# license included in LICENSE.txt and may be redistributed only
 # under the conditions described in the aforementioned license.  The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
 #
 # Author: Corran Webster
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ A renderer which displays a progress bar. """
 
@@ -25,9 +25,9 @@ class ProgressRenderer(TableDelegate):
     """ A renderer which displays a progress bar.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  QAbstractItemDelegate interface
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def paint(self, painter, option, index):
         """ Paint the progressbar. """
@@ -46,5 +46,6 @@ class ProgressRenderer(TableDelegate):
 
         # Draw it
         style = QtGui.QApplication.instance().style()
-        style.drawControl(QtGui.QStyle.CE_ProgressBar, progress_bar_option,
-                          painter)
+        style.drawControl(
+            QtGui.QStyle.CE_ProgressBar, progress_bar_option, painter
+        )

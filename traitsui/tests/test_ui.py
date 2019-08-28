@@ -1,17 +1,17 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2012, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Author: Pietro Berkes
 #  Date:   Feb 2012
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """
 Test cases for the UI object.
@@ -33,24 +33,18 @@ class FooDialog(HasTraits):
     """Test dialog that does nothing useful."""
 
     my_int = Int(2)
-    my_str = Str('hallo')
+    my_str = Str("hallo")
 
-    traits_view = View(
-        Item('my_int'),
-        Item('my_str'),
-        buttons=['OK']
-    )
+    traits_view = View(Item("my_int"), Item("my_str"), buttons=["OK"])
 
 
 class DisallowNewTraits(HasStrictTraits):
     """ Make sure no extra traits are added.
     """
+
     x = Int(10)
 
-    traits_view = View(
-        Item('x'),
-        spring,
-    )
+    traits_view = View(Item("x"), spring)
 
 
 @skip_if_not_wx
@@ -108,20 +102,23 @@ def test_reset_without_destroy_wx():
     ui = foo.edit_traits()
 
     nose.tools.assert_equal(len(ui._editors), 2)
-    nose.tools.assert_is_instance(ui._editors[0],
-                                  traitsui.wx.text_editor.SimpleEditor)
-    nose.tools.assert_is_instance(ui._editors[0].control,
-                                  wx._controls.TextCtrl)
+    nose.tools.assert_is_instance(
+        ui._editors[0], traitsui.wx.text_editor.SimpleEditor
+    )
+    nose.tools.assert_is_instance(
+        ui._editors[0].control, wx._controls.TextCtrl
+    )
 
     ui.reset(destroy=False)
 
     nose.tools.assert_equal(len(ui._editors), 2)
-    nose.tools.assert_is_instance(ui._editors[0],
-                                  traitsui.wx.text_editor.SimpleEditor)
+    nose.tools.assert_is_instance(
+        ui._editors[0], traitsui.wx.text_editor.SimpleEditor
+    )
     nose.tools.assert_is_none(ui._editors[0].control)
 
     # children are still there: check first text control
-    text_ctrl = ui.control.FindWindowByName('text')
+    text_ctrl = ui.control.FindWindowByName("text")
     nose.tools.assert_is_not_none(text_ctrl)
 
 
@@ -137,16 +134,17 @@ def test_reset_without_destroy_qt():
     ui = foo.edit_traits()
 
     nose.tools.assert_equal(len(ui._editors), 2)
-    nose.tools.assert_is_instance(ui._editors[0],
-                                  traitsui.qt4.text_editor.SimpleEditor)
-    nose.tools.assert_is_instance(ui._editors[0].control,
-                                  qt.QtGui.QLineEdit)
+    nose.tools.assert_is_instance(
+        ui._editors[0], traitsui.qt4.text_editor.SimpleEditor
+    )
+    nose.tools.assert_is_instance(ui._editors[0].control, qt.QtGui.QLineEdit)
 
     ui.reset(destroy=False)
 
     nose.tools.assert_equal(len(ui._editors), 2)
-    nose.tools.assert_is_instance(ui._editors[0],
-                                  traitsui.qt4.text_editor.SimpleEditor)
+    nose.tools.assert_is_instance(
+        ui._editors[0], traitsui.qt4.text_editor.SimpleEditor
+    )
     nose.tools.assert_is_none(ui._editors[0].control)
 
     # children are still there: check first text control
@@ -171,9 +169,10 @@ def test_destroy_after_ok_wx():
     control.Destroy = count_calls(control.Destroy)
 
     # press the OK button and close the dialog
-    okbutton = ui.control.FindWindowByName('button')
-    click_event = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED,
-                                  okbutton.GetId())
+    okbutton = ui.control.FindWindowByName("button")
+    click_event = wx.CommandEvent(
+        wx.wxEVT_COMMAND_BUTTON_CLICKED, okbutton.GetId()
+    )
     okbutton.ProcessEvent(click_event)
 
     nose.tools.assert_is_none(ui.control)
@@ -210,4 +209,4 @@ def test_no_spring_trait():
     ui = obj.edit_traits()
     ui.dispose()
 
-    nose.tools.assert_true('spring' not in obj.traits())
+    nose.tools.assert_true("spring" not in obj.traits())

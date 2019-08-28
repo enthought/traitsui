@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,7 +8,7 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the concrete implementations of the traits Toolkit interface for
 the PyQt user interface toolkit.
@@ -19,11 +19,11 @@ the PyQt user interface toolkit.
 from __future__ import absolute_import
 import pyface.qt
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #  Define the reference to the exported GUIToolkit object:
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 from . import toolkit
 
 # Reference to the GUIToolkit object for Qt.
-toolkit = toolkit.GUIToolkit('traitsui', 'qt4', 'traitsui.qt4')
+toolkit = toolkit.GUIToolkit("traitsui", "qt4", "traitsui.qt4")
