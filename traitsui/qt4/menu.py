@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,7 +8,7 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """
 Dynamically construct PyQt Menus or MenuBars from a supplied string
@@ -42,9 +42,6 @@ Menu Description Syntax::
 A line beginning with a hyphen (-) is interpreted as a menu separator.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import, print_function
 
@@ -53,24 +50,14 @@ import re
 from pyface.qt import QtGui
 import six
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
 
-help_pat = re.compile(r'(.*){(.*)}(.*)')
-options_pat = re.compile(r'(.*)\[(.*)\](.*)')
-
-#-------------------------------------------------------------------------
-#  'MakeMenu' class:
-#-------------------------------------------------------------------------
+help_pat = re.compile(r"(.*){(.*)}(.*)")
+options_pat = re.compile(r"(.*)\[(.*)\](.*)")
 
 
 class MakeMenu:
     """ Manages creation of menus.
     """
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
 
     def __init__(self, desc, owner, popup=False, window=None):
         """ Initializes the object.
@@ -79,9 +66,9 @@ class MakeMenu:
         if window is None:
             window = owner
         self.window = window
-        self.indirect = getattr(owner, 'call_menu', None)
+        self.indirect = getattr(owner, "call_menu", None)
         self.names = {}
-        self.desc = desc.split('\n')
+        self.desc = desc.split("\n")
         self.index = 0
         if popup:
             self.menu = menu = QtGui.QMenu()
@@ -90,10 +77,6 @@ class MakeMenu:
             self.menu = menu = QtGui.QMenuBar()
             self.parse(menu, -1)
             window.setMenuBar(menu)
-
-    #-------------------------------------------------------------------------
-    #  Recursively parses menu items from the description:
-    #-------------------------------------------------------------------------
 
     def parse(self, menu, indent):
         """ Recursively parses menu items from the description.
@@ -117,26 +100,26 @@ class MakeMenu:
             self.index += 1
 
             # Check for a blank or comment line:
-            if (line == '') or (line[0:1] == '#'):
+            if (line == "") or (line[0:1] == "#"):
                 continue
 
             # Check for a menu separator:
-            if line[0:1] == '-':
+            if line[0:1] == "-":
                 menu.addSeparator()
                 continue
 
             # Extract the help string (if any):
-            help = ''
+            help = ""
             match = help_pat.search(line)
             if match:
-                help = ' ' + match.group(2).strip()
+                help = " " + match.group(2).strip()
                 line = match.group(1) + match.group(3)
 
             # Check for a menu item:
-            col = line.find(':')
+            col = line.find(":")
             if col >= 0:
-                handler = line[col + 1:].strip()
-                if handler != '':
+                handler = line[col + 1 :].strip()
+                if handler != "":
                     if self.indirect:
                         self.indirect(cur_id, handler)
                         handler = self.indirect
@@ -144,38 +127,41 @@ class MakeMenu:
                         try:
                             _locl = dict(self=self)
                             exec(
-                                'def handler(self=self.owner):\n %s\n' %
-                                handler, globals(), _locl)
-                            handler = _locl['handler']
+                                "def handler(self=self.owner):\n %s\n"
+                                % handler,
+                                globals(),
+                                _locl,
+                            )
+                            handler = _locl["handler"]
                         except:
                             handler = null_handler
                 else:
                     try:
                         _locl = dict(self=self)
                         exec(
-                            'def handler(self=self.owner):\n%s\n' % (
-                                self.get_body(indented),
-                            ),
+                            "def handler(self=self.owner):\n%s\n"
+                            % (self.get_body(indented),),
                             globals(),
-                            _locl
+                            _locl,
                         )
-                        handler = _locl['handler']
+                        handler = _locl["handler"]
                     except:
                         handler = null_handler
 
                 not_checked = checked = disabled = False
-                name = key = ''
+                name = key = ""
                 line = line[:col]
                 match = options_pat.search(line)
                 if match:
                     line = match.group(1) + match.group(3)
                     not_checked, checked, disabled, name = option_check(
-                        '~/-', match.group(2).strip())
+                        "~/-", match.group(2).strip()
+                    )
 
                 label = line.strip()
-                col = label.find('|')
+                col = label.find("|")
                 if col >= 0:
-                    key = label[col + 1:].strip()
+                    key = label[col + 1 :].strip()
                     label = label[:col].strip()
 
                 act = menu.addAction(label, handler)
@@ -205,10 +191,6 @@ class MakeMenu:
                 act = menu.addMenu(submenu)
                 act.setStatusTip(help)
 
-    #-------------------------------------------------------------------------
-    #  Returns the body of an inline method:
-    #-------------------------------------------------------------------------
-
     def get_body(self, indent):
         """ Returns the body of an inline method.
         """
@@ -219,14 +201,10 @@ class MakeMenu:
                 break
             result.append(line)
             self.index += 1
-        result = '\n'.join(result).rstrip()
-        if result != '':
+        result = "\n".join(result).rstrip()
+        if result != "":
             return result
-        return '  pass'
-
-    #-------------------------------------------------------------------------
-    #  Returns the QAction associated with a specified name:
-    #-------------------------------------------------------------------------
+        return "  pass"
 
     def get_action(self, name):
         """ Returns the QAction associated with a specified name.
@@ -235,10 +213,6 @@ class MakeMenu:
             return self.names[name]
 
         return name
-
-    #-------------------------------------------------------------------------
-    #  Checks (or unchecks) a menu item specified by name:
-    #-------------------------------------------------------------------------
 
     def checked(self, name, check=None):
         """ Checks (or unchecks) a menu item specified by name.
@@ -250,10 +224,6 @@ class MakeMenu:
 
         act.setChecked(check)
 
-    #-------------------------------------------------------------------------
-    #  Enables (or disables) a menu item specified by name:
-    #-------------------------------------------------------------------------
-
     def enabled(self, name, enable=None):
         """ Enables (or disables) a menu item specified by name.
         """
@@ -264,10 +234,6 @@ class MakeMenu:
 
         act.setEnabled(enable)
 
-    #-------------------------------------------------------------------------
-    #  Gets/Sets the label for a menu item:
-    #-------------------------------------------------------------------------
-
     def label(self, name, label=None):
         """ Gets or sets the label for a menu item.
         """
@@ -277,10 +243,6 @@ class MakeMenu:
             return six.text_type(act.text())
 
         act.setText(label)
-
-#-------------------------------------------------------------------------
-#  'MakeMenuItem' class:
-#-------------------------------------------------------------------------
 
 
 class MakeMenuItem:
@@ -305,10 +267,11 @@ class MakeMenuItem:
     def label(self, label=None):
         return self.menu.label(self.act, label)
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Determine whether a string contains any specified option characters, and
 #  remove them if it does:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def option_check(test, string):
@@ -320,13 +283,14 @@ def option_check(test, string):
         col = string.find(char)
         result.append(col >= 0)
         if col >= 0:
-            string = string[: col] + string[col + 1:]
+            string = string[:col] + string[col + 1 :]
     return result + [string.strip()]
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Null menu option selection handler:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def null_handler(event):
-    print('null_handler invoked')
+    print("null_handler invoked")

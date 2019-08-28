@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,72 +8,65 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Trait definition for a PyQt-based font.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 from pyface.qt import QtGui
 
-from traits.api \
-    import Trait, TraitHandler, TraitError
+from traits.api import Trait, TraitHandler, TraitError
 import six
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Convert a string into a valid QFont object (if possible):
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Mapping of strings to valid QFont style hints.
 font_families = {
-    'default': QtGui.QFont.AnyStyle,
-    'decorative': QtGui.QFont.Decorative,
-    'roman': QtGui.QFont.Serif,
-    'script': QtGui.QFont.SansSerif,
-    'swiss': QtGui.QFont.SansSerif,
-    'modern': QtGui.QFont.TypeWriter
+    "default": QtGui.QFont.AnyStyle,
+    "decorative": QtGui.QFont.Decorative,
+    "roman": QtGui.QFont.Serif,
+    "script": QtGui.QFont.SansSerif,
+    "swiss": QtGui.QFont.SansSerif,
+    "modern": QtGui.QFont.TypeWriter,
 }
 
 # Mapping of strings to QFont styles.
 font_styles = {
-    'slant': QtGui.QFont.StyleOblique,
-    'italic': QtGui.QFont.StyleItalic
+    "slant": QtGui.QFont.StyleOblique,
+    "italic": QtGui.QFont.StyleItalic,
 }
 
 # Mapping of strings to QFont weights.
-font_weights = {
-    'light': QtGui.QFont.Light,
-    'bold': QtGui.QFont.Bold
-}
+font_weights = {"light": QtGui.QFont.Light, "bold": QtGui.QFont.Bold}
 
 # Strings to ignore in text representations of fonts
-font_noise = ['pt', 'point', 'family']
-
-#-------------------------------------------------------------------------
-#  Converts a QFont into a string description of itself:
-#-------------------------------------------------------------------------
+font_noise = ["pt", "point", "family"]
 
 
 def font_to_str(font):
     """ Converts a QFont into a string description of itself.
     """
-    weight = {QtGui.QFont.Light: ' Light',
-              QtGui.QFont.Bold: ' Bold'}.get(font.weight(), '')
-    style = {QtGui.QFont.StyleOblique: ' Slant',
-             QtGui.QFont.StyleItalic: ' Italic'}.get(font.style(), '')
-    underline = ''
+    weight = {QtGui.QFont.Light: " Light", QtGui.QFont.Bold: " Bold"}.get(
+        font.weight(), ""
+    )
+    style = {
+        QtGui.QFont.StyleOblique: " Slant",
+        QtGui.QFont.StyleItalic: " Italic",
+    }.get(font.style(), "")
+    underline = ""
     if font.underline():
-        underline = ' underline'
-    return '%s point %s%s%s%s' % (
-           font.pointSize(), six.text_type(font.family()), style, weight, underline)
-
-#-------------------------------------------------------------------------
-#  Create a TraitFont object from a string description:
-#-------------------------------------------------------------------------
+        underline = " underline"
+    return "%s point %s%s%s%s" % (
+        font.pointSize(),
+        six.text_type(font.family()),
+        style,
+        weight,
+        underline,
+    )
 
 
 def create_traitsfont(value):
@@ -83,7 +76,7 @@ def create_traitsfont(value):
         return TraitsFont(value)
 
     point_size = None
-    family = ''
+    family = ""
     style = QtGui.QFont.StyleNormal
     weight = QtGui.QFont.Normal
     underline = False
@@ -99,7 +92,7 @@ def create_traitsfont(value):
             style = font_styles[lword]
         elif lword in font_weights:
             weight = font_weights[lword]
-        elif lword == 'underline':
+        elif lword == "underline":
             underline = True
         elif lword not in font_noise:
             if point_size is None:
@@ -111,7 +104,7 @@ def create_traitsfont(value):
             facename.append(word)
 
     if facename:
-        family = ' '.join(facename)
+        family = " ".join(facename)
 
     if family:
         fnt = TraitsFont(family)
@@ -129,35 +122,25 @@ def create_traitsfont(value):
 
     return fnt
 
-#-------------------------------------------------------------------------
-#  'TraitsFont' class:
-#-------------------------------------------------------------------------
-
 
 class TraitsFont(QtGui.QFont):
     """ A Traits-specific QFont.
     """
-    #-------------------------------------------------------------------------
-    #  Returns the pickleable form of a TraitsFont object:
-    #-------------------------------------------------------------------------
 
     def __reduce_ex__(self, protocol):
         """ Returns the pickleable form of a TraitsFont object.
         """
-        return (create_traitsfont, (font_to_str(self), ))
-
-    #-------------------------------------------------------------------------
-    #  Returns a printable form of the font:
-    #-------------------------------------------------------------------------
+        return (create_traitsfont, (font_to_str(self),))
 
     def __str__(self):
         """ Returns a printable form of the font.
         """
         return font_to_str(self)
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  'TraitPyQtFont' class'
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class TraitPyQtFont(TraitHandler):
@@ -165,9 +148,6 @@ class TraitPyQtFont(TraitHandler):
     descriptor strings; the value actually assigned is the corresponding
     TraitsFont.
     """
-    #-------------------------------------------------------------------------
-    #  Validates that the value is a valid font:
-    #-------------------------------------------------------------------------
 
     def validate(self, object, name, value):
         """ Validates that the value is a valid font descriptor string. If so,
@@ -182,17 +162,19 @@ class TraitPyQtFont(TraitHandler):
         except:
             pass
 
-        raise TraitError(object, name, 'a font descriptor string',
-                         repr(value))
+        raise TraitError(object, name, "a font descriptor string", repr(value))
 
     def info(self):
-        return ("a string describing a font (e.g. '12 pt bold italic "
-                "swiss family Arial' or 'default 12')")
+        return (
+            "a string describing a font (e.g. '12 pt bold italic "
+            "swiss family Arial' or 'default 12')"
+        )
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Callable that returns an instance of the PyQtToolkitEditorFactory for font
 #  editors.
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 ### FIXME: We have declared the 'editor' to be a function instead of  the
 # traitsui.qt4.font_editor.ToolkitEditorFactory class, since the
@@ -202,10 +184,12 @@ class TraitPyQtFont(TraitHandler):
 
 def get_font_editor(*args, **traits):
     from traitsui.qt4.font_editor import ToolkitEditorFactory
+
     return ToolkitEditorFactory(*args, **traits)
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Define a PyQt specific font trait:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 PyQtFont = Trait(TraitsFont(), TraitPyQtFont(), editor=get_font_editor)

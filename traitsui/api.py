@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,14 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   10/07/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Exports the symbols defined by the traits.ui package.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -81,12 +78,29 @@ from .editors.api import (
     TitleEditor,
     TreeEditor,
     TupleEditor,
-    ValueEditor)
+    ValueEditor,
+)
 
-from .group import (Group, HFlow, HGroup, HSplit, Tabbed, VFlow, VFold, VGrid,
-                    VGroup, VSplit)
+from .group import (
+    Group,
+    HFlow,
+    HGroup,
+    HSplit,
+    Tabbed,
+    VFlow,
+    VFold,
+    VGrid,
+    VGroup,
+    VSplit,
+)
 
-from .handler import Controller, Handler, ModelView, ViewHandler, default_handler
+from .handler import (
+    Controller,
+    Handler,
+    ModelView,
+    ViewHandler,
+    default_handler,
+)
 
 from .help import on_help_call
 
@@ -94,8 +108,18 @@ from .help_template import help_template
 
 from .include import Include
 
-from .item import (Custom, Heading, Item, Label, Readonly, Spring, UCustom,
-                   UItem, UReadonly, spring)
+from .item import (
+    Custom,
+    Heading,
+    Item,
+    Label,
+    Readonly,
+    Spring,
+    UCustom,
+    UItem,
+    UReadonly,
+    spring,
+)
 
 from .menu import (
     Action,
@@ -121,15 +145,25 @@ from .menu import (
     StandardMenuBar,
     ToolBar,
     UndoAction,
-    UndoButton)
+    UndoButton,
+)
 
 from .message import auto_close_message, error, message
 
-from .table_column import (ExpressionColumn, ListColumn, NumericColumn,
-                           ObjectColumn, TableColumn)
+from .table_column import (
+    ExpressionColumn,
+    ListColumn,
+    NumericColumn,
+    ObjectColumn,
+    TableColumn,
+)
 
-from .table_filter import (EvalTableFilter, MenuTableFilter, RuleTableFilter,
-                           TableFilter)
+from .table_filter import (
+    EvalTableFilter,
+    MenuTableFilter,
+    RuleTableFilter,
+    TableFilter,
+)
 
 from .tabular_adapter import TabularAdapter
 
@@ -137,18 +171,28 @@ from .toolkit import toolkit
 
 from .toolkit_traits import ColorTrait, FontTrait, RGBColorTrait
 
-from .tree_node import (ITreeNode, ITreeNodeAdapter, MultiTreeNode,
-                        ObjectTreeNode, TreeNode, TreeNodeObject)
+from .tree_node import (
+    ITreeNode,
+    ITreeNodeAdapter,
+    MultiTreeNode,
+    ObjectTreeNode,
+    TreeNode,
+    TreeNodeObject,
+)
 
 from .ui import UI
 
 from .ui_info import UIInfo
 
-from .ui_traits import (Border, HasBorder, HasMargin, Image, Margin,
-                        StatusItem)
+from .ui_traits import Border, HasBorder, HasMargin, Image, Margin, StatusItem
 
-from .undo import (AbstractUndoItem, ListUndoItem, UndoHistory,
-                   UndoHistoryUndoItem, UndoItem)
+from .undo import (
+    AbstractUndoItem,
+    ListUndoItem,
+    UndoHistory,
+    UndoHistoryUndoItem,
+    UndoItem,
+)
 
 from .view import View
 
@@ -157,7 +201,7 @@ from .view_element import ViewElement, ViewSubElement
 from . import view_elements
 
 _constants = toolkit().constants()
-WindowColor = _constants.get('WindowColor', 0xFFFFFF)
+WindowColor = _constants.get("WindowColor", 0xFFFFFF)
 
 
 def raise_to_debug():
@@ -166,5 +210,6 @@ def raise_to_debug():
     exception.
     """
     import os
-    if os.getenv('TRAITS_DEBUG') is not None:
+
+    if os.getenv("TRAITS_DEBUG") is not None:
         raise

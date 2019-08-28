@@ -1,17 +1,17 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2012, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Author: Pietro Berkes
 #  Date:   Feb 2012
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """
 Test the layout of elements is consistent with the layout parameters.
@@ -37,29 +37,25 @@ _TXT_WIDTH = 100
 
 class VResizeDialog(HasTraits):
 
-    txt = Str('hallo')
+    txt = Str("hallo")
 
     traits_view = View(
-        VGroup(
-            Item('txt', width=_TXT_WIDTH, resizable=True),
-        ),
+        VGroup(Item("txt", width=_TXT_WIDTH, resizable=True)),
         width=_DIALOG_WIDTH,
         height=_DIALOG_HEIGHT,
-        resizable=True
+        resizable=True,
     )
 
 
 class HResizeDialog(HasTraits):
 
-    txt = Str('hallo')
+    txt = Str("hallo")
 
     traits_view = View(
-        HGroup(
-            Item('txt', width=_TXT_WIDTH, resizable=True),
-        ),
+        HGroup(Item("txt", width=_TXT_WIDTH, resizable=True)),
         width=_DIALOG_WIDTH,
         height=_DIALOG_HEIGHT,
-        resizable=True
+        resizable=True,
     )
 
 
@@ -104,7 +100,7 @@ def test_qt_resizable_in_hgroup():
         # horizontal size should be unchanged
         # ??? maybe not: some elements (e.g., the text field) have
         # 'Expanding' as their default behavior
-        #nose.tools.assert_less(text.width(), _TXT_WIDTH+100)
+        # nose.tools.assert_less(text.width(), _TXT_WIDTH+100)
 
 
 if __name__ == "__main__":

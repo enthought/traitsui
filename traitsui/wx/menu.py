@@ -1,9 +1,9 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -12,7 +12,7 @@
 #  Author: David C. Morrill
 #  Date:   01/24/2002
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Dynamically construct wxPython Menus or MenuBars from a supplied string
     description of the menu.
@@ -45,9 +45,9 @@ Menu Description Syntax::
 A line beginning with a hyphen (-) is interpreted as a menu separator.
 """
 
-#=========================================================================
+# =========================================================================
 #  Imports:
-#=========================================================================
+# =========================================================================
 
 from __future__ import absolute_import, print_function
 
@@ -56,43 +56,36 @@ import re
 import string
 import six
 
-#=========================================================================
+# =========================================================================
 #  Constants:
-#=========================================================================
+# =========================================================================
 
-help_pat = re.compile(r'(.*){(.*)}(.*)')
-options_pat = re.compile(r'(.*)\[(.*)\](.*)')
+help_pat = re.compile(r"(.*){(.*)}(.*)")
+options_pat = re.compile(r"(.*)\[(.*)\](.*)")
 
 # Mapping of key name strings to wxPython key codes
 key_map = {
-    'F1': wx.WXK_F1,
-    'F2': wx.WXK_F2,
-    'F3': wx.WXK_F3,
-    'F4': wx.WXK_F4,
-    'F5': wx.WXK_F5,
-    'F6': wx.WXK_F6,
-    'F7': wx.WXK_F7,
-    'F8': wx.WXK_F8,
-    'F9': wx.WXK_F9,
-    'F10': wx.WXK_F10,
-    'F11': wx.WXK_F11,
-    'F12': wx.WXK_F12
+    "F1": wx.WXK_F1,
+    "F2": wx.WXK_F2,
+    "F3": wx.WXK_F3,
+    "F4": wx.WXK_F4,
+    "F5": wx.WXK_F5,
+    "F6": wx.WXK_F6,
+    "F7": wx.WXK_F7,
+    "F8": wx.WXK_F8,
+    "F9": wx.WXK_F9,
+    "F10": wx.WXK_F10,
+    "F11": wx.WXK_F11,
+    "F12": wx.WXK_F12,
 }
-
-#-------------------------------------------------------------------------
-#  'MakeMenu' class:
-#-------------------------------------------------------------------------
 
 
 class MakeMenu:
     """ Manages creation of menus.
     """
-    # Initialize the globally unique menu ID:
-    cur_id = 1000
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
+    #: Initialize the globally unique menu ID:
+    cur_id = 1000
 
     def __init__(self, desc, owner, popup=False, window=None):
         """ Initializes the object.
@@ -101,9 +94,9 @@ class MakeMenu:
         if window is None:
             window = owner
         self.window = window
-        self.indirect = getattr(owner, 'call_menu', None)
+        self.indirect = getattr(owner, "call_menu", None)
         self.names = {}
-        self.desc = desc.split('\n')
+        self.desc = desc.split("\n")
         self.index = 0
         self.keys = []
         if popup:
@@ -115,10 +108,6 @@ class MakeMenu:
             window.SetMenuBar(menu)
             if len(self.keys) > 0:
                 window.SetAcceleratorTable(wx.AcceleratorTable(self.keys))
-
-    #-------------------------------------------------------------------------
-    #  Recursively parses menu items from the description:
-    #-------------------------------------------------------------------------
 
     def parse(self, menu, indent):
         """ Recursively parses menu items from the description.
@@ -142,11 +131,11 @@ class MakeMenu:
             self.index += 1
 
             # Check for a blank or comment line:
-            if (line == '') or (line[0:1] == '#'):
+            if (line == "") or (line[0:1] == "#"):
                 continue
 
             # Check for a menu separator:
-            if line[0:1] == '-':
+            if line[0:1] == "-":
                 menu.AppendSeparator()
                 continue
 
@@ -155,64 +144,71 @@ class MakeMenu:
             cur_id = MakeMenu.cur_id
 
             # Extract the help string (if any):
-            help = ''
+            help = ""
             match = help_pat.search(line)
             if match:
-                help = ' ' + match.group(2).strip()
+                help = " " + match.group(2).strip()
                 line = match.group(1) + match.group(3)
 
             # Check for a menu item:
-            col = line.find(':')
+            col = line.find(":")
             if col >= 0:
-                handler = line[col + 1:].strip()
-                if handler != '':
+                handler = line[col + 1 :].strip()
+                if handler != "":
                     if self.indirect:
                         self.indirect(cur_id, handler)
                         handler = self.indirect
                     else:
                         try:
-                            exec (
-                                'def handler(event,self=self.owner):\n %s\n' %
-                                handler)
+                            exec(
+                                "def handler(event,self=self.owner):\n %s\n"
+                                % handler
+                            )
                         except:
                             handler = null_handler
                 else:
                     try:
-                        exec('def handler(event,self=self.owner):\n%s\n' % (
-                            self.get_body(indented), ), globals())
+                        exec(
+                            "def handler(event,self=self.owner):\n%s\n"
+                            % (self.get_body(indented),),
+                            globals(),
+                        )
                     except:
                         handler = null_handler
                 wx.EVT_MENU(self.window, cur_id, handler)
                 not_checked = checked = disabled = False
-                line = line[: col]
+                line = line[:col]
                 match = options_pat.search(line)
                 if match:
                     line = match.group(1) + match.group(3)
                     not_checked, checked, disabled, name = option_check(
-                        '~/-', match.group(2).strip())
-                    if name != '':
+                        "~/-", match.group(2).strip()
+                    )
+                    if name != "":
                         self.names[name] = cur_id
                         setattr(self.owner, name, MakeMenuItem(self, cur_id))
                 label = line.strip()
-                col = label.find('|')
+                col = label.find("|")
                 if col >= 0:
-                    key = label[col + 1:].strip()
-                    label = '%s%s%s' % (label[: col].strip(), '\t', key)
+                    key = label[col + 1 :].strip()
+                    label = "%s%s%s" % (label[:col].strip(), "\t", key)
                     key = key.upper()
                     flag = wx.ACCEL_NORMAL
-                    col = key.find('-')
+                    col = key.find("-")
                     if col >= 0:
-                        flag = {'CTRL': wx.ACCEL_CTRL,
-                                'SHIFT': wx.ACCEL_SHIFT,
-                                'ALT': wx.ACCEL_ALT
-                                }.get(key[: col].strip(), wx.ACCEL_CTRL)
-                        key = key[col + 1:].strip()
+                        flag = {
+                            "CTRL": wx.ACCEL_CTRL,
+                            "SHIFT": wx.ACCEL_SHIFT,
+                            "ALT": wx.ACCEL_ALT,
+                        }.get(key[:col].strip(), wx.ACCEL_CTRL)
+                        key = key[col + 1 :].strip()
                     code = key_map.get(key, None)
                     try:
                         if code is None:
                             code = ord(key)
                         self.keys.append(
-                            wx.AcceleratorEntry(flag, code, cur_id))
+                            wx.AcceleratorEntry(flag, code, cur_id)
+                        )
                     except:
                         pass
                 menu.Append(cur_id, label, help, not_checked or checked)
@@ -237,10 +233,6 @@ class MakeMenu:
                 # not understand 'MenuAppend'):
                 menu.Append(submenu, label)
 
-    #-------------------------------------------------------------------------
-    #  Returns the body of an inline method:
-    #-------------------------------------------------------------------------
-
     def get_body(self, indent):
         """ Returns the body of an inline method.
         """
@@ -251,14 +243,10 @@ class MakeMenu:
                 break
             result.append(line)
             self.index += 1
-        result = '\n'.join(result).rstrip()
-        if result != '':
+        result = "\n".join(result).rstrip()
+        if result != "":
             return result
-        return '  pass'
-
-    #-------------------------------------------------------------------------
-    #  Returns the id associated with a specified name:
-    #-------------------------------------------------------------------------
+        return "  pass"
 
     def get_id(self, name):
         """ Returns the ID associated with a specified name.
@@ -267,20 +255,12 @@ class MakeMenu:
             return self.names[name]
         return name
 
-    #-------------------------------------------------------------------------
-    #  Checks (or unchecks) a menu item specified by name:
-    #-------------------------------------------------------------------------
-
     def checked(self, name, check=None):
         """ Checks (or unchecks) a menu item specified by name.
         """
         if check is None:
             return self.menu.IsChecked(self.get_id(name))
         self.menu.Check(self.get_id(name), check)
-
-    #-------------------------------------------------------------------------
-    #  Enables (or disables) a menu item specified by name:
-    #-------------------------------------------------------------------------
 
     def enabled(self, name, enable=None):
         """ Enables (or disables) a menu item specified by name.
@@ -289,20 +269,12 @@ class MakeMenu:
             return self.menu.IsEnabled(self.get_id(name))
         self.menu.Enable(self.get_id(name), enable)
 
-    #-------------------------------------------------------------------------
-    #  Gets/Sets the label for a menu item:
-    #-------------------------------------------------------------------------
-
     def label(self, name, label=None):
         """ Gets or sets the label for a menu item.
         """
         if label is None:
             return self.menu.GetLabel(self.get_id(name))
         self.menu.SetLabel(self.get_id(name), label)
-
-#-------------------------------------------------------------------------
-#  'MakeMenuItem' class:
-#-------------------------------------------------------------------------
 
 
 class MakeMenuItem:
@@ -327,10 +299,11 @@ class MakeMenuItem:
     def label(self, label=None):
         return self.menu.label(self.id, label)
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Determine whether a string contains any specified option characters, and
 #  remove them if it does:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def option_check(test, string):
@@ -342,13 +315,14 @@ def option_check(test, string):
         col = string.find(char)
         result.append(col >= 0)
         if col >= 0:
-            string = string[: col] + string[col + 1:]
+            string = string[:col] + string[col + 1 :]
     return result + [string.strip()]
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Null menu option selection handler:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def null_handler(event):
-    print('null_handler invoked')
+    print("null_handler invoked")

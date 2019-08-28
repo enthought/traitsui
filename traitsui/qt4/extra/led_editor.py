@@ -13,7 +13,6 @@ from traits.api import undefined
 
 
 class _LEDEditor(Editor):
-
     def init(self, parent):
         self.control = QtGui.QLCDNumber()
         self.control.setSegmentStyle(QtGui.QLCDNumber.Flat)
@@ -27,5 +26,5 @@ class LEDEditor(BasicEditorFactory):
 
     #: The editor class to be created
     klass = _LEDEditor
-    # Alignment is not supported for QT backend
+    #: Alignment is not supported for QT backend
     alignment = undefined

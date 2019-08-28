@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -12,13 +12,10 @@
 #
 #  Author: David C. Morrill
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 """ Defines the tree editor factory for all traits user interface toolkits.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -30,48 +27,59 @@ from ..dock_window_theme import DockWindowTheme
 from ..editor_factory import EditorFactory
 from ..helper import Orientation
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Size of each tree node icon
 IconSize = Tuple((16, 16), Int, Int)
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  The core tree node menu actions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
-NewAction = 'NewAction'
-CopyAction = Action(name='Copy',
-                    action='editor._menu_copy_node',
-                    enabled_when='editor._is_copyable(object)')
-CutAction = Action(name='Cut',
-                   action='editor._menu_cut_node',
-                   enabled_when='editor._is_cutable(object)')
-PasteAction = Action(name='Paste',
-                     action='editor._menu_paste_node',
-                     enabled_when='editor._is_pasteable(object)')
-DeleteAction = Action(name='Delete',
-                      action='editor._menu_delete_node',
-                      enabled_when='editor._is_deletable(object)')
-RenameAction = Action(name='Rename',
-                      action='editor._menu_rename_node',
-                      enabled_when='editor._is_renameable(object)')
+NewAction = "NewAction"
+CopyAction = Action(
+    name="Copy",
+    action="editor._menu_copy_node",
+    enabled_when="editor._is_copyable(object)",
+)
+CutAction = Action(
+    name="Cut",
+    action="editor._menu_cut_node",
+    enabled_when="editor._is_cutable(object)",
+)
+PasteAction = Action(
+    name="Paste",
+    action="editor._menu_paste_node",
+    enabled_when="editor._is_pasteable(object)",
+)
+DeleteAction = Action(
+    name="Delete",
+    action="editor._menu_delete_node",
+    enabled_when="editor._is_deletable(object)",
+)
+RenameAction = Action(
+    name="Rename",
+    action="editor._menu_rename_node",
+    enabled_when="editor._is_renameable(object)",
+)
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for tree editors.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Supported TreeNode objects
     nodes = List(TreeNode)
@@ -86,7 +94,7 @@ class ToolkitEditorFactory(EditorFactory):
     editable = Bool(True)
 
     #: Selection mode.
-    selection_mode = Enum('single', 'extended')
+    selection_mode = Enum("single", "extended")
 
     #: Is the editor shared across trees?
     shared_editor = Bool(False)
@@ -171,7 +179,7 @@ class ToolkitEditorFactory(EditorFactory):
     #: * 'appearance': Show lines only when they look good.
     #: * 'on': Always show lines.
     #: * 'off': Don't show lines.
-    lines_mode = Enum('appearance', 'on', 'off')
+    lines_mode = Enum("appearance", "on", "off")
 
     # FIXME: Document as unimplemented or wx specific.
     #: Whether to alternate row colors or not.
@@ -186,6 +194,7 @@ class ToolkitEditorFactory(EditorFactory):
     #: Whether the labels should be wrapped around, if not an ellipsis is shown
     #: This works only in the qt backend and if there is only one column in tree
     word_wrap = Bool(False)
+
 
 #: Define the TreeEditor class.
 TreeEditor = ToolkitEditorFactory
