@@ -33,24 +33,18 @@ from pyface.toolkit import toolkit_object as pyface_toolkit
 
 _app = pyface_toolkit("init:_app")
 
-from traits.api import (
-    HasPrivateTraits,
-    Instance,
-    Property,
-    Category,
-    cached_property,
-)
+from traits.api import HasPrivateTraits, Instance
 from traits.trait_notifiers import set_ui_handler
 from pyface.wx.drag_and_drop import PythonDropTarget
 
 from traitsui.theme import Theme
 from traitsui.ui import UI
 from traitsui.toolkit import Toolkit
-
 from .constants import WindowColor, screen_dx, screen_dy
 from .helper import position_window
 
 
+#: Mapping from wx events to method suffixes.
 EventSuffix = {
     wx.wxEVT_LEFT_DOWN: "left_down",
     wx.wxEVT_LEFT_DCLICK: "left_dclick",
@@ -68,9 +62,13 @@ EventSuffix = {
     wx.wxEVT_PAINT: "paint",
 }
 
-# Types of popup views:
+#: Types of popup views:
 Popups = {"popup", "popover", "info"}
 
+
+# -------------------------------------------------------------------------
+# Traits UI dispatch infrastructure
+# -------------------------------------------------------------------------
 
 def ui_handler(handler, *args):
     """ Handles UI notification handler requests that occur on a thread other
@@ -82,6 +80,10 @@ def ui_handler(handler, *args):
 # Tell the traits notification handlers to use this UI handler
 set_ui_handler(ui_handler)
 
+
+# -------------------------------------------------------------------------
+# Wx Toolkit Implementation
+# -------------------------------------------------------------------------
 
 class GUIToolkit(Toolkit):
     """ Implementation class for wxPython toolkit.
@@ -544,68 +546,6 @@ class DragHandler(HasPrivateTraits):
             result = drag_result
         return result
 
-
-# -------------------------------------------------------------------------
-#  Theme Support
-# -------------------------------------------------------------------------
-
-class WXTheme(Category, Theme):
-    """ Defines the extensions needed to make the generic Theme class specific
-        to wxPython.
-    """
-
-    #: The color to use for content text:
-    content_color = Property
-
-    #: The color to use for label text:
-    label_color = Property
-
-    #: The image slice used to draw the theme:
-    image_slice = Property(depends_on="image")
-
-    # -- Property Implementations ---------------------------------------------
-
-    def _get_content_color(self):
-        if self._content_color is None:
-            color = wx.BLACK
-            islice = self.image_slice
-            if islice is not None:
-                color = islice.content_color
-
-            self._content_color = color
-
-        return self._content_color
-
-    def _set_content_color(self, color):
-        self._content_color = color
-
-    def _get_label_color(self):
-        if self._label_color is None:
-            color = wx.BLACK
-            islice = self.image_slice
-            if islice is not None:
-                color = islice.label_color
-
-            self._label_color = color
-
-        return self._label_color
-
-    def _set_label_color(self, color):
-        self._label_color = color
-
-    @cached_property
-    def _get_image_slice(self):
-        from .image_slice import image_slice_for
-
-        if self.image is None:
-            return None
-
-        return image_slice_for(self.image)
-
-
-# -------------------------------------------------------------------------
-# Event handling
-# -------------------------------------------------------------------------
 
 class EventHandlerWrapper(wx.EvtHandler):
     """ Simple wrapper around wx.EvtHandler used to determine which event
