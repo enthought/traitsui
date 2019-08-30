@@ -343,24 +343,8 @@ class DataFrameEditor(BasicEditorFactory):
     #: data with. The data is a TabularEditorEvent:
     dclicked = Str
 
-<<<<<<< HEAD
-    # The optional extended name of the trait to synchronize right click data
-    # with. The data is a TabularEditorEvent:
-=======
-    #: The optional extended name of the Event trait that should be used to
-    #: trigger a scroll-to command. The data is an integer giving the row.
-    scroll_to_row = Str
-
-    #: Controls behavior of scroll to row
-    scroll_to_row_hint = Enum("center", "top", "bottom", "visible")
-
-    #: The optional extended name of the Event trait that should be used to
-    #: trigger a scroll-to command. The data is an integer giving the column.
-    scroll_to_column = Str
-
     #: The optional extended name of the trait to synchronize right click data
     #: with. The data is a TabularEditorEvent:
->>>>>>> 2c11874d... Merge pull request #648 from enthought/doc/better-comments
     right_clicked = Str
 
     #: The optional extended name of the trait to synchronize right double
