@@ -45,7 +45,6 @@ from pyface.wx.drag_and_drop import PythonDropTarget
 
 from traitsui.theme import Theme
 from traitsui.ui import UI
-from traitsui.dock_window_theme import DockWindowTheme
 from traitsui.toolkit import Toolkit
 
 from .constants import WindowColor, screen_dx, screen_dy
@@ -72,11 +71,6 @@ EventSuffix = {
 # Types of popup views:
 Popups = {"popup", "popover", "info"}
 
-# -------------------------------------------------------------------------
-#  Handles UI notification handler requests that occur on a thread other than
-#  the UI thread:
-# -------------------------------------------------------------------------
-
 
 def ui_handler(handler, *args):
     """ Handles UI notification handler requests that occur on a thread other
@@ -87,10 +81,6 @@ def ui_handler(handler, *args):
 
 # Tell the traits notification handlers to use this UI handler
 set_ui_handler(ui_handler)
-
-# -------------------------------------------------------------------------
-#  'GUIToolkit' class:
-# -------------------------------------------------------------------------
 
 
 class GUIToolkit(Toolkit):
@@ -484,86 +474,16 @@ class GUIToolkit(Toolkit):
     #  'Editor' class methods:
     # -------------------------------------------------------------------------
 
-    # Generic UI-base editor:
     def ui_editor(self):
+        """ Generic base UI editor. """
         from . import ui_editor
 
         return ui_editor.UIEditor
-
-    #
-    #    # Drag and drop:
-    #    def dnd_editor ( self, *args, **traits ):
-    #        import dnd_editor as dnd
-    #        return dnd.ToolkitEditorFactory( *args, **traits)
-    #
-    #    # Key Binding:
-    #    def key_binding_editor ( self, *args, **traits ):
-    #        import key_binding_editor as kbe
-    #        return kbe.ToolkitEditorFactory( *args, **traits )
-    #
-    #    # History:
-    #    def history_editor ( self, *args, **traits ):
-    #        import history_editor as he
-    #        return he.HistoryEditor( *args, **traits )
-    #
-    #    # HTML:
-    #    def html_editor ( self, *args, **traits ):
-    #        import html_editor as he
-    #        return he.ToolkitEditorFactory( *args, **traits )
-    #
-    #    # Image:
-    #    def image_editor ( self, *args, **traits ):
-    #        import image_editor as ie
-    #        return ie.ImageEditor( *args, **traits )
-    #
-    #    # ListStr:
-    #    def list_str_editor ( self, *args, **traits ):
-    #        import list_str_editor as lse
-    #        return lse.ListStrEditor( *args, **traits )
-    #
-    #    # Ordered set:
-    #    def ordered_set_editor ( self, *args, **traits ):
-    #        import ordered_set_editor as ose
-    #        return ose.ToolkitEditorFactory( *args, **traits )
-    #
-    #    # Plot:
-    #    def plot_editor ( self, *args, **traits ):
-    #        import plot_editor as pe
-    #        return pe.ToolkitEditorFactory( *args, **traits )
-    #
-    #    # Popup:
-    #    def popup_editor ( self, *args, **traits ):
-    #        import popup_editor as pe
-    #        return pe.PopupEditor( *args, **traits )
-    #
-    #    # RGB Color:
-    #    def rgb_color_editor ( self, *args, **traits ):
-    #        import rgb_color_editor as rgbce
-    #        return rgbce.ToolkitEditorFactory( *args, **traits )
-    #
-    #    # Scrubber:
-    #    def scrubber_editor ( self, *args, **traits ):
-    #        import scrubber_editor as se
-    #        return se.ScrubberEditor( *args, **traits )
-    #
-    #    # Shell:
 
     def shell_editor(self, *args, **traits):
         from . import shell_editor as se
 
         return se.ToolkitEditorFactory(*args, **traits)
-
-
-#
-#    # Tabular:
-#    def tabular_editor ( self, *args, **traits ):
-#        import tabular_editor as te
-#        return te.TabularEditor( *args, **traits )
-#
-#    # Value:
-#    def value_editor ( self, *args, **traits ):
-#        import value_editor as ve
-#        return ve.ToolkitEditorFactory( *args, **traits )
 
 
 class DragHandler(HasPrivateTraits):
@@ -624,11 +544,10 @@ class DragHandler(HasPrivateTraits):
             result = drag_result
         return result
 
-# -------------------------------------------------------------------------
-#  Defines the extensions needed to make the generic Theme class specific to
-#  wxPython:
-# -------------------------------------------------------------------------
 
+# -------------------------------------------------------------------------
+#  Theme Support
+# -------------------------------------------------------------------------
 
 class WXTheme(Category, Theme):
     """ Defines the extensions needed to make the generic Theme class specific
@@ -685,13 +604,13 @@ class WXTheme(Category, Theme):
 
 
 # -------------------------------------------------------------------------
-
+# Event handling
+# -------------------------------------------------------------------------
 
 class EventHandlerWrapper(wx.EvtHandler):
     """ Simple wrapper around wx.EvtHandler used to determine which event
     handlers were added by traitui.
     """
-
     pass
 
 
