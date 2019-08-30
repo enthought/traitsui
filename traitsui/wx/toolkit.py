@@ -624,7 +624,6 @@ class DragHandler(HasPrivateTraits):
             result = drag_result
         return result
 
-
 # -------------------------------------------------------------------------
 #  Defines the extensions needed to make the generic Theme class specific to
 #  wxPython:
@@ -683,42 +682,6 @@ class WXTheme(Category, Theme):
             return None
 
         return image_slice_for(self.image)
-
-
-# -------------------------------------------------------------------------
-#  Defines the extensions needed to make the generic DockWindowTheme class
-#  specific to wxPython:
-# -------------------------------------------------------------------------
-
-
-class WXDockWindowTheme(Category, DockWindowTheme):
-    """ Defines the extensions needed to make the generic DockWindowTheme class
-        specific to wxPython.
-    """
-
-    #: The bitmap for the 'tab_inactive_edge' image:
-    tab_inactive_edge_bitmap = Property(depends_on="tab_inactive_edge")
-
-    #: The bitmap for the 'tab_hover_edge' image:
-    tab_hover_edge_bitmap = Property(depends_on="tab_hover_edge")
-
-    # -- Property Implementations ---------------------------------------------
-
-    @cached_property
-    def _get_tab_inactive_edge_bitmap(self):
-        image = self.tab_inactive_edge
-        if image is None:
-            return None
-
-        return image.create_image().ConvertToBitmap()
-
-    @cached_property
-    def _get_tab_hover_edge_bitmap(self):
-        image = self.tab_hover_edge
-        if image is None:
-            return self.tab_inactive_edge_bitmap
-
-        return image.create_image().ConvertToBitmap()
 
 
 # -------------------------------------------------------------------------
