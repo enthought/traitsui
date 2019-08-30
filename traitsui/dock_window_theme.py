@@ -1,6 +1,6 @@
 # -------------------------------------------------------------------------
 #
-#  Copyright (c) 2007, Enthought, Inc.
+#  Copyright (c) 2007-19, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
@@ -98,16 +98,16 @@ class DockWindowTheme(HasPrivateTraits):
 
 
 # -------------------------------------------------------------------------
-#  Define the default theme:
+#  Default theme handling
 # -------------------------------------------------------------------------
 
-# The current default DockWindow theme:
+#: The current default DockWindow theme
 _dock_window_theme = None
-
-# Gets/Sets the default DockWindow theme:
 
 
 def dock_window_theme(theme=None):
+    """ Get or set the default DockWindow theme.
+    """
     global _dock_window_theme
 
     if _dock_window_theme is None:
