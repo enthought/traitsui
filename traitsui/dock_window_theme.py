@@ -1,6 +1,6 @@
 # -------------------------------------------------------------------------
 #
-#  Copyright (c) 2007, Enthought, Inc.
+#  Copyright (c) 2007-19, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
@@ -22,7 +22,7 @@
 from __future__ import absolute_import
 
 from pyface.ui_traits import Image
-from traits.api import HasPrivateTraits, Bool
+from traits.api import HasPrivateTraits, Bool, Property, cached_property
 
 from .ui_traits import ATheme
 
@@ -72,18 +72,42 @@ class DockWindowTheme(HasPrivateTraits):
     #: Horizontal drag bar theme:
     horizontal_drag = ATheme
 
+    #: The bitmap for the 'tab_inactive_edge' image:
+    tab_inactive_edge_bitmap = Property(depends_on="tab_inactive_edge")
+
+    #: The bitmap for the 'tab_hover_edge' image:
+    tab_hover_edge_bitmap = Property(depends_on="tab_hover_edge")
+
+    # -- Property Implementations ---------------------------------------------
+
+    @cached_property
+    def _get_tab_inactive_edge_bitmap(self):
+        image = self.tab_inactive_edge
+        if image is None:
+            return None
+
+        return image.create_bitmap()
+
+    @cached_property
+    def _get_tab_hover_edge_bitmap(self):
+        image = self.tab_hover_edge
+        if image is None:
+            return self.tab_inactive_edge_bitmap
+
+        return image.create_bitmap()
+
 
 # -------------------------------------------------------------------------
-#  Define the default theme:
+#  Default theme handling
 # -------------------------------------------------------------------------
 
-# The current default DockWindow theme:
+#: The current default DockWindow theme
 _dock_window_theme = None
-
-# Gets/Sets the default DockWindow theme:
 
 
 def dock_window_theme(theme=None):
+    """ Get or set the default DockWindow theme.
+    """
     global _dock_window_theme
 
     if _dock_window_theme is None:

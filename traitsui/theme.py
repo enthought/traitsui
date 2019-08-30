@@ -1,6 +1,6 @@
 # -------------------------------------------------------------------------
 #
-#  Copyright (c) 2007, Enthought, Inc.
+#  Copyright (c) 2007-19, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
@@ -21,13 +21,9 @@
 
 from __future__ import absolute_import
 
-from traits.api import HasPrivateTraits
+from traits.api import HasPrivateTraits, Property, cached_property
 
 from .ui_traits import Image, HasBorder, HasMargin, Alignment
-
-# -------------------------------------------------------------------------
-#  'Theme' class:
-# -------------------------------------------------------------------------
 
 
 class Theme(HasPrivateTraits):
@@ -49,8 +45,14 @@ class Theme(HasPrivateTraits):
     #: The alignment to use for positioning the label:
     alignment = Alignment(cols=4)
 
-    #: Note: The 'content_color' and 'label_color' traits should be added by a
-    #: toolkit-specific category...
+    #: The color to use for content text (Wx only)
+    content_color = Property
+
+    #: The color to use for label text (Wx only)
+    label_color = Property
+
+    #: The image slice used to draw the theme (Wx only)
+    image_slice = Property(depends_on="image")
 
     # -- Constructor ----------------------------------------------------------
 
@@ -62,6 +64,49 @@ class Theme(HasPrivateTraits):
 
         super(Theme, self).__init__(**traits)
 
+    # -- Property Implementations ---------------------------------------------
 
-# Create a default theme:
+    def _get_content_color(self):
+        import wx
+
+        if self._content_color is None:
+            color = wx.BLACK
+            islice = self.image_slice
+            if islice is not None:
+                color = islice.content_color
+
+            self._content_color = color
+
+        return self._content_color
+
+    def _set_content_color(self, color):
+        self._content_color = color
+
+    def _get_label_color(self):
+        import wx
+
+        if self._label_color is None:
+            color = wx.BLACK
+            islice = self.image_slice
+            if islice is not None:
+                color = islice.label_color
+
+            self._label_color = color
+
+        return self._label_color
+
+    def _set_label_color(self, color):
+        self._label_color = color
+
+    @cached_property
+    def _get_image_slice(self):
+        from traitsui.wx.image_slice import image_slice_for
+
+        if self.image is None:
+            return None
+
+        return image_slice_for(self.image)
+
+
+#: The default theme:
 default_theme = Theme()
