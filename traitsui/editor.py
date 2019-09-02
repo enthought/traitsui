@@ -447,7 +447,7 @@ class Editor(HasPrivateTraits):
             value of corresponding factory traits.
         """
         factory = self.factory
-        for name, trait in factory.traits(sync_value=not_none):
+        for name, trait in factory.traits(sync_value=not_none).items():
             value = getattr(factory, name)
             if isinstance(value, ContextValue):
                 self_trait = self.trait(name)

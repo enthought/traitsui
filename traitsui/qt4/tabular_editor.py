@@ -358,13 +358,15 @@ class TabularEditor(Editor):
         """ When mouse is clicked on a specific cell, update the selected
             indices first
         """
-        self.selected_row = self.clicked.row
-        self.selected_column = self.clicked.column
+        if not self.factory.multi_select:
+            self.selected_row = self.clicked.row
+            self.selected_column = self.clicked.column
 
     def _column_clicked_changed(self):
         """ When column is clicked, update selected column first
         """
-        self.selected_column = self.clicked.column
+        if not self.factory.multi_select:
+            self.selected_column = self.clicked.column
 
     def _update_changed(self):
         self.update_editor()
@@ -438,15 +440,16 @@ class TabularEditor(Editor):
                           QtGui.QItemSelectionModel.Rows)
 
     def _multi_selected_rows_items_changed(self, event):
-        smodel = self.control.selectionModel()
-        for row in event.removed:
-            smodel.select(self.model.index(row, 0),
-                          QtGui.QItemSelectionModel.Deselect |
-                          QtGui.QItemSelectionModel.Rows)
-        for row in event.added:
-            smodel.select(self.model.index(row, 0),
-                          QtGui.QItemSelectionModel.Select |
-                          QtGui.QItemSelectionModel.Rows)
+        if not self._no_update:
+            smodel = self.control.selectionModel()
+            for row in event.removed:
+                smodel.select(self.model.index(row, 0),
+                            QtGui.QItemSelectionModel.Deselect |
+                            QtGui.QItemSelectionModel.Rows)
+            for row in event.added:
+                smodel.select(self.model.index(row, 0),
+                            QtGui.QItemSelectionModel.Select |
+                            QtGui.QItemSelectionModel.Rows)
 
     def _selected_column_changed(self, selected_column):
         if not self._no_update:
@@ -454,7 +457,7 @@ class TabularEditor(Editor):
             if selected_column >= 0:
                 smodel.select(
                     self.model.index(
-                        max(self.selected_row,0),
+                        max(self.selected_row, 0),
                         selected_column
                     ),
                     QtGui.QItemSelectionModel.ClearAndSelect |
@@ -515,11 +518,6 @@ class TabularEditor(Editor):
     def _on_right_click(self, column):
         event = TabularEditorEvent(editor=self, row=0, column=column)
         setattr(self, 'right_clicked', event)
-
-    def _column_clicked_changed(self):
-        """ When column is clicked, update selected column first
-        """
-        self.selected_column = self.clicked.column
 
     def _on_column_right_click(self, column):
         event = TabularEditorEvent(editor=self, row=0, column=column)

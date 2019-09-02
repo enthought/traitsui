@@ -18,65 +18,44 @@
 """ Defines the table editor for the wxPython user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
-
 from __future__ import absolute_import
 
 from operator import itemgetter
 
 import wx
 
-from traits.api \
-    import Int, List, Instance, Str, Any, Button, Tuple, \
-    HasPrivateTraits, Bool, Event, Property
+from pyface.dock.api import (
+    DockWindow, DockSizer, DockSection, DockRegion, DockControl
+)
+from pyface.image_resource import ImageResource
+from pyface.timer.api import do_later
+from pyface.ui.wx.grid.api import Grid
+from traits.api import (
+    Int, List, Instance, Str, Any, Button, Tuple, HasPrivateTraits, Bool,
+    Event, Property
+)
 
-from traitsui.api \
-    import View, Item, UI, InstanceEditor, EnumEditor, Handler, SetEditor, \
+from traitsui.api import (
+    View, Item, UI, InstanceEditor, EnumEditor, Handler, SetEditor,
     ListUndoItem
+)
+from traitsui.editors.table_editor import BaseTableEditor, customize_filter
+from traitsui.menu import Action, ToolBar
+from traitsui.table_column import TableColumn, ObjectColumn
+from traitsui.table_filter import TableFilter
+from traitsui.ui_traits import SequenceTypes
 
-from traitsui.editors.table_editor \
-    import BaseTableEditor, customize_filter
-
-from traitsui.menu \
-    import Action, ToolBar
-
-from traitsui.table_column \
-    import TableColumn, ObjectColumn
-
-from traitsui.table_filter \
-    import TableFilter
-
-from traitsui.ui_traits \
-    import SequenceTypes
-
-from pyface.ui.wx.grid.api \
-    import Grid
-
-from pyface.dock.api \
-    import DockWindow, DockSizer, DockSection, DockRegion, DockControl
-
-from pyface.image_resource \
-    import ImageResource
-
-from pyface.timer.api \
-    import do_later
-
-from .editor \
-    import Editor
-
-from .table_model \
-    import TableModel, TraitGridSelection
-
+from .constants import (
+    TableCellBackgroundColor, TableCellColor, TableLabelBackgroundColor,
+    TableLabelColor, TableReadOnlyBackgroundColor,
+    TableSelectionBackgroundColor, TableSelectionTextColor,
+)
+from .editor import Editor
+from .table_model import TableModel, TraitGridSelection
 from .helper import TraitsUIPanel
 
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
-
-# Mapping from TableEditor selection modes to Grid selection modes:
+#: Mapping from TableEditor selection modes to Grid selection modes:
 GridModes = {
     'row': 'rows',
     'rows': 'rows',
@@ -86,9 +65,12 @@ GridModes = {
     'cells': 'cell'
 }
 
-#-------------------------------------------------------------------------
-#  'TableEditor' class:
-#-------------------------------------------------------------------------
+
+def _get_color(color, default_color):
+    """ Return the color if it is not None, otherwise use default. """
+    if color is not None:
+        return color
+    return default_color
 
 
 class TableEditor(Editor, BaseTableEditor):
@@ -164,11 +146,6 @@ class TableEditor(Editor, BaseTableEditor):
     # Is 'auto_add' mode in effect? (I.e., new rows are automatically added to
     # the end of the table when the user modifies current last row.)
     auto_add = Bool(False)
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -295,10 +272,6 @@ class TableEditor(Editor, BaseTableEditor):
         # Finish the panel layout setup:
         panel.SetSizer(sizer)
 
-    #-------------------------------------------------------------------------
-    #  Creates the associated grid control used to implement the table:
-    #-------------------------------------------------------------------------
-
     def _create_grid(self, parent, sizer):
         """ Creates the associated grid control used to implement the table.
         """
@@ -306,6 +279,19 @@ class TableEditor(Editor, BaseTableEditor):
         selection_mode = GridModes[factory.selection_mode]
         if factory.selection_bg_color is None:
             selection_mode = ''
+
+        cell_color = _get_color(factory.cell_color, TableCellColor)
+        cell_bg_color = _get_color(factory.cell_bg_color,
+                                   TableCellBackgroundColor)
+        cell_read_only_bg_color = _get_color(factory.cell_read_only_bg_color,
+                                             TableReadOnlyBackgroundColor)
+        label_bg_color = _get_color(factory.label_bg_color,
+                                    TableLabelBackgroundColor)
+        label_color = _get_color(factory.label_color, TableLabelColor)
+        selection_text_color = _get_color(factory.selection_color,
+                                          TableSelectionTextColor)
+        selection_bg_color = _get_color(factory.selection_bg_color,
+                                        TableSelectionBackgroundColor)
 
         self.grid = grid = Grid(
             parent,
@@ -315,14 +301,14 @@ class TableEditor(Editor, BaseTableEditor):
             show_row_headers=factory.show_row_labels,
             show_column_headers=factory.show_column_labels,
             default_cell_font=factory.cell_font,
-            default_cell_text_color=factory.cell_color,
-            default_cell_bg_color=factory.cell_bg_color,
-            default_cell_read_only_color=factory.cell_read_only_bg_color,
+            default_cell_text_color=cell_color,
+            default_cell_bg_color=cell_bg_color,
+            default_cell_read_only_color=cell_read_only_bg_color,
             default_label_font=factory.label_font,
-            default_label_text_color=factory.label_color,
-            default_label_bg_color=factory.label_bg_color,
-            selection_bg_color=factory.selection_bg_color,
-            selection_text_color=factory.selection_color,
+            default_label_text_color=label_color,
+            default_label_bg_color=label_bg_color,
+            selection_bg_color=selection_bg_color,
+            selection_text_color=selection_text_color,
             autosize=factory.auto_size,
             read_only=not factory.editable,
             edit_on_first_click=factory.edit_on_first_click,
@@ -375,10 +361,6 @@ class TableEditor(Editor, BaseTableEditor):
 
         return grid.control
 
-    #-------------------------------------------------------------------------
-    #  Creates the table editing tool bar:
-    #-------------------------------------------------------------------------
-
     def _create_toolbar(self, parent, sizer):
         """ Creates the table editing toolbar.
         """
@@ -413,10 +395,6 @@ class TableEditor(Editor, BaseTableEditor):
 
             sizer.Add(tb_sizer, 0, wx.ALIGN_RIGHT | wx.EXPAND)
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
@@ -445,10 +423,6 @@ class TableEditor(Editor, BaseTableEditor):
 
         super(TableEditor, self).dispose()
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -456,18 +430,10 @@ class TableEditor(Editor, BaseTableEditor):
         # fixme: Do we need to override this method?
         pass
 
-    #-------------------------------------------------------------------------
-    #  Refreshes the editor control:
-    #-------------------------------------------------------------------------
-
     def refresh(self):
         """ Refreshes the editor control.
         """
         self.grid._grid.Refresh()
-
-    #-------------------------------------------------------------------------
-    #  Sets the current selection to a set of specified objects:
-    #-------------------------------------------------------------------------
 
     def set_selection(self, objects=[], notify=True):
         """ Sets the current selection to a set of specified objects.
@@ -477,10 +443,6 @@ class TableEditor(Editor, BaseTableEditor):
 
         self.grid.set_selection([TraitGridSelection(obj=object)
                                  for object in objects], notify=notify)
-
-    #-------------------------------------------------------------------------
-    #  Sets the current selection to a set of specified object/column pairs:
-    #-------------------------------------------------------------------------
 
     def set_extended_selection(self, *pairs):
         """ Sets the current selection to a set of specified object/column
@@ -494,10 +456,6 @@ class TableEditor(Editor, BaseTableEditor):
 
         self.grid.set_selection(grid_selections)
 
-    #-------------------------------------------------------------------------
-    #  Creates a new row object using the provided factory:
-    #-------------------------------------------------------------------------
-
     def create_new_row(self):
         """ Creates a new row object using the provided factory.
         """
@@ -508,10 +466,6 @@ class TableEditor(Editor, BaseTableEditor):
 
         return self.ui.evaluate(factory.row_factory,
                                 *factory.row_factory_args, **kw)
-
-    #-------------------------------------------------------------------------
-    #  Adds a new object as a new row after the currently selected indices:
-    #-------------------------------------------------------------------------
 
     def add_row(self, object=None, index=None):
         """ Adds a specified object as a new row after the specified index.
@@ -556,10 +510,6 @@ class TableEditor(Editor, BaseTableEditor):
 
         if in_row_mode:
             self.set_selection(items)
-
-    #-------------------------------------------------------------------------
-    #  Moves a column from one place to another:
-    #-------------------------------------------------------------------------
 
     def move_column(self, from_column, to_column):
         """ Moves the specified **from_column** from its current position to
@@ -653,11 +603,6 @@ class TableEditor(Editor, BaseTableEditor):
 
     #-- UI preference save/restore interface ---------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the
-    #  editor:
-    #-------------------------------------------------------------------------
-
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
@@ -698,10 +643,6 @@ class TableEditor(Editor, BaseTableEditor):
         except Exception:
             pass
 
-    #-------------------------------------------------------------------------
-    #  Returns any user preference information associated with the editor:
-    #-------------------------------------------------------------------------
-
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
@@ -734,10 +675,6 @@ class TableEditor(Editor, BaseTableEditor):
                     [item for item in values if item[0] in items])
 
     #-- Event Handlers -------------------------------------------------------
-
-    #-------------------------------------------------------------------------
-    #  Handles the user selecting items (rows, columns, cells) in the table:
-    #-------------------------------------------------------------------------
 
     def _selection_row_updated(self, event):
         """ Handles the user selecting items (rows, columns, cells) in the
@@ -1038,10 +975,6 @@ class TableEditor(Editor, BaseTableEditor):
                 toolbar.delete.enabled = toolbar.move_up.enabled = \
                     toolbar.move_down.enabled = False
 
-    #-------------------------------------------------------------------------
-    #  Handles the contents of the model being resorted:
-    #-------------------------------------------------------------------------
-
     def _model_sorted(self):
         """ Handles the contents of the model being resorted.
         """
@@ -1051,10 +984,6 @@ class TableEditor(Editor, BaseTableEditor):
         values = self.selected_values
         if len(values) > 0:
             do_later(self.set_extended_selection, values)
-
-    #-------------------------------------------------------------------------
-    #  Handles the current filter being changed:
-    #-------------------------------------------------------------------------
 
     def _filter_changed(self, old_filter, new_filter):
         """ Handles the current filter being changed.
@@ -1069,19 +998,11 @@ class TableEditor(Editor, BaseTableEditor):
             self.model.filter = new_filter
             self.filter_modified()
 
-    #-------------------------------------------------------------------------
-    #  Refresh the list of available filters:
-    #-------------------------------------------------------------------------
-
     def _refresh_filters(self, filters):
         factory = self.factory
         # hack: The following line forces the 'filters' to be changed...
         factory.filters = []
         factory.filters = filters
-
-    #-------------------------------------------------------------------------
-    #  Allows the user to customize the current set of table filters:
-    #-------------------------------------------------------------------------
 
     def _customize_filters(self, filter):
         """ Allows the user to customize the current set of table filters.
@@ -1108,10 +1029,6 @@ class TableEditor(Editor, BaseTableEditor):
         else:
             self.filter = filter
 
-    #-------------------------------------------------------------------------
-    #  Handles the user requesting that columns not be sorted:
-    #-------------------------------------------------------------------------
-
     def on_no_sort(self):
         """ Handles the user requesting that columns not be sorted.
         """
@@ -1120,10 +1037,6 @@ class TableEditor(Editor, BaseTableEditor):
         values = self.selected_values
         if len(values) > 0:
             self.set_extended_selection(values)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user requesting to move the current item up one row:
-    #-------------------------------------------------------------------------
 
     def on_move_up(self):
         """ Handles the user requesting to move the current item up one row.
@@ -1141,10 +1054,6 @@ class TableEditor(Editor, BaseTableEditor):
             self.set_selection(objects)
         else:
             self.set_extended_selection(self.selected_values)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user requesting to move the current item down one row:
-    #-------------------------------------------------------------------------
 
     def on_move_down(self):
         """ Handles the user requesting to move the current item down one row.
@@ -1164,10 +1073,6 @@ class TableEditor(Editor, BaseTableEditor):
         else:
             self.set_extended_selection(self.selected_values)
 
-    #-------------------------------------------------------------------------
-    #  Handles the user requesting a table search:
-    #-------------------------------------------------------------------------
-
     def on_search(self):
         """ Handles the user requesting a table search.
         """
@@ -1177,19 +1082,10 @@ class TableEditor(Editor, BaseTableEditor):
             handler=TableSearchHandler(editor=self)
         )
 
-    #-------------------------------------------------------------------------
-    #  Handles the user requesting to add a new row to the table:
-    #-------------------------------------------------------------------------
-
     def on_add(self):
         """ Handles the user requesting to add a new row to the table.
         """
         self.add_row()
-
-    #-------------------------------------------------------------------------
-    #  Handles the user requesting to delete the currently selected items of
-    #  the table:
-    #-------------------------------------------------------------------------
 
     def on_delete(self):
         """ Handles the user requesting to delete the currently selected items
@@ -1234,11 +1130,6 @@ class TableEditor(Editor, BaseTableEditor):
         else:
             self._update_toolbar(False)
 
-    #-------------------------------------------------------------------------
-    #  Handles the user requesting to set the user preference items for the
-    #  table:
-    #-------------------------------------------------------------------------
-
     def on_prefs(self):
         """ Handles the user requesting to set the user preference items for the
             table.
@@ -1264,10 +1155,6 @@ class TableEditor(Editor, BaseTableEditor):
                       buttons=['Undo', 'OK', 'Cancel'],
                       kind='livemodal'))
 
-    #-------------------------------------------------------------------------
-    #  Prepares to have a context menu action called:
-    #-------------------------------------------------------------------------
-
     def prepare_menu(self, row, column):
         """ Prepares to have a context menu action called.
         """
@@ -1277,10 +1164,6 @@ class TableEditor(Editor, BaseTableEditor):
             self.set_selection(object)
             selection = [object]
         self.set_menu_context(selection, object, column)
-
-    #-------------------------------------------------------------------------
-    #  Set one or more attributes without notifying the grid model:
-    #-------------------------------------------------------------------------
 
     def setx(self, **keywords):
         """ Set one or more attributes without notifying the grid model.
@@ -1294,27 +1177,15 @@ class TableEditor(Editor, BaseTableEditor):
 
 #-- Private Methods: -----------------------------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Adds an 'undo' item to the undo history (if any):
-    #-------------------------------------------------------------------------
-
     def _add_undo(self, undo_item, extend=False):
         history = self.ui.history
         if history is not None:
             history.add(undo_item, extend)
 
-#-------------------------------------------------------------------------
-#  'TableFilterEditor' class:
-#-------------------------------------------------------------------------
-
 
 class TableFilterEditor(Handler):
     """ Editor that manages table filters.
     """
-
-    #-------------------------------------------------------------------------
-    #  Trait definitions:
-    #-------------------------------------------------------------------------
 
     # TableEditor this editor is associated with
     editor = Instance(TableEditor)
@@ -1457,10 +1328,6 @@ class TableFilterEditor(Handler):
         if (not self.filter.template) and len(info.filter.factory.values) > 1:
             info.delete.enabled = True
 
-#-------------------------------------------------------------------------
-#  'TableEditorToolbar' class:
-#-------------------------------------------------------------------------
-
 
 class TableEditorToolbar(HasPrivateTraits):
     """ Toolbar displayed in table editors.
@@ -1528,10 +1395,6 @@ class TableEditorToolbar(HasPrivateTraits):
 
     # The toolbar control:
     control = Any
-
-    #-------------------------------------------------------------------------
-    #  Initializes the toolbar for a specified window:
-    #-------------------------------------------------------------------------
 
     def __init__(self, parent=None, **traits):
         super(TableEditorToolbar, self).__init__(**traits)
@@ -1602,10 +1465,6 @@ class TableEditorToolbar(HasPrivateTraits):
         """
         getattr(self.editor, action.action)()
 
-#-------------------------------------------------------------------------
-#  'TableSearchHandler' class:
-#-------------------------------------------------------------------------
-
 
 class TableSearchHandler(Handler):
     """ Handler for saerching a table.
@@ -1633,10 +1492,6 @@ class TableSearchHandler(Handler):
     # Search status message:
     status = Str
 
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking the 'Find next' button:
-    #-------------------------------------------------------------------------
-
     def handler_find_next_changed(self, info):
         """ Handles the user clicking the **Find** button.
         """
@@ -1652,10 +1507,6 @@ class TableSearchHandler(Handler):
                     break
             else:
                 self.status = 'No more matches found'
-
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking the 'Find previous' button:
-    #-------------------------------------------------------------------------
 
     def handler_find_previous_changed(self, info):
         """ Handles the user clicking the **Find previous** button.
@@ -1673,10 +1524,6 @@ class TableSearchHandler(Handler):
             else:
                 self.status = 'No more matches found'
 
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking the 'Select' button:
-    #-------------------------------------------------------------------------
-
     def handler_select_changed(self, info):
         """ Handles the user clicking the **Select** button.
         """
@@ -1691,10 +1538,6 @@ class TableSearchHandler(Handler):
                 self.status = '1 item selected'
             else:
                 self.status = '%d items selected' % len(items)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking 'OK' button:
-    #-------------------------------------------------------------------------
 
     def handler_OK_changed(self, info):
         """ Handles the user clicking the OK button.

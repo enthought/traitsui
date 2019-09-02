@@ -1482,7 +1482,7 @@ class SectionFactory(HasPrivateTraits):
 
         # Try to find a CSS style sheet, and set up the docutil overrides if
         # found:
-        settings = {}
+        settings = {'output_encoding': 'unicode'}
         css_path = self.css_path
         if css_path != '':
             css_path = os.path.join(self.path, css_path)

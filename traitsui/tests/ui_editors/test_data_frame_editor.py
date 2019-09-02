@@ -451,3 +451,72 @@ def test_data_frame_editor_multi_select():
     with store_exceptions_on_all_threads():
         ui = viewer.edit_traits(view=view)
         ui.dispose()
+
+@skip_if_null
+def test_adapter_set_text():
+    viewer = sample_data()
+    columns = [(column, column) for column in viewer.data.columns]
+    adapter = DataFrameAdapter(columns=columns)
+
+    adapter.set_text(viewer, 'data', 0, 0, '10')
+
+    item_0_df = adapter.get_item(viewer, 'data', 0)
+
+    assert_array_equal(item_0_df.values, [[10, 1, 2]])
+    assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
+
+@skip_if_null
+def test_adapter_set_text_invalid():
+    viewer = sample_data()
+    columns = [(column, column) for column in viewer.data.columns]
+    adapter = DataFrameAdapter(columns=columns)
+
+    adapter.set_text(viewer, 'data', 0, 0, 'invalid')
+
+    # expect no error, and values unchanged
+    item_0_df = adapter.get_item(viewer, 'data', 0)
+
+    assert_array_equal(item_0_df.values, [[0, 1, 2]])
+    assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
+
+@skip_if_null
+def test_adapter_set_index_text():
+    viewer = sample_data()
+    columns = [('', 'index')] + [(column, column) for column in viewer.data.columns]
+    adapter = DataFrameAdapter(columns=columns)
+
+    adapter.set_text(viewer, 'data', 0, 0, 'NewIndex')
+
+    item_0_df = adapter.get_item(viewer, 'data', 0)
+
+    assert_array_equal(item_0_df.values, [[0, 1, 2]])
+    assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
+    assert item_0_df.index[0] == 'NewIndex'
+
+@skip_if_null
+def test_adapter_set_index_text_numeric():
+    viewer = sample_data_numerical_index()
+    columns = [('', 'index')] + [(column, column) for column in viewer.data.columns]
+    adapter = DataFrameAdapter(columns=columns)
+
+    adapter.set_text(viewer, 'data', 0, 0, 100)
+
+    item_0_df = adapter.get_item(viewer, 'data', 0)
+
+    assert_array_equal(item_0_df.values, [[0, 1, 2]])
+    assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
+    assert item_0_df.index[0] == 100
+
+@skip_if_null
+def test_adapter_set_index_text_numeric_invalid():
+    viewer = sample_data_numerical_index()
+    columns = [('', 'index')] + [(column, column) for column in viewer.data.columns]
+    adapter = DataFrameAdapter(columns=columns)
+
+    adapter.set_text(viewer, 'data', 0, 0, 'invalid')
+
+    item_0_df = adapter.get_item(viewer, 'data', 0)
+
+    assert_array_equal(item_0_df.values, [[0, 1, 2]])
+    assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
+    assert item_0_df.index[0] == 1

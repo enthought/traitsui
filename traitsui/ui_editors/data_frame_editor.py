@@ -8,6 +8,8 @@
 
 from __future__ import absolute_import
 
+import logging
+
 from traits.api import (Bool, Dict, Either, Enum, Font, Instance, List,
                         Property, Str)
 
@@ -19,6 +21,9 @@ from traitsui.toolkit import toolkit_object
 from traitsui.ui_editor import UIEditor
 from traitsui.view import View
 import six
+
+
+logger = logging.getLogger(__name__)
 
 
 class DataFrameAdapter(TabularAdapter):
@@ -88,10 +93,19 @@ class DataFrameAdapter(TabularAdapter):
                                          self.column)
 
     def _set_text(self, value):
-        column = self.item[self.column_id]
-        dtype = column.dtype
-        value = dtype.type(value)
-        column.iloc[0] = value
+        df = getattr(self.object, self.name)
+        dtype = df.iloc[:, self.column].dtype
+        try:
+            value = dtype.type(value)
+            df.iloc[self.row, self.column] = value
+        except Exception:
+            logger.debug(
+                "User entered invalid value %r for column %r row %r",
+                value,
+                self.column,
+                self.row,
+                exc_info=True
+            )
 
     def _get_index_text(self):
         return str(self.item.index[0])
@@ -99,8 +113,15 @@ class DataFrameAdapter(TabularAdapter):
     def _set_index_text(self, value):
         index = getattr(self.object, self.name).index
         dtype = index.dtype
-        value = dtype.type(value)
-        index.values[self.row] = value
+        try:
+            value = dtype.type(value)
+            index.values[self.row] = value
+        except Exception:
+            logger.debug(
+                "User entered invalid value %r for index",
+                value,
+                exc_info=True
+            )
 
     #---- Adapter methods that are not sensitive to item type ----------------
 

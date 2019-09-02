@@ -170,7 +170,7 @@ class TableEditor(Editor, BaseTableEditor):
 
         # Create the vertical header context menu and connect to its signals
         self.header_menu = QtGui.QMenu(self.table_view)
-        insertable = factory.row_factory is not None and not factory.auto_add
+        insertable = factory.row_factory is not None
         if factory.editable:
             if insertable:
                 action = self.header_menu.addAction('Insert new item')
@@ -227,7 +227,7 @@ class TableEditor(Editor, BaseTableEditor):
         else:
             main_view = self.table_view
 
-        # Create auxillary editor and encompassing splitter if necessary
+        # Create auxiliary editor and encompassing splitter if necessary
         mode = factory.selection_mode
         if (factory.edit_view == ' ') or mode not in {'row', 'rows'}:
             self.control = main_view
@@ -303,7 +303,7 @@ class TableEditor(Editor, BaseTableEditor):
     def dispose(self):
         """ Disposes of the contents of an editor."""
 
-        # Make sure that the auxillary UIs are properly disposed
+        # Make sure that the auxiliary UIs are properly disposed
         if self.toolbar_ui is not None:
             self.toolbar_ui.dispose()
         if self._ui is not None:
@@ -876,6 +876,22 @@ class TableDelegate(QtGui.QStyledItemDelegate):
         """
         editor.setGeometry(option.rect)
 
+    def paint(self, painter, option, index):
+        self.initStyleOption(option, index)
+
+        if ((option.state & QtGui.QStyle.State_Selected) and
+                (option.state & QtGui.QStyle.State_Active)):
+            factory = self.parent()._editor.factory
+            if factory.selection_bg_color is not None:
+                option.palette.setColor(
+                    QtGui.QPalette.Highlight, factory.selection_bg_color_)
+            if factory.selection_color is not None:
+                option.palette.setColor(
+                    QtGui.QPalette.HighlightedText, factory.selection_color_)
+
+        QtGui.QApplication.style().drawControl(
+            QtGui.QStyle.CE_ItemViewItem, option, painter, None);
+
 
 class TableView(QtGui.QTableView):
     """A QTableView configured to behave as expected by TraitsUI."""
@@ -956,8 +972,7 @@ class TableView(QtGui.QTableView):
         editor = self._editor
         if row == -1:
             factory = editor.factory
-            if (factory.editable and factory.row_factory is not None and
-                    not factory.auto_add):
+            if (factory.editable and factory.row_factory is not None):
                 event.accept()
                 editor.empty_menu.exec_(position)
 
@@ -989,7 +1004,7 @@ class TableView(QtGui.QTableView):
             row = vheader.logicalIndexAt(event.pos().y())
             if row == -1:
                 factory = editor.factory
-                if factory.row_factory is not None and not factory.auto_add:
+                if factory.row_factory is not None:
                     editor.empty_menu.exec_(event.globalPos())
             else:
                 editor.header_row = row
@@ -1145,13 +1160,15 @@ class TableView(QtGui.QTableView):
         # Configure the row headings.
         vheader = self.verticalHeader()
         set_resize_mode = set_qheader_section_resize_mode(vheader)
-        insertable = factory.row_factory is not None and not factory.auto_add
+        insertable = factory.row_factory is not None
         if ((factory.editable and (insertable or factory.deletable)) or
                 factory.reorderable):
             vheader.installEventFilter(self)
             set_resize_mode(QtGui.QHeaderView.ResizeToContents)
         elif not factory.show_row_labels:
             vheader.hide()
+        if factory.row_height > 0:
+            vheader.setDefaultSectionSize(factory.row_height)
         self.setAlternatingRowColors(factory.alternate_bg_color)
         self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
         # Configure the column headings.

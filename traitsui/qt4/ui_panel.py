@@ -896,9 +896,10 @@ class _GroupPanel(object):
             if item.emphasized:
                 self._add_emphasis(control)
 
-            # Give the editor focus if it requested it:
+            # If the item wants focus, remember the control so we can set focus
+            # immediately before opening the UI.
             if item.has_focus:
-                control.setFocus()
+                self.ui._focus_control = control
 
             # Set the correct size on the control, as specified by the user:
             stretch = 0
