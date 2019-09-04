@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------
 #
-#  Copyright (c) 2005, Enthought, Inc.
+#  Copyright (c) 2005-19, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
@@ -42,10 +42,6 @@ Orientation = Enum('horizontal', 'vertical')
 
 # Docking drag bar style:
 DockStyle = Enum('horizontal', 'vertical', 'tab', 'fixed')
-
-#----------------------------------------------------------------------------
-#  Return a 'user-friendly' name for a specified trait:
-#----------------------------------------------------------------------------
 
 
 def user_name_for(name):
@@ -117,3 +113,84 @@ def enum_values_changed(values, strfunc=six.text_type):
         inverse_mapping[value] = name
 
     return (names, mapping, inverse_mapping)
+
+
+def compute_column_widths(available_space, requested, min_widths, user_widths):
+    """ Distribute column space amongst columns based on requested space.
+
+    Widths requests can be specified as one of the following:
+
+    - a value greater than 1.0 is treated as a fixed width with no flexibility
+      (ie. a minimum width as specified and a weight of 0.0)
+
+    - a value between 0.0 and 1.0 is treaded as a flexible width column with
+      the specified width as a weight and a minimum width provided by the
+      min_widths entry.
+
+    - a value less than or equal to 0.0 is treated as a flexible width column
+      with a weight of 0.1 and a minimum width provided by the min_widths
+      parameter.
+
+    If user widths are supplied then any non-None values override the
+    requested widths, and are treated as having a flexibility of 0.
+
+    Space is distributed by evaluating each column from smallest weight to
+    largest and seeing if the weighted proportion of the remaining space is
+    more than the minimum, and if so replacing the width with the weighted
+    width.  The column is then removed from the available width and the
+    total weight and the analysis continues.
+
+    Parameters
+    ----------
+    available_space : int
+        The available horizontal space.
+    requested : list of numbers
+        The requested width or weight for each column.
+    min_widths : None or list of ints
+        The minimum width for each flexible column
+    user_widths : None or list of int or None
+        Any widths specified by the user resizing the columns manually.
+
+    Returns
+    -------
+    widths : list of ints
+        The assigned width for each column
+    """
+    widths = []
+    weights = []
+    if min_widths is None:
+        min_widths = [30] * len(requested)
+
+    # determine flexibility and default width of each column
+    for request, min_width in zip(requested, min_widths):
+        if request >= 1.0:
+            weights.append(0.0)
+            widths.append(int(request))
+        else:
+            if request <= 0:
+                weights.append(0.1)
+            else:
+                weights.append(request)
+            widths.append(min_width)
+
+    # if the user has changed the width of a column manually respect that
+    if user_widths is not None:
+        for i, user_width in enumerate(user_widths):
+            if user_width is not None:
+                widths[i] = user_width
+                weights[i] = 0.0
+
+    total_weight = sum(weights)
+    if sum(widths) < available_space and total_weight > 0:
+        # do inflexible first, then work up from smallest to largest
+        for i, weight in sorted(enumerate(weights), key=itemgetter(1, 0)):
+            total_weight = sum(weights)
+            stretched = int(weight / total_weight * available_space)
+            widths[i] = max(stretched, widths[i])
+
+            # once we have dealt with a column, it no longer counts as flexible
+            # and its space is no longer available
+            weights[i] = 0.0
+            available_space -= widths[i]
+
+    return widths

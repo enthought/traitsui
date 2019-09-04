@@ -25,7 +25,7 @@
 
 from __future__ import absolute_import
 
-import os
+from contextlib import contextmanager
 
 from pyface.qt import QtCore, QtGui
 from pyface.image_resource import ImageResource
@@ -35,6 +35,7 @@ from traits.api import (Any, Bool, Callable, Event, HasStrictTraits, Instance,
                         Int, List, NO_COMPARE, Property, TraitListEvent)
 
 from traitsui.tabular_adapter import TabularAdapter
+from traitsui.helper import compute_column_widths
 from .editor import Editor
 from .tabular_model import TabularModel
 import six
@@ -673,7 +674,8 @@ class _TableView(QtGui.QTableView):
         """
         QtGui.QTableView.__init__(self)
 
-        self._initial_size = False
+        self._user_widths = None
+        self._is_resizing = False
         self._editor = editor
         self.setModel(editor.model)
         factory = editor.factory
@@ -709,6 +711,7 @@ class _TableView(QtGui.QTableView):
         # Configure the column headings.
         hheader = self.horizontalHeader()
         hheader.setStretchLastSection(factory.stretch_last_section)
+        hheader.sectionResized.connect(self.columnResized)
         if factory.show_titles:
             hheader.setHighlightSections(False)
         else:
@@ -802,12 +805,13 @@ class _TableView(QtGui.QTableView):
             space be known, we have to wait until the UI that contains this
             table gives it its initial size.
         """
-        QtGui.QTableView.resizeEvent(self, event)
+        super(_TableView, self).resizeEvent(event)
 
         parent = self.parent()
-        if (not self._initial_size and parent and
-                (self.isVisible() or isinstance(parent, QtGui.QMainWindow))):
-            self._initial_size = True
+        if (
+            parent
+            and (self.isVisible() or isinstance(parent, QtGui.QMainWindow))
+        ):
             self.resizeColumnsToContents()
 
     def sizeHintForColumn(self, column):
@@ -829,34 +833,50 @@ class _TableView(QtGui.QTableView):
 
     def resizeColumnsToContents(self):
         """ Reimplemented to support proportional column width specifications.
-            For information about the layout algorithm, see
-            https://svn.enthought.com/enthought/wiki/Traits_3_0_tabular_editor.
+
+        The core part of the computation is carried out in
+        :func:`traitsui.helpers.compute_column_widths`
         """
         editor = self._editor
+        adapter = editor.adapter
         if editor.factory.auto_resize:
             # Use the default implementation.
             return super(_TableView, self).resizeColumnsToContents()
+
         available_space = self.viewport().width()
+        requested = []
+        min_widths = []
+        for column in range(len(adapter.columns)):
+            width = adapter.get_width(editor.object, editor.name, column)
+            requested.append(width)
+            min_widths.append(self.sizeHintForColumn(column))
+
+        widths = compute_column_widths(
+            available_space, requested, min_widths, self._user_widths
+        )
+
         hheader = self.horizontalHeader()
-
-        # Assign sizes for columns with absolute size requests
-        percent_vals, percent_cols = [], []
-        for column in range(len(editor.adapter.columns)):
-            width = editor.adapter.get_width(
-                editor.object, editor.name, column)
-            if width > 1:
-                available_space -= width
+        with self._resizing():
+            for column, width in enumerate(widths):
                 hheader.resizeSection(column, width)
-            else:
-                if width <= 0:
-                    width = 0.1
-                percent_vals.append(width)
-                percent_cols.append(column)
 
-        # Now use the remaining space for columns with proportional or no width
-        # requests.
-        percent_total = sum(percent_vals)
-        for i, column in enumerate(percent_cols):
-            percent = percent_vals[i] / percent_total
-            width = max(30, int(percent * available_space))
-            hheader.resizeSection(column, width)
+    def columnResized(self, index, old, new):
+        """ Handle user-driven resizing of columns.
+
+        This affects the column widths when not using auto-sizing.
+        """
+        if not self._is_resizing:
+            if self._user_widths is None:
+                self._user_widths = [None] * len(self._editor.adapter.columns)
+            self._user_widths[index] = new
+            if not self._editor.factory.auto_resize:
+                self.resizeColumnsToContents()
+
+    @contextmanager
+    def _resizing(self):
+        """ Context manager that guards against recursive column resizing. """
+        self._is_resizing = True
+        try:
+            yield
+        finally:
+            self._is_resizing = False
