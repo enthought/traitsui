@@ -10,9 +10,9 @@ from io import open
 
 MAJOR = 6
 MINOR = 1
-MICRO = 3
+MICRO = 4
 
-IS_RELEASED = True
+IS_RELEASED = False
 
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
