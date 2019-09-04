@@ -81,7 +81,8 @@ class TableColumn(HasPrivateTraits):
     label = Str(UndefinedLabel)
 
     # Type of data contained by the column:
-    type = Enum('text')
+    # XXX currently no other types supported, but potentially there could be...
+    type = Enum("text", "bool")
 
     # Text color for this column:
     text_color = Color('black')
