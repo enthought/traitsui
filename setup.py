@@ -10,7 +10,7 @@ from io import open
 
 MAJOR = 6
 MINOR = 1
-MICRO = 3
+MICRO = 4
 
 IS_RELEASED = False
 

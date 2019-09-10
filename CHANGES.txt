@@ -1,6 +1,37 @@
 Traits UI Changelog
 ===================
 
+Release 6.1.3
+-------------
+
+A bugfix release that fixes a number of issues discovered since the
+6.1.2 release.  In particular this fixes a number of issues around the
+TableEditor and TabularEditor for the Qt toolkit which didn't match
+the advertised behaviour in the documentation.
+
+Thanks to Qi Chen, Vladimir Chukharev, Mark Dickinson, Sandhya Govindaraju,
+Maxwell Grady, Scott Maddox, Sean Parsons, Rahul Poruri, Corran Webster.
+
+Fixes
+~~~~~
+* Add "bool" to allowed types for TableColumn (#656)
+* Fix tabular editor column widths (#652)
+* Fix setting valus in DataFrameEditor (#651)
+* Allow '...' in addition to ellipsis in text elision (#644)
+* Handle invalid values in RangeEditor better (#637)
+* Fix multi-select in Qt TabularEditor (#633)
+* Fix call to Bind in Wx FileEditor (#628)
+* Fixes to doc links in tutorial (#619)
+* Remove 3.5 from test matrix (#615)
+* Ensure etstool.py has consistent default Python versions (#614)
+* Fix typos in comments for table editor (#610)
+* Comprehensive tests for the base Editor object (#609)
+* Fix ContextValue __init__ method (#607)
+* Fix tutor.py in examples for Python 3 (#603)
+* Set initial item focus correctly on Qt (#602)
+* Make View and UI icons an Image trait (#600)
+* Fix TableEditor styling for Qt (#597)
+
 Release 6.1.2
 -------------
 
