@@ -559,6 +559,8 @@ class _GroupPanel(object):
             # Create the TabWidget or ToolBox.
             if group.layout == "tabbed":
                 sub = QtGui.QTabWidget()
+                sub.setDocumentMode(True)
+                sub.setMovable(True)
             else:
                 sub = QtGui.QToolBox()
 
