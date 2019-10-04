@@ -391,7 +391,7 @@ class TabularEditor(Editor):
         """ When column is clicked, update selected column first
         """
         if not self.factory.multi_select:
-            self.selected_column = self.clicked.column
+            self.selected_column = self.column_clicked.column
 
     def _update_changed(self):
         self.update_editor()
