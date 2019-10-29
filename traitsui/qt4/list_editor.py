@@ -229,7 +229,7 @@ class SimpleEditor(Editor):
                 proxy = control.proxy
             except AttributeError:
                 # See enthought/traitsui#403
-                raise
+                pass
             else:
                 if proxy.index == event.index:
                     proxy.value = event.added[0]
