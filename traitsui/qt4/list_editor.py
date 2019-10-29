@@ -225,10 +225,17 @@ class SimpleEditor(Editor):
             if isinstance(control, QtGui.QLayout):
                 continue
 
-            proxy = control.proxy
-            if proxy.index == event.index:
-                proxy.value = event.added[0]
-                break
+            try:
+                proxy = control.proxy
+            except AttributeError:
+                # See enthought/traitsui#403
+                raise
+            else:
+                if proxy.index == event.index:
+                    proxy.value = event.added[0]
+                    break
+        else:
+            raise ValueError("Unable to update item value.")
 
     def empty_list(self):
         """ Creates an empty list entry (so the user can add a new item).
