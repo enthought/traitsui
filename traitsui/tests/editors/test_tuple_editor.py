@@ -5,7 +5,12 @@ Created on Fri Sep 20 13:17:20 2013
 @author: yves
 """
 
-from __future__ import division, print_function, unicode_literals, absolute_import
+from __future__ import (
+    division,
+    print_function,
+    unicode_literals,
+    absolute_import,
+)
 
 from contextlib import contextmanager
 
@@ -24,9 +29,7 @@ class TupleEditor(HasTraits):
     tup = Tuple(Int, Int)
 
     traits_view = View(
-        Item(label="Enter 4 and 6, then press OK"),
-        Item('tup'),
-        buttons=['OK']
+        Item(label="Enter 4 and 6, then press OK"), Item("tup"), buttons=["OK"]
     )
 
 
@@ -48,10 +51,10 @@ def test_qt_tuple_editor():
         lineedits = ui.control.findChildren(qt.QtGui.QLineEdit)
         lineedits[0].setFocus()
         lineedits[0].clear()
-        lineedits[0].insert('4')
+        lineedits[0].insert("4")
         lineedits[1].setFocus()
         lineedits[1].clear()
-        lineedits[1].insert('6')
+        lineedits[1].insert("6")
 
         # if all went well, the tuple trait has been updated and its value is 4
         assert val.tup == (4, 6)
@@ -60,7 +63,7 @@ def test_qt_tuple_editor():
         press_ok_button(ui)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Executing the file opens the dialog for manual testing
     val = TupleEditor()
     val.configure_traits()

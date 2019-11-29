@@ -1,17 +1,17 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2012, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Author: Pietro Berkes
 #  Date:   Jan 2012
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """
 Test case for bug (wx, Mac OS X)
@@ -43,8 +43,8 @@ class NumberWithSpinnerEditor(HasTraits):
 
     traits_view = View(
         Item(label="Enter 4, then press OK without defocusing"),
-        Item('number', editor=RangeEditor(low=3, high=8, mode='spinner')),
-        buttons=['OK']
+        Item("number", editor=RangeEditor(low=3, high=8, mode="spinner")),
+        buttons=["OK"],
     )
 
 
@@ -62,17 +62,17 @@ def test_wx_spin_control_editing_should_not_crash():
             # range editor, enter a number, and clicking ok without defocusing
 
             # SpinCtrl object
-            spin = ui.control.FindWindowByName('wxSpinCtrl')
+            spin = ui.control.FindWindowByName("wxSpinCtrl")
             spin.SetFocusFromKbd()
 
             # on Windows, a wxSpinCtrl does not have children, and we cannot do
             # the more fine-grained testing below
             if len(spin.GetChildren()) == 0:
-                spin.SetValueString('4')
+                spin.SetValueString("4")
             else:
                 # TextCtrl object of the spin control
-                spintxt = spin.FindWindowByName('text')
-                spintxt.SetValue('4')
+                spintxt = spin.FindWindowByName("text")
+                spintxt.SetValue("4")
 
             # press the OK button and close the dialog
             press_ok_button(ui)
@@ -89,6 +89,7 @@ def test_wx_spin_control_editing_does_not_update():
 
     # But under wx >= 3.0 this has been resolved
     import wx
+
     if wx.VERSION >= (3, 0):
         return
 
@@ -100,17 +101,17 @@ def test_wx_spin_control_editing_does_not_update():
         # range editor, enter a number, and clicking ok without defocusing
 
         # SpinCtrl object
-        spin = ui.control.FindWindowByName('wxSpinCtrl')
+        spin = ui.control.FindWindowByName("wxSpinCtrl")
         spin.SetFocusFromKbd()
 
         # on Windows, a wxSpinCtrl does not have children, and we cannot do
         # the more fine-grained testing below
         if len(spin.GetChildren()) == 0:
-            spin.SetValueString('4')
+            spin.SetValueString("4")
         else:
             # TextCtrl object of the spin control
-            spintxt = spin.FindWindowByName('text')
-            spintxt.SetValue('4')
+            spintxt = spin.FindWindowByName("text")
+            spintxt.SetValue("4")
 
         # press the OK button and close the dialog
         press_ok_button(ui)
@@ -138,7 +139,7 @@ def test_qt_spin_control_editing():
         # text element inside the spin control
         lineedit = ui.control.findChild(qt.QtGui.QLineEdit)
         lineedit.setFocus()
-        lineedit.setText('4')
+        lineedit.setText("4")
 
         # press the OK button and close the dialog
         press_ok_button(ui)
@@ -147,7 +148,7 @@ def test_qt_spin_control_editing():
     assert num.number == 4
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Executing the file opens the dialog for manual testing
     num = NumberWithSpinnerEditor()
     num.configure_traits()

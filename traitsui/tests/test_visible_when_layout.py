@@ -1,17 +1,17 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2012, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Author: Pietro Berkes
 #  Date:   Feb 2012
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """
 Test the layout when element appear and disappear with visible_when.
@@ -36,33 +36,31 @@ _TEXT_HEIGHT = 100
 
 class VisibleWhenProblem(HasTraits):
 
-    which = Enum('one', 'two')
+    which = Enum("one", "two")
 
     on = Bool
     txt = Str
 
     onoff_group = HGroup(
         VGroup(
-            Item('on', resizable=False, width=-100, height=-70),
+            Item("on", resizable=False, width=-100, height=-70),
             show_left=False,
-            show_border=True, visible_when='which == "one"'
-        ),
+            show_border=True,
+            visible_when='which == "one"',
+        )
     )
 
     text_group = VGroup(
-        Item('txt', width=-_TEXT_WIDTH, height=-_TEXT_HEIGHT),
+        Item("txt", width=-_TEXT_WIDTH, height=-_TEXT_HEIGHT),
         visible_when='which == "two"',
         show_border=True,
     )
 
     traits_view = View(
-        Item('which'),
-        VGroup(
-            Include('onoff_group'),
-            Include('text_group'),
-        ),
+        Item("which"),
+        VGroup(Include("onoff_group"), Include("text_group")),
         resizable=True,
-        buttons=['OK', 'Cancel']
+        buttons=["OK", "Cancel"],
     )
 
 
@@ -72,6 +70,7 @@ class VisibleWhenProblem(HasTraits):
 # This is cosmetic, not trivial to fix, and the Wx backend is currently low
 # priority.  Patches which make this work on Wx will be gladly accepted, but
 # there are no current plans to work on this.
+
 
 @skip_if_not_qt4
 def test_visible_when_layout():
@@ -87,8 +86,8 @@ def test_visible_when_layout():
         ui = dialog.edit_traits()
 
         # have the dialog switch from group one to two and back to one
-        dialog.which = 'two'
-        dialog.which = 'one'
+        dialog.which = "two"
+        dialog.which = "one"
 
         # the size of the window should not be larger than the largest
         # combination (in this case, the `text_group` plus the `which` item
@@ -98,7 +97,7 @@ def test_visible_when_layout():
         nose.tools.assert_less(size[1], _TEXT_HEIGHT + 150)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Execute from command line for manual testing
-    vw = VisibleWhenProblem(txt='ciao')
+    vw = VisibleWhenProblem(txt="ciao")
     ui = vw.configure_traits()

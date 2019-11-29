@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,33 +8,27 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the base PyQt classes the various styles of editors used in a
 Traits-based user interface.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
-from traits.api \
-    import TraitError
+from traits.api import TraitError
 
-from traitsui.editor_factory \
-    import EditorFactory as BaseEditorFactory
+from traitsui.editor_factory import EditorFactory as BaseEditorFactory
 
-from .editor \
-    import Editor
+from .editor import Editor
 import six
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'EditorFactory' class
 #   Deprecated alias for traitsui.editor_factory.EditorFactory
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class EditorFactory(BaseEditorFactory):
@@ -43,12 +37,11 @@ class EditorFactory(BaseEditorFactory):
 
     def __init__(self, *args, **kwds):
         super(EditorFactory, self).__init__(*args, **kwds)
-        warnings.warn("DEPRECATED: Use traitsui.editor_factory."
-                      ".EditorFactory instead.", DeprecationWarning)
-
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+        warnings.warn(
+            "DEPRECATED: Use traitsui.editor_factory."
+            ".EditorFactory instead.",
+            DeprecationWarning,
+        )
 
 
 class SimpleEditor(Editor):
@@ -57,10 +50,6 @@ class SimpleEditor(Editor):
     the text field displays an editor-specific dialog box for changing the
     value.
     """
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -69,20 +58,16 @@ class SimpleEditor(Editor):
         self.control = _SimpleField(self)
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Invokes the pop-up editor for an object trait:
     #
     #  (Normally overridden in a subclass)
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def popup_editor(self):
         """ Invokes the pop-up editor for an object trait.
         """
         pass
-
-#-------------------------------------------------------------------------
-#  'TextEditor' class:
-#-------------------------------------------------------------------------
 
 
 class TextEditor(Editor):
@@ -115,29 +100,26 @@ class TextEditor(Editor):
         except TraitError as excp:
             pass
 
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
-
 
 class ReadonlyEditor(Editor):
     """ Base class for read-only style editors, which displays a read-only text
     field, containing a text representation of the object trait value.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     text_alignment_map = {
-        'left': QtCore.Qt.AlignLeft,
-        'right': QtCore.Qt.AlignRight,
-        'just': QtCore.Qt.AlignJustify,
-        'top': QtCore.Qt.AlignLeft,
-        'bottom': QtCore.Qt.AlignBottom,
-        'vcenter': QtCore.Qt.AlignVCenter,
-        'hcenter': QtCore.Qt.AlignHCenter,
-        'center': QtCore.Qt.AlignVCenter | QtCore.Qt.AlignHCenter
+        "left": QtCore.Qt.AlignLeft,
+        "right": QtCore.Qt.AlignRight,
+        "just": QtCore.Qt.AlignJustify,
+        "top": QtCore.Qt.AlignLeft,
+        "bottom": QtCore.Qt.AlignBottom,
+        "vcenter": QtCore.Qt.AlignVCenter,
+        "hcenter": QtCore.Qt.AlignHCenter,
+        "center": QtCore.Qt.AlignVCenter | QtCore.Qt.AlignHCenter,
     }
 
     def init(self, parent):
@@ -147,8 +129,9 @@ class ReadonlyEditor(Editor):
         self.control = QtGui.QLabel(self.str_value)
 
         if self.item.resizable is True or self.item.height != -1.0:
-            self.control.setSizePolicy(QtGui.QSizePolicy.Expanding,
-                                       QtGui.QSizePolicy.Expanding)
+            self.control.setSizePolicy(
+                QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
+            )
             self.control.setWordWrap(True)
 
         alignment = None
@@ -165,23 +148,14 @@ class ReadonlyEditor(Editor):
 
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         self.control.setText(self.str_value)
 
-#-------------------------------------------------------------------------
-#  '_SimpleField' class:
-#-------------------------------------------------------------------------
-
 
 class _SimpleField(QtGui.QLineEdit):
-
     def __init__(self, editor):
         QtGui.QLineEdit.__init__(self, editor.str_value)
 

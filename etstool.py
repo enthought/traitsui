@@ -123,6 +123,11 @@ runtime_dependencies = {
     '2.7': {'mock'},
 }
 
+doc_dependencies = {
+    "sphinx",
+    "enthought_sphinx_theme",
+}
+
 environment_vars = {
     'pyside': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside'},
     'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
@@ -247,6 +252,36 @@ def update(runtime, toolkit, environment):
 
 
 @cli.command()
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
+@click.option('--environment', default=None)
+def docs(runtime, toolkit, environment):
+    """ Autogenerate documentation
+
+    """
+    parameters = get_parameters(runtime, toolkit, environment)
+    packages = ' '.join(doc_dependencies)
+    commands = [
+        "edm install -y -e {environment} " + packages,
+    ]
+    click.echo("Installing documentation tools in  '{environment}'".format(
+        **parameters))
+    execute(commands, parameters)
+    click.echo('Done installing documentation tools')
+
+    os.chdir('docs')
+    commands = [
+        "edm run -e {environment} -- make html",
+    ]
+    click.echo("Building documentation in  '{environment}'".format(**parameters))
+    try:
+        execute(commands, parameters)
+    finally:
+        os.chdir('..')
+    click.echo('Done building documentation')
+
+
+@cli.command()
 def test_all():
     """ Run test_clean across all supported environment combinations.
 
@@ -264,6 +299,7 @@ def test_all():
                 failed_command = True
     if failed_command:
         sys.exit(1)
+
 
 # ----------------------------------------------------------------------------
 # Utility routines

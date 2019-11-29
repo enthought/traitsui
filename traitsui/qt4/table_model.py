@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2008, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -7,14 +7,11 @@
 # in the PyQt GPL exception also apply.
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the table model used by the table editor.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
@@ -25,26 +22,23 @@ from .clipboard import PyMimeData
 
 import six
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
 
 # Mapping for trait alignment values to qt4 horizontal alignment constants
 h_alignment_map = {
-    'left': QtCore.Qt.AlignLeft,
-    'center': QtCore.Qt.AlignHCenter,
-    'right': QtCore.Qt.AlignRight,
+    "left": QtCore.Qt.AlignLeft,
+    "center": QtCore.Qt.AlignHCenter,
+    "right": QtCore.Qt.AlignRight,
 }
 
 # Mapping for trait alignment values to qt4 vertical alignment constants
 v_alignment_map = {
-    'top': QtCore.Qt.AlignTop,
-    'center': QtCore.Qt.AlignVCenter,
-    'bottom': QtCore.Qt.AlignBottom,
+    "top": QtCore.Qt.AlignTop,
+    "center": QtCore.Qt.AlignVCenter,
+    "bottom": QtCore.Qt.AlignBottom,
 }
 
 # MIME type for internal table drag/drop operations
-mime_type = 'traits-ui-table-editor'
+mime_type = "traits-ui-table-editor"
 
 
 def as_qcolor(color):
@@ -54,10 +48,6 @@ def as_qcolor(color):
         return QtGui.QColor(*color)
     else:
         return QtGui.QColor(color)
-
-#-------------------------------------------------------------------------
-#  'TableModel' class:
-#-------------------------------------------------------------------------
 
 
 class TableModel(QtCore.QAbstractTableModel):
@@ -70,9 +60,9 @@ class TableModel(QtCore.QAbstractTableModel):
 
         self._editor = editor
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  QAbstractTableModel interface:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def rowCount(self, mi):
         """Reimplemented to return the number of rows."""
@@ -89,6 +79,11 @@ class TableModel(QtCore.QAbstractTableModel):
 
         obj = self._editor.items()[mi.row()]
         column = self._editor.columns[mi.column()]
+
+        if self._editor.factory is None:
+            # XXX This should never happen, but it does,
+            # probably during shutdown, but I haven't investigated
+            return None
 
         if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
             text = column.get_value(obj)
@@ -107,6 +102,8 @@ class TableModel(QtCore.QAbstractTableModel):
 
         elif role == QtCore.Qt.FontRole:
             font = column.get_text_font(obj)
+            if font is None:
+                font = self._editor.factory.cell_font
             if font is not None:
                 return QtGui.QFont(font)
 
@@ -120,15 +117,21 @@ class TableModel(QtCore.QAbstractTableModel):
         elif role == QtCore.Qt.BackgroundRole:
             color = column.get_cell_color(obj)
             if color is None:
-                # FIXME: Yes, this is weird. It should work fine to fall through
-                # to the catch-all None at the end, but it doesn't.
-                return None
-            else:
-                q_color = as_qcolor(color)
-                return QtGui.QBrush(q_color)
+                if column.is_editable(obj):
+                    color = self._editor.factory.cell_bg_color_
+                else:
+                    color = self._editor.factory.cell_read_only_bg_color_
+                if color is None:
+                    # FIXME: Yes, this is weird. It should work fine to fall through
+                    # to the catch-all None at the end, but it doesn't.
+                    return None
+            q_color = as_qcolor(color)
+            return QtGui.QBrush(q_color)
 
         elif role == QtCore.Qt.ForegroundRole:
             color = column.get_text_color(obj)
+            if color is None:
+                color = self._editor.factory.cell_color_
             if color is not None:
                 q_color = as_qcolor(color)
                 return QtGui.QBrush(q_color)
@@ -156,8 +159,11 @@ class TableModel(QtCore.QAbstractTableModel):
             else:
                 return QtCore.Qt.NoItemFlags
 
-        flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled | \
-            QtCore.Qt.ItemIsDragEnabled
+        flags = (
+            QtCore.Qt.ItemIsSelectable
+            | QtCore.Qt.ItemIsEnabled
+            | QtCore.Qt.ItemIsDragEnabled
+        )
 
         obj = editor.items()[mi.row()]
         column = editor.columns[mi.column()]
@@ -177,9 +183,9 @@ class TableModel(QtCore.QAbstractTableModel):
     def headerData(self, section, orientation, role):
         """Reimplemented to return the header data."""
 
-        if orientation == QtCore.Qt.Horizontal:
+        editor = self._editor
 
-            editor = self._editor
+        if orientation == QtCore.Qt.Horizontal:
             column = editor.columns[section]
 
             if role == QtCore.Qt.DisplayRole:
@@ -189,6 +195,26 @@ class TableModel(QtCore.QAbstractTableModel):
 
             if role == QtCore.Qt.DisplayRole:
                 return str(section + 1)
+
+        if editor.factory is None:
+            # XXX This should never happen, but it does,
+            # probably during shutdown, but I haven't investigated
+            return None
+
+        if role == QtCore.Qt.FontRole:
+            font = editor.factory.label_font
+            if font is not None:
+                return QtGui.QFont(font)
+
+        elif role == QtCore.Qt.BackgroundRole:
+            color = editor.factory.label_bg_color_
+            if color is not None:
+                return color
+
+        elif role == QtCore.Qt.ForegroundRole:
+            color = editor.factory.label_color_
+            if color is not None:
+                return color
 
         return None
 
@@ -242,8 +268,10 @@ class TableModel(QtCore.QAbstractTableModel):
         selection_mode = editor.factory.selection_mode
 
         if selection_mode.startswith("cell"):
-            data = [self._get_cell_drag_value(index.row(), index.column())
-                    for index in indexes]
+            data = [
+                self._get_cell_drag_value(index.row(), index.column())
+                for index in indexes
+            ]
         elif selection_mode.startswith("column"):
             columns = sorted(set(index.column() for index in indexes))
             data = self._get_columns_drag_value(columns)
@@ -256,9 +284,9 @@ class TableModel(QtCore.QAbstractTableModel):
         # handle re-ordering via internal drags
         if editor.factory.reorderable:
             rows = sorted({index.row() for index in indexes})
-            data = QtCore.QByteArray(six.text_type(id(self)).encode('utf8'))
+            data = QtCore.QByteArray(six.text_type(id(self)).encode("utf8"))
             for row in rows:
-                data.append((' %i' % row).encode('utf8'))
+                data.append((" %i" % row).encode("utf8"))
             mime_data.setData(mime_type, data)
         return mime_data
 
@@ -271,7 +299,9 @@ class TableModel(QtCore.QAbstractTableModel):
         # this is a drag from a table model?
         data = mime_data.data(mime_type)
         if not data.isNull() and action == QtCore.Qt.MoveAction:
-            id_and_rows = [int(s) for s in data.data().decode('utf8').split(' ')]
+            id_and_rows = [
+                int(s) for s in data.data().decode("utf8").split(" ")
+            ]
             table_id = id_and_rows[0]
             # is it from ourself?
             if table_id == id(self):
@@ -292,7 +322,7 @@ class TableModel(QtCore.QAbstractTableModel):
                 row = parent.row()
                 column = parent.column()
 
-            if row != -1 and column != - 1:
+            if row != -1 and column != -1:
                 object = editor.items()[row]
                 column = editor.columns[column]
                 if column.is_droppable(object, data):
@@ -306,9 +336,9 @@ class TableModel(QtCore.QAbstractTableModel):
 
         return QtCore.Qt.MoveAction
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Utility methods
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_columns_drag_value(self, columns):
         """ Returns the value to use when the specified columns are dragged or
@@ -339,9 +369,9 @@ class TableModel(QtCore.QAbstractTableModel):
         drag_value = editor.columns[column].get_drag_value(item)
         return drag_value
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  TableModel interface:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def moveRow(self, old_row, new_row):
         """Convenience method to move a single row."""
@@ -378,10 +408,6 @@ class TableModel(QtCore.QAbstractTableModel):
         # Update the selection for the new location.
         self._editor.set_selection(objects)
 
-#-------------------------------------------------------------------------
-#  'SortFilterTableModel' class:
-#-------------------------------------------------------------------------
-
 
 class SortFilterTableModel(QtGui.QSortFilterProxyModel):
     """A wrapper for the TableModel which provides sorting and filtering
@@ -394,9 +420,9 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
 
         self._editor = editor
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  QSortFilterProxyModel interface:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def filterAcceptsRow(self, source_row, source_parent):
         """"Reimplemented to use a TableFilter for filtering rows."""
@@ -422,9 +448,9 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
 
         return column.key(left) < column.key(right)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  SortFilterTableModel interface:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def moveRow(self, old_row, new_row):
         """Convenience method to move a single row."""
@@ -435,7 +461,8 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
         """Delegate to source model with mapped rows."""
 
         source = self.sourceModel()
-        current_rows = [self.mapToSource(self.index(row, 0)).row()
-                        for row in current_rows]
+        current_rows = [
+            self.mapToSource(self.index(row, 0)).row() for row in current_rows
+        ]
         new_row = self.mapToSource(self.index(new_row, 0)).row()
         source.moveRows(current_rows, new_row)

@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -12,14 +12,11 @@
 #
 #  Author: David C. Morrill
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the title editor factory for all traits toolkit backends.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -42,13 +39,11 @@ class ToolkitEditorFactory(EditorFactory):
         the backend package.
 
         """
-        SimpleEditor = toolkit_object('title_editor:SimpleEditor')
+        SimpleEditor = toolkit_object("title_editor:SimpleEditor")
         return SimpleEditor
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Create the editor factory object:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 TitleEditor = ToolkitEditorFactory
-
-### EOF #######################################################################

@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,15 +13,12 @@
 #  Author: David C. Morrill
 #  Date:   10/07/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the UI class used to represent an active traits-based user
     interface.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -43,7 +40,8 @@ from traits.api import (
     Str,
     TraitError,
     on_trait_change,
-    property_depends_on)
+    property_depends_on,
+)
 
 from traits.trait_base import traits_home, is_str
 
@@ -61,167 +59,175 @@ from .item import Item
 
 from .group import Group, ShadowGroup
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
 
 # List of **kind** types for views that must have a **parent** window specified
-kind_must_have_parent = ('panel', 'subpanel')
-
-#-------------------------------------------------------------------------
-#  'UI' class:
-#-------------------------------------------------------------------------
+kind_must_have_parent = ("panel", "subpanel")
 
 
 class UI(HasPrivateTraits):
     """ Information about the user interface for a View.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # The ViewElements object from which this UI resolves Include items
+    #: The ViewElements object from which this UI resolves Include items
     view_elements = Instance(ViewElements)
 
-    # Context objects that the UI is editing
+    #: Context objects that the UI is editing
     context = DictStrAny
 
-    # Handler object used for event handling
+    #: Handler object used for event handling
     handler = Instance(Handler)
 
-    # View template used to construct the user interface
-    view = Instance('traitsui.view.View')
+    #: View template used to construct the user interface
+    view = Instance("traitsui.view.View")
 
-    # Panel or dialog associated with the user interface
+    #: Panel or dialog associated with the user interface
     control = Any
 
-    # The parent UI (if any) of this UI
-    parent = Instance('UI')
+    #: The parent UI (if any) of this UI
+    parent = Instance("UI")
 
-    # Toolkit-specific object that "owns" **control**
+    #: Toolkit-specific object that "owns" **control**
     owner = Any
 
-    # UIInfo object containing context or editor objects
+    #: UIInfo object containing context or editor objects
     info = Instance(UIInfo)
 
-    # Result from a modal or wizard dialog:
+    #: Result from a modal or wizard dialog:
     result = Bool(False)
 
-    # Undo and Redo history
+    #: Undo and Redo history
     history = Any
 
-    # The KeyBindings object (if any) for this UI:
-    key_bindings = Property(depends_on=['view._key_bindings', 'context'])
+    #: The KeyBindings object (if any) for this UI:
+    key_bindings = Property(depends_on=["view._key_bindings", "context"])
 
-    # The unique ID for this UI for persistence
+    #: The unique ID for this UI for persistence
     id = Str
 
-    # Have any modifications been made to UI contents?
+    #: Have any modifications been made to UI contents?
     modified = Bool(False)
 
-    # Event when the user interface has changed
+    #: Event when the user interface has changed
     updated = Event(Bool)
 
-    # Title of the dialog, if any
+    #: Title of the dialog, if any
     title = Str
 
-    # The ImageResource of the icon, if any
+    #: The ImageResource of the icon, if any
     icon = Image
 
-    # Should the created UI have scroll bars?
+    #: Should the created UI have scroll bars?
     scrollable = Bool(False)
 
-    # The number of currently pending editor error conditions
+    #: The number of currently pending editor error conditions
     errors = Int
 
-    # The code used to rebuild an updated user interface
+    #: The code used to rebuild an updated user interface
     rebuild = Callable
 
-    # Set to True when the UI has finished being destroyed.
+    #: Set to True when the UI has finished being destroyed.
     destroyed = Bool(False)
 
-    #-- Private Traits -------------------------------------------------------
+    # -- Private Traits -------------------------------------------------------
 
-    # Original context when used with a modal dialog
+    #: Original context when used with a modal dialog
     _context = DictStrAny
 
-    # Copy of original context used for reverting changes
+    #: Copy of original context used for reverting changes
     _revert = DictStrAny
 
-    # List of methods to call once the user interface is created
+    #: List of methods to call once the user interface is created
     _defined = List
 
-    # List of (visible_when,Editor) pairs
+    #: List of (visible_when,Editor) pairs
     _visible = List
 
-    # List of (enabled_when,Editor) pairs
+    #: List of (enabled_when,Editor) pairs
     _enabled = List
 
-    # List of (checked_when,Editor) pairs
+    #: List of (checked_when,Editor) pairs
     _checked = List
 
-    # Search stack used while building a user interface
+    #: Search stack used while building a user interface
     _search = List
 
-    # List of dispatchable Handler methods
+    #: List of dispatchable Handler methods
     _dispatchers = List
 
-    # List of editors used to build the user interface
+    #: List of editors used to build the user interface
     _editors = List
 
-    # List of names bound to the **info** object
+    #: List of names bound to the **info** object
     _names = List
 
-    # Index of currently the active group in the user interface
+    #: Index of currently the active group in the user interface
     _active_group = Int
 
-    # List of top-level groups used to build the user interface
+    #: List of top-level groups used to build the user interface
     _groups = Property
     _groups_cache = Any
 
-    # Count of levels of nesting for undoable actions
+    #: Count of levels of nesting for undoable actions
     _undoable = Int(-1)
 
-    # Code used to rebuild an updated user interface
+    #: Code used to rebuild an updated user interface
     _rebuild = Callable
 
-    # The statusbar listeners that have been set up:
+    #: The statusbar listeners that have been set up:
     _statusbar = List
 
-    # Control which gets focus after UI is created
-    # Note: this does not track focus after UI creation
-    # only used by Qt backend.
+    #: Control which gets focus after UI is created
+    #: Note: this does not track focus after UI creation
+    #: only used by Qt backend.
     _focus_control = Any
 
-    # Does the UI contain any scrollable widgets?
-    #
-    # The _scrollable trait is set correctly, but not used currently because
-    # its value is arrived at too late to be of use in building the UI.
+    #: Does the UI contain any scrollable widgets?
+    #:
+    #: The _scrollable trait is set correctly, but not used currently because
+    #: its value is arrived at too late to be of use in building the UI.
     _scrollable = Bool(False)
 
-    # Cache for key bindings.
-    _key_bindings = Instance('traitsui.key_bindings.KeyBindings')
+    #: Cache for key bindings.
+    _key_bindings = Instance("traitsui.key_bindings.KeyBindings")
 
-    # List of traits that are reset when a user interface is recycled
-    # (i.e. rebuilt).
+    #: List of traits that are reset when a user interface is recycled
+    #: (i.e. rebuilt).
     recyclable_traits = [
-        '_context', '_revert', '_defined', '_visible', '_enabled', '_checked',
-        '_search', '_dispatchers', '_editors', '_names', '_active_group',
-        '_undoable', '_rebuild', '_groups_cache', '_key_bindings',
-        '_focus_control'
+        "_context",
+        "_revert",
+        "_defined",
+        "_visible",
+        "_enabled",
+        "_checked",
+        "_search",
+        "_dispatchers",
+        "_editors",
+        "_names",
+        "_active_group",
+        "_undoable",
+        "_rebuild",
+        "_groups_cache",
+        "_key_bindings",
+        "_focus_control",
     ]
 
-    # List of additional traits that are discarded when a user interface is
-    # disposed.
+    #: List of additional traits that are discarded when a user interface is
+    #: disposed.
     disposable_traits = [
-        'view_elements', 'info', 'handler', 'context', 'view', 'history',
-        'key_bindings', 'icon', 'rebuild',
+        "view_elements",
+        "info",
+        "handler",
+        "context",
+        "view",
+        "history",
+        "key_bindings",
+        "icon",
+        "rebuild",
     ]
-
-    #-------------------------------------------------------------------------
-    #  Initializes the traits object:
-    #-------------------------------------------------------------------------
 
     def traits_init(self):
         """ Initializes the traits object.
@@ -229,23 +235,16 @@ class UI(HasPrivateTraits):
         self.info = UIInfo(ui=self)
         self.handler.init_info(self.info)
 
-    #-------------------------------------------------------------------------
-    #  Creates a user interface from the associated View template object:
-    #-------------------------------------------------------------------------
-
     def ui(self, parent, kind):
         """ Creates a user interface from the associated View template object.
         """
         if (parent is None) and (kind in kind_must_have_parent):
-            kind = 'live'
-        self.view.on_trait_change(self._updated_changed, 'updated',
-                                  dispatch='ui')
-        self.rebuild = getattr(toolkit(), 'ui_' + kind)
+            kind = "live"
+        self.view.on_trait_change(
+            self._updated_changed, "updated", dispatch="ui"
+        )
+        self.rebuild = getattr(toolkit(), "ui_" + kind)
         self.rebuild(self, parent)
-
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of a user interface:
-    #-------------------------------------------------------------------------
 
     def dispose(self, result=None, abort=False):
         """ Disposes of the contents of a user interface.
@@ -262,10 +261,6 @@ class UI(HasPrivateTraits):
             # Finish disposing of the user interface:
             self.finish()
 
-    #-------------------------------------------------------------------------
-    #  Recycles the user interface prior to rebuilding it:
-    #-------------------------------------------------------------------------
-
     def recycle(self):
         """ Recycles the user interface prior to rebuilding it.
         """
@@ -277,10 +272,6 @@ class UI(HasPrivateTraits):
 
         # Reset all recyclable traits:
         self.reset_traits(self.recyclable_traits)
-
-    #-------------------------------------------------------------------------
-    #  Finishes a user interface:
-    #-------------------------------------------------------------------------
 
     def finish(self):
         """ Finishes disposing of a user interface.
@@ -318,10 +309,6 @@ class UI(HasPrivateTraits):
 
         self.destroyed = True
 
-    #-------------------------------------------------------------------------
-    #  Resets the contents of the user interface:
-    #-------------------------------------------------------------------------
-
     def reset(self, destroy=True):
         """ Resets the contents of a user interface.
         """
@@ -348,11 +335,6 @@ class UI(HasPrivateTraits):
         for dispatcher in self._dispatchers:
             dispatcher.remove()
 
-    #-------------------------------------------------------------------------
-    #  Find the definition of the specified Include object in the current user
-    #  interface building context:
-    #-------------------------------------------------------------------------
-
     def find(self, include):
         """ Finds the definition of the specified Include object in the current
             user interface building context.
@@ -364,7 +346,7 @@ class UI(HasPrivateTraits):
         if len(context) == 1:
             object = list(context.values())[0]
         else:
-            object = context.get('object')
+            object = context.get("object")
 
         # Try to use our ViewElements objects:
         ve = self.view_elements
@@ -381,7 +363,7 @@ class UI(HasPrivateTraits):
         # If not found, then try to search the 'handler' and 'object' for a
         # method we can call that will define it:
         if result is None:
-            handler = context.get('handler')
+            handler = context.get("handler")
             if handler is not None:
                 method = getattr(handler, include.id, None)
                 if callable(method):
@@ -394,27 +376,15 @@ class UI(HasPrivateTraits):
 
         return result
 
-    #-------------------------------------------------------------------------
-    #  Returns the current search stack level:
-    #-------------------------------------------------------------------------
-
     def push_level(self):
         """ Returns the current search stack level.
         """
         return len(self._search)
 
-    #-------------------------------------------------------------------------
-    #  Restores a previously pushed search stack level:
-    #-------------------------------------------------------------------------
-
     def pop_level(self, level):
         """ Restores a previously pushed search stack level.
         """
         del self._search[: len(self._search) - level]
-
-    #-------------------------------------------------------------------------
-    #  Performs all post user interface creation processing:
-    #-------------------------------------------------------------------------
 
     def prepare_ui(self):
         """ Performs all processing that occurs after the user interface is
@@ -432,7 +402,7 @@ class UI(HasPrivateTraits):
         self.sync_view()
 
         # Hook all keyboard events:
-        toolkit().hook_events(self, self.control, 'keys', self.key_handler)
+        toolkit().hook_events(self, self.control, "keys", self.key_handler)
 
         # Hook all events if the handler is an extended 'ViewHandler':
         handler = self.handler
@@ -442,7 +412,7 @@ class UI(HasPrivateTraits):
         # Invoke the handler's 'init' method, and abort if it indicates
         # failure:
         if handler.init(info) == False:
-            raise TraitError('User interface creation aborted')
+            raise TraitError("User interface creation aborted")
 
         # For each Handler method whose name is of the form
         # 'object_name_changed', where 'object' is the name of an object in the
@@ -452,17 +422,18 @@ class UI(HasPrivateTraits):
         # set:
         context = self.context
         for name in self._each_trait_method(handler):
-            if name[-8:] == '_changed':
+            if name[-8:] == "_changed":
                 prefix = name[:-8]
-                col = prefix.find('_', 1)
+                col = prefix.find("_", 1)
                 if col >= 0:
-                    object = context.get(prefix[: col])
+                    object = context.get(prefix[:col])
                     if object is not None:
                         method = getattr(handler, name)
-                        trait_name = prefix[col + 1:]
-                        self._dispatchers.append(Dispatcher(
-                            method, info, object, trait_name))
-                        if object.base_trait(trait_name).type != 'event':
+                        trait_name = prefix[col + 1 :]
+                        self._dispatchers.append(
+                            Dispatcher(method, info, object, trait_name)
+                        )
+                        if object.base_trait(trait_name).type != "event":
                             method(info)
 
         # If there are any Editor object's whose 'visible', 'enabled' or
@@ -472,82 +443,72 @@ class UI(HasPrivateTraits):
         # 'enabled' or 'checked' state of each affected Editor to be set. Also
         # trigger the evaluation immediately, so the visible, enabled or checked
         # state of each Editor can be correctly initialized:
-        if (len(self._visible) +
-            len(self._enabled) +
-                len(self._checked)) > 0:
+        if (len(self._visible) + len(self._enabled) + len(self._checked)) > 0:
             for object in context.values():
-                object.on_trait_change(self._evaluate_when, dispatch='ui')
+                object.on_trait_change(self._evaluate_when, dispatch="ui")
             self._do_evaluate_when(at_init=True)
 
         # Indicate that the user interface has been initialized:
         info.initialized = True
 
-    #-------------------------------------------------------------------------
-    #  Synchronize context object traits with view editor traits:
-    #-------------------------------------------------------------------------
-
     def sync_view(self):
         """ Synchronize context object traits with view editor traits.
         """
         for name, object in self.context.items():
-            self._sync_view(name, object, 'sync_to_view', 'from')
-            self._sync_view(name, object, 'sync_from_view', 'to')
-            self._sync_view(name, object, 'sync_with_view', 'both')
+            self._sync_view(name, object, "sync_to_view", "from")
+            self._sync_view(name, object, "sync_from_view", "to")
+            self._sync_view(name, object, "sync_with_view", "both")
 
     def _sync_view(self, name, object, metadata, direction):
         info = self.info
         for trait_name, trait in object.traits(**{metadata: is_str}).items():
-            for sync in getattr(trait, metadata).split(','):
+            for sync in getattr(trait, metadata).split(","):
                 try:
-                    editor_id, editor_name = [item.strip()
-                                              for item in sync.split('.')]
+                    editor_id, editor_name = [
+                        item.strip() for item in sync.split(".")
+                    ]
                 except:
                     raise TraitError(
                         "The '%s' metadata for the '%s' trait in "
                         "the '%s' context object should be of the form: "
-                        "'id1.trait1[,...,idn.traitn]." %
-                        (metadata, trait_name, name))
+                        "'id1.trait1[,...,idn.traitn]."
+                        % (metadata, trait_name, name)
+                    )
 
                 editor = getattr(info, editor_id, None)
                 if editor is not None:
-                    editor.sync_value('%s.%s' % (name, trait_name),
-                                      editor_name, direction)
+                    editor.sync_value(
+                        "%s.%s" % (name, trait_name), editor_name, direction
+                    )
                 else:
                     raise TraitError(
                         "No editor with id = '%s' was found for "
                         "the '%s' metadata for the '%s' trait in the '%s' "
-                        "context object." %
-                        (editor_id, metadata, trait_name, name))
-
-    #-------------------------------------------------------------------------
-    #  Gets the current value of a specified extended trait name:
-    #-------------------------------------------------------------------------
+                        "context object."
+                        % (editor_id, metadata, trait_name, name)
+                    )
 
     def get_extended_value(self, name):
         """ Gets the current value of a specified extended trait name.
         """
-        names = name.split('.')
+        names = name.split(".")
         if len(names) > 1:
             value = self.context[names[0]]
             del names[0]
         else:
-            value = self.context['object']
+            value = self.context["object"]
 
         for name in names:
             value = getattr(value, name)
 
         return value
 
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the UI:
-    #-------------------------------------------------------------------------
-
     def restore_prefs(self):
         """ Retrieves and restores any saved user preference information
         associated with the UI.
         """
         id = self.id
-        if id != '':
+        if id != "":
             db = self.get_ui_db()
             if db is not None:
                 try:
@@ -558,10 +519,6 @@ class UI(HasPrivateTraits):
                     pass
 
         return None
-
-    #-------------------------------------------------------------------------
-    #  Restores user preference information for the UI:
-    #-------------------------------------------------------------------------
 
     def set_prefs(self, prefs):
         """ Sets the values of user preferences for the UI.
@@ -576,17 +533,13 @@ class UI(HasPrivateTraits):
                         editor.restore_prefs(editor_prefs)
 
             if self.key_bindings is not None:
-                key_bindings = prefs.get('$')
+                key_bindings = prefs.get("$")
                 if key_bindings is not None:
                     self.key_bindings.merge(key_bindings)
 
-            return prefs.get('')
+            return prefs.get("")
 
         return None
-
-    #-------------------------------------------------------------------------
-    #  Saves any user preference information associated with the UI:
-    #-------------------------------------------------------------------------
 
     def save_prefs(self, prefs=None):
         """ Saves any user preference information associated with the UI.
@@ -596,25 +549,21 @@ class UI(HasPrivateTraits):
             return
 
         id = self.id
-        if id != '':
-            db = self.get_ui_db(mode='c')
+        if id != "":
+            db = self.get_ui_db(mode="c")
             if db is not None:
                 db[id] = self.get_prefs(prefs)
                 db.close()
-
-    #-------------------------------------------------------------------------
-    #  Gets the preferences to be saved for the user interface:
-    #-------------------------------------------------------------------------
 
     def get_prefs(self, prefs=None):
         """ Gets the preferences to be saved for the user interface.
         """
         ui_prefs = {}
         if prefs is not None:
-            ui_prefs[''] = prefs
+            ui_prefs[""] = prefs
 
         if self.key_bindings is not None:
-            ui_prefs['$'] = self.key_bindings
+            ui_prefs["$"] = self.key_bindings
 
         info = self.info
         for name in self._names:
@@ -626,32 +575,22 @@ class UI(HasPrivateTraits):
 
         return ui_prefs
 
-    #-------------------------------------------------------------------------
-    #  Gets a reference to the traits UI preference database:
-    #-------------------------------------------------------------------------
-
-    def get_ui_db(self, mode='r'):
+    def get_ui_db(self, mode="r"):
         """ Returns a reference to the Traits UI preference database.
         """
         try:
-            return shelve.open(os.path.join(traits_home(), 'traits_ui'),
-                               flag=mode, protocol=-1)
+            return shelve.open(
+                os.path.join(traits_home(), "traits_ui"),
+                flag=mode,
+                protocol=-1,
+            )
         except:
             return None
-
-    #-------------------------------------------------------------------------
-    #  Returns a list of editors for the given trait name.
-    #-------------------------------------------------------------------------
 
     def get_editors(self, name):
         """ Returns a list of editors for the given trait name.
         """
         return [editor for editor in self._editors if editor.name == name]
-
-    #-------------------------------------------------------------------------
-    #  Returns the list of editor error controls contained by the user
-    #  interface:
-    #-------------------------------------------------------------------------
 
     def get_error_controls(self):
         """ Returns the list of editor error controls contained by the user
@@ -667,68 +606,47 @@ class UI(HasPrivateTraits):
 
         return controls
 
-    #-------------------------------------------------------------------------
-    #  Adds a Handler method to the list of methods to be called once the user
-    #  interface has been constructed:
-    #-------------------------------------------------------------------------
-
     def add_defined(self, method):
         """ Adds a Handler method to the list of methods to be called once the
             user interface has been constructed.
         """
         self._defined.append(method)
 
-    #-------------------------------------------------------------------------
-    #  Add's a conditionally enabled Editor object to the list of monitored
-    #  'visible_when' objects:
-    #-------------------------------------------------------------------------
-
     def add_visible(self, visible_when, editor):
         """ Adds a conditionally enabled Editor object to the list of monitored
             'visible_when' objects.
         """
         try:
-            self._visible.append((compile(visible_when, '<string>', 'eval'),
-                                  editor))
+            self._visible.append(
+                (compile(visible_when, "<string>", "eval"), editor)
+            )
         except:
             pass
             # fixme: Log an error here...
-
-    #-------------------------------------------------------------------------
-    #  Add's a conditionally enabled Editor object to the list of monitored
-    #  'enabled_when' objects:
-    #-------------------------------------------------------------------------
 
     def add_enabled(self, enabled_when, editor):
         """ Adds a conditionally enabled Editor object to the list of monitored
             'enabled_when' objects.
         """
         try:
-            self._enabled.append((compile(enabled_when, '<string>', 'eval'),
-                                  editor))
+            self._enabled.append(
+                (compile(enabled_when, "<string>", "eval"), editor)
+            )
         except:
             pass
             # fixme: Log an error here...
-
-    #-------------------------------------------------------------------------
-    #  Add's a conditionally checked (menu/toolbar) Editor object to the list of
-    #  monitored 'checked_when' objects:
-    #-------------------------------------------------------------------------
 
     def add_checked(self, checked_when, editor):
         """ Adds a conditionally enabled (menu) Editor object to the list of
             monitored 'checked_when' objects.
         """
         try:
-            self._checked.append((compile(checked_when, '<string>', 'eval'),
-                                  editor))
+            self._checked.append(
+                (compile(checked_when, "<string>", "eval"), editor)
+            )
         except:
             pass
             # fixme: Log an error here...
-
-    #-------------------------------------------------------------------------
-    #  Performs an 'undoable' action:
-    #-------------------------------------------------------------------------
 
     def do_undoable(self, action, *args, **kw):
         """ Performs an action that can be undone.
@@ -743,26 +661,18 @@ class UI(HasPrivateTraits):
             if undoable == -1:
                 self._undoable = -1
 
-    #-------------------------------------------------------------------------
-    #  Routes a 'hooked' event to the correct handler method:
-    #-------------------------------------------------------------------------
-
     def route_event(self, event):
         """ Routes a "hooked" event to the correct handler method.
         """
         toolkit().route_event(self, event)
 
-    #-------------------------------------------------------------------------
-    #  Handles key events when the view has a set of KeyBindings:
-    #-------------------------------------------------------------------------
-
     def key_handler(self, event, skip=True):
         """ Handles key events.
         """
         key_bindings = self.key_bindings
-        handled = ((key_bindings is not None) and
-                   key_bindings.do(event, [], self.info,
-                                   recursive=(self.parent is None)))
+        handled = (key_bindings is not None) and key_bindings.do(
+            event, [], self.info, recursive=(self.parent is None)
+        )
 
         if (not handled) and (self.parent is not None):
             handled = self.parent.key_handler(event, False)
@@ -771,10 +681,6 @@ class UI(HasPrivateTraits):
             toolkit().skip_event(event)
 
         return handled
-
-    #-------------------------------------------------------------------------
-    #  Evaluates a specified function in the UI's context:
-    #-------------------------------------------------------------------------
 
     def evaluate(self, function, *args, **kw_args):
         """ Evaluates a specified function in the UI's **context**.
@@ -786,13 +692,9 @@ class UI(HasPrivateTraits):
             return function(*args, **kw_args)
 
         context = self.context.copy()
-        context['ui'] = self
-        context['handler'] = self.handler
+        context["ui"] = self
+        context["handler"] = self.handler
         return eval(function, globals(), context)(*args, **kw_args)
-
-    #-------------------------------------------------------------------------
-    #  Evaluates an expression in the UI's 'context' and returns the result:
-    #-------------------------------------------------------------------------
 
     def eval_when(self, when, result=True):
         """ Evaluates an expression in the UI's **context** and returns the
@@ -803,24 +705,21 @@ class UI(HasPrivateTraits):
             result = eval(when, globals(), context)
         except:
             from traitsui.api import raise_to_debug
+
             raise_to_debug()
 
-        del context['ui']
+        del context["ui"]
 
         return result
-
-    #-------------------------------------------------------------------------
-    #  Gets the context to use for evaluating an expression:
-    #-------------------------------------------------------------------------
 
     def _get_context(self, context):
         """ Gets the context to use for evaluating an expression.
         """
-        name = 'object'
+        name = "object"
         n = len(context)
-        if (n == 2) and ('handler' in context):
+        if (n == 2) and ("handler" in context):
             for name, value in context.items():
-                if name != 'handler':
+                if name != "handler":
                     break
         elif n == 1:
             name = list(context.keys())[0]
@@ -832,15 +731,9 @@ class UI(HasPrivateTraits):
         else:
             context2 = context.copy()
 
-        context2['ui'] = self
+        context2["ui"] = self
 
         return context2
-
-    #-------------------------------------------------------------------------
-    #  Sets the 'visible', 'enabled' and/or 'checked' state for all Editors
-    #  controlled by a 'visible_when', 'enabled_when' or 'checked_when'
-    #  expression:
-    #-------------------------------------------------------------------------
 
     def _evaluate_when(self):
         """ Set the 'visible', 'enabled', and 'checked' states for all Editors
@@ -860,14 +753,9 @@ class UI(HasPrivateTraits):
         time at initialization. In that case, we want to force the state of
         the items to be set (normally it is set only if it changes).
         """
-        self._evaluate_condition(self._visible, 'visible', at_init)
-        self._evaluate_condition(self._enabled, 'enabled', at_init)
-        self._evaluate_condition(self._checked, 'checked', at_init)
-
-    #-------------------------------------------------------------------------
-    #  Evaluates a list of ( eval, editor ) pairs and sets a specified trait on
-    #  each editor to reflect the boolean truth of the expression evaluated:
-    #-------------------------------------------------------------------------
+        self._evaluate_condition(self._visible, "visible", at_init)
+        self._evaluate_condition(self._enabled, "enabled", at_init)
+        self._evaluate_condition(self._checked, "checked", at_init)
 
     def _evaluate_condition(self, conditions, trait, at_init=False):
         """ Evaluates a list of (eval, editor) pairs and sets a specified trait
@@ -928,6 +816,7 @@ class UI(HasPrivateTraits):
             except Exception:
                 # catch errors in the validate_when expression
                 from traitsui.api import raise_to_debug
+
                 raise_to_debug()
 
         # update the state of the editors
@@ -935,11 +824,6 @@ class UI(HasPrivateTraits):
             setattr(editor, trait, False)
         for editor in activate:
             setattr(editor, trait, True)
-
-    #-------------------------------------------------------------------------
-    #  Implementation of the '_groups' property:
-    #  (Returns the top-level Groups for the view (after resolving Includes))
-    #-------------------------------------------------------------------------
 
     def _get__groups(self):
         """ Returns the top-level Groups for the view (after resolving
@@ -951,14 +835,16 @@ class UI(HasPrivateTraits):
             for item in self._groups_cache:
                 if isinstance(item, Item):
                     self._groups_cache = [
-                        ShadowGroup(shadow=Group(*self._groups_cache),
-                                    content=self._groups_cache,
-                                    groups=1)
+                        ShadowGroup(
+                            shadow=Group(*self._groups_cache),
+                            content=self._groups_cache,
+                            groups=1,
+                        )
                     ]
                     break
         return self._groups_cache
 
-    #-- Property Implementations ---------------------------------------------
+    # -- Property Implementations ---------------------------------------------
 
     def _get_key_bindings(self):
         if self._key_bindings is None:
@@ -973,13 +859,14 @@ class UI(HasPrivateTraits):
             key_bindings = view.key_bindings
             if key_bindings is None:
                 from .key_bindings import KeyBindings
+
                 self._key_bindings = KeyBindings(controllers=values)
             else:
                 self._key_bindings = key_bindings.clone(controllers=values)
 
         return self._key_bindings
 
-    #-- Traits Event Handlers ------------------------------------------------
+    # -- Traits Event Handlers ------------------------------------------------
 
     def _updated_changed(self):
         if self.rebuild is not None:
@@ -993,7 +880,7 @@ class UI(HasPrivateTraits):
         if self.control is not None:
             toolkit().set_icon(self)
 
-    @on_trait_change('parent, view, context')
+    @on_trait_change("parent, view, context")
     def _pvc_changed(self):
         parent = self.parent
         if (parent is not None) and (self.key_bindings is not None):
@@ -1006,17 +893,8 @@ class UI(HasPrivateTraits):
             if parent.key_bindings is not None:
                 parent.key_bindings.children.append(self.key_bindings)
 
-#-------------------------------------------------------------------------
-#  'Dispatcher' class:
-#-------------------------------------------------------------------------
-
 
 class Dispatcher(object):
-
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, method, info, object, method_name):
         """ Initializes the object.
         """
@@ -1024,23 +902,16 @@ class Dispatcher(object):
         self.info = info
         self.object = object
         self.method_name = method_name
-        object.on_trait_change(self.dispatch, method_name, dispatch='ui')
-
-    #-------------------------------------------------------------------------
-    #  Dispatches the method:
-    #-------------------------------------------------------------------------
+        object.on_trait_change(self.dispatch, method_name, dispatch="ui")
 
     def dispatch(self):
         """ Dispatches the method.
         """
         self.method(self.info)
 
-    #-------------------------------------------------------------------------
-    #  Remove the dispatcher:
-    #-------------------------------------------------------------------------
-
     def remove(self):
         """ Removes the dispatcher.
         """
-        self.object.on_trait_change(self.dispatch, self.method_name,
-                                    remove=True)
+        self.object.on_trait_change(
+            self.dispatch, self.method_name, remove=True
+        )

@@ -3,7 +3,7 @@
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -192,9 +192,10 @@ class Editor(HasPrivateTraits):
             return
 
         name = self.extended_name
-        if name != 'None':
-            self.context_object.on_trait_change(self._update_editor, name,
-                                                remove=True)
+        if name != "None":
+            self.context_object.on_trait_change(
+                self._update_editor, name, remove=True
+            )
 
         if self._user_from is not None:
             for name, handler in self._user_from:
@@ -511,15 +512,19 @@ class Editor(HasPrivateTraits):
         # If the editor has gone away for some reason, disconnect and exit:
         if self.control is None:
             self.context_object.on_trait_change(
-                self._update_editor, self.extended_name, remove=True)
+                self._update_editor, self.extended_name, remove=True
+            )
             return
 
         # Log the change that was made (as long as the Item is not readonly
         # or it is not for an event):
-        if (self.item.style != 'readonly'
-                and object.base_trait(name).type != 'event'):
-            self.log_change(self.get_undo_item, object, name,
-                            old_value, new_value)
+        if (
+            self.item.style != "readonly"
+            and object.base_trait(name).type != "event"
+        ):
+            self.log_change(
+                self.get_undo_item, object, name, old_value, new_value
+            )
 
         # If the change was not caused by the editor itself:
         if not self._no_update:

@@ -2,7 +2,7 @@
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 
@@ -17,10 +17,11 @@ from traitsui.api import Handler, Item, UIInfo, View, toolkit
 from ._tools import is_current_backend_qt4
 
 # get the pyface GUI test assistant and Modal dialog tester
-GuiTestAssistant = toolkit_object('util.gui_test_assistant:GuiTestAssistant')
-no_gui_test_assistant = (GuiTestAssistant.__name__ == 'Unimplemented')
+GuiTestAssistant = toolkit_object("util.gui_test_assistant:GuiTestAssistant")
+no_gui_test_assistant = GuiTestAssistant.__name__ == "Unimplemented"
 
 if no_gui_test_assistant:
+
     class GuiTestAssistant(object):
         pass
 
@@ -42,15 +43,12 @@ class ClosableHandler(Handler):
 
 
 simple_view = View(
-    Item('cell'),
-    title="Enter IDs and conditions",
-    buttons=['OK', 'Cancel']
+    Item("cell"), title="Enter IDs and conditions", buttons=["OK", "Cancel"]
 )
 
 
-@unittest.skipIf(no_gui_test_assistant, 'No GuiTestAssistant')
+@unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
 class TestViewApplication(GuiTestAssistant, unittest.TestCase):
-
     def setUp(self):
         GuiTestAssistant.setUp(self)
         self.model = SimpleModel()
@@ -70,8 +68,7 @@ class TestViewApplication(GuiTestAssistant, unittest.TestCase):
             self.gui.invoke_later(self.click_button, text=button)
 
         timer = CallbackTimer.single_shot(
-            callback=self.stop_event_loop,
-            interval=1.0
+            callback=self.stop_event_loop, interval=1.0
         )
         try:
             self.result = toolkit().view_application(
@@ -123,109 +120,109 @@ class TestViewApplication(GuiTestAssistant, unittest.TestCase):
         self.event_loop_timeout = True
 
     def test_modal_view_application_close(self):
-        self.view_application('modal')
+        self.view_application("modal")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
         self.assertFalse(self.result)
 
     def test_nonmodal_view_application_close(self):
-        self.view_application('nonmodal')
+        self.view_application("nonmodal")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
         self.assertTrue(self.result)
 
     def test_livemodal_view_application_close(self):
-        self.view_application('livemodal')
+        self.view_application("livemodal")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
         self.assertFalse(self.result)
 
     def test_live_view_application_close(self):
-        self.view_application('live')
+        self.view_application("live")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
         self.assertTrue(self.result)
 
     def test_modal_view_application_ok(self):
-        self.view_application('modal', button='OK')
+        self.view_application("modal", button="OK")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
         self.assertTrue(self.result)
 
     def test_nonmodal_view_application_ok(self):
-        self.view_application('nonmodal', button='OK')
+        self.view_application("nonmodal", button="OK")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
         self.assertTrue(self.result)
 
     def test_livemodal_view_application_ok(self):
-        self.view_application('livemodal', button='OK')
+        self.view_application("livemodal", button="OK")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
         self.assertTrue(self.result)
 
     def test_live_view_application_ok(self):
-        self.view_application('live', button='OK')
+        self.view_application("live", button="OK")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
         self.assertTrue(self.result)
 
     def test_modal_view_application_cancel(self):
-        self.view_application('modal', button='Cancel')
+        self.view_application("modal", button="Cancel")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
         self.assertFalse(self.result)
 
     def test_nonmodal_view_application_cancel(self):
-        self.view_application('nonmodal', button='Cancel')
+        self.view_application("nonmodal", button="Cancel")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
         self.assertFalse(self.result)
 
     def test_livemodal_view_application_cancel(self):
-        self.view_application('livemodal', button='Cancel')
+        self.view_application("livemodal", button="Cancel")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
         self.assertFalse(self.result)
 
     def test_live_view_application_cancel(self):
-        self.view_application('live', button='Cancel')
+        self.view_application("live", button="Cancel")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
         self.assertFalse(self.result)
 
     def test_modal_view_application_eventloop_close(self):
-        self.view_application_event_loop('modal')
+        self.view_application_event_loop("modal")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
 
     def test_nonmodal_view_application_eventloop_close(self):
-        self.view_application_event_loop('nonmodal')
+        self.view_application_event_loop("nonmodal")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
 
     def test_livemodal_view_application_eventloop_close(self):
-        self.view_application_event_loop('livemodal')
+        self.view_application_event_loop("livemodal")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)
 
     def test_live_view_application_eventloop_close(self):
-        self.view_application_event_loop('live')
+        self.view_application_event_loop("live")
 
         self.assertTrue(self.closed)
         self.assertFalse(self.event_loop_timeout)

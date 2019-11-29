@@ -24,14 +24,16 @@ class DefaultOverride(EditorFactory):
     of the default editor.
 
     """
+
     _overrides = Dict
 
     def __init__(self, *args, **overrides):
         EditorFactory.__init__(self, *args)
         self._overrides = overrides
 
-    def _customise_default(self, editor_kind, ui, object, name,
-                           description, parent):
+    def _customise_default(
+        self, editor_kind, ui, object, name, description, parent
+    ):
         """
         Obtain the given trait's default editor and set the parameters
         specified in `overrides` above.
@@ -41,22 +43,27 @@ class DefaultOverride(EditorFactory):
         for option in self._overrides:
             setattr(editor_factory, option, self._overrides[option])
 
-        editor = getattr(editor_factory, editor_kind)(ui, object, name,
-                                                      description, parent)
+        editor = getattr(editor_factory, editor_kind)(
+            ui, object, name, description, parent
+        )
         return editor
 
     def simple_editor(self, ui, object, name, description, parent):
-        return self._customise_default('simple_editor', ui, object,
-                                       name, description, parent)
+        return self._customise_default(
+            "simple_editor", ui, object, name, description, parent
+        )
 
     def custom_editor(self, ui, object, name, description, parent):
-        return self._customise_default('custom_editor', ui, object,
-                                       name, description, parent)
+        return self._customise_default(
+            "custom_editor", ui, object, name, description, parent
+        )
 
     def text_editor(self, ui, object, name, description, parent):
-        return self._customise_default('text_editor', ui, object,
-                                       name, description, parent)
+        return self._customise_default(
+            "text_editor", ui, object, name, description, parent
+        )
 
     def readonly_editor(self, ui, object, name, description, parent):
-        return self._customise_default('readonly_editor', ui, object,
-                                       name, description, parent)
+        return self._customise_default(
+            "readonly_editor", ui, object, name, description, parent
+        )

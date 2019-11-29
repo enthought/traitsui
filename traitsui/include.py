@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,25 +13,18 @@
 #  Author: David C. Morrill
 #  Date:   10/18/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the Include class, which is used to represent a substitutable
     element within a user interface View.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
 from traits.api import Str
 
 from .view_element import ViewSubElement
-
-#-------------------------------------------------------------------------
-#  'Include' class:
-#-------------------------------------------------------------------------
 
 
 class Include(ViewSubElement):
@@ -71,26 +64,18 @@ class Include(ViewSubElement):
     editors for these extra attributes.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # The name of the substitutable content
+    #: The name of the substitutable content
     id = Str
-
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
 
     def __init__(self, id, **traits):
         """ Initializes the Include object.
         """
         super(ViewSubElement, self).__init__(**traits)
         self.id = id
-
-    #-------------------------------------------------------------------------
-    #  Returns a 'pretty print' version of the Include:
-    #-------------------------------------------------------------------------
 
     def __repr__(self):
         """ Returns a "pretty print" version of the Include object.

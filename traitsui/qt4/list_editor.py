@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,14 +8,11 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various list editors for the PyQt user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
@@ -28,16 +25,11 @@ from traits.trait_base import user_name_for, xgetattr
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.list_editor file.
-from traitsui.editors.list_editor import ListItemProxy, \
-    ToolkitEditorFactory
+from traitsui.editors.list_editor import ListItemProxy, ToolkitEditorFactory
 
 from .editor import Editor
 from .helper import IconButton
 from .menu import MakeMenu
-
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
 
 
 class SimpleEditor(Editor):
@@ -46,34 +38,34 @@ class SimpleEditor(Editor):
     a menu of operations on the list.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # The kind of editor to create for each list item
+    #: The kind of editor to create for each list item
     kind = Str
 
-    # Is the list of items being edited mutable?
+    #: Is the list of items being edited mutable?
     mutable = Bool(True)
 
-    # Signal mapper allowing to identify which icon button requested a context
-    # menu
+    #: Signal mapper allowing to identify which icon button requested a context
+    #: menu
     mapper = Instance(QtCore.QSignalMapper)
 
     buttons = List([])
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Class constants:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # Whether the list is displayed in a single row
+    #: Whether the list is displayed in a single row
     single_row = True
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Normal list item menu:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # Menu for modifying the list
+    #: Menu for modifying the list
     list_menu = """
        Add &Before     [_menu_before]: self.add_before()
        Add &After      [_menu_after]:  self.add_after()
@@ -86,18 +78,13 @@ class SimpleEditor(Editor):
        Move to &Bottom [_menu_bottom]: self.move_bottom()
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Empty list item menu:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     empty_list_menu = """
        Add: self.add_empty()
     """
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -114,13 +101,14 @@ class SimpleEditor(Editor):
         self.control.setFrameShape(QtGui.QFrame.NoFrame)
         self.control.setWidgetResizable(True)
 
-        #Create a mapper to identify which icon button requested a contextmenu
+        # Create a mapper to identify which icon button requested a contextmenu
         self.mapper = QtCore.QSignalMapper(self.control)
 
         # Create a widget with a grid layout as the container.
         self._list_pane = QtGui.QWidget()
-        self._list_pane.setSizePolicy(QtGui.QSizePolicy.Expanding,
-                                      QtGui.QSizePolicy.Expanding)
+        self._list_pane.setSizePolicy(
+            QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
+        )
         layout = QtGui.QGridLayout(self._list_pane)
         layout.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -137,33 +125,23 @@ class SimpleEditor(Editor):
         # only when the items in the list change and not when intermediate
         # traits change. Therefore, replace "." by ":" in the extended_name
         # when setting up the listener.
-        extended_name = self.extended_name.replace('.', ':')
+        extended_name = self.extended_name.replace(".", ":")
         self.context_object.on_trait_change(
-            self.update_editor_item,
-            extended_name + '_items?',
-            dispatch='ui')
+            self.update_editor_item, extended_name + "_items?", dispatch="ui"
+        )
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
 
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
         self._dispose_items()
 
-        extended_name = self.extended_name.replace('.', ':')
+        extended_name = self.extended_name.replace(".", ":")
         self.context_object.on_trait_change(
-            self.update_editor_item,
-            extended_name + '_items?',
-            remove=True)
+            self.update_editor_item, extended_name + "_items?", remove=True
+        )
 
         super(SimpleEditor, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -178,11 +156,12 @@ class SimpleEditor(Editor):
 
         # Create all of the list item trait editors:
         trait_handler = self._trait_handler
-        resizable = ((trait_handler.minlen != trait_handler.maxlen) and
-                     self.mutable)
+        resizable = (
+            trait_handler.minlen != trait_handler.maxlen
+        ) and self.mutable
         item_trait = trait_handler.item_trait
 
-        is_fake = (resizable and (len(self.value) == 0))
+        is_fake = resizable and (len(self.value) == 0)
         if is_fake:
             self.empty_list()
         else:
@@ -200,21 +179,23 @@ class SimpleEditor(Editor):
 
             if resizable:
                 # Connecting the new button to the mapper
-                control = IconButton('list_editor.png', self.mapper.map)
+                control = IconButton("list_editor.png", self.mapper.map)
                 self.buttons.append(control)
                 # Setting the mapping and asking it to send the index of the
                 # sender to the callback method.  Unfortunately just sending
                 # the control does not work for PyQt (tested on 4.11)
                 self.mapper.setMapping(control, index)
 
-                layout.addWidget(control, row, column+1)
+                layout.addWidget(control, row, column + 1)
 
-            proxy = ListItemProxy(self.object, self.name, index, item_trait,
-                                  value)
+            proxy = ListItemProxy(
+                self.object, self.name, index, item_trait, value
+            )
             if resizable:
                 control.proxy = proxy
-            peditor = editor(self.ui, proxy, 'value', self.description,
-                             list_pane).trait_set(object_name='')
+            peditor = editor(
+                self.ui, proxy, "value", self.description, list_pane
+            ).trait_set(object_name="")
             peditor.prepare(list_pane)
             pcontrol = peditor.control
             pcontrol.proxy = proxy
@@ -228,11 +209,6 @@ class SimpleEditor(Editor):
         # early (ie. before it contains something).
         if self.control.widget() is None:
             self.control.setWidget(list_pane)
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when an item in the object trait changes external to
-    #  the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor_item(self, event):
         """ Updates the editor when an item in the object trait changes
@@ -254,15 +230,11 @@ class SimpleEditor(Editor):
                 proxy.value = event.added[0]
                 break
 
-    #-------------------------------------------------------------------------
-    #  Creates an empty list entry (so the user can add a new item):
-    #-------------------------------------------------------------------------
-
     def empty_list(self):
         """ Creates an empty list entry (so the user can add a new item).
         """
         # Connecting the new button to the mapper
-        control = IconButton('list_editor.png', self.mapper.map)
+        control = IconButton("list_editor.png", self.mapper.map)
         # Setting the mapping and asking it to send the index of the sender to
         # callback method. Unfortunately just sending the control does not
         # work for PyQt (tested on 4.11)
@@ -273,16 +245,12 @@ class SimpleEditor(Editor):
         self.buttons = [control]
 
         proxy = ListItemProxy(self.object, self.name, -1, None, None)
-        pcontrol = QtGui.QLabel('   (Empty List)')
+        pcontrol = QtGui.QLabel("   (Empty List)")
         pcontrol.proxy = control.proxy = proxy
 
         layout = self._list_pane.layout()
         layout.addWidget(control, 0, 1)
         layout.addWidget(pcontrol, 0, 0)
-
-    #-------------------------------------------------------------------------
-    #  Returns the associated object list and current item index:
-    #-------------------------------------------------------------------------
 
     def get_info(self):
         """ Returns the associated object list and current item index.
@@ -290,20 +258,12 @@ class SimpleEditor(Editor):
         proxy = self._cur_control.proxy
         return (proxy.list, proxy.index)
 
-    #-------------------------------------------------------------------------
-    #  Displays the empty list editor popup menu:
-    #-------------------------------------------------------------------------
-
     def popup_empty_menu(self, index):
         """ Displays the empty list editor popup menu.
         """
         self._cur_control = control = self.buttons[index]
         menu = MakeMenu(self.empty_list_menu, self, True, control).menu
         menu.exec_(control.mapToGlobal(QtCore.QPoint(4, 24)))
-
-    #-------------------------------------------------------------------------
-    #  Displays the list editor popup menu:
-    #-------------------------------------------------------------------------
 
     def popup_menu(self, index):
         """ Displays the list editor popup menu.
@@ -313,7 +273,7 @@ class SimpleEditor(Editor):
         proxy = sender.proxy
         menu = MakeMenu(self.list_menu, self, True, sender).menu
         len_list = len(proxy.list)
-        not_full = (len_list < self._trait_handler.maxlen)
+        not_full = len_list < self._trait_handler.maxlen
 
         self._menu_before.enabled(not_full)
         self._menu_after.enabled(not_full)
@@ -325,10 +285,6 @@ class SimpleEditor(Editor):
 
         menu.exec_(sender.mapToGlobal(QtCore.QPoint(4, 24)))
 
-    #-------------------------------------------------------------------------
-    #  Adds a new value at the specified list index:
-    #-------------------------------------------------------------------------
-
     def add_item(self, offset):
         """ Adds a new value at the specified list index.
         """
@@ -339,27 +295,15 @@ class SimpleEditor(Editor):
         self.value = list[:index] + [value] + list[index:]
         self.update_editor()
 
-    #-------------------------------------------------------------------------
-    #  Inserts a new item before the current item:
-    #-------------------------------------------------------------------------
-
     def add_before(self):
         """ Inserts a new item before the current item.
         """
         self.add_item(0)
 
-    #-------------------------------------------------------------------------
-    #  Inserts a new item after the current item:
-    #-------------------------------------------------------------------------
-
     def add_after(self):
         """ Inserts a new item after the current item.
         """
         self.add_item(1)
-
-    #-------------------------------------------------------------------------
-    #  Adds a new item when the list is empty:
-    #-------------------------------------------------------------------------
 
     def add_empty(self):
         """ Adds a new item when the list is empty.
@@ -367,64 +311,48 @@ class SimpleEditor(Editor):
         list, index = self.get_info()
         self.add_item(0)
 
-    #-------------------------------------------------------------------------
-    #  Delete the current item:
-    #-------------------------------------------------------------------------
-
     def delete_item(self):
         """ Delete the current item.
         """
         list, index = self.get_info()
-        self.value = list[:index] + list[index + 1:]
+        self.value = list[:index] + list[index + 1 :]
         self.update_editor()
-
-    #-------------------------------------------------------------------------
-    #  Move the current item up one in the list:
-    #-------------------------------------------------------------------------
 
     def move_up(self):
         """ Move the current item up one in the list.
         """
         list, index = self.get_info()
-        self.value = (list[:index - 1] + [list[index], list[index - 1]] +
-                      list[index + 1:])
+        self.value = (
+            list[: index - 1]
+            + [list[index], list[index - 1]]
+            + list[index + 1 :]
+        )
         self.update_editor()
-
-    #-------------------------------------------------------------------------
-    #  Moves the current item down one in the list:
-    #-------------------------------------------------------------------------
 
     def move_down(self):
         """ Moves the current item down one in the list.
         """
         list, index = self.get_info()
-        self.value = (list[:index] + [list[index + 1], list[index]] +
-                      list[index + 2:])
+        self.value = (
+            list[:index] + [list[index + 1], list[index]] + list[index + 2 :]
+        )
         self.update_editor()
-
-    #-------------------------------------------------------------------------
-    #  Moves the current item to the top of the list:
-    #-------------------------------------------------------------------------
 
     def move_top(self):
         """ Moves the current item to the top of the list.
         """
         list, index = self.get_info()
-        self.value = [list[index]] + list[:index] + list[index + 1:]
+        self.value = [list[index]] + list[:index] + list[index + 1 :]
         self.update_editor()
-
-    #-------------------------------------------------------------------------
-    #  Moves the current item to the bottom of the list:
-    #-------------------------------------------------------------------------
 
     def move_bottom(self):
         """ Moves the current item to the bottom of the list.
         """
         list, index = self.get_info()
-        self.value = list[:index] + list[index + 1:] + [list[index]]
+        self.value = list[:index] + list[index + 1 :] + [list[index]]
         self.update_editor()
 
-    #-- Private Methods ------------------------------------------------------
+    # -- Private Methods ------------------------------------------------------
 
     def _dispose_items(self):
         """ Disposes of each current list item.
@@ -434,7 +362,7 @@ class SimpleEditor(Editor):
         while child is not None:
             control = child.widget()
             if control is not None:
-                editor = getattr(control, '_editor', None)
+                editor = getattr(control, "_editor", None)
                 if editor is not None:
                     editor.dispose()
                     editor.control = None
@@ -442,21 +370,17 @@ class SimpleEditor(Editor):
             child = layout.takeAt(0)
         del child
 
-    #-- Trait initializers ----------------------------------------------------
+    # -- Trait initializers ----------------------------------------------------
 
     def _kind_default(self):
         """ Returns a default value for the 'kind' trait.
         """
-        return self.factory.style + '_editor'
+        return self.factory.style + "_editor"
 
     def _mutable_default(self):
         """ Trait handler to set the mutable trait from the factory.
         """
         return self.factory.mutable
-
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
 
 
 class CustomEditor(SimpleEditor):
@@ -465,46 +389,34 @@ class CustomEditor(SimpleEditor):
     a menu of operations on the list.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Class constants:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # Whether the list is displayed in a single row. This value overrides the
-    # default.
+    #: Whether the list is displayed in a single row. This value overrides the
+    #: default.
     single_row = False
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # Is the list editor is scrollable? This values overrides the default.
+    #: Is the list editor is scrollable? This values overrides the default.
     scrollable = True
-
-#-------------------------------------------------------------------------
-#  'TextEditor' class:
-#-------------------------------------------------------------------------
 
 
 class TextEditor(CustomEditor):
 
-    # The kind of editor to create for each list item. This value overrides the
-    # default.
-    kind = 'text_editor'
-
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
+    #: The kind of editor to create for each list item. This value overrides the
+    #: default.
+    kind = "text_editor"
 
 
 class ReadonlyEditor(CustomEditor):
 
-    # Is the list of items being edited mutable? This value overrides the
-    # default.
+    #: Is the list of items being edited mutable? This value overrides the
+    #: default.
     mutable = False
-
-#-------------------------------------------------------------------------
-#  'NotebookEditor' class:
-#-------------------------------------------------------------------------
 
 
 class NotebookEditor(Editor):
@@ -512,32 +424,27 @@ class NotebookEditor(Editor):
     pages.
     """
 
-    # The "Close Tab" button.
+    #: The "Close Tab" button.
     close_button = Any()
 
-    # Maps tab names to QWidgets representing the tab contents
-    # TODO: It would be nice to be able to reuse self._pages for this, but
-    # its keys are not quite what we want.
+    #: Maps tab names to QWidgets representing the tab contents
+    #: TODO: It would be nice to be able to reuse self._pages for this, but
+    #: its keys are not quite what we want.
     _pagewidgets = Dict
 
-    # Maps names of tabs to their menu QAction instances; used to toggle
-    # checkboxes
+    #: Maps names of tabs to their menu QAction instances; used to toggle
+    #: checkboxes
     _action_dict = Dict
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # Is the notebook editor scrollable? This values overrides the default:
+    #: Is the notebook editor scrollable? This values overrides the default:
     scrollable = True
 
-    # The currently selected notebook page object:
+    #: The currently selected notebook page object:
     selected = Any
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -550,18 +457,18 @@ class NotebookEditor(Editor):
         self.control.currentChanged.connect(self._tab_activated)
 
         # minimal dock_style handling
-        if self.factory.dock_style == 'tab':
+        if self.factory.dock_style == "tab":
             self.control.setDocumentMode(True)
             self.control.tabBar().setDocumentMode(True)
-        elif self.factory.dock_style == 'vertical':
+        elif self.factory.dock_style == "vertical":
             self.control.setTabPosition(QtGui.QTabWidget.West)
 
         # Create the button to close tabs, if necessary:
         if self.factory.deletable:
             button = QtGui.QToolButton()
             button.setAutoRaise(True)
-            button.setToolTip('Remove current tab ')
-            button.setIcon(ImageResource('closetab').create_icon())
+            button.setToolTip("Remove current tab ")
+            button.setIcon(ImageResource("closetab").create_icon())
 
             self.control.setCornerWidget(button, QtCore.Qt.TopRightCorner)
             button.clicked.connect(self.close_current)
@@ -572,7 +479,8 @@ class NotebookEditor(Editor):
             # tabs via a context menu
             self._context_menu = QtGui.QMenu()
             self.control.customContextMenuRequested.connect(
-                self._context_menu_requested)
+                self._context_menu_requested
+            )
             self.control.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
         # Set up the additional 'list items changed' event handler needed for
@@ -580,18 +488,13 @@ class NotebookEditor(Editor):
         # only when the items in the list change and not when intermediate
         # traits change. Therefore, replace "." by ":" in the extended_name
         # when setting up the listener.
-        extended_name = self.extended_name.replace('.', ':')
+        extended_name = self.extended_name.replace(".", ":")
         self.context_object.on_trait_change(
-            self.update_editor_item,
-            extended_name + '_items?',
-            dispatch='ui')
+            self.update_editor_item, extended_name + "_items?", dispatch="ui"
+        )
 
         # Set of selection synchronization:
-        self.sync_value(self.factory.selected, 'selected')
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
+        self.sync_value(self.factory.selected, "selected")
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -610,10 +513,6 @@ class NotebookEditor(Editor):
         if self.selected:
             self._selected_changed(self.selected)
 
-    #-------------------------------------------------------------------------
-    #  Handles some subset of the trait's list being updated:
-    #-------------------------------------------------------------------------
-
     def update_editor_item(self, event):
         """ Handles an update to some subset of the trait's list.
         """
@@ -625,8 +524,9 @@ class NotebookEditor(Editor):
         for i in event.removed:
             page, ui, view_object, monitoring = self._uis[index]
             if monitoring:
-                view_object.on_trait_change(self.update_page_name, page_name,
-                                            remove=True)
+                view_object.on_trait_change(
+                    self.update_page_name, page_name, remove=True
+                )
             ui.dispose()
             self.control.removeTab(self.control.indexOf(page))
 
@@ -644,7 +544,8 @@ class NotebookEditor(Editor):
         for object in event.added:
             ui, view_object, monitoring = self._create_page(object)
             self._uis[index:index] = [
-                [ui.control, ui, view_object, monitoring]]
+                [ui.control, ui, view_object, monitoring]
+            ]
             index += 1
 
             if first_page is None:
@@ -652,10 +553,6 @@ class NotebookEditor(Editor):
 
         if first_page is not None:
             self.control.setCurrentWidget(first_page)
-
-    #-------------------------------------------------------------------------
-    #  Closes the currently selected tab:
-    #-------------------------------------------------------------------------
 
     def close_current(self, force=False):
         """ Closes the currently selected tab:
@@ -685,10 +582,6 @@ class NotebookEditor(Editor):
             del self._pagewidgets[name]
         return
 
-    #-------------------------------------------------------------------------
-    #  Closes all currently open notebook pages:
-    #-------------------------------------------------------------------------
-
     def close_all(self):
         """ Closes all currently open notebook pages.
         """
@@ -696,8 +589,9 @@ class NotebookEditor(Editor):
 
         for _, ui, view_object, monitoring in self._uis:
             if monitoring:
-                view_object.on_trait_change(self.update_page_name, page_name,
-                                            remove=True)
+                view_object.on_trait_change(
+                    self.update_page_name, page_name, remove=True
+                )
             ui.dispose()
 
         # Reset the list of ui's and dictionary of page name counts:
@@ -706,22 +600,15 @@ class NotebookEditor(Editor):
 
         self.control.clear()
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        self.context_object.on_trait_change(self.update_editor_item,
-                                            self.name + '_items?', remove=True)
+        self.context_object.on_trait_change(
+            self.update_editor_item, self.name + "_items?", remove=True
+        )
         self.close_all()
 
         super(NotebookEditor, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Handles the trait defining a particular page's name being changed:
-    #-------------------------------------------------------------------------
 
     def update_page_name(self, object, name, old, new):
         """ Handles the trait defining a particular page's name being changed.
@@ -731,25 +618,20 @@ class NotebookEditor(Editor):
             if object is ui.info.object:
                 name = None
                 handler = getattr(
-                    self.ui.handler, '%s_%s_page_name' %
-                    (self.object_name, self.name), None)
+                    self.ui.handler,
+                    "%s_%s_page_name" % (self.object_name, self.name),
+                    None,
+                )
 
                 if handler is not None:
                     name = handler(self.ui.info, object)
 
                 if name is None:
                     name = str(
-                        xgetattr(
-                            object,
-                            self.factory.page_name[
-                                1:],
-                            '???'))
+                        xgetattr(object, self.factory.page_name[1:], "???")
+                    )
                 self.control.setTabText(self.control.indexOf(page), name)
                 break
-
-    #-------------------------------------------------------------------------
-    #  Creates a page for a specified object and adds it to the tab widget:
-    #-------------------------------------------------------------------------
 
     def _create_page(self, object):
         # Create the view for the object:
@@ -757,48 +639,48 @@ class NotebookEditor(Editor):
         factory = self.factory
         if factory.factory is not None:
             view_object = factory.factory(object)
-        ui = view_object.edit_traits(parent=self.control,
-                                     view=factory.view,
-                                     kind=factory.ui_kind).trait_set(
-            parent=self.ui)
+        ui = view_object.edit_traits(
+            parent=self.control, view=factory.view, kind=factory.ui_kind
+        ).trait_set(parent=self.ui)
 
         # Get the name of the page being added to the notebook:
-        name = ''
+        name = ""
         monitoring = False
-        prefix = '%s_%s_page_' % (self.object_name, self.name)
+        prefix = "%s_%s_page_" % (self.object_name, self.name)
         page_name = factory.page_name
-        if page_name[0:1] == '.':
+        if page_name[0:1] == ".":
             name = xgetattr(view_object, page_name[1:], None)
-            monitoring = (name is not None)
+            monitoring = name is not None
             if monitoring:
                 handler_name = None
-                method = getattr(self.ui.handler, prefix + 'name', None)
+                method = getattr(self.ui.handler, prefix + "name", None)
                 if method is not None:
                     handler_name = method(self.ui.info, object)
                 if handler_name is not None:
                     name = handler_name
                 else:
-                    name = str(name) or '???'
-                view_object.on_trait_change(self.update_page_name,
-                                            page_name[1:], dispatch='ui')
+                    name = str(name) or "???"
+                view_object.on_trait_change(
+                    self.update_page_name, page_name[1:], dispatch="ui"
+                )
             else:
-                name = ''
-        elif page_name != '':
+                name = ""
+        elif page_name != "":
             name = page_name
 
-        if name == '':
+        if name == "":
             name = user_name_for(view_object.__class__.__name__)
 
         # Make sure the name is not a duplicate:
         if not monitoring:
             self._pages[name] = count = self._pages.get(name, 0) + 1
             if count > 1:
-                name += (' %d' % count)
+                name += " %d" % count
 
         # Return the control for the ui, and whether or not its name is being
         # monitored:
         image = None
-        method = getattr(self.ui.handler, prefix + 'image', None)
+        method = getattr(self.ui.handler, prefix + "image", None)
         if method is not None:
             image = method(self.ui.info, object)
 
@@ -813,8 +695,8 @@ class NotebookEditor(Editor):
             newaction.setCheckable(True)
             newaction.setChecked(True)
             newaction.triggered.connect(
-                lambda e, name=name: self._menu_action(
-                    e, name=name))
+                lambda e, name=name: self._menu_action(e, name=name)
+            )
             self._action_dict[name] = newaction
             self._pagewidgets[name] = ui.control
 
