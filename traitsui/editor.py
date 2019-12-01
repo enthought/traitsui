@@ -155,21 +155,64 @@ class Editor(HasPrivateTraits):
         """ Handles an error that occurs while setting the object's trait value.
 
         This should normally be overridden in a subclass.
+
+        Parameters
+        ----------
+        excp : Exception
+            The exception which occurred.
         """
         pass
 
     def string_value(self, value, format_func=None):
         """ Returns the text representation of a specified object trait value.
 
-        This simply delegates to the factorys `string_value` method.
+        This simply delegates to the factory's `string_value` method.
         Sub-classes may choose to override the default implementation.
+
+        Parameters
+        ----------
+        value : any
+            The value being edited.
+        format_func : callable or None
+            A function that takes a value and returns a string.
         """
         return self.factory.string_value(value, format_func)
+
+    def restore_prefs(self, prefs):
+        """ Restores saved user preference information for the editor.
+
+        Editors with state may choose to override this. It will only be used
+        if the editor has an `id` value.
+
+        Parameters
+        ----------
+        prefs : dict
+            A dictionary of preference values.
+        """
+        pass
+
+    def save_prefs(self):
+        """ Returns any user preference information for the editor.
+
+        Editors with state may choose to override this. It will only be used
+        if the editor has an `id` value.
+
+        Returns
+        -------
+        prefs : dict
+            A dictionary of preference values.
+        """
+        return None
 
     # Editor life-cycle methods ---------------------------------------------
 
     def prepare(self, parent):
         """ Finish setting up the editor.
+
+        Parameters
+        ----------
+        parent : toolkit control
+            The parent toolkit object of the editor's toolkit objects.
         """
         name = self.extended_name
         if name != 'None':
@@ -243,6 +286,17 @@ class Editor(HasPrivateTraits):
         """ Creates an undo history entry.
 
         Can be overridden in a subclass for special value types.
+
+        Parameters
+        ----------
+        object : HasTraits instance
+            The object being modified.
+        name : str
+            The name of the trait that is to be changed.
+        old_value : any
+            The original value of the trait.
+        new_value : any
+            The new value of the trait.
         """
         return UndoItem(
             object=object,
@@ -420,19 +474,6 @@ class Editor(HasPrivateTraits):
 
         return (object, name, partial(xgetattr, object, name))
 
-    # UI preference save/restore interface ----------------------------------
-
-    def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the
-            editor.
-        """
-        pass
-
-    def save_prefs(self):
-        """ Returns any user preference information associated with the editor.
-        """
-        return None
-
     # Utility context managers ----------------------------------------------
 
     @contextmanager
@@ -440,6 +481,9 @@ class Editor(HasPrivateTraits):
         """ Context manager that blocks updates from the named trait. """
         if self._no_trait_update is None:
             self._no_trait_update = set()
+        elif name in self._no_trait_update:
+            yield
+            return
 
         self._no_trait_update.add(name)
         try:
@@ -459,6 +503,10 @@ class Editor(HasPrivateTraits):
     @contextmanager
     def no_value_update(self):
         """ Context manager to handle updating value. """
+        if self.updating:
+            yield
+            return
+
         self.updating = True
         try:
             yield
