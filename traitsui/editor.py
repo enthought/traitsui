@@ -1,6 +1,4 @@
-# ------------------------------------------------------------------------------
-#
-#  Copyright (c) 2005, Enthought, Inc.
+#  Copyright (c) 2005-19, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
@@ -12,8 +10,6 @@
 #
 #  Author: David C. Morrill
 #  Date:   10/07/2004
-#
-# ------------------------------------------------------------------------------
 
 """ Defines the abstract Editor class, which represents an editing control for
     an object trait in a Traits-based user interface.
@@ -37,7 +33,6 @@ from traits.api import (
     ReadOnly,
     Set,
     Str,
-    Trait,
     TraitError,
     TraitListEvent,
     Tuple,
@@ -56,9 +51,6 @@ from .undo import UndoItem
 from .item import Item
 import six
 
-# -------------------------------------------------------------------------
-#  Trait definitions:
-# -------------------------------------------------------------------------
 
 # Reference to an EditorFactory object
 factory_trait = Instance(EditorFactory)
@@ -68,10 +60,6 @@ class Editor(HasPrivateTraits):
     """ Represents an editing control for an object trait in a Traits-based
         user interface.
     """
-
-    # -------------------------------------------------------------------------
-    #  Trait definitions:
-    # -------------------------------------------------------------------------
 
     #: The UI (user interface) this editor is part of:
     ui = Instance("traitsui.ui.UI", clean_up=True)
@@ -464,6 +452,8 @@ class Editor(HasPrivateTraits):
 
         return (object, name, partial(xgetattr, object, name))
 
+    # -- Trait synchronization code -----------------------------------------
+
     def _sync_values(self):
         """ Initialize and synchronize editor and factory traits
 
@@ -542,12 +532,12 @@ class Editor(HasPrivateTraits):
 
         Parameters
         ----------
-        user_name : string
+        user_name : str
             The name of the trait to be used on the user object. If empty, no
             synchronization will be set up.
-        editor_name : string
+        editor_name : str
             The name of the relevant editor trait.
-        mode : string, optional; one of 'to', 'from' or 'both'
+        mode : str, optional; one of 'to', 'from' or 'both'
             The direction of synchronization. 'from' means that trait changes
             in the user object should be propagated to the editor. 'to' means
             that trait changes in the editor should be propagated to the user
@@ -648,7 +638,7 @@ class Editor(HasPrivateTraits):
             The object in the TraitsUI context that is being bound.
         xuser_name: : str
             The extended name of the trait to be used on the user object.
-        editor_name : string
+        editor_name : str
             The name of the relevant editor trait.
         is_list : bool, optional
             If true, synchronization for item events will be set up in
