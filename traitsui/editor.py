@@ -179,14 +179,14 @@ class Editor(HasPrivateTraits):
         parent : toolkit control
             The parent toolkit object of the editor's toolkit objects.
         """
-        raise NotImplementedError
+        raise NotImplementedError("This method must be overriden.")
 
     def set_focus(self):
         """ Assigns focus to the editor's underlying toolkit widget.
 
         This method must be overriden by subclasses.
         """
-        raise NotImplementedError
+        raise NotImplementedError("This method must be overriden.")
 
     def dispose(self):
         """ Disposes of the contents of an editor.
