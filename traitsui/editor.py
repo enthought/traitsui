@@ -168,7 +168,7 @@ class Editor(HasPrivateTraits):
         self.update_editor()
 
     def init(self, parent):
-        """ Creating the underlying toolkit for the widget.
+        """ Create and initialize the underlying toolkit widget.
 
         This method must be overriden by subclasses.  Implementations must
         ensure that the :attr:`control` trait is set to an appropriate
