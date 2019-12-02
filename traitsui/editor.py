@@ -28,6 +28,7 @@ from functools import partial
 from traits.api import (
     Any,
     Bool,
+    Callable,
     HasPrivateTraits,
     HasTraits,
     Instance,
@@ -136,13 +137,13 @@ class Editor(HasPrivateTraits):
     invalid = Bool(False)
 
     #: A set to track values being updated to prevent infinite recursion.
-    _no_trait_update = Set()
+    _no_trait_update = Set(Str)
 
     #: A list of all values synchronized to.
-    _user_to = List(Tuple)
+    _user_to = List(Tuple(Any, Str, Callable))
 
     #: A list of all values synchronized from.
-    _user_from = List(Tuple)
+    _user_from = List(Tuple(Str, Callable))
 
     def __init__(self, parent, **traits):
         """ Initializes the editor object.
@@ -196,13 +197,11 @@ class Editor(HasPrivateTraits):
                 self._update_editor, name, remove=True
             )
 
-        if self._user_from is not None:
-            for name, handler in self._user_from:
-                self.on_trait_change(handler, name, remove=True)
+        for name, handler in self._user_from:
+            self.on_trait_change(handler, name, remove=True)
 
-        if self._user_to is not None:
-            for object, name, handler in self._user_to:
-                object.on_trait_change(handler, name, remove=True)
+        for object, name, handler in self._user_to:
+            object.on_trait_change(handler, name, remove=True)
 
         # Break linkages to references we no longer need:
         self.object = (
@@ -406,12 +405,12 @@ class Editor(HasPrivateTraits):
             attributes holding the value, and a callable which gets the
             current value from the context.
         """
-        parts = name.split(".", 1)
-        if len(parts) == 1:
-            object = self.context_object
+        base_name, __, name = name.partition(".")
+        if name:
+            object = self.ui.context[base_name]
         else:
-            object_name, name = parts
-            object = self.ui.context[object_name]
+            name = base_name
+            object = self.context_object
 
         return (object, name, partial(xgetattr, object, name))
 
@@ -552,8 +551,10 @@ class Editor(HasPrivateTraits):
         key : str
             The key to use to guard against recursive updates.
         user_object : object
+            The object in the TraitsUI context that is being bound.
+        xuser_name: : str
             The extended name of the trait to be used on the user object.
-        editor_name : string
+        editor_name : str
             The name of the relevant editor trait.
         is_list : bool, optional
             If true, synchronization for item events will be set up in
@@ -594,6 +595,8 @@ class Editor(HasPrivateTraits):
         key : str
             The key to use to guard against recursive updates.
         user_object : object
+            The object in the TraitsUI context that is being bound.
+        xuser_name: : str
             The extended name of the trait to be used on the user object.
         editor_name : string
             The name of the relevant editor trait.
@@ -610,8 +613,6 @@ class Editor(HasPrivateTraits):
 
         self.on_trait_change(editor_trait_modified, editor_name)
 
-        if self._user_from is None:
-            self._user_from = []
         self._user_from.append((editor_name, editor_trait_modified))
 
         if is_list:
@@ -646,9 +647,7 @@ class Editor(HasPrivateTraits):
     @contextmanager
     def no_trait_update(self, name):
         """ Context manager that blocks updates from the named trait. """
-        if self._no_trait_update is None:
-            self._no_trait_update = set()
-        elif name in self._no_trait_update:
+        if name in self._no_trait_update:
             yield
             return
 
