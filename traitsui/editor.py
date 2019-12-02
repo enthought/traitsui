@@ -22,23 +22,29 @@
 
 from __future__ import absolute_import
 
+from contextlib import contextmanager
+from functools import partial
+
 from traits.api import (
     Any,
     Bool,
     HasPrivateTraits,
     HasTraits,
     Instance,
+    List,
     Property,
     ReadOnly,
+    Set,
     Str,
     Trait,
     TraitError,
     TraitListEvent,
+    Tuple,
     Undefined,
     cached_property,
 )
 
-from traits.trait_base import not_none
+from traits.trait_base import not_none, xgetattr, xsetattr
 
 from .editor_factory import EditorFactory
 
@@ -129,6 +135,15 @@ class Editor(HasPrivateTraits):
     #: The current editor invalid state status:
     invalid = Bool(False)
 
+    #: A set to track values being updated to prevent infinite recursion.
+    _no_trait_update = Set()
+
+    #: A list of all values synchronized to.
+    _user_to = List(Tuple)
+
+    #: A list of all values synchronized from.
+    _user_from = List(Tuple)
+
     def __init__(self, parent, **traits):
         """ Initializes the editor object.
         """
@@ -201,7 +216,7 @@ class Editor(HasPrivateTraits):
         ) = self.label_control = self.old_value = self._context_object = None
 
     # -------------------------------------------------------------------------
-    #  Returns the context object the editor is using (Property implementation):
+    #  Returns the context object the editor is using (Property implementation)
     # -------------------------------------------------------------------------
 
     @cached_property
@@ -306,7 +321,7 @@ class Editor(HasPrivateTraits):
         # been modified. In this case, we need to rebind the current object
         # being edited:
         if object is not self.object:
-            self.object = eval(self.object_name, globals(), self.ui.context)
+            self.object = self.ui.get_extended_value(self.object_name)
 
         # If the editor has gone away for some reason, disconnect and exit:
         if self.control is None:
@@ -377,32 +392,86 @@ class Editor(HasPrivateTraits):
         )
 
     def parse_extended_name(self, name):
-        """ Returns a tuple of the form ( context_object, 'name[.name...],
-            callable ) for a specified extended name of the form: 'name' or
-            'context_object_name.name[.name...]'.
+        """ Extract the object, name and a getter from an extended name
+
+        Parameters
+        ----------
+        name : str
+            The extended name to parse.
+
+        Returns
+        -------
+        object, name, getter : any, str, callable
+            The object from the context, the (extended) name of the
+            attributes holding the value, and a callable which gets the
+            current value from the context.
         """
-        col = name.find(".")
-        if col < 0:
+        parts = name.split(".", 1)
+        if len(parts) == 1:
             object = self.context_object
         else:
-            object, name = self.ui.context[name[:col]], name[col + 1 :]
+            object_name, name = parts
+            object = self.ui.context[object_name]
 
-        return (object, name, eval("lambda obj=object: obj." + name))
+        return (object, name, partial(xgetattr, object, name))
 
     def _sync_values(self):
-        """ Initializes and synchronizes (as needed) editor traits with the
-            value of corresponding factory traits.
+        """ Initialize and synchronize editor and factory traits
+
+        Initializes and synchronizes (as needed) editor traits with the
+        value of corresponding factory traits.  The name of the factory
+        trait and the editor trait must match and the factory trait needs
+        to have ``sync_value`` metadata set.  The strategy followed is:
+
+        - for each factory trait with ``sync_value`` metadata:
+
+          1.  if the value is a :class:`ContextValue` instance then
+              call :meth:`sync_value` with the ``name`` from the
+              context value.
+          2.  if the trait has ``sync_name`` metadata, look at the
+              referenced trait value and if it is a non-empty string
+              then use this value as the name of the value in the
+              context.
+          3.  otherwise initialize the current value of the factory
+              trait to the corresponding value of the editor.
+
+        - synchronization mode in cases 1 and 2 is taken from the
+          ``sync_value`` metadata of the editor trait first and then
+          the ``sync_value`` metadata of the factory trait if that is
+          empty.
+
+        - if the value is a container type, then the `is_list` metadata
+          is set to
         """
         factory = self.factory
         for name, trait in factory.traits(sync_value=not_none).items():
             value = getattr(factory, name)
+            self_trait = self.trait(name)
+            if self_trait.sync_value:
+                mode = self_trait.sync_value
+            else:
+                mode = trait.sync_value
             if isinstance(value, ContextValue):
-                self_trait = self.trait(name)
                 self.sync_value(
                     value.name,
                     name,
-                    self_trait.sync_value or trait.sync_value,
-                    self_trait.is_list is True,
+                    mode,
+                    bool(self_trait.is_list),
+                    self_trait.type == "event",
+                )
+            elif (
+                trait.sync_name is not None
+                and getattr(factory, trait.sync_name, "") != ""
+            ):
+                # Note: this is implemented as a stepping stone from things
+                # like ``low_name`` and ``high_name`` to using context values.
+                sync_name = getattr(factory, trait.sync_name)
+                self.sync_value(
+                    sync_name,
+                    name,
+                    mode,
+                    bool(self_trait.is_list),
+                    self_trait.type == "event",
                 )
             elif value is not Undefined:
                 setattr(self, name, value)
@@ -415,14 +484,12 @@ class Editor(HasPrivateTraits):
         is_list=False,
         is_event=False,
     ):
-        """
-        Set up synchronization between an editor trait and a user object
-        trait.
+        """ Synchronize an editor trait and a user object trait.
 
         Also sets the initial value of the editor trait from the
         user object trait (for modes 'from' and 'both'), and the initial
         value of the user object trait from the editor trait (for mode
-        'to').
+        'to'), as long as the relevant traits are not events.
 
         Parameters
         ----------
@@ -445,146 +512,121 @@ class Editor(HasPrivateTraits):
             If true, this method won't attempt to initialize the user
             object or editor trait values. The default is False.
         """
-        if user_name != "":
-            key = "%s:%s" % (user_name, editor_name)
+        if user_name == "":
+            return
 
-            if self._no_trait_update is None:
-                self._no_trait_update = {}
+        key = "%s:%s" % (user_name, editor_name)
 
-            user_ref = "user_object"
-            col = user_name.find(".")
-            if col < 0:
-                user_object = self.context_object
-                xuser_name = user_name
-            else:
-                user_object = self.ui.context[user_name[:col]]
-                user_name = xuser_name = user_name[col + 1 :]
-                col = user_name.rfind(".")
-                if col >= 0:
-                    user_ref += "." + user_name[:col]
-                    user_name = user_name[col + 1 :]
+        parts = user_name.split(".")
+        if len(parts) == 1:
+            user_object = self.context_object
+            xuser_name = user_name
+        else:
+            user_object = self.ui.context[parts[0]]
+            xuser_name = ".".join(parts[1:])
+            user_name = parts[-1]
 
-            user_value = compile(
-                "%s.%s" % (user_ref, user_name), "<string>", "eval"
+        if mode in {"from", "both"}:
+            self._bind_from(key, user_object, xuser_name, editor_name, is_list)
+
+            if not is_event:
+                # initialize editor value from user value
+                with self.raise_to_debug():
+                    user_value = xgetattr(user_object, xuser_name)
+                    setattr(self, editor_name, user_value)
+
+        if mode in {"to", "both"}:
+            self._bind_to(key, user_object, xuser_name, editor_name, is_list)
+
+            if mode == "to" and not is_event:
+                # initialize user value from editor value
+                with self.raise_to_debug():
+                    editor_value = xgetattr(self, editor_name)
+                    xsetattr(user_object, xuser_name, editor_value)
+
+    def _bind_from(self, key, user_object, xuser_name, editor_name, is_list):
+        """ Bind trait change handlers from a user object to the editor.
+
+        Parameters
+        ----------
+        key : str
+            The key to use to guard against recursive updates.
+        user_object : object
+            The extended name of the trait to be used on the user object.
+        editor_name : string
+            The name of the relevant editor trait.
+        is_list : bool, optional
+            If true, synchronization for item events will be set up in
+            addition to the synchronization for the object itself.
+            The default is False.
+        """
+
+        def user_trait_modified(new):
+            if key not in self._no_trait_update:
+                with self.no_trait_update(key), self.raise_to_debug():
+                    xsetattr(self, editor_name, new)
+
+        user_object.on_trait_change(user_trait_modified, xuser_name)
+        self._user_to.append((user_object, xuser_name, user_trait_modified))
+
+        if is_list:
+
+            def user_list_modified(event):
+                if (
+                    isinstance(event, TraitListEvent)
+                    and key not in self._no_trait_update
+                ):
+                    with self.no_trait_update(key), self.raise_to_debug():
+                        n = event.index
+                        getattr(self, editor_name)[
+                            n : n + len(event.removed)
+                        ] = event.added
+
+            items = xuser_name + "_items"
+            user_object.on_trait_change(user_list_modified, items)
+            self._user_to.append((user_object, items, user_list_modified))
+
+    def _bind_to(self, key, user_object, xuser_name, editor_name, is_list):
+        """ Bind trait change handlers from a user object to the editor.
+
+        Parameters
+        ----------
+        key : str
+            The key to use to guard against recursive updates.
+        user_object : object
+            The extended name of the trait to be used on the user object.
+        editor_name : string
+            The name of the relevant editor trait.
+        is_list : bool, optional
+            If true, synchronization for item events will be set up in
+            addition to the synchronization for the object itself.
+            The default is False.
+        """
+
+        def editor_trait_modified(new):
+            if key not in self._no_trait_update:
+                with self.no_trait_update(key), self.raise_to_debug():
+                    xsetattr(user_object, xuser_name, new)
+
+        self.on_trait_change(editor_trait_modified, editor_name)
+
+        if self._user_from is None:
+            self._user_from = []
+        self._user_from.append((editor_name, editor_trait_modified))
+
+        if is_list:
+
+            def editor_list_modified(event):
+                if key not in self._no_trait_update:
+                    with self.no_trait_update(key), self.raise_to_debug():
+                        n = event.index
+                        value = xgetattr(user_object, xuser_name)
+                        value[n : n + len(event.removed)] = event.added
+
+            self.on_trait_change(editor_list_modified, editor_name + "_items")
+            self._user_from.append(
+                (editor_name + "_items", editor_list_modified)
             )
-            user_ref = compile(user_ref, "<string>", "eval")
-
-            if mode in ("from", "both"):
-
-                def user_trait_modified(new):
-                    # Need this to include 'user_object' in closure:
-                    user_object
-                    if key not in self._no_trait_update:
-                        self._no_trait_update[key] = None
-                        try:
-                            setattr(self, editor_name, new)
-                        except:
-                            from traitsui.api import raise_to_debug
-
-                            raise_to_debug()
-                        del self._no_trait_update[key]
-
-                user_object.on_trait_change(user_trait_modified, xuser_name)
-
-                if self._user_to is None:
-                    self._user_to = []
-                self._user_to.append(
-                    (user_object, xuser_name, user_trait_modified)
-                )
-
-                if is_list:
-
-                    def user_list_modified(event):
-                        if isinstance(event, TraitListEvent):
-                            if key not in self._no_trait_update:
-                                self._no_trait_update[key] = None
-                                n = event.index
-                                try:
-                                    getattr(self, editor_name)[
-                                        n : n + len(event.removed)
-                                    ] = event.added
-                                except:
-                                    from traitsui.api import raise_to_debug
-
-                                    raise_to_debug()
-                                del self._no_trait_update[key]
-
-                    user_object.on_trait_change(
-                        user_list_modified, xuser_name + "_items"
-                    )
-                    self._user_to.append(
-                        (
-                            user_object,
-                            xuser_name + "_items",
-                            user_list_modified,
-                        )
-                    )
-
-                if not is_event:
-                    try:
-                        setattr(self, editor_name, eval(user_value))
-                    except:
-                        from traitsui.api import raise_to_debug
-
-                        raise_to_debug()
-
-            if mode in ("to", "both"):
-
-                def editor_trait_modified(new):
-                    # Need this to include 'user_object' in closure:
-                    user_object
-                    if key not in self._no_trait_update:
-                        self._no_trait_update[key] = None
-                        try:
-                            setattr(eval(user_ref), user_name, new)
-                        except:
-                            from traitsui.api import raise_to_debug
-
-                            raise_to_debug()
-                        del self._no_trait_update[key]
-
-                self.on_trait_change(editor_trait_modified, editor_name)
-
-                if self._user_from is None:
-                    self._user_from = []
-                self._user_from.append((editor_name, editor_trait_modified))
-
-                if is_list:
-
-                    def editor_list_modified(event):
-                        # Need this to include 'user_object' in closure:
-                        user_object
-                        if key not in self._no_trait_update:
-                            self._no_trait_update[key] = None
-                            n = event.index
-                            try:
-                                eval(user_value)[
-                                    n : n + len(event.removed)
-                                ] = event.added
-                            except:
-                                from traitsui.api import raise_to_debug
-
-                                raise_to_debug()
-                            del self._no_trait_update[key]
-
-                    self.on_trait_change(
-                        editor_list_modified, editor_name + "_items"
-                    )
-                    self._user_from.append(
-                        (editor_name + "_items", editor_list_modified)
-                    )
-
-                if mode == "to" and not is_event:
-                    try:
-                        setattr(
-                            eval(user_ref),
-                            user_name,
-                            getattr(self, editor_name),
-                        )
-                    except:
-                        from traitsui.api import raise_to_debug
-
-                        raise_to_debug()
 
     # -- UI preference save/restore interface ---------------------------------
 
@@ -598,3 +640,30 @@ class Editor(HasPrivateTraits):
         """ Returns any user preference information associated with the editor.
         """
         return None
+
+    # Utility context managers ----------------------------------------------
+
+    @contextmanager
+    def no_trait_update(self, name):
+        """ Context manager that blocks updates from the named trait. """
+        if self._no_trait_update is None:
+            self._no_trait_update = set()
+        elif name in self._no_trait_update:
+            yield
+            return
+
+        self._no_trait_update.add(name)
+        try:
+            yield
+        finally:
+            self._no_trait_update.remove(name)
+
+    @contextmanager
+    def raise_to_debug(self):
+        """ Context manager that uses raise to debug to raise exceptions. """
+        try:
+            yield
+        except Exception:
+            from traitsui.api import raise_to_debug
+
+            raise_to_debug()
