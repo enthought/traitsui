@@ -124,6 +124,8 @@ class Editor(HasPrivateTraits):
     #: The current editor invalid state status:
     invalid = Bool(False)
 
+    # -- private trait definitions ------------------------------------------
+
     #: A set to track values being updated to prevent infinite recursion.
     _no_trait_update = Set(Str)
 
@@ -133,22 +135,95 @@ class Editor(HasPrivateTraits):
     #: A list of all values synchronized from.
     _user_from = List(Tuple(Str, Callable))
 
-    def __init__(self, parent, **traits):
-        """ Initializes the editor object.
-        """
-        super(HasPrivateTraits, self).__init__(**traits)
-        try:
-            self.old_value = getattr(self.object, self.name)
-        except AttributeError:
-            ctrait = self.object.base_trait(self.name)
-            if ctrait.type == "event" or self.name == "spring":
-                # Getting the attribute will fail for 'Event' traits:
-                self.old_value = Undefined
-            else:
-                raise
+    # ------------------------------------------------------------------------
+    # Editor interface
+    # ------------------------------------------------------------------------
 
-        # Synchronize the application invalid state status with the editor's:
-        self.sync_value(self.factory.invalid, "invalid", "from")
+    # -- Abstract methods ---------------------------------------------------
+
+    def init(self, parent):
+        """ Create and initialize the underlying toolkit widget.
+
+        This method must be overriden by subclasses.  Implementations must
+        ensure that the :attr:`control` trait is set to an appropriate
+        toolkit object.
+
+        Parameters
+        ----------
+        parent : toolkit control
+            The parent toolkit object of the editor's toolkit objects.
+        """
+        raise NotImplementedError("This method must be overriden.")
+
+    def update_editor(self):
+        """ Updates the editor when the value changes externally to the editor.
+
+        This should normally be overridden in a subclass.
+        """
+        pass
+
+    def error(self, excp):
+        """ Handles an error that occurs while setting the object's trait value.
+
+        This should normally be overridden in a subclass.
+
+        Parameters
+        ----------
+        excp : Exception
+            The exception which occurred.
+        """
+        pass
+
+    def set_focus(self):
+        """ Assigns focus to the editor's underlying toolkit widget.
+
+        This method must be overriden by subclasses.
+        """
+        raise NotImplementedError("This method must be overriden.")
+
+    def string_value(self, value, format_func=None):
+        """ Returns the text representation of a specified object trait value.
+
+        This simply delegates to the factory's `string_value` method.
+        Sub-classes may choose to override the default implementation.
+
+        Parameters
+        ----------
+        value : any
+            The value being edited.
+        format_func : callable or None
+            A function that takes a value and returns a string.
+        """
+        return self.factory.string_value(value, format_func)
+
+    def restore_prefs(self, prefs):
+        """ Restores saved user preference information for the editor.
+
+        Editors with state may choose to override this. It will only be used
+        if the editor has an `id` value.
+
+        Parameters
+        ----------
+        prefs : dict
+            A dictionary of preference values.
+        """
+        pass
+
+    def save_prefs(self):
+        """ Returns any user preference information for the editor.
+
+        Editors with state may choose to override this. It will only be used
+        if the editor has an `id` value.
+
+        Returns
+        -------
+        prefs : dict or None
+            A dictionary of preference values, or None if no preferences to
+            be saved.
+        """
+        return None
+
+    # -- Editor life-cycle methods ------------------------------------------
 
     def prepare(self, parent):
         """ Finish setting up the editor.
@@ -166,27 +241,6 @@ class Editor(HasPrivateTraits):
         self.init(parent)
         self._sync_values()
         self.update_editor()
-
-    def init(self, parent):
-        """ Create and initialize the underlying toolkit widget.
-
-        This method must be overriden by subclasses.  Implementations must
-        ensure that the :attr:`control` trait is set to an appropriate
-        toolkit object.
-
-        Parameters
-        ----------
-        parent : toolkit control
-            The parent toolkit object of the editor's toolkit objects.
-        """
-        raise NotImplementedError("This method must be overriden.")
-
-    def set_focus(self):
-        """ Assigns focus to the editor's underlying toolkit widget.
-
-        This method must be overriden by subclasses.
-        """
-        raise NotImplementedError("This method must be overriden.")
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -216,162 +270,7 @@ class Editor(HasPrivateTraits):
         for name in self.trait_names(clean_up=True):
             setattr(self, name, None)
 
-    @cached_property
-    def _get_context_object(self):
-        """ Returns the context object the editor is using
-
-        In some cases a proxy object is edited rather than an object directly
-        in the context, in which case we return ``self.object``.
-        """
-        object_name = self.object_name
-        context_key = object_name.split(".", 1)[0]
-        if (object_name != "") and (context_key in self.ui.context):
-            return self.ui.context[context_key]
-
-        # This handles the case of a 'ListItemProxy', which is not in the
-        # ui.context, but is the editor 'object':
-        return self.object
-
-    @cached_property
-    def _get_extended_name(self):
-        """ Returns the extended trait name being edited.
-        """
-        return ("%s.%s" % (self.object_name, self.name)).split(".", 1)[1]
-
-    def _get_value_trait(self):
-        """ Returns the trait the editor is editing (Property implementation).
-        """
-        return self.object.trait(self.name)
-
-    def _get_value(self):
-        """ Returns the value of the trait the editor is editing.
-        """
-        return getattr(self.object, self.name, Undefined)
-
-    def _set_value(self, value):
-        """ Set the value of the trait the editor is editing.
-
-        Dispatches via the TraitsUI Undo/Redo mechanisms to make change
-        reversible, if desired.
-        """
-        if self.ui and self.name != "None":
-            self.ui.do_undoable(self.__set_value, value)
-
-    def __set_value(self, value):
-        """ Set the value of the trait the editor is editing.
-
-        This calls the appropriate setattr method on the handler to perform
-        the actual change.
-        """
-        with self.updating_value():
-            try:
-                handler = self.ui.handler
-                obj_name = self.object_name
-                name = self.name
-                method = (
-                    getattr(handler, "%s_%s_setattr" % (obj_name, name), None)
-                    or getattr(handler, "%s_setattr" % name, None)
-                    or getattr(handler, "setattr")
-                )
-                method(self.ui.info, self.object, name, value)
-            except TraitError as excp:
-                self.error(excp)
-                raise
-
-    def string_value(self, value, format_func=None):
-        """ Returns the text representation of a specified object trait value.
-
-        This simply delegates to the factory's `string_value` method.
-        Sub-classes may choose to override the default implementation.
-
-        Parameters
-        ----------
-        value : any
-            The value being edited.
-        format_func : callable or None
-            A function that takes a value and returns a string.
-        """
-        return self.factory.string_value(value, format_func)
-
-    def _get_str_value(self):
-        """ Returns the text representation of the object trait.
-        """
-        return self.string_value(getattr(self.object, self.name, Undefined))
-
-    def _str(self, value):
-        """ Returns the text representation of a specified value.
-
-        This is a convenience method to cover the differences between Python
-        2 and Python 3 strings.
-
-        Parameters
-        ----------
-        value : any
-            The value to be represented as a string.
-
-        Returns
-        -------
-        string : unicode
-            The string of the value, as an appropriate text type for Python 2
-            or 3.
-        """
-        # In Unicode!
-        return six.text_type(value)
-
-    def error(self, excp):
-        """ Handles an error that occurs while setting the object's trait value.
-
-        This should normally be overridden in a subclass.
-
-        Parameters
-        ----------
-        excp : Exception
-            The exception which occurred.
-        """
-        pass
-
-    def _update_editor(self, object, name, old_value, new_value):
-        """ Performs updates when the object trait changes.
-
-        This is designed to be used as a trait listener.
-        """
-        # If background threads have modified the trait the editor is bound to,
-        # their trait notifications are queued to the UI thread. It is possible
-        # that by the time the UI thread dispatches these events, the UI the
-        # editor is part of has already been closed. So we need to check if we
-        # are still bound to a live UI, and if not, exit immediately:
-        if self.ui is None:
-            return
-
-        # If the notification is for an object different than the one actually
-        # being edited, it is due to editing an item of the form:
-        # object.link1.link2.name, where one of the 'link' objects may have
-        # been modified. In this case, we need to rebind the current object
-        # being edited:
-        if object is not self.object:
-            self.object = self.ui.get_extended_value(self.object_name)
-
-        # If the editor has gone away for some reason, disconnect and exit:
-        if self.control is None:
-            self.context_object.on_trait_change(
-                self._update_editor, self.extended_name, remove=True
-            )
-            return
-
-        # Log the change that was made (as long as the Item is not readonly
-        # or it is not for an event):
-        if (
-            self.item.style != "readonly"
-            and object.base_trait(name).type != "event"
-        ):
-            self.log_change(
-                self.get_undo_item, object, name, old_value, new_value
-            )
-
-        # If the change was not caused by the editor itself:
-        if not self.updating:
-            # Update the editor control to reflect the current object state:
-            self.update_editor()
+    # -- Undo/redo methods --------------------------------------------------
 
     def log_change(self, undo_factory, *undo_args):
         """ Logs a change made in the editor with undo/redo history.
@@ -401,13 +300,6 @@ class Editor(HasPrivateTraits):
                         # Extend the most recent undo transaction:
                         history.extend(item)
 
-    def update_editor(self):
-        """ Updates the editor when the value changes externally to the editor.
-
-        This should normally be overridden in a subclass.
-        """
-        pass
-
     def get_undo_item(self, object, name, old_value, new_value):
         """ Creates an undo history entry.
 
@@ -428,92 +320,7 @@ class Editor(HasPrivateTraits):
             object=object, name=name, old_value=old_value, new_value=new_value
         )
 
-    def parse_extended_name(self, name):
-        """ Extract the object, name and a getter from an extended name
-
-        Parameters
-        ----------
-        name : str
-            The extended name to parse.
-
-        Returns
-        -------
-        object, name, getter : any, str, callable
-            The object from the context, the (extended) name of the
-            attributes holding the value, and a callable which gets the
-            current value from the context.
-        """
-        base_name, __, name = name.partition(".")
-        if name:
-            object = self.ui.context[base_name]
-        else:
-            name = base_name
-            object = self.context_object
-
-        return (object, name, partial(xgetattr, object, name))
-
     # -- Trait synchronization code -----------------------------------------
-
-    def _sync_values(self):
-        """ Initialize and synchronize editor and factory traits
-
-        Initializes and synchronizes (as needed) editor traits with the
-        value of corresponding factory traits.  The name of the factory
-        trait and the editor trait must match and the factory trait needs
-        to have ``sync_value`` metadata set.  The strategy followed is:
-
-        - for each factory trait with ``sync_value`` metadata:
-
-          1.  if the value is a :class:`ContextValue` instance then
-              call :meth:`sync_value` with the ``name`` from the
-              context value.
-          2.  if the trait has ``sync_name`` metadata, look at the
-              referenced trait value and if it is a non-empty string
-              then use this value as the name of the value in the
-              context.
-          3.  otherwise initialize the current value of the factory
-              trait to the corresponding value of the editor.
-
-        - synchronization mode in cases 1 and 2 is taken from the
-          ``sync_value`` metadata of the editor trait first and then
-          the ``sync_value`` metadata of the factory trait if that is
-          empty.
-
-        - if the value is a container type, then the `is_list` metadata
-          is set to
-        """
-        factory = self.factory
-        for name, trait in factory.traits(sync_value=not_none).items():
-            value = getattr(factory, name)
-            self_trait = self.trait(name)
-            if self_trait.sync_value:
-                mode = self_trait.sync_value
-            else:
-                mode = trait.sync_value
-            if isinstance(value, ContextValue):
-                self.sync_value(
-                    value.name,
-                    name,
-                    mode,
-                    bool(self_trait.is_list),
-                    self_trait.type == "event",
-                )
-            elif (
-                trait.sync_name is not None
-                and getattr(factory, trait.sync_name, "") != ""
-            ):
-                # Note: this is implemented as a stepping stone from things
-                # like ``low_name`` and ``high_name`` to using context values.
-                sync_name = getattr(factory, trait.sync_name)
-                self.sync_value(
-                    sync_name,
-                    name,
-                    mode,
-                    bool(self_trait.is_list),
-                    self_trait.type == "event",
-                )
-            elif value is not Undefined:
-                setattr(self, name, value)
 
     def sync_value(
         self,
@@ -582,6 +389,199 @@ class Editor(HasPrivateTraits):
                 with self.raise_to_debug():
                     editor_value = xgetattr(self, editor_name)
                     xsetattr(user_object, xuser_name, editor_value)
+
+    # -- Utility methods -----------------------------------------------------
+
+    def parse_extended_name(self, name):
+        """ Extract the object, name and a getter from an extended name
+
+        Parameters
+        ----------
+        name : str
+            The extended name to parse.
+
+        Returns
+        -------
+        object, name, getter : any, str, callable
+            The object from the context, the (extended) name of the
+            attributes holding the value, and a callable which gets the
+            current value from the context.
+        """
+        base_name, __, name = name.partition(".")
+        if name:
+            object = self.ui.context[base_name]
+        else:
+            name = base_name
+            object = self.context_object
+
+        return (object, name, partial(xgetattr, object, name))
+
+    # -- Utility context managers --------------------------------------------
+
+    @contextmanager
+    def no_trait_update(self, name):
+        """ Context manager that blocks updates from the named trait. """
+        if name in self._no_trait_update:
+            yield
+            return
+
+        self._no_trait_update.add(name)
+        try:
+            yield
+        finally:
+            self._no_trait_update.remove(name)
+
+    @contextmanager
+    def raise_to_debug(self):
+        """ Context manager that uses raise to debug to raise exceptions. """
+        try:
+            yield
+        except Exception:
+            from traitsui.api import raise_to_debug
+
+            raise_to_debug()
+
+    @contextmanager
+    def updating_value(self):
+        """ Context manager to handle updating value. """
+        if self.updating:
+            yield
+            return
+
+        self.updating = True
+        try:
+            yield
+        finally:
+            self.updating = False
+
+    # ------------------------------------------------------------------------
+    # object interface
+    # ------------------------------------------------------------------------
+
+    def __init__(self, parent, **traits):
+        """ Initializes the editor object.
+        """
+        super(HasPrivateTraits, self).__init__(**traits)
+        try:
+            self.old_value = getattr(self.object, self.name)
+        except AttributeError:
+            ctrait = self.object.base_trait(self.name)
+            if ctrait.type == "event" or self.name == "spring":
+                # Getting the attribute will fail for 'Event' traits:
+                self.old_value = Undefined
+            else:
+                raise
+
+        # Synchronize the application invalid state status with the editor's:
+        self.sync_value(self.factory.invalid, "invalid", "from")
+
+    # ------------------------------------------------------------------------
+    # private methods
+    # ------------------------------------------------------------------------
+
+    def _update_editor(self, object, name, old_value, new_value):
+        """ Performs updates when the object trait changes.
+
+        This is designed to be used as a trait listener.
+        """
+        # If background threads have modified the trait the editor is bound to,
+        # their trait notifications are queued to the UI thread. It is possible
+        # that by the time the UI thread dispatches these events, the UI the
+        # editor is part of has already been closed. So we need to check if we
+        # are still bound to a live UI, and if not, exit immediately:
+        if self.ui is None:
+            return
+
+        # If the notification is for an object different than the one actually
+        # being edited, it is due to editing an item of the form:
+        # object.link1.link2.name, where one of the 'link' objects may have
+        # been modified. In this case, we need to rebind the current object
+        # being edited:
+        if object is not self.object:
+            self.object = self.ui.get_extended_value(self.object_name)
+
+        # If the editor has gone away for some reason, disconnect and exit:
+        if self.control is None:
+            self.context_object.on_trait_change(
+                self._update_editor, self.extended_name, remove=True
+            )
+            return
+
+        # Log the change that was made (as long as the Item is not readonly
+        # or it is not for an event):
+        if (
+            self.item.style != "readonly"
+            and object.base_trait(name).type != "event"
+        ):
+            self.log_change(
+                self.get_undo_item, object, name, old_value, new_value
+            )
+
+        # If the change was not caused by the editor itself:
+        if not self.updating:
+            # Update the editor control to reflect the current object state:
+            self.update_editor()
+
+    def _sync_values(self):
+        """ Initialize and synchronize editor and factory traits
+
+        Initializes and synchronizes (as needed) editor traits with the
+        value of corresponding factory traits.  The name of the factory
+        trait and the editor trait must match and the factory trait needs
+        to have ``sync_value`` metadata set.  The strategy followed is:
+
+        - for each factory trait with ``sync_value`` metadata:
+
+          1.  if the value is a :class:`ContextValue` instance then
+              call :meth:`sync_value` with the ``name`` from the
+              context value.
+          2.  if the trait has ``sync_name`` metadata, look at the
+              referenced trait value and if it is a non-empty string
+              then use this value as the name of the value in the
+              context.
+          3.  otherwise initialize the current value of the factory
+              trait to the corresponding value of the editor.
+
+        - synchronization mode in cases 1 and 2 is taken from the
+          ``sync_value`` metadata of the editor trait first and then
+          the ``sync_value`` metadata of the factory trait if that is
+          empty.
+
+        - if the value is a container type, then the `is_list` metadata
+          is set to
+        """
+        factory = self.factory
+        for name, trait in factory.traits(sync_value=not_none).items():
+            value = getattr(factory, name)
+            self_trait = self.trait(name)
+            if self_trait.sync_value:
+                mode = self_trait.sync_value
+            else:
+                mode = trait.sync_value
+            if isinstance(value, ContextValue):
+                self.sync_value(
+                    value.name,
+                    name,
+                    mode,
+                    bool(self_trait.is_list),
+                    self_trait.type == "event",
+                )
+            elif (
+                trait.sync_name is not None
+                and getattr(factory, trait.sync_name, "") != ""
+            ):
+                # Note: this is implemented as a stepping stone from things
+                # like ``low_name`` and ``high_name`` to using context values.
+                sync_name = getattr(factory, trait.sync_name)
+                self.sync_value(
+                    sync_name,
+                    name,
+                    mode,
+                    bool(self_trait.is_list),
+                    self_trait.type == "event",
+                )
+            elif value is not Undefined:
+                setattr(self, name, value)
 
     def _bind_from(self, key, user_object, xuser_name, editor_name, is_list):
         """ Bind trait change handlers from a user object to the editor.
@@ -669,69 +669,91 @@ class Editor(HasPrivateTraits):
                 (editor_name + "_items", editor_list_modified)
             )
 
-    # -- UI preference save/restore interface ---------------------------------
+    def __set_value(self, value):
+        """ Set the value of the trait the editor is editing.
 
-    def restore_prefs(self, prefs):
-        """ Restores saved user preference information for the editor.
+        This calls the appropriate setattr method on the handler to perform
+        the actual change.
+        """
+        with self.updating_value():
+            try:
+                handler = self.ui.handler
+                obj_name = self.object_name
+                name = self.name
+                method = (
+                    getattr(handler, "%s_%s_setattr" % (obj_name, name), None)
+                    or getattr(handler, "%s_setattr" % name, None)
+                    or getattr(handler, "setattr")
+                )
+                method(self.ui.info, self.object, name, value)
+            except TraitError as excp:
+                self.error(excp)
+                raise
 
-        Editors with state may choose to override this. It will only be used
-        if the editor has an `id` value.
+    def _str(self, value):
+        """ Returns the text representation of a specified value.
+
+        This is a convenience method to cover the differences between Python
+        2 and Python 3 strings.
 
         Parameters
         ----------
-        prefs : dict
-            A dictionary of preference values.
-        """
-        pass
-
-    def save_prefs(self):
-        """ Returns any user preference information for the editor.
-
-        Editors with state may choose to override this. It will only be used
-        if the editor has an `id` value.
+        value : any
+            The value to be represented as a string.
 
         Returns
         -------
-        prefs : dict or None
-            A dictionary of preference values, or None if no preferences to
-            be saved.
+        string : unicode
+            The string of the value, as an appropriate text type for Python 2
+            or 3.
         """
-        return None
+        # In Unicode!
+        return six.text_type(value)
 
-    # Utility context managers ----------------------------------------------
+    # -- Traits property getters and setters --------------------------------
 
-    @contextmanager
-    def no_trait_update(self, name):
-        """ Context manager that blocks updates from the named trait. """
-        if name in self._no_trait_update:
-            yield
-            return
+    @cached_property
+    def _get_context_object(self):
+        """ Returns the context object the editor is using
 
-        self._no_trait_update.add(name)
-        try:
-            yield
-        finally:
-            self._no_trait_update.remove(name)
+        In some cases a proxy object is edited rather than an object directly
+        in the context, in which case we return ``self.object``.
+        """
+        object_name = self.object_name
+        context_key = object_name.split(".", 1)[0]
+        if (object_name != "") and (context_key in self.ui.context):
+            return self.ui.context[context_key]
 
-    @contextmanager
-    def raise_to_debug(self):
-        """ Context manager that uses raise to debug to raise exceptions. """
-        try:
-            yield
-        except Exception:
-            from traitsui.api import raise_to_debug
+        # This handles the case of a 'ListItemProxy', which is not in the
+        # ui.context, but is the editor 'object':
+        return self.object
 
-            raise_to_debug()
+    @cached_property
+    def _get_extended_name(self):
+        """ Returns the extended trait name being edited.
+        """
+        return ("%s.%s" % (self.object_name, self.name)).split(".", 1)[1]
 
-    @contextmanager
-    def updating_value(self):
-        """ Context manager to handle updating value. """
-        if self.updating:
-            yield
-            return
+    def _get_value_trait(self):
+        """ Returns the trait the editor is editing (Property implementation).
+        """
+        return self.object.trait(self.name)
 
-        self.updating = True
-        try:
-            yield
-        finally:
-            self.updating = False
+    def _get_value(self):
+        """ Returns the value of the trait the editor is editing.
+        """
+        return getattr(self.object, self.name, Undefined)
+
+    def _set_value(self, value):
+        """ Set the value of the trait the editor is editing.
+
+        Dispatches via the TraitsUI Undo/Redo mechanisms to make change
+        reversible, if desired.
+        """
+        if self.ui and self.name != "None":
+            self.ui.do_undoable(self.__set_value, value)
+
+    def _get_str_value(self):
+        """ Returns the text representation of the object trait.
+        """
+        return self.string_value(getattr(self.object, self.name, Undefined))
