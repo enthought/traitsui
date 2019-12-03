@@ -22,15 +22,7 @@
 
 from __future__ import absolute_import
 
-from traits.etsconfig.api import ETSConfig
 from ..table_column import ObjectColumn
-
-if ETSConfig.toolkit == "wx":
-    from pyface.ui.wx.grid.edit_renderer import EditRenderer
-
-# -------------------------------------------------------------------------
-#  'EditColumn' class:
-# -------------------------------------------------------------------------
 
 
 class EditColumn(ObjectColumn):
@@ -39,7 +31,10 @@ class EditColumn(ObjectColumn):
         """
         super(EditColumn, self).__init__(**traits)
 
-        # force the renderer to be a edit renderer
+        from traitsui.toolkit import toolkit_object
+        EditRenderer = toolkit_object(
+            'extra.edit_renderer:EditRenderer'
+        )
         self.renderer = EditRenderer()
 
         self.label = ""
