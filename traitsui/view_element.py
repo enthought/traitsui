@@ -24,7 +24,7 @@ from __future__ import absolute_import
 
 import re
 
-from traits.api import HasPrivateTraits, Trait, Bool
+from traits.api import HasPrivateTraits, Instance, Bool
 
 from .ui_traits import (
     AnObject,
@@ -36,6 +36,13 @@ from .ui_traits import (
 )
 
 from .util import str_rfind
+
+# Is the AbstractViewElement ABC available in traits.api?
+
+try:
+    from traits.api import AbstractViewElement
+except ImportError:
+    AbstractViewElement = None
 
 
 label_pat = re.compile(r"^(.*)\[(.*)\](.*)$", re.MULTILINE | re.DOTALL)
@@ -102,7 +109,7 @@ class DefaultViewElement(ViewElement):
 # -------------------------------------------------------------------------
 
 # The container trait used by ViewSubElements:
-Container = Trait(DefaultViewElement(), ViewElement)
+Container = Instance(ViewElement, factory=DefaultViewElement)
 
 # -------------------------------------------------------------------------
 #  'ViewSubElement' class (abstract):
@@ -208,3 +215,9 @@ class ViewSubElement(ViewElement):
         """ Indents each line in a specified string by 4 spaces.
         """
         return "\n".join([indent + s for s in string.split("\n")])
+
+
+# Register ViewElement as implementing AbstractViewElement
+# TODO: eventually have ViewElement inherit directly
+if AbstractViewElement is not None:
+    AbstractViewElement.register(ViewElement)
