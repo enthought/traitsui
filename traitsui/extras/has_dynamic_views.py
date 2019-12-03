@@ -85,13 +85,10 @@ _<dynamic_name>_handler : A HasTraits instance.
 
 from __future__ import absolute_import
 
-# Enthought library imports:
-from traitsui.delegating_handler import DelegatingHandler
+from traits.api import Any, Bool, Dict, HasTraits, Instance, Str
 
-# Local imports:
-from .has_traits import HasTraits
-from .trait_types import Any, Bool, Dict, Instance, Str
 from traitsui.api import View, ViewSubElement, ViewElement
+from traitsui.delegating_handler import DelegatingHandler
 
 # Set up a logger:
 import logging
