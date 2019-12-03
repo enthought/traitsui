@@ -5,14 +5,12 @@
 """
 
 from __future__ import absolute_import
-from traits.api \
-    import Bool, HasTraits, Str, Instance, Button
 
-from traitsui.api \
-    import View, HGroup, Group, Item, Handler, Label, spring
+from traits.api import Bool, HasTraits, Str, Instance, Button
 
-from traits.has_dynamic_views \
-    import DynamicView, HasDynamicViews
+from traitsui.api import View, HGroup, Group, Item, Handler, Label, spring
+
+from traitsui.extras.has_dynamic_views import DynamicView, HasDynamicViews
 
 
 class HasFooView(HasDynamicViews):

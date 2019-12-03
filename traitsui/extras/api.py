@@ -22,4 +22,8 @@
 from __future__ import absolute_import
 
 from .checkbox_column import CheckboxColumn
+from .has_dynamic_views import (
+    DynamicView, DynamicViewSubElement, HasDynamicViews
+)
+from .progress_column import ProgressColumn
 from .saving import CanSaveMixin, SaveHandler
