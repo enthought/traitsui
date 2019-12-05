@@ -22,7 +22,7 @@
 
 from __future__ import absolute_import
 
-from traits.api import Str, false
+from traits.api import Bool, Str
 
 from ..basic_editor_factory import BasicEditorFactory
 
@@ -58,7 +58,7 @@ class ToolkitEditorFactory(BasicEditorFactory):
     # --------------------------------------------------------------------------
 
     #: Should implicit text formatting be converted to HTML?
-    format_text = false
+    format_text = Bool(False)
 
     #: External objects referenced in the HTML are relative to this url
     base_url = Str
@@ -67,7 +67,7 @@ class ToolkitEditorFactory(BasicEditorFactory):
     base_url_name = Str
 
     #: Should links be opened in an external browser?
-    open_externally = false
+    open_externally = Bool(False)
 
     def parse_text(self, text):
         """ Parses the contents of a formatted text string into the

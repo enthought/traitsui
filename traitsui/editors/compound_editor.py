@@ -19,7 +19,7 @@
 
 from __future__ import absolute_import
 
-from traits.api import List, true
+from traits.api import Bool, List
 
 from ..editor_factory import EditorFactory
 
@@ -47,7 +47,7 @@ class ToolkitEditorFactory(EditorFactory):
     editors = editors_trait
 
     #: Is user input set on every keystroke?
-    auto_set = true
+    auto_set = Bool(True)
 
 
 # Define the CompoundEditor class

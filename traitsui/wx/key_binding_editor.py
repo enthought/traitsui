@@ -24,7 +24,7 @@
 from __future__ import absolute_import
 import wx
 
-from traits.api import Event, false
+from traits.api import Bool, Event
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -53,7 +53,7 @@ class KeyBindingEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: Does the editor's control have focus currently?
-    has_focus = false
+    has_focus = Bool(False)
 
     #: Keyboard event
     key = Event
