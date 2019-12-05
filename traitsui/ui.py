@@ -30,6 +30,7 @@ from traits.api import (
     Any,
     Bool,
     Callable,
+    Dict,
     Event,
     HasPrivateTraits,
     Instance,
