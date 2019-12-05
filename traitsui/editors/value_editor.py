@@ -21,7 +21,7 @@
 
 from __future__ import absolute_import
 
-from traits.api import Instance, Int, false
+from traits.api import Bool, Instance, Int
 
 from .tree_editor import TreeEditor
 from ..view import View
@@ -47,7 +47,7 @@ class _ValueEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: Is the editor read only?
-    readonly = false
+    readonly = Bool(False)
 
     #: The root node of the value tree
     root = Instance(RootNode)
