@@ -23,7 +23,7 @@ from __future__ import absolute_import
 
 import numpy
 
-from traits.api import Bool, HasTraits, Int, Float, Instance, false, TraitError
+from traits.api import Bool, HasTraits, Int, Float, Instance, TraitError
 
 from ..editor import Editor
 
@@ -215,7 +215,7 @@ class SimpleEditor(Editor):
     # -------------------------------------------------------------------------
 
     # Is the editor read-only?
-    readonly = false
+    readonly = Bool(False)
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

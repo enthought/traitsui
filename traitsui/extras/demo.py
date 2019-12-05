@@ -31,6 +31,7 @@ import io
 from configobj import ConfigObj
 
 from traits.api import (
+    Bool,
     HasTraits,
     HasPrivateTraits,
     Str,
@@ -39,8 +40,6 @@ from traits.api import (
     Any,
     Code,
     HTML,
-    true,
-    false,
     Dict,
 )
 
@@ -418,7 +417,7 @@ class DemoFile(DemoTreeNodeObject):
     nice_name = Property
 
     #: Files don't allow children:
-    allows_children = false
+    allows_children = Bool(False)
 
     #: Description of what the demo does:
     description = HTML
@@ -492,10 +491,10 @@ class DemoPath(DemoTreeNodeObject):
     init_dic = Property
 
     #: Should .py files be included?
-    use_files = true
+    use_files = Bool(True)
 
     #: Paths do allow children:
-    allows_children = true
+    allows_children = Bool(True)
 
     #: Configuration dictionary for this node
     #: This trait is set when a config file exists for the parent of this path.
