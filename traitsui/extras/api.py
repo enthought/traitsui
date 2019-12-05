@@ -22,6 +22,7 @@
 from __future__ import absolute_import
 
 from .checkbox_column import CheckboxColumn
+from .edit_column import EditColumn
 from .has_dynamic_views import (
     DynamicView, DynamicViewSubElement, HasDynamicViews
 )

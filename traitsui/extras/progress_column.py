@@ -17,16 +17,9 @@
 """ A column class for for the TableEditor that displays progress bars. """
 
 from __future__ import absolute_import
-from traits.etsconfig.api import ETSConfig
 from traits.api import Bool, Int, Str
 
 from traitsui.table_column import ObjectColumn
-
-
-if ETSConfig.toolkit == "qt4":
-    from traitsui.qt4.extra.progress_renderer import ProgressRenderer
-else:
-    raise NotImplementedError("No progress column renderer for backend")
 
 
 class ProgressColumn(ObjectColumn):
@@ -51,7 +44,12 @@ class ProgressColumn(ObjectColumn):
 
     def __init__(self, **traits):
         super(ProgressColumn, self).__init__(**traits)
-        # force the renderer to be a progress bar renderer
+
+        from traitsui.toolkit import toolkit_object
+        ProgressRenderer = toolkit_object(
+            'extra.progress_renderer:ProgressRenderer'
+        )
+
         self.renderer = ProgressRenderer()
 
     def is_editable(self, object):
