@@ -30,7 +30,6 @@ from traits.api import (
     Any,
     Bool,
     Callable,
-    DictStrAny,
     Event,
     HasPrivateTraits,
     Instance,
@@ -76,7 +75,7 @@ class UI(HasPrivateTraits):
     view_elements = Instance(ViewElements)
 
     #: Context objects that the UI is editing
-    context = DictStrAny
+    context = Dict(Str, Any)
 
     #: Handler object used for event handling
     handler = Instance(Handler)
@@ -135,10 +134,10 @@ class UI(HasPrivateTraits):
     # -- Private Traits -------------------------------------------------------
 
     #: Original context when used with a modal dialog
-    _context = DictStrAny
+    _context = Dict(Str, Any)
 
     #: Copy of original context used for reverting changes
-    _revert = DictStrAny
+    _revert = Dict(Str, Any)
 
     #: List of methods to call once the user interface is created
     _defined = List
