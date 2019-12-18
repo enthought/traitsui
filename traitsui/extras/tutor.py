@@ -71,14 +71,6 @@ except:
 #  Constants:
 #-------------------------------------------------------------------------
 
-# Correct program usage information:
-Usage = """
-Correct usage is: tutor.py [root_dir]
-where:
-    root_dir = Path to root of the tutorial tree
-
-If omitted, 'root_dir' defaults to the current directory."""
-
 # The standard list editor used:
 list_editor = ListEditor(
     use_notebook=True,
@@ -1774,35 +1766,3 @@ class Tutor(HasPrivateTraits):
         section = SectionFactory(title=title).trait_set(path=path).section
         if section is not None:
             self.section = self.root = section
-
-#-------------------------------------------------------------------------
-#  Run the program:
-#-------------------------------------------------------------------------
-
-# Only run the program if we were invoked from the command line:
-if __name__ == '__main__':
-
-    # Validate the command line arguments:
-    if len(sys.argv) > 2:
-        print(Usage)
-        sys.exit(1)
-
-    # Determine the root path to use for the tutorial files:
-    if len(sys.argv) == 2:
-        path = sys.argv[1]
-    else:
-        path = os.getcwd()
-
-    # Create a tutor and display the tutorial:
-    tutor = Tutor(home=os.path.dirname(sys.argv[0])).trait_set(
-        path=path)
-    if tutor.root is not None:
-        tutor.configure_traits()
-    else:
-        print("""No traits tutorial found in %s.
-
-Correct usage is: python tutor.py [tutorial_path]
-where: tutorial_path = Path to the root of the traits tutorial.
-
-If tutorial_path is omitted, the current directory is assumed to be the root of
-the tutorial.""" % path)
