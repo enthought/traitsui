@@ -172,8 +172,9 @@ if __name__ == "__main__":
         license='BSD',
         maintainer='ETS Developers',
         maintainer_email='enthought-dev@enthought.com',
-        package_data=dict(traitsui=['image/library/*.zip', 'images/*',
-                                    'wx/images/*', 'qt4/images/*']),
+        package_data=dict(traitsui=['extras/images/*', 'image/library/*.zip',
+                                    'images/*', 'wx/images/*',
+                                    'qt4/images/*']),
         packages=find_packages(),
         entry_points={
             'traitsui.toolkits': [
