@@ -878,3 +878,76 @@ def demo(
             name=name, use_files=use_files, config_filename=config_filename
         ),
     ).configure_traits()
+
+
+def publish_html_str(rst_str, css_path=None):
+    """ Format RST string to html using `docutils` if available.
+    Otherwise, return the input `rst_str`.
+
+    Parameters
+    ----------
+    rst_str: string
+        reStructuredText
+
+    css_path: string or None (default)
+        If not None, use the CSS stylesheet.
+
+    Returns
+    -------
+    string
+    """
+    # If docutils is not installed, just add it as a text string item:
+    try:
+        from docutils.core import publish_string
+    except Exception:
+        return rst_str
+
+    # Try to find a CSS style sheet, and set up the docutil overrides if
+    # found:
+    settings = {'output_encoding': 'unicode'}
+    if css_path is not None:
+        settings['stylesheet_path'] = css_path
+        settings['embed_stylesheet'] = True
+        settings['stylesheet'] = None
+
+    # Convert it from restructured text to HTML:
+    return publish_string(rst_str,
+                          writer_name='html',
+                          settings_overrides=settings)
+
+
+def publish_html_file(rst_file_path, html_out_path, css_path=None):
+    """ Format reStructuredText in `rst_file_path` to html using `docutils`
+    if available. Otherwise, does nothing.
+
+    Parameters
+    ----------
+    rst_file_path: string
+
+    html_out_path: string
+
+    css_path: string or None (default)
+        If not None, use the CSS stylesheet.
+
+    Returns
+    -------
+    None
+    """
+    # If docutils is not installed, just add it as a text string item:
+    try:
+        from docutils.core import publish_file
+    except Exception:
+        return
+
+    # Try to find a CSS style sheet, and set up the docutil overrides if
+    # found:
+    settings = {'output_encoding': 'unicode'}
+    if css_path is not None:
+        settings['stylesheet_path'] = css_path
+        settings['embed_stylesheet'] = True
+        settings['stylesheet'] = None
+
+    publish_file(source_path=rst_file_path,
+                 destination_path=html_out_path,
+                 writer_name='html',
+                 settings_overrides=settings)

@@ -50,6 +50,7 @@ from traitsui.menu \
 
 from traitsui.tree_node \
     import TreeNode
+from traitsui.extras.demo import publish_html_str, publish_html_file
 
 from pyface.image_resource \
     import ImageResource
@@ -1452,7 +1453,7 @@ class SectionFactory(HasPrivateTraits):
         if css_path != '':
             css_path = os.path.join(self.path, css_path)
 
-        html = publish_html(content, css_path)
+        html = publish_html_str(content, css_path)
 
         # Choose the right HTML renderer:
         if is_windows and wx_available:
@@ -1734,76 +1735,3 @@ class Tutor(HasPrivateTraits):
         section = SectionFactory(title=title).trait_set(path=path).section
         if section is not None:
             self.section = self.root = section
-
-
-def publish_html(rst_str, css_path=None):
-    """ Format RST string to html using `docutils` if available.
-    Otherwise, return the input `rst_str`.
-
-    Parameters
-    ----------
-    rst_str: string
-        reStructuredText
-
-    css_path: string or None (default)
-        If not None, use the CSS stylesheet.
-
-    Returns
-    -------
-    string
-    """
-    # If docutils is not installed, just add it as a text string item:
-    try:
-        from docutils.core import publish_string
-    except Exception:
-        return rst_str
-
-    # Try to find a CSS style sheet, and set up the docutil overrides if
-    # found:
-    settings = {'output_encoding': 'unicode'}
-    if css_path is not None:
-        settings['stylesheet_path'] = css_path
-        settings['embed_stylesheet'] = True
-        settings['stylesheet'] = None
-
-    # Convert it from restructured text to HTML:
-    return publish_string(rst_str,
-                          writer_name='html',
-                          settings_overrides=settings)
-
-
-def publish_html_file(rst_file_path, html_out_path, css_path=None):
-    """ Format reStructuredText in `rst_file_path` to html using `docutils`
-    if available. Otherwise, does nothing.
-
-    Parameters
-    ----------
-    rst_file_path: string
-
-    html_out_path: string
-
-    css_path: string or None (default)
-        If not None, use the CSS stylesheet.
-
-    Returns
-    -------
-    None
-    """
-    # If docutils is not installed, just add it as a text string item:
-    try:
-        from docutils.core import publish_file
-    except Exception:
-        return
-
-    # Try to find a CSS style sheet, and set up the docutil overrides if
-    # found:
-    settings = {'output_encoding': 'unicode'}
-    if css_path is not None:
-        settings['stylesheet_path'] = css_path
-        settings['embed_stylesheet'] = True
-        settings['stylesheet'] = None
-
-    publish_file(source_path=rst_file_path,
-                 destination_path=html_out_path,
-                 writer_name='html',
-                 settings_overrides=settings)
