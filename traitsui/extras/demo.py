@@ -189,7 +189,9 @@ class DemoFileHandler(Handler):
         sys.stdout = sys.stderr = self
 
         # Read in the demo source file:
-        df.description, df.source = parse_source(df.path)
+        description, source = parse_source(df.path)
+        df.description = publish_html_str(description)
+        df.source = source
         # Try to run the demo source file:
 
         # Append the path for the demo source file to sys.path, so as to
@@ -539,7 +541,7 @@ class DemoPath(DemoTreeNodeObject):
         if self._description is None:
             self._get_init()
 
-        return self._description
+        return publish_html_str(self._description)
 
     # -------------------------------------------------------------------------
     #  Implementation of the 'source' property:
