@@ -1282,28 +1282,26 @@ class SectionFactory(HasPrivateTraits):
 
         # Get the name of the HTML file we will write to:
         dir, base_name = os.path.split(path)
-        html_filepath = os.path.join(dir,
-                                     os.path.splitext(base_name)[0] + '.htm')
+        html = os.path.join(dir, os.path.splitext(base_name)[0] + '.htm')
 
         # If the HTML file does not exist, or is older than the restructured
         # text file, then let docutils convert it to HTML:
-        is_file = os.path.isfile(html_filepath)
+        is_file = os.path.isfile(html)
         if ((not is_file) or
-            (os.path.getmtime(path) > os.path.getmtime(html_filepath)) or
-                (os.path.getmtime(css_path) >
-                    os.path.getmtime(html_filepath))):
+            (os.path.getmtime(path) > os.path.getmtime(html)) or
+                (os.path.getmtime(css_path) > os.path.getmtime(html))):
 
             # Delete the current HTML file (if any):
             if is_file:
-                os.remove(html_filepath)
+                os.remove(html)
 
             # Let docutils create a new HTML file from the restructured text
             # file:
-            publish_html_file(path, html_filepath, css_path)
+            publish_html_file(path, html, css_path)
 
-        if os.path.isfile(html_filepath):
+        if os.path.isfile(html):
             # If there is now a valid HTML file, use it:
-            self._create_html_item(path=html_filepath)
+            self._create_html_item(path=html)
         else:
             # Otherwise, just use the original restructured text file:
             self._add_txt_item(path)
