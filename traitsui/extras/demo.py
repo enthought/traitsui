@@ -861,25 +861,30 @@ class Demo(HasPrivateTraits):
 
 
 # -------------------------------------------------------------------------
-#  Function to run the demo:
+#  Utilities to convert rst strings/files to html.
 # -------------------------------------------------------------------------
 
 
-def demo(
-    use_files=False, dir_name=None, config_filename="", title="Traits UI Demos"
-):
-    if dir_name is None:
-        dir_name = dirname(abspath(sys.argv[0]))
-    path, name = split(dir_name)
-    if len(config_filename) > 0 and not isabs(config_filename):
-        config_filename = join(path, name, config_filename)
-    Demo(
-        path=path,
-        title=title,
-        root=DemoPath(
-            name=name, use_files=use_files, config_filename=config_filename
-        ),
-    ).configure_traits()
+def _get_settings(css_path=None):
+    """ Helper function to make settings dictionary
+    consumable by docutils
+
+    Parameters
+    ----------
+    css_path: string or None (default)
+        If not None, use the CSS stylesheet.
+
+    Returns
+    -------
+    dict
+    """
+    settings = {'output_encoding': 'unicode'}
+    if css_path is not None:
+        settings['stylesheet_path'] = css_path
+        settings['embed_stylesheet'] = True
+        settings['stylesheet'] = None
+
+    return settings
 
 
 def publish_html_str(rst_str, css_path=None):
@@ -898,21 +903,12 @@ def publish_html_str(rst_str, css_path=None):
     -------
     string
     """
-    # If docutils is not installed, just add it as a text string item:
     try:
         from docutils.core import publish_string
     except Exception:
         return rst_str
 
-    # Try to find a CSS style sheet, and set up the docutil overrides if
-    # found:
-    settings = {'output_encoding': 'unicode'}
-    if css_path is not None:
-        settings['stylesheet_path'] = css_path
-        settings['embed_stylesheet'] = True
-        settings['stylesheet'] = None
-
-    # Convert it from restructured text to HTML:
+    settings = _get_settings(css_path)
     return publish_string(rst_str,
                           writer_name='html',
                           settings_overrides=settings)
@@ -935,21 +931,35 @@ def publish_html_file(rst_file_path, html_out_path, css_path=None):
     -------
     None
     """
-    # If docutils is not installed, just add it as a text string item:
     try:
         from docutils.core import publish_file
     except Exception:
         return
 
-    # Try to find a CSS style sheet, and set up the docutil overrides if
-    # found:
-    settings = {'output_encoding': 'unicode'}
-    if css_path is not None:
-        settings['stylesheet_path'] = css_path
-        settings['embed_stylesheet'] = True
-        settings['stylesheet'] = None
-
+    settings = _get_settings(css_path)
     publish_file(source_path=rst_file_path,
                  destination_path=html_out_path,
                  writer_name='html',
                  settings_overrides=settings)
+
+
+# -------------------------------------------------------------------------
+#  Function to run the demo:
+# -------------------------------------------------------------------------
+
+
+def demo(
+    use_files=False, dir_name=None, config_filename="", title="Traits UI Demos"
+):
+    if dir_name is None:
+        dir_name = dirname(abspath(sys.argv[0]))
+    path, name = split(dir_name)
+    if len(config_filename) > 0 and not isabs(config_filename):
+        config_filename = join(path, name, config_filename)
+    Demo(
+        path=path,
+        title=title,
+        root=DemoPath(
+            name=name, use_files=use_files, config_filename=config_filename
+        ),
+    ).configure_traits()
