@@ -1274,51 +1274,35 @@ class SectionFactory(HasPrivateTraits):
     def _add_rst_item(self, path):
         """ Creates a description item for a ReSTructured text file.
         """
-        # If docutils is not installed, just process the file as an ordinary
-        # text file:
-        try:
-            from docutils.core import publish_cmdline
-        except:
-            self._add_txt_item(path)
-            return
-
-        # Get the name of the HTML file we will write to:
-        dir, base_name = os.path.split(path)
-        html = os.path.join(dir, os.path.splitext(base_name)[0] + '.htm')
-
-        # Try to find a CSS style sheet, and set up the docutil overrides if
-        # found:
-        settings = {}
-        css_path = self.css_path
-        if css_path != '':
-            css_path = os.path.join(self.path, css_path)
-            settings['stylesheet_path'] = css_path
-            settings['embed_stylesheet'] = True
-            settings['stylesheet'] = None
+        if self.css_path != '':
+            css_path = os.path.join(self.path, self.css_path)
         else:
             css_path = path
 
+        # Get the name of the HTML file we will write to:
+        dir, base_name = os.path.split(path)
+        html_filepath = os.path.join(dir,
+                                     os.path.splitext(base_name)[0] + '.htm')
+
         # If the HTML file does not exist, or is older than the restructured
         # text file, then let docutils convert it to HTML:
-        is_file = os.path.isfile(html)
+        is_file = os.path.isfile(html_filepath)
         if ((not is_file) or
-            (os.path.getmtime(path) > os.path.getmtime(html)) or
-                (os.path.getmtime(css_path) > os.path.getmtime(html))):
+            (os.path.getmtime(path) > os.path.getmtime(html_filepath)) or
+                (os.path.getmtime(css_path) >
+                    os.path.getmtime(html_filepath))):
 
             # Delete the current HTML file (if any):
             if is_file:
-                os.remove(html)
+                os.remove(html_filepath)
 
             # Let docutils create a new HTML file from the restructured text
             # file:
-            publish_cmdline(writer_name='html',
-                            argv=[path, html],
-                            settings_overrides=settings)
+            publish_html_file(path, html_filepath, css_path)
 
-        if os.path.isfile(html):
+        if os.path.isfile(html_filepath):
             # If there is now a valid HTML file, use it:
-            self._create_html_item(path=html)
-
+            self._create_html_item(path=html_filepath)
         else:
             # Otherwise, just use the original restructured text file:
             self._add_txt_item(path)
@@ -1786,3 +1770,40 @@ def publish_html(rst_str, css_path=None):
     return publish_string(rst_str,
                           writer_name='html',
                           settings_overrides=settings)
+
+
+def publish_html_file(rst_file_path, html_out_path, css_path=None):
+    """ Format reStructuredText in `rst_file_path` to html using `docutils`
+    if available. Otherwise, does nothing.
+
+    Parameters
+    ----------
+    rst_file_path: string
+
+    html_out_path: string
+
+    css_path: string or None (default)
+        If not None, use the CSS stylesheet.
+
+    Returns
+    -------
+    None
+    """
+    # If docutils is not installed, just add it as a text string item:
+    try:
+        from docutils.core import publish_file
+    except Exception:
+        return
+
+    # Try to find a CSS style sheet, and set up the docutil overrides if
+    # found:
+    settings = {'output_encoding': 'unicode'}
+    if css_path is not None:
+        settings['stylesheet_path'] = css_path
+        settings['embed_stylesheet'] = True
+        settings['stylesheet'] = None
+
+    publish_file(source_path=rst_file_path,
+                 destination_path=html_out_path,
+                 writer_name='html',
+                 settings_overrides=settings)
