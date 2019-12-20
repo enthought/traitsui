@@ -1464,7 +1464,11 @@ class SectionFactory(HasPrivateTraits):
 
         content = content.strip()
 
-        html = publish_html(content, self.css_path)
+        css_path = self.css_path
+        if css_path != '':
+            css_path = os.path.join(self.path, css_path)
+
+        html = publish_html(content, css_path)
 
         # Choose the right HTML renderer:
         if is_windows and wx_available:
