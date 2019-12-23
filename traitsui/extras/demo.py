@@ -32,6 +32,7 @@ from configobj import ConfigObj
 
 from traits.api import (
     Bool,
+    cached_property,
     HasTraits,
     HasPrivateTraits,
     Str,
@@ -189,7 +190,9 @@ class DemoFileHandler(Handler):
         sys.stdout = sys.stderr = self
 
         # Read in the demo source file:
-        df.description, df.source = parse_source(df.path)
+        description, source = parse_source(df.path)
+        df.description = publish_html_str(description)
+        df.source = source
         # Try to run the demo source file:
 
         # Append the path for the demo source file to sys.path, so as to
@@ -482,7 +485,7 @@ class DemoPath(DemoTreeNodeObject):
     nice_name = Property
 
     #: Description of the contents of the directory:
-    description = Property(HTML)
+    description = Property(HTML, depends_on="_description")
 
     #: Source code contained in the '__init__.py' file:
     source = Property(Code)
@@ -502,6 +505,9 @@ class DemoPath(DemoTreeNodeObject):
 
     #: Configuration file for this node.
     config_filename = Str
+
+    #: Shadow trait for description property
+    _description = Str
 
     #: Cached value of the nice_name property.
     _nice_name = Str
@@ -535,11 +541,12 @@ class DemoPath(DemoTreeNodeObject):
     #  Implementation of the 'description' property:
     # -------------------------------------------------------------------------
 
+    @cached_property
     def _get_description(self):
         if self._description is None:
             self._get_init()
 
-        return self._description
+        return publish_html_str(self._description)
 
     # -------------------------------------------------------------------------
     #  Implementation of the 'source' property:
@@ -856,6 +863,89 @@ class Demo(HasPrivateTraits):
         """ Handles the 'root' trait being changed.
         """
         root.parent = self
+
+
+# -------------------------------------------------------------------------
+#  Utilities to convert rst strings/files to html.
+# -------------------------------------------------------------------------
+
+
+def _get_settings(css_path=None):
+    """ Helper function to make settings dictionary
+    consumable by docutils
+
+    Parameters
+    ----------
+    css_path: string or None (default)
+        If not None, use the CSS stylesheet.
+
+    Returns
+    -------
+    dict
+    """
+    settings = {'output_encoding': 'unicode'}
+    if css_path is not None:
+        settings['stylesheet_path'] = css_path
+        settings['embed_stylesheet'] = True
+        settings['stylesheet'] = None
+
+    return settings
+
+
+def publish_html_str(rst_str, css_path=None):
+    """ Format RST string to html using `docutils` if available.
+    Otherwise, return the input `rst_str`.
+
+    Parameters
+    ----------
+    rst_str: string
+        reStructuredText
+
+    css_path: string or None (default)
+        If not None, use the CSS stylesheet.
+
+    Returns
+    -------
+    string
+    """
+    try:
+        from docutils.core import publish_string
+    except Exception:
+        return rst_str
+
+    settings = _get_settings(css_path)
+    return publish_string(rst_str,
+                          writer_name='html',
+                          settings_overrides=settings)
+
+
+def publish_html_file(rst_file_path, html_out_path, css_path=None):
+    """ Format reStructuredText in `rst_file_path` to html using `docutils`
+    if available. Otherwise, does nothing.
+
+    Parameters
+    ----------
+    rst_file_path: string
+
+    html_out_path: string
+
+    css_path: string or None (default)
+        If not None, use the CSS stylesheet.
+
+    Returns
+    -------
+    None
+    """
+    try:
+        from docutils.core import publish_file
+    except Exception:
+        return
+
+    settings = _get_settings(css_path)
+    publish_file(source_path=rst_file_path,
+                 destination_path=html_out_path,
+                 writer_name='html',
+                 settings_overrides=settings)
 
 
 # -------------------------------------------------------------------------

@@ -50,6 +50,7 @@ from traitsui.menu \
 
 from traitsui.tree_node \
     import TreeNode
+from traitsui.extras.demo import publish_html_str, publish_html_file
 
 from pyface.image_resource \
     import ImageResource
@@ -1274,29 +1275,14 @@ class SectionFactory(HasPrivateTraits):
     def _add_rst_item(self, path):
         """ Creates a description item for a ReSTructured text file.
         """
-        # If docutils is not installed, just process the file as an ordinary
-        # text file:
-        try:
-            from docutils.core import publish_cmdline
-        except:
-            self._add_txt_item(path)
-            return
+        if self.css_path != '':
+            css_path = os.path.join(self.path, self.css_path)
+        else:
+            css_path = path
 
         # Get the name of the HTML file we will write to:
         dir, base_name = os.path.split(path)
         html = os.path.join(dir, os.path.splitext(base_name)[0] + '.htm')
-
-        # Try to find a CSS style sheet, and set up the docutil overrides if
-        # found:
-        settings = {}
-        css_path = self.css_path
-        if css_path != '':
-            css_path = os.path.join(self.path, css_path)
-            settings['stylesheet_path'] = css_path
-            settings['embed_stylesheet'] = True
-            settings['stylesheet'] = None
-        else:
-            css_path = path
 
         # If the HTML file does not exist, or is older than the restructured
         # text file, then let docutils convert it to HTML:
@@ -1311,14 +1297,11 @@ class SectionFactory(HasPrivateTraits):
 
             # Let docutils create a new HTML file from the restructured text
             # file:
-            publish_cmdline(writer_name='html',
-                            argv=[path, html],
-                            settings_overrides=settings)
+            publish_html_file(path, html, css_path)
 
         if os.path.isfile(html):
             # If there is now a valid HTML file, use it:
             self._create_html_item(path=html)
-
         else:
             # Otherwise, just use the original restructured text file:
             self._add_txt_item(path)
@@ -1464,27 +1447,11 @@ class SectionFactory(HasPrivateTraits):
 
         content = content.strip()
 
-        # If docutils is not installed, just add it as a text string item:
-        try:
-            from docutils.core import publish_string
-        except:
-            self.descriptions.append(TextStrItem(content=content,
-                                                 title=title))
-            return
-
-        # Try to find a CSS style sheet, and set up the docutil overrides if
-        # found:
-        settings = {'output_encoding': 'unicode'}
         css_path = self.css_path
         if css_path != '':
             css_path = os.path.join(self.path, css_path)
-            settings['stylesheet_path'] = css_path
-            settings['embed_stylesheet'] = True
-            settings['stylesheet'] = None
 
-        # Convert it from restructured text to HTML:
-        html = publish_string(content, writer_name='html',
-                              settings_overrides=settings)
+        html = publish_html_str(content, css_path)
 
         # Choose the right HTML renderer:
         if is_windows and wx_available:
