@@ -103,11 +103,6 @@ url_pat1 = re.compile(r'^(.*)\[(.*)\](.*)$')  # Normal
 # Is this running on the Windows platform?
 is_windows = (sys.platform in ('win32', 'win64'))
 
-# Python file section types:
-IsCode = 0
-IsHiddenCode = 1
-IsDescription = 2
-
 # HTML template for a default lecture:
 DefaultLecture = """<html>
   <head>
