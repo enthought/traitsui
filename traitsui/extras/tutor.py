@@ -1217,7 +1217,7 @@ class SectionFactory(HasPrivateTraits):
         """ Creates the code snippets for a Python source file.
         """
         description, source = parse_source(path)
-        title = ''
+        title = "Description"
         self._add_description(description, title)
         self.snippets.append(CodeItem(
             title="Code",
