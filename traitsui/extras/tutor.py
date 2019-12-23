@@ -97,11 +97,6 @@ snippet_editor = ListEditor(
 dir_pat1 = re.compile(r'^(\d\d\d\d)_(.*)$')
 dir_pat2 = re.compile(r'^(.*)_(\d+\.\d+)$')
 
-# Regular expression used to match section header in a Python source file:
-section_pat1 = re.compile(r'^#-*\[(.*)\]')  # Normal
-section_pat2 = re.compile(r'^#-*<(.*)>')    # Hidden
-section_pat3 = re.compile(r'^#-*\((.*)\)')  # Description
-
 # Regular expression used to extract item titles from URLs:
 url_pat1 = re.compile(r'^(.*)\[(.*)\](.*)$')  # Normal
 
@@ -796,10 +791,6 @@ class Lab(ASection):
                          show_label=False,
                          editor=TitleEditor()
                          ),
-                    '_',
-                    Item('visible',
-                         label='View hidden sections'
-                         )
                 ),
             ),
             Tabbed(
