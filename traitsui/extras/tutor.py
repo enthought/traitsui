@@ -1219,14 +1219,11 @@ class SectionFactory(HasPrivateTraits):
         description, source = parse_source(path)
         title = ''
         self._add_description(description, title)
-        self._add_code_snippet('Code', path, source)
-
-    def _add_code_snippet(self, title, path, content):
         self.snippets.append(CodeItem(
-            title=title or 'Code',
+            title="Code",
             path=path,
-            hidden=(type == IsHiddenCode),
-            content=content
+            hidden=False,
+            content=source
         ))
 
     def _add_txt_item(self, path):
