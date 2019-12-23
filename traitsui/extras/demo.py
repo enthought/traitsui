@@ -32,6 +32,7 @@ from configobj import ConfigObj
 
 from traits.api import (
     Bool,
+    cached_property,
     HasTraits,
     HasPrivateTraits,
     Str,
@@ -484,7 +485,7 @@ class DemoPath(DemoTreeNodeObject):
     nice_name = Property
 
     #: Description of the contents of the directory:
-    description = Property(HTML)
+    description = Property(HTML, depends_on="_description")
 
     #: Source code contained in the '__init__.py' file:
     source = Property(Code)
@@ -504,6 +505,9 @@ class DemoPath(DemoTreeNodeObject):
 
     #: Configuration file for this node.
     config_filename = Str
+
+    #: Shadow trait for description property
+    _description = Str
 
     #: Cached value of the nice_name property.
     _nice_name = Str
@@ -537,6 +541,7 @@ class DemoPath(DemoTreeNodeObject):
     #  Implementation of the 'description' property:
     # -------------------------------------------------------------------------
 
+    @cached_property
     def _get_description(self):
         if self._description is None:
             self._get_init()
