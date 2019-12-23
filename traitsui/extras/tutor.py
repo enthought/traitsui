@@ -1396,49 +1396,6 @@ class SectionFactory(HasPrivateTraits):
 
         self.descriptions.append(item)
 
-    def _check_embedded_code(self, lines, start):
-        """ Checks for an embedded Python code snippet within a description.
-        """
-        n = len(lines)
-        while start < n:
-            line = lines[start].strip()
-
-            if line == '':
-                start += 1
-                continue
-
-            if (line[:1] != '[') or (line[-1:] != ']'):
-                break
-
-            del lines[start]
-
-            n -= 1
-            title = line[1:-1].strip()
-            line = lines[start] + '.'
-            pad = len(line) - len(line.strip())
-            clines = []
-
-            while start < n:
-                line = lines[start] + '.'
-                len_line = len(line.strip())
-                if (len_line > 1) and ((len(line) - len_line) < pad):
-                    break
-
-                if (len(clines) > 0) or (len_line > 1):
-                    clines.append(line[pad: -1])
-
-                start += 1
-
-            # Add the new code snippet:
-            self.snippets.append(CodeItem(
-                title=title or 'Code',
-                content='\n'.join(clines)
-            ))
-
-            break
-
-        return start
-
 #-------------------------------------------------------------------------
 #  Tutor tree editor:
 #-------------------------------------------------------------------------
