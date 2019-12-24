@@ -50,7 +50,9 @@ from traitsui.menu \
 
 from traitsui.tree_node \
     import TreeNode
-from traitsui.extras.demo import publish_html_str, publish_html_file
+from traitsui.extras.demo import (
+    parse_source, publish_html_str, publish_html_file
+)
 
 from pyface.image_resource \
     import ImageResource
@@ -95,21 +97,11 @@ snippet_editor = ListEditor(
 dir_pat1 = re.compile(r'^(\d\d\d\d)_(.*)$')
 dir_pat2 = re.compile(r'^(.*)_(\d+\.\d+)$')
 
-# Regular expression used to match section header in a Python source file:
-section_pat1 = re.compile(r'^#-*\[(.*)\]')  # Normal
-section_pat2 = re.compile(r'^#-*<(.*)>')    # Hidden
-section_pat3 = re.compile(r'^#-*\((.*)\)')  # Description
-
 # Regular expression used to extract item titles from URLs:
 url_pat1 = re.compile(r'^(.*)\[(.*)\](.*)$')  # Normal
 
 # Is this running on the Windows platform?
 is_windows = (sys.platform in ('win32', 'win64'))
-
-# Python file section types:
-IsCode = 0
-IsHiddenCode = 1
-IsDescription = 2
 
 # HTML template for a default lecture:
 DefaultLecture = """<html>
@@ -794,10 +786,6 @@ class Lab(ASection):
                          show_label=False,
                          editor=TitleEditor()
                          ),
-                    '_',
-                    Item('visible',
-                         label='View hidden sections'
-                         )
                 ),
             ),
             Tabbed(
@@ -1214,33 +1202,15 @@ class SectionFactory(HasPrivateTraits):
     def _add_py_item(self, path):
         """ Creates the code snippets for a Python source file.
         """
-        source = read_file(path)
-        if source is not None:
-            lines = source.replace('\r', '').split('\n')
-            start_line = 0
-            title = 'Prologue'
-            type = IsCode
-
-            for i, line in enumerate(lines):
-                match = section_pat1.match(line)
-                if match is not None:
-                    next_type = IsCode
-                else:
-                    match = section_pat2.match(line)
-                    if match is not None:
-                        next_type = IsHiddenCode
-                    else:
-                        next_type = IsDescription
-                        match = section_pat3.match(line)
-
-                if match is not None:
-                    self._add_snippet(title, path, lines, start_line, i - 1,
-                                      type)
-                    start_line = i + 1
-                    title = match.group(1).strip()
-                    type = next_type
-
-            self._add_snippet(title, path, lines, start_line, i, type)
+        description, source = parse_source(path)
+        title = "Description"
+        self._add_description(description, title)
+        self.snippets.append(CodeItem(
+            title="Code",
+            path=path,
+            hidden=False,
+            content=source
+        ))
 
     def _add_txt_item(self, path):
         """ Creates a description item for a normal text file.
@@ -1382,71 +1352,10 @@ class SectionFactory(HasPrivateTraits):
 
     #-- Private Methods ------------------------------------------------------
 
-    def _add_snippet(self, title, path, lines, start_line, end_line, type):
-        """ Adds a new code snippet or restructured text item to the list of
-            code snippet or description items.
-        """
-        # Trim leading and trailing blank lines from the snippet:
-        while start_line <= end_line:
-            if lines[start_line].strip() != '':
-                break
-            start_line += 1
-
-        while end_line >= start_line:
-            if lines[end_line].strip() != '':
-                break
-            end_line -= 1
-
-        # Only add if the snippet is not empty:
-        if start_line <= end_line:
-
-            # Check for the title containing the 'auto-run' flag ('*'):
-            if title[:1] == '*':
-                self.auto_run = True
-                title = title[1:].strip()
-
-            if title[-1:] == '*':
-                self.auto_run = True
-                title = title[:-1].strip()
-
-            # Extract out just the lines we will use:
-            content_lines = lines[start_line: end_line + 1]
-
-            if type == IsDescription:
-                # Add the new restructured text description:
-                self._add_description(content_lines, title)
-            else:
-                # Add the new code snippet:
-                self.snippets.append(CodeItem(
-                    title=title or 'Code',
-                    path=path,
-                    hidden=(type == IsHiddenCode),
-                    content='\n'.join(content_lines)
-                ))
-
-    def _add_description(self, lines, title):
+    def _add_description(self, content, title):
         """ Converts a restructured text string to HTML and adds it as
             description item.
         """
-        # Scan the lines for any imbedded Python code that should be shown as
-        # a separate snippet:
-        i = 0
-        while i < len(lines):
-            if lines[i].strip()[-2:] == '::':
-                i = self._check_embedded_code(lines, i + 1)
-            else:
-                i += 1
-
-        # Strip off any docstring style triple quotes (if necessary):
-        content = '\n'.join(lines).strip()
-        if content[:3] in ( '"""', "'''" ):
-            content = content[3:]
-
-        if content[-3:] in ( '"""', "'''" ):
-            content = content[:-3]
-
-        content = content.strip()
-
         css_path = self.css_path
         if css_path != '':
             css_path = os.path.join(self.path, css_path)
@@ -1472,49 +1381,6 @@ class SectionFactory(HasPrivateTraits):
             item = HTMLItem(**traits)
 
         self.descriptions.append(item)
-
-    def _check_embedded_code(self, lines, start):
-        """ Checks for an embedded Python code snippet within a description.
-        """
-        n = len(lines)
-        while start < n:
-            line = lines[start].strip()
-
-            if line == '':
-                start += 1
-                continue
-
-            if (line[:1] != '[') or (line[-1:] != ']'):
-                break
-
-            del lines[start]
-
-            n -= 1
-            title = line[1:-1].strip()
-            line = lines[start] + '.'
-            pad = len(line) - len(line.strip())
-            clines = []
-
-            while start < n:
-                line = lines[start] + '.'
-                len_line = len(line.strip())
-                if (len_line > 1) and ((len(line) - len_line) < pad):
-                    break
-
-                if (len(clines) > 0) or (len_line > 1):
-                    clines.append(line[pad: -1])
-
-                start += 1
-
-            # Add the new code snippet:
-            self.snippets.append(CodeItem(
-                title=title or 'Code',
-                content='\n'.join(clines)
-            ))
-
-            break
-
-        return start
 
 #-------------------------------------------------------------------------
 #  Tutor tree editor:
