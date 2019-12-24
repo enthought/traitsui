@@ -107,6 +107,7 @@ dependencies = {
     "nose",
     "coverage",
     "configobj",
+    "docutils"
 }
 
 extra_dependencies = {
