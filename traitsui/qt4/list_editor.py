@@ -209,6 +209,8 @@ class SimpleEditor(Editor):
         # early (ie. before it contains something).
         if self.control.widget() is None:
             self.control.setWidget(list_pane)
+            if not self.scrollable:
+                self.control.setMinimumHeight(list_pane.sizeHint().height())
 
     def update_editor_item(self, event):
         """ Updates the editor when an item in the object trait changes
@@ -381,6 +383,11 @@ class SimpleEditor(Editor):
         """ Trait handler to set the mutable trait from the factory.
         """
         return self.factory.mutable
+
+    def _scrollable_default(self):
+        """ Trait handler to set the scrollable from the factory.
+        """
+        return self.factory.scrollable
 
 
 class CustomEditor(SimpleEditor):
