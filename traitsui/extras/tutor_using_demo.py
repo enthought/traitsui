@@ -33,6 +33,8 @@ from traitsui.extras.demo import DemoFile
 from traitsui.extras.tutor import LabHandler, NoDemo, StdOut
 
 
+# The code for this class is copied from the old tutor.py code.
+# xref #696
 class TutorialFile(DemoFile):
     """ A demo file that also captures its output, exceptions.
     """
