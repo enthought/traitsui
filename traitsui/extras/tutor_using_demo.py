@@ -21,6 +21,8 @@
 
 from __future__ import absolute_import, print_function
 
+import operator
+import os
 import sys
 
 from pyface.image_resource import ImageResource
@@ -29,7 +31,7 @@ from traitsui.api import (
     CodeEditor, HGroup, HSplit, HTMLEditor, Item, ShellEditor, Tabbed,
     TitleEditor, ValueEditor, VGroup, View, VSplit
 )
-from traitsui.extras.demo import DemoFile
+from traitsui.extras.demo import DemoFile, DemoPath
 from traitsui.extras.tutor import LabHandler, NoDemo, StdOut
 
 
@@ -193,3 +195,35 @@ class TutorialFile(DemoFile):
         id='enthought.tutor.tutor_file',
         handler=LabHandler
     )
+
+
+class TutorialPath(DemoPath):
+    """ A tutorial path also parses file extensions other than py.
+    """
+
+    def get_children_from_datastructure(self):
+        dirs = []
+        files = []
+        path = self.path
+        for name in os.listdir(path):
+            cur_path = os.path.join(path, name)
+            if os.path.isdir(cur_path):
+                if self.has_py_files(cur_path):
+                    dirs.append(DemoPath(parent=self, name=name))
+            elif self.use_files:
+                name, ext = os.path.splitext(name)
+
+                # If we have a handler for the file type, invoke it:
+                method = getattr(
+                    self,
+                    '_make_%s_demo_file' % ext[1:].lower(),
+                    None
+                )
+                if method is not None:
+                    files.append(method(name))
+
+        sort_key = operator.attrgetter("name")
+        dirs.sort(key=sort_key)
+        files.sort(key=sort_key)
+
+        return dirs + files
