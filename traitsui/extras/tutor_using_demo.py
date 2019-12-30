@@ -30,8 +30,8 @@ from pyface.image_resource import ImageResource
 from traits.api import Bool, Button, Dict, HasTraits, Str
 from traitsui.api import (
     CodeEditor, Handler, HGroup, HSplit, HTMLEditor, Item, ObjectTreeNode,
-    ShellEditor, Tabbed, TitleEditor, TreeEditor, ValueEditor, VGroup, View,
-    VSplit
+    ShellEditor, Tabbed, TextEditor, TitleEditor, TreeEditor, ValueEditor, VGroup, 
+    View, VSplit
 )
 from traitsui.extras.demo import (
     DemoFile, DemoPath, parse_source, path_view, publish_html_str
@@ -58,6 +58,90 @@ class _StdOut(object):
         """ Flushes all current data to the output log.
         """
         pass
+
+
+def _read_file(path, mode='rU', encoding='utf8'):
+    """ Returns the contents of a specified text file (or None).
+
+    """
+    try:
+        with open(path, mode, encoding=encoding) as fh:
+            result = fh.read()
+        return result
+    except Exception:
+        return None
+
+
+# HTML template for displaying a .wmv/.avi movie file:
+WMVMovieTemplate = """<html>
+<head>
+</head>
+<body>
+<p><object classid="clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95" codebase="http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=6,4,5,715">
+<param name="FileName" value="%s">
+<param name="AutoStart" value="true">
+<param name="ShowTracker" value="true">
+<param name="ShowControls" value="true">
+<param name="ShowGotoBar" value="false">
+<param name="ShowDisplay" value="false">
+<param name="ShowStatusBar" value="false">
+<param name="AutoSize" value="true">
+<embed src="%s" AutoStart="true" ShowTracker="true" ShowControls="true" ShowGotoBar="false" ShowDisplay="false" ShowStatusBar="false" AutoSize="true" pluginspage="http://www.microsoft.com/windows/windowsmedia/download/"></object></p>
+</body>
+</html>
+"""
+
+# HTML template for displaying a QuickTime.mov movie file:
+QTMovieTemplate = """<html>
+<head>
+</head>
+<body>
+<p><object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab" width="100%%" height="100%%">
+<param name="src" value="file:///%s">
+<param name="scale" value="aspect">
+<param name="autoplay" value="true">
+<param name="loop" value="false">
+<param name="controller" value="true">
+<embed src="file:///%s" width="100%%" height="100%%" scale="aspect" autoplay="true" loop="false" controller="true" pluginspage="http://www.apple.com/quicktime/download"></object></p>
+</body>
+</html>
+"""
+
+# HTML template for displaying an image file:
+ImageTemplate = """<html>
+<head>
+</head>
+<body>
+<img src="%s">
+</body>
+</html>
+"""
+
+# HTML template for playing an MP3 audio file:
+MP3Template = """<html>
+<head>
+<bgsound src="%s">
+</head>
+<body>
+<p>&nbsp;</p>
+</body>
+</html>
+"""
+
+
+class TutorialHTMLFile(DemoFile):
+    pass
+
+
+tutorial_html_view = View(
+    Item(
+        "description",
+        label="Description",
+        show_label=False,
+        style="readonly",
+        editor=HTMLEditor(format_text=True),
+    )
+)
 
 
 class TutorialFile(DemoFile):
@@ -228,6 +312,21 @@ tutor_file_view = View(
 )
 
 
+class TutorialTxtFile(DemoFile):
+    description = Str
+
+
+tutorial_text_view = View(
+    Item(
+        "description",
+        label="Description",
+        show_label=False,
+        style="readonly",
+        editor=TextEditor()
+    )
+)
+
+
 class TutorialPath(DemoPath):
     """ A tutorial path also parses file extensions other than py.
     """
@@ -261,21 +360,76 @@ class TutorialPath(DemoPath):
 
     #-- Factory Methods for Creating Tutorial Files Based on File Type --------
 
+    def _make_avi_demo_file(self, path, name):
+        """ Parse a avi file
+        """
+        self._add_wmv_item(path, name)
+
+    def _make_htm_demo_file(self, path, name):
+        """ Parse a htm file
+        """
+        html = _read_file(path)
+        return TutorialHTMLFile(name=name, description=html)
+
+    def _make_html_demo_file(self, path, name):
+        """ Parse a html file
+        """
+        return self._make_htm_demo_file(path, name)
+
+    def _make_jpg_demo_file(self, path, name):
+        """ Parse a jpg file
+        """
+        html = ImageTemplate % path
+        return TutorialHTMLFile(name=name, description=html)
+
+    def _make_jpeg_demo_file(self, path, name):
+        """ Parse a jpeg file
+        """
+        self._add_jpg_item(path, name)
+
+    def _make_mov_demo_file(self, path, name):
+        """ Parse a mov file
+        """
+        path2 = path.replace(':', '|')
+        html = QTMovieTemplate % (path2, path2)
+        return TutorialHTMLFile(name=name, description=html)
+
+    def _make_mp3_demo_file(self, path, name):
+        """ Parse a mp3 file
+        """
+        html = MP3Template % path
+        return TutorialHTMLFile(name=name, description=html)
+
+    def _make_png_demo_file(self, path, name):
+        """ Parse a png file
+        """
+        self._add_jpg_item(path, name)
+
     def _make_py_demo_file(self, path, name):
-        """  Parse a py file and create corresponding TutorialFile
+        """  Parse a py file
         """
         description, source = parse_source(path)
         description = publish_html_str(description)
         return TutorialFile(name=name, description=description, source=source)
 
     def _make_rst_demo_file(self, path, name):
-        """ Parse a rst file and create corresponding TutorialFile
+        """ Parse a rst file
         """
-        with open(path, 'rt') as f:
-            rst_str = f.read()
-
+        rst_str = _read_file(path)
         html_str = publish_html_str(rst_str)
-        return TutorialFile(name=name, description=html_str)
+        return TutorialHTMLFile(name=name, description=html_str)
+
+    def _make_txt_demo_file(self, path, name):
+        """ Parse a txt file
+        """
+        text = _read_file(path)
+        return TutorialTxtFile(name=name, description=text)
+
+    def _make_wmv_demo_file(self, path, name):
+        """ Parse a wmv file
+        """
+        html = WMVMovieTemplate % (path, path)
+        return TutorialHTMLFile(name=name, description=html)
 
 
 tutor_tree_editor = TreeEditor(
@@ -289,6 +443,16 @@ tutor_tree_editor = TreeEditor(
             node_for=[TutorialFile],
             label="nice_name",
             view=tutor_file_view
+        ),
+        ObjectTreeNode(
+            node_for=[TutorialHTMLFile],
+            label="nice_name",
+            view=tutorial_html_view
+        ),
+        ObjectTreeNode(
+            node_for=[TutorialTxtFile],
+            label="nice_name",
+            view=tutorial_text_view
         )
     ]
 )
