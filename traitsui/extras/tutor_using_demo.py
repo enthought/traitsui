@@ -24,56 +24,77 @@ from __future__ import absolute_import, print_function
 import operator
 import os
 import sys
+import traceback
 
 from pyface.image_resource import ImageResource
 from traits.api import Bool, Button, Dict, HasTraits, Str
 from traitsui.api import (
-    CodeEditor, HGroup, HSplit, HTMLEditor, Item, ShellEditor, Tabbed,
-    TitleEditor, ValueEditor, VGroup, View, VSplit
+    CodeEditor, Handler, HGroup, HSplit, HTMLEditor, Item, ObjectTreeNode,
+    ShellEditor, Tabbed, TitleEditor, TreeEditor, ValueEditor, VGroup, View,
+    VSplit
 )
-from traitsui.extras.demo import DemoFile, DemoPath
-from traitsui.extras.tutor import LabHandler, NoDemo, StdOut
+from traitsui.extras.demo import (
+    DemoFile, DemoPath, parse_source, path_view, publish_html_str
+)
 
-
-# The code for this class is copied from the old tutor.py code.
+# The code in this module is copied from the old tutor.py code.
 # xref #696
+
+
+class _StdOut(object):
+    """ Simulate stdout, but redirect the output to the 'output' string
+        supplied by some 'owner' object.
+    """
+
+    def __init__(self, owner):
+        self.owner = owner
+
+    def write(self, data):
+        """ Adds the specified data to the output log.
+        """
+        self.owner.log += data
+
+    def flush(self):
+        """ Flushes all current data to the output log.
+        """
+        pass
+
+
 class TutorialFile(DemoFile):
     """ A demo file that also captures its output, exceptions.
     """
     #-- Trait Definitions-----------------------------------------------------
 
+    #: Run code on gui initialization.
     auto_run = Bool(False)
 
-    # User error message:
+    #: User error message
     message = Str
 
-    # The output produced while the program is running:
-    output = Str
-
-    # The run Python code button:
+    #: The run Python code button
     run = Button(image=ImageResource('run'), height_padding=1)
 
-    # The dictionary containing the items from the Python code execution:
+    #: The dictionary containing the items from the Python code execution
     values = Dict
 
     #-- Event Handlers -------------------------------------------------------
 
     def _run_changed(self):
-        """ Runs the current set of snippet code.
+        """ Listener for run button.
         """
         self.run_code()
 
     #-- Public Methods -------------------------------------------------------
 
     def run_code(self):
-        """ Runs all of the code snippets associated with the section.
+        """ Runs the code.
         """
         # Reset any syntax error and message log values:
-        self.message = self.output = ''
+        self.message = self.log = ''
 
         # Redirect standard out and error to the message log:
         stdout, stderr = sys.stdout, sys.stderr
-        sys.stdout = sys.stderr = StdOut(self)
+        sys.stdout = sys.stderr = _StdOut(self)
 
         try:
             try:
@@ -94,107 +115,117 @@ class TutorialFile(DemoFile):
 
                 # Handle a 'demo' value being defined:
                 demo = values.get('demo')
-                if not isinstance(demo, HasTraits):
-                    demo = NoDemo()
-                self.demo = demo
+                if isinstance(demo, HasTraits):
+                    self.demo = demo
+                else:
+                    self.message = "No demo defined for this class."
 
                 # Handle a 'popup' value being defined:
                 popup = values.get('popup')
                 if isinstance(popup, HasTraits):
                     popup.edit_traits(kind='livemodal')
-
             except SyntaxError as e:
                 line = e.lineno
                 if line is not None:
                     # Display the syntax error message:
                     self.message = '%s in column %s of line %s' % (
-                                   e.msg.capitalize(), e.offset, line)
+                        e.msg.capitalize(), e.offset, line)
                 else:
                     # Display the syntax error message without line # info:
                     self.message = e.msg.capitalize()
-            except:
-                import traceback
+            except Exception:
                 traceback.print_exc()
         finally:
             # Restore standard out and error to their original values:
             sys.stdout, sys.stderr = stdout, stderr
 
-    #-- Traits View Definitions ----------------------------------------------
 
-    view = View(
-        HSplit(
-            Item(
-                "description",
-                label="Description",
-                show_label=False,
-                style="readonly",
-                editor=HTMLEditor(format_text=True),
-            ),
-            VSplit(
-                VGroup(
-                    Item('source',
-                         style='custom',
-                         show_label=False,
-                         ),
-                    HGroup(
-                        Item('run',
-                             style='custom',
-                             show_label=False,
-                             tooltip='Run the Python code'
-                             ),
-                        '_',
-                        Item('message',
-                             springy=True,
-                             show_label=False,
-                             editor=TitleEditor()
-                             ),
-                        '_',
-                        Item('visible',
-                             label='View hidden sections'
-                             )
-                    ),
-                    label='Lab',
-                    dock='horizontal'
+class TutorialFileHandler(Handler):
+    """ Controller for TutorialFile
+    """
+
+    def init(self, info):
+        """ Handles initialization of the view.
+        """
+        # Run the code if the 'auto-run' feature is enabled:
+        if info.object.auto_run:
+            info.object.run_code()
+
+
+tutor_file_view = View(
+    HSplit(
+        Item(
+            "description",
+            label="Description",
+            show_label=False,
+            style="readonly",
+            editor=HTMLEditor(format_text=True),
+        ),
+        VSplit(
+            VGroup(
+                Item(
+                    'source',
+                    style='custom',
+                    show_label=False,
                 ),
-                Tabbed(
-                    Item('values',
-                         id='values_1',
-                         label='Shell',
-                         editor=ShellEditor(share=True),
-                         dock='tab',
-                         export='DockWindowShell'
-
-                         ),
-                    Item('values',
-                         id='values_2',
-                         editor=ValueEditor(),
-                         dock='tab',
-                         export='DockWindowShell'
-                         ),
-                    Item('output',
-                         style='readonly',
-                         editor=CodeEditor(show_line_numbers=False,
-                                           selected_color=0xFFFFFF),
-                         dock='tab',
-                         export='DockWindowShell'
-                         ),
-                    Item('demo',
-                         id='demo',
-                         style='custom',
-                         resizable=True,
-                         dock='tab',
-                         export='DockWindowShell'
-                         ),
-                    show_labels=False,
+                HGroup(
+                    Item(
+                        'run',
+                        style='custom',
+                        show_label=False,
+                        tooltip='Run the Python code'
+                    ),
+                    '_',
+                    Item(
+                        'message',
+                        springy=True,
+                        show_label=False,
+                        editor=TitleEditor()
+                    )
                 ),
                 label='Lab',
                 dock='horizontal'
             ),
-            id='splitter',
+            Tabbed(
+                Item(
+                    'values',
+                    label='Shell',
+                    editor=ShellEditor(share=True),
+                    dock='tab',
+                    export='DockWindowShell'
+                ),
+                Item(
+                    'values',
+                    editor=ValueEditor(),
+                    dock='tab',
+                    export='DockWindowShell'
+                ),
+                Item(
+                    'log',
+                    style='readonly',
+                    label='Output',
+                    editor=CodeEditor(
+                        show_line_numbers=False,
+                        selected_color=0xFFFFFF
+                    ),
+                    dock='tab',
+                    export='DockWindowShell'
+                ),
+                Item(
+                    'demo',
+                    style='custom',
+                    resizable=True,
+                    dock='tab',
+                    export='DockWindowShell'
+                ),
+                show_labels=False,
+            ),
+            label='Lab',
+            dock='horizontal'
         ),
-        id='enthought.tutor.tutor_file',
-        handler=LabHandler
-    )
+    ),
+    handler=TutorialFileHandler
+)
 
 
 class TutorialPath(DemoPath):
@@ -209,7 +240,7 @@ class TutorialPath(DemoPath):
             cur_path = os.path.join(path, name)
             if os.path.isdir(cur_path):
                 if self.has_py_files(cur_path):
-                    dirs.append(DemoPath(parent=self, name=name))
+                    dirs.append(TutorialPath(parent=self, name=name))
             elif self.use_files:
                 name, ext = os.path.splitext(name)
 
@@ -220,10 +251,57 @@ class TutorialPath(DemoPath):
                     None
                 )
                 if method is not None:
-                    files.append(method(name))
+                    files.append(method(cur_path, name))
 
         sort_key = operator.attrgetter("name")
         dirs.sort(key=sort_key)
         files.sort(key=sort_key)
 
         return dirs + files
+
+    #-- Factory Methods for Creating Tutorial Files Based on File Type --------
+
+    def _make_py_demo_file(self, path, name):
+        """  Parse a py file and create corresponding TutorialFile
+        """
+        description, source = parse_source(path)
+        description = publish_html_str(description)
+        return TutorialFile(name=name, description=description, source=source)
+
+    def _make_rst_demo_file(self, path, name):
+        """ Parse a rst file and create corresponding TutorialFile
+        """
+        with open(path, 'rt') as f:
+            rst_str = f.read()
+
+        html_str = publish_html_str(rst_str)
+        return TutorialFile(name=name, description=html_str)
+
+
+tutor_tree_editor = TreeEditor(
+    nodes=[
+        ObjectTreeNode(
+            node_for=[TutorialPath],
+            label="nice_name",
+            view=path_view
+        ),
+        ObjectTreeNode(
+            node_for=[TutorialFile],
+            label="nice_name",
+            view=tutor_file_view
+        )
+    ]
+)
+
+
+tutor_view = View(
+    Item(
+        name="root",
+        show_label=False,
+        editor=tutor_tree_editor,
+    ),
+    title="Tutorial",
+    resizable=True,
+    width=950,
+    height=900,
+)
