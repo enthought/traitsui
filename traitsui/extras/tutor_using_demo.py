@@ -30,8 +30,8 @@ from pyface.image_resource import ImageResource
 from traits.api import Bool, Button, Dict, HasTraits, Str
 from traitsui.api import (
     CodeEditor, Handler, HGroup, HSplit, HTMLEditor, Item, ObjectTreeNode,
-    ShellEditor, Tabbed, TextEditor, TitleEditor, TreeEditor, ValueEditor, VGroup, 
-    View, VSplit
+    ShellEditor, Tabbed, TextEditor, TitleEditor, TreeEditor, ValueEditor,
+    VGroup, View, VSplit
 )
 from traitsui.extras.demo import (
     DemoFile, DemoPath, parse_source, path_view, publish_html_str
@@ -49,15 +49,15 @@ class _StdOut(object):
     def __init__(self, owner):
         self.owner = owner
 
-    def write(self, data):
-        """ Adds the specified data to the output log.
-        """
-        self.owner.log += data
-
     def flush(self):
         """ Flushes all current data to the output log.
         """
         pass
+
+    def write(self, data):
+        """ Adds the specified data to the output log.
+        """
+        self.owner.log += data
 
 
 def _read_file(path, mode='rU', encoding='utf8'):
@@ -339,14 +339,14 @@ class TutorialPath(DemoPath):
             cur_path = os.path.join(path, name)
             if os.path.isdir(cur_path):
                 if self.has_py_files(cur_path):
-                    dirs.append(TutorialPath(parent=self, name=name))
+                    dirs.append(TutorialPath(name=name, parent=self))
             elif self.use_files:
                 name, ext = os.path.splitext(name)
 
                 # If we have a handler for the file type, invoke it:
                 method = getattr(
                     self,
-                    '_make_%s_demo_file' % ext[1:].lower(),
+                    '_parse_%s_file' % ext[1:].lower(),
                     None
                 )
                 if method is not None:
@@ -360,76 +360,81 @@ class TutorialPath(DemoPath):
 
     #-- Factory Methods for Creating Tutorial Files Based on File Type --------
 
-    def _make_avi_demo_file(self, path, name):
+    def _parse_avi_file(self, path, name):
         """ Parse a avi file
         """
-        self._add_wmv_item(path, name)
+        return self._parse_wmv_file(path, name)
 
-    def _make_htm_demo_file(self, path, name):
+    def _parse_htm_file(self, path, name):
         """ Parse a htm file
         """
         html = _read_file(path)
-        return TutorialHTMLFile(name=name, description=html)
+        return TutorialHTMLFile(description=html, name=name, parent=self)
 
-    def _make_html_demo_file(self, path, name):
+    def _parse_html_file(self, path, name):
         """ Parse a html file
         """
-        return self._make_htm_demo_file(path, name)
+        return self._parse_htm_file(path, name)
 
-    def _make_jpg_demo_file(self, path, name):
+    def _parse_jpg_file(self, path, name):
         """ Parse a jpg file
         """
         html = ImageTemplate % path
-        return TutorialHTMLFile(name=name, description=html)
+        return TutorialHTMLFile(description=html, name=name, parent=self)
 
-    def _make_jpeg_demo_file(self, path, name):
+    def _parse_jpeg_file(self, path, name):
         """ Parse a jpeg file
         """
-        self._add_jpg_item(path, name)
+        return self._parse_jpg_file(path, name)
 
-    def _make_mov_demo_file(self, path, name):
+    def _parse_mov_file(self, path, name):
         """ Parse a mov file
         """
         path2 = path.replace(':', '|')
         html = QTMovieTemplate % (path2, path2)
-        return TutorialHTMLFile(name=name, description=html)
+        return TutorialHTMLFile(description=html, name=name, parent=self)
 
-    def _make_mp3_demo_file(self, path, name):
+    def _parse_mp3_file(self, path, name):
         """ Parse a mp3 file
         """
         html = MP3Template % path
-        return TutorialHTMLFile(name=name, description=html)
+        return TutorialHTMLFile(description=html, name=name, parent=self)
 
-    def _make_png_demo_file(self, path, name):
+    def _parse_png_file(self, path, name):
         """ Parse a png file
         """
-        self._add_jpg_item(path, name)
+        return self._parse_jpg_file(path, name)
 
-    def _make_py_demo_file(self, path, name):
+    def _parse_py_file(self, path, name):
         """  Parse a py file
         """
         description, source = parse_source(path)
         description = publish_html_str(description)
-        return TutorialFile(name=name, description=description, source=source)
+        return TutorialFile(
+            description=description,
+            name=name,
+            parent=self,
+            source=source
+        )
 
-    def _make_rst_demo_file(self, path, name):
+    def _parse_rst_file(self, path, name):
         """ Parse a rst file
         """
         rst_str = _read_file(path)
         html_str = publish_html_str(rst_str)
-        return TutorialHTMLFile(name=name, description=html_str)
+        return TutorialHTMLFile(description=html_str, name=name, parent=self)
 
-    def _make_txt_demo_file(self, path, name):
+    def _parse_txt_file(self, path, name):
         """ Parse a txt file
         """
         text = _read_file(path)
-        return TutorialTxtFile(name=name, description=text)
+        return TutorialTxtFile(description=text, name=name, parent=self)
 
-    def _make_wmv_demo_file(self, path, name):
+    def _parse_wmv_file(self, path, name):
         """ Parse a wmv file
         """
         html = WMVMovieTemplate % (path, path)
-        return TutorialHTMLFile(name=name, description=html)
+        return TutorialHTMLFile(description=html, name=name, parent=self)
 
 
 tutor_tree_editor = TreeEditor(
