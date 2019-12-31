@@ -102,7 +102,7 @@ class ColorComboBox(wx.adv.OwnerDrawnComboBox):
         color_name = self.GetString(item)
 
         dc.DrawText(
-            color_name, r.x + 3, r.y + (r.height - dc.GetCharHeight()) / 2
+            color_name, r.x + 3, r.y + (r.height - dc.GetCharHeight()) // 2
         )
 
         if color_name == "custom":

@@ -217,8 +217,8 @@ class SimpleEditor(Editor):
         wdx, wdy = control.GetClientSize()
         wx.PaintDC(control).DrawBitmap(
             image,
-            (wdx - image.GetWidth()) / 2,
-            (wdy - image.GetHeight()) / 2,
+            (wdx - image.GetWidth()) // 2,
+            (wdy - image.GetHeight()) // 2,
             True,
         )
 

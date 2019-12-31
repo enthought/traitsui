@@ -1030,7 +1030,7 @@ class FillPanel(object):
             # If the Item is resizable, and we are using a multi-column grid:
             if item_resizable and (cols > 1):
                 # Mark the entire row as growable:
-                item_sizer.AddGrowableRow(col / cols)
+                item_sizer.AddGrowableRow(col // cols)
 
             # Save the reference to the label control (if any) in the editor:
             editor.label_control = label

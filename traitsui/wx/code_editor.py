@@ -286,7 +286,7 @@ class SourceEditor(Editor):
         control.MarkerAdd(line, SELECTED_MARKER)
         control.GotoLine(line)
         if self.factory.auto_scroll:
-            control.ScrollToLine(line - (control.LinesOnScreen() / 2))
+            control.ScrollToLine(line - (control.LinesOnScreen() // 2))
 
         control.Refresh()
 

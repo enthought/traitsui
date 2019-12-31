@@ -267,7 +267,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         value = self.value
         try:
             text = self.format % value
-            1 / (self.low <= value <= self.high)
+            1 // (self.low <= value <= self.high)
         except:
             text = ""
             value = self.low
@@ -407,7 +407,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         fvalue = self.value
         try:
             fvalue_text = self._format % fvalue
-            1 / (low <= fvalue <= high)
+            1 // (low <= fvalue <= high)
         except:
             fvalue_text = ""
             fvalue = low

@@ -262,7 +262,7 @@ class GUIToolkit(Toolkit):
             # BH- I think this is the case when there is a parent
             # so this logic tries to place it in the middle of the parent
             # if possible, otherwise tries an offset from the parent
-            x = px + (pdx - width) / 2
+            x = px + (pdx - width) // 2
             if x < 0:
                 x = px + 20
         elif x <= -1.0:
@@ -278,7 +278,7 @@ class GUIToolkit(Toolkit):
             # BH- I think this is the case when there is a parent
             # so this logic tries to place it in the middle of the parent
             # if possible, otherwise tries an offset from the parent
-            y = py + (pdy - height) / 2
+            y = py + (pdy - height) // 2
             if y < 0:
                 y = py + 20
         elif y <= -1.0:

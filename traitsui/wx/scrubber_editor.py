@@ -234,7 +234,7 @@ class _ScrubberEditor(Editor):
             if (low is None) or (high is None) or isinstance(low, int):
                 increment = 1.0
             else:
-                increment = pow(10, round(log10((high - low) / 100.0)))
+                increment = pow(10, round(log10((high - low) // 100.0)))
 
         self.increment = increment
 
@@ -246,12 +246,12 @@ class _ScrubberEditor(Editor):
         """
         tdx, tdy, descent, leading = self._get_text_size()
         wdx, wdy = self.control.GetClientSize()
-        ty = ((wdy - (tdy - descent)) / 2) - 1
+        ty = ((wdy - (tdy - descent)) // 2) - 1
         alignment = self.factory.alignment
         if alignment == "left":
             tx = 0
         elif alignment == "center":
-            tx = (wdx - tdx) / 2
+            tx = (wdx - tdx) // 2
         else:
             tx = wdx - tdx
 
@@ -539,7 +539,7 @@ class _ScrubberEditor(Editor):
             clicks = 3
             if event.ShiftDown():
                 clicks = 7
-            delta = clicks * (event.GetWheelRotation() / event.GetWheelDelta())
+            delta = clicks * (event.GetWheelRotation() // event.GetWheelDelta())
             self._set_scrubber_position(event, delta)
 
     def _update_value(self, event):

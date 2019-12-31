@@ -113,7 +113,7 @@ def bitmap_cache(name, standard_size, path=None):
         dc1.SetPen(wx.TRANSPARENT_PEN)
         dc1.SetBrush(wx.WHITE_BRUSH)
         dc1.DrawRectangle(0, 0, standard_bitmap_width, dy)
-        dc1.Blit((standard_bitmap_width - dx) / 2, 0, dx, dy, dc2, 0, 0)
+        dc1.Blit((standard_bitmap_width - dx) // 2, 0, dx, dy, dc2, 0, 0)
 
     _bitmap_cache[filename + "*"] = std_bitmap
 
@@ -183,8 +183,8 @@ def find_closest_display(x, y):
 
             def _distance(x, y, display):
                 dis_x, dis_y, dis_w, dis_h = display.GetGeometry()
-                dis_mid_x = dis_x + dis_w / 2
-                dis_mid_y = dis_y + dis_h / 2
+                dis_mid_x = dis_x + dis_w // 2
+                dis_mid_y = dis_y + dis_h // 2
 
                 return (x - dis_mid_x) ** 2 + (y - dis_mid_y) ** 2
 
@@ -229,7 +229,7 @@ def position_window(window, width=None, height=None, parent=None):
     if parent is None:
         # Center the popup on the screen:
         window.SetSize(
-            (screen_dx - width) / 2, (screen_dy - height) / 2, width, height
+            (screen_dx - width) // 2, (screen_dy - height) // 2, width, height
         )
         return
 
@@ -450,11 +450,11 @@ class TraitsUIScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
 
         # Is it before the left edge?
         if (cr.x < 0) and (sppux > 0):
-            new_vsx = vsx + (cr.x / sppux)
+            new_vsx = vsx + (cr.x // sppux)
 
         # Is it above the top?
         if (cr.y < 0) and (sppuy > 0):
-            new_vsy = vsy + (cr.y / sppuy)
+            new_vsy = vsy + (cr.y // sppuy)
 
         # For the right and bottom edges, scroll enough to show the whole
         # control if possible, but if not just scroll such that the top/left
@@ -462,19 +462,19 @@ class TraitsUIScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
 
         # Is it past the right edge ?
         if (cr.right > client_size.width) and (sppux > 0):
-            diff = (cr.right - client_size.width) / sppux
+            diff = (cr.right - client_size.width) // sppux
             if (cr.x - (diff * sppux)) > 0:
                 new_vsx = vsx + diff + 1
             else:
-                new_vsx = vsx + (cr.x / sppux)
+                new_vsx = vsx + (cr.x // sppux)
 
         # Is it below the bottom ?
         if (cr.bottom > client_size.height) and (sppuy > 0):
-            diff = (cr.bottom - client_size.height) / sppuy
+            diff = (cr.bottom - client_size.height) // sppuy
             if (cr.y - (diff * sppuy)) > 0:
                 new_vsy = vsy + diff + 1
             else:
-                new_vsy = vsy + (cr.y / sppuy)
+                new_vsy = vsy + (cr.y // sppuy)
 
         # Perform the scroll if any adjustments are needed:
         if (new_vsx != -1) or (new_vsy != -1):

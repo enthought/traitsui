@@ -230,7 +230,7 @@ class LiveWindow(BaseDialog):
             sizer.Add(trait_sheet, 1, wx.EXPAND)
             tsdx, tsdy = trait_sheet.GetSize()
             sw.SetScrollRate(16, 16)
-            max_dy = (2 * screen_dy) / 3
+            max_dy = (2 * screen_dy) // 3
             sw.SetSizer(sizer)
             sw.SetSize(
                 wx.Size(

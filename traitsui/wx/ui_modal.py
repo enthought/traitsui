@@ -146,7 +146,7 @@ class ModalDialog(BaseDialog):
             tsdx += 8
             tsdy += 8
             sw.SetScrollRate(16, 16)
-            max_dy = (2 * screen_dy) / 3
+            max_dy = (2 * screen_dy) // 3
             sw.SetSizer(sizer)
             sw.SetSize(
                 wx.Size(
