@@ -331,6 +331,13 @@ class TutorialPath(DemoPath):
     """ A tutorial path also parses file extensions other than py.
     """
 
+    def get_children(self):
+        """ Gets the object's children.
+        """
+        # XXX: TutorialPath does not support parsing the
+        # tutorial structure from a config file.
+        return self.get_children_from_datastructure()
+
     def get_children_from_datastructure(self):
         dirs = []
         files = []

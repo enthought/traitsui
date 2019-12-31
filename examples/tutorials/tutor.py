@@ -20,7 +20,8 @@ from __future__ import absolute_import, print_function
 import os
 import sys
 
-from traitsui.extras.tutor import Tutor
+from traitsui.extras.demo import Demo
+from traitsui.extras.tutor import tutor_view, TutorialPath
 
 # Correct program usage information:
 usage = """
@@ -33,12 +34,14 @@ If omitted, 'root_dir' defaults to the current directory."""
 
 def main(home_dir, root_dir):
     # Create a tutor and display the tutorial:
-    tutor = Tutor(home=os.path.dirname(home_dir)).trait_set(
-        path=root_dir)
-    if tutor.root is not None:
-        tutor.configure_traits()
-    else:
-        raise NameError("No traits tutorial found in %s" % root_dir)
+
+    path, name = os.path.split(os.path.dirname(root_dir))
+    demo = Demo(
+        path=path,
+        title="Tutorial",
+        root=TutorialPath(name=name, use_files=False)
+    )
+    demo.configure_traits(view=tutor_view)
 
 
 if __name__ == '__main__':
