@@ -10,17 +10,19 @@ env:
 
 matrix:
   include:
-    - env: RUNTIME=2.7 TOOLKITS="null pyqt pyside wx pyside2"
-    - env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5 pyside2"
+    - env: RUNTIME=2.7 TOOLKITS="null pyqt pyside pyside2"
+    - env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5 wx pyside2"
     - os: osx
       env: RUNTIME=2.7 TOOLKITS="null pyside pyqt pyside2"
     - os: osx
       env: RUNTIME=2.7 TOOLKITS="pyqt wx"
     - os: osx
-      env: RUNTIME=3.6 TOOLKITS="null pyqt5 pyqt pyside2"
+      env: RUNTIME=3.6 TOOLKITS="null pyqt5 pyqt wx pyside2"
   allow_failures:
     - os: osx
-      env: RUNTIME=2.7 TOOLKITS="pyqt wx"
+      env: RUNTIME=2.7 TOOLKITS="pyqt"
+    - os: osx
+      env: RUNTIME=3.6 TOOLKITS="wx"
   fast_finish: true
 
 cache:

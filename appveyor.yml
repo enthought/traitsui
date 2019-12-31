@@ -9,17 +9,17 @@ environment:
 
   matrix:
     - RUNTIME: '2.7'
-      TOOLKITS: "null pyqt pyside wx"
+      TOOLKITS: "null pyqt pyside"
     - RUNTIME: '3.6'
       TOOLKITS: "null pyqt pyqt5"
     - RUNTIME: '3.6'
-      TOOLKITS: "pyside2"
+      TOOLKITS: "wx pyside2"
 
 matrix:
   fast_finish: true
   allow_failures:
     - RUNTIME: '3.6'
-      TOOLKITS: "pyside2"
+      TOOLKITS: "wx pyside2"
 
 branches:
   only:
