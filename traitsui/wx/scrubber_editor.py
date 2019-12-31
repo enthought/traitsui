@@ -117,20 +117,20 @@ class _ScrubberEditor(Editor):
         )
 
         # Set up the painting event handlers:
-        wx.EVT_ERASE_BACKGROUND(control, self._erase_background)
-        wx.EVT_PAINT(control, self._on_paint)
-        wx.EVT_SET_FOCUS(control, self._set_focus)
+        control.Bind(wx.EVT_ERASE_BACKGROUND, self._erase_background)
+        control.Bind(wx.EVT_PAINT, self._on_paint)
+        control.Bind(wx.EVT_SET_FOCUS, self._set_focus)
 
         # Set up mouse event handlers:
-        wx.EVT_LEAVE_WINDOW(control, self._leave_window)
-        wx.EVT_ENTER_WINDOW(control, self._enter_window)
-        wx.EVT_LEFT_DOWN(control, self._left_down)
-        wx.EVT_LEFT_UP(control, self._left_up)
-        wx.EVT_MOTION(control, self._motion)
-        wx.EVT_MOUSEWHEEL(control, self._mouse_wheel)
+        control.Bind(wx.EVT_LEAVE_WINDOW, self._leave_window)
+        control.Bind(wx.EVT_ENTER_WINDOW, self._enter_window)
+        control.Bind(wx.EVT_LEFT_DOWN, self._left_down)
+        control.Bind(wx.EVT_LEFT_UP, self._left_up)
+        control.Bind(wx.EVT_MOTION, self._motion)
+        control.Bind(wx.EVT_MOUSEWHEEL, self._mouse_wheel)
 
         # Set up the control resize handler:
-        wx.EVT_SIZE(control, self._resize)
+        control.Bind(wx.EVT_SIZE, self._resize)
 
         # Set the tooltip:
         self._can_set_tooltip = not self.set_tooltip()
@@ -226,7 +226,7 @@ class _ScrubberEditor(Editor):
             else:
                 tooltip = "[%g..%g]" % (low, high)
 
-            self.control.SetToolTipString(tooltip)
+            self.control.SetToolTip(tooltip)
 
         # Establish the slider increment:
         increment = self.factory.increment
@@ -245,7 +245,7 @@ class _ScrubberEditor(Editor):
             displayed.
         """
         tdx, tdy, descent, leading = self._get_text_size()
-        wdx, wdy = self.control.GetClientSizeTuple()
+        wdx, wdy = self.control.GetClientSize()
         ty = ((wdy - (tdy - descent)) / 2) - 1
         alignment = self.factory.alignment
         if alignment == "left":
@@ -304,7 +304,7 @@ class _ScrubberEditor(Editor):
         """ Pop-up a text control to allow the user to enter a value using
             the keyboard.
         """
-        self.control.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
+        self.control.SetCursor(wx.Cursor(wx.CURSOR_ARROW))
 
         if self.mapping is not None:
             self._pop_up_enum()
@@ -327,11 +327,11 @@ class _ScrubberEditor(Editor):
             context={"object": self.object, "editor": self},
         )
 
-        dx, dy = self.control.GetSizeTuple()
+        dx, dy = self.control.GetSize()
         drop_down = self._ui.info.drop_down.control
-        drop_down.SetDimensions(0, 0, dx, dy)
+        drop_down.SetSize(0, 0, dx, dy)
         drop_down.SetFocus()
-        wx.EVT_KILL_FOCUS(drop_down, self._enum_completed)
+        drop_down.Bind(wx.EVT_KILL_FOCUS, self._enum_completed)
 
     def _pop_up_text(self):
         control = self.control
@@ -345,11 +345,11 @@ class _ScrubberEditor(Editor):
         )
         text.SetSelection(-1, -1)
         text.SetFocus()
-        wx.EVT_TEXT_ENTER(control, text.GetId(), self._text_completed)
-        wx.EVT_KILL_FOCUS(text, self._text_completed)
-        wx.EVT_ENTER_WINDOW(text, self._enter_text)
-        wx.EVT_LEAVE_WINDOW(text, self._leave_text)
-        wx.EVT_CHAR(text, self._key_entered)
+        control.Bind(wx.EVT_TEXT_ENTER, self._text_completed, id=text.GetId())
+        text.Bind(wx.EVT_KILL_FOCUS, self._text_completed)
+        text.Bind(wx.EVT_ENTER_WINDOW, self._enter_text)
+        text.Bind(wx.EVT_LEAVE_WINDOW, self._leave_text)
+        text.Bind(wx.EVT_CHAR, self._key_entered)
 
     def _destroy_text(self):
         """ Destroys the current text control.
@@ -423,7 +423,7 @@ class _ScrubberEditor(Editor):
             pen = wx.TRANSPARENT_PEN
 
         if (pen != wx.TRANSPARENT_PEN) or (brush != wx.TRANSPARENT_BRUSH):
-            wdx, wdy = control.GetClientSizeTuple()
+            wdx, wdy = control.GetClientSize()
             dc.SetBrush(brush)
             dc.SetPen(pen)
             dc.DrawRectangle(0, 0, wdx, wdy)
@@ -461,7 +461,7 @@ class _ScrubberEditor(Editor):
         """
         self._hover = True
 
-        self.control.SetCursor(wx.StockCursor(wx.CURSOR_HAND))
+        self.control.SetCursor(wx.Cursor(wx.CURSOR_HAND))
 
         if not self._ignore_focus:
             self._ignore_focus = True

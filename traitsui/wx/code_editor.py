@@ -35,7 +35,7 @@ from traitsui.editors.code_editor import ToolkitEditorFactory
 
 from pyface.api import PythonEditor
 
-from pyface.util.python_stc import faces
+from pyface.wx.python_stc import faces
 
 from .editor import Editor
 
@@ -128,13 +128,14 @@ class SourceEditor(Editor):
         control.CmdKeyClear(ord("N"), stc.STC_SCMOD_CTRL)
 
         # Set up the events
-        wx.EVT_KILL_FOCUS(control, self.wx_update_object)
-        stc.EVT_STC_CALLTIP_CLICK(
-            control, control.GetId(), self._calltip_clicked
+        control.Bind(wx.EVT_KILL_FOCUS, self.wx_update_object)
+        control.Bind(
+            stc.EVT_STC_CALLTIP_CLICK, self._calltip_clicked,
+            id=control.GetId(),
         )
 
         if factory.auto_scroll and (factory.selected_line != ""):
-            wx.EVT_SIZE(control, self._update_selected_line)
+            control.Bind(wx.EVT_SIZE, self._update_selected_line)
 
         if factory.auto_set:
             editor.on_trait_change(
@@ -161,17 +162,17 @@ class SourceEditor(Editor):
         control.MarkerDefine(
             MARK_MARKER,
             stc.STC_MARK_BACKGROUND,
-            background=factory.mark_color_,
+            background=wx.Colour(factory.mark_color_),
         )
         control.MarkerDefine(
             SEARCH_MARKER,
             stc.STC_MARK_BACKGROUND,
-            background=factory.search_color_,
+            background=wx.Colour(factory.search_color_),
         )
         control.MarkerDefine(
             SELECTED_MARKER,
             stc.STC_MARK_BACKGROUND,
-            background=factory.selected_color_,
+            background=wx.Colour(factory.selected_color_),
         )
 
         # Make sure the editor has been initialized:
@@ -398,7 +399,7 @@ class SourceEditor(Editor):
                 self.key_pressed, "key_pressed", remove=True
             )
 
-        wx.EVT_KILL_FOCUS(self.control, None)
+        self.control.Unbind(wx.EVT_KILL_FOCUS)
 
         super(SourceEditor, self).dispose()
 

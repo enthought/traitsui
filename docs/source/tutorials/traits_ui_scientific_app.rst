@@ -391,7 +391,7 @@ loop in wx speech).
             value =  Int()
 
         Counter().edit_traits()
-        wx.PySimpleApp().MainLoop()
+        wx.App().MainLoop()
 
 
 The *Counter().edit_traits()* line creates a counter object and its

@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 import wx
-import wx.wizard as wz
+import wx.adv as wz
 
 from .constants import DefaultTitle
 

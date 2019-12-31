@@ -57,7 +57,7 @@ class _BoundsEditor(Editor):
         wx.EVT_TEXT_ENTER(
             panel, self._label_lo.GetId(), self.update_low_on_enter
         )
-        wx.EVT_KILL_FOCUS(self._label_lo, self.update_low_on_enter)
+        self._label_lo.Bind(wx.EVT_KILL_FOCUS, self.update_low_on_enter)
 
         # low slider
         self.control.lslider = Slider(
@@ -73,7 +73,7 @@ class _BoundsEditor(Editor):
         self.control.lslider.SetTickFreq(1000, 1)
         self.control.lslider.SetPageSize(1000)
         self.control.lslider.SetLineSize(100)
-        wx.EVT_SCROLL(self.control.lslider, self.update_object_on_scroll)
+        self.control.lslider.Bind(wx.EVT_SCROLL, self.update_object_on_scroll)
         sizer.Add(self.control.lslider, 1, wx.EXPAND)
         sizer.AddStretchSpacer(0)
 
@@ -91,7 +91,7 @@ class _BoundsEditor(Editor):
         self.control.rslider.SetTickFreq(1000, 1)
         self.control.rslider.SetPageSize(1000)
         self.control.rslider.SetLineSize(100)
-        wx.EVT_SCROLL(self.control.rslider, self.update_object_on_scroll)
+        self.control.rslider.Bind(wx.EVT_SCROLL, self.update_object_on_scroll)
         sizer.Add(self.control.rslider, 1, wx.EXPAND)
 
         # high text box
@@ -106,7 +106,7 @@ class _BoundsEditor(Editor):
         wx.EVT_TEXT_ENTER(
             panel, self._label_hi.GetId(), self.update_high_on_enter
         )
-        wx.EVT_KILL_FOCUS(self._label_hi, self.update_high_on_enter)
+        self._label_hi.Bind(wx.EVT_KILL_FOCUS, self.update_high_on_enter)
 
         self.set_tooltip(self.control.lslider)
         self.set_tooltip(self.control.rslider)

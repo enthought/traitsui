@@ -51,12 +51,12 @@ def paint_parent(dc, window):
     parent = window.GetParent()
     slice = getattr(parent, "_image_slice", None)
     if slice is not None:
-        x, y = window.GetPositionTuple()
-        dx, dy = parent.GetSizeTuple()
+        x, y = window.GetPosition()
+        dx, dy = parent.GetSize()
         slice.fill(dc, -x, -y, dx, dy)
     else:
         # Otherwise, just paint the normal window background color:
-        dx, dy = window.GetClientSizeTuple()
+        dx, dy = window.GetClientSize()
         if is_mac and hasattr(window, "_border") and window._border:
             dc.SetBackgroundMode(wx.TRANSPARENT)
             dc.SetBrush(wx.Brush(wx.Colour(0, 0, 0, 0)))
@@ -155,9 +155,9 @@ class ImageSlice(HasPrivateTraits):
         if n == 1:
             pdxs = [
                 (0, 0),
-                (1, max(1, tdx / 2)),
+                (1, max(1, tdx // 2)),
                 (sdx - 2, sdx - 2),
-                (1, max(1, tdx - (tdx / 2))),
+                (1, max(1, tdx - (tdx // 2))),
                 (0, 0),
             ]
         elif n == 3:
@@ -171,9 +171,9 @@ class ImageSlice(HasPrivateTraits):
         else:
             pdxs = [
                 (dxs[0], dxs[0]),
-                (dxs[1], max(0, tdx / 2)),
+                (dxs[1], max(0, tdx // 2)),
                 (dxs[2], dxs[2]),
-                (dxs[3], max(0, tdx - (tdx / 2))),
+                (dxs[3], max(0, tdx - (tdx // 2))),
                 (dxs[4], dxs[4]),
             ]
 
@@ -182,9 +182,9 @@ class ImageSlice(HasPrivateTraits):
         if n == 1:
             pdys = [
                 (0, 0),
-                (1, max(1, tdy / 2)),
+                (1, max(1, tdy // 2)),
                 (sdy - 2, sdy - 2),
-                (1, max(1, tdy - (tdy / 2))),
+                (1, max(1, tdy - (tdy // 2))),
                 (0, 0),
             ]
         elif n == 3:
@@ -198,9 +198,9 @@ class ImageSlice(HasPrivateTraits):
         else:
             pdys = [
                 (dys[0], dys[0]),
-                (dys[1], max(0, tdy / 2)),
+                (dys[1], max(0, tdy // 2)),
                 (dys[2], dys[2]),
-                (dys[3], max(0, tdy - (tdy / 2))),
+                (dys[3], max(0, tdy - (tdy // 2))),
                 (dys[4], dys[4]),
             ]
 
@@ -253,7 +253,7 @@ class ImageSlice(HasPrivateTraits):
         self.dy = dy = bitmap.GetHeight()
 
         # Create the opaque version of the bitmap:
-        self.opaque_bitmap = wx.EmptyBitmap(dx, dy)
+        self.opaque_bitmap = wx.Bitmap(dx, dy)
         mdc2 = wx.MemoryDC()
         mdc2.SelectObject(self.opaque_bitmap)
         mdc2.SetBrush(wx.Brush(WindowColor))
@@ -280,7 +280,7 @@ class ImageSlice(HasPrivateTraits):
         image = bitmap.ConvertToImage()
 
         # Convert the bitmap data to a numpy array for analysis:
-        data = reshape(fromstring(image.GetData(), uint8), (dy, dx, 3))
+        data = reshape(image.GetData(), (dy, dx, 3)).astype(uint8)
 
         # Find the horizontal slices:
         matches = []
@@ -303,7 +303,7 @@ class ImageSlice(HasPrivateTraits):
             if dy > 50:
                 matches = [(0, dy)]
             else:
-                matches = [(dy / 2, 1)]
+                matches = [(dy // 2, 1)]
         elif n > self.stretch_rows:
             matches.sort(key=lambda x: x[1], reverse=True)
             matches = matches[: self.stretch_rows]
@@ -332,7 +332,7 @@ class ImageSlice(HasPrivateTraits):
             if dx > 50:
                 matches = [(0, dx)]
             else:
-                matches = [(dx / 2, 1)]
+                matches = [(dx // 2, 1)]
         elif n > self.stretch_columns:
             matches.sort(key=lambda x: x[1], reverse=True)
             matches = matches[: self.stretch_columns]
@@ -341,16 +341,16 @@ class ImageSlice(HasPrivateTraits):
         self.fdx, self.dxs = self._calculate_dxy(dx, matches)
 
         # Save the border size information:
-        self.top = min(dy / 2, self.dys[0])
-        self.bottom = min(dy / 2, self.dys[-1])
-        self.left = min(dx / 2, self.dxs[0])
-        self.right = min(dx / 2, self.dxs[-1])
+        self.top = min(dy // 2, self.dys[0])
+        self.bottom = min(dy // 2, self.dys[-1])
+        self.left = min(dx // 2, self.dxs[0])
+        self.right = min(dx // 2, self.dxs[-1])
 
         # Find the optimal size for the borders (i.e. xleft, xright, ... ):
         self._find_best_borders(data)
 
         # Save the background color:
-        x, y = (dx / 2), (dy / 2)
+        x, y = (dx // 2), (dy // 2)
         r, g, b = data[y, x]
         self.bg_color = (0x10000 * r) + (0x100 * g) + b
 
@@ -359,10 +359,10 @@ class ImageSlice(HasPrivateTraits):
 
         # Find the best contrasting label color:
         if self.xtop >= self.xbottom:
-            self.label_color = self._find_best_color(data, x, self.xtop / 2)
+            self.label_color = self._find_best_color(data, x, self.xtop // 2)
         else:
             self.label_color = self._find_best_color(
-                data, x, dy - (self.xbottom / 2) - 1
+                data, x, dy - (self.xbottom // 2) - 1
             )
 
     def _fill(self, idc, ix, iy, idx, idy, dc, x, y, dx, dy):
@@ -404,8 +404,8 @@ class ImageSlice(HasPrivateTraits):
             return
 
         # Calculate the starting point:
-        left = right = dx / 2
-        top = bottom = dy / 2
+        left = right = dx // 2
+        top = bottom = dy // 2
 
         # Calculate the end points:
         last_y = dy - 1
@@ -502,9 +502,9 @@ class ImageSlice(HasPrivateTraits):
         """
         r, g, b = data[y, x]
         h, l, s = rgb_to_hls(r / 255.0, g / 255.0, b / 255.0)
-        text_color = wx.BLACK
+        text_color = wx.Colour(wx.BLACK)
         if l < 0.50:
-            text_color = wx.WHITE
+            text_color = wx.Colour(wx.WHITE)
 
         return text_color
 

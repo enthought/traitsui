@@ -176,7 +176,7 @@ class ImageEnumDialog(wx.Frame):
         """
         wx.Frame.__init__(self, editor.control, -1, "", style=wx.SIMPLE_BORDER)
         self.SetBackgroundColour(WindowColor)
-        wx.EVT_ACTIVATE(self, self._on_close_dialog)
+        self.Bind(wx.EVT_ACTIVATE, self._on_close_dialog)
         self._closed = False
 
         dlg_editor = CustomEditor(

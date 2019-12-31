@@ -1159,7 +1159,7 @@ class _GroupPanel(object):
 
         # FIXME: Decide what to do about the help.  (The non-standard wx way,
         # What's This style help, both?)
-        # wx.EVT_LEFT_UP( control, show_help_popup )
+        # control.Bind(wx.EVT_LEFT_UP, show_help_popup)
         label_control.help = item.get_help(ui)
 
         if desc != "":

@@ -183,8 +183,8 @@ class SimpleEditor(Editor):
         sizer.Add(column_sizer, 1, wx.EXPAND)
 
         # Hook up the event handlers:
-        wx.EVT_LISTBOX(parent, list.GetId(), handler1)
-        wx.EVT_LISTBOX_DCLICK(parent, list.GetId(), handler2)
+        parent.Bind(wx.EVT_LISTBOX, handler1, id=list.GetId())
+        parent.Bind(wx.EVT_LISTBOX_DCLICK, handler2, id=list.GetId())
 
         return list
 
@@ -194,7 +194,7 @@ class SimpleEditor(Editor):
         button = wx.Button(parent, -1, label, style=wx.BU_EXACTFIT)
         sizer.AddSpacer((space_before, space_before))
         sizer.Add(button, 0, wx.EXPAND | wx.BOTTOM, 8)
-        wx.EVT_BUTTON(parent, button.GetId(), handler)
+        parent.Bind(wx.EVT_BUTTON, handler, id=button.GetId())
         return button
 
     def values_changed(self):

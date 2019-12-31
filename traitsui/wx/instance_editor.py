@@ -119,7 +119,7 @@ class CustomEditor(Editor):
             self._choice = choice = wx.Choice(
                 parent, -1, wx.Point(0, 0), wx.Size(-1, -1), []
             )
-            wx.EVT_CHOICE(choice, choice.GetId(), self.update_object)
+            choice.Bind(wx.EVT_CHOICE, self.update_object, id=choice.GetId())
             if droppable:
                 self._choice.SetBackgroundColour(self.ok_color)
 
@@ -171,7 +171,7 @@ class CustomEditor(Editor):
                 self._choice = choice = wx.Choice(
                     parent, -1, wx.Point(0, 0), wx.Size(-1, -1), []
                 )
-                wx.EVT_CHOICE(choice, choice.GetId(), self.update_object)
+                choice.Bind(wx.EVT_CHOICE, self.update_object, id=choice.GetId())
             self.control = self._choice
         else:
             sizer = wx.BoxSizer(orientation)
@@ -196,7 +196,7 @@ class CustomEditor(Editor):
         choice = self._choice
         if choice is not None:
             if isinstance(choice, wx.Choice):
-                wx.EVT_CHOICE(choice, choice.GetId(), None)
+                choice.Bind(wx.EVT_CHOICE, None, id=choice.GetId())
 
             if self._object is not None:
                 self._object.on_trait_change(
@@ -354,7 +354,7 @@ class CustomEditor(Editor):
         panel = self._panel
         if panel is not None:
             # Compute/update the maximum size the panel has ever been:
-            dx, dy = panel.GetSizeTuple()
+            dx, dy = panel.GetSize()
             mdx = mdy = 0
             if self._panel_size is not None:
                 mdx, mdy = self._panel_size
@@ -505,14 +505,14 @@ class SimpleEditor(CustomEditor):
         """
         self._button = button = wx.Button(parent, -1, "")
         sizer.Add(button, 1, wx.EXPAND | wx.LEFT, 5)
-        wx.EVT_BUTTON(button, button.GetId(), self.edit_instance)
+        button.Bind(wx.EVT_BUTTON, self.edit_instance, id=button.GetId())
 
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
         button = self._button
         if button is not None:
-            wx.EVT_BUTTON(button, button.GetId(), None)
+            button.Bind(wx.EVT_BUTTON, None, id=button.GetId())
 
         super(SimpleEditor, self).dispose()
 

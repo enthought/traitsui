@@ -87,9 +87,9 @@ from contextlib import contextmanager
 import click
 
 supported_combinations = {
-    '2.7': {'pyside', 'pyside2', 'pyqt', 'wx', 'null'},
+    '2.7': {'pyside', 'pyside2', 'pyqt', 'null'},
     '3.5': {'pyside2', 'pyqt', 'pyqt5', 'null'},
-    '3.6': {'pyside2', 'pyqt', 'pyqt5', 'null'},
+    '3.6': {'pyside2', 'pyqt', 'pyqt5', 'wx', 'null'},
 }
 
 # Default Python version to use in the comamnds below if none is specified.
@@ -115,7 +115,7 @@ extra_dependencies = {
     'pyside2': set(),
     'pyqt': {'pyqt<4.12'},  # FIXME: build of 4.12-1 appears to be bad
     'pyqt5': {'pyqt5'},
-    'wx': {'wxpython'},
+    'wx': set(),
     'null': set()
 }
 
@@ -170,7 +170,11 @@ def install(runtime, toolkit, environment):
         commands.append(
             "edm run -e {environment} -- pip install pyside2==5.11"
         )
-
+    elif toolkit == 'wx':
+        commands.append(
+            "edm run -e {environment} -- pip install wxpython>=4"
+        )
+    
     click.echo("Creating environment '{environment}'".format(**parameters))
     execute(commands, parameters)
     click.echo('Done install')

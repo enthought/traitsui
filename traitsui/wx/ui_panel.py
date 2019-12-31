@@ -289,7 +289,7 @@ def panel(ui, parent):
     nb.ui = ui
 
     # Notice when the notebook page changes (to display correct help)
-    ###wx.EVT_NOTEBOOK_PAGE_CHANGED( parent, nb.GetId(), _page_changed )
+    ###parent.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, _page_changed, id=nb.GetId())
 
     # Return the notebook as the result:
     return nb
@@ -928,7 +928,7 @@ class FillPanel(object):
             # following section, depending upon whether we have wrapped an
             # ImagePanel around the editor control or not:
             control = editor.control
-            width, height = control.GetSizeTuple()
+            width, height = control.GetSize()
 
             # Set the correct size on the control, as specified by the user:
             scrollable = editor.scrollable
@@ -1073,7 +1073,7 @@ class FillPanel(object):
             self._add_emphasis(control)
 
         # XXX: Turning off help popups for now
-        # wx.EVT_LEFT_UP( control, show_help_popup )
+        # control.Bind(wx.EVT_LEFT_UP, show_help_popup)
 
         control.help = item.get_help(ui)
         control.SetToolTip(wx.ToolTip(item.get_help(ui)))
@@ -1085,7 +1085,7 @@ class FillPanel(object):
         )
 
         if desc != "":
-            control.SetToolTipString(desc)
+            control.SetToolTip(desc)
 
         return control
 
@@ -1169,7 +1169,7 @@ class HTMLHelpWindow(wx.Frame):
         sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
         b_sizer = wx.BoxSizer(wx.HORIZONTAL)
         button = wx.Button(self, -1, "OK")
-        wx.EVT_BUTTON(self, button.GetId(), self._on_ok)
+        self.Bind(wx.EVT_BUTTON, self._on_ok, id=button.GetId())
         b_sizer.Add(button, 0)
         sizer.Add(b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
         self.SetSizer(sizer)

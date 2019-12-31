@@ -80,7 +80,7 @@ class SimpleEditor(EditorWithList):
         self.control = wx.Choice(
             parent, -1, wx.Point(0, 0), wx.Size(100, 20), []
         )
-        wx.EVT_CHOICE(parent, self.control.GetId(), self.update_object)
+        parent.Bind(wx.EVT_CHOICE, self.update_object, id=self.control.GetId())
 
     def list_updated(self, values):
         """ Handles updates to the list of legal checklist values.
@@ -174,8 +174,8 @@ class CustomEditor(SimpleEditor):
         values = self.values
         n = len(labels)
         cols = self.factory.cols
-        rows = (n + cols - 1) / cols
-        incr = [n / cols] * cols
+        rows = (n + cols - 1) // cols
+        incr = [n // cols] * cols
         rem = n % cols
 
         for i in range(cols):
@@ -196,7 +196,7 @@ class CustomEditor(SimpleEditor):
                     control = wx.CheckBox(panel, -1, label)
                     control.value = value = values[index]
                     control.SetValue(value in cur_value)
-                    wx.EVT_CHECKBOX(panel, control.GetId(), self.update_object)
+                    panel.Bind(wx.EVT_CHECKBOX, self.update_object, id=control.GetId())
                     index += incr[j]
                     n -= 1
                 else:

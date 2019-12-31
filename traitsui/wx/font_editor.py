@@ -192,29 +192,27 @@ class CustomFontEditor(Editor):
         )
 
         sizer2.Add(control, 4, wx.EXPAND)
-        wx.EVT_CHOICE(panel, control.GetId(), self.update_object_parts)
+        panel.Bind(wx.EVT_CHOICE, self.update_object_parts, id=control.GetId())
 
         control = self._point_size = wx.Choice(
             panel, -1, wx.Point(0, 0), wx.Size(-1, -1), PointSizes
         )
         sizer2.Add(control, 1, wx.EXPAND | wx.LEFT, 3)
-        wx.EVT_CHOICE(panel, control.GetId(), self.update_object_parts)
+        panel.Bind(wx.EVT_CHOICE, self.update_object_parts, id=control.GetId())
 
         if self.factory.show_style:
             self._style = wx.Choice(
                 panel, -1, wx.Point(0, 0), wx.Size(-1, -1), Styles
             )
             sizer2.Add(self._style, 1, wx.EXPAND | wx.LEFT, 3)
-            wx.EVT_CHOICE(panel, self._style.GetId(), self.update_object_parts)
+            panel.Bind(wx.EVT_CHOICE, self.update_object_parts, id=self._style.GetId())
 
         if self.factory.show_weight:
             self._weight = wx.Choice(
                 panel, -1, wx.Point(0, 0), wx.Size(-1, -1), Weights
             )
             sizer2.Add(self._weight, 1, wx.EXPAND | wx.LEFT, 3)
-            wx.EVT_CHOICE(
-                panel, self._weight.GetId(), self.update_object_parts
-            )
+            panel.Bind(wx.EVT_CHOICE, self.update_object_parts, id=self._weight.GetId())
 
         sizer.Add(sizer2, 0, wx.EXPAND)
 

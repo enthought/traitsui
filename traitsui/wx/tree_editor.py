@@ -239,24 +239,24 @@ class SimpleEditor(Editor):
         tid = tree.GetId()
 
         # Set up the mouse event handlers:
-        wx.EVT_LEFT_DOWN(tree, self._on_left_down)
-        wx.EVT_RIGHT_DOWN(tree, self._on_right_down)
-        wx.EVT_LEFT_DCLICK(tree, self._on_left_dclick)
+        tree.Bind(wx.EVT_LEFT_DOWN, self._on_left_down)
+        tree.Bind(wx.EVT_RIGHT_DOWN, self._on_right_down)
+        tree.Bind(wx.EVT_LEFT_DCLICK, self._on_left_dclick)
 
         # Set up the tree event handlers:
-        wx.EVT_TREE_ITEM_EXPANDING(tree, tid, self._on_tree_item_expanding)
-        wx.EVT_TREE_ITEM_EXPANDED(tree, tid, self._on_tree_item_expanded)
-        wx.EVT_TREE_ITEM_COLLAPSING(tree, tid, self._on_tree_item_collapsing)
-        wx.EVT_TREE_ITEM_COLLAPSED(tree, tid, self._on_tree_item_collapsed)
-        wx.EVT_TREE_ITEM_ACTIVATED(tree, tid, self._on_tree_item_activated)
-        wx.EVT_TREE_SEL_CHANGED(tree, tid, self._on_tree_sel_changed)
-        wx.EVT_TREE_BEGIN_DRAG(tree, tid, self._on_tree_begin_drag)
-        wx.EVT_TREE_BEGIN_LABEL_EDIT(tree, tid, self._on_tree_begin_label_edit)
-        wx.EVT_TREE_END_LABEL_EDIT(tree, tid, self._on_tree_end_label_edit)
-        wx.EVT_TREE_ITEM_GETTOOLTIP(tree, tid, self._on_tree_item_gettooltip)
+        tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self._on_tree_item_expanding, id=tid)
+        tree.Bind(wx.EVT_TREE_ITEM_EXPANDED, self._on_tree_item_expanded, id=tid)
+        tree.Bind(wx.EVT_TREE_ITEM_COLLAPSING, self._on_tree_item_collapsing, id=tid)
+        tree.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self._on_tree_item_collapsed, id=tid)
+        tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self._on_tree_item_activated, id=tid)
+        tree.Bind(wx.EVT_TREE_SEL_CHANGED, self._on_tree_sel_changed, id=tid)
+        tree.Bind(wx.EVT_TREE_BEGIN_DRAG, self._on_tree_begin_drag, id=tid)
+        tree.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self._on_tree_begin_label_edit, id=tid)
+        tree.Bind(wx.EVT_TREE_END_LABEL_EDIT, self._on_tree_end_label_edit, id=tid)
+        tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self._on_tree_item_gettooltip, id=tid)
 
         # Set up general mouse events
-        wx.EVT_MOTION(tree, self._on_hover)
+        tree.Bind(wx.EVT_MOTION, self._on_hover)
 
         # Synchronize external object traits with the editor:
         self.sync_value(factory.selected, "selected")
@@ -275,18 +275,18 @@ class SimpleEditor(Editor):
         tree = self._tree
         if tree is not None:
             id = tree.GetId()
-            wx.EVT_LEFT_DOWN(tree, None)
-            wx.EVT_RIGHT_DOWN(tree, None)
-            wx.EVT_TREE_ITEM_EXPANDING(tree, id, None)
-            wx.EVT_TREE_ITEM_EXPANDED(tree, id, None)
-            wx.EVT_TREE_ITEM_COLLAPSING(tree, id, None)
-            wx.EVT_TREE_ITEM_COLLAPSED(tree, id, None)
-            wx.EVT_TREE_ITEM_ACTIVATED(tree, id, None)
-            wx.EVT_TREE_SEL_CHANGED(tree, id, None)
-            wx.EVT_TREE_BEGIN_DRAG(tree, id, None)
-            wx.EVT_TREE_BEGIN_LABEL_EDIT(tree, id, None)
-            wx.EVT_TREE_END_LABEL_EDIT(tree, id, None)
-            wx.EVT_TREE_ITEM_GETTOOLTIP(tree, id, None)
+            tree.Unbind(wx.EVT_LEFT_DOWN)
+            tree.Unbind(wx.EVT_RIGHT_DOWN)
+            tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, None, id=id)
+            tree.Bind(wx.EVT_TREE_ITEM_EXPANDED, None, id=id)
+            tree.Bind(wx.EVT_TREE_ITEM_COLLAPSING, None, id=id)
+            tree.Bind(wx.EVT_TREE_ITEM_COLLAPSED, None, id=id)
+            tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, None, id=id)
+            tree.Bind(wx.EVT_TREE_SEL_CHANGED, None, id=id)
+            tree.Bind(wx.EVT_TREE_BEGIN_DRAG, None, id=id)
+            tree.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, None, id=id)
+            tree.Bind(wx.EVT_TREE_END_LABEL_EDIT, None, id=id)
+            tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, None, id=id)
 
             nid = self._tree.GetRootItem()
             if nid.IsOk():
@@ -856,7 +856,7 @@ class SimpleEditor(Editor):
         if nid == self._root_nid:
             return self._root_nid_data
 
-        return self._tree.GetPyData(nid)
+        return self._tree.GetItemData(nid)
 
     def _set_node_data(self, nid, data):
         """ Sets the node specific data.
@@ -864,7 +864,7 @@ class SimpleEditor(Editor):
         if nid == self._root_nid:
             self._root_nid_data = data
         else:
-            self._tree.SetPyData(nid, data)
+            self._tree.SetItemData(nid, data)
 
     # ----- User callable methods: --------------------------------------------
 
@@ -1219,7 +1219,7 @@ class SimpleEditor(Editor):
             # Only display the menu if a valid menu is defined:
             if menu is not None:
                 wxmenu = menu.create_menu(self._tree, self)
-                self._tree.PopupMenuXY(wxmenu, point[0] - 10, point[1] - 10)
+                self._tree.PopupMenu(wxmenu, point[0] - 10, point[1] - 10)
                 wxmenu.Destroy()
 
             # Reset all menu related cached values:

@@ -138,19 +138,19 @@ class SimpleEditor(Editor):
         if self.drop_target:
             control.SetDropTarget(PythonDropTarget(self))
 
-        wx.EVT_LEFT_DOWN(control, self._left_down)
-        wx.EVT_LEFT_UP(control, self._left_up)
-        wx.EVT_MOTION(control, self._mouse_move)
-        wx.EVT_PAINT(control, self._on_paint)
+        control.Bind(wx.EVT_LEFT_DOWN, self._left_down)
+        control.Bind(wx.EVT_LEFT_UP, self._left_up)
+        control.Bind(wx.EVT_MOTION, self._mouse_move)
+        control.Bind(wx.EVT_PAINT, self._on_paint)
 
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
         control = self.control
-        wx.EVT_LEFT_DOWN(control, None)
-        wx.EVT_LEFT_UP(control, None)
-        wx.EVT_MOTION(control, None)
-        wx.EVT_PAINT(control, None)
+        control.Unbind(wx.EVT_LEFT_DOWN)
+        control.Unbind(wx.EVT_LEFT_UP)
+        control.Unbind(wx.EVT_MOTION)
+        control.Unbind(wx.EVT_PAINT)
 
         super(SimpleEditor, self).dispose()
 
@@ -214,7 +214,7 @@ class SimpleEditor(Editor):
         if not control.IsEnabled():
             image = self._disabled_image
 
-        wdx, wdy = control.GetClientSizeTuple()
+        wdx, wdy = control.GetClientSize()
         wx.PaintDC(control).DrawBitmap(
             image,
             (wdx - image.GetWidth()) / 2,
