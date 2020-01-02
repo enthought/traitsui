@@ -48,6 +48,9 @@ class SimpleEditor(Editor):
     #: Is the list of items being edited mutable?
     mutable = Bool(True)
 
+    #: Is the editor scrollable?
+    scrollable = Bool(True)
+
     #: Signal mapper allowing to identify which icon button requested a context
     #: menu
     mapper = Instance(QtCore.QSignalMapper)
@@ -103,14 +106,19 @@ class SimpleEditor(Editor):
             self.control = QtGui.QScrollArea()
             self.control.setFrameShape(QtGui.QFrame.NoFrame)
             self.control.setWidgetResizable(True)
+            self._list_pane = QtGui.QWidget()
         else:
             self.control = QtGui.QWidget()
+            self._list_pane = self.control
+        self._list_pane.setSizePolicy(
+            QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
+        )
 
         # Create a mapper to identify which icon button requested a contextmenu
         self.mapper = QtCore.QSignalMapper(self.control)
 
         # Create a widget with a grid layout as the container.
-        self._layout = layout = QtGui.QGridLayout(self._list_pane)
+        layout = QtGui.QGridLayout(self._list_pane)
         layout.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
@@ -222,9 +230,10 @@ class SimpleEditor(Editor):
 
         # Otherwise, find the proxy for this index and update it with the
         # changed value:
-        children = (self._layout.itemAt(ind).widget()
-                    for ind in range(self._layout.count()))
-        for control in children:
+        for control in self._list_pane.children():
+            if isinstance(control, QtGui.QLayout):
+                continue
+
             proxy = control.proxy
             if proxy.index == event.index:
                 proxy.value = event.added[0]
@@ -357,7 +366,7 @@ class SimpleEditor(Editor):
     def _dispose_items(self):
         """ Disposes of each current list item.
         """
-        layout = self._layout
+        layout = self._list_pane.layout()
         child = layout.takeAt(0)
         while child is not None:
             control = child.widget()
@@ -383,20 +392,7 @@ class SimpleEditor(Editor):
         return self.factory.mutable
 
     def _scrollable_default(self):
-        """ Trait handler to set the scrollable from the factory.
-        """
         return self.factory.scrollable
-
-    def __list_pane_default(self):
-        if self.scrollable:
-            list_pane = QtGui.QWidget()
-            list_pane.setSizePolicy(
-                QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
-            )
-            return list_pane
-        else:
-            return self.control
-
 
 class CustomEditor(SimpleEditor):
     """ Custom style of editor for lists, which displays the items as a series
