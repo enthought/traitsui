@@ -33,9 +33,10 @@ from .menu import MakeMenu
 
 
 class SimpleEditor(Editor):
-    """ Simple style of editor for lists, which displays a scrolling list box
-    with only one item visible at a time. A icon next to the list box displays
-    a menu of operations on the list.
+    """ Simple style of editor for lists, which displays a list box with only
+    one item visible at a time. A icon next to the list box displays a menu of
+    operations on the list.
+
     """
 
     # -------------------------------------------------------------------------
