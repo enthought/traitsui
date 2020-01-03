@@ -215,25 +215,12 @@ class DemoFileHandler(Handler):
                     demo = DemoButton(demo=demo)
                 else:
                     demo = self._get_object("demo", locals)
-            # FIXME: If a 'demo' object could not be found, then try to execute
-            # the file setting __name__ to __main__. A lot of test scripts have
-            # the actual test running when __name__==__main__ and so we can at
-            # least run all test examples this way. Use a do_later loop so as to
-            # finish building the current UI before running the test.
-            if demo is None:
-                locals["__name__"] = "__main__"
-                # do_later(self.execute_test, df, locals)
         except Exception as excp:
             demo = DemoError(msg=str(excp))
 
         # Clean up sys.path
         sys.path.remove(dirname(df.path))
         df.demo = demo
-
-    def execute_test(self, df, locals):
-        """ Executes the file in df.path in the namespace of locals."""
-        with io.open(df.path, "r", encoding="utf-8") as fp:
-            exec(compile(fp.read(), df.path, "exec"), locals, locals)
 
     def closed(self, info, is_ok):
         """ Closes the view.
@@ -568,16 +555,6 @@ class DemoPath(DemoTreeNodeObject):
         exec((exec_str + source), init_dic)
         return init_dic
 
-        # fixme: The following code should work, but doesn't, so we use the
-        #        preceding code instead. Changing any trait in the object in
-        #        this method causes the tree to behave as if the DemoPath object
-        #        had been selected instead of a DemoFile object. May be due to
-        #        an 'anytrait' listener in the TreeEditor?
-        # if self._init_dic is None:
-        #   self._init_dic = {}
-        #   #exec self.source in self._init_dic
-        # return self._init_dic.copy()
-
     # -------------------------------------------------------------------------
     #  Initializes the description and source from the path's '__init__.py'
     #  file:
@@ -761,7 +738,6 @@ path_view = View(
 )
 
 demo_view = View(
-    # VSplit(
     Tabbed(
         Item(
             "description",
@@ -786,19 +762,7 @@ demo_view = View(
         export="DockWindowShell",
         id="tabbed",
     ),
-    # JDM moving log panel provisionally to its own tab, distracting here.
-    # VGroup(
-    # Item( 'log',
-    # show_label = False,
-    # style      = 'readonly'
-    # ),
-    # label = 'Log'
-    # ),
-    # export = 'DockWindowShell',
-    # id     = 'vsplit'
-    # ),
     id="traitsui.demos.demo.file_view",
-    # dock    = 'horizontal',
     handler=demo_file_handler,
 )
 
@@ -841,15 +805,7 @@ class Demo(HasPrivateTraits):
             ),
             title=self.title,
             id="traitsui.demos.demo.Demo",
-            # dock      = 'horizontal',
             resizable=True,
-            # JDM: Seems that QT interface does not deal well with these size
-            # limits.
-            # With them, we get repeated:
-            #   Object::disconnect: Parentheses expected, signal AdvancedCodeWidget::lostFocus
-            # But without them, it throws an exception on exit:
-            #    Internal C++ object (_StickyDialog) already deleted.
-            # No, actually sometimes we get the latter even with them.
             width=950,
             height=900,
         )
