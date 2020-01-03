@@ -21,60 +21,59 @@
 
 from __future__ import absolute_import
 
-import sys
 import glob
+import io
+from io import StringIO
+import operator
+from os import listdir
+from os.path import (
+    abspath,
+    basename,
+    dirname,
+    exists,
+    isabs,
+    isdir,
+    join,
+    split,
+    splitext,
+)
+import sys
 import token
 import tokenize
-import operator
-from io import StringIO
-import io
+import traceback
+
+
 from configobj import ConfigObj
 
 from traits.api import (
+    Any,
     Bool,
     cached_property,
-    HasTraits,
+    Code,
+    Dict,
     HasPrivateTraits,
-    Str,
+    HasTraits,
+    HTML,
     Instance,
     Property,
-    Any,
-    Code,
-    HTML,
-    Dict,
+    Str,
 )
-
 from traitsui.api import (
-    TreeEditor,
-    ObjectTreeNode,
-    TreeNodeObject,
-    View,
-    Item,
-    VSplit,
-    Tabbed,
-    VGroup,
-    HGroup,
-    Heading,
     Handler,
-    UIInfo,
-    InstanceEditor,
+    Heading,
+    HGroup,
     HTMLEditor,
     Include,
+    InstanceEditor,
+    Item,
+    ObjectTreeNode,
     spring,
-)
-
-from os import listdir
-
-from os.path import (
-    join,
-    isdir,
-    split,
-    splitext,
-    dirname,
-    basename,
-    abspath,
-    exists,
-    isabs,
+    Tabbed,
+    TreeEditor,
+    TreeNodeObject,
+    UIInfo,
+    VGroup,
+    View
 )
 
 
@@ -158,8 +157,6 @@ def parse_source(file_name):
     except Exception:
         # Print an error message instead of failing silently.
         # Ideally, the message would be output to the "log" tab.
-        import traceback
-
         traceback_text = traceback.format_exc()
         error_fmt = u"""Sorry, something went wrong.\n\n{}"""
         error_msg = error_fmt.format(traceback_text)
