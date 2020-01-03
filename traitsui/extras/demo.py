@@ -132,8 +132,8 @@ def extract_docstring_from_source(source):
     source_lines = source.splitlines()
 
     # Extract module docstring lines and recombine
-    docstring = eval("\n".join(source_lines[tstart[0] - 1 : tend[0]]))
-    source_lines = source_lines[: tstart[0] - 1] + source_lines[tend[0] :]
+    docstring = eval("\n".join(source_lines[tstart[0] - 1: tend[0]]))
+    source_lines = source_lines[: tstart[0] - 1] + source_lines[tend[0]:]
     source = "\n".join(source_lines)
     source = source.strip()
 
