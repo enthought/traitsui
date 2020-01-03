@@ -234,7 +234,7 @@ class DemoFileHandler(Handler):
             if isinstance(type(object), type):
                 try:
                     object = object()
-                except:
+                except Exception:
                     pass
 
             if isinstance(object, HasTraits):
@@ -644,7 +644,7 @@ class DemoPath(DemoTreeNodeObject):
             if exists(self.config_filename):
                 try:
                     self.config_dict = ConfigObj(self.config_filename)
-                except:
+                except Exception:
                     pass
         if not self.config_dict:
             return self.get_children_from_datastructure()
