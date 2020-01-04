@@ -33,9 +33,10 @@ from .menu import MakeMenu
 
 
 class SimpleEditor(Editor):
-    """ Simple style of editor for lists, which displays a scrolling list box
-    with only one item visible at a time. A icon next to the list box displays
-    a menu of operations on the list.
+    """ Simple style of editor for lists, which displays a list box with only
+    one item visible at a time. A icon next to the list box displays a menu of
+    operations on the list.
+
     """
 
     # -------------------------------------------------------------------------
@@ -48,11 +49,16 @@ class SimpleEditor(Editor):
     #: Is the list of items being edited mutable?
     mutable = Bool(True)
 
+    #: Is the editor scrollable?
+    scrollable = Bool(True)
+
     #: Signal mapper allowing to identify which icon button requested a context
     #: menu
     mapper = Instance(QtCore.QSignalMapper)
 
     buttons = List([])
+
+    _list_pane = Instance(QtGui.QWidget)
 
     # -------------------------------------------------------------------------
     #  Class constants:
@@ -96,19 +102,23 @@ class SimpleEditor(Editor):
             trait_handler = self.object.base_trait(self.name).handler
         self._trait_handler = trait_handler
 
-        # Create a scrolled window to hold all of the list item controls:
-        self.control = QtGui.QScrollArea()
-        self.control.setFrameShape(QtGui.QFrame.NoFrame)
-        self.control.setWidgetResizable(True)
+        if self.scrollable:
+            # Create a scrolled window to hold all of the list item controls:
+            self.control = QtGui.QScrollArea()
+            self.control.setFrameShape(QtGui.QFrame.NoFrame)
+            self.control.setWidgetResizable(True)
+            self._list_pane = QtGui.QWidget()
+        else:
+            self.control = QtGui.QWidget()
+            self._list_pane = self.control
+        self._list_pane.setSizePolicy(
+            QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
+        )
 
         # Create a mapper to identify which icon button requested a contextmenu
         self.mapper = QtCore.QSignalMapper(self.control)
 
         # Create a widget with a grid layout as the container.
-        self._list_pane = QtGui.QWidget()
-        self._list_pane.setSizePolicy(
-            QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
-        )
         layout = QtGui.QGridLayout(self._list_pane)
         layout.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -207,7 +217,7 @@ class SimpleEditor(Editor):
 
         # QScrollArea can have problems if the widget being scrolled is set too
         # early (ie. before it contains something).
-        if self.control.widget() is None:
+        if self.scrollable and self.control.widget() is None:
             self.control.setWidget(list_pane)
 
     def update_editor_item(self, event):
@@ -221,7 +231,7 @@ class SimpleEditor(Editor):
 
         # Otherwise, find the proxy for this index and update it with the
         # changed value:
-        for control in self.control.widget().children():
+        for control in self._list_pane.children():
             if isinstance(control, QtGui.QLayout):
                 continue
 
@@ -382,6 +392,8 @@ class SimpleEditor(Editor):
         """
         return self.factory.mutable
 
+    def _scrollable_default(self):
+        return self.factory.scrollable
 
 class CustomEditor(SimpleEditor):
     """ Custom style of editor for lists, which displays the items as a series
@@ -396,13 +408,6 @@ class CustomEditor(SimpleEditor):
     #: Whether the list is displayed in a single row. This value overrides the
     #: default.
     single_row = False
-
-    # -------------------------------------------------------------------------
-    #  Trait definitions:
-    # -------------------------------------------------------------------------
-
-    #: Is the list editor is scrollable? This values overrides the default.
-    scrollable = True
 
 
 class TextEditor(CustomEditor):
@@ -724,24 +729,6 @@ class NotebookEditor(Editor):
             if deletable and deletable_trait:
                 enabled = xgetattr(selected, deletable_trait, True)
                 self.close_button.setEnabled(enabled)
-
-    def _context_menu_requested(self, event):
-        self._context_menu.popup(self.control.mapToGlobal(event))
-
-    def _menu_action(self, event, name=""):
-        """ Qt signal handler for when a item in a context menu is actually
-        selected.  Not that we get this even after the underlying value has
-        already changed.
-        """
-        action = self._action_dict[name]
-        checked = action.isChecked()
-        if not checked:
-            for ndx in range(self.control.count()):
-                if self.control.tabText(ndx) == name:
-                    self.control.removeTab(ndx)
-        else:
-            # TODO: Fix tab order based on the context_object's list
-            self.control.addTab(self._pagewidgets[name], name)
 
     def _context_menu_requested(self, event):
         self._context_menu.popup(self.control.mapToGlobal(event))

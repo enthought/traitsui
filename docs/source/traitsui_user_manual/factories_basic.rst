@@ -905,7 +905,7 @@ ListEditor()
 :Default for:
     List [18]_
 :Optional parameters:
-    *editor*, *rows*, *style*, *trait_handler*, *use_notebook*
+    *editor*, *rows*, *style*, *scrollable*, *trait_handler*, *use_notebook*
 
     The following parameters are used only if *use_notebook* is True:
     *deletable*, *dock_style*, *export*, *page_name*, *select*, *view*
@@ -923,11 +923,13 @@ reordering items within the list.
 The simple style displays a single item at a time, with small arrows on the
 right side to scroll the display. The custom style shows multiple items. The
 number of items displayed is controlled by the *rows* parameter; if the number
-of items in the list exceeds this value, then the list display scrolls. The
-editor used for each item in the list is determined by the *editor* and *style*
-parameters. The text style of list editor is identical to the custom style,
-except that the editors for the items are text editors. The read-only style
-displays the contents of the list as static text.
+of items in the list exceeds this value, then the list display scrolls. If the
+*scrollable* parameter is False, the editor displays all objects in the list and
+does not render the vertical scrollbar. The editor used for each item in the list
+is determined by the *editor* and *style* parameters. The text style of list
+editor is identical to the custom style, except that the editors for the items
+are text editors. The read-only style displays the contents of the list as
+static text.
 
 By default, the items use the trait handler appropriate to the type of items in
 the list. You can specify a different handler to use for the items using the
