@@ -182,65 +182,14 @@ class DemoFileHandler(Handler):
         self.info = info
 
         # Set up the 'print' logger:
-        df = info.object
-        df.log = ""
         sys.stdout = sys.stderr = self
-
-        # Read in the demo source file:
-        description, source = parse_source(df.path)
-        df.description = publish_html_str(description)
-        df.source = source
-        # Try to run the demo source file:
-
-        # Append the path for the demo source file to sys.path, so as to
-        # resolve any local (relative) imports in the demo source file.
-        sys.path.append(dirname(df.path))
-
-        locals = df.parent.init_dic
-        locals["__name__"] = "___main___"
-        locals["__file__"] = df.path
-        sys.modules["__main__"].__file__ = df.path
-        try:
-            with io.open(df.path, "r", encoding="utf-8") as fp:
-                exec(compile(fp.read(), df.path, "exec"), locals, locals)
-            demo = self._get_object("modal_popup", locals)
-            if demo is not None:
-                demo = ModalDemoButton(demo=demo)
-            else:
-                demo = self._get_object("popup", locals)
-                if demo is not None:
-                    demo = DemoButton(demo=demo)
-                else:
-                    demo = self._get_object("demo", locals)
-        except Exception as excp:
-            demo = DemoError(msg=str(excp))
-
-        # Clean up sys.path
-        sys.path.remove(dirname(df.path))
-        df.demo = demo
+        df = info.object
+        df.init()
 
     def closed(self, info, is_ok):
         """ Closes the view.
         """
         info.object.demo = None
-
-    # -------------------------------------------------------------------------
-    #  Get a specified object from the execution dictionary:
-    # -------------------------------------------------------------------------
-
-    def _get_object(self, name, dic):
-        object = dic.get(name) or dic.get(name.capitalize())
-        if object is not None:
-            if isinstance(type(object), type):
-                try:
-                    object = object()
-                except Exception:
-                    pass
-
-            if isinstance(object, HasTraits):
-                return object
-
-        return None
 
     # -------------------------------------------------------------------------
     #  Handles 'print' output:
@@ -424,7 +373,7 @@ class DemoFile(DemoTreeNodeObject):
     # -------------------------------------------------------------------------
 
     def _get_path(self):
-        return join(self.parent.path, self.name + ".py")
+        return join(self.parent.path, self.name)
 
     # -------------------------------------------------------------------------
     #  Implementation of the 'nice_name' property:
@@ -432,7 +381,8 @@ class DemoFile(DemoTreeNodeObject):
 
     def _get_nice_name(self):
         if not self._nice_name:
-            self._nice_name = user_name_for(self.name)
+            name, ext = splitext(self.name)
+            self._nice_name = user_name_for(name)
         return self._nice_name
 
     def _set_nice_name(self, value):
@@ -448,6 +398,60 @@ class DemoFile(DemoTreeNodeObject):
         """ Returns whether or not the object has children.
         """
         return False
+
+    def init(self):
+        self.log = ""
+        # Read in the demo source file:
+        description, source = parse_source(self.path)
+        self.description = publish_html_str(description)
+        self.source = source
+
+        # Try to run the demo source file:
+
+        # Append the path for the demo source file to sys.path, so as to
+        # resolve any local (relative) imports in the demo source file.
+        sys.path.append(dirname(self.path))
+
+        locals = self.parent.init_dic
+        locals["__name__"] = "___main___"
+        locals["__file__"] = self.path
+        sys.modules["__main__"].__file__ = self.path
+        try:
+            with io.open(self.path, "r", encoding="utf-8") as fp:
+                exec(compile(fp.read(), self.path, "exec"), locals, locals)
+            demo = self._get_object("modal_popup", locals)
+            if demo is not None:
+                demo = ModalDemoButton(demo=demo)
+            else:
+                demo = self._get_object("popup", locals)
+                if demo is not None:
+                    demo = DemoButton(demo=demo)
+                else:
+                    demo = self._get_object("demo", locals)
+        except Exception as excp:
+            demo = DemoError(msg=str(excp))
+
+        # Clean up sys.path
+        sys.path.remove(dirname(self.path))
+        self.demo = demo
+
+    # -------------------------------------------------------------------------
+    #  Get a specified object from the execution dictionary:
+    # -------------------------------------------------------------------------
+
+    def _get_object(self, name, dic):
+        object = dic.get(name) or dic.get(name.capitalize())
+        if object is not None:
+            if isinstance(type(object), type):
+                try:
+                    object = object()
+                except Exception:
+                    pass
+
+            if isinstance(object, HasTraits):
+                return object
+
+        return None
 
 
 class DemoPath(DemoTreeNodeObject):
@@ -495,6 +499,14 @@ class DemoPath(DemoTreeNodeObject):
 
     #: Cached value of the nice_name property.
     _nice_name = Str
+
+    #: Dictionary mapping file extensions to callables
+    _file_factory = Dict
+
+    def __file_factory_default(self):
+        return {
+            ".py": lambda parent, name: DemoFile(parent=parent, name=name)
+        }
 
     # -------------------------------------------------------------------------
     #  Implementation of the 'path' property:
@@ -617,11 +629,13 @@ class DemoPath(DemoTreeNodeObject):
             if isdir(cur_path):
                 if self.has_py_files(cur_path):
                     dirs.append(DemoPath(parent=self, name=name))
-
             elif self.use_files:
-                name, ext = splitext(name)
-                if (ext == ".py") and (name != "__init__"):
-                    files.append(DemoFile(parent=self, name=name))
+                if name != "__init__.py":
+                    try:
+                        demo_file = self._handle_file(name)
+                        files.append(demo_file)
+                    except KeyError:
+                        pass
 
         sort_key = operator.attrgetter("name")
         dirs.sort(key=sort_key)
@@ -668,25 +682,22 @@ class DemoPath(DemoTreeNodeObject):
                     for filename in filenames:
                         filename = join(self.path, filename)
                         for name in glob.iglob(filename):
-                            pathname, ext = splitext(name)
-                            if (ext == ".py") and (
-                                basename(pathname) != "__init__"
-                            ):
-                                names.append(pathname)
+                            if basename(name) != "__init__.py":
+                                names.append(name)
                     if len(names) > 1:
                         config_dict = {}
                         for name in names:
-                            config_dict[basename(name)] = {
-                                "files": name + ".py"
-                            }
+                            config_dict[basename(name)] = {"files": name}
                         demoobj = DemoPath(parent=self, name="")
                         demoobj.nice_name = keyword
                         demoobj.config_dict = config_dict
                         dirs.append(demoobj)
                     elif len(names) == 1:
-                        file = DemoFile(parent=self, name=names[0])
-                        file.nice_name = keyword
-                        files.append(file)
+                        try:
+                            demo_file = self._handle_file(name)
+                            files.append(demo_file)
+                        except KeyError:
+                            pass
 
         sort_key = operator.attrgetter("nice_name")
         dirs.sort(key=sort_key)
@@ -712,6 +723,13 @@ class DemoPath(DemoTreeNodeObject):
 
         return False
 
+    def _handle_file(self, filename):
+        """ Process a file based on its extension.
+        """
+        _, ext = splitext(filename)
+        file_factory = self._file_factory[ext]
+        demo_file = file_factory(parent=self, name=filename)
+        return demo_file
 
 # -------------------------------------------------------------------------
 #  Defines the demo tree editor:
