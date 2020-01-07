@@ -48,6 +48,7 @@ from configobj import ConfigObj
 from traits.api import (
     Any,
     Bool,
+    Button,
     cached_property,
     Code,
     Dict,
@@ -171,15 +172,21 @@ def parse_source(file_name):
 #  'DemoFileHandler' class:
 # -------------------------------------------------------------------------
 
-
 class DemoFileHandler(Handler):
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
+    #: Run the demo file
+    run = Button
+
     #: The current 'info' object (for use by the 'write' method):
     info = Instance(UIInfo)
+
+    def _run_changed(self):
+        model = self.info.ui.context["object"]
+        model.run_code()
 
     def init(self, info):
         # Save the reference to the current 'info' object:
@@ -763,8 +770,14 @@ demo_file_view = View(
             ),
         ),
         VSplit(
-            Tabbed(
-                UItem("source", style="custom"),
+            VGroup(
+                Tabbed(
+                    UItem("source", style="custom"),
+                ),
+                UItem(
+                    "handler.run",
+                    visible_when="source is not None"
+                ),
             ),
             Tabbed(
                 Item(
