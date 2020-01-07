@@ -21,60 +21,59 @@
 
 from __future__ import absolute_import
 
-import sys
 import glob
+import io
+from io import StringIO
+import operator
+from os import listdir
+from os.path import (
+    abspath,
+    basename,
+    dirname,
+    exists,
+    isabs,
+    isdir,
+    join,
+    split,
+    splitext,
+)
+import sys
 import token
 import tokenize
-import operator
-from io import StringIO
-import io
+import traceback
+
+
 from configobj import ConfigObj
 
 from traits.api import (
+    Any,
     Bool,
     cached_property,
-    HasTraits,
+    Code,
+    Dict,
     HasPrivateTraits,
-    Str,
+    HasTraits,
+    HTML,
     Instance,
     Property,
-    Any,
-    Code,
-    HTML,
-    Dict,
+    Str,
 )
-
 from traitsui.api import (
-    TreeEditor,
-    ObjectTreeNode,
-    TreeNodeObject,
-    View,
-    Item,
-    VSplit,
-    Tabbed,
-    VGroup,
-    HGroup,
-    Heading,
     Handler,
-    UIInfo,
-    InstanceEditor,
+    Heading,
+    HGroup,
     HTMLEditor,
     Include,
+    InstanceEditor,
+    Item,
+    ObjectTreeNode,
     spring,
-)
-
-from os import listdir
-
-from os.path import (
-    join,
-    isdir,
-    split,
-    splitext,
-    dirname,
-    basename,
-    abspath,
-    exists,
-    isabs,
+    Tabbed,
+    TreeEditor,
+    TreeNodeObject,
+    UIInfo,
+    VGroup,
+    View
 )
 
 
@@ -158,8 +157,6 @@ def parse_source(file_name):
     except Exception:
         # Print an error message instead of failing silently.
         # Ideally, the message would be output to the "log" tab.
-        import traceback
-
         traceback_text = traceback.format_exc()
         error_fmt = u"""Sorry, something went wrong.\n\n{}"""
         error_msg = error_fmt.format(traceback_text)
@@ -215,25 +212,12 @@ class DemoFileHandler(Handler):
                     demo = DemoButton(demo=demo)
                 else:
                     demo = self._get_object("demo", locals)
-            # FIXME: If a 'demo' object could not be found, then try to execute
-            # the file setting __name__ to __main__. A lot of test scripts have
-            # the actual test running when __name__==__main__ and so we can at
-            # least run all test examples this way. Use a do_later loop so as to
-            # finish building the current UI before running the test.
-            if demo is None:
-                locals["__name__"] = "__main__"
-                # do_later(self.execute_test, df, locals)
         except Exception as excp:
             demo = DemoError(msg=str(excp))
 
         # Clean up sys.path
         sys.path.remove(dirname(df.path))
         df.demo = demo
-
-    def execute_test(self, df, locals):
-        """ Executes the file in df.path in the namespace of locals."""
-        with io.open(df.path, "r", encoding="utf-8") as fp:
-            exec(compile(fp.read(), df.path, "exec"), locals, locals)
 
     def closed(self, info, is_ok):
         """ Closes the view.
@@ -250,7 +234,7 @@ class DemoFileHandler(Handler):
             if isinstance(type(object), type):
                 try:
                     object = object()
-                except:
+                except Exception:
                     pass
 
             if isinstance(object, HasTraits):
@@ -568,16 +552,6 @@ class DemoPath(DemoTreeNodeObject):
         exec((exec_str + source), init_dic)
         return init_dic
 
-        # fixme: The following code should work, but doesn't, so we use the
-        #        preceding code instead. Changing any trait in the object in
-        #        this method causes the tree to behave as if the DemoPath object
-        #        had been selected instead of a DemoFile object. May be due to
-        #        an 'anytrait' listener in the TreeEditor?
-        # if self._init_dic is None:
-        #   self._init_dic = {}
-        #   #exec self.source in self._init_dic
-        # return self._init_dic.copy()
-
     # -------------------------------------------------------------------------
     #  Initializes the description and source from the path's '__init__.py'
     #  file:
@@ -670,7 +644,7 @@ class DemoPath(DemoTreeNodeObject):
             if exists(self.config_filename):
                 try:
                     self.config_dict = ConfigObj(self.config_filename)
-                except:
+                except Exception:
                     pass
         if not self.config_dict:
             return self.get_children_from_datastructure()
@@ -761,7 +735,6 @@ path_view = View(
 )
 
 demo_view = View(
-    # VSplit(
     Tabbed(
         Item(
             "description",
@@ -786,19 +759,7 @@ demo_view = View(
         export="DockWindowShell",
         id="tabbed",
     ),
-    # JDM moving log panel provisionally to its own tab, distracting here.
-    # VGroup(
-    # Item( 'log',
-    # show_label = False,
-    # style      = 'readonly'
-    # ),
-    # label = 'Log'
-    # ),
-    # export = 'DockWindowShell',
-    # id     = 'vsplit'
-    # ),
     id="traitsui.demos.demo.file_view",
-    # dock    = 'horizontal',
     handler=demo_file_handler,
 )
 
@@ -841,15 +802,7 @@ class Demo(HasPrivateTraits):
             ),
             title=self.title,
             id="traitsui.demos.demo.Demo",
-            # dock      = 'horizontal',
             resizable=True,
-            # JDM: Seems that QT interface does not deal well with these size
-            # limits.
-            # With them, we get repeated:
-            #   Object::disconnect: Parentheses expected, signal AdvancedCodeWidget::lostFocus
-            # But without them, it throws an exception on exit:
-            #    Internal C++ object (_StickyDialog) already deleted.
-            # No, actually sometimes we get the latter even with them.
             width=950,
             height=900,
         )
