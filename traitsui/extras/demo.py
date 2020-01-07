@@ -59,9 +59,11 @@ from traits.api import (
     Str,
 )
 from traitsui.api import (
+    CodeEditor,
     Handler,
     Heading,
     HGroup,
+    HSplit,
     HTMLEditor,
     Include,
     InstanceEditor,
@@ -72,8 +74,10 @@ from traitsui.api import (
     TreeEditor,
     TreeNodeObject,
     UIInfo,
+    UItem,
     VGroup,
-    View
+    View,
+    VSplit,
 )
 
 
@@ -737,56 +741,68 @@ class DemoPath(DemoTreeNodeObject):
 #  Defines the demo tree editor:
 # -------------------------------------------------------------------------
 
-path_view = View(
+demo_path_view = View(
     Tabbed(
-        Item(
+        UItem(
             "description",
-            label="Description",
-            show_label=False,
             style="readonly",
             editor=HTMLEditor(format_text=True),
         ),
-        Item("source", label="Source", show_label=False, style="custom"),
-        export="DockWindowShell",
-        id="tabbed",
+        UItem("source", style="custom"),
     ),
-    id="traitsui.demos.demo.path_view",
-    # dock    = 'horizontal'
+    id="demo_path_view",
 )
 
-demo_view = View(
-    Tabbed(
-        Item(
-            "description",
-            label="Description",
-            show_label=False,
-            style="readonly",
-            editor=HTMLEditor(format_text=True),
+demo_file_view = View(
+    HSplit(
+        Tabbed(
+            UItem(
+                "description",
+                style="readonly",
+                editor=HTMLEditor(format_text=True),
+            ),
         ),
-        Item("source", label="Source", show_label=False, style="custom"),
-        Item(
-            "demo",
-            label="Demo",
-            show_label=False,
-            style="custom",
-            resizable=True,
-            # FIXME:
-            # visible_when doesn't work correctly yet (for wx atleast)
-            # for tabbed items. Needs more investigation.
-            visible_when="demo",
+        VSplit(
+            Tabbed(
+                UItem("source", style="custom"),
+            ),
+            Tabbed(
+                Item(
+                    "log",
+                    style="readonly",
+                    editor=CodeEditor(
+                        show_line_numbers=False,
+                        selected_color=0xFFFFFF
+                    ),
+                    label="Output",
+                    show_label=False
+                ),
+                UItem(
+                    "demo",
+                    style="custom",
+                    resizable=True,
+                ),
+            ),
+            dock="horizontal"
         ),
-        Item("log", show_label=False, style="readonly"),
-        export="DockWindowShell",
-        id="tabbed",
     ),
-    id="traitsui.demos.demo.file_view",
+    id="demo_file_view",
     handler=demo_file_handler,
 )
 
+
 demo_tree_editor = TreeEditor(
     nodes=[
-        ObjectTreeNode(node_for=[DemoPath], label="nice_name", view=path_view),
-        ObjectTreeNode(node_for=[DemoFile], label="nice_name", view=demo_view),
+        ObjectTreeNode(
+            node_for=[DemoPath],
+            label="nice_name",
+            view=demo_path_view
+        ),
+        ObjectTreeNode(
+            node_for=[DemoFile],
+            label="nice_name",
+            view=demo_file_view
+        ),
     ]
 )
 
