@@ -181,10 +181,15 @@ class DemoFileHandler(Handler):
         # Save the reference to the current 'info' object:
         self.info = info
 
-        # Set up the 'print' logger:
-        sys.stdout = sys.stderr = self
-        df = info.object
-        df.init()
+        stdout, stderr = sys.stdout, sys.stderr
+        try:
+            # Set up the 'print' logger:
+            sys.stdout = sys.stderr = self
+            df = info.object
+            df.init()
+        finally:
+            # Restore standard out and error to their original values:
+            sys.stdout, sys.stderr = stdout, stderr
 
     def closed(self, info, is_ok):
         """ Closes the view.
@@ -401,24 +406,23 @@ class DemoFile(DemoTreeNodeObject):
 
     def init(self):
         self.log = ""
-        # Read in the demo source file:
         description, source = parse_source(self.path)
         self.description = publish_html_str(description)
         self.source = source
+        self.run_code()
 
-        # Try to run the demo source file:
-
-        # Append the path for the demo source file to sys.path, so as to
-        # resolve any local (relative) imports in the demo source file.
-        sys.path.append(dirname(self.path))
-
-        locals = self.parent.init_dic
-        locals["__name__"] = "___main___"
-        locals["__file__"] = self.path
-        sys.modules["__main__"].__file__ = self.path
+    def run_code(self):
+        """ Runs the code associated with this demo file.
+        """
         try:
-            with io.open(self.path, "r", encoding="utf-8") as fp:
-                exec(compile(fp.read(), self.path, "exec"), locals, locals)
+            # Get the execution context dictionary:
+            locals = self.parent.init_dic
+            locals["__name__"] = "___main___"
+            locals["__file__"] = self.path
+            sys.modules["__main__"].__file__ = self.path
+
+            exec(self.source, locals, locals)
+
             demo = self._get_object("modal_popup", locals)
             if demo is not None:
                 demo = ModalDemoButton(demo=demo)
@@ -428,12 +432,10 @@ class DemoFile(DemoTreeNodeObject):
                     demo = DemoButton(demo=demo)
                 else:
                     demo = self._get_object("demo", locals)
-        except Exception as excp:
-            demo = DemoError(msg=str(excp))
-
-        # Clean up sys.path
-        sys.path.remove(dirname(self.path))
-        self.demo = demo
+        except Exception:
+            traceback.print_exc()
+        else:
+            self.demo = demo
 
     # -------------------------------------------------------------------------
     #  Get a specified object from the execution dictionary:
