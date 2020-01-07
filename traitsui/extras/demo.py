@@ -168,6 +168,14 @@ def parse_source(file_name):
         return (error_msg, "")
 
 
+def _read_file(path, mode='r', encoding='utf8'):
+    """ Returns the contents of a specified text file.
+    """
+    with open(path, mode, encoding=encoding) as fh:
+        result = fh.read()
+    return result
+
+
 # -------------------------------------------------------------------------
 #  'DemoFileHandler' class:
 # -------------------------------------------------------------------------
@@ -185,8 +193,14 @@ class DemoFileHandler(Handler):
     info = Instance(UIInfo)
 
     def _run_changed(self):
-        model = self.info.ui.context["object"]
-        model.run_code()
+        demo_file = self.info.object
+        stdout, stderr = sys.stdout, sys.stderr
+        try:
+            sys.stdout = sys.stderr = self
+            demo_file.run_code()
+        finally:
+            # Restore standard out and error to their original values:
+            sys.stdout, sys.stderr = stdout, stderr
 
     def init(self, info):
         # Save the reference to the current 'info' object:
@@ -194,10 +208,9 @@ class DemoFileHandler(Handler):
 
         stdout, stderr = sys.stdout, sys.stderr
         try:
-            # Set up the 'print' logger:
             sys.stdout = sys.stderr = self
-            df = info.object
-            df.init()
+            demo_file = info.object
+            demo_file.init()
         finally:
             # Restore standard out and error to their original values:
             sys.stdout, sys.stderr = stdout, stderr
@@ -205,14 +218,17 @@ class DemoFileHandler(Handler):
     def closed(self, info, is_ok):
         """ Closes the view.
         """
-        info.object.demo = None
+        demo_file = info.object
+        if hasattr(demo_file, 'demo'):
+            demo_file.demo = None
 
     # -------------------------------------------------------------------------
     #  Handles 'print' output:
     # -------------------------------------------------------------------------
 
     def write(self, text):
-        self.info.object.log += text
+        demo_file = self.info.object
+        demo_file.log += text
 
     def flush(self):
         pass
@@ -350,12 +366,7 @@ class DemoTreeNodeObject(TreeNodeObject):
         raise NotImplementedError
 
 
-class DemoFile(DemoTreeNodeObject):
-
-    # -------------------------------------------------------------------------
-    #  Trait definitions:
-    # -------------------------------------------------------------------------
-
+class DemoFileBase(DemoTreeNodeObject):
     #: Parent of this file:
     parent = Any
 
@@ -374,16 +385,14 @@ class DemoFile(DemoTreeNodeObject):
     #: Description of what the demo does:
     description = HTML
 
-    #: Source code for the demo:
-    source = Code
-
-    #: Demo object whose traits UI is to be displayed:
-    demo = Instance(HasTraits)
-
     #: Log of all print messages displayed:
     log = Code
 
     _nice_name = Str
+
+    def init(self):
+        self.log = ""
+
     # -------------------------------------------------------------------------
     #  Implementation of the 'path' property:
     # -------------------------------------------------------------------------
@@ -415,8 +424,17 @@ class DemoFile(DemoTreeNodeObject):
         """
         return False
 
+
+class DemoFile(DemoFileBase):
+
+    #: Source code for the demo:
+    source = Code
+
+    #: Demo object whose traits UI is to be displayed:
+    demo = Instance(HasTraits)
+
     def init(self):
-        self.log = ""
+        super(DemoFile, self).init()
         description, source = parse_source(self.path)
         self.description = publish_html_str(description)
         self.source = source
@@ -465,6 +483,30 @@ class DemoFile(DemoTreeNodeObject):
                 return object
 
         return None
+
+
+# HTML template for displaying an image file:
+_image_template = """<html>
+<head>
+</head>
+<body>
+<img src="%s">
+</body>
+</html>
+"""
+
+
+class DemoContentFile(DemoFileBase):
+    def init(self):
+        super(DemoContentFile, self).init()        
+        file_str = _read_file(self.path)
+        self.description = publish_html_str(file_str)
+
+
+class DemoImageFile(DemoFileBase):
+    def init(self):
+        super(DemoImageFile, self).init()
+        self.description = _image_template.format(self.path)
 
 
 class DemoPath(DemoTreeNodeObject):
@@ -518,7 +560,14 @@ class DemoPath(DemoTreeNodeObject):
 
     def __file_factory_default(self):
         return {
-            ".py": lambda parent, name: DemoFile(parent=parent, name=name)
+            ".htm": DemoContentFile,
+            ".html": DemoContentFile,
+            ".jpeg": DemoImageFile,
+            ".jpg": DemoImageFile,
+            ".png": DemoImageFile,
+            ".py": DemoFile,
+            ".rst": DemoContentFile,
+            ".txt": DemoContentFile
         }
 
     # -------------------------------------------------------------------------
@@ -803,6 +852,17 @@ demo_file_view = View(
     handler=demo_file_handler,
 )
 
+demo_content_view = View(
+    Tabbed(
+        UItem(
+            "description",
+            style="readonly",
+            editor=HTMLEditor(format_text=True),
+        ),
+    ),
+    handler=demo_file_handler,
+)
+
 
 demo_tree_editor = TreeEditor(
     nodes=[
@@ -815,6 +875,16 @@ demo_tree_editor = TreeEditor(
             node_for=[DemoFile],
             label="nice_name",
             view=demo_file_view
+        ),
+        ObjectTreeNode(
+            node_for=[DemoContentFile],
+            label="nice_name",
+            view=demo_content_view
+        ),
+        ObjectTreeNode(
+            node_for=[DemoImageFile],
+            label="nice_name",
+            view=demo_content_view
         ),
     ]
 )
