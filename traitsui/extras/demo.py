@@ -21,8 +21,8 @@
 
 from __future__ import absolute_import
 
+import contextlib
 import glob
-import io
 from io import StringIO
 import operator
 from os import listdir
@@ -156,8 +156,7 @@ def parse_source(file_name):
         The source code, sans docstring.
     """
     try:
-        with io.open(file_name, "r", encoding="utf-8") as fh:
-            source_code = fh.read()
+        source_code = _read_file(file_name)
         return extract_docstring_from_source(source_code)
     except Exception:
         # Print an error message instead of failing silently.
@@ -180,6 +179,16 @@ def _read_file(path, mode='r', encoding='utf8'):
 #  'DemoFileHandler' class:
 # -------------------------------------------------------------------------
 
+@contextlib.contextmanager
+def _set_stdout(std_out):
+    stdout, stderr = sys.stdout, sys.stderr
+    try:
+        sys.stdout = sys.stderr = std_out
+        yield std_out
+    finally:
+        sys.stdout, sys.stderr = stdout, stderr
+
+
 class DemoFileHandler(Handler):
 
     # -------------------------------------------------------------------------
@@ -194,26 +203,15 @@ class DemoFileHandler(Handler):
 
     def _run_changed(self):
         demo_file = self.info.object
-        stdout, stderr = sys.stdout, sys.stderr
-        try:
-            sys.stdout = sys.stderr = self
+        with _set_stdout(self):
             demo_file.run_code()
-        finally:
-            # Restore standard out and error to their original values:
-            sys.stdout, sys.stderr = stdout, stderr
 
     def init(self, info):
         # Save the reference to the current 'info' object:
         self.info = info
-
-        stdout, stderr = sys.stdout, sys.stderr
-        try:
-            sys.stdout = sys.stderr = self
-            demo_file = info.object
+        demo_file = info.object
+        with _set_stdout(self):
             demo_file.init()
-        finally:
-            # Restore standard out and error to their original values:
-            sys.stdout, sys.stderr = stdout, stderr
 
     def closed(self, info, is_ok):
         """ Closes the view.
@@ -498,7 +496,7 @@ _image_template = """<html>
 
 class DemoContentFile(DemoFileBase):
     def init(self):
-        super(DemoContentFile, self).init()        
+        super(DemoContentFile, self).init()
         file_str = _read_file(self.path)
         self.description = publish_html_str(file_str)
 
