@@ -45,6 +45,7 @@ import traceback
 
 from configobj import ConfigObj
 
+from pyface.api import ImageResource
 from traits.api import (
     Any,
     Bool,
@@ -197,7 +198,7 @@ class DemoFileHandler(Handler):
     # -------------------------------------------------------------------------
 
     #: Run the demo file
-    run = Button
+    run = Button(image=ImageResource("run"))
 
     #: The current 'info' object (for use by the 'write' method):
     info = Instance(UIInfo)
@@ -907,13 +908,13 @@ class Demo(HasPrivateTraits):
     # -------------------------------------------------------------------------
 
     #: Navifate to next node.
-    next = Button
+    next = Button(image=ImageResource("next"))
 
     #: Navigate to parent of selected node.
-    parent = Button
+    parent = Button(image=ImageResource("parent"))
 
     #: Navigate to previous node.
-    previous = Button
+    previous = Button(image=ImageResource("previous"))
 
     #: Path to the root demo directory:
     path = Str
