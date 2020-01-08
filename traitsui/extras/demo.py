@@ -198,12 +198,12 @@ class DemoFileHandler(Handler):
     # -------------------------------------------------------------------------
 
     #: Run the demo file
-    run = Button(image=ImageResource("run"))
+    run_button = Button(image=ImageResource("run"), label="Run")
 
     #: The current 'info' object (for use by the 'write' method):
     info = Instance(UIInfo)
 
-    def _run_changed(self):
+    def _run_button_changed(self):
         demo_file = self.info.object
         with _set_stdout(self):
             demo_file.run_code()
@@ -834,7 +834,7 @@ demo_file_view = View(
                     UItem("source", style="custom"),
                 ),
                 UItem(
-                    "handler.run",
+                    "handler.run_button",
                     visible_when="source is not None"
                 ),
             ),
@@ -908,13 +908,13 @@ class Demo(HasPrivateTraits):
     # -------------------------------------------------------------------------
 
     #: Navifate to next node.
-    next = Button(image=ImageResource("next"))
+    next_button = Button(image=ImageResource("next"), label="Next")
 
     #: Navigate to parent of selected node.
-    parent = Button(image=ImageResource("parent"))
+    parent_button = Button(image=ImageResource("parent"), label="Parent")
 
     #: Navigate to previous node.
-    previous = Button(image=ImageResource("previous"))
+    previous_button = Button(image=ImageResource("previous"), label="Previous")
 
     #: Path to the root demo directory:
     path = Str
@@ -969,15 +969,15 @@ class Demo(HasPrivateTraits):
 
         return previous
 
-    def _next_changed(self):
+    def _next_button_changed(self):
         self.selected_node = self._next_node
 
-    def _parent_changed(self):
+    def _parent_button_changed(self):
         if self.selected_node is not None:
             parent = self.selected_node.parent
             self.selected_node = parent
 
-    def _previous_changed(self):
+    def _previous_button_changed(self):
         self.selected_node = self._previous_node
 
     # -------------------------------------------------------------------------
@@ -990,13 +990,13 @@ class Demo(HasPrivateTraits):
         traits_view = View(
             HGroup(
                 UItem(
-                    "previous",
+                    "previous_button",
                     style="custom",
                     enabled_when="_previous_node is not None",
                     tooltip="Go to previous file"
                 ),
                 UItem(
-                    "parent",
+                    "parent_button",
                     style="custom",
                     enabled_when="(selected_node is not None) and "
                     "(object.selected_node.parent is not None)",
@@ -1008,7 +1008,7 @@ class Demo(HasPrivateTraits):
                     editor=TitleEditor()
                 ),
                 UItem(
-                    "next",
+                    "next_button",
                     style="custom",
                     enabled_when="_next_node is not None",
                     tooltip="Go to next file"
