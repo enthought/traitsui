@@ -670,6 +670,8 @@ class DemoPath(DemoTreeNodeObject):
                 name, ext = splitext(name)
                 if (ext == ".py") and (name != "__init__"):
                     return True
+                elif ext in self._file_factory:
+                    return True
 
         return False
 
