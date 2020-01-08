@@ -72,6 +72,7 @@ from traitsui.api import (
     ObjectTreeNode,
     spring,
     Tabbed,
+    TitleEditor,
     TreeEditor,
     TreeNodeObject,
     UIInfo,
@@ -358,7 +359,7 @@ class DemoTreeNodeObject(TreeNodeObject):
     #  Gets the object's children:
     # -------------------------------------------------------------------------
 
-    def get_children(self, node):
+    def get_children(self):
         """ Gets the object's children.
         """
         raise NotImplementedError
@@ -421,6 +422,11 @@ class DemoFileBase(DemoTreeNodeObject):
         """ Returns whether or not the object has children.
         """
         return False
+
+    def get_children(self):
+        """ Gets the demo file's children.
+        """
+        return []
 
 
 class DemoFile(DemoFileBase):
@@ -573,7 +579,12 @@ class DemoPath(DemoTreeNodeObject):
     # -------------------------------------------------------------------------
 
     def _get_path(self):
-        return join(self.parent.path, self.name)
+        if self.parent is not None:
+            path = join(self.parent.path, self.name)
+        else:
+            path = self.name
+
+        return path
 
     # -------------------------------------------------------------------------
     #  Implementation of the 'nice_name' property:
@@ -884,7 +895,8 @@ demo_tree_editor = TreeEditor(
             label="nice_name",
             view=demo_content_view
         ),
-    ]
+    ],
+    selected='selected_node'
 )
 
 
@@ -894,14 +906,78 @@ class Demo(HasPrivateTraits):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
+    #: Navifate to next node.
+    next = Button
+
+    #: Navigate to parent of selected node.
+    parent = Button
+
+    #: Navigate to previous node.
+    previous = Button
+
     #: Path to the root demo directory:
     path = Str
 
     #: Root path object for locating demo files:
     root = Instance(DemoPath)
 
+    #: Selected node of the demo path tree.
+    selected_node = Any
+
     #: Title for the demo
     title = Str
+
+    _next_node = Property
+
+    _previous_node = Property
+
+    def _get__next_node(self):
+        next = None
+        node = self.selected_node
+        children = node.tno_get_children(node)
+
+        if len(children) > 0:
+            next = children[0]
+        else:
+            parent = node.parent
+            while parent is not None:
+                siblings = parent.tno_get_children(parent)
+                index = siblings.index(node)
+                if index < (len(siblings) - 1):
+                    next = siblings[index + 1]
+                    break
+
+                parent, node = parent.parent, parent
+
+        return next
+
+    def _get__previous_node(self):
+        previous = None
+        node = self.selected_node
+        parent = node.parent
+        if parent is not None:
+            siblings = parent.tno_get_children(parent)
+            index = siblings.index(node)
+            if index > 0:
+                previous = siblings[index - 1]
+                previous_children = previous.tno_get_children(previous)
+                while len(previous_children) > 0:
+                    previous = previous_children[-1]
+            else:
+                previous = parent
+
+        return previous
+
+    def _next_changed(self):
+        self.selected_node = self._next_node
+
+    def _parent_changed(self):
+        if self.selected_node is not None:
+            parent = self.selected_node.parent
+            self.selected_node = parent
+
+    def _previous_changed(self):
+        self.selected_node = self._previous_node
 
     # -------------------------------------------------------------------------
     #  Traits view definitions:
@@ -911,6 +987,33 @@ class Demo(HasPrivateTraits):
         """ Constructs the default traits view."""
 
         traits_view = View(
+            HGroup(
+                UItem(
+                    "previous",
+                    style="custom",
+                    enabled_when="_previous_node is not None",
+                    tooltip="Go to previous file"
+                ),
+                UItem(
+                    "parent",
+                    style="custom",
+                    enabled_when="(selected_node is not None) and "
+                    "(object.selected_node.parent is not None)",
+                    tooltip="Go up one level"
+                ),
+                UItem(
+                    "title",
+                    springy=True,
+                    editor=TitleEditor()
+                ),
+                UItem(
+                    "next",
+                    style="custom",
+                    enabled_when="_next_node is not None",
+                    tooltip="Go to next file"
+                ),
+                "_",
+            ),
             Item(
                 name="root",
                 id="root",
@@ -924,15 +1027,6 @@ class Demo(HasPrivateTraits):
             height=900,
         )
         return traits_view
-
-    # -------------------------------------------------------------------------
-    #  Handles the 'root' trait being changed:
-    # -------------------------------------------------------------------------
-
-    def _root_changed(self, root):
-        """ Handles the 'root' trait being changed.
-        """
-        root.parent = self
 
 
 # -------------------------------------------------------------------------
@@ -1035,6 +1129,9 @@ def demo(
         path=path,
         title=title,
         root=DemoPath(
-            name=name, use_files=use_files, config_filename=config_filename
+            name=dir_name,
+            nice_name=user_name_for(name),
+            use_files=use_files,
+            config_filename=config_filename
         ),
     ).configure_traits()
