@@ -25,7 +25,6 @@ from __future__ import absolute_import
 import six
 
 from traits.api import (
-    AdaptedTo,
     Adapter,
     Any,
     Bool,
@@ -39,6 +38,7 @@ from traits.api import (
     List,
     Property,
     Str,
+    Supports,
     cached_property,
 )
 
@@ -1014,7 +1014,7 @@ class ITreeNodeAdapterBridge(HasPrivateTraits):
     """
 
     #: The ITreeNode adapter being bridged:
-    adapter = AdaptedTo(ITreeNode)
+    adapter = Supports(ITreeNode)
 
     # -- TreeNode implementation ----------------------------------------------
 
