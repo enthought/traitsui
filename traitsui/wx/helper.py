@@ -105,7 +105,7 @@ def bitmap_cache(name, standard_size, path=None):
     dx = bitmap.GetWidth()
     if dx < standard_bitmap_width:
         dy = bitmap.GetHeight()
-        std_bitmap = wx.EmptyBitmap(standard_bitmap_width, dy)
+        std_bitmap = wx.Bitmap(standard_bitmap_width, dy)
         dc1 = wx.MemoryDC()
         dc2 = wx.MemoryDC()
         dc1.SelectObject(std_bitmap)
@@ -113,7 +113,7 @@ def bitmap_cache(name, standard_size, path=None):
         dc1.SetPen(wx.TRANSPARENT_PEN)
         dc1.SetBrush(wx.WHITE_BRUSH)
         dc1.DrawRectangle(0, 0, standard_bitmap_width, dy)
-        dc1.Blit((standard_bitmap_width - dx) / 2, 0, dx, dy, dc2, 0, 0)
+        dc1.Blit((standard_bitmap_width - dx) // 2, 0, dx, dy, dc2, 0, 0)
 
     _bitmap_cache[filename + "*"] = std_bitmap
 
@@ -140,7 +140,7 @@ def save_window(ui):
     """ Saves the user preference items for a specified UI.
     """
     control = ui.control
-    ui.save_prefs(control.GetPositionTuple() + control.GetSizeTuple())
+    ui.save_prefs(control.GetPosition() + control.GetSize())
 
 
 def restore_window(ui, is_popup=False):
@@ -162,9 +162,9 @@ def restore_window(ui, is_popup=False):
         else:
             if (dx, dy) == (0, 0):
                 # The window was saved minimized
-                ui.control.SetDimensions(x, y, -1, -1)
+                ui.control.SetSize(x, y, -1, -1)
             else:
-                ui.control.SetDimensions(x, y, dx, dy)
+                ui.control.SetSize(x, y, dx, dy)
 
 
 def find_closest_display(x, y):
@@ -183,8 +183,8 @@ def find_closest_display(x, y):
 
             def _distance(x, y, display):
                 dis_x, dis_y, dis_w, dis_h = display.GetGeometry()
-                dis_mid_x = dis_x + dis_w / 2
-                dis_mid_y = dis_y + dis_h / 2
+                dis_mid_x = dis_x + dis_w // 2
+                dis_mid_y = dis_y + dis_h // 2
 
                 return (x - dis_mid_x) ** 2 + (y - dis_mid_y) ** 2
 
@@ -219,7 +219,7 @@ def position_window(window, width=None, height=None, parent=None):
     """ Positions a window on the screen with a specified width and height so
         that the window completely fits on the screen if possible.
     """
-    dx, dy = window.GetSizeTuple()
+    dx, dy = window.GetSize()
     width = width or dx
     height = height or dy
 
@@ -228,15 +228,15 @@ def position_window(window, width=None, height=None, parent=None):
 
     if parent is None:
         # Center the popup on the screen:
-        window.SetDimensions(
-            (screen_dx - width) / 2, (screen_dy - height) / 2, width, height
+        window.SetSize(
+            (screen_dx - width) // 2, (screen_dy - height) // 2, width, height
         )
         return
 
     # Calculate the desired size of the popup control:
     if isinstance(parent, wx.Window):
-        x, y = parent.ClientToScreenXY(0, 0)
-        parent_dx, parent_dy = parent.GetSizeTuple()
+        x, y = parent.ClientToScreen(0, 0)
+        parent_dx, parent_dy = parent.GetSize()
     else:
         # Special case of parent being a screen position and size tuple (used
         # to pop-up a dialog for a table cell):
@@ -253,7 +253,7 @@ def position_window(window, width=None, height=None, parent=None):
 
     x, y, dx, dy = get_position_for_display(x, y, width, height, closest)
 
-    window.SetDimensions(x, y, dx, dy)
+    window.SetSize(x, y, dx, dy)
 
 
 def top_level_window_for(control):
@@ -307,14 +307,14 @@ def disconnect(control, *events):
     """
     id = control.GetId()
     for event in events:
-        event(control, id, None)
+        control.Unbind(event, id=id)
 
 
 def disconnect_no_id(control, *events):
     """ Disconnects a wx event handle from its associated control.
     """
     for event in events:
-        event(control, None)
+        control.Unbind(event)
 
 
 # -------------------------------------------------------------------------
@@ -331,7 +331,7 @@ class TraitsUIPanel(wx.Panel):
         bg_color = kw.pop("bg_color", None)
         wx.Panel.__init__(self, parent, *args, **kw)
 
-        wx.EVT_CHILD_FOCUS(self, self.OnChildFocus)
+        self.Bind(wx.EVT_CHILD_FOCUS, self.OnChildFocus)
 
         if bg_color:
             self.SetBackgroundColour(bg_color)
@@ -359,42 +359,30 @@ class TraitsUIPanel(wx.Panel):
 #  'ChildFocusOverride' class:
 # -------------------------------------------------------------------------
 
-# PyEvtHandler was only introduced in wxPython 2.8.8. Fortunately, it is only
-# necessary in wxPython 2.8.8.
-if wx.__version__ < "2.8.8":
+class ChildFocusOverride(wx.EvtHandler):
+    """ Override the scroll-to-focus behaviour in wx 2.8.8's ScrolledWindow
+        C++ implementation for ScrolledPanel.
 
-    class ChildFocusOverride(object):
-        def __init__(self, window):
-            # Set up the event listener.
-            window.Bind(wx.EVT_CHILD_FOCUS, window.OnChildFocus)
+        Instantiating this class with the ScrolledPanel will register the
+        new instance as the event handler for the panel.
+    """
 
+    def __init__(self, window):
+        self.window = window
+        super(ChildFocusOverride, self).__init__()
 
-else:
+        # Make self the event handler for the window.
+        window.PushEventHandler(self)
 
-    class ChildFocusOverride(wx.PyEvtHandler):
-        """ Override the scroll-to-focus behaviour in wx 2.8.8's ScrolledWindow
-            C++ implementation for ScrolledPanel.
-
-            Instantiating this class with the ScrolledPanel will register the
-            new instance as the event handler for the panel.
-        """
-
-        def __init__(self, window):
-            self.window = window
-            wx.PyEvtHandler.__init__(self)
-
-            # Make self the event handler for the window.
-            window.PushEventHandler(self)
-
-        def ProcessEvent(self, event):
-            if isinstance(event, wx.ChildFocusEvent):
-                # Handle this one with our code and don't let the C++ event handler
-                # get it.
-                return self.window.OnChildFocus(event)
-            else:
-                # Otherwise, just pass this along in the event handler chain.
-                result = self.GetNextHandler().ProcessEvent(event)
-                return result
+    def ProcessEvent(self, event):
+        if isinstance(event, wx.ChildFocusEvent):
+            # Handle this one with our code and don't let the C++ event handler
+            # get it.
+            return self.window.OnChildFocus(event)
+        else:
+            # Otherwise, just pass this along in the event handler chain.
+            result = self.GetNextHandler().ProcessEvent(event)
+            return result
 
 
 class TraitsUIScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
@@ -408,7 +396,7 @@ class TraitsUIScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
         name="scrolledpanel",
     ):
 
-        wx.PyScrolledWindow.__init__(
+        wx.ScrolledWindow.__init__(
             self, parent, id, pos=pos, size=size, style=style, name=name
         )
         # FIXME: The ScrolledPanel class calls SetInitialSize in its __init__
@@ -420,6 +408,11 @@ class TraitsUIScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
 
         # Override the C++ ChildFocus event handler:
         ChildFocusOverride(self)
+
+    def Destroy(self):
+        from traitsui.wx.toolkit import _popEventHandlers
+        _popEventHandlers(self, ChildFocusOverride)
+        super().Destroy()
 
     def OnChildFocus(self, event):
         """ Handle a ChildFocusEvent.
@@ -457,11 +450,11 @@ class TraitsUIScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
 
         # Is it before the left edge?
         if (cr.x < 0) and (sppux > 0):
-            new_vsx = vsx + (cr.x / sppux)
+            new_vsx = vsx + (cr.x // sppux)
 
         # Is it above the top?
         if (cr.y < 0) and (sppuy > 0):
-            new_vsy = vsy + (cr.y / sppuy)
+            new_vsy = vsy + (cr.y // sppuy)
 
         # For the right and bottom edges, scroll enough to show the whole
         # control if possible, but if not just scroll such that the top/left
@@ -469,19 +462,19 @@ class TraitsUIScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
 
         # Is it past the right edge ?
         if (cr.right > client_size.width) and (sppux > 0):
-            diff = (cr.right - client_size.width) / sppux
+            diff = (cr.right - client_size.width) // sppux
             if (cr.x - (diff * sppux)) > 0:
                 new_vsx = vsx + diff + 1
             else:
-                new_vsx = vsx + (cr.x / sppux)
+                new_vsx = vsx + (cr.x // sppux)
 
         # Is it below the bottom ?
         if (cr.bottom > client_size.height) and (sppuy > 0):
-            diff = (cr.bottom - client_size.height) / sppuy
+            diff = (cr.bottom - client_size.height) // sppuy
             if (cr.y - (diff * sppuy)) > 0:
                 new_vsy = vsy + diff + 1
             else:
-                new_vsy = vsy + (cr.y / sppuy)
+                new_vsy = vsy + (cr.y // sppuy)
 
         # Perform the scroll if any adjustments are needed:
         if (new_vsx != -1) or (new_vsy != -1):
@@ -573,7 +566,7 @@ class PopupControl(HasPrivateTraits):
             style = wx.RESIZE_BORDER
 
         self.popup = popup = wx.Frame(None, -1, "", style=style)
-        wx.EVT_ACTIVATE(popup, self._on_close_popup)
+        popup.Bind(wx.EVT_ACTIVATE, self._on_close_popup)
         self.create_control(popup)
         self._position_control()
         popup.Show()
@@ -605,9 +598,9 @@ class PopupControl(HasPrivateTraits):
         """ Initializes the popup control's initial position and size.
         """
         # Calculate the desired size of the popup control:
-        px, cy = self.control.ClientToScreenXY(0, 0)
-        cdx, cdy = self.control.GetSizeTuple()
-        pdx, pdy = self.popup.GetSizeTuple()
+        px, cy = self.control.ClientToScreen(0, 0)
+        cdx, cdy = self.control.GetSize()
+        pdx, pdy = self.popup.GetSize()
         pdx, pdy = max(pdx, cdx, self.width), max(pdy, self.height)
 
         # Calculate the best position and size for the pop-up:
@@ -623,7 +616,7 @@ class PopupControl(HasPrivateTraits):
                 py = cy - pdy
 
         # Finally, position the popup control:
-        self.popup.SetDimensions(px, py, pdx, pdy)
+        self.popup.SetSize(px, py, pdx, pdy)
 
     def _on_close_popup(self, event):
         """ Closes the popup control when it is deactivated.
@@ -634,7 +627,7 @@ class PopupControl(HasPrivateTraits):
     def _close_popup(self):
         """ Closes the dialog.
         """
-        wx.EVT_ACTIVATE(self.popup, None)
+        self.popup.Unbind(wx.EVT_ACTIVATE)
         self.dispose()
         self.closed = True
         self.popup.Destroy()
@@ -660,7 +653,7 @@ class BufferDC(wx.MemoryDC):
             dc = wx.PaintDC(dc)
 
         self.dc = dc
-        self.bitmap = wx.EmptyBitmap(width, height)
+        self.bitmap = wx.Bitmap(width, height)
 
         self.SelectObject(self.bitmap)
 
@@ -684,7 +677,7 @@ class Slider(wx.Slider):
     def __init__(self, *args, **kw):
         super(Slider, self).__init__(*args, **kw)
 
-        wx.EVT_ERASE_BACKGROUND(self, self._erase_background)
+        self.Bind(wx.EVT_ERASE_BACKGROUND, self._erase_background)
 
     def _erase_background(self, event):
         pass

@@ -88,7 +88,7 @@ import click
 
 supported_combinations = {
     '3.5': {'pyside2', 'pyqt', 'pyqt5', 'null'},
-    '3.6': {'pyside2', 'pyqt', 'pyqt5', 'null'},
+    '3.6': {'pyside2', 'pyqt', 'pyqt5', 'wx', 'null'},
 }
 
 # Default Python version to use in the comamnds below if none is specified.
@@ -114,7 +114,8 @@ extra_dependencies = {
     'pyside2': set(),
     'pyqt': {'pyqt<4.12'},  # FIXME: build of 4.12-1 appears to be bad
     'pyqt5': {'pyqt5'},
-    'wx': {'wxpython'},
+    # XXX once wxPython 4 is available in EDM, we will want it here
+    'wx': set(),
     'null': set()
 }
 
@@ -167,6 +168,16 @@ def install(runtime, toolkit, environment):
         commands.append(
             "edm run -e {environment} -- pip install pyside2==5.11"
         )
+    elif toolkit == 'wx':
+        if sys.platform != 'linux':
+            commands.append(
+                "edm run -e {environment} -- pip install wxPython"
+            )
+        else:
+            # XXX this is mainly for TravisCI workers; need a generic solution
+            commands.append(
+                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-14.04 wxPython"
+            )
 
     click.echo("Creating environment '{environment}'".format(**parameters))
     execute(commands, parameters)

@@ -228,11 +228,11 @@ class GUIToolkit(Toolkit):
             px, py = 0, 0
             pdx, pdy = screen_dx, screen_dy
         else:
-            px, py = parent.GetPositionTuple()
-            pdx, pdy = parent.GetSizeTuple()
+            px, py = parent.GetPosition()
+            pdx, pdy = parent.GetSize()
 
         # Calculate the correct width and height for the window:
-        cur_width, cur_height = window.GetSizeTuple()
+        cur_width, cur_height = window.GetSize()
         width = view.width
         height = view.height
 
@@ -262,7 +262,7 @@ class GUIToolkit(Toolkit):
             # BH- I think this is the case when there is a parent
             # so this logic tries to place it in the middle of the parent
             # if possible, otherwise tries an offset from the parent
-            x = px + (pdx - width) / 2
+            x = px + (pdx - width) // 2
             if x < 0:
                 x = px + 20
         elif x <= -1.0:
@@ -278,7 +278,7 @@ class GUIToolkit(Toolkit):
             # BH- I think this is the case when there is a parent
             # so this logic tries to place it in the middle of the parent
             # if possible, otherwise tries an offset from the parent
-            y = py + (pdy - height) / 2
+            y = py + (pdy - height) // 2
             if y < 0:
                 y = py + 20
         elif y <= -1.0:
@@ -296,7 +296,7 @@ class GUIToolkit(Toolkit):
         y = min(y, wx.DisplaySize()[1])
 
         # Position and size the window as requested:
-        window.SetDimensions(max(0, x), max(0, y), width, height)
+        window.SetSize(max(0, x), max(0, y), width, height)
 
     def show_help(self, ui, control):
         """ Shows a help window for a specified UI and control.
@@ -554,17 +554,15 @@ class EventHandlerWrapper(wx.EvtHandler):
     pass
 
 
-def _popEventHandlers(ctrl):
+def _popEventHandlers(ctrl, handler_type=EventHandlerWrapper):
     """ Pop any event handlers that have been pushed on to a window and its
         children.
     """
-
-    # Assume that all traitsui event handlers are on the top of the stack
-    while ctrl is not ctrl.GetEventHandler():
-        handler = ctrl.GetEventHandler()
-        if isinstance(handler, EventHandlerWrapper):
+    handler = ctrl.GetEventHandler()
+    while ctrl is not handler:
+        next_handler = handler.GetNextHandler()
+        if isinstance(handler, handler_type):
             ctrl.PopEventHandler(True)
-        else:
-            break
+        handler = next_handler
     for child in ctrl.GetChildren():
         _popEventHandlers(child)

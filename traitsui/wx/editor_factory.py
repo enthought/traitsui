@@ -67,8 +67,8 @@ class SimpleEditor(Editor):
             widget.
         """
         self.control = self.create_control(parent)
-        wx.EVT_LEFT_DOWN(self.control, self._enable_popup_editor)
-        wx.EVT_LEFT_UP(self.control, self._show_popup_editor)
+        self.control.Bind(wx.EVT_LEFT_DOWN, self._enable_popup_editor)
+        self.control.Bind(wx.EVT_LEFT_UP, self._show_popup_editor)
         self.set_tooltip()
 
     def create_control(self, parent):
@@ -113,8 +113,8 @@ class TextEditor(Editor):
         self.control = wx.TextCtrl(
             parent, -1, self.str_value, style=wx.TE_PROCESS_ENTER
         )
-        wx.EVT_KILL_FOCUS(self.control, self.update_object)
-        wx.EVT_TEXT_ENTER(parent, self.control.GetId(), self.update_object)
+        self.control.Bind(wx.EVT_KILL_FOCUS, self.update_object)
+        parent.Bind(wx.EVT_TEXT_ENTER, self.update_object, id=self.control.GetId())
         self.set_tooltip()
 
     def update_object(self, event):

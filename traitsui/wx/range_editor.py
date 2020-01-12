@@ -151,7 +151,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         slider.SetValue(1)
         slider.SetPageSize(1000)
         slider.SetLineSize(100)
-        wx.EVT_SCROLL(slider, self.update_object_on_scroll)
+        slider.Bind(wx.EVT_SCROLL, self.update_object_on_scroll)
         sizer.Add(slider, 1, wx.EXPAND)
         self._label_hi = wx.StaticText(panel, -1, "999999", size=size)
         sizer.Add(self._label_hi, 0, wx.ALIGN_CENTER)
@@ -163,8 +163,8 @@ class SimpleSliderEditor(BaseRangeEditor):
             size=wx.Size(56, 20),
             style=wx.TE_PROCESS_ENTER,
         )
-        wx.EVT_TEXT_ENTER(panel, text.GetId(), self.update_object_on_enter)
-        wx.EVT_KILL_FOCUS(text, self.update_object_on_enter)
+        panel.Bind(wx.EVT_TEXT_ENTER, self.update_object_on_enter, id=text.GetId())
+        text.Bind(wx.EVT_KILL_FOCUS, self.update_object_on_enter)
 
         sizer.Add(text, 0, wx.LEFT | wx.EXPAND, 4)
 
@@ -267,7 +267,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         value = self.value
         try:
             text = self.format % value
-            1 / (self.low <= value <= self.high)
+            1 // (self.low <= value <= self.high)
         except:
             text = ""
             value = self.low
@@ -407,7 +407,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         fvalue = self.value
         try:
             fvalue_text = self._format % fvalue
-            1 / (low <= fvalue <= high)
+            1 // (low <= fvalue <= high)
         except:
             fvalue_text = ""
             fvalue = low
@@ -432,7 +432,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             style=wx.BU_EXACTFIT | wx.NO_BORDER,
         )
         panel.button_lo = button_lo
-        button_lo.Bind(wx.EVT_BUTTON, self.reduce_range, button_lo)
+        button_lo.Bind(wx.EVT_BUTTON, button_lo, id=self.reduce_range)
         sizer.Add(button_lo, 1, wx.ALIGN_CENTER)
 
         # Slider:
@@ -449,7 +449,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         slider.SetValue(1)
         slider.SetPageSize(1000)
         slider.SetLineSize(100)
-        wx.EVT_SCROLL(slider, self.update_object_on_scroll)
+        slider.Bind(wx.EVT_SCROLL, self.update_object_on_scroll)
         sizer.Add(slider, 6, wx.EXPAND)
 
         # Upper limit button:
@@ -462,7 +462,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             style=wx.BU_EXACTFIT | wx.NO_BORDER,
         )
         panel.button_hi = button_hi
-        button_hi.Bind(wx.EVT_BUTTON, self.increase_range, button_hi)
+        button_hi.Bind(wx.EVT_BUTTON, button_hi, id=self.increase_range)
         sizer.Add(button_hi, 1, wx.ALIGN_CENTER)
 
         # Upper limit label:
@@ -478,8 +478,8 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             size=wx.Size(56, 20),
             style=wx.TE_PROCESS_ENTER,
         )
-        wx.EVT_TEXT_ENTER(panel, text.GetId(), self.update_object_on_enter)
-        wx.EVT_KILL_FOCUS(text, self.update_object_on_enter)
+        panel.Bind(wx.EVT_TEXT_ENTER, self.update_object_on_enter, id=text.GetId())
+        text.Bind(wx.EVT_KILL_FOCUS, self.update_object_on_enter)
 
         sizer.Add(text, 0, wx.LEFT | wx.EXPAND, 4)
 
@@ -745,9 +745,9 @@ class SimpleSpinEditor(BaseRangeEditor):
         self.control = wx.SpinCtrl(
             parent, -1, self.str_value, min=low, max=high, initial=self.value
         )
-        wx.EVT_SPINCTRL(parent, self.control.GetId(), self.update_object)
+        parent.Bind(wx.EVT_SPINCTRL, self.update_object, id=self.control.GetId())
         if wx.VERSION < (3, 0):
-            wx.EVT_TEXT(parent, self.control.GetId(), self.update_object)
+            parent.Bind(wx.EVT_TEXT, self.update_object, id=self.control.GetId())
         self.set_tooltip()
 
     def update_object(self, event):
@@ -828,14 +828,14 @@ class RangeTextEditor(TextEditor):
             control = wx.TextCtrl(
                 parent, -1, self.str_value, style=wx.TE_PROCESS_ENTER
             )
-            wx.EVT_TEXT_ENTER(parent, control.GetId(), self.update_object)
+            parent.Bind(wx.EVT_TEXT_ENTER, self.update_object, id=control.GetId())
         else:
             control = wx.TextCtrl(parent, -1, self.str_value)
 
-        wx.EVT_KILL_FOCUS(control, self.update_object)
+        control.Bind(wx.EVT_KILL_FOCUS, self.update_object)
 
         if self.factory.auto_set:
-            wx.EVT_TEXT(parent, control.GetId(), self.update_object)
+            parent.Bind(wx.EVT_TEXT, self.update_object, id=control.GetId())
 
         self.evaluate = self.factory.evaluate
         self.sync_value(self.factory.evaluate_name, "evaluate", "from")

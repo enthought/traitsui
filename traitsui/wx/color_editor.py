@@ -17,7 +17,7 @@
 
 from __future__ import absolute_import
 import wx
-import wx.combo
+import wx.adv
 
 from traits.api import List, TraitError
 from traitsui.editors.color_editor import (
@@ -77,7 +77,7 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
                     color.Blue(),
                 )
 
-            return "rgb(%d,%d,%d,%d)" % (
+            return "rgba(%d,%d,%d,%d)" % (
                 color.Red(),
                 color.Green(),
                 color.Blue(),
@@ -92,7 +92,7 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
 # ------------------------------------------------------------------------------
 
 
-class ColorComboBox(wx.combo.OwnerDrawnComboBox):
+class ColorComboBox(wx.adv.OwnerDrawnComboBox):
     def OnDrawItem(self, dc, rect, item, flags):
 
         r = wx.Rect(rect.x, rect.y, rect.width, rect.height)
@@ -102,7 +102,7 @@ class ColorComboBox(wx.combo.OwnerDrawnComboBox):
         color_name = self.GetString(item)
 
         dc.DrawText(
-            color_name, r.x + 3, r.y + (r.height - dc.GetCharHeight()) / 2
+            color_name, r.x + 3, r.y + (r.height - dc.GetCharHeight()) // 2
         )
 
         if color_name == "custom":
@@ -245,14 +245,12 @@ class CustomColorEditor(BaseSimpleEditor):
         text_control = wx.TextCtrl(
             parent, -1, self.str_value, style=wx.TE_PROCESS_ENTER
         )
-        wx.EVT_KILL_FOCUS(text_control, self.update_object)
-        wx.EVT_TEXT_ENTER(parent, text_control.GetId(), self.update_object)
+        text_control.Bind(wx.EVT_KILL_FOCUS, self.update_object)
+        parent.Bind(wx.EVT_TEXT_ENTER, self.update_object, id=text_control.GetId())
 
         # 'button_control' shows the 'Edit' button.
         button_control = wx.Button(parent, label="Edit", style=wx.BU_EXACTFIT)
-        wx.EVT_BUTTON(
-            button_control, button_control.GetId(), self.open_color_dialog
-        )
+        button_control.Bind(wx.EVT_BUTTON, self.open_color_dialog, id=button_control.GetId())
 
         sizer.Add(text_control, wx.ALIGN_LEFT)
         sizer.AddSpacer(8)

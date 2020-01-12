@@ -68,11 +68,11 @@ class HistoryControl(HasPrivateTraits):
             self.history,
             style=wx.CB_DROPDOWN,
         )
-        wx.EVT_COMBOBOX(parent, control.GetId(), self._update_value)
-        wx.EVT_KILL_FOCUS(control, self._kill_focus)
-        wx.EVT_TEXT_ENTER(parent, control.GetId(), self._update_text_value)
+        parent.Bind(wx.EVT_COMBOBOX, self._update_value, id=control.GetId())
+        control.Bind(wx.EVT_KILL_FOCUS, self._kill_focus)
+        parent.Bind(wx.EVT_TEXT_ENTER, self._update_text_value, id=control.GetId())
         if self.auto_set:
-            wx.EVT_TEXT(parent, control.GetId(), self._update_value_only)
+            parent.Bind(wx.EVT_TEXT, self._update_value_only, id=control.GetId())
 
         return control
 
@@ -81,9 +81,9 @@ class HistoryControl(HasPrivateTraits):
         """
         control, self.control = self.control, None
         parent = control.GetParent()
-        wx.EVT_COMBOBOX(parent, control.GetId(), None)
-        wx.EVT_TEXT_ENTER(parent, control.GetId(), None)
-        wx.EVT_KILL_FOCUS(control, None)
+        parent.Bind(wx.EVT_COMBOBOX, None, id=control.GetId())
+        parent.Bind(wx.EVT_TEXT_ENTER, None, id=control.GetId())
+        control.Unbind(wx.EVT_KILL_FOCUS)
 
     def set_value(self, value):
         """ Sets the specified value and adds it to the history.

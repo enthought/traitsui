@@ -199,8 +199,8 @@ class LiveWindow(BaseDialog):
             window.SetBackgroundColour(WindowColor)
 
             self.control = window
-            wx.EVT_CLOSE(window, self._on_close_page)
-            wx.EVT_CHAR(window, self._on_key)
+            window.Bind(wx.EVT_CLOSE, self._on_close_page)
+            window.Bind(wx.EVT_CHAR, self._on_key)
 
         self.set_icon(view.icon)
         buttons = [self.coerce_button(button) for button in view.buttons]
@@ -230,7 +230,7 @@ class LiveWindow(BaseDialog):
             sizer.Add(trait_sheet, 1, wx.EXPAND)
             tsdx, tsdy = trait_sheet.GetSize()
             sw.SetScrollRate(16, 16)
-            max_dy = (2 * screen_dy) / 3
+            max_dy = (2 * screen_dy) // 3
             sw.SetSizer(sizer)
             sw.SetSize(
                 wx.Size(
@@ -370,7 +370,7 @@ class LiveWindow(BaseDialog):
         """ Handles the user clicking the **OK** button.
         """
         if self.ui.handler.close(self.ui.info, True):
-            wx.EVT_ACTIVATE(self.control, None)
+            self.control.Unbind(wx.EVT_ACTIVATE)
             self.close(wx.ID_OK)
             return True
 
@@ -434,8 +434,8 @@ class MouseMonitor(wx.Timer):
             return
 
         mx, my = wx.GetMousePosition()
-        cx, cy = control.ClientToScreenXY(0, 0)
-        cdx, cdy = control.GetSizeTuple()
+        cx, cy = control.ClientToScreen(0, 0)
+        cdx, cdy = control.GetSize()
 
         if self.is_activated:
             # Don't close the popup if any mouse buttons are currently pressed:

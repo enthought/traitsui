@@ -139,21 +139,21 @@ class KeyBindingCtrl(wx.Window):
         editor.has_focus = False
 
         # Set up the 'erase background' event handler:
-        wx.EVT_ERASE_BACKGROUND(self, self._on_erase_background)
+        self.Bind(wx.EVT_ERASE_BACKGROUND, self._on_erase_background)
 
         # Set up the 'paint' event handler:
-        wx.EVT_PAINT(self, self._paint)
+        self.Bind(wx.EVT_PAINT, self._paint)
 
         # Set up the focus change handlers:
-        wx.EVT_SET_FOCUS(self, self._get_focus)
-        wx.EVT_KILL_FOCUS(self, self._lose_focus)
+        self.Bind(wx.EVT_SET_FOCUS, self._get_focus)
+        self.Bind(wx.EVT_KILL_FOCUS, self._lose_focus)
 
         # Set up mouse event handlers:
-        wx.EVT_LEFT_DOWN(self, self._set_focus)
-        wx.EVT_LEFT_DCLICK(self, self._clear_contents)
+        self.Bind(wx.EVT_LEFT_DOWN, self._set_focus)
+        self.Bind(wx.EVT_LEFT_DCLICK, self._clear_contents)
 
         # Handle key events:
-        wx.EVT_CHAR(self, self._on_char)
+        self.Bind(wx.EVT_CHAR, self._on_char)
 
     def _on_char(self, event):
         """ Handle keyboard keys being pressed.
@@ -167,7 +167,7 @@ class KeyBindingCtrl(wx.Window):
         """ Updates the screen.
         """
         wdc = wx.PaintDC(self)
-        dx, dy = self.GetSizeTuple()
+        dx, dy = self.GetSize()
         if self.editor.has_focus:
             wdc.SetPen(wx.Pen(wx.RED, 2))
             wdc.DrawRectangle(1, 1, dx - 1, dy - 1)

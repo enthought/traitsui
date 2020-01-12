@@ -6,5 +6,5 @@ class Counter(HasTraits):
     value =  Int()
 
 Counter().edit_traits()
-wx.PySimpleApp().MainLoop()
+wx.App().MainLoop()
 

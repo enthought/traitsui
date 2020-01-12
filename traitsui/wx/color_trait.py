@@ -143,9 +143,12 @@ def convert_to_color(object, name, value):
             tup = eval(tmp)
             return tuple_to_wxcolor(tup)
 
-    elif isinstance(value, int):
-        num = int(value)
-        return wx.Colour(num / 0x10000, (num / 0x100) & 0xFF, num & 0xFF)
+    else:
+        try:
+            num = int(value)
+        except Exception:
+            raise TraitError
+        return wx.Colour(num // 0x10000, (num // 0x100) & 0xFF, num & 0xFF)
 
     raise TraitError
 

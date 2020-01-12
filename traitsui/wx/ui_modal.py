@@ -125,8 +125,8 @@ class ModalDialog(BaseDialog):
             window.SetBackgroundColour(WindowColor)
             self.control = window
             self.set_icon(view.icon)
-            wx.EVT_CLOSE(window, self._on_close_page)
-            wx.EVT_CHAR(window, self._on_key)
+            window.Bind(wx.EVT_CLOSE, self._on_close_page)
+            window.Bind(wx.EVT_CHAR, self._on_key)
 
             # Create the 'context' copies we will need while editing:
             context = ui.context
@@ -142,11 +142,11 @@ class ModalDialog(BaseDialog):
             sw = TraitsUIScrolledPanel(window)
             trait_sheet = panel(ui, sw)
             sizer.Add(trait_sheet, 1, wx.EXPAND | wx.ALL, 4)
-            tsdx, tsdy = trait_sheet.GetSizeTuple()
+            tsdx, tsdy = trait_sheet.GetSize()
             tsdx += 8
             tsdy += 8
             sw.SetScrollRate(16, 16)
-            max_dy = (2 * screen_dy) / 3
+            max_dy = (2 * screen_dy) // 3
             sw.SetSizer(sizer)
             sw.SetSize(
                 wx.Size(

@@ -39,10 +39,10 @@ class SearchEditor(Editor):
         self.control.ShowCancelButton(self.factory.cancel_button)
 
         if self.factory.auto_set:
-            wx.EVT_TEXT(parent, self.control.GetId(), self.update_object)
+            parent.Bind(wx.EVT_TEXT, self.update_object, id=self.control.GetId())
 
         if self.factory.enter_set:
-            wx.EVT_TEXT_ENTER(parent, self.control.GetId(), self.update_object)
+            parent.Bind(wx.EVT_TEXT_ENTER, self.update_object, id=self.control.GetId())
 
         wx.EVT_SEARCHCTRL_SEARCH_BTN(
             parent, self.control.GetId(), self.update_object
