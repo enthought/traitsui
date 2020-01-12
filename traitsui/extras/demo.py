@@ -21,60 +21,66 @@
 
 from __future__ import absolute_import
 
-import sys
+import contextlib
 import glob
-import token
-import tokenize
-import operator
 from io import StringIO
-import io
-from configobj import ConfigObj
-
-from traits.api import (
-    Bool,
-    cached_property,
-    HasTraits,
-    HasPrivateTraits,
-    Str,
-    Instance,
-    Property,
-    Any,
-    Code,
-    HTML,
-    Dict,
-)
-
-from traitsui.api import (
-    TreeEditor,
-    ObjectTreeNode,
-    TreeNodeObject,
-    View,
-    Item,
-    VSplit,
-    Tabbed,
-    VGroup,
-    HGroup,
-    Heading,
-    Handler,
-    UIInfo,
-    InstanceEditor,
-    HTMLEditor,
-    Include,
-    spring,
-)
-
+import operator
 from os import listdir
-
 from os.path import (
-    join,
-    isdir,
-    split,
-    splitext,
-    dirname,
-    basename,
     abspath,
+    basename,
+    dirname,
     exists,
     isabs,
+    isdir,
+    join,
+    split,
+    splitext,
+)
+import sys
+import token
+import tokenize
+import traceback
+
+
+from configobj import ConfigObj
+
+from pyface.api import ImageResource
+from traits.api import (
+    Any,
+    Bool,
+    Button,
+    cached_property,
+    Code,
+    Dict,
+    HasPrivateTraits,
+    HasTraits,
+    HTML,
+    Instance,
+    Property,
+    Str,
+)
+from traitsui.api import (
+    CodeEditor,
+    Handler,
+    Heading,
+    HGroup,
+    HSplit,
+    HTMLEditor,
+    Include,
+    InstanceEditor,
+    Item,
+    ObjectTreeNode,
+    spring,
+    Tabbed,
+    TitleEditor,
+    TreeEditor,
+    TreeNodeObject,
+    UIInfo,
+    UItem,
+    VGroup,
+    View,
+    VSplit,
 )
 
 
@@ -152,23 +158,37 @@ def parse_source(file_name):
         The source code, sans docstring.
     """
     try:
-        with io.open(file_name, "r", encoding="utf-8") as fh:
-            source_code = fh.read()
+        source_code = _read_file(file_name)
         return extract_docstring_from_source(source_code)
     except Exception:
         # Print an error message instead of failing silently.
         # Ideally, the message would be output to the "log" tab.
-        import traceback
-
         traceback_text = traceback.format_exc()
         error_fmt = u"""Sorry, something went wrong.\n\n{}"""
         error_msg = error_fmt.format(traceback_text)
         return (error_msg, "")
 
 
+def _read_file(path, mode='r', encoding='utf8'):
+    """ Returns the contents of a specified text file.
+    """
+    with open(path, mode, encoding=encoding) as fh:
+        result = fh.read()
+    return result
+
+
 # -------------------------------------------------------------------------
 #  'DemoFileHandler' class:
 # -------------------------------------------------------------------------
+
+@contextlib.contextmanager
+def _set_stdout(std_out):
+    stdout, stderr = sys.stdout, sys.stderr
+    try:
+        sys.stdout = sys.stderr = std_out
+        yield std_out
+    finally:
+        sys.stdout, sys.stderr = stdout, stderr
 
 
 class DemoFileHandler(Handler):
@@ -177,93 +197,38 @@ class DemoFileHandler(Handler):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
+    #: Run the demo file
+    run_button = Button(image=ImageResource("run"), label="Run")
+
     #: The current 'info' object (for use by the 'write' method):
     info = Instance(UIInfo)
+
+    def _run_button_changed(self):
+        demo_file = self.info.object
+        with _set_stdout(self):
+            demo_file.run_code()
 
     def init(self, info):
         # Save the reference to the current 'info' object:
         self.info = info
-
-        # Set up the 'print' logger:
-        df = info.object
-        df.log = ""
-        sys.stdout = sys.stderr = self
-
-        # Read in the demo source file:
-        description, source = parse_source(df.path)
-        df.description = publish_html_str(description)
-        df.source = source
-        # Try to run the demo source file:
-
-        # Append the path for the demo source file to sys.path, so as to
-        # resolve any local (relative) imports in the demo source file.
-        sys.path.append(dirname(df.path))
-
-        locals = df.parent.init_dic
-        locals["__name__"] = "___main___"
-        locals["__file__"] = df.path
-        sys.modules["__main__"].__file__ = df.path
-        try:
-            with io.open(df.path, "r", encoding="utf-8") as fp:
-                exec(compile(fp.read(), df.path, "exec"), locals, locals)
-            demo = self._get_object("modal_popup", locals)
-            if demo is not None:
-                demo = ModalDemoButton(demo=demo)
-            else:
-                demo = self._get_object("popup", locals)
-                if demo is not None:
-                    demo = DemoButton(demo=demo)
-                else:
-                    demo = self._get_object("demo", locals)
-            # FIXME: If a 'demo' object could not be found, then try to execute
-            # the file setting __name__ to __main__. A lot of test scripts have
-            # the actual test running when __name__==__main__ and so we can at
-            # least run all test examples this way. Use a do_later loop so as to
-            # finish building the current UI before running the test.
-            if demo is None:
-                locals["__name__"] = "__main__"
-                # do_later(self.execute_test, df, locals)
-        except Exception as excp:
-            demo = DemoError(msg=str(excp))
-
-        # Clean up sys.path
-        sys.path.remove(dirname(df.path))
-        df.demo = demo
-
-    def execute_test(self, df, locals):
-        """ Executes the file in df.path in the namespace of locals."""
-        with io.open(df.path, "r", encoding="utf-8") as fp:
-            exec(compile(fp.read(), df.path, "exec"), locals, locals)
+        demo_file = info.object
+        with _set_stdout(self):
+            demo_file.init()
 
     def closed(self, info, is_ok):
         """ Closes the view.
         """
-        info.object.demo = None
-
-    # -------------------------------------------------------------------------
-    #  Get a specified object from the execution dictionary:
-    # -------------------------------------------------------------------------
-
-    def _get_object(self, name, dic):
-        object = dic.get(name) or dic.get(name.capitalize())
-        if object is not None:
-            if isinstance(type(object), type):
-                try:
-                    object = object()
-                except:
-                    pass
-
-            if isinstance(object, HasTraits):
-                return object
-
-        return None
+        demo_file = info.object
+        if hasattr(demo_file, 'demo'):
+            demo_file.demo = None
 
     # -------------------------------------------------------------------------
     #  Handles 'print' output:
     # -------------------------------------------------------------------------
 
     def write(self, text):
-        self.info.object.log += text
+        demo_file = self.info.object
+        demo_file.log += text
 
     def flush(self):
         pass
@@ -395,18 +360,13 @@ class DemoTreeNodeObject(TreeNodeObject):
     #  Gets the object's children:
     # -------------------------------------------------------------------------
 
-    def get_children(self, node):
+    def get_children(self):
         """ Gets the object's children.
         """
         raise NotImplementedError
 
 
-class DemoFile(DemoTreeNodeObject):
-
-    # -------------------------------------------------------------------------
-    #  Trait definitions:
-    # -------------------------------------------------------------------------
-
+class DemoFileBase(DemoTreeNodeObject):
     #: Parent of this file:
     parent = Any
 
@@ -425,22 +385,20 @@ class DemoFile(DemoTreeNodeObject):
     #: Description of what the demo does:
     description = HTML
 
-    #: Source code for the demo:
-    source = Code
-
-    #: Demo object whose traits UI is to be displayed:
-    demo = Instance(HasTraits)
-
     #: Log of all print messages displayed:
     log = Code
 
     _nice_name = Str
+
+    def init(self):
+        self.log = ""
+
     # -------------------------------------------------------------------------
     #  Implementation of the 'path' property:
     # -------------------------------------------------------------------------
 
     def _get_path(self):
-        return join(self.parent.path, self.name + ".py")
+        return join(self.parent.path, self.name)
 
     # -------------------------------------------------------------------------
     #  Implementation of the 'nice_name' property:
@@ -448,7 +406,8 @@ class DemoFile(DemoTreeNodeObject):
 
     def _get_nice_name(self):
         if not self._nice_name:
-            self._nice_name = user_name_for(self.name)
+            name, ext = splitext(self.name)
+            self._nice_name = user_name_for(name)
         return self._nice_name
 
     def _set_nice_name(self, value):
@@ -464,6 +423,95 @@ class DemoFile(DemoTreeNodeObject):
         """ Returns whether or not the object has children.
         """
         return False
+
+    def get_children(self):
+        """ Gets the demo file's children.
+        """
+        return []
+
+
+class DemoFile(DemoFileBase):
+
+    #: Source code for the demo:
+    source = Code
+
+    #: Demo object whose traits UI is to be displayed:
+    demo = Instance(HasTraits)
+
+    def init(self):
+        super(DemoFile, self).init()
+        description, source = parse_source(self.path)
+        self.description = publish_html_str(description)
+        self.source = source
+        self.run_code()
+
+    def run_code(self):
+        """ Runs the code associated with this demo file.
+        """
+        try:
+            # Get the execution context dictionary:
+            locals = self.parent.init_dic
+            locals["__name__"] = "___main___"
+            locals["__file__"] = self.path
+            sys.modules["__main__"].__file__ = self.path
+
+            exec(self.source, locals, locals)
+
+            demo = self._get_object("modal_popup", locals)
+            if demo is not None:
+                demo = ModalDemoButton(demo=demo)
+            else:
+                demo = self._get_object("popup", locals)
+                if demo is not None:
+                    demo = DemoButton(demo=demo)
+                else:
+                    demo = self._get_object("demo", locals)
+        except Exception:
+            traceback.print_exc()
+        else:
+            self.demo = demo
+
+    # -------------------------------------------------------------------------
+    #  Get a specified object from the execution dictionary:
+    # -------------------------------------------------------------------------
+
+    def _get_object(self, name, dic):
+        object = dic.get(name) or dic.get(name.capitalize())
+        if object is not None:
+            if isinstance(type(object), type):
+                try:
+                    object = object()
+                except Exception:
+                    pass
+
+            if isinstance(object, HasTraits):
+                return object
+
+        return None
+
+
+# HTML template for displaying an image file:
+_image_template = """<html>
+<head>
+</head>
+<body>
+<img src="%s">
+</body>
+</html>
+"""
+
+
+class DemoContentFile(DemoFileBase):
+    def init(self):
+        super(DemoContentFile, self).init()
+        file_str = _read_file(self.path)
+        self.description = publish_html_str(file_str)
+
+
+class DemoImageFile(DemoFileBase):
+    def init(self):
+        super(DemoImageFile, self).init()
+        self.description = _image_template.format(self.path)
 
 
 class DemoPath(DemoTreeNodeObject):
@@ -512,12 +560,32 @@ class DemoPath(DemoTreeNodeObject):
     #: Cached value of the nice_name property.
     _nice_name = Str
 
+    #: Dictionary mapping file extensions to callables
+    _file_factory = Dict
+
+    def __file_factory_default(self):
+        return {
+            ".htm": DemoContentFile,
+            ".html": DemoContentFile,
+            ".jpeg": DemoImageFile,
+            ".jpg": DemoImageFile,
+            ".png": DemoImageFile,
+            ".py": DemoFile,
+            ".rst": DemoContentFile,
+            ".txt": DemoContentFile
+        }
+
     # -------------------------------------------------------------------------
     #  Implementation of the 'path' property:
     # -------------------------------------------------------------------------
 
     def _get_path(self):
-        return join(self.parent.path, self.name)
+        if self.parent is not None:
+            path = join(self.parent.path, self.name)
+        else:
+            path = self.name
+
+        return path
 
     # -------------------------------------------------------------------------
     #  Implementation of the 'nice_name' property:
@@ -568,16 +636,6 @@ class DemoPath(DemoTreeNodeObject):
         exec((exec_str + source), init_dic)
         return init_dic
 
-        # fixme: The following code should work, but doesn't, so we use the
-        #        preceding code instead. Changing any trait in the object in
-        #        this method causes the tree to behave as if the DemoPath object
-        #        had been selected instead of a DemoFile object. May be due to
-        #        an 'anytrait' listener in the TreeEditor?
-        # if self._init_dic is None:
-        #   self._init_dic = {}
-        #   #exec self.source in self._init_dic
-        # return self._init_dic.copy()
-
     # -------------------------------------------------------------------------
     #  Initializes the description and source from the path's '__init__.py'
     #  file:
@@ -612,6 +670,8 @@ class DemoPath(DemoTreeNodeObject):
                 name, ext = splitext(name)
                 if (ext == ".py") and (name != "__init__"):
                     return True
+                elif ext in self._file_factory:
+                    return True
 
         return False
 
@@ -643,11 +703,13 @@ class DemoPath(DemoTreeNodeObject):
             if isdir(cur_path):
                 if self.has_py_files(cur_path):
                     dirs.append(DemoPath(parent=self, name=name))
-
             elif self.use_files:
-                name, ext = splitext(name)
-                if (ext == ".py") and (name != "__init__"):
-                    files.append(DemoFile(parent=self, name=name))
+                if name != "__init__.py":
+                    try:
+                        demo_file = self._handle_file(name)
+                        files.append(demo_file)
+                    except KeyError:
+                        pass
 
         sort_key = operator.attrgetter("name")
         dirs.sort(key=sort_key)
@@ -670,7 +732,7 @@ class DemoPath(DemoTreeNodeObject):
             if exists(self.config_filename):
                 try:
                     self.config_dict = ConfigObj(self.config_filename)
-                except:
+                except Exception:
                     pass
         if not self.config_dict:
             return self.get_children_from_datastructure()
@@ -694,25 +756,22 @@ class DemoPath(DemoTreeNodeObject):
                     for filename in filenames:
                         filename = join(self.path, filename)
                         for name in glob.iglob(filename):
-                            pathname, ext = splitext(name)
-                            if (ext == ".py") and (
-                                basename(pathname) != "__init__"
-                            ):
-                                names.append(pathname)
+                            if basename(name) != "__init__.py":
+                                names.append(name)
                     if len(names) > 1:
                         config_dict = {}
                         for name in names:
-                            config_dict[basename(name)] = {
-                                "files": name + ".py"
-                            }
+                            config_dict[basename(name)] = {"files": name}
                         demoobj = DemoPath(parent=self, name="")
                         demoobj.nice_name = keyword
                         demoobj.config_dict = config_dict
                         dirs.append(demoobj)
                     elif len(names) == 1:
-                        file = DemoFile(parent=self, name=names[0])
-                        file.nice_name = keyword
-                        files.append(file)
+                        try:
+                            demo_file = self._handle_file(name)
+                            files.append(demo_file)
+                        except KeyError:
+                            pass
 
         sort_key = operator.attrgetter("nice_name")
         dirs.sort(key=sort_key)
@@ -738,75 +797,109 @@ class DemoPath(DemoTreeNodeObject):
 
         return False
 
+    def _handle_file(self, filename):
+        """ Process a file based on its extension.
+        """
+        _, ext = splitext(filename)
+        file_factory = self._file_factory[ext]
+        demo_file = file_factory(parent=self, name=filename)
+        return demo_file
 
 # -------------------------------------------------------------------------
 #  Defines the demo tree editor:
 # -------------------------------------------------------------------------
 
-path_view = View(
+demo_path_view = View(
     Tabbed(
-        Item(
+        UItem(
             "description",
-            label="Description",
-            show_label=False,
             style="readonly",
             editor=HTMLEditor(format_text=True),
         ),
-        Item("source", label="Source", show_label=False, style="custom"),
-        export="DockWindowShell",
-        id="tabbed",
+        UItem("source", style="custom"),
     ),
-    id="traitsui.demos.demo.path_view",
-    # dock    = 'horizontal'
+    id="demo_path_view",
 )
 
-demo_view = View(
-    # VSplit(
-    Tabbed(
-        Item(
-            "description",
-            label="Description",
-            show_label=False,
-            style="readonly",
-            editor=HTMLEditor(format_text=True),
+demo_file_view = View(
+    HSplit(
+        Tabbed(
+            UItem(
+                "description",
+                style="readonly",
+                editor=HTMLEditor(format_text=True),
+            ),
         ),
-        Item("source", label="Source", show_label=False, style="custom"),
-        Item(
-            "demo",
-            label="Demo",
-            show_label=False,
-            style="custom",
-            resizable=True,
-            # FIXME:
-            # visible_when doesn't work correctly yet (for wx atleast)
-            # for tabbed items. Needs more investigation.
-            visible_when="demo",
+        VSplit(
+            VGroup(
+                Tabbed(
+                    UItem("source", style="custom"),
+                ),
+                UItem(
+                    "handler.run_button",
+                    visible_when="source is not None"
+                ),
+            ),
+            Tabbed(
+                Item(
+                    "log",
+                    style="readonly",
+                    editor=CodeEditor(
+                        show_line_numbers=False,
+                        selected_color=0xFFFFFF
+                    ),
+                    label="Output",
+                    show_label=False
+                ),
+                UItem(
+                    "demo",
+                    style="custom",
+                    resizable=True,
+                ),
+            ),
+            dock="horizontal"
         ),
-        Item("log", show_label=False, style="readonly"),
-        export="DockWindowShell",
-        id="tabbed",
     ),
-    # JDM moving log panel provisionally to its own tab, distracting here.
-    # VGroup(
-    # Item( 'log',
-    # show_label = False,
-    # style      = 'readonly'
-    # ),
-    # label = 'Log'
-    # ),
-    # export = 'DockWindowShell',
-    # id     = 'vsplit'
-    # ),
-    id="traitsui.demos.demo.file_view",
-    # dock    = 'horizontal',
+    id="demo_file_view",
     handler=demo_file_handler,
 )
 
+demo_content_view = View(
+    Tabbed(
+        UItem(
+            "description",
+            style="readonly",
+            editor=HTMLEditor(format_text=True),
+        ),
+    ),
+    handler=demo_file_handler,
+)
+
+
 demo_tree_editor = TreeEditor(
     nodes=[
-        ObjectTreeNode(node_for=[DemoPath], label="nice_name", view=path_view),
-        ObjectTreeNode(node_for=[DemoFile], label="nice_name", view=demo_view),
-    ]
+        ObjectTreeNode(
+            node_for=[DemoPath],
+            label="nice_name",
+            view=demo_path_view
+        ),
+        ObjectTreeNode(
+            node_for=[DemoFile],
+            label="nice_name",
+            view=demo_file_view
+        ),
+        ObjectTreeNode(
+            node_for=[DemoContentFile],
+            label="nice_name",
+            view=demo_content_view
+        ),
+        ObjectTreeNode(
+            node_for=[DemoImageFile],
+            label="nice_name",
+            view=demo_content_view
+        ),
+    ],
+    selected='selected_node'
 )
 
 
@@ -816,14 +909,78 @@ class Demo(HasPrivateTraits):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
+    #: Navifate to next node.
+    next_button = Button(image=ImageResource("next"), label="Next")
+
+    #: Navigate to parent of selected node.
+    parent_button = Button(image=ImageResource("parent"), label="Parent")
+
+    #: Navigate to previous node.
+    previous_button = Button(image=ImageResource("previous"), label="Previous")
+
     #: Path to the root demo directory:
     path = Str
 
     #: Root path object for locating demo files:
     root = Instance(DemoPath)
 
+    #: Selected node of the demo path tree.
+    selected_node = Any
+
     #: Title for the demo
     title = Str
+
+    _next_node = Property
+
+    _previous_node = Property
+
+    def _get__next_node(self):
+        next = None
+        node = self.selected_node
+        children = node.tno_get_children(node)
+
+        if len(children) > 0:
+            next = children[0]
+        else:
+            parent = node.parent
+            while parent is not None:
+                siblings = parent.tno_get_children(parent)
+                index = siblings.index(node)
+                if index < (len(siblings) - 1):
+                    next = siblings[index + 1]
+                    break
+
+                parent, node = parent.parent, parent
+
+        return next
+
+    def _get__previous_node(self):
+        previous = None
+        node = self.selected_node
+        parent = node.parent
+        if parent is not None:
+            siblings = parent.tno_get_children(parent)
+            index = siblings.index(node)
+            if index > 0:
+                previous = siblings[index - 1]
+                previous_children = previous.tno_get_children(previous)
+                while len(previous_children) > 0:
+                    previous = previous_children[-1]
+            else:
+                previous = parent
+
+        return previous
+
+    def _next_button_changed(self):
+        self.selected_node = self._next_node
+
+    def _parent_button_changed(self):
+        if self.selected_node is not None:
+            parent = self.selected_node.parent
+            self.selected_node = parent
+
+    def _previous_button_changed(self):
+        self.selected_node = self._previous_node
 
     # -------------------------------------------------------------------------
     #  Traits view definitions:
@@ -833,6 +990,33 @@ class Demo(HasPrivateTraits):
         """ Constructs the default traits view."""
 
         traits_view = View(
+            HGroup(
+                UItem(
+                    "previous_button",
+                    style="custom",
+                    enabled_when="_previous_node is not None",
+                    tooltip="Go to previous file"
+                ),
+                UItem(
+                    "parent_button",
+                    style="custom",
+                    enabled_when="(selected_node is not None) and "
+                    "(object.selected_node.parent is not None)",
+                    tooltip="Go up one level"
+                ),
+                UItem(
+                    "title",
+                    springy=True,
+                    editor=TitleEditor()
+                ),
+                UItem(
+                    "next_button",
+                    style="custom",
+                    enabled_when="_next_node is not None",
+                    tooltip="Go to next file"
+                ),
+                "_",
+            ),
             Item(
                 name="root",
                 id="root",
@@ -841,28 +1025,11 @@ class Demo(HasPrivateTraits):
             ),
             title=self.title,
             id="traitsui.demos.demo.Demo",
-            # dock      = 'horizontal',
             resizable=True,
-            # JDM: Seems that QT interface does not deal well with these size
-            # limits.
-            # With them, we get repeated:
-            #   Object::disconnect: Parentheses expected, signal AdvancedCodeWidget::lostFocus
-            # But without them, it throws an exception on exit:
-            #    Internal C++ object (_StickyDialog) already deleted.
-            # No, actually sometimes we get the latter even with them.
             width=950,
             height=900,
         )
         return traits_view
-
-    # -------------------------------------------------------------------------
-    #  Handles the 'root' trait being changed:
-    # -------------------------------------------------------------------------
-
-    def _root_changed(self, root):
-        """ Handles the 'root' trait being changed.
-        """
-        root.parent = self
 
 
 # -------------------------------------------------------------------------
@@ -965,6 +1132,9 @@ def demo(
         path=path,
         title=title,
         root=DemoPath(
-            name=name, use_files=use_files, config_filename=config_filename
+            name=dir_name,
+            nice_name=user_name_for(name),
+            use_files=use_files,
+            config_filename=config_filename
         ),
     ).configure_traits()

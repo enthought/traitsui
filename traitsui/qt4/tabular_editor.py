@@ -24,7 +24,7 @@ from __future__ import absolute_import
 
 from contextlib import contextmanager
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_qt5
 from pyface.image_resource import ImageResource
 from pyface.ui_traits import Image
 
@@ -715,7 +715,12 @@ class _TableView(QtGui.QTableView):
             vheader.hide()
 
         if factory.show_row_titles and factory.auto_resize_rows:
-            vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+            if is_qt5:
+                vheader.setSectionResizeMode(
+                    QtGui.QHeaderView.ResizeToContents
+                )
+            else:
+                vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
         else:
             # Set a default height for rows. Although setting the resize mode to
             # ResizeToContents would provide the best sizes, this is far too

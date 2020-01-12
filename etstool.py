@@ -87,7 +87,6 @@ from contextlib import contextmanager
 import click
 
 supported_combinations = {
-    '2.7': {'pyside', 'pyside2', 'pyqt', 'null'},
     '3.5': {'pyside2', 'pyqt', 'pyqt5', 'null'},
     '3.6': {'pyside2', 'pyqt', 'pyqt5', 'wx', 'null'},
 }
@@ -102,7 +101,6 @@ dependencies = {
     "numpy",
     "pandas<0.24",
     "pygments",
-    "traits",
     "pip",
     "nose",
     "coverage",
@@ -120,9 +118,7 @@ extra_dependencies = {
     'null': set()
 }
 
-runtime_dependencies = {
-    '2.7': {'mock'},
-}
+runtime_dependencies = {}
 
 doc_dependencies = {
     "sphinx",
@@ -175,7 +171,7 @@ def install(runtime, toolkit, environment):
         commands.append(
             "edm run -e {environment} -- pip install wxpython>=4"
         )
-    
+
     click.echo("Creating environment '{environment}'".format(**parameters))
     execute(commands, parameters)
     click.echo('Done install')

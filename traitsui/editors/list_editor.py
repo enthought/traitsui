@@ -85,6 +85,9 @@ class ToolkitEditorFactory(EditorFactory):
     #: Can the list be reorganized, or have items added and deleted.
     mutable = Bool(True)
 
+    #: Should the scrollbars be displayed if the list is too long.
+    scrollable = Bool(True, sync_value=True)
+
     #: The style of editor to use for each item:
     style = style_trait
 

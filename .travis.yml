@@ -10,17 +10,14 @@ env:
 
 matrix:
   include:
-    - env: RUNTIME=2.7 TOOLKITS="null pyqt pyside pyside2"
-    - env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5 pyside2"
+    - env: RUNTIME=3.6 TOOLKITS="null pyqt pyside2"
+    - env: RUNTIME=3.6 TOOLKITS="wx pyqt5"
     - os: osx
-      env: RUNTIME=2.7 TOOLKITS="null pyside pyqt pyside2"
+      env: RUNTIME=3.6 TOOLKITS="null pyqt5 pyqt pyside2"
     - os: osx
-      env: RUNTIME=2.7 TOOLKITS="pyqt wx"
-    - os: osx
-      env: RUNTIME=3.6 TOOLKITS="null pyqt5 pyqt wx pyside2"
+      env: RUNTIME=3.6 TOOLKITS="wx"
   allow_failures:
-    - os: osx
-      env: RUNTIME=2.7 TOOLKITS="pyqt"
+    - env: RUNTIME=3.6 TOOLKITS="wx pyqt5"
     - os: osx
       env: RUNTIME=3.6 TOOLKITS="wx"
   fast_finish: true
@@ -32,6 +29,7 @@ cache:
 before_install:
   - mkdir -p "${HOME}/.cache/download"
   - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then ./install-edm-linux.sh; export PATH="${HOME}/edm/bin:${PATH}"; fi
+  - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then sudo apt-get install -y libdbus-1-3 libxkbcommon-x11-0; fi
   - if [[ ${TRAVIS_OS_NAME} == 'osx' ]]; then ./install-edm-osx.sh; export PATH="${PATH}:/usr/local/bin"; fi
   - edm install -y wheel click coverage
 install:
