@@ -168,9 +168,15 @@ def install(runtime, toolkit, environment):
             "edm run -e {environment} -- pip install pyside2==5.11"
         )
     elif toolkit == 'wx':
-        commands.append(
-            "edm run -e {environment} -- pip install wxpython>=4"
-        )
+        if sys.platform != 'linux':
+            commands.append(
+                "{edm} run -e {environment} -- pip install wxPython"
+            )
+        else:
+            # XXX this is mainly for TravisCI workers; need a generic solution
+            commands.append(
+                "{edm} run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-14.04 wxPython"
+            )
 
     click.echo("Creating environment '{environment}'".format(**parameters))
     execute(commands, parameters)
