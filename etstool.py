@@ -171,12 +171,12 @@ def install(runtime, toolkit, environment):
     elif toolkit == 'wx':
         if sys.platform != 'linux':
             commands.append(
-                "{edm} run -e {environment} -- pip install wxPython"
+                "edm run -e {environment} -- pip install wxPython"
             )
         else:
             # XXX this is mainly for TravisCI workers; need a generic solution
             commands.append(
-                "{edm} run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-14.04 wxPython"
+                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-14.04 wxPython"
             )
 
     click.echo("Creating environment '{environment}'".format(**parameters))
