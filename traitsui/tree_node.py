@@ -999,6 +999,9 @@ class ITreeNodeAdapter(Adapter):
 
     def get_icon(self, is_expanded):
         """ Returns the icon for a specified object.
+
+        Valid values are '<item>' (file looking icon), '<group>' (closed folder
+        looking icon) and '<open>' (open folder looking icon).
         """
         return '<item>'
 
