@@ -240,6 +240,55 @@ property that wraps the raw tree structure in a :py:class:`DictNode` to get
 started: unlike the :py:class:`ITreeNodeAdapter` approaches this wrapping not
 automatically provided for you.
 
+Custom Renderers
+----------------
+
+The Qt backend allows users to completely override the rendering of cells in
+a TreeEditor.  To do this, the TreeNode should override the
+:py:meth:`TreeNode.get_renderer` method to return an instance of a
+subclass of :py:class:`~traitsui.tree_node_renderer.AbstractTreeNodeRenderer`.
+A :py:class:`~traitsui.qt4.tree_node_renderers.WordWrapRenderer` is available
+to provide basic word-wrapped layout in a cell, but user-defined subclasses
+can do any rendering that they want by implementing their own
+:py:class:`~traitsui.tree_node_renderer.AbstractTreeNodeRenderer` subclass.
+
+:py:class:`~traitsui.tree_node_renderer.AbstractTreeNodeRenderer` is an
+abstract base class, and subclasses must implement two methods:
+
+:py:meth:`~traitsui.tree_node_renderer.AbstractTreeNodeRenderer.size`
+    A method which should return a (height, width) tuple giving the preferred
+    size for the cell.  Depending on other constraints and user interactions,
+    this may not be the actual size that the cell will have available.
+
+    The toolkit will provide a ``size_context`` object that provides useful
+    parameters to help with sizing operations.  In the Qt backend, this is a
+    tuple containing the arguments passed to the Qt :py:meth:`sizeHint` method
+    of a :py:class:`QStyledItemDelegate`.
+
+:py:meth:`~traitsui.tree_node_renderer.AbstractTreeNodeRenderer.paint`
+    Toolkit-dependent code that renders the cell
+
+    The toolkit will provide a ```paint_context``` object that provides useful
+    parameters to help with painting operations.  In the Qt backend, this is a
+    tuple containing the arguments passed to the Qt :py:meth:`paint` method
+    of a :py:class:`QStyledItemDelegate`.  In particular, the first argument
+    is always a :py:class:`QPainter` instance and the second a
+    :py:class:`QStyleOptionViewItem` from which you can get the rectangle of
+    the cell being rendered as well as style and font information.
+
+The renderer can choose to not handle all of the rendering, and instead let
+the tree editor handle rendering the icon or the text of the cell, by setting
+the :py:meth:`~traitsui.tree_node_renderer.AbstractTreeNodeRenderer.handles_icon`,
+:py:meth:`~traitsui.tree_node_renderer.AbstractTreeNodeRenderer.handles_text`,
+and :py:meth:`~traitsui.tree_node_renderer.AbstractTreeNodeRenderer.handles_all`
+traits appropriately.
+
+Lastly there is a convenience method
+:py:meth:`~traitsui.tree_node_renderer.AbstractTreeNodeRenderer.get_label` that
+gets the label text given the tree node, the underlying object, and the column,
+smoothing over the TreeNode columns label API.
+
+
 Examples
 --------
 
@@ -249,6 +298,7 @@ There are a number of examples of use of the
 - :github-demo:`TreeEditor <Standard_Editors/TreeEditor_demo.py>`
 - :github-demo:`Adapted TreeEditor <Advanced/Adapted_tree_editor_demo.py>`
 - :github-demo:`HDF5 Tree <Advanced/HDF5_tree_demo.py>`
+- :github-demo:`Tree Editor with Renderer <Extras/Tree_editor_with_TreeNodeRenderer.py>`
 
 
 The TabularAdapter Class

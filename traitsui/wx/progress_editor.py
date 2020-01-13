@@ -7,7 +7,6 @@ from pyface.ui.wx.progress_dialog import ProgressDialog
 
 
 class _ProgressDialog(ProgressDialog):
-
     def close(self):
         """ Overwritten to disable closing.
         """
@@ -31,7 +30,7 @@ class SimpleEditor(Editor):
     # The ending value
     max = Int
 
-    #-- Editor interface ------------------------------------------------------
+    # -- Editor interface ------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -42,9 +41,9 @@ class SimpleEditor(Editor):
         self.min = factory.min
         self.max = factory.max
         self.message = factory.message
-        self.sync_value(factory.min_name, 'min', 'from')
-        self.sync_value(factory.max_name, 'max', 'from')
-        self.sync_value(factory.message_name, 'message', 'from')
+        self.sync_value(factory.min_name, "min", "from")
+        self.sync_value(factory.max_name, "max", "from")
+        self.sync_value(factory.message_name, "message", "from")
         self.set_tooltip()
 
     def create_control(self, parent):
@@ -52,20 +51,22 @@ class SimpleEditor(Editor):
         Finishes initializing the editor by creating the underlying widget.
         """
 
-        self.progress = ProgressDialog(title=self.factory.title,
-                                       message=self.factory.message,
-                                       min=self.factory.min,
-                                       max=self.factory.max,
-                                       can_cancel=self.factory.can_cancel,
-                                       show_time=self.factory.show_time,
-                                       show_percent=self.factory.show_percent)
+        self.progress = ProgressDialog(
+            title=self.factory.title,
+            message=self.factory.message,
+            min=self.factory.min,
+            max=self.factory.max,
+            can_cancel=self.factory.can_cancel,
+            show_time=self.factory.show_time,
+            show_percent=self.factory.show_percent,
+        )
 
         panel = wx.Panel(parent, -1)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         panel.SetSizer(sizer)
         panel.SetAutoLayout(True)
-        panel.SetBackgroundColour(wx.NullColor)
+        panel.SetBackgroundColour(wx.NullColour)
 
         self.progress.dialog_size = wx.Size()
 

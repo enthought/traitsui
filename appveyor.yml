@@ -5,27 +5,24 @@ environment:
 
   global:
     PYTHONUNBUFFERED: "1"
-    INSTALL_EDM_VERSION: "1.9.1"
+    INSTALL_EDM_VERSION: "2.0.0"
 
   matrix:
-    - RUNTIME: '2.7'
-      TOOLKITS: "null pyqt pyside wx"
-    - RUNTIME: '3.5'
-      TOOLKITS: "null pyqt pyqt5"
     - RUNTIME: '3.6'
-      TOOLKITS: "null pyqt pyqt5"
+      TOOLKITS: "null pyqt"
     - RUNTIME: '3.6'
-      TOOLKITS: "pyside2"
+      TOOLKITS: "wx pyside2 pyqt5"
 
 matrix:
   fast_finish: true
   allow_failures:
     - RUNTIME: '3.6'
-      TOOLKITS: "pyside2"
+      TOOLKITS: "wx pyside2 pyqt5"
 
 branches:
   only:
     - master
+    - maint/6.1
 
 cache:
   - C:\Users\appveyor\.cache -> appveyor-clean-cache.txt

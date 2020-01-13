@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,7 +13,7 @@
 #  Author: David C. Morrill
 #  Date:   12/18/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the base class for the wxPython-based Traits UI modal and non-modal
     dialogs.
@@ -32,6 +32,7 @@ from .editor import Editor
 class ButtonEditor(Editor):
     """ Editor for buttons.
     """
+
     # Action associated with the button
     action = Instance(Action)
 
@@ -53,7 +54,8 @@ class BaseDialog(_BasePanel):
     def default_icon(self):
         """ Return a default icon for a TraitsUI dialog. """
         from pyface.image_resource import ImageResource
-        return ImageResource('frame.ico')
+
+        return ImageResource("frame.ico")
 
     def set_icon(self, icon=None):
         """ Sets the frame's icon.
@@ -85,13 +87,13 @@ class BaseDialog(_BasePanel):
                 set_text = self._set_status_text(control, i)
                 name = item.name
                 set_text(ui.get_extended_value(name))
-                col = name.find('.')
-                object = 'object'
+                col = name.find(".")
+                object = "object"
                 if col >= 0:
-                    object = name[: col]
-                    name = name[col + 1:]
+                    object = name[:col]
+                    name = name[col + 1 :]
                 object = context[object]
-                object.on_trait_change(set_text, name, dispatch='ui')
+                object.on_trait_change(set_text, name, dispatch="ui")
                 listeners.append((object, set_text, name))
 
             control.SetStatusWidths(widths)
@@ -111,7 +113,8 @@ class BaseDialog(_BasePanel):
         if menubar is not None:
             self._last_group = self._last_parent = None
             self.control.SetMenuBar(
-                menubar.create_menu_bar(self.control, self))
+                menubar.create_menu_bar(self.control, self)
+            )
             self._last_group = self._last_parent = None
 
     def add_toolbar(self):
@@ -121,16 +124,25 @@ class BaseDialog(_BasePanel):
         if toolbar is not None:
             self._last_group = self._last_parent = None
             self.control.SetToolBar(
-                toolbar.create_tool_bar(self.control, self))
+                toolbar.create_tool_bar(self.control, self)
+            )
             self._last_group = self._last_parent = None
 
-    def add_button(self, action, sizer, method=None, enabled=True,
-                   name=None, default=False):
+    def add_button(
+        self,
+        action,
+        sizer,
+        method=None,
+        enabled=True,
+        name=None,
+        default=False,
+    ):
         """ Creates a button.
         """
         ui = self.ui
-        if ((action.defined_when != '') and
-                (not ui.eval_when(action.defined_when))):
+        if (action.defined_when != "") and (
+            not ui.eval_when(action.defined_when)
+        ):
             return None
 
         if name is None:
@@ -140,20 +152,18 @@ class BaseDialog(_BasePanel):
         button.Enable(enabled)
         if default:
             button.SetDefault()
-        if (method is None) or (action.enabled_when != '') or (id != ''):
-            editor = ButtonEditor(ui=ui,
-                                  action=action,
-                                  control=button)
-            if id != '':
+        if (method is None) or (action.enabled_when != "") or (id != ""):
+            editor = ButtonEditor(ui=ui, action=action, control=button)
+            if id != "":
                 ui.info.bind(id, editor)
-            if action.visible_when != '':
+            if action.visible_when != "":
                 ui.add_visible(action.visible_when, editor)
-            if action.enabled_when != '':
+            if action.enabled_when != "":
                 ui.add_enabled(action.enabled_when, editor)
             if method is None:
                 method = editor.perform
-        wx.EVT_BUTTON(self.control, button.GetId(), method)
+        self.control.Bind(wx.EVT_BUTTON, method, id=button.GetId())
         sizer.Add(button, 0, wx.LEFT, 5)
-        if action.tooltip != '':
-            button.SetToolTipString(action.tooltip)
+        if action.tooltip != "":
+            button.SetToolTip(action.tooltip)
         return button

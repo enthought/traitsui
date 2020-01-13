@@ -1,10 +1,10 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,7 +13,7 @@
 #  Author: Evan Patterson
 #  Date:   06/25/09
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # System library imports
 from __future__ import absolute_import
@@ -24,7 +24,6 @@ from .editor import Editor
 
 
 class SearchEditor(Editor):
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -40,15 +39,17 @@ class SearchEditor(Editor):
         self.control.ShowCancelButton(self.factory.cancel_button)
 
         if self.factory.auto_set:
-            wx.EVT_TEXT(parent, self.control.GetId(), self.update_object)
+            parent.Bind(wx.EVT_TEXT, self.update_object, id=self.control.GetId())
 
         if self.factory.enter_set:
-            wx.EVT_TEXT_ENTER(parent, self.control.GetId(), self.update_object)
+            parent.Bind(wx.EVT_TEXT_ENTER, self.update_object, id=self.control.GetId())
 
-        wx.EVT_SEARCHCTRL_SEARCH_BTN(parent, self.control.GetId(),
-                                     self.update_object)
-        wx.EVT_SEARCHCTRL_CANCEL_BTN(parent, self.control.GetId(),
-                                     self.clear_text)
+        wx.EVT_SEARCHCTRL_SEARCH_BTN(
+            parent, self.control.GetId(), self.update_object
+        )
+        wx.EVT_SEARCHCTRL_CANCEL_BTN(
+            parent, self.control.GetId(), self.clear_text
+        )
 
     def update_object(self, event):
         """ Handles the user entering input data in the edit control.
@@ -56,7 +57,7 @@ class SearchEditor(Editor):
 
         if not self._no_update:
             self.value = self.control.GetValue()
-            if self.factory.search_event_trait != '':
+            if self.factory.search_event_trait != "":
                 setattr(self.object, self.factory.search_event_trait, True)
 
     def clear_text(self, event):
@@ -66,7 +67,7 @@ class SearchEditor(Editor):
         if not self._no_update:
             self.control.SetValue("")
             self.value = ""
-            if self.factory.search_event_trait != '':
+            if self.factory.search_event_trait != "":
                 setattr(self.object, self.factory.search_event_trait, True)
 
     def update_editor(self):

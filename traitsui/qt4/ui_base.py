@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # Copyright (c) 2017, Enthought Inc.
 # All rights reserved.
@@ -8,7 +8,7 @@
 # described in the PyQt GPL exception also apply
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """Defines the base class for the PyQt-based Traits UI modal and non-modal
    dialogs.
@@ -30,24 +30,17 @@ from .helper import restore_window, save_window
 class ButtonEditor(Editor):
     """ Editor for buttons.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # Action associated with the button
+    #: Action associated with the button
     action = Instance(Action)
-
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
 
     def __init__(self, **traits):
         # XXX Why does this need to be an Editor subclass? -- CJW
         HasPrivateTraits.__init__(self, **traits)
-
-    #-------------------------------------------------------------------------
-    #  Handles the associated button being clicked:
-    #-------------------------------------------------------------------------
 
     def perform(self):
         """ Handles the associated button being clicked.
@@ -60,13 +53,22 @@ class BasePanel(_BasePanel):
     """Base class for Traits UI panels.
     """
 
-    def add_button(self, action, bbox, role, method=None, enabled=True,
-                   name=None, default=False):
+    def add_button(
+        self,
+        action,
+        bbox,
+        role,
+        method=None,
+        enabled=True,
+        name=None,
+        default=False,
+    ):
         """ Creates a button.
         """
         ui = self.ui
-        if ((action.defined_when != '') and
-                (not ui.eval_when(action.defined_when))):
+        if (action.defined_when != "") and (
+            not ui.eval_when(action.defined_when)
+        ):
             return None
 
         if name is None:
@@ -76,15 +78,13 @@ class BasePanel(_BasePanel):
         button.setAutoDefault(False)
         button.setDefault(default)
         button.setEnabled(enabled)
-        if (method is None) or (action.enabled_when != '') or (id != ''):
-            editor = ButtonEditor(ui=ui,
-                                  action=action,
-                                  control=button)
-            if id != '':
+        if (method is None) or (action.enabled_when != "") or (id != ""):
+            editor = ButtonEditor(ui=ui, action=action, control=button)
+            if id != "":
                 ui.info.bind(id, editor)
-            if action.visible_when != '':
+            if action.visible_when != "":
                 ui.add_visible(action.visible_when, editor)
-            if action.enabled_when != '':
+            if action.enabled_when != "":
                 ui.add_enabled(action.enabled_when, editor)
             if method is None:
                 method = editor.perform
@@ -92,7 +92,7 @@ class BasePanel(_BasePanel):
         if method is not None:
             button.clicked.connect(method)
 
-        if action.tooltip != '':
+        if action.tooltip != "":
             button.setToolTip(action.tooltip)
 
         return button
@@ -135,12 +135,17 @@ class _StickyDialog(QtGui.QDialog):
             flags = QtCore.Qt.Dialog | QtCore.Qt.WindowSystemMenuHint
             layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
             if ui.view.resizable:
-                flags |= QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowMaximizeButtonHint
+                flags |= (
+                    QtCore.Qt.WindowMinimizeButtonHint
+                    | QtCore.Qt.WindowMaximizeButtonHint
+                )
         try:
             flags |= QtCore.Qt.WindowCloseButtonHint
             if ui.view.resizable:
-                flags |= (QtCore.Qt.WindowMinimizeButtonHint |
-                          QtCore.Qt.WindowMaximizeButtonHint)
+                flags |= (
+                    QtCore.Qt.WindowMinimizeButtonHint
+                    | QtCore.Qt.WindowMaximizeButtonHint
+                )
         except AttributeError:
             # Either PyQt or Qt is too old.
             pass
@@ -167,8 +172,10 @@ class _StickyDialog(QtGui.QDialog):
         """Reimplemented to ignore the Escape key if appropriate, and to ignore
         the Enter key if no default button has been explicitly set."""
 
-        if e.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return) and \
-                not self._ui.view.default_button:
+        if (
+            e.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return)
+            and not self._ui.view.default_button
+        ):
             return
 
         if e.key() == QtCore.Qt.Key_Escape and not self._ok_to_close():
@@ -222,7 +229,7 @@ class _StickyDialog(QtGui.QDialog):
 class BaseDialog(BasePanel):
     """Base class for Traits UI dialog boxes."""
 
-    # The different dialog styles.
+    #: The different dialog styles.
     NONMODAL, MODAL, POPUP = list(range(3))
 
     def init(self, ui, parent, style):
@@ -281,7 +288,7 @@ class BaseDialog(BasePanel):
 
         try:
             ui.prepare_ui()
-        except:
+        except BaseException:
             ui.control.setParent(None)
             ui.control.ui = None
             ui.control = None
@@ -291,6 +298,11 @@ class BaseDialog(BasePanel):
 
         ui.handler.position(ui.info)
         restore_window(ui)
+
+        # if an item asked for initial focus, give it to them
+        if ui._focus_control is not None:
+            ui._focus_control.setFocus()
+            ui._focus_control = None
 
         if style == BaseDialog.NONMODAL:
             ui.control.show()
@@ -313,10 +325,6 @@ class BaseDialog(BasePanel):
 
         self.ok.setEnabled(errors == 0)
 
-    #-------------------------------------------------------------------------
-    #  Adds a menu bar to the dialog:
-    #-------------------------------------------------------------------------
-
     def _add_menubar(self):
         """Adds a menu bar to the dialog.
         """
@@ -324,12 +332,9 @@ class BaseDialog(BasePanel):
         if menubar is not None:
             self._last_group = self._last_parent = None
             self.control.layout().setMenuBar(
-                menubar.create_menu_bar(self.control, self))
+                menubar.create_menu_bar(self.control, self)
+            )
             self._last_group = self._last_parent = None
-
-    #-------------------------------------------------------------------------
-    #  Adds a tool bar to the dialog:
-    #-------------------------------------------------------------------------
 
     def _add_toolbar(self):
         """ Adds a toolbar to the dialog.
@@ -341,10 +346,6 @@ class BaseDialog(BasePanel):
             qt_toolbar.setMovable(False)
             self.control._mw.addToolBar(qt_toolbar)
             self._last_group = self._last_parent = None
-
-    #-------------------------------------------------------------------------
-    #  Adds a status bar to the dialog:
-    #-------------------------------------------------------------------------
 
     def _add_statusbar(self):
         """ Adds a statusbar to the dialog.
@@ -369,14 +370,14 @@ class BaseDialog(BasePanel):
                 control.addWidget(item_control, stretch)
 
                 # Set up event listener for updating the status text
-                col = name.find('.')
-                obj = 'object'
+                col = name.find(".")
+                obj = "object"
                 if col >= 0:
                     obj = name[:col]
-                    name = name[col + 1:]
+                    name = name[col + 1 :]
                 obj = self.ui.context[obj]
                 set_text = self._set_status_text(item_control)
-                obj.on_trait_change(set_text, name, dispatch='ui')
+                obj.on_trait_change(set_text, name, dispatch="ui")
                 listeners.append((obj, set_text, name))
 
             self.control._mw.setStatusBar(control)
@@ -385,6 +386,7 @@ class BaseDialog(BasePanel):
     def _set_status_text(self, control):
         """ Helper function for _add_statusbar.
         """
+
         def set_status_text(text):
             control.setText(text)
 

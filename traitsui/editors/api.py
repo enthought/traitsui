@@ -1,4 +1,3 @@
-
 from __future__ import absolute_import
 
 from ..toolkit import toolkit
@@ -12,8 +11,10 @@ except ImportError:
         import numpy
     except ImportError:
         import warnings
-        warnings.warn('ArrayEditor is not available due to missing numpy',
-                      ImportWarning)
+
+        warnings.warn(
+            "ArrayEditor is not available due to missing numpy", ImportWarning
+        )
     else:
         del numpy
         raise
@@ -27,6 +28,7 @@ from .compound_editor import CompoundEditor
 from .csv_list_editor import CSVListEditor
 from .custom_editor import CustomEditor
 from .date_editor import DateEditor
+from .date_range_editor import DateRangeEditor
 from .styled_date_editor import StyledDateEditor
 from .default_override import DefaultOverride
 from .directory_editor import DirectoryEditor

@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,7 +8,7 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Implements a wrapper around the PyQt clipboard that handles Python objects
 using pickle.
@@ -20,33 +20,34 @@ from pyface.ui.qt4.mimedata import PyMimeData, str2bytes
 from traits.api import HasTraits, Instance, Property
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  '_Clipboard' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
 
 class _Clipboard(HasTraits):
     """ The _Clipboard class provides a wrapper around the PyQt clipboard.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # The instance on the clipboard (if any).
+    #: The instance on the clipboard (if any).
     instance = Property
 
-    # Set if the clipboard contains an instance.
+    #: Set if the clipboard contains an instance.
     has_instance = Property
 
-    # The type of the instance on the clipboard (if any).
+    #: The type of the instance on the clipboard (if any).
     instance_type = Property
 
-    # The application clipboard.
+    #: The application clipboard.
     clipboard = Instance(QtGui.QClipboard)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Instance property methods:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_instance(self):
         """ The instance getter.
@@ -76,17 +77,18 @@ class _Clipboard(HasTraits):
 
         return md.instanceType()
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Other trait handlers:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _clipboard_default(self):
         """ Initialise the clipboard.
         """
         return QtGui.QApplication.clipboard()
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  The singleton clipboard instance.
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 clipboard = _Clipboard()

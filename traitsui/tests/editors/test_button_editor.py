@@ -6,8 +6,11 @@ from pyface.gui import GUI
 from traits.api import Button, HasTraits, Unicode
 from traitsui.api import ButtonEditor, Item, UItem, View
 from traitsui.tests._tools import (
-    is_current_backend_qt4, is_current_backend_wx, skip_if_null,
-    store_exceptions_on_all_threads)
+    is_current_backend_qt4,
+    is_current_backend_wx,
+    skip_if_null,
+    store_exceptions_on_all_threads,
+)
 
 
 class ButtonTextEdit(HasTraits):
@@ -17,31 +20,25 @@ class ButtonTextEdit(HasTraits):
     play_button_label = Unicode("I'm a play button")
 
     traits_view = View(
-        Item('play_button', style='simple'),
-        Item('play_button', style='custom'),
-        Item('play_button', style='readonly'),
-        Item('play_button', style='text'),
+        Item("play_button", style="simple"),
+        Item("play_button", style="custom"),
+        Item("play_button", style="readonly"),
+        Item("play_button", style="text"),
     )
 
 
 simple_view = View(
-    UItem(
-        'play_button',
-        editor=ButtonEditor(label_value="play_button_label"),
-    ),
-    Item('play_button_label'),
+    UItem("play_button", editor=ButtonEditor(label_value="play_button_label")),
+    Item("play_button_label"),
     resizable=True,
 )
 
 
 custom_view = View(
-    UItem(
-        'play_button',
-        editor=ButtonEditor(label_value="play_button_label"),
-    ),
-    Item('play_button_label'),
+    UItem("play_button", editor=ButtonEditor(label_value="play_button_label")),
+    Item("play_button_label"),
     resizable=True,
-    style='custom',
+    style="custom",
 )
 
 
@@ -55,7 +52,6 @@ def get_button_text(button):
 
 
 class TestButtonEditor(unittest.TestCase):
-
     def check_button_text_update(self, view):
         gui = GUI()
         button_text_edit = ButtonTextEdit()

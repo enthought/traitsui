@@ -1,1 +1,2 @@
+git+http://github.com/enthought/traits.git#egg=traits
 git+http://github.com/enthought/pyface.git#egg=pyface

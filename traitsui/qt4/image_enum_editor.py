@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,18 +13,15 @@
 #  Author: Evan Patterson
 #  Date:   08/11/2009
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various image enumeration editors for the PyQt user interface
     toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_qt5
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -38,11 +35,6 @@ from .enum_editor import RadioEditor as CustomEnumEditor
 from .helper import pixmap_cache
 
 
-#-------------------------------------------------------------------------
-#  'BaseImageEnumEditor' class:
-#-------------------------------------------------------------------------
-
-
 class BaseEditor(object):
     """ The base class for the different styles of ImageEnumEditor.
     """
@@ -53,23 +45,14 @@ class BaseEditor(object):
         if name is None:
             return None
         factory = self.factory
-        name = ''.join((factory.prefix, name, factory.suffix))
+        name = "".join((factory.prefix, name, factory.suffix))
         return pixmap_cache(name, factory._image_path)
-
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
 
 
 class ReadonlyEditor(BaseEditor, BaseEnumEditor):
     """ Read-only style of image enumeration editor, which displays a single
         static image representing the object trait's value.
     """
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -79,40 +62,25 @@ class ReadonlyEditor(BaseEditor, BaseEnumEditor):
         self.control.setPixmap(self.get_pixmap(self.str_value))
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         self.control.setPixmap(self.get_pixmap(self.str_value))
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(BaseEditor, SimpleEnumEditor):
     """ Simple style of image enumeration editor, which displays a combo box.
     """
 
-    #-------------------------------------------------------------------------
-    #  Returns the QComboBox used for the editor control:
-    #-------------------------------------------------------------------------
-
     def create_combo_box(self):
         """ Returns the QComboBox used for the editor control.
         """
         control = ImageEnumComboBox(self)
-        control.setSizePolicy(QtGui.QSizePolicy.Maximum,
-                              QtGui.QSizePolicy.Maximum)
+        control.setSizePolicy(
+            QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum
+        )
         return control
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -132,33 +100,20 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
                 self.control.setCurrentIndex(row)
             self._no_enum_update -= 1
 
-    #-------------------------------------------------------------------------
-    #  Rebuilds the contents of the editor whenever the original factory
-    #  object's 'values' trait changes:
-    #-------------------------------------------------------------------------
-
     def rebuild_editor(self):
         """ Rebuilds the contents of the editor whenever the original factory
             object's **values** trait changes.
         """
         self.control.model().reset()
 
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomEditor(BaseEditor, CustomEnumEditor):
     """ Simple style of image enumeration editor, which displays a combo box.
     """
 
-    # Is the button layout row-major or column-major? This value overrides the
-    # default.
+    #: Is the button layout row-major or column-major? This value overrides the
+    #: default.
     row_major = True
-
-    #-------------------------------------------------------------------------
-    #  Returns the QAbstractButton used for the radio button:
-    #-------------------------------------------------------------------------
 
     def create_button(self, name):
         """ Returns the QAbstractButton used for the radio button.
@@ -173,9 +128,10 @@ class CustomEditor(BaseEditor, CustomEnumEditor):
 
         return button
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Custom Qt objects used in the SimpleEditor:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ImageEnumComboBox(QtGui.QComboBox):
@@ -220,12 +176,19 @@ class ImageEnumComboBox(QtGui.QComboBox):
 
         editor = self._editor
         pixmap = editor.get_pixmap(editor.inverse_mapping[editor.value])
-        arrow = self.style().subControlRect(QtGui.QStyle.CC_ComboBox,
-                                            option, QtGui.QStyle.SC_ComboBoxArrow, None)
+        arrow = self.style().subControlRect(
+            QtGui.QStyle.CC_ComboBox,
+            option,
+            QtGui.QStyle.SC_ComboBoxArrow,
+            None,
+        )
         option.rect.setWidth(option.rect.width() - arrow.width())
-        target = QtGui.QStyle.alignedRect(QtCore.Qt.LeftToRight,
-                                          QtCore.Qt.AlignCenter,
-                                          pixmap.size(), option.rect)
+        target = QtGui.QStyle.alignedRect(
+            QtCore.Qt.LeftToRight,
+            QtCore.Qt.AlignCenter,
+            pixmap.size(),
+            option.rect,
+        )
         painter.drawPixmap(target, pixmap)
 
     def sizeHint(self):
@@ -238,25 +201,25 @@ class ImageEnumComboBox(QtGui.QComboBox):
 
         option = QtGui.QStyleOptionComboBox()
         self.initStyleOption(option)
-        size = self.style().sizeFromContents(QtGui.QStyle.CT_ComboBox, option,
-                                             size, self)
+        size = self.style().sizeFromContents(
+            QtGui.QStyle.CT_ComboBox, option, size, self
+        )
         return size
 
 
 class ImageEnumTablePopupView(QtGui.QTableView):
-
     def __init__(self, parent):
         """ Configure the appearence of the table view.
         """
         QtGui.QTableView.__init__(self, parent)
         hheader = self.horizontalHeader()
-        if QtCore.__version_info__[0] >= 5:
+        if is_qt5:
             hheader.setSectionResizeMode(QtGui.QHeaderView.ResizeToContents)
         else:
             hheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
         hheader.hide()
         vheader = self.verticalHeader()
-        if QtCore.__version_info__[0] >= 5:
+        if is_qt5:
             vheader.setSectionResizeMode(QtGui.QHeaderView.ResizeToContents)
         else:
             vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
@@ -277,7 +240,7 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
     def displayText(self, value, locale):
         """ Reimplemented to display nothing.
         """
-        return ''
+        return ""
 
     def paint(self, painter, option, mi):
         """ Reimplemented to draw images.
@@ -289,9 +252,12 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
         name = mi.data(QtCore.Qt.DisplayRole)
         pixmap = self._get_pixmap(name)
         if pixmap is not None:
-            target = QtGui.QStyle.alignedRect(QtCore.Qt.LeftToRight,
-                                              QtCore.Qt.AlignCenter,
-                                              pixmap.size(), option.rect)
+            target = QtGui.QStyle.alignedRect(
+                QtCore.Qt.LeftToRight,
+                QtCore.Qt.AlignCenter,
+                pixmap.size(),
+                option.rect,
+            )
             painter.drawPixmap(target, pixmap)
 
     def sizeHint(self, option, mi):

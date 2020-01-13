@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,65 +13,49 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various instance editors for the wxPython user interface
 toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 import wx
 
-from traits.api \
-    import HasTraits, Property
+from traits.api import HasTraits, Property
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.instance_editor file.
-from traitsui.editors.instance_editor \
-    import ToolkitEditorFactory
+from traitsui.editors.instance_editor import ToolkitEditorFactory
 
-from traitsui.ui_traits \
-    import AView
+from traitsui.ui_traits import AView
 
-from traitsui.helper \
-    import user_name_for
+from traitsui.helper import user_name_for
 
-from traitsui.handler \
-    import Handler
+from traitsui.handler import Handler
 
-from traitsui.instance_choice \
-    import InstanceChoiceItem
+from traitsui.instance_choice import InstanceChoiceItem
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .constants \
-    import DropColor, is_wx26
+from .constants import DropColor, is_wx26
 
-from .helper \
-    import TraitsUIPanel, position_window
+from .helper import TraitsUIPanel, position_window
 
-from pyface.wx.drag_and_drop \
-    import PythonDropTarget
+from pyface.wx.drag_and_drop import PythonDropTarget
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
 
 OrientationMap = {
-    'default': None,
-    'horizontal': wx.HORIZONTAL,
-    'vertical': wx.VERTICAL
+    "default": None,
+    "horizontal": wx.HORIZONTAL,
+    "vertical": wx.VERTICAL,
 }
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'CustomEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class CustomEditor(Editor):
@@ -81,42 +65,38 @@ class CustomEditor(Editor):
     containing trait editors for all the instance's traits.
     """
 
-    # Background color when an item can be dropped on the editor:
+    #: Background color when an item can be dropped on the editor:
     ok_color = DropColor
 
-    # The orientation of the instance editor relative to the instance selector:
+    #: The orientation of the instance editor relative to the instance selector:
     orientation = wx.VERTICAL
 
-    # Class constant:
+    #: Class constant:
     extra = 0
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # List of InstanceChoiceItem objects used by the editor
+    #: List of InstanceChoiceItem objects used by the editor
     items = Property
 
-    # The maximum extra padding that should be allowed around the editor:
-    # (Override of the Editor base class trait)
+    #: The maximum extra padding that should be allowed around the editor:
+    #: (Override of the Editor base class trait)
     border_size = 0
 
-    # The view to use for displaying the instance:
+    #: The view to use for displaying the instance:
     view = AView
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         factory = self.factory
-        if factory.name != '':
-            self._object, self._name, self._value = \
-                self.parse_extended_name(factory.name)
+        if factory.name != "":
+            self._object, self._name, self._value = self.parse_extended_name(
+                factory.name
+            )
 
         # Create a panel to hold the object trait's view:
         if factory.editable:
@@ -136,30 +116,34 @@ class CustomEditor(Editor):
             if item is not None:
                 self._object_cache[id(item)] = self.value
 
-            self._choice = choice = wx.Choice(parent, -1, wx.Point(0, 0),
-                                              wx.Size(-1, -1), [])
-            wx.EVT_CHOICE(choice, choice.GetId(), self.update_object)
+            self._choice = choice = wx.Choice(
+                parent, -1, wx.Point(0, 0), wx.Size(-1, -1), []
+            )
+            choice.Bind(wx.EVT_CHOICE, self.update_object, id=choice.GetId())
             if droppable:
                 self._choice.SetBackgroundColour(self.ok_color)
 
             self.set_tooltip(self._choice)
 
-            if factory.name != '':
-                self._object.on_trait_change(self.rebuild_items,
-                                             self._name, dispatch='ui')
+            if factory.name != "":
                 self._object.on_trait_change(
-                    self.rebuild_items, self._name + '_items', dispatch='ui')
+                    self.rebuild_items, self._name, dispatch="ui"
+                )
+                self._object.on_trait_change(
+                    self.rebuild_items, self._name + "_items", dispatch="ui"
+                )
 
-            factory.on_trait_change(self.rebuild_items, 'values',
-                                    dispatch='ui')
-            factory.on_trait_change(self.rebuild_items, 'values_items',
-                                    dispatch='ui')
+            factory.on_trait_change(
+                self.rebuild_items, "values", dispatch="ui"
+            )
+            factory.on_trait_change(
+                self.rebuild_items, "values_items", dispatch="ui"
+            )
 
             self.rebuild_items()
 
         elif droppable:
-            self._choice = wx.TextCtrl(parent, -1, '',
-                                       style=wx.TE_READONLY)
+            self._choice = wx.TextCtrl(parent, -1, "", style=wx.TE_READONLY)
             self._choice.SetBackgroundColour(self.ok_color)
             self.set_tooltip(self._choice)
 
@@ -175,15 +159,19 @@ class CustomEditor(Editor):
             sizer.Add(self._choice, self.extra, wx.EXPAND)
             if orientation == wx.VERTICAL:
                 sizer.Add(
-                    wx.StaticLine(parent, -1, style=wx.LI_HORIZONTAL), 0,
-                    wx.EXPAND | wx.TOP | wx.BOTTOM, 5)
+                    wx.StaticLine(parent, -1, style=wx.LI_HORIZONTAL),
+                    0,
+                    wx.EXPAND | wx.TOP | wx.BOTTOM,
+                    5,
+                )
             self.create_editor(parent, sizer)
             parent.SetSizer(sizer)
         elif self.control is None:
             if self._choice is None:
-                self._choice = choice = wx.Choice(parent, -1, wx.Point(0, 0),
-                                                  wx.Size(-1, -1), [])
-                wx.EVT_CHOICE(choice, choice.GetId(), self.update_object)
+                self._choice = choice = wx.Choice(
+                    parent, -1, wx.Point(0, 0), wx.Size(-1, -1), []
+                )
+                choice.Bind(wx.EVT_CHOICE, self.update_object, id=choice.GetId())
             self.control = self._choice
         else:
             sizer = wx.BoxSizer(orientation)
@@ -194,11 +182,7 @@ class CustomEditor(Editor):
         # fixme: A normal assignment can cause a crash (for unknown reasons) in
         # some cases, so we make sure that no notifications are generated:
         self.trait_setq(view=factory.view)
-        self.sync_value(factory.view_name, 'view', 'from')
-
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
+        self.sync_value(factory.view_name, "view", "from")
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -212,34 +196,30 @@ class CustomEditor(Editor):
         choice = self._choice
         if choice is not None:
             if isinstance(choice, wx.Choice):
-                wx.EVT_CHOICE(choice, choice.GetId(), None)
+                choice.Bind(wx.EVT_CHOICE, None, id=choice.GetId())
 
             if self._object is not None:
-                self._object.on_trait_change(self.rebuild_items,
-                                             self._name, remove=True)
                 self._object.on_trait_change(
-                    self.rebuild_items, self._name + '_items', remove=True)
+                    self.rebuild_items, self._name, remove=True
+                )
+                self._object.on_trait_change(
+                    self.rebuild_items, self._name + "_items", remove=True
+                )
 
-            self.factory.on_trait_change(self.rebuild_items, 'values',
-                                         remove=True)
-            self.factory.on_trait_change(self.rebuild_items,
-                                         'values_items', remove=True)
+            self.factory.on_trait_change(
+                self.rebuild_items, "values", remove=True
+            )
+            self.factory.on_trait_change(
+                self.rebuild_items, "values_items", remove=True
+            )
 
         super(CustomEditor, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Creates the editor control:
-    #-------------------------------------------------------------------------
 
     def create_editor(self, parent, sizer):
         """ Creates the editor control.
         """
         self._panel = TraitsUIPanel(parent, -1)
         sizer.Add(self._panel, 1, wx.EXPAND)
-
-    #-------------------------------------------------------------------------
-    #  Gets the current list of InstanceChoiceItem items:
-    #-------------------------------------------------------------------------
 
     def _get_items(self):
         """ Gets the current list of InstanceChoiceItem items.
@@ -263,10 +243,6 @@ class CustomEditor(Editor):
         self._items = items
 
         return items
-
-    #-------------------------------------------------------------------------
-    #  Rebuilds the object selector list:
-    #-------------------------------------------------------------------------
 
     def rebuild_items(self):
         """ Rebuilds the object selector list.
@@ -296,10 +272,6 @@ class CustomEditor(Editor):
             except:
                 pass
 
-    #-------------------------------------------------------------------------
-    #  Returns the InstanceChoiceItem for a specified object:
-    #-------------------------------------------------------------------------
-
     def item_for(self, object):
         """ Returns the InstanceChoiceItem for a specified object.
         """
@@ -309,26 +281,19 @@ class CustomEditor(Editor):
 
         return None
 
-    #-------------------------------------------------------------------------
-    #  Returns the view to use for a specified object:
-    #-------------------------------------------------------------------------
-
     def view_for(self, object, item):
         """ Returns the view to use for a specified object.
         """
-        view = ''
+        view = ""
         if item is not None:
             view = item.get_view()
 
-        if view == '':
+        if view == "":
             view = self.view
 
-        return self.ui.handler.trait_view_for(self.ui.info, view, object,
-                                              self.object_name, self.name)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user selecting a new value from the combo box:
-    #-------------------------------------------------------------------------
+        return self.ui.handler.trait_view_for(
+            self.ui.info, view, object, self.object_name, self.name
+        )
 
     def update_object(self, event):
         """ Handles the user selecting a new value from the combo box.
@@ -342,7 +307,7 @@ class CustomEditor(Editor):
                     object = item.get_object()
                     if (not self.factory.editable) and item.is_factory:
                         view = self.view_for(object, self.item_for(object))
-                        view.ui(object, self.control, 'modal')
+                        view.ui(object, self.control, "modal")
 
                     if self.factory.cachable:
                         self._object_cache[id_item] = object
@@ -350,10 +315,6 @@ class CustomEditor(Editor):
                 self.value = object
                 self.resynch_editor()
                 break
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -367,7 +328,7 @@ class CustomEditor(Editor):
         # control being managed by the DockControl.
         parent = self.control.GetParent()
         parent._object = self.value
-        dock_control = getattr(parent, '_dock_control', None)
+        dock_control = getattr(parent, "_dock_control", None)
         if dock_control is not None:
             dock_control.reset_tab()
 
@@ -386,11 +347,6 @@ class CustomEditor(Editor):
             else:
                 choice.SetValue(name)
 
-    #-------------------------------------------------------------------------
-    #  Resynchronizes the contents of the editor when the object trait changes
-    #  external to the editor:
-    #-------------------------------------------------------------------------
-
     def resynch_editor(self):
         """ Resynchronizes the contents of the editor when the object trait
         changes externally to the editor.
@@ -398,7 +354,7 @@ class CustomEditor(Editor):
         panel = self._panel
         if panel is not None:
             # Compute/update the maximum size the panel has ever been:
-            dx, dy = panel.GetSizeTuple()
+            dx, dy = panel.GetSize()
             mdx = mdy = 0
             if self._panel_size is not None:
                 mdx, mdy = self._panel_size
@@ -420,7 +376,7 @@ class CustomEditor(Editor):
             stretch = 0
             value = self.value
             if not isinstance(value, HasTraits):
-                str_value = ''
+                str_value = ""
                 if value is not None:
                     str_value = self.str_value
                 control = wx.StaticText(panel, -1, str_value)
@@ -430,11 +386,16 @@ class CustomEditor(Editor):
                 handler = None
                 if isinstance(value, Handler):
                     handler = value
-                context.setdefault('context', self.object)
-                context.setdefault('context_handler', self.ui.handler)
-                self._ui = ui = view.ui(context, panel, 'subpanel',
-                                        value.trait_view_elements(), handler,
-                                        self.factory.id)
+                context.setdefault("context", self.object)
+                context.setdefault("context_handler", self.ui.handler)
+                self._ui = ui = view.ui(
+                    context,
+                    panel,
+                    "subpanel",
+                    value.trait_view_elements(),
+                    handler,
+                    self.factory.id,
+                )
                 control = ui.control
                 self.scrollable = ui._scrollable
                 ui.parent = self.ui
@@ -464,65 +425,44 @@ class CustomEditor(Editor):
             # NB: There is a typo in the wxPython 2.6 code that prevents the
             # 'SendSizeEvent' from working correctly, so we just skip it.
             if not is_wx26:
-                while ((parent is not None) and
-                       (not isinstance(parent, wx.ScrolledWindow))):
+                while (parent is not None) and (
+                    not isinstance(parent, wx.ScrolledWindow)
+                ):
                     parent = parent.GetParent()
 
                 if parent is not None:
                     parent.SendSizeEvent()
-
-    #-------------------------------------------------------------------------
-    #  Handles an error that occurs while setting the object's trait value:
-    #-------------------------------------------------------------------------
 
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
         pass
 
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
-
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
         """
-        return (self._choice or self.control)
+        return self._choice or self.control
 
-    #-- UI preference save/restore interface ---------------------------------
-
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the
-    #  editor:
-    #-------------------------------------------------------------------------
+    # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
         """
         ui = self._ui
-        if (ui is not None) and (prefs.get('id') == ui.id):
-            ui.set_prefs(prefs.get('prefs'))
-
-    #-------------------------------------------------------------------------
-    #  Returns any user preference information associated with the editor:
-    #-------------------------------------------------------------------------
+        if (ui is not None) and (prefs.get("id") == ui.id):
+            ui.set_prefs(prefs.get("prefs"))
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
         ui = self._ui
-        if (ui is not None) and (ui.id != ''):
-            return {'id': ui.id,
-                    'prefs': ui.get_prefs()}
+        if (ui is not None) and (ui.id != ""):
+            return {"id": ui.id, "prefs": ui.get_prefs()}
 
         return None
 
-    #-- Drag and drop event handlers -----------------------------------------
-
-    #-------------------------------------------------------------------------
-    #  Handles a Python object being dropped on the control:
-    #-------------------------------------------------------------------------
+    # -- Drag and drop event handlers -----------------------------------------
 
     def wx_dropped_on(self, x, y, data, drag_result):
         """ Handles a Python object being dropped on the tree.
@@ -536,10 +476,6 @@ class CustomEditor(Editor):
 
         return wx.DragNone
 
-    #-------------------------------------------------------------------------
-    #  Handles a Python object being dragged over the control:
-    #-------------------------------------------------------------------------
-
     def wx_drag_over(self, x, y, data, drag_result):
         """ Handles a Python object being dragged over the tree.
         """
@@ -549,14 +485,10 @@ class CustomEditor(Editor):
 
         return wx.DragNone
 
-    #-- Traits event handlers ------------------------------------------------
+    # -- Traits event handlers ------------------------------------------------
 
     def _view_changed(self, view):
         self.resynch_editor()
-
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
 
 
 class SimpleEditor(CustomEditor):
@@ -564,37 +496,25 @@ class SimpleEditor(CustomEditor):
     the button displays a dialog box in which the instance can be edited.
     """
 
-    # Class constants:
+    #: Class constants:
     orientation = wx.HORIZONTAL
     extra = 2
-
-    #-------------------------------------------------------------------------
-    #  Creates the editor control:
-    #-------------------------------------------------------------------------
 
     def create_editor(self, parent, sizer):
         """ Creates the editor control (a button).
         """
-        self._button = button = wx.Button(parent, -1, '')
+        self._button = button = wx.Button(parent, -1, "")
         sizer.Add(button, 1, wx.EXPAND | wx.LEFT, 5)
-        wx.EVT_BUTTON(button, button.GetId(), self.edit_instance)
-
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
+        button.Bind(wx.EVT_BUTTON, self.edit_instance, id=button.GetId())
 
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
         button = self._button
         if button is not None:
-            wx.EVT_BUTTON(button, button.GetId(), None)
+            button.Bind(wx.EVT_BUTTON, None, id=button.GetId())
 
         super(SimpleEditor, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Edit the contents of the object trait when the user clicks the button:
-    #-------------------------------------------------------------------------
 
     def edit_instance(self, event):
         """ Edit the contents of the object trait when the user clicks the
@@ -602,11 +522,12 @@ class SimpleEditor(CustomEditor):
         """
         # Create the user interface:
         factory = self.factory
-        view = self.ui.handler.trait_view_for(self.ui.info, factory.view,
-                                              self.value, self.object_name,
-                                              self.name)
-        ui = self.value.edit_traits(view, self.control, factory.kind,
-                                    id=factory.id)
+        view = self.ui.handler.trait_view_for(
+            self.ui.info, factory.view, self.value, self.object_name, self.name
+        )
+        ui = self.value.edit_traits(
+            view, self.control, factory.kind, id=factory.id
+        )
 
         # Check to see if the view was 'modal', in which case it will already
         # have been closed (i.e. is None) by the time we get control back:
@@ -619,11 +540,6 @@ class SimpleEditor(CustomEditor):
             if ui.history is None:
                 ui.history = self.ui.history
 
-    #-------------------------------------------------------------------------
-    #  Resynchronizes the contents of the editor when the object trait changes
-    #  external to the editor:
-    #-------------------------------------------------------------------------
-
     def resynch_editor(self):
         """ Resynchronizes the contents of the editor when the object trait
             changes externally to the editor.
@@ -631,9 +547,7 @@ class SimpleEditor(CustomEditor):
         button = self._button
         if button is not None:
             label = self.factory.label
-            if label == '':
+            if label == "":
                 label = user_name_for(self.name)
             button.SetLabel(label)
             button.Enable(isinstance(self.value, HasTraits))
-
-### EOF #######################################################################

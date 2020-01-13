@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,37 +13,30 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the base wxPython EditorFactory class and classes the various
     styles of editors used in a Traits-based user interface.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 import warnings
 
 import wx
 
-from traits.api \
-    import TraitError, Any, Bool, Event, Str
+from traits.api import TraitError, Any, Bool, Event, Str
 
-from traitsui.editor_factory \
-    import EditorFactory as BaseEditorFactory
+from traitsui.editor_factory import EditorFactory as BaseEditorFactory
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .constants \
-    import WindowColor
+from .constants import WindowColor
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'EditorFactory' class
 #   Deprecated alias for traitsui.editor_factory.EditorFactory
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class EditorFactory(BaseEditorFactory):
@@ -52,12 +45,11 @@ class EditorFactory(BaseEditorFactory):
 
     def __init__(self, *args, **kwds):
         super(EditorFactory, self).__init__(*args, **kwds)
-        warnings.warn("DEPRECATED: Use traitsui.editor_factory."
-                      ".EditorFactory instead.", DeprecationWarning)
-
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+        warnings.warn(
+            "DEPRECATED: Use traitsui.editor_factory."
+            ".EditorFactory instead.",
+            DeprecationWarning,
+        )
 
 
 class SimpleEditor(Editor):
@@ -67,37 +59,28 @@ class SimpleEditor(Editor):
         the value.
     """
 
-    # Has the left mouse button been pressed:
+    #: Has the left mouse button been pressed:
     left_down = Bool(False)
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         self.control = self.create_control(parent)
-        wx.EVT_LEFT_DOWN(self.control, self._enable_popup_editor)
-        wx.EVT_LEFT_UP(self.control, self._show_popup_editor)
+        self.control.Bind(wx.EVT_LEFT_DOWN, self._enable_popup_editor)
+        self.control.Bind(wx.EVT_LEFT_UP, self._show_popup_editor)
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Creates the control to use for the simple editor:
-    #-------------------------------------------------------------------------
 
     def create_control(self, parent):
         """ Creates the control to use for the simple editor.
         """
         return wx.TextCtrl(parent, -1, self.str_value, style=wx.TE_READONLY)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Invokes the pop-up editor for an object trait:
     #
     #  (Normally overridden in a subclass)
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def popup_editor(self, event):
         """ Invokes the pop-up editor for an object trait.
@@ -117,34 +100,22 @@ class SimpleEditor(Editor):
             self.left_down = False
             self.popup_editor(event)
 
-#-------------------------------------------------------------------------
-#  'TextEditor' class:
-#-------------------------------------------------------------------------
-
 
 class TextEditor(Editor):
     """ Base class for text style editors, which displays an editable text
         field, containing a text representation of the object trait value.
     """
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = wx.TextCtrl(parent, -1, self.str_value,
-                                   style=wx.TE_PROCESS_ENTER)
-        wx.EVT_KILL_FOCUS(self.control, self.update_object)
-        wx.EVT_TEXT_ENTER(parent, self.control.GetId(), self.update_object)
+        self.control = wx.TextCtrl(
+            parent, -1, self.str_value, style=wx.TE_PROCESS_ENTER
+        )
+        self.control.Bind(wx.EVT_KILL_FOCUS, self.update_object)
+        parent.Bind(wx.EVT_TEXT_ENTER, self.update_object, id=self.control.GetId())
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self, event):
         """ Handles the user changing the contents of the edit control.
@@ -156,26 +127,17 @@ class TextEditor(Editor):
         except TraitError as excp:
             pass
 
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
-
 
 class ReadonlyEditor(Editor):
     """ Base class for read-only style editors, which displays a read-only text
         field, containing a text representation of the object trait value.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     # layout_style = 0  # Style for imbedding control in a sizer (override)
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -183,18 +145,19 @@ class ReadonlyEditor(Editor):
         """
         if (self.item.resizable is True) or (self.item.height != -1.0):
             self.control = wx.TextCtrl(
-                parent, -1, self.str_value, style=wx.NO_BORDER | wx.TE_MULTILINE | wx.TE_READONLY)
+                parent,
+                -1,
+                self.str_value,
+                style=wx.NO_BORDER | wx.TE_MULTILINE | wx.TE_READONLY,
+            )
             self.control.SetBackgroundColour(WindowColor)
         else:
-            self.control = wx.StaticText(parent, -1, self.str_value,
-                                         style=wx.ALIGN_LEFT)
+            self.control = wx.StaticText(
+                parent, -1, self.str_value, style=wx.ALIGN_LEFT
+            )
             self.layout_style = 0
 
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

@@ -14,7 +14,7 @@
 from __future__ import absolute_import
 from os.path import abspath, splitext, isfile, exists
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_qt5
 from traits.api import List, Event, File, Unicode, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -25,8 +25,6 @@ from .text_editor import SimpleEditor as SimpleTextEditor
 from .helper import IconButton
 import six
 
-
-is_qt5 = (QtCore.__version_info__[0] >= 5)
 
 # Wildcard filter:
 filter_trait = List(Unicode)
@@ -100,13 +98,12 @@ class SimpleEditor(SimpleTextEditor):
                 self.value = file_name
                 self.update_editor()
 
-
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
         """
         return self._file_name
 
-    #-- Private Methods ------------------------------------------------------
+    # -- Private Methods ------------------------------------------------------
 
     def _create_file_dialog(self):
         """ Creates the correct type of file dialog.
@@ -114,9 +111,9 @@ class SimpleEditor(SimpleTextEditor):
         dlg = QtGui.QFileDialog(self.control)
         dlg.selectFile(self._file_name.text())
 
-        if self.factory.dialog_style == 'open':
+        if self.factory.dialog_style == "open":
             dlg.setAcceptMode(dlg.AcceptOpen)
-        elif self.factory.dialog_style == 'save':
+        elif self.factory.dialog_style == "save":
             dlg.setAcceptMode(dlg.AcceptSave)
 
         if len(self.factory.filter) > 0:
@@ -129,19 +126,19 @@ class CustomEditor(SimpleTextEditor):
     """ Custom style of file editor, consisting of a file system tree view.
     """
 
-    # Is the file editor scrollable? This value overrides the default.
+    #: Is the file editor scrollable? This value overrides the default.
     scrollable = True
 
-    # Wildcard filter to apply to the file dialog:
+    #: Wildcard filter to apply to the file dialog:
     filter = filter_trait
 
-    # The root path of the file tree view.
+    #: The root path of the file tree view.
     root_path = File
 
-    # Event fired when the file system view should be rebuilt:
+    #: Event fired when the file system view should be rebuilt:
     reload = Event
 
-    # Event fired when the user double-clicks a file:
+    #: Event fired when the user double-clicks a file:
     dclick = Event
 
     def init(self, parent):
@@ -154,8 +151,12 @@ class CustomEditor(SimpleTextEditor):
         current_path = abspath(self.str_value)
 
         # Don't apply filters to directories and don't show "." and ".."
-        model.setFilter(QtCore.QDir.AllDirs | QtCore.QDir.Files |
-                        QtCore.QDir.Drives | QtCore.QDir.NoDotAndDotDot)
+        model.setFilter(
+            QtCore.QDir.AllDirs
+            | QtCore.QDir.Files
+            | QtCore.QDir.Drives
+            | QtCore.QDir.NoDotAndDotDot
+        )
 
         # Hide filtered out files instead of only disabling them
         self._model.setNameFilterDisables(False)
@@ -182,10 +183,10 @@ class CustomEditor(SimpleTextEditor):
         factory = self.factory
         self.filter = factory.filter
         self.root_path = factory.root_path
-        self.sync_value(factory.filter_name, 'filter', 'from', is_list=True)
-        self.sync_value(factory.root_path_name, 'root_path', 'from')
-        self.sync_value(factory.reload_name, 'reload', 'from')
-        self.sync_value(factory.dclick_name, 'dclick', 'to')
+        self.sync_value(factory.filter_name, "filter", "from", is_list=True)
+        self.sync_value(factory.root_path_name, "root_path", "from")
+        self.sync_value(factory.reload_name, "reload", "from")
+        self.sync_value(factory.dclick_name, "dclick", "to")
 
         self.set_tooltip()
 
@@ -218,7 +219,7 @@ class CustomEditor(SimpleTextEditor):
             self.control.expand(index)
             self.control.setCurrentIndex(index)
 
-    #-- Private Methods ------------------------------------------------------
+    # -- Private Methods ------------------------------------------------------
 
     def _on_dclick(self, idx):
         """ Handles the user double-clicking on a file name.

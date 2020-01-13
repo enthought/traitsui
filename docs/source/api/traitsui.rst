@@ -51,6 +51,7 @@ Submodules
    traitsui.toolkit
    traitsui.toolkit_traits
    traitsui.tree_node
+   traitsui.tree_node_renderer
    traitsui.ui
    traitsui.ui_editor
    traitsui.ui_info

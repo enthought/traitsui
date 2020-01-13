@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,46 +13,38 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines file editors for the wxPython user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 import wx
 
-from os.path \
-    import abspath, split, splitext, isfile, exists
+from os.path import abspath, split, splitext, isfile, exists
 
-from traits.api \
-    import List, Str, Event, Any, on_trait_change, TraitError
+from traits.api import List, Str, Event, Any, on_trait_change, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.file_editor file.
-from traitsui.editors.file_editor \
-    import ToolkitEditorFactory
+from traitsui.editors.file_editor import ToolkitEditorFactory
 
-from .text_editor \
-    import SimpleEditor as SimpleTextEditor
+from .text_editor import SimpleEditor as SimpleTextEditor
 
-from .helper \
-    import TraitsUIPanel, PopupControl
+from .helper import TraitsUIPanel, PopupControl
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Wildcard filter:
 filter_trait = List(Str)
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class SimpleEditor(SimpleTextEditor):
@@ -61,16 +53,11 @@ class SimpleEditor(SimpleTextEditor):
         and drop a file onto this control.
     """
 
-    # The history control (used if the factory 'entries' > 0):
+    #: The history control (used if the factory 'entries' > 0):
     history = Any
 
-    # The popup file control (an Instance( PopupFile )):
+    #: The popup file control (an Instance( PopupFile )):
     popup = Any
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -83,27 +70,25 @@ class SimpleEditor(SimpleTextEditor):
         if factory.entries > 0:
             from .history_control import HistoryControl
 
-            self.history = HistoryControl(entries=factory.entries,
-                                          auto_set=factory.auto_set)
+            self.history = HistoryControl(
+                entries=factory.entries, auto_set=factory.auto_set
+            )
             control = self.history.create_control(panel)
             pad = 3
-            button = wx.Button(panel, -1, '...',
-                               size=wx.Size(28, -1))
+            button = wx.Button(panel, -1, "...", size=wx.Size(28, -1))
         else:
             if factory.enter_set:
-                control = wx.TextCtrl(panel, -1, '',
-                                      style=wx.TE_PROCESS_ENTER)
-                wx.EVT_TEXT_ENTER(panel, control.GetId(), self.update_object)
+                control = wx.TextCtrl(panel, -1, "", style=wx.TE_PROCESS_ENTER)
+                panel.Bind(wx.EVT_TEXT_ENTER, self.update_object, id=control.GetId())
             else:
-                control = wx.TextCtrl(panel, -1, '')
+                control = wx.TextCtrl(panel, -1, "")
 
-            wx.EVT_KILL_FOCUS(control, self.update_object)
+            control.Bind(wx.EVT_KILL_FOCUS, self.update_object)
 
             if factory.auto_set:
-                wx.EVT_TEXT(panel, control.GetId(), self.update_object)
+                panel.Bind(wx.EVT_TEXT, self.update_object, id=control.GetId())
 
-            bmp = wx.ArtProvider.GetBitmap(wx.ART_FOLDER_OPEN,
-                                           size=(15, 15))
+            bmp = wx.ArtProvider.GetBitmap(wx.ART_FOLDER_OPEN, size=(15, 15))
             button = wx.BitmapButton(panel, -1, bitmap=bmp)
 
             pad = 8
@@ -111,7 +96,7 @@ class SimpleEditor(SimpleTextEditor):
         self._file_name = control
         sizer.Add(control, 1, wx.EXPAND | wx.ALIGN_CENTER)
         sizer.Add(button, 0, wx.LEFT | wx.ALIGN_CENTER, pad)
-        wx.EVT_BUTTON(panel, button.GetId(), self.show_file_dialog)
+        panel.Bind(wx.EVT_BUTTON, self.show_file_dialog, id=button.GetId())
         panel.SetDropTarget(FileDropTarget(self))
         panel.SetSizerAndFit(sizer)
         self._button = button
@@ -122,7 +107,7 @@ class SimpleEditor(SimpleTextEditor):
         """ Disposes of the contents of an editor.
         """
         panel = self.control
-        panel.Bind(wx.EVT_BUTTON, self._button.GetId(), None)
+        panel.Unbind((wx.EVT_BUTTON, id=self._button.GetId())
         self._button = None
 
         if self.history is not None:
@@ -133,24 +118,16 @@ class SimpleEditor(SimpleTextEditor):
             control, self._file_name = self._file_name, None
             control.Bind(wx.EVT_KILL_FOCUS, None)
             panel.Bind(wx.EVT_TEXT_ENTER, None, id=control.GetId())
-            panel.Bind(wx.EVT_TEXT, None, id=control.GetId())
+            panel.Unbind((wx.EVT_TEXT, id=control.GetId())
 
         super(SimpleEditor, self).dispose()
 
-    #-------------------------------------------------------------------------
-    #  Handles the history 'value' trait being changed:
-    #-------------------------------------------------------------------------
-
-    @on_trait_change('history:value')
+    @on_trait_change("history:value")
     def _history_value_changed(self, value):
         """ Handles the history 'value' trait being changed.
         """
         if not self._no_update:
             self._update(value)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self, event):
         """ Handles the user changing the contents of the edit control.
@@ -158,10 +135,6 @@ class SimpleEditor(SimpleTextEditor):
         if isinstance(event, wx.FocusEvent):
             event.Skip()
         self._update(self._file_name.GetValue())
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -174,10 +147,6 @@ class SimpleEditor(SimpleTextEditor):
         else:
             self._file_name.SetValue(self.str_value)
 
-    #-------------------------------------------------------------------------
-    #  Displays the pop-up file dialog:
-    #-------------------------------------------------------------------------
-
     def show_file_dialog(self, event):
         """ Displays the pop-up file dialog.
         """
@@ -185,7 +154,7 @@ class SimpleEditor(SimpleTextEditor):
             self.popup = self._create_file_popup()
         else:
             dlg = self._create_file_dialog()
-            rc = (dlg.ShowModal() == wx.ID_OK)
+            rc = dlg.ShowModal() == wx.ID_OK
             file_name = abspath(dlg.GetPath())
             dlg.Destroy()
             if rc:
@@ -195,18 +164,14 @@ class SimpleEditor(SimpleTextEditor):
                 self.value = file_name
                 self.update_editor()
 
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
-
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
         """
         return self._file_name
 
-    #-- Traits Event Handlers ------------------------------------------------
+    # -- Traits Event Handlers ------------------------------------------------
 
-    @on_trait_change('popup:value')
+    @on_trait_change("popup:value")
     def _popup_value_changed(self, file_name):
         """ Handles the popup value being changed.
         """
@@ -218,43 +183,44 @@ class SimpleEditor(SimpleTextEditor):
         self.history.set_value(self.str_value)
         self._no_update = False
 
-    @on_trait_change('popup:closed')
+    @on_trait_change("popup:closed")
     def _popup_closed_changed(self):
         """ Handles the popup control being closed.
         """
         self.popup = None
 
-    #-- UI preference save/restore interface ---------------------------------
+    # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
         """
         if self.history is not None:
-            self.history.history = \
-                prefs.get('history', [])[: self.factory.entries]
+            self.history.history = prefs.get("history", [])[
+                : self.factory.entries
+            ]
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
         if self.history is not None:
-            return {'history': self.history.history[:]}
+            return {"history": self.history.history[:]}
 
         return None
 
-    #-- Private Methods ------------------------------------------------------
+    # -- Private Methods ------------------------------------------------------
 
     def _create_file_dialog(self):
         """ Creates the correct type of file dialog.
         """
         if len(self.factory.filter) > 0:
-            wildcard = '|'.join(self.factory.filter[:])
+            wildcard = "|".join(self.factory.filter[:])
         else:
-            wildcard = 'All Files (*.*)|*.*'
+            wildcard = "All Files (*.*)|*.*"
 
-        if self.factory.dialog_style == 'save':
+        if self.factory.dialog_style == "save":
             style = wx.FD_SAVE
-        elif self.factory.dialog_style == 'open':
+        elif self.factory.dialog_style == "open":
             style = wx.FD_OPEN
         else:
             style = wx.FD_DEFAULT_STYLE
@@ -265,9 +231,9 @@ class SimpleEditor(SimpleTextEditor):
             self.control,
             defaultDir=directory,
             defaultFile=filename,
-            message='Select a File',
+            message="Select a File",
             wildcard=wildcard,
-            style=style
+            style=style,
         )
 
         return dlg
@@ -275,10 +241,12 @@ class SimpleEditor(SimpleTextEditor):
     def _create_file_popup(self):
         """ Creates the correct type of file popup.
         """
-        return PopupFile(control=self.control,
-                         file_name=self.str_value,
-                         filter=self.factory.filter,
-                         height=300)
+        return PopupFile(
+            control=self.control,
+            file_name=self.str_value,
+            filter=self.factory.filter,
+            height=300,
+        )
 
     def _update(self, file_name):
         """ Updates the editor value with a specified file name.
@@ -299,31 +267,22 @@ class SimpleEditor(SimpleTextEditor):
 
         return self._file_name.GetValue()
 
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomEditor(SimpleTextEditor):
     """ Custom style of file editor, consisting of a file system tree view.
     """
 
-    # Is the file editor scrollable? This value overrides the default.
+    #: Is the file editor scrollable? This value overrides the default.
     scrollable = True
 
-    # Wildcard filter to apply to the file dialog:
+    #: Wildcard filter to apply to the file dialog:
     filter = filter_trait
 
-    # Event fired when the file system view should be rebuilt:
+    #: Event fired when the file system view should be rebuilt:
     reload = Event
 
-    # Event fired when the user double-clicks a file:
+    #: Event fired when the user double-clicks a file:
     dclick = Event
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -331,20 +290,20 @@ class CustomEditor(SimpleTextEditor):
         """
         style = self.get_style()
         factory = self.factory
-        if (len(factory.filter) > 0) or (factory.filter_name != ''):
+        if (len(factory.filter) > 0) or (factory.filter_name != ""):
             style |= wx.DIRCTRL_SHOW_FILTERS
 
         self.control = wx.GenericDirCtrl(parent, style=style)
         self._tree = tree = self.control.GetTreeCtrl()
         id = tree.GetId()
-        wx.EVT_TREE_SEL_CHANGED(tree, id, self.update_object)
-        wx.EVT_TREE_ITEM_ACTIVATED(tree, id, self._on_dclick)
-        wx.EVT_TREE_ITEM_GETTOOLTIP(tree, id, self._on_tooltip)
+        tree.Bind(wx.EVT_TREE_SEL_CHANGED, self.update_object, id=id)
+        tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self._on_dclick, id=id)
+        tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self._on_tooltip, id=id)
 
         self.filter = factory.filter
-        self.sync_value(factory.filter_name, 'filter', 'from', is_list=True)
-        self.sync_value(factory.reload_name, 'reload', 'from')
-        self.sync_value(factory.dclick_name, 'dclick', 'to')
+        self.sync_value(factory.filter_name, "filter", "from", is_list=True)
+        self.sync_value(factory.reload_name, "reload", "from")
+        self.sync_value(factory.dclick_name, "dclick", "to")
 
         self.set_tooltip()
 
@@ -354,14 +313,10 @@ class CustomEditor(SimpleTextEditor):
         tree, self._tree = self._tree, None
         id = tree.GetId()
 
-        wx.EVT_TREE_SEL_CHANGED(tree, id, None)
-        wx.EVT_TREE_ITEM_ACTIVATED(tree, id, None)
+        tree.Bind(wx.EVT_TREE_SEL_CHANGED, None, id=id)
+        tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, None, id=id)
 
         super(CustomEditor, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self, event):
         """ Handles the user changing the contents of the edit control.
@@ -374,10 +329,6 @@ class CustomEditor(SimpleTextEditor):
 
                 self.value = path
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -385,45 +336,25 @@ class CustomEditor(SimpleTextEditor):
         if exists(self.str_value):
             self.control.SetPath(self.str_value)
 
-    #-------------------------------------------------------------------------
-    #  Returns the basic style to use for the control:
-    #-------------------------------------------------------------------------
-
     def get_style(self):
         """ Returns the basic style to use for the control.
         """
         return wx.DIRCTRL_EDIT_LABELS
-
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
         """
         return self._tree
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'filter' trait being changed:
-    #-------------------------------------------------------------------------
-
     def _filter_changed(self):
         """ Handles the 'filter' trait being changed.
         """
-        self.control.SetFilter('|'.join(self.filter[:]))
-
-    #-------------------------------------------------------------------------
-    #  Handles the user double-clicking on a file name:
-    #-------------------------------------------------------------------------
+        self.control.SetFilter("|".join(self.filter[:]))
 
     def _on_dclick(self, event):
         """ Handles the user double-clicking on a file name.
         """
         self.dclick = self.control.GetPath()
-
-    #-------------------------------------------------------------------------
-    #  Handles the user hovering on a file name for a tooltip:
-    #-------------------------------------------------------------------------
 
     def _on_tooltip(self, event):
         """ Handles the user hovering on a file name for a tooltip.
@@ -431,32 +362,24 @@ class CustomEditor(SimpleTextEditor):
         text = self._tree.GetItemText(event.GetItem())
         event.SetToolTip(text)
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'reload' trait being changed:
-    #-------------------------------------------------------------------------
-
     def _reload_changed(self):
         """ Handles the 'reload' trait being changed.
         """
         self.control.ReCreateTree()
 
-#-------------------------------------------------------------------------
-#  'PopupFile' class:
-#-------------------------------------------------------------------------
-
 
 class PopupFile(PopupControl):
 
-    # The initially specified file name:
+    #: The initially specified file name:
     file_name = Str
 
-    # The file name filter to support:
+    #: The file name filter to support:
     filter = filter_trait
 
-    # Override of PopupControl trait to make the popup resizable:
+    #: Override of PopupControl trait to make the popup resizable:
     resizable = True
 
-    #-- PopupControl Method Overrides ----------------------------------------
+    # -- PopupControl Method Overrides ----------------------------------------
 
     def create_control(self, parent):
         """ Creates the file control and gets it ready for use.
@@ -465,14 +388,15 @@ class PopupFile(PopupControl):
         if len(self.filter) > 0:
             style |= wx.DIRCTRL_SHOW_FILTERS
 
-        self._files = files = wx.GenericDirCtrl(parent, style=style,
-                                                filter='|'.join(self.filter))
+        self._files = files = wx.GenericDirCtrl(
+            parent, style=style, filter="|".join(self.filter)
+        )
         files.SetPath(self.file_name)
         self._tree = tree = files.GetTreeCtrl()
-        wx.EVT_TREE_SEL_CHANGED(tree, tree.GetId(), self._select_file)
+        tree.Bind(wx.EVT_TREE_SEL_CHANGED, self._select_file, id=tree.GetId())
 
     def dispose(self):
-        wx.EVT_TREE_SEL_CHANGED(self._tree, self._tree.GetId(), None)
+        self._tree.Bind(wx.EVT_TREE_SEL_CHANGED, None, id=self._tree.GetId())
         self._tree = self._files = None
 
     def get_style(self):
@@ -485,7 +409,7 @@ class PopupFile(PopupControl):
         """
         return isfile(path)
 
-    #-- Private Methods ------------------------------------------------------
+    # -- Private Methods ------------------------------------------------------
 
     def _select_file(self, event):
         """ Handles a file being selected in the file control.
@@ -502,14 +426,12 @@ class PopupFile(PopupControl):
         # drive is not available, it can take the 'isfile' call a long time to
         # time out, so we attempt to ignore them by doing a quick test to see
         # if it could be a valid file name, and ignore it if it is not:
-        if ((path != abspath(self.file_name)) and
-            (path[-1:] not in ('/\\')) and
-                self.is_valid(path)):
+        if (
+            (path != abspath(self.file_name))
+            and (path[-1:] not in ("/\\"))
+            and self.is_valid(path)
+        ):
             self.value = path
-
-#-------------------------------------------------------------------------
-#  'FileDropTarget' class:
-#-------------------------------------------------------------------------
 
 
 class FileDropTarget(wx.FileDropTarget):
@@ -525,5 +447,3 @@ class FileDropTarget(wx.FileDropTarget):
         self.editor.update_editor()
 
         return True
-
-### EOF #######################################################################

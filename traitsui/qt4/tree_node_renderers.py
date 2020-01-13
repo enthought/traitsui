@@ -2,13 +2,16 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
+# license included in LICENSE.txt and may be redistributed only
 # under the conditions described in the aforementioned license.  The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
 
 from __future__ import (
-    absolute_import, division, print_function, unicode_literals
+    absolute_import,
+    division,
+    print_function,
+    unicode_literals,
 )
 
 from pyface.qt import QtCore, QtGui
@@ -51,8 +54,12 @@ class WordWrapRenderer(AbstractTreeNodeRenderer):
 
         x = option.rect.left() + icon_width + self.padding.left
         y = option.rect.top() + self.padding.top
-        width = (option.rect.width() - icon_width - self.padding.left
-                 - self.padding.right)
+        width = (
+            option.rect.width()
+            - icon_width
+            - self.padding.left
+            - self.padding.right
+        )
         height = option.rect.height() - self.padding.top - self.padding.bottom
 
         lines = wrap_text_with_elision(text, option.font, width, height)
@@ -62,9 +69,7 @@ class WordWrapRenderer(AbstractTreeNodeRenderer):
             painter.setPen(QtGui.QPen(option.palette.highlightedText(), 0))
         try:
             rect = painter.drawText(
-                x, y, width, height,
-                option.displayAlignment,
-                '\n'.join(lines)
+                x, y, width, height, option.displayAlignment, "\n".join(lines)
             )
         finally:
             painter.setPen(old_pen)
@@ -98,11 +103,21 @@ class WordWrapRenderer(AbstractTreeNodeRenderer):
             icon_width = 0
             icon_height = 0
 
-        width = self.width_hint - icon_width - self.padding.left - self.padding.right
+        width = (
+            self.width_hint
+            - icon_width
+            - self.padding.left
+            - self.padding.right
+        )
         max_height = self.max_lines * font_metrics.lineSpacing()
         lines = wrap_text_with_elision(text, option.font, width, max_height)
 
         text_height = len(lines) * font_metrics.lineSpacing()
 
-        height = max(icon_height, text_height) + self.padding.top + self.padding.bottom + self.extra_space
+        height = (
+            max(icon_height, text_height)
+            + self.padding.top
+            + self.padding.bottom
+            + self.extra_space
+        )
         return self.width_hint, height

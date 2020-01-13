@@ -1,5 +1,10 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
+# (C) Copyright 2007-2019 Enthought, Inc., Austin, TX
+# All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only
+# under the conditions described in the aforementioned license.  The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+# Thanks for using Enthought open source!
 
 """
 This demo illustrates use of the LEDEditor for displaying numeric values
@@ -7,20 +12,19 @@ using a simulated LED display control.
 """
 
 from __future__ import absolute_import
-from threading \
-    import Thread
+from threading  import Thread
 
-from time \
-    import sleep
+from time import sleep
 
-from traits.api \
-    import HasTraits, Instance, Int, Bool, Float
+from traits.api import HasTraits, Instance, Int, Bool, Float
 
-from traitsui.api \
-    import View, Item, HGroup, Handler, UIInfo, spring
+from traitsui.api import View, Item, HGroup, Handler, UIInfo, spring
 
-from traitsui.wx.extra.led_editor \
-    import LEDEditor
+from traits.etsconfig.api import ETSConfig
+if ETSConfig.toolkit == 'wx':
+    from traitsui.wx.extra.led_editor import LEDEditor
+else:
+    from traitsui.qt4.extra.led_editor import LEDEditor
 
 # Handler class for the LEDDemo class view:
 

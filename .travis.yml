@@ -1,50 +1,26 @@
 language: generic
-sudo: false
+dist: xenial
+services:
+  - xvfb
 
 env:
   global:
-    - INSTALL_EDM_VERSION=1.10.0
+    - INSTALL_EDM_VERSION=2.0.0
       PYTHONUNBUFFERED="1"
 
 matrix:
   include:
-    - env: RUNTIME=2.7 TOOLKITS="null pyqt pyside wx"
-    - env: RUNTIME=2.7 TOOLKITS="pyside2"
-    - env: RUNTIME=3.5 TOOLKITS="null pyqt pyqt5"
-    - env: RUNTIME=3.5 TOOLKITS="pyside2"
-    - env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5"
-    - env: RUNTIME=3.6 TOOLKITS="pyside2"
+    - env: RUNTIME=3.6 TOOLKITS="null pyqt pyside2"
+    - env: RUNTIME=3.6 TOOLKITS="wx pyqt5"
     - os: osx
-      env: RUNTIME=2.7 TOOLKITS="null pyside pyqt"
+      env: RUNTIME=3.6 TOOLKITS="null pyqt5 pyqt pyside2"
     - os: osx
-      env: RUNTIME=2.7 TOOLKITS="pyside2"
-    - os: osx
-      env: RUNTIME=2.7 TOOLKITS="pyqt wx"
-    - os: osx
-      env: RUNTIME=3.5 TOOLKITS="null pyqt5 pyqt"
-    - os: osx
-      env: RUNTIME=3.5 TOOLKITS="pyside2"
-    - os: osx
-      env: RUNTIME=3.6 TOOLKITS="null pyqt5 pyqt"
-    - os: osx
-      env: RUNTIME=3.6 TOOLKITS="pyside2"
+      env: RUNTIME=3.6 TOOLKITS="wx"
   allow_failures:
-    - env: RUNTIME=2.7 TOOLKITS="pyside2"
-    - env: RUNTIME=3.5 TOOLKITS="pyside2"
-    - env: RUNTIME=3.6 TOOLKITS="pyside2"
+    - env: RUNTIME=3.6 TOOLKITS="wx pyqt5"
     - os: osx
-      env: RUNTIME=2.7 TOOLKITS="pyside2"
-    - os: osx
-      env: RUNTIME=2.7 TOOLKITS="pyqt wx"
-    - os: osx
-      env: RUNTIME=3.5 TOOLKITS="pyside2"
-    - os: osx
-      env: RUNTIME=3.6 TOOLKITS="pyside2"
+      env: RUNTIME=3.6 TOOLKITS="wx"
   fast_finish: true
-
-branches:
-  only:
-    - master
 
 cache:
   directories:
@@ -52,9 +28,9 @@ cache:
 
 before_install:
   - mkdir -p "${HOME}/.cache/download"
-  - export DISPLAY=:99.0
-  - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then sh -e /etc/init.d/xvfb start; fi
   - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then ./install-edm-linux.sh; export PATH="${HOME}/edm/bin:${PATH}"; fi
+  # libdbus and libxkb for Pyside2, libsdl for wxpython
+  - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then sudo apt-get install -y libdbus-1-3 libxkbcommon-x11-0 libsdl1.2debian; fi
   - if [[ ${TRAVIS_OS_NAME} == 'osx' ]]; then ./install-edm-osx.sh; export PATH="${PATH}:/usr/local/bin"; fi
   - edm install -y wheel click coverage
 install:

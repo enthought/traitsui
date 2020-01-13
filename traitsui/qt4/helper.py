@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,57 +8,52 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines helper functions and classes used to define PyQt-based trait
     editors and trait editor factories.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
-
 from __future__ import absolute_import
 import os.path
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_qt5, qt_api
 from pyface.ui_traits import convert_image
 from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 
 from traitsui.ui_traits import SequenceTypes
 import six
 
-is_qt5 = QtCore.__version_info__ >= (5,)
 
-#-------------------------------------------------------------------------
-#  Trait definitions:
-#-------------------------------------------------------------------------
+is_pyqt = qt_api in {"pyqt", "pyqt5"}
 
-# Layout orientation for a control and its associated editor
-Orientation = Enum('horizontal', 'vertical')
 
-#-------------------------------------------------------------------------
-#  Convert an image file name to a cached QPixmap:
-#-------------------------------------------------------------------------
+#: Layout orientation for a control and its associated editor
+Orientation = Enum("horizontal", "vertical")
+
+#: Dock-related stubs.
+DockStyle = Enum("horizontal", "vertical", "tab", "fixed")
 
 
 def pixmap_cache(name, path=None):
-    """ Return the QPixmap corresponding to a filename. If the filename does not
-        contain a path component, 'path' is used (or if 'path' is not specified,
-        the local 'images' directory is used).
+    """ Convert an image file name to a cached QPixmap
+
+    Returns the QPixmap corresponding to a filename. If the filename does not
+    contain a path component, 'path' is used (or if 'path' is not specified,
+    the local 'images' directory is used).
     """
-    if name[:1] == '@':
-        image = convert_image(name.replace(' ', '_').lower())
+    if name[:1] == "@":
+        image = convert_image(name.replace(" ", "_").lower())
         if image is not None:
             return image.create_image()
 
     name_path, name = os.path.split(name)
-    name = name.replace(' ', '_').lower()
+    name = name.replace(" ", "_").lower()
     if name_path:
         filename = os.path.join(name_path, name)
     else:
         if path is None:
-            filename = os.path.join(os.path.dirname(__file__), 'images', name)
+            filename = os.path.join(os.path.dirname(__file__), "images", name)
         else:
             filename = os.path.join(path, name)
     filename = os.path.abspath(filename)
@@ -74,11 +69,6 @@ def pixmap_cache(name, path=None):
             pm.load(filename)
             QtGui.QPixmapCache.insert(filename, pm)
     return pm
-
-#-------------------------------------------------------------------------
-#  Positions a window on the screen with a specified width and height so that
-#  the window completely fits on the screen if possible:
-#-------------------------------------------------------------------------
 
 
 def position_window(window, width=None, height=None, parent=None):
@@ -128,12 +118,9 @@ def position_window(window, width=None, height=None, parent=None):
     y += cdy + fheight
 
     # Position the window (making sure it will fit on the screen).
-    window.move(max(0, min(x, screen_dx - width)),
-                max(0, min(y, screen_dy - height)))
-
-#-------------------------------------------------------------------------
-#  Restores the user preference items for a specified UI:
-#-------------------------------------------------------------------------
+    window.move(
+        max(0, min(x, screen_dx - width)), max(0, min(y, screen_dy - height))
+    )
 
 
 def restore_window(ui):
@@ -143,34 +130,12 @@ def restore_window(ui):
     if prefs is not None:
         ui.control.setGeometry(*prefs)
 
-#-------------------------------------------------------------------------
-#  Saves the user preference items for a specified UI:
-#-------------------------------------------------------------------------
-
 
 def save_window(ui):
     """ Saves the user preference items for a specified UI.
     """
     geom = ui.control.geometry()
     ui.save_prefs((geom.x(), geom.y(), geom.width(), geom.height()))
-
-#-------------------------------------------------------------------------
-#  Safely tries to pop up an FBI window if etsdevtools.debug is installed
-#-------------------------------------------------------------------------
-
-
-def open_fbi():
-    try:
-        from etsdevtools.developer.helper.fbi import if_fbi
-        if not if_fbi():
-            import traceback
-            traceback.print_exc()
-    except ImportError:
-        pass
-
-#-------------------------------------------------------------------------
-#  'IconButton' class:
-#-------------------------------------------------------------------------
 
 
 class IconButton(QtGui.QPushButton):
@@ -215,15 +180,11 @@ class IconButton(QtGui.QPushButton):
 
         self.clicked.connect(slot)
 
-#-------------------------------------------------------------------------
-#  Dock-related stubs.
-#-------------------------------------------------------------------------
 
-DockStyle = Enum('horizontal', 'vertical', 'tab', 'fixed')
+# ------------------------------------------------------------------------
+# Text Rendering helpers
+# ------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------
-#  Text Rendering helpers
-#-------------------------------------------------------------------------
 
 def wrap_text_with_elision(text, font, width, height):
     """ Wrap paragraphs to fit inside a given size, eliding if too long.

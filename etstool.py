@@ -87,20 +87,25 @@ from contextlib import contextmanager
 import click
 
 supported_combinations = {
-    '2.7': {'pyside', 'pyside2', 'pyqt', 'wx', 'null'},
     '3.5': {'pyside2', 'pyqt', 'pyqt5', 'null'},
-    '3.6': {'pyside2', 'pyqt', 'pyqt5', 'null'},
+    '3.6': {'pyside2', 'pyqt', 'pyqt5', 'wx', 'null'},
 }
+
+# Default Python version to use in the comamnds below if none is specified.
+DEFAULT_RUNTIME = '3.6'
+
+# Default toolkit to use if none specified.
+DEFAULT_TOOLKIT = 'null'
 
 dependencies = {
     "numpy",
-    "pandas",
+    "pandas<0.24",
     "pygments",
-    "traits",
     "pip",
     "nose",
     "coverage",
     "configobj",
+    "docutils"
 }
 
 extra_dependencies = {
@@ -108,10 +113,17 @@ extra_dependencies = {
     # XXX once pyside2 is available in EDM, we will want it here
     'pyside2': set(),
     'pyqt': {'pyqt<4.12'},  # FIXME: build of 4.12-1 appears to be bad
-    # XXX once pyqt5 is available in EDM, we will want it here
-    'pyqt5': set(),
-    'wx': {'wxpython'},
+    'pyqt5': {'pyqt5'},
+    # XXX once wxPython 4 is available in EDM, we will want it here
+    'wx': set(),
     'null': set()
+}
+
+runtime_dependencies = {}
+
+doc_dependencies = {
+    "sphinx",
+    "enthought_sphinx_theme",
 }
 
 environment_vars = {
@@ -130,8 +142,8 @@ def cli():
 
 
 @cli.command()
-@click.option('--runtime', default='3.5')
-@click.option('--toolkit', default='null')
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def install(runtime, toolkit, environment):
     """ Install project and dependencies into a clean EDM environment.
@@ -139,7 +151,10 @@ def install(runtime, toolkit, environment):
     """
     parameters = get_parameters(runtime, toolkit, environment)
     packages = ' '.join(
-        dependencies | extra_dependencies.get(toolkit, set()))
+        dependencies
+        | extra_dependencies.get(toolkit, set())
+        | runtime_dependencies.get(runtime, set())
+    )
     # edm commands to setup the development environment
     commands = [
         "edm environments create {environment} --force --version={runtime}",
@@ -149,12 +164,20 @@ def install(runtime, toolkit, environment):
         "edm run -e {environment} -- python setup.py install"
     ]
     # pip install pyqt5 and pyside2, because we don't have them in EDM yet
-    if toolkit == 'pyqt5':
-        commands.append("edm run -e {environment} -- pip install pyqt5==5.9.2")
-    elif toolkit == 'pyside2':
+    if toolkit == 'pyside2':
         commands.append(
-            "edm run -e {environment} -- pip install pyside2"
+            "edm run -e {environment} -- pip install pyside2==5.11"
         )
+    elif toolkit == 'wx':
+        if sys.platform != 'linux':
+            commands.append(
+                "edm run -e {environment} -- pip install wxPython"
+            )
+        else:
+            # XXX this is mainly for TravisCI workers; need a generic solution
+            commands.append(
+                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-14.04 wxPython"
+            )
 
     click.echo("Creating environment '{environment}'".format(**parameters))
     execute(commands, parameters)
@@ -162,8 +185,8 @@ def install(runtime, toolkit, environment):
 
 
 @cli.command()
-@click.option('--runtime', default='3.5')
-@click.option('--toolkit', default='null')
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def test(runtime, toolkit, environment):
     """ Run the test suite in a given environment with the specified toolkit.
@@ -190,8 +213,8 @@ def test(runtime, toolkit, environment):
     click.echo('Done test')
 
 @cli.command()
-@click.option('--runtime', default='3.5')
-@click.option('--toolkit', default='null')
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def cleanup(runtime, toolkit, environment):
     """ Remove a development environment.
@@ -207,8 +230,8 @@ def cleanup(runtime, toolkit, environment):
 
 
 @cli.command()
-@click.option('--runtime', default='3.5')
-@click.option('--toolkit', default='null')
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
 def test_clean(runtime, toolkit):
     """ Run tests in a clean environment, cleaning up afterwards
 
@@ -221,8 +244,8 @@ def test_clean(runtime, toolkit):
         cleanup(args=args, standalone_mode=False)
 
 @cli.command()
-@click.option('--runtime', default='3.5')
-@click.option('--toolkit', default='null')
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def update(runtime, toolkit, environment):
     """ Update/Reinstall package into environment.
@@ -234,6 +257,36 @@ def update(runtime, toolkit, environment):
     click.echo("Re-installing in  '{environment}'".format(**parameters))
     execute(commands, parameters)
     click.echo('Done update')
+
+
+@cli.command()
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
+@click.option('--environment', default=None)
+def docs(runtime, toolkit, environment):
+    """ Autogenerate documentation
+
+    """
+    parameters = get_parameters(runtime, toolkit, environment)
+    packages = ' '.join(doc_dependencies)
+    commands = [
+        "edm install -y -e {environment} " + packages,
+    ]
+    click.echo("Installing documentation tools in  '{environment}'".format(
+        **parameters))
+    execute(commands, parameters)
+    click.echo('Done installing documentation tools')
+
+    os.chdir('docs')
+    commands = [
+        "edm run -e {environment} -- make html",
+    ]
+    click.echo("Building documentation in  '{environment}'".format(**parameters))
+    try:
+        execute(commands, parameters)
+    finally:
+        os.chdir('..')
+    click.echo('Done building documentation')
 
 
 @cli.command()
@@ -255,6 +308,7 @@ def test_all():
     if failed_command:
         sys.exit(1)
 
+
 # ----------------------------------------------------------------------------
 # Utility routines
 # ----------------------------------------------------------------------------
@@ -262,7 +316,7 @@ def test_all():
 def get_parameters(runtime, toolkit, environment):
     """ Set up parameters dictionary for format() substitution """
     parameters = {'runtime': runtime, 'toolkit': toolkit, 'environment': environment}
-    if toolkit not in supported_combinations[runtime] :
+    if toolkit not in supported_combinations[runtime]:
         msg = ("Python {runtime} and toolkit {toolkit} not supported by " +
                "test environments")
         raise RuntimeError(msg.format(**parameters))

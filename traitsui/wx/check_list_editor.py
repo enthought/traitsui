@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,38 +13,30 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various editors for multi-selection enumerations, for the
 wxPython user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 import logging
 
 import wx
 
-from traits.api \
-    import List, Str, TraitError
+from traits.api import List, Str, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.check_list_editor file.
-from traitsui.editors.check_list_editor \
-    import ToolkitEditorFactory
+from traitsui.editors.check_list_editor import ToolkitEditorFactory
 
-from .editor_factory \
-    import TextEditor as BaseTextEditor
+from .editor_factory import TextEditor as BaseTextEditor
 
-from .editor \
-    import EditorWithList
+from .editor import EditorWithList
 
-from .helper \
-    import TraitsUIPanel
+from .helper import TraitsUIPanel
 from functools import reduce
 import six
 
@@ -55,28 +47,24 @@ logger = logging.getLogger(__name__)
 capitalize = lambda s: s.capitalize()
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
 
 class SimpleEditor(EditorWithList):
     """ Simple style of editor for checklists, which displays a combo box.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # Checklist item names
+    #: Checklist item names
     names = List(Str)
 
-    # Checklist item values
+    #: Checklist item values
     values = List
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -86,20 +74,13 @@ class SimpleEditor(EditorWithList):
         super(SimpleEditor, self).init(parent)
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Creates the initial editor control:
-    #-------------------------------------------------------------------------
-
     def create_control(self, parent):
         """ Creates the initial editor control.
         """
-        self.control = wx.Choice(parent, -1,
-                                 wx.Point(0, 0), wx.Size(100, 20), [])
-        wx.EVT_CHOICE(parent, self.control.GetId(), self.update_object)
-
-    #-------------------------------------------------------------------------
-    #  Handles the list of legal check list values being updated:
-    #-------------------------------------------------------------------------
+        self.control = wx.Choice(
+            parent, -1, wx.Point(0, 0), wx.Size(100, 20), []
+        )
+        parent.Bind(wx.EVT_CHOICE, self.update_object, id=self.control.GetId())
 
     def list_updated(self, values):
         """ Handles updates to the list of legal checklist values.
@@ -119,18 +100,18 @@ class SimpleEditor(EditorWithList):
                     del cur_value[i]
                     modified = True
                 except TypeError as e:
-                    logger.warn('Unable to remove non-current value [%s] from '
-                                'values %s', cur_value[i], values)
+                    logger.warn(
+                        "Unable to remove non-current value [%s] from "
+                        "values %s",
+                        cur_value[i],
+                        values,
+                    )
         if modified:
             if isinstance(self.value, six.string_types):
-                cur_value = ','.join(cur_value)
+                cur_value = ",".join(cur_value)
             self.value = cur_value
 
         self.rebuild_editor()
-
-    #-------------------------------------------------------------------------
-    #  Rebuilds the editor after its definition is modified:
-    #-------------------------------------------------------------------------
 
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
@@ -142,10 +123,6 @@ class SimpleEditor(EditorWithList):
 
         self.update_editor()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user selecting a new value from the combo box:
-    #-------------------------------------------------------------------------
-
     def update_object(self, event):
         """ Handles the user selecting a new value from the combo box.
         """
@@ -155,23 +132,21 @@ class SimpleEditor(EditorWithList):
 
         self.value = value
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         try:
             self.control.SetSelection(
-                self.values.index(parse_value(self.value)[0]))
+                self.values.index(parse_value(self.value)[0])
+            )
         except:
             pass
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  'CustomEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class CustomEditor(SimpleEditor):
@@ -179,19 +154,11 @@ class CustomEditor(SimpleEditor):
         boxes.
     """
 
-    #-------------------------------------------------------------------------
-    #  Creates the initial editor control:
-    #-------------------------------------------------------------------------
-
     def create_control(self, parent):
         """ Creates the initial editor control.
         """
         # Create a panel to hold all of the check boxes
         self.control = panel = TraitsUIPanel(parent, -1)
-
-    #-------------------------------------------------------------------------
-    #  Rebuilds the editor after its definition is modified:
-    #-------------------------------------------------------------------------
 
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
@@ -207,12 +174,12 @@ class CustomEditor(SimpleEditor):
         values = self.values
         n = len(labels)
         cols = self.factory.cols
-        rows = (n + cols - 1) / cols
-        incr = [n / cols] * cols
+        rows = (n + cols - 1) // cols
+        incr = [n // cols] * cols
         rem = n % cols
 
         for i in range(cols):
-            incr[i] += (rem > i)
+            incr[i] += rem > i
         incr[-1] = -(reduce(lambda x, y: x + y, incr[:-1], 0) - 1)
 
         if cols > 1:
@@ -229,11 +196,11 @@ class CustomEditor(SimpleEditor):
                     control = wx.CheckBox(panel, -1, label)
                     control.value = value = values[index]
                     control.SetValue(value in cur_value)
-                    wx.EVT_CHECKBOX(panel, control.GetId(), self.update_object)
+                    panel.Bind(wx.EVT_CHECKBOX, self.update_object, id=control.GetId())
                     index += incr[j]
                     n -= 1
                 else:
-                    control = wx.CheckBox(panel, -1, '')
+                    control = wx.CheckBox(panel, -1, "")
                     control.Show(False)
 
                 sizer.Add(control, 0, wx.NORTH, 5)
@@ -255,10 +222,6 @@ class CustomEditor(SimpleEditor):
         panel.Layout()
         panel.Refresh()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking one of the 'custom' check boxes:
-    #-------------------------------------------------------------------------
-
     def update_object(self, event):
         """ Handles the user clicking one of the custom check boxes.
         """
@@ -269,12 +232,8 @@ class CustomEditor(SimpleEditor):
         else:
             cur_value.remove(control.value)
         if isinstance(self.value, six.string_types):
-            cur_value = ','.join(cur_value)
+            cur_value = ",".join(cur_value)
         self.value = cur_value
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -285,18 +244,10 @@ class CustomEditor(SimpleEditor):
             if control.IsShown():
                 control.SetValue(control.value in new_values)
 
-#-------------------------------------------------------------------------
-#  'TextEditor' class:
-#-------------------------------------------------------------------------
-
 
 class TextEditor(BaseTextEditor):
     """ Text style of editor for checklists, which displays a text field.
     """
-
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self, event):
         """ Handles the user changing the contents of the edit control.
@@ -311,9 +262,10 @@ class TextEditor(BaseTextEditor):
         except TraitError as excp:
             pass
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Parse a value into a list:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def parse_value(value):
@@ -325,6 +277,4 @@ def parse_value(value):
     if not isinstance(value, str):
         return value[:]
 
-    return [x.strip() for x in value.split(',')]
-
-### EOF ##################################################################
+    return [x.strip() for x in value.split(",")]

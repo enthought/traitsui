@@ -1,10 +1,10 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2006, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -13,40 +13,31 @@
 #  Author: Bryce Hendrix
 #  Date:   09/13/2007
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the table column descriptor used for editing the object represented
     by the row
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
-from traits.etsconfig.api import ETSConfig
 from ..table_column import ObjectColumn
-
-if ETSConfig.toolkit == 'wx':
-    from pyface.ui.wx.grid.edit_renderer import EditRenderer
-
-#-------------------------------------------------------------------------
-#  'EditColumn' class:
-#-------------------------------------------------------------------------
 
 
 class EditColumn(ObjectColumn):
-
     def __init__(self, **traits):
         """ Initializes the object.
         """
         super(EditColumn, self).__init__(**traits)
 
-        # force the renderer to be a edit renderer
+        from traitsui.toolkit import toolkit_object
+        EditRenderer = toolkit_object(
+            'extra.edit_renderer:EditRenderer'
+        )
         self.renderer = EditRenderer()
 
-        self.label = ''
+        self.label = ""
 
     def get_cell_color(self, object):
         """ Returns the cell background color for the column for a specified

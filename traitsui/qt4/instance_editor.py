@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2008, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,15 +8,12 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various instance editors and the instance editor factory for
     the PyQt user interface toolkit..
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
@@ -36,19 +33,12 @@ from .drop_editor import _DropEventFilter
 from .constants import DropColor
 from .helper import position_window
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
 
 OrientationMap = {
-    'default': None,
-    'horizontal': QtGui.QBoxLayout.LeftToRight,
-    'vertical': QtGui.QBoxLayout.TopToBottom
+    "default": None,
+    "horizontal": QtGui.QBoxLayout.LeftToRight,
+    "vertical": QtGui.QBoxLayout.TopToBottom,
 }
-
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
 
 
 class CustomEditor(Editor):
@@ -58,38 +48,34 @@ class CustomEditor(Editor):
     containing trait editors for all the instance's traits.
     """
 
-    # Background color when an item can be dropped on the editor:
+    #: Background color when an item can be dropped on the editor:
     ok_color = DropColor
 
-    # The orientation of the instance editor relative to the instance selector:
+    #: The orientation of the instance editor relative to the instance selector:
     orientation = QtGui.QBoxLayout.TopToBottom
 
-    # Class constant:
+    #: Class constant:
     extra = 0
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # List of InstanceChoiceItem objects used by the editor
+    #: List of InstanceChoiceItem objects used by the editor
     items = Property
 
-    # The view to use for displaying the instance
+    #: The view to use for displaying the instance
     view = AView
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         factory = self.factory
-        if factory.name != '':
-            self._object, self._name, self._value = \
-                self.parse_extended_name(factory.name)
+        if factory.name != "":
+            self._object, self._name, self._value = self.parse_extended_name(
+                factory.name
+            )
 
         # Create a panel to hold the object trait's view:
         if factory.editable:
@@ -114,16 +100,20 @@ class CustomEditor(Editor):
 
             self.set_tooltip(self._choice)
 
-            if factory.name != '':
-                self._object.on_trait_change(self.rebuild_items,
-                                             self._name, dispatch='ui')
+            if factory.name != "":
                 self._object.on_trait_change(
-                    self.rebuild_items, self._name + '_items', dispatch='ui')
+                    self.rebuild_items, self._name, dispatch="ui"
+                )
+                self._object.on_trait_change(
+                    self.rebuild_items, self._name + "_items", dispatch="ui"
+                )
 
-            factory.on_trait_change(self.rebuild_items, 'values',
-                                    dispatch='ui')
-            factory.on_trait_change(self.rebuild_items, 'values_items',
-                                    dispatch='ui')
+            factory.on_trait_change(
+                self.rebuild_items, "values", dispatch="ui"
+            )
+            factory.on_trait_change(
+                self.rebuild_items, "values_items", dispatch="ui"
+            )
 
             self.rebuild_items()
 
@@ -169,21 +159,13 @@ class CustomEditor(Editor):
         # fixme: A normal assignment can cause a crash (for unknown reasons) in
         # some cases, so we make sure that no notifications are generated:
         self.trait_setq(view=factory.view)
-        self.sync_value(factory.view_name, 'view', 'from')
-
-    #-------------------------------------------------------------------------
-    #  Creates the editor control:
-    #-------------------------------------------------------------------------
+        self.sync_value(factory.view_name, "view", "from")
 
     def create_editor(self, parent, layout):
         """ Creates the editor control.
         """
         self._panel = QtGui.QWidget()
         layout.addWidget(self._panel)
-
-    #-------------------------------------------------------------------------
-    #  Gets the current list of InstanceChoiceItem items:
-    #-------------------------------------------------------------------------
 
     def _get_items(self):
         """ Gets the current list of InstanceChoiceItem items.
@@ -207,10 +189,6 @@ class CustomEditor(Editor):
         self._items = items
 
         return items
-
-    #-------------------------------------------------------------------------
-    #  Rebuilds the object selector list:
-    #-------------------------------------------------------------------------
 
     def rebuild_items(self):
         """ Rebuilds the object selector list.
@@ -239,10 +217,6 @@ class CustomEditor(Editor):
             except:
                 pass
 
-    #-------------------------------------------------------------------------
-    #  Returns the InstanceChoiceItem for a specified object:
-    #-------------------------------------------------------------------------
-
     def item_for(self, object):
         """ Returns the InstanceChoiceItem for a specified object.
         """
@@ -252,26 +226,19 @@ class CustomEditor(Editor):
 
         return None
 
-    #-------------------------------------------------------------------------
-    #  Returns the view to use for a specified object:
-    #-------------------------------------------------------------------------
-
     def view_for(self, object, item):
         """ Returns the view to use for a specified object.
         """
-        view = ''
+        view = ""
         if item is not None:
             view = item.get_view()
 
-        if view == '':
+        if view == "":
             view = self.view
 
-        return self.ui.handler.trait_view_for(self.ui.info, view, object,
-                                              self.object_name, self.name)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user selecting a new value from the combo box:
-    #-------------------------------------------------------------------------
+        return self.ui.handler.trait_view_for(
+            self.ui.info, view, object, self.object_name, self.name
+        )
 
     def update_object(self, index):
         """ Handles the user selecting a new value from the combo box.
@@ -283,17 +250,13 @@ class CustomEditor(Editor):
             object = item.get_object()
             if (not self.factory.editable) and item.is_factory:
                 view = self.view_for(object, self.item_for(object))
-                view.ui(object, self.control, 'modal')
+                view.ui(object, self.control, "modal")
 
             if self.factory.cachable:
                 self._object_cache[id_item] = object
 
         self.value = object
         self.resynch_editor()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -316,11 +279,6 @@ class CustomEditor(Editor):
                 choice.setCurrentIndex(idx)
             else:
                 choice.setText(name)
-
-    #-------------------------------------------------------------------------
-    #  Resynchronizes the contents of the editor when the object trait changes
-    #  external to the editor:
-    #-------------------------------------------------------------------------
 
     def resynch_editor(self):
         """ Resynchronizes the contents of the editor when the object trait
@@ -347,7 +305,7 @@ class CustomEditor(Editor):
             stretch = 0
             value = self.value
             if not isinstance(value, HasTraits):
-                str_value = ''
+                str_value = ""
                 if value is not None:
                     str_value = self.str_value
                 control = QtGui.QLabel(str_value)
@@ -357,11 +315,16 @@ class CustomEditor(Editor):
                 handler = None
                 if isinstance(value, Handler):
                     handler = value
-                context.setdefault('context', self.object)
-                context.setdefault('context_handler', self.ui.handler)
-                self._ui = ui = view.ui(context, panel, 'subpanel',
-                                        value.trait_view_elements(), handler,
-                                        self.factory.id)
+                context.setdefault("context", self.object)
+                context.setdefault("context_handler", self.ui.handler)
+                self._ui = ui = view.ui(
+                    context,
+                    panel,
+                    "subpanel",
+                    value.trait_view_elements(),
+                    handler,
+                    self.factory.id,
+                )
                 control = ui.control
                 self.scrollable = ui._scrollable
                 ui.parent = self.ui
@@ -371,10 +334,6 @@ class CustomEditor(Editor):
 
             # FIXME: Handle stretch.
             layout.addWidget(control)
-
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -387,73 +346,55 @@ class CustomEditor(Editor):
 
         if self._choice is not None:
             if self._object is not None:
-                self._object.on_trait_change(self.rebuild_items,
-                                             self._name, remove=True)
                 self._object.on_trait_change(
-                    self.rebuild_items, self._name + '_items', remove=True)
+                    self.rebuild_items, self._name, remove=True
+                )
+                self._object.on_trait_change(
+                    self.rebuild_items, self._name + "_items", remove=True
+                )
 
-            self.factory.on_trait_change(self.rebuild_items, 'values',
-                                         remove=True)
-            self.factory.on_trait_change(self.rebuild_items,
-                                         'values_items', remove=True)
+            self.factory.on_trait_change(
+                self.rebuild_items, "values", remove=True
+            )
+            self.factory.on_trait_change(
+                self.rebuild_items, "values_items", remove=True
+            )
 
         super(CustomEditor, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Handles an error that occurs while setting the object's trait value:
-    #-------------------------------------------------------------------------
 
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
         pass
 
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
-
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
         """
-        return (self._choice or self.control)
+        return self._choice or self.control
 
-    #-- UI preference save/restore interface ---------------------------------
-
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the
-    #  editor:
-    #-------------------------------------------------------------------------
+    # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
         """
         ui = self._ui
-        if (ui is not None) and (prefs.get('id') == ui.id):
-            ui.set_prefs(prefs.get('prefs'))
-
-    #-------------------------------------------------------------------------
-    #  Returns any user preference information associated with the editor:
-    #-------------------------------------------------------------------------
+        if (ui is not None) and (prefs.get("id") == ui.id):
+            ui.set_prefs(prefs.get("prefs"))
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
         ui = self._ui
-        if (ui is not None) and (ui.id != ''):
-            return {'id': ui.id,
-                    'prefs': ui.get_prefs()}
+        if (ui is not None) and (ui.id != ""):
+            return {"id": ui.id, "prefs": ui.get_prefs()}
 
         return None
 
-    #-- Traits event handlers ------------------------------------------------
+    # -- Traits event handlers ------------------------------------------------
 
     def _view_changed(self, view):
         self.resynch_editor()
-
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
 
 
 class SimpleEditor(CustomEditor):
@@ -462,15 +403,11 @@ class SimpleEditor(CustomEditor):
     """
 
     #: The ui instance for the currently open editor dialog
-    _dialog_ui = Instance('traitsui.ui.UI')
+    _dialog_ui = Instance("traitsui.ui.UI")
 
-    # Class constants:
+    #: Class constants:
     orientation = QtGui.QBoxLayout.LeftToRight
     extra = 2
-
-    #-------------------------------------------------------------------------
-    #  Creates the editor control:
-    #-------------------------------------------------------------------------
 
     def create_editor(self, parent, layout):
         """ Creates the editor control (a button).
@@ -481,21 +418,18 @@ class SimpleEditor(CustomEditor):
         # Make sure the editor is properly disposed if parent UI is closed
         self._button.destroyed.connect(self._parent_closed)
 
-    #-------------------------------------------------------------------------
-    #  Edit the contents of the object trait when the user clicks the button:
-    #-------------------------------------------------------------------------
-
     def edit_instance(self):
         """ Edit the contents of the object trait when the user clicks the
             button.
         """
         # Create the user interface:
         factory = self.factory
-        view = self.ui.handler.trait_view_for(self.ui.info, factory.view,
-                                              self.value, self.object_name,
-                                              self.name)
-        self._dialog_ui = self.value.edit_traits(view, kind=factory.kind,
-                                                 id=factory.id)
+        view = self.ui.handler.trait_view_for(
+            self.ui.info, factory.view, self.value, self.object_name, self.name
+        )
+        self._dialog_ui = self.value.edit_traits(
+            view, kind=factory.kind, id=factory.id
+        )
 
         # Check to see if the view was 'modal', in which case it will already
         # have been closed (i.e. is None) by the time we get control back:
@@ -511,11 +445,6 @@ class SimpleEditor(CustomEditor):
         else:
             self._dialog_ui = None
 
-    #-------------------------------------------------------------------------
-    #  Resynchronizes the contents of the editor when the object trait changes
-    #  external to the editor:
-    #-------------------------------------------------------------------------
-
     def resynch_editor(self):
         """ Resynchronizes the contents of the editor when the object trait
             changes externally to the editor.
@@ -523,7 +452,7 @@ class SimpleEditor(CustomEditor):
         button = self._button
         if button is not None:
             label = self.factory.label
-            if label == '':
+            if label == "":
                 label = user_name_for(self.name)
 
             button.setText(label)
