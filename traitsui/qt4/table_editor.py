@@ -519,6 +519,8 @@ class TableEditor(Editor, BaseTableEditor):
         finally:
             smodel.blockSignals(False)
 
+        self.refresh_editor()
+
     # -------------------------------------------------------------------------
     #  Private methods:
     # -------------------------------------------------------------------------
