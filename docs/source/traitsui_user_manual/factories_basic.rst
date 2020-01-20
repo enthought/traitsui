@@ -765,9 +765,9 @@ InstanceEditor()
 ````````````````
 
 :Suitable for:
-    Instance, Property, self, ThisClass, This
+    Instance, Property, self, This
 :Default for:
-    Instance, self, ThisClass, This
+    Instance, self, This
 :Optional parameters:
     *cachable*, *editable*, *id*, *kind*, *label*, *name*, *object*,
     *orientation*, *values*, *view*
