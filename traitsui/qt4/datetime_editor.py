@@ -41,6 +41,9 @@ class SimpleEditor(Editor):
             widget.
         """
         self.control = QtGui.QDateTimeEdit()
+        self.minimum_datetime = self.factory.minimum_datetime
+        self.maximum_datetime = self.factory.maximum_datetime
+        self.update_date_range()
         self.control.dateTimeChanged.connect(self.update_object)
 
     def update_editor(self):
@@ -64,7 +67,7 @@ class SimpleEditor(Editor):
                    QDateTime(self.minimum_datetime)
                 )
             if self.maximum_datetime is not None:
-                self.control.setMinimumDateTime(
+                self.control.setMaximumDateTime(
                     QDateTime(self.maximum_datetime)
                 )
 

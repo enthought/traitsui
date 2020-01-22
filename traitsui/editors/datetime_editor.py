@@ -19,6 +19,9 @@
 """
 
 from __future__ import absolute_import
+import datetime
+
+from traits.api import Instance, Str
 
 from ..editor_factory import EditorFactory
 
@@ -26,4 +29,21 @@ from ..editor_factory import EditorFactory
 class DateTimeEditor(EditorFactory):
     """ Editor factory for the datetime editor.
     """
-    pass
+    # -------------------------------------------------------------------------
+    #  Trait definitions:
+    # -------------------------------------------------------------------------
+
+    #: The earliest datetime allowed by the editor
+    minimum_datetime = Instance(datetime.datetime)
+
+    #: The latest datetime allowed by the editor
+    maximum_datetime = Instance(datetime.datetime)
+
+    # -- ReadonlyEditor traits ------------------------------------------------
+
+    #: Message to show when datetime is None.
+    message = Str("Undefined")
+
+    #: The string representation of the datetime to show.  Uses time.strftime
+    #: format.
+    strftime = Str("%Y-%m-%dT%H:%M:%S")
