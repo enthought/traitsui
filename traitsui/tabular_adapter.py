@@ -21,15 +21,15 @@
 
 from __future__ import absolute_import
 
+import six
+
 from traits.api import (
     Any,
     Bool,
-    Color,
     Either,
     Enum,
     Event,
     Float,
-    Font,
     HasPrivateTraits,
     HasTraits,
     Instance,
@@ -42,7 +42,8 @@ from traits.api import (
     on_trait_change,
     provides,
 )
-import six
+
+from .toolkit_traits import Color, Font
 
 
 class ITabularAdapter(Interface):

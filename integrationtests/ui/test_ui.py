@@ -21,11 +21,11 @@ import wx
 
 from traits.api \
     import Trait, HasTraits, Str, Int, Range, List, Event, File, Directory, \
-    Bool, Color, Font, Enum
+    Bool, Enum
 
 from traitsui.api \
     import View, Handler, Item, CheckListEditor, ButtonEditor, FileEditor, \
-    DirectoryEditor, ImageEnumEditor
+    DirectoryEditor, ImageEnumEditor, Color, Font
 
 #-------------------------------------------------------------------------
 #  Constants:

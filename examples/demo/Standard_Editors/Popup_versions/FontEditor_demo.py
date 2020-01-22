@@ -5,8 +5,8 @@ This demo shows each of the four styles of the FontEditor.
 """
 
 from __future__ import absolute_import
-from traits.api import HasTraits, Font
-from traitsui.api import Item, Group, View
+from traits.api import HasTraits
+from traitsui.api import Item, Group, View, Font
 
 #-------------------------------------------------------------------------
 #  Demo Class

@@ -28,13 +28,11 @@ from traits.api import (
     Any,
     Bool,
     Callable,
-    Color,
     Constant,
     Either,
     Enum,
     Expression,
     Float,
-    Font,
     HasPrivateTraits,
     Instance,
     Int,
@@ -47,6 +45,7 @@ from traits.trait_base import user_name_for, xgetattr
 from .editor_factory import EditorFactory
 from .menu import Menu
 from .ui_traits import Image, AView, EditorStyle
+from .toolkit_traits import Color, Font
 from .view import View
 
 # Set up a logger:

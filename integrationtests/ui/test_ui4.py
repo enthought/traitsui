@@ -21,8 +21,7 @@ from __future__ import absolute_import
 import wx
 
 from traits.api import Trait, HasTraits, Str, Int
-from traitsui.api import View, Group
-from traits.api import Color
+from traitsui.api import Color, View, Group
 
 #-------------------------------------------------------------------------
 #  Model classes:

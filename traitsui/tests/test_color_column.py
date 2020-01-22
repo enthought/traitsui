@@ -1,8 +1,8 @@
 from __future__ import absolute_import
 from unittest import TestCase
 
-from traits.api import HasTraits, Str, Int, RGBColor, List
-from traitsui.api import View, Group, Item, TableEditor, ObjectColumn
+from traits.api import HasTraits, Str, Int, List
+from traitsui.api import View, Group, Item, TableEditor, ObjectColumn, RGBColor
 from traitsui.color_column import ColorColumn
 
 from traitsui.tests._tools import skip_if_null, store_exceptions_on_all_threads

@@ -22,9 +22,10 @@ useful for tools such as debuggers.
 
 from __future__ import absolute_import
 
-from traits.api import Instance, Str, Color, Enum, Bool
+from traits.api import Instance, Str, Enum, Bool
 
 from ..editor_factory import EditorFactory
+from ..toolkit_traits import Color
 
 # -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:

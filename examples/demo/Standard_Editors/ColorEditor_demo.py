@@ -10,10 +10,10 @@ This demo shows each of the four styles of the ColorEditor
 # Imports:
 from __future__ import absolute_import
 from traits.api \
-    import HasTraits, Color
+    import HasTraits
 
 from traitsui.api \
-    import Item, Group, View
+    import Item, Group, View, Color
 
 # Demo class definition:
 

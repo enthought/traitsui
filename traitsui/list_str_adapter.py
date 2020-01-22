@@ -24,7 +24,6 @@ from __future__ import absolute_import
 from traits.api import (
     Any,
     Bool,
-    Color,
     Enum,
     Event,
     HasPrivateTraits,
@@ -35,6 +34,7 @@ from traits.api import (
     on_trait_change,
     provides,
 )
+from .toolkit_traits import Color
 import six
 
 # -------------------------------------------------------------------------

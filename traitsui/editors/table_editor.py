@@ -26,8 +26,6 @@ from traits.api import (
     List,
     Instance,
     Str,
-    Color,
-    Font,
     Any,
     Tuple,
     Dict,
@@ -40,19 +38,13 @@ from traits.api import (
 )
 
 from ..editor_factory import EditorFactory
-
 from ..handler import Handler
-
 from ..helper import Orientation
-
 from ..item import Item
-
 from ..table_filter import TableFilter
-
+from ..toolkit_traits import Color, Font
 from ..ui_traits import AView
-
 from ..view import View
-
 from .enum_editor import EnumEditor
 
 

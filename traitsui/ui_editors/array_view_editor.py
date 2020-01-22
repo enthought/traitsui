@@ -22,14 +22,12 @@
 
 from __future__ import absolute_import
 
-from traits.api import Instance, Property, List, Str, Bool, Font
+from traits.api import Instance, Property, List, Str, Bool
 
 from ..api import View, Item, TabularEditor, BasicEditorFactory
-
 from ..tabular_adapter import TabularAdapter
-
 from ..toolkit import toolkit_object
-
+from ..toolkit_traits import Font
 from ..ui_editor import UIEditor
 
 # -- Tabular Adapter Definition -------------------------------------------
