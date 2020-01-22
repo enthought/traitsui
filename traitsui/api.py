@@ -169,7 +169,14 @@ from .tabular_adapter import TabularAdapter
 
 from .toolkit import toolkit
 
-from .toolkit_traits import ColorTrait, FontTrait, RGBColorTrait
+from .toolkit_traits import (
+    Color,
+    ColorTrait,
+    Font,
+    FontTrait,
+    RGBColor,
+    RGBColorTrait,
+)
 
 from .tree_node import (
     ITreeNode,
