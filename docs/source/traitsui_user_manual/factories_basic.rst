@@ -547,7 +547,7 @@ FileEditor()
 :Default for:
     File
 :Optional parameters:
-    *entries*, *filter*, *filter_name*, *reload_name*, *truncate_ext*, *dclick_name*
+    *entries*, *filter*, *filter_name*, *reload_name*, *truncate_ext*, *dclick_name*, *dialog_style*
 
 A file editor enables the user to display a File trait or set it to some file in
 the local system hierarchy. The styles of this editor are shown in Figure 31.
@@ -592,6 +592,10 @@ that the filename is not modified before it is returned.
 The *dclick_name* parameter is an extended trait name of a trait event which is
 fired when the user double-clicks on a file name when using the custom style.
 
+When using the simple style, the *dialog_style* parameter controls the type of
+file dialog that will open when the user clicks on the folder icon.  Setting the
+value of ``open`` makes the control pop up an "Open File" dialog; setting the
+value of `save` will result in a "Save As" dialog.
 
 FontEditor()
 ````````````
