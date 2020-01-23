@@ -19,15 +19,11 @@ from __future__ import absolute_import, print_function
 import datetime
 
 from pyface.qt import QtGui
-from pyface.qt.util import datetime_to_QDateTime, QDateTime_to_datetime
+from pyface.qt.QtCore import QDateTime
 from traits.api import Instance
 
-from traitsui.api import CVType
 from .editor import Editor
 from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
-
-
-CV_DateTime = CVType()
 
 
 class SimpleEditor(Editor):
@@ -44,8 +40,10 @@ class SimpleEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        factory = self.factory
         self.control = QtGui.QDateTimeEdit()
+        self.minimum_datetime = self.factory.minimum_datetime
+        self.maximum_datetime = self.factory.maximum_datetime
+        self.update_date_range()
         self.control.dateTimeChanged.connect(self.update_object)
 
     def update_editor(self):
@@ -54,23 +52,23 @@ class SimpleEditor(Editor):
         """
         value = self.value
         if value:
-            q_datetime = datetime_to_QDateTime(value)
+            q_datetime = QDateTime(value)
             self.control.setTime(q_datetime)
 
     def update_object(self, q_datetime):
         """ Handles the user entering input data in the edit control.
         """
-        self.value = QDateTime_to_datetime(q_datetime)
+        self.value = q_datetime.toPyDateTime()
 
     def update_date_range(self):
         if self.control is not None:
             if self.minimum_datetime is not None:
                 self.control.setMinimumDateTime(
-                    datetime_to_QDateTime(self.minimum_datetime)
+                   QDateTime(self.minimum_datetime)
                 )
             if self.maximum_datetime is not None:
-                self.control.setMinimumDateTime(
-                    datetime_to_QDateTime(self.maximum_datetime)
+                self.control.setMaximumDateTime(
+                    QDateTime(self.maximum_datetime)
                 )
 
 
@@ -79,7 +77,7 @@ class ReadonlyEditor(BaseReadonlyEditor):
     """
 
     def _get_str_value(self):
-        """ Replace the default string value with our own time verision.
+        """ Replace the default string value with our own time version.
         """
         if not self.value:
             return self.factory.message
