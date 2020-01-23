@@ -25,10 +25,10 @@ import numpy as np
 
 from pyface.qt import QtCore, QtGui, qt_api
 from traits.api import (
-    Array, Float, HasTraits, Instance, Int, List, RGBColor, Unicode
+    Array, Float, HasTraits, Instance, Int, List, Unicode
 )
 
-from traitsui.api import TreeEditor, TreeNode, UItem, View
+from traitsui.api import TreeEditor, TreeNode, UItem, View, RGBColor
 from traitsui.tree_node_renderer import AbstractTreeNodeRenderer
 from traitsui.qt4.tree_editor import WordWrapRenderer
 

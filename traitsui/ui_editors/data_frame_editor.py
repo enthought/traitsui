@@ -15,7 +15,6 @@ from traits.api import (
     Dict,
     Either,
     Enum,
-    Font,
     Instance,
     List,
     Property,
@@ -27,6 +26,7 @@ from traitsui.editors.tabular_editor import TabularEditor
 from traitsui.item import Item
 from traitsui.tabular_adapter import TabularAdapter
 from traitsui.toolkit import toolkit_object
+from traitsui.toolkit_traits import Font
 from traitsui.ui_editor import UIEditor
 from traitsui.view import View
 import six

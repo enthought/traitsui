@@ -51,10 +51,10 @@ from random \
     import randint, choice, shuffle
 
 from traits.api \
-    import HasTraits, Str, Int, List, Instance, Property, Constant, Color
+    import HasTraits, Str, Int, List, Instance, Property, Constant
 
 from traitsui.api \
-    import View, Group, Item, Margin, TabularEditor
+    import View, Group, Item, Margin, TabularEditor, Color
 
 from traitsui.tabular_adapter \
     import TabularAdapter

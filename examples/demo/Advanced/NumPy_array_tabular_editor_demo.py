@@ -14,8 +14,8 @@ index of each point in the array, as well as a red flag if the point lies within
 from __future__ import absolute_import
 from numpy import sqrt
 from numpy.random import random
-from traits.api import HasTraits, Property, Array, Font
-from traitsui.api import View, Item, TabularEditor
+from traits.api import HasTraits, Property, Array
+from traitsui.api import View, Item, TabularEditor, Font
 from traitsui.tabular_adapter import TabularAdapter
 
 #-- Tabular Adapter Definition -------------------------------------------

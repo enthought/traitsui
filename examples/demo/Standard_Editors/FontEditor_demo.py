@@ -18,9 +18,9 @@ This example also displays some other less common style choices.
 
 # Imports:
 from __future__ import absolute_import
-from traits.api import HasTraits, Font
+from traits.api import HasTraits
 
-from traitsui.api import Item, Group, View
+from traitsui.api import Item, Group, View, Font
 
 
 class FontEditorDemo(HasTraits):

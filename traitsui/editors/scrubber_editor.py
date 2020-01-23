@@ -22,11 +22,11 @@
 from __future__ import absolute_import
 
 from pyface.ui_traits import Alignment
-from traits.api import Float, Color, Property
+from traits.api import Float, Property
 
 from ..basic_editor_factory import BasicEditorFactory
-
 from ..toolkit import toolkit_object
+from ..toolkit_traits import Color
 
 # -------------------------------------------------------------------------
 #  Create the editor factory object:

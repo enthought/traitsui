@@ -5,8 +5,8 @@ This demo shows each of the four styles of the TupleEditor.
 """
 
 from __future__ import absolute_import
-from traits.api import HasTraits, Tuple, Color, Range, Str
-from traitsui.api import Item, Group, View
+from traits.api import HasTraits, Tuple, Range, Str
+from traitsui.api import Item, Group, View, Color
 
 #-------------------------------------------------------------------------
 #  Demo Class

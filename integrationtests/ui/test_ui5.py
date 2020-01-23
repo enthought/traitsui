@@ -30,10 +30,8 @@ from traits.api \
 
 from traitsui.api \
     import View, Handler, Item, CheckListEditor, ButtonEditor, FileEditor, \
-    DirectoryEditor, ImageEnumEditor
+    DirectoryEditor, ImageEnumEditor, Color, Font
 
-from traits.api \
-    import Color, Font
 
 #-------------------------------------------------------------------------
 #  Constants:

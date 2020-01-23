@@ -1,8 +1,9 @@
 from __future__ import absolute_import
 from nose.tools import assert_equals
 
-from traits.api import HasTraits, Font
+from traits.api import HasTraits
 
+from traitsui.toolkit_traits import Font
 from traitsui.tests._tools import *
 
 

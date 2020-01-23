@@ -31,12 +31,12 @@ from os.path \
 
 from traits.api \
     import HasPrivateTraits, Str, Float, List, Directory, File, Code, \
-    Instance, Property, Font, cached_property
+    Instance, Property, cached_property
 
 import traitsui.api
 
 from traitsui.api \
-    import View, Item, HSplit, VSplit, TabularEditor
+    import View, Item, HSplit, VSplit, TabularEditor, Font
 
 from traitsui.tabular_adapter \
     import TabularAdapter
