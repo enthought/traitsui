@@ -34,7 +34,7 @@ from .api import (
     CompoundEditor,
     CustomEditor,
     DateEditor,
-    DateTimeEditor,
+    DatetimeEditor,
     DefaultOverride,
     DirectoryEditor,
     DNDEditor,

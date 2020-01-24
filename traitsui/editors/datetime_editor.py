@@ -26,7 +26,7 @@ from traits.api import Instance, Str
 from ..editor_factory import EditorFactory
 
 
-class DateTimeEditor(EditorFactory):
+class DatetimeEditor(EditorFactory):
     """ Editor factory for the datetime editor.
     """
     # -------------------------------------------------------------------------

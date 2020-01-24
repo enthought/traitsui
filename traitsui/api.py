@@ -47,7 +47,7 @@ from .editors.api import (
     DNDEditor,
     StyledDateEditor,
     DateEditor,
-    DateTimeEditor,
+    DatetimeEditor,
     DateRangeEditor,
     DefaultOverride,
     DirectoryEditor,
