@@ -21,6 +21,11 @@ from traitsui.undo import UndoHistory
 
 GuiTestAssistant = toolkit_object("util.gui_test_assistant:GuiTestAssistant")
 no_gui_test_assistant = GuiTestAssistant.__name__ == "Unimplemented"
+if no_gui_test_assistant:
+
+    # ensure null toolkit has an inheritable GuiTestAssistant
+    class GuiTestAssistant(object):
+        pass
 
 
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
