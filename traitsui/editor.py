@@ -282,9 +282,7 @@ class Editor(HasPrivateTraits):
         *undo_args
             Any arguments to pass to the undo factory.
         """
-        # Indicate that the contents of the user interface have been changed:
         ui = self.ui
-        ui.modified = True
 
         # Create an undo history entry if we are maintaining a history:
         undoable = ui._undoable
@@ -513,6 +511,9 @@ class Editor(HasPrivateTraits):
             self.item.style != "readonly"
             and object.base_trait(name).type != "event"
         ):
+            # Indicate that the contents of the UI have been changed:
+            self.ui.modified = True
+
             if self.updating:
                     self.log_change(
                     self.get_undo_item, object, name, old_value, new_value
