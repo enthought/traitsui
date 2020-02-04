@@ -513,9 +513,10 @@ class Editor(HasPrivateTraits):
             self.item.style != "readonly"
             and object.base_trait(name).type != "event"
         ):
-            self.log_change(
-                self.get_undo_item, object, name, old_value, new_value
-            )
+            if self.updating:
+                    self.log_change(
+                    self.get_undo_item, object, name, old_value, new_value
+                )
 
         # If the change was not caused by the editor itself:
         if not self.updating:
