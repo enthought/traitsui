@@ -34,9 +34,13 @@ class TestEditorUndo(GuiTestAssistant, unittest.TestCase):
                       expected_history_length):
         if (editor.ui.history.now == expected_history_now and
                 len(editor.ui.history.history) == expected_history_length):
+
+            # Ensure that there is exactly 1 entry in each history item since
+            # no entries can be merged in this test.
             for itm in editor.ui.history.history:
-                if len(itm) > 1:
+                if len(itm) != 1:
                     return False
+
             return True
 
     def undo(self, editor):
