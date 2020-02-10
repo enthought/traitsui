@@ -21,7 +21,7 @@ from traitsui.editor import Editor
 from traitsui.editor_factory import EditorFactory
 from traitsui.handler import default_handler
 from traitsui.ui import UI
-from traitsui.tests._tools import GuiTestAssistant
+from traitsui.tests._tools import GuiTestAssistant, no_gui_test_assistant
 
 
 class FakeControl(HasTraits):

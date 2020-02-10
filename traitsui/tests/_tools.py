@@ -274,7 +274,8 @@ def wx_find_event_by_number(evt_num):
 
 
 GuiTestAssistant = toolkit_object("util.gui_test_assistant:GuiTestAssistant")
-if GuiTestAssistant.__name__ == "Unimplemented":
+no_gui_test_assistant = GuiTestAssistant.__name__ == "Unimplemented"
+if no_gui_test_assistant:
 
     # ensure null toolkit has an inheritable GuiTestAssistant
     class GuiTestAssistant(object):
