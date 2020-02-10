@@ -16,8 +16,6 @@ from pyface.ui.qt4.util.gui_test_assistant import GuiTestAssistant
 from traits.api import (
     HasTraits,
     Str,
-    pop_exception_handler,
-    push_exception_handler,
 )
 from traitsui.api import TextEditor, View, Item
 from traitsui.tests._tools import (
@@ -67,7 +65,6 @@ def launch_ui(gui_test_case, object, view):
     finally:
         with gui_test_case.delete_widget(ui.control):
             ui.dispose()
-
 
 
 # Skips tests if the backend is not either qt4 or qt5
