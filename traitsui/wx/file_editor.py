@@ -310,10 +310,9 @@ class CustomEditor(SimpleTextEditor):
         """ Disposes of the contents of an editor.
         """
         tree, self._tree = self._tree, None
-        id = tree.GetId()
 
-        tree.Bind(wx.EVT_TREE_SEL_CHANGED, None, id=id)
-        tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, None, id=id)
+        tree.Unbind(wx.EVT_TREE_SEL_CHANGED)
+        tree.Unbind(wx.EVT_TREE_ITEM_ACTIVATED)
 
         super(CustomEditor, self).dispose()
 
@@ -395,7 +394,7 @@ class PopupFile(PopupControl):
         tree.Bind(wx.EVT_TREE_SEL_CHANGED, self._select_file, id=tree.GetId())
 
     def dispose(self):
-        self._tree.Bind(wx.EVT_TREE_SEL_CHANGED, None, id=self._tree.GetId())
+        self._tree.Unbind(wx.EVT_TREE_SEL_CHANGED)
         self._tree = self._files = None
 
     def get_style(self):
