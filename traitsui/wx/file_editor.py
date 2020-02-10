@@ -107,18 +107,17 @@ class SimpleEditor(SimpleTextEditor):
         """ Disposes of the contents of an editor.
         """
         panel = self.control
-        panel.Unbind((wx.EVT_BUTTON, id=self._button.GetId())
+        panel.Unbind(wx.EVT_BUTTON, id=self._button.GetId())
         self._button = None
 
         if self.history is not None:
             self.history.dispose()
             self.history = None
         else:
-            factory = self.factory
             control, self._file_name = self._file_name, None
-            control.Bind(wx.EVT_KILL_FOCUS, None)
-            panel.Bind(wx.EVT_TEXT_ENTER, None, id=control.GetId())
-            panel.Unbind((wx.EVT_TEXT, id=control.GetId())
+            control.Unbind(wx.EVT_KILL_FOCUS)
+            panel.Unbind(wx.EVT_TEXT_ENTER, id=control.GetId())
+            panel.Unbind(wx.EVT_TEXT, id=control.GetId())
 
         super(SimpleEditor, self).dispose()
 
