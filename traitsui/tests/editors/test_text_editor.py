@@ -70,7 +70,7 @@ def launch_ui(gui_test_case, object, view):
 
 # Skips tests if the backend is not either qt4 or qt5
 @skip_if_not_qt4
-@skipIf(no_gui_test_assistant, "No GuiTestAssistant")
+@unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
 class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
     """ Test on TextEditor with Qt backend."""
 
