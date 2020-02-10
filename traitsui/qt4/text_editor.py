@@ -84,7 +84,7 @@ class SimpleEditor(Editor):
             # updated.
             control.editingFinished.connect(self.update_object)
 
-        control.setPlaceholderText(self.factory.text)
+        control.setPlaceholderText(self.factory.placeholder)
 
         self.control = control
         # default horizontal policy is Expand, set this to Minimum

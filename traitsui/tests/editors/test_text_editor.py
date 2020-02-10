@@ -40,7 +40,7 @@ def view_with_placeholder():
     return View(
         Item(
             name="name",
-            editor=TextEditor(text="Enter name"),
+            editor=TextEditor(placeholder="Enter name"),
         )
     )
 
@@ -50,7 +50,7 @@ def view_with_readonly_and_placeholder():
         Item(
             name="name",
             editor=TextEditor(
-                text="Enter name",
+                placeholder="Enter name",
                 read_only=True,
             )
         )

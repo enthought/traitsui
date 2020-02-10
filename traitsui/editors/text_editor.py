@@ -103,7 +103,7 @@ class ToolkitEditorFactory(EditorFactory):
     readonly_allow_selection = Bool(False)
 
     #: Grayed-out placeholder text to be displayed when the editor is empty.
-    text = Str()
+    placeholder = Str()
 
     # -------------------------------------------------------------------------
     #  Traits view definition:
