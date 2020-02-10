@@ -107,18 +107,17 @@ class SimpleEditor(SimpleTextEditor):
         """ Disposes of the contents of an editor.
         """
         panel = self.control
-        panel.Unbind((wx.EVT_BUTTON, id=self._button.GetId())
+        panel.Unbind(wx.EVT_BUTTON, id=self._button.GetId())
         self._button = None
 
         if self.history is not None:
             self.history.dispose()
             self.history = None
         else:
-            factory = self.factory
             control, self._file_name = self._file_name, None
-            control.Bind(wx.EVT_KILL_FOCUS, None)
-            panel.Bind(wx.EVT_TEXT_ENTER, None, id=control.GetId())
-            panel.Unbind((wx.EVT_TEXT, id=control.GetId())
+            control.Unbind(wx.EVT_KILL_FOCUS)
+            panel.Unbind(wx.EVT_TEXT_ENTER, id=control.GetId())
+            panel.Unbind(wx.EVT_TEXT, id=control.GetId())
 
         super(SimpleEditor, self).dispose()
 
@@ -311,10 +310,9 @@ class CustomEditor(SimpleTextEditor):
         """ Disposes of the contents of an editor.
         """
         tree, self._tree = self._tree, None
-        id = tree.GetId()
 
-        tree.Bind(wx.EVT_TREE_SEL_CHANGED, None, id=id)
-        tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, None, id=id)
+        tree.Unbind(wx.EVT_TREE_SEL_CHANGED)
+        tree.Unbind(wx.EVT_TREE_ITEM_ACTIVATED)
 
         super(CustomEditor, self).dispose()
 
@@ -396,7 +394,7 @@ class PopupFile(PopupControl):
         tree.Bind(wx.EVT_TREE_SEL_CHANGED, self._select_file, id=tree.GetId())
 
     def dispose(self):
-        self._tree.Bind(wx.EVT_TREE_SEL_CHANGED, None, id=self._tree.GetId())
+        self._tree.Unbind(wx.EVT_TREE_SEL_CHANGED)
         self._tree = self._files = None
 
     def get_style(self):
