@@ -29,35 +29,6 @@ class Foo(HasTraits):
     name = Str()
 
 
-def default_view():
-    return View(
-        Item(
-            name="name",
-        )
-    )
-
-
-def view_with_placeholder():
-    return View(
-        Item(
-            name="name",
-            editor=TextEditor(placeholder="Enter name"),
-        )
-    )
-
-
-def view_with_readonly_and_placeholder():
-    return View(
-        Item(
-            name="name",
-            editor=TextEditor(
-                placeholder="Enter name",
-                read_only=True,
-            )
-        )
-    )
-
-
 @contextlib.contextmanager
 def launch_ui(gui_test_case, object, view):
     ui = object.edit_traits(view=view)
@@ -76,7 +47,10 @@ class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
 
     def test_text_editor_placeholder_text(self):
         foo = Foo()
-        view = view_with_placeholder()
+        editor = TextEditor(
+            placeholder="Enter name",
+        )
+        view = View(Item(name="name", editor=editor))
         with launch_ui(self, object=foo, view=view) as ui:
             name_editor, = ui.get_editors("name")
             self.assertEqual(
@@ -87,7 +61,11 @@ class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
     def test_text_editor_placeholder_text_and_readonly(self):
         # Placeholder can be set independently of read_only flag
         foo = Foo()
-        view = view_with_readonly_and_placeholder()
+        editor = TextEditor(
+            placeholder="Enter name",
+            read_only=True,
+        )
+        view = View(Item(name="name", editor=editor))
         with launch_ui(self, object=foo, view=view) as ui:
             name_editor, = ui.get_editors("name")
             self.assertEqual(
@@ -97,10 +75,27 @@ class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
 
     def test_text_editor_default_view(self):
         foo = Foo()
-        view = default_view()
-        with launch_ui(self, object=foo, view=view) as ui:
+        with launch_ui(self, object=foo, view=None) as ui:
             name_editor, = ui.get_editors("name")
             self.assertEqual(
                 name_editor.control.placeholderText(),
                 "",
             )
+
+    def test_text_editor_custom_style_placeholder(self):
+        # Test against CustomEditor using QTextEdit
+        foo = Foo()
+        view = View(Item(
+            name="name",
+            style="custom",
+            editor=TextEditor(placeholder="Enter name"),
+        ))
+        with launch_ui(self, object=foo, view=view) as ui:
+            name_editor, = ui.get_editors("name")
+            try:
+                placeholder = name_editor.control.placeholderText()
+            except AttributeError:
+                # placeholderText is introduced to QTextEdit since Qt 5.2
+                pass
+            else:
+                self.assertEqual(placeholder, "Enter name")

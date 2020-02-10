@@ -84,7 +84,12 @@ class SimpleEditor(Editor):
             # updated.
             control.editingFinished.connect(self.update_object)
 
-        control.setPlaceholderText(self.factory.placeholder)
+        placeholder = self.factory.placeholder
+        try:
+            control.setPlaceholderText(placeholder)
+        except AttributeError:
+            # setPlaceholderText is introduced to QTextEdit since Qt 5.2
+            pass
 
         self.control = control
         # default horizontal policy is Expand, set this to Minimum
