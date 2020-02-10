@@ -102,7 +102,7 @@ class ToolkitEditorFactory(EditorFactory):
     #: In a read-only text editor, allow selection and copying of the text.
     readonly_allow_selection = Bool(False)
 
-    #: Grayed-out placehold text to be displayed when the editor is empty.
+    #: Grayed-out placeholder text to be displayed when the editor is empty.
     text = Str()
 
     # -------------------------------------------------------------------------
