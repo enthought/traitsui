@@ -12,13 +12,13 @@
 import contextlib
 import unittest
 
-from pyface.ui.qt4.util.gui_test_assistant import GuiTestAssistant
 from traits.api import (
     HasTraits,
     Str,
 )
 from traitsui.api import TextEditor, View, Item
 from traitsui.tests._tools import (
+    GuiTestAssistant,
     skip_if_not_qt4,
 )
 

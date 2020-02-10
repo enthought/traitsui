@@ -23,6 +23,8 @@ from contextlib import contextmanager
 from unittest import skip
 
 from nose import SkipTest
+
+from pyface.toolkit import toolkit_object
 from traits.etsconfig.api import ETSConfig
 import traits.trait_notifiers
 
@@ -269,3 +271,11 @@ def wx_find_event_by_number(evt_num):
     ]
 
     return possible
+
+
+GuiTestAssistant = toolkit_object("util.gui_test_assistant:GuiTestAssistant")
+if GuiTestAssistant.__name__ == "Unimplemented":
+
+    # ensure null toolkit has an inheritable GuiTestAssistant
+    class GuiTestAssistant(object):
+        pass
