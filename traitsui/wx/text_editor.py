@@ -87,6 +87,8 @@ class SimpleEditor(Editor):
 
         control.Bind(wx.EVT_KILL_FOCUS, self.update_object)
 
+        control.SetHint(self.factory.text)
+
         if factory.auto_set:
             parent.Bind(wx.EVT_TEXT, self.update_object, id=control.GetId())
 

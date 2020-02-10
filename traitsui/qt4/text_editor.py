@@ -84,6 +84,8 @@ class SimpleEditor(Editor):
             # updated.
             control.editingFinished.connect(self.update_object)
 
+        control.setPlaceholderText(self.factory.text)
+
         self.control = control
         # default horizontal policy is Expand, set this to Minimum
         if not (self.item.resizable) and not self.item.springy:
