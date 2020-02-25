@@ -22,10 +22,10 @@ from __future__ import absolute_import
 from traits.trait_base import SequenceTypes
 
 from traits.api import (
+    BaseTuple,
     Bool,
     HasTraits,
     List,
-    Tuple,
     Unicode,
     Int,
     Any,
@@ -154,7 +154,7 @@ class TupleStructure(HasTraits):
 
         if types is None:
             type = editor.value_trait.handler
-            if isinstance(type, Tuple):
+            if isinstance(type, BaseTuple):
                 types = type.types
 
         if not isinstance(types, SequenceTypes):
