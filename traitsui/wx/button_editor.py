@@ -93,7 +93,7 @@ class CustomEditor(SimpleEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        from pyface.image_button import ImageButton
+        from pyface.ui.wx.image_button import ImageButton
 
         factory = self.factory
         if self.factory.label:

@@ -36,10 +36,6 @@ from traitsui.editors.html_editor import ToolkitEditorFactory
 
 from .editor import Editor
 
-# -------------------------------------------------------------------------
-#  URLResolvingHtmlWindow class:
-# -------------------------------------------------------------------------
-
 
 class URLResolvingHtmlWindow(wh.HtmlWindow):
     """ Overrides OnOpeningURL method of HtmlWindow to append the base URL
@@ -73,9 +69,9 @@ class URLResolvingHtmlWindow(wh.HtmlWindow):
             and not os.path.isabs(url)
             and not url.startswith(("http://", "https://", self.base_url))
         ):
-            return self.base_url + url
+            return wh.HTML_REDIRECT, self.base_url + url
         else:
-            return wh.HTML_OPEN
+            return wh.HTML_OPEN, url
 
 
 class SimpleEditor(Editor):

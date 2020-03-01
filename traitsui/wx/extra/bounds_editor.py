@@ -54,9 +54,7 @@ class _BoundsEditor(Editor):
             style=wx.TE_PROCESS_ENTER,
         )
         sizer.Add(self._label_lo, 0, wx.ALIGN_CENTER)
-        wx.EVT_TEXT_ENTER(
-            panel, self._label_lo.GetId(), self.update_low_on_enter
-        )
+        self._label_lo.Bind(wx.EVT_TEXT_ENTER, self.update_low_on_enter)
         self._label_lo.Bind(wx.EVT_KILL_FOCUS, self.update_low_on_enter)
 
         # low slider
@@ -103,9 +101,7 @@ class _BoundsEditor(Editor):
             style=wx.TE_PROCESS_ENTER,
         )
         sizer.Add(self._label_hi, 0, wx.ALIGN_CENTER)
-        wx.EVT_TEXT_ENTER(
-            panel, self._label_hi.GetId(), self.update_high_on_enter
-        )
+        self._label_hi.Bind(wx.EVT_TEXT_ENTER, self.update_high_on_enter)
         self._label_hi.Bind(wx.EVT_KILL_FOCUS, self.update_high_on_enter)
 
         self.set_tooltip(self.control.lslider)
@@ -115,6 +111,12 @@ class _BoundsEditor(Editor):
 
         # Set-up the layout:
         panel.SetSizerAndFit(sizer)
+
+    def dispose(self):
+        self._label_hi.Unbind(wx.EVT_TEXT_ENTER)
+        self._label_hi.Unbind(wx.EVT_KILL_FOCUS)
+        self._label_lo.Unbind(wx.EVT_TEXT_ENTER)
+        self._label_lo.Unbind(wx.EVT_KILL_FOCUS)
 
     def update_low_on_enter(self, event):
         if isinstance(event, wx.FocusEvent):

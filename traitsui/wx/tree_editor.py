@@ -89,23 +89,23 @@ class SimpleEditor(Editor):
     scrollable = True
 
     #: Allows an external agent to set the tree selection
-    selection = Event
+    selection = Event()
 
     #: The currently selected object
-    selected = Any
+    selected = Any()
 
     #: The event fired when a tree node is activated by double clicking or
     #: pressing the enter key on a node.
-    activated = Event
+    activated = Event()
 
     #: The event fired when a tree node is clicked on:
-    click = Event
+    click = Event()
 
     #: The event fired when a tree node is double-clicked on:
-    dclick = Event
+    dclick = Event()
 
     #: The event fired when the application wants to veto an operation:
-    veto = Event
+    veto = Event()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -235,25 +235,22 @@ class SimpleEditor(Editor):
         # Initialize the 'undo state' stack:
         self._undoable = []
 
-        # Get the tree control id:
-        tid = tree.GetId()
-
         # Set up the mouse event handlers:
         tree.Bind(wx.EVT_LEFT_DOWN, self._on_left_down)
         tree.Bind(wx.EVT_RIGHT_DOWN, self._on_right_down)
         tree.Bind(wx.EVT_LEFT_DCLICK, self._on_left_dclick)
 
         # Set up the tree event handlers:
-        tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self._on_tree_item_expanding, id=tid)
-        tree.Bind(wx.EVT_TREE_ITEM_EXPANDED, self._on_tree_item_expanded, id=tid)
-        tree.Bind(wx.EVT_TREE_ITEM_COLLAPSING, self._on_tree_item_collapsing, id=tid)
-        tree.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self._on_tree_item_collapsed, id=tid)
-        tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self._on_tree_item_activated, id=tid)
-        tree.Bind(wx.EVT_TREE_SEL_CHANGED, self._on_tree_sel_changed, id=tid)
-        tree.Bind(wx.EVT_TREE_BEGIN_DRAG, self._on_tree_begin_drag, id=tid)
-        tree.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self._on_tree_begin_label_edit, id=tid)
-        tree.Bind(wx.EVT_TREE_END_LABEL_EDIT, self._on_tree_end_label_edit, id=tid)
-        tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self._on_tree_item_gettooltip, id=tid)
+        tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self._on_tree_item_expanding)
+        tree.Bind(wx.EVT_TREE_ITEM_EXPANDED, self._on_tree_item_expanded)
+        tree.Bind(wx.EVT_TREE_ITEM_COLLAPSING, self._on_tree_item_collapsing)
+        tree.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self._on_tree_item_collapse)
+        tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self._on_tree_item_activated)
+        tree.Bind(wx.EVT_TREE_SEL_CHANGED, self._on_tree_sel_changed)
+        tree.Bind(wx.EVT_TREE_BEGIN_DRAG, self._on_tree_begin_drag)
+        tree.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self._on_tree_begin_label_edit)
+        tree.Bind(wx.EVT_TREE_END_LABEL_EDIT, self._on_tree_end_label_edit)
+        tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self._on_tree_item_gettooltip)
 
         # Set up general mouse events
         tree.Bind(wx.EVT_MOTION, self._on_hover)
@@ -274,24 +271,28 @@ class SimpleEditor(Editor):
         """
         tree = self._tree
         if tree is not None:
-            id = tree.GetId()
             tree.Unbind(wx.EVT_LEFT_DOWN)
             tree.Unbind(wx.EVT_RIGHT_DOWN)
-            tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, None, id=id)
-            tree.Bind(wx.EVT_TREE_ITEM_EXPANDED, None, id=id)
-            tree.Bind(wx.EVT_TREE_ITEM_COLLAPSING, None, id=id)
-            tree.Bind(wx.EVT_TREE_ITEM_COLLAPSED, None, id=id)
-            tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, None, id=id)
-            tree.Bind(wx.EVT_TREE_SEL_CHANGED, None, id=id)
-            tree.Bind(wx.EVT_TREE_BEGIN_DRAG, None, id=id)
-            tree.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, None, id=id)
-            tree.Bind(wx.EVT_TREE_END_LABEL_EDIT, None, id=id)
-            tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, None, id=id)
+            tree.Unbind(wx.EVT_LEFT_DCLICK)
+
+            tree.Unbind(wx.EVT_TREE_ITEM_EXPANDING)
+            tree.Unbind(wx.EVT_TREE_ITEM_EXPANDED)
+            tree.Unbind(wx.EVT_TREE_ITEM_COLLAPSING)
+            tree.Unbind(wx.EVT_TREE_ITEM_COLLAPSED)
+            tree.Unbind(wx.EVT_TREE_ITEM_ACTIVATED)
+            tree.Unbind(wx.EVT_TREE_SEL_CHANGED)
+            tree.Unbind(wx.EVT_TREE_BEGIN_DRAG)
+            tree.Unbind(wx.EVT_TREE_BEGIN_LABEL_EDIT)
+            tree.Unbind(wx.EVT_TREE_END_LABEL_EDIT)
+            tree.Unbind(wx.EVT_TREE_ITEM_GETTOOLTIP)
+
+            tree.Unbind(wx.EVT_MOTION)
 
             nid = self._tree.GetRootItem()
             if nid.IsOk():
                 self._delete_node(nid)
 
+        self._tree = None
         super(SimpleEditor, self).dispose()
 
     def _selection_changed(self, selection):
@@ -299,7 +300,7 @@ class SimpleEditor(Editor):
         """
         try:
             self._tree.SelectItem(self._object_info(selection)[2])
-        except:
+        except Exception:
             pass
 
     def _selected_changed(self, selected):
@@ -471,7 +472,7 @@ class SimpleEditor(Editor):
         if index is None:
             cnid = tree.AppendItem(nid, label, icon, icon)
         else:
-            cnid = tree.InsertItemBefore(nid, index, label, icon, icon)
+            cnid = tree.InsertItem(nid, index, label, icon, icon)
         has_children = self._has_children(node, object)
         tree.SetItemHasChildren(cnid, has_children)
         self._set_node_data(cnid, (False, node, object))
