@@ -554,14 +554,19 @@ class EventHandlerWrapper(wx.EvtHandler):
     pass
 
 
-def _popEventHandlers(ctrl, handler_type=EventHandlerWrapper):
+def _popEventHandlers(ctrl, handler_type=wx.EvtHandler):
     """ Pop any event handlers that have been pushed on to a window and its
         children.
     """
+    # FIXME: have to special case URLResolvingHtmlWindow because it doesn't
+    # want its EvtHandler cleaned up.  See issue #752.
+    from .html_editor import URLResolvingHtmlWindow
+
     handler = ctrl.GetEventHandler()
     while ctrl is not handler:
         next_handler = handler.GetNextHandler()
-        if isinstance(handler, handler_type):
+        if (isinstance(handler, EventHandlerWrapper)
+                or not isinstance(ctrl, URLResolvingHtmlWindow)):
             ctrl.PopEventHandler(True)
         handler = next_handler
     for child in ctrl.GetChildren():
