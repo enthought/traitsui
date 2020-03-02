@@ -80,8 +80,7 @@ class SimpleEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        self.control.GetParent().Bind(wx.EVT_BUTTON, None, id=self.control.GetId())
-
+        self.control.Unbind(wx.EVT_BUTTON)
         super(SimpleEditor, self).dispose()
 
 
