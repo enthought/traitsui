@@ -11,11 +11,10 @@
 
 from __future__ import absolute_import
 
-from traits.api import Enum, Property, Str
+from traits.api import Callable, Enum, Property, Str
 
 from ..basic_editor_factory import BasicEditorFactory
 from ..toolkit import toolkit_object
-
 
 AspectRatio = Enum('keep', 'ignore', 'expand')
 PlayerState = Enum('stopped', 'playing', 'paused')
@@ -77,6 +76,10 @@ class VideoEditor(BasicEditorFactory):
     #: The name of a trait to synchronise with the player's error state.
     #: The referenced trait should be a Str.
     video_error = Str(sync_value='to', sync_name='video_error')
+
+    #: The name of a trait to synchronise with the player's image function.
+    #: The referenced trait should be a Str.
+    image_fun = Str(sync_value='both', sync_name='image_fun')
 
     def _get_klass(self):
         """ Returns the editor class to be instantiated.

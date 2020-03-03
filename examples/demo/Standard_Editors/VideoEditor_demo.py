@@ -7,9 +7,14 @@ VideoEditor
 
 """
 
-from traits.api import Bool, Button, Float, HasTraits, Range, Str
-from traitsui.api import ButtonEditor, Item, UItem, View, HGroup
-from traitsui.editors.video_editor import VideoEditor, MediaStatus, PlayerState
+import numpy as np
+from traits.api import Bool, Button, Callable, Float, HasTraits, Range, Str
+from traitsui.api import ButtonEditor, HGroup, Item, UItem, View
+from traitsui.editors.video_editor import MediaStatus, PlayerState, VideoEditor
+
+
+def test_image_fun(image):
+    return image // 4
 
 
 class VideoEditorDemo(HasTraits):
@@ -41,6 +46,8 @@ class VideoEditorDemo(HasTraits):
 
     playback_rate = Float(1.0)
 
+    image_fun = Callable()
+
     def _state_changed(self, new):
         if new == 'stopped' or new == 'paused':
             self.button_label = 'Play'
@@ -68,6 +75,7 @@ class VideoEditorDemo(HasTraits):
                 muted='muted',
                 volume='volume',
                 playback_rate='playback_rate',
+                image_fun='image_fun'
             ),
         ),
         HGroup(
@@ -99,7 +107,7 @@ class VideoEditorDemo(HasTraits):
 
 
 # Create the demo:
-demo = VideoEditorDemo()
+demo = VideoEditorDemo(image_fun=test_image_fun)
 demo.video_url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"  # noqa: E501
 
 # Run the demo (if invoked from the command line):

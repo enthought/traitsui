@@ -80,9 +80,10 @@ import glob
 import os
 import subprocess
 import sys
-from shutil import rmtree, copy as copyfile
-from tempfile import mkdtemp
 from contextlib import contextmanager
+from shutil import copy as copyfile
+from shutil import rmtree
+from tempfile import mkdtemp
 
 import click
 

@@ -58,12 +58,10 @@ def QImage_from_np(image):
     assert (np.max(image) <= 255)
     image8 = image.astype(np.uint8, order='C', casting='unsafe')
     height, width, colors = image8.shape
-    bytesPerLine = 3 * width
+    bytesPerLine = 4 * width
 
     image = QImage(image8.data, width, height, bytesPerLine,
-                   QImage.Format_RGB888)
-
-    image = image.rgbSwapped()
+                   QImage.Format_RGB32)
     return image
 
 
