@@ -11,6 +11,7 @@
 from __future__ import absolute_import
 
 import numpy as np
+from PIL import Image
 from pyface.qt.QtCore import QPoint, Qt, QUrl, Signal
 from pyface.qt.QtGui import QImage, QPainter, QPalette, QSizePolicy
 from pyface.qt.QtMultimedia import (QAbstractVideoBuffer,
@@ -54,33 +55,15 @@ media_status_map = {
 }
 
 
-def QImage_from_np(image):
-    assert (np.max(image) <= 255)
-    image8 = image.astype(np.uint8, order='C', casting='unsafe')
-    height, width, colors = image8.shape
-    bytesPerLine = 4 * width
-
-    image = QImage(image8.data, width, height, bytesPerLine,
-                   QImage.Format_RGB32)
-    return image
-
-
-def np_from_QImage(qimage):
-    # Creates a numpy array from a pyqt(5) QImage object
-    width, height = qimage.width(), qimage.height()
-    channels = qimage.pixelFormat().channelCount()
-    return np.array(
-        qimage.bits().asarray(width * height * channels)
-    ).reshape(height, width, channels).astype('u1')
-
-
 class ImageWidget(QVideoWidget):
     """ Paints a QImage to the window body. """
 
     def __init__(self, parent=None, image_fun=None):
         super().__init__(parent)
-        self.image = None
+        self.image = QImage()
+        self._np_image = np.zeros(shape=(0, 0, 4))
         self.painter = None
+        self.resizeEvent(None)
         if image_fun is None:
             def I_fun(image):
                 return image
@@ -88,9 +71,15 @@ class ImageWidget(QVideoWidget):
         else:
             self.image_fun = image_fun
 
+    def resizeEvent(self, event):
+        s = self.size()
+        self.width = s.width()
+        self.height = s.height()
+
     def setImage(self, image):
-        np_image = np_from_QImage(image)
-        self.image = QImage_from_np(self.image_fun(np_image))
+        self.image, self._np_image = self.image_fun(
+            image, (self.width, self.height)
+        )
         self.update()
 
     def paintEvent(self, event):
@@ -138,7 +127,7 @@ class VideoEditor(Editor):
     """
 
     #: function to apply to the image. Takes frame to new frame
-    image_fun = Property(Callable)
+    image_fun = Callable()
 
     #: current held frame of the video viewer
     frame = Property(Array(shape=(None, None, 3), dtype='u1'))
@@ -189,19 +178,10 @@ class VideoEditor(Editor):
     playback_rate = Float(1.0)
 
     def _get_frame(self):
-        if self.control.image is not None:
-            return np_from_QImage(self.control.image)
-        else:
-            return [[[0, 0, 0]]]
+        return self.control._np_image
 
-    def _get_image_fun(self):
-        return self.control.image_fun
-
-    def _set_image_fun(self, new_fun):
-        self.control.image_fun = new_fun
-
-    def _control_default(self):
-        return ImageWidget()
+    def _image_fun_changed(self):
+        self.control.image_fun = self.image_fun
 
     # ------------------------------------------------------------------------
     # Editor interface
@@ -215,6 +195,7 @@ class VideoEditor(Editor):
         parent : QWidget or None
             The parent widget for this widget.
         """
+        self.control = ImageWidget(image_fun=self.image_fun)
         self.control.setSizePolicy(
             QSizePolicy.Expanding, QSizePolicy.Expanding
         )
