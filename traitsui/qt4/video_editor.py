@@ -133,7 +133,7 @@ class VideoEditor(Editor):
     frame = Property(Array(shape=(None, None, 3), dtype='u1'))
 
     #: does the drawing onto the image plane
-    control = Instance(ImageWidget)
+    control = Instance(QVideoWidget)
 
     #: handels the image pulling so the frames can be processed.
     surface = Instance(QAbstractVideoSurface)
@@ -180,8 +180,31 @@ class VideoEditor(Editor):
     def _get_frame(self):
         return self.control._np_image
 
+    def update_to_regular(self):
+        self.control = QVideoWidget()
+        self.control.setSizePolicy(
+            QSizePolicy.Expanding, QSizePolicy.Expanding
+        )
+        self.control.setBackgroundRole(QPalette.Window)
+        self.media_player.setVideoOutput(self.control)
+
+    def update_to_functional(self):
+        self.control = ImageWidget(image_fun=self.image_fun)
+        self.control.setSizePolicy(
+            QSizePolicy.Expanding, QSizePolicy.Expanding
+        )
+        self.control.setBackgroundRole(QPalette.Window)
+
+        self.surface = VideoSurface(widget=self.control)
+        self.surface.frameAvailable.connect(self.control.setImage)
+
+        self.media_player.setVideoOutput(self.surface)
+
     def _image_fun_changed(self):
-        self.control.image_fun = self.image_fun
+        if self.image_fun is None:
+            self.update_to_regular()
+        else:
+            self.update_to_functional()
 
     # ------------------------------------------------------------------------
     # Editor interface
@@ -195,18 +218,15 @@ class VideoEditor(Editor):
         parent : QWidget or None
             The parent widget for this widget.
         """
-        self.control = ImageWidget(image_fun=self.image_fun)
+        self.control = QVideoWidget()
         self.control.setSizePolicy(
             QSizePolicy.Expanding, QSizePolicy.Expanding
         )
         self.control.setBackgroundRole(QPalette.Window)
 
-        self.surface = VideoSurface(widget=self.control)
-        self.surface.frameAvailable.connect(self.control.setImage)
-
         self.media_player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self._set_video_url()
-        self.media_player.setVideoOutput(self.surface)
+        self.media_player.setVideoOutput(self.control)
         self.media_player.setMuted(self.muted)
         self._state_changed()
         self._aspect_ratio_changed()

@@ -141,7 +141,8 @@ class VideoEditorDemo(HasTraits):
 
 
 # Create the demo:
-demo = VideoEditorDemo(image_fun=test_image_fun)
+# demo = VideoEditorDemo(image_fun=test_image_fun)
+demo = VideoEditorDemo()
 demo.video_url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"  # noqa: E501
 
 # Run the demo (if invoked from the command line):
