@@ -35,7 +35,7 @@ def np_from_QImage(qimage):
 
 
 def qimage_function(image_fun):
-    """ Turns a image funciton into a QImage function """
+    """ Turns a image funciton into a QImage function, bound within a box """
     def qimage_conv_fun(image, box_dims):
         _np_image = image_fun(np_from_QImage(image))
         pil_image = Image.fromarray(_np_image)
