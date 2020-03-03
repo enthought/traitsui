@@ -145,40 +145,41 @@ class UserObject(HasTraits):
     user_event = Event
 
 
-@unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
-class TestEditor(GuiTestAssistant, unittest.TestCase):
-    def create_editor(
-        self,
+def create_editor(
         context=None,
         object_name="object",
         name="user_value",
         factory=None,
         is_event=False,
-    ):
-        if context is None:
-            user_object = UserObject()
-            context = {"object": user_object}
-        elif "." in object_name:
-            context_name, xname = object_name.split(".", 1)
-            context_object = context[context_name]
-            user_object = xgetattr(context_object, xname)
-        else:
-            user_object = context[object_name]
-        ui = UI(context=context, handler=default_handler())
+):
+    if context is None:
+        user_object = UserObject()
+        context = {"object": user_object}
+    elif "." in object_name:
+        context_name, xname = object_name.split(".", 1)
+        context_object = context[context_name]
+        user_object = xgetattr(context_object, xname)
+    else:
+        user_object = context[object_name]
+    ui = UI(context=context, handler=default_handler())
 
-        if factory is None:
-            factory = StubEditorFactory()
-        factory.is_event = is_event
+    if factory is None:
+        factory = StubEditorFactory()
+    factory.is_event = is_event
 
-        editor = StubEditor(
-            parent=None,
-            ui=ui,
-            object_name=object_name,
-            name=name,
-            factory=factory,
-            object=user_object,
-        )
-        return editor
+    editor = StubEditor(
+        parent=None,
+        ui=ui,
+        object_name=object_name,
+        name=name,
+        factory=factory,
+        object=user_object,
+    )
+    return editor
+
+
+@unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
+class TestEditor(GuiTestAssistant, unittest.TestCase):
 
     def change_user_value(self, editor, object, name, value):
         if editor.is_event:
@@ -203,7 +204,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             self.event_loop_helper.event_loop_with_timeout(repeat=6)
 
     def test_lifecycle(self):
-        editor = self.create_editor()
+        editor = create_editor()
 
         self.assertEqual(editor.old_value, "test")
         self.assertEqual(editor.name, "user_value")
@@ -244,7 +245,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
     def test_context_object(self):
         user_object = UserObject(user_value="other_test")
         context = {"object": UserObject(), "other_object": user_object}
-        editor = self.create_editor(
+        editor = create_editor(
             context=context, object_name="other_object"
         )
 
@@ -274,7 +275,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         editor.dispose()
 
     def test_event_trait(self):
-        editor = self.create_editor(name="user_event", is_event=True)
+        editor = create_editor(name="user_event", is_event=True)
         user_object = editor.object
 
         self.assertEqual(editor.name, "user_event")
@@ -298,7 +299,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             )
         }
         user_object = context["object"].user_auxiliary
-        editor = self.create_editor(
+        editor = create_editor(
             context=context, object_name="object.user_auxiliary"
         )
 
@@ -340,7 +341,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
     def test_factory_sync_simple(self):
         factory = StubEditorFactory(auxiliary_value="test")
-        editor = self.create_editor(factory=factory)
+        editor = create_editor(factory=factory)
         editor.prepare(None)
 
         # preparation copies the auxiliary value from the factory
@@ -350,7 +351,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
     def test_factory_sync_cv_simple(self):
         factory = StubEditorFactory()
-        editor = self.create_editor(factory=factory)
+        editor = create_editor(factory=factory)
         editor.prepare(None)
 
         # preparation copies the auxiliary CV int value from the factory
@@ -365,7 +366,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             ),
             "other_object": UserObject(user_value="another_test"),
         }
-        editor = self.create_editor(context=context)
+        editor = create_editor(context=context)
         editor.prepare(None)
 
         # test simple name
@@ -401,7 +402,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
     # Testing sync_value "from" ---------------------------------------------
 
     def test_sync_value_from(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
 
@@ -423,7 +424,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             user_object.user_auxiliary = 12
 
     def test_sync_value_from_object(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
 
@@ -447,7 +448,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         user_object = UserObject()
         other_object = UserObject(user_auxiliary=20)
         context = {"object": user_object, "other_object": other_object}
-        editor = self.create_editor(context=context)
+        editor = create_editor(context=context)
         editor.prepare(None)
 
         with self.assertTraitChanges(editor, "auxiliary_value", count=1):
@@ -471,7 +472,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         # set up the editor
         user_object = UserObject(user_auxiliary=UserObject(user_value=20))
         context = {"object": user_object}
-        editor = self.create_editor(context=context)
+        editor = create_editor(context=context)
         editor.prepare(None)
 
         with self.assertTraitChanges(editor, "auxiliary_value", count=1):
@@ -497,7 +498,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             user_object.user_auxiliary.user_value = 13
 
     def test_sync_value_from_list(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
 
@@ -524,7 +525,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             user_object.user_list = ["one", "two", "three"]
 
     def test_sync_value_from_event(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
 
@@ -545,7 +546,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         factory = StubEditorFactory(
             auxiliary_cv_int=ContextValue("object.user_auxiliary")
         )
-        editor = self.create_editor(factory=factory)
+        editor = create_editor(factory=factory)
         user_object = editor.object
 
         with self.assertTraitChanges(editor, "auxiliary_cv_int", count=1):
@@ -566,7 +567,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
     # Testing sync_value "to" -----------------------------------------------
 
     def test_sync_value_to(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
         editor.auxiliary_value = 20
@@ -587,7 +588,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             editor.auxiliary_value = 12
 
     def test_sync_value_to_object(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
         editor.auxiliary_value = 20
@@ -612,7 +613,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         user_object = UserObject()
         other_object = UserObject()
         context = {"object": user_object, "other_object": other_object}
-        editor = self.create_editor(context=context)
+        editor = create_editor(context=context)
         editor.prepare(None)
         editor.auxiliary_value = 20
 
@@ -636,12 +637,12 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
     def test_sync_value_to_chained(self):
         user_object = UserObject(user_auxiliary=UserObject())
         context = {"object": user_object}
-        editor = self.create_editor(context=context)
+        editor = create_editor(context=context)
         editor.prepare(None)
         editor.auxiliary_value = 20
 
         with self.assertTraitChanges(
-            user_object.user_auxiliary, "user_value", count=1
+                user_object.user_auxiliary, "user_value", count=1
         ):
             editor.sync_value(
                 "object.user_auxiliary.user_value", "auxiliary_value", "to"
@@ -650,7 +651,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         self.assertEqual(user_object.user_auxiliary.user_value, 20)
 
         with self.assertTraitChanges(
-            user_object.user_auxiliary, "user_value", count=1
+                user_object.user_auxiliary, "user_value", count=1
         ):
             editor.auxiliary_value = 11
 
@@ -659,12 +660,12 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         editor.dispose()
 
         with self.assertTraitDoesNotChange(
-            user_object.user_auxiliary, "user_value"
+                user_object.user_auxiliary, "user_value"
         ):
             editor.auxiliary_value = 12
 
     def test_sync_value_to_list(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
 
@@ -691,7 +692,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             editor.auxiliary_list = ["one", "two", "three"]
 
     def test_sync_value_to_event(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
 
@@ -712,7 +713,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         factory = StubEditorFactory(
             auxiliary_cv_float=ContextValue("object.user_auxiliary")
         )
-        editor = self.create_editor(factory=factory)
+        editor = create_editor(factory=factory)
         user_object = editor.object
         editor.auxiliary_cv_float = 20.0
 
@@ -734,7 +735,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
     # Testing sync_value "both" -----------------------------------------------
 
     def test_sync_value_both(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
 

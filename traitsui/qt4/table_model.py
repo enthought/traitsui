@@ -14,6 +14,9 @@
 
 
 from __future__ import absolute_import
+
+import logging
+
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
@@ -21,6 +24,9 @@ from traitsui.ui_traits import SequenceTypes
 from .clipboard import PyMimeData
 
 import six
+
+# set up logging for the module
+logger = logging.getLogger(__name__)
 
 
 # Mapping for trait alignment values to qt4 horizontal alignment constants
@@ -440,13 +446,18 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
     def lessThan(self, left_mi, right_mi):
         """Reimplemented to sort according to the 'key' method defined for
         TableColumn."""
+        try:
+            editor = self._editor
+            column = editor.columns[left_mi.column()]
+            items = editor.items()
+            left, right = items[left_mi.row()], items[right_mi.row()]
 
-        editor = self._editor
-        column = editor.columns[left_mi.column()]
-        items = editor.items()
-        left, right = items[left_mi.row()], items[right_mi.row()]
-
-        return column.key(left) < column.key(right)
+            return column.key(left) < column.key(right)
+        except Exception as exc:
+            logger.exception(exc)
+            # This will almost certainly segfault, but there does not seem to
+            # be anything sensible we can do.
+            raise
 
     # -------------------------------------------------------------------------
     #  SortFilterTableModel interface:
