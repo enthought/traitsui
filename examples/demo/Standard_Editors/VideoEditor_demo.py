@@ -34,19 +34,27 @@ def np_from_QImage(qimage):
     ).reshape(height, width, channels).astype('u1')
 
 
-def qimage_function(image_fun):
-    """ Turns a image funciton into a QImage function, bound within a box """
-    def qimage_conv_fun(image, box_dims):
-        _np_image = image_fun(np_from_QImage(image))
-        pil_image = Image.fromarray(_np_image)
-        pil_image.thumbnail(box_dims, Image.ANTIALIAS)
-        _np_image = np.array(pil_image)
-        image = QImage_from_np(_np_image)
-        return image, _np_image
-    return qimage_conv_fun
+def qimage_function(antialiasing=True):
+    def antialis_fun(image_fun):
+        """
+        Turns a image funciton into a QImage function,
+        bound within the viewing frames box.
+        """
+        def qimage_conv_fun(image, box_dims):
+            _np_image = image_fun(np_from_QImage(image))
+            pil_image = Image.fromarray(_np_image)
+            if antialiasing:
+                pil_image.thumbnail(box_dims, Image.ANTIALIAS)
+            else:
+                pil_image.thumbnail(box_dims)
+            _np_image = np.array(pil_image)
+            image = QImage_from_np(_np_image)
+            return image, _np_image
+        return qimage_conv_fun
+    return antialis_fun
 
 
-@qimage_function
+@qimage_function(antialiasing=False)
 def test_image_fun(image):
     return image.transpose(1, 0, 2)
 
@@ -141,8 +149,8 @@ class VideoEditorDemo(HasTraits):
 
 
 # Create the demo:
-# demo = VideoEditorDemo(image_fun=test_image_fun)
-demo = VideoEditorDemo()
+demo = VideoEditorDemo(image_fun=test_image_fun)
+# demo = VideoEditorDemo()
 demo.video_url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"  # noqa: E501
 
 # Run the demo (if invoked from the command line):
