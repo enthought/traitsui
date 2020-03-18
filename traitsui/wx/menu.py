@@ -51,10 +51,15 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 
 from __future__ import absolute_import, print_function
 
-import wx
 import re
-import string
+import logging
 import six
+
+import wx
+
+
+loggert = logging.getLogger(__name__)
+
 
 # =========================================================================
 #  Constants:
@@ -160,21 +165,35 @@ class MakeMenu:
                         handler = self.indirect
                     else:
                         try:
+                            _locl = dict(self=self)
                             exec(
-                                "def handler(event,self=self.owner):\n %s\n"
-                                % handler
+                                "def handler(event, self=self.owner):\n %s\n"
+                                % handler,
+                                globals(),
+                                _locl,
                             )
-                        except:
+                            handler = _locl["handler"]
+                        except Exception:
+                            logger.exception(
+                                "Invalid menu handler {:r}".format(handler)
+                            )
                             handler = null_handler
                 else:
                     try:
+                        _locl = dict(self=self)
                         exec(
-                            "def handler(event,self=self.owner):\n%s\n"
+                            "def handler(event, self=self.owner):\n%s\n"
                             % (self.get_body(indented),),
                             globals(),
+                            _locl,
                         )
-                    except:
+                        handler = _locl["handler"]
+                    except Exception:
+                        logger.exception(
+                            "Invalid menu handler {:r}".format(handler)
+                        )
                         handler = null_handler
+                print(repr(handler))
                 self.window.Bind(wx.EVT_MENU, handler, id=cur_id)
                 not_checked = checked = disabled = False
                 line = line[:col]
