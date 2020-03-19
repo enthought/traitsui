@@ -192,7 +192,7 @@ class SimpleEditor(Editor):
         """ Creates a button.
         """
         button = wx.Button(parent, -1, label, style=wx.BU_EXACTFIT)
-        sizer.AddSpacer((space_before, space_before))
+        sizer.AddSpacer(space_before)
         sizer.Add(button, 0, wx.EXPAND | wx.BOTTOM, 8)
         parent.Bind(wx.EVT_BUTTON, handler, id=button.GetId())
         return button
@@ -356,7 +356,7 @@ class SimpleEditor(Editor):
         """ Unselects all items in the given ListBox
         """
         for i in box.GetSelections():
-            box.SetSelection(i, False)
+            box.Deselect(i)
 
     def _transfer_all(self, list_from, list_to, values_from, values_to):
         """ Transfers all items from one list to another.
@@ -434,6 +434,7 @@ class SimpleEditor(Editor):
         index_from = self._get_first_selection(listbox)
         index_to = index_from + direction
         label = listbox.GetString(index_from)
+        listbox.Deselect(index_from)
         listbox.Delete(index_from)
         listbox.Insert(label, index_to)
         listbox.SetSelection(index_to)
