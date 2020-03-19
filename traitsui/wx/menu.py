@@ -58,7 +58,7 @@ import six
 import wx
 
 
-loggert = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 # =========================================================================
@@ -193,7 +193,6 @@ class MakeMenu:
                             "Invalid menu handler {:r}".format(handler)
                         )
                         handler = null_handler
-                print(repr(handler))
                 self.window.Bind(wx.EVT_MENU, handler, id=cur_id)
                 not_checked = checked = disabled = False
                 line = line[:col]
