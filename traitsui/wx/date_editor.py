@@ -25,14 +25,17 @@ Simple, Custom, Text, and ReadOnly.
 from __future__ import absolute_import, print_function
 
 import datetime
+import logging
 
 import wx
 import wx.adv
 
-from traits.api import Bool
 from traitsui.wx.editor import Editor
 from traitsui.wx.constants import WindowColor
 from traitsui.wx.text_editor import ReadonlyEditor as TextReadonlyEditor
+
+
+logger = logging.getLogger(__name__)
 
 
 # ------------------------------------------------------------------------------
@@ -54,9 +57,9 @@ class SimpleEditor(Editor):
         self.control = date_widget(
             parent,
             size=(120, -1),
-            style=wx.DP_DROPDOWN | wx.DP_SHOWCENTURY | wx.DP_ALLOWNONE,
+            style=wx.adv.DP_DROPDOWN | wx.adv.DP_SHOWCENTURY | wx.adv.DP_ALLOWNONE,
         )
-        self.control.Bind(wx.EVT_DATE_CHANGED, self.day_selected)
+        self.control.Bind(wx.adv.EVT_DATE_CHANGED, self.day_selected)
         return
 
     def day_selected(self, event):
@@ -73,7 +76,7 @@ class SimpleEditor(Editor):
             try:
                 self.value = datetime.date(year, month, day)
             except ValueError:
-                print("Invalid date:", year, month, day)
+                logger.exception("Invalid date: %d-%d-%d (y-m-d)", (year, month, day))
                 raise
         return
 
@@ -257,7 +260,6 @@ class wxMouseBoxCalendarCtrl(wx.adv.CalendarCtrl):
         gc.SetBrush(brush)
         gc.DrawRectangle(x, y, w, h)
 
-
 # -- end wxMouseBoxCalendarCtrl ------------------------------------------------
 
 
@@ -316,7 +318,7 @@ class MultiCalendarCtrl(wx.Panel):
             cal = self._make_calendar_widget(i)
             self.cal_ctrls.insert(0, cal)
             if i != 0:
-                self.sizer.AddSpacer(wx.Size(padding, padding))
+                self.sizer.AddSpacer(padding)
 
         # Initial painting
         self.selected_list_changed()
@@ -438,8 +440,8 @@ class MultiCalendarCtrl(wx.Panel):
         cal.highlight_changed()
 
         # Set up control to sync the other calendar widgets and coloring:
-        self.Bind(wx.adv.EVT_CALENDAR_MONTH, cal, id=self.month_changed)
-        self.Bind(wx.adv.EVT_CALENDAR_YEAR, cal, id=self.month_changed)
+        cal.Bind(wx.adv.EVT_CALENDAR_MONTH, self.month_changed)
+        cal.Bind(wx.adv.EVT_CALENDAR_YEAR, self.month_changed)
 
         cal.Bind(wx.EVT_LEFT_DOWN, self._left_down)
 
