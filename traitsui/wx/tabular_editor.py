@@ -719,7 +719,7 @@ class TabularEditor(Editor):
         """ Handles the user pressing a key in the list control.
         """
         key = event.GetKeyCode()
-        if key == wx.WXK_NEXT:
+        if key == wx.WXK_PAGEDOWN:
             self._append_new()
         elif key in (wx.WXK_BACK, wx.WXK_DELETE):
             self._delete_current()
