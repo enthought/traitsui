@@ -486,9 +486,9 @@ class TabularEditor(Editor):
             return
 
         if 0 <= (row - top) < pn:
-            control.EnsureVisible(top + pn - 2)
+            control.EnsureVisible(min(top + pn - 2, control.GetItemCount() - 1))
         elif row < top:
-            control.EnsureVisible(row + pn - 1)
+            control.EnsureVisible(min(row + pn - 1, control.GetItemCount() - 1))
         else:
             control.EnsureVisible(row)
 
