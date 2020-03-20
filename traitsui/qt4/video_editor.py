@@ -8,18 +8,21 @@
 
 """Traits UI 'display only' video editor."""
 
-
 from __future__ import absolute_import
 
-from pyface.qt.QtCore import Qt, QUrl
-from pyface.qt.QtGui import QPalette, QSizePolicy
-from pyface.qt.QtMultimedia import QAudio, QMediaContent, QMediaPlayer
+import numpy as np
+from PIL import Image
+from pyface.qt.QtCore import QPoint, Qt, QUrl, Signal
+from pyface.qt.QtGui import QImage, QPainter, QPalette, QSizePolicy
+from pyface.qt.QtMultimedia import (QAbstractVideoBuffer,
+                                    QAbstractVideoSurface, QAudio,
+                                    QMediaContent, QMediaPlayer, QVideoFrame)
 from pyface.qt.QtMultimediaWidgets import QVideoWidget
-from traits.api import Bool, Float, Instance, Range, Str
-
+from traits.api import (Array, Bool, Callable, Float, Instance, Property,
+                        Range, Str)
 from traitsui.editors.video_editor import AspectRatio, MediaStatus, PlayerState
-from .editor import Editor
 
+from .editor import Editor
 
 #: Map from ApectRatio enum values to Qt aspect ratio behaviours.
 aspect_ratio_map = {
@@ -52,6 +55,68 @@ media_status_map = {
 }
 
 
+class ImageWidget(QVideoWidget):
+    """ Paints a QImage to the window body. """
+
+    def __init__(self, parent=None, image_fun=None):
+        super().__init__(parent)
+        self.image = QImage()
+        self._np_image = np.zeros(shape=(0, 0, 4))
+        self.painter = None
+        self.resizeEvent(None)
+        if image_fun is None:
+            def I_fun(image):
+                return image
+            self.image_fun = I_fun
+        else:
+            self.image_fun = image_fun
+
+    def resizeEvent(self, event):
+        s = self.size()
+        self.width = s.width()
+        self.height = s.height()
+
+    def setImage(self, image):
+        self.image, self._np_image = self.image_fun(
+            image, (self.width, self.height)
+        )
+        self.update()
+
+    def paintEvent(self, event):
+        super().paintEvent(event)
+        if self.painter is None:
+            self.painter = QPainter()
+        self.painter.begin(self)
+        if self.image:
+            self.painter.drawImage(QPoint(0, 0), self.image)
+        self.painter.end()
+
+
+class VideoSurface(QAbstractVideoSurface):
+
+    frameAvailable = Signal(['QImage'])
+
+    def __init__(self, *args, widget=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.widget = widget
+
+    def supportedPixelFormats(self, handleType):
+        return [QVideoFrame.Format_RGB32]
+
+    def present(self, frame):
+        cloned_frame = QVideoFrame(frame)
+        cloned_frame.map(QAbstractVideoBuffer.ReadOnly)
+        image = QImage(
+            cloned_frame.bits(),
+            cloned_frame.width(),
+            cloned_frame.height(),
+            cloned_frame.bytesPerLine(),
+            QVideoFrame.imageFormatFromPixelFormat(cloned_frame.pixelFormat())
+        )
+        self.frameAvailable.emit(image)
+        return True
+
+
 class VideoEditor(Editor):
     """Traits UI 'display only' video editor.
 
@@ -61,7 +126,17 @@ class VideoEditor(Editor):
     behaviour and provide internal state of the control during playback.
     """
 
+    #: function to apply to the image. Takes frame to new frame
+    image_fun = Callable()
+
+    #: current held frame of the video viewer
+    frame = Property(Array(shape=(None, None, 3), dtype='u1'))
+
+    #: does the drawing onto the image plane
     control = Instance(QVideoWidget)
+
+    #: handels the image pulling so the frames can be processed.
+    surface = Instance(QAbstractVideoSurface)
 
     #: The QMediaObject that holds the connection to the video stream.
     media_content = Instance(QMediaContent)
@@ -102,6 +177,35 @@ class VideoEditor(Editor):
     #: The playback rate.  Negative values rewind the video.
     playback_rate = Float(1.0)
 
+    def _get_frame(self):
+        return self.control._np_image
+
+    def update_to_regular(self):
+        self.control = QVideoWidget()
+        self.control.setSizePolicy(
+            QSizePolicy.Expanding, QSizePolicy.Expanding
+        )
+        self.control.setBackgroundRole(QPalette.Window)
+        self.media_player.setVideoOutput(self.control)
+
+    def update_to_functional(self):
+        self.control = ImageWidget(image_fun=self.image_fun)
+        self.control.setSizePolicy(
+            QSizePolicy.Expanding, QSizePolicy.Expanding
+        )
+        self.control.setBackgroundRole(QPalette.Window)
+
+        self.surface = VideoSurface(widget=self.control)
+        self.surface.frameAvailable.connect(self.control.setImage)
+
+        self.media_player.setVideoOutput(self.surface)
+
+    def _image_fun_changed(self):
+        if self.image_fun is None:
+            self.update_to_regular()
+        else:
+            self.update_to_functional()
+
     # ------------------------------------------------------------------------
     # Editor interface
     # ------------------------------------------------------------------------
@@ -114,7 +218,6 @@ class VideoEditor(Editor):
         parent : QWidget or None
             The parent widget for this widget.
         """
-
         self.control = QVideoWidget()
         self.control.setSizePolicy(
             QSizePolicy.Expanding, QSizePolicy.Expanding
