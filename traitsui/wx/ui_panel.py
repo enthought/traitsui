@@ -1184,6 +1184,7 @@ class HTMLHelpWindow(wx.Frame):
     def _on_ok(self, event):
         """ Handles the window being closed.
         """
+        self.Unbind(wx.EVT_BUTTON)
         self.Destroy()
 
 

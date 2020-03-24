@@ -54,7 +54,7 @@ class SimpleEditor(Editor):
         label = self.factory.label or self.item.get_label(self.ui)
         self.control = wx.Button(parent, -1, self.string_value(label))
         self.sync_value(self.factory.label_value, "label", "from")
-        parent.Bind(wx.EVT_BUTTON, self.update_object, id=self.control.GetId())
+        self.control.Bind(wx.EVT_BUTTON, self.update_object)
         self.set_tooltip()
 
     def _label_changed(self, label):

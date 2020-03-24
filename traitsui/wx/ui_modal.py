@@ -239,6 +239,9 @@ class ModalDialog(BaseDialog):
         if self.is_modal:
             self.control.EndModal(rc)
 
+        self.control.Unbind(wx.EVT_CLOSE)
+        self.control.Unbind(wx.EVT_CHAR)
+
         ui.finish()
         self.ui = self.apply = self.revert = self.help = self.control = None
 

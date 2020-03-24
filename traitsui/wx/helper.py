@@ -354,6 +354,9 @@ class TraitsUIPanel(wx.Panel):
         if event.GetWindow() in self.GetChildren():
             event.Skip()
 
+    def Destroy(self):
+        self.Unbind(wx.EVT_CHILD_FOCUS)
+
 
 # -------------------------------------------------------------------------
 #  'ChildFocusOverride' class:
@@ -681,3 +684,6 @@ class Slider(wx.Slider):
 
     def _erase_background(self, event):
         pass
+
+    def Destroy(self):
+        self.Unbind(wx.EVT_ERASE_BACKGROUND)

@@ -293,7 +293,7 @@ class SimpleEditor(Editor):
                 self._delete_node(nid)
 
         self._tree = None
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def _selection_changed(self, selection):
         """ Handles the **selection** event.
