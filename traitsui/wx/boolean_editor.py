@@ -50,7 +50,7 @@ class SimpleEditor(Editor):
         self.set_tooltip()
 
     def dispose(self):
-        self.control.Unind(wx.EVT_CHECKBOX)
+        self.control.Unbind(wx.EVT_CHECKBOX)
 
     def update_object(self, event):
         """ Handles the user clicking the checkbox.

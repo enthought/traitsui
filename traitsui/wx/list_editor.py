@@ -25,13 +25,10 @@ import wx
 import wx.lib.scrolledpanel as wxsp
 
 from traits.api import Str, Any, Instance, Property, Bool, cached_property
-
 from traits.trait_base import user_name_for, xgetattr
 
 from traitsui.ui_traits import Image, convert_bitmap
-
 from traitsui.editors.list_editor import ListItemProxy, ToolkitEditorFactory
-
 from traitsui.dockable_view_element import DockableViewElement
 
 from pyface.dock.api import (
@@ -42,12 +39,10 @@ from pyface.dock.api import (
     DockControl,
 )
 
+from . import toolkit
 from .constants import scrollbar_dx
-
 from .editor import Editor
-
 from .menu import MakeMenu
-
 from .image_control import ImageControl
 import six
 
@@ -165,7 +160,7 @@ class SimpleEditor(Editor):
         list_pane = self.control
         list_pane.SetSizer(None)
         for child in list_pane.GetChildren():
-            child.Destroy()
+            toolkit.destroy_control(child)
 
         # Create all of the list item trait editors:
         trait_handler = self._trait_handler
@@ -431,7 +426,10 @@ class SimpleEditor(Editor):
         for control in self.control.GetChildren():
             editor = getattr(control, "_editor", None)
             if editor is not None:
-                editor.dispose()
+                try:
+                    editor.dispose()
+                except Exception:
+                    pass
                 editor.control = None
 
     # -- Trait initializers ----------------------------------------------------

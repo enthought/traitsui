@@ -356,6 +356,7 @@ class TraitsUIPanel(wx.Panel):
 
     def Destroy(self):
         self.Unbind(wx.EVT_CHILD_FOCUS)
+        super().Destroy()
 
 
 # -------------------------------------------------------------------------
@@ -687,3 +688,4 @@ class Slider(wx.Slider):
 
     def Destroy(self):
         self.Unbind(wx.EVT_ERASE_BACKGROUND)
+        super().Destroy()

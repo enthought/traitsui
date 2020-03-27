@@ -430,7 +430,7 @@ class GUIToolkit(Toolkit):
     def destroy_control(self, control):
         """ Destroys a specified GUI toolkit control.
         """
-        _popEventHandlers(control, wx.EvtHandler)
+        _popEventHandlers(control)
         try:
             control.Destroy()
         except Exception:
@@ -441,7 +441,7 @@ class GUIToolkit(Toolkit):
             control.
         """
         for child in control.GetChildren():
-            _popEventHandlers(child, wx.EvtHandler)
+            _popEventHandlers(child)
         control.DestroyChildren()
 
     def image_size(self, image):

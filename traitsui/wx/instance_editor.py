@@ -23,28 +23,22 @@ toolkit.
 from __future__ import absolute_import
 import wx
 
+from pyface.wx.drag_and_drop import PythonDropTarget
 from traits.api import HasTraits, Property
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.instance_editor file.
 from traitsui.editors.instance_editor import ToolkitEditorFactory
-
 from traitsui.ui_traits import AView
-
 from traitsui.helper import user_name_for
-
 from traitsui.handler import Handler
-
 from traitsui.instance_choice import InstanceChoiceItem
 
+from . import toolkit
 from .editor import Editor
-
 from .constants import DropColor
-
 from .helper import TraitsUIPanel, position_window
-
-from pyface.wx.drag_and_drop import PythonDropTarget
 
 
 OrientationMap = {
@@ -367,9 +361,7 @@ class CustomEditor(Editor):
                 self._ui = None
             else:
                 for child in panel.GetChildren():
-                    while child.GetEventHandler() is not child:
-                        child.PopEventHandler(True)
-                    child.Destroy()
+                    toolkit.destroy_control(child)
 
             # Create the new content for the panel:
             sizer = wx.BoxSizer(wx.VERTICAL)
