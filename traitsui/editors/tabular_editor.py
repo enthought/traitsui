@@ -42,7 +42,7 @@ class TabularEditor(BasicEditorFactory):
     #: Should column headers (i.e. titles) be displayed?
     show_titles = Bool(True)
 
-    #: Should row headers be displated (Qt4 only)?
+    #: Should row headers be displayed (Qt4 only)?
     show_row_titles = Bool(False)
 
     #: The optional extended name of the trait used to indicate that a complete
