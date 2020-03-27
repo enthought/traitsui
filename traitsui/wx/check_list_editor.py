@@ -74,13 +74,16 @@ class SimpleEditor(EditorWithList):
         super(SimpleEditor, self).init(parent)
         self.set_tooltip()
 
+    def dispose(self):
+        self.control.Unbind(wx.EVT_CHOICE)
+
     def create_control(self, parent):
         """ Creates the initial editor control.
         """
         self.control = wx.Choice(
             parent, -1, wx.Point(0, 0), wx.Size(100, 20), []
         )
-        parent.Bind(wx.EVT_CHOICE, self.update_object, id=self.control.GetId())
+        self.control.Bind(wx.EVT_CHOICE, self.update_object)
 
     def list_updated(self, values):
         """ Handles updates to the list of legal checklist values.
@@ -140,7 +143,7 @@ class SimpleEditor(EditorWithList):
             self.control.SetSelection(
                 self.values.index(parse_value(self.value)[0])
             )
-        except:
+        except Exception:
             pass
 
 

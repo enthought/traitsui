@@ -46,8 +46,11 @@ class SimpleEditor(Editor):
             widget.
         """
         self.control = wx.CheckBox(parent, -1, "")
-        parent.Bind(wx.EVT_CHECKBOX, self.update_object, id=self.control.GetId())
+        self.control.Bind(wx.EVT_CHECKBOX, self.update_object)
         self.set_tooltip()
+
+    def dispose(self):
+        self.control.Unbind(wx.EVT_CHECKBOX)
 
     def update_object(self, event):
         """ Handles the user clicking the checkbox.

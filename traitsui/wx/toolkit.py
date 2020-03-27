@@ -19,9 +19,10 @@
     the wxPython user interface toolkit.
 """
 
-
 # Make sure that importimg from this backend is OK:
 from __future__ import absolute_import
+import logging
+
 from traitsui.toolkit import assert_toolkit_import
 
 assert_toolkit_import(["wx"])
@@ -42,6 +43,9 @@ from traitsui.ui import UI
 from traitsui.toolkit import Toolkit
 from .constants import WindowColor, screen_dx, screen_dy
 from .helper import position_window
+
+
+logger = logging.getLogger(__name__)
 
 
 #: Mapping from wx events to method suffixes.
@@ -427,7 +431,10 @@ class GUIToolkit(Toolkit):
         """ Destroys a specified GUI toolkit control.
         """
         _popEventHandlers(control)
-        control.Destroy()
+        try:
+            control.Destroy()
+        except Exception:
+            logger.exception("Wx control %r not destroyed cleanly", control)
 
     def destroy_children(self, control):
         """ Destroys all of the child controls of a specified GUI toolkit
@@ -558,6 +565,10 @@ def _popEventHandlers(ctrl, handler_type=EventHandlerWrapper):
     """ Pop any event handlers that have been pushed on to a window and its
         children.
     """
+    # FIXME: have to special case URLResolvingHtmlWindow because it doesn't
+    # want its EvtHandler cleaned up.  See issue #752.
+    from .html_editor import URLResolvingHtmlWindow
+
     handler = ctrl.GetEventHandler()
     while ctrl is not handler:
         next_handler = handler.GetNextHandler()
@@ -565,4 +576,4 @@ def _popEventHandlers(ctrl, handler_type=EventHandlerWrapper):
             ctrl.PopEventHandler(True)
         handler = next_handler
     for child in ctrl.GetChildren():
-        _popEventHandlers(child)
+        _popEventHandlers(child, handler_type)

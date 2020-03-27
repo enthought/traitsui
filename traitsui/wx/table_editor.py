@@ -107,7 +107,7 @@ class TableEditor(Editor, BaseTableEditor):
     # -------------------------------------------------------------------------
 
     #: The set of columns currently defined on the editor:
-    columns = List(TableColumn)
+    columns = List(Instance(TableColumn))
 
     #: Index of currently edited (i.e., selected) table item(s):
     selected_row_index = Int(-1)

@@ -162,10 +162,10 @@ class TableModel(GridModel):
         """
         try:
             return self.__filtered_items()[index]
-        except:
-            logger.error(
-                "TableModel error: Request for invalid row %d out of "
-                "%d" % (index, len(self.__filtered_items()))
+        except Exception:
+            logger.exception(
+                "TableModel error: Request for invalid row %d out of %d",
+                index, len(self.__filtered_items())
             )
             return None
 
@@ -399,7 +399,6 @@ class TableModel(GridModel):
         editor._ui = self.editor.ui
 
         target, name = column.target_name(object)
-
         return TraitGridCellAdapter(
             editor,
             target,
