@@ -50,13 +50,13 @@ class SearchEditor(Editor):
     def dispose(self):
         if self.control is not None:
             if self.factory.auto_set:
-                self.control.Unbind(wx.EVT_TEXT, self.update_object)
+                self.control.Unbind(wx.EVT_TEXT, handler=self.update_object)
 
             if self.factory.enter_set:
-                self.control.Unbind(wx.EVT_TEXT_ENTER, self.update_object)
+                self.control.Unbind(wx.EVT_TEXT_ENTER, handler=self.update_object)
 
-            self.control.Unbind(wx.EVT_SEARCHCTRL_SEARCH_BTN, self.update_object)
-            self.control.Unbind(wx.EVT_SEARCHCTRL_CANCEL_BTN, self.clear_text)
+            self.control.Unbind(wx.EVT_SEARCHCTRL_SEARCH_BTN, handler=self.update_object)
+            self.control.Unbind(wx.EVT_SEARCHCTRL_CANCEL_BTN, handler=self.clear_text)
 
         super().dispose()
 
