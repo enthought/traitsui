@@ -104,6 +104,40 @@ class wxListCtrl(wx.ListCtrl, TextEditMixin):
         if can_edit:
             TextEditMixin.__init__(self, edit_labels)
 
+    def make_editor(self, col_style=wx.LIST_FORMAT_LEFT):
+        # override implementation in base class due to issue with destroying
+        # editor
+
+        style = wx.TE_PROCESS_ENTER | wx.TE_PROCESS_TAB | wx.TE_RICH2
+        style |= {
+            wx.LIST_FORMAT_LEFT: wx.TE_LEFT,
+            wx.LIST_FORMAT_RIGHT: wx.TE_RIGHT,
+            wx.LIST_FORMAT_CENTRE: wx.TE_CENTRE,
+        }[col_style]
+
+        editor = wx.TextCtrl(self, -1, style=style)
+        editor.SetBackgroundColour(self.editorBgColour)
+        editor.SetForegroundColour(self.editorFgColour)
+        font = self.GetFont()
+        editor.SetFont(font)
+
+        self.curRow = 0
+        self.curCol = 0
+
+        editor.Hide()
+        # Base class does explicit Destroy call here.  Should not be needed.
+        # Excised code is as follows:
+        #   if hasattr(self, 'editor'):
+        #       self.editor.Destroy()
+        # Dropping the reference to the editor should result in the
+        # destruction of the underlying C++ widget just fine.
+
+        self.editor = editor
+
+        self.col_style = col_style
+        self.editor.Bind(wx.EVT_CHAR, self.OnChar)
+        self.editor.Bind(wx.EVT_KILL_FOCUS, self.CloseEditor)
+
     def SetVirtualData(self, row, col, text):
         # this method is called but the job is already done by
         # the _end_label_edit method. Commmented code is availabed

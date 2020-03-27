@@ -5,7 +5,7 @@ from traits.api import HasTraits, Str, Int, List
 from traitsui.api import View, Group, Item, TableEditor, ObjectColumn, RGBColor
 from traitsui.color_column import ColorColumn
 
-from traitsui.tests._tools import skip_if_null, store_exceptions_on_all_threads
+from traitsui.tests._tools import skip_if_not_qt4, store_exceptions_on_all_threads
 
 
 class MyEntry(HasTraits):
@@ -35,7 +35,7 @@ class MyData(HasTraits):
 
 
 class TestColorColumn(TestCase):
-    @skip_if_null
+    @skip_if_not_qt4
     def test_color_column(self):
         # Behaviour: column ui should display without error
 

@@ -399,7 +399,6 @@ class TableModel(GridModel):
         editor._ui = self.editor.ui
 
         target, name = column.target_name(object)
-
         return TraitGridCellAdapter(
             editor,
             target,

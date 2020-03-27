@@ -336,9 +336,9 @@ class _ListStrEditor(Editor):
             return
 
         if 0 <= (index - top) < pn:
-            control.EnsureVisible(max(0, top + pn - 2))
+            control.EnsureVisible(min(top + pn - 2, control.GetItemCount() - 1))
         elif index < top:
-            control.EnsureVisible(min(n, index + pn - 1))
+            control.EnsureVisible(min(index + pn - 1, control.GetItemCount() - 1))
         else:
             control.EnsureVisible(index)
 
