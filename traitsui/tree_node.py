@@ -22,6 +22,7 @@
 
 from __future__ import absolute_import
 
+from itertools import zip_longest
 import six
 
 from traits.api import (
@@ -319,7 +320,7 @@ class TreeNode(HasPrivateTraits):
         trait = self.column_labels
         labels = xgetattr(object, trait, [])
         formatted = []
-        for formatter, label in six.moves.zip_longest(
+        for formatter, label in zip_longest(
             self.column_formatters, labels
         ):
             # If the list of column formatters is shorter than the list of

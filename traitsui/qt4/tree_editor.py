@@ -19,9 +19,8 @@ from __future__ import absolute_import
 
 import copy
 import collections
+from itertools import zip_longest
 import logging
-
-from six.moves import zip_longest
 
 from pyface.qt import QtCore, QtGui
 
