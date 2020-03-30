@@ -83,6 +83,12 @@ class SimpleEditor(Editor):
             # updated.
             control.editingFinished.connect(self.update_object)
 
+        placeholder = self.factory.placeholder
+
+        if wtype is not QtGui.QTextEdit or QtCore.__version_info__ >= (5, 2):
+            # setPlaceholderText is introduced to QTextEdit since Qt 5.2
+            control.setPlaceholderText(placeholder)
+
         self.control = control
         # default horizontal policy is Expand, set this to Minimum
         if not (self.item.resizable) and not self.item.springy:

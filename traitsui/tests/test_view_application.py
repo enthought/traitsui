@@ -9,20 +9,10 @@
 import unittest
 
 from pyface.timer.api import CallbackTimer
-from pyface.toolkit import toolkit_object
 from traits.api import HasTraits, Instance, Int
 from traitsui.api import Handler, Item, UIInfo, View, toolkit
 
-from ._tools import is_current_backend_qt4
-
-# get the pyface GUI test assistant and Modal dialog tester
-GuiTestAssistant = toolkit_object("util.gui_test_assistant:GuiTestAssistant")
-no_gui_test_assistant = GuiTestAssistant.__name__ == "Unimplemented"
-
-if no_gui_test_assistant:
-
-    class GuiTestAssistant(object):
-        pass
+from ._tools import GuiTestAssistant, is_current_backend_qt4, no_gui_test_assistant
 
 
 class SimpleModel(HasTraits):

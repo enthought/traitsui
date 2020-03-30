@@ -13,7 +13,6 @@
 
 import unittest
 
-from pyface.toolkit import toolkit_object
 from traits.api import Any, Bool, Event, Float, HasTraits, Int, List, Undefined
 from traits.trait_base import xgetattr
 
@@ -22,15 +21,7 @@ from traitsui.editor import Editor
 from traitsui.editor_factory import EditorFactory
 from traitsui.handler import default_handler
 from traitsui.ui import UI
-
-
-GuiTestAssistant = toolkit_object("util.gui_test_assistant:GuiTestAssistant")
-no_gui_test_assistant = GuiTestAssistant.__name__ == "Unimplemented"
-if no_gui_test_assistant:
-
-    # ensure null toolkit has an inheritable GuiTestAssistant
-    class GuiTestAssistant(object):
-        pass
+from traitsui.tests._tools import GuiTestAssistant, no_gui_test_assistant
 
 
 class FakeControl(HasTraits):
