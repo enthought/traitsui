@@ -61,7 +61,7 @@ from .group import Group
 from .item import Item
 
 from .include import Include
-import six
+
 
 # -------------------------------------------------------------------------
 #  Trait definitions:

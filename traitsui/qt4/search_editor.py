@@ -18,7 +18,7 @@ from pyface.qt import QtCore, QtGui
 
 # ETS imports
 from .editor import Editor
-import six
+
 
 
 class SearchWidget(QtGui.QLineEdit):

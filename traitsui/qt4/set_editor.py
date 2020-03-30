@@ -27,7 +27,7 @@ from traitsui.helper import enum_values_changed
 from .editor import Editor
 
 from traits.api import Instance, Property
-import six
+
 
 
 class SimpleEditor(Editor):

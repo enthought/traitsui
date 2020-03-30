@@ -22,7 +22,7 @@
 
 from __future__ import absolute_import
 
-import six
+
 
 # avoid deprecation warning
 from inspect import getfullargspec

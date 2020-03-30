@@ -27,7 +27,7 @@ from operator import itemgetter
 from traits.api import BaseTraitHandler, CTrait, Enum, TraitError
 
 from .ui_traits import SequenceTypes
-import six
+
 
 
 # -------------------------------------------------------------------------

@@ -50,7 +50,7 @@ from .clipboard import clipboard, PyMimeData
 from .editor import Editor
 from .helper import pixmap_cache
 from .tree_node_renderers import WordWrapRenderer
-import six
+
 
 
 logger = logging.getLogger(__name__)

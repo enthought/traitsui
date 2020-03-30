@@ -50,7 +50,7 @@ from .view import View
 
 # Set up a logger:
 import logging
-import six
+
 
 logger = logging.getLogger(__name__)
 

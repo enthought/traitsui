@@ -8,7 +8,7 @@ from traits.api import Dict
 # as in the default date_editor.
 from .date_editor import SimpleEditor
 from .date_editor import CustomEditor as DateCustomEditor
-import six
+
 
 
 class CustomEditor(DateCustomEditor):

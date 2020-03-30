@@ -18,7 +18,7 @@ from __future__ import absolute_import
 from pyface.qt import QtGui
 
 from traits.api import Trait, TraitError
-import six
+
 
 
 def convert_to_color(object, name, value):

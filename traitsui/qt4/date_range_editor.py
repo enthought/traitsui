@@ -8,7 +8,7 @@ from pyface.qt.QtGui import QFont
 from traits.api import Dict
 
 from .date_editor import CustomEditor as DateCustomEditor
-import six
+
 
 
 class CustomEditor(DateCustomEditor):

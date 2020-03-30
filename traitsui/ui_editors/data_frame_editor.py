@@ -29,7 +29,7 @@ from traitsui.toolkit import toolkit_object
 from traitsui.toolkit_traits import Font
 from traitsui.ui_editor import UIEditor
 from traitsui.view import View
-import six
+
 
 
 logger = logging.getLogger(__name__)

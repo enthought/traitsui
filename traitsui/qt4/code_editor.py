@@ -41,7 +41,7 @@ from pyface.key_pressed_event import KeyPressedEvent
 from .constants import OKColor, ErrorColor
 from .editor import Editor
 from .helper import pixmap_cache
-import six
+
 
 
 # Marker line constants:

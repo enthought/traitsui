@@ -59,7 +59,7 @@ from traitsui.ui_traits import SequenceTypes
 
 from .editor import Editor
 from .table_model import TableModel, SortFilterTableModel
-import six
+
 
 
 if is_qt5:

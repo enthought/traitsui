@@ -45,7 +45,7 @@ from .include import Include
 from .ui_traits import SequenceTypes, ContainerDelegate, Orientation, Layout
 
 from .dock_window_theme import dock_window_theme, DockWindowTheme
-import six
+
 
 # -------------------------------------------------------------------------
 #  Trait definitions:

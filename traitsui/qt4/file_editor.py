@@ -23,7 +23,7 @@ from traits.api import List, Event, File, Unicode, TraitError
 from traitsui.editors.file_editor import ToolkitEditorFactory
 from .text_editor import SimpleEditor as SimpleTextEditor
 from .helper import IconButton
-import six
+
 
 
 # Wildcard filter:

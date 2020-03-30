@@ -35,7 +35,7 @@ from traits.api import (
     provides,
 )
 from .toolkit_traits import Color
-import six
+
 
 # -------------------------------------------------------------------------
 #  'IListStrAdapter' interface:

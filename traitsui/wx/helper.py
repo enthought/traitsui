@@ -50,7 +50,7 @@ from pyface.timer.api import do_later
 from .constants import standard_bitmap_width, screen_dx, screen_dy
 
 from .editor import Editor
-import six
+
 
 
 # -------------------------------------------------------------------------

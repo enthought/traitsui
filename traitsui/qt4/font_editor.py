@@ -29,7 +29,7 @@ from .editor_factory import (
 )
 
 from .editor import Editor
-import six
+
 
 
 # Standard font point sizes

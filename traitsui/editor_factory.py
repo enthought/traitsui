@@ -24,7 +24,7 @@ from __future__ import absolute_import, print_function
 
 import logging
 
-import six
+
 
 from traits.api import (
     HasPrivateTraits,

@@ -48,7 +48,7 @@ from __future__ import absolute_import, print_function
 import re
 
 from pyface.qt import QtGui
-import six
+
 
 
 help_pat = re.compile(r"(.*){(.*)}(.*)")

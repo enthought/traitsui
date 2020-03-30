@@ -46,7 +46,7 @@ from traitsui.tabular_adapter import TabularAdapter
 from traitsui.helper import compute_column_widths
 from .editor import Editor
 from .tabular_model import TabularModel
-import six
+
 
 
 class HeaderEventFilter(QtCore.QObject):

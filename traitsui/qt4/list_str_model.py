@@ -24,7 +24,7 @@ from __future__ import absolute_import, unicode_literals
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
-import six
+
 
 
 # MIME type for internal table drag/drop operations

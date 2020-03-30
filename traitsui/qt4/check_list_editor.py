@@ -31,7 +31,7 @@ from traitsui.editors.check_list_editor import ToolkitEditorFactory
 from .editor_factory import TextEditor as BaseTextEditor
 
 from .editor import EditorWithList
-import six
+
 
 
 logger = logging.getLogger(__name__)

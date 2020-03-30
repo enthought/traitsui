@@ -23,7 +23,7 @@ from traits.api import TraitError
 from traitsui.editor_factory import EditorFactory as BaseEditorFactory
 
 from .editor import Editor
-import six
+
 
 # -------------------------------------------------------------------------
 #  'EditorFactory' class

@@ -44,7 +44,7 @@ from .constants import scrollbar_dx
 from .editor import Editor
 from .menu import MakeMenu
 from .image_control import ImageControl
-import six
+
 
 
 # -------------------------------------------------------------------------

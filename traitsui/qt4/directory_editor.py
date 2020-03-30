@@ -23,7 +23,7 @@ from .file_editor import (
     SimpleEditor as SimpleFileEditor,
     CustomEditor as CustomFileEditor,
 )
-import six
+
 
 
 class SimpleEditor(SimpleFileEditor):

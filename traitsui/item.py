@@ -44,7 +44,7 @@ from .view_element import ViewSubElement
 from .ui_traits import ContainerDelegate, EditorStyle
 
 from .editor_factory import EditorFactory
-import six
+
 
 
 # Pattern of all digits:

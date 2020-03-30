@@ -24,7 +24,7 @@ from __future__ import absolute_import
 from pyface.qt import QtGui
 
 from .editor import Editor
-import six
+
 
 
 class _HistoryEditor(Editor):

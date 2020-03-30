@@ -22,7 +22,7 @@ from __future__ import absolute_import
 
 from types import CodeType
 
-import six
+
 
 from traits.api import (
     CTrait,

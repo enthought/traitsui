@@ -24,7 +24,7 @@ from __future__ import absolute_import
 
 import collections
 
-import six
+
 
 from traits.api import (
     Event,

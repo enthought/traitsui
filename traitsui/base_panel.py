@@ -15,7 +15,7 @@ from __future__ import absolute_import
 from pyface.action.api import ActionController
 from traits.api import Any, Instance
 from traitsui.menu import Action
-import six
+
 
 
 # Set of all predefined system button names:

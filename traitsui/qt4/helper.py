@@ -22,7 +22,7 @@ from pyface.ui_traits import convert_image
 from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 
 from traitsui.ui_traits import SequenceTypes
-import six
+
 
 
 is_pyqt = qt_api in {"pyqt", "pyqt5"}

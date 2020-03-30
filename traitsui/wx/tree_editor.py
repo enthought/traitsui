@@ -23,7 +23,7 @@ from __future__ import absolute_import
 import os
 import wx
 import copy
-import six
+
 
 try:
     from pyface.wx.drag_and_drop import PythonDropSource, PythonDropTarget

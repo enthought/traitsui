@@ -5,7 +5,7 @@ from traits.api import Float, Any, Str, Trait
 from traitsui.editors.api import RangeEditor
 from traitsui.qt4.editor import Editor
 from traitsui.qt4.extra.range_slider import RangeSlider
-import six
+
 
 
 class _BoundsEditor(Editor):

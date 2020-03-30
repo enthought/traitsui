@@ -29,7 +29,7 @@ from .editor import Editor
 from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
 from .constants import OKColor
-import six
+
 
 
 class SimpleEditor(Editor):

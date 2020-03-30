@@ -23,7 +23,7 @@
 from __future__ import absolute_import
 
 from itertools import zip_longest
-import six
+
 
 from traits.api import (
     Adapter,

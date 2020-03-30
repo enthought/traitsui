@@ -23,7 +23,7 @@ from traitsui.ui_traits import SequenceTypes
 
 from .clipboard import PyMimeData
 
-import six
+
 
 # set up logging for the module
 logger = logging.getLogger(__name__)

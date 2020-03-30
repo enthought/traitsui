@@ -34,7 +34,7 @@ from .editor import Editor
 from .constants import OKColor, ErrorColor
 
 from .helper import IconButton
-import six
+
 
 # -------------------------------------------------------------------------
 #  'BaseRangeEditor' class:

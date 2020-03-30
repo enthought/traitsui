@@ -41,7 +41,7 @@ from pyface.wx.drag_and_drop import (
     PythonDropTarget,
     clipboard,
 )
-import six
+
 
 try:
     from apptools.io import File

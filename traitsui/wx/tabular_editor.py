@@ -52,7 +52,7 @@ from pyface.image_resource import ImageResource
 from pyface.timer.api import do_later
 
 from .constants import is_mac, scrollbar_dx
-import six
+
 
 try:
     from pyface.wx.drag_and_drop import PythonDropSource, PythonDropTarget

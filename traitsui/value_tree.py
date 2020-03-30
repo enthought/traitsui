@@ -39,7 +39,7 @@ from traits.api import (
 from .tree_node import ObjectTreeNode, TreeNode, TreeNodeObject
 
 from .editors.tree_editor import TreeEditor
-import six
+
 
 
 class SingleValueTreeNodeObject(TreeNodeObject):

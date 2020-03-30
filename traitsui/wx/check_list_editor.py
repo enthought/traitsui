@@ -38,7 +38,7 @@ from .editor import EditorWithList
 
 from .helper import TraitsUIPanel
 from functools import reduce
-import six
+
 
 logger = logging.getLogger(__name__)
 

@@ -30,7 +30,7 @@ from .editor import Editor
 from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 from traitsui.editors.date_editor import CellFormat
 
-import six
+
 
 
 class SimpleEditor(Editor):

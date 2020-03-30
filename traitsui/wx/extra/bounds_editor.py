@@ -5,7 +5,7 @@ from traits.api import Float, Any, Str, Trait
 from traitsui.editors.api import RangeEditor
 from traitsui.wx.editor import Editor
 from traitsui.wx.helper import TraitsUIPanel, Slider
-import six
+
 
 
 class _BoundsEditor(Editor):

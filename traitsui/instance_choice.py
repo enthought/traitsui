@@ -27,7 +27,7 @@ from traits.api import HasPrivateTraits, Str, Any, Dict, Tuple, Callable, Bool
 from .ui_traits import AView
 
 from .helper import user_name_for
-import six
+
 
 
 class InstanceChoiceItem(HasPrivateTraits):

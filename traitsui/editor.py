@@ -49,7 +49,7 @@ from .context_value import ContextValue
 from .undo import UndoItem
 
 from .item import Item
-import six
+
 
 
 # Reference to an EditorFactory object

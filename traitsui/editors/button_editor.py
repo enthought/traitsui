@@ -27,7 +27,7 @@ from traits.api import Str, Range, Enum, Property, Trait
 from ..editor_factory import EditorFactory
 from ..ui_traits import AView
 from ..view import View
-import six
+
 
 # -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:

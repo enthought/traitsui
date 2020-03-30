@@ -47,7 +47,7 @@ from traits.api import (
     TraitPrefixList,
     TraitType,
 )
-import six
+
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
