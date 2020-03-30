@@ -34,8 +34,6 @@ from .ui_traits import (
     Image,
 )
 
-from .util import str_rfind
-
 # Is the AbstractViewElement ABC available in traits.api?
 
 try:
@@ -159,7 +157,7 @@ class ViewSubElement(ViewElement):
         value = self._option(value, "@", "style", "custom")
         value = self._option(value, "*", "style", "text")
         value = self._option(value, "~", "style", "readonly")
-        value = self._split("style", value, ";", str_rfind, 1, 0)
+        value = self._split("style", value, ";", str.rfind, 1, 0)
 
         return value
 
