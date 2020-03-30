@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 from traits import *
 from pyface.api import GUI
 from traitsui import View, Item, ButtonEditor

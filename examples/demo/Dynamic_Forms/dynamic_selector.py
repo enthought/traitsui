@@ -24,7 +24,6 @@ appear in the GUI's enumerated list are determined by the *cities* attribute of
 the view's handler, as specified in the EnumEditor's *name* parameter.
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, Str, Enum, List
 from traitsui.api import View, Item, Handler, EnumEditor
 

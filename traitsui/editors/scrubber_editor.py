@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from pyface.ui_traits import Alignment
 from traits.api import Float, Property

@@ -13,12 +13,10 @@
 """ Defines the various editors and the editor factory for single-selection
     enumerations, for the PyQt user interface toolkit.
 """
-from __future__ import absolute_import
 
 from functools import reduce
 
-import six
-from six.moves import range
+
 
 from pyface.qt import QtCore, QtGui
 
@@ -262,7 +260,7 @@ class SimpleEditor(BaseEditor):
         if self._no_enum_update == 0:
             self._no_enum_update += 1
             try:
-                self.value = self.mapping[six.text_type(text)]
+                self.value = self.mapping[str(text)]
             except Exception:
                 from traitsui.api import raise_to_debug
 
@@ -274,7 +272,7 @@ class SimpleEditor(BaseEditor):
         """
         if self._no_enum_update == 0:
 
-            value = six.text_type(text)
+            value = str(text)
             try:
                 value = self.mapping[value]
             except Exception:
@@ -466,7 +464,7 @@ class ListEditor(BaseEditor):
     def update_object(self, text):
         """ Handles the user selecting a list box item.
         """
-        value = six.text_type(text)
+        value = str(text)
         try:
             value = self.mapping[value]
         except Exception:

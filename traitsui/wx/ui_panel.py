@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 import wx.html as wh
 import re
@@ -1184,6 +1183,7 @@ class HTMLHelpWindow(wx.Frame):
     def _on_ok(self, event):
         """ Handles the window being closed.
         """
+        self.Unbind(wx.EVT_BUTTON)
         self.Destroy()
 
 

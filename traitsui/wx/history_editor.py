@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 from traits.api import Any, on_trait_change
 
 from pyface.timer.api import do_later

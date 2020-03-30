@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 import sys
 import wx
 
@@ -432,7 +431,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             style=wx.BU_EXACTFIT | wx.NO_BORDER,
         )
         panel.button_lo = button_lo
-        button_lo.Bind(wx.EVT_BUTTON, button_lo, id=self.reduce_range)
+        button_lo.Bind(wx.EVT_BUTTON, self.reduce_range)
         sizer.Add(button_lo, 1, wx.ALIGN_CENTER)
 
         # Slider:
@@ -462,7 +461,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             style=wx.BU_EXACTFIT | wx.NO_BORDER,
         )
         panel.button_hi = button_hi
-        button_hi.Bind(wx.EVT_BUTTON, button_hi, id=self.increase_range)
+        button_hi.Bind(wx.EVT_BUTTON, self.increase_range)
         sizer.Add(button_hi, 1, wx.ALIGN_CENTER)
 
         # Upper limit label:

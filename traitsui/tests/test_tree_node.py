@@ -16,7 +16,6 @@
 Test cases for the TreeNode object.
 """
 
-from __future__ import absolute_import
 import unittest
 
 from traits.api import HasStrictTraits, List, Str, This

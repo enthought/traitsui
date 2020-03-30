@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from .helper import restore_window, save_window, TraitsUIScrolledPanel
@@ -238,6 +237,9 @@ class ModalDialog(BaseDialog):
         save_window(ui)
         if self.is_modal:
             self.control.EndModal(rc)
+
+        self.control.Unbind(wx.EVT_CLOSE)
+        self.control.Unbind(wx.EVT_CHAR)
 
         ui.finish()
         self.ui = self.apply = self.revert = self.help = self.control = None

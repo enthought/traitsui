@@ -22,7 +22,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 import wx.adv as wz
 
@@ -117,7 +116,7 @@ def ui_wizard(ui, parent):
     wizard.SetPageSize(wx.Size(min_dx, min_dy))
 
     # Set up the wizard 'page changing' event handler:
-    wz.EVT_WIZARD_PAGE_CHANGING(wizard, wizard.GetId(), page_changing)
+    wizard.Bind(wz.EVT_WIZARD_PAGE_CHANGING, page_changing)
 
     # Size the wizard and the individual pages appropriately:
     prev_page = pages[0]
@@ -159,6 +158,7 @@ def ui_wizard(ui, parent):
         ui.result = False
 
     # Clean up loose ends, like restoring the original context:
+    wizard.Unbind(wz.EVT_WIZARD_PAGE_CHANGING, page_changing)
     save_window(ui)
     ui.finish()
     ui.context = ui._context

@@ -37,7 +37,6 @@ See the Traits User Manual for more details.
 
 # FIXME: provide accessible copy or equivalent of factories_advanced_extra.rst
 
-from __future__ import absolute_import
 from traits.api import HasTraits, Str, Regex, List, Instance
 from traitsui.api import Item, View, TreeEditor, TreeNode
 

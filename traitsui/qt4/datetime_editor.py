@@ -14,7 +14,6 @@
 """ A Traits UI editor for datetime.datetime objects.
 """
 
-from __future__ import absolute_import, print_function
 
 import datetime
 

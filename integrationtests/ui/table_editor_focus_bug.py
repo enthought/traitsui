@@ -1,7 +1,6 @@
 #  Copyright (c) 2007, Enthought, Inc.
 #  License: BSD Style.
 
-from __future__ import absolute_import, print_function
 
 from traits.api import HasTraits, Str, List
 from traitsui.api import Group, Item, TableEditor, View

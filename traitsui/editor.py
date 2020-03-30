@@ -16,7 +16,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from contextlib import contextmanager
 from functools import partial
@@ -49,7 +48,7 @@ from .context_value import ContextValue
 from .undo import UndoItem
 
 from .item import Item
-import six
+
 
 
 # Reference to an EditorFactory object
@@ -710,7 +709,7 @@ class Editor(HasPrivateTraits):
             or 3.
         """
         # In Unicode!
-        return six.text_type(value)
+        return str(value)
 
     # -- Traits property getters and setters --------------------------------
 

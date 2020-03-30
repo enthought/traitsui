@@ -6,7 +6,6 @@ small integer range, a medium-sized integer range, a large integer range
 and a float range are demonstrated on separate tabs.
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, Range
 from traitsui.api import Item, Group, View
 

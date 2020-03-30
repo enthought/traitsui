@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui, is_qt5
 import collections
 

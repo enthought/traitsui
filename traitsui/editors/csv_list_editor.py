@@ -20,7 +20,6 @@ It allows the user to edit the list in a text field, using commas
 #
 # ------------------------------------------------------------------------------
 
-from __future__ import absolute_import
 from traits.api import Str, Int, Float, Enum, Range, Bool, Trait, TraitError
 from traits.trait_handlers import RangeTypes
 

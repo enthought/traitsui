@@ -61,7 +61,6 @@ instances of :class:`ContextValue` (abbreviated as ``CV``)::
         )
 """
 
-from __future__ import absolute_import
 
 from traits.api import HasStrictTraits, Instance, Str, Int, Float, Either
 

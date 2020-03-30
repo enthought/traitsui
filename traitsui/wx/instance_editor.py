@@ -20,31 +20,24 @@ toolkit.
 """
 
 
-from __future__ import absolute_import
 import wx
 
+from pyface.wx.drag_and_drop import PythonDropTarget
 from traits.api import HasTraits, Property
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.instance_editor file.
 from traitsui.editors.instance_editor import ToolkitEditorFactory
-
 from traitsui.ui_traits import AView
-
 from traitsui.helper import user_name_for
-
 from traitsui.handler import Handler
-
 from traitsui.instance_choice import InstanceChoiceItem
 
+from . import toolkit
 from .editor import Editor
-
-from .constants import DropColor, is_wx26
-
+from .constants import DropColor
 from .helper import TraitsUIPanel, position_window
-
-from pyface.wx.drag_and_drop import PythonDropTarget
 
 
 OrientationMap = {
@@ -367,9 +360,7 @@ class CustomEditor(Editor):
                 self._ui = None
             else:
                 for child in panel.GetChildren():
-                    while child.GetEventHandler() is not child:
-                        child.PopEventHandler(True)
-                    child.Destroy()
+                    toolkit.destroy_control(child)
 
             # Create the new content for the panel:
             sizer = wx.BoxSizer(wx.VERTICAL)
@@ -422,16 +413,13 @@ class CustomEditor(Editor):
             # It is possible that this instance editor is embedded at some level
             # in a ScrolledWindow. If so, we need to inform the window that the
             # size of the editor's contents have (potentially) changed:
-            # NB: There is a typo in the wxPython 2.6 code that prevents the
-            # 'SendSizeEvent' from working correctly, so we just skip it.
-            if not is_wx26:
-                while (parent is not None) and (
-                    not isinstance(parent, wx.ScrolledWindow)
-                ):
-                    parent = parent.GetParent()
+            while (parent is not None) and (
+                not isinstance(parent, wx.ScrolledWindow)
+            ):
+                parent = parent.GetParent()
 
-                if parent is not None:
-                    parent.SendSizeEvent()
+            if parent is not None:
+                parent.SendSizeEvent()
 
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.

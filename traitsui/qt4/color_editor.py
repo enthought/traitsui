@@ -13,7 +13,6 @@
 """ Defines the various color editors for the PyQt user interface toolkit.
 """
 
-from __future__ import absolute_import, division
 
 
 from pyface.qt import QtCore, QtGui
@@ -29,7 +28,7 @@ from .editor_factory import (
 )
 
 from .editor import Editor
-import six
+
 
 
 # Standard color samples:
@@ -163,7 +162,7 @@ class TextColorEditor(BaseTextEditor):
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
-        self.value = six.text_type(self.control.text())
+        self.value = str(self.control.text())
         set_color(self)
 
     def update_editor(self):
@@ -297,7 +296,7 @@ def color_editor_for(editor, parent):
 
             i += 1
 
-    mapper.mapped[six.text_type].connect(editor.update_object_from_swatch)
+    mapper.mapped[str].connect(editor.update_object_from_swatch)
 
     panel.addLayout(grid)
 

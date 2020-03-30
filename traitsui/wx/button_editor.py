@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import Str
@@ -54,7 +53,7 @@ class SimpleEditor(Editor):
         label = self.factory.label or self.item.get_label(self.ui)
         self.control = wx.Button(parent, -1, self.string_value(label))
         self.sync_value(self.factory.label_value, "label", "from")
-        parent.Bind(wx.EVT_BUTTON, self.update_object, id=self.control.GetId())
+        self.control.Bind(wx.EVT_BUTTON, self.update_object)
         self.set_tooltip()
 
     def _label_changed(self, label):
@@ -80,8 +79,7 @@ class SimpleEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        self.control.GetParent().Bind(wx.EVT_BUTTON, None, id=self.control.GetId())
-
+        self.control.Unbind(wx.EVT_BUTTON)
         super(SimpleEditor, self).dispose()
 
 
@@ -93,7 +91,7 @@ class CustomEditor(SimpleEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        from pyface.image_button import ImageButton
+        from pyface.ui.wx.image_button import ImageButton
 
         factory = self.factory
         if self.factory.label:

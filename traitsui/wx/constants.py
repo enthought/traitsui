@@ -19,14 +19,12 @@
     editors and text editor factories.
 """
 
-from __future__ import absolute_import
 import sys
 
 import wx
 
 #: Define platform and wx version constants:
 is_mac = sys.platform == "darwin"
-is_wx26 = float(".".join(wx.__version__.split(".")[0:2])) < 2.8
 
 #: Default dialog title
 DefaultTitle = "Edit properties"

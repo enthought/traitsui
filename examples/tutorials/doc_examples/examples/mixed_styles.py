@@ -4,7 +4,6 @@
 # mixed_styles.py -- Example of using editor styles at various levels
 
 #--[Imports]--------------------------------------------------------------
-from __future__ import absolute_import
 from traits.api import HasTraits, Str, Enum
 from traitsui.api import View, Group, Item
 

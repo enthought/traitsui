@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 
 from pyface.gui import GUI
 from traits.api import HasTraits, Instance, Int, List, Str, Tuple

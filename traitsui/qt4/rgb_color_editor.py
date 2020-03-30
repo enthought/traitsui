@@ -16,7 +16,6 @@ that are represented as tuples of the form ( *red*, *green*, *blue* ), where
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtGui
 
 from traits.trait_base import SequenceTypes

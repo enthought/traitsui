@@ -15,7 +15,6 @@ PyQt user interface toolkit.
 """
 
 
-from __future__ import absolute_import
 from math import log10
 
 from pyface.qt import QtCore, QtGui
@@ -34,7 +33,7 @@ from .editor import Editor
 from .constants import OKColor, ErrorColor
 
 from .helper import IconButton
-import six
+
 
 # -------------------------------------------------------------------------
 #  'BaseRangeEditor' class:
@@ -184,12 +183,12 @@ class SimpleSliderEditor(BaseRangeEditor):
 
         try:
             try:
-                value = eval(six.text_type(self.control.text.text()).strip())
+                value = eval(str(self.control.text.text()).strip())
             except Exception as ex:
                 # The entered something that didn't eval as a number, (e.g.,
                 # 'foo') pretend it didn't happen
                 value = self.value
-                self.control.text.setText(six.text_type(value))
+                self.control.text.setText(str(value))
                 # for compound editor, value may be non-numeric
                 if not isinstance(value, (int, float)):
                     return
@@ -451,7 +450,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         """ Handles the user pressing the Enter key in the text field.
         """
         try:
-            self.value = eval(six.text_type(self.control.text.text()).strip())
+            self.value = eval(str(self.control.text.text()).strip())
         except TraitError as excp:
             pass
 
@@ -701,7 +700,7 @@ class RangeTextEditor(TextEditor):
         """ Handles the user entering input data in the edit control.
         """
         try:
-            value = eval(six.text_type(self.control.text()))
+            value = eval(str(self.control.text()))
             if self.evaluate is not None:
                 value = self.evaluate(value)
             self.value = value

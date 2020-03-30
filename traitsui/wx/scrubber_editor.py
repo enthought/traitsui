@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from math import log10, pow
@@ -234,7 +233,7 @@ class _ScrubberEditor(Editor):
             if (low is None) or (high is None) or isinstance(low, int):
                 increment = 1.0
             else:
-                increment = pow(10, round(log10((high - low) // 100.0)))
+                increment = pow(10, round(log10((high - low) / 100.0)))
 
         self.increment = increment
 

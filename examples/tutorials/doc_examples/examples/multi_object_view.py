@@ -4,7 +4,6 @@
 # multi_object_view.py -- Sample code to show multi-object view with context
 
 #--[Imports]--------------------------------------------------------------
-from __future__ import absolute_import
 from traits.api import HasTraits, Str, Int, Bool
 from traitsui.api import View, Group, Item
 

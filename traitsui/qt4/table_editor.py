@@ -15,7 +15,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from pyface.qt import QtCore, QtGui, is_qt5
 from pyface.image_resource import ImageResource
@@ -59,7 +58,7 @@ from traitsui.ui_traits import SequenceTypes
 
 from .editor import Editor
 from .table_model import TableModel, SortFilterTableModel
-import six
+
 
 
 if is_qt5:
@@ -576,7 +575,7 @@ class TableEditor(Editor, BaseTableEditor):
     def _get_image(self, image):
         """ Converts a user specified image to a QIcon.
         """
-        if isinstance(image, six.string_types):
+        if isinstance(image, str):
             self.image = image
             image = self.image
 

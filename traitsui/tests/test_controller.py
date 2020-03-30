@@ -15,7 +15,6 @@
 Test cases for the Controller class.
 """
 
-from __future__ import absolute_import
 import nose
 
 from traits.api import HasTraits, Instance, Str

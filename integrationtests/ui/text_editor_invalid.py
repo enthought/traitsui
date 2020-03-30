@@ -7,7 +7,6 @@
 #
 #   background color should be set at initialization.
 
-from __future__ import absolute_import
 from traits.api import Bool, HasTraits, Property, Str
 from traitsui.api import Item, View
 from traitsui.api import TextEditor

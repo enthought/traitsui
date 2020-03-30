@@ -17,7 +17,6 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import absolute_import, print_function
 
 from traits.api import HasTraits, Str, Regex, List, Instance
 from traitsui.api import TreeEditor, TreeNode, View, Item, VSplit, \

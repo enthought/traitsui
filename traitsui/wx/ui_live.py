@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from .helper import restore_window, save_window, TraitsUIScrolledPanel
@@ -343,6 +342,9 @@ class LiveWindow(BaseDialog):
         if self.is_modal:
             self.control.EndModal(rc)
 
+        self.control.Unbind(wx.EVT_CLOSE)
+        self.control.Unbind(wx.EVT_CHAR)
+
         ui.finish()
         self.ui = self.undo = self.redo = self.revert = self.control = None
 
@@ -369,6 +371,9 @@ class LiveWindow(BaseDialog):
     def _on_ok(self, event=None):
         """ Handles the user clicking the **OK** button.
         """
+        if self.ui is None or self.control is None:
+            return True
+
         if self.ui.handler.close(self.ui.info, True):
             self.control.Unbind(wx.EVT_ACTIVATE)
             self.close(wx.ID_OK)

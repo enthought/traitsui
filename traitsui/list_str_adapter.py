@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from traits.api import (
     Any,
@@ -35,7 +34,7 @@ from traits.api import (
     provides,
 )
 from .toolkit_traits import Color
-import six
+
 
 # -------------------------------------------------------------------------
 #  'IListStrAdapter' interface:
@@ -280,10 +279,10 @@ class ListStrAdapter(HasPrivateTraits):
         return self.can_edit
 
     def _get_drag(self):
-        return six.text_type(self.item)
+        return str(self.item)
 
     def _get_can_drop(self):
-        return isinstance(self.value, six.string_types)
+        return isinstance(self.value, str)
 
     def _get_dropped(self):
         return self.dropped
@@ -307,7 +306,7 @@ class ListStrAdapter(HasPrivateTraits):
         return self.item
 
     def _get_text(self):
-        return six.text_type(self.item)
+        return str(self.item)
 
     # -- Private Methods ------------------------------------------------------
 

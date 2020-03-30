@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from pyface.qt.QtGui import QFrame, QPainter, QPalette
 

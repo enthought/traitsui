@@ -4,7 +4,6 @@
 """
 A Traits UI editor that wraps a Qt calendar panel.
 """
-from __future__ import absolute_import, print_function
 
 from traits.api import HasTraits, Date, Tuple
 from traitsui.api import View, Item, DateRangeEditor, Group

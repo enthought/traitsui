@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 import wx.lib.mixins.listctrl as listmix
 
@@ -52,8 +51,7 @@ from pyface.image_resource import ImageResource
 from pyface.timer.api import do_later
 
 from .constants import is_mac, scrollbar_dx
-import six
-from six.moves import range
+
 
 try:
     from pyface.wx.drag_and_drop import PythonDropSource, PythonDropTarget
@@ -103,6 +101,40 @@ class wxListCtrl(wx.ListCtrl, TextEditMixin):
         # if the selected is editable, then we have to init the mixin
         if can_edit:
             TextEditMixin.__init__(self, edit_labels)
+
+    def make_editor(self, col_style=wx.LIST_FORMAT_LEFT):
+        # override implementation in base class due to issue with destroying
+        # editor
+
+        style = wx.TE_PROCESS_ENTER | wx.TE_PROCESS_TAB | wx.TE_RICH2
+        style |= {
+            wx.LIST_FORMAT_LEFT: wx.TE_LEFT,
+            wx.LIST_FORMAT_RIGHT: wx.TE_RIGHT,
+            wx.LIST_FORMAT_CENTRE: wx.TE_CENTRE,
+        }[col_style]
+
+        editor = wx.TextCtrl(self, -1, style=style)
+        editor.SetBackgroundColour(self.editorBgColour)
+        editor.SetForegroundColour(self.editorFgColour)
+        font = self.GetFont()
+        editor.SetFont(font)
+
+        self.curRow = 0
+        self.curCol = 0
+
+        editor.Hide()
+        # Base class does explicit Destroy call here.  Should not be needed.
+        # Excised code is as follows:
+        #   if hasattr(self, 'editor'):
+        #       self.editor.Destroy()
+        # Dropping the reference to the editor should result in the
+        # destruction of the underlying C++ widget just fine.
+
+        self.editor = editor
+
+        self.col_style = col_style
+        self.editor.Bind(wx.EVT_CHAR, self.OnChar)
+        self.editor.Bind(wx.EVT_KILL_FOCUS, self.CloseEditor)
 
     def SetVirtualData(self, row, col, text):
         # this method is called but the job is already done by
@@ -486,9 +518,9 @@ class TabularEditor(Editor):
             return
 
         if 0 <= (row - top) < pn:
-            control.EnsureVisible(top + pn - 2)
+            control.EnsureVisible(min(top + pn - 2, control.GetItemCount() - 1))
         elif row < top:
-            control.EnsureVisible(row + pn - 1)
+            control.EnsureVisible(min(row + pn - 1, control.GetItemCount() - 1))
         else:
             control.EnsureVisible(row)
 
@@ -719,7 +751,7 @@ class TabularEditor(Editor):
         """ Handles the user pressing a key in the list control.
         """
         key = event.GetKeyCode()
-        if key == wx.WXK_NEXT:
+        if key == wx.WXK_PAGEDOWN:
             self._append_new()
         elif key in (wx.WXK_BACK, wx.WXK_DELETE):
             self._delete_current()
@@ -1024,7 +1056,7 @@ class TabularEditor(Editor):
     def _get_image(self, image):
         """ Converts a user specified image to a wx.ListCtrl image index.
         """
-        if isinstance(image, six.string_types):
+        if isinstance(image, str):
             self.image = image
             image = self.image
 

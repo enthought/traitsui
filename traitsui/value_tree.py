@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 
 import inspect
 from operator import itemgetter
@@ -39,7 +38,7 @@ from traits.api import (
 from .tree_node import ObjectTreeNode, TreeNode, TreeNodeObject
 
 from .editors.tree_editor import TreeEditor
-import six
+
 
 
 class SingleValueTreeNodeObject(TreeNodeObject):
@@ -484,7 +483,7 @@ def basic_types():
         _basic_types = [
             (type(None), NoneNode),
             (str, StringNode),
-            (six.text_type, StringNode),
+            (str, StringNode),
             (bool, BoolNode),
             (int, IntNode),
             (float, FloatNode),

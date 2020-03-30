@@ -11,7 +11,6 @@ index of each point in the array, as well as a red flag if the point lies within
 
 #-- Imports --------------------------------------------------------------
 
-from __future__ import absolute_import
 from numpy import sqrt
 from numpy.random import random
 from traits.api import HasTraits, Property, Array

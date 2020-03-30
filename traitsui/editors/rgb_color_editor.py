@@ -21,7 +21,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from .color_editor import ToolkitEditorFactory as EditorFactory
 

@@ -49,12 +49,16 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 #  Imports:
 # =========================================================================
 
-from __future__ import absolute_import, print_function
+
+import re
+import logging
+
 
 import wx
-import re
-import string
-import six
+
+
+logger = logging.getLogger(__name__)
+
 
 # =========================================================================
 #  Constants:
@@ -160,20 +164,33 @@ class MakeMenu:
                         handler = self.indirect
                     else:
                         try:
+                            _locl = dict(self=self)
                             exec(
-                                "def handler(event,self=self.owner):\n %s\n"
-                                % handler
+                                "def handler(event, self=self.owner):\n %s\n"
+                                % handler,
+                                globals(),
+                                _locl,
                             )
-                        except:
+                            handler = _locl["handler"]
+                        except Exception:
+                            logger.exception(
+                                "Invalid menu handler {:r}".format(handler)
+                            )
                             handler = null_handler
                 else:
                     try:
+                        _locl = dict(self=self)
                         exec(
-                            "def handler(event,self=self.owner):\n%s\n"
+                            "def handler(event, self=self.owner):\n%s\n"
                             % (self.get_body(indented),),
                             globals(),
+                            _locl,
                         )
-                    except:
+                        handler = _locl["handler"]
+                    except Exception:
+                        logger.exception(
+                            "Invalid menu handler {:r}".format(handler)
+                        )
                         handler = null_handler
                 self.window.Bind(wx.EVT_MENU, handler, id=cur_id)
                 not_checked = checked = disabled = False
@@ -251,7 +268,7 @@ class MakeMenu:
     def get_id(self, name):
         """ Returns the ID associated with a specified name.
         """
-        if isinstance(name, six.string_types):
+        if isinstance(name, str):
             return self.names[name]
         return name
 

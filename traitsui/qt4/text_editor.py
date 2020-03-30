@@ -14,7 +14,6 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traits.api import TraitError
@@ -29,7 +28,7 @@ from .editor import Editor
 from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
 from .constants import OKColor
-import six
+
 
 
 class SimpleEditor(Editor):
@@ -144,7 +143,7 @@ class SimpleEditor(Editor):
         except AttributeError:
             value = self.control.toPlainText()
 
-        value = six.text_type(value)
+        value = str(value)
 
         try:
             value = self.evaluate(value)

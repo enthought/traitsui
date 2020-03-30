@@ -7,7 +7,6 @@ clicked, Traits UI will execute a method of your choice (a 'listener').
 In this example, the listener just increments a click counter.
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, Button, Int
 from traitsui.api import View
 

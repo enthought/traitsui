@@ -28,7 +28,6 @@ tree view.
 
 #-- Imports --------------------------------------------------------------
 
-from __future__ import absolute_import
 from os import getcwd
 
 from traits.api import (

@@ -20,7 +20,6 @@ wxPython user interface toolkit.
 """
 
 
-from __future__ import absolute_import
 import logging
 
 import wx
@@ -38,7 +37,7 @@ from .editor import EditorWithList
 
 from .helper import TraitsUIPanel
 from functools import reduce
-import six
+
 
 logger = logging.getLogger(__name__)
 
@@ -74,19 +73,22 @@ class SimpleEditor(EditorWithList):
         super(SimpleEditor, self).init(parent)
         self.set_tooltip()
 
+    def dispose(self):
+        self.control.Unbind(wx.EVT_CHOICE)
+
     def create_control(self, parent):
         """ Creates the initial editor control.
         """
         self.control = wx.Choice(
             parent, -1, wx.Point(0, 0), wx.Size(100, 20), []
         )
-        parent.Bind(wx.EVT_CHOICE, self.update_object, id=self.control.GetId())
+        self.control.Bind(wx.EVT_CHOICE, self.update_object)
 
     def list_updated(self, values):
         """ Handles updates to the list of legal checklist values.
         """
         sv = self.string_value
-        if (len(values) > 0) and isinstance(values[0], six.string_types):
+        if (len(values) > 0) and isinstance(values[0], str):
             values = [(x, sv(x, capitalize)) for x in values]
         self.values = valid_values = [x[0] for x in values]
         self.names = [x[1] for x in values]
@@ -107,7 +109,7 @@ class SimpleEditor(EditorWithList):
                         values,
                     )
         if modified:
-            if isinstance(self.value, six.string_types):
+            if isinstance(self.value, str):
                 cur_value = ",".join(cur_value)
             self.value = cur_value
 
@@ -140,7 +142,7 @@ class SimpleEditor(EditorWithList):
             self.control.SetSelection(
                 self.values.index(parse_value(self.value)[0])
             )
-        except:
+        except Exception:
             pass
 
 
@@ -231,7 +233,7 @@ class CustomEditor(SimpleEditor):
             cur_value.append(control.value)
         else:
             cur_value.remove(control.value)
-        if isinstance(self.value, six.string_types):
+        if isinstance(self.value, str):
             cur_value = ",".join(cur_value)
         self.value = cur_value
 

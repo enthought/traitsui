@@ -18,7 +18,6 @@
 """ Run the Traits UI demo.
 """
 
-from __future__ import absolute_import
 from traitsui.extras.demo import demo
 
 demo()

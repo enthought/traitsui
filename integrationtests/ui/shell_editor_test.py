@@ -11,7 +11,6 @@
 #
 #-------------------------------------------------------------------------
 
-from __future__ import absolute_import
 from traits.api import *
 from traitsui.api import *
 from traitsui.menu import *
