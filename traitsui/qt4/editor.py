@@ -325,7 +325,7 @@ class Editor(UIEditor):
         Parameters
         ----------
         direction : QtGui.QBoxLayout.Direction
-            Directionality of the group that contains this edito. Either
+            Directionality of the group that contains this editor. Either
             QtGui.QBoxLayout.LeftToRight or QtGui.QBoxLayout.TopToBottom
 
         resizable : bool

@@ -28,7 +28,6 @@ from traits.api import (
     Bool,
     Callable,
     Constant,
-    Either,
     Enum,
     Expression,
     Float,
@@ -37,6 +36,7 @@ from traits.api import (
     Int,
     Property,
     Str,
+    Union,
 )
 
 from traits.trait_base import user_name_for, xgetattr
@@ -77,13 +77,13 @@ class TableColumn(HasPrivateTraits):
     text_color = Color("black")
 
     #: Text font for this column:
-    text_font = Either(None, Font)
+    text_font = Union(None, Font)
 
     #: Cell background color for this column:
-    cell_color = Either(Color("white"), None)
+    cell_color = Union(Color("white"), None)
 
     #: Cell background color for non-editable columns:
-    read_only_cell_color = Either(Color(0xF4F3EE), None)
+    read_only_cell_color = Union(Color(0xF4F3EE), None)
 
     #: Cell graph color:
     graph_color = Color(0xDDD9CC)
