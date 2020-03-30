@@ -21,7 +21,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from colorsys import rgb_to_hls

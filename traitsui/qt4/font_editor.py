@@ -15,7 +15,6 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traitsui.editors.font_editor import (

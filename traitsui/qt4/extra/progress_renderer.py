@@ -14,7 +14,6 @@
 """ A renderer which displays a progress bar. """
 
 # System library imports
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 # ETS imports

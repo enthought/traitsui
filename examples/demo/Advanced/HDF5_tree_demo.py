@@ -6,7 +6,6 @@ In the demo, the path to the selected item is printed whenever the selection
 changes.  In order to run, a path to an existing HDF5 database must be given
 at the bottom of this file.
 """
-from __future__ import absolute_import, print_function
 
 from traits.api import HasTraits, Str, List, Instance
 from traitsui.api import TreeEditor, TreeNode, View, Item, Group

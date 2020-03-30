@@ -15,7 +15,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from pyface.qt import QtCore, QtGui, is_qt5
 from pyface.image_resource import ImageResource

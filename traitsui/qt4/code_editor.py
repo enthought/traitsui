@@ -15,7 +15,6 @@ interface toolkit, useful for tools such as debuggers.
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget

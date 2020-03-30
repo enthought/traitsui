@@ -17,7 +17,6 @@
 # Adding this statement for backwards compatibility (since editors.py was a
 # file prior to version 3.0.3).
 
-from __future__ import absolute_import
 
 try:
     from .api import ArrayEditor

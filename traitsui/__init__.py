@@ -15,7 +15,6 @@
 #
 # ------------------------------------------------------------------------------
 
-from __future__ import absolute_import
 
 try:
     from traitsui._version import full_version as __version__

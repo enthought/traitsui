@@ -19,7 +19,6 @@
     editors and text editor factories.
 """
 
-from __future__ import absolute_import
 import sys
 
 import wx

@@ -11,7 +11,6 @@
 #  Author: Corran Webster
 #  Date:   Aug 2017
 
-from __future__ import absolute_import
 from pyface.action.api import ActionController
 from traits.api import Any, Instance
 from traitsui.menu import Action

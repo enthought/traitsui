@@ -12,7 +12,6 @@ It also demonstrates how to add vertical space and a Label (plain text which is
 not editable.)
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, Bool, Int
 from traitsui.api import Item, Label, Group, View
 

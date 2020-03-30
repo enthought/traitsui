@@ -14,7 +14,6 @@
     editors and trait editor factories.
 """
 
-from __future__ import absolute_import
 import os.path
 
 from pyface.qt import QtCore, QtGui, is_qt5, qt_api

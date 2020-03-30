@@ -16,7 +16,6 @@
 # -------------------------------------------------------------------------
 
 # System library imports
-from __future__ import absolute_import
 import wx
 
 # Local imports

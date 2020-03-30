@@ -6,7 +6,6 @@ A simple demonstration of how to use the ImageEditor to add a graphic element
 to a Traits UI View.
 """
 
-from __future__ import absolute_import
 import traits
 
 # Imports:

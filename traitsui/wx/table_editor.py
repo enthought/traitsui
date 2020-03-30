@@ -18,7 +18,6 @@
 """ Defines the table editor for the wxPython user interface toolkit.
 """
 
-from __future__ import absolute_import
 
 from operator import itemgetter
 

@@ -13,7 +13,6 @@
 """ Defines the various editors and the editor factory for single-selection
     enumerations, for the PyQt user interface toolkit.
 """
-from __future__ import absolute_import
 
 from functools import reduce
 

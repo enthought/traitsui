@@ -4,7 +4,6 @@
 # default_trait_editors.py -- Example of using default trait editors
 
 #--[Imports]--------------------------------------------------------------
-from __future__ import absolute_import
 from traits.api import HasTraits, Str, Range, Bool
 from traitsui.api import View, Item
 

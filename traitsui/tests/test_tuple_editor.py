@@ -16,7 +16,6 @@
 Test cases for the TupleEditor object.
 """
 
-from __future__ import absolute_import
 import unittest
 
 from traits.api import Float, HasStrictTraits, Str, Tuple

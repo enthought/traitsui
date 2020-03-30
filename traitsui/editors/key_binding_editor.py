@@ -20,7 +20,6 @@ key binding editor).
 """
 
 
-from __future__ import absolute_import
 
 # FIXME: Import from the api.py file when it has been added.
 from ..basic_editor_factory import BasicEditorFactory

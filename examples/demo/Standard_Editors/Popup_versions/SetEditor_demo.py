@@ -9,7 +9,6 @@ The four tabs of this demo show variations on the interface as follows:
    Ord II:   Creates a set whose order is specifed by the user, has "move all"
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, List
 from traitsui.api import Item, Group, View, SetEditor
 

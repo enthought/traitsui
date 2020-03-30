@@ -20,7 +20,6 @@
     UI application.
 """
 
-from __future__ import absolute_import
 
 # ETS imports
 from pyface.api import FileDialog, confirm, error, YES, CANCEL

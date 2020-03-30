@@ -14,7 +14,6 @@ This demo illustrates use of TreeNodeRenderers for displaying more complex
 contents inside the cells of a TreeEditor.
 """
 
-from __future__ import (
     absolute_import, division, print_function, unicode_literals
 )
 

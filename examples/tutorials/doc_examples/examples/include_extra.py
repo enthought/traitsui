@@ -3,7 +3,6 @@
 
 # include_extra.py --- Example of Include object
 #                      provided for subclasses
-from __future__ import absolute_import
 from traits.api import HasTraits, Int, Str
 from traitsui.api import Group, Include, View
 

@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 from traits.api import HasTraits, Instance, Str
 from traitsui.item import Item
 from traitsui.view import View

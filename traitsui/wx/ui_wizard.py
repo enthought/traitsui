@@ -22,7 +22,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 import wx.adv as wz
 

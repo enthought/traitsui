@@ -15,7 +15,6 @@ PyQt user interface toolkit.
 """
 
 
-from __future__ import absolute_import
 from math import log10
 
 from pyface.qt import QtCore, QtGui

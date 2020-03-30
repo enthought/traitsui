@@ -7,7 +7,6 @@ Fixme: This version of the demo only shows the old-style InstanceEditor
 capabilities.
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, Str, Range, Bool, Trait
 from traitsui.api import Item, Group, View
 

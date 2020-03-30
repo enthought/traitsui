@@ -12,7 +12,6 @@ The *Start Threads* button is disabled while the threads are running, and
 becomes active again once all threads have finished running.
 """
 
-from __future__ import absolute_import
 from threading import Thread
 from time import sleep
 from traits.api import HasTraits, Int, Button

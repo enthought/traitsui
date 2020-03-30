@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 from pyface.image.image import *
 
 from warnings import warn

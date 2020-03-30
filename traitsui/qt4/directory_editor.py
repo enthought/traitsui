@@ -11,7 +11,6 @@
 """ Defines various directory editor for the PyQt user interface toolkit.
 """
 
-from __future__ import absolute_import
 from pyface.qt import QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward

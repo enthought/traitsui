@@ -11,7 +11,6 @@
 #  Date:   Aug 2017
 #
 
-from __future__ import absolute_import
 from unittest import TestCase
 
 from pyface.action.api import ActionEvent

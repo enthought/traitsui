@@ -17,7 +17,6 @@
 """ Table column object for RGBColor traits.
 """
 
-from __future__ import absolute_import
 from traitsui.table_column import ObjectColumn
 
 

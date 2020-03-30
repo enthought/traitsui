@@ -13,7 +13,6 @@
 """ Defines the various color editors for the PyQt user interface toolkit.
 """
 
-from __future__ import absolute_import, division
 
 
 from pyface.qt import QtCore, QtGui

@@ -19,7 +19,6 @@ As an extra <i>feature</i>, the <b>TabularEditor</b> also displays a:
  - Blue ball if the file size > 16KB.
 """
 
-from __future__ import absolute_import
 from time \
     import localtime, strftime
 

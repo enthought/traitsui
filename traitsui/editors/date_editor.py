@@ -18,7 +18,6 @@
 """ A Traits UI editor that wraps a WX calendar panel.
 """
 
-from __future__ import absolute_import
 
 from traits.trait_types import Bool, Instance, Int, Enum, Str
 from ..ui_traits import AView

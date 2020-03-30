@@ -3,7 +3,6 @@
 
 # view_attributes.py --- Example of a view as an
 #                        attribute of a class
-from __future__ import absolute_import
 from traits.api import HasTraits, Int, Str, Trait
 from traitsui.api import View
 
