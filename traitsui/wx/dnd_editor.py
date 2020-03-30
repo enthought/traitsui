@@ -27,7 +27,7 @@ from __future__ import absolute_import
 import wx
 import numpy
 
-from six.moves.cPickle import load
+from pickle import load
 
 from traits.api import Bool
 
