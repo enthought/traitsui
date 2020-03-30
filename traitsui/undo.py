@@ -72,11 +72,14 @@ class UndoItem(AbstractUndoItem):
     # -------------------------------------------------------------------------
 
     #: Object the change occurred on
-    object = Trait(HasTraits)
+    object = Instance(HasTraits)
+
     #: Name of the trait that changed
     name = Str
+
     #: Old value of the changed trait
     old_value = Property
+
     #: New value of the changed trait
     new_value = Property
 
@@ -208,13 +211,17 @@ class ListUndoItem(AbstractUndoItem):
     # -------------------------------------------------------------------------
 
     #: Object that the change occurred on
-    object = Trait(HasTraits)
+    object = Instance(HasTraits)
+
     #: Name of the trait that changed
     name = Str
+
     #: Starting index
     index = Int
+
     #: Items added to the list
     added = List
+
     #: Items removed from the list
     removed = List
 

@@ -21,7 +21,7 @@
 
 
 from pyface.ui_traits import Image
-from traits.api import Str, Range, Enum, Property, Trait
+from traits.api import Str, Range, Enum, Property, Union
 
 from ..editor_factory import EditorFactory
 from ..ui_traits import AView
@@ -54,7 +54,7 @@ class ToolkitEditorFactory(EditorFactory):
     # values.  If this is set, then the value, label, and label_value traits
     # are ignored; instead, they will be set from this list.  When this button
     # is clicked, the value set will be the one selected from the drop-down.
-    values_trait = Trait(None, None, Str)
+    values_trait = Union(None, Str)
 
     # (Optional) Image to display on the button
     image = Image

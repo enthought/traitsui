@@ -25,20 +25,18 @@
 import wx
 import wx.adv as wz
 
+from traits.api import Str, Union
+
 from .constants import DefaultTitle
-
 from .helper import restore_window, save_window, GroupEditor
-
 from .ui_panel import fill_panel_for_group
-
-from traits.api import Trait, Str
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
 # -------------------------------------------------------------------------
 
 # Trait that allows only None or a string value
-none_str_trait = Trait("", None, str)
+none_str_trait = Union(None, Str, default="")
 
 
 def ui_wizard(ui, parent):

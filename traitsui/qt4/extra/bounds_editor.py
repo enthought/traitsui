@@ -1,6 +1,7 @@
 from pyface.qt import QtGui, QtCore
 
-from traits.api import Float, Any, Str, Trait
+from traits.api import Float, Any, Str, Union
+
 from traitsui.editors.api import RangeEditor
 from traitsui.qt4.editor import Editor
 from traitsui.qt4.extra.range_slider import RangeSlider
@@ -185,8 +186,8 @@ class _BoundsEditor(Editor):
 
 class BoundsEditor(RangeEditor):
 
-    min = Trait(None, Float)
-    max = Trait(None, Float)
+    min = Union(None, Float)
+    max = Union(None, Float)
 
     def _get_simple_editor_class(self):
         return _BoundsEditor
