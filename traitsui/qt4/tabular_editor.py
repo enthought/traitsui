@@ -356,7 +356,7 @@ class TabularEditor(Editor):
     def _get_image(self, image):
         """ Converts a user specified image to a QIcon.
         """
-        if isinstance(image, six.string_types):
+        if isinstance(image, str):
             self.image = image
             image = self.image
 

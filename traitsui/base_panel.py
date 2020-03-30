@@ -55,14 +55,14 @@ class BasePanel(ActionController):
     def is_button(self, action, name):
         """ Returns whether a specified action button is a system button.
         """
-        if isinstance(action, six.string_types):
+        if isinstance(action, str):
             return action == name
         return action.name == name
 
     def coerce_button(self, action):
         """ Coerces a string to an Action if necessary.
         """
-        if isinstance(action, six.string_types):
+        if isinstance(action, str):
             return Action(
                 name=action, action="" if action in SystemButtons else "?"
             )

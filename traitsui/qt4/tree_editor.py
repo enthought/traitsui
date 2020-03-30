@@ -204,7 +204,7 @@ class SimpleEditor(Editor):
         """
         try:
             tree = self._tree
-            if not isinstance(selection, six.string_types) and isinstance(
+            if not isinstance(selection, str) and isinstance(
                 selection, collections.Iterable
             ):
 
@@ -521,7 +521,7 @@ class SimpleEditor(Editor):
             return QtGui.QIcon()
 
         icon_name = node.get_icon(object, is_expanded)
-        if isinstance(icon_name, six.string_types):
+        if isinstance(icon_name, str):
             if icon_name.startswith("@"):
                 image_resource = convert_image(icon_name, 4)
                 return image_resource.create_icon()
@@ -530,7 +530,7 @@ class SimpleEditor(Editor):
                 return self._tree.style().standardIcon(icon)
 
             path = node.get_icon_path(object)
-            if isinstance(path, six.string_types):
+            if isinstance(path, str):
                 path = [path, node]
             else:
                 path = path + [node]

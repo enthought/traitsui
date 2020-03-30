@@ -77,7 +77,7 @@ class SimpleEditor(EditorWithList):
         """ Handles updates to the list of legal checklist values.
         """
         sv = self.string_value
-        if (len(values) > 0) and isinstance(values[0], six.string_types):
+        if (len(values) > 0) and isinstance(values[0], str):
             values = [(x, sv(x, capitalize)) for x in values]
         self.values = valid_values = [x[0] for x in values]
         self.names = [x[1] for x in values]
@@ -98,7 +98,7 @@ class SimpleEditor(EditorWithList):
                         values,
                     )
         if modified:
-            if isinstance(self.value, six.string_types):
+            if isinstance(self.value, str):
                 cur_value = ",".join(cur_value)
             self.value = cur_value
 
@@ -117,7 +117,7 @@ class SimpleEditor(EditorWithList):
         """ Handles the user selecting a new value from the combo box.
         """
         value = self.values[index]
-        if not isinstance(self.value, six.string_types):
+        if not isinstance(self.value, str):
             value = [value]
         self.value = value
 
@@ -200,7 +200,7 @@ class CustomEditor(SimpleEditor):
         elif cb.value in cur_value:
             cur_value.remove(cb.value)
 
-        if isinstance(self.value, six.string_types):
+        if isinstance(self.value, str):
             cur_value = ",".join(cur_value)
 
         self.value = cur_value
@@ -245,6 +245,6 @@ def parse_value(value):
     """
     if value is None:
         return []
-    if not isinstance(value, six.string_types):
+    if not isinstance(value, str):
         return value[:]
     return [x.strip() for x in value.split(",")]

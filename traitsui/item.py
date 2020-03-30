@@ -271,7 +271,7 @@ class Item(ViewSubElement):
         if value is None:
             return
 
-        if not isinstance(value, six.string_types):
+        if not isinstance(value, str):
             raise TypeError(
                 "The argument to Item must be a string of the "
                 "form: [id:][object.[object.]*][name]['['label']']`tooltip`"
@@ -356,7 +356,7 @@ class Item(ViewSubElement):
         if tlabel is None:
             return label
 
-        if isinstance(tlabel, six.string_types):
+        if isinstance(tlabel, str):
             if tlabel[0:3] == "...":
                 return label + tlabel[3:]
             if tlabel[-3:] == "...":

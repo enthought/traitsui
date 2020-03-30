@@ -181,7 +181,7 @@ class ToolkitEditorFactory(EditorFactory):
             self.high_label = six.text_type(high)
 
     def _cast(self, value):
-        if not isinstance(value, six.string_types):
+        if not isinstance(value, str):
             return value
 
         try:

@@ -283,7 +283,7 @@ class ListStrAdapter(HasPrivateTraits):
         return six.text_type(self.item)
 
     def _get_can_drop(self):
-        return isinstance(self.value, six.string_types)
+        return isinstance(self.value, str)
 
     def _get_dropped(self):
         return self.dropped

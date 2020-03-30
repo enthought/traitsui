@@ -269,7 +269,7 @@ class MakeMenu:
     def get_id(self, name):
         """ Returns the ID associated with a specified name.
         """
-        if isinstance(name, six.string_types):
+        if isinstance(name, str):
             return self.names[name]
         return name
 

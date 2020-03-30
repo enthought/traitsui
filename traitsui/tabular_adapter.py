@@ -594,7 +594,7 @@ class TabularAdapter(HasPrivateTraits):
     def _get_column_dict(self):
         cols = {}
         for i, value in enumerate(self.columns):
-            if isinstance(value, six.string_types):
+            if isinstance(value, str):
                 cols.update({value: value})
             else:
                 cols.update({value[0]: value[1]})
@@ -604,7 +604,7 @@ class TabularAdapter(HasPrivateTraits):
     def _get_column_map(self):
         map = []
         for i, value in enumerate(self.columns):
-            if isinstance(value, six.string_types):
+            if isinstance(value, str):
                 map.append(i)
             else:
                 map.append(value[1])
@@ -628,7 +628,7 @@ class TabularAdapter(HasPrivateTraits):
     def _get_label_map(self):
         map = []
         for i, value in enumerate(self.columns):
-            if isinstance(value, six.string_types):
+            if isinstance(value, str):
                 map.append(value)
             else:
                 map.append(value[0])
@@ -642,7 +642,7 @@ class TabularAdapter(HasPrivateTraits):
         for adapter in self.adapters:
             indices = []
             for label in adapter.columns:
-                if not isinstance(label, six.string_types):
+                if not isinstance(label, str):
                     label = label[0]
 
                 indices.append(labels.index(label))
@@ -657,7 +657,7 @@ class TabularAdapter(HasPrivateTraits):
             mapping = {}
             for label in adapter.columns:
                 id = None
-                if not isinstance(label, six.string_types):
+                if not isinstance(label, str):
                     label, id = label
 
                 key = labels.index(label)

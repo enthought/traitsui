@@ -360,7 +360,7 @@ class View(ViewElement):
             elif type(value) in SequenceTypes:
                 content.append(Group(*value))
             elif (
-                isinstance(value, six.string_types)
+                isinstance(value, str)
                 and (value[:1] == "<")
                 and (value[-1:] == ">")
             ):

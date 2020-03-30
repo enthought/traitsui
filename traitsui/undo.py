@@ -132,7 +132,7 @@ class UndoItem(AbstractUndoItem):
             t1 = type(v1)
             if isinstance(v2, t1):
 
-                if isinstance(t1, six.string_types):
+                if isinstance(t1, str):
                     # Merge two undo items if they have new values which are
                     # strings which only differ by one character (corresponding
                     # to a single character insertion, deletion or replacement
