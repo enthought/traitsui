@@ -53,7 +53,6 @@ from pyface.timer.api import do_later
 
 from .constants import is_mac, scrollbar_dx
 import six
-from six.moves import range
 
 try:
     from pyface.wx.drag_and_drop import PythonDropSource, PythonDropTarget

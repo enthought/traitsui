@@ -18,7 +18,6 @@ from __future__ import absolute_import
 from functools import reduce
 
 import six
-from six.moves import range
 
 from pyface.qt import QtCore, QtGui
 
