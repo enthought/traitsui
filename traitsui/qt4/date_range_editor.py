@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 
 import datetime
 
@@ -8,8 +7,7 @@ from pyface.qt.QtGui import QFont
 from traits.api import Dict
 
 from .date_editor import CustomEditor as DateCustomEditor
-import six
-from six.moves import map
+
 
 
 class CustomEditor(DateCustomEditor):

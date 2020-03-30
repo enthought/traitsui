@@ -97,7 +97,6 @@ feels stand out about this approach are:
 
 """
 
-from __future__ import absolute_import
 from random import randint, choice, shuffle
 from traits.api import HasTraits, Str, Int, List, Instance, Property, \
     Constant

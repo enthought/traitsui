@@ -20,14 +20,13 @@
 """
 
 
-from __future__ import absolute_import
 
 from operator import itemgetter
 
 from traits.api import BaseTraitHandler, CTrait, Enum, TraitError
 
 from .ui_traits import SequenceTypes
-import six
+
 
 
 # -------------------------------------------------------------------------
@@ -69,7 +68,7 @@ def commatize(value):
     return "-" + result
 
 
-def enum_values_changed(values, strfunc=six.text_type):
+def enum_values_changed(values, strfunc=str):
     """ Recomputes the mappings for a new set of enumeration values.
     """
 

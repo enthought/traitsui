@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from .helper import restore_window, save_window, TraitsUIScrolledPanel

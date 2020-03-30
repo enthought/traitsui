@@ -20,7 +20,6 @@
 """
 
 # Make sure that importimg from this backend is OK:
-from __future__ import absolute_import
 import logging
 
 from traitsui.toolkit import assert_toolkit_import

@@ -15,7 +15,6 @@ target editor handles drag and drop operations as a drop target.
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtGui, QtCore
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward

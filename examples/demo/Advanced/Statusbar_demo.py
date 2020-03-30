@@ -18,7 +18,6 @@ Note the use of a timer thread to update the status bar once per second.
 
 """
 
-from __future__ import absolute_import
 from time import sleep, strftime
 from threading import Thread
 from traits.api import HasPrivateTraits, Str, Property

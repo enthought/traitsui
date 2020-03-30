@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import, print_function
 
 import datetime
 
@@ -30,7 +29,7 @@ from .editor import Editor
 from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 from traitsui.editors.date_editor import CellFormat
 
-import six
+
 
 
 class SimpleEditor(Editor):
@@ -248,7 +247,7 @@ def _textformat_to_cellformat(textformat):
 def _color_to_brush(color):
     """ Returns a QBrush with the color specified in **color** """
     brush = QtGui.QBrush()
-    if isinstance(color, six.string_types) and hasattr(QtCore.Qt, color):
+    if isinstance(color, str) and hasattr(QtCore.Qt, color):
         col = getattr(QtCore.Qt, color)
     elif isinstance(color, tuple):
         col = QtGui.QColor()

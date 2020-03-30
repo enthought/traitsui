@@ -4,7 +4,6 @@
 """ Demonstrates how to use the Dynamic Views facility.
 """
 
-from __future__ import absolute_import
 
 from traits.api import Bool, HasTraits, Str, Instance, Button
 

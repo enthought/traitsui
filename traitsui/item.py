@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 
 import re
 
@@ -43,10 +42,8 @@ from .view_element import ViewSubElement
 
 from .ui_traits import ContainerDelegate, EditorStyle
 
-from .util import str_find, str_rfind
-
 from .editor_factory import EditorFactory
-import six
+
 
 
 # Pattern of all digits:
@@ -271,7 +268,7 @@ class Item(ViewSubElement):
         if value is None:
             return
 
-        if not isinstance(value, six.string_types):
+        if not isinstance(value, str):
             raise TypeError(
                 "The argument to Item must be a string of the "
                 "form: [id:][object.[object.]*][name]['['label']']`tooltip`"
@@ -287,8 +284,8 @@ class Item(ViewSubElement):
         value = self._parse_tooltip(value)
         value = self._option(value, "#", "resizable", True)
         value = self._option(value, "^", "emphasized", True)
-        value = self._split("id", value, ":", str_find, 0, 1)
-        value = self._split("object", value, ".", str_rfind, 0, 1)
+        value = self._split("id", value, ":", str.find, 0, 1)
+        value = self._split("object", value, ".", str.rfind, 0, 1)
 
         if value != "":
             self.name = value
@@ -356,7 +353,7 @@ class Item(ViewSubElement):
         if tlabel is None:
             return label
 
-        if isinstance(tlabel, six.string_types):
+        if isinstance(tlabel, str):
             if tlabel[0:3] == "...":
                 return label + tlabel[3:]
             if tlabel[-3:] == "...":

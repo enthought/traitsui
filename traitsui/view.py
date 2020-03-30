@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from pyface.ui_traits import Image
 from traits.api import (
@@ -61,7 +60,7 @@ from .group import Group
 from .item import Item
 
 from .include import Include
-import six
+
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
@@ -360,7 +359,7 @@ class View(ViewElement):
             elif type(value) in SequenceTypes:
                 content.append(Group(*value))
             elif (
-                isinstance(value, six.string_types)
+                isinstance(value, str)
                 and (value[:1] == "<")
                 and (value[-1:] == ">")
             ):

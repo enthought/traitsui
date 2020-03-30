@@ -19,7 +19,6 @@ Test case for bug (wx, Mac OS X)
 A RangeEditor in mode 'text' for an Int allows values out of range.
 """
 
-from __future__ import absolute_import, print_function
 
 from traits.has_traits import HasTraits
 from traits.trait_types import Float, Int

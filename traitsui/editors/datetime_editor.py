@@ -18,7 +18,6 @@
 """ A Traits UI editor
 """
 
-from __future__ import absolute_import
 import datetime
 
 from traits.api import Instance, Str

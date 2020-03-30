@@ -14,7 +14,6 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -27,7 +26,7 @@ from traitsui.helper import enum_values_changed
 from .editor import Editor
 
 from traits.api import Instance, Property
-import six
+
 
 
 class SimpleEditor(Editor):
@@ -453,7 +452,7 @@ class SimpleEditor(Editor):
     def _get_selected_strings(self, listbox):
         """ Returns a list of the selected strings in the given *listbox*.
         """
-        return [six.text_type(itm.text()) for itm in listbox.selectedItems()]
+        return [str(itm.text()) for itm in listbox.selectedItems()]
 
     # -------------------------------------------------------------------------
     # Returns the index of the first (or only) selected item.

@@ -14,7 +14,6 @@
 """ Test the storing/restoration of split group state.
 """
 
-from __future__ import absolute_import
 import nose
 
 from traits.api import Int

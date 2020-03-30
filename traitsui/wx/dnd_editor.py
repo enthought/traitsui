@@ -23,11 +23,10 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 import numpy
 
-from six.moves.cPickle import load
+from pickle import load
 
 from traits.api import Bool
 
@@ -41,7 +40,7 @@ from pyface.wx.drag_and_drop import (
     PythonDropTarget,
     clipboard,
 )
-import six
+
 
 try:
     from apptools.io import File
@@ -68,7 +67,7 @@ object_image = ImageResource("object").create_image()
 inactive_image = ImageResource("inactive").create_image()
 
 # String types:
-string_type = (str, six.text_type)
+string_type = (str, str)
 
 # -------------------------------------------------------------------------
 #  'SimpleEditor' class:

@@ -20,11 +20,10 @@
 """
 
 
-from __future__ import absolute_import, print_function
 
 import logging
 
-import six
+
 
 from traits.api import (
     HasPrivateTraits,
@@ -218,7 +217,7 @@ class EditorFactory(HasPrivateTraits):
         if format_func is not None:
             return format_func(value)
 
-        return six.text_type(value)
+        return str(value)
 
     # -------------------------------------------------------------------------
     #  Property getters

@@ -5,7 +5,6 @@ For each of three data types for which TextEditor is used, this demo shows
 each of the four styles of the TextEditor.
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, Str, Int, Password
 from traitsui.api import Item, Group, View
 

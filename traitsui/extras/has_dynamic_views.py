@@ -83,7 +83,6 @@ _<dynamic_name>_handler : A HasTraits instance.
 
 """
 
-from __future__ import absolute_import
 
 from traits.api import Any, Bool, Dict, HasTraits, Instance, Str
 

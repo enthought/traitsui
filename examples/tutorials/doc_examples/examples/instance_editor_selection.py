@@ -6,7 +6,6 @@
 
 #--[Imports]--------------------------------------------------------------
 
-from __future__ import absolute_import
 from traits.api    \
     import HasStrictTraits, Int, Instance, List, Regex, Str
 from traitsui.api \

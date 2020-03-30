@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 import wx.lib.mixins.listctrl as listmix
 
@@ -52,8 +51,7 @@ from pyface.image_resource import ImageResource
 from pyface.timer.api import do_later
 
 from .constants import is_mac, scrollbar_dx
-import six
-from six.moves import range
+
 
 try:
     from pyface.wx.drag_and_drop import PythonDropSource, PythonDropTarget
@@ -1058,7 +1056,7 @@ class TabularEditor(Editor):
     def _get_image(self, image):
         """ Converts a user specified image to a wx.ListCtrl image index.
         """
-        if isinstance(image, six.string_types):
+        if isinstance(image, str):
             self.image = image
             image = self.image
 

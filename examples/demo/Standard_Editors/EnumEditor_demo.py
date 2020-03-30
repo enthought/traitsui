@@ -22,7 +22,6 @@ An Enum can be displayed / edited in one of five styles:
 """
 
 # Imports:
-from __future__ import absolute_import
 from traits.api import HasTraits, Enum
 
 from traitsui.api import Item, Group, View, EnumEditor

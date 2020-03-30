@@ -18,11 +18,10 @@
 """
 
 
-from __future__ import absolute_import
 
 from types import CodeType
 
-import six
+
 
 from traits.api import (
     CTrait,
@@ -162,9 +161,9 @@ class ToolkitEditorFactory(EditorFactory):
             self.is_float = isinstance(low, float)
 
         if (self.low_label == "") or (
-            self.low_label == six.text_type(old_low)
+            self.low_label == str(old_low)
         ):
-            self.low_label = six.text_type(low)
+            self.low_label = str(low)
 
     def _get_high(self):
         return self._high
@@ -176,12 +175,12 @@ class ToolkitEditorFactory(EditorFactory):
             self.is_float = isinstance(high, float)
 
         if (self.high_label == "") or (
-            self.high_label == six.text_type(old_high)
+            self.high_label == str(old_high)
         ):
-            self.high_label = six.text_type(high)
+            self.high_label = str(high)
 
     def _cast(self, value):
-        if not isinstance(value, six.string_types):
+        if not isinstance(value, str):
             return value
 
         try:

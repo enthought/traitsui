@@ -18,7 +18,6 @@ We do *not* demonstrate two styles which are not as useful for this editor:
     drop-down widget.
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, List
 from traitsui.api import UItem, Group, View, CheckListEditor, Label
 

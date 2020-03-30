@@ -20,7 +20,6 @@ wxPython user interface toolkit.
 """
 
 
-from __future__ import absolute_import
 import logging
 
 import wx
@@ -38,7 +37,7 @@ from .editor import EditorWithList
 
 from .helper import TraitsUIPanel
 from functools import reduce
-import six
+
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +88,7 @@ class SimpleEditor(EditorWithList):
         """ Handles updates to the list of legal checklist values.
         """
         sv = self.string_value
-        if (len(values) > 0) and isinstance(values[0], six.string_types):
+        if (len(values) > 0) and isinstance(values[0], str):
             values = [(x, sv(x, capitalize)) for x in values]
         self.values = valid_values = [x[0] for x in values]
         self.names = [x[1] for x in values]
@@ -110,7 +109,7 @@ class SimpleEditor(EditorWithList):
                         values,
                     )
         if modified:
-            if isinstance(self.value, six.string_types):
+            if isinstance(self.value, str):
                 cur_value = ",".join(cur_value)
             self.value = cur_value
 
@@ -234,7 +233,7 @@ class CustomEditor(SimpleEditor):
             cur_value.append(control.value)
         else:
             cur_value.remove(control.value)
-        if isinstance(self.value, six.string_types):
+        if isinstance(self.value, str):
             cur_value = ",".join(cur_value)
         self.value = cur_value
 

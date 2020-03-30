@@ -18,7 +18,6 @@
 """
 
 
-from __future__ import absolute_import
 import webbrowser
 
 from pyface.qt import QtCore, QtGui, QtWebKit

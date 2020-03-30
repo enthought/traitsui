@@ -7,7 +7,6 @@
 
 #--[Imports]--------------------------------------------------------------
 
-from __future__ import absolute_import
 from pandas import DataFrame
 from traits.api import HasTraits, Instance
 from traitsui.api import View, Item
@@ -21,33 +20,33 @@ import numpy as np
 #------ DataFrameEditorDemo Class Definition---------------------------------
 
 
-class DataFrameEditorDemo(HasTraits): 
+class DataFrameEditorDemo(HasTraits):
 
     df = Instance(DataFrame)
 
     view = View(
-    
-                Item('df', 
+
+                Item('df',
                     show_label=False,
                     editor=DataFrameEditor(formats={
-                    
+
                             'RuntimeInMinutes':'%.4d',
                             'BudgetInMillions':'%d',
                             'BoxOfficeRevenueInMillions':'%d',
                             'AcademyAwardNominations':'%d',
                             'AcademyAwardWins':'%d',
                             'RottenTomatoesScore':'%.2f'
-                            
+
                             })
 
                     ),
-                    
+
                     title="DataFrameEditor",
                     resizable=True,
                     id='traitsui.demo.Applications.data_frame_editor_demo'
-                
+
                 )
-    
+
 
 
 # Sample Data
@@ -70,7 +69,7 @@ col_names = [
             'AcademyAwardWins',
             'RottenTomatoesScore'
             ]
-            
+
 index_names =  [
                 'The Lord of the Rings Series',
                 'The Fellowship of the Ring',
@@ -81,8 +80,8 @@ index_names =  [
                 'The Desolation of Smaug',
                 'The Battle of the Five Armies'
                 ]
-        
-# Create & run the demo       
+
+# Create & run the demo
 df = DataFrame(data=lotrMovieData, columns=col_names, index=index_names)
 
 demo = DataFrameEditorDemo(df=df)
@@ -91,6 +90,6 @@ demo = DataFrameEditorDemo(df=df)
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-    
-    
-    
+
+
+

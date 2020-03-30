@@ -2,7 +2,6 @@
 #  License: BSD Style.
 
 # wizard.py ---Example of a traits-based wizard UI
-from __future__ import absolute_import
 
 from traits.api import HasTraits, Str
 from traitsui.api import Item, View, VGroup

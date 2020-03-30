@@ -18,7 +18,6 @@ parameter True.
 
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, HTML
 from traitsui.api import UItem, View, HTMLEditor
 

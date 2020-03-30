@@ -46,9 +46,6 @@ Notes:
 
 """
 
-from __future__ import absolute_import, unicode_literals
-
-import six
 
 from traits.api import Enum, HasPrivateTraits, List, Constant
 
@@ -99,7 +96,7 @@ class OrderMenu(HasPrivateTraits):
                 Item('entree',
                      editor=EnumEditor(
                          name='object.capabilities.available',
-                         evaluate=six.text_type,
+                         evaluate=str,
                          completion_mode='popup',
                         )
                      ),

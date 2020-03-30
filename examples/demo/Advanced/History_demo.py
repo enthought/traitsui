@@ -23,7 +23,6 @@ value it had when the demo was run the previous time.
 
 #-- Imports --------------------------------------------------------------
 
-from __future__ import absolute_import
 from traits.api \
     import HasTraits, Str, File, Directory
 

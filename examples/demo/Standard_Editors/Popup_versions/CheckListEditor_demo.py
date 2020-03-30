@@ -5,7 +5,6 @@ For each of three CheckListEditor column formations, this demo shows
 each of the four styles of the CheckListEditor.
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, List
 from traitsui.api import Item, Group, View, CheckListEditor
 

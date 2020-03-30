@@ -5,7 +5,6 @@
 """
 
 # Imports:
-from __future__ import absolute_import
 from traitsui.wx.extra.windows.ie_html_editor \
     import IEHTMLEditor
 

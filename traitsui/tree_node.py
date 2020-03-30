@@ -20,9 +20,9 @@
 """
 
 
-from __future__ import absolute_import
 
-import six
+from itertools import zip_longest
+
 
 from traits.api import (
     Adapter,
@@ -319,7 +319,7 @@ class TreeNode(HasPrivateTraits):
         trait = self.column_labels
         labels = xgetattr(object, trait, [])
         formatted = []
-        for formatter, label in six.moves.zip_longest(
+        for formatter, label in zip_longest(
             self.column_formatters, labels
         ):
             # If the list of column formatters is shorter than the list of
@@ -417,13 +417,13 @@ class TreeNode(HasPrivateTraits):
 
     def get_background(self, object):
         background = self.background
-        if isinstance(background, six.string_types):
+        if isinstance(background, str):
             background = xgetattr(object, background, default=background)
         return background
 
     def get_foreground(self, object):
         foreground = self.foreground
-        if isinstance(foreground, six.string_types):
+        if isinstance(foreground, str):
             foreground = xgetattr(object, foreground, default=foreground)
         return foreground
 

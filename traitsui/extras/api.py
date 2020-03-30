@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from .checkbox_column import CheckboxColumn
 from .edit_column import EditColumn

@@ -6,7 +6,6 @@
 # configure_traits()
 
 #--[Imports]--------------------------------------------------------------
-from __future__ import absolute_import
 from traits.api import HasTraits, Str, Int
 from traitsui.api import View, Item, Group
 import traitsui

@@ -19,11 +19,10 @@
 """
 
 
-from __future__ import absolute_import
 import os
 import wx
 import copy
-import six
+
 
 try:
     from pyface.wx.drag_and_drop import PythonDropSource, PythonDropTarget
@@ -587,7 +586,7 @@ class SimpleEditor(Editor):
             return -1
 
         icon_name = node.get_icon(object, is_expanded)
-        if isinstance(icon_name, six.string_types):
+        if isinstance(icon_name, str):
             if icon_name.startswith("@"):
                 image = convert_image(icon_name, 3)
                 if image is None:
@@ -598,7 +597,7 @@ class SimpleEditor(Editor):
                     path = self
                 else:
                     path = node.get_icon_path(object)
-                    if isinstance(path, six.string_types):
+                    if isinstance(path, str):
                         path = [path, node]
                     else:
                         path.append(node)

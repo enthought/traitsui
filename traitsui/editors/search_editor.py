@@ -19,7 +19,6 @@
     search widgets.
 """
 
-from __future__ import absolute_import
 
 from traits.api import Bool, Property, Str
 from ..toolkit import toolkit_object

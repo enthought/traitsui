@@ -15,14 +15,13 @@
 #
 # ------------------------------------------------------------------------------
 
-from __future__ import absolute_import
 
 try:
     from traitsui._version import full_version as __version__
 except ImportError:
     __version__ = "not-built"
 
-__requires__ = ["traits", "pyface>=6.0.0", "six"]
+__requires__ = ["traits", "pyface>=6.0.0"]
 __extras_require__ = {
     "wx": ["wxpython>=4", "numpy"],
     "pyqt": ["pyqt>=4.10", "pygments"],

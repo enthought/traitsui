@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 import wx.html as wh
 import re

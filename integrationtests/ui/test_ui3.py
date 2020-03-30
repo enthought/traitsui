@@ -17,7 +17,6 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import Trait, HasTraits, Str, Int

@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import (
@@ -46,7 +45,6 @@ from traitsui.wx.editor import Editor
 from pyface.image_resource import ImageResource
 
 from .helper import disconnect, disconnect_no_id
-from six.moves import range
 
 try:
     from pyface.wx.drag_and_drop import PythonDropSource, PythonDropTarget

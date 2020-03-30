@@ -14,7 +14,6 @@
 """ Editor that displays an interactive Python shell.
 """
 
-from __future__ import absolute_import
 
 from traits.api import Bool, Str, Event, Property
 

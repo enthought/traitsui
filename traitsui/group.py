@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from traits.api import (
     Bool,
@@ -44,10 +43,8 @@ from .include import Include
 
 from .ui_traits import SequenceTypes, ContainerDelegate, Orientation, Layout
 
-from .util import str_find
-
 from .dock_window_theme import dock_window_theme, DockWindowTheme
-import six
+
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
@@ -203,7 +200,7 @@ class Group(ViewSubElement):
 
         # Process any embedded Group options first:
         for value in values:
-            if (isinstance(value, six.string_types)) and (value[0:1] in "-|"):
+            if (isinstance(value, str)) and (value[0:1] in "-|"):
                 # Parse Group trait options if specified as a string:
                 self._parse(value)
 
@@ -214,7 +211,7 @@ class Group(ViewSubElement):
             elif type(value) in SequenceTypes:
                 # Map (...) or [...] to a Group():
                 content.append(Group(*value))
-            elif isinstance(value, six.string_types):
+            elif isinstance(value, str):
                 if value[0:1] in "-|":
                     # We've already parsed Group trait options above:
                     pass
@@ -335,7 +332,7 @@ class Group(ViewSubElement):
         self.show_labels = show_labels
 
         # Parse all of the punctuation based sub-string options:
-        value = self._split("id", value, ":", str_find, 0, 1)
+        value = self._split("id", value, ":", str.find, 0, 1)
         if value != "":
             self.object = value
 

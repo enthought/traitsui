@@ -6,7 +6,6 @@
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 
-from __future__ import absolute_import
 
 import logging
 
@@ -29,7 +28,7 @@ from traitsui.toolkit import toolkit_object
 from traitsui.toolkit_traits import Font
 from traitsui.ui_editor import UIEditor
 from traitsui.view import View
-import six
+
 
 
 logger = logging.getLogger(__name__)
@@ -88,7 +87,7 @@ class DataFrameAdapter(TabularAdapter):
             return self._fonts.get(self.column_id, "Courier 10")
 
     def _get_format(self):
-        if isinstance(self._formats, six.string_types):
+        if isinstance(self._formats, str):
             return self._formats
         else:
             return self._formats.get(self.column_id, "%s")
@@ -257,7 +256,7 @@ class _DataFrameEditor(UIEditor):
         if factory.columns != []:
             columns = []
             for column in factory.columns:
-                if isinstance(column, six.string_types):
+                if isinstance(column, str):
                     title = column
                     column_id = column
                 else:
