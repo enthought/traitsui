@@ -9,7 +9,6 @@ from traits.api import Dict
 
 from .date_editor import CustomEditor as DateCustomEditor
 import six
-from six.moves import map
 
 
 class CustomEditor(DateCustomEditor):
