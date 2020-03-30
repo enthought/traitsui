@@ -44,8 +44,6 @@ from .include import Include
 
 from .ui_traits import SequenceTypes, ContainerDelegate, Orientation, Layout
 
-from .util import str_find
-
 from .dock_window_theme import dock_window_theme, DockWindowTheme
 import six
 
@@ -335,7 +333,7 @@ class Group(ViewSubElement):
         self.show_labels = show_labels
 
         # Parse all of the punctuation based sub-string options:
-        value = self._split("id", value, ":", str_find, 0, 1)
+        value = self._split("id", value, ":", str.find, 0, 1)
         if value != "":
             self.object = value
 
