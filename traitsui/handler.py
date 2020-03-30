@@ -24,11 +24,8 @@ from __future__ import absolute_import
 
 import six
 
-if six.PY2:
-    from inspect import getargspec
-else:
-    # avoid deprecation warning
-    from inspect import getfullargspec as getargspec
+# avoid deprecation warning
+from inspect import getfullargspec
 
 from traits.api import HasPrivateTraits, HasTraits, Instance
 
@@ -224,7 +221,7 @@ class Handler(HasPrivateTraits):
             method = getattr(object, method_name, None)
             if method is not None:
                 # call the action method
-                specification = getargspec(method)
+                specification = getfullargspec(method)
                 if len(specification.args) == 1:
                     method()
                 else:
@@ -233,7 +230,7 @@ class Handler(HasPrivateTraits):
                 return
 
         # otherwise, call the perform method of the action
-        specification = getargspec(action.perform)
+        specification = getfullargspec(action.perform)
         if len(specification.args) == 1:
             action.perform()
         else:
