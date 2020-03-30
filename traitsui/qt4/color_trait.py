@@ -93,6 +93,9 @@ def get_color_editor(*args, **traits):
 def PyQtColor(default="white", allow_none=False, **metadata):
     """ Defines PyQt-specific color traits.
     """
+    if default is None:
+        allow_none = True
+
     if allow_none:
         return Trait(
             default,

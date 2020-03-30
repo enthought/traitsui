@@ -80,10 +80,10 @@ class TableColumn(HasPrivateTraits):
     text_font = Union(None, Font)
 
     #: Cell background color for this column:
-    cell_color = Union(Color("white"), None)
+    cell_color = Color("white", allow_none=True)
 
     #: Cell background color for non-editable columns:
-    read_only_cell_color = Union(Color(0xF4F3EE), None)
+    read_only_cell_color = Color(0xF4F3EE, allow_none=True)
 
     #: Cell graph color:
     graph_color = Color(0xDDD9CC)
