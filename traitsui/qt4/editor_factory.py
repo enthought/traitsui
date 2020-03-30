@@ -96,7 +96,7 @@ class TextEditor(Editor):
         if self.control is None:
             return
         try:
-            self.value = six.text_type(self.control.text())
+            self.value = str(self.control.text())
         except TraitError as excp:
             pass
 

@@ -710,7 +710,7 @@ class Editor(HasPrivateTraits):
             or 3.
         """
         # In Unicode!
-        return six.text_type(value)
+        return str(value)
 
     # -- Traits property getters and setters --------------------------------
 

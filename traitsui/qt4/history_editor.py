@@ -51,7 +51,7 @@ class _HistoryEditor(Editor):
         if self.factory.auto_set:
             control.editTextChanged.connect(self.update_object)
         else:
-            control.activated[six.text_type].connect(self.update_object)
+            control.activated[str].connect(self.update_object)
 
         self.set_tooltip()
 
@@ -59,7 +59,7 @@ class _HistoryEditor(Editor):
         """ Handles the user entering input data in the edit control.
         """
         if not self._no_update:
-            self.value = six.text_type(text)
+            self.value = str(text)
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

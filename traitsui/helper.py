@@ -69,7 +69,7 @@ def commatize(value):
     return "-" + result
 
 
-def enum_values_changed(values, strfunc=six.text_type):
+def enum_values_changed(values, strfunc=str):
     """ Recomputes the mappings for a new set of enumeration values.
     """
 

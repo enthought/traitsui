@@ -264,7 +264,7 @@ class TabularModel(QtCore.QAbstractTableModel):
             for row in rows
         ]
         mime_data = PyMimeData.coerce(items)
-        data = QtCore.QByteArray(six.text_type(id(self)).encode("utf8"))
+        data = QtCore.QByteArray(str(id(self)).encode("utf8"))
         for row in rows:
             data.append((" %i" % row).encode("utf8"))
         mime_data.setData(tabular_mime_type, data)

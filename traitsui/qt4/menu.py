@@ -240,7 +240,7 @@ class MakeMenu:
         act = self.get_action(name)
 
         if label is None:
-            return six.text_type(act.text())
+            return str(act.text())
 
         act.setText(label)
 

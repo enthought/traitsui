@@ -146,7 +146,7 @@ class CustomEditor(SimpleEditor):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
-        self._mapper.mapped[six.text_type].connect(self.update_object)
+        self._mapper.mapped[str].connect(self.update_object)
 
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
@@ -225,7 +225,7 @@ class TextEditor(BaseTextEditor):
         """ Handles the user changing the contents of the edit control.
         """
         try:
-            value = six.text_type(self.control.text())
+            value = str(self.control.text())
             value = eval(value)
         except:
             pass

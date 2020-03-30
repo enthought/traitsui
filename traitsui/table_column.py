@@ -662,7 +662,7 @@ class ListColumn(TableColumn):
     def get_value(self, object):
         """ Gets the value of the column for a specified object.
         """
-        return six.text_type(object[self.index])
+        return str(object[self.index])
 
     def set_value(self, object, value):
         """ Sets the value of the column for a specified object.

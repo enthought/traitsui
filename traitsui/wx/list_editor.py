@@ -651,7 +651,7 @@ class NotebookEditor(Editor):
                     name = handler(self.ui.info, user_object)
 
                 if name is None:
-                    name = six.text_type(
+                    name = str(
                         xgetattr(
                             view_object, self.factory.page_name[1:], u"???"
                         )
@@ -692,7 +692,7 @@ class NotebookEditor(Editor):
                 if handler_name is not None:
                     name = handler_name
                 else:
-                    name = six.text_type(name) or u"???"
+                    name = str(name) or u"???"
                 view_object.on_trait_change(
                     self.update_page_name, page_name[1:], dispatch="ui"
                 )

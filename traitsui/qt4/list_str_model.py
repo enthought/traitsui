@@ -225,7 +225,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         """
         mime_data = QtCore.QMimeData()
         rows = list({index.row() for index in indexes})
-        data = QtCore.QByteArray(six.text_type(rows[0]).encode("utf8"))
+        data = QtCore.QByteArray(str(rows[0]).encode("utf8"))
         for row in rows[1:]:
             data.append((" %i" % row).encode("utf8"))
         mime_data.setData(mime_type, data)

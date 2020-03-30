@@ -41,7 +41,7 @@ from traits.api import (
 
 
 NumericTypes = six.integer_types + (float, complex)
-SimpleTypes = (six.text_type, bytes) + NumericTypes
+SimpleTypes = (str, bytes) + NumericTypes
 
 
 class AbstractUndoItem(HasPrivateTraits):

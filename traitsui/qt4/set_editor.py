@@ -453,7 +453,7 @@ class SimpleEditor(Editor):
     def _get_selected_strings(self, listbox):
         """ Returns a list of the selected strings in the given *listbox*.
         """
-        return [six.text_type(itm.text()) for itm in listbox.selectedItems()]
+        return [str(itm.text()) for itm in listbox.selectedItems()]
 
     # -------------------------------------------------------------------------
     # Returns the index of the first (or only) selected item.

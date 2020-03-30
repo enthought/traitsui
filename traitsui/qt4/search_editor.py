@@ -30,7 +30,7 @@ class SearchWidget(QtGui.QLineEdit):
         """ Store the descriptive text for the widget.
         """
         super(SearchWidget, self).__init__()
-        self._desc = six.text_type(desc)
+        self._desc = str(desc)
         self._set_descriptive_text()
 
     def focusInEvent(self, event):

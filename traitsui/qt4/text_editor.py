@@ -138,7 +138,7 @@ class SimpleEditor(Editor):
         except AttributeError:
             value = self.control.toPlainText()
 
-        value = six.text_type(value)
+        value = str(value)
 
         try:
             value = self.evaluate(value)

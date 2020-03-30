@@ -484,7 +484,7 @@ def basic_types():
         _basic_types = [
             (type(None), NoneNode),
             (str, StringNode),
-            (six.text_type, StringNode),
+            (str, StringNode),
             (bool, BoolNode),
             (int, IntNode),
             (float, FloatNode),

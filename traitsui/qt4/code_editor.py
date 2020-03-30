@@ -190,7 +190,7 @@ class SourceEditor(Editor):
         """
         if not self._locked:
             try:
-                value = six.text_type(self._widget.code.toPlainText())
+                value = str(self._widget.code.toPlainText())
                 if isinstance(self.value, SequenceTypes):
                     value = value.split()
                 self.value = value
@@ -248,7 +248,7 @@ class SourceEditor(Editor):
         self._mark_lines_changed()
 
     def _selection_changed(self):
-        self.selected_text = six.text_type(
+        self.selected_text = str(
             self._widget.code.textCursor().selectedText()
         )
         start = self._widget.code.textCursor().selectionStart()

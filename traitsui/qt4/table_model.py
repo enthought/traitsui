@@ -290,7 +290,7 @@ class TableModel(QtCore.QAbstractTableModel):
         # handle re-ordering via internal drags
         if editor.factory.reorderable:
             rows = sorted({index.row() for index in indexes})
-            data = QtCore.QByteArray(six.text_type(id(self)).encode("utf8"))
+            data = QtCore.QByteArray(str(id(self)).encode("utf8"))
             for row in rows:
                 data.append((" %i" % row).encode("utf8"))
             mime_data.setData(mime_type, data)

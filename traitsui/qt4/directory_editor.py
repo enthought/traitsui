@@ -57,7 +57,7 @@ class CustomEditor(CustomFileEditor):
         """
         if self.control is not None:
             if self._model.isDir(idx):
-                self.value = six.text_type(self._model.filePath(idx))
+                self.value = str(self._model.filePath(idx))
 
     # Trait change handlers --------------------------------------------------
 

@@ -68,7 +68,7 @@ object_image = ImageResource("object").create_image()
 inactive_image = ImageResource("inactive").create_image()
 
 # String types:
-string_type = (str, six.text_type)
+string_type = (str, str)
 
 # -------------------------------------------------------------------------
 #  'SimpleEditor' class:

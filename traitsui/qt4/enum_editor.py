@@ -262,7 +262,7 @@ class SimpleEditor(BaseEditor):
         if self._no_enum_update == 0:
             self._no_enum_update += 1
             try:
-                self.value = self.mapping[six.text_type(text)]
+                self.value = self.mapping[str(text)]
             except Exception:
                 from traitsui.api import raise_to_debug
 
@@ -274,7 +274,7 @@ class SimpleEditor(BaseEditor):
         """
         if self._no_enum_update == 0:
 
-            value = six.text_type(text)
+            value = str(text)
             try:
                 value = self.mapping[value]
             except Exception:
@@ -466,7 +466,7 @@ class ListEditor(BaseEditor):
     def update_object(self, text):
         """ Handles the user selecting a list box item.
         """
-        value = six.text_type(text)
+        value = str(text)
         try:
             value = self.mapping[value]
         except Exception:

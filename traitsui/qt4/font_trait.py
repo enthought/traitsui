@@ -62,7 +62,7 @@ def font_to_str(font):
         underline = " underline"
     return "%s point %s%s%s%s" % (
         font.pointSize(),
-        six.text_type(font.family()),
+        str(font.family()),
         style,
         weight,
         underline,
