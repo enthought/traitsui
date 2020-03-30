@@ -20,7 +20,7 @@ import logging
 
 from pyface.qt import QtCore, QtGui
 
-from traits.api import List, Unicode, TraitError
+from traits.api import List, Str, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -54,7 +54,7 @@ class SimpleEditor(EditorWithList):
     # -------------------------------------------------------------------------
 
     #: Checklist item names
-    names = List(Unicode)
+    names = List(Str)
 
     #: Checklist item values
     values = List

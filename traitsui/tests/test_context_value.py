@@ -14,7 +14,7 @@
 import unittest
 
 from traits.testing.unittest_tools import UnittestTools
-from traits.api import HasTraits, Unicode
+from traits.api import HasTraits, Str
 
 from traitsui.context_value import ContextValue, CVFloat, CVInt, CVStr, CVType
 
@@ -27,7 +27,7 @@ class CVExample(HasTraits):
 
     cv_str = CVStr
 
-    cv_unicode = CVType(Unicode, something="meta", sync_value="both")
+    cv_unicode = CVType(Str, something="meta", sync_value="both")
 
 
 class TestContextvalue(UnittestTools, unittest.TestCase):

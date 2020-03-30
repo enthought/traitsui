@@ -113,7 +113,7 @@ def extract_docstring_from_source(source):
 
     Parameters
     ----------
-    source : Str (Unicode)
+    source : Str (Str)
         Python source code.
 
     Returns

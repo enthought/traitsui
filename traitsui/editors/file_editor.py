@@ -17,7 +17,7 @@
 
 
 
-from traits.api import List, Str, Bool, Int, Unicode, File
+from traits.api import List, Str, Bool, Int, Str, File
 
 # CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
 # to avoid circular imports, as this EditorFactory will be part of
@@ -33,7 +33,7 @@ from .text_editor import ToolkitEditorFactory as EditorFactory
 # -------------------------------------------------------------------------
 
 # Wildcard filter:
-filter_trait = List(Unicode)
+filter_trait = List(Str)
 
 # -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:

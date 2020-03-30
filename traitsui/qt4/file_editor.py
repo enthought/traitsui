@@ -14,7 +14,7 @@
 from os.path import abspath, splitext, isfile, exists
 
 from pyface.qt import QtCore, QtGui, is_qt5
-from traits.api import List, Event, File, Unicode, TraitError
+from traits.api import List, Event, File, Str, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -26,7 +26,7 @@ from .helper import IconButton
 
 
 # Wildcard filter:
-filter_trait = List(Unicode)
+filter_trait = List(Str)
 
 
 class SimpleEditor(SimpleTextEditor):

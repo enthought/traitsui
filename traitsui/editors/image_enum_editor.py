@@ -27,7 +27,7 @@ from os import getcwd
 
 from os.path import join, dirname, exists
 
-from traits.api import Module, Type, Unicode, on_trait_change
+from traits.api import Module, Type, Str, on_trait_change
 
 from .enum_editor import ToolkitEditorFactory as EditorFactory
 
@@ -44,13 +44,13 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     # -------------------------------------------------------------------------
     #: Prefix to add to values to form image names:
-    prefix = Unicode
+    prefix = Str
 
     #: Suffix to add to values to form image names:
-    suffix = Unicode
+    suffix = Str
 
     #: Path to use to locate image files:
-    path = Unicode
+    path = Str
 
     #: Class used to derive the path to the image files:
     klass = Type

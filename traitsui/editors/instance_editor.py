@@ -21,7 +21,7 @@ toolkits.
 
 
 
-from traits.api import Str, List, Enum, Unicode, Type, Bool
+from traits.api import Str, List, Enum, Str, Type, Bool
 
 from ..view import View, AKind
 
@@ -71,7 +71,7 @@ class ToolkitEditorFactory(EditorFactory):
     cachable = Bool(True)
 
     #: Optional label for button
-    label = Unicode
+    label = Str
 
     #: Optional instance view to use
     view = AView

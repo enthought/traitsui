@@ -26,7 +26,7 @@ The factory should look something like this::
         minimum = CVInt
 
         #: The suffix for the data.
-        suffix = CVType(Unicode)
+        suffix = CVType(Str)
 
 The editor class needs to have traits which correspond to the context value
 traits, and should be able to react to changes to them::
@@ -37,7 +37,7 @@ traits, and should be able to react to changes to them::
         minimum = Int
 
         #: The suffix for the data.
-        suffix = Unicode
+        suffix = Str
 
 This can then be used in views, with values either as constants or as
 instances of :class:`ContextValue` (abbreviated as ``CV``)::
@@ -45,7 +45,7 @@ instances of :class:`ContextValue` (abbreviated as ``CV``)::
     class MyObject(HasTraits):
 
         #: An important value.
-        my_value = Unicode
+        my_value = Str
 
         #: The minimum value.
         my_minimum = Int(10)
