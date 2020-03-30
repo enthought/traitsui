@@ -2,7 +2,7 @@ import unittest
 
 from pyface.gui import GUI
 
-from traits.api import Button, HasTraits, Unicode
+from traits.api import Button, HasTraits, Str
 from traitsui.api import ButtonEditor, Item, UItem, View
 from traitsui.tests._tools import (
     is_current_backend_qt4,
@@ -16,7 +16,7 @@ class ButtonTextEdit(HasTraits):
 
     play_button = Button("Play")
 
-    play_button_label = Unicode("I'm a play button")
+    play_button_label = Str("I'm a play button")
 
     traits_view = View(
         Item("play_button", style="simple"),

@@ -16,7 +16,7 @@
 
 from pyface.qt import QtCore, QtGui
 
-from traits.api import Unicode, List, Str, on_trait_change
+from traits.api import Str, List, Str, on_trait_change
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -35,7 +35,7 @@ class SimpleEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: The button label
-    label = Unicode
+    label = Str
 
     #: The list of items in a drop-down menu, if any
     # menu_items = List

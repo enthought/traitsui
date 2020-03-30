@@ -25,7 +25,7 @@ from traits.api import (
     Bool,
     HasTraits,
     List,
-    Unicode,
+    Str,
     Int,
     Any,
     TraitType,
@@ -61,7 +61,7 @@ class ToolkitEditorFactory(EditorFactory):
     types = Any
 
     #: Labels for each of the tuple fields
-    labels = List(Unicode)
+    labels = List(Str)
 
     #: Editors for each of the tuple fields:
     editors = List(EditorFactory)

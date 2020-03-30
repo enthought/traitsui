@@ -14,9 +14,6 @@ This demo illustrates use of TreeNodeRenderers for displaying more complex
 contents inside the cells of a TreeEditor.
 """
 
-    absolute_import, division, print_function, unicode_literals
-)
-
 from random import choice, uniform
 import colorsys
 
@@ -24,7 +21,7 @@ import numpy as np
 
 from pyface.qt import QtCore, QtGui, qt_api
 from traits.api import (
-    Array, Float, HasTraits, Instance, Int, List, Unicode
+    Array, Float, HasTraits, Instance, Int, List, Str
 )
 
 from traitsui.api import TreeEditor, TreeNode, UItem, View, RGBColor
@@ -36,7 +33,7 @@ class MyDataElement(HasTraits):
     """ A node in a tree of data. """
 
     #: Some text to display.
-    text = Unicode
+    text = Str
 
     #: A random walk to plot.
     data = Array
@@ -55,7 +52,7 @@ class MyData(HasTraits):
     """ The root node for a tree of data. """
 
     #: The name of the root node.
-    name = Unicode('Rooty McRootface')
+    name = Str('Rooty McRootface')
 
     #: The elements contained in the root node.
     elements = List(Instance(MyDataElement))

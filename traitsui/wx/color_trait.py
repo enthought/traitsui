@@ -262,6 +262,8 @@ def get_color_editor(*args, **traits):
 def WxColor(default="white", allow_none=False, **metadata):
     """ Defines wxPython-specific color traits.
     """
+    if default is None:
+        allow_none = True
 
     if allow_none:
         return Trait(

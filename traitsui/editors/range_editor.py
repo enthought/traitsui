@@ -31,7 +31,7 @@ from traits.api import (
     Str,
     Int,
     Any,
-    Unicode,
+    Str,
     Bool,
     Undefined,
 )
@@ -68,10 +68,10 @@ class ToolkitEditorFactory(EditorFactory):
     enter_set = Bool(False)
 
     #: Label for the low end of the range
-    low_label = Unicode
+    low_label = Str
 
     #: Label for the high end of the range
-    high_label = Unicode
+    high_label = Str
 
     #: FIXME: This is supported only in the wx backend so far.
     #: The width of the low and high labels
@@ -84,7 +84,7 @@ class ToolkitEditorFactory(EditorFactory):
     high_name = Str
 
     #: Formatting string used to format value and labels
-    format = Unicode("%s")
+    format = Str("%s")
 
     #: Is the range for floating pointer numbers (vs. integers)?
     is_float = Bool(Undefined)

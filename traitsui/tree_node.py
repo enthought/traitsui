@@ -30,7 +30,6 @@ from traits.api import (
     Bool,
     Callable,
     Dict,
-    Either,
     HasPrivateTraits,
     Instance,
     Interface,
@@ -39,6 +38,7 @@ from traits.api import (
     Property,
     Str,
     Supports,
+    Union,
     cached_property,
 )
 
@@ -126,7 +126,7 @@ class TreeNode(HasPrivateTraits):
     formatter = Callable
 
     #: Functions for formatting the other columns.
-    column_formatters = List(Either(None, Callable))
+    column_formatters = List(Union(None, Callable))
 
     #: Function for formatting the tooltip
     tooltip_formatter = Callable

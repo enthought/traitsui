@@ -12,12 +12,13 @@ import logging
 from traits.api import (
     Bool,
     Dict,
-    Either,
     Enum,
     Instance,
     List,
     Property,
     Str,
+    Tuple,
+    Union,
 )
 
 from traitsui.basic_editor_factory import BasicEditorFactory
@@ -39,28 +40,28 @@ class DataFrameAdapter(TabularAdapter):
     """
 
     #: The text to use for a generic entry.
-    text = Property
+    text = Property()
 
     #: The alignment for each cell
     alignment = Property(Enum("left", "center", "right"))
 
     #: The text to use for a row index.
-    index_text = Property
+    index_text = Property()
 
     #: The alignment to use for a row index.
-    index_alignment = Property
+    index_alignment = Property()
 
     #: The font to use for each column
-    font = Property
+    font = Property()
 
     #: The format to use for each column
-    format = Property
+    format = Property()
 
     #: The format for each element, or a mapping column ID to format.
-    _formats = Either(Str, Dict, default="%s")
+    _formats = Union(Str, Dict, default="%s")
 
     #: The font for each element, or a mapping column ID to font.
-    _fonts = Either(Font, Dict, default="Courier 10")
+    _fonts = Union(Font, Dict, default="Courier 10")
 
     def _get_index_alignment(self):
         import numpy as np
@@ -304,13 +305,13 @@ class DataFrameEditor(BasicEditorFactory):
     show_titles = Bool(True)
 
     #: Optional list of either column ID or pairs of (column title, column ID).
-    columns = List()
+    columns = List(Union(Str, Tuple(Str, Str)))
 
     #: The format for each element, or a mapping column ID to format.
-    formats = Either(Str, Dict, default="%s")
+    formats = Union(Str, Dict, default="%s")
 
     #: The font for each element, or a mapping column ID to font.
-    fonts = Either(Font, Dict, default="Courier 10")
+    fonts = Union(Font, Dict, default="Courier 10")
 
     #: The optional extended name of the trait to synchronize the selection
     #: values with:

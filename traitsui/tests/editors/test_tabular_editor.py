@@ -12,7 +12,7 @@
 import contextlib
 import unittest
 
-from traits.api import Event, HasTraits, Instance, Int, List, Unicode
+from traits.api import Event, HasTraits, Instance, Int, List, Str
 from traits.testing.api import UnittestTools
 
 from traitsui.api import Item, TabularEditor, View
@@ -21,7 +21,7 @@ from traitsui.tests._tools import skip_if_null
 
 
 class Person(HasTraits):
-    name = Unicode
+    name = Str
     age = Int
 
     def __repr__(self):

@@ -20,7 +20,6 @@ from pyface.qt import QtCore, QtGui
 from pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
 from traits.api import (
     Str,
-    Unicode,
     List,
     Int,
     Event,
@@ -84,7 +83,7 @@ class SourceEditor(Editor):
     selected_end_pos = Int
 
     #: The currently selected text
-    selected_text = Unicode
+    selected_text = Str
 
     #: The list of line numbers to mark
     mark_lines = List(Int)
