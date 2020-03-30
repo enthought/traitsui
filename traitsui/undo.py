@@ -40,7 +40,7 @@ from traits.api import (
 )
 
 
-NumericTypes = six.integer_types + (float, complex)
+NumericTypes = (int, float, complex)
 SimpleTypes = (str, bytes) + NumericTypes
 
 
