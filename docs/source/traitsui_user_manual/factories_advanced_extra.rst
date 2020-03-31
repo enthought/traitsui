@@ -171,7 +171,7 @@ with associated key bindings, and a button that invokes the key binding editor.
 
     class KBCodeExample ( HasPrivateTraits ):
 
-        code   = Code
+        code = Code()
         status = Str()
         kb    = Button(label='Edit Key Bindings')
 

@@ -817,8 +817,8 @@ For this example, let's assume we have the following two classes::
 
     class Person( HasTraits ):
 
-        name    = Str
-        age     = Int
+        name = Str()
+        age = Int()
         address = Str()
 
     class MarriedPerson( Person ):
@@ -865,7 +865,7 @@ Given this set of requirements, we can now define the following
 
         font                      = 'Courier 10'
         age_alignment             = Constant( 'right' )
-        MarriedPerson_age_image   = Property
+        MarriedPerson_age_image = Property()
         MarriedPerson_bg_color    = Color( 0xE0E0FF )
         MarriedPerson_spouse_text = Property()
         Person_spouse_text        = Constant( '' )

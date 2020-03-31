@@ -777,8 +777,8 @@ combination.</p>
 <pre class="literal-block">
 class Person( HasTraits ):
 
-    name    = Str
-    age     = Int
+    name = Str()
+    age = Int()
     address = Str()
 
 class MarriedPerson( Person ):
@@ -824,7 +824,7 @@ class ReportAdapter( TabularAdapter ):
 
     font                      = 'Courier 10'
     age_alignment             = Constant( 'right' )
-    MarriedPerson_age_image   = Property
+    MarriedPerson_age_image = Property()
     MarriedPerson_bg_color    = Color( 0xE0E0FF )
     MarriedPerson_spouse_text = Property()
     Person_spouse_text        = Constant( '' )
