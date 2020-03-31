@@ -9,16 +9,16 @@ from traitsui.table_column \
 
 
 class Word(HasTraits):
-    word = Str
+    word = Str()
 
 
 class Foo(HasTraits):
 
     # arbitrary string containing spaces
-    input = Str
+    input = Str()
 
     # input split on space
-    parsed = List
+    parsed = List()
 
     def _input_changed(self):
         words = self.input.split()

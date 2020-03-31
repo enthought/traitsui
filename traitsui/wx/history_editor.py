@@ -44,7 +44,7 @@ class _HistoryEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: The history control:
-    history = Any
+    history = Any()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

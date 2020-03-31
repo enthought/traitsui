@@ -51,18 +51,18 @@ class _ListStrEditor(Editor):
     # -------------------------------------------------------------------------
 
     # The list view control associated with the editor:
-    list_view = Any
+    list_view = Any()
 
     #: The list model associated the editor:
     model = Instance(ListStrModel)
 
     #: The title of the editor:
-    title = Str
+    title = Str()
 
     #: The current set of selected items (which one is used depends upon the
     #: initial state of the editor factory 'multi_select' trait):
-    selected = Any
-    multi_selected = List
+    selected = Any()
+    multi_selected = List()
 
     #: The current set of selected item indices (which one is used depends upon
     #: the initial state of the editor factory 'multi_select' trait):
@@ -75,8 +75,8 @@ class _ListStrEditor(Editor):
     activated_index = Int(comparison_mode=NO_COMPARE)
 
     #: The most recently right_clicked item and its index:
-    right_clicked = Event
-    right_clicked_index = Event
+    right_clicked = Event()
+    right_clicked_index = Event()
 
     #: Is the list editor scrollable? This value overrides the default.
     scrollable = True
@@ -94,10 +94,10 @@ class _ListStrEditor(Editor):
     image_resources = Any({})
 
     #: The current number of item currently in the list:
-    item_count = Property
+    item_count = Property()
 
     #: The current search string:
-    search = Str
+    search = Str()
 
     # -------------------------------------------------------------------------
     #  Editor interface:

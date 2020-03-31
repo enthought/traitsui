@@ -9,7 +9,7 @@ from traitsui.tests._tools import (
 
 
 class EditedInstance(HasTraits):
-    value = Str
+    value = Str()
     traits_view = View(Item("value"), buttons=["OK"])
 
 

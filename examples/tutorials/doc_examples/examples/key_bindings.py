@@ -45,8 +45,8 @@ class CodeHandler(Handler):
 
 class KBCodeExample(HasPrivateTraits):
 
-    code = Code
-    status = Str
+    code = Code()
+    status = Str()
     kb = Button(label='Edit Key Bindings')
 
     view = View(Group(

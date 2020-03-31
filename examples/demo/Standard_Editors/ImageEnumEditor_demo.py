@@ -22,7 +22,7 @@ image_list = ['top left', 'top right', 'bottom left', 'bottom right']
 class Dummy(HasTraits):
     """ Dummy class for ImageEnumEditor
     """
-    x = Str
+    x = Str()
 
     view = View()
 

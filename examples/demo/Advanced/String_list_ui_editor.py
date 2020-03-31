@@ -36,7 +36,7 @@ class MultiSelectAdapter(TabularAdapter):
     columns = [('Value', 'value')]
 
     # The text property used for the 'value' column:
-    value_text = Property
+    value_text = Property()
 
     def _get_value_text(self):
         return self.item
@@ -91,7 +91,7 @@ class StringListEditor(BasicEditorFactory):
     klass = _StringListEditor
 
     # The extended trait name containing the editor's set of choices:
-    choices = Str
+    choices = Str()
 
 #-- Define the demo class ----------------------------------------------------
 

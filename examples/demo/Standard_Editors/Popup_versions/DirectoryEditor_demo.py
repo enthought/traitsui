@@ -17,7 +17,7 @@ class DirectoryEditorDemo(HasTraits):
     """
 
     # To demonstrate any given Trait editor, an appropriate Trait is required.
-    dir_name = Directory
+    dir_name = Directory()
 
     # Display specification (one Item per editor style)
     dir_group = Group(Item('dir_name', style='simple', label='Simple'),

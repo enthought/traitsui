@@ -244,7 +244,7 @@ class DemoError(HasPrivateTraits):
     # -------------------------------------------------------------------------
 
     #: The error message text:
-    msg = Code
+    msg = Code()
 
     # -------------------------------------------------------------------------
     #  Traits view definitions:
@@ -308,10 +308,10 @@ class DemoTreeNodeObject(TreeNodeObject):
     # -------------------------------------------------------------------------
 
     #: Cached result of 'tno_has_children':
-    _has_children = Any
+    _has_children = Any()
 
     #: Cached result of 'tno_get_children':
-    _get_children = Any
+    _get_children = Any()
 
     # -------------------------------------------------------------------------
     #  Returns whether chidren of this object are allowed or not:
@@ -367,27 +367,27 @@ class DemoTreeNodeObject(TreeNodeObject):
 
 class DemoFileBase(DemoTreeNodeObject):
     #: Parent of this file:
-    parent = Any
+    parent = Any()
 
     #: Name of file system path to this file:
-    path = Property
+    path = Property()
 
     #: Name of the file:
-    name = Str
+    name = Str()
 
     #: UI form of the 'name':
-    nice_name = Property
+    nice_name = Property()
 
     #: Files don't allow children:
     allows_children = Bool(False)
 
     #: Description of what the demo does:
-    description = HTML
+    description = HTML()
 
     #: Log of all print messages displayed:
-    log = Code
+    log = Code()
 
-    _nice_name = Str
+    _nice_name = Str()
 
     def init(self):
         self.log = ""
@@ -432,7 +432,7 @@ class DemoFileBase(DemoTreeNodeObject):
 class DemoFile(DemoFileBase):
 
     #: Source code for the demo:
-    source = Code
+    source = Code()
 
     #: Demo object whose traits UI is to be displayed:
     demo = Instance(HasTraits)
@@ -520,16 +520,16 @@ class DemoPath(DemoTreeNodeObject):
     # -------------------------------------------------------------------------
 
     #: Parent of this package:
-    parent = Any
+    parent = Any()
 
     #: Name of file system path to this package:
-    path = Property
+    path = Property()
 
     #: Name of the directory:
-    name = Str
+    name = Str()
 
     #: UI form of the 'name':
-    nice_name = Property
+    nice_name = Property()
 
     #: Description of the contents of the directory:
     description = Property(HTML, depends_on="_description")
@@ -538,7 +538,7 @@ class DemoPath(DemoTreeNodeObject):
     source = Property(Code)
 
     #: Dictionary containing symbols defined by the path's '__init__.py' file:
-    init_dic = Property
+    init_dic = Property()
 
     #: Should .py files be included?
     use_files = Bool(True)
@@ -548,19 +548,19 @@ class DemoPath(DemoTreeNodeObject):
 
     #: Configuration dictionary for this node
     #: This trait is set when a config file exists for the parent of this path.
-    config_dict = Dict
+    config_dict = Dict()
 
     #: Configuration file for this node.
-    config_filename = Str
+    config_filename = Str()
 
     #: Shadow trait for description property
-    _description = Str
+    _description = Str()
 
     #: Cached value of the nice_name property.
-    _nice_name = Str
+    _nice_name = Str()
 
     #: Dictionary mapping file extensions to callables
-    _file_factory = Dict
+    _file_factory = Dict()
 
     def __file_factory_default(self):
         return {
@@ -918,20 +918,20 @@ class Demo(HasPrivateTraits):
     previous_button = Button(image=ImageResource("previous"), label="Previous")
 
     #: Path to the root demo directory:
-    path = Str
+    path = Str()
 
     #: Root path object for locating demo files:
     root = Instance(DemoPath)
 
     #: Selected node of the demo path tree.
-    selected_node = Any
+    selected_node = Any()
 
     #: Title for the demo
-    title = Str
+    title = Str()
 
-    _next_node = Property
+    _next_node = Property()
 
-    _previous_node = Property
+    _previous_node = Property()
 
     def _get__next_node(self):
         next = None

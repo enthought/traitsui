@@ -814,7 +814,7 @@ class CustomEditor(Editor):
     Example usage::
 
         class DateListPicker(HasTraits):
-            calendar = List
+            calendar = List()
             traits_view = View(Item('calendar', editor=DateEditor(),
                                     style='custom', show_label=False))
     """

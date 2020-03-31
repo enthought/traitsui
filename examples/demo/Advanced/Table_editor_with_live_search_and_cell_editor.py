@@ -180,7 +180,7 @@ class LiveSearch(HasTraits):
     file_type = Enum('Python', 'C', 'C++', 'Java', 'Ruby')
 
     # The current search string:
-    search = Str
+    search = Str()
 
     # Is the search case sensitive?
     case_sensitive = Bool(False)
@@ -198,7 +198,7 @@ class LiveSearch(HasTraits):
     selected_contents = Property  # List( Str )
 
     # The currently selected match:
-    selected_match = Int
+    selected_match = Int()
 
     # The text line corresponding to the selected match:
     selected_line = Property  # Int
@@ -375,7 +375,7 @@ class SourceFile(HasTraits):
     live_search = Instance(LiveSearch)
 
     # The full path and file name of the source file:
-    full_name = File
+    full_name = File()
 
     # The base file name of the source file:
     base_name = Property  # Str

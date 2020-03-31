@@ -88,16 +88,16 @@ class ImageSlice(HasPrivateTraits):
     stretch_columns = Enum(1, 2)
 
     #: Width/height of the image borders:
-    top = Int
-    bottom = Int
-    left = Int
-    right = Int
+    top = Int()
+    bottom = Int()
+    left = Int()
+    right = Int()
 
     #: Width/height of the extended image borders:
-    xtop = Int
-    xbottom = Int
-    xleft = Int
-    xright = Int
+    xtop = Int()
+    xbottom = Int()
+    xleft = Int()
+    xright = Int()
 
     #: The color to use for content text:
     content_color = Instance(wx.Colour)
@@ -120,16 +120,16 @@ class ImageSlice(HasPrivateTraits):
     transparent_bitmap = Instance(wx.Bitmap)
 
     #: Size of the current image:
-    dx = Int
-    dy = Int
+    dx = Int()
+    dy = Int()
 
     #: Size of the current image's slices:
-    dxs = List
-    dys = List
+    dxs = List()
+    dys = List()
 
     #: Fixed minimum size of current image:
-    fdx = Int
-    fdy = Int
+    fdx = Int()
+    fdy = Int()
 
     # -- Public Methods -------------------------------------------------------
 

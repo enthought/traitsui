@@ -59,10 +59,10 @@ class TraitGridSelection(HasPrivateTraits):
     """
 
     #: The selected object
-    obj = Any
+    obj = Any()
 
     #: The specific trait selected on the object
-    name = Str
+    name = Str()
 
 
 class TableModel(GridModel):
@@ -86,10 +86,10 @@ class TableModel(GridModel):
     reverse = Bool(False)
 
     #: Event fired when the table has been sorted
-    sorted = Event
+    sorted = Event()
 
     #: The current 'auto_add' row
-    auto_add_row = Any
+    auto_add_row = Any()
 
     def __init__(self, **traits):
         """ Initializes the object.

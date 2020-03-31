@@ -21,7 +21,7 @@ class DirectoryEditorDemo(HasTraits):
     """ Define the main DirectoryEditor demo class. """
 
     # Define a Directory trait to view:
-    dir_name = Directory
+    dir_name = Directory()
 
     # Display specification (one Item per editor style):
     dir_group = Group(

@@ -37,7 +37,7 @@ class ToolkitEditorFactory(EditorFactory):
     # -------------------------------------------------------------------------
 
     #: Allowable drop objects must be of this class (optional)
-    klass = Any
+    klass = Any()
 
     #: Must allowable drop objects be bindings?
     binding = Bool(False)

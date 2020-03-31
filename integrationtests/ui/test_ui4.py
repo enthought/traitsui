@@ -45,9 +45,9 @@ class ExtraPerson(Person):
 
 
 class LocatedPerson(Person):
-    street = Str
-    city = Str
-    state = Str
+    street = Str()
+    city = Str()
+    state = Str()
     zip = Int(78663)
 
 

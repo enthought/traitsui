@@ -374,10 +374,10 @@ class EditorWithList(Editor):
     list_object = Instance(HasTraits)
 
     #: Name of the monitored trait
-    list_name = Str
+    list_name = Str()
 
     #: Function used to evaluate the current list object value:
-    list_value = Callable
+    list_value = Callable()
 
     def init(self, parent):
         """ Initializes the object.

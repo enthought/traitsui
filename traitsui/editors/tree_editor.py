@@ -84,7 +84,7 @@ class ToolkitEditorFactory(EditorFactory):
     nodes = List(TreeNode)
 
     #: Mapping from TreeNode tuples to MultiTreeNodes
-    multi_nodes = Dict
+    multi_nodes = Dict()
 
     #: The column header labels if any.
     column_headers = List(Str)
@@ -116,48 +116,48 @@ class ToolkitEditorFactory(EditorFactory):
 
     #: Number of tree levels (down from the root) that should be automatically
     #: opened
-    auto_open = Int
+    auto_open = Int()
 
     #: Size of the tree node icons
     icon_size = IconSize
 
     #: Called when a node is selected
-    on_select = Any
+    on_select = Any()
 
     #: Called when a node is clicked
-    on_click = Any
+    on_click = Any()
 
     #: Called when a node is double-clicked
-    on_dclick = Any
+    on_dclick = Any()
 
     #: Called when a node is activated
-    on_activated = Any
+    on_activated = Any()
 
     #: Call when the mouse hovers over a node
-    on_hover = Any
+    on_hover = Any()
 
     #: The optional extended trait name of the trait to synchronize with the
     #: editor's current selection:
-    selected = Str
+    selected = Str()
 
     #: The optional extended trait name of the trait that should be assigned
     #: a node object when a tree node is activated, by double-clicking or
     #: pressing the Enter key when a node has focus (Note: if you want to
     #: receive repeated activated events on the same node, make sure the trait
     #: is defined as an Event):
-    activated = Str
+    activated = Str()
 
     #: The optional extended trait name of the trait that should be assigned
     #: a node object when a tree node is clicked on (Note: If you want to
     #: receive repeated clicks on the same node, make sure the trait is defined
     #: as an Event):
-    click = Str
+    click = Str()
 
     #: The optional extended trait name of the trait that should be assigned
     #: a node object when a tree node is double-clicked on (Note: if you want to
     #: receive repeated double-clicks on the same node, make sure the trait is
     #: defined as an Event):
-    dclick = Str
+    dclick = Str()
 
     #: The optional extended trait name of the trait event that is fired
     #: whenever the application wishes to veto a tree action in progress (e.g.
@@ -166,12 +166,12 @@ class ToolkitEditorFactory(EditorFactory):
     #: wish to veto the open or close operation). Be sure to fire the veto event
     #: in the event handler triggered by the operation (e.g. the 'dclick' event
     #: handler.
-    veto = Str
+    veto = Str()
 
     #: The optional extended trait name of the trait event that is fired when the
     #: application wishes the currently visible portion of the tree widget to
     #: repaint itself.
-    refresh = Str
+    refresh = Str()
 
     #: Mode for lines connecting tree nodes
     #:

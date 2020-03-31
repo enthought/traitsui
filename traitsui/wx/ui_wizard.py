@@ -246,4 +246,4 @@ class PageGroupEditor(GroupEditor):
     #: ID of previous page to display
     previous = none_str_trait
     #: Message to display if user can't link to page
-    msg = Str
+    msg = Str()

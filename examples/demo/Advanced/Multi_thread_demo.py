@@ -21,15 +21,15 @@ from traitsui.api import View, Item, VGroup
 class ThreadDemo(HasTraits):
 
     # The thread specific counters:
-    thread_0 = Int
-    thread_1 = Int
-    thread_2 = Int
+    thread_0 = Int()
+    thread_1 = Int()
+    thread_2 = Int()
 
     # The button used to start the threads running:
     start = Button('Start Threads')
 
     # The count of how many threads ae currently running:
-    running = Int
+    running = Int()
 
     view = View(
         VGroup(

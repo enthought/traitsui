@@ -31,7 +31,7 @@ class SearchEditor(BasicEditorFactory):
     """
 
     #: The editor class to be created:
-    klass = Property
+    klass = Property()
 
     #: The descriptive text for the widget
     text = Str("Search")
@@ -50,7 +50,7 @@ class SearchEditor(BasicEditorFactory):
 
     #: Fire this event on the object whenever a search should be triggered,
     #: regardless of whether the search term changed
-    search_event_trait = Str
+    search_event_trait = Str()
 
     def _get_klass(self):
         """ Returns the toolkit-specific editor class to be instantiated.

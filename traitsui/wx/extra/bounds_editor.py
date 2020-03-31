@@ -9,13 +9,13 @@ from traitsui.wx.helper import TraitsUIPanel, Slider
 
 class _BoundsEditor(Editor):
 
-    evaluate = Any
+    evaluate = Any()
 
-    min = Any
-    max = Any
-    low = Any
-    high = Any
-    format = Str
+    min = Any()
+    max = Any()
+    low = Any()
+    high = Any()
+    format = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

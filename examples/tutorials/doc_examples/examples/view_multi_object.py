@@ -10,12 +10,12 @@ import traitsui
 
 
 class Person(HasTraits):
-    first_name = Str
-    last_name = Str
+    first_name = Str()
+    last_name = Str()
 
 
 class Company(HasTraits):
-    company_name = Str
+    company_name = Str()
 
 # Standalone View object referencing objects in the UI context
 employee_view = View('e.first_name', 'e.last_name',

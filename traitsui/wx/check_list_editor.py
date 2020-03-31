@@ -63,7 +63,7 @@ class SimpleEditor(EditorWithList):
     names = List(Str)
 
     #: Checklist item values
-    values = List
+    values = List()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

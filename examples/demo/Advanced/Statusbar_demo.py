@@ -29,13 +29,13 @@ from traitsui.api import View, Item, StatusItem, Label
 class TextEditor(HasPrivateTraits):
 
     # The text being edited:
-    text = Str
+    text = Str()
 
     # The current length of the text being edited:
     length = Property(depends_on='text')
 
     # The current time:
-    time = Str
+    time = Str()
 
     # The view definition:
     view = View(

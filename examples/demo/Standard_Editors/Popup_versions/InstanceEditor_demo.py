@@ -24,10 +24,10 @@ class SampleClass(HasTraits):
     # to demonstrate the InstanceEditor's capabilities.
     #--------------------------------------------------------------------------
 
-    name = Str
-    occupation = Str
+    name = Str()
+    occupation = Str()
     age = Range(21, 65)
-    registered_voter = Bool
+    registered_voter = Bool()
 
     #--------------------------------------------------------------------------
     # The InstanceEditor uses whatever view is defined for the class.  The

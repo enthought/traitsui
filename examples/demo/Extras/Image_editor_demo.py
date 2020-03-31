@@ -36,9 +36,9 @@ search_path = [join(dirname(traits.api.__file__),
 class Employee(HasTraits):
 
     # Define the traits:
-    name = Str
-    dept = Str
-    email = Str
+    name = Str()
+    dept = Str()
+    email = Str()
 
     # Define the view:
     view = View(

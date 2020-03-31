@@ -8,17 +8,17 @@ from traitsui.api import Group, Include, View
 
 
 class Person(HasTraits):
-    name = Str
-    age = Int
+    name = Str()
+    age = Int()
 
     person_view = View('name', Include('extra'), 'age')
 
 
 class LocatedPerson(Person):
-    street = Str
-    city = Str
-    state = Str
-    zip = Str
+    street = Str()
+    city = Str()
+    state = Str()
+    zip = Str()
 
     extra = Group('street', 'city', 'state', 'zip')
 

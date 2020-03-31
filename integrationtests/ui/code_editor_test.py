@@ -67,8 +67,8 @@ class CodeHandler(Handler):
 
 class TestCode(HasPrivateTraits):
 
-    code = Code
-    status = Str
+    code = Code()
+    status = Str()
 
     view = View(
         [Item('code',

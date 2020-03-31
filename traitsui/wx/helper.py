@@ -536,10 +536,10 @@ class PopupControl(HasPrivateTraits):
     control = Instance(wx.Window)
 
     #: The minimum width of the popup:
-    width = Int
+    width = Int()
 
     #: The minimum height of the popup:
-    height = Int
+    height = Int()
 
     #: Should the popup be resizable?
     resizable = Bool(False)
@@ -547,10 +547,10 @@ class PopupControl(HasPrivateTraits):
     # -- Public Traits --------------------------------------------------------
 
     #: The value (if any) set by the popup control:
-    value = Any
+    value = Any()
 
     #: Event fired when the popup control is closed:
-    closed = Event
+    closed = Event()
 
     # -- Private Traits -------------------------------------------------------
 

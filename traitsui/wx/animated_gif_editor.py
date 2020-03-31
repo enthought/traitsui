@@ -84,4 +84,4 @@ class AnimatedGIFEditor(BasicEditorFactory):
 
     #: The optional trait used to control whether the animated GIF file is
     #: playing or not:
-    playing = Str
+    playing = Str()

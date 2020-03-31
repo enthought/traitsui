@@ -67,21 +67,21 @@ class TreeNode(HasPrivateTraits):
 
     #: Name of trait containing children (if '', the node is a leaf). Nested
     #: attributes are allowed, e.g., 'library.books'
-    children = Str
+    children = Str()
 
     #: Either the name of a trait containing a label, or a constant label, if
     #: the string starts with '='.
-    label = Str
+    label = Str()
 
     #: The name of a trait containing a list of labels for any columns.
-    column_labels = Str
+    column_labels = Str()
 
     #: Either the name of a trait containing a tooltip, or constant tooltip, if
     #: the string starts with '='.
-    tooltip = Str
+    tooltip = Str()
 
     #: Name to use for a new instance
-    name = Str
+    name = Str()
 
     #: Can the object's children be renamed?
     rename = Bool(True)
@@ -123,26 +123,26 @@ class TreeNode(HasPrivateTraits):
     node_for_interface = Property(depends_on="node_for")
 
     #: Function for formatting the label
-    formatter = Callable
+    formatter = Callable()
 
     #: Functions for formatting the other columns.
     column_formatters = List(Union(None, Callable))
 
     #: Function for formatting the tooltip
-    tooltip_formatter = Callable
+    tooltip_formatter = Callable()
 
     #: Function for handling selecting an object
-    on_select = Callable
+    on_select = Callable()
 
     #: Function for handling clicking an object
-    on_click = Callable
+    on_click = Callable()
 
     #: Function for handling double-clicking an object
-    on_dclick = Callable
+    on_dclick = Callable()
 
     #: Function for handling activation of an object
     #: (double-click or Enter key press when node is in focus)
-    on_activated = Callable
+    on_activated = Callable()
 
     #: View to use for editing the object
     view = AView
@@ -152,7 +152,7 @@ class TreeNode(HasPrivateTraits):
     #: - Instance( Menu ): Use this menu as the context menu
     #: - None: Use the default context menu
     #: - False: Do not display a context menu
-    menu = Any
+    menu = Any()
 
     #: Name of leaf item icon
     icon_item = Str("<item>")
@@ -164,23 +164,23 @@ class TreeNode(HasPrivateTraits):
     icon_open = Str("<open>")
 
     #: Resource path used to locate the node icon
-    icon_path = Str
+    icon_path = Str()
 
     #: Selector or name for background color
-    background = Any
+    background = Any()
 
     #: Selector or name for foreground color
-    foreground = Any
+    foreground = Any()
 
     # fixme: The 'menu' trait should really be defined as:
     #        Instance( 'traitsui.menu.MenuBar' ), but it doesn't work
     #        right currently.
 
     #: A toolkit-appropriate cell renderer (currently Qt only)
-    renderer = Any
+    renderer = Any()
 
     #: A cache for listeners that need to keep state.
-    _listener_cache = Dict
+    _listener_cache = Dict()
 
     def __init__(self, **traits):
         super(TreeNode, self).__init__(**traits)
@@ -1455,7 +1455,7 @@ class TreeNodeObject(HasPrivateTraits):
     """
 
     #: A cache for listeners that need to keep state.
-    _listener_cache = Dict
+    _listener_cache = Dict()
 
     def tno_allows_children(self, node):
         """ Returns whether this object allows children.

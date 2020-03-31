@@ -386,7 +386,7 @@ def test_data_frame_editor_columns():
 def test_data_frame_editor_with_update_refresh():
     class DataFrameViewer(HasTraits):
         data = Instance(DataFrame)
-        df_updated = Event
+        df_updated = Event()
         view = View(Item("data", editor=DataFrameEditor(update="df_updated")))
 
     df = DataFrame(
@@ -403,7 +403,7 @@ def test_data_frame_editor_with_update_refresh():
 def test_data_frame_editor_with_refresh():
     class DataFrameViewer(HasTraits):
         data = Instance(DataFrame)
-        df_refreshed = Event
+        df_refreshed = Event()
         view = View(
             Item("data", editor=DataFrameEditor(refresh="df_refreshed"))
         )

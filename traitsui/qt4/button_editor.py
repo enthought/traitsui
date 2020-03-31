@@ -35,13 +35,13 @@ class SimpleEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: The button label
-    label = Str
+    label = Str()
 
     #: The list of items in a drop-down menu, if any
-    # menu_items = List
+    # menu_items = List()
 
     #: The selected item in the drop-down menu.
-    selected_item = Str
+    selected_item = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

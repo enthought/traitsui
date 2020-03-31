@@ -44,7 +44,7 @@ class SimpleEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: The button label
-    label = Str
+    label = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

@@ -36,7 +36,7 @@ class TabularEditor(BasicEditorFactory):
     # -- Trait Definitions ----------------------------------------------------
 
     #: The editor class to be created:
-    klass = Property
+    klass = Property()
 
     #: Should column headers (i.e. titles) be displayed?
     show_titles = Bool(True)
@@ -46,11 +46,11 @@ class TabularEditor(BasicEditorFactory):
 
     #: The optional extended name of the trait used to indicate that a complete
     #: table update is needed:
-    update = Str
+    update = Str()
 
     #: The optional extended name of the trait used to indicate that the table
     #: just needs to be repainted.
-    refresh = Str
+    refresh = Str()
 
     #: Should the table update automatically when the table item's contents
     #: change? Note that in order for this feature to work correctly, the editor
@@ -61,54 +61,54 @@ class TabularEditor(BasicEditorFactory):
 
     #: The optional extended name of the trait to synchronize the selection
     #: values with:
-    selected = Str
+    selected = Str()
 
     #: The optional extended name of the trait to synchronize the selection rows
     #: with:
-    selected_row = Str
+    selected_row = Str()
 
     #: Whether or not to allow selection.
     selectable = Bool(True)
 
     #: The optional extended name of the trait to synchronize the activated value
     #: with:
-    activated = Str
+    activated = Str()
 
     #: The optional extended name of the trait to synchronize the activated
     #: value's row with:
-    activated_row = Str
+    activated_row = Str()
 
     #: The optional extended name of the trait to synchronize left click data
     #: with. The data is a TabularEditorEvent:
-    clicked = Str
+    clicked = Str()
 
     #: The optional extended name of the trait to synchronize left double click
     #: data with. The data is a TabularEditorEvent:
-    dclicked = Str
+    dclicked = Str()
 
     #: The optional extended name of the trait to synchronize right click data
     #: with. The data is a TabularEditorEvent:
-    right_clicked = Str
+    right_clicked = Str()
 
     #: The optional extended name of the trait to synchronize right double
     #: clicked data with. The data is a TabularEditorEvent:
-    right_dclicked = Str
+    right_dclicked = Str()
 
     #: The optional extended name of the trait to synchronize column
     #: clicked data with. The data is a TabularEditorEvent:
-    column_clicked = Str
+    column_clicked = Str()
 
     #: The optional extended name of the trait to synchronize column
     #: right clicked data with. The data is a TabularEditorEvent:
-    column_right_clicked = Str
+    column_right_clicked = Str()
 
     #: The optional extended name of the Event trait that should be used to
     #: trigger a scroll-to command. The data is an integer giving the row.
-    scroll_to_row = Str
+    scroll_to_row = Str()
 
     #: The optional extended name of the Event trait that should be used to
     #: trigger a scroll-to command. The data is an integer giving the column.
-    scroll_to_column = Str
+    scroll_to_column = Str()
 
     #: Controls behavior of scroll to row
     scroll_to_row_hint = Enum("center", "top", "bottom", "visible")

@@ -23,13 +23,13 @@ class SimpleEditor(Editor):
     progress = Instance(_ProgressDialog)
 
     #: The message to be displayed along side the progress guage
-    message = Str
+    message = Str()
 
     #: The starting value
-    min = Int
+    min = Int()
 
     #: The ending value
-    max = Int
+    max = Int()
 
     # -- Editor interface ------------------------------------------------------
 

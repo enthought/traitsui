@@ -53,13 +53,13 @@ class SingleValueTreeNodeObject(TreeNodeObject):
     parent = Instance(TreeNodeObject)
 
     #: Name of the value
-    name = Str
+    name = Str()
 
     #: User-specified override of the default label
-    label = Str
+    label = Str()
 
     #: The value itself
-    value = Any
+    value = Any()
 
     #: Is the value readonly?
     readonly = Bool(False)

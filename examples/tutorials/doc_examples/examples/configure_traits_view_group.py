@@ -14,12 +14,12 @@ import traitsui
 
 
 class SimpleEmployee(HasTraits):
-    first_name = Str
-    last_name = Str
-    department = Str
+    first_name = Str()
+    last_name = Str()
+    department = Str()
 
-    employee_number = Str
-    salary = Int
+    employee_number = Str()
+    salary = Int()
 
 view1 = View(Group(Item(name='first_name'),
                    Item(name='last_name'),

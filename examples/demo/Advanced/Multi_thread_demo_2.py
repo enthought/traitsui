@@ -26,7 +26,7 @@ from traitsui.api import View, Item, ListEditor
 class Counter(HasTraits):
 
     # The current count:
-    count = Int
+    count = Int()
 
     view = View(Item('count', style='readonly'))
 

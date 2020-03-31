@@ -88,14 +88,14 @@ player_editor = TableEditor(
 class Player(HasStrictTraits):
 
     # Trait definitions:
-    name = Str
-    at_bats = Int
+    name = Str()
+    at_bats = Int()
     strike_outs = Int(event='affects_average')
     singles = Int(event='affects_average')
     doubles = Int(event='affects_average')
     triples = Int(event='affects_average')
     home_runs = Int(event='affects_average')
-    walks = Int
+    walks = Int()
     average = Property(Float)
 
     def _get_average(self):

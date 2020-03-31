@@ -96,10 +96,10 @@ class WebPage(HasTraits):
     url = Str('http://code.enthought.com')
 
     # The page title:
-    title = Str
+    title = Str()
 
     # The page status:
-    status = Str
+    status = Str()
 
     # The browser navigation buttons:
     back = Button('<--')

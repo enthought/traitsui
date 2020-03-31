@@ -27,7 +27,7 @@ except RuntimeError:
 
 class Employee(HasTraits):
     name = Str('<unknown>')
-    title = Str
+    title = Str()
     phone = Regex(regex=r'\d\d\d-\d\d\d\d')
 
     def default_title(self):

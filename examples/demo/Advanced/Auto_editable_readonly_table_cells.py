@@ -45,7 +45,7 @@ from traitsui.table_column \
 class Integer(HasTraits):
 
     # The value:
-    n = Int
+    n = Int()
 
 #-- Factor Class ---------------------------------------------------------
 
@@ -53,7 +53,7 @@ class Integer(HasTraits):
 class Factor(HasTraits):
 
     # The number being factored:
-    n = Int
+    n = Int()
 
     # The list of factors of 'n':
     factors = Property(List)

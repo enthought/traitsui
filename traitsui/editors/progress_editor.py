@@ -31,25 +31,25 @@ class ToolkitEditorFactory(EditorFactory):
     # -------------------------------------------------------------------------
 
     #: The title
-    title = Str
+    title = Str()
 
     #: The message to be displayed along side the progress guage
-    message = Str
+    message = Str()
 
     #: The name of an [object.]trait that defines the message string
-    message_name = Str
+    message_name = Str()
 
     #: The starting value
-    min = Int
+    min = Int()
 
     #: The name of an [object.]trait that defines the starting value
-    min_name = Str
+    min_name = Str()
 
     #: The ending value
-    max = Int
+    max = Int()
 
     #: The name of an [object.]trait that defines the ending value
-    max_name = Str
+    max_name = Str()
 
     #: If the cancel button should be shown (not very sensible as an editor)
     can_cancel = Bool(False)

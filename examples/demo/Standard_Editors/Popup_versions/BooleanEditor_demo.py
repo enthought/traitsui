@@ -18,7 +18,7 @@ class BooleanEditorDemo(HasTraits):
     """
 
     # To demonstrate any given Trait editor, an appropriate Trait is required.
-    boolean_trait = Bool
+    boolean_trait = Bool()
 
     # Items are used to define the demo display - one Item per
     # editor style

@@ -28,7 +28,7 @@ class DummyModel(HasStrictTraits):
     """ Dummy model with children.
     """
 
-    name = Str
+    name = Str()
 
     children = List(This)
 

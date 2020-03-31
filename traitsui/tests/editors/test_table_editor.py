@@ -16,17 +16,17 @@ from traitsui.tests._tools import (
 class ListItem(HasTraits):
     """ Items to visualize in a table editor """
 
-    value = Str
-    other_value = Int
+    value = Str()
+    other_value = Int()
 
 
 class ObjectListWithSelection(HasTraits):
     values = List(Instance(ListItem))
     selected = Instance(ListItem)
     selections = List(Instance(ListItem))
-    selected_index = Int
+    selected_index = Int()
     selected_indices = List(Int)
-    selected_column = Str
+    selected_column = Str()
     selected_columns = List(Str)
     selected_cell = Tuple(Instance(ListItem), Str)
     selected_cells = List(Tuple(Instance(ListItem), Str))

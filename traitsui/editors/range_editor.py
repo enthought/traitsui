@@ -68,20 +68,20 @@ class ToolkitEditorFactory(EditorFactory):
     enter_set = Bool(False)
 
     #: Label for the low end of the range
-    low_label = Str
+    low_label = Str()
 
     #: Label for the high end of the range
-    high_label = Str
+    high_label = Str()
 
     #: FIXME: This is supported only in the wx backend so far.
     #: The width of the low and high labels
-    label_width = Int
+    label_width = Int()
 
     #: The name of an [object.]trait that defines the low value for the range
-    low_name = Str
+    low_name = Str()
 
     #: The name of an [object.]trait that defines the high value for the range
-    high_name = Str
+    high_name = Str()
 
     #: Formatting string used to format value and labels
     format = Str("%s")
@@ -91,16 +91,16 @@ class ToolkitEditorFactory(EditorFactory):
 
     #: Function to evaluate floats/ints when they are assigned to an object
     #: trait
-    evaluate = Any
+    evaluate = Any()
 
     #: The object trait containing the function used to evaluate floats/ints
-    evaluate_name = Str
+    evaluate_name = Str()
 
     #: Low end of range
-    low = Property
+    low = Property()
 
     #: High end of range
-    high = Property
+    high = Property()
 
     #: Display mode to use
     mode = Enum(

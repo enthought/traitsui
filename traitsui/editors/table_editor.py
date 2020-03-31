@@ -74,17 +74,17 @@ class ToolkitEditorFactory(EditorFactory):
     other_columns = List(Instance("traitsui.table_column.TableColumn"))
 
     #: The object trait containing the list of column descriptors
-    columns_name = Str
+    columns_name = Str()
 
     #: The desired number of visible rows in the table
-    rows = Int
+    rows = Int()
 
     #: The optional extended name of the trait used to specify an external filter
     #: for the table data. The value of the trait must either be an instance of
     #: TableEditor, a callable that accepts one argument (a table row) and
     #: returns True or False to indicate whether the specified object passes the
     #: filter or not, or **None** to indicate that no filter is to be applied:
-    filter_name = Str
+    filter_name = Str()
 
     #: Initial filter that should be applied to the table
     filter = Instance("traitsui.table_filter.TableFilter")
@@ -95,7 +95,7 @@ class ToolkitEditorFactory(EditorFactory):
     #: The optional extended trait name of the trait used to notify that the
     #: filter has changed and the displayed objects should be updated.
     #: It should be an Event.
-    update_filter_name = Str
+    update_filter_name = Str()
 
     #: Filter object used to allow a user to search the table.
     #: NOTE: If left as None, the table will not be searchable.
@@ -105,7 +105,7 @@ class ToolkitEditorFactory(EditorFactory):
     menu = Instance("traitsui.menu.Menu")
 
     #: Default trait name containg menu
-    menu_name = Str
+    menu_name = Str()
 
     #: Are objects deletable from the table?
     deletable = BoolOrCallable(False)
@@ -158,7 +158,7 @@ class ToolkitEditorFactory(EditorFactory):
     reverse = Bool(False)
 
     #: The DockWindow graphical theme:
-    dock_theme = Any
+    dock_theme = Any()
 
     #: View to use when editing table items.
     #: NOTE: If not specified, the table items are not editable in a separate
@@ -246,7 +246,7 @@ class ToolkitEditorFactory(EditorFactory):
 
     #: The optional extended name of the trait that the indices of the items
     #: currently passing the table filter are synced with:
-    filtered_indices = Str
+    filtered_indices = Str()
 
     #: The selection mode of the table. The meaning of the various values are as
     #: follows:
@@ -270,44 +270,44 @@ class ToolkitEditorFactory(EditorFactory):
 
     #: The optional extended name of the trait that the current selection is
     #: synced with:
-    selected = Str
+    selected = Str()
 
     #: The optional extended trait name of the trait that the indices of the
     #: current selection are synced with:
-    selected_indices = Str
+    selected_indices = Str()
 
     #: The optional extended trait name of the trait that should be assigned
     #: an ( object, column ) tuple when a table cell is clicked on (Note: If you
     #: want to receive repeated clicks on the same cell, make sure the trait is
     #: defined as an Event):
-    click = Str
+    click = Str()
 
     #: The optional extended trait name of the trait that should be assigned
     #: an ( object, column ) tuple when a table cell is double-clicked on
     #: (Note: if you want to receive repeated double-clicks on the same cell,
     #: make sure the trait is defined as an Event):
-    dclick = Str
+    dclick = Str()
 
     #: Called when a table item is selected
-    on_select = Any
+    on_select = Any()
 
     #: Called when a table item is double clicked
-    on_dclick = Any
+    on_dclick = Any()
 
     #: A factory to generate new rows.
     #: NOTE: If None, then the user will not be able to add new rows to the
     #: table. If not None, then it must be a callable that accepts
     #: **row_factory_args** and **row_factory_kw** and returns a new object
     #: that can be added to the table.
-    row_factory = Any
+    row_factory = Any()
 
     #: Arguments to pass to the **row_factory** callable when a new row is
     #: created
-    row_factory_args = Tuple
+    row_factory_args = Tuple()
 
     #: Keyword arguments to pass to the **row_factory** callable when a new row
     #: is created
-    row_factory_kw = Dict
+    row_factory_kw = Dict()
 
     #: Hooks for replacing parts of the implementation.
     table_view_factory = Callable()

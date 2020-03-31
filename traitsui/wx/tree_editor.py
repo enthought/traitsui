@@ -1706,7 +1706,7 @@ class ObjectLabel(HasStrictTraits):
     # -------------------------------------------------------------------------
 
     #: Label to be edited
-    label = Str
+    label = Str()
 
     # -------------------------------------------------------------------------
     #  Traits view definition:

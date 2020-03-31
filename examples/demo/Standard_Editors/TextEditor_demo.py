@@ -28,7 +28,7 @@ class TextEditorDemo(HasTraits):
     # Define a trait for each of three TextEditor variants:
     string_trait = Str("sample string")
     int_trait = Int(1)
-    password = Password
+    password = Password()
 
     # TextEditor display with multi-line capability (for a string):
     text_str_group = Group(

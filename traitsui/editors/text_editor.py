@@ -93,7 +93,7 @@ class ToolkitEditorFactory(EditorFactory):
     evaluate = evaluate_trait
 
     #: The object trait containing the function used to evaluate user input
-    evaluate_name = Str
+    evaluate_name = Str()
 
     #: The optional view to display when a read-only text editor is clicked:
     view = AView

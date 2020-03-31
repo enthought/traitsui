@@ -105,7 +105,7 @@ class Player(HasTraits):
     name = Str('<new player>')
 
     # The number of hits the player made this season:
-    hits = Int
+    hits = Int()
 
 #--[Team Class]-----------------------------------------------------------
 

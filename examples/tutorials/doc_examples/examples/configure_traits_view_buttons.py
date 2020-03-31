@@ -14,12 +14,12 @@ from traitsui.menu import OKButton, CancelButton
 
 
 class SimpleEmployee(HasTraits):
-    first_name = Str
-    last_name = Str
-    department = Str
+    first_name = Str()
+    last_name = Str()
+    department = Str()
 
-    employee_number = Str
-    salary = Int
+    employee_number = Str()
+    salary = Int()
 
 view1 = View(Item(name='first_name'),
              Item(name='last_name'),

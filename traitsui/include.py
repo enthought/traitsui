@@ -42,8 +42,8 @@ class Include(ViewSubElement):
     "extra" attributes in the middle of the view::
 
         class Person(HasTraits):
-            name = Str
-            age = Int
+            name = Str()
+            age = Int()
             person_view = View('name', Include('extra'), 'age', kind='modal')
 
     If you directly create an instance of Person, and edit its attributes,
@@ -53,10 +53,10 @@ class Include(ViewSubElement):
     attributes to add to the view defined on Person::
 
         class LocatedPerson(Person):
-            street = Str
-            city = Str
-            state = Str
-            zip = Int
+            street = Str()
+            city = Str()
+            state = Str()
+            zip = Int()
             extra = Group('street', 'city', 'state', 'zip')
 
     The attribute-editing window for an instance of LocatedPerson displays
@@ -68,7 +68,7 @@ class Include(ViewSubElement):
     # -------------------------------------------------------------------------
 
     #: The name of the substitutable content
-    id = Str
+    id = Str()
 
     def __init__(self, id, **traits):
         """ Initializes the Include object.

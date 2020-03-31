@@ -99,7 +99,7 @@ class FileTreeDemo(HasTraits):
     root_path = Directory(entries=10)
 
     # The root of the file tree:
-    root = Property
+    root = Property()
 
     # The traits view to display:
     view = View(

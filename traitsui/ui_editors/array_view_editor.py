@@ -41,7 +41,7 @@ class ArrayViewAdapter(TabularAdapter):
     transpose = Bool(False)
 
     alignment = "right"
-    index_text = Property
+    index_text = Property()
 
     def _get_index_text(self):
         return str(self.row)
@@ -169,7 +169,7 @@ class _ArrayViewEditor(UIEditor):
 class ArrayViewEditor(BasicEditorFactory):
 
     #: The editor implementation class:
-    klass = Property
+    klass = Property()
 
     #: Should an index column be displayed:
     show_index = Bool(True)

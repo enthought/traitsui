@@ -72,7 +72,7 @@ class CustomEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: List of InstanceChoiceItem objects used by the editor
-    items = Property
+    items = Property()
 
     #: The maximum extra padding that should be allowed around the editor:
     #: (Override of the Editor base class trait)

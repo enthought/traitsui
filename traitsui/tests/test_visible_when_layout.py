@@ -37,8 +37,8 @@ class VisibleWhenProblem(HasTraits):
 
     which = Enum("one", "two")
 
-    on = Bool
-    txt = Str
+    on = Bool()
+    txt = Str()
 
     onoff_group = HGroup(
         VGroup(

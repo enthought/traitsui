@@ -45,7 +45,7 @@ class TitleEditorDemo(HasTraits):
     title_3 = Property(depends_on='value')
 
     # The number used to drive the calculation:
-    value = Float
+    value = Float()
 
     # Define the test view:
     view = View(

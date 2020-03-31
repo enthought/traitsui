@@ -16,7 +16,7 @@ from ._tools import GuiTestAssistant, is_current_backend_qt4, no_gui_test_assist
 
 
 class SimpleModel(HasTraits):
-    cell = Int
+    cell = Int()
 
 
 class ClosableHandler(Handler):

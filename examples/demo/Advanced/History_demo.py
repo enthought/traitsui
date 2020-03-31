@@ -34,9 +34,9 @@ from traitsui.api \
 
 class HistoryDemo(HasTraits):
 
-    name = Str
-    file = File
-    directory = Directory
+    name = Str()
+    file = File()
+    directory = Directory()
 
     view = View(
         Item('name',

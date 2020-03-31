@@ -11,7 +11,7 @@ from traitsui.api import View, Item, DateEditor, Group
 
 class DateEditorDemo(HasTraits):
     """ Demo class to show Date editors. """
-    single_date = Date
+    single_date = Date()
     multi_date = List(Date)
     info_string = Str('The editors for Traits Date objects.  Showing both '
                       'the defaults, and one with alternate options.')

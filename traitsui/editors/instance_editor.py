@@ -49,7 +49,7 @@ class ToolkitEditorFactory(EditorFactory):
 
     #: Extended name of the context object trait containing the list of types of
     #: selectable or editable instances
-    name = Str
+    name = Str()
 
     #: Is the current value of the object trait editable (vs. merely
     #: selectable)?
@@ -71,17 +71,17 @@ class ToolkitEditorFactory(EditorFactory):
     cachable = Bool(True)
 
     #: Optional label for button
-    label = Str
+    label = Str()
 
     #: Optional instance view to use
     view = AView
 
     #: Extended name of the context object trait containing the view, or name of
     #: the view, to use
-    view_name = Str
+    view_name = Str()
 
     #: The ID to use with the view
-    id = Str
+    id = Str()
 
     #: Kind of pop-up editor (live, modal, nonmodal, wizard)
     kind = AKind

@@ -42,7 +42,7 @@ from traitsui.api import *
 
 class Count(HasTraits):
 
-    count = Int
+    count = Int()
     go = Button('Count')
 
     view = View(

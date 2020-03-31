@@ -24,9 +24,9 @@ class TC_Handler(Handler):
 
 
 class TestClass(HasTraits):
-    b1 = Bool
-    b2 = Bool
-    b3 = Bool
+    b1 = Bool()
+    b2 = Bool()
+    b3 = Bool()
     _updated = Bool(False)
 
 view1 = View('b1', 'b2', 'b3',

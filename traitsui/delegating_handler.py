@@ -47,7 +47,7 @@ class DelegatingHandler(Handler):
     # -- Protected 'DelegatingHandler' Interface ------------------------------
 
     #: A list of dispatchable handler methods:
-    _dispatchers = List
+    _dispatchers = List()
 
     # -------------------------------------------------------------------------
     #  'Handler' interface:

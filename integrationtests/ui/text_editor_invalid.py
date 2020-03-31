@@ -13,7 +13,7 @@ from traitsui.api import TextEditor
 
 
 class Person(HasTraits):
-    name = Str
+    name = Str()
 
     invalid = Property(Bool, depends_on='name')
 

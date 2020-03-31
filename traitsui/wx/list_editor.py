@@ -62,16 +62,16 @@ class SimpleEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: The kind of editor to create for each list item
-    kind = Str
+    kind = Str()
 
     #: Is the list of items being edited mutable?
-    mutable = Bool
+    mutable = Bool()
 
     #: The image used by the editor:
     image = Image("list_editor")
 
     #: The bitmap used by the editor:
-    bitmap = Property
+    bitmap = Property()
 
     # -------------------------------------------------------------------------
     #  Class constants:
@@ -497,7 +497,7 @@ class NotebookEditor(Editor):
     scrollable = True
 
     #: The currently selected notebook page object:
-    selected = Any
+    selected = Any()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

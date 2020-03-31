@@ -8,9 +8,9 @@ from traitsui.api import View
 
 
 class Person(HasTraits):
-    first_name = Str
-    last_name = Str
-    age = Int
+    first_name = Str()
+    last_name = Str()
+    age = Int()
     gender = Trait(None, 'M', 'F')
     name_view = View('first_name', 'last_name')
 

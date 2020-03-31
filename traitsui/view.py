@@ -320,10 +320,10 @@ class View(ViewElement):
     height = Height
 
     #: Class of dropped objects that can be added:
-    drop_class = Any
+    drop_class = Any()
 
     #: Event when the view has been updated:
-    updated = Event
+    updated = Event()
 
     #: What result should be returned if the user clicks the window or dialog
     #: close button or icon?

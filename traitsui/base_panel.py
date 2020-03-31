@@ -30,7 +30,7 @@ class BasePanel(ActionController):
     """
 
     #: The top-level toolkit control of the UI.
-    control = Any
+    control = Any()
 
     #: The UI instance for the view.
     ui = Instance("traitsui.ui.UI")

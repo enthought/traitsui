@@ -20,7 +20,7 @@ class TextEditorDemo(HasTraits):
     # Define a trait for each of three variants
     string_trait = Str("sample string")
     int_trait = Int(1)
-    password = Password
+    password = Password()
 
     # TextEditor display without multi-line capability (for various traits):
     text_int_group = Group(Item('int_trait', style='simple', label='Simple'),

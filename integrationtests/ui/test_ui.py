@@ -82,8 +82,8 @@ class TraitsTest(HasTraits):
     list = List(Str, ['East of Eden', 'The Grapes of Wrath',
                       'Of Mice and Men'])
     button = Event(0, editor=ButtonEditor(label='Click'))
-    file = File
-    directory = Directory
+    file = File()
+    directory = Directory()
     image_enum = Trait(editor=ImageEnumEditor(values=origin_values,
                                               suffix='_origin',
                                               cols=4,

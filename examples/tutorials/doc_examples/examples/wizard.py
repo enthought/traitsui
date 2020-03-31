@@ -8,11 +8,11 @@ from traitsui.api import Item, View, VGroup
 
 
 class Person(HasTraits):
-    first_name = Str
-    last_name = Str
+    first_name = Str()
+    last_name = Str()
 
-    company = Str
-    position = Str
+    company = Str()
+    position = Str()
 
     view = View(
         VGroup(

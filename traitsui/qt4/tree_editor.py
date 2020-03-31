@@ -71,26 +71,26 @@ class SimpleEditor(Editor):
     scrollable = True
 
     #: Allows an external agent to set the tree selection
-    selection = Event
+    selection = Event()
 
     #: The currently selected object
-    selected = Any
+    selected = Any()
 
     #: The event fired when a tree node is activated by double clicking or
     #: pressing the Enter key on a node.
-    activated = Event
+    activated = Event()
 
     #: The event fired when a tree node is clicked on:
-    click = Event
+    click = Event()
 
     #: The event fired when a tree node is double-clicked on:
-    dclick = Event
+    dclick = Event()
 
     #: The event fired when the application wants to veto an operation:
-    veto = Event
+    veto = Event()
 
     #: The vent fired when the application wants to refresh the viewport.
-    refresh = Event
+    refresh = Event()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

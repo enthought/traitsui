@@ -13,10 +13,10 @@ from traitsui.api import View, Group, Item
 
 
 class House(HasTraits):
-    address = Str
-    bedrooms = Int
-    pool = Bool
-    price = Int
+    address = Str()
+    bedrooms = Int()
+    pool = Bool()
+    price = Int()
 
 # View object designed to display two objects of class 'House'
 comp_view = View(

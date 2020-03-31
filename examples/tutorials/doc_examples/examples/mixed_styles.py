@@ -11,8 +11,8 @@ from traitsui.api import View, Group, Item
 
 
 class MixedStyles(HasTraits):
-    first_name = Str
-    last_name = Str
+    first_name = Str()
+    last_name = Str()
 
     department = Enum("Business", "Research", "Admin")
     position_type = Enum("Full-Time",

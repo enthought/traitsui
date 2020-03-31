@@ -49,32 +49,32 @@ class Action(PyFaceAction):
     #: **visible_when** conditions are checked each time that any trait value
     #: is edited in the display. Therefore, you can use **visible_when**
     #: conditions to hide or show actions in response to user input.
-    visible_when = Str
+    visible_when = Str()
 
     #: Pre-condition for enabling the action. If the expression evaluates to
     #: False, the action is disabled, that is, it cannot be selected. All
     #: **enabled_when** conditions are checked each time that any trait value
     #: is edited in the display. Therefore, you can use **enabled_when**
     #: conditions to enable or disable actions in response to user input.
-    enabled_when = Str
+    enabled_when = Str()
 
     #: Boolean expression indicating when the action is displayed with a check
     #: mark beside it. This attribute applies only to actions that are included
     #: in menus.
-    checked_when = Str
+    checked_when = Str()
 
     #: Pre-condition for including the action in the menu bar or toolbar. If the
     #: expression evaluates to False, the action is not defined in the display.
     #: Conditions for **defined_when** are evaluated only once, when the display
     #: is first constructed.
-    defined_when = Str
+    defined_when = Str()
 
     #: The method to call to perform the action, on the Handler for the window.
     #: The method must accept a single parameter, which is a UIInfo object.
     #: Because Actions are associated with Views rather than Handlers, you must
     #: ensure that the Handler object for a particular window has a method with
     #: the correct name, for each Action defined on the View for that window.
-    action = Str
+    action = Str()
 
 
 # -------------------------------------------------------------------------

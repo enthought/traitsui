@@ -126,7 +126,7 @@ class TableColumn(HasPrivateTraits):
     menu = Instance(Menu)
 
     #: The tooltip to display when the mouse is over the column:
-    tooltip = Str
+    tooltip = Str()
 
     #: The width of the column (< 0.0: Default, 0.0..1.0: fraction of total table
     #: width, > 1.0: absolute width in pixels):
@@ -310,10 +310,10 @@ class ObjectColumn(TableColumn):
     # -------------------------------------------------------------------------
 
     #: Name of the object trait associated with this column:
-    name = Str
+    name = Str()
 
     #: Column label to use for this column:
-    label = Property
+    label = Property()
 
     #: Trait editor used to edit the contents of this column:
     editor = Instance(EditorFactory)
@@ -325,7 +325,7 @@ class ObjectColumn(TableColumn):
     format = Str("%s")
 
     #: Format function to apply to column values:
-    format_func = Callable
+    format_func = Callable()
 
     # -------------------------------------------------------------------------
     #  Trait view definitions:
@@ -491,7 +491,7 @@ class NumericColumn(ObjectColumn):
     # -------------------------------------------------------------------------
 
     #: Column label to use for this column
-    label = Property
+    label = Property()
 
     #: Text color this column when selected
     selected_text_color = Color("black")
@@ -627,10 +627,10 @@ class ListColumn(TableColumn):
     # -------------------------------------------------------------------------
 
     # Label to use for this column
-    label = Property
+    label = Property()
 
     #: Index of the list element associated with this column
-    index = Int
+    index = Int()
 
     # Is this column editable? This value overrides the base class default.
     editable = False

@@ -174,7 +174,7 @@ class SearchStackItem(HasStrictTraits):
     # -------------------------------------------------------------------------
 
     #: Name that was looked up
-    id = Str
+    id = Str()
 
     #: Index into the 'mro' list of ViewElements that the ID was found in
-    context = Int
+    context = Int()

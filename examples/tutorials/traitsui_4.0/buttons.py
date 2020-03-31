@@ -57,8 +57,8 @@ from traitsui.api import *
 
 class Adder(HasTraits):
 
-    value_1 = Float
-    value_2 = Float
+    value_1 = Float()
+    value_2 = Float()
     sum = Property(depends_on=['value_1', 'value_2'])
 
     view = View(

@@ -44,7 +44,7 @@ class Bogus(HasTraits):
 
     name = Str("Bogus")
 
-    bogus_list = List
+    bogus_list = List()
 
     wrapped_bogus = Instance(BogusWrap)
 
@@ -57,9 +57,9 @@ class BogusTreeView(HasTraits):
 
     bogus = Instance(Bogus)
 
-    hide_root = Bool
+    hide_root = Bool()
 
-    word_wrap = Bool
+    word_wrap = Bool()
 
     nodes = List(TreeNode)
 
@@ -88,7 +88,7 @@ class BogusTreeNodeObject(TreeNodeObject):
 
     name = Str("Bogus")
 
-    bogus_list = List
+    bogus_list = List()
 
 
 class BogusTreeNodeObjectView(HasTraits):
@@ -96,7 +96,7 @@ class BogusTreeNodeObjectView(HasTraits):
 
     bogus = Instance(BogusTreeNodeObject)
 
-    hide_root = Bool
+    hide_root = Bool()
 
     nodes = List(TreeNode)
 

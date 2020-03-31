@@ -28,10 +28,10 @@ class SampleClass(HasTraits):
 
     # The actual attributes don't matter here; we just need an assortment
     # to demonstrate the InstanceEditor's capabilities.:
-    name = Str
-    occupation = Str
+    name = Str()
+    occupation = Str()
     age = Range(21, 65)
-    registered_voter = Bool
+    registered_voter = Bool()
 
     # The InstanceEditor uses whatever view is defined for the class.  The
     # default view lists the fields alphabetically, so it's best to define one
