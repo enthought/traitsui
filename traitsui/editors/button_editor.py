@@ -42,13 +42,13 @@ class ToolkitEditorFactory(EditorFactory):
     # -------------------------------------------------------------------------
 
     # Value to set when the button is clicked
-    value = Property
+    value = Property()
 
     # Optional label for the button
-    label = Str
+    label = Str()
 
     # The name of the external object trait that the button label is synced to
-    label_value = Str
+    label_value = Str()
 
     # The name of the trait on the object that contains the list of possible
     # values.  If this is set, then the value, label, and label_value traits

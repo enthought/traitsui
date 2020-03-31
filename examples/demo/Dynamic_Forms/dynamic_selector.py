@@ -65,9 +65,9 @@ class Address(HasTraits):
     """ Demo class for demonstrating dynamic redefinition of valid trait values.
     """
 
-    street_address = Str
+    street_address = Str()
     state = Enum(list(cities.keys())[0], list(cities.keys()))
-    city = Str
+    city = Str()
 
     view = View(
         Item(name='street_address'),

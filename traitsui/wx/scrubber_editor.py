@@ -56,19 +56,19 @@ class _ScrubberEditor(Editor):
     """
 
     #: The low end of the slider range:
-    low = Any
+    low = Any()
 
     #: The high end of the slider range:
-    high = Any
+    high = Any()
 
     #: The smallest allowed increment:
-    increment = Float
+    increment = Float()
 
     #: The current text being displayed:
-    text = Str
+    text = Str()
 
     #: The mapping to use (only for Enum's):
-    mapping = Any
+    mapping = Any()
 
     # -- Class Variables ------------------------------------------------------
 

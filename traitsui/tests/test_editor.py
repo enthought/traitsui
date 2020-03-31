@@ -32,10 +32,10 @@ class FakeControl(HasTraits):
     """
 
     #: The value stored in the control.
-    control_value = Any
+    control_value = Any()
 
     #: An event which also can be fired.
-    control_event = Event
+    control_event = Event()
 
 
 class StubEditorFactory(EditorFactory):
@@ -74,22 +74,22 @@ class StubEditor(Editor):
     """
 
     #: Whether or not the traits are events.
-    is_event = Bool
+    is_event = Bool()
 
     #: An auxiliary value we want to synchronize.
-    auxiliary_value = Any
+    auxiliary_value = Any()
 
     #: An auxiliary list we want to synchronize.
-    auxiliary_list = List
+    auxiliary_list = List()
 
     #: An auxiliary event we want to synchronize.
-    auxiliary_event = Event
+    auxiliary_event = Event()
 
     #: An auxiliary int we want to synchronize with a context value.
     auxiliary_cv_int = Int(sync_value="from")
 
     #: An auxiliary float we want to synchronize with a context value.
-    auxiliary_cv_float = Float
+    auxiliary_cv_float = Float()
 
     def init(self, parent):
         self.control = FakeControl()
@@ -142,7 +142,7 @@ class UserObject(HasTraits):
     user_list = List(["one", "two", "three"])
 
     #: An event user value
-    user_event = Event
+    user_event = Event()
 
 
 def create_editor(

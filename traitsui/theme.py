@@ -45,10 +45,10 @@ class Theme(HasPrivateTraits):
     alignment = Alignment(cols=4)
 
     #: The color to use for content text (Wx only)
-    content_color = Property
+    content_color = Property()
 
     #: The color to use for label text (Wx only)
-    label_color = Property
+    label_color = Property()
 
     #: The image slice used to draw the theme (Wx only)
     image_slice = Property(depends_on="image")

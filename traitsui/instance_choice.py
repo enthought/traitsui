@@ -36,7 +36,7 @@ class InstanceChoiceItem(HasPrivateTraits):
     # -------------------------------------------------------------------------
 
     #: User interface name for the item
-    name = Str
+    name = Str()
 
     #: View associated with this item
     view = AView
@@ -82,7 +82,7 @@ class InstanceChoice(InstanceChoiceItem):
     # -------------------------------------------------------------------------
 
     #: Object associated with the item
-    object = Any
+    object = Any()
 
     #: The name of the object trait containing its user interface name:
     name_trait = Str("name")
@@ -125,10 +125,10 @@ class InstanceFactoryChoice(InstanceChoiceItem):
 
     #: A class (or other callable) that can be used to create an item compatible
     #: with this item
-    klass = Callable
+    klass = Callable()
 
     #: Tuple of arguments to pass to **klass** to create an instance
-    args = Tuple
+    args = Tuple()
 
     #: Dictionary of arguments to pass to **klass** to create an instance
     kw_args = Dict(Str, Any)

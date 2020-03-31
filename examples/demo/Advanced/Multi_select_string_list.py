@@ -23,7 +23,7 @@ class MultiSelectAdapter(TabularAdapter):
 
     # Magically named trait which gives the display text of the column named
     # 'myvalue'. This is done using a Traits Property and its getter:
-    myvalue_text = Property
+    myvalue_text = Property()
 
     # The getter for Property 'myvalue_text' simply takes the value of the
     # corresponding item in the list being displayed in this table.

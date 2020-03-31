@@ -17,7 +17,7 @@ class FileEditorDemo(HasTraits):
     """
 
     # To demonstrate any given Trait editor, an appropriate Trait is required.
-    file_name = File
+    file_name = File()
 
     # Display specification (one Item per editor style)
     file_group = Group(Item('file_name', style='simple', label='Simple'),

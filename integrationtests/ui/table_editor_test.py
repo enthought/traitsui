@@ -40,10 +40,10 @@ class Person(HasStrictTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    name = Str
-    age = Int
+    name = Str()
+    age = Int()
     phone = Regex(value='000-0000', regex='\d\d\d[-]\d\d\d\d')
-    state = Str
+    state = Str()
 
     #-------------------------------------------------------------------------
     #  Traits view definition:
@@ -124,7 +124,7 @@ class NameFilter(TableFilter):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    mname = Str
+    mname = Str()
 
     #-------------------------------------------------------------------------
     #  Traits view definitions:

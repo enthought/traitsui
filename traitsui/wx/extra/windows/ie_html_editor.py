@@ -61,37 +61,37 @@ class _IEHTMLEditor(Editor):
     scrollable = True
 
     #: External objects referenced in the HTML are relative to this url
-    base_url = Str
+    base_url = Str()
 
     #: Event fired when the browser home page should be displayed:
-    home = Event
+    home = Event()
 
     #: Event fired when the browser should show the previous page:
-    back = Event
+    back = Event()
 
     #: Event fired when the browser should show the next page:
-    forward = Event
+    forward = Event()
 
     #: Event fired when the browser should stop loading the current page:
-    stop = Event
+    stop = Event()
 
     #: Event fired when the browser should refresh the current page:
-    refresh = Event
+    refresh = Event()
 
     #: Event fired when the browser should search the current page:
-    search = Event
+    search = Event()
 
     #: The current browser status:
-    status = Str
+    status = Str()
 
     #: The current browser page title:
-    title = Str
+    title = Str()
 
     #: The URL of the page that just finished loading:
-    page_loaded = Str
+    page_loaded = Str()
 
     #: The current page content as HTML:
-    html = Property
+    html = Property()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -222,41 +222,41 @@ class IEHTMLEditor(BasicEditorFactory):
     klass = _IEHTMLEditor
 
     #: External objects referenced in the HTML are relative to this url
-    base_url = Str
+    base_url = Str()
 
     #: The object trait containing the base URL
-    base_url_name = Str
+    base_url_name = Str()
 
     #: Should links be opened in an external browser?
     open_externally = Bool(False)
 
     #: Optional name of trait used to tell browser to show Home page:
-    home = Str
+    home = Str()
 
     #: Optional name of trait used to tell browser to view the previous page:
-    back = Str
+    back = Str()
 
     #: Optional name of trait used to tell browser to view the next page:
-    forward = Str
+    forward = Str()
 
     #: Optional name of trait used to tell browser to stop loading page:
-    stop = Str
+    stop = Str()
 
     #: Optional name of trait used to tell browser to refresh the current page:
-    refresh = Str
+    refresh = Str()
 
     #: Optional name of trait used to tell browser to search the current page:
-    search = Str
+    search = Str()
 
     #: Optional name of trait used to contain the current browser status:
-    status = Str
+    status = Str()
 
     #: Optional name of trait used to contain the current browser page title:
-    title = Str
+    title = Str()
 
     #: Optional name of trait used to contain the URL of the page that just
     #: completed loading:
-    page_loaded = Str
+    page_loaded = Str()
 
     #: Optional name of trait used to get/set the page content as HTML:
-    html = Str
+    html = Str()

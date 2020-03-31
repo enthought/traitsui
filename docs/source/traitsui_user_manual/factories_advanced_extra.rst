@@ -171,8 +171,8 @@ with associated key bindings, and a button that invokes the key binding editor.
 
     class KBCodeExample ( HasPrivateTraits ):
 
-        code   = Code
-        status = Str
+        code = Code()
+        status = Str()
         kb    = Button(label='Edit Key Bindings')
 
         view = View( Group (
@@ -762,7 +762,7 @@ The following example shows the code that produces the editor shown in Figure
 
     class Employee ( HasTraits ):
         name  = Str( '<unknown>' )
-        title = Str
+        title = Str()
         phone = Regex( regex = r'\d\d\d-\d\d\d\d' )
 
         def default_title ( self ):

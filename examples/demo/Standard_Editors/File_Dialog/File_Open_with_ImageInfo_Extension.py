@@ -43,7 +43,7 @@ filters = [
 class FileDialogDemo(HasTraits):
 
     # The name of the selected file:
-    file_name = File
+    file_name = File()
 
     # The button used to display the file dialog:
     open = Button('Open...')

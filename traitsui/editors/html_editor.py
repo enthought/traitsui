@@ -60,10 +60,10 @@ class ToolkitEditorFactory(BasicEditorFactory):
     format_text = Bool(False)
 
     #: External objects referenced in the HTML are relative to this url
-    base_url = Str
+    base_url = Str()
 
     #: The object trait containing the base URL
-    base_url_name = Str
+    base_url_name = Str()
 
     #: Should links be opened in an external browser?
     open_externally = Bool(False)

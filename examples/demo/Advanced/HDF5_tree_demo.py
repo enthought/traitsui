@@ -30,9 +30,9 @@ class Hdf5GroupNode(HasTraits):
     parent_path = Str('<unknown>')
     # Can't have recursive traits?  Really?
     #groups = List( Hdf5GroupNode )
-    groups = List
+    groups = List()
     arrays = List(Hdf5ArrayNode)
-    groups_and_arrays = List
+    groups_and_arrays = List()
 
 
 class Hdf5FileNode(HasTraits):
@@ -40,7 +40,7 @@ class Hdf5FileNode(HasTraits):
     path = Str('/')
     groups = List(Hdf5GroupNode)
     arrays = List(Hdf5ArrayNode)
-    groups_and_arrays = List
+    groups_and_arrays = List()
 
 # Recurssively build tree, there is probably a better way of doing this.
 
@@ -147,7 +147,7 @@ if __name__ == '__main__':
 
     class ATree(HasTraits):
         h5_tree = Instance(Hdf5FileNode)
-        node = Any
+        node = Any()
 
         traits_view = View(
             Group(

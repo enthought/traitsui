@@ -121,31 +121,31 @@ class _ListStrEditor(Editor):
     # -- Trait Definitions ----------------------------------------------------
 
     #: The title of the editor:
-    title = Str
+    title = Str()
 
     #: The current set of selected items (which one is used depends upon the
     #: initial state of the editor factory 'multi_select' trait):
-    selected = Any
-    multi_selected = List
+    selected = Any()
+    multi_selected = List()
 
     #: The current set of selected item indices (which one is used depends upon
     #: the initial state of the editor factory 'multi_select' trait):
-    selected_index = Int
+    selected_index = Int()
     multi_selected_indices = List(Int)
 
     #: The most recently actived item and its index:
-    activated = Any
-    activated_index = Int
+    activated = Any()
+    activated_index = Int()
 
     #: The most recently right_clicked item and its index:
-    right_clicked = Event
-    right_clicked_index = Event
+    right_clicked = Event()
+    right_clicked_index = Event()
 
     #: Is the list editor scrollable? This value overrides the default.
     scrollable = True
 
     #: Index of item to select after rebuilding editor list:
-    index = Any
+    index = Any()
 
     #: Should the selected item be edited after rebuilding the editor list:
     edit = Bool(False)
@@ -160,10 +160,10 @@ class _ListStrEditor(Editor):
     image_resources = Any({})
 
     #: The current number of item currently in the list:
-    item_count = Property
+    item_count = Property()
 
     #: The current search string:
-    search = Str
+    search = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

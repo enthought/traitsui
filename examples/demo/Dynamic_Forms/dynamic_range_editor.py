@@ -41,7 +41,7 @@ class DynamicRangeEditor(HasPrivateTraits):
     """
 
     # The value with the dynamic range:
-    value = Float
+    value = Float()
 
     # This determines the low end of the range:
     low = Range(0.0, 10.0, 0.0)
@@ -50,7 +50,7 @@ class DynamicRangeEditor(HasPrivateTraits):
     high = Range(20.0, 100.0, 20.0)
 
     # An integer value:
-    int_value = Int
+    int_value = Int()
 
     # This determines the low end of the integer range:
     int_low = Range(0, 10, 0)

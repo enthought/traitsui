@@ -72,8 +72,8 @@ class PersonHandler(Handler):
 class Person(HasPrivateTraits):
 
     # The person's name, age and gender:
-    name = Str
-    age = Int
+    name = Str()
+    age = Int()
     gender = Enum('Male', 'Female')
 
     # The traits UI view:

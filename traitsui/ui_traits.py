@@ -89,7 +89,7 @@ ContainerDelegate = container_delegate = Delegate(
 HelpId = help_id_trait = Str(desc="the external help context identifier")
 
 # A button to add to a view:
-AButton = Any
+AButton = Any()
 # AButton = Trait( '', Str, Instance( 'traitsui.menu.Action' ) )
 
 # The set of buttons to add to the view:
@@ -98,7 +98,7 @@ Buttons = List(
 )
 
 # View trait specified by name or instance:
-AView = Any
+AView = Any()
 # AView = Trait( '', Str, Instance( 'traitsui.view.View' ) )
 
 # FIXME: on AButton and AView: TraitCompound handlers with deferred-import

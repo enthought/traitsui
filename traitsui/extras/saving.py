@@ -43,7 +43,7 @@ class CanSaveMixin(HasTraits):
         since its last save.
     """
 
-    filepath = Str
+    filepath = Str()
     dirty = Bool(False)
 
     # -----------------------------------------------------------------
@@ -87,14 +87,14 @@ class SaveHandler(Handler):
     #: The object which is to be saved (subclass of CanSaveMixin). It is assigned
     #: to info.object in the 'init' method, which in many cases is what you want.
     #: If not, override that method to set it to something else.
-    saveObject = Any
+    saveObject = Any()
 
     #: The type of files to show in the save dialogs
     wildcard = Str("All files (*.*)|*.*")
 
     #: The option extension which should appear at the end of all filenames. If
     #: the user does not explicitly specifiy it, it is appended to the filename.
-    extension = Str
+    extension = Str()
 
     #: This message to display when the Handler requests a save
     savePromptMessage = Str("Would you like to save?")

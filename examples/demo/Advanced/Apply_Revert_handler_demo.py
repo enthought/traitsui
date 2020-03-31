@@ -29,9 +29,9 @@ class ApplyRevert_Handler(Handler):
 class ApplyRevertDemo(HasTraits):
 
     # Trait definitions:
-    input = Str
-    stack = List
-    queue = List
+    input = Str()
+    stack = List()
+    queue = List()
 
     # Traits view definitions:
     traits_view = View(

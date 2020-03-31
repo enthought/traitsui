@@ -36,7 +36,7 @@ class BasicEditorFactory(EditorFactory):
     # -------------------------------------------------------------------------
 
     # Editor class to be instantiated
-    klass = Any
+    klass = Any()
 
     # -------------------------------------------------------------------------
     #  Property getters.

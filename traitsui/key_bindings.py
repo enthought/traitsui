@@ -62,10 +62,10 @@ class KeyBinding(HasStrictTraits):
     binding2 = Binding
 
     #: Description of what application function the method performs
-    description = Str
+    description = Str()
 
     #: Name of controller method the key is bound to
-    method_name = Str
+    method_name = Str()
 
     #: KeyBindings object that "owns" the KeyBinding
     owner = Instance("KeyBindings")
@@ -100,10 +100,10 @@ class KeyBindings(HasPrivateTraits):
     bindings = List(KeyBinding)
 
     #: Optional prefix to add to each method name
-    prefix = Str
+    prefix = Str()
 
     #: Optional suffix to add to each method name
-    suffix = Str
+    suffix = Str()
 
     # -- Private Traits -------------------------------------------------------
 

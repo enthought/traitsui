@@ -67,7 +67,7 @@ class TableTest(HasStrictTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    people = List
+    people = List()
 
     #-------------------------------------------------------------------------
     #  Traits view definitions:

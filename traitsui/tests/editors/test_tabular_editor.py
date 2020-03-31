@@ -21,8 +21,8 @@ from traitsui.tests._tools import skip_if_null
 
 
 class Person(HasTraits):
-    name = Str
-    age = Int
+    name = Str()
+    age = Int()
 
     def __repr__(self):
         return "Person(name={self.name!r}, age={self.age!r})".format(self=self)
@@ -40,10 +40,10 @@ class Report(HasTraits):
     selected_row = Int(-1)
 
     # Event for triggering a UI repaint.
-    refresh = Event
+    refresh = Event()
 
     # Event for triggering a UI table update.
-    update = Event
+    update = Event()
 
     traits_view = View(
         Item(

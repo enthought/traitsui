@@ -31,7 +31,7 @@ class PyfaceAction(Action):
 
     name = "Test Action"
 
-    performed = Bool
+    performed = Bool()
 
     def perform(self, event):
         self.performed = True
@@ -41,7 +41,7 @@ class TraitsUIAction(Action):
 
     name = "Test Action"
 
-    performed = Bool
+    performed = Bool()
 
     def perform(self):
         self.performed = True
@@ -49,23 +49,23 @@ class TraitsUIAction(Action):
 
 class SampleHandler(Handler):
 
-    action_performed = Bool
+    action_performed = Bool()
 
-    info_action_performed = Bool
+    info_action_performed = Bool()
 
-    click_performed = Bool
+    click_performed = Bool()
 
-    undo_performed = Bool
+    undo_performed = Bool()
 
-    redo_performed = Bool
+    redo_performed = Bool()
 
-    revert_performed = Bool
+    revert_performed = Bool()
 
-    apply_performed = Bool
+    apply_performed = Bool()
 
-    close_performed = Bool
+    close_performed = Bool()
 
-    help_performed = Bool
+    help_performed = Bool()
 
     def action_handler(self):
         self.action_performed = True
@@ -104,13 +104,13 @@ class SampleHandler(Handler):
 
 class SampleObject(HasTraits):
 
-    object_action_performed = Bool
+    object_action_performed = Bool()
 
-    action_performed = Bool
+    action_performed = Bool()
 
-    info_action_performed = Bool
+    info_action_performed = Bool()
 
-    click_performed = Bool
+    click_performed = Bool()
 
     def object_action_handler(self):
         self.object_action_performed = True

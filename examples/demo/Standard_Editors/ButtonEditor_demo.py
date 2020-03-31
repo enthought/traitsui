@@ -16,7 +16,7 @@ class ButtonEditorDemo(HasTraits):
 
     # Define a Button trait:
     my_button_trait = Button('Click Me')
-    click_counter = Int
+    click_counter = Int()
 
     # When the button is clicked, do something.
     # The listener method is named '_TraitName_fired', where

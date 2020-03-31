@@ -38,8 +38,8 @@ class EmployeeAdapter(TabularAdapter):
 
 class Employee(HasTraits):
 
-    name = Str
-    salary = Float
+    name = Str()
+    salary = Float()
 
 #-- Company Class --------------------------------------------------------
 
@@ -48,7 +48,7 @@ class Company(HasTraits):
 
     employees = List(Employee)
     employee = Instance(Employee)
-    increase = Float
+    increase = Float()
     give_raise = Button('Give raise')
 
     view = View(

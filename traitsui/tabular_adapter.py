@@ -48,16 +48,16 @@ from .toolkit_traits import Color, Font
 class ITabularAdapter(Interface):
 
     #: The row index of the current item being adapted:
-    row = Int
+    row = Int()
 
     #: The current column id being adapted (if any):
-    column = Any
+    column = Any()
 
     #: Current item being adapted:
-    item = Any
+    item = Any()
 
     #: The current value (if any):
-    value = Any
+    value = Any()
 
     #: The list of columns the adapter supports. The items in the list have the
     #: same format as the :py:attr:`columns` trait in the
@@ -67,10 +67,10 @@ class ITabularAdapter(Interface):
     columns = List(Str)
 
     #: Does the adapter know how to handle the current *item* or not:
-    accepts = Bool
+    accepts = Bool()
 
     #: Does the value of *accepts* depend only upon the type of *item*?
-    is_cacheable = Bool
+    is_cacheable = Bool()
 
 
 @provides(ITabularAdapter)
@@ -79,16 +79,16 @@ class AnITabularAdapter(HasPrivateTraits):
     # Implementation of the ITabularAdapter Interface ------------------------
 
     #: The row index of the current item being adapted:
-    row = Int
+    row = Int()
 
     #: The current column id being adapted (if any):
-    column = Any
+    column = Any()
 
     #: Current item being adapted:
-    item = Any
+    item = Any()
 
     #: The current value (if any):
-    value = Any
+    value = Any()
 
     #: The list of columns the adapter supports. The items in the list have the
     #: same format as the :py:attr:`columns` trait in the
@@ -159,7 +159,7 @@ class TabularAdapter(HasPrivateTraits):
     can_edit = Bool(True)
 
     #: The value to be dragged for a specified row item.
-    drag = Property
+    drag = Property()
 
     #: Can any arbitrary value be dropped onto the tabular view.
     can_drop = Bool(False)
@@ -172,28 +172,28 @@ class TabularAdapter(HasPrivateTraits):
     font = Font(None)
 
     #: The text color for a row item.
-    text_color = Property
+    text_color = Property()
 
     #: The background color for a row item.
-    bg_color = Property
+    bg_color = Property()
 
     #: The name of the default image to use for column items.
     image = Str(None, update=True)
 
     #: The text of a row/column item.
-    text = Property
+    text = Property()
 
     #: The content of a row/column item (may be any Python value).
-    content = Property
+    content = Property()
 
     #: The tooltip information for a row/column item.
-    tooltip = Str
+    tooltip = Str()
 
     #: The context menu for a row/column item.
-    menu = Any
+    menu = Any()
 
     #: The context menu for column header.
-    column_menu = Any
+    column_menu = Any()
 
     #: List of optional delegated adapters.
     adapters = List(ITabularAdapter, update=True)
@@ -204,22 +204,22 @@ class TabularAdapter(HasPrivateTraits):
     object = Instance(HasTraits)
 
     #: The name of the trait being edited.
-    name = Str
+    name = Str()
 
     #: The row index of the current item being adapted.
-    row = Int
+    row = Int()
 
     #: The column index of the current item being adapted.
-    column = Int
+    column = Int()
 
     #: The current column id being adapted (if any).
-    column_id = Any
+    column_id = Any()
 
     #: Current item being adapted.
-    item = Any
+    item = Any()
 
     #: The current value (if any).
-    value = Any
+    value = Any()
 
     # -- Private Trait Definitions --------------------------------------------
 

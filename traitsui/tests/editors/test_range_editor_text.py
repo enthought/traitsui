@@ -33,7 +33,7 @@ class NumberWithRangeEditor(HasTraits):
     """Dialog containing a RangeEditor in 'spinner' mode for an Int.
     """
 
-    number = Int
+    number = Int()
 
     traits_view = View(
         Item(label="Range should be 3 to 8. Enter 1, then press OK"),

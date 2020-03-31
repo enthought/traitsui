@@ -106,8 +106,8 @@ from traitsui.table_column import *
 
 class Parent(HasTraits):
 
-    first_name = Str
-    last_name = Str
+    first_name = Str()
+    last_name = Str()
 
 #--[Child Class]----------------------------------------------------------
 
@@ -117,7 +117,7 @@ class Child(HasTraits):
     mother = Instance(Parent)
     father = Instance(Parent)
 
-    first_name = Str
+    first_name = Str()
     last_name = Delegate('father')
 
 #--[ChildModelView Class]-------------------------------------------------

@@ -23,8 +23,8 @@ from traitsui.table_filter \
 
 
 class Employee(HasTraits):
-    name = Str
-    age = Int
+    name = Str()
+    age = Int()
     gender = Enum('Male', 'Female')
     phone = Regex(value='000-0000', regex='\d\d\d[-]\d\d\d\d')
 

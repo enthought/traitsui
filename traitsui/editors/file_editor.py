@@ -52,7 +52,7 @@ class ToolkitEditorFactory(EditorFactory):
     filter = filter_trait
 
     #: Optional extended trait name of the trait containing the list of filters:
-    filter_name = Str
+    filter_name = Str()
 
     #: Should file extension be truncated?
     truncate_ext = Bool(False)
@@ -74,18 +74,18 @@ class ToolkitEditorFactory(EditorFactory):
 
     #: The root path of the file tree view ('custom' style only, not supported
     #: under wx). If not specified, the filesystem root is used.
-    root_path = File
+    root_path = File()
 
     #: Optional extend trait name of the trait containing the root path.
-    root_path_name = Str
+    root_path_name = Str()
 
     #: Optional extended trait name used to notify the editor when the file
     #: system view should be reloaded ('custom' style only):
-    reload_name = Str
+    reload_name = Str()
 
     #: Optional extended trait name used to notify when the user double-clicks
     #: an entry in the file tree view. The associated path is assigned it:
-    dclick_name = Str
+    dclick_name = Str()
 
     #: The style of file dialog to use when the 'Browse...' button is clicked
     #: Should be one of 'open' or 'save'

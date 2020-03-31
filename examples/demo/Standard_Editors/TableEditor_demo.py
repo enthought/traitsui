@@ -26,9 +26,9 @@ from traitsui.table_filter \
 
 
 class Employee(HasTraits):
-    first_name = Str
-    last_name = Str
-    age = Int
+    first_name = Str()
+    last_name = Str()
+    age = Int()
     phone = Regex(value='000-0000', regex='\d\d\d[-]\d\d\d\d')
 
     traits_view = View(

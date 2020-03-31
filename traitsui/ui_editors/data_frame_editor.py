@@ -296,7 +296,7 @@ class DataFrameEditor(BasicEditorFactory):
     """ Editor factory for basic data frame editor """
 
     #: The editor implementation class.
-    klass = Property
+    klass = Property()
 
     #: Should an index column be displayed.
     show_index = Bool(True)
@@ -315,11 +315,11 @@ class DataFrameEditor(BasicEditorFactory):
 
     #: The optional extended name of the trait to synchronize the selection
     #: values with:
-    selected = Str
+    selected = Str()
 
     #: The optional extended name of the trait to synchronize the selection rows
     #: with:
-    selected_row = Str
+    selected_row = Str()
 
     #: Whether or not to allow selection.
     selectable = Bool(True)
@@ -329,46 +329,46 @@ class DataFrameEditor(BasicEditorFactory):
 
     #: The optional extended name of the trait to synchronize the activated
     #: value with:
-    activated = Str
+    activated = Str()
 
     #: The optional extended name of the trait to synchronize the activated
     #: value's row with:
-    activated_row = Str
+    activated_row = Str()
 
     #: The optional extended name of the trait to synchronize left click data
     #: with. The data is a TabularEditorEvent:
-    clicked = Str
+    clicked = Str()
 
     #: The optional extended name of the trait to synchronize left double click
     #: data with. The data is a TabularEditorEvent:
-    dclicked = Str
+    dclicked = Str()
 
     #: The optional extended name of the Event trait that should be used to
     #: trigger a scroll-to command. The data is an integer giving the row.
-    scroll_to_row = Str
+    scroll_to_row = Str()
 
     #: Controls behavior of scroll to row
     scroll_to_row_hint = Enum("center", "top", "bottom", "visible")
 
     #: The optional extended name of the Event trait that should be used to
     #: trigger a scroll-to command. The data is an integer giving the column.
-    scroll_to_column = Str
+    scroll_to_column = Str()
 
     #: The optional extended name of the trait to synchronize right click data
     #: with. The data is a TabularEditorEvent:
-    right_clicked = Str
+    right_clicked = Str()
 
     #: The optional extended name of the trait to synchronize right double
     #: clicked data with. The data is a TabularEditorEvent:
-    right_dclicked = Str
+    right_dclicked = Str()
 
     #: The optional extended name of the trait to synchronize column
     #: clicked data with. The data is a TabularEditorEvent:
-    column_clicked = Str
+    column_clicked = Str()
 
     #: The optional extended name of the trait to synchronize column
     #: right clicked data with. The data is a TabularEditorEvent:
-    column_right_clicked = Str
+    column_right_clicked = Str()
 
     #: Whether or not the entries can be edited.
     editable = Bool(False)
@@ -381,11 +381,11 @@ class DataFrameEditor(BasicEditorFactory):
 
     #: The optional extended name of the trait used to indicate that a complete
     #: table update is needed:
-    update = Str
+    update = Str()
 
     #: The optional extended name of the trait used to indicate that the table
     #: just needs to be repainted.
-    refresh = Str
+    refresh = Str()
 
     #: Set to override the default dataframe adapter
     adapter = Instance(DataFrameAdapter)

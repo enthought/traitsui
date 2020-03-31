@@ -21,7 +21,7 @@ class FileEditorDemo(HasTraits):
     """ Defines the main FileEditor demo class. """
 
     # Define a File trait to view:
-    file_name = File
+    file_name = File()
 
     # Display specification (one Item per editor style):
     file_group = Group(

@@ -32,8 +32,8 @@ class Person(HasStrictTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    name = Str
-    age = Int
+    name = Str()
+    age = Int()
     phone = Regex(value='000-0000', regex='\d\d\d[-]\d\d\d\d')
 
     #-------------------------------------------------------------------------
@@ -56,7 +56,7 @@ class WorkingPerson(Person):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    job = Str
+    job = Str()
 
     #-------------------------------------------------------------------------
     #  Traits view definition:

@@ -43,7 +43,7 @@ class SimpleEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: The kind of editor to create for each list item
-    kind = Str
+    kind = Str()
 
     #: Is the list of items being edited mutable?
     mutable = Bool(True)
@@ -434,11 +434,11 @@ class NotebookEditor(Editor):
     #: Maps tab names to QWidgets representing the tab contents
     #: TODO: It would be nice to be able to reuse self._pages for this, but
     #: its keys are not quite what we want.
-    _pagewidgets = Dict
+    _pagewidgets = Dict()
 
     #: Maps names of tabs to their menu QAction instances; used to toggle
     #: checkboxes
-    _action_dict = Dict
+    _action_dict = Dict()
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -448,7 +448,7 @@ class NotebookEditor(Editor):
     scrollable = True
 
     #: The currently selected notebook page object:
-    selected = Any
+    selected = Any()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

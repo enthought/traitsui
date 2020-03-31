@@ -38,7 +38,7 @@ class NumberWithSpinnerEditor(HasTraits):
     """Dialog containing a RangeEditor in 'spinner' mode for an Int.
     """
 
-    number = Int
+    number = Int()
 
     traits_view = View(
         Item(label="Enter 4, then press OK without defocusing"),

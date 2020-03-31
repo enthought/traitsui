@@ -1224,7 +1224,7 @@ class TabbedFoldGroupEditor(GroupEditor):
     """
 
     #: The QTabWidget or QToolBox for the group
-    container = Any
+    container = Any()
 
     # -- UI preference save/restore interface ---------------------------------
 

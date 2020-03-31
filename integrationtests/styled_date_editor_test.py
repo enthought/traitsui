@@ -13,8 +13,8 @@ class Foo(HasTraits):
     dates = Dict()
     styles = Dict()
 
-    fast_dates = List
-    slow_dates = List
+    fast_dates = List()
+    slow_dates = List()
 
     current_date = Date()
 

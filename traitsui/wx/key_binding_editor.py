@@ -55,10 +55,10 @@ class KeyBindingEditor(Editor):
     has_focus = Bool(False)
 
     #: Keyboard event
-    key = Event
+    key = Event()
 
     #: Clear field event
-    clear = Event
+    clear = Event()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

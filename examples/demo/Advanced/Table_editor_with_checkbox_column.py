@@ -62,14 +62,14 @@ class Player(HasStrictTraits):
 
     # Trait definitions:
     in_lineup = Bool(True)
-    name = Str
-    at_bats = Int
-    strike_outs = Int
-    singles = Int
-    doubles = Int
-    triples = Int
-    home_runs = Int
-    walks = Int
+    name = Str()
+    at_bats = Int()
+    strike_outs = Int()
+    singles = Int()
+    doubles = Int()
+    triples = Int()
+    home_runs = Int()
+    walks = Int()
     average = Property(Float)
 
     def _get_average(self):
@@ -87,7 +87,7 @@ class Team(HasStrictTraits):
     # Trait definitions:
     players = List(Player)
 
-    selected_player_indices = List
+    selected_player_indices = List()
 
     # Trait view definitions:
     traits_view = View(

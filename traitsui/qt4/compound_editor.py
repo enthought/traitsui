@@ -37,7 +37,7 @@ class CompoundEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: The kind of editor to create for each list item
-    kind = Str
+    kind = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

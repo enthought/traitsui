@@ -68,15 +68,15 @@ class TabularEditor(Editor):
     # -- Trait Definitions ----------------------------------------------------
 
     #: The event fired when a table update is needed:
-    update = Event
+    update = Event()
 
     #: The event fired when a simple repaint is needed:
-    refresh = Event
+    refresh = Event()
 
     #: The current set of selected items (which one is used depends upon the
     #: initial state of the editor factory 'multi_select' trait):
-    selected = Any
-    multi_selected = List
+    selected = Any()
+    multi_selected = List()
 
     #: The current set of selected item indices (which one is used depends upon
     #: the initial state of the editor factory 'multi_select' trait):
@@ -120,7 +120,7 @@ class TabularEditor(Editor):
 
     #: NIT: This doesn't seem to be used anywhere...can I delete?
     #: # Row index of item to select after rebuilding editor list:
-    #: row = Any
+    #: row = Any()
 
     #: Should the selected item be edited after rebuilding the editor list:
     edit = Bool(False)
@@ -631,13 +631,13 @@ class TabularEditor(Editor):
 class TabularEditorEvent(HasStrictTraits):
 
     # The index of the row:
-    row = Int
+    row = Int()
 
     # The id of the column (either a string or an integer):
-    column = Any
+    column = Any()
 
     # The row item:
-    item = Property
+    item = Property()
 
     # -- Private Traits -------------------------------------------------------
 

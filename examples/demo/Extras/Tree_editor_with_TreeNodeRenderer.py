@@ -33,7 +33,7 @@ class MyDataElement(HasTraits):
     """ A node in a tree of data. """
 
     #: Some text to display.
-    text = Str
+    text = Str()
 
     #: A random walk to plot.
     data = Array

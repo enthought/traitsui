@@ -41,10 +41,10 @@ class UIWindow(HasPrivateTraits):
     size = Instance(wx.Size, (-1, -1))
 
     #: The current width of the window:
-    width = Property
+    width = Property()
 
     #: The current height of the window:
-    height = Property
+    height = Property()
 
     # -- Public Methods -------------------------------------------------------
 

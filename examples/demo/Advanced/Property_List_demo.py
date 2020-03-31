@@ -56,8 +56,8 @@ class Person(HasStrictTraits):
     """ Defines some sample data to display in the TableEditor.
     """
 
-    name = Str
-    age = Int
+    name = Str()
+    age = Int()
     gender = Enum('Male', 'Female')
 
 #-- PropertyListDemo Class -----------------------------------------------
@@ -69,13 +69,13 @@ class PropertyListDemo(HasPrivateTraits):
      """
 
     # An event used to trigger a Property value update:
-    ticker = Event
+    ticker = Event()
 
     # The property being display in the TableEditor:
     people = Property(List, depends_on='ticker')
 
     # Tiny hack to allow starting the background thread easily:
-    begin = Int
+    begin = Int()
 
     #-- Traits View Definitions ----------------------------------------------
 

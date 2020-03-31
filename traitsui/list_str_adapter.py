@@ -44,19 +44,19 @@ from .toolkit_traits import Color
 class IListStrAdapter(Interface):
 
     #: The index of the current item being adapted.
-    index = Int
+    index = Int()
 
     #: Current item being adapted.
-    item = Any
+    item = Any()
 
     #: The current value (if any).
-    value = Any
+    value = Any()
 
     #: Does the adapter know how to handle the current *item* or not?
-    accepts = Bool
+    accepts = Bool()
 
     #: Does the value of *accepts* depend only upon the type of *item*?
-    is_cacheable = Bool
+    is_cacheable = Bool()
 
 
 # -------------------------------------------------------------------------
@@ -70,13 +70,13 @@ class AnIListStrAdapter(HasPrivateTraits):
     # Implementation of the IListStrAdapter Interface ------------------------
 
     #: The index of the current item being adapted.
-    index = Int
+    index = Int()
 
     #: Current item being adapted.
-    item = Any
+    item = Any()
 
     #: The current value (if any).
-    value = Any
+    value = Any()
 
     #: Does the adapter know how to handle the current *item* or not?
     accepts = Bool(True)
@@ -101,7 +101,7 @@ class ListStrAdapter(HasPrivateTraits):
     default_value = Any("")
 
     #: Specifies the default text for a new list item.
-    default_text = Str
+    default_text = Str()
 
     #: The default text color for even list items.
     even_text_color = Color(None, update=True)
@@ -132,13 +132,13 @@ class ListStrAdapter(HasPrivateTraits):
     dropped = Enum("after", "before")
 
     #: The index of the current item being adapter.
-    index = Int
+    index = Int()
 
     #: The current item being adapted.
-    item = Any
+    item = Any()
 
     #: The current value (if any).
-    value = Any
+    value = Any()
 
     #: List of optional delegated adapters.
     adapters = List(IListStrAdapter, update=True)

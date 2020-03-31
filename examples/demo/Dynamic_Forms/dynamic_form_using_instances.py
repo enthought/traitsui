@@ -44,8 +44,8 @@ class Spec(HasTraits):
 class ChildSpec(Spec):
     """ Trait list for children (assigned to 'misc' for a Person when age < 18).
     """
-    legal_guardian = Str
-    school = Str
+    legal_guardian = Str()
+    school = Str()
     grade = Range(1, 12)
 
     traits_view = View('legal_guardian',
@@ -58,8 +58,8 @@ class AdultSpec(Spec):
     """
 
     marital_status = Enum('single', 'married', 'divorced', 'widowed')
-    registered_voter = Bool
-    military_service = Bool
+    registered_voter = Bool()
+    military_service = Bool()
 
     traits_view = View('marital_status',
                        'registered_voter',
@@ -87,8 +87,8 @@ class PersonHandler(Handler):
 class Person(HasTraits):
     """ Demo class for demonstrating dynamic interface restructuring.
     """
-    first_name = Str
-    last_name = Str
+    first_name = Str()
+    last_name = Str()
     age = Range(0, 120)
     misc = Instance(Spec)
 

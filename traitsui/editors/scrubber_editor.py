@@ -37,16 +37,16 @@ from ..toolkit_traits import Color
 class ScrubberEditor(BasicEditorFactory):
 
     #: The editor class to be instantiated:
-    klass = Property
+    klass = Property()
 
     #: The low end of the scrubber range:
-    low = Float
+    low = Float()
 
     #: The high end of the scrubber range:
-    high = Float
+    high = Float()
 
     #: The normal increment (default: auto-calculate):
-    increment = Float
+    increment = Float()
 
     #: The alignment of the text within the scrubber:
     alignment = Alignment("center")

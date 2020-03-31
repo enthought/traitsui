@@ -182,18 +182,18 @@ class _ShellEditor(Editor):
 class ToolkitEditorFactory(BasicEditorFactory):
 
     #: The editor class to be instantiated.
-    klass = Property
+    klass = Property()
 
     #: Should the shell interpreter use the object value's dictionary?
     share = Bool(False)
 
     #: Extended trait name of the object event trait which triggers a command
     #: execution in the shell when fired.
-    command_to_execute = Str
+    command_to_execute = Str()
 
     #: Extended trait name of the object event trait which is fired when a
     #: command is executed.
-    command_executed = Str
+    command_executed = Str()
 
     def _get_klass(self):
         """ Returns the toolkit-specific editor class to be used in the UI.

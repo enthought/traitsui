@@ -242,7 +242,7 @@ class GenericTableFilterRule(HasPrivateTraits):
     name_editor = Instance(EditorFactory)
 
     #: Name of the object trait that this rule applies to
-    name = Str
+    name = Str()
 
     #: Operation to be applied in the rule
     operation = GenericTableFilterRuleOperation
@@ -251,7 +251,7 @@ class GenericTableFilterRule(HasPrivateTraits):
     value_editor = Instance(EditorFactory)
 
     #: Value to use in the operation when applying the rule to an object
-    value = Any
+    value = Any()
 
     # -------------------------------------------------------------------------
     #  Class constants:
@@ -420,16 +420,16 @@ class RuleTableFilter(TableFilter):
     rules = List(GenericTableFilterRule)
 
     #: Event fired when the contents of the filter have changed
-    modified = Event
+    modified = Event()
 
     #: Persistence ID of the view
     view_id = Str("traitsui.table_filter.RuleTableFilter")
 
     #: Sample object that the filter will apply to
-    _object = Any
+    _object = Any()
 
     #: Map of trait names and default values
-    _trait_values = Any
+    _trait_values = Any()
 
     # -------------------------------------------------------------------------
     #  Traits view definitions:

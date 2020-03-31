@@ -30,13 +30,13 @@ class Person(HasTraits):
     """
 
     # General traits:
-    first_name = Str
-    last_name = Str
+    first_name = Str()
+    last_name = Str()
     age = Range(0, 120)
 
     # Traits for children only:
-    legal_guardian = Str
-    school = Str
+    legal_guardian = Str()
+    school = Str()
     grade = Range(1, 12)
 
     # Traits for adults only:

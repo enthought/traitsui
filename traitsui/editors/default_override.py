@@ -24,7 +24,7 @@ class DefaultOverride(EditorFactory):
 
     """
 
-    _overrides = Dict
+    _overrides = Dict()
 
     def __init__(self, *args, **overrides):
         EditorFactory.__init__(self, *args)

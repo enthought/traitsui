@@ -9,7 +9,7 @@ def test_configure_traits_error():
     """ Verify that configure_traits fails with NotImplementedError. """
 
     class Test(HasTraits):
-        x = Int
+        x = Int()
 
     t = Test()
 

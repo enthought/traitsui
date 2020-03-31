@@ -837,8 +837,8 @@ Example 16: Instance editor with instance selection
         import View, Item, InstanceEditor
 
     class Person ( HasStrictTraits ):
-        name  = Str
-        age   = Int
+        name = Str()
+        age = Int()
         phone = Regex( value = '000-0000',
                        regex = '\d\d\d[-]\d\d\d\d' )
 
@@ -857,7 +857,7 @@ Example 16: Instance editor with instance selection
 
     class Team ( HasStrictTraits ):
 
-        name    = Str
+        name = Str()
         captain = Instance( Person )
         roster  = List( Person )
 

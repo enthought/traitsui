@@ -28,8 +28,8 @@ from traitsui.api import Color, View, Group
 
 
 class Employer(HasTraits):
-    company = Str
-    boss = Str
+    company = Str()
+    boss = Str()
 
     view = View('company', 'boss')
 
@@ -49,9 +49,9 @@ class ExtraPerson(Person):
 
 
 class LocatedPerson(Person):
-    street = Str
-    city = Str
-    state = Str
+    street = Str()
+    city = Str()
+    state = Str()
     zip = Int(78663)
 
     extra = Group('street', 'city', 'state', 'zip')

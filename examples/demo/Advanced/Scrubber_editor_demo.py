@@ -116,7 +116,7 @@ class ScrubberDemo(HasTraits):
     # Define some sample ranges and values:
     simple_integer = Range(0, 100)
     rollover_float = Range(-10.0, 10.0)
-    bordered_unbounded = Float
+    bordered_unbounded = Float()
     dynamic_low = Range(high=-0.01, value=-10.0)
     dynamic_high = Range(low=0.01, value=10.0)
     dynamic_value = Range('dynamic_low', 'dynamic_high', 0.0)

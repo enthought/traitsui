@@ -116,14 +116,14 @@ class ToolkitEditorFactory(EditorFactory):
 
     #: FIXME: Currently, this trait is used only in the wx backend.
     #: The DockWindow graphical theme
-    dock_theme = Any
+    dock_theme = Any()
 
     #: FIXME: Currently, this trait is used only in the wx backend.
     #: Dock page style to use for each DockControl:
     dock_style = DockStyle
 
     #: Export class for each item in a notebook:
-    export = Str
+    export = Str()
 
     #: Name of the view to use in notebook mode:
     view = AView
@@ -133,16 +133,16 @@ class ToolkitEditorFactory(EditorFactory):
 
     #: A factory function that can be used to define that actual object to be
     #: edited (i.e. view_object = factory( object )):
-    factory = Callable
+    factory = Callable()
 
     #: Extended name to use for each notebook page. It can be either the actual
     #: name or the name of an attribute on the object in the form:
     #: '.name[.name...]'
-    page_name = Str
+    page_name = Str()
 
     #: Name of the [object.]trait[.trait...] to synchronize notebook page
     #: selection with:
-    selected = Str
+    selected = Str()
 
     # -------------------------------------------------------------------------
     #  Traits view definition:
@@ -183,19 +183,19 @@ class ToolkitEditorFactory(EditorFactory):
 class ListItemProxy(HasTraits):
 
     #: The list proxy:
-    list = Property
+    list = Property()
 
     #: The item proxies index into the original list:
-    index = Int
+    index = Int()
 
     #: Delegate all other traits to the original object:
     _ = PrototypedFrom("_zzz_object")
 
     #: Define all of the private internal use values (the funny names are an
     #: attempt to avoid name collisions with delegated trait names):
-    _zzz_inited = Any
-    _zzz_object = Any
-    _zzz_name = Any
+    _zzz_inited = Any()
+    _zzz_object = Any()
+    _zzz_name = Any()
 
     def __init__(self, object, name, index, trait, value):
         super(ListItemProxy, self).__init__()

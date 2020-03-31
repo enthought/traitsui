@@ -34,10 +34,10 @@ traits, and should be able to react to changes to them::
     class MyEditor(Editor):
 
         #: The minimum value.
-        minimum = Int
+        minimum = Int()
 
         #: The suffix for the data.
-        suffix = Str
+        suffix = Str()
 
 This can then be used in views, with values either as constants or as
 instances of :class:`ContextValue` (abbreviated as ``CV``)::
@@ -45,7 +45,7 @@ instances of :class:`ContextValue` (abbreviated as ``CV``)::
     class MyObject(HasTraits):
 
         #: An important value.
-        my_value = Str
+        my_value = Str()
 
         #: The minimum value.
         my_minimum = Int(10)
@@ -77,7 +77,7 @@ class ContextValue(HasStrictTraits):
 
     #: The extended trait name of the value that can be bound to the editor
     #: (e.g. 'selection' or 'handler.selection'):
-    name = Str
+    name = Str()
 
     # ------------------------------------------------------------------------
     # object Interface

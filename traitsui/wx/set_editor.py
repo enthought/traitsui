@@ -56,13 +56,13 @@ class SimpleEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: Current set of enumeration names:
-    names = Property
+    names = Property()
 
     #: Current mapping from names to values:
-    mapping = Property
+    mapping = Property()
 
     #: Current inverse mapping from values to names:
-    inverse_mapping = Property
+    inverse_mapping = Property()
 
     #: Is set editor scrollable? This value overrides the default.
     scrollable = True

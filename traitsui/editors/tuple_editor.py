@@ -58,7 +58,7 @@ class ToolkitEditorFactory(EditorFactory):
     # -------------------------------------------------------------------------
 
     #: Trait definitions for each tuple field
-    types = Any
+    types = Any()
 
     #: Labels for each of the tuple fields
     labels = List(Str)
@@ -121,13 +121,13 @@ class TupleStructure(HasTraits):
     # -------------------------------------------------------------------------
 
     #: Editor this structure is linked to
-    editor = Any
+    editor = Any()
 
     #: The constructed View for the tuple
-    view = Any
+    view = Any()
 
     #: Number of tuple fields
-    fields = Int
+    fields = Int()
 
     def __init__(self, editor):
         """ Initializes the object.

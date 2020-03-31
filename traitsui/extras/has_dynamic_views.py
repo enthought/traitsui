@@ -112,15 +112,15 @@ class DynamicViewSubElement(ViewSubElement):
 
     #: Keyword arguments passed in during construction of the actual
     #: ViewSubElement instance.
-    keywords = Dict
+    keywords = Dict()
 
     # FIXME: Should be the 'Class' trait but I couldn't get that to work.
     #: The class of the actual ViewSubElement we are dynamically creating.
-    klass = Any
+    klass = Any()
 
     #: The name of this dynamic sub-element.  This controls the metadata
     #: names identifying the sub-elements that compose this element.
-    name = Str
+    name = Str()
 
 
 # -------------------------------------------------------------------------------
@@ -141,15 +141,15 @@ class DynamicView(HasTraits):
 
     #: The ID of the view.  This is the ID that the view's preferences will be
     #: saved under.
-    id = Str
+    id = Str()
 
     #: The name of the view.  This is the name that should be requested when
     #: calling edit_traits() or configure_traits().
-    name = Str
+    name = Str()
 
     #: Keyword arguments passed in during construction of the actual view
     #: instance.
-    keywords = Dict
+    keywords = Dict()
 
     #: Indicates whether this view should be the default traits view for objects
     #: it is contributed to.

@@ -8,16 +8,16 @@ from traitsui.extras.progress_column import ProgressColumn
 
 class Job(HasTraits):
 
-    name = Str
+    name = Str()
 
-    percent_complete = Int
+    percent_complete = Int()
 
 
 class JobManager(HasTraits):
 
     jobs = List(Instance(Job))
 
-    start = Button
+    start = Button()
 
     def populate(self):
         self.jobs = [

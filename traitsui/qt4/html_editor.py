@@ -43,7 +43,7 @@ class SimpleEditor(Editor):
     scrollable = True
 
     #: External objects referenced in the HTML are relative to this URL
-    base_url = Str
+    base_url = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

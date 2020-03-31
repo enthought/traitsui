@@ -26,11 +26,11 @@ class ShellTest(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    name = Str
-    age = Int
-    weight = Float
-    shell_1 = Str
-    shell_2 = Dict
+    name = Str()
+    age = Int()
+    weight = Float()
+    shell_1 = Str()
+    shell_2 = Dict()
 
     #-------------------------------------------------------------------------
     #  Traits view definitions:

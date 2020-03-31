@@ -39,7 +39,7 @@ class HistoryControl(HasPrivateTraits):
     control = Instance(wx.Window)
 
     #: The current value of the control:
-    value = Str
+    value = Str()
 
     #: Should 'value' be updated on every keystroke?
     auto_set = Bool(False)

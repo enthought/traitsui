@@ -21,10 +21,10 @@ class Person(Handler):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    name = Str
-    age = Int
+    name = Str()
+    age = Int()
     phone = Regex(value='000-0000', regex='\d\d\d[-]\d\d\d\d')
-    notes = Str
+    notes = Str()
 
     #-------------------------------------------------------------------------
     #  Handles the 'Annoy' button being clicked:

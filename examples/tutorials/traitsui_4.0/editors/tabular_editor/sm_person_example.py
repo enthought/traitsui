@@ -78,9 +78,9 @@ search_path = [join(dirname(traitsui.api.__file__),
 
 class Person(HasTraits):
 
-    name = Str
-    address = Str
-    age = Int
+    name = Str()
+    address = Str()
+    age = Int()
 
 #--[MarriedPerson Class]--------------------------------------------------
 
@@ -101,9 +101,9 @@ class ReportAdapter(TabularAdapter):
 
     font = 'Courier 10'
     age_alignment = Constant('right')
-    MarriedPerson_age_image = Property
+    MarriedPerson_age_image = Property()
     MarriedPerson_bg_color = Color(0xE0E0FF)
-    MarriedPerson_spouse_text = Property
+    MarriedPerson_spouse_text = Property()
     Person_spouse_text = Constant('')
 
     def _get_MarriedPerson_age_image(self):

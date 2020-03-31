@@ -50,7 +50,7 @@ class BaseRangeEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: Function to evaluate floats/ints
-    evaluate = Any
+    evaluate = Any()
 
     def _set_value(self, value):
         if self.evaluate is not None:
@@ -70,13 +70,13 @@ class SimpleSliderEditor(BaseRangeEditor):
     # -------------------------------------------------------------------------
 
     #: Low value for the slider range
-    low = Any
+    low = Any()
 
     #: High value for the slider range
-    high = Any
+    high = Any()
 
     #: Formatting string used to format value and labels
-    format = Str
+    format = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -331,10 +331,10 @@ class LargeRangeSliderEditor(BaseRangeEditor):
     high = Any(1)
 
     #: Low end of displayed range
-    cur_low = Float
+    cur_low = Float()
 
     #: High end of displayed range
-    cur_high = Float
+    cur_high = Float()
 
     #: Flag indicating that the UI is in the process of being updated
     ui_changing = Bool(False)
@@ -600,10 +600,10 @@ class SimpleSpinEditor(BaseRangeEditor):
     # -------------------------------------------------------------------------
 
     # Low value for the slider range
-    low = Any
+    low = Any()
 
     # High value for the slider range
-    high = Any
+    high = Any()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -686,7 +686,7 @@ class RangeTextEditor(TextEditor):
     # -------------------------------------------------------------------------
 
     #: Function to evaluate floats/ints
-    evaluate = Any
+    evaluate = Any()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

@@ -20,7 +20,7 @@ class BooleanEditorDemo(HasTraits):
     """ Defines the main BooleanEditor demo class. """
 
     # a boolean trait to view:
-    my_boolean_trait = Bool
+    my_boolean_trait = Bool()
     count_changes = Int(0)
 
     # When the trait's value changes, do something.

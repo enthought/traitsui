@@ -190,10 +190,10 @@ such a structure might look like this::
         parent = Instance('DictNode')
 
         #: The label for the node
-        label = Str
+        label = Str()
 
         #: The value for this node
-        value = Any
+        value = Any()
 
         def tno_get_label(self, node):
             return self.label

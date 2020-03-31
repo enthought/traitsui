@@ -109,9 +109,9 @@ from traitsui.tabular_adapter import TabularAdapter
 
 class Person(HasTraits):
 
-    name = Str
-    address = Str
-    age = Int
+    name = Str()
+    address = Str()
+    age = Int()
 
     # surname is displayed in qt-only row label:
     surname = Property(fget=lambda self: self.name.split()[-1],
@@ -147,9 +147,9 @@ class ReportAdapter(TabularAdapter):
     # Font fails with wx in OSX; see traitsui issue #13:
     # font                      = 'Courier 10'
     age_alignment = Constant('right')
-    MarriedPerson_age_image = Property
+    MarriedPerson_age_image = Property()
     MarriedPerson_bg_color = Color(0xE0E0FF)
-    MarriedPerson_spouse_text = Property
+    MarriedPerson_spouse_text = Property()
     Person_spouse_text = Constant('')
 
     def _get_MarriedPerson_age_image(self):

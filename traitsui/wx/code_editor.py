@@ -72,34 +72,34 @@ class SourceEditor(Editor):
     readonly = Bool(False)
 
     #: The currently selected line
-    selected_line = Int
+    selected_line = Int()
 
     #: The currently selected text
-    selected_text = Str
+    selected_text = Str()
 
     #: The list of line numbers to mark
     mark_lines = List(Int)
 
     #: The current line number
-    line = Event
+    line = Event()
 
     #: The current column
-    column = Event
+    column = Event()
 
     #: calltip clicked event
-    calltip_clicked = Event
+    calltip_clicked = Event()
 
     #: The STC lexer use
-    lexer = Int
+    lexer = Int()
 
     #: The lines to be dimmed
     dim_lines = List(Int)
-    dim_color = Str
+    dim_color = Str()
     _dim_style_number = Int(16)  # 0-15 are reserved for the python lexer
 
     #: The lines to have squiggles drawn under them
     squiggle_lines = List(Int)
-    squiggle_color = Str
+    squiggle_color = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

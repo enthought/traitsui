@@ -75,13 +75,13 @@ class UndoItem(AbstractUndoItem):
     object = Instance(HasTraits)
 
     #: Name of the trait that changed
-    name = Str
+    name = Str()
 
     #: Old value of the changed trait
-    old_value = Property
+    old_value = Property()
 
     #: New value of the changed trait
-    new_value = Property
+    new_value = Property()
 
     def _get_old_value(self):
         return self._old_value
@@ -214,16 +214,16 @@ class ListUndoItem(AbstractUndoItem):
     object = Instance(HasTraits)
 
     #: Name of the trait that changed
-    name = Str
+    name = Str()
 
     #: Starting index
-    index = Int
+    index = Int()
 
     #: Items added to the list
-    added = List
+    added = List()
 
     #: Items removed from the list
-    removed = List
+    removed = List()
 
     def undo(self):
         """ Undoes the change.
@@ -296,17 +296,17 @@ class UndoHistory(HasStrictTraits):
     # -------------------------------------------------------------------------
 
     #: List of accumulated undo changes
-    history = List
+    history = List()
     #: The current position in the list
-    now = Int
+    now = Int()
     #: Fired when state changes to undoable
     undoable = Event(False)
     #: Fired when state changes to redoable
     redoable = Event(False)
     #: Can an action be undone?
-    can_undo = Property
+    can_undo = Property()
     #: Can an action be redone?
-    can_redo = Property
+    can_redo = Property()
 
     def add(self, undo_item, extend=False):
         """ Adds an UndoItem to the history.

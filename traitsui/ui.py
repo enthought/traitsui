@@ -84,13 +84,13 @@ class UI(HasPrivateTraits):
     view = Instance("traitsui.view.View")
 
     #: Panel or dialog associated with the user interface
-    control = Any
+    control = Any()
 
     #: The parent UI (if any) of this UI
     parent = Instance("UI")
 
     #: Toolkit-specific object that "owns" **control**
-    owner = Any
+    owner = Any()
 
     #: UIInfo object containing context or editor objects
     info = Instance(UIInfo)
@@ -99,13 +99,13 @@ class UI(HasPrivateTraits):
     result = Bool(False)
 
     #: Undo and Redo history
-    history = Any
+    history = Any()
 
     #: The KeyBindings object (if any) for this UI:
     key_bindings = Property(depends_on=["view._key_bindings", "context"])
 
     #: The unique ID for this UI for persistence
-    id = Str
+    id = Str()
 
     #: Have any modifications been made to UI contents?
     modified = Bool(False)
@@ -114,7 +114,7 @@ class UI(HasPrivateTraits):
     updated = Event(Bool)
 
     #: Title of the dialog, if any
-    title = Str
+    title = Str()
 
     #: The ImageResource of the icon, if any
     icon = Image
@@ -123,10 +123,10 @@ class UI(HasPrivateTraits):
     scrollable = Bool(False)
 
     #: The number of currently pending editor error conditions
-    errors = Int
+    errors = Int()
 
     #: The code used to rebuild an updated user interface
-    rebuild = Callable
+    rebuild = Callable()
 
     #: Set to True when the UI has finished being destroyed.
     destroyed = Bool(False)
@@ -140,49 +140,49 @@ class UI(HasPrivateTraits):
     _revert = Dict(Str, Any)
 
     #: List of methods to call once the user interface is created
-    _defined = List
+    _defined = List()
 
     #: List of (visible_when,Editor) pairs
-    _visible = List
+    _visible = List()
 
     #: List of (enabled_when,Editor) pairs
-    _enabled = List
+    _enabled = List()
 
     #: List of (checked_when,Editor) pairs
-    _checked = List
+    _checked = List()
 
     #: Search stack used while building a user interface
-    _search = List
+    _search = List()
 
     #: List of dispatchable Handler methods
-    _dispatchers = List
+    _dispatchers = List()
 
     #: List of editors used to build the user interface
-    _editors = List
+    _editors = List()
 
     #: List of names bound to the **info** object
-    _names = List
+    _names = List()
 
     #: Index of currently the active group in the user interface
-    _active_group = Int
+    _active_group = Int()
 
     #: List of top-level groups used to build the user interface
-    _groups = Property
-    _groups_cache = Any
+    _groups = Property()
+    _groups_cache = Any()
 
     #: Count of levels of nesting for undoable actions
     _undoable = Int(-1)
 
     #: Code used to rebuild an updated user interface
-    _rebuild = Callable
+    _rebuild = Callable()
 
     #: The statusbar listeners that have been set up:
-    _statusbar = List
+    _statusbar = List()
 
     #: Control which gets focus after UI is created
     #: Note: this does not track focus after UI creation
     #: only used by Qt backend.
-    _focus_control = Any
+    _focus_control = Any()
 
     #: Does the UI contain any scrollable widgets?
     #:

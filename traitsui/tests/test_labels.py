@@ -50,7 +50,7 @@ class HResizeTestDialog(HasTraits):
     """
 
     bool_item = Bool(True)
-    txt_item = Str
+    txt_item = Str()
 
     traits_view = View(
         VGroup(
@@ -69,7 +69,7 @@ class VResizeTestDialog(HasTraits):
     """
 
     bool_item = Bool(True)
-    txt_item = Str
+    txt_item = Str()
 
     traits_view = View(
         VGroup(

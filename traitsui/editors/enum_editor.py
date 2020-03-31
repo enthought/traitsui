@@ -51,7 +51,7 @@ class ToolkitEditorFactory(EditorWithListFactory):
     # -------------------------------------------------------------------------
 
     #: (Optional) Function used to evaluate text input:
-    evaluate = Any
+    evaluate = Any()
 
     #: Is user input set on every keystroke (when text input is allowed)?
     auto_set = Bool(True)

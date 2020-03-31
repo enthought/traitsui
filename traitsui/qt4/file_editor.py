@@ -132,13 +132,13 @@ class CustomEditor(SimpleTextEditor):
     filter = filter_trait
 
     #: The root path of the file tree view.
-    root_path = File
+    root_path = File()
 
     #: Event fired when the file system view should be rebuilt:
-    reload = Event
+    reload = Event()
 
     #: Event fired when the user double-clicks a file:
-    dclick = Event
+    dclick = Event()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
