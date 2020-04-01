@@ -166,7 +166,7 @@ def press_ok_button(ui):
     if is_current_backend_wx():
         import wx
 
-        ok_button = ui.control.FindWindowByName("button")
+        ok_button = ui.control.FindWindowByName("button", ui.control)
         click_event = wx.CommandEvent(
             wx.wxEVT_COMMAND_BUTTON_CLICKED, ok_button.GetId()
         )

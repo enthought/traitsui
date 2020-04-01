@@ -105,7 +105,7 @@ def test_reset_without_destroy_wx():
         ui._editors[0], traitsui.wx.text_editor.SimpleEditor
     )
     nose.tools.assert_is_instance(
-        ui._editors[0].control, wx._controls.TextCtrl
+        ui._editors[0].control, wx.TextCtrl
     )
 
     ui.reset(destroy=False)
@@ -168,7 +168,9 @@ def test_destroy_after_ok_wx():
     control.Destroy = count_calls(control.Destroy)
 
     # press the OK button and close the dialog
-    okbutton = ui.control.FindWindowByName("button")
+    okbutton = ui.control.FindWindowByName("button", ui.control)
+    assert okbutton.Label == 'OK'
+
     click_event = wx.CommandEvent(
         wx.wxEVT_COMMAND_BUTTON_CLICKED, okbutton.GetId()
     )

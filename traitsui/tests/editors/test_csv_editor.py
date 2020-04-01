@@ -68,7 +68,7 @@ def test_csv_editor_external_append():
     # list externally
 
     def _wx_get_text_value(ui):
-        txt_ctrl = ui.control.FindWindowByName("text")
+        txt_ctrl = ui.control.FindWindowByName("text", ui.control)
         return txt_ctrl.GetValue()
 
     def _qt_get_text_value(ui):
