@@ -45,20 +45,120 @@ means of the UIInfo object.
 
 Whenever TraitsUI creates a window or panel from a View, a UIInfo object is
 created to act as the Handler's reference to that window and to the objects
-whose :term:`trait attribute`\ s are displayed in it. Each entry in the View's
-context (see :ref:`the-view-context`) becomes an attribute of the UIInfo
-object. [12]_ For example, the UIInfo object created in
-:ref:`Example 7 <example-7-using-a-multi-object-view-with-a-context>`
+whose :term:`trait attribute`\ s are displayed in it.  This object holds a
+reference to the UI instance in it's **ui** trait, and whether the or not
+the UI has been initialized in the **initialized** trait.  Additionally,
+this object is dynamically assigned trait attributes which correspond to:
+
+- each entry in the View's context (see :ref:`the-view-context`).
+
+- each item's and group's editor in the view, by id (or name, if no id is
+  available for an item).
+
+Where there is conflict between ids, the editors take precedence over context
+values, and if two editors have the same name then the last editor with that
+name will be referenced.
+
+For example, the UIInfo object created in :ref:`Example 7 <example-7-using-a-multi-object-view-with-a-context>`
 has attributes **h1** and **h2** whose values are the objects **house1** and
-**house2** respectively. In :ref:`Example 1 <example-1-using-configure-traits>`
-through
-:ref:`Example 6 <example-6-defining-multiple-view-objects-in-a-hastraits-class>`,
+**house2** respectively.  Additionally it has attributes **address**,
+**bedroom**, **pool**, and **price** that reference the editors in the second
+group.
+
+In :ref:`Example 1 <example-1-using-configure-traits>`
+through :ref:`Example 6 <example-6-defining-multiple-view-objects-in-a-hastraits-class>`,
 the created UIInfo object has an attribute **object** whose value is the object
-**sam**.
+**sam**, together with attributes that corrspond to the items in the views,
+such as **first_name**, **last_name** and **department**.
+
 
 Whenever a window event causes a Handler method to be called, TraitsUI passes
 the corresponding UIInfo object as one of the method arguments. This gives the
 Handler the information necessary to perform its tasks.
+
+Additionally, traits on objects in the context can be synchronized with traits
+on editors via the **sync_to_view**, **sync_from_view** and **sync_with_view**
+trait metadata.  Note that not every trait on every editor can react to changes:
+some values are only used at editor creation time; however all editors support
+dynamically changing the **enabled**, **visible** and **invalid** traits.  This
+feature can sometimes allow developers to avoid having to create a custom Handler
+subclass.
+
+See the :github-demo:`Invalid state handling <Advanced/Invalid_state_handling.py>`
+example which demonstrates how to use this mechanism to control the invalid state
+of a dialog based on the value of multiple editors.
+
+.. _backstage-the-ui-object:
+
+Backstage: The UI Object
+------------------------
+
+As opposed to the very dynamic UIInfo object, the UI class provides an object
+which ties together the various objects that are involved in a TraitsUI GUI:
+the View, the context, the Handler, the underlying toolkit controls and the
+shared state of the GUI.  It also has some life-cycle and useful utility methods
+that can be useful when working from a handler.
+
+The UI object is returned as the result of a call to edit_traits(), and as noted
+in the previous section, is available as the **ui** attribute of the UIInfo object
+that is passed to most handler methods.
+
+.. rubric:: Attributes of UI, by category
+
+TraitsUI core
+   view:
+      View template used to construct the user interface.
+   handler:
+      Handler object used for event handling.
+   context:
+      Dictionary of objects that the UI is editing.
+   info:
+      UIInfo object containing context or editor objects
+   parent:
+      The parent UI (if any) of this UI.
+
+Toolkit
+   control:
+      Panel or dialog associated with the user interface.
+   owner:
+      Toolkit-specific object that "owns" **control**
+
+GUI state
+   id:
+      The unique ID for this UI for persistence.
+   title:
+      Title of the dialog, if any.
+   icon:
+      The ImageResource of the dialog icon, if any.
+   key_bindings:
+      The KeyBindings object (if any) for this UI.
+   result:
+      Result from a modal or wizard dialog.
+   modified:
+      Have any modifications been made to UI contents?
+   updated:
+      Event when the user interface has changed.
+   history:
+      Undo and Redo history.
+   errors:
+      The number of currently pending editor error conditions.
+      Note that changing this must be done very carefully to avoid
+      permanent error states.
+   destroyed:
+      Set to True when the UI has finished being destroyed.
+
+
+.. rubric:: Useful UI methods
+
++---------------------------+--------------------------------------------------+
+|Method                     |Purpose                                           |
++===========================+==================================================+
+|dispose(result, abort)     |Disposes of the UI.  This can be called to close a|
+|                           |TraitsUI dialog programatically from a handler.   |
++---------------------------+--------------------------------------------------+
+|get_editors(name)          |Returns a list of all editors matching the name.  |
++---------------------------+--------------------------------------------------+
+
 
 .. _assigning-handlers-to-views:
 
