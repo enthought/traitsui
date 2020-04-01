@@ -130,7 +130,7 @@ def test_wx_list_str_multi_selected_index():
         # the following is equivalent to setting the text in the text control,
         # then pressing OK
 
-        liststrctrl = ui.control.FindWindowByName("listCtrl")
+        liststrctrl = ui.control.FindWindowByName("listCtrl", ui.control)
         selected_1 = get_selected(liststrctrl)
 
         obj.selected_indices = [0]

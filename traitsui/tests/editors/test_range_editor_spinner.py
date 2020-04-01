@@ -61,16 +61,16 @@ def test_wx_spin_control_editing_should_not_crash():
             # range editor, enter a number, and clicking ok without defocusing
 
             # SpinCtrl object
-            spin = ui.control.FindWindowByName("wxSpinCtrl")
+            spin = ui.control.FindWindowByName("wxSpinCtrl", ui.control)
             spin.SetFocusFromKbd()
 
             # on Windows, a wxSpinCtrl does not have children, and we cannot do
             # the more fine-grained testing below
             if len(spin.GetChildren()) == 0:
-                spin.SetValueString("4")
+                spin.SetValue("4")
             else:
                 # TextCtrl object of the spin control
-                spintxt = spin.FindWindowByName("text")
+                spintxt = spin.FindWindowByName("text", spin)
                 spintxt.SetValue("4")
 
             # press the OK button and close the dialog

@@ -44,15 +44,9 @@ def ui_wizard(ui, parent):
     object.
     """
     # Create the copy of the 'context' we will need while editing:
-    context = ui.context
-    ui._context = context
-    new_context = {}
-    for name, value in context.items():
-        if value is not None:
-            new_context[name] = value.clone_traits()
-        else:
-            new_context[name] = None
-
+    ui._context = context = ui.context
+    new_context = {name: None if value is None else value.clone_traits()
+                   for name, value in context.items()}
     ui.context = new_context
 
     # Now bind the context values to the 'info' object:
@@ -156,7 +150,7 @@ def ui_wizard(ui, parent):
         ui.result = False
 
     # Clean up loose ends, like restoring the original context:
-    wizard.Unbind(wz.EVT_WIZARD_PAGE_CHANGING, page_changing)
+    wizard.Unbind(wz.EVT_WIZARD_PAGE_CHANGING, handler=page_changing)
     save_window(ui)
     ui.finish()
     ui.context = ui._context
@@ -174,11 +168,9 @@ def page_changing(event):
         new_page = page.GetPrev()
 
     # If the page has a disabled PageGroupEditor object, veto the page change:
-    if (
-        (new_page is not None)
-        and (new_page.editor is not None)
-        and (not new_page.editor.enabled)
-    ):
+    if ((new_page is not None)
+            and (new_page.editor is not None)
+            and (not new_page.editor.enabled)):
         event.Veto()
 
         # If their is a message associated with the editor, display it:
@@ -187,12 +179,12 @@ def page_changing(event):
             wx.MessageBox(msg)
 
 
-class UIWizardPage(wz.PyWizardPage):
+class UIWizardPage(wz.WizardPage):
     """ A page within a wizard interface.
     """
 
     def __init__(self, wizard, pages):
-        wz.PyWizardPage.__init__(self, wizard)
+        super().__init__(wizard)
         self.next = self.previous = self.editor = None
         self.pages = pages
 
@@ -211,11 +203,11 @@ class UIWizardPage(wz.PyWizardPage):
         """
         editor = self.editor
         if (editor is not None) and (editor.next != ""):
-            next = editor.next
-            if next is None:
+            next_ = editor.next
+            if next_ is None:
                 return None
             for page in self.pages:
-                if page.id == next:
+                if page.id == next_:
                     return page
         return self.next
 
