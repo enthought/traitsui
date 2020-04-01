@@ -22,11 +22,11 @@
 
 import wx
 
-from .helper import restore_window, save_window, TraitsUIScrolledPanel
+from .helper import save_window, TraitsUIScrolledPanel
 
 from .ui_base import BaseDialog
 
-from .ui_panel import panel, show_help
+from .ui_panel import panel
 
 from .constants import DefaultTitle, WindowColor, screen_dy, scrollbar_dx
 from traitsui.undo import UndoHistory
@@ -40,16 +40,6 @@ from traitsui.menu import (
 )
 
 
-# Types of supported windows:
-NONMODAL = 0
-MODAL = 1
-POPUP = 2
-POPOVER = 3
-INFO = 4
-
-# Types of 'popup' dialogs:
-Popups = {POPUP, POPOVER, INFO}
-
 # -------------------------------------------------------------------------
 #  Creates a 'live update' wxPython user interface for a specified UI object:
 # -------------------------------------------------------------------------
@@ -59,70 +49,43 @@ def ui_live(ui, parent):
     """ Creates a live, non-modal wxPython user interface for a specified UI
     object.
     """
-    ui_dialog(ui, parent, NONMODAL)
+    _ui_dialog(ui, parent, BaseDialog.NONMODAL)
 
 
 def ui_livemodal(ui, parent):
     """ Creates a live, modal wxPython user interface for a specified UI object.
     """
-    ui_dialog(ui, parent, MODAL)
+    _ui_dialog(ui, parent, BaseDialog.MODAL)
 
 
 def ui_popup(ui, parent):
     """ Creates a live, temporary popup wxPython user interface for a specified
         UI object.
     """
-    ui_dialog(ui, parent, POPUP)
+    _ui_dialog(ui, parent, BaseDialog.POPUP)
 
 
 def ui_popover(ui, parent):
     """ Creates a live, temporary popup wxPython user interface for a specified
         UI object.
     """
-    ui_dialog(ui, parent, POPOVER)
+    _ui_dialog(ui, parent, BaseDialog.POPOVER)
 
 
 def ui_info(ui, parent):
     """ Creates a live, temporary popup wxPython user interface for a specified
         UI object.
     """
-    ui_dialog(ui, parent, INFO)
+    _ui_dialog(ui, parent, BaseDialog.INFO)
 
 
-def ui_dialog(ui, parent, style):
+def _ui_dialog(ui, parent, style):
     """ Creates a live wxPython user interface for a specified UI object.
     """
     if ui.owner is None:
         ui.owner = LiveWindow()
 
-    ui.owner.init(ui, parent, style)
-    ui.control = ui.owner.control
-    ui.control._parent = parent
-
-    try:
-        ui.prepare_ui()
-    except:
-        ui.control.Destroy()
-        ui.control.ui = None
-        ui.control = None
-        ui.owner = None
-        ui.result = False
-        raise
-
-    ui.handler.position(ui.info)
-    restore_window(ui, is_popup=(style in Popups))
-
-    ui.control.Layout()
-    # Check if the control is already being displayed modally. This would be
-    # the case if after the window was displayed, some event caused the ui to
-    # get rebuilt (typically when the user fires the 'updated' event on the ui
-    # ). In this case, calling ShowModal again leads to the parent window
-    # hanging even after the control has been closed by clicking OK or Cancel
-    # (maybe the modal mode isn't ending?)
-    if style == MODAL and not ui.control.IsModal():
-        ui.control.ShowModal()
-    else:
-        ui.control.Show()
+    BaseDialog.display_ui(ui, parent, style)
 
 
 class LiveWindow(BaseDialog):
@@ -130,7 +93,7 @@ class LiveWindow(BaseDialog):
     """
 
     def init(self, ui, parent, style):
-        self.is_modal = style == MODAL
+        self.is_modal = style == self.MODAL
         window_style = 0
         view = ui.view
         if view.resizable:
@@ -157,7 +120,7 @@ class LiveWindow(BaseDialog):
             ui.reset()
         else:
             self.ui = ui
-            if style == MODAL:
+            if style == self.MODAL:
                 if view.resizable:
                     window_style |= wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX
                 window = wx.Dialog(
@@ -166,7 +129,7 @@ class LiveWindow(BaseDialog):
                     title,
                     style=window_style | wx.DEFAULT_DIALOG_STYLE,
                 )
-            elif style == NONMODAL:
+            elif style == self.NONMODAL:
                 if parent is not None:
                     window_style |= (
                         wx.FRAME_FLOAT_ON_PARENT | wx.FRAME_NO_TASKBAR

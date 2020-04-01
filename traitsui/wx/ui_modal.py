@@ -21,11 +21,11 @@
 
 import wx
 
-from .helper import restore_window, save_window, TraitsUIScrolledPanel
+from .helper import save_window, TraitsUIScrolledPanel
 
 from .ui_base import BaseDialog
 
-from .ui_panel import panel, show_help
+from .ui_panel import panel
 
 from .constants import DefaultTitle, WindowColor, screen_dy, scrollbar_dx
 
@@ -41,16 +41,16 @@ from traitsui.menu import (
 def ui_modal(ui, parent):
     """ Creates a modal wxPython user interface for a specified UI object.
     """
-    ui_dialog(ui, parent, True)
+    _ui_dialog(ui, parent, BaseDialog.MODAL)
 
 
 def ui_nonmodal(ui, parent):
     """ Creates a non-modal wxPython user interface for a specified UI object.
     """
-    ui_dialog(ui, parent, False)
+    _ui_dialog(ui, parent, BaseDialog.NONMODAL)
 
 
-def ui_dialog(ui, parent, is_modal):
+def _ui_dialog(ui, parent, style):
     """ Creates a wxPython dialog box for a specified UI object.
 
     Changes are not immediately applied to the underlying object. The user must
@@ -60,34 +60,15 @@ def ui_dialog(ui, parent, is_modal):
     if ui.owner is None:
         ui.owner = ModalDialog()
 
-    ui.owner.init(ui, parent, is_modal)
-    ui.control = ui.owner.control
-    ui.control._parent = parent
-    try:
-        ui.prepare_ui()
-    except:
-        ui.control.Destroy()
-        ui.control.ui = None
-        ui.control = None
-        ui.owner = None
-        ui.result = False
-        raise
-
-    ui.handler.position(ui.info)
-    restore_window(ui)
-
-    if is_modal:
-        ui.control.ShowModal()
-    else:
-        ui.control.Show()
+    BaseDialog.display_ui(ui, parent, style)
 
 
 class ModalDialog(BaseDialog):
     """ Modal dialog box for Traits-based user interfaces.
     """
 
-    def init(self, ui, parent, is_modal):
-        self.is_modal = is_modal
+    def init(self, ui, parent, style):
+        self.is_modal = style == self.MODAL
         style = 0
         view = ui.view
         if view.resizable:
@@ -108,7 +89,7 @@ class ModalDialog(BaseDialog):
                 apply = self.apply.IsEnabled()
         else:
             self.ui = ui
-            if is_modal:
+            if self.is_modal:
                 window = wx.Dialog(
                     parent, -1, title, style=style | wx.DEFAULT_DIALOG_STYLE
                 )
