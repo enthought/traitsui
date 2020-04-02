@@ -210,7 +210,7 @@ class EvalTableFilter(TableFilter):
         if self._traits is None:
             self._traits = object.trait_names()
         try:
-            return eval(self.expression_, globals(), object.get(*self._traits))
+            return eval(self.expression_, globals(), object.trait_get(*self._traits))
         except:
             return False
 

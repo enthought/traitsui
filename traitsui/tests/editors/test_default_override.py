@@ -1,4 +1,4 @@
-from nose.tools import assert_equals
+from nose.tools import assert_equal
 
 from traitsui.api import DefaultOverride, EditorFactory
 from traits.api import HasTraits, Int
@@ -39,49 +39,49 @@ def test_simple_override():
     editor_name, editor, ui, obj, name, description, parent = do.simple_editor(
         "ui", dummy_object, "x", "description", "parent"
     )
-    assert_equals(editor_name, "simple_editor")
-    assert_equals(editor.x, 15)
-    assert_equals(editor.y, 25)
-    assert_equals(obj, dummy_object)
-    assert_equals(name, "x")
-    assert_equals(description, "description")
-    assert_equals(parent, "parent")
+    assert_equal(editor_name, "simple_editor")
+    assert_equal(editor.x, 15)
+    assert_equal(editor.y, 25)
+    assert_equal(obj, dummy_object)
+    assert_equal(name, "x")
+    assert_equal(description, "description")
+    assert_equal(parent, "parent")
 
 
 def test_text_override():
     editor_name, editor, ui, obj, name, description, parent = do.text_editor(
         "ui", dummy_object, "x", "description", "parent"
     )
-    assert_equals(editor_name, "text_editor")
-    assert_equals(editor.x, 15)
-    assert_equals(editor.y, 25)
-    assert_equals(obj, dummy_object)
-    assert_equals(name, "x")
-    assert_equals(description, "description")
-    assert_equals(parent, "parent")
+    assert_equal(editor_name, "text_editor")
+    assert_equal(editor.x, 15)
+    assert_equal(editor.y, 25)
+    assert_equal(obj, dummy_object)
+    assert_equal(name, "x")
+    assert_equal(description, "description")
+    assert_equal(parent, "parent")
 
 
 def test_custom_override():
     editor_name, editor, ui, obj, name, description, parent = do.custom_editor(
         "ui", dummy_object, "x", "description", "parent"
     )
-    assert_equals(editor_name, "custom_editor")
-    assert_equals(editor.x, 15)
-    assert_equals(editor.y, 25)
-    assert_equals(obj, dummy_object)
-    assert_equals(name, "x")
-    assert_equals(description, "description")
-    assert_equals(parent, "parent")
+    assert_equal(editor_name, "custom_editor")
+    assert_equal(editor.x, 15)
+    assert_equal(editor.y, 25)
+    assert_equal(obj, dummy_object)
+    assert_equal(name, "x")
+    assert_equal(description, "description")
+    assert_equal(parent, "parent")
 
 
 def test_readonly_override():
     editor_name, editor, ui, obj, name, description, parent = do.readonly_editor(
         "ui", dummy_object, "x", "description", "parent"
     )
-    assert_equals(editor_name, "readonly_editor")
-    assert_equals(editor.x, 15)
-    assert_equals(editor.y, 25)
-    assert_equals(obj, dummy_object)
-    assert_equals(name, "x")
-    assert_equals(description, "description")
-    assert_equals(parent, "parent")
+    assert_equal(editor_name, "readonly_editor")
+    assert_equal(editor.x, 15)
+    assert_equal(editor.y, 25)
+    assert_equal(obj, dummy_object)
+    assert_equal(name, "x")
+    assert_equal(description, "description")
+    assert_equal(parent, "parent")
