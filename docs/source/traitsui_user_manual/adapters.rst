@@ -18,6 +18,7 @@ The TreeEditor and TreeNodes
 .. _tree-nodes:
 
 .. module:: traitsui.tree_node
+   :noindex:
 
 The :py:class:`~traitsui.editors.tree_editor.TreeEditor` internally associates
 with each node in the tree a pair consisting of the object that is associated
@@ -305,6 +306,7 @@ The TabularAdapter Class
 ========================
 
 .. module:: traitsui.tabular_adapter
+   :noindex:
 
 The power and flexibility of the tabular editor is mostly a result of the
 :py:class:`TabularAdapter` class, which is the base class from which all
@@ -691,7 +693,7 @@ traits, where they can be easily accessed by a trait getter or setter method:
 - ``column``: The column id of the table column being accessed (not its index).
 - ``item``: The data item for the specified table row (i.e. the item determined
   in the first step described above).
-- `value``: In the case of a *set_xxx* method, the value to be set; otherwise it
+- ``value``: In the case of a *set_xxx* method, the value to be set; otherwise it
   is ``None``.
 
 As mentioned previously, the :py:class:`TabularAdapter` class provides trait
@@ -857,6 +859,7 @@ The ListStrAdapter Class
 ========================
 
 .. module:: traitsui.list_str_adapter
+   :noindex:
 
 Although the :py:class:`~traitsui.editors.list_str_editor.ListStrEditor` editor
 is frequently used, as might be expected, with lists of strings, it also

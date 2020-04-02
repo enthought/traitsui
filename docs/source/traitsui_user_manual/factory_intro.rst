@@ -105,7 +105,7 @@ Other packages can define their own editor factories for their own traits. For
 example, enthought.kiva.api.KivaFont uses a KivaFontEditor() and
 enthought.enable2.traits.api.RGBAColor uses an RGBAColorEditor().
 
-For most :term:`predefined trait type`\ s (see `Traits User Manual <http://github.enthought.com/traits/index.html>`_), there is
+For most :term:`predefined trait type`\ s (see `Traits User Manual <http://docs.enthought.com/traits/index.html>`_), there is
 exactly one predefined trait editor factory suitable for displaying it: the
 editor factory that is assigned as its default. [15]_ There are exceptions,
 however; for example, a Str trait defaults to using a TextEditor, but can also
@@ -271,7 +271,7 @@ following:
 
 For this type of editor, the end user must type in a valid value for the
 attribute. If the user types an invalid value, the validation method for the
-attribute (see `Traits User Manual <http://github.enthought.com/traits/index.html>`_) notifies the user of the error (for
+attribute (see `Traits User Manual <http://docs.enthought.com/traits/index.html>`_) notifies the user of the error (for
 example, by shading the background of the text box red).
 
 The text representation of an attribute to be edited in a text style editor is

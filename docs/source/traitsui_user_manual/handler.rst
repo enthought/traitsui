@@ -588,8 +588,3 @@ created, as in the following code::
 
 .. [11] Except those implemented via the **enabled_when**, **visible_when**,
    and **defined_when** attributes of Items and Groups.
-
-.. [12] Other attributes of the UIInfo object include a UI object and any
-   *trait editors* contained in the window (see
-   :ref:`introduction-to-trait-editor-factories` and
-   :ref:`the-predefined-trait-editor-factories`).
