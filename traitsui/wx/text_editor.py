@@ -85,8 +85,8 @@ class SimpleEditor(Editor):
             control = wx.TextCtrl(parent, -1, self.str_value, style=style)
 
         control.Bind(wx.EVT_KILL_FOCUS, self.update_object)
-
-        control.SetHint(self.factory.placeholder)
+        if control.IsSingleLine():
+            control.SetHint(self.factory.placeholder)
 
         if factory.auto_set:
             parent.Bind(wx.EVT_TEXT, self.update_object, id=control.GetId())
