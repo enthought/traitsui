@@ -1,5 +1,6 @@
-from traits.api import HasTraits, Int
 import wx
+
+from traits.api import HasTraits, Int
 
 
 class Counter(HasTraits):

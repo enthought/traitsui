@@ -1,5 +1,6 @@
-from traits.api import HasTraits, Int
 from pyface.qt.QtCore import QApplication
+
+from traits.api import HasTraits, Int
 
 
 class Counter(HasTraits):
