@@ -46,7 +46,7 @@ means of the UIInfo object.
 Whenever TraitsUI creates a window or panel from a View, a UIInfo object is
 created to act as the Handler's reference to that window and to the objects
 whose :term:`trait attribute`\ s are displayed in it.  This object holds a
-reference to the UI instance in it's **ui** trait, and whether the or not
+reference to the UI instance in its **ui** trait, and whether or not
 the UI has been initialized in the **initialized** trait.  Additionally,
 this object is dynamically assigned trait attributes which correspond to:
 

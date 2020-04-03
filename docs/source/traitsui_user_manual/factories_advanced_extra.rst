@@ -33,10 +33,6 @@ factory_function(*window_parent*, *editor*[, \*\ *args*, \*\*\ *kwargs*])
 Additional arguments, if any, can be passed as a tuple in the *args* parameter
 of CustomEditor().
 
-For an example of using CustomEditor(),examine the implementation of the
-NumericModelExplorer class in the enthought.model.numeric_model_explorer module;
-CustomEditor() is used to generate the plots in the user interface.
-
 
 DropEditor()
 ````````````
