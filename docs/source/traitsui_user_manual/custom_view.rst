@@ -37,7 +37,7 @@ attribute. There are seven possible values of **kind**:
 *  'live'
 *  'livemodal'
 *  'nonmodal'
-*  'wizard'
+*  'wizard' (wx backend only)
 *  'panel'
 *  'subpanel'
 

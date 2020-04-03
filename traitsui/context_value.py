@@ -69,7 +69,7 @@ class ContextValue(HasStrictTraits):
     """ Defines the name of a context value that can be bound to an editor
 
     Resolution of the name follows the same rules as for context values in
-    :class:`.Item`s: if there is no dot in it then it is treated as an
+    Item objects: if there is no dot in it then it is treated as an
     attribute of the 'object' context value, other wise the first part
     specifies the object in the context and the rest are dotted attribute
     look-ups.

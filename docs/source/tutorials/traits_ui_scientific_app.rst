@@ -21,10 +21,10 @@ python module that provides a great answer to this problem. I have found
 that I am incredibly productive when creating graphical application using
 traitsUI. However I had to learn a few new concepts and would like to
 lay them down together in order to make it easier for others to follow my
-footsteps. 
+footsteps.
 
 This document is intended to help a non-programmer to use traits and
-traitsUI to write an interactive graphical application. 
+traitsUI to write an interactive graphical application.
 The reader is assumed to have some basic python scripting knowledge (see
 ref [#]_ for a basic introduction).
 Knowledge of numpy/scipy [#]_ helps understanding the
@@ -65,7 +65,7 @@ scientific-computing work-flow, as, during the elaboration of algorithms
 and data-flow, the objects that are represented in the GUI are likely to
 change often.
 
-Visual computing, where the programmer creates first a graphical 
+Visual computing, where the programmer creates first a graphical
 interface and then writes the callbacks of the graphical objects, gives
 rise to a slow development cycle, as the work-flow is centered on the
 GUI, and not on the code.
@@ -134,7 +134,7 @@ A point object could be implemented in python with:
             x = 0.
             y = 0.
             z = 0.
-            
+
             def rotate_z(self, theta):
                 """ rotate the point around the Z axis """
                 xtemp =  cos(theta) * self.x + sin(theta) * self.y
@@ -166,7 +166,7 @@ internal details of their procedures. As long as the object has a
     structures that know how to modify themselves. Part of the point of
     object-oriented programming is that the object is responsible for
     modifying itself through its methods. The object therefore takes care
-    of its internal logic and the consistency between its attributes. 
+    of its internal logic and the consistency between its attributes.
 
     In python, dictionaries make great structures and are more suited
     for such a use than objects.
@@ -298,7 +298,7 @@ like (see the TraitsUI manual):
             camera = Instance(Camera)
             display = Instance(TextDisplay)
 
-            view = View( 
+            view = View(
                         Item('camera', style='custom', show_label=False, ),
                         Item('display', style='custom', show_label=False, ),
                     )
@@ -357,49 +357,55 @@ execution of his program. An event loop allows the programmer to develop
 an application in which each user action triggers an event, by stacking
 the user created events on a queue, and processing them in the order in
 which the appeared.
- 
+
 A complex GUI is made of a large numbers of graphical elements, called
 widgets (e.g., text boxes, check boxes, buttons, menus). Each of these
 widgets has specific behaviors associated with user interaction
 (modifying the content of a text box, clicking on a button, opening a
 menu). It is natural to use objects to represent the widgets, with their
 behavior being set in the object's methods.
- 
+
 Dialogs populated with widgets are automatically created by `traitsUI` in
 the *configure_traits()* call. `traitsUI` allow the developer to not
 worry about widgets, but to deal only with objects and their attributes.
 This is a fabulous gain as the widgets no longer appear in the code, but
-only the attributes they are associated to. 
+only the attributes they are associated to.
 
 A *HasTraits* object has an *edit_traits()* method that creates a
 graphical panel to edit its attributes. This method creates and returns
 the panel, but does not start its event loop. The panel is not yet
 "alive", unlike with the *configure_traits()* method. Traits uses the
-wxWidget toolkit by default to create its widget. They can be turned live
-and displayed by starting a wx application, and its main loop (ie event
-loop in wx speech).
+Qt toolkit by default to create its widget. They can be turned live
+and displayed by starting a Qt application, and its main loop (ie event
+loop in Qt speech).
 
 
-    `code snippet #3 <../_static/event_loop.py>`_
+    `code snippet #3 <../_static/event_loop_qt.py>`_
 
     .. code-block:: python
 
-        from traits.api import *
-        import wx
+        from pyface.qt.QtCore import QApplication
+
+        from traits.api import HasTraits, Int
+
 
         class Counter(HasTraits):
-            value =  Int()
+            value = Int()
+
 
         Counter().edit_traits()
-        wx.App().MainLoop()
+        QApplication.instance().exec_()
 
+There is a `similar example for wxPython <../_static/event_loop_wx.py>`_
+and a `toolkit-independent example that uses Pyface <../_static/event_loop.py>`_
+as well.
 
 The *Counter().edit_traits()* line creates a counter object and its
 representation, a dialog with one integer represented. However it does
-not display it until a wx application is created, and its main loop is
+not display it until a Qt application is created, and its main loop is
 started.
 
-Usually it is not necessary to create the wx application yourself, and to
+Usually it is not necessary to create the Qt application yourself, and to
 start its main loop, traits will do all this for you when the
 *.configure_traits()* method is called.
 
@@ -500,7 +506,7 @@ A standard python program executes in a sequential way. Consider the
 following code snippet :
 
     .. code-block:: python
-        
+
         do_a()
         do_b()
         do_c()
@@ -554,7 +560,7 @@ The above code yields the following output::
 
     Main thread done
     MyThread done
- 
+
 Getting threads and the GUI event loop to play nice
 ```````````````````````````````````````````````````
 
@@ -572,7 +578,7 @@ thread will lead to race conditions, and unpredictable crash: suppose the
 GUI was repainting itself (due to a window move, for instance) when you
 modify it.
 
-In a wxPython application, if you start a thread, GUI event will still be
+In an application, if you start a thread, GUI event will still be
 processed by the GUI event loop. To avoid collisions between your thread
 and the event loop, the proper way of modifying a GUI object is to insert
 the modifications in the event loop, using the *GUI.invoke_later()* call.
@@ -709,8 +715,8 @@ powerful tool for plotting we have to get our hands a bit dirty and
 create our own traits editor.
 
 This involves some `wxPython` coding, as we need to translate a
-`wxPython` object to a traits editor by providing the corresponding API 
-(i.e. the standard way of building a `traits` editor), so that the `traits` 
+`wxPython` object to a traits editor by providing the corresponding API
+(i.e. the standard way of building a `traits` editor), so that the `traits`
 framework will know how to create the editor.
 
 Traits editor are created by an editor factory that instantiates an
@@ -745,7 +751,7 @@ displaying and positioning the editor.
             def init(self, parent):
                 self.control = self._create_canvas(parent)
                 self.set_tooltip()
-                
+
             def update_editor(self):
                 pass
 
@@ -821,7 +827,7 @@ Toronto.
 
 The reason I am providing this code is to give an example to study of how
 a full-blown application can be built. This code can be found in the
-`tutorial's zip file <http://gael-varoquaux.info/computers/traits_tutorial/traits_tutorial.zip>`_ 
+`tutorial's zip file <http://gael-varoquaux.info/computers/traits_tutorial/traits_tutorial.zip>`_
 (it is the file `application.py`).
 
 * The camera will be built as an object. Its real attributes (exposure
@@ -845,7 +851,7 @@ The MPLFigureEditor is imported from the last example.
         from traits.api import *
         from traitsui.api import View, Item, Group, HSplit, Handler
         from traitsui.menu import NoButtons
-        from mpl_figure_editor import MPLFigureEditor 
+        from mpl_figure_editor import MPLFigureEditor
         from matplotlib.figure import Figure
         from scipy import *
         import wx
@@ -875,7 +881,7 @@ via traitsUI.
 
             view = View( Item('width', style='readonly'),
                          Item('x', style='readonly'),
-                         Item('y', style='readonly'), 
+                         Item('y', style='readonly'),
                        )
 
 The camera object also is a real object, and not only a data structure:
@@ -1080,7 +1086,7 @@ produces noisy gaussian images, and the processing code estimates the
 parameters of the gaussian.
 
 Here are screenshots of the three different tabs of the application:
-    
+
     .. image:: images/application1.png
 
     .. image:: images/application2.png

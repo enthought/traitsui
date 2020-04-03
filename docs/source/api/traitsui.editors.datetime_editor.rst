@@ -1,7 +1,7 @@
-traitsui\.qt4.tree\_node\_renderers module
+traitsui\.editors\.datetime\_editor module
 ==========================================
 
-.. automodule:: traitsui.qt4.tree_node_renderers
+.. automodule:: traitsui.editors.datetime_editor
     :members:
     :undoc-members:
     :show-inheritance:

@@ -25,23 +25,33 @@ from ..editor_factory import EditorFactory
 
 
 class CellFormat(object):
-    """ Encapsulates some common visual attributes to set on the cells of a
+    """ Styling attributes for calendar widget cells.
+
+    Encapsulates some common visual attributes to set on the cells of a
     calendar widget.  All attributes default to None, which means that they
     will not override the existing values of the calendar widget.
+
+    The color attributes should be strings representing color names,
+    from the list: red, green, blue, cyan, magenta, yellow, gray, white,
+    darkRed, darkGreen, darkBlue, darkCyan, darkmagenta, darkYellow,
+    darkGray, black, lightGray.
+
+    Alternatively, they can be a tuple of (R,G,B) values from 0-255.
     """
 
+    #: Whether to display in an italic style.
     italics = None
+
+    #: Whether to use a bold weight.
     bold = None
+
+    #: Whether to underline the text.
     underline = None
 
-    #: The color attributes should be strings representing color names,
-    #: from the list:
-    #:   red, green, blue, cyan, magenta, yellow, gray, white,
-    #:   darkRed, darkGreen, darkBlue, darkCyan, darkmagenta, darkYellow,
-    #:   darkGray, black, lightGray
-    #:
-    #: Alternatively, they can be a tuple of (R,G,B) values from 0-255.
+    #: The background color.
     bgcolor = None
+
+    #: The text color.
     fgcolor = None
 
     def __init__(self, **args):
@@ -82,17 +92,16 @@ class DateEditor(EditorFactory):
 
     #: When a user multi-selects entries and some of those entries are already
     #: selected and some are not, what should be the behavior for the seletion?
-    #: Options::
     #:
-    #:     'toggle'     -- Toggle each day to the opposite of the current state.
-    #:     'on'         -- Always turn them on.
-    #:     'off'        -- Always turn them off.
-    #:     'max_change' -- Change all to same state, with most days changing.
-    #:                     For example 1 selected and 9 not, then they would
-    #:                     all get selected.
-    #:     'min_change' -- Change all to same state, with min days changing.
-    #:                     For example 1 selected and 9 not, then they would
-    #:                     all get unselected.
+    #: Options:
+    #:
+    #: - 'toggle': Toggle each day to the opposite of the current state.
+    #: - 'on': Always turn them on.
+    #: - 'off': Always turn them off.
+    #: - 'max_change': Change all to same state, with most days changing.
+    #:   For example 1 selected and 9 not, then they would all get selected.
+    #: - 'min_change': Change all to same state, with min days changing.
+    #:   For example 1 selected and 9 not, then they would all get unselected.
     on_mixed_select = Enum("toggle", "on", "off", "max_change", "min_change")
 
     #: How much space to put between the individual months.

@@ -33,10 +33,6 @@ factory_function(*window_parent*, *editor*[, \*\ *args*, \*\*\ *kwargs*])
 Additional arguments, if any, can be passed as a tuple in the *args* parameter
 of CustomEditor().
 
-For an example of using CustomEditor(),examine the implementation of the
-NumericModelExplorer class in the enthought.model.numeric_model_explorer module;
-CustomEditor() is used to generate the plots in the user interface.
-
 
 DropEditor()
 ````````````
@@ -1267,43 +1263,23 @@ The following have special meaning for the DataFrameEditor():
 - **fonts**: either a font for all entries, or a mapping of column id to fonts.
 
 
-HistoryEditor()
-```````````````
-
-:Suitable for:
-    string traits
-:Default for:
-    (none)
-:Optional parameters:
-    *entries*
-
-HistoryEditor() generates a combo box, which allows the user to either enter a
-text string or select a value from a list of previously-entered values. The same
-control is used for all editor styles. The *entries* parameter determines how
-many entries are preserved in the history list. This type of control is used as
-part of the simple style of file editor; see :ref:`fileeditor`.
-
-ImageEditor()
-`````````````
+DefaultOverride()
+`````````````````
 
 :Suitable for:
     (any)
 :Default for:
     (none)
-:Optional parameters:
-    *image*, *scale*, *preserve_aspect_ratio*, *allow_upscaling*,
-    *allow_clipping*
 
-ImageEditor() generates a read-only display of an image. The image to be
-displayed is determined by the *image* parameter, or by the value of the trait
-attribute being edited, if *image* is not specified. In either case, the value
-must be a PyFace ImageResource (pyface.api.ImageResource), or a string
-that can be converted to one. If *image* is specified, then the type and value
-of the trait attribute being edited are irrelevant and are ignored.
+The DefaultOverride() is a factory that takes the trait's default editor and
+customizes it with the specified parameters. This is useful when a trait defines
+a default editor using some of its data, e.g. Range or Enum, and you want to
+tweak some of the other parameters without having recreate that data.
 
-For the Qt backend *scale*, *preserve_aspect_ratio*, *allow_upscaling*, and
-*allow_clipping* control whether the image should be scaled or not, and how
-to perform that scaling.
+For example, the default editor for Range(low=0, high=1500) has
+'1500' as the upper label.  To change it to 'Max' instead, use::
+
+    View(Item('my_range', editor=DefaultOverride(high_label='Max'))
 
 
 .. _extra-trait-editor-factories:
@@ -1329,74 +1305,3 @@ AnimatedGIFEditor()
 AnimatedGIFEditor() generates a display of the contents of an animated GIF image
 file. The Boolean *playing* parameter determines whether the image is animated
 or static.
-
-FlashEditor()
-`````````````
-
-:Suitable for:
-    string traits, Enum(string values)
-:Default for:
-    (none)
-
-FlashEditor() generates a display of an Adobe Flash Video file, using an ActiveX
-control (if one is installed on the system). This factory is available only on
-Microsoft Windows platforms. The attribute being edited must have a value whose
-text representation is the name or URL of a Flash video file. If the value is a
-Unicode string, it must contain only characters that are valid for filenames or
-URLs.
-
-IEHTMLEditor()
-``````````````
-
-:Suitable for:
-    string traits, Enum(string values)
-:Default for:
-    (none)
-:Optional parameters:
-    *back, forward, home, html, page_loaded, refresh, search, status, stop,*
-    *title*
-
-IEHTMLEditor() generates a display of a web page, using Microsoft Internet
-Explorer (IE) via ActiveX to render the page. This factory is available only on
-Microsoft Windows platforms. The attribute being edited must have value whose
-text representation is a URL. If the value is a Unicode string, it must contain
-only characters that are valid for URLs.
-
-The *back*, *forward*, *home*, *refresh*, *search* and *stop* parameters are
-extended names of event attributes that represent the user clicking on the
-corresponding buttons in the standard IE interface. The IE buttons are not
-displayed by the editor; you must create buttons separately in the View,
-if you want the user to be able to actually click buttons.
-
-The *html*, *page_loaded*, *status*, and *title* parameters are the extended
-names of string attributes, which the editor updates with values based on its
-own state. You can display these attributes elsewhere in the View.
-
-- *html*: The current page content as HTML (as would be displayed by the
-  :menuselection:`View > Source` command in IE).
-- *page_loaded*: The URL of the currently displayed page; this may be different
-  from the URL represented by the attribute being edited.
-- *status*: The text that would appear in the IE status bar.
-- *title*: The title of the currently displayed page.
-
-LEDEditor()
-```````````
-
-:Suitable for:
-    numeric traits
-:Default for:
-    (none)
-:Optional parameters:
-    *alignment, format_str*
-
-LEDEditor() generates a display that resembles a "digital" display using
-light-emitting diodes. All styles of this editor are the same, and are
-read-only.
-
-The *alignment* parameter can be 'left', 'center', or 'right' to indicate how
-the value should be aligned within the display. The default is right-alignment.
-
-.. figure:: images/led_editor.png
-   :alt: LED-like display of 90452
-
-   Figure 56: LED Editor with right alignment
