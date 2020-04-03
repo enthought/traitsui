@@ -41,6 +41,7 @@ from .key_binding_editor import KeyBindingEditor
 from .image_editor import ImageEditor
 from .image_enum_editor import ImageEnumEditor
 from .instance_editor import InstanceEditor
+from .led_editor import LEDEditor
 from .list_editor import ListEditor
 from .list_str_editor import ListStrEditor
 from .null_editor import NullEditor

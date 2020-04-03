@@ -7,12 +7,14 @@
 # Thanks for using Enthought open source!
 
 from pyface.qt import QtGui
-from traitsui.qt4.editor import Editor
-from traitsui.basic_editor_factory import BasicEditorFactory
-from traits.api import Any, Undefined
+
+from .editor import Editor
 
 
-class _LEDEditor(Editor):
+class LEDEditor(Editor):
+    """ Traits UI 'display only' LED numeric editor.
+    """
+
     def init(self, parent):
         self.control = QtGui.QLCDNumber()
         self.control.setSegmentStyle(QtGui.QLCDNumber.Flat)
@@ -22,9 +24,7 @@ class _LEDEditor(Editor):
         self.control.display(self.str_value)
 
 
-class LEDEditor(BasicEditorFactory):
-
-    #: The editor class to be created
-    klass = _LEDEditor
-    #: Alignment is not supported for QT backend
-    alignment = Any(Undefined)
+# editor names for factory to find
+ReadonlyEditor = LEDEditor
+SimpleEditor = LEDEditor
+CustomEditor = LEDEditor

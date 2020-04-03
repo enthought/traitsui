@@ -60,6 +60,7 @@ from .editors.api import (
     ImageEnumEditor,
     InstanceEditor,
     KeyBindingEditor,
+    LEDEditor,
     ListEditor,
     ListStrEditor,
     NullEditor,
