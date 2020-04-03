@@ -578,7 +578,7 @@ thread will lead to race conditions, and unpredictable crash: suppose the
 GUI was repainting itself (due to a window move, for instance) when you
 modify it.
 
-In a wxPython application, if you start a thread, GUI event will still be
+In an application, if you start a thread, GUI event will still be
 processed by the GUI event loop. To avoid collisions between your thread
 and the event loop, the proper way of modifying a GUI object is to insert
 the modifications in the event loop, using the *GUI.invoke_later()* call.
