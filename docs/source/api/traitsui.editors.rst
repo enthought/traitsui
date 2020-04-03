@@ -30,6 +30,7 @@ Submodules
    traitsui.editors.image_enum_editor
    traitsui.editors.instance_editor
    traitsui.editors.key_binding_editor
+   traitsui.editors.led_editor
    traitsui.editors.list_editor
    traitsui.editors.list_str_editor
    traitsui.editors.null_editor
