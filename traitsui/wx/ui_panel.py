@@ -23,7 +23,7 @@ import wx
 import wx.html as wh
 import re
 
-from cgi import escape
+from html import escape
 
 from traits.api import Instance, Undefined
 
@@ -57,7 +57,6 @@ from .helper import (
 from .constants import screen_dx, screen_dy, WindowColor
 
 from .ui_base import BaseDialog
-from .constants import is_mac
 
 
 # Pattern of all digits
