@@ -1,6 +1,6 @@
 import wx
 
-from traits.api import Float, Any, Str, Union
+from traits.api import Float, Any, Str, Either
 from traitsui.editors.api import RangeEditor
 from traitsui.wx.editor import Editor
 from traitsui.wx.helper import TraitsUIPanel, Slider
@@ -235,8 +235,8 @@ class _BoundsEditor(Editor):
 
 class BoundsEditor(RangeEditor):
 
-    min = Union(None, Float)
-    max = Union(None, Float)
+    min = Either(None, Float)
+    max = Either(None, Float)
 
     def _get_simple_editor_class(self):
         return _BoundsEditor
