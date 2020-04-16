@@ -36,7 +36,7 @@ from traits.api import (
     List,
     Property,
     Str,
-    Union,
+    Either,
     cached_property,
     on_trait_change,
     provides,
@@ -239,7 +239,7 @@ class TabularAdapter(HasPrivateTraits):
 
     #: The name of the trait on a row item containing the value to use
     #: as a row label. If ``None``, the label will be the empty string.
-    row_label_name = Union(None, Str)
+    row_label_name = Either(None, Str)
 
     #: For each adapter, specifies the column indices the adapter handles.
     adapter_column_indices = Property(depends_on="adapters,columns")
