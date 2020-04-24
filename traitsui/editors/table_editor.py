@@ -32,7 +32,7 @@ from traits.api import (
     Bool,
     Callable,
     Range,
-    Union,
+    Trait,
     on_trait_change,
 )
 
@@ -56,7 +56,7 @@ customize_filter = TableFilter(name="Customize...")
 # -------------------------------------------------------------------------
 
 # A trait whose value can be True, False, or a callable function
-BoolOrCallable = Union(Bool, Callable, default=False)
+BoolOrCallable = Trait(False, Bool, Callable)
 
 
 class ToolkitEditorFactory(EditorFactory):

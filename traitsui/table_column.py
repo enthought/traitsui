@@ -36,7 +36,7 @@ from traits.api import (
     Int,
     Property,
     Str,
-    Union,
+    Either,
 )
 
 from traits.trait_base import user_name_for, xgetattr
@@ -77,7 +77,7 @@ class TableColumn(HasPrivateTraits):
     text_color = Color("black")
 
     #: Text font for this column:
-    text_font = Union(None, Font)
+    text_font = Either(None, Font)
 
     #: Cell background color for this column:
     cell_color = Color("white", allow_none=True)
