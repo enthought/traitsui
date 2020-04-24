@@ -17,6 +17,7 @@ Submodules
    traitsui.editors.csv_list_editor
    traitsui.editors.custom_editor
    traitsui.editors.date_editor
+   traitsui.editors.datetime_editor
    traitsui.editors.default_override
    traitsui.editors.directory_editor
    traitsui.editors.dnd_editor

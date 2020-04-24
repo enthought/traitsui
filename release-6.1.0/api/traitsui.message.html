@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.message module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.mimedata module" href="traitsui.mimedata.html" >
+    <link rel="prev" title="traitsui.menu module" href="traitsui.menu.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.message module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.mimedata.html" title="traitsui.mimedata module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.menu.html" title="traitsui.menu module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.message">
+<span id="traitsui-message-module"></span><h1>traitsui.message module<a class="headerlink" href="#module-traitsui.message" title="Permalink to this headline">¶</a></h1>
+<p>Displays a message to the user as a modal window.</p>
+<dl class="class">
+<dt id="traitsui.message.AutoCloseMessage">
+<em class="property">class </em><code class="descclassname">traitsui.message.</code><code class="descname">AutoCloseMessage</code><a class="headerlink" href="#traitsui.message.AutoCloseMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dl class="method">
+<dt id="traitsui.message.AutoCloseMessage.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>parent=None</em>, <em>title=''</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.message.AutoCloseMessage.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display the wait message for a limited duration.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.message.Message">
+<em class="property">class </em><code class="descclassname">traitsui.message.</code><code class="descname">Message</code><a class="headerlink" href="#traitsui.message.Message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traitsui.message.auto_close_message">
+<code class="descclassname">traitsui.message.</code><code class="descname">auto_close_message</code><span class="sig-paren">(</span><em>message='Please wait'</em>, <em>time=2.0</em>, <em>title='Please wait'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.message.auto_close_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays a message to the user as a modal window with no buttons. The
+window closes automatically after a specified time interval (specified
+in seconds).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traitsui.message.error">
+<code class="descclassname">traitsui.message.</code><code class="descname">error</code><span class="sig-paren">(</span><em>message='', title='Message', buttons=['OK', 'Cancel'], parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.message.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays a message to the user as a modal window with the specified
+title and buttons.</p>
+<p>If <em>buttons</em> is not specified, <strong>OK</strong> and <strong>Cancel</strong> buttons are used,
+which is appropriate for confirmations, where the user must decide whether
+to proceed. Be sure to word the message so that it is clear that clicking
+<strong>OK</strong> continues the operation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traitsui.message.message">
+<code class="descclassname">traitsui.message.</code><code class="descname">message</code><span class="sig-paren">(</span><em>message='', title='Message', buttons=['OK'], parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.message.message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays a message to the user as a model window with the specified
+title and buttons.</p>
+<p>If <em>buttons</em> is not specified, a single <strong>OK</strong> button is used, which is
+appropriate for notifications, where no further action or decision on the
+user’s part is required.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.menu.html"
+                        title="previous chapter">traitsui.menu module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.mimedata.html"
+                        title="next chapter">traitsui.mimedata module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.message.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

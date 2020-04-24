@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.instance_choice module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.instance_choice module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.item module" href="traitsui.item.html" >
     <link rel="prev" title="traitsui.include module" href="traitsui.include.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.instance_choice module</a></li>
@@ -97,108 +96,196 @@
 instance editor factory classes.</p>
 <dl class="class">
 <dt id="traitsui.instance_choice.InstanceChoice">
-<em class="property">class </em><code class="descclassname">traitsui.instance_choice.</code><code class="descname">InstanceChoice</code><a class="headerlink" href="#traitsui.instance_choice.InstanceChoice" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.instance_choice.</code><code class="sig-name descname">InstanceChoice</code><a class="headerlink" href="#traitsui.instance_choice.InstanceChoice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.instance_choice.InstanceChoiceItem" title="traitsui.instance_choice.InstanceChoiceItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.instance_choice.InstanceChoiceItem</span></code></a></p>
 <dl class="method">
 <dt id="traitsui.instance_choice.InstanceChoice.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><em>object=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoice.get_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><em class="sig-param">object=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoice.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the name of the item.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.instance_choice.InstanceChoice.get_object">
-<code class="descname">get_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoice.get_object" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoice.get_object" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the object associated with the item.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.instance_choice.InstanceChoice.is_compatible">
-<code class="descname">is_compatible</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoice.is_compatible" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_compatible</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoice.is_compatible" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates whether a specified object is compatible with the item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.instance_choice.InstanceChoice.name_trait">
+<code class="sig-name descname">name_trait</code><em class="property"> = Str(&quot;name&quot;)</em><a class="headerlink" href="#traitsui.instance_choice.InstanceChoice.name_trait" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the object trait containing its user interface name:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.instance_choice.InstanceChoice.object">
+<code class="sig-name descname">object</code><em class="property"> = Any()</em><a class="headerlink" href="#traitsui.instance_choice.InstanceChoice.object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object associated with the item</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.instance_choice.InstanceChoiceItem">
-<em class="property">class </em><code class="descclassname">traitsui.instance_choice.</code><code class="descname">InstanceChoiceItem</code><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.instance_choice.</code><code class="sig-name descname">InstanceChoiceItem</code><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <dl class="method">
 <dt id="traitsui.instance_choice.InstanceChoiceItem.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><em>object=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.get_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><em class="sig-param">object=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the name of the item.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.instance_choice.InstanceChoiceItem.get_object">
-<code class="descname">get_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.get_object" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.get_object" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the object associated with the item.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.instance_choice.InstanceChoiceItem.get_view">
-<code class="descname">get_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.get_view" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.get_view" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the view associated with the object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.instance_choice.InstanceChoiceItem.is_compatible">
-<code class="descname">is_compatible</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.is_compatible" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_compatible</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.is_compatible" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates whether a specified object is compatible with the item.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.instance_choice.InstanceChoiceItem.is_droppable">
-<code class="descname">is_droppable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.is_droppable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_droppable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.is_droppable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates whether the item supports drag and drop.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.instance_choice.InstanceChoiceItem.is_factory">
+<code class="sig-name descname">is_factory</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.is_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does this item create new instances?</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.instance_choice.InstanceChoiceItem.is_selectable">
-<code class="descname">is_selectable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.is_selectable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_selectable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.is_selectable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates whether the item can be selected by the user.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.instance_choice.InstanceChoiceItem.name">
+<code class="sig-name descname">name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>User interface name for the item</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.instance_choice.InstanceChoiceItem.view">
+<code class="sig-name descname">view</code><em class="property"> = AView</em><a class="headerlink" href="#traitsui.instance_choice.InstanceChoiceItem.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>View associated with this item</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.instance_choice.InstanceDropChoice">
-<em class="property">class </em><code class="descclassname">traitsui.instance_choice.</code><code class="descname">InstanceDropChoice</code><a class="headerlink" href="#traitsui.instance_choice.InstanceDropChoice" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.instance_choice.</code><code class="sig-name descname">InstanceDropChoice</code><a class="headerlink" href="#traitsui.instance_choice.InstanceDropChoice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.instance_choice.InstanceFactoryChoice" title="traitsui.instance_choice.InstanceFactoryChoice"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.instance_choice.InstanceFactoryChoice</span></code></a></p>
+<dl class="attribute">
+<dt id="traitsui.instance_choice.InstanceDropChoice.droppable">
+<code class="sig-name descname">droppable</code><em class="property"> = True</em><a class="headerlink" href="#traitsui.instance_choice.InstanceDropChoice.droppable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates whether an instance compatible with this item can be dragged and
+dropped rather than created . This value overrides the default.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.instance_choice.InstanceDropChoice.is_factory">
+<code class="sig-name descname">is_factory</code><em class="property"> = False</em><a class="headerlink" href="#traitsui.instance_choice.InstanceDropChoice.is_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does this item create new instances? This value overrides the default.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.instance_choice.InstanceDropChoice.selectable">
+<code class="sig-name descname">selectable</code><em class="property"> = False</em><a class="headerlink" href="#traitsui.instance_choice.InstanceDropChoice.selectable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates whether the item can be selected by the user. This value
+overrides the default.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.instance_choice.InstanceFactoryChoice">
-<em class="property">class </em><code class="descclassname">traitsui.instance_choice.</code><code class="descname">InstanceFactoryChoice</code><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.instance_choice.</code><code class="sig-name descname">InstanceFactoryChoice</code><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.instance_choice.InstanceChoiceItem" title="traitsui.instance_choice.InstanceChoiceItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.instance_choice.InstanceChoiceItem</span></code></a></p>
+<dl class="attribute">
+<dt id="traitsui.instance_choice.InstanceFactoryChoice.args">
+<code class="sig-name descname">args</code><em class="property"> = Tuple()</em><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tuple of arguments to pass to <strong>klass</strong> to create an instance</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.instance_choice.InstanceFactoryChoice.droppable">
+<code class="sig-name descname">droppable</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.droppable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates whether an instance compatible with this item can be dragged and
+dropped rather than created</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.instance_choice.InstanceFactoryChoice.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><em>object=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.get_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><em class="sig-param">object=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the name of the item.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.instance_choice.InstanceFactoryChoice.get_object">
-<code class="descname">get_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.get_object" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.get_object" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the object associated with the item.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.instance_choice.InstanceFactoryChoice.is_compatible">
-<code class="descname">is_compatible</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.is_compatible" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_compatible</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.is_compatible" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates whether a specified object is compatible with the item.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.instance_choice.InstanceFactoryChoice.is_droppable">
-<code class="descname">is_droppable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.is_droppable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_droppable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.is_droppable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates whether the item supports drag and drop.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.instance_choice.InstanceFactoryChoice.is_factory">
+<code class="sig-name descname">is_factory</code><em class="property"> = True</em><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.is_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does this item create new instances? This value overrides the default.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.instance_choice.InstanceFactoryChoice.is_selectable">
-<code class="descname">is_selectable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.is_selectable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_selectable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.is_selectable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates whether the item can be selected by the user.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.instance_choice.InstanceFactoryChoice.klass">
+<code class="sig-name descname">klass</code><em class="property"> = Callable()</em><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.klass" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class (or other callable) that can be used to create an item compatible
+with this item</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.instance_choice.InstanceFactoryChoice.kw_args">
+<code class="sig-name descname">kw_args</code><em class="property"> = Dict(Str, Any)</em><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.kw_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of arguments to pass to <strong>klass</strong> to create an instance</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.instance_choice.InstanceFactoryChoice.selectable">
+<code class="sig-name descname">selectable</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.instance_choice.InstanceFactoryChoice.selectable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates whether the item can be selected by the user</p>
 </dd></dl>
 
 </dd></dl>
@@ -226,13 +313,11 @@ instance editor factory classes.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -253,13 +338,13 @@ instance editor factory classes.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

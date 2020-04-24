@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.dockable_view_element module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.dockable_view_element module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.editor module" href="traitsui.editor.html" >
     <link rel="prev" title="traitsui.dock_window_theme module" href="traitsui.dock_window_theme.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.dockable_view_element module</a></li>
@@ -91,8 +90,61 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
             
-  <div class="section" id="traitsui-dockable-view-element-module">
-<h1>traitsui.dockable_view_element module<a class="headerlink" href="#traitsui-dockable-view-element-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-traitsui.dockable_view_element">
+<span id="traitsui-dockable-view-element-module"></span><h1>traitsui.dockable_view_element module<a class="headerlink" href="#module-traitsui.dockable_view_element" title="Permalink to this headline">¶</a></h1>
+<p>Defines the DockableViewElement class, which allows Traits UIs and
+Traits UI elements to be docked in external PyFace DockWindow windows.</p>
+<dl class="class">
+<dt id="traitsui.dockable_view_element.DockableViewElement">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.dockable_view_element.</code><code class="sig-name descname">DockableViewElement</code><a class="headerlink" href="#traitsui.dockable_view_element.DockableViewElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pyface.dock.idockable.IDockable</span></code></p>
+<p>Allows Traits UIs and Traits UI elements to be docked in external
+PyFace DockWindow windows.</p>
+<dl class="method">
+<dt id="traitsui.dockable_view_element.DockableViewElement.close_dock_control">
+<code class="sig-name descname">close_dock_control</code><span class="sig-paren">(</span><em class="sig-param">dock_control</em>, <em class="sig-param">abort</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.dockable_view_element.DockableViewElement.close_dock_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the closing of a DockControl containing a Traits UI.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.dockable_view_element.DockableViewElement.dockable_get_control">
+<code class="sig-name descname">dockable_get_control</code><span class="sig-paren">(</span><em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.dockable_view_element.DockableViewElement.dockable_get_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a control that can be docked into a DockWindow.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.dockable_view_element.DockableViewElement.dockable_init_dockcontrol">
+<code class="sig-name descname">dockable_init_dockcontrol</code><span class="sig-paren">(</span><em class="sig-param">dock_control</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.dockable_view_element.DockableViewElement.dockable_init_dockcontrol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows the object to override the default DockControl settings.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.dockable_view_element.DockableViewElement.dockable_should_close">
+<code class="sig-name descname">dockable_should_close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.dockable_view_element.DockableViewElement.dockable_should_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the current DockControl be closed before creating the new
+one?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dockable_view_element.DockableViewElement.element">
+<code class="sig-name descname">element</code><em class="property"> = Instance(ViewSubElement)</em><a class="headerlink" href="#traitsui.dockable_view_element.DockableViewElement.element" title="Permalink to this definition">¶</a></dt>
+<dd><p>The (optional) element of the Traits UI that can be docked</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dockable_view_element.DockableViewElement.should_close">
+<code class="sig-name descname">should_close</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.dockable_view_element.DockableViewElement.should_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the DockControl be closed on redocking?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dockable_view_element.DockableViewElement.ui">
+<code class="sig-name descname">ui</code><em class="property"> = Instance(UI)</em><a class="headerlink" href="#traitsui.dockable_view_element.DockableViewElement.ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Traits UI that can be docked with an external DockWindow</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -116,13 +168,11 @@
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -143,13 +193,13 @@
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

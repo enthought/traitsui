@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.view_element module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.view_elements module" href="traitsui.view_elements.html" >
+    <link rel="prev" title="traitsui.view module" href="traitsui.view.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.view_element module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.view_elements.html" title="traitsui.view_elements module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.view.html" title="traitsui.view module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.view_element">
+<span id="traitsui-view-element-module"></span><h1>traitsui.view_element module<a class="headerlink" href="#module-traitsui.view_element" title="Permalink to this headline">¶</a></h1>
+<p>Defines the abstract ViewElement class that all trait view template items
+(i.e., View, Group, Item, Include) derive from.</p>
+<dl class="class">
+<dt id="traitsui.view_element.DefaultViewElement">
+<em class="property">class </em><code class="descclassname">traitsui.view_element.</code><code class="descname">DefaultViewElement</code><a class="headerlink" href="#traitsui.view_element.DefaultViewElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.view_element.ViewElement" title="traitsui.view_element.ViewElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewElement</span></code></a></p>
+<p>A view element that can be used as a default value for traits whose
+value is a view element.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.view_element.ViewElement">
+<em class="property">class </em><code class="descclassname">traitsui.view_element.</code><code class="descname">ViewElement</code><a class="headerlink" href="#traitsui.view_element.ViewElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<p>An element of a view.</p>
+<dl class="method">
+<dt id="traitsui.view_element.ViewElement.is_includable">
+<code class="descname">is_includable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view_element.ViewElement.is_includable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object is replacable by an Include object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.view_element.ViewElement.replace_include">
+<code class="descname">replace_include</code><span class="sig-paren">(</span><em>view_elements</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view_element.ViewElement.replace_include" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches the current object’s <strong>content</strong> attribute for objects that
+have an <strong>id</strong> attribute, and replaces each one with an Include object
+with the same <strong>id</strong> value, and puts the replaced object into the
+specified ViewElements object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>view_elements</strong> (<em>ViewElements object</em>) – Object containing Group, Item, and Include objects</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.view_element.ViewSubElement">
+<em class="property">class </em><code class="descclassname">traitsui.view_element.</code><code class="descname">ViewSubElement</code><a class="headerlink" href="#traitsui.view_element.ViewSubElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.view_element.ViewElement" title="traitsui.view_element.ViewElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewElement</span></code></a></p>
+<p>Abstract class representing elements that can be contained in a view.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.view.html"
+                        title="previous chapter">traitsui.view module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.view_elements.html"
+                        title="next chapter">traitsui.view_elements module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.view_element.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

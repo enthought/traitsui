@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.view module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.view module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.view_element module" href="traitsui.view_element.html" >
     <link rel="prev" title="traitsui.value_tree module" href="traitsui.value_tree.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.view module</a></li>
@@ -97,59 +96,301 @@
 Traits-based user interface.</p>
 <dl class="class">
 <dt id="traitsui.view.View">
-<em class="property">class </em><code class="descclassname">traitsui.view.</code><code class="descname">View</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view.View" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.view.</code><code class="sig-name descname">View</code><span class="sig-paren">(</span><em class="sig-param">*values</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view.View" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.view_element.html#traitsui.view_element.ViewElement" title="traitsui.view_element.ViewElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewElement</span></code></a></p>
 <p>A Traits-based user interface for one or more objects.</p>
 <p>The attributes of the View object determine the contents and layout of
 an attribute-editing window. A View object contains a set of Group,
 Item, and Include objects. A View object can be an attribute of an
 object derived from HasTraits, or it can be a standalone object.</p>
+<dl class="attribute">
+<dt id="traitsui.view.View.buttons">
+<code class="sig-name descname">buttons</code><em class="property"> = Buttons</em><a class="headerlink" href="#traitsui.view.View.buttons" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of button actions to add to the view. The <strong>traitsui.menu</strong>
+module defines standard buttons, such as <strong>OKButton</strong>, and standard sets
+of buttons, such as <strong>ModalButtons</strong>, which can be used to define a value
+for this attribute. This value can also be a list of button name strings,
+such as <code class="docutils literal notranslate"><span class="pre">['OK',</span> <span class="pre">'Cancel',</span> <span class="pre">'Help']</span></code>. If set to the empty list, the
+view contains a default set of buttons (equivalent to <strong>LiveButtons</strong>:
+Undo/Redo, Revert, OK, Cancel, Help). To suppress buttons in the view,
+use the <strong>NoButtons</strong> variable, defined in <strong>traitsui.menu</strong>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.close_result">
+<code class="sig-name descname">close_result</code><em class="property"> = CloseResult</em><a class="headerlink" href="#traitsui.view.View.close_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>What result should be returned if the user clicks the window or dialog
+close button or icon?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.content">
+<code class="sig-name descname">content</code><em class="property"> = Content</em><a class="headerlink" href="#traitsui.view.View.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>The top-level Group object for the view:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.default_button">
+<code class="sig-name descname">default_button</code><em class="property"> = AButton</em><a class="headerlink" href="#traitsui.view.View.default_button" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default button to activate when Enter is pressed. If not specified,
+pressing Enter will not activate any button.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.dock">
+<code class="sig-name descname">dock</code><em class="property"> = DockStyle</em><a class="headerlink" href="#traitsui.view.View.dock" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default docking style to use for sub-groups of the view. The following
+values are possible:</p>
+<ul class="simple">
+<li><p>‘fixed’: No rearrangement of sub-groups is allowed.</p></li>
+<li><p>‘horizontal’: Moveable elements have a visual “handle” to the left by
+which the element can be dragged.</p></li>
+<li><p>‘vertical’: Moveable elements have a visual “handle” above them by
+which the element can be dragged.</p></li>
+<li><p>‘tabbed’: Moveable elements appear as tabbed pages, which can be
+arranged within the window or “stacked” so that only one appears at
+at a time.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.drop_class">
+<code class="sig-name descname">drop_class</code><em class="property"> = Any()</em><a class="headerlink" href="#traitsui.view.View.drop_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class of dropped objects that can be added:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.export">
+<code class="sig-name descname">export</code><em class="property"> = ExportType</em><a class="headerlink" href="#traitsui.view.View.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>The category of exported elements:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.handler">
+<code class="sig-name descname">handler</code><em class="property"> = AHandler</em><a class="headerlink" href="#traitsui.view.View.handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Handler object that provides GUI logic for handling events in the
+window. Set this attribute only if you are using a custom Handler. If
+not set, the default Traits UI Handler is used.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.height">
+<code class="sig-name descname">height</code><em class="property"> = Height</em><a class="headerlink" href="#traitsui.view.View.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Requested height for the view window, as an (integer) number of pixels, or
+as a (floating point) fraction of the screen height.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.help_id">
+<code class="sig-name descname">help_id</code><em class="property"> = HelpId</em><a class="headerlink" href="#traitsui.view.View.help_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>External help context identifier, which can be used by a custom help
+handler. This attribute is ignored by the default help handler.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.icon">
+<code class="sig-name descname">icon</code><em class="property"> = Image</em><a class="headerlink" href="#traitsui.view.View.icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the icon to display in the dialog window title bar:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.id">
+<code class="sig-name descname">id</code><em class="property"> = AnId</em><a class="headerlink" href="#traitsui.view.View.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A unique identifier for the view:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.image">
+<code class="sig-name descname">image</code><em class="property"> = Image</em><a class="headerlink" href="#traitsui.view.View.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>The image to display on notebook tabs:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.imports">
+<code class="sig-name descname">imports</code><em class="property"> = ImportTypes</em><a class="headerlink" href="#traitsui.view.View.imports" title="Permalink to this definition">¶</a></dt>
+<dd><p>The valid categories of imported elements:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.key_bindings">
+<code class="sig-name descname">key_bindings</code><em class="property"> = AKeyBindings</em><a class="headerlink" href="#traitsui.view.View.key_bindings" title="Permalink to this definition">¶</a></dt>
+<dd><p>The set of global key bindings for the view. Each time a key is pressed
+while the view has keyboard focus, the key is checked to see if it is one
+of the keys recognized by the KeyBindings object. If it is, the matching
+KeyBinding’s method name is checked to see if it is defined on any of the
+object’s in the view’s context. If it is, the method is invoked. If the
+result of the method is <strong>False</strong>, then the search continues with the
+next object in the context. If any invoked method returns a non-False
+value, processing stops and the key is marked as having been handled. If
+all invoked methods return <strong>False</strong>, or no matching KeyBinding object is
+found, the key is processed normally. If the view has a non-empty <em>id</em>
+trait, the contents of the <strong>KeyBindings</strong> object will be saved as part
+of the view’s persistent data:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.kind">
+<code class="sig-name descname">kind</code><em class="property"> = AKind</em><a class="headerlink" href="#traitsui.view.View.kind" title="Permalink to this definition">¶</a></dt>
+<dd><p>The kind of user interface to create:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.menubar">
+<code class="sig-name descname">menubar</code><em class="property"> = Any  # Instance( pyface.action.MenuBarManager )</em><a class="headerlink" href="#traitsui.view.View.menubar" title="Permalink to this definition">¶</a></dt>
+<dd><p>The menu bar for the view. Usually requires a custom <strong>handler</strong>:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.model_view">
+<code class="sig-name descname">model_view</code><em class="property"> = AModelView</em><a class="headerlink" href="#traitsui.view.View.model_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>The factory function for converting a model into a model/view object:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.object">
+<code class="sig-name descname">object</code><em class="property"> = AnObject</em><a class="headerlink" href="#traitsui.view.View.object" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default object being edited:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.on_apply">
+<code class="sig-name descname">on_apply</code><em class="property"> = OnApply</em><a class="headerlink" href="#traitsui.view.View.on_apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when modal changes are applied or reverted:</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.view.View.replace_include">
-<code class="descname">replace_include</code><span class="sig-paren">(</span><em>view_elements</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view.View.replace_include" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">replace_include</code><span class="sig-paren">(</span><em class="sig-param">view_elements</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view.View.replace_include" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replaces any items that have an ID with an Include object with
 the same ID, and puts the object with the ID into the specified
 ViewElements object.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="traitsui.view.View.resizable">
+<code class="sig-name descname">resizable</code><em class="property"> = IsResizable</em><a class="headerlink" href="#traitsui.view.View.resizable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can the user resize the window?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.scrollable">
+<code class="sig-name descname">scrollable</code><em class="property"> = IsScrollable</em><a class="headerlink" href="#traitsui.view.View.scrollable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can the user scroll the view? If set to True, window-level scroll bars
+appear whenever the window is too small to show all of its contents at
+one time. If set to False, the window does not scroll, but individual
+widgets might still contain scroll bars.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.view.View.set_content">
-<code class="descname">set_content</code><span class="sig-paren">(</span><em>*values</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view.View.set_content" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_content</code><span class="sig-paren">(</span><em class="sig-param">*values</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view.View.set_content" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the content of a view.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.statusbar">
+<code class="sig-name descname">statusbar</code><em class="property"> = ViewStatus</em><a class="headerlink" href="#traitsui.view.View.statusbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Status bar items to add to the view’s status bar. The value can be:</p>
+<ul class="simple">
+<li><p><strong>None</strong>: No status bar for the view (the default).</p></li>
+<li><p>string: Same as [ StatusItem( name = string ) ].</p></li>
+<li><p>StatusItem: Same as [ StatusItem ].</p></li>
+<li><p>[ [StatusItem|string], … ]: Create a status bar with one field for
+each StatusItem in the list (or tuple). The status bar fields are
+defined from left to right in the order specified. A string value is
+converted to: StatusItem( name = string ):</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.style">
+<code class="sig-name descname">style</code><em class="property"> = EditorStyle</em><a class="headerlink" href="#traitsui.view.View.style" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default editor style of elements in the view:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.title">
+<code class="sig-name descname">title</code><em class="property"> = ATitle</em><a class="headerlink" href="#traitsui.view.View.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Title for the view, displayed in the title bar when the view appears as a
+secondary window (i.e., dialog or wizard). If not specified, “Edit
+properties” is used as the title.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.toolbar">
+<code class="sig-name descname">toolbar</code><em class="property"> = Any  # Instance( pyface.action.ToolBarManager )</em><a class="headerlink" href="#traitsui.view.View.toolbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>The toolbar for the view. Usually requires a custom <strong>handler</strong>:</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.view.View.ui">
-<code class="descname">ui</code><span class="sig-paren">(</span><em>context</em>, <em>parent=None</em>, <em>kind=None</em>, <em>view_elements=None</em>, <em>handler=None</em>, <em>id=''</em>, <em>scrollable=None</em>, <em>args=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view.View.ui" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">ui</code><span class="sig-paren">(</span><em class="sig-param">context</em>, <em class="sig-param">parent=None</em>, <em class="sig-param">kind=None</em>, <em class="sig-param">view_elements=None</em>, <em class="sig-param">handler=None</em>, <em class="sig-param">id=''</em>, <em class="sig-param">scrollable=None</em>, <em class="sig-param">args=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view.View.ui" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a <strong>UI</strong> object, which generates the actual GUI window or
 panel from a set of view elements.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>context</strong> (<em>object</em><em> or </em><em>dictionary</em>) – A single object or a dictionary of string/object pairs, whose trait
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> (<em>object</em><em> or </em><em>dictionary</em>) – A single object or a dictionary of string/object pairs, whose trait
 attributes are to be edited. If not specified, the current object is
-used.</li>
-<li><strong>parent</strong> (<em>window component</em>) – The window parent of the View object’s window</li>
-<li><strong>kind</strong> (<em>string</em>) – The kind of window to create. See the <strong>AKind</strong> trait for details.
+used.</p></li>
+<li><p><strong>parent</strong> (<em>window component</em>) – The window parent of the View object’s window</p></li>
+<li><p><strong>kind</strong> (<em>string</em>) – The kind of window to create. See the <strong>AKind</strong> trait for details.
 If <em>kind</em> is unspecified or None, the <strong>kind</strong> attribute of the
-View object is used.</li>
-<li><strong>view_elements</strong> (<em>ViewElements object</em>) – The set of Group, Item, and Include objects contained in the view.
-Do not use this parameter when calling this method directly.</li>
-<li><strong>handler</strong> (<em>Handler object</em>) – A handler object used for event handling in the dialog box. If
-None, the default handler for Traits UI is used.</li>
-<li><strong>id</strong> (<em>string</em>) – A unique ID for persisting preferences about this user interface,
+View object is used.</p></li>
+<li><p><strong>view_elements</strong> (<em>ViewElements object</em>) – The set of Group, Item, and Include objects contained in the view.
+Do not use this parameter when calling this method directly.</p></li>
+<li><p><strong>handler</strong> (<em>Handler object</em>) – A handler object used for event handling in the dialog box. If
+None, the default handler for Traits UI is used.</p></li>
+<li><p><strong>id</strong> (<em>string</em>) – A unique ID for persisting preferences about this user interface,
 such as size and position. If not specified, no user preferences
-are saved.</li>
-<li><strong>scrollable</strong> (<em>Boolean</em>) – Indicates whether the dialog box should be scrollable. When set to
+are saved.</p></li>
+<li><p><strong>scrollable</strong> (<em>Boolean</em>) – Indicates whether the dialog box should be scrollable. When set to
 True, scroll bars appear on the dialog box if it is not large enough
-to display all of the items in the view at one time.</li>
+to display all of the items in the view at one time.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.updated">
+<code class="sig-name descname">updated</code><em class="property"> = Event()</em><a class="headerlink" href="#traitsui.view.View.updated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event when the view has been updated:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.width">
+<code class="sig-name descname">width</code><em class="property"> = Width</em><a class="headerlink" href="#traitsui.view.View.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Requested width for the view window, as an (integer) number of pixels, or
+as a (floating point) fraction of the screen width.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.x">
+<code class="sig-name descname">x</code><em class="property"> = XCoordinate</em><a class="headerlink" href="#traitsui.view.View.x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Requested x-coordinate (horizontal position) for the view window. This
+attribute can be specified in the following ways:</p>
+<ul class="simple">
+<li><p>A positive integer: indicates the number of pixels from the left edge
+of the screen to the left edge of the window.</p></li>
+<li><p>A negative integer: indicates the number of pixels from the right edge
+of the screen to the right edge of the window.</p></li>
+<li><p>A floating point value between 0 and 1: indicates the fraction of the
+total screen width between the left edge of the screen and the left edge
+of the window.</p></li>
+<li><p>A floating point value between -1 and 0: indicates the fraction of the
+total screen width between the right edge of the screen and the right
+edge of the window.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view.View.y">
+<code class="sig-name descname">y</code><em class="property"> = YCoordinate</em><a class="headerlink" href="#traitsui.view.View.y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Requested y-coordinate (vertical position) for the view window. This
+attribute behaves exactly like the <strong>x</strong> attribute, except that its value
+indicates the position of the top or bottom of the view window relative
+to the top or bottom of the screen.</p>
 </dd></dl>
 
 </dd></dl>
@@ -177,13 +418,11 @@ to display all of the items in the view at one time.</li>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -204,13 +443,13 @@ to display all of the items in the view at one time.</li>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

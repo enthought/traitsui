@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.toolkit_traits module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.toolkit_traits module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.tree_node module" href="traitsui.tree_node.html" >
     <link rel="prev" title="traitsui.toolkit module" href="traitsui.toolkit.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.toolkit_traits module</a></li>
@@ -95,18 +94,75 @@
 <span id="traitsui-toolkit-traits-module"></span><h1>traitsui.toolkit_traits module<a class="headerlink" href="#module-traitsui.toolkit_traits" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="traitsui.toolkit_traits.ColorTrait">
-<code class="descclassname">traitsui.toolkit_traits.</code><code class="descname">ColorTrait</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit_traits.ColorTrait" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-prename descclassname">traitsui.toolkit_traits.</code><code class="sig-name descname">ColorTrait</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit_traits.ColorTrait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a trait whose value is a GUI toolkit-specific color.</p>
+<p>A number of different values are accepted for setting the value, including:</p>
+<ul class="simple">
+<li><p>tuples of the form (r, g, b) and (r, g, b, a)</p></li>
+<li><p>strings which match standard color names</p></li>
+<li><p>strings of the form “(r, g, b)” and “(r, g, b, a)”</p></li>
+<li><p>integers whose hex value is of the form 0xRRGGBB</p></li>
+<li><p>toolkit-specific color classes</p></li>
+</ul>
+<p>Tuple values are expected to be in the range 0 to 255.</p>
+<p>Exact behaviour (eg. precisely what values are accepted, and what the
+“standard” color names are) is toolkit-dependent.</p>
+<p>The default value is white.  The default editor is a ColorEditor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>default</strong> (<em>color</em>) – The default color for the trait.</p></li>
+<li><p><strong>allow_none</strong> (<em>bool</em>) – Whether to allow None as a value.</p></li>
+<li><p><strong>**metadata</strong> – Trait metadata to be passed through.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="function">
 <dt id="traitsui.toolkit_traits.FontTrait">
-<code class="descclassname">traitsui.toolkit_traits.</code><code class="descname">FontTrait</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit_traits.FontTrait" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-prename descclassname">traitsui.toolkit_traits.</code><code class="sig-name descname">FontTrait</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit_traits.FontTrait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a trait whose value is a GUI toolkit-specific font.</p>
+<p>This trait accepts either a toolkit-specific font object, or a string
+containing a font description.  The string description can contain:</p>
+<ul class="simple">
+<li><p>a font name or family.  The following generic names are understood:
+“default”, “decorative”, “roman”, “script”, “swiss”, and “modern”.</p></li>
+<li><p>a size, in points.</p></li>
+<li><p>a style, which is one of: “slant” or “italic”</p></li>
+<li><p>a weight, which is one of: “light” or “bold”</p></li>
+<li><p>whether the font is underlined, indicated by the inclusion of
+“underlined”.</p></li>
+</ul>
+<p>Where values aren’t supplied, the application defaults will be used
+instead.</p>
+<p>The default value is the application default font, which is toolkit
+and platform dependent.  The default editor is FontEditor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**metadata</strong> – Trait metadata to be passed through.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="function">
 <dt id="traitsui.toolkit_traits.RGBColorTrait">
-<code class="descclassname">traitsui.toolkit_traits.</code><code class="descname">RGBColorTrait</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit_traits.RGBColorTrait" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-prename descclassname">traitsui.toolkit_traits.</code><code class="sig-name descname">RGBColorTrait</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit_traits.RGBColorTrait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a trait whose value is a RGB tuple with values from 0 to 1.</p>
+<p>A number of different values are accepted for setting the value, including:</p>
+<ul class="simple">
+<li><p>tuples of the form (r, g, b) with values from 0.0 to 1.0</p></li>
+<li><p>strings which match standard color names</p></li>
+<li><p>integers whose hex value is of the form 0xRRGGBB</p></li>
+</ul>
+<p>The default value is (1.0, 1.0, 1.0).  The default editor is a
+RGBColorEditor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**metadata</strong> – Trait metadata to be passed through.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 
@@ -131,13 +187,11 @@
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -158,13 +212,13 @@
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

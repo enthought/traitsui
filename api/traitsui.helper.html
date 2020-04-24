@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.helper module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.helper module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.include module" href="traitsui.include.html" >
     <link rel="prev" title="traitsui.help_template module" href="traitsui.help_template.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.helper module</a></li>
@@ -97,20 +96,60 @@
 user interfaces.</p>
 <dl class="function">
 <dt id="traitsui.helper.commatize">
-<code class="descclassname">traitsui.helper.</code><code class="descname">commatize</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.helper.commatize" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.helper.</code><code class="sig-name descname">commatize</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.helper.commatize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Formats a specified value as an integer string with embedded commas.
 For example: commatize( 12345 ) returns “12,345”.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="traitsui.helper.compute_column_widths">
+<code class="sig-prename descclassname">traitsui.helper.</code><code class="sig-name descname">compute_column_widths</code><span class="sig-paren">(</span><em class="sig-param">available_space</em>, <em class="sig-param">requested</em>, <em class="sig-param">min_widths</em>, <em class="sig-param">user_widths</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.helper.compute_column_widths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distribute column space amongst columns based on requested space.</p>
+<p>Widths requests can be specified as one of the following:</p>
+<ul class="simple">
+<li><p>a value greater than 1.0 is treated as a fixed width with no flexibility
+(ie. a minimum width as specified and a weight of 0.0)</p></li>
+<li><p>a value between 0.0 and 1.0 is treaded as a flexible width column with
+the specified width as a weight and a minimum width provided by the
+min_widths entry.</p></li>
+<li><p>a value less than or equal to 0.0 is treated as a flexible width column
+with a weight of 0.1 and a minimum width provided by the min_widths
+parameter.</p></li>
+</ul>
+<p>If user widths are supplied then any non-None values override the
+requested widths, and are treated as having a flexibility of 0.</p>
+<p>Space is distributed by evaluating each column from smallest weight to
+largest and seeing if the weighted proportion of the remaining space is
+more than the minimum, and if so replacing the width with the weighted
+width.  The column is then removed from the available width and the
+total weight and the analysis continues.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>available_space</strong> (<em>int</em>) – The available horizontal space.</p></li>
+<li><p><strong>requested</strong> (<em>list of numbers</em>) – The requested width or weight for each column.</p></li>
+<li><p><strong>min_widths</strong> (<em>None</em><em> or </em><em>list of ints</em>) – The minimum width for each flexible column</p></li>
+<li><p><strong>user_widths</strong> (<em>None</em><em> or </em><em>list of int</em><em> or </em><em>None</em>) – Any widths specified by the user resizing the columns manually.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>widths</strong> – The assigned width for each column</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of ints</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="traitsui.helper.enum_values_changed">
-<code class="descclassname">traitsui.helper.</code><code class="descname">enum_values_changed</code><span class="sig-paren">(</span><em>values</em>, <em>strfunc=&lt;class 'str'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.helper.enum_values_changed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.helper.</code><code class="sig-name descname">enum_values_changed</code><span class="sig-paren">(</span><em class="sig-param">values</em>, <em class="sig-param">strfunc=&lt;class 'str'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.helper.enum_values_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recomputes the mappings for a new set of enumeration values.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="traitsui.helper.user_name_for">
-<code class="descclassname">traitsui.helper.</code><code class="descname">user_name_for</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.helper.user_name_for" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.helper.</code><code class="sig-name descname">user_name_for</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.helper.user_name_for" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a “user-friendly” name for a specified trait.</p>
 </dd></dl>
 
@@ -137,13 +176,11 @@ For example: commatize( 12345 ) returns “12,345”.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -164,13 +201,13 @@ For example: commatize( 12345 ) returns “12,345”.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

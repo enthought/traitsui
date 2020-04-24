@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.ui_traits module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.ui_traits module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.undo module" href="traitsui.undo.html" >
     <link rel="prev" title="traitsui.ui_info module" href="traitsui.ui_info.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.ui_traits module</a></li>
@@ -96,23 +95,25 @@
 <p>Defines common traits used within the traits.ui package.</p>
 <dl class="class">
 <dt id="traitsui.ui_traits.ATheme">
-<em class="property">class </em><code class="descclassname">traitsui.ui_traits.</code><code class="descname">ATheme</code><span class="sig-paren">(</span><em>value=None</em>, <em>**metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.ATheme" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/trait_handlers.html#traits.trait_handlers.TraitType" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_handlers.TraitType</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.ui_traits.</code><code class="sig-name descname">ATheme</code><span class="sig-paren">(</span><em class="sig-param">value=None</em>, <em class="sig-param">**metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.ATheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/trait_type.html#traits.trait_type.TraitType" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_type.TraitType</span></code></a></p>
 <p>Defines a trait whose value must be a traits UI Theme or a string that
 can be converted to one.</p>
 <dl class="attribute">
 <dt id="traitsui.ui_traits.ATheme.default_value">
-<code class="descname">default_value</code><em class="property"> = None</em><a class="headerlink" href="#traitsui.ui_traits.ATheme.default_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">default_value</code><em class="property"> = None</em><a class="headerlink" href="#traitsui.ui_traits.ATheme.default_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the default value for the trait:</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="traitsui.ui_traits.ATheme.info_text">
-<code class="descname">info_text</code><em class="property"> = 'a Theme or string that can be used to define one'</em><a class="headerlink" href="#traitsui.ui_traits.ATheme.info_text" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">info_text</code><em class="property"> = 'a Theme or string that can be used to define one'</em><a class="headerlink" href="#traitsui.ui_traits.ATheme.info_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>A description of the type of value this trait accepts:</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="traitsui.ui_traits.ATheme.validate">
-<code class="descname">validate</code><span class="sig-paren">(</span><em>object</em>, <em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.ATheme.validate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.ATheme.validate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates that a specified value is valid for this trait.</p>
 </dd></dl>
 
@@ -120,29 +121,51 @@ can be converted to one.</p>
 
 <dl class="class">
 <dt id="traitsui.ui_traits.StatusItem">
-<em class="property">class </em><code class="descclassname">traitsui.ui_traits.</code><code class="descname">StatusItem</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.StatusItem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.ui_traits.</code><code class="sig-name descname">StatusItem</code><span class="sig-paren">(</span><em class="sig-param">value=None</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.StatusItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
+<dl class="attribute">
+<dt id="traitsui.ui_traits.StatusItem.name">
+<code class="sig-name descname">name</code><em class="property"> = Str(&quot;status&quot;)</em><a class="headerlink" href="#traitsui.ui_traits.StatusItem.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the trait the status information will be synched with:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_traits.StatusItem.width">
+<code class="sig-name descname">width</code><em class="property"> = Float(0.5)</em><a class="headerlink" href="#traitsui.ui_traits.StatusItem.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>The width of the status field. The possible values are:</p>
+<ul class="simple">
+<li><p>abs( width )  &gt; 1.0: Width of the field in pixels = abs( width )</p></li>
+<li><dl class="simple">
+<dt>abs( width ) &lt;= 1.0: Relative width of the field when compared to</dt><dd><p>the other relative width fields.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.ui_traits.ViewStatus">
-<em class="property">class </em><code class="descclassname">traitsui.ui_traits.</code><code class="descname">ViewStatus</code><span class="sig-paren">(</span><em>default_value=&lt;traits.trait_handlers.NoDefaultSpecified object&gt;</em>, <em>**metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.ViewStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/trait_handlers.html#traits.trait_handlers.TraitType" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_handlers.TraitType</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.ui_traits.</code><code class="sig-name descname">ViewStatus</code><span class="sig-paren">(</span><em class="sig-param">default_value=&lt;traits.trait_type.NoDefaultSpecified object&gt;</em>, <em class="sig-param">**metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.ViewStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/trait_type.html#traits.trait_type.TraitType" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_type.TraitType</span></code></a></p>
 <p>Defines a trait whose value must be a single StatusItem instance or a
 list of StatusItem instances.</p>
 <dl class="attribute">
 <dt id="traitsui.ui_traits.ViewStatus.default_value">
-<code class="descname">default_value</code><em class="property"> = None</em><a class="headerlink" href="#traitsui.ui_traits.ViewStatus.default_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">default_value</code><em class="property"> = None</em><a class="headerlink" href="#traitsui.ui_traits.ViewStatus.default_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the default value for the trait:</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="traitsui.ui_traits.ViewStatus.info_text">
-<code class="descname">info_text</code><em class="property"> = 'None, a string, a single StatusItem instance, or a list or tuple of strings and/or StatusItem instances'</em><a class="headerlink" href="#traitsui.ui_traits.ViewStatus.info_text" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">info_text</code><em class="property"> = 'None, a string, a single StatusItem instance, or a list or tuple of strings and/or StatusItem instances'</em><a class="headerlink" href="#traitsui.ui_traits.ViewStatus.info_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>A description of the type of value this trait accepts:</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="traitsui.ui_traits.ViewStatus.validate">
-<code class="descname">validate</code><span class="sig-paren">(</span><em>object</em>, <em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.ViewStatus.validate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.ViewStatus.validate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates that a specified value is valid for this trait.</p>
 </dd></dl>
 
@@ -150,7 +173,7 @@ list of StatusItem instances.</p>
 
 <dl class="function">
 <dt id="traitsui.ui_traits.convert_theme">
-<code class="descclassname">traitsui.ui_traits.</code><code class="descname">convert_theme</code><span class="sig-paren">(</span><em>value</em>, <em>level=3</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.convert_theme" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.ui_traits.</code><code class="sig-name descname">convert_theme</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">level=3</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.convert_theme" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a specified value to a Theme if possible.</p>
 </dd></dl>
 
@@ -177,13 +200,11 @@ list of StatusItem instances.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -204,13 +225,13 @@ list of StatusItem instances.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

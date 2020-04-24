@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.item module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.key_bindings module" href="traitsui.key_bindings.html" >
+    <link rel="prev" title="traitsui.instance_choice module" href="traitsui.instance_choice.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.item module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.key_bindings.html" title="traitsui.key_bindings module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.instance_choice.html" title="traitsui.instance_choice module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.item">
+<span id="traitsui-item-module"></span><h1>traitsui.item module<a class="headerlink" href="#module-traitsui.item" title="Permalink to this headline">¶</a></h1>
+<p>Defines the Item class, which is used to represent a single item within
+a Traits-based user interface.</p>
+<dl class="class">
+<dt id="traitsui.item.Custom">
+<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">Custom</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Custom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.item.Item" title="traitsui.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Item</span></code></a></p>
+<p>An Item using a ‘custom’ style.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.item.Heading">
+<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">Heading</code><span class="sig-paren">(</span><em>label</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Heading" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.item.Label" title="traitsui.item.Label"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Label</span></code></a></p>
+<p>An item that is a fancy label.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.item.Item">
+<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">Item</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.view_element.html#traitsui.view_element.ViewSubElement" title="traitsui.view_element.ViewSubElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewSubElement</span></code></a></p>
+<p>An element in a Traits-based user interface.</p>
+<p>Magic:</p>
+<ul class="simple">
+<li>Items are rendered as layout elements if <code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code> is set to
+special values:<ul>
+<li><code class="docutils literal notranslate"><span class="pre">name=''</span></code>, the item is rendered as a static label</li>
+<li><code class="docutils literal notranslate"><span class="pre">name='_'</span></code>, the item is rendered as a separator</li>
+<li><code class="docutils literal notranslate"><span class="pre">name='</span> <span class="pre">'</span></code>, the item is rendered as a 5 pixel spacer</li>
+<li><code class="docutils literal notranslate"><span class="pre">name='23'</span></code> (any number), the item is rendered as a spacer of
+the size specified (number of pixels)</li>
+</ul>
+</li>
+</ul>
+<dl class="method">
+<dt id="traitsui.item.Item.get_help">
+<code class="descname">get_help</code><span class="sig-paren">(</span><em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.get_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the help text associated with the Item in a specified UI.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.item.Item.get_id">
+<code class="descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.get_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an ID used to identify the item.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.item.Item.get_label">
+<code class="descname">get_label</code><span class="sig-paren">(</span><em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.get_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the label to use for a specified Item.</p>
+<p>If not specified, the label is set as the name of the
+corresponding trait, replacing ‘_’ with ‘ ‘, and capitalizing
+the first letter (see <code class="xref py py-func docutils literal notranslate"><span class="pre">user_name_for()</span></code>). This is called
+the <em>user name</em>.</p>
+<p>Magic:</p>
+<ul class="simple">
+<li>if attr:<cite>item.label</cite> is specified, and it begins with ‘…’,
+the final label is the user name followed by the item label</li>
+<li>if attr:<cite>item.label</cite> is specified, and it ends with ‘…’,
+the final label is the item label followed by the user name</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.item.Item.is_includable">
+<code class="descname">is_includable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.is_includable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Boolean indicating whether the object is replaceable by an
+Include object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.item.Item.is_spacer">
+<code class="descname">is_spacer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.is_spacer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the item represents a spacer or separator.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.item.Label">
+<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">Label</code><span class="sig-paren">(</span><em>label</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.item.Item" title="traitsui.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Item</span></code></a></p>
+<p>An item that is a label.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.item.Readonly">
+<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">Readonly</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Readonly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.item.Item" title="traitsui.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Item</span></code></a></p>
+<p>An Item using a ‘readonly’ style.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.item.Spring">
+<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">Spring</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Spring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.item.Item" title="traitsui.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Item</span></code></a></p>
+<p>An item that is a layout “spring”.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.item.UCustom">
+<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">UCustom</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.UCustom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.item.Custom" title="traitsui.item.Custom"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Custom</span></code></a></p>
+<p>An Item using a ‘custom’ style with no label.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.item.UItem">
+<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">UItem</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.UItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.item.Item" title="traitsui.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Item</span></code></a></p>
+<p>An Item that has no label.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.item.UReadonly">
+<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">UReadonly</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.UReadonly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.item.Readonly" title="traitsui.item.Readonly"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Readonly</span></code></a></p>
+<p>An Item using a ‘readonly’ style with no label.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.instance_choice.html"
+                        title="previous chapter">traitsui.instance_choice module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.key_bindings.html"
+                        title="next chapter">traitsui.key_bindings module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.item.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

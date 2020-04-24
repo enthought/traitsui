@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Controlling the Interface: the Handler &mdash; TraitsUI 6 User Manual</title>
+    <title>Controlling the Interface: the Handler &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,8 +29,8 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 6.1 User Manual" href="index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
+    <link rel="up" title="TraitsUI 7.0 User Manual" href="index.html" >
     <link rel="next" title="Introduction to Trait Editor Factories" href="factory_intro.html" >
     <link rel="prev" title="Advanced View Concepts" href="advanced_view.html" > 
   </head>
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 7.0 User Manual</a></li>
   
     <li><a href="#">Controlling the Interface: the Handler</a></li>
   
@@ -96,7 +95,7 @@
 relationship between the model and view aspects of the <a class="reference internal" href="glossary.html#term-mvc"><span class="xref std std-term">MVC</span></a> design
 pattern as supported by TraitsUI. This chapter examines the third aspect: the
 <a class="reference internal" href="glossary.html#term-controller"><span class="xref std std-term">controller</span></a>, implemented in TraitsUI as an <a class="reference internal" href="glossary.html#term-instance"><span class="xref std std-term">instance</span></a> of the
-<a class="reference internal" href="glossary.html#term-handler"><span class="xref std std-term">Handler</span></a> class. <a class="footnote-reference" href="#id20" id="id2">[11]</a></p>
+<a class="reference internal" href="glossary.html#term-handler"><span class="xref std std-term">Handler</span></a> class. <a class="footnote-reference brackets" href="#id20" id="id2">11</a></p>
 <p>A controller for an MVC-based application is essentially an event handler for
 GUI events, i.e., for events that are generated through or by the program
 interface. Such events can require changes to one or more model objects (e.g.,
@@ -125,19 +124,121 @@ corresponding window and model objects. In TraitsUI, this is accomplished by
 means of the UIInfo object.</p>
 <p>Whenever TraitsUI creates a window or panel from a View, a UIInfo object is
 created to act as the Handler’s reference to that window and to the objects
-whose <a class="reference internal" href="glossary.html#term-trait-attribute"><span class="xref std std-term">trait attribute</span></a>s are displayed in it. Each entry in the View’s
-context (see <a class="reference internal" href="advanced_view.html#the-view-context"><span class="std std-ref">The View Context</span></a>) becomes an attribute of the UIInfo
-object. <a class="footnote-reference" href="#id21" id="id4">[12]</a> For example, the UIInfo object created in
-<a class="reference internal" href="advanced_view.html#example-7-using-a-multi-object-view-with-a-context"><span class="std std-ref">Example 7</span></a>
+whose <a class="reference internal" href="glossary.html#term-trait-attribute"><span class="xref std std-term">trait attribute</span></a>s are displayed in it.  This object holds a
+reference to the UI instance in its <strong>ui</strong> trait, and whether or not
+the UI has been initialized in the <strong>initialized</strong> trait.  Additionally,
+this object is dynamically assigned trait attributes which correspond to:</p>
+<ul class="simple">
+<li><p>each entry in the View’s context (see <a class="reference internal" href="advanced_view.html#the-view-context"><span class="std std-ref">The View Context</span></a>).</p></li>
+<li><p>each item’s and group’s editor in the view, by id (or name, if no id is
+available for an item).</p></li>
+</ul>
+<p>Where there is conflict between ids, the editors take precedence over context
+values, and if two editors have the same name then the last editor with that
+name will be referenced.</p>
+<p>For example, the UIInfo object created in <a class="reference internal" href="advanced_view.html#example-7-using-a-multi-object-view-with-a-context"><span class="std std-ref">Example 7</span></a>
 has attributes <strong>h1</strong> and <strong>h2</strong> whose values are the objects <strong>house1</strong> and
-<strong>house2</strong> respectively. In <a class="reference internal" href="view.html#example-1-using-configure-traits"><span class="std std-ref">Example 1</span></a>
-through
-<a class="reference internal" href="advanced_view.html#example-6-defining-multiple-view-objects-in-a-hastraits-class"><span class="std std-ref">Example 6</span></a>,
+<strong>house2</strong> respectively.  Additionally it has attributes <strong>address</strong>,
+<strong>bedroom</strong>, <strong>pool</strong>, and <strong>price</strong> that reference the editors in the second
+group.</p>
+<p>In <a class="reference internal" href="view.html#example-1-using-configure-traits"><span class="std std-ref">Example 1</span></a>
+through <a class="reference internal" href="advanced_view.html#example-6-defining-multiple-view-objects-in-a-hastraits-class"><span class="std std-ref">Example 6</span></a>,
 the created UIInfo object has an attribute <strong>object</strong> whose value is the object
-<strong>sam</strong>.</p>
+<strong>sam</strong>, together with attributes that corrspond to the items in the views,
+such as <strong>first_name</strong>, <strong>last_name</strong> and <strong>department</strong>.</p>
 <p>Whenever a window event causes a Handler method to be called, TraitsUI passes
 the corresponding UIInfo object as one of the method arguments. This gives the
 Handler the information necessary to perform its tasks.</p>
+<p>Additionally, traits on objects in the context can be synchronized with traits
+on editors via the <strong>sync_to_view</strong>, <strong>sync_from_view</strong> and <strong>sync_with_view</strong>
+trait metadata.  Note that not every trait on every editor can react to changes:
+some values are only used at editor creation time; however all editors support
+dynamically changing the <strong>enabled</strong>, <strong>visible</strong> and <strong>invalid</strong> traits.  This
+feature can sometimes allow developers to avoid having to create a custom Handler
+subclass.</p>
+<p>See the <a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Advanced/Invalid_state_handling.py">Invalid state handling</a>
+example which demonstrates how to use this mechanism to control the invalid state
+of a dialog based on the value of multiple editors.</p>
+</div>
+<div class="section" id="backstage-the-ui-object">
+<span id="id4"></span><h2>Backstage: The UI Object<a class="headerlink" href="#backstage-the-ui-object" title="Permalink to this headline">¶</a></h2>
+<p>As opposed to the very dynamic UIInfo object, the UI class provides an object
+which ties together the various objects that are involved in a TraitsUI GUI:
+the View, the context, the Handler, the underlying toolkit controls and the
+shared state of the GUI.  It also has some life-cycle and useful utility methods
+that can be useful when working from a handler.</p>
+<p>The UI object is returned as the result of a call to edit_traits(), and as noted
+in the previous section, is available as the <strong>ui</strong> attribute of the UIInfo object
+that is passed to most handler methods.</p>
+<p class="rubric">Attributes of UI, by category</p>
+<dl class="simple">
+<dt>TraitsUI core</dt><dd><dl class="simple">
+<dt>view:</dt><dd><p>View template used to construct the user interface.</p>
+</dd>
+<dt>handler:</dt><dd><p>Handler object used for event handling.</p>
+</dd>
+<dt>context:</dt><dd><p>Dictionary of objects that the UI is editing.</p>
+</dd>
+<dt>info:</dt><dd><p>UIInfo object containing context or editor objects</p>
+</dd>
+<dt>parent:</dt><dd><p>The parent UI (if any) of this UI.</p>
+</dd>
+</dl>
+</dd>
+<dt>Toolkit</dt><dd><dl class="simple">
+<dt>control:</dt><dd><p>Panel or dialog associated with the user interface.</p>
+</dd>
+<dt>owner:</dt><dd><p>Toolkit-specific object that “owns” <strong>control</strong></p>
+</dd>
+</dl>
+</dd>
+<dt>GUI state</dt><dd><dl class="simple">
+<dt>id:</dt><dd><p>The unique ID for this UI for persistence.</p>
+</dd>
+<dt>title:</dt><dd><p>Title of the dialog, if any.</p>
+</dd>
+<dt>icon:</dt><dd><p>The ImageResource of the dialog icon, if any.</p>
+</dd>
+<dt>key_bindings:</dt><dd><p>The KeyBindings object (if any) for this UI.</p>
+</dd>
+<dt>result:</dt><dd><p>Result from a modal or wizard dialog.</p>
+</dd>
+<dt>modified:</dt><dd><p>Have any modifications been made to UI contents?</p>
+</dd>
+<dt>updated:</dt><dd><p>Event when the user interface has changed.</p>
+</dd>
+<dt>history:</dt><dd><p>Undo and Redo history.</p>
+</dd>
+<dt>errors:</dt><dd><p>The number of currently pending editor error conditions.
+Note that changing this must be done very carefully to avoid
+permanent error states.</p>
+</dd>
+<dt>destroyed:</dt><dd><p>Set to True when the UI has finished being destroyed.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Useful UI methods</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>dispose(result, abort)</p></td>
+<td><p>Disposes of the UI.  This can be called to close a
+TraitsUI dialog programatically from a handler.</p></td>
+</tr>
+<tr class="row-odd"><td><p>get_editors(name)</p></td>
+<td><p>Returns a list of all editors matching the name.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="assigning-handlers-to-views">
 <span id="id5"></span><h2>Assigning Handlers to Views<a class="headerlink" href="#assigning-handlers-to-views" title="Permalink to this headline">¶</a></h2>
@@ -146,9 +247,9 @@ entities belonging to distinct classes. In order for a custom Handler to provide
 the control logic for a window, it must be explicitly associated with the View
 for that window. The TraitsUI package provides three ways to accomplish this:</p>
 <ul class="simple">
-<li>Make the Handler an attribute of the View.</li>
-<li>Provide the Handler as an argument to a display method such as edit_traits().</li>
-<li>Define the View as part of the Handler.</li>
+<li><p>Make the Handler an attribute of the View.</p></li>
+<li><p>Provide the Handler as an argument to a display method such as edit_traits().</p></li>
+<li><p>Define the View as part of the Handler.</p></li>
 </ul>
 <div class="section" id="binding-a-singleton-handler-to-a-view">
 <span id="id6"></span><h3>Binding a Singleton Handler to a View<a class="headerlink" href="#binding-a-singleton-handler-to-a-view" title="Permalink to this headline">¶</a></h3>
@@ -194,10 +295,10 @@ application.</p>
 <p>Both ModelView and Controller extend the Handler class by adding the following
 trait attributes:</p>
 <ul class="simple">
-<li><strong>model</strong>: The model object for which this handler defines a view and
-controller.</li>
-<li><strong>info</strong>: The UIInfo object associated with the actual user interface window
-or panel for the model object.</li>
+<li><p><strong>model</strong>: The model object for which this handler defines a view and
+controller.</p></li>
+<li><p><strong>info</strong>: The UIInfo object associated with the actual user interface window
+or panel for the model object.</p></li>
 </ul>
 <p>The <strong>model</strong> attribute provides convenient access to the model object
 associated with either subclass. Normally, the <strong>model</strong> attribute is set in the
@@ -210,12 +311,12 @@ created.</p>
 model object. They also can accept metadata as keyword parameters.</p>
 <dl class="class">
 <dt id="ModelView">
-<em class="property">class </em><code class="descname">ModelView</code><span class="sig-paren">(</span><span class="optional">[</span><em>model = None</em>, <em>**metadata</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ModelView" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ModelView</code><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param">model = None</em>, <em class="sig-param">**metadata</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#ModelView" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="class">
 <dt id="Controller">
-<em class="property">class </em><code class="descname">Controller</code><span class="sig-paren">(</span><span class="optional">[</span><em>model = None</em>, <em>**metadata</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Controller" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">Controller</code><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param">model = None</em>, <em class="sig-param">**metadata</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Controller" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>The difference between the ModelView and Controller classes lies in the context
@@ -231,8 +332,8 @@ object.</p>
 <p>The context dictionary that a Controller object passes to the View’s ui() method
 contains the following entries:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">object</span></code>: The Controller’s model object.</li>
-<li><code class="docutils literal notranslate"><span class="pre">controller</span></code>: The Controller object itself.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">object</span></code>: The Controller’s model object.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">controller</span></code>: The Controller object itself.</p></li>
 </ul>
 <p>Using a Controller as the handler class assumes that the model object contains
 most, if not all, of the data to be viewed. Therefore, the model object is used
@@ -249,8 +350,8 @@ interface.</p>
 <p>The context dictionary that a ModelView object passes to the View’s ui() method
 contains the following entries:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">object</span></code>: The ModelView object itself.</li>
-<li><code class="docutils literal notranslate"><span class="pre">model</span></code>: The ModelView’s model object.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">object</span></code>: The ModelView object itself.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model</span></code>: The ModelView’s model object.</p></li>
 </ul>
 <p>In effect, the ModelView object substitutes itself for the model object in
 relation to the View object, serving both the “controller” role and the “model”
@@ -272,101 +373,101 @@ overriding these methods, you can implement a variety of custom window
 behaviors. The following sequence shows the points at which the Handler methods
 are called.</p>
 <ol class="arabic simple">
-<li>A UIInfo object is created</li>
-<li>The Handler’s init_info() method is called. Override this method if the
+<li><p>A UIInfo object is created</p></li>
+<li><p>The Handler’s init_info() method is called. Override this method if the
 handler needs access to viewable traits on the UIInfo object whose values
-are properties that depend on items in the context being edited.</li>
-<li>The UI object is created, and generates the actual window.</li>
-<li>The init() method is called. Override this method if you need to initialize
-or customize the window.</li>
+are properties that depend on items in the context being edited.</p></li>
+<li><p>The UI object is created, and generates the actual window.</p></li>
+<li><p>The init() method is called. Override this method if you need to initialize
+or customize the window.</p></li>
 </ol>
 <ol class="arabic simple" start="5">
-<li>The position() method is called. Override this method to modify the position
-of the window (if setting the x and y attributes of the View is insufficient).</li>
-<li>The window is displayed.</li>
+<li><p>The position() method is called. Override this method to modify the position
+of the window (if setting the x and y attributes of the View is insufficient).</p></li>
+<li><p>The window is displayed.</p></li>
 </ol>
 <p class="rubric" id="when-handler-methods-are-called-and-when-to-override-them-table">When Handler methods are called, and when to override them</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="36%" />
-<col width="34%" />
-<col width="30%" />
+<col style="width: 36%" />
+<col style="width: 34%" />
+<col style="width: 30%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">Called When</th>
-<th class="head">Override When?</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Called When</p></th>
+<th class="head"><p>Override When?</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>apply(info)</td>
-<td>The user clicks the
+<tbody>
+<tr class="row-even"><td><p>apply(info)</p></td>
+<td><p>The user clicks the
 <span class="guilabel">Apply</span> button,
 and after the changes have
 been applied to the
-context objects.</td>
-<td>To perform additional
+context objects.</p></td>
+<td><p>To perform additional
 processing at this
-point.</td>
+point.</p></td>
 </tr>
-<tr class="row-odd"><td>close(info, is_ok)</td>
-<td>The user requests to close
+<tr class="row-odd"><td><p>close(info, is_ok)</p></td>
+<td><p>The user requests to close
 the window, clicking
 <span class="guilabel">OK</span>,
 <span class="guilabel">Cancel</span>, or the
 window close button, menu,
-or icon.</td>
-<td>To perform additional
+or icon.</p></td>
+<td><p>To perform additional
 checks before
-destroying the window.</td>
+destroying the window.</p></td>
 </tr>
-<tr class="row-even"><td>closed(info, is_ok)</td>
-<td>The window has been
-destroyed.</td>
-<td>To perform additional
-clean-up tasks.</td>
+<tr class="row-even"><td><p>closed(info, is_ok)</p></td>
+<td><p>The window has been
+destroyed.</p></td>
+<td><p>To perform additional
+clean-up tasks.</p></td>
 </tr>
-<tr class="row-odd"><td>revert(info)</td>
-<td>The user clicks the
+<tr class="row-odd"><td><p>revert(info)</p></td>
+<td><p>The user clicks the
 <span class="guilabel">Revert</span> button,
 or clicks
 <span class="guilabel">Cancel</span> in a
-live window.</td>
-<td>To perform additional
-processing.</td>
+live window.</p></td>
+<td><p>To perform additional
+processing.</p></td>
 </tr>
-<tr class="row-even"><td>setattr(info, object, name,
-value)</td>
-<td>The user changes a trait
+<tr class="row-even"><td><p>setattr(info, object, name,
+value)</p></td>
+<td><p>The user changes a trait
 attribute value through
-the user interface.</td>
-<td>To perform additional
+the user interface.</p></td>
+<td><p>To perform additional
 processing, such as
 keeping a change
 history. Make sure that
 the overriding method
 actually sets the
-attribute.</td>
+attribute.</p></td>
 </tr>
-<tr class="row-odd"><td>show_help(info,
-control=None)</td>
-<td>The user clicks the
-<span class="guilabel">Help</span> button.</td>
-<td>To call a custom help
+<tr class="row-odd"><td><p>show_help(info,
+control=None)</p></td>
+<td><p>The user clicks the
+<span class="guilabel">Help</span> button.</p></td>
+<td><p>To call a custom help
 handler in addition to
 or instead of the
 global help handler,
-for this window.</td>
+for this window.</p></td>
 </tr>
-<tr class="row-even"><td>perform(info, action,
-event)</td>
-<td>The user clicks a button
+<tr class="row-even"><td><p>perform(info, action,
+event)</p></td>
+<td><p>The user clicks a button
 or toolbar item, or
-selects a menu item.</td>
-<td>To change the way that
+selects a menu item.</p></td>
+<td><p>To change the way that
 actions are handled,
 eg. to pass more info
-to a method.</td>
+to a method.</p></td>
 </tr>
 </tbody>
 </table>
@@ -384,7 +485,7 @@ pattern, TraitsUI supports “user interface notification” methods, which must
 have a signature with the following format:</p>
 <dl class="method">
 <dt id="extended_traitname_changed">
-<code class="descname">extended_traitname_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#extended_traitname_changed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extended_traitname_changed</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#extended_traitname_changed" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>This method is called whenever a change is made to the attribute specified by
@@ -398,9 +499,9 @@ default object), the method name should be object_salary_changed().</p>
 include a method called h2_price_changed() to be called whenever the price of
 the second house is edited.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>These methods are called on window creation.</p>
-<p class="last">User interface notification methods are called when the window is first
+<p>User interface notification methods are called when the window is first
 created.</p>
 </div>
 <p>To differentiate between code that should be executed when the window is first
@@ -441,9 +542,9 @@ overridden setattr() method and user interface notification method.</p>
             <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">title</span> <span class="o">+=</span> <span class="s2">&quot;*&quot;</span>
 
 <span class="k">class</span> <span class="nc">TestClass</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
-    <span class="n">b1</span> <span class="o">=</span> <span class="n">Bool</span>
-    <span class="n">b2</span> <span class="o">=</span> <span class="n">Bool</span>
-    <span class="n">b3</span> <span class="o">=</span> <span class="n">Bool</span>
+    <span class="n">b1</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">()</span>
+    <span class="n">b2</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">()</span>
+    <span class="n">b3</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">()</span>
     <span class="n">_updated</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="n">view1</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="s1">&#39;b1&#39;</span><span class="p">,</span> <span class="s1">&#39;b2&#39;</span><span class="p">,</span> <span class="s1">&#39;b3&#39;</span><span class="p">,</span>
@@ -456,9 +557,9 @@ overridden setattr() method and user interface notification method.</p>
 </pre></div>
 </div>
 <img alt="Dialog box with empty checkboxes and a title of &quot;Alter Title&quot;" src="../_images/alter_title_before.png" />
-<div class="figure" id="id22">
+<div class="figure align-default" id="id21">
 <img alt="Dialog box with one filled checkbox and a title of &quot;Alter Title*&quot;" src="../_images/alter_title_after.png" />
-<p class="caption"><span class="caption-text">Figure 7: Before and after views of Example 9</span></p>
+<p class="caption"><span class="caption-text">Figure 7: Before and after views of Example 9</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="implementing-custom-window-commands">
@@ -473,11 +574,10 @@ Actions can be used in <a class="reference internal" href="glossary.html#term-co
 further that you have defined a subclass of Handler called MyHandler to provide
 the logic for the window. To create the action:</p>
 <ol class="arabic">
-<li><p class="first">Add a method to MyHandler that implements the command logic. This method can
+<li><p>Add a method to MyHandler that implements the command logic. This method can
 have any name (e.g., do_recalc()), but must accept exactly one argument: a
-UIInfo object.</p>
-</li>
-<li><p class="first">Create an Action instance using the name of the new method, e.g.:</p>
+UIInfo object.</p></li>
+<li><p>Create an Action instance using the name of the new method, e.g.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">recalc</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Recalculate&quot;</span><span class="p">,</span>
                 <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;do_recalc&quot;</span><span class="p">)</span>
 </pre></div>
@@ -491,9 +591,8 @@ UIInfo object.</p>
 <strong>buttons</strong> attribute for the View. It appears in the button area of the window,
 along with any standard buttons you specify.</p>
 <ol class="arabic">
-<li><p class="first">Define the handler method and action, as described in <a class="reference internal" href="#actions"><span class="std std-ref">Actions</span></a>.</p>
-</li>
-<li><p class="first">Include the new Action in the <strong>buttons</strong> attribute for the View:</p>
+<li><p>Define the handler method and action, as described in <a class="reference internal" href="#actions"><span class="std std-ref">Actions</span></a>.</p></li>
+<li><p>Include the new Action in the <strong>buttons</strong> attribute for the View:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">View</span> <span class="p">(</span> <span class="c1">#view contents,</span>
        <span class="c1"># ...,</span>
        <span class="n">buttons</span> <span class="o">=</span> <span class="p">[</span> <span class="n">OKButton</span><span class="p">,</span> <span class="n">CancelButton</span><span class="p">,</span> <span class="n">recalc</span> <span class="p">])</span>
@@ -507,12 +606,12 @@ along with any standard buttons you specify.</p>
 <p>Another way to install an Action such as <strong>recalc</strong> as a window command is to
 make it into a menu option.</p>
 <ol class="arabic simple">
-<li>Define the handler method and action, as described in <a class="reference internal" href="#actions"><span class="std std-ref">Actions</span></a>.</li>
-<li>If the View does not already include a MenuBar, create one and assign it to
-the View’s <strong>menubar</strong> attribute.</li>
-<li>If the appropriate Menu does not yet exist, create it and add it to the
-MenuBar.</li>
-<li>Add the Action to the Menu.</li>
+<li><p>Define the handler method and action, as described in <a class="reference internal" href="#actions"><span class="std std-ref">Actions</span></a>.</p></li>
+<li><p>If the View does not already include a MenuBar, create one and assign it to
+the View’s <strong>menubar</strong> attribute.</p></li>
+<li><p>If the appropriate Menu does not yet exist, create it and add it to the
+MenuBar.</p></li>
+<li><p>Add the Action to the Menu.</p></li>
 </ol>
 <p>These steps can be executed all at once when the View is created, as in the
 following code:</p>
@@ -530,7 +629,7 @@ following code:</p>
 toolbar. Adding a toolbar to a Traits View is similar to adding a menu bar,
 except that toolbars do not contain menus; they directly contain actions.</p>
 <ol class="arabic">
-<li><p class="first">Define the handler method and the action, as in <a class="reference internal" href="#actions"><span class="std std-ref">Actions</span></a>, including a
+<li><p>Define the handler method and the action, as in <a class="reference internal" href="#actions"><span class="std std-ref">Actions</span></a>, including a
 tooltip and an image to display on the toolbar. The image must be a Pyface
 ImageResource instance; if a path to the image file is not specified, it is
 assumed to be in an images subdirectory of the directory where ImageResource
@@ -544,11 +643,9 @@ is used:</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">If the View does not already include a ToolBar, create one and assign it to
-the View’s <strong>toolbar</strong> attribute.</p>
-</li>
-<li><p class="first">Add the Action to the ToolBar.</p>
-</li>
+<li><p>If the View does not already include a ToolBar, create one and assign it to
+the View’s <strong>toolbar</strong> attribute.</p></li>
+<li><p>Add the Action to the ToolBar.</p></li>
 </ol>
 <p>As with a MenuBar, these steps can be executed all at once when the View is
 created, as in the following code:</p>
@@ -558,22 +655,12 @@ created, as in the following code:</p>
 </pre></div>
 </div>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="id20" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[11]</a></td><td>Except those implemented via the <strong>enabled_when</strong>, <strong>visible_when</strong>,
-and <strong>defined_when</strong> attributes of Items and Groups.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id21" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id4">[12]</a></td><td>Other attributes of the UIInfo object include a UI object and any
-<em>trait editors</em> contained in the window (see
-<a class="reference internal" href="factory_intro.html#introduction-to-trait-editor-factories"><span class="std std-ref">Introduction to Trait Editor Factories</span></a> and
-<a class="reference internal" href="factories_basic.html#the-predefined-trait-editor-factories"><span class="std std-ref">The Predefined Trait Editor Factories</span></a>).</td></tr>
-</tbody>
-</table>
+<dl class="footnote brackets">
+<dt class="label" id="id20"><span class="brackets"><a class="fn-backref" href="#id2">11</a></span></dt>
+<dd><p>Except those implemented via the <strong>enabled_when</strong>, <strong>visible_when</strong>,
+and <strong>defined_when</strong> attributes of Items and Groups.</p>
+</dd>
+</dl>
 </div>
 </div>
 </div>
@@ -592,6 +679,7 @@ and <strong>defined_when</strong> attributes of Items and Groups.</td></tr>
   <ul>
 <li><a class="reference internal" href="#">Controlling the Interface: the Handler</a><ul>
 <li><a class="reference internal" href="#backstage-introducing-the-uiinfo-object">Backstage: Introducing the UIInfo Object</a></li>
+<li><a class="reference internal" href="#backstage-the-ui-object">Backstage: The UI Object</a></li>
 <li><a class="reference internal" href="#assigning-handlers-to-views">Assigning Handlers to Views</a><ul>
 <li><a class="reference internal" href="#binding-a-singleton-handler-to-a-view">Binding a Singleton Handler to a View</a></li>
 <li><a class="reference internal" href="#linking-handler-and-view-at-edit-time">Linking Handler and View at Edit Time</a></li>
@@ -631,13 +719,11 @@ and <strong>defined_when</strong> attributes of Items and Groups.</td></tr>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -658,13 +744,13 @@ and <strong>defined_when</strong> attributes of Items and Groups.</td></tr>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

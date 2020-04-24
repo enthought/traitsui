@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui package &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui package &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,10 +29,10 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 6.1 API Reference" href="index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
+    <link rel="up" title="TraitsUI 7.0 API Reference" href="index.html" >
     <link rel="next" title="traitsui.editors package" href="traitsui.editors.html" >
-    <link rel="prev" title="TraitsUI 6.1 API Reference" href="index.html" > 
+    <link rel="prev" title="TraitsUI 7.0 API Reference" href="index.html" > 
   </head>
   <body>
   <div class="container">
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 7.0 API Reference</a></li>
   
     <li><a href="#">traitsui package</a></li>
   
@@ -74,7 +73,7 @@
            accesskey="N">next</a>
       </li>
       <li class="active">
-        <a href="index.html" title="TraitsUI 6.1 API Reference"
+        <a href="index.html" title="TraitsUI 7.0 API Reference"
            accesskey="P">previous</a>
       </li>
     </ul>
@@ -109,6 +108,7 @@
 <li class="toctree-l3"><a class="reference internal" href="traitsui.editors.csv_list_editor.html">traitsui.editors.csv_list_editor module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="traitsui.editors.custom_editor.html">traitsui.editors.custom_editor module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="traitsui.editors.date_editor.html">traitsui.editors.date_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.datetime_editor.html">traitsui.editors.datetime_editor module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="traitsui.editors.default_override.html">traitsui.editors.default_override module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="traitsui.editors.directory_editor.html">traitsui.editors.directory_editor module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="traitsui.editors.dnd_editor.html">traitsui.editors.dnd_editor module</a></li>
@@ -153,6 +153,7 @@
 <li class="toctree-l3"><a class="reference internal" href="traitsui.extras.checkbox_column.html">traitsui.extras.checkbox_column module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="traitsui.extras.demo.html">traitsui.extras.demo module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="traitsui.extras.edit_column.html">traitsui.extras.edit_column module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.extras.has_dynamic_views.html">traitsui.extras.has_dynamic_views module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="traitsui.extras.progress_column.html">traitsui.extras.progress_column module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="traitsui.extras.saving.html">traitsui.extras.saving module</a></li>
 </ul>
@@ -327,7 +328,7 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">TraitsUI 6.1 API Reference</a></p>
+                        title="previous chapter">TraitsUI 7.0 API Reference</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="traitsui.editors.html"
                         title="next chapter">traitsui.editors package</a></p>
@@ -337,13 +338,11 @@
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -364,13 +363,13 @@
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

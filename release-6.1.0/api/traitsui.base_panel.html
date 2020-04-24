@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.base_panel module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.basic_editor_factory module" href="traitsui.basic_editor_factory.html" >
+    <link rel="prev" title="traitsui.api module" href="traitsui.api.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.base_panel module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.basic_editor_factory.html" title="traitsui.basic_editor_factory module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.api.html" title="traitsui.api module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.base_panel">
+<span id="traitsui-base-panel-module"></span><h1>traitsui.base_panel module<a class="headerlink" href="#module-traitsui.base_panel" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="traitsui.base_panel.BasePanel">
+<em class="property">class </em><code class="descclassname">traitsui.base_panel.</code><code class="descname">BasePanel</code><a class="headerlink" href="#traitsui.base_panel.BasePanel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/pyface/api/pyface.action.action_controller.html#pyface.action.action_controller.ActionController" title="(in pyface v6.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyface.action.action_controller.ActionController</span></code></a></p>
+<p>Base class for Traits UI panels and dialog boxes.</p>
+<p>Concrete subclasses of BasePanel are the Python-side owners of the
+top-level toolkit control for a UI.  They also implement the Pyface
+ActionController API for menu and toolbar action handling.</p>
+<dl class="method">
+<dt id="traitsui.base_panel.BasePanel.add_to_menu">
+<code class="descname">add_to_menu</code><span class="sig-paren">(</span><em>menu_item</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.base_panel.BasePanel.add_to_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a menu item to the menu bar being constructed.</p>
+<p>The bulk of the back-end work is done in Pyface.  This code is simply
+responsible for hooking up radio groups, checkboxes, and enabled
+status.</p>
+<p>This routine is also used to add items to the toolbar, as logic and
+APIs are identical.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>menu_item</strong> (<em>toolkit MenuItem</em>) – The Pyface toolkit-level item to add to the menu.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.base_panel.BasePanel.add_to_toolbar">
+<code class="descname">add_to_toolbar</code><span class="sig-paren">(</span><em>toolbar_item</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.base_panel.BasePanel.add_to_toolbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a menu item to the menu bar being constructed.</p>
+<p>The bulk of the back-end work is done in Pyface.  This code is simply
+responsible for hooking up radio groups, checkboxes, and enabled
+status.</p>
+<p>This simply calls the analagous menu as logic and APIs are identical.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>toolbar_item</strong> (<em>toolkit Tool</em>) – The Pyface toolkit-level item to add to the toolbar.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.base_panel.BasePanel.can_add_to_menu">
+<code class="descname">can_add_to_menu</code><span class="sig-paren">(</span><em>action</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.base_panel.BasePanel.can_add_to_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the toolbar action be defined in the user interface.</p>
+<p>This simply calls the analagous menu as logic and APIs are identical.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>action</strong> (<a class="reference internal" href="traitsui.menu.html#traitsui.menu.Action" title="traitsui.menu.Action"><em>Action</em></a>) – The Action to add to the toolbar.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>defined</strong> – Whether or not the action should be added to the menu.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.base_panel.BasePanel.can_add_to_toolbar">
+<code class="descname">can_add_to_toolbar</code><span class="sig-paren">(</span><em>action</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.base_panel.BasePanel.can_add_to_toolbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the toolbar action be defined in the user interface.</p>
+<p>This simply calls the analagous menu as logic and APIs are identical.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>action</strong> (<a class="reference internal" href="traitsui.menu.html#traitsui.menu.Action" title="traitsui.menu.Action"><em>Action</em></a>) – The Action to add to the toolbar.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>defined</strong> – Whether or not the action should be added to the toolbar.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.base_panel.BasePanel.check_button">
+<code class="descname">check_button</code><span class="sig-paren">(</span><em>buttons</em>, <em>action</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.base_panel.BasePanel.check_button" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds <em>action</em> to the system buttons list for this dialog, if it is
+not already in the list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.base_panel.BasePanel.coerce_button">
+<code class="descname">coerce_button</code><span class="sig-paren">(</span><em>action</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.base_panel.BasePanel.coerce_button" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coerces a string to an Action if necessary.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.base_panel.BasePanel.control">
+<code class="descname">control</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.base_panel.BasePanel.control" title="Permalink to this definition">¶</a></dt>
+<dd><p>The top-level toolkit control of the UI.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.base_panel.BasePanel.default_icon">
+<code class="descname">default_icon</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.base_panel.BasePanel.default_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a default icon for a TraitsUI dialog.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.base_panel.BasePanel.is_button">
+<code class="descname">is_button</code><span class="sig-paren">(</span><em>action</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.base_panel.BasePanel.is_button" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether a specified action button is a system button.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.base_panel.BasePanel.perform">
+<code class="descname">perform</code><span class="sig-paren">(</span><em>action</em>, <em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.base_panel.BasePanel.perform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dispatches the action to be handled by the handler.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>action</strong> (<em>Action instance</em>) – The action to perform.</li>
+<li><strong>event</strong> (<em>ActionEvent instance</em>) – The event that triggered the action.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>result</strong> – The result of the action’s perform method (usually None).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">any</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.base_panel.BasePanel.ui">
+<code class="descname">ui</code><em class="property"> = Instance('traitsui.ui.UI')</em><a class="headerlink" href="#traitsui.base_panel.BasePanel.ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>The UI instance for the view.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.api.html"
+                        title="previous chapter">traitsui.api module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.basic_editor_factory.html"
+                        title="next chapter">traitsui.basic_editor_factory module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.base_panel.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

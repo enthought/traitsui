@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Advanced Editor Adapters &mdash; TraitsUI 6 User Manual</title>
+    <title>Advanced Editor Adapters &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,8 +29,8 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 6.1 User Manual" href="index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
+    <link rel="up" title="TraitsUI 7.0 User Manual" href="index.html" >
     <link rel="next" title="Tips, Tricks and Gotchas" href="tips.html" >
     <link rel="prev" title="Advanced Trait Editors" href="factories_advanced_extra.html" > 
   </head>
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 7.0 User Manual</a></li>
   
     <li><a href="#">Advanced Editor Adapters</a></li>
   
@@ -100,7 +99,7 @@ we will look more closely at each of these and discuss how they can be
 customized as needed.</p>
 <div class="section" id="the-treeeditor-and-treenodes">
 <h2>The TreeEditor and TreeNodes<a class="headerlink" href="#the-treeeditor-and-treenodes" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-traitsui.tree_node"><span id="tree-nodes"></span></span><p>The <a class="reference internal" href="../api/traitsui.editors.tree_editor.html#traitsui.editors.tree_editor.TreeEditor" title="traitsui.editors.tree_editor.TreeEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeEditor</span></code></a> internally associates
+<p id="tree-nodes">The <a class="reference internal" href="../api/traitsui.editors.tree_editor.html#traitsui.editors.tree_editor.TreeEditor" title="traitsui.editors.tree_editor.TreeEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeEditor</span></code></a> internally associates
 with each node in the tree a pair consisting of the object that is associated
 with the node and something that to adheres to the <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode" title="traitsui.tree_node.TreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeNode</span></code></a>
 interface.  The <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode" title="traitsui.tree_node.TreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeNode</span></code></a> interface is not explicitly laid out, but
@@ -112,13 +111,13 @@ to be offered as values associated with a node, such as the value of the root
 node trait or values that might be returned by the
 <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.get_children" title="traitsui.tree_node.TreeNode.get_children"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_children()</span></code></a> method:</p>
 <ul class="simple">
-<li>an explicit pair of the object and a <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode" title="traitsui.tree_node.TreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeNode</span></code></a> instance for that
-object</li>
-<li>an object that has <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.is_node_for" title="traitsui.tree_node.TreeNode.is_node_for"><code class="xref py py-meth docutils literal notranslate"><span class="pre">is_node_for()</span></code></a> return <code class="docutils literal notranslate"><span class="pre">True</span></code> for at
+<li><p>an explicit pair of the object and a <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode" title="traitsui.tree_node.TreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeNode</span></code></a> instance for that
+object</p></li>
+<li><p>an object that has <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.is_node_for" title="traitsui.tree_node.TreeNode.is_node_for"><code class="xref py py-meth docutils literal notranslate"><span class="pre">is_node_for()</span></code></a> return <code class="docutils literal notranslate"><span class="pre">True</span></code> for at
 least one of the factory’s
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code> items.</li>
-<li>an object that provides or can be adapted to the <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.ITreeNode" title="traitsui.tree_node.ITreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITreeNode</span></code></a>
-interface using Traits adaptation.</li>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">nodes</span></code> items.</p></li>
+<li><p>an object that provides or can be adapted to the <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.ITreeNode" title="traitsui.tree_node.ITreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITreeNode</span></code></a>
+interface using Traits adaptation.</p></li>
 </ul>
 <p>There is a crucial distinction between the way that <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode" title="traitsui.tree_node.TreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeNode</span></code></a> and
 <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.ITreeNode" title="traitsui.tree_node.ITreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITreeNode</span></code></a> work. <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode" title="traitsui.tree_node.TreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeNode</span></code></a> is generic—it is designed
@@ -166,23 +165,23 @@ new <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.
 give a richer set of icons.</p>
 <p>Common use cases for this approach would include:</p>
 <ul class="simple">
-<li>more customized icon display, as above.</li>
-<li>having the label built from multiple traits, which requires overriding
+<li><p>more customized icon display, as above.</p></li>
+<li><p>having the label built from multiple traits, which requires overriding
 <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.get_label" title="traitsui.tree_node.TreeNode.get_label"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_label()</span></code></a>, <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.when_label_changed" title="traitsui.tree_node.TreeNode.when_label_changed"><code class="xref py py-meth docutils literal notranslate"><span class="pre">when_label_changed()</span></code></a> and
-possibly <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.set_label" title="traitsui.tree_node.TreeNode.set_label"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_label()</span></code></a>.</li>
-<li>having the children come from multiple traits, which requires overriding
+possibly <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.set_label" title="traitsui.tree_node.TreeNode.set_label"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_label()</span></code></a>.</p></li>
+<li><p>having the children come from multiple traits, which requires overriding
 <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.allows_children" title="traitsui.tree_node.TreeNode.allows_children"><code class="xref py py-meth docutils literal notranslate"><span class="pre">allows_children()</span></code></a>, <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.get_children" title="traitsui.tree_node.TreeNode.get_children"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_children()</span></code></a>,
 <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.when_children_replaced" title="traitsui.tree_node.TreeNode.when_children_replaced"><code class="xref py py-meth docutils literal notranslate"><span class="pre">when_children_replaced()</span></code></a>,
 <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.when_children_changed" title="traitsui.tree_node.TreeNode.when_children_changed"><code class="xref py py-meth docutils literal notranslate"><span class="pre">when_children_changed()</span></code></a> and possibly
 <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.append_child" title="traitsui.tree_node.TreeNode.append_child"><code class="xref py py-meth docutils literal notranslate"><span class="pre">append_child()</span></code></a>, <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.insert_child" title="traitsui.tree_node.TreeNode.insert_child"><code class="xref py py-meth docutils literal notranslate"><span class="pre">insert_child()</span></code></a> and
 <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.delete_child" title="traitsui.tree_node.TreeNode.delete_child"><code class="xref py py-meth docutils literal notranslate"><span class="pre">delete_child()</span></code></a> (although there may be better ways to
-handle this situation by using multiple <code class="xref py py-class docutils literal notranslate"><span class="pre">TreeNodes</span></code> for the class).</li>
-<li>being more selective about what objects to use for the node.  For example,
+handle this situation by using multiple <code class="xref py py-class docutils literal notranslate"><span class="pre">TreeNodes</span></code> for the class).</p></li>
+<li><p>being more selective about what objects to use for the node.  For example,
 requiring not only that an object be of a certain class, but that it also
 have an attribute with a cetain value.  This requires overriding
-<a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.is_node_for" title="traitsui.tree_node.TreeNode.is_node_for"><code class="xref py py-meth docutils literal notranslate"><span class="pre">is_node_for()</span></code></a>.</li>
-<li>customization of menus on a per-object basis, or other UI behaviour like drag
-and drop, selection and clicking.</li>
+<a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.is_node_for" title="traitsui.tree_node.TreeNode.is_node_for"><code class="xref py py-meth docutils literal notranslate"><span class="pre">is_node_for()</span></code></a>.</p></li>
+<li><p>customization of menus on a per-object basis, or other UI behaviour like drag
+and drop, selection and clicking.</p></li>
 </ul>
 <p>This has the advantage that most of the time the behaviour that you want is
 built into the <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode" title="traitsui.tree_node.TreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeNode</span></code></a> class, and you only need to change the
@@ -256,10 +255,10 @@ such a structure might look like this:</p>
     <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s1">&#39;DictNode&#39;</span><span class="p">)</span>
 
     <span class="c1">#: The label for the node</span>
-    <span class="n">label</span> <span class="o">=</span> <span class="n">Str</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
 
     <span class="c1">#: The value for this node</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="n">Any</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">tno_get_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
@@ -312,25 +311,23 @@ automatically provided for you.</p>
 a TreeEditor.  To do this, the TreeNode should override the
 <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode.get_renderer" title="traitsui.tree_node.TreeNode.get_renderer"><code class="xref py py-meth docutils literal notranslate"><span class="pre">TreeNode.get_renderer()</span></code></a> method to return an instance of a
 subclass of <a class="reference internal" href="../api/traitsui.tree_node_renderer.html#traitsui.tree_node_renderer.AbstractTreeNodeRenderer" title="traitsui.tree_node_renderer.AbstractTreeNodeRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractTreeNodeRenderer</span></code></a>.
-A <a class="reference internal" href="../api/traitsui.qt4.tree_node_renderers.html#traitsui.qt4.tree_node_renderers.WordWrapRenderer" title="traitsui.qt4.tree_node_renderers.WordWrapRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">WordWrapRenderer</span></code></a> is available
+A <code class="xref py py-class docutils literal notranslate"><span class="pre">WordWrapRenderer</span></code> is available
 to provide basic word-wrapped layout in a cell, but user-defined subclasses
 can do any rendering that they want by implementing their own
 <a class="reference internal" href="../api/traitsui.tree_node_renderer.html#traitsui.tree_node_renderer.AbstractTreeNodeRenderer" title="traitsui.tree_node_renderer.AbstractTreeNodeRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractTreeNodeRenderer</span></code></a> subclass.</p>
 <p><a class="reference internal" href="../api/traitsui.tree_node_renderer.html#traitsui.tree_node_renderer.AbstractTreeNodeRenderer" title="traitsui.tree_node_renderer.AbstractTreeNodeRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractTreeNodeRenderer</span></code></a> is an
 abstract base class, and subclasses must implement two methods:</p>
-<dl class="docutils">
-<dt><a class="reference internal" href="../api/traitsui.tree_node_renderer.html#traitsui.tree_node_renderer.AbstractTreeNodeRenderer.size" title="traitsui.tree_node_renderer.AbstractTreeNodeRenderer.size"><code class="xref py py-meth docutils literal notranslate"><span class="pre">size()</span></code></a></dt>
-<dd><p class="first">A method which should return a (height, width) tuple giving the preferred
+<dl>
+<dt><a class="reference internal" href="../api/traitsui.tree_node_renderer.html#traitsui.tree_node_renderer.AbstractTreeNodeRenderer.size" title="traitsui.tree_node_renderer.AbstractTreeNodeRenderer.size"><code class="xref py py-meth docutils literal notranslate"><span class="pre">size()</span></code></a></dt><dd><p>A method which should return a (height, width) tuple giving the preferred
 size for the cell.  Depending on other constraints and user interactions,
 this may not be the actual size that the cell will have available.</p>
-<p class="last">The toolkit will provide a <code class="docutils literal notranslate"><span class="pre">size_context</span></code> object that provides useful
+<p>The toolkit will provide a <code class="docutils literal notranslate"><span class="pre">size_context</span></code> object that provides useful
 parameters to help with sizing operations.  In the Qt backend, this is a
 tuple containing the arguments passed to the Qt <code class="xref py py-meth docutils literal notranslate"><span class="pre">sizeHint()</span></code> method
 of a <code class="xref py py-class docutils literal notranslate"><span class="pre">QStyledItemDelegate</span></code>.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tree_node_renderer.html#traitsui.tree_node_renderer.AbstractTreeNodeRenderer.paint" title="traitsui.tree_node_renderer.AbstractTreeNodeRenderer.paint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paint()</span></code></a></dt>
-<dd><p class="first">Toolkit-dependent code that renders the cell</p>
-<p class="last">The toolkit will provide a <code class="docutils literal notranslate"><span class="pre">`paint_context`</span></code> object that provides useful
+<dt><a class="reference internal" href="../api/traitsui.tree_node_renderer.html#traitsui.tree_node_renderer.AbstractTreeNodeRenderer.paint" title="traitsui.tree_node_renderer.AbstractTreeNodeRenderer.paint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paint()</span></code></a></dt><dd><p>Toolkit-dependent code that renders the cell</p>
+<p>The toolkit will provide a <code class="docutils literal notranslate"><span class="pre">`paint_context`</span></code> object that provides useful
 parameters to help with painting operations.  In the Qt backend, this is a
 tuple containing the arguments passed to the Qt <code class="xref py py-meth docutils literal notranslate"><span class="pre">paint()</span></code> method
 of a <code class="xref py py-class docutils literal notranslate"><span class="pre">QStyledItemDelegate</span></code>.  In particular, the first argument
@@ -355,15 +352,15 @@ smoothing over the TreeNode columns label API.</p>
 <p>There are a number of examples of use of the
 <a class="reference internal" href="../api/traitsui.editors.tree_editor.html#traitsui.editors.tree_editor.TreeEditor" title="traitsui.editors.tree_editor.TreeEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeEditor</span></code></a> in the TraitsUI demos:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Standard_Editors/TreeEditor_demo.py">TreeEditor</a></li>
-<li><a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Advanced/Adapted_tree_editor_demo.py">Adapted TreeEditor</a></li>
-<li><a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Advanced/HDF5_tree_demo.py">HDF5 Tree</a></li>
-<li><a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Extras/Tree_editor_with_TreeNodeRenderer.py">Tree Editor with Renderer</a></li>
+<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Standard_Editors/TreeEditor_demo.py">TreeEditor</a></p></li>
+<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Advanced/Adapted_tree_editor_demo.py">Adapted TreeEditor</a></p></li>
+<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Advanced/HDF5_tree_demo.py">HDF5 Tree</a></p></li>
+<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Extras/Tree_editor_with_TreeNodeRenderer.py">Tree Editor with Renderer</a></p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="module-traitsui.tabular_adapter">
-<span id="the-tabularadapter-class"></span><h2>The TabularAdapter Class<a class="headerlink" href="#module-traitsui.tabular_adapter" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="the-tabularadapter-class">
+<h2>The TabularAdapter Class<a class="headerlink" href="#the-tabularadapter-class" title="Permalink to this headline">¶</a></h2>
 <p>The power and flexibility of the tabular editor is mostly a result of the
 <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularAdapter</span></code></a> class, which is the base class from which all
 tabular editor adapters must be derived.</p>
@@ -383,8 +380,8 @@ displayed by the associated
 <p>Each entry in the <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.columns" title="traitsui.tabular_adapter.TabularAdapter.columns"><code class="xref py py-attr docutils literal notranslate"><span class="pre">columns</span></code></a> list can have one of two
 forms:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">string</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">(string,</span> <span class="pre">id)</span></code></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(string,</span> <span class="pre">id)</span></code></p></li>
 </ul>
 <p>where <code class="docutils literal notranslate"><span class="pre">string</span></code> is the user interface name of the column (which will appear in
 the table column header) and <code class="docutils literal notranslate"><span class="pre">id</span></code> is any value that you want to use to
@@ -432,31 +429,29 @@ adapter to your needs.  But for now, let’s start by covering the details of th
 core interface itself.</p>
 <p>To reduce the amount of repetition, we’ll use the following definitions in all
 of the method argument lists that follow in this section:</p>
-<dl class="docutils">
-<dt>object</dt>
-<dd>The object whose trait is being edited by the
-<a class="reference internal" href="../api/traitsui.editors.tabular_editor.html#traitsui.editors.tabular_editor.TabularEditor" title="traitsui.editors.tabular_editor.TabularEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularEditor</span></code></a>.</dd>
-<dt>trait</dt>
-<dd>The name of the trait the
-<a class="reference internal" href="../api/traitsui.editors.tabular_editor.html#traitsui.editors.tabular_editor.TabularEditor" title="traitsui.editors.tabular_editor.TabularEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularEditor</span></code></a> is editing.</dd>
-<dt>row</dt>
-<dd>The row index (starting with 0) of a table item.</dd>
-<dt>column</dt>
-<dd>The column index (starting with 0) of a table column.</dd>
+<dl class="simple">
+<dt>object</dt><dd><p>The object whose trait is being edited by the
+<a class="reference internal" href="../api/traitsui.editors.tabular_editor.html#traitsui.editors.tabular_editor.TabularEditor" title="traitsui.editors.tabular_editor.TabularEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularEditor</span></code></a>.</p>
+</dd>
+<dt>trait</dt><dd><p>The name of the trait the
+<a class="reference internal" href="../api/traitsui.editors.tabular_editor.html#traitsui.editors.tabular_editor.TabularEditor" title="traitsui.editors.tabular_editor.TabularEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularEditor</span></code></a> is editing.</p>
+</dd>
+<dt>row</dt><dd><p>The row index (starting with 0) of a table item.</p>
+</dd>
+<dt>column</dt><dd><p>The column index (starting with 0) of a table column.</p>
+</dd>
 </dl>
 <p>The adapter interface consists of a number of methods which can be divided into
 two main categories: those which are sensitive to the type of a particular table
 item, and those which are not. We’ll begin with the methods that are
 sensitive to an item’s type:</p>
-<dl class="docutils">
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_alignment" title="traitsui.tabular_adapter.TabularAdapter.get_alignment"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_alignment()</span></code></a></dt>
-<dd><p class="first">Returns the alignment style to use for a specified column.</p>
-<p class="last">The possible values that can be returned are: <code class="docutils literal notranslate"><span class="pre">'left'</span></code>, <code class="docutils literal notranslate"><span class="pre">'center'</span></code>
+<dl>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_alignment" title="traitsui.tabular_adapter.TabularAdapter.get_alignment"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_alignment()</span></code></a></dt><dd><p>Returns the alignment style to use for a specified column.</p>
+<p>The possible values that can be returned are: <code class="docutils literal notranslate"><span class="pre">'left'</span></code>, <code class="docutils literal notranslate"><span class="pre">'center'</span></code>
 or <code class="docutils literal notranslate"><span class="pre">'right'</span></code>. All table items share the same alignment for a
 specified column.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_width" title="traitsui.tabular_adapter.TabularAdapter.get_width"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_width()</span></code></a></dt>
-<dd><p class="first">Returns the width to use for a specified column.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_width" title="traitsui.tabular_adapter.TabularAdapter.get_width"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_width()</span></code></a></dt><dd><p>Returns the width to use for a specified column.</p>
 <p>If the value is &lt;= 0, the column will have a <em>default</em> width, which is
 the same as specifying a width of 0.1.</p>
 <p>If the value is &gt; 1.0, it is converted to an integer and the result is
@@ -465,7 +460,7 @@ the width of the column in pixels. This is referred to as a
 <p>If the value is a float such that 0.0 &lt; value &lt;= 1.0, it is treated as
 the <em>unnormalized fraction of the available space</em> that is to be
 assigned to the column. What this means requires a little explanation.</p>
-<p class="last">To arrive at the size in pixels of the column at any given time, the
+<p>To arrive at the size in pixels of the column at any given time, the
 editor adds together all of the <em>unnormalized fraction</em> values
 returned for all columns in the table to arrive at a total value. Each
 <em>unnormalized fraction</em> is then divided by the total to create a
@@ -478,108 +473,95 @@ resized in the user interface, thus allowing columns of this type to
 increase or decrease their width dynamically, while leaving <em>fixed
 width</em> columns unchanged.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_can_edit" title="traitsui.tabular_adapter.TabularAdapter.get_can_edit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_can_edit()</span></code></a></dt>
-<dd><p class="first">Returns whether the user can edit a specified row.</p>
-<p class="last">A <code class="docutils literal notranslate"><span class="pre">True</span></code> result indicates that the value can be edited, while a
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_can_edit" title="traitsui.tabular_adapter.TabularAdapter.get_can_edit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_can_edit()</span></code></a></dt><dd><p>Returns whether the user can edit a specified row.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">True</span></code> result indicates that the value can be edited, while a
 <code class="docutils literal notranslate"><span class="pre">False</span></code> result indicates that it cannot.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_drag" title="traitsui.tabular_adapter.TabularAdapter.get_drag"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_drag()</span></code></a></dt>
-<dd><p class="first">Returns the value to be <em>dragged</em> for a specified row.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_drag" title="traitsui.tabular_adapter.TabularAdapter.get_drag"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_drag()</span></code></a></dt><dd><p>Returns the value to be <em>dragged</em> for a specified row.</p>
 <p>A result of <code class="docutils literal notranslate"><span class="pre">None</span></code> means that the item cannot be dragged. Note that
 the value returned does not have to be the actual row item. It can be
 any value that you want to drag in its place. In particular, if you
 want the drag target to receive a copy of the row item, you should
 return a copy or clone of the item in its place.</p>
-<p class="last">Also note that if multiple items are being dragged, and this method
+<p>Also note that if multiple items are being dragged, and this method
 returns <code class="docutils literal notranslate"><span class="pre">None</span></code> for any item in the set, no drag operation is
 performed.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_can_drop" title="traitsui.tabular_adapter.TabularAdapter.get_can_drop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_can_drop()</span></code></a></dt>
-<dd><p class="first">Returns whether the specified <code class="docutils literal notranslate"><span class="pre">value</span></code> can be dropped on the specified row.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_can_drop" title="traitsui.tabular_adapter.TabularAdapter.get_can_drop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_can_drop()</span></code></a></dt><dd><p>Returns whether the specified <code class="docutils literal notranslate"><span class="pre">value</span></code> can be dropped on the specified row.</p>
 <p>A value of <code class="docutils literal notranslate"><span class="pre">True</span></code> means the <code class="docutils literal notranslate"><span class="pre">value</span></code> can be dropped; and a value of
 <code class="docutils literal notranslate"><span class="pre">False</span></code> indicates that it cannot be dropped.</p>
-<p class="last">The result is used to provide the user positive or negative drag
+<p>The result is used to provide the user positive or negative drag
 feedback while dragging items over the table. <code class="docutils literal notranslate"><span class="pre">value</span></code> will always be
 a single value, even if multiple items are being dragged. The editor
 handles multiple drag items by making a separate call to
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_can_drop()</span></code> for each item being dragged.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_dropped" title="traitsui.tabular_adapter.TabularAdapter.get_dropped"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_dropped()</span></code></a></dt>
-<dd><p class="first">Returns how to handle a specified <code class="docutils literal notranslate"><span class="pre">value</span></code> being dropped on a specified row.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_dropped" title="traitsui.tabular_adapter.TabularAdapter.get_dropped"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_dropped()</span></code></a></dt><dd><p>Returns how to handle a specified <code class="docutils literal notranslate"><span class="pre">value</span></code> being dropped on a specified row.</p>
 <p>The possible return values are:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">'before'</span></code>: Insert the specified <code class="docutils literal notranslate"><span class="pre">value</span></code> before the dropped on item.</li>
-<li><code class="docutils literal notranslate"><span class="pre">'after'</span></code>: Insert the specified <code class="docutils literal notranslate"><span class="pre">value</span></code> after the dropped on item.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'before'</span></code>: Insert the specified <code class="docutils literal notranslate"><span class="pre">value</span></code> before the dropped on item.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'after'</span></code>: Insert the specified <code class="docutils literal notranslate"><span class="pre">value</span></code> after the dropped on item.</p></li>
 </ul>
-<p class="last">Note there is no result indicating <em>do not drop</em> since you will have
+<p>Note there is no result indicating <em>do not drop</em> since you will have
 already indicated that the <code class="docutils literal notranslate"><span class="pre">object</span></code> can be dropped by the result
 returned from a previous call to <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_can_drop()</span></code>.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_font" title="traitsui.tabular_adapter.TabularAdapter.get_font"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_font()</span></code></a></dt>
-<dd><p class="first">Returns the font to use for displaying a specified row or cell.</p>
-<p class="last">A result of <code class="docutils literal notranslate"><span class="pre">None</span></code> means use the default font; otherwise a toolkit
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_font" title="traitsui.tabular_adapter.TabularAdapter.get_font"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_font()</span></code></a></dt><dd><p>Returns the font to use for displaying a specified row or cell.</p>
+<p>A result of <code class="docutils literal notranslate"><span class="pre">None</span></code> means use the default font; otherwise a toolkit
 font object should be returned. Note that all columns for the specified
 table row will use the font value returned.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_text_color" title="traitsui.tabular_adapter.TabularAdapter.get_text_color"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_text_color()</span></code></a></dt>
-<dd><p class="first">Returns the text color to use for a specified row or cell.</p>
-<p class="last">A result of <code class="docutils literal notranslate"><span class="pre">None</span></code> means use the default text color; otherwise a
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_text_color" title="traitsui.tabular_adapter.TabularAdapter.get_text_color"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_text_color()</span></code></a></dt><dd><p>Returns the text color to use for a specified row or cell.</p>
+<p>A result of <code class="docutils literal notranslate"><span class="pre">None</span></code> means use the default text color; otherwise a
 toolkit-compatible color should be returned. Note that all columns for
 the specified table row will use the text color value returned.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_bg_color" title="traitsui.tabular_adapter.TabularAdapter.get_bg_color"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_bg_color()</span></code></a></dt>
-<dd><p class="first">Returns the background color to use for a specified row or cell.</p>
-<p class="last">A result of <code class="docutils literal notranslate"><span class="pre">None</span></code> means use the default background color; otherwise
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_bg_color" title="traitsui.tabular_adapter.TabularAdapter.get_bg_color"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_bg_color()</span></code></a></dt><dd><p>Returns the background color to use for a specified row or cell.</p>
+<p>A result of <code class="docutils literal notranslate"><span class="pre">None</span></code> means use the default background color; otherwise
 a toolkit-compatible color should be returned. Note that all columns
 for the specified table row will use the background color value
 returned.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_image" title="traitsui.tabular_adapter.TabularAdapter.get_image"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_image()</span></code></a></dt>
-<dd><p class="first">Returns the image to display for a specified cell.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_image" title="traitsui.tabular_adapter.TabularAdapter.get_image"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_image()</span></code></a></dt><dd><p>Returns the image to display for a specified cell.</p>
 <p>A result of <code class="docutils literal notranslate"><span class="pre">None</span></code> means no image will be displayed in the specified
 table cell. Otherwise the result should either be the name of the
 image, or an <code class="xref py py-class docutils literal notranslate"><span class="pre">ImageResource</span></code> object
 specifying the image to display.</p>
-<p class="last">A name is allowed in the case where the image is specified in the
+<p>A name is allowed in the case where the image is specified in the
 <a class="reference internal" href="../api/traitsui.editors.tabular_editor.html#traitsui.editors.tabular_editor.TabularEditor" title="traitsui.editors.tabular_editor.TabularEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularEditor</span></code></a>
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">images</span></code> trait.
+<a class="reference internal" href="../api/traitsui.editors.tabular_editor.html#traitsui.editors.tabular_editor.TabularEditor.images" title="traitsui.editors.tabular_editor.TabularEditor.images"><code class="xref py py-attr docutils literal notranslate"><span class="pre">images</span></code></a> trait.
 In that case, the name should be the same as the string specified in
 the <code class="xref py py-class docutils literal notranslate"><span class="pre">ImageResource</span></code> constructor.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_format" title="traitsui.tabular_adapter.TabularAdapter.get_format"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_format()</span></code></a></dt>
-<dd><p class="first">Returns the Python formatting string to apply to the specified cell.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_format" title="traitsui.tabular_adapter.TabularAdapter.get_format"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_format()</span></code></a></dt><dd><p>Returns the Python formatting string to apply to the specified cell.</p>
 <p>The resulting of formatting with this string will be used as the text
 to display it in the table.</p>
-<p class="last">The return can be any Python string containing exactly one old-style
+<p>The return can be any Python string containing exactly one old-style
 Python formatting sequence, such as <code class="docutils literal notranslate"><span class="pre">'%.4f'</span></code> or <code class="docutils literal notranslate"><span class="pre">'(%5.2f)'</span></code>.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_text" title="traitsui.tabular_adapter.TabularAdapter.get_text"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_text()</span></code></a></dt>
-<dd><p class="first">Returns a string containing the text to display for a specified cell.</p>
-<p class="last">If the underlying data representation for a specified item is not a
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_text" title="traitsui.tabular_adapter.TabularAdapter.get_text"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_text()</span></code></a></dt><dd><p>Returns a string containing the text to display for a specified cell.</p>
+<p>If the underlying data representation for a specified item is not a
 string, then it is your responsibility to convert it to one before
 returning it as the result.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.set_text" title="traitsui.tabular_adapter.TabularAdapter.set_text"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_text()</span></code></a></dt>
-<dd><p class="first">Sets the value for the specified cell.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.set_text" title="traitsui.tabular_adapter.TabularAdapter.set_text"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_text()</span></code></a></dt><dd><p>Sets the value for the specified cell.</p>
 <p>This method is called when the user completes an editing operation on a
 table cell.</p>
-<p class="last">The string specified by <code class="docutils literal notranslate"><span class="pre">text</span></code> is the value that the user has
+<p>The string specified by <code class="docutils literal notranslate"><span class="pre">text</span></code> is the value that the user has
 entered in the table cell.  If the underlying data does not store the
 value as text, it is your responsibility to convert <code class="docutils literal notranslate"><span class="pre">text</span></code> to the
 correct representation used.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_tooltip" title="traitsui.tabular_adapter.TabularAdapter.get_tooltip"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_tooltip()</span></code></a></dt>
-<dd><p class="first">Returns a string containing the tooltip to display for a specified cell.</p>
-<p class="last">You should return the empty string if you do not wish to display a
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_tooltip" title="traitsui.tabular_adapter.TabularAdapter.get_tooltip"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_tooltip()</span></code></a></dt><dd><p>Returns a string containing the tooltip to display for a specified cell.</p>
+<p>You should return the empty string if you do not wish to display a
 tooltip.</p>
 </dd>
 </dl>
 <p>The following are the remaining adapter methods, which are not sensitive to the
 type of item or column data:</p>
-<dl class="docutils">
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_item" title="traitsui.tabular_adapter.TabularAdapter.get_item"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_item()</span></code></a></dt>
-<dd><p class="first">Returns the specified row item.</p>
-<p class="last">The value returned should be the value that exists (or <em>logically</em>
+<dl>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_item" title="traitsui.tabular_adapter.TabularAdapter.get_item"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_item()</span></code></a></dt><dd><p>Returns the specified row item.</p>
+<p>The value returned should be the value that exists (or <em>logically</em>
 exists) at the specified <code class="docutils literal notranslate"><span class="pre">row</span></code> in your data. If your data is not
 really a list or array, then you can just use <code class="docutils literal notranslate"><span class="pre">row</span></code> as an integer
 <em>key</em> or <em>token</em> that can be used to retrieve a corresponding item. The
@@ -587,41 +569,37 @@ value of <code class="docutils literal notranslate"><span class="pre">row</span>
 <code class="docutils literal notranslate"><span class="pre">len(object,</span> <span class="pre">trait)</span></code> (i.e. the result returned by the adapter
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">len()</span></code> method).</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.len" title="traitsui.tabular_adapter.TabularAdapter.len"><code class="xref py py-meth docutils literal notranslate"><span class="pre">len()</span></code></a></dt>
-<dd><p class="first">Returns the number of row items in the specified <code class="docutils literal notranslate"><span class="pre">object.trait</span></code>.</p>
-<p class="last">The result should be an integer greater than or equal to 0.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.len" title="traitsui.tabular_adapter.TabularAdapter.len"><code class="xref py py-meth docutils literal notranslate"><span class="pre">len()</span></code></a></dt><dd><p>Returns the number of row items in the specified <code class="docutils literal notranslate"><span class="pre">object.trait</span></code>.</p>
+<p>The result should be an integer greater than or equal to 0.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.delete" title="traitsui.tabular_adapter.TabularAdapter.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">delete()</span></code></a></dt>
-<dd><p class="first">Deletes the specified row item.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.delete" title="traitsui.tabular_adapter.TabularAdapter.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">delete()</span></code></a></dt><dd><p>Deletes the specified row item.</p>
 <p>This method is only called if the <em>delete</em> operation is specified in
 the <a class="reference internal" href="../api/traitsui.editors.tabular_editor.html#traitsui.editors.tabular_editor.TabularEditor" title="traitsui.editors.tabular_editor.TabularEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularEditor</span></code></a>
 <code class="xref py py-attr docutils literal notranslate"><span class="pre">operation</span></code>
 trait, and the user requests that the item be deleted from the table.</p>
-<p class="last">The adapter can still choose not to delete the specified item if
+<p>The adapter can still choose not to delete the specified item if
 desired, although that may prove confusing to the user.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.insert" title="traitsui.tabular_adapter.TabularAdapter.insert"><code class="xref py py-meth docutils literal notranslate"><span class="pre">insert()</span></code></a></dt>
-<dd><p class="first">Inserts <code class="docutils literal notranslate"><span class="pre">value</span></code> at the specified <code class="docutils literal notranslate"><span class="pre">object.trait[row]</span></code> index.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.insert" title="traitsui.tabular_adapter.TabularAdapter.insert"><code class="xref py py-meth docutils literal notranslate"><span class="pre">insert()</span></code></a></dt><dd><p>Inserts <code class="docutils literal notranslate"><span class="pre">value</span></code> at the specified <code class="docutils literal notranslate"><span class="pre">object.trait[row]</span></code> index.</p>
 <p>The specified <code class="docutils literal notranslate"><span class="pre">value</span></code> can be:</p>
 <ul class="simple">
-<li>An item being moved from one location in the data to another.</li>
-<li><dl class="first docutils">
-<dt>A new item created by a previous call to</dt>
-<dd><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_default_value" title="traitsui.tabular_adapter.TabularAdapter.get_default_value"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_default_value()</span></code></a>.</dd>
+<li><p>An item being moved from one location in the data to another.</p></li>
+<li><dl class="simple">
+<dt>A new item created by a previous call to</dt><dd><p><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_default_value" title="traitsui.tabular_adapter.TabularAdapter.get_default_value"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_default_value()</span></code></a>.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>An item the adapter previously approved via a call to</dt>
-<dd><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_can_drop" title="traitsui.tabular_adapter.TabularAdapter.get_can_drop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_can_drop()</span></code></a>.</dd>
+<li><dl class="simple">
+<dt>An item the adapter previously approved via a call to</dt><dd><p><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_can_drop" title="traitsui.tabular_adapter.TabularAdapter.get_can_drop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_can_drop()</span></code></a>.</p>
+</dd>
 </dl>
 </li>
 </ul>
-<p class="last">The adapter can still choose not to insert the item into the data,
+<p>The adapter can still choose not to insert the item into the data,
 although that may prove confusing to the user.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_default_value" title="traitsui.tabular_adapter.TabularAdapter.get_default_value"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_default_value()</span></code></a></dt>
-<dd><p class="first">Returns a new default value for the specified <code class="docutils literal notranslate"><span class="pre">object.trait</span></code> list.</p>
-<p class="last">This method is called when <em>insert</em> or <em>append</em> operations are allowed
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_default_value" title="traitsui.tabular_adapter.TabularAdapter.get_default_value"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_default_value()</span></code></a></dt><dd><p>Returns a new default value for the specified <code class="docutils literal notranslate"><span class="pre">object.trait</span></code> list.</p>
+<p>This method is called when <em>insert</em> or <em>append</em> operations are allowed
 and the user requests that a new item be added to the table. The result
 should be a new instance of whatever underlying representation is being
 used for table items.</p>
@@ -666,27 +644,26 @@ plays an important part in the design rules, as we will see shortly.</p>
 <p>With this in mind, we now describe the simple design rules used by the first
 group of methods in the <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularAdapter</span></code></a> class:</p>
 <ul>
-<li><p class="first">When getting or setting an adapter attribute, the method first retrieves the
+<li><p>When getting or setting an adapter attribute, the method first retrieves the
 underlying item for the specified data row. The item, and type (i.e. class) of
-the item, are then used in the next rule.</p>
-</li>
-<li><p class="first">The method gets or sets the first trait it finds on the adapter that matches
+the item, are then used in the next rule.</p></li>
+<li><p>The method gets or sets the first trait it finds on the adapter that matches
 one of the following names:</p>
 <ul class="simple">
-<li><em>classname_columnid_attribute</em></li>
-<li><em>classsname_attribute</em></li>
-<li><em>columnid_attribute</em></li>
-<li><em>attribute</em></li>
+<li><p><em>classname_columnid_attribute</em></p></li>
+<li><p><em>classsname_attribute</em></p></li>
+<li><p><em>columnid_attribute</em></p></li>
+<li><p><em>attribute</em></p></li>
 </ul>
 <p>where:</p>
 <ul class="simple">
-<li><em>classname</em> is the name of the class of the item found in the first step, or
+<li><p><em>classname</em> is the name of the class of the item found in the first step, or
 one of its base class names, searched in the order defined by the <em>mro</em>
-(<strong>method resolution order</strong>) for the item’s class.</li>
-<li><em>columnid</em> is the column id specified by the developer in the adapter’s
-<em>column</em> trait for the specified table column.</li>
-<li><em>attribute</em> is the attribute name as described previously (e.g.
-<em>alignment</em>).</li>
+(<strong>method resolution order</strong>) for the item’s class.</p></li>
+<li><p><em>columnid</em> is the column id specified by the developer in the adapter’s
+<em>column</em> trait for the specified table column.</p></li>
+<li><p><em>attribute</em> is the attribute name as described previously (e.g.
+<em>alignment</em>).</p></li>
 </ul>
 </li>
 </ul>
@@ -705,42 +682,38 @@ trait property, which cannot be passed this information directly, the adapter
 always stores the arguments and values it computes in the following adapter
 traits, where they can be easily accessed by a trait getter or setter method:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">row</span></code>: The table row being accessed.</li>
-<li><code class="docutils literal notranslate"><span class="pre">column</span></code>: The column id of the table column being accessed (not its index).</li>
-<li><code class="docutils literal notranslate"><span class="pre">item</span></code>: The data item for the specified table row (i.e. the item determined
-in the first step described above).</li>
-<li><cite>value`</cite>: In the case of a <em>set_xxx</em> method, the value to be set; otherwise it
-is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">row</span></code>: The table row being accessed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">column</span></code>: The column id of the table column being accessed (not its index).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">item</span></code>: The data item for the specified table row (i.e. the item determined
+in the first step described above).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: In the case of a <em>set_xxx</em> method, the value to be set; otherwise it
+is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 </ul>
 <p>As mentioned previously, the <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularAdapter</span></code></a> class provides trait
 definitions for all of the attributes these rules apply to. You can either use
 the default values as they are, override the default, set a new value, or
 completely replace the trait definition in a subclass. A description of the
 default trait implementation for each attribute is as follows:</p>
-<dl class="docutils">
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.default_value" title="traitsui.tabular_adapter.TabularAdapter.default_value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default_value</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Any('')</span></code></dt>
-<dd><p class="first">The default value for a new row.</p>
-<p class="last">The default value is the empty string, but you will normally need to assign
+<dl>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.default_value" title="traitsui.tabular_adapter.TabularAdapter.default_value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default_value</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Any('')</span></code></dt><dd><p>The default value for a new row.</p>
+<p>The default value is the empty string, but you will normally need to assign
 a different (default) value.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.format" title="traitsui.tabular_adapter.TabularAdapter.format"><code class="xref py py-attr docutils literal notranslate"><span class="pre">format</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Str('%s')</span></code></dt>
-<dd><p class="first">The default Python formatting string for a column item.</p>
-<p class="last">The default value is <code class="docutils literal notranslate"><span class="pre">'%s'</span></code> which will simply convert the column item to
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.format" title="traitsui.tabular_adapter.TabularAdapter.format"><code class="xref py py-attr docutils literal notranslate"><span class="pre">format</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Str('%s')</span></code></dt><dd><p>The default Python formatting string for a column item.</p>
+<p>The default value is <code class="docutils literal notranslate"><span class="pre">'%s'</span></code> which will simply convert the column item to
 a displayable string value.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.text" title="traitsui.tabular_adapter.TabularAdapter.text"><code class="xref py py-attr docutils literal notranslate"><span class="pre">text</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Property</span></code></dt>
-<dd><p class="first">The text to display for the column item.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.text" title="traitsui.tabular_adapter.TabularAdapter.text"><code class="xref py py-attr docutils literal notranslate"><span class="pre">text</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Property</span></code></dt><dd><p>The text to display for the column item.</p>
 <p>The implementation of the property checks the type of the column’s
 <em>column id</em>:</p>
 <ul class="simple">
-<li>If it is an integer, it returns <code class="docutils literal notranslate"><span class="pre">format</span> <span class="pre">%</span> <span class="pre">item[column_id]</span></code>.</li>
-<li>Otherwise, it returns <code class="docutils literal notranslate"><span class="pre">format</span> <span class="pre">%</span> <span class="pre">item.column_id</span></code>.</li>
+<li><p>If it is an integer, it returns <code class="docutils literal notranslate"><span class="pre">format</span> <span class="pre">%</span> <span class="pre">item[column_id]</span></code>.</p></li>
+<li><p>Otherwise, it returns <code class="docutils literal notranslate"><span class="pre">format</span> <span class="pre">%</span> <span class="pre">item.column_id</span></code>.</p></li>
 </ul>
-<p class="last">Note that <code class="docutils literal notranslate"><span class="pre">format</span></code> refers to the value returned by a call to
+<p>Note that <code class="docutils literal notranslate"><span class="pre">format</span></code> refers to the value returned by a call to
 <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_format" title="traitsui.tabular_adapter.TabularAdapter.get_format"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_format()</span></code></a> for the current column item.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.text_color" title="traitsui.tabular_adapter.TabularAdapter.text_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">text_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Property</span></code></dt>
-<dd><p class="first">The text color for a row item.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.text_color" title="traitsui.tabular_adapter.TabularAdapter.text_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">text_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Property</span></code></dt><dd><p>The text color for a row item.</p>
 <p>The property implementation checks to see if the current table row is even
 or odd, and based on the result returns the value of the
 <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.even_text_color" title="traitsui.tabular_adapter.TabularAdapter.even_text_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">even_text_color</span></code></a> or
@@ -749,14 +722,13 @@ or odd, and based on the result returns the value of the
 <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.default_text_color" title="traitsui.tabular_adapter.TabularAdapter.default_text_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default_text_color</span></code></a> trait if it is. The
 definition of these additional traits are as follows:</p>
 <ul class="simple">
-<li><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.odd_text_color" title="traitsui.tabular_adapter.TabularAdapter.odd_text_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">odd_text_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Color(None)</span></code></li>
-<li><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.even_text_color" title="traitsui.tabular_adapter.TabularAdapter.even_text_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">even_text_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Color(None)</span></code></li>
-<li><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.default_text_color" title="traitsui.tabular_adapter.TabularAdapter.default_text_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default_text_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Color(None)</span></code></li>
+<li><p><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.odd_text_color" title="traitsui.tabular_adapter.TabularAdapter.odd_text_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">odd_text_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Color(None)</span></code></p></li>
+<li><p><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.even_text_color" title="traitsui.tabular_adapter.TabularAdapter.even_text_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">even_text_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Color(None)</span></code></p></li>
+<li><p><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.default_text_color" title="traitsui.tabular_adapter.TabularAdapter.default_text_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default_text_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Color(None)</span></code></p></li>
 </ul>
-<p class="last">Remember that a <code class="docutils literal notranslate"><span class="pre">None</span></code> value means use the default text color.</p>
+<p>Remember that a <code class="docutils literal notranslate"><span class="pre">None</span></code> value means use the default text color.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.bg_color" title="traitsui.tabular_adapter.TabularAdapter.bg_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">bg_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Property</span></code></dt>
-<dd><p class="first">The background color for a row item.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.bg_color" title="traitsui.tabular_adapter.TabularAdapter.bg_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">bg_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Property</span></code></dt><dd><p>The background color for a row item.</p>
 <p>The property implementation checks to see if the current table row is even
 or odd, and based on the result returns the value of the
 <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.even_bg_color" title="traitsui.tabular_adapter.TabularAdapter.even_bg_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">even_bg_color</span></code></a> or
@@ -764,51 +736,42 @@ or odd, and based on the result returns the value of the
 and the value of the <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.default_bg_color" title="traitsui.tabular_adapter.TabularAdapter.default_bg_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default_bg_color</span></code></a> trait if
 it is. The definition of these additional traits are as follows:</p>
 <ul class="simple">
-<li><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.odd_bg_color" title="traitsui.tabular_adapter.TabularAdapter.odd_bg_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">odd_bg_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Color(None)</span></code></li>
-<li><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.even_bg_color" title="traitsui.tabular_adapter.TabularAdapter.even_bg_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">even_bg_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Color(None)</span></code></li>
-<li><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.default_bg_color" title="traitsui.tabular_adapter.TabularAdapter.default_bg_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default_bg_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Color(None)</span></code></li>
+<li><p><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.odd_bg_color" title="traitsui.tabular_adapter.TabularAdapter.odd_bg_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">odd_bg_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Color(None)</span></code></p></li>
+<li><p><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.even_bg_color" title="traitsui.tabular_adapter.TabularAdapter.even_bg_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">even_bg_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Color(None)</span></code></p></li>
+<li><p><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.default_bg_color" title="traitsui.tabular_adapter.TabularAdapter.default_bg_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default_bg_color</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Color(None)</span></code></p></li>
 </ul>
-<p class="last">Remember that a <code class="docutils literal notranslate"><span class="pre">None</span></code> value means use the default background color.</p>
+<p>Remember that a <code class="docutils literal notranslate"><span class="pre">None</span></code> value means use the default background color.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.alignment" title="traitsui.tabular_adapter.TabularAdapter.alignment"><code class="xref py py-attr docutils literal notranslate"><span class="pre">alignment</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Enum('left',</span> <span class="pre">'center',</span> <span class="pre">'right')</span></code></dt>
-<dd><p class="first">The alignment to use for a specified column.</p>
-<p class="last">The default value is <code class="docutils literal notranslate"><span class="pre">'left'</span></code>.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.alignment" title="traitsui.tabular_adapter.TabularAdapter.alignment"><code class="xref py py-attr docutils literal notranslate"><span class="pre">alignment</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Enum('left',</span> <span class="pre">'center',</span> <span class="pre">'right')</span></code></dt><dd><p>The alignment to use for a specified column.</p>
+<p>The default value is <code class="docutils literal notranslate"><span class="pre">'left'</span></code>.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.width" title="traitsui.tabular_adapter.TabularAdapter.width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">width</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Float(-1)</span></code></dt>
-<dd><p class="first">The width of a specified column.</p>
-<p class="last">The default value is -1, which means a dynamically sized column with an
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.width" title="traitsui.tabular_adapter.TabularAdapter.width"><code class="xref py py-attr docutils literal notranslate"><span class="pre">width</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Float(-1)</span></code></dt><dd><p>The width of a specified column.</p>
+<p>The default value is -1, which means a dynamically sized column with an
 <em>unnormalized fractional</em> value of 0.1.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.can_edit" title="traitsui.tabular_adapter.TabularAdapter.can_edit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">can_edit</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Bool(True)</span></code></dt>
-<dd><p class="first">Specifies whether the text value of the current item can be edited.</p>
-<p class="last">The default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>, which means that the user can edit the
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.can_edit" title="traitsui.tabular_adapter.TabularAdapter.can_edit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">can_edit</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Bool(True)</span></code></dt><dd><p>Specifies whether the text value of the current item can be edited.</p>
+<p>The default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>, which means that the user can edit the
 value.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.drag" title="traitsui.tabular_adapter.TabularAdapter.drag"><code class="xref py py-attr docutils literal notranslate"><span class="pre">drag</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Property</span></code></dt>
-<dd><p class="first">A property which returns the value to be dragged for a specified row item.</p>
-<p class="last">The property implementation simply returns the current row item.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.drag" title="traitsui.tabular_adapter.TabularAdapter.drag"><code class="xref py py-attr docutils literal notranslate"><span class="pre">drag</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Property</span></code></dt><dd><p>A property which returns the value to be dragged for a specified row item.</p>
+<p>The property implementation simply returns the current row item.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.can_drop" title="traitsui.tabular_adapter.TabularAdapter.can_drop"><code class="xref py py-attr docutils literal notranslate"><span class="pre">can_drop</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Bool(False)</span></code></dt>
-<dd><p class="first">Specifies whether the specified value be dropped on the current item.</p>
-<p class="last">The default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>, meaning that the value cannot be dropped.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.can_drop" title="traitsui.tabular_adapter.TabularAdapter.can_drop"><code class="xref py py-attr docutils literal notranslate"><span class="pre">can_drop</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Bool(False)</span></code></dt><dd><p>Specifies whether the specified value be dropped on the current item.</p>
+<p>The default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>, meaning that the value cannot be dropped.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.dropped" title="traitsui.tabular_adapter.TabularAdapter.dropped"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dropped</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Enum('after',</span> <span class="pre">'before')</span></code></dt>
-<dd><p class="first">Specifies where a dropped item should be placed in the table relative to
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.dropped" title="traitsui.tabular_adapter.TabularAdapter.dropped"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dropped</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Enum('after',</span> <span class="pre">'before')</span></code></dt><dd><p>Specifies where a dropped item should be placed in the table relative to
 the item it is dropped on.</p>
-<p class="last">The default value is <code class="docutils literal notranslate"><span class="pre">'after'</span></code>.</p>
+<p>The default value is <code class="docutils literal notranslate"><span class="pre">'after'</span></code>.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.font" title="traitsui.tabular_adapter.TabularAdapter.font"><code class="xref py py-attr docutils literal notranslate"><span class="pre">font</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Font</span></code></dt>
-<dd><p class="first">The font to use for the current item.</p>
-<p class="last">The default value is the standard default Traits font value.</p>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.font" title="traitsui.tabular_adapter.TabularAdapter.font"><code class="xref py py-attr docutils literal notranslate"><span class="pre">font</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Font</span></code></dt><dd><p>The font to use for the current item.</p>
+<p>The default value is the standard default Traits font value.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.image" title="traitsui.tabular_adapter.TabularAdapter.image"><code class="xref py py-attr docutils literal notranslate"><span class="pre">image</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Str(None)</span></code></dt>
-<dd><p class="first">The name of the default image to use for a column.</p>
-<p class="last">The default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>, which means that no image will be displayed
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.image" title="traitsui.tabular_adapter.TabularAdapter.image"><code class="xref py py-attr docutils literal notranslate"><span class="pre">image</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Str(None)</span></code></dt><dd><p>The name of the default image to use for a column.</p>
+<p>The default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>, which means that no image will be displayed
 for the column.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.tooltip" title="traitsui.tabular_adapter.TabularAdapter.tooltip"><code class="xref py py-attr docutils literal notranslate"><span class="pre">tooltip</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Str</span></code></dt>
-<dd><p class="first">The tooltip information for a column item.</p>
-<p class="last">The default value is the empty string, which means no tooltip information
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.tooltip" title="traitsui.tabular_adapter.TabularAdapter.tooltip"><code class="xref py py-attr docutils literal notranslate"><span class="pre">tooltip</span></code></a> = <code class="docutils literal notranslate"><span class="pre">Str</span></code></dt><dd><p>The tooltip information for a column item.</p>
+<p>The default value is the empty string, which means no tooltip information
 will be displayed for the column.</p>
 </dd>
 </dl>
@@ -816,32 +779,31 @@ will be displayed for the column.</p>
 group of <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-attr docutils literal notranslate"><span class="pre">TabularAdapter</span></code></a> interface methods. However, the design rules
 do not apply to the remaining five adapter methods, although they all provide a
 useful default implementation:</p>
-<dl class="docutils">
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_item" title="traitsui.tabular_adapter.TabularAdapter.get_item"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_item()</span></code></a></dt>
-<dd><p class="first">The default implementation assumes the trait defined by <code class="docutils literal notranslate"><span class="pre">object.trait</span></code> is
+<dl>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_item" title="traitsui.tabular_adapter.TabularAdapter.get_item"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_item()</span></code></a></dt><dd><p>The default implementation assumes the trait defined by <code class="docutils literal notranslate"><span class="pre">object.trait</span></code> is
 a <em>sequence</em> and attempts to return the value at index <code class="docutils literal notranslate"><span class="pre">row</span></code>. If an error
 occurs, it returns <code class="docutils literal notranslate"><span class="pre">None</span></code> instead. This definition should work correctly
 for lists, tuples and arrays, or any other object that is indexable, but
 will have to be overridden for all other cases.</p>
-<p class="last">Note that this method is the one called in the first design rule described
+<p>Note that this method is the one called in the first design rule described
 previously to retrieve the item at the current table row.</p>
 </dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.len" title="traitsui.tabular_adapter.TabularAdapter.len"><code class="xref py py-meth docutils literal notranslate"><span class="pre">len()</span></code></a></dt>
-<dd>Again, the default implementation assumes the trait defined by
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.len" title="traitsui.tabular_adapter.TabularAdapter.len"><code class="xref py py-meth docutils literal notranslate"><span class="pre">len()</span></code></a></dt><dd><p>Again, the default implementation assumes the trait defined by
 <code class="docutils literal notranslate"><span class="pre">object.trait</span></code> is a <em>sequence</em> and attempts to return the result of
 calling <code class="docutils literal notranslate"><span class="pre">len(object.trait)</span></code>. It will need to be overridden for any type
-of data which for which <code class="xref py py-func docutils literal notranslate"><span class="pre">len()</span></code> will not work.</dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.delete" title="traitsui.tabular_adapter.TabularAdapter.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">delete()</span></code></a></dt>
-<dd>The default implementation assumes the trait defined by <code class="docutils literal notranslate"><span class="pre">object.trait</span></code> is
+of data which for which <code class="xref py py-func docutils literal notranslate"><span class="pre">len()</span></code> will not work.</p>
+</dd>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.delete" title="traitsui.tabular_adapter.TabularAdapter.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">delete()</span></code></a></dt><dd><p>The default implementation assumes the trait defined by <code class="docutils literal notranslate"><span class="pre">object.trait</span></code> is
 a mutable sequence and attempts to perform a <code class="docutils literal notranslate"><span class="pre">del</span> <span class="pre">object.trait[row]</span></code>
-operation.</dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.insert" title="traitsui.tabular_adapter.TabularAdapter.insert"><code class="xref py py-meth docutils literal notranslate"><span class="pre">insert()</span></code></a></dt>
-<dd>The default implementation assumes the trait defined by <code class="docutils literal notranslate"><span class="pre">object.trait</span></code> is
+operation.</p>
+</dd>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.insert" title="traitsui.tabular_adapter.TabularAdapter.insert"><code class="xref py py-meth docutils literal notranslate"><span class="pre">insert()</span></code></a></dt><dd><p>The default implementation assumes the trait defined by <code class="docutils literal notranslate"><span class="pre">object.trait</span></code> is
 a mutable sequence and attempts to perform an
-<code class="docutils literal notranslate"><span class="pre">object.trait[row:row]</span> <span class="pre">=</span> <span class="pre">[value]</span></code> operation.</dd>
-<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_default_value" title="traitsui.tabular_adapter.TabularAdapter.get_default_value"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_default_value()</span></code></a></dt>
-<dd>The default implementation simply returns the value of the adapter’s
-<a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.default_value" title="traitsui.tabular_adapter.TabularAdapter.default_value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default_value</span></code></a> trait.</dd>
+<code class="docutils literal notranslate"><span class="pre">object.trait[row:row]</span> <span class="pre">=</span> <span class="pre">[value]</span></code> operation.</p>
+</dd>
+<dt><a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.get_default_value" title="traitsui.tabular_adapter.TabularAdapter.get_default_value"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_default_value()</span></code></a></dt><dd><p>The default implementation simply returns the value of the adapter’s
+<a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.default_value" title="traitsui.tabular_adapter.TabularAdapter.default_value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default_value</span></code></a> trait.</p>
+</dd>
 </dl>
 </div>
 <div class="section" id="id2">
@@ -849,14 +811,14 @@ a mutable sequence and attempts to perform an
 <p>There are a number of examples of use of the <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularAdapter</span></code></a> in the
 TraitsUI demos:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Advanced/Tabular_editor_demo.py">TabularEditor</a></li>
-<li><a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Advanced/Auto_update_TabularEditor_demo.py">TabularEditor (auto-update)</a></li>
-<li><a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Advanced/NumPy_array_tabular_editor_demo.py">NumPy array TabularEditor</a></li>
+<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Advanced/Tabular_editor_demo.py">TabularEditor</a></p></li>
+<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Advanced/Auto_update_TabularEditor_demo.py">TabularEditor (auto-update)</a></p></li>
+<li><p><a class="reference external" href="https://github.com/enthought/traitsui/tree/master/examples/demo/Advanced/NumPy_array_tabular_editor_demo.py">NumPy array TabularEditor</a></p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="module-traitsui.list_str_adapter">
-<span id="the-liststradapter-class"></span><h2>The ListStrAdapter Class<a class="headerlink" href="#module-traitsui.list_str_adapter" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="the-liststradapter-class">
+<h2>The ListStrAdapter Class<a class="headerlink" href="#the-liststradapter-class" title="Permalink to this headline">¶</a></h2>
 <p>Although the <a class="reference internal" href="../api/traitsui.editors.list_str_editor.html#traitsui.editors.list_str_editor.ListStrEditor" title="traitsui.editors.list_str_editor.ListStrEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ListStrEditor</span></code></a> editor
 is frequently used, as might be expected, with lists of strings, it also
 provides facilities to edit lists of other object types that can be adapted
@@ -892,14 +854,14 @@ well.</p>
 <li><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-traitsui.tabular_adapter">The TabularAdapter Class</a><ul>
+<li><a class="reference internal" href="#the-tabularadapter-class">The TabularAdapter Class</a><ul>
 <li><a class="reference internal" href="#the-tabularadapter-columns-trait">The TabularAdapter <em>columns</em> Trait</a></li>
 <li><a class="reference internal" href="#the-core-tabularadapter-interface">The Core TabularAdapter Interface</a></li>
 <li><a class="reference internal" href="#creating-a-custom-tabularadapter">Creating a Custom TabularAdapter</a></li>
 <li><a class="reference internal" href="#id2">Examples</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-traitsui.list_str_adapter">The ListStrAdapter Class</a></li>
+<li><a class="reference internal" href="#the-liststradapter-class">The ListStrAdapter Class</a></li>
 </ul>
 </li>
 </ul>
@@ -916,13 +878,11 @@ well.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -943,13 +903,13 @@ well.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

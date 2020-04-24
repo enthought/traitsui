@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.view_element module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.view_element module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.view_elements module" href="traitsui.view_elements.html" >
     <link rel="prev" title="traitsui.view module" href="traitsui.view.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.view_element module</a></li>
@@ -97,47 +96,92 @@
 (i.e., View, Group, Item, Include) derive from.</p>
 <dl class="class">
 <dt id="traitsui.view_element.DefaultViewElement">
-<em class="property">class </em><code class="descclassname">traitsui.view_element.</code><code class="descname">DefaultViewElement</code><a class="headerlink" href="#traitsui.view_element.DefaultViewElement" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.view_element.</code><code class="sig-name descname">DefaultViewElement</code><a class="headerlink" href="#traitsui.view_element.DefaultViewElement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.view_element.ViewElement" title="traitsui.view_element.ViewElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewElement</span></code></a></p>
 <p>A view element that can be used as a default value for traits whose
 value is a view element.</p>
+<dl class="attribute">
+<dt id="traitsui.view_element.DefaultViewElement.dock">
+<code class="sig-name descname">dock</code><em class="property"> = DockStyle</em><a class="headerlink" href="#traitsui.view_element.DefaultViewElement.dock" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default dock style to use:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view_element.DefaultViewElement.export">
+<code class="sig-name descname">export</code><em class="property"> = ExportType</em><a class="headerlink" href="#traitsui.view_element.DefaultViewElement.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>The category of elements dragged out of the view:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view_element.DefaultViewElement.image">
+<code class="sig-name descname">image</code><em class="property"> = Image</em><a class="headerlink" href="#traitsui.view_element.DefaultViewElement.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default notebook tab image to use:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view_element.DefaultViewElement.object">
+<code class="sig-name descname">object</code><em class="property"> = AnObject</em><a class="headerlink" href="#traitsui.view_element.DefaultViewElement.object" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default context object to edit:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view_element.DefaultViewElement.show_labels">
+<code class="sig-name descname">show_labels</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.view_element.DefaultViewElement.show_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should labels be added to items in a group?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view_element.DefaultViewElement.style">
+<code class="sig-name descname">style</code><em class="property"> = EditorStyle</em><a class="headerlink" href="#traitsui.view_element.DefaultViewElement.style" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default editor style to use:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.view_element.ViewElement">
-<em class="property">class </em><code class="descclassname">traitsui.view_element.</code><code class="descname">ViewElement</code><a class="headerlink" href="#traitsui.view_element.ViewElement" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.view_element.</code><code class="sig-name descname">ViewElement</code><a class="headerlink" href="#traitsui.view_element.ViewElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>An element of a view.</p>
 <dl class="method">
 <dt id="traitsui.view_element.ViewElement.is_includable">
-<code class="descname">is_includable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view_element.ViewElement.is_includable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_includable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view_element.ViewElement.is_includable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether the object is replacable by an Include object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.view_element.ViewElement.replace_include">
-<code class="descname">replace_include</code><span class="sig-paren">(</span><em>view_elements</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view_element.ViewElement.replace_include" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">replace_include</code><span class="sig-paren">(</span><em class="sig-param">view_elements</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view_element.ViewElement.replace_include" title="Permalink to this definition">¶</a></dt>
 <dd><p>Searches the current object’s <strong>content</strong> attribute for objects that
 have an <strong>id</strong> attribute, and replaces each one with an Include object
 with the same <strong>id</strong> value, and puts the replaced object into the
 specified ViewElements object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>view_elements</strong> (<em>ViewElements object</em>) – Object containing Group, Item, and Include objects</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>view_elements</strong> (<em>ViewElements object</em>) – Object containing Group, Item, and Include objects</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.view_element.ViewSubElement">
-<em class="property">class </em><code class="descclassname">traitsui.view_element.</code><code class="descname">ViewSubElement</code><a class="headerlink" href="#traitsui.view_element.ViewSubElement" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.view_element.</code><code class="sig-name descname">ViewSubElement</code><a class="headerlink" href="#traitsui.view_element.ViewSubElement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.view_element.ViewElement" title="traitsui.view_element.ViewElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewElement</span></code></a></p>
 <p>Abstract class representing elements that can be contained in a view.</p>
+<dl class="attribute">
+<dt id="traitsui.view_element.ViewSubElement.container">
+<code class="sig-name descname">container</code><em class="property"> = Container</em><a class="headerlink" href="#traitsui.view_element.ViewSubElement.container" title="Permalink to this definition">¶</a></dt>
+<dd><p>The object this ViewSubElement is contained in; must be a ViewElement.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view_element.ViewSubElement.help_id">
+<code class="sig-name descname">help_id</code><em class="property"> = HelpId</em><a class="headerlink" href="#traitsui.view_element.ViewSubElement.help_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>External help context identifier:</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -163,13 +207,11 @@ specified ViewElements object.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -190,13 +232,13 @@ specified ViewElements object.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

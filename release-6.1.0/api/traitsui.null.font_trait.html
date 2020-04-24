@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.null.font_trait module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.null package" href="traitsui.null.html" >
+    <link rel="next" title="traitsui.null.rgb_color_trait module" href="traitsui.null.rgb_color_trait.html" >
+    <link rel="prev" title="traitsui.null.color_trait module" href="traitsui.null.color_trait.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.null.html" accesskey="U">traitsui.null package</a></li>
+  
+    <li><a href="#">traitsui.null.font_trait module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.null.rgb_color_trait.html" title="traitsui.null.rgb_color_trait module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.null.color_trait.html" title="traitsui.null.color_trait module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.null.font_trait">
+<span id="traitsui-null-font-trait-module"></span><h1>traitsui.null.font_trait module<a class="headerlink" href="#module-traitsui.null.font_trait" title="Permalink to this headline">¶</a></h1>
+<p>Trait definition for a null-based (i.e., no UI) font.</p>
+<dl class="class">
+<dt id="traitsui.null.font_trait.TraitFont">
+<em class="property">class </em><code class="descclassname">traitsui.null.font_trait.</code><code class="descname">TraitFont</code><a class="headerlink" href="#traitsui.null.font_trait.TraitFont" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/trait_handlers.html#traits.trait_handlers.TraitHandler" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_handlers.TraitHandler</span></code></a></p>
+<p>Ensures that values assigned to a trait attribute are valid font
+descriptor strings; the value actually assigned is the corresponding
+canonical font descriptor string.</p>
+<dl class="method">
+<dt id="traitsui.null.font_trait.TraitFont.info">
+<code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.null.font_trait.TraitFont.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Must return a string describing the type of value accepted by the
+trait handler.</p>
+<p>The string should be a phrase describing the type defined by the
+TraitHandler subclass, rather than a complete sentence. For example, use
+the phrase, “a square sprocket” instead of the sentence, “The value must
+be a square sprocket.” The value returned by info() is combined with
+other information whenever an error occurs and therefore makes more
+sense to the user if the result is a phrase. The info() method is
+similar in purpose and use to the <strong>info</strong> attribute of a validator
+function.</p>
+<p>Note that the result can include information specific to the particular
+trait handler instance. For example, TraitRange instances return a
+string indicating the range of values acceptable to the handler (e.g.,
+“an integer in the range from 1 to 9”). If the info() method is not
+overridden, the default method returns the value of the ‘info_text’
+attribute.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.null.font_trait.TraitFont.validate">
+<code class="descname">validate</code><span class="sig-paren">(</span><em>object</em>, <em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.null.font_trait.TraitFont.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates that the value is a valid font descriptor string.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="traitsui.null.font_trait.get_font_editor">
+<code class="descclassname">traitsui.null.font_trait.</code><code class="descname">get_font_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.null.font_trait.get_font_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.null.color_trait.html"
+                        title="previous chapter">traitsui.null.color_trait module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.null.rgb_color_trait.html"
+                        title="next chapter">traitsui.null.rgb_color_trait module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.null.font_trait.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

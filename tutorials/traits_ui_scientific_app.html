@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Writing a graphical application for scientific programming using TraitsUI 6.1 &mdash; TraitsUI 6 User Manual</title>
+    <title>Writing a graphical application for scientific programming using TraitsUI 7.0 &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,10 +29,10 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 6.1 Tutorials" href="index.html" >
-    <link rel="next" title="TraitsUI 6.1 Demos" href="../demos/index.html" >
-    <link rel="prev" title="TraitsUI 6.1 Tutorials" href="index.html" > 
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
+    <link rel="up" title="TraitsUI 7.0 Tutorials" href="index.html" >
+    <link rel="next" title="TraitsUI 7.0 Demos" href="../demos/index.html" >
+    <link rel="prev" title="TraitsUI 7.0 Tutorials" href="index.html" > 
   </head>
   <body>
   <div class="container">
@@ -50,11 +49,11 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 Tutorials</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 7.0 Tutorials</a></li>
   
-    <li><a href="#">Writing a graphical application for scientific programming using TraitsUI 6.1</a></li>
+    <li><a href="#">Writing a graphical application for scientific programming using TraitsUI 7.0</a></li>
   
 
     </ul>
@@ -70,11 +69,11 @@
            >modules</a>
       </li>
       <li class="active">
-        <a href="../demos/index.html" title="TraitsUI 6.1 Demos"
+        <a href="../demos/index.html" title="TraitsUI 7.0 Demos"
            accesskey="N">next</a>
       </li>
       <li class="active">
-        <a href="index.html" title="TraitsUI 6.1 Tutorials"
+        <a href="index.html" title="TraitsUI 7.0 Tutorials"
            accesskey="P">previous</a>
       </li>
     </ul>
@@ -91,20 +90,19 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="writing-a-graphical-application-for-scientific-programming-using-traitsui-version">
-<span id="writing-a-graphical-application-for-scientific-programming-using-traitsui"></span><h1>Writing a graphical application for scientific programming using TraitsUI 6.1<a class="headerlink" href="#writing-a-graphical-application-for-scientific-programming-using-traitsui-version" title="Permalink to this headline">¶</a></h1>
+<span id="writing-a-graphical-application-for-scientific-programming-using-traitsui"></span><h1>Writing a graphical application for scientific programming using TraitsUI 7.0<a class="headerlink" href="#writing-a-graphical-application-for-scientific-programming-using-traitsui-version" title="Permalink to this headline">¶</a></h1>
 <p><strong>A step by step guide for a non-programmer</strong></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Gael Varoquaux</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2019-05-10</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">License:</th><td class="field-body">BSD</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Gael Varoquaux</p>
+</dd>
+<dt class="field-even">Date</dt>
+<dd class="field-even"><p>2020-04-24</p>
+</dd>
+<dt class="field-odd">License</dt>
+<dd class="field-odd"><p>BSD</p>
+</dd>
+</dl>
 <p>Building interactive Graphical User Interfaces (GUIs) is a hard problem,
 especially for somebody who has not had training in IT. TraitsUI is a
 python module that provides a great answer to this problem. I have found
@@ -115,12 +113,12 @@ footsteps.</p>
 <p>This document is intended to help a non-programmer to use traits and
 traitsUI to write an interactive graphical application.
 The reader is assumed to have some basic python scripting knowledge (see
-ref <a class="footnote-reference" href="#id9" id="id1">[1]</a> for a basic introduction).
-Knowledge of numpy/scipy <a class="footnote-reference" href="#id10" id="id2">[2]</a> helps understanding the
+ref <a class="footnote-reference brackets" href="#id9" id="id1">1</a> for a basic introduction).
+Knowledge of numpy/scipy <a class="footnote-reference brackets" href="#id10" id="id2">2</a> helps understanding the
 data processing aspects of the examples, but may not be paramount. Some
-examples rely on matplotlib <a class="footnote-reference" href="#id11" id="id3">[3]</a> . This
+examples rely on matplotlib <a class="footnote-reference brackets" href="#id11" id="id3">3</a> . This
 document is <strong>not</strong> a replacement for user manuals and references of the
-different packages (traitsUI <a class="footnote-reference" href="#id12" id="id4">[4]</a>, scipy, matplotlib). It provides a
+different packages (traitsUI <a class="footnote-reference brackets" href="#id12" id="id4">4</a>, scipy, matplotlib). It provides a
 “cookbook” approach, and not a reference.</p>
 <p>This tutorial provides step-by-step guide to building a medium-size
 application. The example chosen is an application used to do control of a
@@ -155,7 +153,7 @@ rise to a slow development cycle, as the work-flow is centered on the
 GUI, and not on the code.</p>
 <p>TraitsUI provides a beautiful answer to this problem by building
 graphical representations of an object. Traits and TraitsUI have their
-own manuals (<a class="reference external" href="http://code.enthought.com/traits/">http://code.enthought.com/traits/</a>) and the reader is encouraged to
+own manuals (<a class="reference external" href="http://docs.enthought.com/traits/">http://docs.enthought.com/traits/</a>) and the reader is encouraged to
 refer to these for more information.</p>
 <p>We will use TraitsUI for <em>all</em> our GUIs. This forces us to store all the
 data and parameters in objects, which is good programming style. The GUI
@@ -264,9 +262,10 @@ sub-classes, and method to manipulate objects are derived from the
 objects parent-ship: a <em>ColoredPoint</em> is only a special case of
 <em>Point</em>. This proves very handy on large projects.</p>
 <blockquote>
-<div><strong>Note</strong>: To stress the differences between classes and their
+<div><p><strong>Note</strong>: To stress the differences between classes and their
 instances (objects), classes are usually named with capital letters,
-and objects only with lower case letters.</div></blockquote>
+and objects only with lower case letters.</p>
+</div></blockquote>
 </div>
 </div>
 <div class="section" id="an-object-and-its-representation">
@@ -284,7 +283,7 @@ definition.</p>
 a dialog to edit the objects’ attributes specified in its class
 definition.</p>
 <p>Here we define a camera object (which, in our real world example, is a
-camera interfaced to python through the ctypes <a class="footnote-reference" href="#id14" id="id5">[5]</a> module), and show how
+camera interfaced to python through the ctypes <a class="footnote-reference brackets" href="#id14" id="id5">5</a> module), and show how
 to open a dialog to edit its properties :</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/code_block1.py">code snippet #1</a></p>
@@ -428,27 +427,33 @@ only the attributes they are associated to.</p>
 graphical panel to edit its attributes. This method creates and returns
 the panel, but does not start its event loop. The panel is not yet
 “alive”, unlike with the <em>configure_traits()</em> method. Traits uses the
-wxWidget toolkit by default to create its widget. They can be turned live
-and displayed by starting a wx application, and its main loop (ie event
-loop in wx speech).</p>
+Qt toolkit by default to create its widget. They can be turned live
+and displayed by starting a Qt application, and its main loop (ie event
+loop in Qt speech).</p>
 <blockquote>
-<div><p><a class="reference external" href="../_static/event_loop.py">code snippet #3</a></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">wx</span>
+<div><p><a class="reference external" href="../_static/event_loop_qt.py">code snippet #3</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyface.qt.QtCore</span> <span class="kn">import</span> <span class="n">QApplication</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Int</span>
+
 
 <span class="k">class</span> <span class="nc">Counter</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
-    <span class="n">value</span> <span class="o">=</span>  <span class="n">Int</span><span class="p">()</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
+
 
 <span class="n">Counter</span><span class="p">()</span><span class="o">.</span><span class="n">edit_traits</span><span class="p">()</span>
-<span class="n">wx</span><span class="o">.</span><span class="n">PySimpleApp</span><span class="p">()</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+<span class="n">QApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
 </pre></div>
 </div>
 </div></blockquote>
+<p>There is a <a class="reference external" href="../_static/event_loop_wx.py">similar example for wxPython</a>
+and a <a class="reference external" href="../_static/event_loop.py">toolkit-independent example that uses Pyface</a>
+as well.</p>
 <p>The <em>Counter().edit_traits()</em> line creates a counter object and its
 representation, a dialog with one integer represented. However it does
-not display it until a wx application is created, and its main loop is
+not display it until a Qt application is created, and its main loop is
 started.</p>
-<p>Usually it is not necessary to create the wx application yourself, and to
+<p>Usually it is not necessary to create the Qt application yourself, and to
 start its main loop, traits will do all this for you when the
 <em>.configure_traits()</em> method is called.</p>
 </div>
@@ -563,7 +568,7 @@ unexpected things can happen.</p>
 <div class="section" id="threads-in-python">
 <h3>Threads in python<a class="headerlink" href="#threads-in-python" title="Permalink to this headline">¶</a></h3>
 <p>In python a thread can be implemented with a <em>Thread</em> object, from the
-threading <a class="footnote-reference" href="#id15" id="id6">[6]</a> module. To create your own execution thread, subclass the
+threading <a class="footnote-reference brackets" href="#id15" id="id6">6</a> module. To create your own execution thread, subclass the
 <em>Thread</em> object and put the code that you want to run in a separate
 thread in its <em>run</em> method. You can start your thread using its <em>start</em>
 method:</p>
@@ -604,7 +609,7 @@ trigger race-conditions. Naively manipulating the GUI objects in your
 thread will lead to race conditions, and unpredictable crash: suppose the
 GUI was repainting itself (due to a window move, for instance) when you
 modify it.</p>
-<p>In a wxPython application, if you start a thread, GUI event will still be
+<p>In an application, if you start a thread, GUI event will still be
 processed by the GUI event loop. To avoid collisions between your thread
 and the event loop, the proper way of modifying a GUI object is to insert
 the modifications in the event loop, using the <em>GUI.invoke_later()</em> call.
@@ -720,7 +725,7 @@ insert a matplotlib in my <cite>traitsUI</cite> application. It is not necessary
 fully understand the code of this section to be able to read on.</p>
 <p>I should stress that there already exists a plotting module that provides
 traits editors for plotting, and that is very well integrated with
-traits: chaco <a class="footnote-reference" href="#id16" id="id7">[7]</a>.</p>
+traits: chaco <a class="footnote-reference brackets" href="#id16" id="id7">7</a>.</p>
 <div class="section" id="making-a-traits-editor-from-a-matplotlib-plot">
 <h3>Making a <cite>traits</cite> editor from a MatPlotLib plot<a class="headerlink" href="#making-a-traits-editor-from-a-matplotlib-plot" title="Permalink to this headline">¶</a></h3>
 <p>To use traits, the developer does not need to know its internals. However
@@ -820,7 +825,7 @@ This editor allows to insert a matplotlib figure in a traitsUI dialog. It
 can be modified using reactive programming, as demonstrated in section 3
 of this tutorial. However, once the dialog is up and running, you have to
 call <em>self.figure.canvas.draw()</em> to update the canvas if you made
-modifications to the figure. The matplotlib user guide <a class="footnote-reference" href="#id11" id="id8">[3]</a> details how
+modifications to the figure. The matplotlib user guide <a class="footnote-reference brackets" href="#id11" id="id8">3</a> details how
 this object can be used for plotting.</p>
 </div>
 </div>
@@ -838,12 +843,12 @@ a full-blown application can be built. This code can be found in the
 <a class="reference external" href="http://gael-varoquaux.info/computers/traits_tutorial/traits_tutorial.zip">tutorial’s zip file</a>
 (it is the file <cite>application.py</cite>).</p>
 <ul class="simple">
-<li>The camera will be built as an object. Its real attributes (exposure
+<li><p>The camera will be built as an object. Its real attributes (exposure
 time, gain…) will be represented as the object’s attributes, and
-exposed through traitsUI.</li>
-<li>The continuous acquisition/processing/user-interaction will be handled
-by appropriate threads, as discussed in section 2.3.</li>
-<li>The plotting of the results will be done through the MPLWidget object.</li>
+exposed through traitsUI.</p></li>
+<li><p>The continuous acquisition/processing/user-interaction will be handled
+by appropriate threads, as discussed in section 2.3.</p></li>
+<li><p>The plotting of the results will be done through the MPLWidget object.</p></li>
 </ul>
 <div class="section" id="the-imports">
 <h3>The imports<a class="headerlink" href="#the-imports" title="Permalink to this headline">¶</a></h3>
@@ -916,14 +921,12 @@ using its attributes as parameters for the acquisition.</p>
 <h3>Threads and flow control<a class="headerlink" href="#threads-and-flow-control" title="Permalink to this headline">¶</a></h3>
 <p>There are three threads in this application:</p>
 <ul>
-<li><p class="first">The GUI event loop, the only thread running at the start of the program.</p>
-</li>
-<li><p class="first">The acquisition thread, started through the GUI. This thread is an
+<li><p>The GUI event loop, the only thread running at the start of the program.</p></li>
+<li><p>The acquisition thread, started through the GUI. This thread is an
 infinite loop that waits for the camera to be triggered, retrieves the
 images, displays them, and spawns the processing thread for each image
-received.</p>
-</li>
-<li><p class="first">The processing thread, started by the acquisition thread. This thread is
+received.</p></li>
+<li><p>The processing thread, started by the acquisition thread. This thread is
 responsible for the numerical intensive work of the application. It
 processes the data and displays the results. It dies when it is done. One
 processing thread runs per shot acquired on the camera, but to avoid
@@ -1117,50 +1120,31 @@ deserve many thanks for both writing such great software, and being so
 helpful on the mailing lists.</p>
 <hr class="docutils" />
 <p><strong>References</strong></p>
-<table class="docutils footnote" frame="void" id="id9" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>python tutorial: <a class="reference external" href="http://docs.python.org/tut/tut.html">http://docs.python.org/tut/tut.html</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id10" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>The scipy website: <a class="reference external" href="http://www.scipy.org">http://www.scipy.org</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id11" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>The matplotlib website:
-<a class="reference external" href="http://matplotlib.sourceforge.net">http://matplotlib.sourceforge.net</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id12" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id4">[4]</a></td><td>The traits and traitsUI user guide:
-<a class="reference external" href="http://code.enthought.com/traits">http://code.enthought.com/traits</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id14" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5">[5]</a></td><td>ctypes: <a class="reference external" href="http://starship.python.net/crew/theller/ctypes/">http://starship.python.net/crew/theller/ctypes/</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id15" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id6">[6]</a></td><td>threading: <a class="reference external" href="http://docs.python.org/lib/module-threading.html">http://docs.python.org/lib/module-threading.html</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id16" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id7">[7]</a></td><td>chaco: <a class="reference external" href="http://code.enthought.com/chaco/">http://code.enthought.com/chaco/</a></td></tr>
-</tbody>
-</table>
+<dl class="footnote brackets">
+<dt class="label" id="id9"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>python tutorial: <a class="reference external" href="http://docs.python.org/tut/tut.html">http://docs.python.org/tut/tut.html</a></p>
+</dd>
+<dt class="label" id="id10"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>The scipy website: <a class="reference external" href="http://www.scipy.org">http://www.scipy.org</a></p>
+</dd>
+<dt class="label" id="id11"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dd><p>The matplotlib website:
+<a class="reference external" href="http://matplotlib.sourceforge.net">http://matplotlib.sourceforge.net</a></p>
+</dd>
+<dt class="label" id="id12"><span class="brackets"><a class="fn-backref" href="#id4">4</a></span></dt>
+<dd><p>The traits and traitsUI user guide:
+<a class="reference external" href="http://docs.enthought.com/traits">http://docs.enthought.com/traits</a></p>
+</dd>
+<dt class="label" id="id14"><span class="brackets"><a class="fn-backref" href="#id5">5</a></span></dt>
+<dd><p>ctypes: <a class="reference external" href="https://docs.python.org/3/library/ctypes.html">https://docs.python.org/3/library/ctypes.html</a></p>
+</dd>
+<dt class="label" id="id15"><span class="brackets"><a class="fn-backref" href="#id6">6</a></span></dt>
+<dd><p>threading: <a class="reference external" href="http://docs.python.org/lib/module-threading.html">http://docs.python.org/lib/module-threading.html</a></p>
+</dd>
+<dt class="label" id="id16"><span class="brackets"><a class="fn-backref" href="#id7">7</a></span></dt>
+<dd><p>chaco: <a class="reference external" href="http://docs.enthought.com/chaco/">http://docs.enthought.com/chaco/</a></p>
+</dd>
+</dl>
 </div>
 </div>
 </div>
@@ -1176,7 +1160,7 @@ helpful on the mailing lists.</p>
             </a></p>
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Writing a graphical application for scientific programming using TraitsUI 6.1</a><ul>
+<li><a class="reference internal" href="#">Writing a graphical application for scientific programming using TraitsUI 7.0</a><ul>
 <li><a class="reference internal" href="#from-objects-to-dialogs-using-traitsui">From objects to dialogs using traitsUI</a><ul>
 <li><a class="reference internal" href="#object-oriented-programming">Object-oriented programming</a><ul>
 <li><a class="reference internal" href="#objects-attributes-and-methods">Objects, attributes and methods</a></li>
@@ -1216,23 +1200,21 @@ helpful on the mailing lists.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">TraitsUI 6.1 Tutorials</a></p>
+                        title="previous chapter">TraitsUI 7.0 Tutorials</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../demos/index.html"
-                        title="next chapter">TraitsUI 6.1 Demos</a></p>
+                        title="next chapter">TraitsUI 7.0 Demos</a></p>
   <h3>This Page</h3>
   <div>
     <a href="../_sources/tutorials/traits_ui_scientific_app.rst.txt"
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -1253,13 +1235,13 @@ helpful on the mailing lists.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

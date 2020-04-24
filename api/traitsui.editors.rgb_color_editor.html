@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.editors.rgb_color_editor module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.editors.rgb_color_editor module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
     <link rel="next" title="traitsui.editors.scrubber_editor module" href="traitsui.editors.scrubber_editor.html" >
     <link rel="prev" title="traitsui.editors.range_editor module" href="traitsui.editors.range_editor.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
   
@@ -99,25 +98,22 @@ that are represented as tuples of the form ( <em>red</em>, <em>green</em>, <em>b
 where <em>red</em>, <em>green</em> and <em>blue</em> are floats in the range from 0.0 to 1.0.</p>
 <dl class="function">
 <dt id="traitsui.editors.rgb_color_editor.RGBColorEditor">
-<code class="descclassname">traitsui.editors.rgb_color_editor.</code><code class="descname">RGBColorEditor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.rgb_color_editor.RGBColorEditor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.editors.rgb_color_editor.</code><code class="sig-name descname">RGBColorEditor</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.rgb_color_editor.RGBColorEditor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an instance of the toolkit-specific editor factory declared in
 traitsui.&lt;toolkit&gt;.rgb_color_editor. If such an editor factory
 cannot be located, an instance of the abstract ToolkitEditorFactory
 declared in traitsui.editors.rgb_color_editor is returned.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>**traits</strong> (<em>*args</em><em>,</em>) – arguments and keywords to be passed on to the editor
-factory’s constructor.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**traits</strong> (<em>*args</em><em>,</em>) – arguments and keywords to be passed on to the editor
+factory’s constructor.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.editors.rgb_color_editor.ToolkitEditorFactory">
-<em class="property">class </em><code class="descclassname">traitsui.editors.rgb_color_editor.</code><code class="descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.rgb_color_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.rgb_color_editor.</code><code class="sig-name descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.rgb_color_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.editors.color_editor.html#traitsui.editors.color_editor.ToolkitEditorFactory" title="traitsui.editors.color_editor.ToolkitEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editors.color_editor.ToolkitEditorFactory</span></code></a></p>
 <p>Factory for editors for RGB colors.</p>
 </dd></dl>
@@ -145,13 +141,11 @@ factory’s constructor.</td>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -172,13 +166,13 @@ factory’s constructor.</td>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

@@ -1,0 +1,373 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.ui module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.ui_editor module" href="traitsui.ui_editor.html" >
+    <link rel="prev" title="traitsui.tree_node_renderer module" href="traitsui.tree_node_renderer.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.ui module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.ui_editor.html" title="traitsui.ui_editor module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.tree_node_renderer.html" title="traitsui.tree_node_renderer module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.ui">
+<span id="traitsui-ui-module"></span><h1>traitsui.ui module<a class="headerlink" href="#module-traitsui.ui" title="Permalink to this headline">¶</a></h1>
+<p>Defines the UI class used to represent an active traits-based user
+interface.</p>
+<dl class="class">
+<dt id="traitsui.ui.Dispatcher">
+<em class="property">class </em><code class="descclassname">traitsui.ui.</code><code class="descname">Dispatcher</code><span class="sig-paren">(</span><em>method</em>, <em>info</em>, <em>object</em>, <em>method_name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.Dispatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="traitsui.ui.Dispatcher.dispatch">
+<code class="descname">dispatch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.Dispatcher.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dispatches the method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.Dispatcher.remove">
+<code class="descname">remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.Dispatcher.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the dispatcher.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.ui.UI">
+<em class="property">class </em><code class="descclassname">traitsui.ui.</code><code class="descname">UI</code><a class="headerlink" href="#traitsui.ui.UI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<p>Information about the user interface for a View.</p>
+<dl class="method">
+<dt id="traitsui.ui.UI.add_checked">
+<code class="descname">add_checked</code><span class="sig-paren">(</span><em>checked_when</em>, <em>editor</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.add_checked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a conditionally enabled (menu) Editor object to the list of
+monitored ‘checked_when’ objects.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.add_defined">
+<code class="descname">add_defined</code><span class="sig-paren">(</span><em>method</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.add_defined" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a Handler method to the list of methods to be called once the
+user interface has been constructed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.add_enabled">
+<code class="descname">add_enabled</code><span class="sig-paren">(</span><em>enabled_when</em>, <em>editor</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.add_enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a conditionally enabled Editor object to the list of monitored
+‘enabled_when’ objects.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.add_visible">
+<code class="descname">add_visible</code><span class="sig-paren">(</span><em>visible_when</em>, <em>editor</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.add_visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a conditionally enabled Editor object to the list of monitored
+‘visible_when’ objects.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui.UI.disposable_traits">
+<code class="descname">disposable_traits</code><em class="property"> = ['view_elements', 'info', 'handler', 'context', 'view', 'history', 'key_bindings', 'icon', 'rebuild']</em><a class="headerlink" href="#traitsui.ui.UI.disposable_traits" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.dispose">
+<code class="descname">dispose</code><span class="sig-paren">(</span><em>result=None</em>, <em>abort=False</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.dispose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disposes of the contents of a user interface.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.do_undoable">
+<code class="descname">do_undoable</code><span class="sig-paren">(</span><em>action</em>, <em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.do_undoable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs an action that can be undone.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.eval_when">
+<code class="descname">eval_when</code><span class="sig-paren">(</span><em>when</em>, <em>result=True</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.eval_when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates an expression in the UI’s <strong>context</strong> and returns the
+result.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.evaluate">
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>function</em>, <em>*args</em>, <em>**kw_args</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates a specified function in the UI’s <strong>context</strong>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.find">
+<code class="descname">find</code><span class="sig-paren">(</span><em>include</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the definition of the specified Include object in the current
+user interface building context.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.finish">
+<code class="descname">finish</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finishes disposing of a user interface.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.get_editors">
+<code class="descname">get_editors</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.get_editors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of editors for the given trait name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.get_error_controls">
+<code class="descname">get_error_controls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.get_error_controls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of editor error controls contained by the user
+interface.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.get_extended_value">
+<code class="descname">get_extended_value</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.get_extended_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the current value of a specified extended trait name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.get_prefs">
+<code class="descname">get_prefs</code><span class="sig-paren">(</span><em>prefs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.get_prefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the preferences to be saved for the user interface.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.get_ui_db">
+<code class="descname">get_ui_db</code><span class="sig-paren">(</span><em>mode='r'</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.get_ui_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a reference to the Traits UI preference database.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.key_handler">
+<code class="descname">key_handler</code><span class="sig-paren">(</span><em>event</em>, <em>skip=True</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.key_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles key events.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.pop_level">
+<code class="descname">pop_level</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.pop_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restores a previously pushed search stack level.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.prepare_ui">
+<code class="descname">prepare_ui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.prepare_ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs all processing that occurs after the user interface is
+created.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.push_level">
+<code class="descname">push_level</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.push_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current search stack level.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui.UI.recyclable_traits">
+<code class="descname">recyclable_traits</code><em class="property"> = ['_context', '_revert', '_defined', '_visible', '_enabled', '_checked', '_search', '_dispatchers', '_editors', '_names', '_active_group', '_undoable', '_rebuild', '_groups_cache', '_key_bindings']</em><a class="headerlink" href="#traitsui.ui.UI.recyclable_traits" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.recycle">
+<code class="descname">recycle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.recycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recycles the user interface prior to rebuilding it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><em>destroy=True</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the contents of a user interface.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.restore_prefs">
+<code class="descname">restore_prefs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.restore_prefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves and restores any saved user preference information
+associated with the UI.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.route_event">
+<code class="descname">route_event</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.route_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routes a “hooked” event to the correct handler method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.save_prefs">
+<code class="descname">save_prefs</code><span class="sig-paren">(</span><em>prefs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.save_prefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves any user preference information associated with the UI.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.set_prefs">
+<code class="descname">set_prefs</code><span class="sig-paren">(</span><em>prefs</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.set_prefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the values of user preferences for the UI.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.sync_view">
+<code class="descname">sync_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.sync_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Synchronize context object traits with view editor traits.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.traits_init">
+<code class="descname">traits_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.traits_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the traits object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui.UI.ui">
+<code class="descname">ui</code><span class="sig-paren">(</span><em>parent</em>, <em>kind</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a user interface from the associated View template object.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.tree_node_renderer.html"
+                        title="previous chapter">traitsui.tree_node_renderer module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.ui_editor.html"
+                        title="next chapter">traitsui.ui_editor module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.ui.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

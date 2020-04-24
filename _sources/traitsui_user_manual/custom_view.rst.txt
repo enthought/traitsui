@@ -37,7 +37,7 @@ attribute. There are seven possible values of **kind**:
 *  'live'
 *  'livemodal'
 *  'nonmodal'
-*  'wizard'
+*  'wizard' (wx backend only)
 *  'panel'
 *  'subpanel'
 
@@ -109,11 +109,11 @@ pages that a user must navigate sequentially.
   from traitsui.api import Item, View, VGroup
 
   class Person(HasTraits):
-      first_name = Str
-      last_name = Str
+      first_name = Str()
+      last_name = Str()
 
-      company = Str
-      position = Str
+      company = Str()
+      position = Str()
 
       view = View(
           VGroup(
@@ -204,12 +204,12 @@ Consider the following variation on Example 3:
     from traitsui.menu import OKButton, CancelButton
 
     class SimpleEmployee(HasTraits):
-        first_name = Str
-        last_name = Str
-        department = Str
+        first_name = Str()
+        last_name = Str()
+        department = Str()
 
-        employee_number = Str
-        salary = Int
+        employee_number = Str()
+        salary = Int()
 
     view1 = View(Item(name = 'first_name'),
                  Item(name = 'last_name'),

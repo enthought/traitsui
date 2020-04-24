@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.context_value module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.context_value module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.default_dock_window_theme module" href="traitsui.default_dock_window_theme.html" >
     <link rel="prev" title="traitsui.color_column module" href="traitsui.color_column.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.context_value module</a></li>
@@ -94,24 +93,123 @@
   <div class="section" id="module-traitsui.context_value">
 <span id="traitsui-context-value-module"></span><h1>traitsui.context_value module<a class="headerlink" href="#module-traitsui.context_value" title="Permalink to this headline">¶</a></h1>
 <p>Defines some helper classes and traits used to define ‘bindable’ editor
-values.</p>
+values.  These classes and associated traits are designed to simplify
+writing editors by allowing the editor factory to specify a context value
+instance for attributes and have the value on the editor be synchronized
+with the corresponsing value rom the context.</p>
+<p>The factory should look something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyEditorFactory</span><span class="p">(</span><span class="n">EditorFactory</span><span class="p">):</span>
+
+    <span class="c1">#: The minimum value.</span>
+    <span class="n">minimum</span> <span class="o">=</span> <span class="n">CVInt</span>
+
+    <span class="c1">#: The suffix for the data.</span>
+    <span class="n">suffix</span> <span class="o">=</span> <span class="n">CVType</span><span class="p">(</span><span class="n">Str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The editor class needs to have traits which correspond to the context value
+traits, and should be able to react to changes to them:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyEditor</span><span class="p">(</span><span class="n">Editor</span><span class="p">):</span>
+
+    <span class="c1">#: The minimum value.</span>
+    <span class="n">minimum</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
+
+    <span class="c1">#: The suffix for the data.</span>
+    <span class="n">suffix</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This can then be used in views, with values either as constants or as
+instances of <a class="reference internal" href="#traitsui.context_value.ContextValue" title="traitsui.context_value.ContextValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContextValue</span></code></a> (abbreviated as <code class="docutils literal notranslate"><span class="pre">CV</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyObject</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
+
+    <span class="c1">#: An important value.</span>
+    <span class="n">my_value</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The minimum value.</span>
+    <span class="n">my_minimum</span> <span class="o">=</span> <span class="n">Int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="n">traits_view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+        <span class="n">Item</span><span class="p">(</span>
+            <span class="s1">&#39;my_value&#39;</span><span class="p">,</span>
+            <span class="n">editor</span><span class="o">=</span><span class="n">MyEditorFactory</span><span class="p">(</span>
+                <span class="n">minimum</span><span class="o">=</span><span class="n">CV</span><span class="p">(</span><span class="s1">&#39;my_minimum&#39;</span><span class="p">),</span>
+                <span class="n">suffix</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;...&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
 <dl class="attribute">
 <dt id="traitsui.context_value.CV">
-<code class="descclassname">traitsui.context_value.</code><code class="descname">CV</code><a class="headerlink" href="#traitsui.context_value.CV" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="#traitsui.context_value.ContextValue" title="traitsui.context_value.ContextValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.context_value.ContextValue</span></code></a></p>
+<code class="sig-prename descclassname">traitsui.context_value.</code><code class="sig-name descname">CV</code><a class="headerlink" href="#traitsui.context_value.CV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a shorthand name for a ContextValue:</p>
+<p>alias of <a class="reference internal" href="#traitsui.context_value.ContextValue" title="traitsui.context_value.ContextValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.context_value.ContextValue</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.context_value.CVFloat">
+<code class="sig-prename descclassname">traitsui.context_value.</code><code class="sig-name descname">CVFloat</code><em class="property"> = CVType(Float)</em><a class="headerlink" href="#traitsui.context_value.CVFloat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Float or Context value trait</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.context_value.CVInt">
+<code class="sig-prename descclassname">traitsui.context_value.</code><code class="sig-name descname">CVInt</code><em class="property"> = CVType(Int)</em><a class="headerlink" href="#traitsui.context_value.CVInt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Int or Context value trait</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.context_value.CVStr">
+<code class="sig-prename descclassname">traitsui.context_value.</code><code class="sig-name descname">CVStr</code><em class="property"> = CVType(Str)</em><a class="headerlink" href="#traitsui.context_value.CVStr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Str or Context value trait</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="traitsui.context_value.CVType">
-<code class="descclassname">traitsui.context_value.</code><code class="descname">CVType</code><span class="sig-paren">(</span><em>type</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.context_value.CVType" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-prename descclassname">traitsui.context_value.</code><code class="sig-name descname">CVType</code><span class="sig-paren">(</span><em class="sig-param">type</em>, <em class="sig-param">**metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.context_value.CVType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Factory that creates a union of a trait type and a ContextValue trait.</p>
+<p>This also sets up one-way synchronization to the editor if no
+other synchronization is specified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<em>trait type</em>) – The trait type that is expected for constant values.</p></li>
+<li><p><strong>**metadata</strong> – Additional metadata for the trait.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>cv_type_trait</strong> – A trait which can either hold a constant of the specified
+type or an instance of the ContextValue class.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>trait</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="class">
 <dt id="traitsui.context_value.ContextValue">
-<em class="property">class </em><code class="descclassname">traitsui.context_value.</code><code class="descname">ContextValue</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.context_value.ContextValue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
-<p>Defines the name of a context value that can be bound to some editor
-value.</p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.context_value.</code><code class="sig-name descname">ContextValue</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.context_value.ContextValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
+<p>Defines the name of a context value that can be bound to an editor</p>
+<p>Resolution of the name follows the same rules as for context values in
+Item objects: if there is no dot in it then it is treated as an
+attribute of the ‘object’ context value, other wise the first part
+specifies the object in the context and the rest are dotted attribute
+look-ups.</p>
+<dl class="attribute">
+<dt id="traitsui.context_value.ContextValue.name">
+<code class="sig-name descname">name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.context_value.ContextValue.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The extended trait name of the value that can be bound to the editor
+(e.g. ‘selection’ or ‘handler.selection’):</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.context_value.InstanceOfContextValue">
+<code class="sig-prename descclassname">traitsui.context_value.</code><code class="sig-name descname">InstanceOfContextValue</code><em class="property"> = Instance(ContextValue, allow_none=False)</em><a class="headerlink" href="#traitsui.context_value.InstanceOfContextValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shorthand for an Instance of ContextValue trait.</p>
 </dd></dl>
 
 </div>
@@ -137,13 +235,11 @@ value.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -164,13 +260,13 @@ value.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

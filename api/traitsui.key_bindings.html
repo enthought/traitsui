@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.key_bindings module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.key_bindings module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.list_str_adapter module" href="traitsui.list_str_adapter.html" >
     <link rel="prev" title="traitsui.item module" href="traitsui.item.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.key_bindings module</a></li>
@@ -98,50 +97,135 @@ keystroke events into method calls on controller objects that are supplied
 by the application.</p>
 <dl class="class">
 <dt id="traitsui.key_bindings.KeyBinding">
-<em class="property">class </em><code class="descclassname">traitsui.key_bindings.</code><code class="descname">KeyBinding</code><a class="headerlink" href="#traitsui.key_bindings.KeyBinding" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.key_bindings.</code><code class="sig-name descname">KeyBinding</code><a class="headerlink" href="#traitsui.key_bindings.KeyBinding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
 <p>Binds one or two keystrokes to a method.</p>
+<dl class="attribute">
+<dt id="traitsui.key_bindings.KeyBinding.binding1">
+<code class="sig-name descname">binding1</code><em class="property"> = Binding</em><a class="headerlink" href="#traitsui.key_bindings.KeyBinding.binding1" title="Permalink to this definition">¶</a></dt>
+<dd><p>First key binding</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.key_bindings.KeyBinding.binding2">
+<code class="sig-name descname">binding2</code><em class="property"> = Binding</em><a class="headerlink" href="#traitsui.key_bindings.KeyBinding.binding2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Second key binding</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.key_bindings.KeyBinding.description">
+<code class="sig-name descname">description</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.key_bindings.KeyBinding.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description of what application function the method performs</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.key_bindings.KeyBinding.method_name">
+<code class="sig-name descname">method_name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.key_bindings.KeyBinding.method_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of controller method the key is bound to</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.key_bindings.KeyBinding.owner">
+<code class="sig-name descname">owner</code><em class="property"> = Instance(&quot;KeyBindings&quot;)</em><a class="headerlink" href="#traitsui.key_bindings.KeyBinding.owner" title="Permalink to this definition">¶</a></dt>
+<dd><p>KeyBindings object that “owns” the KeyBinding</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.key_bindings.KeyBindings">
-<em class="property">class </em><code class="descclassname">traitsui.key_bindings.</code><code class="descname">KeyBindings</code><span class="sig-paren">(</span><em>*bindings</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.key_bindings.</code><code class="sig-name descname">KeyBindings</code><span class="sig-paren">(</span><em class="sig-param">*bindings</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>A set of key bindings.</p>
+<dl class="attribute">
+<dt id="traitsui.key_bindings.KeyBindings.binding_modified">
+<code class="sig-name descname">binding_modified</code><em class="property"> = Event(KeyBinding)</em><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.binding_modified" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event fired when one of the contained KeyBinding objects is changed</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.key_bindings.KeyBindings.bindings">
+<code class="sig-name descname">bindings</code><em class="property"> = List(KeyBinding)</em><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.bindings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set of defined key bindings (redefined dynamically)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.key_bindings.KeyBindings.children">
+<code class="sig-name descname">children</code><em class="property"> = List(transient=True)</em><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.children" title="Permalink to this definition">¶</a></dt>
+<dd><p>The child KeyBindings of this object (if any):</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.key_bindings.KeyBindings.clone">
-<code class="descname">clone</code><span class="sig-paren">(</span><em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.clone" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">clone</code><span class="sig-paren">(</span><em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.clone" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a clone of the KeyBindings object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.key_bindings.KeyBindings.controllers">
+<code class="sig-name descname">controllers</code><em class="property"> = List(transient=True)</em><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.controllers" title="Permalink to this definition">¶</a></dt>
+<dd><p>The (optional) list of controllers associated with this KeyBindings
+object. The controllers may also be provided with the ‘do’ method:</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.key_bindings.KeyBindings.dispose">
-<code class="descname">dispose</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.dispose" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dispose</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.dispose" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dispose of the object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.key_bindings.KeyBindings.do">
-<code class="descname">do</code><span class="sig-paren">(</span><em>event</em>, <em>controllers=[]</em>, <em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.do" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">do</code><span class="sig-paren">(</span><em class="sig-param">event</em>, <em class="sig-param">controllers=[]</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.do" title="Permalink to this definition">¶</a></dt>
 <dd><p>Processes a keyboard event.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.key_bindings.KeyBindings.edit">
-<code class="descname">edit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.edit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">edit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.edit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edits a possibly hierarchical set of KeyBindings.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.key_bindings.KeyBindings.focus_owner">
+<code class="sig-name descname">focus_owner</code><em class="property"> = Any(transient=True)</em><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.focus_owner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control that currently has the focus (if any)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.key_bindings.KeyBindings.key_binding_for">
-<code class="descname">key_binding_for</code><span class="sig-paren">(</span><em>binding</em>, <em>key_name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.key_binding_for" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">key_binding_for</code><span class="sig-paren">(</span><em class="sig-param">binding</em>, <em class="sig-param">key_name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.key_binding_for" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the current binding for a specified key (if any).</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.key_bindings.KeyBindings.merge">
-<code class="descname">merge</code><span class="sig-paren">(</span><em>key_bindings</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.merge" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">merge</code><span class="sig-paren">(</span><em class="sig-param">key_bindings</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.merge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merges another set of key bindings into this set.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.key_bindings.KeyBindings.parent">
+<code class="sig-name descname">parent</code><em class="property"> = Instance(&quot;KeyBindings&quot;, transient=True)</em><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ‘parent’ KeyBindings object of this one (if any):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.key_bindings.KeyBindings.prefix">
+<code class="sig-name descname">prefix</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional prefix to add to each method name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.key_bindings.KeyBindings.root">
+<code class="sig-name descname">root</code><em class="property"> = Property(depends_on=&quot;parent&quot;)</em><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.root" title="Permalink to this definition">¶</a></dt>
+<dd><p>The root of the KeyBindings tree this object is part of:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.key_bindings.KeyBindings.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.suffix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional suffix to add to each method name</p>
 </dd></dl>
 
 </dd></dl>
@@ -169,13 +253,11 @@ by the application.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -196,13 +278,13 @@ by the application.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

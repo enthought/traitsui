@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.extras.has_dynamic_views module &mdash; TraitsUI 7 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '7.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.extras package" href="traitsui.extras.html" >
+    <link rel="next" title="traitsui.extras.progress_column module" href="traitsui.extras.progress_column.html" >
+    <link rel="prev" title="traitsui.extras.edit_column module" href="traitsui.extras.edit_column.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.extras.html" accesskey="U">traitsui.extras package</a></li>
+  
+    <li><a href="#">traitsui.extras.has_dynamic_views module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.extras.progress_column.html" title="traitsui.extras.progress_column module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.extras.edit_column.html" title="traitsui.extras.edit_column module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.extras.has_dynamic_views">
+<span id="traitsui-extras-has-dynamic-views-module"></span><h1>traitsui.extras.has_dynamic_views module<a class="headerlink" href="#module-traitsui.extras.has_dynamic_views" title="Permalink to this headline">¶</a></h1>
+<p>Provides a framework that assembles Traits UI Views at run time,
+when the view is requested, rather than at the time a class is written.</p>
+<p>This capability is particularly useful when the object being ‘viewed’ with a
+Traits UI is part of a plug-in application – such as Envisage.  In general,
+this capability allows:</p>
+<ul class="simple">
+<li><p>The GUI for an object can be extendable by contributions
+other than from the original code writer.</p></li>
+<li><p>The view can be dynamic in that the elements it is composed
+of can change each time it is requested.</p></li>
+<li><p>Registration of a handler can be associated with the view contributions.</p></li>
+</ul>
+<p>Either the original object writer, or a contributor, can use this framework to
+declare one or more dynamic views that are composed of sub-elements that only
+need to exist at the time the view is requested.</p>
+<p>Users of this framework create a dynamic view by registering a DynamicView
+declaration.  That declaration includes a name that forms the basis for the
+metadata attributes that are used to identify and order the desired view
+sub-elements into the view’s composition.  In addition, the declaration
+includes any data to be passed into the constructor of the dynamic view and
+the id that should be used to persist the user’s customization of the view.</p>
+<p>Additionally, this framework allows sub-elements themselves to also be
+dynamically composed of further sub-elements.</p>
+<p>For example, a dynamic view could be composed of two sub-elements:</p>
+<ol class="arabic simple">
+<li><p>The first is a dynamically composed HFlow, which represents a toolbar
+that can be extended through contributions of toolbar buttons.</p></li>
+<li><p>The second could be a dynamic tabset where each page is also a
+contribution.</p></li>
+</ol>
+<p>Programmers include dynamic sub-elements within their dynamic views by
+contributing a DynamicViewSubElement into that view.  When the framework comes
+across this contribution while building the view, it replaces that
+DynamicViewSubElement with a fully initialized Traits ViewSubElement composed
+in a manner similar to how the elements of the View itself were composed.</p>
+<p>Each contribution to a dynamic view or sub-element must be an instance of a
+Traits ViewSubElement and must have associated metadata like the following for
+each dynamic view or sub-element it will display in:</p>
+<dl class="simple">
+<dt>_&lt;dynamic name&gt;_order<span class="classifier">A float value.</span></dt><dd><p>The framework uses only ViewSubElements with this metadata
+instantiated when building the dynamic view or sub-element with
+the specified name.  The elements are sorted by ascending
+order of this value using the standard list sort function.</p>
+</dd>
+<dt>_&lt;dynamic name&gt;_priority<span class="classifier">A float value.</span></dt><dd><p>The framework resolves any overloading of an order value by
+picking the first element encountered that has the highest
+priority value. The other elements with the same view order are
+not displayed at all.</p>
+</dd>
+</dl>
+<p>In addition, dynamic view contributions can also provide a ‘handler’, which
+behaves like a normal Traits Handler.  That is, it can contain methods that
+are called when model values change and can access  the Traits UIInfo
+object representing the actual UI instances.  To provide a handler, append the
+following metadata to your view sub-element:</p>
+<dl class="simple">
+<dt>_&lt;dynamic_name&gt;_handler<span class="classifier">A HasTraits instance.</span></dt><dd><p>The framework will connect listeners to call the handler methods as
+part of the handler for the dynamic view.</p>
+</dd>
+</dl>
+<dl class="class">
+<dt id="traitsui.extras.has_dynamic_views.DynamicView">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.extras.has_dynamic_views.</code><code class="sig-name descname">DynamicView</code><a class="headerlink" href="#traitsui.extras.has_dynamic_views.DynamicView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
+<p>Declares a dynamic view.</p>
+<dl class="attribute">
+<dt id="traitsui.extras.has_dynamic_views.DynamicView.id">
+<code class="sig-name descname">id</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.extras.has_dynamic_views.DynamicView.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ID of the view.  This is the ID that the view’s preferences will be
+saved under.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.has_dynamic_views.DynamicView.keywords">
+<code class="sig-name descname">keywords</code><em class="property"> = Dict()</em><a class="headerlink" href="#traitsui.extras.has_dynamic_views.DynamicView.keywords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keyword arguments passed in during construction of the actual view
+instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.has_dynamic_views.DynamicView.name">
+<code class="sig-name descname">name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.extras.has_dynamic_views.DynamicView.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the view.  This is the name that should be requested when
+calling edit_traits() or configure_traits().</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.has_dynamic_views.DynamicView.use_as_default">
+<code class="sig-name descname">use_as_default</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.extras.has_dynamic_views.DynamicView.use_as_default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates whether this view should be the default traits view for objects
+it is contributed to.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.extras.has_dynamic_views.DynamicViewSubElement">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.extras.has_dynamic_views.</code><code class="sig-name descname">DynamicViewSubElement</code><a class="headerlink" href="#traitsui.extras.has_dynamic_views.DynamicViewSubElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.view_element.html#traitsui.view_element.ViewSubElement" title="traitsui.view_element.ViewSubElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewSubElement</span></code></a></p>
+<p>Declares a dynamic sub-element of a dynamic view.</p>
+<dl class="attribute">
+<dt id="traitsui.extras.has_dynamic_views.DynamicViewSubElement.keywords">
+<code class="sig-name descname">keywords</code><em class="property"> = Dict()</em><a class="headerlink" href="#traitsui.extras.has_dynamic_views.DynamicViewSubElement.keywords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keyword arguments passed in during construction of the actual
+ViewSubElement instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.has_dynamic_views.DynamicViewSubElement.klass">
+<code class="sig-name descname">klass</code><em class="property"> = Any()</em><a class="headerlink" href="#traitsui.extras.has_dynamic_views.DynamicViewSubElement.klass" title="Permalink to this definition">¶</a></dt>
+<dd><p>The class of the actual ViewSubElement we are dynamically creating.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.has_dynamic_views.DynamicViewSubElement.name">
+<code class="sig-name descname">name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.extras.has_dynamic_views.DynamicViewSubElement.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of this dynamic sub-element.  This controls the metadata
+names identifying the sub-elements that compose this element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.extras.has_dynamic_views.HasDynamicViews">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.extras.has_dynamic_views.</code><code class="sig-name descname">HasDynamicViews</code><a class="headerlink" href="#traitsui.extras.has_dynamic_views.HasDynamicViews" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
+<p>Provides of a framework that builds Traits UI Views at run time,
+when the view is requested, rather than at the time a class is written.</p>
+<dl class="method">
+<dt id="traitsui.extras.has_dynamic_views.HasDynamicViews.declare_dynamic_view">
+<code class="sig-name descname">declare_dynamic_view</code><span class="sig-paren">(</span><em class="sig-param">declaration</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.has_dynamic_views.HasDynamicViews.declare_dynamic_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience method to add a new dynamic view declaration to this
+instance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.has_dynamic_views.HasDynamicViews.trait_view">
+<code class="sig-name descname">trait_view</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">view_element=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.has_dynamic_views.HasDynamicViews.trait_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets or sets a ViewElement associated with an object’s class.</p>
+<p>Extended here to build dynamic views and sub-elements.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.extras.edit_column.html"
+                        title="previous chapter">traitsui.extras.edit_column module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.extras.progress_column.html"
+                        title="next chapter">traitsui.extras.progress_column module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.extras.has_dynamic_views.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on Apr 24, 2020.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

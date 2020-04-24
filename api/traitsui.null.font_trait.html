@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.null.font_trait module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.null.font_trait module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui.null package" href="traitsui.null.html" >
     <link rel="next" title="traitsui.null.rgb_color_trait module" href="traitsui.null.rgb_color_trait.html" >
     <link rel="prev" title="traitsui.null.color_trait module" href="traitsui.null.color_trait.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.null.html" accesskey="U">traitsui.null package</a></li>
   
@@ -97,14 +96,14 @@
 <p>Trait definition for a null-based (i.e., no UI) font.</p>
 <dl class="class">
 <dt id="traitsui.null.font_trait.TraitFont">
-<em class="property">class </em><code class="descclassname">traitsui.null.font_trait.</code><code class="descname">TraitFont</code><a class="headerlink" href="#traitsui.null.font_trait.TraitFont" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/trait_handlers.html#traits.trait_handlers.TraitHandler" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_handlers.TraitHandler</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.null.font_trait.</code><code class="sig-name descname">TraitFont</code><a class="headerlink" href="#traitsui.null.font_trait.TraitFont" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/trait_handler.html#traits.trait_handler.TraitHandler" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_handler.TraitHandler</span></code></a></p>
 <p>Ensures that values assigned to a trait attribute are valid font
 descriptor strings; the value actually assigned is the corresponding
 canonical font descriptor string.</p>
 <dl class="method">
 <dt id="traitsui.null.font_trait.TraitFont.info">
-<code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.null.font_trait.TraitFont.info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.null.font_trait.TraitFont.info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Must return a string describing the type of value accepted by the
 trait handler.</p>
 <p>The string should be a phrase describing the type defined by the
@@ -116,16 +115,13 @@ sense to the user if the result is a phrase. The info() method is
 similar in purpose and use to the <strong>info</strong> attribute of a validator
 function.</p>
 <p>Note that the result can include information specific to the particular
-trait handler instance. For example, TraitRange instances return a
-string indicating the range of values acceptable to the handler (e.g.,
-“an integer in the range from 1 to 9”). If the info() method is not
-overridden, the default method returns the value of the ‘info_text’
-attribute.</p>
+trait handler instance. If the info() method is not overridden, the
+default method returns the value of the ‘info_text’ attribute.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.null.font_trait.TraitFont.validate">
-<code class="descname">validate</code><span class="sig-paren">(</span><em>object</em>, <em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.null.font_trait.TraitFont.validate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.null.font_trait.TraitFont.validate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validates that the value is a valid font descriptor string.</p>
 </dd></dl>
 
@@ -133,7 +129,7 @@ attribute.</p>
 
 <dl class="function">
 <dt id="traitsui.null.font_trait.get_font_editor">
-<code class="descclassname">traitsui.null.font_trait.</code><code class="descname">get_font_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.null.font_trait.get_font_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.null.font_trait.</code><code class="sig-name descname">get_font_editor</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.null.font_trait.get_font_editor" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -159,13 +155,11 @@ attribute.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -186,13 +180,13 @@ attribute.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

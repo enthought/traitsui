@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.view_elements module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.view_elements module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,9 +29,9 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
-    <link rel="next" title="TraitsUI 6.1 Tutorials" href="../tutorials/index.html" >
+    <link rel="next" title="TraitsUI 7.0 Tutorials" href="../tutorials/index.html" >
     <link rel="prev" title="traitsui.view_element module" href="traitsui.view_element.html" > 
   </head>
   <body>
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.view_elements module</a></li>
@@ -71,7 +70,7 @@
            >modules</a>
       </li>
       <li class="active">
-        <a href="../tutorials/index.html" title="TraitsUI 6.1 Tutorials"
+        <a href="../tutorials/index.html" title="TraitsUI 7.0 Tutorials"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -101,25 +100,43 @@ class. The ViewElements object is also linked to the ViewElements objects
 of its associated class’s parent classes.</p>
 <dl class="class">
 <dt id="traitsui.view_elements.SearchStackItem">
-<em class="property">class </em><code class="descclassname">traitsui.view_elements.</code><code class="descname">SearchStackItem</code><a class="headerlink" href="#traitsui.view_elements.SearchStackItem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.view_elements.</code><code class="sig-name descname">SearchStackItem</code><a class="headerlink" href="#traitsui.view_elements.SearchStackItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
+<dl class="attribute">
+<dt id="traitsui.view_elements.SearchStackItem.context">
+<code class="sig-name descname">context</code><em class="property"> = Int()</em><a class="headerlink" href="#traitsui.view_elements.SearchStackItem.context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index into the ‘mro’ list of ViewElements that the ID was found in</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.view_elements.SearchStackItem.id">
+<code class="sig-name descname">id</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.view_elements.SearchStackItem.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name that was looked up</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.view_elements.ViewElements">
-<em class="property">class </em><code class="descclassname">traitsui.view_elements.</code><code class="descname">ViewElements</code><a class="headerlink" href="#traitsui.view_elements.ViewElements" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.view_elements.</code><code class="sig-name descname">ViewElements</code><a class="headerlink" href="#traitsui.view_elements.ViewElements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
 <p>Defines a hierarchical name space of related ViewElement objects.</p>
+<dl class="attribute">
+<dt id="traitsui.view_elements.ViewElements.content">
+<code class="sig-name descname">content</code><em class="property"> = content_trait</em><a class="headerlink" href="#traitsui.view_elements.ViewElements.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary containing the named ViewElement items</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.view_elements.ViewElements.filter_by">
-<code class="descname">filter_by</code><span class="sig-paren">(</span><em>klass=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view_elements.ViewElements.filter_by" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">filter_by</code><span class="sig-paren">(</span><em class="sig-param">klass=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view_elements.ViewElements.filter_by" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a sorted list of all names accessible from the ViewElements
 object that are of a specified (ViewElement) type.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.view_elements.ViewElements.find">
-<code class="descname">find</code><span class="sig-paren">(</span><em>name</em>, <em>stack=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view_elements.ViewElements.find" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">find</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">stack=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view_elements.ViewElements.find" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds a specified ViewElement within the specified (optional) search
 context.</p>
 </dd></dl>
@@ -142,20 +159,18 @@ context.</p>
                         title="previous chapter">traitsui.view_element module</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../tutorials/index.html"
-                        title="next chapter">TraitsUI 6.1 Tutorials</a></p>
+                        title="next chapter">TraitsUI 7.0 Tutorials</a></p>
   <h3>This Page</h3>
   <div>
     <a href="../_sources/api/traitsui.view_elements.rst.txt"
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -176,13 +191,13 @@ context.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

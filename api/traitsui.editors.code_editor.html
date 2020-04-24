@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.editors.code_editor module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.editors.code_editor module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
     <link rel="next" title="traitsui.editors.color_editor module" href="traitsui.editors.color_editor.html" >
     <link rel="prev" title="traitsui.editors.check_list_editor module" href="traitsui.editors.check_list_editor.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
   
@@ -98,15 +97,151 @@
 useful for tools such as debuggers.</p>
 <dl class="attribute">
 <dt id="traitsui.editors.code_editor.CodeEditor">
-<code class="descclassname">traitsui.editors.code_editor.</code><code class="descname">CodeEditor</code><a class="headerlink" href="#traitsui.editors.code_editor.CodeEditor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.editors.code_editor.</code><code class="sig-name descname">CodeEditor</code><a class="headerlink" href="#traitsui.editors.code_editor.CodeEditor" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <a class="reference internal" href="#traitsui.editors.code_editor.ToolkitEditorFactory" title="traitsui.editors.code_editor.ToolkitEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editors.code_editor.ToolkitEditorFactory</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.editors.code_editor.ToolkitEditorFactory">
-<em class="property">class </em><code class="descclassname">traitsui.editors.code_editor.</code><code class="descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.code_editor.</code><code class="sig-name descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory" title="traitsui.editor_factory.EditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editor_factory.EditorFactory</span></code></a></p>
 <p>Editor factory for code editors.</p>
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.auto_scroll">
+<code class="sig-name descname">auto_scroll</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.auto_scroll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the editor auto-scroll when a new <strong>selected_line</strong> value is set?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.auto_set">
+<code class="sig-name descname">auto_set</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.auto_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is user input set on every change?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.calltip_clicked">
+<code class="sig-name descname">calltip_clicked</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.calltip_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calltip clicked event</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.column">
+<code class="sig-name descname">column</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current column</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.dim_color">
+<code class="sig-name descname">dim_color</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.dim_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object trait to dim lines to. Can be of form #rrggbb or a color spec. If
+not specified, dark grey is used.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.dim_lines">
+<code class="sig-name descname">dim_lines</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.dim_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object trait containing the list of line numbers to dim (optional)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.foldable">
+<code class="sig-name descname">foldable</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.foldable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should code folding be enabled?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.key_bindings">
+<code class="sig-name descname">key_bindings</code><em class="property"> = Instance(&quot;traitsui.key_bindings.KeyBindings&quot;)</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.key_bindings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional key bindings associated with the editor</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.lexer">
+<code class="sig-name descname">lexer</code><em class="property"> = Str(&quot;python&quot;)</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.lexer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The lexer to use. Default is ‘python’; ‘null’ indicates no lexing.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.line">
+<code class="sig-name descname">line</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current line</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.mark_color">
+<code class="sig-name descname">mark_color</code><em class="property"> = Color(0xECE9D8)</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.mark_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Background color for marking lines</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.mark_lines">
+<code class="sig-name descname">mark_lines</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.mark_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object trait containing list of line numbers to mark (optional)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.search">
+<code class="sig-name descname">search</code><em class="property"> = Enum(&quot;top&quot;, &quot;bottom&quot;, &quot;none&quot;)</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Where should the search toolbar be placed?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.search_color">
+<code class="sig-name descname">search_color</code><em class="property"> = Color(0xFFFF94)</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.search_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Background color for lines that match the current search</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.selected_color">
+<code class="sig-name descname">selected_color</code><em class="property"> = Color(0xA4FFFF)</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.selected_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Background color for selected lines</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.selected_end_pos">
+<code class="sig-name descname">selected_end_pos</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.selected_end_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object trait containing the currently selected text end position
+(optional)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.selected_line">
+<code class="sig-name descname">selected_line</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.selected_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object trait containing the currently selected line (optional)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.selected_start_pos">
+<code class="sig-name descname">selected_start_pos</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.selected_start_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object trait containing the currently selected text start position
+(optional)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.selected_text">
+<code class="sig-name descname">selected_text</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.selected_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object trait containing the currently selected text (optional)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.show_line_numbers">
+<code class="sig-name descname">show_line_numbers</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.show_line_numbers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should line numbers be displayed in the margin?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.squiggle_color">
+<code class="sig-name descname">squiggle_color</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.squiggle_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object trait for the color of squiggles. If not specified, red is used.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.code_editor.ToolkitEditorFactory.squiggle_lines">
+<code class="sig-name descname">squiggle_lines</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.code_editor.ToolkitEditorFactory.squiggle_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object trait containing the list of line numbers to put squiggles under
+(optional)</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -132,13 +267,11 @@ useful for tools such as debuggers.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -159,13 +292,13 @@ useful for tools such as debuggers.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>
