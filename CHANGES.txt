@@ -4,7 +4,7 @@ Traits UI Changelog
 Release 7.0.0
 -------------
 
-Traits 7.0.0 is a major release which focuses on modernization of the
+TraitsUI 7.0.0 is a major release which focuses on modernization of the
 codebase.  This release includes updating the WxPython backend to support
 WxPython 4, an effort led by Rob McMullen's first cut at support, with
 help from a number of other people, particularly Per Brodtkorb.  It also
