@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.editor_factory module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.editor_factory module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.editors_gen module" href="traitsui.editors_gen.html" >
     <link rel="prev" title="traitsui.editor module" href="traitsui.editor.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.editor_factory module</a></li>
@@ -97,45 +96,94 @@
 creating the Editor objects used in a Traits-based user interface.</p>
 <dl class="class">
 <dt id="traitsui.editor_factory.EditorFactory">
-<em class="property">class </em><code class="descclassname">traitsui.editor_factory.</code><code class="descname">EditorFactory</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editor_factory.</code><code class="sig-name descname">EditorFactory</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Represents a factory for creating the Editor objects in a Traits-based
 user interface.</p>
 <dl class="method">
 <dt id="traitsui.editor_factory.EditorFactory.custom_editor">
-<code class="descname">custom_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.custom_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">custom_editor</code><span class="sig-paren">(</span><em class="sig-param">ui</em>, <em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.custom_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an editor using the “custom” style.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor_factory.EditorFactory.custom_editor_class">
+<code class="sig-name descname">custom_editor_class</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.custom_editor_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>The editor class to use for ‘custom’ style views.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor_factory.EditorFactory.enabled">
+<code class="sig-name descname">enabled</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Are created editors initially enabled?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor_factory.EditorFactory.format_func">
+<code class="sig-name descname">format_func</code><em class="property"> = Callable()</em><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.format_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to use for string formatting</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor_factory.EditorFactory.format_str">
+<code class="sig-name descname">format_str</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.format_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format string to use for formatting (used if <strong>format_func</strong> is not set).</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor_factory.EditorFactory.init">
-<code class="descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.init" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.init" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs any initialization needed after all constructor traits
 have been set.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="traitsui.editor_factory.EditorFactory.invalid">
+<code class="sig-name descname">invalid</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.invalid" title="Permalink to this definition">¶</a></dt>
+<dd><p>The extended trait name of the trait containing editor invalid state
+status:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor_factory.EditorFactory.is_grid_cell">
+<code class="sig-name descname">is_grid_cell</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.is_grid_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the editor being used to create table grid cells?</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.editor_factory.EditorFactory.named_value">
-<code class="descname">named_value</code><span class="sig-paren">(</span><em>name</em>, <em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.named_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">named_value</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.named_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of a specified extended name of the form: name or
 context_object_name.name[.name…]:</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor_factory.EditorFactory.readonly_editor">
-<code class="descname">readonly_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.readonly_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">readonly_editor</code><span class="sig-paren">(</span><em class="sig-param">ui</em>, <em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.readonly_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an “editor” that is read-only.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor_factory.EditorFactory.readonly_editor_class">
+<code class="sig-name descname">readonly_editor_class</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.readonly_editor_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>The editor class to use for ‘readonly’ style views.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor_factory.EditorFactory.simple_editor">
-<code class="descname">simple_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.simple_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">simple_editor</code><span class="sig-paren">(</span><em class="sig-param">ui</em>, <em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.simple_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an editor using the “simple” style.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor_factory.EditorFactory.simple_editor_class">
+<code class="sig-name descname">simple_editor_class</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.simple_editor_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>The editor class to use for ‘simple’ style views.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor_factory.EditorFactory.string_value">
-<code class="descname">string_value</code><span class="sig-paren">(</span><em>value</em>, <em>format_func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.string_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">string_value</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">format_func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.string_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the text representation of a specified object trait value.</p>
 <p>If the <strong>format_func</strong> attribute is set on the editor factory, then
 this method calls that function to do the formatting.  If the
@@ -144,19 +192,58 @@ method uses that string for formatting. If neither attribute is
 set, then this method just calls the appropriate text type to format.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="traitsui.editor_factory.EditorFactory.text_alignment">
+<code class="sig-name descname">text_alignment</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.text_alignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text aligment to use in most readonly editors
+Possible values: left, right, top, bottom, just, vcenter, hcenter, center
+Example: left,vcenter</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.editor_factory.EditorFactory.text_editor">
-<code class="descname">text_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.text_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">text_editor</code><span class="sig-paren">(</span><em class="sig-param">ui</em>, <em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.text_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an editor using the “text” style.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor_factory.EditorFactory.text_editor_class">
+<code class="sig-name descname">text_editor_class</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.text_editor_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>The editor class to use for ‘text’ style views.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.editor_factory.EditorWithListFactory">
-<em class="property">class </em><code class="descclassname">traitsui.editor_factory.</code><code class="descname">EditorWithListFactory</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorWithListFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editor_factory.</code><code class="sig-name descname">EditorWithListFactory</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorWithListFactory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.editor_factory.EditorFactory" title="traitsui.editor_factory.EditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editor_factory.EditorFactory</span></code></a></p>
 <p>Base class for factories of editors for objects that contain lists.</p>
+<dl class="attribute">
+<dt id="traitsui.editor_factory.EditorWithListFactory.name">
+<code class="sig-name descname">name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editor_factory.EditorWithListFactory.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the trait on ‘object’ containing the enumeration data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor_factory.EditorWithListFactory.object">
+<code class="sig-name descname">object</code><em class="property"> = Str(&quot;object&quot;)</em><a class="headerlink" href="#traitsui.editor_factory.EditorWithListFactory.object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extended name of the trait on <strong>object</strong> containing the enumeration data:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor_factory.EditorWithListFactory.values">
+<code class="sig-name descname">values</code><em class="property"> = Any()</em><a class="headerlink" href="#traitsui.editor_factory.EditorWithListFactory.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Values to enumerate (can be a list, tuple, dict, or a CTrait or
+TraitHandler that is “mapped”):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor_factory.EditorWithListFactory.values_modified">
+<code class="sig-name descname">values_modified</code><em class="property"> = Event()</em><a class="headerlink" href="#traitsui.editor_factory.EditorWithListFactory.values_modified" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fired when the <strong>values</strong> trait has been updated:</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -182,13 +269,11 @@ set, then this method just calls the appropriate text type to format.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -209,13 +294,13 @@ set, then this method just calls the appropriate text type to format.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

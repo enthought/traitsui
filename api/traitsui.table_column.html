@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.table_column module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.table_column module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.table_filter module" href="traitsui.table_filter.html" >
     <link rel="prev" title="traitsui.mimedata module" href="traitsui.mimedata.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.table_column module</a></li>
@@ -97,43 +96,68 @@
 classes for numeric and table editors.</p>
 <dl class="class">
 <dt id="traitsui.table_column.ExpressionColumn">
-<em class="property">class </em><code class="descclassname">traitsui.table_column.</code><code class="descname">ExpressionColumn</code><a class="headerlink" href="#traitsui.table_column.ExpressionColumn" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.table_column.</code><code class="sig-name descname">ExpressionColumn</code><a class="headerlink" href="#traitsui.table_column.ExpressionColumn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.table_column.ObjectColumn" title="traitsui.table_column.ObjectColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_column.ObjectColumn</span></code></a></p>
 <p>A column for displaying computed values.</p>
+<dl class="attribute">
+<dt id="traitsui.table_column.ExpressionColumn.editable">
+<code class="sig-name descname">editable</code><em class="property"> = Constant(False)</em><a class="headerlink" href="#traitsui.table_column.ExpressionColumn.editable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this column editable?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.ExpressionColumn.expression">
+<code class="sig-name descname">expression</code><em class="property"> = Expression</em><a class="headerlink" href="#traitsui.table_column.ExpressionColumn.expression" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Python expression used to return the value of the column:</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.table_column.ExpressionColumn.get_raw_value">
-<code class="descname">get_raw_value</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ExpressionColumn.get_raw_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_raw_value</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ExpressionColumn.get_raw_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the unformatted value of the column for a specified object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.ExpressionColumn.globals">
+<code class="sig-name descname">globals</code><em class="property"> = Any({})</em><a class="headerlink" href="#traitsui.table_column.ExpressionColumn.globals" title="Permalink to this definition">¶</a></dt>
+<dd><p>The globals dictionary that should be passed to the expression
+evaluation:</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.table_column.ListColumn">
-<em class="property">class </em><code class="descclassname">traitsui.table_column.</code><code class="descname">ListColumn</code><a class="headerlink" href="#traitsui.table_column.ListColumn" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.table_column.</code><code class="sig-name descname">ListColumn</code><a class="headerlink" href="#traitsui.table_column.ListColumn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.table_column.TableColumn" title="traitsui.table_column.TableColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_column.TableColumn</span></code></a></p>
 <p>A column for editing lists.</p>
 <dl class="method">
 <dt id="traitsui.table_column.ListColumn.get_editor">
-<code class="descname">get_editor</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ListColumn.get_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_editor</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ListColumn.get_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the editor for the column of a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.ListColumn.get_value">
-<code class="descname">get_value</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ListColumn.get_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ListColumn.get_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the value of the column for a specified object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.ListColumn.index">
+<code class="sig-name descname">index</code><em class="property"> = Int()</em><a class="headerlink" href="#traitsui.table_column.ListColumn.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index of the list element associated with this column</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.ListColumn.key">
-<code class="descname">key</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ListColumn.key" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">key</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ListColumn.key" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value to use for sorting.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.ListColumn.set_value">
-<code class="descname">set_value</code><span class="sig-paren">(</span><em>object</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ListColumn.set_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_value</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ListColumn.set_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the column for a specified object.</p>
 </dd></dl>
 
@@ -141,89 +165,126 @@ classes for numeric and table editors.</p>
 
 <dl class="class">
 <dt id="traitsui.table_column.NumericColumn">
-<em class="property">class </em><code class="descclassname">traitsui.table_column.</code><code class="descname">NumericColumn</code><a class="headerlink" href="#traitsui.table_column.NumericColumn" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.table_column.</code><code class="sig-name descname">NumericColumn</code><a class="headerlink" href="#traitsui.table_column.NumericColumn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.table_column.ObjectColumn" title="traitsui.table_column.ObjectColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_column.ObjectColumn</span></code></a></p>
 <p>A column for editing Numeric arrays.</p>
+<dl class="attribute">
+<dt id="traitsui.table_column.NumericColumn.format">
+<code class="sig-name descname">format</code><em class="property"> = Str(&quot;%s&quot;)</em><a class="headerlink" href="#traitsui.table_column.NumericColumn.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Formatting string for the cell value</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.table_column.NumericColumn.get_cell_color">
-<code class="descname">get_cell_color</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_cell_color" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_cell_color</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_cell_color" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the cell background color for the column for a specified
 object row.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.NumericColumn.get_data_column">
-<code class="descname">get_data_column</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_data_column" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_data_column</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_data_column" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the entire contents of the specified object column.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.NumericColumn.get_editor">
-<code class="descname">get_editor</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_editor</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the editor for the column of a specified object row.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.NumericColumn.get_horizontal_alignment">
-<code class="descname">get_horizontal_alignment</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_horizontal_alignment" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_horizontal_alignment</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_horizontal_alignment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the horizontal alignment for the column for a specified
 object row.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.NumericColumn.get_menu">
-<code class="descname">get_menu</code><span class="sig-paren">(</span><em>object</em>, <em>row</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_menu" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_menu</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">row</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_menu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the context menu to display when the user right-clicks on
 the column for a specified object row.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.NumericColumn.get_text_color">
-<code class="descname">get_text_color</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_text_color" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_text_color</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_text_color" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the text color for the column for a specified object row.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.NumericColumn.get_text_font">
-<code class="descname">get_text_font</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_text_font" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_text_font</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_text_font" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the text font for the column for a specified object row.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.NumericColumn.get_type">
-<code class="descname">get_type</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_type" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the type of data for the column for a specified object row.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.NumericColumn.get_value">
-<code class="descname">get_value</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the value of the column for a specified object row.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.NumericColumn.get_vertical_alignment">
-<code class="descname">get_vertical_alignment</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_vertical_alignment" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_vertical_alignment</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.get_vertical_alignment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the vertical alignment for the column for a specified
 object row.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="traitsui.table_column.NumericColumn.horizontal_alignment">
+<code class="sig-name descname">horizontal_alignment</code><em class="property"> = &quot;center&quot;</em><a class="headerlink" href="#traitsui.table_column.NumericColumn.horizontal_alignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Horizontal alignment of text in the column; this value overrides the
+default.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.table_column.NumericColumn.is_droppable">
-<code class="descname">is_droppable</code><span class="sig-paren">(</span><em>object</em>, <em>row</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.is_droppable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_droppable</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">row</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.is_droppable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether a specified value is valid for dropping on the
 column for a specified object row.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.NumericColumn.is_editable">
-<code class="descname">is_editable</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.is_editable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_editable</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.is_editable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether the column is editable for a specified object row.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.NumericColumn.label">
+<code class="sig-name descname">label</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.table_column.NumericColumn.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Column label to use for this column</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.NumericColumn.selected_cell_color">
+<code class="sig-name descname">selected_cell_color</code><em class="property"> = Color(0xD8FFD8)</em><a class="headerlink" href="#traitsui.table_column.NumericColumn.selected_cell_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cell background color for this column when selected</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.NumericColumn.selected_text_color">
+<code class="sig-name descname">selected_text_color</code><em class="property"> = Color(&quot;black&quot;)</em><a class="headerlink" href="#traitsui.table_column.NumericColumn.selected_text_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text color this column when selected</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.NumericColumn.selected_text_font">
+<code class="sig-name descname">selected_text_font</code><em class="property"> = Font</em><a class="headerlink" href="#traitsui.table_column.NumericColumn.selected_text_font" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text font for this column when selected</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.NumericColumn.set_value">
-<code class="descname">set_value</code><span class="sig-paren">(</span><em>object</em>, <em>row</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.set_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_value</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">row</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.NumericColumn.set_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the column for a specified object row.</p>
 </dd></dl>
 
@@ -231,61 +292,97 @@ column for a specified object row.</p>
 
 <dl class="class">
 <dt id="traitsui.table_column.ObjectColumn">
-<em class="property">class </em><code class="descclassname">traitsui.table_column.</code><code class="descname">ObjectColumn</code><a class="headerlink" href="#traitsui.table_column.ObjectColumn" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.table_column.</code><code class="sig-name descname">ObjectColumn</code><a class="headerlink" href="#traitsui.table_column.ObjectColumn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.table_column.TableColumn" title="traitsui.table_column.TableColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_column.TableColumn</span></code></a></p>
 <p>A column for editing objects.</p>
+<dl class="attribute">
+<dt id="traitsui.table_column.ObjectColumn.editor">
+<code class="sig-name descname">editor</code><em class="property"> = Instance(EditorFactory)</em><a class="headerlink" href="#traitsui.table_column.ObjectColumn.editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trait editor used to edit the contents of this column:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.ObjectColumn.format">
+<code class="sig-name descname">format</code><em class="property"> = Str(&quot;%s&quot;)</em><a class="headerlink" href="#traitsui.table_column.ObjectColumn.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format string to apply to column values:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.ObjectColumn.format_func">
+<code class="sig-name descname">format_func</code><em class="property"> = Callable()</em><a class="headerlink" href="#traitsui.table_column.ObjectColumn.format_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format function to apply to column values:</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.table_column.ObjectColumn.get_drag_value">
-<code class="descname">get_drag_value</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.get_drag_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_drag_value</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.get_drag_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the drag value for the column.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.ObjectColumn.get_editor">
-<code class="descname">get_editor</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.get_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_editor</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.get_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the editor for the column of a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.ObjectColumn.get_raw_value">
-<code class="descname">get_raw_value</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.get_raw_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_raw_value</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.get_raw_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the unformatted value of the column for a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.ObjectColumn.get_style">
-<code class="descname">get_style</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.get_style" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_style</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.get_style" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the editor style for the column of a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.ObjectColumn.get_value">
-<code class="descname">get_value</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.get_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.get_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the formatted value of the column for a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.ObjectColumn.is_droppable">
-<code class="descname">is_droppable</code><span class="sig-paren">(</span><em>object</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.is_droppable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_droppable</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.is_droppable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether a specified value is valid for dropping on the
 column for a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.ObjectColumn.key">
-<code class="descname">key</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.key" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">key</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.key" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value to use for sorting.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.ObjectColumn.label">
+<code class="sig-name descname">label</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.table_column.ObjectColumn.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Column label to use for this column:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.ObjectColumn.name">
+<code class="sig-name descname">name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.table_column.ObjectColumn.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the object trait associated with this column:</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.ObjectColumn.set_value">
-<code class="descname">set_value</code><span class="sig-paren">(</span><em>object</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.set_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_value</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.set_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the value of the column for a specified object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.ObjectColumn.style">
+<code class="sig-name descname">style</code><em class="property"> = EditorStyle</em><a class="headerlink" href="#traitsui.table_column.ObjectColumn.style" title="Permalink to this definition">¶</a></dt>
+<dd><p>The editor style to use to edit the contents of this column:</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.ObjectColumn.target_name">
-<code class="descname">target_name</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.target_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">target_name</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.ObjectColumn.target_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the target object and name for the column.</p>
 </dd></dl>
 
@@ -293,161 +390,322 @@ column for a specified object.</p>
 
 <dl class="class">
 <dt id="traitsui.table_column.TableColumn">
-<em class="property">class </em><code class="descclassname">traitsui.table_column.</code><code class="descname">TableColumn</code><a class="headerlink" href="#traitsui.table_column.TableColumn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.table_column.</code><code class="sig-name descname">TableColumn</code><a class="headerlink" href="#traitsui.table_column.TableColumn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Represents a column in a table editor.</p>
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.auto_editable">
+<code class="sig-name descname">auto_editable</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.auto_editable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the column automatically edited/viewed (i.e. should the column editor
+or popup be activated automatically on mouse over)?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.cell_color">
+<code class="sig-name descname">cell_color</code><em class="property"> = Color(&quot;white&quot;, allow_none=True)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.cell_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cell background color for this column:</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.cmp">
-<code class="descname">cmp</code><span class="sig-paren">(</span><em>object1</em>, <em>object2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.cmp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cmp</code><span class="sig-paren">(</span><em class="sig-param">object1</em>, <em class="sig-param">object2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.cmp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the result of comparing the column of two different objects.</p>
 <p>This is deprecated.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.droppable">
+<code class="sig-name descname">droppable</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.droppable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can external objects be dropped on the column?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.edit_height">
+<code class="sig-name descname">edit_height</code><em class="property"> = Float(-1.0)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.edit_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>The height of the column cell’s row while it is being edited
+(&lt; 0.0: Default, 0.0..1.0: fraction of total table height,
+&gt; 1.0: absolute height in pixels):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.edit_width">
+<code class="sig-name descname">edit_width</code><em class="property"> = Float(-1.0)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.edit_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>The width of the column while it is being edited (&lt; 0.0: Default,
+0.0..1.0: fraction of total table width, &gt; 1.0: absolute width in
+pixels):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.editable">
+<code class="sig-name descname">editable</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.editable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this column editable?</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_cell_color">
-<code class="descname">get_cell_color</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_cell_color" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_cell_color</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_cell_color" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the cell background color for the column for a specified
 object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_edit_height">
-<code class="descname">get_edit_height</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_edit_height" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_edit_height</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_edit_height" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the height of the column cell’s row while it is being
 edited.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_edit_width">
-<code class="descname">get_edit_width</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_edit_width" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_edit_width</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_edit_width" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the edit width of the column.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_graph_color">
-<code class="descname">get_graph_color</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_graph_color" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_graph_color</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_graph_color" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the cell background graph color for the column for a
 specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_horizontal_alignment">
-<code class="descname">get_horizontal_alignment</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_horizontal_alignment" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_horizontal_alignment</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_horizontal_alignment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the horizontal alignment for the column for a specified
 object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_image">
-<code class="descname">get_image</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_image" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_image</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the image to display for the column for a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_label">
-<code class="descname">get_label</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_label" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_label</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_label" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the label of the column.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_maximum">
-<code class="descname">get_maximum</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_maximum" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_maximum</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_maximum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the maximum value a numeric column can have.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_menu">
-<code class="descname">get_menu</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_menu" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_menu</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_menu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the context menu to display when the user right-clicks on
 the column for a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_object">
-<code class="descname">get_object</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_object" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_object</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_object" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the actual object being edited.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_renderer">
-<code class="descname">get_renderer</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_renderer" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_renderer</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_renderer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the renderer for the column of a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_text_color">
-<code class="descname">get_text_color</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_text_color" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_text_color</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_text_color" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the text color for the column for a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_text_font">
-<code class="descname">get_text_font</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_text_font" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_text_font</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_text_font" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the text font for the column for a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_tooltip">
-<code class="descname">get_tooltip</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_tooltip" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_tooltip</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_tooltip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the tooltip to display when the user mouses over the column
 for a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_type">
-<code class="descname">get_type</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_type" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the type of data for the column for a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_vertical_alignment">
-<code class="descname">get_vertical_alignment</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_vertical_alignment" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_vertical_alignment</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_vertical_alignment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the vertical alignment for the column for a specified
 object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_view">
-<code class="descname">get_view</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_view" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_view</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_view" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the view to display when clicking a non-editable cell.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_width">
-<code class="descname">get_width</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_width" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_width</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_width" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the width of the column.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.graph_color">
+<code class="sig-name descname">graph_color</code><em class="property"> = Color(0xDDD9CC)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.graph_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cell graph color:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.horizontal_alignment">
+<code class="sig-name descname">horizontal_alignment</code><em class="property"> = Enum(&quot;left&quot;, [&quot;left&quot;, &quot;center&quot;, &quot;right&quot;])</em><a class="headerlink" href="#traitsui.table_column.TableColumn.horizontal_alignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Horizontal alignment of text in the column:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.horizontal_margin">
+<code class="sig-name descname">horizontal_margin</code><em class="property"> = Int(4)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.horizontal_margin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Horizontal cell margin</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.image">
+<code class="sig-name descname">image</code><em class="property"> = Image</em><a class="headerlink" href="#traitsui.table_column.TableColumn.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>The image to display in the cell:</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.is_auto_editable">
-<code class="descname">is_auto_editable</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.is_auto_editable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_auto_editable</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.is_auto_editable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether the column is automatically edited/viewed for a
 specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.is_droppable">
-<code class="descname">is_droppable</code><span class="sig-paren">(</span><em>object</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.is_droppable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_droppable</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.is_droppable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether a specified value is valid for dropping on the
 column for a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.is_editable">
-<code class="descname">is_editable</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.is_editable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_editable</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.is_editable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether the column is editable for a specified object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.label">
+<code class="sig-name descname">label</code><em class="property"> = Str(UndefinedLabel)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Column label to use for this column:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.maximum">
+<code class="sig-name descname">maximum</code><em class="property"> = Float(trait_value=True)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.maximum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional maximum value a numeric cell value can have:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.menu">
+<code class="sig-name descname">menu</code><em class="property"> = Instance(Menu)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context menu to display when this column is right-clicked:</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.on_click">
-<code class="descname">on_click</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.on_click" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">on_click</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.on_click" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called when the user clicks on the column.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.on_dclick">
-<code class="descname">on_dclick</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.on_dclick" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">on_dclick</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.on_dclick" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called when the user clicks on the column.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.read_only_cell_color">
+<code class="sig-name descname">read_only_cell_color</code><em class="property"> = Color(0xF4F3EE, allow_none=True)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.read_only_cell_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cell background color for non-editable columns:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.renderer">
+<code class="sig-name descname">renderer</code><em class="property"> = Any  # A toolkit specific renderer</em><a class="headerlink" href="#traitsui.table_column.TableColumn.renderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renderer used to render the contents of this column:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.resize_mode">
+<code class="sig-name descname">resize_mode</code><em class="property"> = Enum(&quot;interactive&quot;, &quot;fixed&quot;, &quot;stretch&quot;, &quot;resize_to_contents&quot;)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.resize_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>The resize mode for this column.  This takes precedence over other settings
+(like <strong>width</strong>, above).
+- “interactive”: column can be resized by users or programmatically
+- “fixed”: users cannot resize the column, but it can be set programmatically
+- “stretch”: the column will be resized to fill the available space
+- “resize_to_contents”: column will be sized to fit the contents, but then cannot be resized</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.show_checkbox">
+<code class="sig-name descname">show_checkbox</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.show_checkbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should a checkbox be displayed instead of True/False?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.text_color">
+<code class="sig-name descname">text_color</code><em class="property"> = Color(&quot;black&quot;)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.text_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text color for this column:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.text_font">
+<code class="sig-name descname">text_font</code><em class="property"> = Either(None, Font)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.text_font" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text font for this column:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.tooltip">
+<code class="sig-name descname">tooltip</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.table_column.TableColumn.tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>The tooltip to display when the mouse is over the column:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.vertical_alignment">
+<code class="sig-name descname">vertical_alignment</code><em class="property"> = Enum(&quot;center&quot;, [&quot;top&quot;, &quot;center&quot;, &quot;bottom&quot;])</em><a class="headerlink" href="#traitsui.table_column.TableColumn.vertical_alignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vertical alignment of text in the column:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.vertical_margin">
+<code class="sig-name descname">vertical_margin</code><em class="property"> = Int(3)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.vertical_margin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vertical cell margin</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.view">
+<code class="sig-name descname">view</code><em class="property"> = AView</em><a class="headerlink" href="#traitsui.table_column.TableColumn.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>The view (if any) to display when clicking a non-editable cell:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.visible">
+<code class="sig-name descname">visible</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the table column visible (i.e., viewable)?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_column.TableColumn.width">
+<code class="sig-name descname">width</code><em class="property"> = Float(-1.0)</em><a class="headerlink" href="#traitsui.table_column.TableColumn.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>The width of the column (&lt; 0.0: Default, 0.0..1.0: fraction of total table
+width, &gt; 1.0: absolute width in pixels):</p>
 </dd></dl>
 
 </dd></dl>
@@ -475,13 +733,11 @@ column for a specified object.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -502,13 +758,13 @@ column for a specified object.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

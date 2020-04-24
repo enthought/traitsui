@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.ui_editors.array_view_editor module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.ui_editors.array_view_editor module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui.ui_editors package" href="traitsui.ui_editors.html" >
     <link rel="next" title="traitsui.ui_editors.data_frame_editor module" href="traitsui.ui_editors.data_frame_editor.html" >
     <link rel="prev" title="traitsui.ui_editors package" href="traitsui.ui_editors.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.ui_editors.html" accesskey="U">traitsui.ui_editors package</a></li>
   
@@ -97,26 +96,74 @@
 <p>Defines an ArrayViewEditor for displaying 1-d or 2-d arrays of values.</p>
 <dl class="class">
 <dt id="traitsui.ui_editors.array_view_editor.ArrayViewAdapter">
-<em class="property">class </em><code class="descclassname">traitsui.ui_editors.array_view_editor.</code><code class="descname">ArrayViewAdapter</code><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewAdapter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.ui_editors.array_view_editor.</code><code class="sig-name descname">ArrayViewAdapter</code><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewAdapter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.tabular_adapter.TabularAdapter</span></code></a></p>
 <dl class="method">
 <dt id="traitsui.ui_editors.array_view_editor.ArrayViewAdapter.get_item">
-<code class="descname">get_item</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewAdapter.get_item" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_item</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">trait</em>, <em class="sig-param">row</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewAdapter.get_item" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the <em>object.trait[row]</em> item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.array_view_editor.ArrayViewAdapter.is_2d">
+<code class="sig-name descname">is_2d</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewAdapter.is_2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the array 1D or 2D?</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.ui_editors.array_view_editor.ArrayViewAdapter.len">
-<code class="descname">len</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewAdapter.len" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">len</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">trait</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewAdapter.len" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of items in the specified <em>object.trait</em> list.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.array_view_editor.ArrayViewAdapter.transpose">
+<code class="sig-name descname">transpose</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewAdapter.transpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should array rows and columns be transposed:</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.ui_editors.array_view_editor.ArrayViewEditor">
-<em class="property">class </em><code class="descclassname">traitsui.ui_editors.array_view_editor.</code><code class="descname">ArrayViewEditor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewEditor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.ui_editors.array_view_editor.</code><code class="sig-name descname">ArrayViewEditor</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewEditor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.basic_editor_factory.html#traitsui.basic_editor_factory.BasicEditorFactory" title="traitsui.basic_editor_factory.BasicEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.basic_editor_factory.BasicEditorFactory</span></code></a></p>
+<dl class="attribute">
+<dt id="traitsui.ui_editors.array_view_editor.ArrayViewEditor.font">
+<code class="sig-name descname">font</code><em class="property"> = Font(&quot;Courier 10&quot;)</em><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewEditor.font" title="Permalink to this definition">¶</a></dt>
+<dd><p>The font to use for displaying each array element:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.array_view_editor.ArrayViewEditor.format">
+<code class="sig-name descname">format</code><em class="property"> = Str(&quot;%s&quot;)</em><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewEditor.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format used to display each array element:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.array_view_editor.ArrayViewEditor.klass">
+<code class="sig-name descname">klass</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewEditor.klass" title="Permalink to this definition">¶</a></dt>
+<dd><p>The editor implementation class:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.array_view_editor.ArrayViewEditor.show_index">
+<code class="sig-name descname">show_index</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewEditor.show_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should an index column be displayed:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.array_view_editor.ArrayViewEditor.titles">
+<code class="sig-name descname">titles</code><em class="property"> = List(Str)</em><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewEditor.titles" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of (optional) column titles:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.array_view_editor.ArrayViewEditor.transpose">
+<code class="sig-name descname">transpose</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.ui_editors.array_view_editor.ArrayViewEditor.transpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the array be logically transposed:</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -142,13 +189,11 @@
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -169,13 +214,13 @@
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

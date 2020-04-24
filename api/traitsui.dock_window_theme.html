@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.dock_window_theme module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.dock_window_theme module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.dockable_view_element module" href="traitsui.dockable_view_element.html" >
     <link rel="prev" title="traitsui.delegating_handler module" href="traitsui.delegating_handler.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.dock_window_theme module</a></li>
@@ -96,15 +95,106 @@
 <p>Defines the theme style information for a DockWindow and its components.</p>
 <dl class="class">
 <dt id="traitsui.dock_window_theme.DockWindowTheme">
-<em class="property">class </em><code class="descclassname">traitsui.dock_window_theme.</code><code class="descname">DockWindowTheme</code><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.dock_window_theme.</code><code class="sig-name descname">DockWindowTheme</code><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Defines the theme style information for a DockWindow and its components.</p>
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.horizontal_drag">
+<code class="sig-name descname">horizontal_drag</code><em class="property"> = ATheme</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.horizontal_drag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Horizontal drag bar theme:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.horizontal_splitter">
+<code class="sig-name descname">horizontal_splitter</code><em class="property"> = ATheme</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.horizontal_splitter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Horizontal splitter bar theme:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.tab">
+<code class="sig-name descname">tab</code><em class="property"> = ATheme</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.tab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tab theme:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.tab_active">
+<code class="sig-name descname">tab_active</code><em class="property"> = ATheme</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.tab_active" title="Permalink to this definition">¶</a></dt>
+<dd><p>Active tab theme:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.tab_background">
+<code class="sig-name descname">tab_background</code><em class="property"> = ATheme</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.tab_background" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tab background theme:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.tab_hover">
+<code class="sig-name descname">tab_hover</code><em class="property"> = ATheme</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.tab_hover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tab hover theme (used for inactive tabs):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.tab_hover_edge">
+<code class="sig-name descname">tab_hover_edge</code><em class="property"> = Image</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.tab_hover_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional image to use for right edge of rightmost hover tab:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.tab_hover_edge_bitmap">
+<code class="sig-name descname">tab_hover_edge_bitmap</code><em class="property"> = Property(depends_on=&quot;tab_hover_edge&quot;)</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.tab_hover_edge_bitmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bitmap for the ‘tab_hover_edge’ image:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.tab_inactive">
+<code class="sig-name descname">tab_inactive</code><em class="property"> = ATheme</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.tab_inactive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inactive tab theme:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.tab_inactive_edge">
+<code class="sig-name descname">tab_inactive_edge</code><em class="property"> = Image</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.tab_inactive_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional image to use for right edge of rightmost inactive tab:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.tab_inactive_edge_bitmap">
+<code class="sig-name descname">tab_inactive_edge_bitmap</code><em class="property"> = Property(depends_on=&quot;tab_inactive_edge&quot;)</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.tab_inactive_edge_bitmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bitmap for the ‘tab_inactive_edge’ image:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.tabs_at_top">
+<code class="sig-name descname">tabs_at_top</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.tabs_at_top" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw notebook tabs at the top (True) or the bottom (False)?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.use_theme_color">
+<code class="sig-name descname">use_theme_color</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.use_theme_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the theme background color as the DockWindow background color?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.vertical_drag">
+<code class="sig-name descname">vertical_drag</code><em class="property"> = ATheme</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.vertical_drag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vertical drag bar theme:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.dock_window_theme.DockWindowTheme.vertical_splitter">
+<code class="sig-name descname">vertical_splitter</code><em class="property"> = ATheme</em><a class="headerlink" href="#traitsui.dock_window_theme.DockWindowTheme.vertical_splitter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vertical splitter bar theme:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="function">
 <dt id="traitsui.dock_window_theme.dock_window_theme">
-<code class="descclassname">traitsui.dock_window_theme.</code><code class="descname">dock_window_theme</code><span class="sig-paren">(</span><em>theme=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.dock_window_theme.dock_window_theme" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-prename descclassname">traitsui.dock_window_theme.</code><code class="sig-name descname">dock_window_theme</code><span class="sig-paren">(</span><em class="sig-param">theme=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.dock_window_theme.dock_window_theme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or set the default DockWindow theme.</p>
+</dd></dl>
 
 </div>
 
@@ -129,13 +219,11 @@
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -156,13 +244,13 @@
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

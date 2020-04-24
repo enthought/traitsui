@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.undo module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.value_tree module" href="traitsui.value_tree.html" >
+    <link rel="prev" title="traitsui.ui_traits module" href="traitsui.ui_traits.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.undo module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.value_tree.html" title="traitsui.value_tree module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.ui_traits.html" title="traitsui.ui_traits module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.undo">
+<span id="traitsui-undo-module"></span><h1>traitsui.undo module<a class="headerlink" href="#module-traitsui.undo" title="Permalink to this headline">¶</a></h1>
+<p>Defines the manager for Undo and Redo history for Traits user interface
+support.</p>
+<dl class="class">
+<dt id="traitsui.undo.AbstractUndoItem">
+<em class="property">class </em><code class="descclassname">traitsui.undo.</code><code class="descname">AbstractUndoItem</code><a class="headerlink" href="#traitsui.undo.AbstractUndoItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<p>Abstract base class for undo items.</p>
+<dl class="method">
+<dt id="traitsui.undo.AbstractUndoItem.merge_undo">
+<code class="descname">merge_undo</code><span class="sig-paren">(</span><em>undo_item</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.AbstractUndoItem.merge_undo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merges two undo items if possible.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.undo.AbstractUndoItem.redo">
+<code class="descname">redo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.AbstractUndoItem.redo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Re-does the change.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.undo.AbstractUndoItem.undo">
+<code class="descname">undo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.AbstractUndoItem.undo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Undoes the change.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.undo.ListUndoItem">
+<em class="property">class </em><code class="descclassname">traitsui.undo.</code><code class="descname">ListUndoItem</code><a class="headerlink" href="#traitsui.undo.ListUndoItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.undo.AbstractUndoItem" title="traitsui.undo.AbstractUndoItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.undo.AbstractUndoItem</span></code></a></p>
+<p>A change to a list, which can be undone.</p>
+<dl class="method">
+<dt id="traitsui.undo.ListUndoItem.merge_undo">
+<code class="descname">merge_undo</code><span class="sig-paren">(</span><em>undo_item</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.ListUndoItem.merge_undo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merges two undo items if possible.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.undo.ListUndoItem.redo">
+<code class="descname">redo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.ListUndoItem.redo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Re-does the change.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.undo.ListUndoItem.undo">
+<code class="descname">undo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.ListUndoItem.undo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Undoes the change.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.undo.UndoHistory">
+<em class="property">class </em><code class="descclassname">traitsui.undo.</code><code class="descname">UndoHistory</code><a class="headerlink" href="#traitsui.undo.UndoHistory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
+<p>Manages a list of undoable changes.</p>
+<dl class="method">
+<dt id="traitsui.undo.UndoHistory.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>undo_item</em>, <em>extend=False</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.UndoHistory.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an UndoItem to the history.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.undo.UndoHistory.clear">
+<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.UndoHistory.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the undo history.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.undo.UndoHistory.extend">
+<code class="descname">extend</code><span class="sig-paren">(</span><em>undo_item</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.UndoHistory.extend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extends the undo history.</p>
+<p>If possible the method merges the new UndoItem with the last item in
+the history; otherwise, it appends the new item.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.undo.UndoHistory.redo">
+<code class="descname">redo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.UndoHistory.redo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Redoes an operation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.undo.UndoHistory.revert">
+<code class="descname">revert</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.UndoHistory.revert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reverts all changes made so far and clears the history.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.undo.UndoHistory.undo">
+<code class="descname">undo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.UndoHistory.undo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Undoes an operation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.undo.UndoHistoryUndoItem">
+<em class="property">class </em><code class="descclassname">traitsui.undo.</code><code class="descname">UndoHistoryUndoItem</code><a class="headerlink" href="#traitsui.undo.UndoHistoryUndoItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.undo.AbstractUndoItem" title="traitsui.undo.AbstractUndoItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.undo.AbstractUndoItem</span></code></a></p>
+<p>An undo item for the undo history.</p>
+<dl class="method">
+<dt id="traitsui.undo.UndoHistoryUndoItem.redo">
+<code class="descname">redo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.UndoHistoryUndoItem.redo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Re-does the change.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.undo.UndoHistoryUndoItem.undo">
+<code class="descname">undo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.UndoHistoryUndoItem.undo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Undoes the change.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.undo.UndoItem">
+<em class="property">class </em><code class="descclassname">traitsui.undo.</code><code class="descname">UndoItem</code><a class="headerlink" href="#traitsui.undo.UndoItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.undo.AbstractUndoItem" title="traitsui.undo.AbstractUndoItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.undo.AbstractUndoItem</span></code></a></p>
+<p>A change to an object trait, which can be undone.</p>
+<dl class="method">
+<dt id="traitsui.undo.UndoItem.merge_undo">
+<code class="descname">merge_undo</code><span class="sig-paren">(</span><em>undo_item</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.UndoItem.merge_undo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merges two undo items if possible.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.undo.UndoItem.redo">
+<code class="descname">redo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.UndoItem.redo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Re-does the change.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.undo.UndoItem.undo">
+<code class="descname">undo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.undo.UndoItem.undo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Undoes the change.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.ui_traits.html"
+                        title="previous chapter">traitsui.ui_traits module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.value_tree.html"
+                        title="next chapter">traitsui.value_tree module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.undo.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

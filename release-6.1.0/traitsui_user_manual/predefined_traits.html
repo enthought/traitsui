@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Appendix II: Editor Factories for Predefined Traits &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="TraitsUI 6.1 User Manual" href="index.html" >
+    <link rel="next" title="TraitsUI 6.1 API Reference" href="../api/index.html" >
+    <link rel="prev" title="Appendix I: Glossary of Terms" href="glossary.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 User Manual</a></li>
+  
+    <li><a href="#">Appendix II: Editor Factories for Predefined Traits</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="../api/index.html" title="TraitsUI 6.1 API Reference"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="glossary.html" title="Appendix I: Glossary of Terms"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="appendix-ii-editor-factories-for-predefined-traits">
+<span id="editor-factories-for-predefined-traits"></span><h1>Appendix II: Editor Factories for Predefined Traits<a class="headerlink" href="#appendix-ii-editor-factories-for-predefined-traits" title="Permalink to this headline">¶</a></h1>
+<p>Predefined traits that are not listed in this table use TextEditor() by default,
+and have no other appropriate editor factories.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="37%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Trait</th>
+<th class="head">Default Editor Factory</th>
+<th class="head">Other Possible Editor Factories</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Any</td>
+<td>TextEditor</td>
+<td>EnumEditor, ImageEnumEditor,
+ValueEditor</td>
+</tr>
+<tr class="row-odd"><td>Array</td>
+<td>ArrayEditor (for 2-D arrays)</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Bool</td>
+<td>BooleanEditor</td>
+<td>ThemedCheckboxEditor</td>
+</tr>
+<tr class="row-odd"><td>Button</td>
+<td>ButtonEditor</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>CArray</td>
+<td>ArrayEditor (for 2-D arrays)</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>CBool</td>
+<td>BooleanEditor</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>CComplex</td>
+<td>TextEditor</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>CFloat, CInt,
+CLong</td>
+<td>TextEditor</td>
+<td>LEDEditor</td>
+</tr>
+<tr class="row-even"><td>Code</td>
+<td>CodeEditor</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>Color</td>
+<td>ColorEditor</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Complex</td>
+<td>TextEditor</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>CStr,
+CUnicode</td>
+<td>TextEditor (multi_line=True)</td>
+<td>CodeEditor, HTMLEditor</td>
+</tr>
+<tr class="row-even"><td>Dict</td>
+<td>TextEditor</td>
+<td>ValueEditor</td>
+</tr>
+<tr class="row-odd"><td>Directory</td>
+<td>DirectoryEditor</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Enum</td>
+<td>EnumEditor</td>
+<td>ImageEnumEditor</td>
+</tr>
+<tr class="row-odd"><td>Event</td>
+<td>(none)</td>
+<td>ButtonEditor, ToolbarButtonEditor</td>
+</tr>
+<tr class="row-even"><td>File</td>
+<td>FileEditor</td>
+<td>AnimatedGIFEditor</td>
+</tr>
+<tr class="row-odd"><td>Float</td>
+<td>TextEditor</td>
+<td>LEDEditor</td>
+</tr>
+<tr class="row-even"><td>Font</td>
+<td>FontEditor</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>HTML</td>
+<td>HTMLEditor</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Instance</td>
+<td>InstanceEditor</td>
+<td>TreeEditor, DropEditor, DNDEditor,
+ValueEditor</td>
+</tr>
+<tr class="row-odd"><td>List</td>
+<td>TableEditor for lists of
+HasTraits objects;
+ListEditor for all other
+lists.</td>
+<td>CSVListEditor, CheckListEditor,
+SetEditor, ValueEditor,
+ThemedVerticalNotebookEditor</td>
+</tr>
+<tr class="row-even"><td>Long</td>
+<td>TextEditor</td>
+<td>LEDEditor</td>
+</tr>
+<tr class="row-odd"><td>Password</td>
+<td>TextEditor(password=True)</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>PythonValue</td>
+<td>ShellEditor</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>Range</td>
+<td>RangeEditor</td>
+<td>ThemedSliderEditor</td>
+</tr>
+<tr class="row-even"><td>Regex</td>
+<td>TextEditor</td>
+<td>CodeEditor</td>
+</tr>
+<tr class="row-odd"><td>RGBColor</td>
+<td>RGBColorEditor</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Str</td>
+<td>TextEditor(multi_line=True)</td>
+<td>CodeEditor, HTMLEditor</td>
+</tr>
+<tr class="row-odd"><td>String</td>
+<td>TextEditor</td>
+<td>CodeEditor, ThemedTextEditor</td>
+</tr>
+<tr class="row-even"><td>This</td>
+<td>InstanceEditor</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>ToolbarButton</td>
+<td>ButtonEditor</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Tuple</td>
+<td>TupleEditor</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>UIDebugger</td>
+<td>ButtonEditor (button calls
+the UIDebugEditor factory)</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Unicode</td>
+<td>TextEditor(multi_line=True)</td>
+<td>HTMLEditor</td>
+</tr>
+<tr class="row-odd"><td>WeakRef</td>
+<td>InstanceEditor</td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="glossary.html"
+                        title="previous chapter">Appendix I: Glossary of Terms</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../api/index.html"
+                        title="next chapter">TraitsUI 6.1 API Reference</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/traitsui_user_manual/predefined_traits.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

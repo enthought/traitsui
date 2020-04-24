@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.table_filter module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.table_filter module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.tabular_adapter module" href="traitsui.tabular_adapter.html" >
     <link rel="prev" title="traitsui.table_column module" href="traitsui.table_column.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.table_filter module</a></li>
@@ -96,110 +95,171 @@
 <p>Defines the filter object used to filter items displayed in a table editor.</p>
 <dl class="class">
 <dt id="traitsui.table_filter.EvalTableFilter">
-<em class="property">class </em><code class="descclassname">traitsui.table_filter.</code><code class="descname">EvalTableFilter</code><a class="headerlink" href="#traitsui.table_filter.EvalTableFilter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.table_filter.</code><code class="sig-name descname">EvalTableFilter</code><a class="headerlink" href="#traitsui.table_filter.EvalTableFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.table_filter.TableFilter" title="traitsui.table_filter.TableFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_filter.TableFilter</span></code></a></p>
 <p>A table filter based on evaluating an expression.</p>
 <dl class="method">
 <dt id="traitsui.table_filter.EvalTableFilter.description">
-<code class="descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.EvalTableFilter.description" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.EvalTableFilter.description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a user readable description of what kind of object
 satisfies the filter.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="traitsui.table_filter.EvalTableFilter.expression">
+<code class="sig-name descname">expression</code><em class="property"> = Expression</em><a class="headerlink" href="#traitsui.table_filter.EvalTableFilter.expression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python expression which will be applied to each table item</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.table_filter.EvalTableFilter.filter">
-<code class="descname">filter</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.EvalTableFilter.filter" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">filter</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.EvalTableFilter.filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether a specified object meets the filter or search
 criteria.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.EvalTableFilter.name">
+<code class="sig-name descname">name</code><em class="property"> = &quot;Default evaluation filter&quot;</em><a class="headerlink" href="#traitsui.table_filter.EvalTableFilter.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override the standard <strong>name</strong> trait</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.table_filter.GenericTableFilterRule">
-<em class="property">class </em><code class="descclassname">traitsui.table_filter.</code><code class="descname">GenericTableFilterRule</code><span class="sig-paren">(</span><em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.table_filter.</code><code class="sig-name descname">GenericTableFilterRule</code><span class="sig-paren">(</span><em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>A general rule used by a table filter.</p>
+<dl class="attribute">
+<dt id="traitsui.table_filter.GenericTableFilterRule.and_or">
+<code class="sig-name descname">and_or</code><em class="property"> = Enum(&quot;and&quot;, &quot;or&quot;)</em><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.and_or" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this rule an ‘and’ rule or an ‘or’ rule?</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRule.clone_traits">
-<code class="descname">clone_traits</code><span class="sig-paren">(</span><em>traits=None</em>, <em>memo=None</em>, <em>copy=None</em>, <em>**metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.clone_traits" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">clone_traits</code><span class="sig-paren">(</span><em class="sig-param">traits=None</em>, <em class="sig-param">memo=None</em>, <em class="sig-param">copy=None</em>, <em class="sig-param">**metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.clone_traits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clones a new object from this one, optionally copying only a
 specified set of traits.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRule.contains">
-<code class="descname">contains</code><span class="sig-paren">(</span><em>value1</em>, <em>value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.contains" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">contains</code><span class="sig-paren">(</span><em class="sig-param">value1</em>, <em class="sig-param">value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.contains" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRule.description">
-<code class="descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.description" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a description of the filter.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.GenericTableFilterRule.enabled">
+<code class="sig-name descname">enabled</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this rule enabled?</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRule.ends_with">
-<code class="descname">ends_with</code><span class="sig-paren">(</span><em>value1</em>, <em>value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.ends_with" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">ends_with</code><span class="sig-paren">(</span><em class="sig-param">value1</em>, <em class="sig-param">value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.ends_with" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRule.eq">
-<code class="descname">eq</code><span class="sig-paren">(</span><em>value1</em>, <em>value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.eq" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">eq</code><span class="sig-paren">(</span><em class="sig-param">value1</em>, <em class="sig-param">value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.eq" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.GenericTableFilterRule.filter">
+<code class="sig-name descname">filter</code><em class="property"> = Instance(&quot;RuleTableFilter&quot;)</em><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter this rule is part of</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRule.ge">
-<code class="descname">ge</code><span class="sig-paren">(</span><em>value1</em>, <em>value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.ge" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">ge</code><span class="sig-paren">(</span><em class="sig-param">value1</em>, <em class="sig-param">value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.ge" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRule.gt">
-<code class="descname">gt</code><span class="sig-paren">(</span><em>value1</em>, <em>value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.gt" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">gt</code><span class="sig-paren">(</span><em class="sig-param">value1</em>, <em class="sig-param">value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.gt" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="traitsui.table_filter.GenericTableFilterRule.ignored_traits">
-<code class="descname">ignored_traits</code><em class="property"> = ['filter', 'name_editor', 'value_editor']</em><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.ignored_traits" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">ignored_traits</code><em class="property"> = ['filter', 'name_editor', 'value_editor']</em><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.ignored_traits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Traits that are ignored by the _anytrait_changed() handler</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRule.is_true">
-<code class="descname">is_true</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.is_true" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_true</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.is_true" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether the rule is true for a specified object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRule.le">
-<code class="descname">le</code><span class="sig-paren">(</span><em>value1</em>, <em>value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.le" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">le</code><span class="sig-paren">(</span><em class="sig-param">value1</em>, <em class="sig-param">value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.le" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRule.lt">
-<code class="descname">lt</code><span class="sig-paren">(</span><em>value1</em>, <em>value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.lt" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">lt</code><span class="sig-paren">(</span><em class="sig-param">value1</em>, <em class="sig-param">value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.lt" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.GenericTableFilterRule.name">
+<code class="sig-name descname">name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the object trait that this rule applies to</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.GenericTableFilterRule.name_editor">
+<code class="sig-name descname">name_editor</code><em class="property"> = Instance(EditorFactory)</em><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.name_editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>EnumEditor used to edit the <strong>name</strong> trait:</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRule.ne">
-<code class="descname">ne</code><span class="sig-paren">(</span><em>value1</em>, <em>value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.ne" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">ne</code><span class="sig-paren">(</span><em class="sig-param">value1</em>, <em class="sig-param">value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.ne" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.GenericTableFilterRule.operation">
+<code class="sig-name descname">operation</code><em class="property"> = GenericTableFilterRuleOperation</em><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.operation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Operation to be applied in the rule</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRule.starts_with">
-<code class="descname">starts_with</code><span class="sig-paren">(</span><em>value1</em>, <em>value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.starts_with" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">starts_with</code><span class="sig-paren">(</span><em class="sig-param">value1</em>, <em class="sig-param">value2</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.starts_with" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.GenericTableFilterRule.value">
+<code class="sig-name descname">value</code><em class="property"> = Any()</em><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value to use in the operation when applying the rule to an object</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.GenericTableFilterRule.value_editor">
+<code class="sig-name descname">value_editor</code><em class="property"> = Instance(EditorFactory)</em><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRule.value_editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Editor used to edit the <strong>value</strong> trait</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.table_filter.GenericTableFilterRuleAndOrColumn">
-<em class="property">class </em><code class="descclassname">traitsui.table_filter.</code><code class="descname">GenericTableFilterRuleAndOrColumn</code><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleAndOrColumn" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.table_filter.</code><code class="sig-name descname">GenericTableFilterRuleAndOrColumn</code><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleAndOrColumn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.table_column.html#traitsui.table_column.ObjectColumn" title="traitsui.table_column.ObjectColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_column.ObjectColumn</span></code></a></p>
 <p>Table column that displays whether a filter rule is conjoining (‘and’)
 or disjoining (‘or’).</p>
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRuleAndOrColumn.get_value">
-<code class="descname">get_value</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleAndOrColumn.get_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleAndOrColumn.get_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the traits editor of the column for a specified object.</p>
 </dd></dl>
 
@@ -207,12 +267,12 @@ or disjoining (‘or’).</p>
 
 <dl class="class">
 <dt id="traitsui.table_filter.GenericTableFilterRuleEnabledColumn">
-<em class="property">class </em><code class="descclassname">traitsui.table_filter.</code><code class="descname">GenericTableFilterRuleEnabledColumn</code><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleEnabledColumn" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.table_filter.</code><code class="sig-name descname">GenericTableFilterRuleEnabledColumn</code><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleEnabledColumn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.table_column.html#traitsui.table_column.ObjectColumn" title="traitsui.table_column.ObjectColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_column.ObjectColumn</span></code></a></p>
 <p>Table column that indicates whether a filter rule is enabled.</p>
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRuleEnabledColumn.get_value">
-<code class="descname">get_value</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleEnabledColumn.get_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleEnabledColumn.get_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the traits editor of the column for a specified object.</p>
 </dd></dl>
 
@@ -220,12 +280,12 @@ or disjoining (‘or’).</p>
 
 <dl class="class">
 <dt id="traitsui.table_filter.GenericTableFilterRuleNameColumn">
-<em class="property">class </em><code class="descclassname">traitsui.table_filter.</code><code class="descname">GenericTableFilterRuleNameColumn</code><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleNameColumn" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.table_filter.</code><code class="sig-name descname">GenericTableFilterRuleNameColumn</code><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleNameColumn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.table_column.html#traitsui.table_column.ObjectColumn" title="traitsui.table_column.ObjectColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_column.ObjectColumn</span></code></a></p>
 <p>Table column for the name of an object trait.</p>
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRuleNameColumn.get_editor">
-<code class="descname">get_editor</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleNameColumn.get_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_editor</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleNameColumn.get_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the traits editor of the column for a specified object.</p>
 </dd></dl>
 
@@ -233,12 +293,12 @@ or disjoining (‘or’).</p>
 
 <dl class="class">
 <dt id="traitsui.table_filter.GenericTableFilterRuleValueColumn">
-<em class="property">class </em><code class="descclassname">traitsui.table_filter.</code><code class="descname">GenericTableFilterRuleValueColumn</code><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleValueColumn" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.table_filter.</code><code class="sig-name descname">GenericTableFilterRuleValueColumn</code><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleValueColumn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.table_column.html#traitsui.table_column.ObjectColumn" title="traitsui.table_column.ObjectColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_column.ObjectColumn</span></code></a></p>
 <p>Table column for the value of an object trait.</p>
 <dl class="method">
 <dt id="traitsui.table_filter.GenericTableFilterRuleValueColumn.get_editor">
-<code class="descname">get_editor</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleValueColumn.get_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_editor</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.GenericTableFilterRuleValueColumn.get_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the traits editor of the column for a specified object.</p>
 </dd></dl>
 
@@ -246,40 +306,52 @@ or disjoining (‘or’).</p>
 
 <dl class="class">
 <dt id="traitsui.table_filter.MenuTableFilter">
-<em class="property">class </em><code class="descclassname">traitsui.table_filter.</code><code class="descname">MenuTableFilter</code><a class="headerlink" href="#traitsui.table_filter.MenuTableFilter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.table_filter.</code><code class="sig-name descname">MenuTableFilter</code><a class="headerlink" href="#traitsui.table_filter.MenuTableFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.table_filter.RuleTableFilter" title="traitsui.table_filter.RuleTableFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_filter.RuleTableFilter</span></code></a></p>
 <p>A table filter based on a menu of rules.</p>
 <dl class="method">
 <dt id="traitsui.table_filter.MenuTableFilter.description">
-<code class="descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.MenuTableFilter.description" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.MenuTableFilter.description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a user8readable description of what kind of object
 satisfies the filter.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.MenuTableFilter.filter">
-<code class="descname">filter</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.MenuTableFilter.filter" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">filter</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.MenuTableFilter.filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether a specified object meets the filter or search
 criteria.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.MenuTableFilter.name">
+<code class="sig-name descname">name</code><em class="property"> = &quot;Default menu-based filter&quot;</em><a class="headerlink" href="#traitsui.table_filter.MenuTableFilter.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides the default <strong>name</strong> trait</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.MenuTableFilter.view_id">
+<code class="sig-name descname">view_id</code><em class="property"> = Str(&quot;traitsui.table_filter.MenuTableFilter&quot;)</em><a class="headerlink" href="#traitsui.table_filter.MenuTableFilter.view_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides the persistence ID of the view</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.table_filter.RuleTableFilter">
-<em class="property">class </em><code class="descclassname">traitsui.table_filter.</code><code class="descname">RuleTableFilter</code><a class="headerlink" href="#traitsui.table_filter.RuleTableFilter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.table_filter.</code><code class="sig-name descname">RuleTableFilter</code><a class="headerlink" href="#traitsui.table_filter.RuleTableFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.table_filter.TableFilter" title="traitsui.table_filter.TableFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_filter.TableFilter</span></code></a></p>
 <p>A table filter based on rules.</p>
 <dl class="method">
 <dt id="traitsui.table_filter.RuleTableFilter.description">
-<code class="descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.RuleTableFilter.description" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.RuleTableFilter.description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a user-readable description of the kind of object that
 satisfies the filter.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.RuleTableFilter.edit_view">
-<code class="descname">edit_view</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.RuleTableFilter.edit_view" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">edit_view</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.RuleTableFilter.edit_view" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a view to use for editing the filter.</p>
 <p>The ‘’object’’ parameter is a sample object for the table that the
 filter will be applied to. It is supplied in case the filter needs to
@@ -289,34 +361,71 @@ extract data or metadata from the object. If the table is empty, the
 
 <dl class="method">
 <dt id="traitsui.table_filter.RuleTableFilter.filter">
-<code class="descname">filter</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.RuleTableFilter.filter" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">filter</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.RuleTableFilter.filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether a specified object meets the filter or search
 criteria.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.RuleTableFilter.modified">
+<code class="sig-name descname">modified</code><em class="property"> = Event()</em><a class="headerlink" href="#traitsui.table_filter.RuleTableFilter.modified" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event fired when the contents of the filter have changed</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.RuleTableFilter.name">
+<code class="sig-name descname">name</code><em class="property"> = &quot;Default rule-based filter&quot;</em><a class="headerlink" href="#traitsui.table_filter.RuleTableFilter.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides the default <strong>name</strong> trait</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.RuleTableFilter.rules">
+<code class="sig-name descname">rules</code><em class="property"> = List(GenericTableFilterRule)</em><a class="headerlink" href="#traitsui.table_filter.RuleTableFilter.rules" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of the filter rules to be applied</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.RuleTableFilter.view_id">
+<code class="sig-name descname">view_id</code><em class="property"> = Str(&quot;traitsui.table_filter.RuleTableFilter&quot;)</em><a class="headerlink" href="#traitsui.table_filter.RuleTableFilter.view_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Persistence ID of the view</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.table_filter.TableFilter">
-<em class="property">class </em><code class="descclassname">traitsui.table_filter.</code><code class="descname">TableFilter</code><a class="headerlink" href="#traitsui.table_filter.TableFilter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.table_filter.</code><code class="sig-name descname">TableFilter</code><a class="headerlink" href="#traitsui.table_filter.TableFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Filter for items displayed in a table.</p>
+<dl class="attribute">
+<dt id="traitsui.table_filter.TableFilter.allowed">
+<code class="sig-name descname">allowed</code><em class="property"> = Callable(lambda object: True, transient=True)</em><a class="headerlink" href="#traitsui.table_filter.TableFilter.allowed" title="Permalink to this definition">¶</a></dt>
+<dd><p>A callable function that returns whether the passed object is allowed
+by the filter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.TableFilter.desc">
+<code class="sig-name descname">desc</code><em class="property"> = Str(&quot;All items&quot;)</em><a class="headerlink" href="#traitsui.table_filter.TableFilter.desc" title="Permalink to this definition">¶</a></dt>
+<dd><p>A user-readable description of what kind of object satisfies the filter</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.table_filter.TableFilter.description">
-<code class="descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.TableFilter.description" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.TableFilter.description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a user-readable description of what kind of object
 satisfies the filter.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.TableFilter.edit">
-<code class="descname">edit</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.TableFilter.edit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">edit</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.TableFilter.edit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edits the contents of the filter.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.table_filter.TableFilter.edit_view">
-<code class="descname">edit_view</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.TableFilter.edit_view" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">edit_view</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.TableFilter.edit_view" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a view to use for editing the filter.</p>
 <p>The ‘’object’’ parameter is a sample object for the table that the
 filter will be applied to. It is supplied in case the filter needs to
@@ -326,15 +435,28 @@ extract data or metadata from the object. If the table is empty, the
 
 <dl class="method">
 <dt id="traitsui.table_filter.TableFilter.filter">
-<code class="descname">filter</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.TableFilter.filter" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">filter</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_filter.TableFilter.filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether a specified object meets the filter or search
 criteria.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="traitsui.table_filter.TableFilter.ignored_traits">
-<code class="descname">ignored_traits</code><em class="property"> = ['_name', 'template', 'desc']</em><a class="headerlink" href="#traitsui.table_filter.TableFilter.ignored_traits" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">ignored_traits</code><em class="property"> = ['_name', 'template', 'desc']</em><a class="headerlink" href="#traitsui.table_filter.TableFilter.ignored_traits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Traits that are ignored by the _anytrait_changed() handler</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.TableFilter.name">
+<code class="sig-name descname">name</code><em class="property"> = Str(&quot;Default filter&quot;)</em><a class="headerlink" href="#traitsui.table_filter.TableFilter.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>UI name of this filter (so the user can identify it in the UI)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.table_filter.TableFilter.template">
+<code class="sig-name descname">template</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.table_filter.TableFilter.template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the filter a template (i.e., non-deletable, non-editable)?</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -361,13 +483,11 @@ criteria.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -388,13 +508,13 @@ criteria.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

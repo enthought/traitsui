@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.ui_info module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.ui_info module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.ui_traits module" href="traitsui.ui_traits.html" >
     <link rel="prev" title="traitsui.ui_editor module" href="traitsui.ui_editor.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.ui_info module</a></li>
@@ -97,21 +96,33 @@
 an active Traits-based user interface.</p>
 <dl class="class">
 <dt id="traitsui.ui_info.UIInfo">
-<em class="property">class </em><code class="descclassname">traitsui.ui_info.</code><code class="descname">UIInfo</code><a class="headerlink" href="#traitsui.ui_info.UIInfo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.ui_info.</code><code class="sig-name descname">UIInfo</code><a class="headerlink" href="#traitsui.ui_info.UIInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Represents the object and editor content of an active Traits-based
 user interface</p>
 <dl class="method">
 <dt id="traitsui.ui_info.UIInfo.bind">
-<code class="descname">bind</code><span class="sig-paren">(</span><em>name</em>, <em>value</em>, <em>id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_info.UIInfo.bind" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">bind</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em>, <em class="sig-param">id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_info.UIInfo.bind" title="Permalink to this definition">¶</a></dt>
 <dd><p>Binds a name to a value if it is not already bound.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.ui_info.UIInfo.bind_context">
-<code class="descname">bind_context</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_info.UIInfo.bind_context" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">bind_context</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_info.UIInfo.bind_context" title="Permalink to this definition">¶</a></dt>
 <dd><p>Binds all of the associated context objects as traits of the
 object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_info.UIInfo.initialized">
+<code class="sig-name descname">initialized</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.ui_info.UIInfo.initialized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates whether the UI has finished initialization</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_info.UIInfo.ui">
+<code class="sig-name descname">ui</code><em class="property"> = Instance(&quot;traitsui.ui.UI&quot;, allow_none=True)</em><a class="headerlink" href="#traitsui.ui_info.UIInfo.ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bound to a UI object at UIInfo construction time</p>
 </dd></dl>
 
 </dd></dl>
@@ -139,13 +150,11 @@ object.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -166,13 +175,13 @@ object.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

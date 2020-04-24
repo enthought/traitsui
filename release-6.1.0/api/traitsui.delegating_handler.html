@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.delegating_handler module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.dock_window_theme module" href="traitsui.dock_window_theme.html" >
+    <link rel="prev" title="traitsui.default_dock_window_theme module" href="traitsui.default_dock_window_theme.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.delegating_handler module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.dock_window_theme.html" title="traitsui.dock_window_theme module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.default_dock_window_theme.html" title="traitsui.default_dock_window_theme module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.delegating_handler">
+<span id="traitsui-delegating-handler-module"></span><h1>traitsui.delegating_handler module<a class="headerlink" href="#module-traitsui.delegating_handler" title="Permalink to this headline">¶</a></h1>
+<p>A handler that delegates the handling of events to a set of sub-handlers.</p>
+<p>This is typically used as the handler for dynamic views.  See the
+<strong>traits.has_dynamic_view</strong> module.</p>
+<dl class="class">
+<dt id="traitsui.delegating_handler.DelegatingHandler">
+<em class="property">class </em><code class="descclassname">traitsui.delegating_handler.</code><code class="descname">DelegatingHandler</code><a class="headerlink" href="#traitsui.delegating_handler.DelegatingHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.handler.html#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.handler.Handler</span></code></a></p>
+<p>A handler that delegates the handling of events to a set of
+sub-handlers.</p>
+<dl class="method">
+<dt id="traitsui.delegating_handler.DelegatingHandler.closed">
+<code class="descname">closed</code><span class="sig-paren">(</span><em>info</em>, <em>is_ok</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.delegating_handler.DelegatingHandler.closed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the user interface being closed by the user.</p>
+<p>This method is overridden here to unregister any dispatchers that
+were set up in the <em>init()</em> method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.delegating_handler.DelegatingHandler.init">
+<code class="descname">init</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.delegating_handler.DelegatingHandler.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the controls of a user interface.</p>
+<p>This method is called after all user interface elements have been
+created, but before the user interface is displayed. Use this method to
+further customize the user interface before it is displayed.</p>
+<p>This method is overridden here to delegate to sub-handlers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<em>UIInfo</em> object) – The UIInfo object associated with the view</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>initialized</strong> – A boolean, indicating whether the user interface was successfully
+initialized. A True value indicates that the UI can be displayed;
+a False value indicates that the display operation should be
+cancelled.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.default_dock_window_theme.html"
+                        title="previous chapter">traitsui.default_dock_window_theme module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.dock_window_theme.html"
+                        title="next chapter">traitsui.dock_window_theme module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.delegating_handler.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

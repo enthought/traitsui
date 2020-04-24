@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.editors.value_editor module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.editors.value_editor module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
     <link rel="next" title="traitsui.extras package" href="traitsui.extras.html" >
     <link rel="prev" title="traitsui.editors.tuple_editor module" href="traitsui.editors.tuple_editor.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
   
@@ -97,14 +96,20 @@
 <p>Defines the tree-based Python value editor and the value editor factory.</p>
 <dl class="class">
 <dt id="traitsui.editors.value_editor.ToolkitEditorFactory">
-<em class="property">class </em><code class="descclassname">traitsui.editors.value_editor.</code><code class="descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.value_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.value_editor.</code><code class="sig-name descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.value_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory" title="traitsui.editor_factory.EditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editor_factory.EditorFactory</span></code></a></p>
 <p>Editor factory for tree-based value editors.</p>
+<dl class="attribute">
+<dt id="traitsui.editors.value_editor.ToolkitEditorFactory.auto_open">
+<code class="sig-name descname">auto_open</code><em class="property"> = Int(2)</em><a class="headerlink" href="#traitsui.editors.value_editor.ToolkitEditorFactory.auto_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of tree levels to automatically open</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="attribute">
 <dt id="traitsui.editors.value_editor.ValueEditor">
-<code class="descclassname">traitsui.editors.value_editor.</code><code class="descname">ValueEditor</code><a class="headerlink" href="#traitsui.editors.value_editor.ValueEditor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.editors.value_editor.</code><code class="sig-name descname">ValueEditor</code><a class="headerlink" href="#traitsui.editors.value_editor.ValueEditor" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <a class="reference internal" href="#traitsui.editors.value_editor.ToolkitEditorFactory" title="traitsui.editors.value_editor.ToolkitEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editors.value_editor.ToolkitEditorFactory</span></code></a></p>
 </dd></dl>
 
@@ -131,13 +136,11 @@
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -158,13 +161,13 @@
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

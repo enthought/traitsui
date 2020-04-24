@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.group module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.group module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.handler module" href="traitsui.handler.html" >
     <link rel="prev" title="traitsui.file_dialog module" href="traitsui.file_dialog.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.group module</a></li>
@@ -97,86 +96,339 @@
 Traits-based user interface.</p>
 <dl class="class">
 <dt id="traitsui.group.Group">
-<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">Group</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.group.</code><code class="sig-name descname">Group</code><span class="sig-paren">(</span><em class="sig-param">*values</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.view_element.html#traitsui.view_element.ViewSubElement" title="traitsui.view_element.ViewSubElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewSubElement</span></code></a></p>
 <p>Represents a grouping of items in a user interface view.</p>
+<dl class="attribute">
+<dt id="traitsui.group.Group.columns">
+<code class="sig-name descname">columns</code><em class="property"> = Range(1, 50)</em><a class="headerlink" href="#traitsui.group.Group.columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of columns in the group</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.content">
+<code class="sig-name descname">content</code><em class="property"> = List(ViewSubElement)</em><a class="headerlink" href="#traitsui.group.Group.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of Group, Item, and Include objects in this group.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.defined_when">
+<code class="sig-name descname">defined_when</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.group.Group.defined_when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-condition for including the group in the display. If the expression
+evaluates to False, the group is not defined in the display. Conditions
+for <strong>defined_when</strong> are evaluated only once, when the display is first
+constructed. Use this attribute for conditions based on attributes that
+vary from object to object, but that do not change over time.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.dock">
+<code class="sig-name descname">dock</code><em class="property"> = ContainerDelegate</em><a class="headerlink" href="#traitsui.group.Group.dock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default docking style of items in group.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.dock_theme">
+<code class="sig-name descname">dock_theme</code><em class="property"> = Instance(DockWindowTheme, allow_none=False)</em><a class="headerlink" href="#traitsui.group.Group.dock_theme" title="Permalink to this definition">¶</a></dt>
+<dd><p>The theme to use for a DockWindow:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.enabled_when">
+<code class="sig-name descname">enabled_when</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.group.Group.enabled_when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-condition for enabling the group. If the expression evaluates to False,
+the group is disabled, that is, none of the widgets accept input. All
+<strong>enabled_when</strong> conditions are checked each time that any trait value
+is edited in the display. Therefore, you can use <strong>enabled_when</strong>
+conditions to enable or disable groups in response to user input.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.export">
+<code class="sig-name descname">export</code><em class="property"> = ContainerDelegate</em><a class="headerlink" href="#traitsui.group.Group.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Category of elements dragged from view.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.group.Group.get_label">
-<code class="descname">get_label</code><span class="sig-paren">(</span><em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.get_label" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_label</code><span class="sig-paren">(</span><em class="sig-param">ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.get_label" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the label to use this group.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.group.Group.get_shadow">
-<code class="descname">get_shadow</code><span class="sig-paren">(</span><em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.get_shadow" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_shadow</code><span class="sig-paren">(</span><em class="sig-param">ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.get_shadow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a ShadowGroup object for the current Group object, which
 recursively resolves all embedded Include objects and which replaces
 each embedded Group object with a corresponding ShadowGroup.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="traitsui.group.Group.height">
+<code class="sig-name descname">height</code><em class="property"> = Property(Float, depends_on=&quot;content&quot;)</em><a class="headerlink" href="#traitsui.group.Group.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Requested height of the group (calculated from heights of contents)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.help">
+<code class="sig-name descname">help</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.group.Group.help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional help text (for top-level group). This help text appears in the
+View-level help window (created by the default help handler), for any
+View that contains <em>only</em> this group. Group-level help is ignored for
+nested groups and multiple top-level groups</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.id">
+<code class="sig-name descname">id</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.group.Group.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A unique identifier for the group.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.image">
+<code class="sig-name descname">image</code><em class="property"> = ContainerDelegate</em><a class="headerlink" href="#traitsui.group.Group.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default image to display on notebook tabs.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.group.Group.is_includable">
-<code class="descname">is_includable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.is_includable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_includable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.is_includable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a Boolean value indicating whether the object is replacable
 by an Include object.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="traitsui.group.Group.label">
+<code class="sig-name descname">label</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.group.Group.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>User interface label for the group. How the label is displayed depends
+on the <strong>show_border</strong> attribute, and on the <strong>layout</strong> attribute of
+the group’s parent group or view.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.layout">
+<code class="sig-name descname">layout</code><em class="property"> = Layout</em><a class="headerlink" href="#traitsui.group.Group.layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Layout style of the group, which can be one of the following:</p>
+<ul class="simple">
+<li><p>‘normal’ (default): Sub-groups are displayed sequentially in a single
+panel.</p></li>
+<li><p>‘flow’: Sub-groups are displayed sequentially, and then “wrap” when
+they exceed the available space in the <strong>orientation</strong> direction.</p></li>
+<li><p>‘split’: Sub-groups are displayed in a single panel, separated by
+“splitter bars”, which the user can drag to adjust the amount of space
+for each sub-group.</p></li>
+<li><p>‘tabbed’: Each sub-group appears on a separate tab, labeled with the
+sub-group’s <em>label</em> text, if any.</p></li>
+</ul>
+<p>This attribute is ignored for groups that contain only items, or contain
+only one sub-group.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.object">
+<code class="sig-name descname">object</code><em class="property"> = ContainerDelegate</em><a class="headerlink" href="#traitsui.group.Group.object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default context object for group items.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.orientation">
+<code class="sig-name descname">orientation</code><em class="property"> = Orientation</em><a class="headerlink" href="#traitsui.group.Group.orientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spatial orientation of the group’s elements. Can be ‘vertical’ (default)
+or ‘horizontal’.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.padding">
+<code class="sig-name descname">padding</code><em class="property"> = Padding</em><a class="headerlink" href="#traitsui.group.Group.padding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Amount of padding (in pixels) to add around each item in the group. The
+value must be an integer between 0 and 15. (Unlike the Item class, the
+Group class does not support negative padding.) The padding for any
+individual widget is the sum of the padding for its Group, the padding
+for its Item, and the default spacing determined by the toolkit.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.group.Group.replace_include">
-<code class="descname">replace_include</code><span class="sig-paren">(</span><em>view_elements</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.replace_include" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">replace_include</code><span class="sig-paren">(</span><em class="sig-param">view_elements</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.replace_include" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replaces any items that have an <strong>id</strong> attribute with an Include
 object with the same ID value, and puts the object with the ID
 into the specified ViewElements object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>view_elements</strong> (<em>ViewElements object</em>) – A set of Group, Item, and Include objects</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>view_elements</strong> (<em>ViewElements object</em>) – A set of Group, Item, and Include objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.scrollable">
+<code class="sig-name descname">scrollable</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.group.Group.scrollable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the group be scrollable along the direction of orientation?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.selected">
+<code class="sig-name descname">selected</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.group.Group.selected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this group the tab that is initially selected? If True, the group’s
+tab is displayed when the view is opened. If the <strong>layout</strong> of the group’s
+parent is not ‘tabbed’, this attribute is ignored.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.group.Group.set_container">
-<code class="descname">set_container</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.set_container" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_container</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.set_container" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the correct container for the content.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.show_border">
+<code class="sig-name descname">show_border</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.group.Group.show_border" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should a border be drawn around group? If set to True, the <strong>label</strong> text
+is embedded in the border. If set to False, the label appears as a banner
+above the elements of the group.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.show_labels">
+<code class="sig-name descname">show_labels</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.group.Group.show_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should labels be added to items in group? Only items that are directly
+contained in the group are affected. That is, if the group contains
+a sub-group, the display of labels in the sub-group is not affected by
+the attribute on this group.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.show_left">
+<code class="sig-name descname">show_left</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.group.Group.show_left" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should labels be shown to the left of items (True) or the right (False)?
+Only items that are directly contained in the group are affected. That is,
+if the group contains a sub-group, the display of labels in the sub-group
+is not affected by the attribute in this group. If <strong>show_labels</strong> is
+False, this attribute is irrelevant.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.springy">
+<code class="sig-name descname">springy</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.group.Group.springy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the group use extra space along its parent group’s layout
+orientation?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.style">
+<code class="sig-name descname">style</code><em class="property"> = ContainerDelegate</em><a class="headerlink" href="#traitsui.group.Group.style" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default editor style of items in the group.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.visible_when">
+<code class="sig-name descname">visible_when</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.group.Group.visible_when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-condition for showing the group. If the expression evaluates to False,
+the group and its items are not visible (and they disappear if they were
+previously visible). If the value evaluates to True, the group and items
+become visible. All <strong>visible_when</strong> conditions are checked each time
+that any trait value is edited in the display. Therefore, you can use
+<strong>visible_when</strong> conditions to hide or show groups in response to user
+input.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.Group.width">
+<code class="sig-name descname">width</code><em class="property"> = Property(Float, depends_on=&quot;content&quot;)</em><a class="headerlink" href="#traitsui.group.Group.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Requested width of the group (calculated from widths of contents)</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.HFlow">
-<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">HFlow</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.HFlow" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.group.</code><code class="sig-name descname">HFlow</code><span class="sig-paren">(</span><em class="sig-param">*values</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.HFlow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.group.HGroup" title="traitsui.group.HGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.HGroup</span></code></a></p>
 <p>A group in which items are laid out horizontally, and “wrap” when
 they exceed the available horizontal space..</p>
+<dl class="attribute">
+<dt id="traitsui.group.HFlow.layout">
+<code class="sig-name descname">layout</code><em class="property"> = &quot;flow&quot;</em><a class="headerlink" href="#traitsui.group.HFlow.layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override standard Group trait defaults to give it horizontal flow
+behavior:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.HGroup">
-<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">HGroup</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.HGroup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.group.</code><code class="sig-name descname">HGroup</code><span class="sig-paren">(</span><em class="sig-param">*values</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.HGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
 <p>A group whose items are laid out horizontally.</p>
+<dl class="attribute">
+<dt id="traitsui.group.HGroup.orientation">
+<code class="sig-name descname">orientation</code><em class="property"> = &quot;horizontal&quot;</em><a class="headerlink" href="#traitsui.group.HGroup.orientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override standard Group trait defaults to give it horizontal group
+behavior:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.HSplit">
-<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">HSplit</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.HSplit" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.group.</code><code class="sig-name descname">HSplit</code><span class="sig-paren">(</span><em class="sig-param">*values</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.HSplit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
 <p>A horizontal group with splitter bars to separate it from other groups.</p>
+<dl class="attribute">
+<dt id="traitsui.group.HSplit.layout">
+<code class="sig-name descname">layout</code><em class="property"> = &quot;split&quot;</em><a class="headerlink" href="#traitsui.group.HSplit.layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override standard Group trait defaults to give it horizontal splitter
+behavior:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.ShadowGroup">
-<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">ShadowGroup</code><span class="sig-paren">(</span><em>shadow</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.ShadowGroup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.group.</code><code class="sig-name descname">ShadowGroup</code><span class="sig-paren">(</span><em class="sig-param">shadow</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.ShadowGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
 <p>Corresponds to a Group object, but with all embedded Include
 objects resolved, and with all embedded Group objects replaced by
 corresponding ShadowGroup objects.</p>
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.columns">
+<code class="sig-name descname">columns</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of columns in the group</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.defined_when">
+<code class="sig-name descname">defined_when</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.defined_when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-condition for defining the group</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.dock">
+<code class="sig-name descname">dock</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.dock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default docking style of items in the group</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.dock_theme">
+<code class="sig-name descname">dock_theme</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.dock_theme" title="Permalink to this definition">¶</a></dt>
+<dd><p>The theme to use for a DockWindow:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.enabled_when">
+<code class="sig-name descname">enabled_when</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.enabled_when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-condition for enabling the group</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.export">
+<code class="sig-name descname">export</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Category of elements dragged from the view</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.group.ShadowGroup.get_content">
-<code class="descname">get_content</code><span class="sig-paren">(</span><em>allow_groups=True</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.ShadowGroup.get_content" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_content</code><span class="sig-paren">(</span><em class="sig-param">allow_groups=True</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.ShadowGroup.get_content" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the contents of the Group within a specified context for
 building a user interface.</p>
 <p>This method makes sure that all Group types are of the same type (i.e.,
@@ -186,60 +438,215 @@ substituted values.</p>
 
 <dl class="method">
 <dt id="traitsui.group.ShadowGroup.get_id">
-<code class="descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.ShadowGroup.get_id" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.ShadowGroup.get_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an ID for the group.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.groups">
+<code class="sig-name descname">groups</code><em class="property"> = ReadOnly()</em><a class="headerlink" href="#traitsui.group.ShadowGroup.groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of ShadowGroups in <strong>content</strong></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.help">
+<code class="sig-name descname">help</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional help text (for top-level group)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.id">
+<code class="sig-name descname">id</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the group</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.image">
+<code class="sig-name descname">image</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default image to display on notebook tabs</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.label">
+<code class="sig-name descname">label</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>User interface label for the group</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.layout">
+<code class="sig-name descname">layout</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Layout style of the group</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.object">
+<code class="sig-name descname">object</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default context object for group items</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.orientation">
+<code class="sig-name descname">orientation</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.orientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spatial orientation of the group</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.padding">
+<code class="sig-name descname">padding</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.padding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Amount of padding to add around each item</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.scrollable">
+<code class="sig-name descname">scrollable</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.scrollable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the group be scrollable along the direction of orientation?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.selected">
+<code class="sig-name descname">selected</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.selected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is group the initially selected page?</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.group.ShadowGroup.set_container">
-<code class="descname">set_container</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.ShadowGroup.set_container" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_container</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.ShadowGroup.set_container" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the correct container for the content.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.shadow">
+<code class="sig-name descname">shadow</code><em class="property"> = shadow</em><a class="headerlink" href="#traitsui.group.ShadowGroup.shadow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group object this is a “shadow” for</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.show_border">
+<code class="sig-name descname">show_border</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.show_border" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should a border be drawn around group?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.show_labels">
+<code class="sig-name descname">show_labels</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.show_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should labels be added to items in group?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.show_left">
+<code class="sig-name descname">show_left</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.show_left" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should labels be shown to the left of items (vs. the right)?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.springy">
+<code class="sig-name descname">springy</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.springy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the group use extra space along its parent group’s layout
+orientation?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.style">
+<code class="sig-name descname">style</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.style" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default style of items in the group</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.style_sheet">
+<code class="sig-name descname">style_sheet</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.style_sheet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Style sheet for the panel</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.group.ShadowGroup.visible_when">
+<code class="sig-name descname">visible_when</code><em class="property"> = ShadowDelegate</em><a class="headerlink" href="#traitsui.group.ShadowGroup.visible_when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-condition for showing the group</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.Tabbed">
-<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">Tabbed</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Tabbed" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.group.</code><code class="sig-name descname">Tabbed</code><span class="sig-paren">(</span><em class="sig-param">*values</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Tabbed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
 <p>A group that is shown as a tabbed notebook.</p>
+<dl class="attribute">
+<dt id="traitsui.group.Tabbed.layout">
+<code class="sig-name descname">layout</code><em class="property"> = &quot;tabbed&quot;</em><a class="headerlink" href="#traitsui.group.Tabbed.layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override standard Group trait defaults to give it tabbed notebook
+behavior:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.VFlow">
-<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VFlow</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VFlow" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.group.</code><code class="sig-name descname">VFlow</code><span class="sig-paren">(</span><em class="sig-param">*values</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VFlow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.group.VGroup" title="traitsui.group.VGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.VGroup</span></code></a></p>
 <p>A group in which items are laid out vertically, and “wrap” when they
 exceed the available vertical space.</p>
+<dl class="attribute">
+<dt id="traitsui.group.VFlow.layout">
+<code class="sig-name descname">layout</code><em class="property"> = &quot;flow&quot;</em><a class="headerlink" href="#traitsui.group.VFlow.layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override standard Group trait defaults to give it vertical flow behavior:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.VFold">
-<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VFold</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VFold" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.group.</code><code class="sig-name descname">VFold</code><span class="sig-paren">(</span><em class="sig-param">*values</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VFold" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.group.VGroup" title="traitsui.group.VGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.VGroup</span></code></a></p>
 <p>A group in which items are laid out vertically and can be collapsed
 (i.e. ‘folded’) by clicking their title.</p>
+<dl class="attribute">
+<dt id="traitsui.group.VFold.layout">
+<code class="sig-name descname">layout</code><em class="property"> = &quot;fold&quot;</em><a class="headerlink" href="#traitsui.group.VFold.layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override standard Group trait defaults to give it vertical folding group
+behavior:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.VGrid">
-<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VGrid</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VGrid" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.group.</code><code class="sig-name descname">VGrid</code><span class="sig-paren">(</span><em class="sig-param">*values</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VGrid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.group.VGroup" title="traitsui.group.VGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.VGroup</span></code></a></p>
 <p>A group whose items are laid out in 2 columns.</p>
+<dl class="attribute">
+<dt id="traitsui.group.VGrid.columns">
+<code class="sig-name descname">columns</code><em class="property"> = 2</em><a class="headerlink" href="#traitsui.group.VGrid.columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override standard Group trait defaults to give it grid behavior:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.VGroup">
-<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VGroup</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VGroup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.group.</code><code class="sig-name descname">VGroup</code><span class="sig-paren">(</span><em class="sig-param">*values</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
 <p>A group whose items are laid out vertically.</p>
+<dl class="attribute">
+<dt id="traitsui.group.VGroup.orientation">
+<code class="sig-name descname">orientation</code><em class="property"> = &quot;vertical&quot;</em><a class="headerlink" href="#traitsui.group.VGroup.orientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override standard Group trait defaults to give it vertical group
+behavior:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.VSplit">
-<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VSplit</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VSplit" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.group.</code><code class="sig-name descname">VSplit</code><span class="sig-paren">(</span><em class="sig-param">*values</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VSplit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
 <p>A vertical group with splitter bars to separate it from other groups.</p>
+<dl class="attribute">
+<dt id="traitsui.group.VSplit.layout">
+<code class="sig-name descname">layout</code><em class="property"> = &quot;split&quot;</em><a class="headerlink" href="#traitsui.group.VSplit.layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override standard Group trait defaults to give it vertical splitter
+behavior:</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -265,13 +672,11 @@ exceed the available vertical space.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -292,13 +697,13 @@ exceed the available vertical space.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

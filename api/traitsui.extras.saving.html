@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.extras.saving module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.extras.saving module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui.extras package" href="traitsui.extras.html" >
     <link rel="next" title="traitsui.image package" href="traitsui.image.html" >
     <link rel="prev" title="traitsui.extras.progress_column module" href="traitsui.extras.progress_column.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.extras.html" accesskey="U">traitsui.extras package</a></li>
   
@@ -99,22 +98,22 @@ involved with implementing user-friendly saving behavior in a Traits
 UI application.</p>
 <dl class="class">
 <dt id="traitsui.extras.saving.CanSaveMixin">
-<em class="property">class </em><code class="descclassname">traitsui.extras.saving.</code><code class="descname">CanSaveMixin</code><a class="headerlink" href="#traitsui.extras.saving.CanSaveMixin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.extras.saving.</code><code class="sig-name descname">CanSaveMixin</code><a class="headerlink" href="#traitsui.extras.saving.CanSaveMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
 <p>A mixin-class for objects that wish to support GUI saving via a
 SaveHandler. It is the responsiblity of the child class to manage
 its dirty flag, which describes whether its information has changed
 since its last save.</p>
 <dl class="method">
 <dt id="traitsui.extras.saving.CanSaveMixin.save">
-<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.CanSaveMixin.save" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.CanSaveMixin.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the object to the path specified by its ‘filepath’ trait. This
 method should also reset the dirty flag on this object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.extras.saving.CanSaveMixin.validate">
-<code class="descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.CanSaveMixin.validate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.CanSaveMixin.validate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether the information in the object is valid to be saved
 in tuple form. The first item is the validation state (boolean) and
 the second item is the message to display if the object did not
@@ -126,33 +125,68 @@ validate.</p>
 
 <dl class="class">
 <dt id="traitsui.extras.saving.SaveHandler">
-<em class="property">class </em><code class="descclassname">traitsui.extras.saving.</code><code class="descname">SaveHandler</code><a class="headerlink" href="#traitsui.extras.saving.SaveHandler" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.extras.saving.</code><code class="sig-name descname">SaveHandler</code><a class="headerlink" href="#traitsui.extras.saving.SaveHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.handler.html#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.handler.Handler</span></code></a></p>
 <p>A Handler that facilates adding saving to a Traits UI application.</p>
+<dl class="attribute">
+<dt id="traitsui.extras.saving.SaveHandler.allowValidationBypass">
+<code class="sig-name descname">allowValidationBypass</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.allowValidationBypass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to allow the user to override a validation failure through a
+confirmation dialog. By default, validation errors cannot be overriden.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.saving.SaveHandler.autosave">
+<code class="sig-name descname">autosave</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.autosave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to automatically save after a certain amount of time has passed
+since the last save</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.saving.SaveHandler.autosaveInterval">
+<code class="sig-name descname">autosaveInterval</code><em class="property"> = Int(300)</em><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.autosaveInterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of seconds between each autosave. Default is 5 minutes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.saving.SaveHandler.autosaveValidationBypass">
+<code class="sig-name descname">autosaveValidationBypass</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.autosaveValidationBypass" title="Permalink to this definition">¶</a></dt>
+<dd><p>If it is possible to override validation failures, this specifies whether
+autosave will do so. If False and a validation errors occurs, no save
+will occur.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.extras.saving.SaveHandler.close">
-<code class="descname">close</code><span class="sig-paren">(</span><em>info</em>, <em>is_ok</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.close" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">close</code><span class="sig-paren">(</span><em class="sig-param">info</em>, <em class="sig-param">is_ok</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.close" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called when the user requests to close the interface. Returns a
 boolean indicating whether the window should be allowed to close.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.extras.saving.SaveHandler.closed">
-<code class="descname">closed</code><span class="sig-paren">(</span><em>info</em>, <em>is_ok</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.closed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">closed</code><span class="sig-paren">(</span><em class="sig-param">info</em>, <em class="sig-param">is_ok</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.closed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called after the window is destroyed. Makes sure that the autosave
 timer is stopped.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.extras.saving.SaveHandler.exit">
-<code class="descname">exit</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.exit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">exit</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.exit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Closes the UI unless a save prompt is cancelled. Provided for
 convenience to be used with a Menu action.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="traitsui.extras.saving.SaveHandler.extension">
+<code class="sig-name descname">extension</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.extension" title="Permalink to this definition">¶</a></dt>
+<dd><p>The option extension which should appear at the end of all filenames. If
+the user does not explicitly specifiy it, it is appended to the filename.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.extras.saving.SaveHandler.init">
-<code class="descname">init</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.init" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">init</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.init" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the default save object (the object being handled). Also,
 perform a questionable hack by which we remove the handled
 object from the keybinding’s controllers. This means that a
@@ -165,14 +199,20 @@ that this problem exists. Keybindings are a UI concept–they should
 
 <dl class="method">
 <dt id="traitsui.extras.saving.SaveHandler.promptForSave">
-<code class="descname">promptForSave</code><span class="sig-paren">(</span><em>info</em>, <em>cancel=True</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.promptForSave" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">promptForSave</code><span class="sig-paren">(</span><em class="sig-param">info</em>, <em class="sig-param">cancel=True</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.promptForSave" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prompts the user to save the object, if appropriate. Returns whether
 the user canceled the action that invoked this prompt.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="traitsui.extras.saving.SaveHandler.promptOnExit">
+<code class="sig-name descname">promptOnExit</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.promptOnExit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to prompt for a save on exit if the save object is dirty</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.extras.saving.SaveHandler.save">
-<code class="descname">save</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.save" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the object to its current filepath. If this is not specified,
 opens a dialog to select this path. Returns whether the save
 actually occurred.</p>
@@ -180,9 +220,29 @@ actually occurred.</p>
 
 <dl class="method">
 <dt id="traitsui.extras.saving.SaveHandler.saveAs">
-<code class="descname">saveAs</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.saveAs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">saveAs</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.saveAs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the object to a new path, and sets this as the ‘filepath’ on
 the object. Returns whether the save actually occurred.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.saving.SaveHandler.saveObject">
+<code class="sig-name descname">saveObject</code><em class="property"> = Any()</em><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.saveObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>The object which is to be saved (subclass of CanSaveMixin). It is assigned
+to info.object in the ‘init’ method, which in many cases is what you want.
+If not, override that method to set it to something else.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.saving.SaveHandler.savePromptMessage">
+<code class="sig-name descname">savePromptMessage</code><em class="property"> = Str(&quot;Would you like to save?&quot;)</em><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.savePromptMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>This message to display when the Handler requests a save</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.saving.SaveHandler.wildcard">
+<code class="sig-name descname">wildcard</code><em class="property"> = Str(&quot;All files (*.*)|*.*&quot;)</em><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.wildcard" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of files to show in the save dialogs</p>
 </dd></dl>
 
 </dd></dl>
@@ -210,13 +270,11 @@ the object. Returns whether the save actually occurred.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -237,13 +295,13 @@ the object. Returns whether the save actually occurred.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

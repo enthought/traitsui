@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.ui_editors.data_frame_editor module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.ui_editors.data_frame_editor module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui.ui_editors package" href="traitsui.ui_editors.html" >
     <link rel="next" title="traitsui.api module" href="traitsui.api.html" >
     <link rel="prev" title="traitsui.ui_editors.array_view_editor module" href="traitsui.ui_editors.array_view_editor.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.ui_editors.html" accesskey="U">traitsui.ui_editors package</a></li>
   
@@ -96,18 +95,18 @@
 <span id="traitsui-ui-editors-data-frame-editor-module"></span><h1>traitsui.ui_editors.data_frame_editor module<a class="headerlink" href="#module-traitsui.ui_editors.data_frame_editor" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter">
-<em class="property">class </em><code class="descclassname">traitsui.ui_editors.data_frame_editor.</code><code class="descname">DataFrameAdapter</code><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.ui_editors.data_frame_editor.</code><code class="sig-name descname">DataFrameAdapter</code><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.tabular_adapter.TabularAdapter</span></code></a></p>
 <p>Generic tabular adapter for data frames</p>
 <dl class="attribute">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.alignment">
-<code class="descname">alignment</code><em class="property"> = Property(Enum('left', 'center', 'right'))</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.alignment" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">alignment</code><em class="property"> = Property(Enum(&quot;left&quot;, &quot;center&quot;, &quot;right&quot;))</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.alignment" title="Permalink to this definition">¶</a></dt>
 <dd><p>The alignment for each cell</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.delete">
-<code class="descname">delete</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.delete" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">delete</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">trait</em>, <em class="sig-param">row</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override the base implementation to work with DataFrames</p>
 <p>Unavoidably does a copy of the data, setting the trait with the new
 value.</p>
@@ -115,19 +114,19 @@ value.</p>
 
 <dl class="attribute">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.font">
-<code class="descname">font</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.font" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">font</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.font" title="Permalink to this definition">¶</a></dt>
 <dd><p>The font to use for each column</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.format">
-<code class="descname">format</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.format" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">format</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.format" title="Permalink to this definition">¶</a></dt>
 <dd><p>The format to use for each column</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.get_item">
-<code class="descname">get_item</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.get_item" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_item</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">trait</em>, <em class="sig-param">row</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.get_item" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override the base implementation to work with DataFrames</p>
 <p>This returns a dataframe with one row, rather than a series, since
 using a dataframe preserves dtypes.</p>
@@ -135,19 +134,19 @@ using a dataframe preserves dtypes.</p>
 
 <dl class="attribute">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.index_alignment">
-<code class="descname">index_alignment</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.index_alignment" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">index_alignment</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.index_alignment" title="Permalink to this definition">¶</a></dt>
 <dd><p>The alignment to use for a row index.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.index_text">
-<code class="descname">index_text</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.index_text" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">index_text</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.index_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>The text to use for a row index.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.insert">
-<code class="descname">insert</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.insert" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">insert</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">trait</em>, <em class="sig-param">row</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.insert" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override the base implementation to work with DataFrames</p>
 <p>Unavoidably does a copy of the data, setting the trait with the new
 value.</p>
@@ -155,7 +154,7 @@ value.</p>
 
 <dl class="attribute">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.text">
-<code class="descname">text</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.text" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">text</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.text" title="Permalink to this definition">¶</a></dt>
 <dd><p>The text to use for a generic entry.</p>
 </dd></dl>
 
@@ -163,49 +162,177 @@ value.</p>
 
 <dl class="class">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor">
-<em class="property">class </em><code class="descclassname">traitsui.ui_editors.data_frame_editor.</code><code class="descname">DataFrameEditor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.ui_editors.data_frame_editor.</code><code class="sig-name descname">DataFrameEditor</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.basic_editor_factory.html#traitsui.basic_editor_factory.BasicEditorFactory" title="traitsui.basic_editor_factory.BasicEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.basic_editor_factory.BasicEditorFactory</span></code></a></p>
 <p>Editor factory for basic data frame editor</p>
 <dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.activated">
+<code class="sig-name descname">activated</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.activated" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait to synchronize the activated
+value with:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.activated_row">
+<code class="sig-name descname">activated_row</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.activated_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait to synchronize the activated
+value’s row with:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.adapter">
+<code class="sig-name descname">adapter</code><em class="property"> = Instance(DataFrameAdapter)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.adapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set to override the default dataframe adapter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.clicked">
+<code class="sig-name descname">clicked</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait to synchronize left click data
+with. The data is a TabularEditorEvent:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.column_clicked">
+<code class="sig-name descname">column_clicked</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.column_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait to synchronize column
+clicked data with. The data is a TabularEditorEvent:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.column_right_clicked">
+<code class="sig-name descname">column_right_clicked</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.column_right_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait to synchronize column
+right clicked data with. The data is a TabularEditorEvent:</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.columns">
-<code class="descname">columns</code><em class="property"> = List()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.columns" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">columns</code><em class="property"> = List(Either(Str, Tuple(Str, Str)))</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.columns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optional list of either column ID or pairs of (column title, column ID).</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.dclicked">
+<code class="sig-name descname">dclicked</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.dclicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait to synchronize left double click
+data with. The data is a TabularEditorEvent:</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.editable">
-<code class="descname">editable</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.editable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">editable</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.editable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Whether or not the entries can be edited.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.fonts">
-<code class="descname">fonts</code><em class="property"> = Either(Font, Dict, default='Courier 10')</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.fonts" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fonts</code><em class="property"> = Either(Font, Dict, default=&quot;Courier 10&quot;)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.fonts" title="Permalink to this definition">¶</a></dt>
 <dd><p>The font for each element, or a mapping column ID to font.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.formats">
-<code class="descname">formats</code><em class="property"> = Either(Str, Dict, default='%s')</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.formats" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">formats</code><em class="property"> = Either(Str, Dict, default=&quot;%s&quot;)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.formats" title="Permalink to this definition">¶</a></dt>
 <dd><p>The format for each element, or a mapping column ID to format.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.klass">
-<code class="descname">klass</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.klass" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">klass</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.klass" title="Permalink to this definition">¶</a></dt>
 <dd><p>The editor implementation class.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.multi_select">
+<code class="sig-name descname">multi_select</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.multi_select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not to allow for multiple selections</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.operations">
+<code class="sig-name descname">operations</code><em class="property"> = List( …</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.operations" title="Permalink to this definition">¶</a></dt>
+<dd><p>What type of operations are allowed on the list:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.refresh">
+<code class="sig-name descname">refresh</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait used to indicate that the table
+just needs to be repainted.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.right_clicked">
+<code class="sig-name descname">right_clicked</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.right_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait to synchronize right click data
+with. The data is a TabularEditorEvent:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.right_dclicked">
+<code class="sig-name descname">right_dclicked</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.right_dclicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait to synchronize right double
+clicked data with. The data is a TabularEditorEvent:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.scroll_to_column">
+<code class="sig-name descname">scroll_to_column</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.scroll_to_column" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the Event trait that should be used to
+trigger a scroll-to command. The data is an integer giving the column.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.scroll_to_row">
+<code class="sig-name descname">scroll_to_row</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.scroll_to_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the Event trait that should be used to
+trigger a scroll-to command. The data is an integer giving the row.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.scroll_to_row_hint">
+<code class="sig-name descname">scroll_to_row_hint</code><em class="property"> = Enum(&quot;center&quot;, &quot;top&quot;, &quot;bottom&quot;, &quot;visible&quot;)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.scroll_to_row_hint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Controls behavior of scroll to row</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.selectable">
+<code class="sig-name descname">selectable</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.selectable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not to allow selection.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.selected">
+<code class="sig-name descname">selected</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.selected" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait to synchronize the selection
+values with:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.selected_row">
+<code class="sig-name descname">selected_row</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.selected_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait to synchronize the selection rows
+with:</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.show_index">
-<code class="descname">show_index</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.show_index" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">show_index</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.show_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Should an index column be displayed.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.show_titles">
-<code class="descname">show_titles</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.show_titles" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">show_titles</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.show_titles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Should column headers be displayed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.update">
+<code class="sig-name descname">update</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait used to indicate that a complete
+table update is needed:</p>
 </dd></dl>
 
 </dd></dl>
@@ -233,13 +360,11 @@ value.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -260,13 +385,13 @@ value.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

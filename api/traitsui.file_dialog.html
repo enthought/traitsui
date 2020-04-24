@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.file_dialog module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.file_dialog module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.group module" href="traitsui.group.html" >
     <link rel="prev" title="traitsui.editors_gen module" href="traitsui.editors_gen.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.file_dialog module</a></li>
@@ -97,52 +96,106 @@
 opening and saving files.</p>
 <dl class="class">
 <dt id="traitsui.file_dialog.CreateDirHandler">
-<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">CreateDirHandler</code><a class="headerlink" href="#traitsui.file_dialog.CreateDirHandler" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">CreateDirHandler</code><a class="headerlink" href="#traitsui.file_dialog.CreateDirHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.handler.html#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.handler.Handler</span></code></a></p>
 <p>Controller for the ‘create new directory’ popup.</p>
+<dl class="attribute">
+<dt id="traitsui.file_dialog.CreateDirHandler.dir_name">
+<code class="sig-name descname">dir_name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.file_dialog.CreateDirHandler.dir_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name for the new directory to be created:</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.file_dialog.CreateDirHandler.handler_cancel_changed">
-<code class="descname">handler_cancel_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.CreateDirHandler.handler_cancel_changed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handler_cancel_changed</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.CreateDirHandler.handler_cancel_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the user clicking the Cancel button.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.file_dialog.CreateDirHandler.handler_ok_changed">
-<code class="descname">handler_ok_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.CreateDirHandler.handler_ok_changed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handler_ok_changed</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.CreateDirHandler.handler_ok_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the user clicking the OK button.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.CreateDirHandler.message">
+<code class="sig-name descname">message</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.file_dialog.CreateDirHandler.message" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current status message:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.CreateDirHandler.ok">
+<code class="sig-name descname">ok</code><em class="property"> = Button(&quot;OK&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.CreateDirHandler.ok" title="Permalink to this definition">¶</a></dt>
+<dd><p>The OK and Cancel buttons:</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.file_dialog.FileExistsHandler">
-<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">FileExistsHandler</code><a class="headerlink" href="#traitsui.file_dialog.FileExistsHandler" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">FileExistsHandler</code><a class="headerlink" href="#traitsui.file_dialog.FileExistsHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.handler.html#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.handler.Handler</span></code></a></p>
 <p>Controller for the ‘file already exists’ popup.</p>
 <dl class="method">
 <dt id="traitsui.file_dialog.FileExistsHandler.handler_cancel_changed">
-<code class="descname">handler_cancel_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.FileExistsHandler.handler_cancel_changed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handler_cancel_changed</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.FileExistsHandler.handler_cancel_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the user clicking the Cancel button.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.file_dialog.FileExistsHandler.handler_ok_changed">
-<code class="descname">handler_ok_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.FileExistsHandler.handler_ok_changed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handler_ok_changed</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.FileExistsHandler.handler_ok_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the user clicking the OK button.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.FileExistsHandler.message">
+<code class="sig-name descname">message</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.file_dialog.FileExistsHandler.message" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current status message:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.FileExistsHandler.ok">
+<code class="sig-name descname">ok</code><em class="property"> = Button(&quot;OK&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.FileExistsHandler.ok" title="Permalink to this definition">¶</a></dt>
+<dd><p>The OK and Cancel buttons:</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.file_dialog.FileInfo">
-<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">FileInfo</code><a class="headerlink" href="#traitsui.file_dialog.FileInfo" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">FileInfo</code><a class="headerlink" href="#traitsui.file_dialog.FileInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.file_dialog.MFileDialogModel" title="traitsui.file_dialog.MFileDialogModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.file_dialog.MFileDialogModel</span></code></a></p>
 <p>Defines a file dialog extension that display various file information.</p>
+<dl class="attribute">
+<dt id="traitsui.file_dialog.FileInfo.atime">
+<code class="sig-name descname">atime</code><em class="property"> = Property(depends_on=&quot;file_name&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.FileInfo.atime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Last file access time:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.FileInfo.ctime">
+<code class="sig-name descname">ctime</code><em class="property"> = Property(depends_on=&quot;file_name&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.FileInfo.ctime" title="Permalink to this definition">¶</a></dt>
+<dd><p>File creation time (or last metadata change time):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.FileInfo.mtime">
+<code class="sig-name descname">mtime</code><em class="property"> = Property(depends_on=&quot;file_name&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.FileInfo.mtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>List file modification time:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.FileInfo.size">
+<code class="sig-name descname">size</code><em class="property"> = Property(depends_on=&quot;file_name&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.FileInfo.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the file:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.file_dialog.IFileDialogExtension">
-<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">IFileDialogExtension</code><a class="headerlink" href="#traitsui.file_dialog.IFileDialogExtension" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">IFileDialogExtension</code><a class="headerlink" href="#traitsui.file_dialog.IFileDialogExtension" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.file_dialog.IFileDialogModel" title="traitsui.file_dialog.IFileDialogModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.file_dialog.IFileDialogModel</span></code></a>, <a class="reference internal" href="#traitsui.file_dialog.IFileDialogView" title="traitsui.file_dialog.IFileDialogView"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.file_dialog.IFileDialogView</span></code></a></p>
 <p>Defines a (convenience) union of the IFileDialogModel and
 IFileDialogView interfaces.</p>
@@ -150,29 +203,65 @@ IFileDialogView interfaces.</p>
 
 <dl class="class">
 <dt id="traitsui.file_dialog.IFileDialogModel">
-<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">IFileDialogModel</code><a class="headerlink" href="#traitsui.file_dialog.IFileDialogModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.Interface</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">IFileDialogModel</code><a class="headerlink" href="#traitsui.file_dialog.IFileDialogModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.Interface</span></code></a></p>
 <p>Defines a model extension to a file dialog.</p>
+<dl class="attribute">
+<dt id="traitsui.file_dialog.IFileDialogModel.file_name">
+<code class="sig-name descname">file_name</code><em class="property"> = File()</em><a class="headerlink" href="#traitsui.file_dialog.IFileDialogModel.file_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the currently selected file:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.file_dialog.IFileDialogView">
-<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">IFileDialogView</code><a class="headerlink" href="#traitsui.file_dialog.IFileDialogView" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.Interface</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">IFileDialogView</code><a class="headerlink" href="#traitsui.file_dialog.IFileDialogView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.Interface</span></code></a></p>
 <p>Defines a visual extension to a file dialog.</p>
+<dl class="attribute">
+<dt id="traitsui.file_dialog.IFileDialogView.is_fixed">
+<code class="sig-name descname">is_fixed</code><em class="property"> = Bool()</em><a class="headerlink" href="#traitsui.file_dialog.IFileDialogView.is_fixed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the view fixed or variable width?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.IFileDialogView.view">
+<code class="sig-name descname">view</code><em class="property"> = AView</em><a class="headerlink" href="#traitsui.file_dialog.IFileDialogView.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>The view to display:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.file_dialog.ImageInfo">
-<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">ImageInfo</code><a class="headerlink" href="#traitsui.file_dialog.ImageInfo" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">ImageInfo</code><a class="headerlink" href="#traitsui.file_dialog.ImageInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.file_dialog.MFileDialogModel" title="traitsui.file_dialog.MFileDialogModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.file_dialog.MFileDialogModel</span></code></a></p>
 <p>Defines a file dialog extension that display an image file’s dimensions
 and content.</p>
+<dl class="attribute">
+<dt id="traitsui.file_dialog.ImageInfo.height">
+<code class="sig-name descname">height</code><em class="property"> = Property(depends_on=&quot;image&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.ImageInfo.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>The height of the current image:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.ImageInfo.image">
+<code class="sig-name descname">image</code><em class="property"> = Property(depends_on=&quot;file_name&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.ImageInfo.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ImageResource object for the current file:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.ImageInfo.width">
+<code class="sig-name descname">width</code><em class="property"> = Property(depends_on=&quot;image&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.ImageInfo.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>The width of the current image:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.file_dialog.MFileDialogExtension">
-<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">MFileDialogExtension</code><a class="headerlink" href="#traitsui.file_dialog.MFileDialogExtension" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">MFileDialogExtension</code><a class="headerlink" href="#traitsui.file_dialog.MFileDialogExtension" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.file_dialog.MFileDialogModel" title="traitsui.file_dialog.MFileDialogModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.file_dialog.MFileDialogModel</span></code></a>, <a class="reference internal" href="#traitsui.file_dialog.MFileDialogView" title="traitsui.file_dialog.MFileDialogView"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.file_dialog.MFileDialogView</span></code></a></p>
 <p>Defines a (convenience) union of the MFileDialogModel and
 MFileDialogView mix-in classes.</p>
@@ -180,71 +269,179 @@ MFileDialogView mix-in classes.</p>
 
 <dl class="class">
 <dt id="traitsui.file_dialog.MFileDialogModel">
-<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">MFileDialogModel</code><a class="headerlink" href="#traitsui.file_dialog.MFileDialogModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">MFileDialogModel</code><a class="headerlink" href="#traitsui.file_dialog.MFileDialogModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dl class="attribute">
+<dt id="traitsui.file_dialog.MFileDialogModel.file_name">
+<code class="sig-name descname">file_name</code><em class="property"> = File()</em><a class="headerlink" href="#traitsui.file_dialog.MFileDialogModel.file_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the currently selected file:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.file_dialog.MFileDialogView">
-<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">MFileDialogView</code><a class="headerlink" href="#traitsui.file_dialog.MFileDialogView" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">MFileDialogView</code><a class="headerlink" href="#traitsui.file_dialog.MFileDialogView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Defines a visual extension to a file dialog.</p>
+<dl class="attribute">
+<dt id="traitsui.file_dialog.MFileDialogView.is_fixed">
+<code class="sig-name descname">is_fixed</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.file_dialog.MFileDialogView.is_fixed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the view fixed or variable width?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.MFileDialogView.view">
+<code class="sig-name descname">view</code><em class="property"> = AView</em><a class="headerlink" href="#traitsui.file_dialog.MFileDialogView.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>The view to display:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.file_dialog.OpenFileDialog">
-<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">OpenFileDialog</code><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">OpenFileDialog</code><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.handler.html#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.handler.Handler</span></code></a></p>
 <p>Defines the model and handler for the open file dialog.</p>
+<dl class="attribute">
+<dt id="traitsui.file_dialog.OpenFileDialog.can_create_dir">
+<code class="sig-name descname">can_create_dir</code><em class="property"> = Property(depends_on=&quot;file_name&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.can_create_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can a directory be created now?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.OpenFileDialog.dclick">
+<code class="sig-name descname">dclick</code><em class="property"> = Event()</em><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.dclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event fired when the user double-clicks on a file name:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.OpenFileDialog.entries">
+<code class="sig-name descname">entries</code><em class="property"> = Int(10)</em><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of history entries to allow:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.OpenFileDialog.extension__">
+<code class="sig-name descname">extension__</code><em class="property"> = None</em><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.extension__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow extension models to be added dynamically:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.OpenFileDialog.extensions">
+<code class="sig-name descname">extensions</code><em class="property"> = CList(IFileDialogModel)</em><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.extensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of optional file dialog extensions:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.OpenFileDialog.file_name">
+<code class="sig-name descname">file_name</code><em class="property"> = File()</em><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.file_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The starting and current file path:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.OpenFileDialog.filter">
+<code class="sig-name descname">filter</code><em class="property"> = CList(Str)</em><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of file filters to apply:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.OpenFileDialog.id">
+<code class="sig-name descname">id</code><em class="property"> = Str(&quot;traitsui.file_dialog.OpenFileDialog&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Traits UI persistence id to use:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.OpenFileDialog.info">
+<code class="sig-name descname">info</code><em class="property"> = Instance(UIInfo)</em><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>The UIInfo object for the view:</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.file_dialog.OpenFileDialog.init_info">
-<code class="descname">init_info</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.init_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">init_info</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.init_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the UIInfo object being initialized during view start-up.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.OpenFileDialog.is_save_file">
+<code class="sig-name descname">is_save_file</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.is_save_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the file dialog for saving a file (or opening a file)?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.OpenFileDialog.is_valid_file">
+<code class="sig-name descname">is_valid_file</code><em class="property"> = Property(depends_on=&quot;file_name&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.is_valid_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the currently specified file name valid?</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.file_dialog.OpenFileDialog.object_cancel_changed">
-<code class="descname">object_cancel_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.object_cancel_changed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">object_cancel_changed</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.object_cancel_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the user clicking the Cancel button.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.file_dialog.OpenFileDialog.object_create_changed">
-<code class="descname">object_create_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.object_create_changed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">object_create_changed</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.object_create_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the user clicking the create directory button.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.file_dialog.OpenFileDialog.object_ok_changed">
-<code class="descname">object_ok_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.object_ok_changed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">object_ok_changed</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.object_ok_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the user clicking the OK button.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.OpenFileDialog.ok">
+<code class="sig-name descname">ok</code><em class="property"> = Button(&quot;OK&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.ok" title="Permalink to this definition">¶</a></dt>
+<dd><p>The OK, Cancel and create directory buttons:</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.file_dialog.OpenFileDialog.open_file_view">
-<code class="descname">open_file_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.open_file_view" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">open_file_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.open_file_view" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the file dialog view to use.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.OpenFileDialog.reload">
+<code class="sig-name descname">reload</code><em class="property"> = Event()</em><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event fired when the file tree view should be reloaded:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.file_dialog.OpenFileDialog.title">
+<code class="sig-name descname">title</code><em class="property"> = Str(&quot;Open File&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>The file dialog title:</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.file_dialog.TextInfo">
-<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">TextInfo</code><a class="headerlink" href="#traitsui.file_dialog.TextInfo" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">TextInfo</code><a class="headerlink" href="#traitsui.file_dialog.TextInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.file_dialog.MFileDialogModel" title="traitsui.file_dialog.MFileDialogModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.file_dialog.MFileDialogModel</span></code></a></p>
 <p>Defines a file dialog extension that displays a file’s contents as text.</p>
+<dl class="attribute">
+<dt id="traitsui.file_dialog.TextInfo.text">
+<code class="sig-name descname">text</code><em class="property"> = Property(depends_on=&quot;file_name&quot;)</em><a class="headerlink" href="#traitsui.file_dialog.TextInfo.text" title="Permalink to this definition">¶</a></dt>
+<dd><p>The file’s text content:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="function">
 <dt id="traitsui.file_dialog.open_file">
-<code class="descclassname">traitsui.file_dialog.</code><code class="descname">open_file</code><span class="sig-paren">(</span><em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.open_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">open_file</code><span class="sig-paren">(</span><em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.open_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a file name to open or an empty string if the user cancels the
 operation.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="traitsui.file_dialog.save_file">
-<code class="descclassname">traitsui.file_dialog.</code><code class="descname">save_file</code><span class="sig-paren">(</span><em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.save_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">save_file</code><span class="sig-paren">(</span><em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.save_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a file name to save to or an empty string if the user cancels
 the operation. In the case where the file selected already exists, the
 user will be prompted if they want to overwrite the file before the
@@ -274,13 +471,11 @@ selected file name is returned.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -301,13 +496,13 @@ selected file name is returned.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

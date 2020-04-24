@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>TraitsUI 6.1 User Manual &mdash; TraitsUI 6 User Manual</title>
+    <title>TraitsUI 7.0 User Manual &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,8 +29,8 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="next" title="TraitsUI 6.1 User Manual" href="front.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
+    <link rel="next" title="Introduction" href="intro.html" >
     <link rel="prev" title="TraitsUI Documentation" href="../index.html" > 
   </head>
   <body>
@@ -49,10 +48,10 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
   
-    <li><a href="#">TraitsUI 6.1 User Manual</a></li>
+    <li><a href="#">TraitsUI 7.0 User Manual</a></li>
   
 
     </ul>
@@ -68,7 +67,7 @@
            >modules</a>
       </li>
       <li class="active">
-        <a href="front.html" title="TraitsUI 6.1 User Manual"
+        <a href="intro.html" title="Introduction"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -89,10 +88,22 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="traitsui-version-user-manual">
-<h1>TraitsUI 6.1 User Manual<a class="headerlink" href="#traitsui-version-user-manual" title="Permalink to this headline">¶</a></h1>
+<h1>TraitsUI 7.0 User Manual<a class="headerlink" href="#traitsui-version-user-manual" title="Permalink to this headline">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Authors</dt>
+<dd class="field-odd"><p>Lyn Pierce, Janet Swisher, and Enthought Developers</p>
+</dd>
+<dt class="field-even">Version</dt>
+<dd class="field-even"><p>Document Version 4</p>
+</dd>
+<dt class="field-odd">Copyright</dt>
+<dd class="field-odd"><p>2005-2020 Enthought, Inc. All Rights Reserved.</p>
+</dd>
+</dl>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="front.html">TraitsUI 6.1 User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="intro.html#the-model-view-controller-mvc-design-pattern">The Model-View-Controller (MVC) Design Pattern</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="intro.html#the-model-hastraits-subclasses-and-objects">The Model: HasTraits Subclasses and Objects</a></li>
@@ -148,6 +159,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="handler.html">Controlling the Interface: the Handler</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="handler.html#backstage-introducing-the-uiinfo-object">Backstage: Introducing the UIInfo Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler.html#backstage-the-ui-object">Backstage: The UI Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler.html#assigning-handlers-to-views">Assigning Handlers to Views</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="handler.html#binding-a-singleton-handler-to-a-view">Binding a Singleton Handler to a View</a></li>
 <li class="toctree-l3"><a class="reference internal" href="handler.html#linking-handler-and-view-at-edit-time">Linking Handler and View at Edit Time</a></li>
@@ -192,15 +204,19 @@
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#coloreditor">ColorEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#compoundeditor">CompoundEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#csvlisteditor">CSVListEditor()</a></li>
-<li class="toctree-l3"><a class="reference internal" href="factories_basic.html#defaultoverride">DefaultOverride()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="factories_basic.html#dateeditor">DateEditor()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="factories_basic.html#datetimeeditor">DatetimeEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#directoryeditor">DirectoryEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#enumeditor">EnumEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#fileeditor">FileEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#fonteditor">FontEditor()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="factories_basic.html#historyeditor">HistoryEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#htmleditor">HTMLEditor()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="factories_basic.html#imageeditor">ImageEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#imageenumeditor">ImageEnumEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#instanceeditor">InstanceEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#listeditor">ListEditor()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="factories_basic.html#lededitor">LEDEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#liststreditor">ListStrEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#nulleditor">NullEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#rangeeditor">RangeEditor()</a></li>
@@ -208,6 +224,7 @@
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#seteditor">SetEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#shelleditor">ShellEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#texteditor">TextEditor()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="factories_basic.html#timeeditor">TimeEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#titleeditor">TitleEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#tupleeditor">TupleEditor()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="factories_basic.html#valueeditor">ValueEditor()</a></li>
@@ -244,15 +261,11 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="factories_advanced_extra.html#arrayvieweditor">ArrayViewEditor()</a></li>
 <li class="toctree-l2"><a class="reference internal" href="factories_advanced_extra.html#dataframeeditor">DataFrameEditor()</a></li>
-<li class="toctree-l2"><a class="reference internal" href="factories_advanced_extra.html#historyeditor">HistoryEditor()</a></li>
-<li class="toctree-l2"><a class="reference internal" href="factories_advanced_extra.html#imageeditor">ImageEditor()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="factories_advanced_extra.html#defaultoverride">DefaultOverride()</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="factories_advanced_extra.html#extra-trait-editor-factories">“Extra” Trait Editor Factories</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="factories_advanced_extra.html#animatedgifeditor">AnimatedGIFEditor()</a></li>
-<li class="toctree-l2"><a class="reference internal" href="factories_advanced_extra.html#flasheditor">FlashEditor()</a></li>
-<li class="toctree-l2"><a class="reference internal" href="factories_advanced_extra.html#iehtmleditor">IEHTMLEditor()</a></li>
-<li class="toctree-l2"><a class="reference internal" href="factories_advanced_extra.html#lededitor">LEDEditor()</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="adapters.html">Advanced Editor Adapters</a><ul>
@@ -264,14 +277,14 @@
 <li class="toctree-l3"><a class="reference internal" href="adapters.html#examples">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="adapters.html#module-traitsui.tabular_adapter">The TabularAdapter Class</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#the-tabularadapter-class">The TabularAdapter Class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="adapters.html#the-tabularadapter-columns-trait">The TabularAdapter <em>columns</em> Trait</a></li>
 <li class="toctree-l3"><a class="reference internal" href="adapters.html#the-core-tabularadapter-interface">The Core TabularAdapter Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="adapters.html#creating-a-custom-tabularadapter">Creating a Custom TabularAdapter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="adapters.html#id2">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="adapters.html#module-traitsui.list_str_adapter">The ListStrAdapter Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html#the-liststradapter-class">The ListStrAdapter Class</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tips.html">Tips, Tricks and Gotchas</a><ul>
@@ -287,6 +300,42 @@
 </ul>
 </div>
 </div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>Redistribution and use of this document in source and derived forms, with or
+without modification, are permitted provided that the following conditions are
+met:</p>
+<ul class="simple">
+<li><p>Redistributions of source or derived format (for example, Portable Document
+Format or Hypertext Markup Language) must retain the above copyright notice,
+this list of conditions and the following disclaimer.</p></li>
+<li><p>Neither the name of Enthought, Inc., nor the names of contributors may be used
+to endorse or promote products derived from this document without specific
+prior written permission.</p></li>
+</ul>
+<p>THIS DOCUMENT IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THIS DOCUMENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+<p>All trademarks and registered trademarks are the property of their respective
+owners.</p>
+<div class="line-block">
+<div class="line">Enthought, Inc.</div>
+<div class="line">200 W Cesar Chavez, Suite 202</div>
+<div class="line">Austin, TX 78701</div>
+<div class="line">United States</div>
+<div class="line">1.512.536.1057 (voice)</div>
+<div class="line"><a class="reference external" href="http://www.enthought.com">http://www.enthought.com</a></div>
+<div class="line"><a class="reference external" href="mailto:info&#37;&#52;&#48;enthought&#46;com">info<span>&#64;</span>enthought<span>&#46;</span>com</a></div>
+</div>
+</div>
+</div>
 
 
           </div>
@@ -297,25 +346,32 @@
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">TraitsUI 7.0 User Manual</a><ul>
+<li><a class="reference internal" href="#contents">Contents</a></li>
+<li><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="../index.html"
                         title="previous chapter">TraitsUI Documentation</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="front.html"
-                        title="next chapter">TraitsUI 6.1 User Manual</a></p>
+  <p class="topless"><a href="intro.html"
+                        title="next chapter">Introduction</a></p>
   <h3>This Page</h3>
   <div>
     <a href="../_sources/traitsui_user_manual/index.rst.txt"
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -336,13 +392,13 @@
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

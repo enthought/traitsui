@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.item module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.item module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.key_bindings module" href="traitsui.key_bindings.html" >
     <link rel="prev" title="traitsui.instance_choice module" href="traitsui.instance_choice.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.item module</a></li>
@@ -97,50 +96,138 @@
 a Traits-based user interface.</p>
 <dl class="class">
 <dt id="traitsui.item.Custom">
-<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">Custom</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Custom" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.item.</code><code class="sig-name descname">Custom</code><span class="sig-paren">(</span><em class="sig-param">value=None</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Custom" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.item.Item" title="traitsui.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Item</span></code></a></p>
 <p>An Item using a ‘custom’ style.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.item.Heading">
-<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">Heading</code><span class="sig-paren">(</span><em>label</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Heading" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.item.</code><code class="sig-name descname">Heading</code><span class="sig-paren">(</span><em class="sig-param">label</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Heading" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.item.Label" title="traitsui.item.Label"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Label</span></code></a></p>
 <p>An item that is a fancy label.</p>
+<dl class="attribute">
+<dt id="traitsui.item.Heading.style">
+<code class="sig-name descname">style</code><em class="property"> = Constant(&quot;custom&quot;)</em><a class="headerlink" href="#traitsui.item.Heading.style" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override the ‘style’ trait to default to the fancy ‘custom’ style:</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.item.Item">
-<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">Item</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.item.</code><code class="sig-name descname">Item</code><span class="sig-paren">(</span><em class="sig-param">value=None</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.view_element.html#traitsui.view_element.ViewSubElement" title="traitsui.view_element.ViewSubElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewSubElement</span></code></a></p>
 <p>An element in a Traits-based user interface.</p>
 <p>Magic:</p>
 <ul class="simple">
-<li>Items are rendered as layout elements if <code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code> is set to
-special values:<ul>
-<li><code class="docutils literal notranslate"><span class="pre">name=''</span></code>, the item is rendered as a static label</li>
-<li><code class="docutils literal notranslate"><span class="pre">name='_'</span></code>, the item is rendered as a separator</li>
-<li><code class="docutils literal notranslate"><span class="pre">name='</span> <span class="pre">'</span></code>, the item is rendered as a 5 pixel spacer</li>
-<li><code class="docutils literal notranslate"><span class="pre">name='23'</span></code> (any number), the item is rendered as a spacer of
-the size specified (number of pixels)</li>
+<li><p>Items are rendered as layout elements if <a class="reference internal" href="#traitsui.item.Item.name" title="traitsui.item.Item.name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code></a> is set to
+special values:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">name=''</span></code>, the item is rendered as a static label</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name='_'</span></code>, the item is rendered as a separator</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name='</span> <span class="pre">'</span></code>, the item is rendered as a 5 pixel spacer</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name='23'</span></code> (any number), the item is rendered as a spacer of
+the size specified (number of pixels)</p></li>
 </ul>
 </li>
 </ul>
+<dl class="attribute">
+<dt id="traitsui.item.Item.defined_when">
+<code class="sig-name descname">defined_when</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.item.Item.defined_when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-condition for including the item in the display. If the expression
+evaluates to False, the item is not defined in the display. Conditions
+for <strong>defined_when</strong> are evaluated only once, when the display is first
+constructed. Use this attribute for conditions based on attributes that
+vary from object to object, but that do not change over time. For example,
+displaying a ‘maiden_name’ item only for female employees in a company
+database.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.dock">
+<code class="sig-name descname">dock</code><em class="property"> = ContainerDelegate</em><a class="headerlink" href="#traitsui.item.Item.dock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Docking style for the item:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.editor">
+<code class="sig-name descname">editor</code><em class="property"> = ItemEditor</em><a class="headerlink" href="#traitsui.item.Item.editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Editor to use for the item:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.editor_args">
+<code class="sig-name descname">editor_args</code><em class="property"> = Dict()</em><a class="headerlink" href="#traitsui.item.Item.editor_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Additional editor traits to be set if default traits editor to be used:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.emphasized">
+<code class="sig-name descname">emphasized</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.item.Item.emphasized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the item’s label use emphasized text? If the label is not shown,
+this attribute is ignored.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.enabled_when">
+<code class="sig-name descname">enabled_when</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.item.Item.enabled_when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-condition for enabling the item. If the expression evaluates to False,
+the widget is disabled, that is, it does not accept input. All
+<strong>enabled_when</strong> conditions are checked each time that any trait value
+is edited in the display. Therefore, you can use <strong>enabled_when</strong>
+conditions to enable or disable widgets in response to user input.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.export">
+<code class="sig-name descname">export</code><em class="property"> = ContainerDelegate</em><a class="headerlink" href="#traitsui.item.Item.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Category of elements dragged from view:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.format_func">
+<code class="sig-name descname">format_func</code><em class="property"> = Callable()</em><a class="headerlink" href="#traitsui.item.Item.format_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Callable to use for formatting the contents of the item. This function
+or method is called to create the string representation of the trait value
+to be edited. If the widget does not use a string representation, this
+attribute is ignored.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.format_str">
+<code class="sig-name descname">format_str</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.item.Item.format_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python format string to use for formatting the contents of the item.
+The format string is applied to the string representation of the trait
+value before it is displayed in the widget. This attribute is ignored if
+the widget does not use a string representation, or if the
+<strong>format_func</strong> is set.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.full_size">
+<code class="sig-name descname">full_size</code><em class="property"> = Bool(Undefined)</em><a class="headerlink" href="#traitsui.item.Item.full_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the item use any extra space along its Group’s non-layout
+orientation? For example, in a vertical group, should an item expand
+horizontally to the full width of the group? If left to the default value
+of Undefined, the decision will be left up to the associated item editor.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.item.Item.get_help">
-<code class="descname">get_help</code><span class="sig-paren">(</span><em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.get_help" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_help</code><span class="sig-paren">(</span><em class="sig-param">ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.get_help" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the help text associated with the Item in a specified UI.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.item.Item.get_id">
-<code class="descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.get_id" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.get_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an ID used to identify the item.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.item.Item.get_label">
-<code class="descname">get_label</code><span class="sig-paren">(</span><em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.get_label" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_label</code><span class="sig-paren">(</span><em class="sig-param">ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.get_label" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the label to use for a specified Item.</p>
 <p>If not specified, the label is set as the name of the
 corresponding trait, replacing ‘_’ with ‘ ‘, and capitalizing
@@ -148,66 +235,259 @@ the first letter (see <code class="xref py py-func docutils literal notranslate"
 the <em>user name</em>.</p>
 <p>Magic:</p>
 <ul class="simple">
-<li>if attr:<cite>item.label</cite> is specified, and it begins with ‘…’,
-the final label is the user name followed by the item label</li>
-<li>if attr:<cite>item.label</cite> is specified, and it ends with ‘…’,
-the final label is the item label followed by the user name</li>
+<li><p>if attr:<cite>item.label</cite> is specified, and it begins with ‘…’,
+the final label is the user name followed by the item label</p></li>
+<li><p>if attr:<cite>item.label</cite> is specified, and it ends with ‘…’,
+the final label is the item label followed by the user name</p></li>
 </ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.has_focus">
+<code class="sig-name descname">has_focus</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.item.Item.has_focus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the item receive focus initially?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.height">
+<code class="sig-name descname">height</code><em class="property"> = Float(-1.0)</em><a class="headerlink" href="#traitsui.item.Item.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Requested height of the editor (in pixels or fraction of available
+height). For pixel values (i.e. values not in the range from 0.0 to 1.0),
+the actual displayed height is at least the maximum of <strong>height</strong> and the
+optimal height of the widget as calculated by the GUI toolkit. Specify a
+negative value to ignore the toolkit’s optimal height. For example, use
+-50 to force a height of 50 pixels. The default value of -1 ensures that
+the toolkit’s optimal height is used.</p>
+<p>A value in the range from 0.0 to 1.0 specifies the fraction of the
+available height to assign to the editor. Note that the value is not an
+absolute value, but is relative to other item’s whose <strong>height</strong> is also
+in the 0.0 to 1.0 range. For example, if you have two item’s with a height
+of 0.1, and one item with a height of 0.2, the first two items will each
+receive 25% of the available height, while the third item will receive
+50% of the available height. The available height is the total height of
+the view minus the height of any item’s with fixed pixel sizes (i.e.
+height values not in the 0.0 to 1.0 range).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.help">
+<code class="sig-name descname">help</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.item.Item.help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Help text describing the purpose of the item. The built-in help handler
+displays this text in a pop-up window if the user clicks the widget’s
+label. View-level help displays the help text for all items in a view.
+If this attribute is not set, the built-in help handler generates a
+description based on the trait definition.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.id">
+<code class="sig-name descname">id</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.item.Item.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A unique identifier for the item. If not set, it defaults to the value
+of <strong>name</strong>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.image">
+<code class="sig-name descname">image</code><em class="property"> = ContainerDelegate</em><a class="headerlink" href="#traitsui.item.Item.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Image to display on notebook tabs:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.invalid">
+<code class="sig-name descname">invalid</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.item.Item.invalid" title="Permalink to this definition">¶</a></dt>
+<dd><p>The extended trait name of the trait containing the item’s invalid state
+status (passed through to the item’s editor):</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.item.Item.is_includable">
-<code class="descname">is_includable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.is_includable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_includable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.is_includable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a Boolean indicating whether the object is replaceable by an
 Include object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.item.Item.is_spacer">
-<code class="descname">is_spacer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.is_spacer" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_spacer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Item.is_spacer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if the item represents a spacer or separator.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.label">
+<code class="sig-name descname">label</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.item.Item.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>User interface label for the item in the GUI. If this attribute is not
+set, the label is the value of <strong>name</strong> with slight modifications:
+underscores are replaced by spaces, and the first letter is capitalized.
+If an item’s <strong>name</strong> is not specified, its label is displayed as
+static text, without any editor widget.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.name">
+<code class="sig-name descname">name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.item.Item.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the trait the item is editing:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.object">
+<code class="sig-name descname">object</code><em class="property"> = ContainerDelegate</em><a class="headerlink" href="#traitsui.item.Item.object" title="Permalink to this definition">¶</a></dt>
+<dd><p>The HasTraits object whose trait attribute the item is editing:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.padding">
+<code class="sig-name descname">padding</code><em class="property"> = Padding</em><a class="headerlink" href="#traitsui.item.Item.padding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Amount of extra space, in pixels, to add around the item. Values must be
+integers between -15 and 15. Use negative values to subtract from the
+default spacing.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.resizable">
+<code class="sig-name descname">resizable</code><em class="property"> = Bool(Undefined)</em><a class="headerlink" href="#traitsui.item.Item.resizable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the item use extra space along its Group’s non-layout axis? If set to
+True, the widget expands to fill any extra space that is available in the
+display. If set to True for more than one item in the same View, any extra
+space is divided between them. If set to False, the widget uses only
+whatever space it is explicitly (or implicitly) assigned. The default
+value of Undefined means that the use (or non-use) of extra space will be
+determined by the editor associated with the item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.show_label">
+<code class="sig-name descname">show_label</code><em class="property"> = Delegate(&quot;container&quot;, &quot;show_labels&quot;)</em><a class="headerlink" href="#traitsui.item.Item.show_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should a label be displayed for the item?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.springy">
+<code class="sig-name descname">springy</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.item.Item.springy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the item use extra space along its Group’s layout axis? For
+example, it a vertical group, should an item expand vertically to use
+any extra space available in the group?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.style">
+<code class="sig-name descname">style</code><em class="property"> = ContainerDelegate</em><a class="headerlink" href="#traitsui.item.Item.style" title="Permalink to this definition">¶</a></dt>
+<dd><p>Presentation style for the item:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.style_sheet">
+<code class="sig-name descname">style_sheet</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.item.Item.style_sheet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Style-sheet to apply to item / group (Qt only)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.tooltip">
+<code class="sig-name descname">tooltip</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.item.Item.tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tooltip to display over the item, when the mouse pointer is left idle
+over the widget. Make this text as concise as possible; use the <strong>help</strong>
+attribute to provide more detailed information.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.visible_when">
+<code class="sig-name descname">visible_when</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.item.Item.visible_when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-condition for showing the item. If the expression evaluates to False,
+the widget is not visible (and disappears if it was previously visible).
+If the value evaluates to True, the widget becomes visible. All
+<strong>visible_when</strong> conditions are checked each time that any trait value
+is edited in the display. Therefore, you can use <strong>visible_when</strong>
+conditions to hide or show widgets in response to user input.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Item.width">
+<code class="sig-name descname">width</code><em class="property"> = Float(-1.0)</em><a class="headerlink" href="#traitsui.item.Item.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Requested width of the editor (in pixels or fraction of available width).
+For pixel values (i.e. values not in the range from 0.0 to 1.0), the
+actual displayed width is at least the maximum of <strong>width</strong> and the
+optimal width of the widget as calculated by the GUI toolkit. Specify a
+negative value to ignore the toolkit’s optimal width. For example, use
+-50 to force a width of 50 pixels. The default value of -1 ensures that
+the toolkit’s optimal width is used.</p>
+<p>A value in the range from 0.0 to 1.0 specifies the fraction of the
+available width to assign to the editor. Note that the value is not an
+absolute value, but is relative to other item’s whose <strong>width</strong> is also
+in the 0.0 to 1.0 range. For example, if you have two item’s with a width
+of 0.1, and one item with a width of 0.2, the first two items will each
+receive 25% of the available width, while the third item will receive
+50% of the available width. The available width is the total width of the
+view minus the width of any item’s with fixed pixel sizes (i.e. width
+values not in the 0.0 to 1.0 range).</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.item.Label">
-<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">Label</code><span class="sig-paren">(</span><em>label</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Label" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.item.</code><code class="sig-name descname">Label</code><span class="sig-paren">(</span><em class="sig-param">label</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Label" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.item.Item" title="traitsui.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Item</span></code></a></p>
 <p>An item that is a label.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.item.Readonly">
-<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">Readonly</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Readonly" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.item.</code><code class="sig-name descname">Readonly</code><span class="sig-paren">(</span><em class="sig-param">value=None</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Readonly" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.item.Item" title="traitsui.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Item</span></code></a></p>
 <p>An Item using a ‘readonly’ style.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.item.Spring">
-<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">Spring</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Spring" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.item.</code><code class="sig-name descname">Spring</code><span class="sig-paren">(</span><em class="sig-param">value=None</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.Spring" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.item.Item" title="traitsui.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Item</span></code></a></p>
 <p>An item that is a layout “spring”.</p>
+<dl class="attribute">
+<dt id="traitsui.item.Spring.editor">
+<code class="sig-name descname">editor</code><em class="property"> = Instance(&quot;traitsui.api.NullEditor&quot;, ())</em><a class="headerlink" href="#traitsui.item.Spring.editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Editor to use for the item</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Spring.name">
+<code class="sig-name descname">name</code><em class="property"> = &quot;trait_modified&quot;</em><a class="headerlink" href="#traitsui.item.Spring.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the trait the item is editing
+Just a dummy trait that exists on all HasTraits objects. It’s an Event,
+so it won’t cause Traits UI to add any synchronization, and because it
+already exists, it won’t force the addition of a new trait with a bogus
+name.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Spring.show_label">
+<code class="sig-name descname">show_label</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.item.Spring.show_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should a label be displayed?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.item.Spring.springy">
+<code class="sig-name descname">springy</code><em class="property"> = True</em><a class="headerlink" href="#traitsui.item.Spring.springy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the item use extra space along its Group’s layout orientation?</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.item.UCustom">
-<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">UCustom</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.UCustom" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.item.</code><code class="sig-name descname">UCustom</code><span class="sig-paren">(</span><em class="sig-param">value=None</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.UCustom" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.item.Custom" title="traitsui.item.Custom"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Custom</span></code></a></p>
 <p>An Item using a ‘custom’ style with no label.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.item.UItem">
-<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">UItem</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.UItem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.item.</code><code class="sig-name descname">UItem</code><span class="sig-paren">(</span><em class="sig-param">value=None</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.UItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.item.Item" title="traitsui.item.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Item</span></code></a></p>
 <p>An Item that has no label.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.item.UReadonly">
-<em class="property">class </em><code class="descclassname">traitsui.item.</code><code class="descname">UReadonly</code><span class="sig-paren">(</span><em>value=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.UReadonly" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.item.</code><code class="sig-name descname">UReadonly</code><span class="sig-paren">(</span><em class="sig-param">value=None</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.item.UReadonly" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.item.Readonly" title="traitsui.item.Readonly"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.item.Readonly</span></code></a></p>
 <p>An Item using a ‘readonly’ style with no label.</p>
 </dd></dl>
@@ -235,13 +515,11 @@ Include object.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -262,13 +540,13 @@ Include object.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

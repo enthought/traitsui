@@ -1,0 +1,375 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editors.tree_editor module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
+    <link rel="next" title="traitsui.editors.tuple_editor module" href="traitsui.editors.tuple_editor.html" >
+    <link rel="prev" title="traitsui.editors.title_editor module" href="traitsui.editors.title_editor.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
+  
+    <li><a href="#">traitsui.editors.tree_editor module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editors.tuple_editor.html" title="traitsui.editors.tuple_editor module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editors.title_editor.html" title="traitsui.editors.title_editor module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.editors.tree_editor">
+<span id="traitsui-editors-tree-editor-module"></span><h1>traitsui.editors.tree_editor module<a class="headerlink" href="#module-traitsui.editors.tree_editor" title="Permalink to this headline">¶</a></h1>
+<p>Defines the tree editor factory for all traits user interface toolkits.</p>
+<dl class="class">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory">
+<em class="property">class </em><code class="descclassname">traitsui.editors.tree_editor.</code><code class="descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory" title="traitsui.editor_factory.EditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editor_factory.EditorFactory</span></code></a></p>
+<p>Editor factory for tree editors.</p>
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.activated">
+<code class="descname">activated</code><em class="property"> = Str</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.activated" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended trait name of the trait that should be assigned
+a node object when a tree node is activated, by double-clicking or
+pressing the Enter key when a node has focus (Note: if you want to
+receive repeated activated events on the same node, make sure the trait
+is defined as an Event):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.alternating_row_colors">
+<code class="descname">alternating_row_colors</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.alternating_row_colors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to alternate row colors or not.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.auto_open">
+<code class="descname">auto_open</code><em class="property"> = Int</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.auto_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of tree levels (down from the root) that should be automatically
+opened</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.click">
+<code class="descname">click</code><em class="property"> = Str</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.click" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended trait name of the trait that should be assigned
+a node object when a tree node is clicked on (Note: If you want to
+receive repeated clicks on the same node, make sure the trait is defined
+as an Event):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.column_headers">
+<code class="descname">column_headers</code><em class="property"> = List(Str)</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.column_headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>The column header labels if any.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.dclick">
+<code class="descname">dclick</code><em class="property"> = Str</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.dclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended trait name of the trait that should be assigned
+a node object when a tree node is double-clicked on (Note: if you want to
+receive repeated double-clicks on the same node, make sure the trait is
+defined as an Event):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.dock_theme">
+<code class="descname">dock_theme</code><em class="property"> = Instance(DockWindowTheme)</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.dock_theme" title="Permalink to this definition">¶</a></dt>
+<dd><p>The DockWindow graphical theme</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.editable">
+<code class="descname">editable</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.editable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Are the individual nodes editable?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.editor">
+<code class="descname">editor</code><em class="property"> = Instance(EditorFactory)</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reference to a shared object editor</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.expands_on_dclick">
+<code class="descname">expands_on_dclick</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.expands_on_dclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not to expand on a double-click.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.hide_root">
+<code class="descname">hide_root</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.hide_root" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hide the tree root node?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.icon_size">
+<code class="descname">icon_size</code><em class="property"> = IconSize</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.icon_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Size of the tree node icons</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.lines_mode">
+<code class="descname">lines_mode</code><em class="property"> = Enum('appearance', 'on', 'off')</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.lines_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mode for lines connecting tree nodes</p>
+<ul class="simple">
+<li>‘appearance’: Show lines only when they look good.</li>
+<li>‘on’: Always show lines.</li>
+<li>‘off’: Don’t show lines.</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.multi_nodes">
+<code class="descname">multi_nodes</code><em class="property"> = Dict</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.multi_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping from TreeNode tuples to MultiTreeNodes</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.nodes">
+<code class="descname">nodes</code><em class="property"> = List(TreeNode)</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Supported TreeNode objects</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.on_activated">
+<code class="descname">on_activated</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.on_activated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a node is activated</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.on_click">
+<code class="descname">on_click</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.on_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a node is clicked</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.on_dclick">
+<code class="descname">on_dclick</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.on_dclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a node is double-clicked</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.on_hover">
+<code class="descname">on_hover</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.on_hover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call when the mouse hovers over a node</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.on_select">
+<code class="descname">on_select</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.on_select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a node is selected</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.orientation">
+<code class="descname">orientation</code><em class="property"> = Orientation</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.orientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Layout orientation of the tree and the editor</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.refresh">
+<code class="descname">refresh</code><em class="property"> = Str</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended trait name of the trait event that is fired when the
+application wishes the currently visible portion of the tree widget to
+repaint itself.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.selected">
+<code class="descname">selected</code><em class="property"> = Str</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.selected" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended trait name of the trait to synchronize with the
+editor’s current selection:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.selection_mode">
+<code class="descname">selection_mode</code><em class="property"> = Enum('single', 'extended')</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.selection_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selection mode.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.shared_editor">
+<code class="descname">shared_editor</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.shared_editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the editor shared across trees?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.show_icons">
+<code class="descname">show_icons</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.show_icons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show icons for tree nodes?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.vertical_padding">
+<code class="descname">vertical_padding</code><em class="property"> = Int(0)</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.vertical_padding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Any extra vertical padding to add.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.veto">
+<code class="descname">veto</code><em class="property"> = Str</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.veto" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended trait name of the trait event that is fired
+whenever the application wishes to veto a tree action in progress (e.g.
+double-clicking a non-leaf tree node normally opens or closes the node,
+but if you are handling the double-click event in your program, you may
+wish to veto the open or close operation). Be sure to fire the veto event
+in the event handler triggered by the operation (e.g. the ‘dclick’ event
+handler.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.ToolkitEditorFactory.word_wrap">
+<code class="descname">word_wrap</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.tree_editor.ToolkitEditorFactory.word_wrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the labels should be wrapped around, if not an ellipsis is shown
+This works only in the qt backend and if there is only one column in tree</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.tree_editor.TreeEditor">
+<code class="descclassname">traitsui.editors.tree_editor.</code><code class="descname">TreeEditor</code><a class="headerlink" href="#traitsui.editors.tree_editor.TreeEditor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the TreeEditor class.</p>
+<p>alias of <a class="reference internal" href="#traitsui.editors.tree_editor.ToolkitEditorFactory" title="traitsui.editors.tree_editor.ToolkitEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editors.tree_editor.ToolkitEditorFactory</span></code></a></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.editors.title_editor.html"
+                        title="previous chapter">traitsui.editors.title_editor module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.editors.tuple_editor.html"
+                        title="next chapter">traitsui.editors.tuple_editor module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.editors.tree_editor.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,643 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.toolkit module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.toolkit_traits module" href="traitsui.toolkit_traits.html" >
+    <link rel="prev" title="traitsui.theme module" href="traitsui.theme.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.toolkit module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.toolkit_traits.html" title="traitsui.toolkit_traits module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.theme.html" title="traitsui.theme module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.toolkit">
+<span id="traitsui-toolkit-module"></span><h1>traitsui.toolkit module<a class="headerlink" href="#module-traitsui.toolkit" title="Permalink to this headline">¶</a></h1>
+<p>Defines the stub functions used for creating concrete implementations of
+the standard EditorFactory subclasses supplied with the Traits package.</p>
+<p>Most of the logic for determining which backend toolkit to use can now be
+found in <a class="reference external" href="http://docs.enthought.com/pyface/api/pyface.base_toolkit.html#module-pyface.base_toolkit" title="(in pyface v6.1.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyface.base_toolkit</span></code></a>.</p>
+<dl class="class">
+<dt id="traitsui.toolkit.Toolkit">
+<em class="property">class </em><code class="descclassname">traitsui.toolkit.</code><code class="descname">Toolkit</code><span class="sig-paren">(</span><em>package</em>, <em>toolkit</em>, <em>*packages</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/pyface/api/pyface.base_toolkit.html#pyface.base_toolkit.Toolkit" title="(in pyface v6.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyface.base_toolkit.Toolkit</span></code></a></p>
+<p>Abstract base class for GUI toolkits.</p>
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.array_editor">
+<code class="descname">array_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.array_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.boolean_editor">
+<code class="descname">boolean_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.boolean_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.button_editor">
+<code class="descname">button_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.button_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.check_list_editor">
+<code class="descname">check_list_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.check_list_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.code_editor">
+<code class="descname">code_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.code_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.color_editor">
+<code class="descname">color_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.color_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.color_trait">
+<code class="descname">color_trait</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.color_trait" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.compound_editor">
+<code class="descname">compound_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.compound_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.constants">
+<code class="descname">constants</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.constants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary of useful constants.</p>
+<p>Currently, the dictionary should have the following key/value pairs:</p>
+<ul class="simple">
+<li>WindowColor’: the standard window background color in the toolkit
+specific color format.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.custom_editor">
+<code class="descname">custom_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.custom_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.destroy_children">
+<code class="descname">destroy_children</code><span class="sig-paren">(</span><em>control</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.destroy_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroys all of the child controls of a specified GUI toolkit
+control.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.destroy_control">
+<code class="descname">destroy_control</code><span class="sig-paren">(</span><em>control</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.destroy_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroys a specified GUI toolkit control.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.directory_editor">
+<code class="descname">directory_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.directory_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.dnd_editor">
+<code class="descname">dnd_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.dnd_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.drop_editor">
+<code class="descname">drop_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.drop_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.enum_editor">
+<code class="descname">enum_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.enum_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.file_editor">
+<code class="descname">file_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.file_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.font_editor">
+<code class="descname">font_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.font_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.font_trait">
+<code class="descname">font_trait</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.font_trait" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.history_editor">
+<code class="descname">history_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.history_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.hook_events">
+<code class="descname">hook_events</code><span class="sig-paren">(</span><em>ui</em>, <em>control</em>, <em>events=None</em>, <em>handler=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.hook_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hooks all specified events for all controls in a UI so that they
+can be routed to the correct event handler.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.html_editor">
+<code class="descname">html_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.html_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.image_editor">
+<code class="descname">image_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.image_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.image_enum_editor">
+<code class="descname">image_enum_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.image_enum_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.image_size">
+<code class="descname">image_size</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.image_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a ( width, height ) tuple containing the size of a
+specified toolkit image.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.instance_editor">
+<code class="descname">instance_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.instance_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.key_binding_editor">
+<code class="descname">key_binding_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.key_binding_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.key_event_to_name">
+<code class="descname">key_event_to_name</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.key_event_to_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a keystroke event into a corresponding key name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.kiva_font_trait">
+<code class="descname">kiva_font_trait</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.kiva_font_trait" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.list_editor">
+<code class="descname">list_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.list_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.list_str_editor">
+<code class="descname">list_str_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.list_str_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.null_editor">
+<code class="descname">null_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.null_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.ordered_set_editor">
+<code class="descname">ordered_set_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.ordered_set_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.plot_editor">
+<code class="descname">plot_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.plot_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.position">
+<code class="descname">position</code><span class="sig-paren">(</span><em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Positions the associated dialog window on the display.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.range_editor">
+<code class="descname">range_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.range_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.rebuild_ui">
+<code class="descname">rebuild_ui</code><span class="sig-paren">(</span><em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.rebuild_ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rebuilds a UI after a change to the content of the UI.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.rgb_color_editor">
+<code class="descname">rgb_color_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.rgb_color_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.rgb_color_trait">
+<code class="descname">rgb_color_trait</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.rgb_color_trait" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.rgba_color_editor">
+<code class="descname">rgba_color_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.rgba_color_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.rgba_color_trait">
+<code class="descname">rgba_color_trait</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.rgba_color_trait" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.route_event">
+<code class="descname">route_event</code><span class="sig-paren">(</span><em>ui</em>, <em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.route_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routes a “hooked” event to the corrent handler method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.save_window">
+<code class="descname">save_window</code><span class="sig-paren">(</span><em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.save_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves user preference information associated with a UI window.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.set_icon">
+<code class="descname">set_icon</code><span class="sig-paren">(</span><em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.set_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the icon for the UI window.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.set_title">
+<code class="descname">set_title</code><span class="sig-paren">(</span><em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.set_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the title for the UI window.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.shell_editor">
+<code class="descname">shell_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.shell_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.show_help">
+<code class="descname">show_help</code><span class="sig-paren">(</span><em>ui</em>, <em>control</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.show_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows a Help window for a specified UI and control.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.skip_event">
+<code class="descname">skip_event</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.skip_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates that an event should continue to be processed by the
+toolkit.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.table_editor">
+<code class="descname">table_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.table_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.tabular_editor">
+<code class="descname">tabular_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.tabular_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.text_editor">
+<code class="descname">text_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.text_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.title_editor">
+<code class="descname">title_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.title_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.tree_editor">
+<code class="descname">tree_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.tree_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.tuple_editor">
+<code class="descname">tuple_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.tuple_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.ui_editor">
+<code class="descname">ui_editor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.ui_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.ui_info">
+<code class="descname">ui_info</code><span class="sig-paren">(</span><em>ui</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.ui_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a GUI-toolkit-specific temporary “live update” popup dialog
+user interface using information from the specified UI object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.ui_live">
+<code class="descname">ui_live</code><span class="sig-paren">(</span><em>ui</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.ui_live" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a GUI-toolkit-specific non-modal “live update” window user
+interface using information from the specified UI object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.ui_livemodal">
+<code class="descname">ui_livemodal</code><span class="sig-paren">(</span><em>ui</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.ui_livemodal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a GUI-toolkit-specific modal “live update” dialog user
+interface using information from the specified UI object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.ui_modal">
+<code class="descname">ui_modal</code><span class="sig-paren">(</span><em>ui</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.ui_modal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a GUI-toolkit-specific modal dialog user interface using
+information from the specified UI object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.ui_nonmodal">
+<code class="descname">ui_nonmodal</code><span class="sig-paren">(</span><em>ui</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.ui_nonmodal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a GUI-toolkit-specific non-modal dialog user interface using
+information from the specified UI object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.ui_panel">
+<code class="descname">ui_panel</code><span class="sig-paren">(</span><em>ui</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.ui_panel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a GUI-toolkit-specific panel-based user interface using
+information from the specified UI object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.ui_popover">
+<code class="descname">ui_popover</code><span class="sig-paren">(</span><em>ui</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.ui_popover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a GUI-toolkit-specific temporary “live update” popup dialog
+user interface using information from the specified UI object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.ui_popup">
+<code class="descname">ui_popup</code><span class="sig-paren">(</span><em>ui</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.ui_popup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a GUI-toolkit-specific temporary “live update” popup dialog
+user interface using information from the specified UI object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.ui_subpanel">
+<code class="descname">ui_subpanel</code><span class="sig-paren">(</span><em>ui</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.ui_subpanel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a GUI-toolkit-specific subpanel-based user interface using
+information from the specified UI object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.ui_wizard">
+<code class="descname">ui_wizard</code><span class="sig-paren">(</span><em>ui</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.ui_wizard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a GUI-toolkit-specific wizard dialog user interface using
+information from the specified UI object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.value_editor">
+<code class="descname">value_editor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.value_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.toolkit.Toolkit.view_application">
+<code class="descname">view_application</code><span class="sig-paren">(</span><em>context</em>, <em>view</em>, <em>kind=None</em>, <em>handler=None</em>, <em>id=''</em>, <em>scrollable=None</em>, <em>args=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit.view_application" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Creates a GUI-toolkit-specific modal dialog user interface that</dt>
+<dd>runs as a complete application using information from the
+specified View object.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>context</strong> (<em>object</em><em> or </em><em>dictionary</em>) – A single object or a dictionary of string/object pairs, whose trait
+attributes are to be edited. If not specified, the current object is
+used.</li>
+<li><strong>view</strong> (<em>view</em><em> or </em><em>string</em>) – A View object that defines a user interface for editing trait
+attribute values.</li>
+<li><strong>kind</strong> (<em>string</em>) – The type of user interface window to create. See the
+<strong>traitsui.view.kind_trait</strong> trait for values and
+their meanings. If <em>kind</em> is unspecified or None, the <strong>kind</strong>
+attribute of the View object is used.</li>
+<li><strong>handler</strong> (<em>Handler object</em>) – A handler object used for event handling in the dialog box. If
+None, the default handler for Traits UI is used.</li>
+<li><strong>id</strong> (<em>string</em>) – A unique ID for persisting preferences about this user interface,
+such as size and position. If not specified, no user preferences
+are saved.</li>
+<li><strong>scrollable</strong> (<em>Boolean</em>) – Indicates whether the dialog box should be scrollable. When set to
+True, scroll bars appear on the dialog box if it is not large enough
+to display all of the items in the view at one time.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="traitsui.toolkit.assert_toolkit_import">
+<code class="descclassname">traitsui.toolkit.</code><code class="descname">assert_toolkit_import</code><span class="sig-paren">(</span><em>names</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.assert_toolkit_import" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise an error if a toolkit with the given name should not be allowed
+to be imported.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traitsui.toolkit.toolkit">
+<code class="descclassname">traitsui.toolkit.</code><code class="descname">toolkit</code><span class="sig-paren">(</span><em>*toolkits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.toolkit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects and returns a low-level GUI toolkit.</p>
+<p>Use this function to get a reference to the current toolkit.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>*toolkits</strong> (<em>strings</em>) – Toolkit names to try if toolkit not already selected.  If not supplied,
+will try all <code class="docutils literal notranslate"><span class="pre">traitsui.toolkits</span></code> entry points until a match is found.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Appropriate concrete Toolkit subclass for selected toolkit.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">toolkit</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">TraitError</span></code> – If no working toolkit is found.</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code> – If no ETSConfig.toolkit is set but the toolkit cannot be loaded for
+some reason.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="traitsui.toolkit.toolkit_object">
+<code class="descclassname">traitsui.toolkit.</code><code class="descname">toolkit_object</code><span class="sig-paren">(</span><em>name</em>, <em>raise_exceptions=False</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.toolkit_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the toolkit specific object with the given name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – The relative module path and the object name separated by a colon.</li>
+<li><strong>raise_exceptions</strong> (<em>bool</em>) – Whether or not to raise an exception if the name cannot be imported.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">TraitError</span></code> – If no working toolkit is found.</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code> – If no ETSConfig.toolkit is set but the toolkit cannot be loaded for
+some reason.  This is also raised if raise_exceptions is True the
+backend does not implement the desired object.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.theme.html"
+                        title="previous chapter">traitsui.theme module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.toolkit_traits.html"
+                        title="next chapter">traitsui.toolkit_traits module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.toolkit.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

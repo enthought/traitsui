@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.editors.instance_editor module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.editors.instance_editor module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
     <link rel="next" title="traitsui.editors.key_binding_editor module" href="traitsui.editors.key_binding_editor.html" >
     <link rel="prev" title="traitsui.editors.image_enum_editor module" href="traitsui.editors.image_enum_editor.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
   
@@ -98,15 +97,103 @@
 toolkits.</p>
 <dl class="attribute">
 <dt id="traitsui.editors.instance_editor.InstanceEditor">
-<code class="descclassname">traitsui.editors.instance_editor.</code><code class="descname">InstanceEditor</code><a class="headerlink" href="#traitsui.editors.instance_editor.InstanceEditor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.editors.instance_editor.</code><code class="sig-name descname">InstanceEditor</code><a class="headerlink" href="#traitsui.editors.instance_editor.InstanceEditor" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <a class="reference internal" href="#traitsui.editors.instance_editor.ToolkitEditorFactory" title="traitsui.editors.instance_editor.ToolkitEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editors.instance_editor.ToolkitEditorFactory</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.editors.instance_editor.ToolkitEditorFactory">
-<em class="property">class </em><code class="descclassname">traitsui.editors.instance_editor.</code><code class="descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.instance_editor.</code><code class="sig-name descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory" title="traitsui.editor_factory.EditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editor_factory.EditorFactory</span></code></a></p>
 <p>Editor factory for instance editors.</p>
+<dl class="attribute">
+<dt id="traitsui.editors.instance_editor.ToolkitEditorFactory.adapter">
+<code class="sig-name descname">adapter</code><em class="property"> = Type(InstanceChoice, allow_none=False)</em><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory.adapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default adapter class used to create InstanceChoice compatible
+adapters for instance objects:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.instance_editor.ToolkitEditorFactory.cachable">
+<code class="sig-name descname">cachable</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory.cachable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should factory-created objects be cached?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.instance_editor.ToolkitEditorFactory.droppable">
+<code class="sig-name descname">droppable</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory.droppable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the editor support drag and drop of objects to set the trait value
+(a value of True forces the editor to allow drag and drop, while a value
+of False only supports drag and drop if at least one item in the list of
+possible objects supports drag and drop):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.instance_editor.ToolkitEditorFactory.editable">
+<code class="sig-name descname">editable</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory.editable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the current value of the object trait editable (vs. merely
+selectable)?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.instance_editor.ToolkitEditorFactory.id">
+<code class="sig-name descname">id</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ID to use with the view</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.instance_editor.ToolkitEditorFactory.kind">
+<code class="sig-name descname">kind</code><em class="property"> = AKind</em><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory.kind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kind of pop-up editor (live, modal, nonmodal, wizard)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.instance_editor.ToolkitEditorFactory.label">
+<code class="sig-name descname">label</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional label for button</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.instance_editor.ToolkitEditorFactory.name">
+<code class="sig-name descname">name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extended name of the context object trait containing the list of types of
+selectable or editable instances</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.instance_editor.ToolkitEditorFactory.orientation">
+<code class="sig-name descname">orientation</code><em class="property"> = Enum(&quot;default&quot;, &quot;horizontal&quot;, &quot;vertical&quot;)</em><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory.orientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>The orientation of the instance editor relative to the instance selector</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.instance_editor.ToolkitEditorFactory.selectable">
+<code class="sig-name descname">selectable</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory.selectable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the object trait value be selectable from a list of objects (a
+value of True forces a selection list to be displayed, while a value of
+False displays a selection list only if at least one object in the list
+of possible object values is selectable):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.instance_editor.ToolkitEditorFactory.values">
+<code class="sig-name descname">values</code><em class="property"> = List(InstanceChoiceItem)</em><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of items describing the types of selectable or editable instances</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.instance_editor.ToolkitEditorFactory.view">
+<code class="sig-name descname">view</code><em class="property"> = AView</em><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional instance view to use</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.instance_editor.ToolkitEditorFactory.view_name">
+<code class="sig-name descname">view_name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.instance_editor.ToolkitEditorFactory.view_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extended name of the context object trait containing the view, or name of
+the view, to use</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -132,13 +219,11 @@ toolkits.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -159,13 +244,13 @@ toolkits.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

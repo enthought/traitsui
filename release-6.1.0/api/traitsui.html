@@ -1,0 +1,380 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui package &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="TraitsUI 6.1 API Reference" href="index.html" >
+    <link rel="next" title="traitsui.editors package" href="traitsui.editors.html" >
+    <link rel="prev" title="TraitsUI 6.1 API Reference" href="index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 API Reference</a></li>
+  
+    <li><a href="#">traitsui package</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editors.html" title="traitsui.editors package"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="index.html" title="TraitsUI 6.1 API Reference"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="traitsui-package">
+<h1>traitsui package<a class="headerlink" href="#traitsui-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.editors.html">traitsui.editors package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="traitsui.editors.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.api.html">traitsui.editors.api module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.array_editor.html">traitsui.editors.array_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.boolean_editor.html">traitsui.editors.boolean_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.button_editor.html">traitsui.editors.button_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.check_list_editor.html">traitsui.editors.check_list_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.code_editor.html">traitsui.editors.code_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.color_editor.html">traitsui.editors.color_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.compound_editor.html">traitsui.editors.compound_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.csv_list_editor.html">traitsui.editors.csv_list_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.custom_editor.html">traitsui.editors.custom_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.date_editor.html">traitsui.editors.date_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.default_override.html">traitsui.editors.default_override module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.directory_editor.html">traitsui.editors.directory_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.dnd_editor.html">traitsui.editors.dnd_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.drop_editor.html">traitsui.editors.drop_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.enum_editor.html">traitsui.editors.enum_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.file_editor.html">traitsui.editors.file_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.font_editor.html">traitsui.editors.font_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.history_editor.html">traitsui.editors.history_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.html_editor.html">traitsui.editors.html_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.image_editor.html">traitsui.editors.image_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.image_enum_editor.html">traitsui.editors.image_enum_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.instance_editor.html">traitsui.editors.instance_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.key_binding_editor.html">traitsui.editors.key_binding_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.list_editor.html">traitsui.editors.list_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.list_str_editor.html">traitsui.editors.list_str_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.null_editor.html">traitsui.editors.null_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.popup_editor.html">traitsui.editors.popup_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.progress_editor.html">traitsui.editors.progress_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.range_editor.html">traitsui.editors.range_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.rgb_color_editor.html">traitsui.editors.rgb_color_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.scrubber_editor.html">traitsui.editors.scrubber_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.search_editor.html">traitsui.editors.search_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.set_editor.html">traitsui.editors.set_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.shell_editor.html">traitsui.editors.shell_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.styled_date_editor.html">traitsui.editors.styled_date_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.table_editor.html">traitsui.editors.table_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.tabular_editor.html">traitsui.editors.tabular_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.text_editor.html">traitsui.editors.text_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.time_editor.html">traitsui.editors.time_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.title_editor.html">traitsui.editors.title_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.tree_editor.html">traitsui.editors.tree_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.tuple_editor.html">traitsui.editors.tuple_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.editors.value_editor.html">traitsui.editors.value_editor module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traitsui.editors.html#module-traitsui.editors">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.extras.html">traitsui.extras package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="traitsui.extras.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.extras.api.html">traitsui.extras.api module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.extras.checkbox_column.html">traitsui.extras.checkbox_column module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.extras.demo.html">traitsui.extras.demo module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.extras.edit_column.html">traitsui.extras.edit_column module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.extras.progress_column.html">traitsui.extras.progress_column module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.extras.saving.html">traitsui.extras.saving module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traitsui.extras.html#module-traitsui.extras">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.image.html">traitsui.image package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="traitsui.image.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.image.image.html">traitsui.image.image module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traitsui.image.html#module-traitsui.image">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.null.html">traitsui.null package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="traitsui.null.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.null.color_trait.html">traitsui.null.color_trait module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.null.font_trait.html">traitsui.null.font_trait module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.null.rgb_color_trait.html">traitsui.null.rgb_color_trait module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.null.toolkit.html">traitsui.null.toolkit module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traitsui.null.html#module-traitsui.null">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.tests.html">traitsui.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="traitsui.tests.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.editors.html">traitsui.tests.editors package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="traitsui.tests.editors.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.editors.test_button_editor.html">traitsui.tests.editors.test_button_editor module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.editors.test_code_editor.html">traitsui.tests.editors.test_code_editor module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.editors.test_csv_editor.html">traitsui.tests.editors.test_csv_editor module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.editors.test_default_override.html">traitsui.tests.editors.test_default_override module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.editors.test_instance_editor.html">traitsui.tests.editors.test_instance_editor module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.editors.test_liststr_editor.html">traitsui.tests.editors.test_liststr_editor module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.editors.test_liststr_editor_selection.html">traitsui.tests.editors.test_liststr_editor_selection module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.editors.test_range_editor_spinner.html">traitsui.tests.editors.test_range_editor_spinner module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.editors.test_range_editor_text.html">traitsui.tests.editors.test_range_editor_text module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.editors.test_table_editor.html">traitsui.tests.editors.test_table_editor module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.editors.test_tabular_editor.html">traitsui.tests.editors.test_tabular_editor module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.editors.test_tree_editor.html">traitsui.tests.editors.test_tree_editor module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.editors.test_tuple_editor.html">traitsui.tests.editors.test_tuple_editor module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="traitsui.tests.editors.html#module-traitsui.tests.editors">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.null_backend.html">traitsui.tests.null_backend package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="traitsui.tests.null_backend.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.null_backend.test_font_trait.html">traitsui.tests.null_backend.test_font_trait module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.null_backend.test_null_toolkit.html">traitsui.tests.null_backend.test_null_toolkit module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="traitsui.tests.null_backend.html#module-traitsui.tests.null_backend">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.ui_editors.html">traitsui.tests.ui_editors package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="traitsui.tests.ui_editors.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="traitsui.tests.ui_editors.test_data_frame_editor.html">traitsui.tests.ui_editors.test_data_frame_editor module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="traitsui.tests.ui_editors.html#module-traitsui.tests.ui_editors">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traitsui.tests.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.test_actions.html">traitsui.tests.test_actions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.test_color_column.html">traitsui.tests.test_color_column module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.test_controller.html">traitsui.tests.test_controller module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.test_handler.html">traitsui.tests.test_handler module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.test_labels.html">traitsui.tests.test_labels module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.test_layout.html">traitsui.tests.test_layout module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.test_regression.html">traitsui.tests.test_regression module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.test_shadow_group.html">traitsui.tests.test_shadow_group module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.test_splitter_prefs_restored.html">traitsui.tests.test_splitter_prefs_restored module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.test_toolkit.html">traitsui.tests.test_toolkit module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.test_tuple_editor.html">traitsui.tests.test_tuple_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.test_ui.html">traitsui.tests.test_ui module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.tests.test_visible_when_layout.html">traitsui.tests.test_visible_when_layout module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traitsui.tests.html#module-traitsui.tests">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.ui_editors.html">traitsui.ui_editors package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="traitsui.ui_editors.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.ui_editors.array_view_editor.html">traitsui.ui_editors.array_view_editor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traitsui.ui_editors.data_frame_editor.html">traitsui.ui_editors.data_frame_editor module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traitsui.ui_editors.html#module-traitsui.ui_editors">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.api.html">traitsui.api module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.base_panel.html">traitsui.base_panel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.basic_editor_factory.html">traitsui.basic_editor_factory module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.color_column.html">traitsui.color_column module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.context_value.html">traitsui.context_value module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.default_dock_window_theme.html">traitsui.default_dock_window_theme module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.delegating_handler.html">traitsui.delegating_handler module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.dock_window_theme.html">traitsui.dock_window_theme module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.dockable_view_element.html">traitsui.dockable_view_element module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.editor.html">traitsui.editor module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.editor_factory.html">traitsui.editor_factory module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.editors_gen.html">traitsui.editors_gen module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.file_dialog.html">traitsui.file_dialog module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.group.html">traitsui.group module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.handler.html">traitsui.handler module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.help.html">traitsui.help module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.help_template.html">traitsui.help_template module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.helper.html">traitsui.helper module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.include.html">traitsui.include module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.instance_choice.html">traitsui.instance_choice module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.item.html">traitsui.item module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.key_bindings.html">traitsui.key_bindings module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.list_str_adapter.html">traitsui.list_str_adapter module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.menu.html">traitsui.menu module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.message.html">traitsui.message module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.mimedata.html">traitsui.mimedata module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.table_column.html">traitsui.table_column module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.table_filter.html">traitsui.table_filter module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.tabular_adapter.html">traitsui.tabular_adapter module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.theme.html">traitsui.theme module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.toolkit.html">traitsui.toolkit module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.toolkit_traits.html">traitsui.toolkit_traits module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.tree_node.html">traitsui.tree_node module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.tree_node_renderer.html">traitsui.tree_node_renderer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.ui.html">traitsui.ui module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.ui_editor.html">traitsui.ui_editor module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.ui_info.html">traitsui.ui_info module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.ui_traits.html">traitsui.ui_traits module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.undo.html">traitsui.undo module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.value_tree.html">traitsui.value_tree module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.view.html">traitsui.view module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.view_element.html">traitsui.view_element module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traitsui.view_elements.html">traitsui.view_elements module</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="module-traitsui">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-traitsui" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">traitsui package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-traitsui">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">TraitsUI 6.1 API Reference</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.editors.html"
+                        title="next chapter">traitsui.editors package</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

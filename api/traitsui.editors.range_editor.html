@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.editors.range_editor module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.editors.range_editor module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
     <link rel="next" title="traitsui.editors.rgb_color_editor module" href="traitsui.editors.rgb_color_editor.html" >
     <link rel="prev" title="traitsui.editors.progress_editor module" href="traitsui.editors.progress_editor.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
   
@@ -97,33 +96,125 @@
 <p>Defines the range editor factory for all traits user interface toolkits.</p>
 <dl class="attribute">
 <dt id="traitsui.editors.range_editor.RangeEditor">
-<code class="descclassname">traitsui.editors.range_editor.</code><code class="descname">RangeEditor</code><a class="headerlink" href="#traitsui.editors.range_editor.RangeEditor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.editors.range_editor.</code><code class="sig-name descname">RangeEditor</code><a class="headerlink" href="#traitsui.editors.range_editor.RangeEditor" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <a class="reference internal" href="#traitsui.editors.range_editor.ToolkitEditorFactory" title="traitsui.editors.range_editor.ToolkitEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editors.range_editor.ToolkitEditorFactory</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.editors.range_editor.ToolkitEditorFactory">
-<em class="property">class </em><code class="descclassname">traitsui.editors.range_editor.</code><code class="descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.range_editor.</code><code class="sig-name descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory" title="traitsui.editor_factory.EditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editor_factory.EditorFactory</span></code></a></p>
 <p>Editor factory for range editors.</p>
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.auto_set">
+<code class="sig-name descname">auto_set</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.auto_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is user input set on every keystroke?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.cols">
+<code class="sig-name descname">cols</code><em class="property"> = Range(1, 20)</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.cols" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of columns when displayed as an enumeration</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.editors.range_editor.ToolkitEditorFactory.custom_editor">
-<code class="descname">custom_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.custom_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">custom_editor</code><span class="sig-paren">(</span><em class="sig-param">ui</em>, <em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.custom_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an editor using the “custom” style.
 Overridden to set the values of the _low_value, _high_value and
 is_float traits.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.enter_set">
+<code class="sig-name descname">enter_set</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.enter_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is user input set when the Enter key is pressed?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.evaluate">
+<code class="sig-name descname">evaluate</code><em class="property"> = Any()</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to evaluate floats/ints when they are assigned to an object
+trait</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.evaluate_name">
+<code class="sig-name descname">evaluate_name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.evaluate_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The object trait containing the function used to evaluate floats/ints</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.format">
+<code class="sig-name descname">format</code><em class="property"> = Str(&quot;%s&quot;)</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Formatting string used to format value and labels</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.high">
+<code class="sig-name descname">high</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.high" title="Permalink to this definition">¶</a></dt>
+<dd><p>High end of range</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.high_label">
+<code class="sig-name descname">high_label</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.high_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Label for the high end of the range</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.high_name">
+<code class="sig-name descname">high_name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.high_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of an [object.]trait that defines the high value for the range</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.editors.range_editor.ToolkitEditorFactory.init">
-<code class="descname">init</code><span class="sig-paren">(</span><em>handler=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.init" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">init</code><span class="sig-paren">(</span><em class="sig-param">handler=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.init" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs any initialization needed after all constructor traits
 have been set.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.is_float">
+<code class="sig-name descname">is_float</code><em class="property"> = Bool(Undefined)</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.is_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the range for floating pointer numbers (vs. integers)?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.label_width">
+<code class="sig-name descname">label_width</code><em class="property"> = Int()</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.label_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>FIXME: This is supported only in the wx backend so far.
+The width of the low and high labels</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.low">
+<code class="sig-name descname">low</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.low" title="Permalink to this definition">¶</a></dt>
+<dd><p>Low end of range</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.low_label">
+<code class="sig-name descname">low_label</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.low_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Label for the low end of the range</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.low_name">
+<code class="sig-name descname">low_name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.low_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of an [object.]trait that defines the low value for the range</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.range_editor.ToolkitEditorFactory.mode">
+<code class="sig-name descname">mode</code><em class="property"> = Enum( …</em><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display mode to use</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.editors.range_editor.ToolkitEditorFactory.simple_editor">
-<code class="descname">simple_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.simple_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">simple_editor</code><span class="sig-paren">(</span><em class="sig-param">ui</em>, <em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.range_editor.ToolkitEditorFactory.simple_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an editor using the “simple” style.
 Overridden to set the values of the _low_value, _high_value and
 is_float traits.</p>
@@ -154,13 +245,11 @@ is_float traits.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -181,13 +270,13 @@ is_float traits.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

@@ -1,0 +1,1915 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.tree_node module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.tree_node_renderer module" href="traitsui.tree_node_renderer.html" >
+    <link rel="prev" title="traitsui.toolkit_traits module" href="traitsui.toolkit_traits.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.tree_node module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.tree_node_renderer.html" title="traitsui.tree_node_renderer module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.toolkit_traits.html" title="traitsui.toolkit_traits module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.tree_node">
+<span id="traitsui-tree-node-module"></span><h1>traitsui.tree_node module<a class="headerlink" href="#module-traitsui.tree_node" title="Permalink to this headline">¶</a></h1>
+<p>Defines the tree node descriptor used by the tree editor and tree editor
+factory classes.</p>
+<dl class="class">
+<dt id="traitsui.tree_node.ITreeNode">
+<em class="property">class </em><code class="descclassname">traitsui.tree_node.</code><code class="descname">ITreeNode</code><a class="headerlink" href="#traitsui.tree_node.ITreeNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.Interface</span></code></a></p>
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.activated">
+<code class="descname">activated</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.activated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being activated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.allows_children">
+<code class="descname">allows_children</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.allows_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether this object can have children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.append_child">
+<code class="descname">append_child</code><span class="sig-paren">(</span><em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.append_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a child to the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.can_add">
+<code class="descname">can_add</code><span class="sig-paren">(</span><em>add_object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.can_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether a given object is droppable on the node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.can_auto_close">
+<code class="descname">can_auto_close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.can_auto_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children should be automatically
+closed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.can_auto_open">
+<code class="descname">can_auto_open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.can_auto_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children should be automatically
+opened.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.can_copy">
+<code class="descname">can_copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.can_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be copied.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.can_delete">
+<code class="descname">can_delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.can_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be deleted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.can_delete_me">
+<code class="descname">can_delete_me</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.can_delete_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object can be deleted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.can_insert">
+<code class="descname">can_insert</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.can_insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be inserted (vs.
+appended).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.can_rename">
+<code class="descname">can_rename</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.can_rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be renamed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.can_rename_me">
+<code class="descname">can_rename_me</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.can_rename_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object can be renamed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.click">
+<code class="descname">click</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.confirm_delete">
+<code class="descname">confirm_delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.confirm_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether a specified object can be deleted.</p>
+<p>The following return values are possible:</p>
+<ul class="simple">
+<li><strong>True</strong> if the object should be deleted with no further prompting.</li>
+<li><strong>False</strong> if the object should not be deleted.</li>
+<li>Anything else: Caller should take its default action (which might
+include prompting the user to confirm deletion).</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.dclick">
+<code class="descname">dclick</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.dclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being double-clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.delete_child">
+<code class="descname">delete_child</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.delete_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a child at a specified index from the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.drop_object">
+<code class="descname">drop_object</code><span class="sig-paren">(</span><em>dropped_object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.drop_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a droppable version of a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.get_add">
+<code class="descname">get_add</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.get_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of classes that can be added to the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.get_children">
+<code class="descname">get_children</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.get_children_id">
+<code class="descname">get_children_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.get_children_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object’s children identifier.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.get_column_labels">
+<code class="descname">get_column_labels</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.get_column_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the labels for any columns that have been defined.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.get_drag_object">
+<code class="descname">get_drag_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.get_drag_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a draggable version of a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.get_icon">
+<code class="descname">get_icon</code><span class="sig-paren">(</span><em>is_expanded</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.get_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the icon for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.get_icon_path">
+<code class="descname">get_icon_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.get_icon_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path used to locate an object’s icon.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.get_label">
+<code class="descname">get_label</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.get_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the label to display for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.get_menu">
+<code class="descname">get_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.get_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the right-click context menu for an object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name to use when adding a new object instance
+(displayed in the “New” submenu).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.get_tooltip">
+<code class="descname">get_tooltip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.get_tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the tooltip to display for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.get_view">
+<code class="descname">get_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.get_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the view to use when editing an object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.has_children">
+<code class="descname">has_children</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.has_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object has children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.insert_child">
+<code class="descname">insert_child</code><span class="sig-paren">(</span><em>index</em>, <em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.insert_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts a child into the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.select">
+<code class="descname">select</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being selected.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.set_label">
+<code class="descname">set_label</code><span class="sig-paren">(</span><em>label</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.set_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the label for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.when_children_changed">
+<code class="descname">when_children_changed</code><span class="sig-paren">(</span><em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.when_children_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being changed on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.when_children_replaced">
+<code class="descname">when_children_replaced</code><span class="sig-paren">(</span><em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.when_children_replaced" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being replaced on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.when_column_labels_change">
+<code class="descname">when_column_labels_change</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.when_column_labels_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for the column labels being changed on
+a specified object.</p>
+<p>This will fire when either the list is reassigned or when it is
+modified. I.e., it listens both to the trait change event and the
+trait_items change event. Implement the listener appropriately to handle
+either case.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNode.when_label_changed">
+<code class="descname">when_label_changed</code><span class="sig-paren">(</span><em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.when_label_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for the label being changed on a
+specified object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.tree_node.ITreeNodeAdapter">
+<em class="property">class </em><code class="descclassname">traitsui.tree_node.</code><code class="descname">ITreeNodeAdapter</code><span class="sig-paren">(</span><em>adaptee</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/traits.adaptation.html#traits.adaptation.adapter.Adapter" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.adaptation.adapter.Adapter</span></code></a></p>
+<p>Abstract base class for an adapter that implements the ITreeNode
+interface.</p>
+<p>Usage:</p>
+<ol class="arabic simple">
+<li>Create a subclass of ITreeNodeAdapter.</li>
+<li>Register the adapter to define what class (or classes) this is an
+ITreeNode adapter for (ie.
+<code class="docutils literal notranslate"><span class="pre">register_factory(&lt;from</span> <span class="pre">class&gt;,</span> <span class="pre">ITreeNode,</span> <span class="pre">ITreeNodeAdapter)</span></code>).</li>
+<li>Override any of the following methods as necessary, using the
+<code class="docutils literal notranslate"><span class="pre">self.adaptee</span></code> trait to access the adapted object if needed.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This base class implements all of the ITreeNode interface methods,
+but does not necessarily provide useful implementations for all of the
+methods. It allows you to get a new adapter class up and running quickly,
+but you should carefully review your final adapter implementation class
+to make sure it behaves correctly in your application.</p>
+</div>
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.activated">
+<code class="descname">activated</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.activated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being activated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.allows_children">
+<code class="descname">allows_children</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.allows_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether this object can have children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.append_child">
+<code class="descname">append_child</code><span class="sig-paren">(</span><em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.append_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a child to the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.can_add">
+<code class="descname">can_add</code><span class="sig-paren">(</span><em>add_object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.can_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether a given object is droppable on the node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.can_auto_close">
+<code class="descname">can_auto_close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.can_auto_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children should be automatically
+closed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.can_auto_open">
+<code class="descname">can_auto_open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.can_auto_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children should be automatically
+opened.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.can_copy">
+<code class="descname">can_copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.can_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be copied.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.can_delete">
+<code class="descname">can_delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.can_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be deleted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.can_delete_me">
+<code class="descname">can_delete_me</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.can_delete_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object can be deleted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.can_insert">
+<code class="descname">can_insert</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.can_insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be inserted (vs.
+appended).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.can_rename">
+<code class="descname">can_rename</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.can_rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be renamed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.can_rename_me">
+<code class="descname">can_rename_me</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.can_rename_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object can be renamed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.click">
+<code class="descname">click</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.confirm_delete">
+<code class="descname">confirm_delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.confirm_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether a specified object can be deleted.</p>
+<p>The following return values are possible:</p>
+<ul class="simple">
+<li><strong>True</strong> if the object should be deleted with no further prompting.</li>
+<li><strong>False</strong> if the object should not be deleted.</li>
+<li>Anything else: Caller should take its default action (which might
+include prompting the user to confirm deletion).</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.dclick">
+<code class="descname">dclick</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.dclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being double-clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.delete_child">
+<code class="descname">delete_child</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.delete_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a child at a specified index from the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.drop_object">
+<code class="descname">drop_object</code><span class="sig-paren">(</span><em>dropped_object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.drop_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a droppable version of a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_add">
+<code class="descname">get_add</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of classes that can be added to the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_background">
+<code class="descname">get_background</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_background" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the background for object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_children">
+<code class="descname">get_children</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_children_id">
+<code class="descname">get_children_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_children_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object’s children identifier.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_column_labels">
+<code class="descname">get_column_labels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_column_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the labels for any columns that have been defined.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_drag_object">
+<code class="descname">get_drag_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_drag_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a draggable version of a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_foreground">
+<code class="descname">get_foreground</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_foreground" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the foreground for object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_icon">
+<code class="descname">get_icon</code><span class="sig-paren">(</span><em>is_expanded</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the icon for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_icon_path">
+<code class="descname">get_icon_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_icon_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path used to locate an object’s icon.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_label">
+<code class="descname">get_label</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the label to display for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_menu">
+<code class="descname">get_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the right-click context menu for an object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name to use when adding a new object instance
+(displayed in the “New” submenu).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_renderer">
+<code class="descname">get_renderer</code><span class="sig-paren">(</span><em>column=0</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_renderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the renderer for object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_tooltip">
+<code class="descname">get_tooltip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the tooltip to display for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.get_view">
+<code class="descname">get_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.get_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the view to use when editing an object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.has_children">
+<code class="descname">has_children</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.has_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object has children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.insert_child">
+<code class="descname">insert_child</code><span class="sig-paren">(</span><em>index</em>, <em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.insert_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts a child into the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.select">
+<code class="descname">select</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being selected.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.set_label">
+<code class="descname">set_label</code><span class="sig-paren">(</span><em>label</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.set_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the label for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.when_children_changed">
+<code class="descname">when_children_changed</code><span class="sig-paren">(</span><em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.when_children_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being changed on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.when_children_replaced">
+<code class="descname">when_children_replaced</code><span class="sig-paren">(</span><em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.when_children_replaced" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being replaced on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.when_column_labels_change">
+<code class="descname">when_column_labels_change</code><span class="sig-paren">(</span><em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.when_column_labels_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for the column labels being changed on
+a specified object.</p>
+<p>This will fire when either the list is reassigned or when it is
+modified. I.e., it listens both to the trait change event and the
+trait_items change event. Implement the listener appropriately to handle
+either case.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapter.when_label_changed">
+<code class="descname">when_label_changed</code><span class="sig-paren">(</span><em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter.when_label_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for the label being changed on a
+specified object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge">
+<em class="property">class </em><code class="descclassname">traitsui.tree_node.</code><code class="descname">ITreeNodeAdapterBridge</code><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<p>Private class for use by a toolkit-specific implementation of the
+TreeEditor to allow bridging the TreeNode interface used by the editor
+to the ITreeNode interface used by object adapters.</p>
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.activated">
+<code class="descname">activated</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.activated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being activated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.allows_children">
+<code class="descname">allows_children</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.allows_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether this object can have children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.append_child">
+<code class="descname">append_child</code><span class="sig-paren">(</span><em>object</em>, <em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.append_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a child to the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.can_add">
+<code class="descname">can_add</code><span class="sig-paren">(</span><em>object</em>, <em>add_object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.can_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether a given object is droppable on the node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.can_auto_close">
+<code class="descname">can_auto_close</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.can_auto_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children should be automatically
+closed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.can_auto_open">
+<code class="descname">can_auto_open</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.can_auto_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children should be automatically
+opened.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.can_copy">
+<code class="descname">can_copy</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.can_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be copied.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.can_delete">
+<code class="descname">can_delete</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.can_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be deleted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.can_delete_me">
+<code class="descname">can_delete_me</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.can_delete_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object can be deleted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.can_insert">
+<code class="descname">can_insert</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.can_insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be inserted (vs.
+appended).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.can_rename">
+<code class="descname">can_rename</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.can_rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be renamed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.can_rename_me">
+<code class="descname">can_rename_me</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.can_rename_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object can be renamed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.click">
+<code class="descname">click</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.confirm_delete">
+<code class="descname">confirm_delete</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.confirm_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether a specified object can be deleted.</p>
+<p>The following return values are possible:</p>
+<ul class="simple">
+<li><strong>True</strong> if the object should be deleted with no further prompting.</li>
+<li><strong>False</strong> if the object should not be deleted.</li>
+<li>Anything else: Caller should take its default action (which might
+include prompting the user to confirm deletion).</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.dclick">
+<code class="descname">dclick</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.dclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being double-clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.delete_child">
+<code class="descname">delete_child</code><span class="sig-paren">(</span><em>object</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.delete_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a child at a specified index from the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.drop_object">
+<code class="descname">drop_object</code><span class="sig-paren">(</span><em>object</em>, <em>dropped_object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.drop_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a droppable version of a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_add">
+<code class="descname">get_add</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of classes that can be added to the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_background">
+<code class="descname">get_background</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_background" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the background for object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_children">
+<code class="descname">get_children</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_children_id">
+<code class="descname">get_children_id</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_children_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object’s children identifier.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_column_labels">
+<code class="descname">get_column_labels</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_column_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the labels for any columns that have been defined.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_drag_object">
+<code class="descname">get_drag_object</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_drag_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a draggable version of a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_foreground">
+<code class="descname">get_foreground</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_foreground" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the foreground for object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_icon">
+<code class="descname">get_icon</code><span class="sig-paren">(</span><em>object</em>, <em>is_expanded</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the icon for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_icon_path">
+<code class="descname">get_icon_path</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_icon_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path used to locate an object’s icon.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_label">
+<code class="descname">get_label</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the label to display for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_menu">
+<code class="descname">get_menu</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the right-click context menu for an object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name to use when adding a new object instance
+(displayed in the “New” submenu).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_renderer">
+<code class="descname">get_renderer</code><span class="sig-paren">(</span><em>object</em>, <em>column=0</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_renderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the renderer for object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_tooltip">
+<code class="descname">get_tooltip</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the tooltip to display for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.get_view">
+<code class="descname">get_view</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.get_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the view to use when editing an object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.has_children">
+<code class="descname">has_children</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.has_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object has children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.insert_child">
+<code class="descname">insert_child</code><span class="sig-paren">(</span><em>object</em>, <em>index</em>, <em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.insert_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts a child into the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.select">
+<code class="descname">select</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being selected.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.set_label">
+<code class="descname">set_label</code><span class="sig-paren">(</span><em>object</em>, <em>label</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.set_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the label for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.when_children_changed">
+<code class="descname">when_children_changed</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.when_children_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being changed on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.when_children_replaced">
+<code class="descname">when_children_replaced</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.when_children_replaced" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being replaced on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.when_column_labels_change">
+<code class="descname">when_column_labels_change</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.when_column_labels_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for the column labels being changed on
+a specified object.</p>
+<p>This will fire when either the list is reassigned or when it is
+modified. I.e., it listens both to the trait change event and the
+trait_items change event. Implement the listener appropriately to handle
+either case.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ITreeNodeAdapterBridge.when_label_changed">
+<code class="descname">when_label_changed</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge.when_label_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for the label being changed on a
+specified object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.tree_node.MultiTreeNode">
+<em class="property">class </em><code class="descclassname">traitsui.tree_node.</code><code class="descname">MultiTreeNode</code><span class="sig-paren">(</span><em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.tree_node.TreeNode" title="traitsui.tree_node.TreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.tree_node.TreeNode</span></code></a></p>
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.activated">
+<code class="descname">activated</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.activated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being activated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.allows_children">
+<code class="descname">allows_children</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.allows_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether this object can have children (True for this
+class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.can_add">
+<code class="descname">can_add</code><span class="sig-paren">(</span><em>object</em>, <em>add_object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.can_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether a given object is droppable on the node (False for
+this class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.can_auto_close">
+<code class="descname">can_auto_close</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.can_auto_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children should be automatically
+closed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.can_auto_open">
+<code class="descname">can_auto_open</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.can_auto_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children should be automatically
+opened.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.can_copy">
+<code class="descname">can_copy</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.can_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be copied.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.can_delete">
+<code class="descname">can_delete</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.can_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be deleted (False for
+this class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.can_delete_me">
+<code class="descname">can_delete_me</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.can_delete_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object can be deleted (True for this class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.can_insert">
+<code class="descname">can_insert</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.can_insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be inserted (False,
+meaning that children are appended, for this class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.can_rename">
+<code class="descname">can_rename</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.can_rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be renamed (False for
+this class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.can_rename_me">
+<code class="descname">can_rename_me</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.can_rename_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object can be renamed (False for this class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.click">
+<code class="descname">click</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.dclick">
+<code class="descname">dclick</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.dclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being double-clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.drop_object">
+<code class="descname">drop_object</code><span class="sig-paren">(</span><em>object</em>, <em>dropped_object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.drop_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a droppable version of a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.get_add">
+<code class="descname">get_add</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.get_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of classes that can be added to the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.get_children">
+<code class="descname">get_children</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.get_children_id">
+<code class="descname">get_children_id</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.get_children_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object’s children identifier.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.get_drag_object">
+<code class="descname">get_drag_object</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.get_drag_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a draggable version of a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.get_icon">
+<code class="descname">get_icon</code><span class="sig-paren">(</span><em>object</em>, <em>is_expanded</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.get_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the icon for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.get_icon_path">
+<code class="descname">get_icon_path</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.get_icon_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path used to locate an object’s icon.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.get_label">
+<code class="descname">get_label</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.get_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the label to display for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.get_menu">
+<code class="descname">get_menu</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.get_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the right-click context menu for an object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name to use when adding a new object instance
+(displayed in the “New” submenu).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.get_view">
+<code class="descname">get_view</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.get_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the view to use when editing an object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.has_children">
+<code class="descname">has_children</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.has_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether this object has children (True for this class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.select">
+<code class="descname">select</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being selected.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.set_label">
+<code class="descname">set_label</code><span class="sig-paren">(</span><em>object</em>, <em>label</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.set_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the label for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.when_children_changed">
+<code class="descname">when_children_changed</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.when_children_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being changed on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.when_children_replaced">
+<code class="descname">when_children_replaced</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.when_children_replaced" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being replaced on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.MultiTreeNode.when_label_changed">
+<code class="descname">when_label_changed</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.MultiTreeNode.when_label_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for the label being changed on a
+specified object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.tree_node.ObjectTreeNode">
+<em class="property">class </em><code class="descclassname">traitsui.tree_node.</code><code class="descname">ObjectTreeNode</code><span class="sig-paren">(</span><em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.tree_node.TreeNode" title="traitsui.tree_node.TreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.tree_node.TreeNode</span></code></a></p>
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.activated">
+<code class="descname">activated</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.activated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being activated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.allows_children">
+<code class="descname">allows_children</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.allows_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether this object can have children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.append_child">
+<code class="descname">append_child</code><span class="sig-paren">(</span><em>object</em>, <em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.append_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a child to the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.can_add">
+<code class="descname">can_add</code><span class="sig-paren">(</span><em>object</em>, <em>add_object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.can_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether a given object is droppable on the node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.can_auto_close">
+<code class="descname">can_auto_close</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.can_auto_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children should be automatically
+closed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.can_auto_open">
+<code class="descname">can_auto_open</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.can_auto_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children should be automatically
+opened.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.can_copy">
+<code class="descname">can_copy</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.can_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be copied.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.can_delete">
+<code class="descname">can_delete</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.can_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be deleted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.can_delete_me">
+<code class="descname">can_delete_me</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.can_delete_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object can be deleted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.can_insert">
+<code class="descname">can_insert</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.can_insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be inserted (vs.
+appended).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.can_rename">
+<code class="descname">can_rename</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.can_rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be renamed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.can_rename_me">
+<code class="descname">can_rename_me</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.can_rename_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object can be renamed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.click">
+<code class="descname">click</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.confirm_delete">
+<code class="descname">confirm_delete</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.confirm_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether a specified object can be deleted.</p>
+<p>The following return values are possible:</p>
+<ul class="simple">
+<li><strong>True</strong> if the object should be deleted with no further prompting.</li>
+<li><strong>False</strong> if the object should not be deleted.</li>
+<li>Anything else: Caller should take its default action (which might
+include prompting the user to confirm deletion).</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.dclick">
+<code class="descname">dclick</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.dclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being double-clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.delete_child">
+<code class="descname">delete_child</code><span class="sig-paren">(</span><em>object</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.delete_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a child at a specified index from the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.drop_object">
+<code class="descname">drop_object</code><span class="sig-paren">(</span><em>object</em>, <em>dropped_object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.drop_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a droppable version of a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.get_add">
+<code class="descname">get_add</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.get_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of classes that can be added to the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.get_children">
+<code class="descname">get_children</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.get_children_id">
+<code class="descname">get_children_id</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.get_children_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object’s children identifier.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.get_drag_object">
+<code class="descname">get_drag_object</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.get_drag_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a draggable version of a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.get_icon">
+<code class="descname">get_icon</code><span class="sig-paren">(</span><em>object</em>, <em>is_expanded</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.get_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the icon for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.get_icon_path">
+<code class="descname">get_icon_path</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.get_icon_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path used to locate an object’s icon.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.get_label">
+<code class="descname">get_label</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.get_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the label to display for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.get_menu">
+<code class="descname">get_menu</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.get_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the right-click context menu for an object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name to use when adding a new object instance
+(displayed in the “New” submenu).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.get_tooltip">
+<code class="descname">get_tooltip</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.get_tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the tooltip to display for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.get_view">
+<code class="descname">get_view</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.get_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the view to use when editing an object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.has_children">
+<code class="descname">has_children</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.has_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object has children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.insert_child">
+<code class="descname">insert_child</code><span class="sig-paren">(</span><em>object</em>, <em>index</em>, <em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.insert_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts a child into the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.is_node_for">
+<code class="descname">is_node_for</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.is_node_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether this is the node that should handle a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.select">
+<code class="descname">select</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being selected.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.set_label">
+<code class="descname">set_label</code><span class="sig-paren">(</span><em>object</em>, <em>label</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.set_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the label for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.when_children_changed">
+<code class="descname">when_children_changed</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.when_children_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being changed on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.when_children_replaced">
+<code class="descname">when_children_replaced</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.when_children_replaced" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being replaced on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.ObjectTreeNode.when_label_changed">
+<code class="descname">when_label_changed</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ObjectTreeNode.when_label_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for the label being changed on a
+specified object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.tree_node.TreeNode">
+<em class="property">class </em><code class="descclassname">traitsui.tree_node.</code><code class="descname">TreeNode</code><span class="sig-paren">(</span><em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<p>Represents a tree node. Used by the tree editor and tree editor factory
+classes.</p>
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.activated">
+<code class="descname">activated</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.activated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being activated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.allows_children">
+<code class="descname">allows_children</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.allows_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether this object can have children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.append_child">
+<code class="descname">append_child</code><span class="sig-paren">(</span><em>object</em>, <em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.append_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a child to the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.can_add">
+<code class="descname">can_add</code><span class="sig-paren">(</span><em>object</em>, <em>add_object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.can_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether a given object is droppable on the node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.can_auto_close">
+<code class="descname">can_auto_close</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.can_auto_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children should be automatically
+closed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.can_auto_open">
+<code class="descname">can_auto_open</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.can_auto_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children should be automatically
+opened.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.can_copy">
+<code class="descname">can_copy</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.can_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be copied.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.can_delete">
+<code class="descname">can_delete</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.can_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be deleted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.can_delete_me">
+<code class="descname">can_delete_me</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.can_delete_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object can be deleted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.can_insert">
+<code class="descname">can_insert</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.can_insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be inserted (vs.
+appended).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.can_rename">
+<code class="descname">can_rename</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.can_rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be renamed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.can_rename_me">
+<code class="descname">can_rename_me</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.can_rename_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object can be renamed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.click">
+<code class="descname">click</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.confirm_delete">
+<code class="descname">confirm_delete</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.confirm_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether a specified object can be deleted.</p>
+<p>The following return values are possible:</p>
+<ul class="simple">
+<li><strong>True</strong> if the object should be deleted with no further prompting.</li>
+<li><strong>False</strong> if the object should not be deleted.</li>
+<li>Anything else: Caller should take its default action (which might
+include prompting the user to confirm deletion).</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.dclick">
+<code class="descname">dclick</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.dclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being double-clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.delete_child">
+<code class="descname">delete_child</code><span class="sig-paren">(</span><em>object</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.delete_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a child at a specified index from the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.drop_object">
+<code class="descname">drop_object</code><span class="sig-paren">(</span><em>object</em>, <em>dropped_object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.drop_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a droppable version of a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_add">
+<code class="descname">get_add</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of classes that can be added to the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_background">
+<code class="descname">get_background</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_background" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_children">
+<code class="descname">get_children</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_children_id">
+<code class="descname">get_children_id</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_children_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object’s children identifier.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_column_labels">
+<code class="descname">get_column_labels</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_column_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the labels for any columns that have been defined.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_drag_object">
+<code class="descname">get_drag_object</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_drag_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a draggable version of a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_foreground">
+<code class="descname">get_foreground</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_foreground" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_icon">
+<code class="descname">get_icon</code><span class="sig-paren">(</span><em>object</em>, <em>is_expanded</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the icon for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_icon_path">
+<code class="descname">get_icon_path</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_icon_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path used to locate an object’s icon.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_label">
+<code class="descname">get_label</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the label to display for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_menu">
+<code class="descname">get_menu</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the right-click context menu for an object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name to use when adding a new object instance
+(displayed in the “New” submenu).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_renderer">
+<code class="descname">get_renderer</code><span class="sig-paren">(</span><em>object</em>, <em>column=0</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_renderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the renderer for the object and column.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_tooltip">
+<code class="descname">get_tooltip</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the tooltip to display for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.get_view">
+<code class="descname">get_view</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.get_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the view to use when editing an object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.has_children">
+<code class="descname">has_children</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.has_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object has children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.insert_child">
+<code class="descname">insert_child</code><span class="sig-paren">(</span><em>object</em>, <em>index</em>, <em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.insert_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts a child into the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.is_addable">
+<code class="descname">is_addable</code><span class="sig-paren">(</span><em>klass</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.is_addable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether a specified object class can be added to the node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.is_node_for">
+<code class="descname">is_node_for</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.is_node_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether this is the node that handles a specified object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tree_node.TreeNode.renderer">
+<code class="descname">renderer</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.tree_node.TreeNode.renderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A toolkit-appropriate cell renderer (currently Qt only)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.select">
+<code class="descname">select</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being selected.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.set_label">
+<code class="descname">set_label</code><span class="sig-paren">(</span><em>object</em>, <em>label</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.set_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the label for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.when_children_changed">
+<code class="descname">when_children_changed</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.when_children_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being changed on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.when_children_replaced">
+<code class="descname">when_children_replaced</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.when_children_replaced" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being replaced on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.when_column_labels_change">
+<code class="descname">when_column_labels_change</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.when_column_labels_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for the column labels being changed on
+a specified object.</p>
+<p>This will fire when either the list is reassigned or when it is
+modified. I.e., it listens both to the trait change event and the
+trait_items change event. Implement the listener appropriately to
+handle either case.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNode.when_label_changed">
+<code class="descname">when_label_changed</code><span class="sig-paren">(</span><em>object</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode.when_label_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for the label being changed on a
+specified object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.tree_node.TreeNodeObject">
+<em class="property">class </em><code class="descclassname">traitsui.tree_node.</code><code class="descname">TreeNodeObject</code><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<p>Represents the object that corresponds to a tree node.</p>
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_activated">
+<code class="descname">tno_activated</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_activated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being activated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_allows_children">
+<code class="descname">tno_allows_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_allows_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether this object allows children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_append_child">
+<code class="descname">tno_append_child</code><span class="sig-paren">(</span><em>node</em>, <em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_append_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a child to the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_can_add">
+<code class="descname">tno_can_add</code><span class="sig-paren">(</span><em>node</em>, <em>add_object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_can_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether a given object is droppable on the node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_can_auto_close">
+<code class="descname">tno_can_auto_close</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_can_auto_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children should be automatically
+closed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_can_auto_open">
+<code class="descname">tno_can_auto_open</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_can_auto_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children should be automatically
+opened.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_can_copy">
+<code class="descname">tno_can_copy</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_can_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be copied.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_can_delete">
+<code class="descname">tno_can_delete</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_can_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be deleted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_can_delete_me">
+<code class="descname">tno_can_delete_me</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_can_delete_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object can be deleted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_can_insert">
+<code class="descname">tno_can_insert</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_can_insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be inserted (vs.
+appended).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_can_rename">
+<code class="descname">tno_can_rename</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_can_rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object’s children can be renamed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_can_rename_me">
+<code class="descname">tno_can_rename_me</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_can_rename_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object can be renamed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_click">
+<code class="descname">tno_click</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_confirm_delete">
+<code class="descname">tno_confirm_delete</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_confirm_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether a specified object can be deleted.</p>
+<p>The following return values are possible:</p>
+<ul class="simple">
+<li><strong>True</strong> if the object should be deleted with no further prompting.</li>
+<li><strong>False</strong> if the object should not be deleted.</li>
+<li>Anything else: Caller should take its default action (which might
+include prompting the user to confirm deletion).</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_dclick">
+<code class="descname">tno_dclick</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_dclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being double-clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_delete_child">
+<code class="descname">tno_delete_child</code><span class="sig-paren">(</span><em>node</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_delete_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a child at a specified index from the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_drop_object">
+<code class="descname">tno_drop_object</code><span class="sig-paren">(</span><em>node</em>, <em>dropped_object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_drop_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a droppable version of a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_get_add">
+<code class="descname">tno_get_add</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_get_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of classes that can be added to the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_get_children">
+<code class="descname">tno_get_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_get_children_id">
+<code class="descname">tno_get_children_id</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_get_children_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object’s children identifier.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_get_drag_object">
+<code class="descname">tno_get_drag_object</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_get_drag_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a draggable version of a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_get_icon">
+<code class="descname">tno_get_icon</code><span class="sig-paren">(</span><em>node</em>, <em>is_expanded</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_get_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the icon for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_get_icon_path">
+<code class="descname">tno_get_icon_path</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_get_icon_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path used to locate an object’s icon.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_get_label">
+<code class="descname">tno_get_label</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_get_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the label to display for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_get_menu">
+<code class="descname">tno_get_menu</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_get_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the right-click context menu for an object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_get_name">
+<code class="descname">tno_get_name</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name to use when adding a new object instance
+(displayed in the “New” submenu).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_get_tooltip">
+<code class="descname">tno_get_tooltip</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_get_tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the tooltip to display for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_get_view">
+<code class="descname">tno_get_view</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_get_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the view to use when editing an object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_has_children">
+<code class="descname">tno_has_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_has_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether this object has children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_insert_child">
+<code class="descname">tno_insert_child</code><span class="sig-paren">(</span><em>node</em>, <em>index</em>, <em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_insert_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts a child into the object’s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_is_node_for">
+<code class="descname">tno_is_node_for</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_is_node_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether this is the node that should handle a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_select">
+<code class="descname">tno_select</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an object being selected.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_set_label">
+<code class="descname">tno_set_label</code><span class="sig-paren">(</span><em>node</em>, <em>label</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_set_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the label for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_when_children_changed">
+<code class="descname">tno_when_children_changed</code><span class="sig-paren">(</span><em>node</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_when_children_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being changed on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_when_children_replaced">
+<code class="descname">tno_when_children_replaced</code><span class="sig-paren">(</span><em>node</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_when_children_replaced" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being replaced on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tree_node.TreeNodeObject.tno_when_label_changed">
+<code class="descname">tno_when_label_changed</code><span class="sig-paren">(</span><em>node</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject.tno_when_label_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for  the label being changed on a
+specified object.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.toolkit_traits.html"
+                        title="previous chapter">traitsui.toolkit_traits module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.tree_node_renderer.html"
+                        title="next chapter">traitsui.tree_node_renderer module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.tree_node.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

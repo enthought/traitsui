@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.editors.scrubber_editor module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.editors.scrubber_editor module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
     <link rel="next" title="traitsui.editors.search_editor module" href="traitsui.editors.search_editor.html" >
     <link rel="prev" title="traitsui.editors.rgb_color_editor module" href="traitsui.editors.rgb_color_editor.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
   
@@ -97,8 +96,68 @@
 <p>Editor factory for scrubber-based integer or float value editors.</p>
 <dl class="class">
 <dt id="traitsui.editors.scrubber_editor.ScrubberEditor">
-<em class="property">class </em><code class="descclassname">traitsui.editors.scrubber_editor.</code><code class="descname">ScrubberEditor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.scrubber_editor.</code><code class="sig-name descname">ScrubberEditor</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.basic_editor_factory.html#traitsui.basic_editor_factory.BasicEditorFactory" title="traitsui.basic_editor_factory.BasicEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.basic_editor_factory.BasicEditorFactory</span></code></a></p>
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.active_color">
+<code class="sig-name descname">active_color</code><em class="property"> = Color(None)</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.active_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The active mode background color for the scrubber:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.alignment">
+<code class="sig-name descname">alignment</code><em class="property"> = Alignment(&quot;center&quot;)</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.alignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>The alignment of the text within the scrubber:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.border_color">
+<code class="sig-name descname">border_color</code><em class="property"> = Color(None)</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.border_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The scrubber border color:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.color">
+<code class="sig-name descname">color</code><em class="property"> = Color(None)</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The background color for the scrubber:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.high">
+<code class="sig-name descname">high</code><em class="property"> = Float()</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.high" title="Permalink to this definition">¶</a></dt>
+<dd><p>The high end of the scrubber range:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.hover_color">
+<code class="sig-name descname">hover_color</code><em class="property"> = Color(None)</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.hover_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The hover mode background color for the scrubber:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.increment">
+<code class="sig-name descname">increment</code><em class="property"> = Float()</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.increment" title="Permalink to this definition">¶</a></dt>
+<dd><p>The normal increment (default: auto-calculate):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.klass">
+<code class="sig-name descname">klass</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.klass" title="Permalink to this definition">¶</a></dt>
+<dd><p>The editor class to be instantiated:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.low">
+<code class="sig-name descname">low</code><em class="property"> = Float()</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.low" title="Permalink to this definition">¶</a></dt>
+<dd><p>The low end of the scrubber range:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.text_color">
+<code class="sig-name descname">text_color</code><em class="property"> = Color(&quot;black&quot;)</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.text_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The color to use for the value text:</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -124,13 +183,11 @@
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -151,13 +208,13 @@
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

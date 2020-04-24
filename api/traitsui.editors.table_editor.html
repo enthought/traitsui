@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.editors.table_editor module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.editors.table_editor module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
     <link rel="next" title="traitsui.editors.tabular_editor module" href="traitsui.editors.tabular_editor.html" >
     <link rel="prev" title="traitsui.editors.styled_date_editor module" href="traitsui.editors.styled_date_editor.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
   
@@ -97,50 +96,50 @@
 <p>Defines the table editor factory for all traits user interface toolkits.</p>
 <dl class="class">
 <dt id="traitsui.editors.table_editor.BaseTableEditor">
-<em class="property">class </em><code class="descclassname">traitsui.editors.table_editor.</code><code class="descname">BaseTableEditor</code><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.table_editor.</code><code class="sig-name descname">BaseTableEditor</code><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base class for toolkit-specific editors.</p>
 <dl class="method">
 <dt id="traitsui.editors.table_editor.BaseTableEditor.add_to_menu">
-<code class="descname">add_to_menu</code><span class="sig-paren">(</span><em>menu_item</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor.add_to_menu" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_to_menu</code><span class="sig-paren">(</span><em class="sig-param">menu_item</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor.add_to_menu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a menu item to the menu bar being constructed.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editors.table_editor.BaseTableEditor.add_to_toolbar">
-<code class="descname">add_to_toolbar</code><span class="sig-paren">(</span><em>toolbar_item</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor.add_to_toolbar" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_to_toolbar</code><span class="sig-paren">(</span><em class="sig-param">toolbar_item</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor.add_to_toolbar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a toolbar item to the toolbar being constructed.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editors.table_editor.BaseTableEditor.can_add_to_menu">
-<code class="descname">can_add_to_menu</code><span class="sig-paren">(</span><em>action</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor.can_add_to_menu" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">can_add_to_menu</code><span class="sig-paren">(</span><em class="sig-param">action</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor.can_add_to_menu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether the action should be defined in the user interface.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editors.table_editor.BaseTableEditor.can_add_to_toolbar">
-<code class="descname">can_add_to_toolbar</code><span class="sig-paren">(</span><em>action</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor.can_add_to_toolbar" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">can_add_to_toolbar</code><span class="sig-paren">(</span><em class="sig-param">action</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor.can_add_to_toolbar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether the toolbar action should be defined in the user
 interface.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editors.table_editor.BaseTableEditor.eval_when">
-<code class="descname">eval_when</code><span class="sig-paren">(</span><em>condition</em>, <em>object</em>, <em>trait</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor.eval_when" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">eval_when</code><span class="sig-paren">(</span><em class="sig-param">condition</em>, <em class="sig-param">object</em>, <em class="sig-param">trait</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor.eval_when" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluates a condition within a defined context and sets a specified
 object trait based on the result, which is assumed to be a Boolean.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editors.table_editor.BaseTableEditor.perform">
-<code class="descname">perform</code><span class="sig-paren">(</span><em>action</em>, <em>action_event=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor.perform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">perform</code><span class="sig-paren">(</span><em class="sig-param">action</em>, <em class="sig-param">action_event=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor.perform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs the action described by a specified Action object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editors.table_editor.BaseTableEditor.set_menu_context">
-<code class="descname">set_menu_context</code><span class="sig-paren">(</span><em>selection</em>, <em>object</em>, <em>column</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor.set_menu_context" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_menu_context</code><span class="sig-paren">(</span><em class="sig-param">selection</em>, <em class="sig-param">object</em>, <em class="sig-param">column</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.BaseTableEditor.set_menu_context" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call before creating a context menu for a cell, then set self as the
 controller for the menu.</p>
 </dd></dl>
@@ -149,19 +148,19 @@ controller for the menu.</p>
 
 <dl class="class">
 <dt id="traitsui.editors.table_editor.ReversedList">
-<em class="property">class </em><code class="descclassname">traitsui.editors.table_editor.</code><code class="descname">ReversedList</code><span class="sig-paren">(</span><em>list</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.ReversedList" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.table_editor.</code><code class="sig-name descname">ReversedList</code><span class="sig-paren">(</span><em class="sig-param">list</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.ReversedList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A list whose order is the reverse of its input.</p>
 <dl class="method">
 <dt id="traitsui.editors.table_editor.ReversedList.index">
-<code class="descname">index</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.ReversedList.index" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">index</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.ReversedList.index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the index of the first occurrence of the specified value in
 the list.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editors.table_editor.ReversedList.insert">
-<code class="descname">insert</code><span class="sig-paren">(</span><em>index</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.ReversedList.insert" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">insert</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.ReversedList.insert" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inserts a value at a specified index in the list.</p>
 </dd></dl>
 
@@ -169,21 +168,425 @@ the list.</p>
 
 <dl class="attribute">
 <dt id="traitsui.editors.table_editor.TableEditor">
-<code class="descclassname">traitsui.editors.table_editor.</code><code class="descname">TableEditor</code><a class="headerlink" href="#traitsui.editors.table_editor.TableEditor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.editors.table_editor.</code><code class="sig-name descname">TableEditor</code><a class="headerlink" href="#traitsui.editors.table_editor.TableEditor" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <a class="reference internal" href="#traitsui.editors.table_editor.ToolkitEditorFactory" title="traitsui.editors.table_editor.ToolkitEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editors.table_editor.ToolkitEditorFactory</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.editors.table_editor.ToolkitEditorFactory">
-<em class="property">class </em><code class="descclassname">traitsui.editors.table_editor.</code><code class="descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.table_editor.</code><code class="sig-name descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory" title="traitsui.editor_factory.EditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editor_factory.EditorFactory</span></code></a></p>
 <p>Editor factory for table editors.</p>
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.alternate_bg_color">
+<code class="sig-name descname">alternate_bg_color</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.alternate_bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to even-odd alternate the background color. Qt only.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.auto_add">
+<code class="sig-name descname">auto_add</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.auto_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should a new row automatically be added to the end of the table to allow
+the user to create new entries? If True, <strong>row_factory</strong> must be set.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.auto_size">
+<code class="sig-name descname">auto_size</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.auto_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the cells of the table automatically size to the optimal size?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.cell_bg_color">
+<code class="sig-name descname">cell_bg_color</code><em class="property"> = Color(default=None, allow_none=True)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.cell_bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color to use for cell backgrounds</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.cell_color">
+<code class="sig-name descname">cell_color</code><em class="property"> = Color(default=None, allow_none=True)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.cell_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color to use for text in cells</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.cell_font">
+<code class="sig-name descname">cell_font</code><em class="property"> = Font</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.cell_font" title="Permalink to this definition">¶</a></dt>
+<dd><p>Font to use for text in cells</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.cell_read_only_bg_color">
+<code class="sig-name descname">cell_read_only_bg_color</code><em class="property"> = Color(default=None, allow_none=True)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.cell_read_only_bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color to use for read-only cell backgrounds</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.click">
+<code class="sig-name descname">click</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.click" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended trait name of the trait that should be assigned
+an ( object, column ) tuple when a table cell is clicked on (Note: If you
+want to receive repeated clicks on the same cell, make sure the trait is
+defined as an Event):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.column_label_height">
+<code class="sig-name descname">column_label_height</code><em class="property"> = Int(25)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.column_label_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Height (in pixels) of column labels</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.columns">
+<code class="sig-name descname">columns</code><em class="property"> = List(Instance(&quot;traitsui.table_column.TableColumn&quot;))</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of initial table column descriptors</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.columns_name">
+<code class="sig-name descname">columns_name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.columns_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The object trait containing the list of column descriptors</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.configurable">
+<code class="sig-name descname">configurable</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.configurable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can the user configure the table columns?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.dclick">
+<code class="sig-name descname">dclick</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.dclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended trait name of the trait that should be assigned
+an ( object, column ) tuple when a table cell is double-clicked on
+(Note: if you want to receive repeated double-clicks on the same cell,
+make sure the trait is defined as an Event):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.deletable">
+<code class="sig-name descname">deletable</code><em class="property"> = BoolOrCallable(False)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.deletable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Are objects deletable from the table?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.dock_theme">
+<code class="sig-name descname">dock_theme</code><em class="property"> = Any()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.dock_theme" title="Permalink to this definition">¶</a></dt>
+<dd><p>The DockWindow graphical theme:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.edit_on_first_click">
+<code class="sig-name descname">edit_on_first_click</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.edit_on_first_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the editor become active after the first click</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.edit_view">
+<code class="sig-name descname">edit_view</code><em class="property"> = AView(&quot; &quot;)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.edit_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>View to use when editing table items.
+NOTE: If not specified, the table items are not editable in a separate
+pane of the editor.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.edit_view_handler">
+<code class="sig-name descname">edit_view_handler</code><em class="property"> = Instance(Handler)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.edit_view_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>The handler to apply to <strong>edit_view</strong></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.edit_view_height">
+<code class="sig-name descname">edit_view_height</code><em class="property"> = Float(-1.0)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.edit_view_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Height to use for the edit view</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.edit_view_width">
+<code class="sig-name descname">edit_view_width</code><em class="property"> = Float(-1.0)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.edit_view_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Width to use for the edit view</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.editable">
+<code class="sig-name descname">editable</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.editable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the table editable?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.filter">
+<code class="sig-name descname">filter</code><em class="property"> = Instance(&quot;traitsui.table_filter.TableFilter&quot;)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initial filter that should be applied to the table</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.filter_name">
+<code class="sig-name descname">filter_name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.filter_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait used to specify an external filter
+for the table data. The value of the trait must either be an instance of
+TableEditor, a callable that accepts one argument (a table row) and
+returns True or False to indicate whether the specified object passes the
+filter or not, or <strong>None</strong> to indicate that no filter is to be applied:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.filtered_indices">
+<code class="sig-name descname">filtered_indices</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.filtered_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait that the indices of the items
+currently passing the table filter are synced with:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.filters">
+<code class="sig-name descname">filters</code><em class="property"> = List(Instance(&quot;traitsui.table_filter.TableFilter&quot;))</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.filters" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of available filters that can be applied to the table</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.h_size_policy">
+<code class="sig-name descname">h_size_policy</code><em class="property"> = Enum( …</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.h_size_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mirrors the Qt QSizePolicy.Policy attribute, for horizontal and vertical
+dimensions.  For these to be useful, set auto_size to False.  If these
+are None, then the table size policy will not be set in that dimension
+(for backwards compatibility).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.label_bg_color">
+<code class="sig-name descname">label_bg_color</code><em class="property"> = Color(default=None, allow_none=True)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.label_bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color to use for label backgrounds. Some Qt styles (eg. MacOS) ignore this.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.label_color">
+<code class="sig-name descname">label_color</code><em class="property"> = Color(default=None, allow_none=True)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.label_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color to use for text in labels</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.label_font">
+<code class="sig-name descname">label_font</code><em class="property"> = Font</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.label_font" title="Permalink to this definition">¶</a></dt>
+<dd><p>Font to use for text in labels</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.line_color">
+<code class="sig-name descname">line_color</code><em class="property"> = Color(0xC4C0A9)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.line_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grid line color.  Does not work on Qt.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.menu">
+<code class="sig-name descname">menu</code><em class="property"> = Instance(&quot;traitsui.menu.Menu&quot;)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default context menu to display when any cell is right-clicked</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.menu_name">
+<code class="sig-name descname">menu_name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.menu_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default trait name containg menu</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.on_dclick">
+<code class="sig-name descname">on_dclick</code><em class="property"> = Any()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.on_dclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a table item is double clicked</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.on_select">
+<code class="sig-name descname">on_select</code><em class="property"> = Any()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.on_select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a table item is selected</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.orientation">
+<code class="sig-name descname">orientation</code><em class="property"> = Orientation</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.orientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Layout orientation of the table and its associated editor pane. This
+attribute applies only if <strong>edit_view</strong> is not ‘ ‘.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.other_columns">
+<code class="sig-name descname">other_columns</code><em class="property"> = List(Instance(&quot;traitsui.table_column.TableColumn&quot;))</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.other_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of other table column descriptors (not initially displayed)</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.editors.table_editor.ToolkitEditorFactory.readonly_editor">
-<code class="descname">readonly_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.readonly_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">readonly_editor</code><span class="sig-paren">(</span><em class="sig-param">ui</em>, <em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.readonly_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an “editor” that is read-only.
 Overridden to set the value of the editable trait to False before
 generating the editor.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.reorderable">
+<code class="sig-name descname">reorderable</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.reorderable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can the user reorder the items in the table?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.reverse">
+<code class="sig-name descname">reverse</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.reverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the table items be presented in reverse order?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.row_factory">
+<code class="sig-name descname">row_factory</code><em class="property"> = Any()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.row_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>A factory to generate new rows.
+NOTE: If None, then the user will not be able to add new rows to the
+table. If not None, then it must be a callable that accepts
+<strong>row_factory_args</strong> and <strong>row_factory_kw</strong> and returns a new object
+that can be added to the table.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.row_factory_args">
+<code class="sig-name descname">row_factory_args</code><em class="property"> = Tuple()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.row_factory_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Arguments to pass to the <strong>row_factory</strong> callable when a new row is
+created</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.row_factory_kw">
+<code class="sig-name descname">row_factory_kw</code><em class="property"> = Dict()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.row_factory_kw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keyword arguments to pass to the <strong>row_factory</strong> callable when a new row
+is created</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.row_height">
+<code class="sig-name descname">row_height</code><em class="property"> = Int(0)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.row_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>The initial height of each row (&lt;= 0 means use default value):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.row_label_width">
+<code class="sig-name descname">row_label_width</code><em class="property"> = Int(82)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.row_label_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Width (in pixels) of row labels</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.rows">
+<code class="sig-name descname">rows</code><em class="property"> = Int()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>The desired number of visible rows in the table</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.scroll_dy">
+<code class="sig-name descname">scroll_dy</code><em class="property"> = Range(1, 32)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.scroll_dy" title="Permalink to this definition">¶</a></dt>
+<dd><p>The vertical scroll increment for the table:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.search">
+<code class="sig-name descname">search</code><em class="property"> = Instance(&quot;traitsui.table_filter.TableFilter&quot;)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter object used to allow a user to search the table.
+NOTE: If left as None, the table will not be searchable.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.selected">
+<code class="sig-name descname">selected</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.selected" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended name of the trait that the current selection is
+synced with:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.selected_indices">
+<code class="sig-name descname">selected_indices</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.selected_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended trait name of the trait that the indices of the
+current selection are synced with:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.selection_bg_color">
+<code class="sig-name descname">selection_bg_color</code><em class="property"> = Color(default=None, allow_none=True)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.selection_bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Background color of selected item.  Does not work on Qt.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.selection_color">
+<code class="sig-name descname">selection_color</code><em class="property"> = Color(default=None, allow_none=True)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.selection_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color of selected text.  Does not work on Qt.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.selection_mode">
+<code class="sig-name descname">selection_mode</code><em class="property"> = Enum(&quot;row&quot;, &quot;rows&quot;, &quot;column&quot;, &quot;columns&quot;, &quot;cell&quot;, &quot;cells&quot;)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.selection_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>The selection mode of the table. The meaning of the various values are as
+follows:</p>
+<dl class="simple">
+<dt>row</dt><dd><p>Entire rows are selected. At most one row can be selected at once.
+This is the default.</p>
+</dd>
+<dt>rows</dt><dd><p>Entire rows are selected. More than one row can be selected at once.</p>
+</dd>
+<dt>column</dt><dd><p>Entire columns are selected. At most one column can be selected at
+once.</p>
+</dd>
+<dt>columns</dt><dd><p>Entire columns are selected. More than one column can be selected at
+once.</p>
+</dd>
+<dt>cell</dt><dd><p>Single cells are selected. Only one cell can be selected at once.</p>
+</dd>
+<dt>cells</dt><dd><p>Single cells are selected. More than one cell can be selected at once.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.show_column_labels">
+<code class="sig-name descname">show_column_labels</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.show_column_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show column labels?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.show_lines">
+<code class="sig-name descname">show_lines</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.show_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should grid lines be shown on the table?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.show_row_labels">
+<code class="sig-name descname">show_row_labels</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.show_row_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show row labels?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.show_toolbar">
+<code class="sig-name descname">show_toolbar</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.show_toolbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should the toolbar be displayed? (Note that False will override settings
+such as ‘configurable’, etc., and is a quick way to prevent the toolbar
+from being displayed; but True will not cause a toolbar to appear if one
+would not otherwise have been displayed)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.sort_model">
+<code class="sig-name descname">sort_model</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.sort_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does sorting affect the model (vs. just the view)?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.sortable">
+<code class="sig-name descname">sortable</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.sortable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the table sortable by clicking on the column headers?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.table_view_factory">
+<code class="sig-name descname">table_view_factory</code><em class="property"> = Callable()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.table_view_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hooks for replacing parts of the implementation.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.table_editor.ToolkitEditorFactory.update_filter_name">
+<code class="sig-name descname">update_filter_name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.table_editor.ToolkitEditorFactory.update_filter_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optional extended trait name of the trait used to notify that the
+filter has changed and the displayed objects should be updated.
+It should be an Event.</p>
 </dd></dl>
 
 </dd></dl>
@@ -211,13 +614,11 @@ generating the editor.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -238,13 +639,13 @@ generating the editor.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

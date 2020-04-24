@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.editors.image_enum_editor module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.editors.image_enum_editor module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
     <link rel="next" title="traitsui.editors.instance_editor module" href="traitsui.editors.instance_editor.html" >
     <link rel="prev" title="traitsui.editors.image_editor module" href="traitsui.editors.image_editor.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
   
@@ -98,20 +97,50 @@
 toolkits.</p>
 <dl class="attribute">
 <dt id="traitsui.editors.image_enum_editor.ImageEnumEditor">
-<code class="descclassname">traitsui.editors.image_enum_editor.</code><code class="descname">ImageEnumEditor</code><a class="headerlink" href="#traitsui.editors.image_enum_editor.ImageEnumEditor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.editors.image_enum_editor.</code><code class="sig-name descname">ImageEnumEditor</code><a class="headerlink" href="#traitsui.editors.image_enum_editor.ImageEnumEditor" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <a class="reference internal" href="#traitsui.editors.image_enum_editor.ToolkitEditorFactory" title="traitsui.editors.image_enum_editor.ToolkitEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editors.image_enum_editor.ToolkitEditorFactory</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.editors.image_enum_editor.ToolkitEditorFactory">
-<em class="property">class </em><code class="descclassname">traitsui.editors.image_enum_editor.</code><code class="descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.image_enum_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.image_enum_editor.</code><code class="sig-name descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.image_enum_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.editors.enum_editor.html#traitsui.editors.enum_editor.ToolkitEditorFactory" title="traitsui.editors.enum_editor.ToolkitEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editors.enum_editor.ToolkitEditorFactory</span></code></a></p>
 <p>Editor factory for image enumeration editors.</p>
 <dl class="method">
 <dt id="traitsui.editors.image_enum_editor.ToolkitEditorFactory.init">
-<code class="descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.image_enum_editor.ToolkitEditorFactory.init" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.image_enum_editor.ToolkitEditorFactory.init" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs any initialization needed after all constructor traits
 have been set.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.image_enum_editor.ToolkitEditorFactory.klass">
+<code class="sig-name descname">klass</code><em class="property"> = Type()</em><a class="headerlink" href="#traitsui.editors.image_enum_editor.ToolkitEditorFactory.klass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class used to derive the path to the image files:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.image_enum_editor.ToolkitEditorFactory.module">
+<code class="sig-name descname">module</code><em class="property"> = Module</em><a class="headerlink" href="#traitsui.editors.image_enum_editor.ToolkitEditorFactory.module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Module used to derive the path to the image files:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.image_enum_editor.ToolkitEditorFactory.path">
+<code class="sig-name descname">path</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.image_enum_editor.ToolkitEditorFactory.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to use to locate image files:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.image_enum_editor.ToolkitEditorFactory.prefix">
+<code class="sig-name descname">prefix</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.image_enum_editor.ToolkitEditorFactory.prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prefix to add to values to form image names:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.image_enum_editor.ToolkitEditorFactory.suffix">
+<code class="sig-name descname">suffix</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.image_enum_editor.ToolkitEditorFactory.suffix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Suffix to add to values to form image names:</p>
 </dd></dl>
 
 </dd></dl>
@@ -139,13 +168,11 @@ have been set.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -166,13 +193,13 @@ have been set.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

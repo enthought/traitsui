@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Advanced View Concepts &mdash; TraitsUI 6 User Manual</title>
+    <title>Advanced View Concepts &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,8 +29,8 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 6.1 User Manual" href="index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
+    <link rel="up" title="TraitsUI 7.0 User Manual" href="index.html" >
     <link rel="next" title="Controlling the Interface: the Handler" href="handler.html" >
     <link rel="prev" title="Customizing a View" href="custom_view.html" > 
   </head>
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 7.0 User Manual</a></li>
   
     <li><a href="#">Advanced View Concepts</a></li>
   
@@ -97,20 +96,20 @@ class to quickly construct a simple window for a single HasTraits object. This
 chapter explores a number of more complex techniques that significantly increase
 the power and versatility of the View object.</p>
 <ul class="simple">
-<li><em>Internal Views:</em> Views can be defined as attributes of a HasTraits class;
+<li><p><em>Internal Views:</em> Views can be defined as attributes of a HasTraits class;
 one class can have multiple views. View attributes can be inherited by
-subclasses.</li>
-<li><em>External Views:</em> A view can be defined as a module variable, inline as a
-function or method argument, or as an attribute of a <a class="reference internal" href="glossary.html#term-handler"><span class="xref std std-term">Handler</span></a>.</li>
-<li><em>Ways of displaying Views:</em> You can display a View by calling
+subclasses.</p></li>
+<li><p><em>External Views:</em> A view can be defined as a module variable, inline as a
+function or method argument, or as an attribute of a <a class="reference internal" href="glossary.html#term-handler"><span class="xref std std-term">Handler</span></a>.</p></li>
+<li><p><em>Ways of displaying Views:</em> You can display a View by calling
 configure_traits() or edit_traits() on a HasTraits object, or by calling the
-ui() method on the View object.</li>
-<li><em>View context:</em> You can pass a context to any of the methods for displaying
+ui() method on the View object.</p></li>
+<li><p><em>View context:</em> You can pass a context to any of the methods for displaying
 views, which is a dictionary of labels and objects. In the default case, this
 dictionary contains only one object, referenced as ‘object’, but you can
-define contexts that contain multiple objects.</li>
-<li><em>Include objects:</em> You can use an Include object as a placeholder for view
-items defined elsewhere.</li>
+define contexts that contain multiple objects.</p></li>
+<li><p><em>Include objects:</em> You can use an Include object as a placeholder for view
+items defined elsewhere.</p></li>
 </ul>
 <div class="section" id="internal-views">
 <span id="id2"></span><h2>Internal Views<a class="headerlink" href="#internal-views" title="Permalink to this headline">¶</a></h2>
@@ -137,12 +136,12 @@ variation on Example 3:</p>
 <span class="kn">import</span> <span class="nn">traitsui</span>
 
 <span class="k">class</span> <span class="nc">SimpleEmployee2</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
-    <span class="n">first_name</span> <span class="o">=</span> <span class="n">Str</span>
-    <span class="n">last_name</span> <span class="o">=</span> <span class="n">Str</span>
-    <span class="n">department</span> <span class="o">=</span> <span class="n">Str</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">department</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
 
-    <span class="n">employee_number</span> <span class="o">=</span> <span class="n">Str</span>
-    <span class="n">salary</span> <span class="o">=</span> <span class="n">Int</span>
+    <span class="n">employee_number</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">salary</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
 
     <span class="n">traits_view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;first_name&#39;</span><span class="p">),</span>
                              <span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;last_name&#39;</span><span class="p">),</span>
@@ -157,9 +156,9 @@ variation on Example 3:</p>
 <p>In this example, configure_traits() no longer requires a <em>view</em> keyword
 argument; the <strong>traits_view</strong> attribute is used by default, resulting in the
 same display as in Figure 3:</p>
-<div class="figure" id="id21">
+<div class="figure align-default" id="id21">
 <img alt="User interface showing three fields enclosed in a border" src="../_images/ui_for_ex3.jpg" />
-<p class="caption"><span class="caption-text">Figure 5: User interface for Example 5</span></p>
+<p class="caption"><span class="caption-text">Figure 5: User interface for Example 5</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
 </div>
 <p>It is not strictly necessary to call this View attribute <strong>traits_view</strong>. If
 exactly one View attribute is defined for a HasTraits class, that View is always
@@ -178,12 +177,12 @@ example above would be implemented as follows:</p>
 <span class="kn">import</span> <span class="nn">traitsui</span>
 
 <span class="k">class</span> <span class="nc">SimpleEmployee2</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
-    <span class="n">first_name</span> <span class="o">=</span> <span class="n">Str</span>
-    <span class="n">last_name</span> <span class="o">=</span> <span class="n">Str</span>
-    <span class="n">department</span> <span class="o">=</span> <span class="n">Str</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">department</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
 
-    <span class="n">employee_number</span> <span class="o">=</span> <span class="n">Str</span>
-    <span class="n">salary</span> <span class="o">=</span> <span class="n">Int</span>
+    <span class="n">employee_number</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">salary</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">default_traits_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">View</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;first_name&#39;</span><span class="p">),</span>
@@ -215,12 +214,12 @@ this by simply adding a second View attribute:</p>
 <span class="kn">import</span> <span class="nn">traitsui</span>
 
 <span class="k">class</span> <span class="nc">SimpleEmployee3</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
-    <span class="n">first_name</span> <span class="o">=</span> <span class="n">Str</span>
-    <span class="n">last_name</span> <span class="o">=</span> <span class="n">Str</span>
-    <span class="n">department</span> <span class="o">=</span> <span class="n">Str</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">department</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
 
-    <span class="n">employee_number</span> <span class="o">=</span> <span class="n">Str</span>
-    <span class="n">salary</span> <span class="o">=</span> <span class="n">Int</span>
+    <span class="n">employee_number</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">salary</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
 
     <span class="n">traits_view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;first_name&#39;</span><span class="p">),</span>
                              <span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;last_name&#39;</span><span class="p">),</span>
@@ -272,7 +271,7 @@ begins to explore how the TraitsUI package truly supports the separation of
 model and view prescribed by the <a class="reference internal" href="glossary.html#term-mvc"><span class="xref std std-term">MVC</span></a> design pattern.</p>
 <p>An <em>external</em> view is one that is defined outside the model classes. In Traits
 UI, you can define a named View wherever you can define a variable or class
-attribute. <a class="footnote-reference" href="#id17" id="id6">[7]</a> A View can even be defined in-line as a function or method
+attribute. <a class="footnote-reference brackets" href="#id17" id="id6">7</a> A View can even be defined in-line as a function or method
 argument, for example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">object</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">(</span><span class="n">view</span><span class="o">=</span><span class="n">View</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">),</span>
                                         <span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">),</span>
@@ -287,7 +286,7 @@ external Views defined as variables. One advantage of this convention is that
 the variable name provides an easily accessible “handle” for re-using the View.
 This technique does not, however, support visual inheritance.</p>
 <p>A powerful alternative is to define a View within the <a class="reference internal" href="glossary.html#term-controller"><span class="xref std std-term">controller</span></a>
-(Handler) class that controls the window for that View. <a class="footnote-reference" href="#id18" id="id7">[8]</a> This technique is
+(Handler) class that controls the window for that View. <a class="footnote-reference brackets" href="#id18" id="id7">8</a> This technique is
 described in <a class="reference internal" href="handler.html#controlling-the-interface-the-handler"><span class="std std-ref">Controlling the Interface: the Handler</span></a>.</p>
 </div>
 <div class="section" id="displaying-a-view">
@@ -321,14 +320,14 @@ handled elsewhere in the application.</p>
 generation of the window or panel from the View for both edit_traits() and
 configure_traits(). The ui() method is also available directly through the
 TraitsUI API; however, using one of the other two methods is usually
-preferable. <a class="footnote-reference" href="#id19" id="id12">[9]</a></p>
+preferable. <a class="footnote-reference brackets" href="#id19" id="id12">9</a></p>
 <p>The ui() method has five keyword parameters:</p>
 <ul class="simple">
-<li><em>kind</em></li>
-<li><em>context</em></li>
-<li><em>handler</em></li>
-<li><em>parent</em></li>
-<li><em>view_elements</em></li>
+<li><p><em>kind</em></p></li>
+<li><p><em>context</em></p></li>
+<li><p><em>handler</em></p></li>
+<li><p><em>parent</em></p></li>
+<li><p><em>view_elements</em></p></li>
 </ul>
 <p>The first four are identical in form and function to the corresponding arguments
 of edit_traits(), except that <em>context</em> is not optional; the following section
@@ -377,10 +376,10 @@ example shows:</p>
 
 <span class="c1"># Sample class</span>
 <span class="k">class</span> <span class="nc">House</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
-   <span class="n">address</span> <span class="o">=</span> <span class="n">Str</span>
-   <span class="n">bedrooms</span> <span class="o">=</span> <span class="n">Int</span>
-   <span class="n">pool</span> <span class="o">=</span> <span class="n">Bool</span>
-   <span class="n">price</span> <span class="o">=</span> <span class="n">Int</span>
+   <span class="n">address</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+   <span class="n">bedrooms</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
+   <span class="n">pool</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">()</span>
+   <span class="n">price</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
 
 <span class="c1"># View object designed to display two objects of class &#39;House&#39;</span>
 <span class="n">comp_view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
@@ -418,10 +417,10 @@ example shows:</p>
                                                  <span class="s1">&#39;h2&#39;</span><span class="p">:</span><span class="n">house2</span><span class="p">})</span>
 </pre></div>
 </div>
-<p>The resulting window has the desired appearance: <a class="footnote-reference" href="#id20" id="id15">[10]</a></p>
-<div class="figure" id="id22">
+<p>The resulting window has the desired appearance: <a class="footnote-reference brackets" href="#id20" id="id15">10</a></p>
+<div class="figure align-default" id="id22">
 <img alt="UI showing side-by-side groups." src="../_images/ui_for_ex7.jpg" />
-<p class="caption"><span class="caption-text">Figure 6: User interface for Example 7</span></p>
+<p class="caption"><span class="caption-text">Figure 6: User interface for Example 7</span><a class="headerlink" href="#id22" title="Permalink to this image">¶</a></p>
 </div>
 <p>For the purposes of this particular example, it makes sense to create a separate
 Group for each model object, and to use two model objects of the same class.
@@ -445,7 +444,7 @@ references that refer to multiple traits, since the behavior of such references
 is not defined. Also, avoid extended trait references where one of the
 intermediate objects could be None, because there is no way to obtain a valid
 reference from None.</p>
-<p>Refer to the <a class="reference external" href="http://github.enthought.com/traits/index.html">Traits User Manual</a>, in the chapter on trait
+<p>Refer to the <a class="reference external" href="http://docs.enthought.com/traits/index.html">Traits User Manual</a>, in the chapter on trait
 notification, for details of the extended trait name syntax.</p>
 </div>
 </div>
@@ -483,41 +482,31 @@ Include objects belonging to that View can be defined differently for different
 instances or subclasses of that class. This technique is called <em>view
 parameterization</em>.</p>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="id17" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id6">[7]</a></td><td>Note that although the definition of a View within a HasTraits class has
+<dl class="footnote brackets">
+<dt class="label" id="id17"><span class="brackets"><a class="fn-backref" href="#id6">7</a></span></dt>
+<dd><p>Note that although the definition of a View within a HasTraits class has
 the syntax of a trait attribute definition, the resulting View is not stored
-as an attribute of the class.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id18" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id7">[8]</a></td><td>Assuming there is one; not all GUIs require an explicitly defined
-Handler.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id19" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id12">[9]</a></td><td>One possible exception is the case where a View object is defined as a
+as an attribute of the class.</p>
+</dd>
+<dt class="label" id="id18"><span class="brackets"><a class="fn-backref" href="#id7">8</a></span></dt>
+<dd><p>Assuming there is one; not all GUIs require an explicitly defined
+Handler.</p>
+</dd>
+<dt class="label" id="id19"><span class="brackets"><a class="fn-backref" href="#id12">9</a></span></dt>
+<dd><p>One possible exception is the case where a View object is defined as a
 variable (i.e., outside any class) or within a custom Handler, and is
 associated more or less equally with multiple model objects; see
-<a class="reference internal" href="#multi-object-views"><span class="std std-ref">Multi-Object Views</span></a>.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id20" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id15">[10]</a></td><td>If the script were designed to run within an existing GUI, it would make
+<a class="reference internal" href="#multi-object-views"><span class="std std-ref">Multi-Object Views</span></a>.</p>
+</dd>
+<dt class="label" id="id20"><span class="brackets"><a class="fn-backref" href="#id15">10</a></span></dt>
+<dd><p>If the script were designed to run within an existing GUI, it would make
 sense to replace the last line with
 <code class="docutils literal notranslate"><span class="pre">comp_view.ui(context={'h1':</span> <span class="pre">house1,</span> <span class="pre">'h2':</span> <span class="pre">house2})</span></code>, since neither object
 particularly dominates the view. However, the examples in this Manual are
 designed to be fully executable from the Python command line, which is why
-configure_traits() was used instead.</td></tr>
-</tbody>
-</table>
+configure_traits() was used instead.</p>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -566,13 +555,11 @@ configure_traits() was used instead.</td></tr>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -593,13 +580,13 @@ configure_traits() was used instead.</td></tr>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

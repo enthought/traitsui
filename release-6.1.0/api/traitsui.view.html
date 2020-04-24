@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.view module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.view_element module" href="traitsui.view_element.html" >
+    <link rel="prev" title="traitsui.value_tree module" href="traitsui.value_tree.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.view module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.view_element.html" title="traitsui.view_element module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.value_tree.html" title="traitsui.value_tree module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.view">
+<span id="traitsui-view-module"></span><h1>traitsui.view module<a class="headerlink" href="#module-traitsui.view" title="Permalink to this headline">¶</a></h1>
+<p>Defines the View class used to represent the structural content of a
+Traits-based user interface.</p>
+<dl class="class">
+<dt id="traitsui.view.View">
+<em class="property">class </em><code class="descclassname">traitsui.view.</code><code class="descname">View</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view.View" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.view_element.html#traitsui.view_element.ViewElement" title="traitsui.view_element.ViewElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewElement</span></code></a></p>
+<p>A Traits-based user interface for one or more objects.</p>
+<p>The attributes of the View object determine the contents and layout of
+an attribute-editing window. A View object contains a set of Group,
+Item, and Include objects. A View object can be an attribute of an
+object derived from HasTraits, or it can be a standalone object.</p>
+<dl class="method">
+<dt id="traitsui.view.View.replace_include">
+<code class="descname">replace_include</code><span class="sig-paren">(</span><em>view_elements</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view.View.replace_include" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces any items that have an ID with an Include object with
+the same ID, and puts the object with the ID into the specified
+ViewElements object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.view.View.set_content">
+<code class="descname">set_content</code><span class="sig-paren">(</span><em>*values</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view.View.set_content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the content of a view.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.view.View.ui">
+<code class="descname">ui</code><span class="sig-paren">(</span><em>context</em>, <em>parent=None</em>, <em>kind=None</em>, <em>view_elements=None</em>, <em>handler=None</em>, <em>id=''</em>, <em>scrollable=None</em>, <em>args=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view.View.ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a <strong>UI</strong> object, which generates the actual GUI window or
+panel from a set of view elements.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>context</strong> (<em>object</em><em> or </em><em>dictionary</em>) – A single object or a dictionary of string/object pairs, whose trait
+attributes are to be edited. If not specified, the current object is
+used.</li>
+<li><strong>parent</strong> (<em>window component</em>) – The window parent of the View object’s window</li>
+<li><strong>kind</strong> (<em>string</em>) – The kind of window to create. See the <strong>AKind</strong> trait for details.
+If <em>kind</em> is unspecified or None, the <strong>kind</strong> attribute of the
+View object is used.</li>
+<li><strong>view_elements</strong> (<em>ViewElements object</em>) – The set of Group, Item, and Include objects contained in the view.
+Do not use this parameter when calling this method directly.</li>
+<li><strong>handler</strong> (<em>Handler object</em>) – A handler object used for event handling in the dialog box. If
+None, the default handler for Traits UI is used.</li>
+<li><strong>id</strong> (<em>string</em>) – A unique ID for persisting preferences about this user interface,
+such as size and position. If not specified, no user preferences
+are saved.</li>
+<li><strong>scrollable</strong> (<em>Boolean</em>) – Indicates whether the dialog box should be scrollable. When set to
+True, scroll bars appear on the dialog box if it is not large enough
+to display all of the items in the view at one time.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.value_tree.html"
+                        title="previous chapter">traitsui.value_tree module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.view_element.html"
+                        title="next chapter">traitsui.view_element module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.view.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.include module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.include module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.instance_choice module" href="traitsui.instance_choice.html" >
     <link rel="prev" title="traitsui.helper module" href="traitsui.helper.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.include module</a></li>
@@ -97,7 +96,7 @@
 element within a user interface View.</p>
 <dl class="class">
 <dt id="traitsui.include.Include">
-<em class="property">class </em><code class="descclassname">traitsui.include.</code><code class="descname">Include</code><span class="sig-paren">(</span><em>id</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.include.Include" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.include.</code><code class="sig-name descname">Include</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.include.Include" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.view_element.html#traitsui.view_element.ViewSubElement" title="traitsui.view_element.ViewSubElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewSubElement</span></code></a></p>
 <p>A substitutable user interface element, i.e., a placeholder in a view
 definition.</p>
@@ -111,8 +110,8 @@ or on a subclass. For example, the following class contains a view
 definition that provides for the possibility that a subclass might add
 “extra” attributes in the middle of the view:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">Str</span>
-    <span class="n">age</span> <span class="o">=</span> <span class="n">Int</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">age</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
     <span class="n">person_view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">Include</span><span class="p">(</span><span class="s1">&#39;extra&#39;</span><span class="p">),</span> <span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;modal&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -121,15 +120,21 @@ the Include object is ignored.</p>
 <p>The following class extends Person, and defines a group of “extra”
 attributes to add to the view defined on Person:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LocatedPerson</span><span class="p">(</span><span class="n">Person</span><span class="p">):</span>
-    <span class="n">street</span> <span class="o">=</span> <span class="n">Str</span>
-    <span class="n">city</span> <span class="o">=</span> <span class="n">Str</span>
-    <span class="n">state</span> <span class="o">=</span> <span class="n">Str</span>
-    <span class="nb">zip</span> <span class="o">=</span> <span class="n">Int</span>
+    <span class="n">street</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">city</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="nb">zip</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
     <span class="n">extra</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="s1">&#39;street&#39;</span><span class="p">,</span> <span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;zip&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The attribute-editing window for an instance of LocatedPerson displays
 editors for these extra attributes.</p>
+<dl class="attribute">
+<dt id="traitsui.include.Include.id">
+<code class="sig-name descname">id</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.include.Include.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the substitutable content</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -155,13 +160,11 @@ editors for these extra attributes.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -182,13 +185,13 @@ editors for these extra attributes.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

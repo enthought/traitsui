@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.editors.default_override module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.editors.default_override module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,10 +29,10 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
     <link rel="next" title="traitsui.editors.directory_editor module" href="traitsui.editors.directory_editor.html" >
-    <link rel="prev" title="traitsui.editors.date_editor module" href="traitsui.editors.date_editor.html" > 
+    <link rel="prev" title="traitsui.editors.datetime_editor module" href="traitsui.editors.datetime_editor.html" > 
   </head>
   <body>
   <div class="container">
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
   
@@ -76,7 +75,7 @@
            accesskey="N">next</a>
       </li>
       <li class="active">
-        <a href="traitsui.editors.date_editor.html" title="traitsui.editors.date_editor module"
+        <a href="traitsui.editors.datetime_editor.html" title="traitsui.editors.datetime_editor module"
            accesskey="P">previous</a>
       </li>
     </ul>
@@ -97,39 +96,39 @@
 <p>Editor factory that overrides certain attributes of the default editor.</p>
 <p>For example, the default editor for Range(low=0, high=1500) has
 ‘1500’ as the upper label.  To change it to ‘Max’ instead, use</p>
-<dl class="docutils">
-<dt>my_range = Range(low=0, high=1500,</dt>
-<dd>editor=DefaultOverride(high_label=’Max’))</dd>
+<dl class="simple">
+<dt>my_range = Range(low=0, high=1500,</dt><dd><p>editor=DefaultOverride(high_label=’Max’))</p>
+</dd>
 </dl>
 <p>Alternatively, the override can also be specified in the view:</p>
 <p>View(Item(‘my_range’, editor=DefaultOverride(high_label=’Max’))</p>
 <dl class="class">
 <dt id="traitsui.editors.default_override.DefaultOverride">
-<em class="property">class </em><code class="descclassname">traitsui.editors.default_override.</code><code class="descname">DefaultOverride</code><span class="sig-paren">(</span><em>*args</em>, <em>**overrides</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.default_override.</code><code class="sig-name descname">DefaultOverride</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**overrides</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory" title="traitsui.editor_factory.EditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editor_factory.EditorFactory</span></code></a></p>
 <p>Editor factory for selectively overriding certain parameters
 of the default editor.</p>
 <dl class="method">
 <dt id="traitsui.editors.default_override.DefaultOverride.custom_editor">
-<code class="descname">custom_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride.custom_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">custom_editor</code><span class="sig-paren">(</span><em class="sig-param">ui</em>, <em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride.custom_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an editor using the “custom” style.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editors.default_override.DefaultOverride.readonly_editor">
-<code class="descname">readonly_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride.readonly_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">readonly_editor</code><span class="sig-paren">(</span><em class="sig-param">ui</em>, <em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride.readonly_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an “editor” that is read-only.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editors.default_override.DefaultOverride.simple_editor">
-<code class="descname">simple_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride.simple_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">simple_editor</code><span class="sig-paren">(</span><em class="sig-param">ui</em>, <em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride.simple_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an editor using the “simple” style.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editors.default_override.DefaultOverride.text_editor">
-<code class="descname">text_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride.text_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">text_editor</code><span class="sig-paren">(</span><em class="sig-param">ui</em>, <em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride.text_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an editor using the “text” style.</p>
 </dd></dl>
 
@@ -147,8 +146,8 @@ of the default editor.</p>
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="traitsui.editors.date_editor.html"
-                        title="previous chapter">traitsui.editors.date_editor module</a></p>
+  <p class="topless"><a href="traitsui.editors.datetime_editor.html"
+                        title="previous chapter">traitsui.editors.datetime_editor module</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="traitsui.editors.directory_editor.html"
                         title="next chapter">traitsui.editors.directory_editor module</a></p>
@@ -158,13 +157,11 @@ of the default editor.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -185,13 +182,13 @@ of the default editor.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

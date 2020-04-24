@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.group module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.handler module" href="traitsui.handler.html" >
+    <link rel="prev" title="traitsui.file_dialog module" href="traitsui.file_dialog.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.group module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.handler.html" title="traitsui.handler module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.file_dialog.html" title="traitsui.file_dialog module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.group">
+<span id="traitsui-group-module"></span><h1>traitsui.group module<a class="headerlink" href="#module-traitsui.group" title="Permalink to this headline">¶</a></h1>
+<p>Defines the Group class used to represent a group of items used in a
+Traits-based user interface.</p>
+<dl class="class">
+<dt id="traitsui.group.Group">
+<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">Group</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.view_element.html#traitsui.view_element.ViewSubElement" title="traitsui.view_element.ViewSubElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewSubElement</span></code></a></p>
+<p>Represents a grouping of items in a user interface view.</p>
+<dl class="method">
+<dt id="traitsui.group.Group.get_label">
+<code class="descname">get_label</code><span class="sig-paren">(</span><em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.get_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the label to use this group.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.group.Group.get_shadow">
+<code class="descname">get_shadow</code><span class="sig-paren">(</span><em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.get_shadow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a ShadowGroup object for the current Group object, which
+recursively resolves all embedded Include objects and which replaces
+each embedded Group object with a corresponding ShadowGroup.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.group.Group.is_includable">
+<code class="descname">is_includable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.is_includable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Boolean value indicating whether the object is replacable
+by an Include object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.group.Group.replace_include">
+<code class="descname">replace_include</code><span class="sig-paren">(</span><em>view_elements</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.replace_include" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces any items that have an <strong>id</strong> attribute with an Include
+object with the same ID value, and puts the object with the ID
+into the specified ViewElements object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>view_elements</strong> (<em>ViewElements object</em>) – A set of Group, Item, and Include objects</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.group.Group.set_container">
+<code class="descname">set_container</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group.set_container" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the correct container for the content.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.group.HFlow">
+<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">HFlow</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.HFlow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.HGroup" title="traitsui.group.HGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.HGroup</span></code></a></p>
+<p>A group in which items are laid out horizontally, and “wrap” when
+they exceed the available horizontal space..</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.group.HGroup">
+<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">HGroup</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.HGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
+<p>A group whose items are laid out horizontally.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.group.HSplit">
+<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">HSplit</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.HSplit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
+<p>A horizontal group with splitter bars to separate it from other groups.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.group.ShadowGroup">
+<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">ShadowGroup</code><span class="sig-paren">(</span><em>shadow</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.ShadowGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
+<p>Corresponds to a Group object, but with all embedded Include
+objects resolved, and with all embedded Group objects replaced by
+corresponding ShadowGroup objects.</p>
+<dl class="method">
+<dt id="traitsui.group.ShadowGroup.get_content">
+<code class="descname">get_content</code><span class="sig-paren">(</span><em>allow_groups=True</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.ShadowGroup.get_content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the contents of the Group within a specified context for
+building a user interface.</p>
+<p>This method makes sure that all Group types are of the same type (i.e.,
+Group or Item) and that all Include objects have been replaced by their
+substituted values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.group.ShadowGroup.get_id">
+<code class="descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.ShadowGroup.get_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an ID for the group.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.group.ShadowGroup.set_container">
+<code class="descname">set_container</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.ShadowGroup.set_container" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the correct container for the content.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.group.Tabbed">
+<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">Tabbed</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Tabbed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
+<p>A group that is shown as a tabbed notebook.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.group.VFlow">
+<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VFlow</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VFlow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.VGroup" title="traitsui.group.VGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.VGroup</span></code></a></p>
+<p>A group in which items are laid out vertically, and “wrap” when they
+exceed the available vertical space.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.group.VFold">
+<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VFold</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VFold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.VGroup" title="traitsui.group.VGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.VGroup</span></code></a></p>
+<p>A group in which items are laid out vertically and can be collapsed
+(i.e. ‘folded’) by clicking their title.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.group.VGrid">
+<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VGrid</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VGrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.VGroup" title="traitsui.group.VGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.VGroup</span></code></a></p>
+<p>A group whose items are laid out in 2 columns.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.group.VGroup">
+<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VGroup</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
+<p>A group whose items are laid out vertically.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.group.VSplit">
+<em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VSplit</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VSplit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
+<p>A vertical group with splitter bars to separate it from other groups.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.file_dialog.html"
+                        title="previous chapter">traitsui.file_dialog module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.handler.html"
+                        title="next chapter">traitsui.handler module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.group.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

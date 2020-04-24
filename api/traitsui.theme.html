@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.theme module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.theme module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.toolkit module" href="traitsui.toolkit.html" >
     <link rel="prev" title="traitsui.tabular_adapter module" href="traitsui.tabular_adapter.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.theme module</a></li>
@@ -96,8 +95,62 @@
 <p>Defines ‘theme’ related classes.</p>
 <dl class="class">
 <dt id="traitsui.theme.Theme">
-<em class="property">class </em><code class="descclassname">traitsui.theme.</code><code class="descname">Theme</code><span class="sig-paren">(</span><em>image=None</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.theme.Theme" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.theme.</code><code class="sig-name descname">Theme</code><span class="sig-paren">(</span><em class="sig-param">image=None</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.theme.Theme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dl class="attribute">
+<dt id="traitsui.theme.Theme.alignment">
+<code class="sig-name descname">alignment</code><em class="property"> = Alignment(cols=4)</em><a class="headerlink" href="#traitsui.theme.Theme.alignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>The alignment to use for positioning the label:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.theme.Theme.border">
+<code class="sig-name descname">border</code><em class="property"> = HasBorder</em><a class="headerlink" href="#traitsui.theme.Theme.border" title="Permalink to this definition">¶</a></dt>
+<dd><p>The border inset:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.theme.Theme.content">
+<code class="sig-name descname">content</code><em class="property"> = HasMargin</em><a class="headerlink" href="#traitsui.theme.Theme.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>The margin to use around the content:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.theme.Theme.content_color">
+<code class="sig-name descname">content_color</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.theme.Theme.content_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The color to use for content text (Wx only)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.theme.Theme.image">
+<code class="sig-name descname">image</code><em class="property"> = Image</em><a class="headerlink" href="#traitsui.theme.Theme.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>The background image to use for the theme:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.theme.Theme.image_slice">
+<code class="sig-name descname">image_slice</code><em class="property"> = Property(depends_on=&quot;image&quot;)</em><a class="headerlink" href="#traitsui.theme.Theme.image_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>The image slice used to draw the theme (Wx only)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.theme.Theme.label">
+<code class="sig-name descname">label</code><em class="property"> = HasMargin</em><a class="headerlink" href="#traitsui.theme.Theme.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The margin to use around the label:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.theme.Theme.label_color">
+<code class="sig-name descname">label_color</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.theme.Theme.label_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The color to use for label text (Wx only)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="data">
+<dt id="traitsui.theme.default_theme">
+<code class="sig-prename descclassname">traitsui.theme.</code><code class="sig-name descname">default_theme</code><em class="property"> = &lt;traitsui.theme.Theme object&gt;</em><a class="headerlink" href="#traitsui.theme.default_theme" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default theme:</p>
 </dd></dl>
 
 </div>
@@ -123,13 +176,11 @@
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -150,13 +201,13 @@
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>

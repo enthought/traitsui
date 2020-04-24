@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editor module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.editor_factory module" href="traitsui.editor_factory.html" >
+    <link rel="prev" title="traitsui.dockable_view_element module" href="traitsui.dockable_view_element.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.editor module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editor_factory.html" title="traitsui.editor_factory module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.dockable_view_element.html" title="traitsui.dockable_view_element module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.editor">
+<span id="traitsui-editor-module"></span><h1>traitsui.editor module<a class="headerlink" href="#module-traitsui.editor" title="Permalink to this headline">¶</a></h1>
+<p>Defines the abstract Editor class, which represents an editing control for
+an object trait in a Traits-based user interface.</p>
+<dl class="class">
+<dt id="traitsui.editor.Editor">
+<em class="property">class </em><code class="descclassname">traitsui.editor.</code><code class="descname">Editor</code><span class="sig-paren">(</span><em>parent</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<p>Represents an editing control for an object trait in a Traits-based
+user interface.</p>
+<dl class="method">
+<dt id="traitsui.editor.Editor.dispose">
+<code class="descname">dispose</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.dispose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disposes of the contents of an editor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.error">
+<code class="descname">error</code><span class="sig-paren">(</span><em>excp</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles an error that occurs while setting the object’s trait value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.get_undo_item">
+<code class="descname">get_undo_item</code><span class="sig-paren">(</span><em>object</em>, <em>name</em>, <em>old_value</em>, <em>new_value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.get_undo_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an undo history entry.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.init">
+<code class="descname">init</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finishes initializing the editor by creating the underlying toolkit
+widget.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.log_change">
+<code class="descname">log_change</code><span class="sig-paren">(</span><em>undo_factory</em>, <em>*undo_args</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.log_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs a change made in the editor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.parse_extended_name">
+<code class="descname">parse_extended_name</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.parse_extended_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a tuple of the form ( context_object, ‘name[.name…],
+callable ) for a specified extended name of the form: ‘name’ or
+‘context_object_name.name[.name…]’.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.prepare">
+<code class="descname">prepare</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.prepare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finishes setting up the editor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.restore_prefs">
+<code class="descname">restore_prefs</code><span class="sig-paren">(</span><em>prefs</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.restore_prefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restores any saved user preference information associated with the
+editor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.save_prefs">
+<code class="descname">save_prefs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.save_prefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns any user preference information associated with the editor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.set_focus">
+<code class="descname">set_focus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.set_focus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assigns focus to the editor’s underlying toolkit widget.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.string_value">
+<code class="descname">string_value</code><span class="sig-paren">(</span><em>value</em>, <em>format_func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.string_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the text representation of a specified object trait value.</p>
+<p>This simply delegates to the factorys <cite>string_value</cite> method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.sync_value">
+<code class="descname">sync_value</code><span class="sig-paren">(</span><em>user_name</em>, <em>editor_name</em>, <em>mode='both'</em>, <em>is_list=False</em>, <em>is_event=False</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.sync_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up synchronization between an editor trait and a user object
+trait.</p>
+<p>Also sets the initial value of the editor trait from the
+user object trait (for modes ‘from’ and ‘both’), and the initial
+value of the user object trait from the editor trait (for mode
+‘to’).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user_name</strong> (<em>string</em>) – The name of the trait to be used on the user object. If empty, no
+synchronization will be set up.</li>
+<li><strong>editor_name</strong> (<em>string</em>) – The name of the relevant editor trait.</li>
+<li><strong>mode</strong> (<em>string</em><em>, </em><em>optional; one of 'to'</em><em>, </em><em>'from'</em><em> or </em><em>'both'</em>) – The direction of synchronization. ‘from’ means that trait changes
+in the user object should be propagated to the editor. ‘to’ means
+that trait changes in the editor should be propagated to the user
+object. ‘both’ means changes should be propagated in both
+directions. The default is ‘both’.</li>
+<li><strong>is_list</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, synchronization for item events will be set up in
+addition to the synchronization for the object itself.
+The default is False.</li>
+<li><strong>is_event</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, this method won’t attempt to initialize the user
+object or editor trait values. The default is False.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.update_editor">
+<code class="descname">update_editor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.update_editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the editor when the object trait changes externally to the
+editor.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.dockable_view_element.html"
+                        title="previous chapter">traitsui.dockable_view_element module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.editor_factory.html"
+                        title="next chapter">traitsui.editor_factory module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.editor.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

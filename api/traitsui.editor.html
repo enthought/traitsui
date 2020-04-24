@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8">
     
-    <title>traitsui.editor module &mdash; TraitsUI 6 User Manual</title>
+    <title>traitsui.editor module &mdash; TraitsUI 7 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
     <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.1.0',
+        VERSION:     '7.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +29,7 @@
     <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
-    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.editor_factory module" href="traitsui.editor_factory.html" >
     <link rel="prev" title="traitsui.dockable_view_element module" href="traitsui.dockable_view_element.html" > 
@@ -50,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.editor module</a></li>
@@ -97,120 +96,335 @@
 an object trait in a Traits-based user interface.</p>
 <dl class="class">
 <dt id="traitsui.editor.Editor">
-<em class="property">class </em><code class="descclassname">traitsui.editor.</code><code class="descname">Editor</code><span class="sig-paren">(</span><em>parent</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editor.</code><code class="sig-name descname">Editor</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Represents an editing control for an object trait in a Traits-based
 user interface.</p>
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.context_object">
+<code class="sig-name descname">context_object</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.editor.Editor.context_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>The context object the editor is editing (e.g. object):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.control">
+<code class="sig-name descname">control</code><em class="property"> = Any(clean_up=True)</em><a class="headerlink" href="#traitsui.editor.Editor.control" title="Permalink to this definition">¶</a></dt>
+<dd><p>The GUI widget defined by this editor:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.description">
+<code class="sig-name descname">description</code><em class="property"> = ReadOnly()</em><a class="headerlink" href="#traitsui.editor.Editor.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text description of the object trait being edited:</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.editor.Editor.dispose">
-<code class="descname">dispose</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.dispose" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dispose</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.dispose" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disposes of the contents of an editor.</p>
+<p>This disconnects any synchronised values and resets references
+to other objects.</p>
+<p>Subclasses may chose to override this method to perform additional
+clean-up.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.enabled">
+<code class="sig-name descname">enabled</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editor.Editor.enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the underlying GUI widget enabled?</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor.Editor.error">
-<code class="descname">error</code><span class="sig-paren">(</span><em>excp</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.error" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><em class="sig-param">excp</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles an error that occurs while setting the object’s trait value.</p>
+<p>This should normally be overridden in a subclass.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>excp</strong> (<em>Exception</em>) – The exception which occurred.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.extended_name">
+<code class="sig-name descname">extended_name</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.editor.Editor.extended_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The extended name of the object trait being edited. That is,
+‘object_name.name’ minus the context object name at the beginning. For
+example: ‘link1.link2.value’:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.factory">
+<code class="sig-name descname">factory</code><em class="property"> = Instance(EditorFactory, clean_up=True)</em><a class="headerlink" href="#traitsui.editor.Editor.factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>The EditorFactory used to create this editor:</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor.Editor.get_undo_item">
-<code class="descname">get_undo_item</code><span class="sig-paren">(</span><em>object</em>, <em>name</em>, <em>old_value</em>, <em>new_value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.get_undo_item" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_undo_item</code><span class="sig-paren">(</span><em class="sig-param">object</em>, <em class="sig-param">name</em>, <em class="sig-param">old_value</em>, <em class="sig-param">new_value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.get_undo_item" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates an undo history entry.</p>
+<p>Can be overridden in a subclass for special value types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>object</strong> (<em>HasTraits instance</em>) – The object being modified.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name of the trait that is to be changed.</p></li>
+<li><p><strong>old_value</strong> (<em>any</em>) – The original value of the trait.</p></li>
+<li><p><strong>new_value</strong> (<em>any</em>) – The new value of the trait.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor.Editor.init">
-<code class="descname">init</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.init" title="Permalink to this definition">¶</a></dt>
-<dd><p>Finishes initializing the editor by creating the underlying toolkit
-widget.</p>
+<code class="sig-name descname">init</code><span class="sig-paren">(</span><em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and initialize the underlying toolkit widget.</p>
+<p>This method must be overriden by subclasses.  Implementations must
+ensure that the <a class="reference internal" href="#traitsui.editor.Editor.control" title="traitsui.editor.Editor.control"><code class="xref py py-attr docutils literal notranslate"><span class="pre">control</span></code></a> trait is set to an appropriate
+toolkit object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parent</strong> (<em>toolkit control</em>) – The parent toolkit object of the editor’s toolkit objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.invalid">
+<code class="sig-name descname">invalid</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editor.Editor.invalid" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current editor invalid state status:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.item">
+<code class="sig-name descname">item</code><em class="property"> = Instance(Item, (), clean_up=True)</em><a class="headerlink" href="#traitsui.editor.Editor.item" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Item object used to create this editor:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.label_control">
+<code class="sig-name descname">label_control</code><em class="property"> = Any(clean_up=True)</em><a class="headerlink" href="#traitsui.editor.Editor.label_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>The GUI label (if any) defined by this editor:</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor.Editor.log_change">
-<code class="descname">log_change</code><span class="sig-paren">(</span><em>undo_factory</em>, <em>*undo_args</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.log_change" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logs a change made in the editor.</p>
+<code class="sig-name descname">log_change</code><span class="sig-paren">(</span><em class="sig-param">undo_factory</em>, <em class="sig-param">*undo_args</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.log_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs a change made in the editor with undo/redo history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>undo_factory</strong> (<em>callable</em>) – Callable that creates an undo item.  Often self.get_undo_item.</p></li>
+<li><p><strong>*undo_args</strong> – Any arguments to pass to the undo factory.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.name">
+<code class="sig-name descname">name</code><em class="property"> = ReadOnly()</em><a class="headerlink" href="#traitsui.editor.Editor.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the trait this editor is editing (e.g. ‘value’):</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.no_trait_update">
+<code class="sig-name descname">no_trait_update</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.no_trait_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context manager that blocks updates from the named trait.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.object">
+<code class="sig-name descname">object</code><em class="property"> = Instance(HasTraits, clean_up=True)</em><a class="headerlink" href="#traitsui.editor.Editor.object" title="Permalink to this definition">¶</a></dt>
+<dd><p>The object this editor is editing (e.g. object.link1.link2):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.object_name">
+<code class="sig-name descname">object_name</code><em class="property"> = Str(&quot;object&quot;)</em><a class="headerlink" href="#traitsui.editor.Editor.object_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Full name of the object the editor is editing (e.g.
+‘object.link1.link2’):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.old_value">
+<code class="sig-name descname">old_value</code><em class="property"> = Any(clean_up=True)</em><a class="headerlink" href="#traitsui.editor.Editor.old_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Original value of object.name (e.g. object.link1.link2.value):</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor.Editor.parse_extended_name">
-<code class="descname">parse_extended_name</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.parse_extended_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a tuple of the form ( context_object, ‘name[.name…],
-callable ) for a specified extended name of the form: ‘name’ or
-‘context_object_name.name[.name…]’.</p>
+<code class="sig-name descname">parse_extended_name</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.parse_extended_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the object, name and a getter from an extended name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – The extended name to parse.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>object, name, getter</strong> – The object from the context, the (extended) name of the
+attributes holding the value, and a callable which gets the
+current value from the context.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>any, str, callable</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor.Editor.prepare">
-<code class="descname">prepare</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.prepare" title="Permalink to this definition">¶</a></dt>
-<dd><p>Finishes setting up the editor.</p>
+<code class="sig-name descname">prepare</code><span class="sig-paren">(</span><em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.prepare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finish setting up the editor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parent</strong> (<em>toolkit control</em>) – The parent toolkit object of the editor’s toolkit objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.raise_to_debug">
+<code class="sig-name descname">raise_to_debug</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.raise_to_debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context manager that uses raise to debug to raise exceptions.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor.Editor.restore_prefs">
-<code class="descname">restore_prefs</code><span class="sig-paren">(</span><em>prefs</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.restore_prefs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Restores any saved user preference information associated with the
-editor.</p>
+<code class="sig-name descname">restore_prefs</code><span class="sig-paren">(</span><em class="sig-param">prefs</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.restore_prefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restores saved user preference information for the editor.</p>
+<p>Editors with state may choose to override this. It will only be used
+if the editor has an <cite>id</cite> value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>prefs</strong> (<em>dict</em>) – A dictionary of preference values.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor.Editor.save_prefs">
-<code class="descname">save_prefs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.save_prefs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns any user preference information associated with the editor.</p>
+<code class="sig-name descname">save_prefs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.save_prefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns any user preference information for the editor.</p>
+<p>Editors with state may choose to override this. It will only be used
+if the editor has an <cite>id</cite> value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>prefs</strong> – A dictionary of preference values, or None if no preferences to
+be saved.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.scrollable">
+<code class="sig-name descname">scrollable</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editor.Editor.scrollable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the underlying GUI widget scrollable?</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor.Editor.set_focus">
-<code class="descname">set_focus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.set_focus" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_focus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.set_focus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assigns focus to the editor’s underlying toolkit widget.</p>
+<p>This method must be overriden by subclasses.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.str_value">
+<code class="sig-name descname">str_value</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.editor.Editor.str_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current value of object trait as a string:</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor.Editor.string_value">
-<code class="descname">string_value</code><span class="sig-paren">(</span><em>value</em>, <em>format_func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.string_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">string_value</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">format_func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.string_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the text representation of a specified object trait value.</p>
-<p>This simply delegates to the factorys <cite>string_value</cite> method.</p>
+<p>This simply delegates to the factory’s <cite>string_value</cite> method.
+Sub-classes may choose to override the default implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>any</em>) – The value being edited.</p></li>
+<li><p><strong>format_func</strong> (<em>callable</em><em> or </em><em>None</em>) – A function that takes a value and returns a string.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor.Editor.sync_value">
-<code class="descname">sync_value</code><span class="sig-paren">(</span><em>user_name</em>, <em>editor_name</em>, <em>mode='both'</em>, <em>is_list=False</em>, <em>is_event=False</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.sync_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set up synchronization between an editor trait and a user object
-trait.</p>
+<code class="sig-name descname">sync_value</code><span class="sig-paren">(</span><em class="sig-param">user_name</em>, <em class="sig-param">editor_name</em>, <em class="sig-param">mode='both'</em>, <em class="sig-param">is_list=False</em>, <em class="sig-param">is_event=False</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.sync_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Synchronize an editor trait and a user object trait.</p>
 <p>Also sets the initial value of the editor trait from the
 user object trait (for modes ‘from’ and ‘both’), and the initial
 value of the user object trait from the editor trait (for mode
-‘to’).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>user_name</strong> (<em>string</em>) – The name of the trait to be used on the user object. If empty, no
-synchronization will be set up.</li>
-<li><strong>editor_name</strong> (<em>string</em>) – The name of the relevant editor trait.</li>
-<li><strong>mode</strong> (<em>string</em><em>, </em><em>optional; one of 'to'</em><em>, </em><em>'from'</em><em> or </em><em>'both'</em>) – The direction of synchronization. ‘from’ means that trait changes
+‘to’), as long as the relevant traits are not events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_name</strong> (<em>str</em>) – The name of the trait to be used on the user object. If empty, no
+synchronization will be set up.</p></li>
+<li><p><strong>editor_name</strong> (<em>str</em>) – The name of the relevant editor trait.</p></li>
+<li><p><strong>mode</strong> (<em>str</em><em>, </em><em>optional; one of 'to'</em><em>, </em><em>'from'</em><em> or </em><em>'both'</em>) – The direction of synchronization. ‘from’ means that trait changes
 in the user object should be propagated to the editor. ‘to’ means
 that trait changes in the editor should be propagated to the user
 object. ‘both’ means changes should be propagated in both
-directions. The default is ‘both’.</li>
-<li><strong>is_list</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, synchronization for item events will be set up in
+directions. The default is ‘both’.</p></li>
+<li><p><strong>is_list</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, synchronization for item events will be set up in
 addition to the synchronization for the object itself.
-The default is False.</li>
-<li><strong>is_event</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, this method won’t attempt to initialize the user
-object or editor trait values. The default is False.</li>
+The default is False.</p></li>
+<li><p><strong>is_event</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, this method won’t attempt to initialize the user
+object or editor trait values. The default is False.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.ui">
+<code class="sig-name descname">ui</code><em class="property"> = Instance(&quot;traitsui.ui.UI&quot;, clean_up=True)</em><a class="headerlink" href="#traitsui.editor.Editor.ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>The UI (user interface) this editor is part of:</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor.Editor.update_editor">
-<code class="descname">update_editor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.update_editor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates the editor when the object trait changes externally to the
-editor.</p>
+<code class="sig-name descname">update_editor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.update_editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the editor when the value changes externally to the editor.</p>
+<p>This should normally be overridden in a subclass.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.updating">
+<code class="sig-name descname">updating</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editor.Editor.updating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the editor updating the object.name value?</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor.Editor.updating_value">
+<code class="sig-name descname">updating_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.updating_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context manager to handle updating value.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.value">
+<code class="sig-name descname">value</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.editor.Editor.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current value for object.name:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.value_trait">
+<code class="sig-name descname">value_trait</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.editor.Editor.value_trait" title="Permalink to this definition">¶</a></dt>
+<dd><p>The trait the editor is editing (not its value, but the trait itself):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editor.Editor.visible">
+<code class="sig-name descname">visible</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editor.Editor.visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the underlying GUI widget visible?</p>
 </dd></dl>
 
 </dd></dl>
@@ -238,13 +452,11 @@ editor.</p>
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -265,13 +477,13 @@ editor.</p>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2018, Enthought
+        &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on May 10, 2019.
+      Last updated on Apr 24, 2020.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
       </li>
     </ul>
     </div>
