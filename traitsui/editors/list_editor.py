@@ -17,7 +17,7 @@
 """ Defines the list editor factory for the traits user interface toolkits..
 """
 
-
+import warnings
 
 from traits.api import (
     HasTraits,
@@ -27,6 +27,7 @@ from traits.api import (
     Any,
     Int,
     Instance,
+    on_trait_change,
     Property,
     Bool,
     Callable,
@@ -54,9 +55,6 @@ from ..helper import DockStyle
 #  Trait definitions:
 # -------------------------------------------------------------------------
 
-# Trait whose value is a BaseTraitHandler object
-handler_trait = Instance(BaseTraitHandler)
-
 # The visible number of rows displayed
 rows_trait = Range(1, 50, 5, desc="the number of list rows to display")
 
@@ -69,6 +67,12 @@ editor_trait = Instance(EditorFactory)
 #  'ToolkitEditorFactory' class:
 # -------------------------------------------------------------------------
 
+warnings.filterwarnings(
+    "ignore",
+    message=r".*The attribute named 'trait_handler' of class .*",
+    category=Warning,
+    module=".*traitsui.editors.*",
+)
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for list editors.
@@ -91,7 +95,11 @@ class ToolkitEditorFactory(EditorFactory):
     style = style_trait
 
     #: The trait handler for each list item:
-    trait_handler = handler_trait
+    #: Deprecated. Use handler_trait instead.
+    trait_handler = Instance(BaseTraitHandler)
+
+    #: The trait handler for each list item:
+    handler_trait = Instance(BaseTraitHandler)
 
     #: The number of list rows to display:
     rows = rows_trait
@@ -171,6 +179,15 @@ class ToolkitEditorFactory(EditorFactory):
         if self.use_notebook:
             return toolkit_object("list_editor:NotebookEditor")
         return toolkit_object("list_editor:CustomEditor")
+
+    @on_trait_change("trait_handler")
+    def _deprecate_trait_handler(self, new):
+        warnings.warn(
+            "'trait_handler' is deprecated in {}. "
+            "Use 'handler_trait' instead.".format(type(self).__name__),
+            DeprecationWarning,
+        )
+        self.handler_trait = new
 
 
 # -------------------------------------------------------------------------

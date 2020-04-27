@@ -572,11 +572,11 @@ class TabularAdapter(HasPrivateTraits):
         else:
             # Convert value to the correct trait type.
             try:
-                trait_handler = self.item.trait(self.column_id).handler
+                handler_trait = self.item.trait(self.column_id).handler
                 setattr(
                     self.item,
                     self.column_id,
-                    trait_handler.evaluate(self.value),
+                    handler_trait.evaluate(self.value),
                 )
             except:
                 setattr(self.item, self.column_id, value)

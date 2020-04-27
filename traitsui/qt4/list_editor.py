@@ -96,10 +96,10 @@ class SimpleEditor(Editor):
             widget.
         """
         # Initialize the trait handler to use:
-        trait_handler = self.factory.trait_handler
-        if trait_handler is None:
-            trait_handler = self.object.base_trait(self.name).handler
-        self._trait_handler = trait_handler
+        handler_trait = self.factory.handler_trait
+        if handler_trait is None:
+            handler_trait = self.object.base_trait(self.name).handler
+        self._handler_trait = handler_trait
 
         if self.scrollable:
             # Create a scrolled window to hold all of the list item controls:
@@ -126,7 +126,7 @@ class SimpleEditor(Editor):
         # Remember the editor to use for each individual list item:
         editor = self.factory.editor
         if editor is None:
-            editor = trait_handler.item_trait.get_editor()
+            editor = handler_trait.item_trait.get_editor()
         self._editor = getattr(editor, self.kind)
 
         # Set up the additional 'list items changed' event handler needed for
@@ -164,11 +164,11 @@ class SimpleEditor(Editor):
         layout = list_pane.layout()
 
         # Create all of the list item trait editors:
-        trait_handler = self._trait_handler
+        handler_trait = self._handler_trait
         resizable = (
-            trait_handler.minlen != trait_handler.maxlen
+            handler_trait.minlen != handler_trait.maxlen
         ) and self.mutable
-        item_trait = trait_handler.item_trait
+        item_trait = handler_trait.item_trait
 
         is_fake = resizable and (len(self.value) == 0)
         if is_fake:
@@ -282,11 +282,11 @@ class SimpleEditor(Editor):
         proxy = sender.proxy
         menu = MakeMenu(self.list_menu, self, True, sender).menu
         len_list = len(proxy.list)
-        not_full = len_list < self._trait_handler.maxlen
+        not_full = len_list < self._handler_trait.maxlen
 
         self._menu_before.enabled(not_full)
         self._menu_after.enabled(not_full)
-        self._menu_delete.enabled(len_list > self._trait_handler.minlen)
+        self._menu_delete.enabled(len_list > self._handler_trait.minlen)
         self._menu_up.enabled(index > 0)
         self._menu_top.enabled(index > 0)
         self._menu_down.enabled(index < (len_list - 1))
@@ -299,7 +299,7 @@ class SimpleEditor(Editor):
         """
         list, index = self.get_info()
         index += offset
-        item_trait = self._trait_handler.item_trait
+        item_trait = self._handler_trait.item_trait
         value = item_trait.default_value_for(self.object, self.name)
         self.value = list[:index] + [value] + list[index:]
         self.update_editor()

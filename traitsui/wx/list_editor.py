@@ -110,10 +110,10 @@ class SimpleEditor(Editor):
             widget.
         """
         # Initialize the trait handler to use:
-        trait_handler = self.factory.trait_handler
-        if trait_handler is None:
-            trait_handler = self.object.base_trait(self.name).handler
-        self._trait_handler = trait_handler
+        handler_trait = self.factory.handler_trait
+        if handler_trait is None:
+            handler_trait = self.object.base_trait(self.name).handler
+        self._handler_trait = handler_trait
 
         # Create a scrolled window to hold all of the list item controls:
         self.control = wxsp.ScrolledPanel(parent, -1)
@@ -123,7 +123,7 @@ class SimpleEditor(Editor):
         # Remember the editor to use for each individual list item:
         editor = self.factory.editor
         if editor is None:
-            editor = trait_handler.item_trait.get_editor()
+            editor = handler_trait.item_trait.get_editor()
         self._editor = getattr(editor, self.kind)
 
         # Set up the additional 'list items changed' event handler needed for
@@ -162,11 +162,11 @@ class SimpleEditor(Editor):
             toolkit.destroy_control(child)
 
         # Create all of the list item trait editors:
-        trait_handler = self._trait_handler
+        handler_trait = self._handler_trait
         resizable = (
-            trait_handler.minlen != trait_handler.maxlen
+            handler_trait.minlen != handler_trait.maxlen
         ) and self.mutable
-        item_trait = trait_handler.item_trait
+        item_trait = handler_trait.item_trait
         factory = self.factory
         list_sizer = wx.FlexGridSizer(
             len(self.value), (1 + resizable) * factory.columns, 0, 0
@@ -253,7 +253,7 @@ class SimpleEditor(Editor):
 
         list_pane.SetMinSize(
             wx.Size(
-                width + ((trait_handler.maxlen > rows) * scrollbar_dx),
+                width + ((handler_trait.maxlen > rows) * scrollbar_dx),
                 panel_height,
             )
         )
@@ -331,10 +331,10 @@ class SimpleEditor(Editor):
         index = proxy.index
         menu = MakeMenu(self.list_menu, self, True, self.control).menu
         len_list = len(proxy.list)
-        not_full = len_list < self._trait_handler.maxlen
+        not_full = len_list < self._handler_trait.maxlen
         self._menu_before.enabled(not_full)
         self._menu_after.enabled(not_full)
-        self._menu_delete.enabled(len_list > self._trait_handler.minlen)
+        self._menu_delete.enabled(len_list > self._handler_trait.minlen)
         self._menu_up.enabled(index > 0)
         self._menu_top.enabled(index > 0)
         self._menu_down.enabled(index < (len_list - 1))
@@ -349,7 +349,7 @@ class SimpleEditor(Editor):
         """
         list, index = self.get_info()
         index += offset
-        item_trait = self._trait_handler.item_trait
+        item_trait = self._handler_trait.item_trait
         value = item_trait.default_value_for(self.object, self.name)
         self.value = list[:index] + [value] + list[index:]
         wx.CallAfter(self.update_editor)
