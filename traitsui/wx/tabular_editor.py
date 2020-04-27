@@ -583,9 +583,9 @@ class TabularEditor(Editor):
         try:
             self._multi_selected_rows_items_changed(
                 TraitListEvent(
-                    0,
-                    [values.index(item) for item in event.removed],
-                    [values.index(item) for item in event.added],
+                    index=0,
+                    removed=[values.index(item) for item in event.removed],
+                    added=[values.index(item) for item in event.added],
                 )
             )
         except:

@@ -332,7 +332,8 @@ class _ListStrEditor(Editor):
             except ValueError:
                 pass
             else:
-                event = TraitListEvent(0, added, removed)
+                event = TraitListEvent(
+                    index=0, added=added, removed=removed)
                 self._multi_selected_indices_items_changed(event)
 
     def _multi_selected_indices_changed(self, selected_indices):

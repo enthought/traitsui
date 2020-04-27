@@ -446,7 +446,8 @@ class TabularEditor(Editor):
         except:
             pass
         else:
-            list_event = TraitListEvent(0, added, removed)
+            list_event = TraitListEvent(
+                index=0, added=added, removed=removed)
             self._multi_selected_rows_items_changed(list_event)
 
     def _multi_selected_rows_changed(self, selected_rows):
