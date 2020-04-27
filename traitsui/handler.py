@@ -358,7 +358,7 @@ class Handler(HasPrivateTraits):
             DeprecationWarning,
             stacklevel=2,
         )
-        self.get_view_for(
+        return self.get_view_for(
             info=info,
             view=view,
             object=object,
