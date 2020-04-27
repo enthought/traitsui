@@ -284,7 +284,7 @@ class CustomEditor(Editor):
         if view == "":
             view = self.view
 
-        return self.ui.handler.trait_view_for(
+        return self.ui.handler.get_view_for(
             self.ui.info, view, object, self.object_name, self.name
         )
 
@@ -510,7 +510,7 @@ class SimpleEditor(CustomEditor):
         """
         # Create the user interface:
         factory = self.factory
-        view = self.ui.handler.trait_view_for(
+        view = self.ui.handler.get_view_for(
             self.ui.info, factory.view, self.value, self.object_name, self.name
         )
         ui = self.value.edit_traits(

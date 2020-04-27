@@ -25,6 +25,7 @@
 
 # avoid deprecation warning
 from inspect import getfullargspec
+import warnings
 
 from traits.api import HasPrivateTraits, HasTraits, Instance
 
@@ -56,6 +57,13 @@ def close_dock_control(dock_control):
     # And tell the DockWindow to remove the DockControl:
     return True
 
+
+warnings.filterwarnings(
+    "ignore",
+    message=r".*The attribute named 'trait_view_for' of class Handler .*",
+    category=Warning,
+    module=".*traitsui.handler.*",
+)
 
 class Handler(HasPrivateTraits):
     """ Provides access to and control over the run-time workings of a
@@ -288,7 +296,7 @@ class Handler(HasPrivateTraits):
         """
         setattr(object, name, value)
 
-    def trait_view_for(self, info, view, object, object_name, trait_name):
+    def get_view_for(self, info, view, object, object_name, trait_name):
         """ Gets a specified View object.
         """
         # If a view element was passed instead of a name or None, return it:
@@ -325,6 +333,14 @@ class Handler(HasPrivateTraits):
                 return result
             method = getattr(self, "trait_view_for_%s" % name, None)
             if callable(method):
+                warnings.warn(
+                    "Using method named {!r} on {!r} for creating a view. "
+                    "This approach will be deprecated. Please specify view "
+                    "explicitly via an editor factory.".format(
+                        method.__name__, type(self)
+                    ),
+                    DeprecationWarning, stacklevel=2,
+                )
                 result = method(info, object)
                 if result is not None:
                     return result
@@ -332,6 +348,23 @@ class Handler(HasPrivateTraits):
         # If nothing is defined on the handler, return either the requested
         # view on the object itself, or the object's default view:
         return object.trait_view(view) or object.trait_view()
+
+    def trait_view_for(
+            self, info, view, object, object_name, trait_name):
+        """ Gets a specified View object.
+        """
+        warnings.warn(
+            "'trait_view_for' is deprecated. Use 'get_view_for' instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        self.get_view_for(
+            info=info,
+            view=view,
+            object=object,
+            object_name=object_name,
+            trait_name=trait_name,
+        )
 
     # -- 'DockWindowHandler' interface implementation -------------------------
 
