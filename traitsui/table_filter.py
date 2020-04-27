@@ -263,7 +263,7 @@ class GenericTableFilterRule(HasPrivateTraits):
     def __init__(self, **traits):
         super(GenericTableFilterRule, self).__init__(**traits)
         if self.name == "":
-            names = list(self.filter._trait_values.keys())
+            names = list(self.filter._name_to_value.keys())
             if len(names) > 0:
                 names.sort()
                 self.name = names[0]
@@ -274,7 +274,7 @@ class GenericTableFilterRule(HasPrivateTraits):
         """
         filter = self.filter
         if (filter is not None) and (filter._object is not None):
-            self.value = filter._trait_values.get(name)
+            self.value = filter._name_to_value.get(name)
             self.value_editor = filter._object.base_trait(name).get_editor()
 
     # -------------------------------------------------------------------------
@@ -429,7 +429,7 @@ class RuleTableFilter(TableFilter):
     _object = Any()
 
     #: Map of trait names and default values
-    _trait_values = Any()
+    _name_to_value = Any()
 
     # -------------------------------------------------------------------------
     #  Traits view definitions:
@@ -499,7 +499,7 @@ class RuleTableFilter(TableFilter):
             return self.edit_traits(view="error_view")
 
         names = object.editable_traits()
-        self._trait_values = object.get(names)
+        self._name_to_value = object.get(names)
         return View(
             [
                 ["name{Filter name}", "_"],
@@ -549,7 +549,7 @@ class RuleTableFilter(TableFilter):
         dict = self.__dict__.copy()
         if "_object" in dict:
             del dict["_object"]
-            del dict["_trait_values"]
+            del dict["_name_to_value"]
         return dict
 
     def _rules_changed(self, rules):
