@@ -27,7 +27,6 @@ from traits.api import (
     Any,
     Int,
     Instance,
-    on_trait_change,
     Property,
     Bool,
     Callable,
@@ -96,7 +95,7 @@ class ToolkitEditorFactory(EditorFactory):
 
     #: The trait handler for each list item:
     #: Deprecated. Use handler_trait instead.
-    trait_handler = Instance(BaseTraitHandler)
+    trait_handler = Property(Instance(BaseTraitHandler))
 
     #: The trait handler for each list item:
     handler_trait = Instance(BaseTraitHandler)
@@ -180,14 +179,21 @@ class ToolkitEditorFactory(EditorFactory):
             return toolkit_object("list_editor:NotebookEditor")
         return toolkit_object("list_editor:CustomEditor")
 
-    @on_trait_change("trait_handler")
-    def _deprecate_trait_handler(self, new):
+    def _get_trait_handler(self):
         warnings.warn(
             "'trait_handler' is deprecated in {}. "
             "Use 'handler_trait' instead.".format(type(self).__name__),
             DeprecationWarning,
         )
-        self.handler_trait = new
+        return self.handler_trait
+
+    def _set_trait_handler(self, value):
+        warnings.warn(
+            "'trait_handler' is deprecated in {}. "
+            "Use 'handler_trait' instead.".format(type(self).__name__),
+            DeprecationWarning,
+        )
+        self.handler_trait = value
 
 
 # -------------------------------------------------------------------------
