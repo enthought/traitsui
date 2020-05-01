@@ -965,6 +965,7 @@ class Demo(HasPrivateTraits):
                 previous_children = previous.tno_get_children(previous)
                 while len(previous_children) > 0:
                     previous = previous_children[-1]
+                    previous_children = previous.tno_get_children(previous)
             else:
                 previous = parent
 
