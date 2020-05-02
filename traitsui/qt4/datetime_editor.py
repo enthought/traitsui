@@ -76,12 +76,18 @@ class SimpleEditor(Editor):
     @on_trait_change('minimum_datetime,maximum_datetime')
     def update_date_range(self):
         if self.control is not None:
-            self.control.setMinimumDateTime(
-                QDateTime(self.minimum_datetime)
-            )
-            self.control.setMaximumDateTime(
-                QDateTime(self.maximum_datetime)
-            )
+            if self.minimum_datetime is not None:
+                self.control.setMinimumDateTime(
+                   QDateTime(self.minimum_datetime)
+                )
+            else:
+                self.control.clearMinimumDateTime()
+            if self.maximum_datetime is not None:
+                self.control.setMaximumDateTime(
+                    QDateTime(self.maximum_datetime)
+                )
+            else:
+                self.control.clearMaximumDateTime()
 
 
 class ReadonlyEditor(BaseReadonlyEditor):
