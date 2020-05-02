@@ -25,7 +25,6 @@ class DateEditorDemo(HasTraits):
             Item(
                 'datetime',
                 label='Simple date editor',
-                #editor=DatetimeEditor(),
             ),
             Item(
                 'datetime',
