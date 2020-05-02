@@ -15,14 +15,13 @@
 """
 
 
-import datetime
-
-from pyface.qt import QtGui
+from pyface.qt import QtGui, qt_api
 from pyface.qt.QtCore import QDateTime
-from traits.api import Instance
+from traits.api import Datetime, on_trait_change
 
 from .editor import Editor
 from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
+
 
 
 class SimpleEditor(Editor):
@@ -30,45 +29,59 @@ class SimpleEditor(Editor):
     """
 
     #: the earliest datetime allowed by the editor
-    minimum_datetime = Instance(datetime.datetime)
+    minimum_datetime = Datetime
 
     #: the latest datetime allowed by the editor
-    maximum_datetime = Instance(datetime.datetime)
+    maximum_datetime = Datetime
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QDateTimeEdit()
+        # set min and max early, don't wait for editor sync
         self.minimum_datetime = self.factory.minimum_datetime
         self.maximum_datetime = self.factory.maximum_datetime
-        self.update_date_range()
+
+        self.control = QtGui.QDateTimeEdit()
         self.control.dateTimeChanged.connect(self.update_object)
+        self.update_date_range()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         value = self.value
-        if value:
-            q_datetime = QDateTime(value)
-            self.control.setTime(q_datetime)
+        if self.value:
+            if self.minimum_datetime and self.minimum_datetime > value:
+                value = self.minimum_datetime
+            elif self.maximum_datetime and self.value > self.maximum_datetime:
+                value = self.maximum_datetime
+            try:
+                q_datetime = QDateTime(value)
+            except Exception:
+                pass
+            self.control.setDateTime(q_datetime)
 
     def update_object(self, q_datetime):
         """ Handles the user entering input data in the edit control.
         """
-        self.value = q_datetime.toPyDateTime()
+        try:
+            if qt_api == 'pyside2':
+                self.value = q_datetime.toPython()
+            else:
+                self.value = q_datetime.toPyDateTime()
+        except ValueError:
+            pass
 
+    @on_trait_change('minimum_datetime,maximum_datetime')
     def update_date_range(self):
         if self.control is not None:
-            if self.minimum_datetime is not None:
-                self.control.setMinimumDateTime(
-                   QDateTime(self.minimum_datetime)
-                )
-            if self.maximum_datetime is not None:
-                self.control.setMaximumDateTime(
-                    QDateTime(self.maximum_datetime)
-                )
+            self.control.setMinimumDateTime(
+                QDateTime(self.minimum_datetime)
+            )
+            self.control.setMaximumDateTime(
+                QDateTime(self.maximum_datetime)
+            )
 
 
 class ReadonlyEditor(BaseReadonlyEditor):
