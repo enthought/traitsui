@@ -7,11 +7,11 @@ A Traits UI editor that edits a datetime panel.
 import datetime
 
 from traits.api import HasTraits, Datetime, Str
-from traitsui.api import View, Item, Group, DatetimeEditor
+from traitsui.api import View, Item, Group
 
 
 class DateEditorDemo(HasTraits):
-    """ Demo class to show Date editors. """
+    """ Demo class to show Datetime editors. """
     datetime = Datetime()
     info_string = Str('The editors for Traits Datetime objects.')
 
