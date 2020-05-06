@@ -24,6 +24,7 @@ import contextlib
 import glob
 from io import StringIO
 import operator
+import os
 from os import listdir
 from os.path import (
     abspath,
@@ -36,6 +37,7 @@ from os.path import (
     split,
     splitext,
 )
+import pathlib
 import sys
 import token
 import tokenize
@@ -60,6 +62,7 @@ from traits.api import (
     Str,
 )
 from traitsui.api import (
+    Action,
     CodeEditor,
     Handler,
     Heading,
@@ -69,10 +72,14 @@ from traitsui.api import (
     Include,
     InstanceEditor,
     Item,
+    ModelView,
     ObjectTreeNode,
+    spring,
+    ShellEditor,
     spring,
     Tabbed,
     TitleEditor,
+    ToolBar,
     TreeEditor,
     TreeNodeObject,
     UIInfo,
@@ -370,7 +377,10 @@ class DemoFileBase(DemoTreeNodeObject):
     parent = Any()
 
     #: Name of file system path to this file:
-    path = Property()
+    path = Property(depends_on='parent.path,name')
+
+    #: The base URL for links:
+    base_url = Property(depends_on='path')
 
     #: Name of the file:
     name = Str()
@@ -398,6 +408,13 @@ class DemoFileBase(DemoTreeNodeObject):
 
     def _get_path(self):
         return join(self.parent.path, self.name)
+
+    def _get_base_url(self):
+        if isdir(self.path):
+            base_dir = self.path
+        else:
+            base_dir = dirname(self.path)
+        return base_dir
 
     # -------------------------------------------------------------------------
     #  Implementation of the 'nice_name' property:
@@ -437,10 +454,16 @@ class DemoFile(DemoFileBase):
     #: Demo object whose traits UI is to be displayed:
     demo = Instance(HasTraits)
 
+    #: Local namespace for executed code:
+    locals = Dict(Str, Any)
+
+    #: The css file for this node.
+    css_filename = Str("default.css")
+
     def init(self):
         super(DemoFile, self).init()
         description, source = parse_source(self.path)
-        self.description = publish_html_str(description)
+        self.description = publish_html_str(description, self.css_filename)
         self.source = source
         self.run_code()
 
@@ -469,6 +492,7 @@ class DemoFile(DemoFileBase):
             traceback.print_exc()
         else:
             self.demo = demo
+        self.locals = locals
 
     # -------------------------------------------------------------------------
     #  Get a specified object from the execution dictionary:
@@ -494,7 +518,7 @@ _image_template = """<html>
 <head>
 </head>
 <body>
-<img src="%s">
+<img src="{}">
 </body>
 </html>
 """
@@ -523,7 +547,10 @@ class DemoPath(DemoTreeNodeObject):
     parent = Any()
 
     #: Name of file system path to this package:
-    path = Property()
+    path = Property(depends_on='parent.path,name')
+
+    #: The base URL for links:
+    base_url = Property(depends_on='path')
 
     #: Name of the directory:
     name = Str()
@@ -532,7 +559,7 @@ class DemoPath(DemoTreeNodeObject):
     nice_name = Property()
 
     #: Description of the contents of the directory:
-    description = Property(HTML, depends_on="_description")
+    description = Property(HTML, depends_on="source")
 
     #: Source code contained in the '__init__.py' file:
     source = Property(Code)
@@ -552,6 +579,9 @@ class DemoPath(DemoTreeNodeObject):
 
     #: Configuration file for this node.
     config_filename = Str()
+
+    #: The css file for this node.
+    css_filename = Str("default.css")
 
     #: Shadow trait for description property
     _description = Str()
@@ -586,6 +616,13 @@ class DemoPath(DemoTreeNodeObject):
 
         return path
 
+    def _get_base_url(self):
+        if isdir(self.path):
+            base_dir = self.path
+        else:
+            base_dir = dirname(self.path)
+        return base_dir
+
     # -------------------------------------------------------------------------
     #  Implementation of the 'nice_name' property:
     # -------------------------------------------------------------------------
@@ -610,10 +647,15 @@ class DemoPath(DemoTreeNodeObject):
 
     @cached_property
     def _get_description(self):
-        if self._description is None:
+        if not self._description:
             self._get_init()
 
-        return publish_html_str(self._description)
+        if self.css_filename:
+            result = publish_html_str(
+                self._description, self.css_filename)
+        else:
+            result = publish_html_str(self._description)
+        return result
 
     # -------------------------------------------------------------------------
     #  Implementation of the 'source' property:
@@ -647,7 +689,7 @@ class DemoPath(DemoTreeNodeObject):
                 join(self.path, "__init__.py")
             )
         else:
-            self._description = '<img src="traits_ui_demo.jpg">'
+            self._description = ".. image:: traits_ui_demo.jpg"
             source = ""
 
         self._source = exec_str + source
@@ -701,11 +743,18 @@ class DemoPath(DemoTreeNodeObject):
             cur_path = join(path, name)
             if isdir(cur_path):
                 if self.has_py_files(cur_path):
-                    dirs.append(DemoPath(parent=self, name=name))
+                    dirs.append(
+                        DemoPath(
+                            parent=self,
+                            name=name,
+                            css_filename=join('..', self.css_filename)
+                        )
+                    )
             elif self.use_files:
                 if name != "__init__.py":
                     try:
                         demo_file = self._handle_file(name)
+                        demo_file.css_filename = self.css_filename
                         files.append(demo_file)
                     except KeyError:
                         pass
@@ -743,7 +792,11 @@ class DemoPath(DemoTreeNodeObject):
                 sourcedir = value.pop("sourcedir", None)
                 if sourcedir is not None:
                     # This is a demo directory.
-                    demoobj = DemoPath(parent=self, name=sourcedir)
+                    demoobj = DemoPath(
+                        parent=self,
+                        name=sourcedir,
+                        css_filename=join("..", self.css_filename),
+                    )
                     demoobj.nice_name = keyword
                     demoobj.config_dict = value
                     dirs.append(demoobj)
@@ -764,11 +817,13 @@ class DemoPath(DemoTreeNodeObject):
                         demoobj = DemoPath(parent=self, name="")
                         demoobj.nice_name = keyword
                         demoobj.config_dict = config_dict
+                        demoobj.css_filename = os.path.join("..", self.css_filename)
                         dirs.append(demoobj)
                     elif len(names) == 1:
                         try:
                             demo_file = self._handle_file(name)
                             files.append(demo_file)
+                            demo_file.css_filename = self.css_filename
                         except KeyError:
                             pass
 
@@ -804,39 +859,43 @@ class DemoPath(DemoTreeNodeObject):
         demo_file = file_factory(parent=self, name=filename)
         return demo_file
 
+
 # -------------------------------------------------------------------------
 #  Defines the demo tree editor:
 # -------------------------------------------------------------------------
 
 demo_path_view = View(
-    Tabbed(
-        UItem(
-            "description",
-            style="readonly",
-            editor=HTMLEditor(format_text=True),
+    UItem(
+        "description",
+        style="readonly",
+        editor=HTMLEditor(
+            format_text=True,
+            base_url_name='base_url',
         ),
-        UItem("source", style="custom"),
     ),
     id="demo_path_view",
+    kind='subpanel',
 )
 
 demo_file_view = View(
     HSplit(
-        Tabbed(
-            UItem(
-                "description",
-                style="readonly",
-                editor=HTMLEditor(format_text=True),
+        UItem(
+            "description",
+            style="readonly",
+            editor=HTMLEditor(
+                format_text=True,
+                base_url_name='base_url',
             ),
         ),
         VSplit(
             VGroup(
-                Tabbed(
-                    UItem("source", style="custom"),
-                ),
-                UItem(
-                    "handler.run_button",
-                    visible_when="source is not None"
+                UItem("source", style="custom"),
+                HGroup(
+                    spring,
+                    UItem(
+                        "handler.run_button",
+                    ),
+                    visible_when="source is not None",
                 ),
             ),
             Tabbed(
@@ -850,17 +909,24 @@ demo_file_view = View(
                     label="Output",
                     show_label=False
                 ),
+                Item(
+                    "locals",
+                    editor=ShellEditor(share=True),
+                    label="Shell",
+                    show_label=False
+                ),
                 UItem(
                     "demo",
                     style="custom",
                     resizable=True,
                 ),
             ),
-            dock="horizontal"
+            dock="horizontal",
         ),
     ),
     id="demo_file_view",
     handler=demo_file_handler,
+    kind='subpanel',
 )
 
 demo_content_view = View(
@@ -868,10 +934,14 @@ demo_content_view = View(
         UItem(
             "description",
             style="readonly",
-            editor=HTMLEditor(format_text=True),
+            editor=HTMLEditor(
+                format_text=True,
+                base_url_name='base_url',
+            ),
         ),
     ),
     handler=demo_file_handler,
+    kind='subpanel',
 )
 
 
@@ -880,7 +950,7 @@ demo_tree_editor = TreeEditor(
         ObjectTreeNode(
             node_for=[DemoPath],
             label="nice_name",
-            view=demo_path_view
+            view=demo_path_view,
         ),
         ObjectTreeNode(
             node_for=[DemoFile],
@@ -898,30 +968,44 @@ demo_tree_editor = TreeEditor(
             view=demo_content_view
         ),
     ],
-    selected='selected_node'
+    selected='selected_node',
+
 )
 
 
-class Demo(HasPrivateTraits):
+next_tool = Action(
+    name='Next',
+    image=ImageResource("next"),
+    tooltip="Go to next file",
+    action="do_next",
+    enabled_when="_next_node is not None",
+)
 
-    # -------------------------------------------------------------------------
-    #  Trait definitions:
-    # -------------------------------------------------------------------------
+previous_tool = Action(
+    name='Previous',
+    image=ImageResource("previous"),
+    tooltip="Go to next file",
+    action="do_previous",
+    enabled_when="_previous_node is not None",
+)
 
-    #: Navifate to next node.
-    next_button = Button(image=ImageResource("next"), label="Next")
+parent_tool = Action(
+    name='Parent',
+    image=ImageResource("parent"),
+    tooltip="Go to next file",
+    action="do_parent",
+    enabled_when="(selected_node is not None) and "
+                 "(object.selected_node.parent is not None)",
+)
 
-    #: Navigate to parent of selected node.
-    parent_button = Button(image=ImageResource("parent"), label="Parent")
 
-    #: Navigate to previous node.
-    previous_button = Button(image=ImageResource("previous"), label="Previous")
+class Demo(ModelView):
+
+    #: Root path object for locating demo files:
+    model = Instance(DemoPath)
 
     #: Path to the root demo directory:
     path = Str()
-
-    #: Root path object for locating demo files:
-    root = Instance(DemoPath)
 
     #: Selected node of the demo path tree.
     selected_node = Any()
@@ -932,6 +1016,20 @@ class Demo(HasPrivateTraits):
     _next_node = Property()
 
     _previous_node = Property()
+
+    def do_next(self, event=None):
+        self.selected_node = self._next_node
+
+    def do_previous(self, event=None):
+        self.selected_node = self._previous_node
+
+    def do_parent(self, event=None):
+        if self.selected_node is not None:
+            parent = self.selected_node.parent
+            self.selected_node = parent
+
+    def init(self, info):
+        info.ui.title = self.title
 
     def _get__next_node(self):
         next = None
@@ -971,65 +1069,23 @@ class Demo(HasPrivateTraits):
 
         return previous
 
-    def _next_button_changed(self):
-        self.selected_node = self._next_node
-
-    def _parent_button_changed(self):
-        if self.selected_node is not None:
-            parent = self.selected_node.parent
-            self.selected_node = parent
-
-    def _previous_button_changed(self):
-        self.selected_node = self._previous_node
-
     # -------------------------------------------------------------------------
     #  Traits view definitions:
     # -------------------------------------------------------------------------
 
-    def default_traits_view(self):
-        """ Constructs the default traits view."""
-
-        traits_view = View(
-            HGroup(
-                UItem(
-                    "previous_button",
-                    style="custom",
-                    enabled_when="_previous_node is not None",
-                    tooltip="Go to previous file"
-                ),
-                UItem(
-                    "parent_button",
-                    style="custom",
-                    enabled_when="(selected_node is not None) and "
-                    "(object.selected_node.parent is not None)",
-                    tooltip="Go up one level"
-                ),
-                UItem(
-                    "title",
-                    springy=True,
-                    editor=TitleEditor()
-                ),
-                UItem(
-                    "next_button",
-                    style="custom",
-                    enabled_when="_next_node is not None",
-                    tooltip="Go to next file"
-                ),
-                "_",
-            ),
-            Item(
-                name="root",
-                id="root",
-                show_label=False,
-                editor=demo_tree_editor,
-            ),
-            title=self.title,
-            id="traitsui.demos.demo.Demo",
-            resizable=True,
-            width=950,
-            height=900,
-        )
-        return traits_view
+    traits_view = View(
+        Item(
+            name="model",
+            id="model",
+            show_label=False,
+            editor=demo_tree_editor,
+        ),
+        id="traitsui.demos.demo.Demo",
+        toolbar=ToolBar(previous_tool, parent_tool, next_tool, show_tool_names=True),
+        resizable=True,
+        width=1200,
+        height=700,
+    )
 
 
 # -------------------------------------------------------------------------
@@ -1053,7 +1109,7 @@ def _get_settings(css_path=None):
     settings = {'output_encoding': 'unicode'}
     if css_path is not None:
         settings['stylesheet_path'] = css_path
-        settings['embed_stylesheet'] = True
+        settings['embed_stylesheet'] = False
         settings['stylesheet'] = None
 
     return settings
@@ -1121,7 +1177,7 @@ def publish_html_file(rst_file_path, html_out_path, css_path=None):
 
 
 def demo(
-    use_files=False, dir_name=None, config_filename="", title="Traits UI Demos"
+    use_files=False, dir_name=None, config_filename="", title="Traits UI Demos", css_filename="default.css"
 ):
     if dir_name is None:
         dir_name = dirname(abspath(sys.argv[0]))
@@ -1131,10 +1187,11 @@ def demo(
     Demo(
         path=path,
         title=title,
-        root=DemoPath(
+        model=DemoPath(
             name=dir_name,
             nice_name=user_name_for(name),
             use_files=use_files,
-            config_filename=config_filename
+            config_filename=config_filename,
+            css_filename=css_filename,
         ),
     ).configure_traits()
