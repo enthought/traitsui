@@ -559,7 +559,7 @@ class DemoPath(DemoTreeNodeObject):
     nice_name = Property()
 
     #: Description of the contents of the directory:
-    description = Property(HTML, depends_on="source")
+    description = Property(HTML, depends_on="_description")
 
     #: Source code contained in the '__init__.py' file:
     source = Property(Code)
