@@ -16,12 +16,9 @@
 
 import sys
 import traceback
-import inspect
-from functools import partial, wraps
+from functools import partial
 from contextlib import contextmanager
-from unittest import skip
-
-from nose import SkipTest
+from unittest import skipIf
 
 from pyface.toolkit import toolkit_object
 from traits.etsconfig.api import ETSConfig
@@ -72,28 +69,6 @@ def _is_current_backend(backend_name=""):
     return ETSConfig.toolkit == backend_name
 
 
-def skip_if_not_backend(item, backend_name=""):
-    """Decorator that skip tests if the backend is not the desired one."""
-
-    if inspect.isclass(item):
-        if not _is_current_backend(backend_name):
-            message = "" if backend_name != "" else "Test only for {}"
-            wrapper = skip(message)(item)
-        else:
-            wrapper = item
-    else:
-
-        @wraps(item)
-        def wrapper(*args, **kwargs):
-            if not _is_current_backend(backend_name):
-                message = "" if backend_name != "" else "Test only for {}"
-                raise SkipTest(message.format(backend_name))
-            else:
-                return item(*args, **kwargs)
-
-    return wrapper
-
-
 #: Return True if current backend is 'wx'
 is_current_backend_wx = partial(_is_current_backend, backend_name="wx")
 
@@ -105,34 +80,22 @@ is_current_backend_null = partial(_is_current_backend, backend_name="null")
 
 
 #: Test decorator: Skip test if backend is not 'wx'
-skip_if_not_wx = partial(skip_if_not_backend, backend_name="wx")
+skip_if_not_wx = skipIf(not is_current_backend_wx(), "Test only for wx")
 
 #: Test decorator: Skip test if backend is not 'qt4'
-skip_if_not_qt4 = partial(skip_if_not_backend, backend_name="qt4")
+skip_if_not_qt4 = skipIf(not is_current_backend_qt4(), "Test only for qt4")
 
 #: Test decorator: Skip test if backend is not 'null'
-skip_if_not_null = partial(skip_if_not_backend, backend_name="null")
+skip_if_not_null = skipIf(not is_current_backend_null(), "Test only for null")
 
+#: Test decorator: Skip test if backend is 'null'
+skip_if_null = skipIf(
+    is_current_backend_null(),
+    "Test not working on the 'null' backend"
+)
 
 #: True if current platform is MacOS
 is_mac_os = sys.platform == "Darwin"
-
-
-def skip_if_null(test_func):
-    """Decorator that skip tests if the backend is set to 'null'.
-
-    Some tests handle both wx and Qt in one go, but many things are not
-    defined in the null backend. Use this decorator to skip the test.
-    """
-
-    @wraps(test_func)
-    def wrapper(*args, **kwargs):
-        if _is_current_backend("null"):
-            raise SkipTest("Test not working on the 'null' backend")
-        else:
-            return test_func(*args, **kwargs)
-
-    return wrapper
 
 
 def count_calls(func):

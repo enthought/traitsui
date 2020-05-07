@@ -1,4 +1,4 @@
-from nose.tools import assert_equal
+import unittest
 
 from traitsui.api import DefaultOverride, EditorFactory
 from traits.api import HasTraits, Int
@@ -35,53 +35,50 @@ dummy_object = Dummy()
 do = DefaultOverride(x=15, y=25, format_str="%r")
 
 
-def test_simple_override():
-    editor_name, editor, ui, obj, name, description, parent = do.simple_editor(
-        "ui", dummy_object, "x", "description", "parent"
-    )
-    assert_equal(editor_name, "simple_editor")
-    assert_equal(editor.x, 15)
-    assert_equal(editor.y, 25)
-    assert_equal(obj, dummy_object)
-    assert_equal(name, "x")
-    assert_equal(description, "description")
-    assert_equal(parent, "parent")
+class TestDefaultOverride(unittest.TestCase):
 
+    def test_simple_override(self):
+        editor_name, editor, ui, obj, name, description, parent = \
+            do.simple_editor("ui", dummy_object, "x", "description", "parent")
+        self.assertEqual(editor_name, "simple_editor")
+        self.assertEqual(editor.x, 15)
+        self.assertEqual(editor.y, 25)
+        self.assertEqual(obj, dummy_object)
+        self.assertEqual(name, "x")
+        self.assertEqual(description, "description")
+        self.assertEqual(parent, "parent")
 
-def test_text_override():
-    editor_name, editor, ui, obj, name, description, parent = do.text_editor(
-        "ui", dummy_object, "x", "description", "parent"
-    )
-    assert_equal(editor_name, "text_editor")
-    assert_equal(editor.x, 15)
-    assert_equal(editor.y, 25)
-    assert_equal(obj, dummy_object)
-    assert_equal(name, "x")
-    assert_equal(description, "description")
-    assert_equal(parent, "parent")
+    def test_text_override(self):
+        editor_name, editor, ui, obj, name, description, parent = \
+            do.text_editor("ui", dummy_object, "x", "description", "parent")
+        self.assertEqual(editor_name, "text_editor")
+        self.assertEqual(editor.x, 15)
+        self.assertEqual(editor.y, 25)
+        self.assertEqual(obj, dummy_object)
+        self.assertEqual(name, "x")
+        self.assertEqual(description, "description")
+        self.assertEqual(parent, "parent")
 
+    def test_custom_override(self):
+        editor_name, editor, ui, obj, name, description, parent = \
+            do.custom_editor("ui", dummy_object, "x", "description", "parent")
+        self.assertEqual(editor_name, "custom_editor")
+        self.assertEqual(editor.x, 15)
+        self.assertEqual(editor.y, 25)
+        self.assertEqual(obj, dummy_object)
+        self.assertEqual(name, "x")
+        self.assertEqual(description, "description")
+        self.assertEqual(parent, "parent")
 
-def test_custom_override():
-    editor_name, editor, ui, obj, name, description, parent = do.custom_editor(
-        "ui", dummy_object, "x", "description", "parent"
-    )
-    assert_equal(editor_name, "custom_editor")
-    assert_equal(editor.x, 15)
-    assert_equal(editor.y, 25)
-    assert_equal(obj, dummy_object)
-    assert_equal(name, "x")
-    assert_equal(description, "description")
-    assert_equal(parent, "parent")
-
-
-def test_readonly_override():
-    editor_name, editor, ui, obj, name, description, parent = do.readonly_editor(
-        "ui", dummy_object, "x", "description", "parent"
-    )
-    assert_equal(editor_name, "readonly_editor")
-    assert_equal(editor.x, 15)
-    assert_equal(editor.y, 25)
-    assert_equal(obj, dummy_object)
-    assert_equal(name, "x")
-    assert_equal(description, "description")
-    assert_equal(parent, "parent")
+    def test_readonly_override(self):
+        editor_name, editor, ui, obj, name, description, parent = \
+            do.readonly_editor(
+                "ui", dummy_object, "x", "description", "parent"
+            )
+        self.assertEqual(editor_name, "readonly_editor")
+        self.assertEqual(editor.x, 15)
+        self.assertEqual(editor.y, 25)
+        self.assertEqual(obj, dummy_object)
+        self.assertEqual(name, "x")
+        self.assertEqual(description, "description")
+        self.assertEqual(parent, "parent")
