@@ -23,7 +23,6 @@ from .editor import Editor
 from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
 
-
 class SimpleEditor(Editor):
     """ Simple Traits UI time editor that wraps QDateTimeEdit.
     """
@@ -44,14 +43,15 @@ class SimpleEditor(Editor):
 
         self.control = QtGui.QDateTimeEdit()
         self.control.dateTimeChanged.connect(self.update_object)
-        self.update_date_range()
+        self.update_minimum_datetime()
+        self.update_maximum_datetime()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         value = self.value
-        if self.value:
+        if value:
             if self.minimum_datetime and self.minimum_datetime > value:
                 value = self.minimum_datetime
             elif self.maximum_datetime and self.value > self.maximum_datetime:
@@ -61,6 +61,7 @@ class SimpleEditor(Editor):
             except Exception:
                 pass
             self.control.setDateTime(q_datetime)
+            self.value = value
 
     def update_object(self, q_datetime):
         """ Handles the user entering input data in the edit control.
@@ -73,8 +74,14 @@ class SimpleEditor(Editor):
         except ValueError:
             pass
 
-    @on_trait_change('minimum_datetime,maximum_datetime')
-    def update_date_range(self):
+    @on_trait_change('minimum_datetime')
+    def update_minimum_datetime(self):
+        # sanity checking of values
+        if (self.minimum_datetime is not None
+                and self.maximum_datetime is not None
+                and self.minimum_datetime > self.maximum_datetime):
+            self.maximum_datetime = self.minimum_datetime
+
         if self.control is not None:
             if self.minimum_datetime is not None:
                 self.control.setMinimumDateTime(
@@ -82,6 +89,16 @@ class SimpleEditor(Editor):
                 )
             else:
                 self.control.clearMinimumDateTime()
+
+    @on_trait_change('maximum_datetime')
+    def update_maximum_datetime(self):
+        # sanity checking of values
+        if (self.minimum_datetime is not None
+                and self.maximum_datetime is not None
+                and self.minimum_datetime > self.maximum_datetime):
+            self.minimum_datetime = self.maximum_datetime
+
+        if self.control is not None:
             if self.maximum_datetime is not None:
                 self.control.setMaximumDateTime(
                     QDateTime(self.maximum_datetime)
