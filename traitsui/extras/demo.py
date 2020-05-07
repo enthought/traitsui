@@ -37,7 +37,6 @@ from os.path import (
     split,
     splitext,
 )
-import pathlib
 import sys
 import token
 import tokenize
@@ -1073,19 +1072,22 @@ class Demo(ModelView):
     #  Traits view definitions:
     # -------------------------------------------------------------------------
 
-    traits_view = View(
-        Item(
-            name="model",
-            id="model",
-            show_label=False,
-            editor=demo_tree_editor,
-        ),
-        id="traitsui.demos.demo.Demo",
-        toolbar=ToolBar(previous_tool, parent_tool, next_tool, show_tool_names=True),
-        resizable=True,
-        width=1200,
-        height=700,
-    )
+    def default_traits_view(self):
+        # XXX need to do this to hide the instantiation of ToolBar from null
+        # toolkit tests.  It would be preferable to have this be declarative.
+        return View(
+            Item(
+                name="model",
+                id="model",
+                show_label=False,
+                editor=demo_tree_editor,
+            ),
+            id="traitsui.demos.demo.Demo",
+            toolbar=ToolBar(previous_tool, parent_tool, next_tool, show_tool_names=True),
+            resizable=True,
+            width=1200,
+            height=700,
+        )
 
 
 # -------------------------------------------------------------------------
