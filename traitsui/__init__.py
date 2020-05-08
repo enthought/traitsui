@@ -29,3 +29,47 @@ __extras_require__ = {
     "pyside": ["pyside>=1.2", "pygments"],
     "demo": ["configobj", "docutils"],
 }
+
+
+# ============================= Test Loader ==================================
+def load_tests(loader, standard_tests, pattern):
+    """ Custom test loading function that enables test filtering using regex
+    exclusion pattern.
+
+    Parameters
+    ----------
+    loader : unittest.TestLoader
+        The instance of test loader
+    standard_tests : unittest.TestSuite
+        Tests that would be loaded by default from this module (no tests)
+    pattern : str
+        An inclusion pattern used to match test files (test*.py default)
+
+    Returns
+    -------
+    filtered_package_tests : unittest.TestSuite
+        TestSuite representing all package tests that did not match specified
+        exclusion pattern.
+    """
+    from os import environ
+    from os.path import dirname
+    from traitsui.tests._tools import filter_tests
+    from unittest import TestSuite
+
+    # Make sure the right toolkit is up and running before importing tests
+    from traitsui.toolkit import toolkit
+    toolkit()
+
+    this_dir = dirname(__file__)
+    package_tests = loader.discover(start_dir=this_dir, pattern=pattern)
+
+    exclusion_pattern = environ.get("EXCLUDE_TESTS", None)
+    if exclusion_pattern is None:
+        return package_tests
+
+    filtered_package_tests = TestSuite()
+    for test_suite in package_tests:
+        filtered_test_suite = filter_tests(test_suite, exclusion_pattern)
+        filtered_package_tests.addTest(filtered_test_suite)
+
+    return filtered_package_tests
