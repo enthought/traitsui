@@ -172,7 +172,7 @@ class TestUI(unittest.TestCase):
 
         # press the OK button and close the dialog
         okbutton = ui.control.FindWindowByName("button", ui.control)
-        assert okbutton.Label == 'OK'
+        self.assertEqual(okbutton.Label, 'OK')
 
         click_event = wx.CommandEvent(
             wx.wxEVT_COMMAND_BUTTON_CLICKED, okbutton.GetId()

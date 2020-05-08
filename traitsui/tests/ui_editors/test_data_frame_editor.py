@@ -98,7 +98,7 @@ class TestDataFrameEditor(unittest.TestCase):
 
         assert_array_equal(item_0_df.values, [[0, 1, 2]])
         assert_array_equal(item_0_df.columns, ["X", "Y", "Z"])
-        assert item_0_df.index[0] == "one"
+        self.assertEqual(item_0_df.index[0], "one")
 
     @skip_if_null
     def test_adapter_empty_dataframe(self):
@@ -131,7 +131,7 @@ class TestDataFrameEditor(unittest.TestCase):
 
         assert_array_equal(item_0_df.values, [[0, 1, 2]])
         assert_array_equal(item_0_df.columns, ["X", "Y", "Z"])
-        assert item_0_df.index[0] == 1
+        self.assertEqual(item_0_df.index[0], 1)
 
     @skip_if_null
     def test_adapter_delete_start(self):
@@ -458,7 +458,7 @@ class TestDataFrameEditor(unittest.TestCase):
 
         assert_array_equal(item_0_df.values, [[0, 1, 2]])
         assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
-        assert item_0_df.index[0] == 'NewIndex'
+        self.assertEqual(item_0_df.index[0], 'NewIndex')
 
     @skip_if_null
     def test_adapter_set_index_text_numeric(self):
@@ -475,7 +475,7 @@ class TestDataFrameEditor(unittest.TestCase):
 
         assert_array_equal(item_0_df.values, [[0, 1, 2]])
         assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
-        assert item_0_df.index[0] == 100
+        self.assertEqual(item_0_df.index[0], 100)
 
     @skip_if_null
     def test_adapter_set_index_text_numeric_invalid(self):
@@ -492,4 +492,4 @@ class TestDataFrameEditor(unittest.TestCase):
 
         assert_array_equal(item_0_df.values, [[0, 1, 2]])
         assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
-        assert item_0_df.index[0] == 1
+        self.assertEqual(item_0_df.index[0], 1)
