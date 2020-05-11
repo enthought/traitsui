@@ -39,7 +39,7 @@ def main(root_dir):
 if __name__ == '__main__':
 
     # Validate the command line arguments:
-    if len(sys.argv) != 2:
+    if len(sys.argv) > 2:
         print(usage)
         sys.exit(1)
 
