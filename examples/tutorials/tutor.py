@@ -44,8 +44,4 @@ if __name__ == '__main__':
         sys.exit(1)
 
     root_dir = sys.argv[1]
-    try:
-        main(root_dir)
-    except NameError as e:
-        print(e)
-        print(usage)
+    main(root_dir)
