@@ -43,5 +43,10 @@ if __name__ == '__main__':
         print(usage)
         sys.exit(1)
 
-    root_dir = sys.argv[1]
+    # Determine the root path to use for the tutorial files:
+    if len(sys.argv) == 2:
+        root_dir = sys.argv[1]
+    else:
+        root_dir = os.getcwd()
+
     main(root_dir)
