@@ -39,13 +39,14 @@ def main(root_dir):
 if __name__ == '__main__':
 
     # Validate the command line arguments:
-    if len(sys.argv) != 2:
+    if len(sys.argv) > 2:
         print(usage)
         sys.exit(1)
 
-    root_dir = sys.argv[1]
-    try:
-        main(root_dir)
-    except NameError as e:
-        print(e)
-        print(usage)
+    # Determine the root path to use for the tutorial files:
+    if len(sys.argv) == 2:
+        root_dir = sys.argv[1]
+    else:
+        root_dir = os.getcwd()
+
+    main(root_dir)
