@@ -126,7 +126,6 @@ class TestRangeEditorSpinner(unittest.TestCase):
 
             # if all went well, the number traits has been updated and its
             # value is 4
-            print(num.number)
             self.assertEqual(num.number, 4)
 
     @skip_if_not_qt4

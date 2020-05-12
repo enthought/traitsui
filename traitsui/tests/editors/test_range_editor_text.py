@@ -80,7 +80,6 @@ class TestRangeEditorText(unittest.TestCase):
             press_ok_button(ui)
 
         # the number traits should be between 3 and 8
-        print("Actual value:", num.number)
         self.assertTrue(3 <= num.number <= 8)
 
     @skip_if_not_qt4
@@ -104,7 +103,6 @@ class TestRangeEditorText(unittest.TestCase):
             press_ok_button(ui)
 
         # the number trait should be 4 extactly
-        print(num.number)
         self.assertEqual(num.number, 4.0)
 
 

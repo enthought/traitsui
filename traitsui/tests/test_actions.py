@@ -50,7 +50,6 @@ class DialogWithToolbar(HasTraits):
     action_successful = Bool(False)
 
     def test_clicked(self):
-        print("perform action")
         self.action_successful = True
 
     menubar = MenuBar(Menu(ActionGroup(TestAction), name="&Test menu"))
@@ -82,7 +81,6 @@ def _qt_click_button(ui):
 
     bbox = ui.control.findChild(QDialogButtonBox)
     button = bbox.buttons()[1]
-    print((button.text()))
     button.click()
 
 
