@@ -17,7 +17,7 @@
 Test the layout when element appear and disappear with visible_when.
 """
 
-import nose
+import unittest
 
 from traits.has_traits import HasTraits
 from traits.trait_types import Enum, Bool, Str
@@ -27,7 +27,11 @@ from traitsui.include import Include
 from traitsui.item import Item
 from traitsui.view import View
 
-from traitsui.tests._tools import *
+from traitsui.tests._tools import (
+    get_dialog_size,
+    skip_if_not_qt4,
+    store_exceptions_on_all_threads,
+)
 
 _TEXT_WIDTH = 200
 _TEXT_HEIGHT = 100
@@ -71,29 +75,31 @@ class VisibleWhenProblem(HasTraits):
 # there are no current plans to work on this.
 
 
-@skip_if_not_qt4
-def test_visible_when_layout():
-    # Bug: The size of a dialog that contains elements that are activated
-    # by "visible_when" can end up being the *sum* of the sizes of the
-    # elements, even though the elements are mutually exclusive (e.g.,
-    # a typical case is a dropbox that lets you select different cases).
-    # The expected behavior is that the size of the dialog should be at most
-    # the size of the largest combination of elements.
+class TestVisibleWhenLayout(unittest.TestCase):
 
-    with store_exceptions_on_all_threads():
-        dialog = VisibleWhenProblem()
-        ui = dialog.edit_traits()
+    @skip_if_not_qt4
+    def test_visible_when_layout(self):
+        # Bug: The size of a dialog that contains elements that are activated
+        # by "visible_when" can end up being the *sum* of the sizes of the
+        # elements, even though the elements are mutually exclusive (e.g.,
+        # a typical case is a dropbox that lets you select different cases).
+        # The expected behavior is that the size of the dialog should be at
+        # most the size of the largest combination of elements.
 
-        # have the dialog switch from group one to two and back to one
-        dialog.which = "two"
-        dialog.which = "one"
+        with store_exceptions_on_all_threads():
+            dialog = VisibleWhenProblem()
+            ui = dialog.edit_traits()
 
-        # the size of the window should not be larger than the largest
-        # combination (in this case, the `text_group` plus the `which` item
-        size = get_dialog_size(ui.control)
-        # leave some margin for labels, dropbox, etc
-        nose.tools.assert_less(size[0], _TEXT_WIDTH + 100)
-        nose.tools.assert_less(size[1], _TEXT_HEIGHT + 150)
+            # have the dialog switch from group one to two and back to one
+            dialog.which = "two"
+            dialog.which = "one"
+
+            # the size of the window should not be larger than the largest
+            # combination (in this case, the `text_group` plus the `which` item
+            size = get_dialog_size(ui.control)
+            # leave some margin for labels, dropbox, etc
+            self.assertLess(size[0], _TEXT_WIDTH + 100)
+            self.assertLess(size[1], _TEXT_HEIGHT + 150)
 
 
 if __name__ == "__main__":

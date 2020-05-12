@@ -17,7 +17,7 @@
 Test the layout of elements is consistent with the layout parameters.
 """
 
-import nose
+import unittest
 
 from traits.has_traits import HasTraits
 from traits.trait_types import Str
@@ -26,7 +26,10 @@ from traitsui.item import Item
 from traitsui.view import View
 from traitsui.group import HGroup, VGroup
 
-from traitsui.tests._tools import *
+from traitsui.tests._tools import (
+    skip_if_not_qt4,
+    store_exceptions_on_all_threads,
+)
 
 
 _DIALOG_WIDTH = 500
@@ -58,48 +61,49 @@ class HResizeDialog(HasTraits):
     )
 
 
-@skip_if_not_qt4
-def test_qt_resizable_in_vgroup():
-    # Behavior: Item.resizable controls whether a component can resize along
-    # the non-layout axis of its group. In a VGroup, resizing should work
-    # only in the horizontal direction.
+class TestLayout(unittest.TestCase):
 
-    from pyface import qt
+    @skip_if_not_qt4
+    def test_qt_resizable_in_vgroup(self):
+        # Behavior: Item.resizable controls whether a component can resize
+        # along the non-layout axis of its group. In a VGroup, resizing should
+        # work only in the horizontal direction.
 
-    with store_exceptions_on_all_threads():
-        dialog = VResizeDialog()
-        ui = dialog.edit_traits()
+        from pyface import qt
 
-        text = ui.control.findChild(qt.QtGui.QLineEdit)
+        with store_exceptions_on_all_threads():
+            dialog = VResizeDialog()
+            ui = dialog.edit_traits()
 
-        # horizontal size should be large
-        nose.tools.assert_greater(text.width(), _DIALOG_WIDTH - 100)
+            text = ui.control.findChild(qt.QtGui.QLineEdit)
 
-        # vertical size should be unchanged
-        nose.tools.assert_less(text.height(), 100)
+            # horizontal size should be large
+            self.assertGreater(text.width(), _DIALOG_WIDTH - 100)
 
+            # vertical size should be unchanged
+            self.assertLess(text.height(), 100)
 
-@skip_if_not_qt4
-def test_qt_resizable_in_hgroup():
-    # Behavior: Item.resizable controls whether a component can resize along
-    # the non-layout axis of its group. In a HGroup, resizing should work
-    # only in the vertical direction.
+    @skip_if_not_qt4
+    def test_qt_resizable_in_hgroup(self):
+        # Behavior: Item.resizable controls whether a component can resize
+        # along the non-layout axis of its group. In a HGroup, resizing should
+        # work only in the vertical direction.
 
-    from pyface import qt
+        from pyface import qt
 
-    with store_exceptions_on_all_threads():
-        dialog = HResizeDialog()
-        ui = dialog.edit_traits()
+        with store_exceptions_on_all_threads():
+            dialog = HResizeDialog()
+            ui = dialog.edit_traits()
 
-        text = ui.control.findChild(qt.QtGui.QLineEdit)
+            text = ui.control.findChild(qt.QtGui.QLineEdit)
 
-        # vertical size should be large
-        nose.tools.assert_greater(text.height(), _DIALOG_HEIGHT - 100)
+            # vertical size should be large
+            self.assertGreater(text.height(), _DIALOG_HEIGHT - 100)
 
-        # horizontal size should be unchanged
-        # ??? maybe not: some elements (e.g., the text field) have
-        # 'Expanding' as their default behavior
-        # nose.tools.assert_less(text.width(), _TXT_WIDTH+100)
+            # horizontal size should be unchanged
+            # ??? maybe not: some elements (e.g., the text field) have
+            # 'Expanding' as their default behavior
+            # self.assertLess(text.width(), _TXT_WIDTH+100)
 
 
 if __name__ == "__main__":

@@ -19,6 +19,7 @@ Test case for bug (wx, Mac OS X)
 A ListStrEditor was not checking for valid item indexes under Wx.  This was
 most noticeable when the selected_index was set in the editor factory.
 """
+import unittest
 
 from traits.has_traits import HasTraits
 from traits.trait_types import List, Int, Str
@@ -90,93 +91,93 @@ def get_selected(control):
     return selected
 
 
-@skip_if_not_wx
-def test_wx_list_str_selected_index():
-    # behavior: when starting up, the
+class TestListStrEditorSelection(unittest.TestCase):
 
-    with store_exceptions_on_all_threads():
-        obj = ListStrEditorWithSelectedIndex(
-            values=["value1", "value2"], selected_index=1
-        )
-        ui = obj.edit_traits(view=single_select_view)
+    @skip_if_not_wx
+    def test_wx_list_str_selected_index(self):
+        # behavior: when starting up, the
 
-        # the following is equivalent to setting the text in the text control,
-        # then pressing OK
+        with store_exceptions_on_all_threads():
+            obj = ListStrEditorWithSelectedIndex(
+                values=["value1", "value2"], selected_index=1
+            )
+            ui = obj.edit_traits(view=single_select_view)
 
-        liststrctrl = ui.control.FindWindowByName("listCtrl")
-        selected_1 = get_selected(liststrctrl)
+            # the following is equivalent to setting the text in the text
+            # control, then pressing OK
 
-        obj.selected_index = 0
-        selected_2 = get_selected(liststrctrl)
+            liststrctrl = ui.control.FindWindowByName("listCtrl")
+            selected_1 = get_selected(liststrctrl)
 
-        # press the OK button and close the dialog
-        press_ok_button(ui)
+            obj.selected_index = 0
+            selected_2 = get_selected(liststrctrl)
 
-    # the number traits should be between 3 and 8
-    assert selected_1 == [1]
-    assert selected_2 == [0]
-
-
-@skip_if_not_wx
-def test_wx_list_str_multi_selected_index():
-    # behavior: when starting up, the
-
-    with store_exceptions_on_all_threads():
-        obj = ListStrEditorWithSelectedIndex(
-            values=["value1", "value2"], selected_indices=[1]
-        )
-        ui = obj.edit_traits(view=multi_select_view)
-
-        # the following is equivalent to setting the text in the text control,
-        # then pressing OK
-
-        liststrctrl = ui.control.FindWindowByName("listCtrl", ui.control)
-        selected_1 = get_selected(liststrctrl)
-
-        obj.selected_indices = [0]
-        selected_2 = get_selected(liststrctrl)
-
-        # press the OK button and close the dialog
-        press_ok_button(ui)
-
-    # the number traits should be between 3 and 8
-    assert selected_1 == [1]
-    assert selected_2 == [0]
-
-
-@skip_if_not_qt4
-def test_selection_listener_disconnected():
-    """ Check that selection listeners get correctly disconnected """
-    from pyface.api import GUI
-    from pyface.qt.QtGui import QApplication, QItemSelectionModel
-    from pyface.ui.qt4.util.event_loop_helper import EventLoopHelper
-    from pyface.ui.qt4.util.testing import event_loop
-
-    obj = ListStrEditorWithSelectedIndex(values=["value1", "value2"])
-
-    with store_exceptions_on_all_threads():
-        qt_app = QApplication.instance()
-        if qt_app is None:
-            qt_app = QApplication([])
-        helper = EventLoopHelper(gui=GUI(), qt_app=qt_app)
-
-        # open the UI and run until the dialog is closed
-        ui = obj.edit_traits(view=single_select_item_view)
-        with helper.delete_widget(ui.control):
+            # press the OK button and close the dialog
             press_ok_button(ui)
 
-        # now run again and change the selection
-        ui = obj.edit_traits(view=single_select_item_view)
-        with event_loop():
-            editor = ui.get_editors("values")[0]
+        # the number traits should be between 3 and 8
+        self.assertEqual(selected_1, [1])
+        self.assertEqual(selected_2, [0])
 
-            list_view = editor.list_view
-            mi = editor.model.index(1)
-            list_view.selectionModel().select(
-                mi, QItemSelectionModel.ClearAndSelect
+    @skip_if_not_wx
+    def test_wx_list_str_multi_selected_index(self):
+        # behavior: when starting up, the
+
+        with store_exceptions_on_all_threads():
+            obj = ListStrEditorWithSelectedIndex(
+                values=["value1", "value2"], selected_indices=[1]
             )
+            ui = obj.edit_traits(view=multi_select_view)
 
-    obj.selected = "value2"
+            # the following is equivalent to setting the text in the text
+            # control, then pressing OK
+
+            liststrctrl = ui.control.FindWindowByName("listCtrl", ui.control)
+            selected_1 = get_selected(liststrctrl)
+
+            obj.selected_indices = [0]
+            selected_2 = get_selected(liststrctrl)
+
+            # press the OK button and close the dialog
+            press_ok_button(ui)
+
+        # the number traits should be between 3 and 8
+        self.assertEqual(selected_1, [1])
+        self.assertEqual(selected_2, [0])
+
+    @skip_if_not_qt4
+    def test_selection_listener_disconnected(self):
+        """ Check that selection listeners get correctly disconnected """
+        from pyface.api import GUI
+        from pyface.qt.QtGui import QApplication, QItemSelectionModel
+        from pyface.ui.qt4.util.event_loop_helper import EventLoopHelper
+        from pyface.ui.qt4.util.testing import event_loop
+
+        obj = ListStrEditorWithSelectedIndex(values=["value1", "value2"])
+
+        with store_exceptions_on_all_threads():
+            qt_app = QApplication.instance()
+            if qt_app is None:
+                qt_app = QApplication([])
+            helper = EventLoopHelper(gui=GUI(), qt_app=qt_app)
+
+            # open the UI and run until the dialog is closed
+            ui = obj.edit_traits(view=single_select_item_view)
+            with helper.delete_widget(ui.control):
+                press_ok_button(ui)
+
+            # now run again and change the selection
+            ui = obj.edit_traits(view=single_select_item_view)
+            with event_loop():
+                editor = ui.get_editors("values")[0]
+
+                list_view = editor.list_view
+                mi = editor.model.index(1)
+                list_view.selectionModel().select(
+                    mi, QItemSelectionModel.ClearAndSelect
+                )
+
+        obj.selected = "value2"
 
 
 if __name__ == "__main__":
