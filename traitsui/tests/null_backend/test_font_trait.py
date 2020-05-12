@@ -14,7 +14,7 @@ class TestFontTrait(unittest.TestCase):
             font = Font()
 
         f = Foo()
-        self.assertEquals(f.font, "10 pt Arial")
+        self.assertEqual(f.font, "10 pt Arial")
 
     @skip_if_not_null
     def test_font_trait_examples(self):
@@ -30,22 +30,22 @@ class TestFontTrait(unittest.TestCase):
             font = Font
 
         f = Foo(font="Qwerty 10")
-        self.assertEquals(f.font, "10 pt Qwerty")
+        self.assertEqual(f.font, "10 pt Qwerty")
 
         f = Foo(font="nothing")
-        self.assertEquals(f.font, "nothing")
+        self.assertEqual(f.font, "nothing")
 
         f = Foo(font="swiss family arial")
-        self.assertEquals(f.font, "swiss arial")
+        self.assertEqual(f.font, "swiss arial")
 
         f = Foo(font="12 pt bold italic")
-        self.assertEquals(f.font, "12 pt italic bold")
+        self.assertEqual(f.font, "12 pt italic bold")
 
         f = Foo(font="123 Foo bar slant")
-        self.assertEquals(f.font, "123 pt slant Foo bar")
+        self.assertEqual(f.font, "123 pt slant Foo bar")
 
         f = Foo(font="123 point Foo family bar slant")
-        self.assertEquals(f.font, "123 pt slant Foo bar")
+        self.assertEqual(f.font, "123 pt slant Foo bar")
 
         f = Foo(font="16 xyzzy underline slant")
-        self.assertEquals(f.font, "16 pt slant underline xyzzy")
+        self.assertEqual(f.font, "16 pt slant underline xyzzy")
