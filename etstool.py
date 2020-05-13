@@ -142,7 +142,12 @@ def cli():
 @click.option('--runtime', default=DEFAULT_RUNTIME)
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
-def install(runtime, toolkit, environment):
+@click.option(
+    "--editable/--not-editable",
+    default=False,
+    help="Install main package in 'editable' mode?  [default: --not-editable]",
+)
+def install(runtime, toolkit, environment, editable):
     """ Install project and dependencies into a clean EDM environment.
 
     """
@@ -152,14 +157,21 @@ def install(runtime, toolkit, environment):
         | extra_dependencies.get(toolkit, set())
         | runtime_dependencies.get(runtime, set())
     )
+
+    install_traitsui = "edm run -e {environment} -- pip install "
+    if editable:
+        install_traitsui += "--editable "
+    install_traitsui += "."
+
     # edm commands to setup the development environment
     commands = [
         "edm environments create {environment} --force --version={runtime}",
         "edm install -y -e {environment} " + packages,
         "edm run -e {environment} -- pip install -r ci-src-requirements.txt --no-dependencies",
         "edm run -e {environment} -- python setup.py clean --all",
-        "edm run -e {environment} -- python setup.py install"
+        install_traitsui,
     ]
+
     # pip install pyqt5 and pyside2, because we don't have them in EDM yet
     if toolkit == 'pyside2':
         commands.append(
