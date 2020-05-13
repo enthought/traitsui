@@ -14,11 +14,12 @@
 # ------------------------------------------------------------------------------
 
 
+import re
 import sys
 import traceback
 from functools import partial
 from contextlib import contextmanager
-from unittest import skipIf
+from unittest import skipIf, TestSuite
 
 from pyface.toolkit import toolkit_object
 from traits.etsconfig.api import ETSConfig
@@ -111,6 +112,23 @@ def count_calls(func):
     wrapped._n_calls = 0
 
     return wrapped
+
+
+def filter_tests(test_suite, exclusion_pattern):
+    filtered_test_suite = TestSuite()
+    for item in test_suite:
+        if isinstance(item, TestSuite):
+            filtered = filter_tests(item, exclusion_pattern)
+            filtered_test_suite.addTest(filtered)
+        else:
+            match = re.search(exclusion_pattern, item.id())
+            if match is not None:
+                skip_msg = "Test excluded via pattern '{}'".format(
+                    exclusion_pattern
+                )
+                setattr(item, 'setUp', lambda: item.skipTest(skip_msg))
+            filtered_test_suite.addTest(item)
+    return filtered_test_suite
 
 
 # ######### Utility tools to test on both qt4 and wx

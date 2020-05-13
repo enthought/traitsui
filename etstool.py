@@ -204,12 +204,17 @@ def test(runtime, toolkit, environment):
     parameters = get_parameters(runtime, toolkit, environment)
     environ = environment_vars.get(toolkit, {}).copy()
     environ['PYTHONUNBUFFERED'] = "1"
+
+    if toolkit == "wx":
+        environ["EXCLUDE_TESTS"] = "qt"
+    elif toolkit in {"pyqt", "pyqt5", "pyside", "pyside2"}:
+        environ["EXCLUDE_TESTS"] = "wx"
+    else:
+        environ["EXCLUDE_TESTS"] = "(wx|qt)"
+
     commands = [
-        "edm run -e {environment} -- coverage run -p -m nose.core -v traitsui.tests --nologcapture"]
-    # extra tests for qt
-    if toolkit in {'pyqt', 'pyside', 'pyqt5'}:
-        commands.append(
-            "edm run -e {environment} -- coverage run -p -m nose.core -v traitsui.qt4.tests --nologcapture")
+        "edm run -e {environment} -- coverage run -p -m unittest discover -v traitsui"
+    ]
 
     # We run in a tempdir to avoid accidentally picking up wrong traitsui
     # code from a local dir.  We need to ensure a good .coveragerc is in
