@@ -18,7 +18,7 @@ Test case for bug (wx, Mac OS X)
 
 A RangeEditor in mode 'text' for an Int allows values out of range.
 """
-
+import unittest
 
 from traits.has_traits import HasTraits
 from traits.trait_types import Float, Int
@@ -26,7 +26,12 @@ from traitsui.item import Item
 from traitsui.view import View
 from traitsui.editors.range_editor import RangeEditor
 
-from traitsui.tests._tools import *
+from traitsui.tests._tools import (
+    press_ok_button,
+    skip_if_not_wx,
+    skip_if_not_qt4,
+    store_exceptions_on_all_threads,
+)
 
 
 class NumberWithRangeEditor(HasTraits):
@@ -53,53 +58,52 @@ class FloatWithRangeEditor(HasTraits):
     )
 
 
-@skip_if_not_wx
-def test_wx_text_editing():
-    # behavior: when editing the text part of a spin control box, pressing
-    # the OK button should update the value of the HasTraits class
-    # (tests a bug where this fails with an AttributeError)
+class TestRangeEditorText(unittest.TestCase):
 
-    with store_exceptions_on_all_threads():
-        num = NumberWithRangeEditor()
-        ui = num.edit_traits()
+    @skip_if_not_wx
+    def test_wx_text_editing(self):
+        # behavior: when editing the text part of a spin control box, pressing
+        # the OK button should update the value of the HasTraits class
+        # (tests a bug where this fails with an AttributeError)
 
-        # the following is equivalent to setting the text in the text control,
-        # then pressing OK
+        with store_exceptions_on_all_threads():
+            num = NumberWithRangeEditor()
+            ui = num.edit_traits()
 
-        textctrl = ui.control.FindWindowByName("text")
-        textctrl.SetValue("1")
+            # the following is equivalent to setting the text in the text
+            # control, then pressing OK
 
-        # press the OK button and close the dialog
-        press_ok_button(ui)
+            textctrl = ui.control.FindWindowByName("text")
+            textctrl.SetValue("1")
 
-    # the number traits should be between 3 and 8
-    print("Actual value:", num.number)
-    assert 3 <= num.number <= 8
+            # press the OK button and close the dialog
+            press_ok_button(ui)
 
+        # the number traits should be between 3 and 8
+        self.assertTrue(3 <= num.number <= 8)
 
-@skip_if_not_qt4
-def test_avoid_slider_feedback():
-    # behavior: when editing the text box part of a range editor, the value
-    # should not be adjusted by the slider part of the range editor
-    from pyface import qt
+    @skip_if_not_qt4
+    def test_avoid_slider_feedback(self):
+        # behavior: when editing the text box part of a range editor, the value
+        # should not be adjusted by the slider part of the range editor
+        from pyface import qt
 
-    with store_exceptions_on_all_threads():
-        num = FloatWithRangeEditor()
-        ui = num.edit_traits()
+        with store_exceptions_on_all_threads():
+            num = FloatWithRangeEditor()
+            ui = num.edit_traits()
 
-        # the following is equivalent to setting the text in the text control,
-        # then pressing OK
-        lineedit = ui.control.findChild(qt.QtGui.QLineEdit)
-        lineedit.setFocus()
-        lineedit.setText("4")
-        lineedit.editingFinished.emit()
+            # the following is equivalent to setting the text in the text
+            # control, then pressing OK
+            lineedit = ui.control.findChild(qt.QtGui.QLineEdit)
+            lineedit.setFocus()
+            lineedit.setText("4")
+            lineedit.editingFinished.emit()
 
-        # press the OK button and close the dialog
-        press_ok_button(ui)
+            # press the OK button and close the dialog
+            press_ok_button(ui)
 
-    # the number trait should be 4 extactly
-    print(num.number)
-    assert num.number == 4.0
+        # the number trait should be 4 extactly
+        self.assertEqual(num.number, 4.0)
 
 
 if __name__ == "__main__":
