@@ -378,9 +378,6 @@ class DemoFileBase(DemoTreeNodeObject):
     #: Name of file system path to this file:
     path = Property(depends_on='parent.path,name')
 
-    #: The base URL for links:
-    base_url = Property(depends_on='path')
-
     #: Name of the file:
     name = Str()
 
@@ -392,6 +389,12 @@ class DemoFileBase(DemoTreeNodeObject):
 
     #: Description of what the demo does:
     description = HTML()
+
+    #: The base URL for links:
+    base_url = Property(depends_on='path')
+
+    #: The css file for this node.
+    css_filename = Str("default.css")
 
     #: Log of all print messages displayed:
     log = Code()
@@ -456,9 +459,6 @@ class DemoFile(DemoFileBase):
     #: Local namespace for executed code:
     locals = Dict(Str, Any)
 
-    #: The css file for this node.
-    css_filename = Str("default.css")
-
     def init(self):
         super(DemoFile, self).init()
         description, source = parse_source(self.path)
@@ -515,6 +515,7 @@ class DemoFile(DemoFileBase):
 # HTML template for displaying an image file:
 _image_template = """<html>
 <head>
+<link rel="stylesheet" type="text/css" href="{}">
 </head>
 <body>
 <img src="{}">
@@ -524,16 +525,18 @@ _image_template = """<html>
 
 
 class DemoContentFile(DemoFileBase):
+
     def init(self):
         super(DemoContentFile, self).init()
         file_str = _read_file(self.path)
-        self.description = publish_html_str(file_str)
+        self.description = publish_html_str(file_str, self.css_filename)
 
 
 class DemoImageFile(DemoFileBase):
+
     def init(self):
         super(DemoImageFile, self).init()
-        self.description = _image_template.format(self.path)
+        self.description = _image_template.format(self.css_filename, self.path)
 
 
 class DemoPath(DemoTreeNodeObject):
@@ -556,9 +559,6 @@ class DemoPath(DemoTreeNodeObject):
 
     #: UI form of the 'name':
     nice_name = Property()
-
-    #: Description of the contents of the directory:
-    description = Property(HTML, depends_on="_description")
 
     #: Source code contained in the '__init__.py' file:
     source = Property(Code)
