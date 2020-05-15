@@ -551,8 +551,14 @@ class DemoPath(DemoTreeNodeObject):
     #: Name of file system path to this package:
     path = Property(depends_on='parent.path,name')
 
+    #: Description of what the demo does:
+    description = HTML()
+
     #: The base URL for links:
     base_url = Property(depends_on='path')
+
+    #: The css file for this node.
+    css_filename = Str("default.css")
 
     #: Name of the directory:
     name = Str()
