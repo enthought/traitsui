@@ -552,7 +552,7 @@ class DemoPath(DemoTreeNodeObject):
     path = Property(depends_on='parent.path,name')
 
     #: Description of what the demo does:
-    description = HTML()
+    description = Property(HTML, depends_on="_description")
 
     #: The base URL for links:
     base_url = Property(depends_on='path')
