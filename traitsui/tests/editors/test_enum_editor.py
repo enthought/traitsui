@@ -431,6 +431,7 @@ class TestSimpleEnumEditor(unittest.TestCase):
             ui = enum_edit.edit_traits(view=resizable_view)
             self.addCleanup(ui.dispose)
 
+    @skip_if_null
     def test_simple_editor_rebuild_editor_evaluate(self):
         # Smoke test for `wx.enum_editor.SimpleEditor.rebuild_editor`
         enum_editor_factory = EnumEditor(
