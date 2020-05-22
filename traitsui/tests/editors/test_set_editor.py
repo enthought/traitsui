@@ -31,26 +31,13 @@ def get_view(can_move_all=True, ordered=False):
     )
 
 
-def get_unused_items(editor):
-    """ Return a list of unused items (left column) as shown in ui. """
+def get_list_items(list_widget):
+    """ Return a list of strings. """
+
     if is_current_backend_wx():
         raise unittest.SkipTest("Test not implemented for wx")
 
     elif is_current_backend_qt4():
-        list_widget = editor.root_layout.itemAtPosition(1, 0).widget()
-        items = []
-        for i in range(list_widget.count()):
-            items.append(list_widget.item(i).text())
-        return items
-
-
-def get_used_items(editor):
-    """ Return a list of used items (left column) as shown in ui. """
-    if is_current_backend_wx():
-        raise unittest.SkipTest("Test not implemented for wx")
-
-    elif is_current_backend_qt4():
-        list_widget = editor.root_layout.itemAtPosition(1, 2).widget()
         items = []
         for i in range(list_widget.count()):
             items.append(list_widget.item(i).text())
@@ -63,14 +50,12 @@ def click_on_item(editor, item_no, in_used=False):
         raise unittest.SkipTest("Test not implemented for wx")
 
     elif is_current_backend_qt4():
-        layout = editor.root_layout
-
-        unused_list = layout.itemAtPosition(1, 0).widget()
+        unused_list = editor._unused
         for i in range(unused_list.count()):
             status = (not in_used) and (item_no == i)
             unused_list.item(i).setSelected(status)
 
-        used_list = layout.itemAtPosition(1, 2).widget()
+        used_list = editor._used
         for i in range(used_list.count()):
             status = (in_used) and (item_no == i)
             used_list.item(i).setSelected(status)
@@ -87,14 +72,12 @@ def double_click_on_item(editor, item_no, in_used=False):
         raise unittest.SkipTest("Test not implemented for wx")
 
     elif is_current_backend_qt4():
-        layout = editor.root_layout
-
-        unused_list = layout.itemAtPosition(1, 0).widget()
+        unused_list = editor._unused
         for i in range(unused_list.count()):
             status = (not in_used) and (item_no == i)
             unused_list.item(i).setSelected(status)
 
-        used_list = layout.itemAtPosition(1, 2).widget()
+        used_list = editor._used
         for i in range(used_list.count()):
             status = (in_used) and (item_no == i)
             used_list.item(i).setSelected(status)
@@ -223,8 +206,8 @@ class TestSimpleSetEditor(unittest.TestCase):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["one", "two"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["one", "two"])
 
             click_on_item(editor, 1, in_used=False)
             gui.process_events()
@@ -235,9 +218,11 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_button(editor._use)
             gui.process_events()
 
-            self.assertEqual(get_unused_items(editor), ["four"])
+            self.assertEqual(get_list_items(editor._unused), ["four"])
             # Button inserts at the top
-            self.assertEqual(get_used_items(editor), ["three", "one", "two"])
+            self.assertEqual(
+                get_list_items(editor._used), ["three", "one", "two"]
+            )
             self.assertEqual(editor._get_selected_strings(editor._used), [])
 
     @skip_if_null
@@ -245,8 +230,8 @@ class TestSimpleSetEditor(unittest.TestCase):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["one", "two"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["one", "two"])
 
             click_on_item(editor, 0, in_used=True)
             gui.process_events()
@@ -259,24 +244,26 @@ class TestSimpleSetEditor(unittest.TestCase):
 
             # Button inserts at the top
             self.assertEqual(
-                get_unused_items(editor), ["one", "four", "three"]
+                get_list_items(editor._unused), ["one", "four", "three"]
             )
-            self.assertEqual(get_used_items(editor), ["two"])
+            self.assertEqual(get_list_items(editor._used), ["two"])
 
     @skip_if_null
     def test_simple_set_editor_use_dclick(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["one", "two"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["one", "two"])
 
             double_click_on_item(editor, 1, in_used=False)
             gui.process_events()
 
-            self.assertEqual(get_unused_items(editor), ["four"])
+            self.assertEqual(get_list_items(editor._unused), ["four"])
             # Inserts at the top
-            self.assertEqual(get_used_items(editor), ["three", "one", "two"])
+            self.assertEqual(
+                get_list_items(editor._used), ["three", "one", "two"]
+            )
             self.assertEqual(editor._get_selected_strings(editor._used), [])
 
     @skip_if_null
@@ -284,25 +271,25 @@ class TestSimpleSetEditor(unittest.TestCase):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["one", "two"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["one", "two"])
 
             double_click_on_item(editor, 0, in_used=True)
             gui.process_events()
 
             # Inserts at the top
             self.assertEqual(
-                get_unused_items(editor), ["one", "four", "three"]
+                get_list_items(editor._unused), ["one", "four", "three"]
             )
-            self.assertEqual(get_used_items(editor), ["two"])
+            self.assertEqual(get_list_items(editor._used), ["two"])
 
     @skip_if_null
     def test_simple_set_editor_use_all(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["one", "two"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["one", "two"])
 
             click_on_item(editor, 1, in_used=False)
             gui.process_events()
@@ -313,10 +300,10 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_button(editor._use_all)
             gui.process_events()
 
-            self.assertEqual(get_unused_items(editor), [])
+            self.assertEqual(get_list_items(editor._unused), [])
             # Button inserts at the end
             self.assertEqual(
-                get_used_items(editor), ["one", "two", "four", "three"]
+                get_list_items(editor._used), ["one", "two", "four", "three"]
             )
 
     @skip_if_null
@@ -324,8 +311,8 @@ class TestSimpleSetEditor(unittest.TestCase):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["one", "two"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["one", "two"])
 
             click_on_item(editor, 0, in_used=True)
             gui.process_events()
@@ -338,9 +325,9 @@ class TestSimpleSetEditor(unittest.TestCase):
 
             # Button inserts at the end
             self.assertEqual(
-                get_unused_items(editor), ["four", "three", "one", "two"]
+                get_list_items(editor._unused), ["four", "three", "one", "two"]
             )
-            self.assertEqual(get_used_items(editor), [])
+            self.assertEqual(get_list_items(editor._used), [])
 
     @skip_if_null
     def test_simple_set_editor_move_up(self):
@@ -349,8 +336,8 @@ class TestSimpleSetEditor(unittest.TestCase):
                 ListModel(), get_view(ordered=True)
             )
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["one", "two"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["one", "two"])
 
             click_on_item(editor, 1, in_used=True)
             gui.process_events()
@@ -361,8 +348,8 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_button(editor._up)
             gui.process_events()
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["two", "one"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["two", "one"])
 
     @skip_if_null
     def test_simple_set_editor_move_down(self):
@@ -371,8 +358,8 @@ class TestSimpleSetEditor(unittest.TestCase):
                 ListModel(), get_view(ordered=True)
             )
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["one", "two"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["one", "two"])
 
             click_on_item(editor, 0, in_used=True)
             gui.process_events()
@@ -383,16 +370,16 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_button(editor._down)
             gui.process_events()
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["two", "one"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["two", "one"])
 
     @skip_if_null
     def test_simple_set_editor_use_all_button(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["one", "two"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["one", "two"])
 
             click_on_item(editor, 1, in_used=False)
             gui.process_events()
@@ -403,10 +390,10 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_button(editor._use_all)
             gui.process_events()
 
-            self.assertEqual(get_unused_items(editor), [])
+            self.assertEqual(get_list_items(editor._unused), [])
             # Button inserts at the end
             self.assertEqual(
-                get_used_items(editor), ["one", "two", "four", "three"]
+                get_list_items(editor._used), ["one", "two", "four", "three"]
             )
 
     @skip_if_null
@@ -414,8 +401,8 @@ class TestSimpleSetEditor(unittest.TestCase):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["one", "two"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["one", "two"])
 
             click_on_item(editor, 0, in_used=True)
             gui.process_events()
@@ -428,26 +415,28 @@ class TestSimpleSetEditor(unittest.TestCase):
 
             # Button inserts at the end
             self.assertEqual(
-                get_unused_items(editor), ["four", "three", "one", "two"]
+                get_list_items(editor._unused), ["four", "three", "one", "two"]
             )
-            self.assertEqual(get_used_items(editor), [])
+            self.assertEqual(get_list_items(editor._used), [])
 
     @skip_if_null
     def test_simple_set_editor_default_selection_unused(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["one", "two"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["one", "two"])
 
             click_button(editor._use)
             gui.process_events()
 
             # Button inserts at the top
             self.assertEqual(
-                get_unused_items(editor), ["three"]
+                get_list_items(editor._unused), ["three"]
             )
-            self.assertEqual(get_used_items(editor), ["four", "one", "two"])
+            self.assertEqual(
+                get_list_items(editor._used), ["four", "one", "two"]
+            )
 
     @skip_if_null
     def test_simple_set_editor_default_selection_used(self):
@@ -457,16 +446,18 @@ class TestSimpleSetEditor(unittest.TestCase):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(list_edit, get_view())
 
-            self.assertEqual(get_unused_items(editor), [])
+            self.assertEqual(get_list_items(editor._unused), [])
             self.assertEqual(
-                get_used_items(editor), ["four", "one", "three", "two"])
+                get_list_items(editor._used), ["four", "one", "three", "two"])
 
             click_button(editor._unuse)
             gui.process_events()
 
             # Button inserts at the top
-            self.assertEqual(get_unused_items(editor), ["four"])
-            self.assertEqual(get_used_items(editor), ["one", "three", "two"])
+            self.assertEqual(get_list_items(editor._unused), ["four"])
+            self.assertEqual(
+                get_list_items(editor._used), ["one", "three", "two"]
+            )
 
     @skip_if_null
     def test_simple_set_editor_deleted_valid_values(self):
@@ -477,14 +468,14 @@ class TestSimpleSetEditor(unittest.TestCase):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(list_edit, view)
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["one", "two"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["one", "two"])
 
             editor_factory.values = ["two", "three", "four"]
             gui.process_events()
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["two"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["two"])
             self.assertEqual(list_edit.value, ["two"])
 
     @skip_if_null
@@ -494,8 +485,8 @@ class TestSimpleSetEditor(unittest.TestCase):
                 ListModel(), get_view(ordered=True)
             )
 
-            self.assertEqual(get_unused_items(editor), ["four", "three"])
-            self.assertEqual(get_used_items(editor), ["one", "two"])
+            self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            self.assertEqual(get_list_items(editor._used), ["one", "two"])
 
             click_on_item(editor, 1, in_used=False)
             gui.process_events()
@@ -506,9 +497,11 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_button(editor._use)
             gui.process_events()
 
-            self.assertEqual(get_unused_items(editor), ["four"])
+            self.assertEqual(get_list_items(editor._unused), ["four"])
             # Button inserts at the top
-            self.assertEqual(get_used_items(editor), ["three", "one", "two"])
+            self.assertEqual(
+                get_list_items(editor._used), ["three", "one", "two"]
+            )
             self.assertEqual(
                 editor._get_selected_strings(editor._used), ["three"]
             )
