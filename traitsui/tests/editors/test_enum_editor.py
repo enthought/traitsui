@@ -97,7 +97,10 @@ def set_combobox_index(combobox, idx):
 def finish_combobox_text_entry(combobox):
     """ Finish text entry given combobox. """
     if is_current_backend_wx():
-        raise unittest.SkipTest("Test not implemented for wx")
+        import wx
+
+        event = wx.CommandEvent(wx.EVT_TEXT_ENTER.typeId, combobox.GetId())
+        wx.PostEvent(combobox, event)
 
     elif is_current_backend_qt4():
         combobox.lineEdit().editingFinished.emit()
@@ -106,7 +109,12 @@ def finish_combobox_text_entry(combobox):
 def get_all_button_status(widget):
     """ Gets status of all radio buttons in the layout of a given widget."""
     if is_current_backend_wx():
-        raise unittest.SkipTest("Test not implemented for wx")
+        button_status = []
+        for item in widget.GetSizer().GetChildren():
+            button = item.GetWindow()
+            if button.value != "":  # There are empty invisible buttons
+                button_status.append(button.GetValue())
+        return button_status
 
     elif is_current_backend_qt4():
         layout = widget.layout()
@@ -119,7 +127,13 @@ def get_all_button_status(widget):
 def click_radio_button(widget, button_idx):
     """ Simulate a radio button click given widget and button number."""
     if is_current_backend_wx():
-        raise unittest.SkipTest("Test not implemented for wx")
+        import wx
+
+        sizer_items = widget.GetSizer().GetChildren()
+        button = sizer_items[button_idx].GetWindow()
+        event = wx.CommandEvent(wx.EVT_RADIOBUTTON.typeId, button.GetId())
+        event.SetEventObject(button)
+        wx.PostEvent(widget, event)
 
     elif is_current_backend_qt4():
         widget.layout().itemAt(button_idx).widget().click()
@@ -128,7 +142,8 @@ def click_radio_button(widget, button_idx):
 def get_list_widget_text(list_widget):
     """ Return the text of currently selected item in given list widget. """
     if is_current_backend_wx():
-        raise unittest.SkipTest("Test not implemented for wx")
+        selected_item_idx = list_widget.GetSelection()
+        return list_widget.GetString(selected_item_idx)
 
     elif is_current_backend_qt4():
         return list_widget.currentItem().text()
@@ -137,7 +152,11 @@ def get_list_widget_text(list_widget):
 def set_list_widget_selected_index(list_widget, idx):
     """ Set the choice index given a list widget control and index number. """
     if is_current_backend_wx():
-        raise unittest.SkipTest("Test not implemented for wx")
+        import wx
+
+        list_widget.SetSelection(idx)
+        event = wx.CommandEvent(wx.EVT_LISTBOX.typeId, list_widget.GetId())
+        wx.PostEvent(list_widget, event)
 
     elif is_current_backend_qt4():
         list_widget.setCurrentRow(idx)
@@ -211,19 +230,45 @@ class TestEnumEditorMapping(unittest.TestCase):
         with store_exceptions_on_all_threads():
             editor = self.setup_ui(model, formatted_view)
 
-            self.assertEqual(editor.names, ["FALSE", "TRUE"])
-            self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
-            self.assertEqual(
-                editor.inverse_mapping, {0: "FALSE", 1: "TRUE"}
-            )
+            if is_current_backend_wx():  # FIXME issue #835
+                with self.assertRaises(AssertionError):
+                    self.assertEqual(editor.names, ["FALSE", "TRUE"])
+                    self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
+                    self.assertEqual(
+                        editor.inverse_mapping, {0: "FALSE", 1: "TRUE"}
+                    )
+                self.assertEqual(editor.names, ["0", "1"])
+                self.assertEqual(editor.mapping, {"0": 0, "1": 1})
+                self.assertEqual(
+                    editor.inverse_mapping, {0: "0", 1: "1"}
+                )
+            else:
+                self.assertEqual(editor.names, ["FALSE", "TRUE"])
+                self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
+                self.assertEqual(
+                    editor.inverse_mapping, {0: "FALSE", 1: "TRUE"}
+                )
 
             model.possible_values = [1, 0]
 
-            self.assertEqual(editor.names, ["TRUE", "FALSE"])
-            self.assertEqual(editor.mapping, {"TRUE": 1, "FALSE": 0})
-            self.assertEqual(
-                editor.inverse_mapping, {1: "TRUE", 0: "FALSE"}
-            )
+            if is_current_backend_wx():  # FIXME issue #835
+                with self.assertRaises(AssertionError):
+                    self.assertEqual(editor.names, ["TRUE", "FALSE"])
+                    self.assertEqual(editor.mapping, {"TRUE": 1, "FALSE": 0})
+                    self.assertEqual(
+                        editor.inverse_mapping, {1: "TRUE", 0: "FALSE"}
+                    )
+                self.assertEqual(editor.names, ["1", "0"])
+                self.assertEqual(editor.mapping, {"1": 1, "0": 0})
+                self.assertEqual(
+                    editor.inverse_mapping, {1: "1", 0: "0"}
+                )
+            else:
+                self.assertEqual(editor.names, ["TRUE", "FALSE"])
+                self.assertEqual(editor.mapping, {"TRUE": 1, "FALSE": 0})
+                self.assertEqual(
+                    editor.inverse_mapping, {1: "TRUE", 0: "FALSE"}
+                )
 
     @skip_if_null
     def test_simple_editor_mapping_values(self):
@@ -235,11 +280,23 @@ class TestEnumEditorMapping(unittest.TestCase):
 
     @skip_if_null
     def test_radio_editor_mapping_values(self):
-        self.check_enum_mappings_value_change("custom", "radio")
+        if is_current_backend_wx():  # FIXME
+            import wx
+
+            with self.assertRaises(wx._core.wxAssertionError):
+                self.check_enum_mappings_value_change("custom", "radio")
+        else:
+            self.check_enum_mappings_value_change("custom", "radio")
 
     @skip_if_null
     def test_radio_editor_mapping_name(self):
-        self.check_enum_mappings_name_change("custom", "radio")
+        if is_current_backend_wx():  # FIXME
+            import wx
+
+            with self.assertRaises(wx._core.wxAssertionError):
+                self.check_enum_mappings_name_change("custom", "radio")
+        else:
+            self.check_enum_mappings_name_change("custom", "radio")
 
     @skip_if_null
     def test_list_editor_mapping_values(self):
@@ -355,10 +412,12 @@ class TestSimpleEnumEditor(unittest.TestCase):
             set_combobox_text(combobox, "two")
             gui.process_events()
 
-            self.assertEqual(enum_edit.value, "one")
+            # wx modifies the value without the need to finish entry
+            if is_current_backend_qt4():
+                self.assertEqual(enum_edit.value, "one")
 
-            finish_combobox_text_entry(combobox)
-            gui.process_events()
+                finish_combobox_text_entry(combobox)
+                gui.process_events()
 
             self.assertEqual(enum_edit.value, "two")
 
@@ -371,6 +430,19 @@ class TestSimpleEnumEditor(unittest.TestCase):
         with store_exceptions_on_all_threads():
             ui = enum_edit.edit_traits(view=resizable_view)
             self.addCleanup(ui.dispose)
+
+    def test_simple_editor_rebuild_editor_evaluate(self):
+        # Smoke test for `wx.enum_editor.SimpleEditor.rebuild_editor`
+        enum_editor_factory = EnumEditor(
+            evaluate=True,
+            values=["one", "two", "three", "four"],
+        )
+        view = View(UItem("value", editor=enum_editor_factory, style="simple"))
+
+        with store_exceptions_on_all_threads():
+            gui, combobox = self.setup_gui(EnumModel(), view)
+
+            enum_editor_factory.values = ["one", "two", "three"]
 
 
 class TestRadioEnumEditor(unittest.TestCase):
