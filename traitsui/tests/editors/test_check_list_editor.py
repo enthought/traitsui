@@ -17,13 +17,12 @@ class ListModel(HasTraits):
     value = List()
 
 
-def get_view(style, format_func=None):
+def get_view(style):
     return View(
         UItem(
             "value",
             editor=CheckListEditor(
                 values=["one", "two", "three", "four"],
-                format_func=format_func,
             ),
             style=style,
         ),
@@ -31,13 +30,12 @@ def get_view(style, format_func=None):
     )
 
 
-def get_mapped_view(style, format_func=None):
+def get_mapped_view(style):
     return View(
         UItem(
             "value",
             editor=CheckListEditor(
                 values=[(1, "one"), (2, "two"), (3, "three"), (4, "four")],
-                format_func=format_func,
             ),
             style=style,
         ),
