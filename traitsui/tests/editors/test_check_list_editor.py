@@ -166,13 +166,13 @@ class TestCheckListEditorMapping(unittest.TestCase):
         with store_exceptions_on_all_threads():
             editor = self.setup_ui(model, formatted_view)
 
-            with self.assertRaises(AssertionError):  # FIXME
+            with self.assertRaises(AssertionError):  # FIXME issue #841
                 self.assertEqual(editor.names, ["ONE", "TWO"])
             self.assertEqual(editor.names, ["one", "two"])
 
             check_list_editor_factory.values = [(2, "two"), (1, "one")]
 
-            with self.assertRaises(AssertionError):  # FIXME
+            with self.assertRaises(AssertionError):  # FIXME issue #841
                 self.assertEqual(editor.names, ["TWO", "ONE"])
             self.assertEqual(editor.names, ["two", "one"])
 
@@ -224,13 +224,13 @@ class TestCheckListEditorMapping(unittest.TestCase):
         with store_exceptions_on_all_threads():
             editor = self.setup_ui(model, formatted_view)
 
-            with self.assertRaises(AssertionError):  # FIXME
+            with self.assertRaises(AssertionError):  # FIXME issue #841
                 self.assertEqual(editor.names, ["ONE", "TWO"])
             self.assertEqual(editor.names, ["one", "two"])
 
             model.possible_values = [(2, "two"), (1, "one")]
 
-            with self.assertRaises(AssertionError):  # FIXME
+            with self.assertRaises(AssertionError):  # FIXME issue #841
                 self.assertEqual(editor.names, ["TWO", "ONE"])
             self.assertEqual(editor.names, ["two", "one"])
 
@@ -252,7 +252,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
 
     @skip_if_null
     def test_custom_editor_mapping_values(self):
-        if is_current_backend_wx():  # FIXME
+        if is_current_backend_wx():  # FIXME issue #842
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -262,7 +262,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
 
     @skip_if_null
     def test_custom_editor_mapping_values_tuple(self):
-        if is_current_backend_wx():  # FIXME
+        if is_current_backend_wx():  # FIXME issue #842
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -272,7 +272,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
 
     @skip_if_null
     def test_custom_editor_mapping_name(self):
-        if is_current_backend_wx():  # FIXME
+        if is_current_backend_wx():  # FIXME issue #842
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -282,7 +282,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
 
     @skip_if_null
     def test_custom_editor_mapping_name_tuple(self):
-        if is_current_backend_wx():  # FIXME
+        if is_current_backend_wx():  # FIXME issue #842
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -326,14 +326,14 @@ class TestSimpleCheckListEditor(unittest.TestCase):
         with store_exceptions_on_all_threads():
             gui, _, combobox = self.setup_gui(list_edit, view)
 
-            with self.assertRaises(AssertionError):  # FIXME
+            with self.assertRaises(AssertionError):  # FIXME issue #841
                 self.assertEqual(get_combobox_text(combobox), "One")
             self.assertEqual(get_combobox_text(combobox), "one")
 
             list_edit.value = [2]
             gui.process_events()
 
-            with self.assertRaises(AssertionError):  # FIXME
+            with self.assertRaises(AssertionError):  # FIXME issue #841
                 self.assertEqual(get_combobox_text(combobox), "Two")
             self.assertEqual(get_combobox_text(combobox), "two")
 
