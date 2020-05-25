@@ -58,11 +58,17 @@ class BaseEditor(Editor):
     #  BaseEditor Interface
     # -------------------------------------------------------------------------
 
-    def values_changed(self):
-        """ Recomputes the cached data based on the underlying enumeration model.
+    def values_changed(self, object):
+        """ Recomputes the cached data based on the underlying enumeration model
+            or the values of the factory.
         """
+        if object is self._object:
+            values = self._value()
+        else:
+            values = self.factory.values
+
         self._names, self._mapping, self._inverse_mapping = enum_values_changed(
-            self._value(), self.string_value
+            values, self.string_value
         )
 
     def rebuild_editor(self):
@@ -86,13 +92,14 @@ class BaseEditor(Editor):
             self._object, self._name, self._value = self.parse_extended_name(
                 factory.name
             )
-            self.values_changed()
+            self.values_changed(self._object)
             self._object.on_trait_change(
                 self._values_changed, " " + self._name, dispatch="ui"
             )
         else:
+            self.values_changed(factory)
             factory.on_trait_change(
-                self.rebuild_editor, "values_modified", dispatch="ui"
+                self._values_changed, "values", dispatch="ui"
             )
 
     def dispose(self):
@@ -104,7 +111,7 @@ class BaseEditor(Editor):
             )
         else:
             self.factory.on_trait_change(
-                self.rebuild_editor, "values_modified", remove=True
+                self._values_changed, "values", remove=True
             )
 
         super(BaseEditor, self).dispose()
@@ -118,33 +125,25 @@ class BaseEditor(Editor):
     def _get_names(self):
         """ Gets the current set of enumeration names.
         """
-        if self._object is None:
-            return self.factory._names
-
         return self._names
 
     def _get_mapping(self):
         """ Gets the current mapping.
         """
-        if self._object is None:
-            return self.factory._mapping
-
         return self._mapping
 
     def _get_inverse_mapping(self):
         """ Gets the current inverse mapping.
         """
-        if self._object is None:
-            return self.factory._inverse_mapping
-
         return self._inverse_mapping
 
     # Trait change handlers --------------------------------------------------
 
-    def _values_changed(self):
-        """ Handles the underlying object model's enumeration set being changed.
+    def _values_changed(self, object, name, new):
+        """ Handles the underlying object model's enumeration set or factory's
+            values being changed.
         """
-        self.values_changed()
+        self.values_changed(object)
         self.rebuild_editor()
 
 
