@@ -280,7 +280,7 @@ class TestEnumEditorMapping(unittest.TestCase):
 
     @skip_if_null
     def test_radio_editor_mapping_values(self):
-        if is_current_backend_wx():  # FIXME
+        if is_current_backend_wx():  # FIXME issue #842
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -290,7 +290,7 @@ class TestEnumEditorMapping(unittest.TestCase):
 
     @skip_if_null
     def test_radio_editor_mapping_name(self):
-        if is_current_backend_wx():  # FIXME
+        if is_current_backend_wx():  # FIXME issue #842
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
