@@ -537,7 +537,7 @@ class TestSimpleSetEditor(unittest.TestCase):
             gui.process_events()
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
-            if is_current_backend_wx():  # FIXME
+            if is_current_backend_wx():  # FIXME issue #840
                 with self.assertRaises(AssertionError):
                     self.assertEqual(get_list_items(editor._used), ["two"])
                 self.assertEqual(get_list_items(editor._used), ["one", "two"])
