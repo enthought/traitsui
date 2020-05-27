@@ -25,6 +25,7 @@ from traitsui.item import Item
 from traitsui.group import VGroup, HGroup
 
 from traitsui.tests._tools import (
+    create_ui,
     is_current_backend_qt4,
     is_current_backend_wx,
     skip_if_not_qt4,
@@ -166,9 +167,8 @@ class TestLabels(unittest.TestCase):
 
         from pyface import qt
 
-        with store_exceptions_on_all_threads():
-            dialog = dialog_class()
-            ui = dialog.edit_traits()
+        with store_exceptions_on_all_threads(), \
+                create_ui(dialog_class()) as ui:
 
             # all labels
             labels = ui.control.findChildren(qt.QtGui.QLabel)
@@ -206,23 +206,13 @@ class TestLabels(unittest.TestCase):
     def test_qt_labels_right_resizing_horizontal(self):
         self._test_qt_labels_right_resizing(HResizeTestDialog)
 
-    @skip_if_not_qt4
-    def test_qt_no_labels_on_the_right_bug(self):
-        # Bug: If one set show_left=False, show_label=False on a non-resizable
-        # item like a checkbox, the Qt backend tried to set the label's size
-        # policy and failed because label=None.
-
-        with store_exceptions_on_all_threads():
-            dialog = NoLabelResizeTestDialog()
-            ui = dialog.edit_traits()
-
     @skip_if_null
     def test_labels_enabled_when(self):
         # Behaviour: label should enable/disable along with editor
 
-        with store_exceptions_on_all_threads():
-            dialog = EnableWhenDialog()
-            ui = dialog.edit_traits()
+        dialog = EnableWhenDialog()
+        with store_exceptions_on_all_threads(), \
+                create_ui(dialog) as ui:
 
             labelled_editor = ui.get_editors("labelled_item")[0]
 
@@ -239,6 +229,36 @@ class TestLabels(unittest.TestCase):
             dialog.bool_item = True
 
             ui.dispose()
+
+
+@skip_if_null
+class TestAnyToolkit(unittest.TestCase):
+    """ Toolkit-agnostic tests for labels with different orientations."""
+
+    def test_group_show_right_labels(self):
+        with store_exceptions_on_all_threads(), \
+                create_ui(ShowRightLabelsDialog()):
+            pass
+
+    def test_horizontal_resizable_and_labels(self):
+        with store_exceptions_on_all_threads(), \
+                create_ui(HResizeTestDialog()):
+            pass
+
+    def test_all_resizable_with_labels(self):
+        with store_exceptions_on_all_threads(), \
+                create_ui(VResizeTestDialog()):
+            pass
+
+    def test_show_right_with_no_label(self):
+        with store_exceptions_on_all_threads(), \
+                create_ui(NoLabelResizeTestDialog()):
+            pass
+
+    def test_enable_when_flag(self):
+        with store_exceptions_on_all_threads(), \
+                create_ui(EnableWhenDialog()):
+            pass
 
 
 if __name__ == "__main__":

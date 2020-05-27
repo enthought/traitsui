@@ -131,6 +131,30 @@ def filter_tests(test_suite, exclusion_pattern):
     return filtered_test_suite
 
 
+@contextmanager
+def create_ui(object, ui_kwargs=None):
+    """ Context manager for creating a UI and then dispose it when exiting
+    the context.
+
+    Parameters
+    ----------
+    object : HasTraits
+        An object from which ``edit_traits`` can be called to create a UI
+    ui_kwargs : dict or None
+        Keyword arguments to be provided to ``edit_traits``.
+
+    Yields
+    ------
+    ui: UI
+    """
+    ui_kwargs = {} if ui_kwargs is None else ui_kwargs
+    ui = object.edit_traits(**ui_kwargs)
+    try:
+        yield ui
+    finally:
+        ui.dispose()
+
+
 # ######### Utility tools to test on both qt4 and wx
 
 
