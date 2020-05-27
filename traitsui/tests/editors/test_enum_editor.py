@@ -6,6 +6,7 @@ from pyface.gui import GUI
 from traits.api import Enum, HasTraits, Int, List
 from traitsui.api import EnumEditor, UItem, View
 from traitsui.tests._tools import (
+    get_all_button_status,
     is_current_backend_qt4,
     is_current_backend_wx,
     skip_if_null,
@@ -50,8 +51,12 @@ def get_combobox_text(combobox):
             return combobox.GetString(combobox.GetSelection())
         else:
             return combobox.GetValue()
+
     elif is_current_backend_qt4():
         return combobox.currentText()
+
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
 def set_combobox_text(combobox, text):
@@ -74,6 +79,9 @@ def set_combobox_text(combobox, text):
     elif is_current_backend_qt4():
         combobox.setEditText(text)
 
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
+
 
 def set_combobox_index(combobox, idx):
     """ Set the choice index given a combobox control and index number """
@@ -93,6 +101,9 @@ def set_combobox_index(combobox, idx):
     elif is_current_backend_qt4():
         combobox.setCurrentIndex(idx)
 
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
+
 
 def finish_combobox_text_entry(combobox):
     """ Finish text entry given combobox. """
@@ -105,27 +116,13 @@ def finish_combobox_text_entry(combobox):
     elif is_current_backend_qt4():
         combobox.lineEdit().editingFinished.emit()
 
-
-def get_all_button_status(widget):
-    """ Gets status of all radio buttons in the layout of a given widget."""
-    if is_current_backend_wx():
-        button_status = []
-        for item in widget.GetSizer().GetChildren():
-            button = item.GetWindow()
-            if button.value != "":  # There are empty invisible buttons
-                button_status.append(button.GetValue())
-        return button_status
-
-    elif is_current_backend_qt4():
-        layout = widget.layout()
-        button_status = []
-        for i in range(layout.count()):
-            button_status.append(layout.itemAt(i).widget().isChecked())
-        return button_status
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
 def click_radio_button(widget, button_idx):
-    """ Simulate a radio button click given widget and button number."""
+    """ Simulate a radio button click given widget and button number. Assumes
+    all sizer children (wx) or layout items (qt) are buttons."""
     if is_current_backend_wx():
         import wx
 
@@ -138,6 +135,9 @@ def click_radio_button(widget, button_idx):
     elif is_current_backend_qt4():
         widget.layout().itemAt(button_idx).widget().click()
 
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
+
 
 def get_list_widget_text(list_widget):
     """ Return the text of currently selected item in given list widget. """
@@ -147,6 +147,9 @@ def get_list_widget_text(list_widget):
 
     elif is_current_backend_qt4():
         return list_widget.currentItem().text()
+
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
 def set_list_widget_selected_index(list_widget, idx):
@@ -161,7 +164,11 @@ def set_list_widget_selected_index(list_widget, idx):
     elif is_current_backend_qt4():
         list_widget.setCurrentRow(idx)
 
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
 
+
+@skip_if_null
 class TestEnumEditorMapping(unittest.TestCase):
 
     def setup_ui(self, model, view):
@@ -189,7 +196,8 @@ class TestEnumEditorMapping(unittest.TestCase):
         with store_exceptions_on_all_threads():
             editor = self.setup_ui(IntEnumModel(), formatted_view)
 
-            with self.assertRaises(AssertionError):  # FIXME issue #782
+            # FIXME issue enthought/traitsui#782
+            with self.assertRaises(AssertionError):
                 self.assertEqual(editor.names, ["FALSE", "TRUE"])
                 self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
                 self.assertEqual(
@@ -230,7 +238,8 @@ class TestEnumEditorMapping(unittest.TestCase):
         with store_exceptions_on_all_threads():
             editor = self.setup_ui(model, formatted_view)
 
-            if is_current_backend_wx():  # FIXME issue #835
+            # FIXME issue enthought/traitsui#835
+            if is_current_backend_wx():
                 with self.assertRaises(AssertionError):
                     self.assertEqual(editor.names, ["FALSE", "TRUE"])
                     self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
@@ -251,7 +260,8 @@ class TestEnumEditorMapping(unittest.TestCase):
 
             model.possible_values = [1, 0]
 
-            if is_current_backend_wx():  # FIXME issue #835
+            # FIXME issue enthought/traitsui#835
+            if is_current_backend_wx():
                 with self.assertRaises(AssertionError):
                     self.assertEqual(editor.names, ["TRUE", "FALSE"])
                     self.assertEqual(editor.mapping, {"TRUE": 1, "FALSE": 0})
@@ -270,17 +280,15 @@ class TestEnumEditorMapping(unittest.TestCase):
                     editor.inverse_mapping, {1: "TRUE", 0: "FALSE"}
                 )
 
-    @skip_if_null
     def test_simple_editor_mapping_values(self):
         self.check_enum_mappings_value_change("simple", "radio")
 
-    @skip_if_null
     def test_simple_editor_mapping_name(self):
         self.check_enum_mappings_name_change("simple", "radio")
 
-    @skip_if_null
     def test_radio_editor_mapping_values(self):
-        if is_current_backend_wx():  # FIXME issue #842
+        # FIXME issue enthought/traitsui#842
+        if is_current_backend_wx():
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -288,9 +296,9 @@ class TestEnumEditorMapping(unittest.TestCase):
         else:
             self.check_enum_mappings_value_change("custom", "radio")
 
-    @skip_if_null
     def test_radio_editor_mapping_name(self):
-        if is_current_backend_wx():  # FIXME issue #842
+        # FIXME issue enthought/traitsui#842
+        if is_current_backend_wx():
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -298,15 +306,14 @@ class TestEnumEditorMapping(unittest.TestCase):
         else:
             self.check_enum_mappings_name_change("custom", "radio")
 
-    @skip_if_null
     def test_list_editor_mapping_values(self):
         self.check_enum_mappings_value_change("custom", "list")
 
-    @skip_if_null
     def test_list_editor_mapping_name(self):
         self.check_enum_mappings_name_change("custom", "list")
 
 
+@skip_if_null
 class TestSimpleEnumEditor(unittest.TestCase):
 
     def setup_gui(self, model, view):
@@ -372,34 +379,27 @@ class TestSimpleEnumEditor(unittest.TestCase):
 
             self.assertEqual(enum_edit.value, "one")
 
-    @skip_if_null
     def test_simple_enum_editor_text(self):
         self.check_enum_text_update(get_view("simple"))
 
-    @skip_if_null
     def test_simple_enum_editor_index(self):
         self.check_enum_index_update(get_view("simple"))
 
-    @skip_if_null
     @unittest.skipIf(is_windows, "Test needs fixing on windows")
     def test_simple_evaluate_editor_text(self):
         self.check_enum_text_update(get_evaluate_view("simple"))
 
-    @skip_if_null
     @unittest.skipIf(is_windows, "Test needs fixing on windows")
     def test_simple_evaluate_editor_index(self):
         self.check_enum_index_update(get_evaluate_view("simple"))
 
-    @skip_if_null
     def test_simple_evaluate_editor_bad_text(self):
         self.check_enum_text_bad_update(get_evaluate_view("simple"))
 
-    @skip_if_null
     @unittest.skipIf(is_windows, "Test needs fixing on windows")
     def test_simple_evaluate_editor_object(self):
         self.check_enum_object_update(get_evaluate_view("simple"))
 
-    @skip_if_null
     def test_simple_evaluate_editor_object_no_auto_set(self):
         view = get_evaluate_view("simple", auto_set=False)
         enum_edit = EnumModel()
@@ -421,7 +421,6 @@ class TestSimpleEnumEditor(unittest.TestCase):
 
             self.assertEqual(enum_edit.value, "two")
 
-    @skip_if_null
     def test_simple_editor_resizable(self):
         # Smoke test for `qt4.enum_editor.SimpleEditor.set_size_policy`
         enum_edit = EnumModel()
@@ -431,7 +430,6 @@ class TestSimpleEnumEditor(unittest.TestCase):
             ui = enum_edit.edit_traits(view=resizable_view)
             self.addCleanup(ui.dispose)
 
-    @skip_if_null
     def test_simple_editor_rebuild_editor_evaluate(self):
         # Smoke test for `wx.enum_editor.SimpleEditor.rebuild_editor`
         enum_editor_factory = EnumEditor(
@@ -446,6 +444,7 @@ class TestSimpleEnumEditor(unittest.TestCase):
             enum_editor_factory.values = ["one", "two", "three"]
 
 
+@skip_if_null
 class TestRadioEnumEditor(unittest.TestCase):
 
     def setup_gui(self, model, view):
@@ -459,7 +458,6 @@ class TestRadioEnumEditor(unittest.TestCase):
 
         return gui, widget
 
-    @skip_if_null
     def test_radio_enum_editor_button_update(self):
         enum_edit = EnumModel()
 
@@ -478,7 +476,6 @@ class TestRadioEnumEditor(unittest.TestCase):
                 get_all_button_status(widget), [False, False, False, True]
             )
 
-    @skip_if_null
     def test_radio_enum_editor_pick(self):
         enum_edit = EnumModel()
 
@@ -494,6 +491,7 @@ class TestRadioEnumEditor(unittest.TestCase):
             self.assertEqual(enum_edit.value, "two")
 
 
+@skip_if_null
 class TestListEnumEditor(unittest.TestCase):
 
     def setup_gui(self, model, view):
@@ -533,7 +531,6 @@ class TestListEnumEditor(unittest.TestCase):
 
             self.assertEqual(enum_edit.value, "two")
 
-    @skip_if_null
     def test_list_enum_editor_text(self):
         view = View(
             UItem(
@@ -548,7 +545,6 @@ class TestListEnumEditor(unittest.TestCase):
         )
         self.check_enum_text_update(view)
 
-    @skip_if_null
     def test_list_enum_editor_index(self):
         view = View(
             UItem(
@@ -563,10 +559,8 @@ class TestListEnumEditor(unittest.TestCase):
         )
         self.check_enum_index_update(view)
 
-    @skip_if_null
     def test_list_evaluate_editor_text(self):
         self.check_enum_text_update(get_evaluate_view("custom", mode="list"))
 
-    @skip_if_null
     def test_list_evaluate_editor_index(self):
         self.check_enum_index_update(get_evaluate_view("custom", mode="list"))
