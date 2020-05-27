@@ -1011,7 +1011,7 @@ class FillPanel(object):
             item_sizer.Add(
                 control,
                 growable,
-                flags | layout_style | wx.ALIGN_CENTER_VERTICAL,
+                flags | layout_style,
                 max(0, border_size + padding + item.padding),
             )
 
