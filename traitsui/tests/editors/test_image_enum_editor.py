@@ -1,4 +1,3 @@
-import os
 import unittest
 from unittest.mock import patch
 
@@ -22,9 +21,6 @@ if is_current_backend_wx():
 elif is_current_backend_qt4():
     from traitsui.qt4.helper import pixmap_cache as image_cache
     cache_to_patch = "traitsui.qt4.image_enum_editor.pixmap_cache"
-else:
-    image_cache = None
-    cache_to_patch = "traitsui.null"
 
 
 class EnumModel(HasTraits):
@@ -42,7 +38,7 @@ def get_view(style):
                 ],
                 prefix='@icons:',
                 suffix='_origin',
-                path=os.getcwd(),
+                path='dummy_path',
             ),
             style=style,
         ),
@@ -55,10 +51,12 @@ def click_on_image(image_control):
     if is_current_backend_wx():
         import wx
 
-        event = wx.MouseEvent(wx.EVT_LEFT_UP.typeId)
-        event.SetX(0)
-        event.SetY(0)
-        wx.PostEvent(image_control, event)
+        event_down = wx.MouseEvent(wx.EVT_LEFT_DOWN.typeId)
+        wx.PostEvent(image_control, event_down)
+        event_up = wx.MouseEvent(wx.EVT_LEFT_UP.typeId)
+        event_up.SetX(0)
+        event_up.SetY(0)
+        wx.PostEvent(image_control, event_up)
 
     elif is_current_backend_qt4():
         image_control.click()
@@ -141,7 +139,7 @@ class TestImageEnumEditorMapping(unittest.TestCase):
             format_func=lambda v: v.upper(),
             prefix='@icons:',
             suffix='_origin',
-            path=os.getcwd(),
+            path='dummy_path',
         )
         formatted_view = View(
             UItem(
@@ -200,7 +198,7 @@ class TestImageEnumEditorMapping(unittest.TestCase):
                     format_func=lambda v: v.upper(),
                     prefix='@icons:',
                     suffix='_origin',
-                    path=os.getcwd(),
+                    path='dummy_path',
                 ),
                 style=style,
             )
@@ -266,7 +264,7 @@ class TestImageEnumEditorMapping(unittest.TestCase):
                     format_func=lambda v: v.upper(),
                     prefix='@icons:',
                     suffix='_origin',
-                    path=os.getcwd(),
+                    path='dummy_path',
                 ),
                 style="readonly",
             )
@@ -308,7 +306,7 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
                     ],
                     prefix='@icons:',
                     suffix='_origin',
-                    path=os.getcwd(),
+                    path='dummy_path',
                     cols=4,
                 ),
                 style="simple",
@@ -317,69 +315,69 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
         )
 
         with store_exceptions_on_all_threads():
-            gui, combobox = self.setup_gui(enum_edit, view)
+            self.setup_gui(enum_edit, view)
 
     @skip_if_not_wx
-    @patch(cache_to_patch, wraps=image_cache)
-    def test_simple_editor_popup_editor(self, patched_cache):
+    def test_simple_editor_popup_editor(self):
         enum_edit = EnumModel()
 
         with store_exceptions_on_all_threads():
-            gui, control = self.setup_gui(enum_edit, get_view("simple"))
+            with patch(cache_to_patch, wraps=image_cache) as patched_cache:
+                gui, control = self.setup_gui(enum_edit, get_view("simple"))
 
-            self.assertEqual(enum_edit.value, 'top left')
-            self.assertEqual(
-                patched_cache.call_args[0][0], "@icons:top left_origin"
-            )
+                self.assertEqual(enum_edit.value, 'top left')
+                self.assertEqual(
+                    patched_cache.call_args[0][0], "@icons:top left_origin"
+                )
 
-            # Set up ImageEnumDialog
-            click_on_image(control)
-            gui.process_events()
+                # Set up ImageEnumDialog
+                click_on_image(control)
+                gui.process_events()
 
-            # Check created buttons
-            image_grid_control = control.GetChildren()[0].GetChildren()[0]
-            self.assertEqual(
-                get_button_strings(image_grid_control),
-                ['top left', 'top right', 'bottom left', 'bottom right']
-            )
+                # Check created buttons
+                image_grid_control = control.GetChildren()[0].GetChildren()[0]
+                self.assertEqual(
+                    get_button_strings(image_grid_control),
+                    ['top left', 'top right', 'bottom left', 'bottom right']
+                )
 
-            # Select new image
-            click_on_image(get_button_control(image_grid_control, 1))
-            gui.process_events()
+                # Select new image
+                click_on_image(get_button_control(image_grid_control, 1))
+                gui.process_events()
 
-            self.assertEqual(enum_edit.value, 'top right')
-            self.assertEqual(
-                patched_cache.call_args[0][0], "@icons:top right_origin"
-            )
+                self.assertEqual(enum_edit.value, 'top right')
+                self.assertEqual(
+                    patched_cache.call_args[0][0], "@icons:top right_origin"
+                )
 
-            # Check that dialog window is closed
-            self.assertEqual(list(control.GetChildren()), [])
+                # Check that dialog window is closed
+                self.assertEqual(list(control.GetChildren()), [])
 
     @skip_if_not_qt4
-    @patch(cache_to_patch, wraps=image_cache)
-    def test_simple_editor_combobox(self, patched_cache):
+    def test_simple_editor_combobox(self):
         enum_edit = EnumModel()
 
         with store_exceptions_on_all_threads():
-            gui, combobox = self.setup_gui(enum_edit, get_view("simple"))
+            with patch(cache_to_patch, wraps=image_cache) as patched_cache:
+                gui, combobox = self.setup_gui(enum_edit, get_view("simple"))
 
-            self.assertEqual(enum_edit.value, 'top left')
-            self.assertEqual(
-                patched_cache.call_args[0][0], "@icons:top left_origin"
-            )
+                self.assertEqual(enum_edit.value, 'top left')
+                self.assertEqual(
+                    patched_cache.call_args[0][0], "@icons:top left_origin"
+                )
 
-            # Smoke test for ImageEnumItemDelegate painting
-            combobox.showPopup()
-            gui.process_events()
+                # Smoke test for ImageEnumItemDelegate painting
+                combobox.showPopup()
+                gui.process_events()
 
-            combobox.setCurrentIndex(1)
-            combobox.hidePopup()
-            gui.process_events()
+                combobox.setCurrentIndex(1)
+                combobox.hidePopup()
+                gui.process_events()
 
-            self.assertEqual(enum_edit.value, 'top right')
-            self.assertEqual(
-                patched_cache.call_args[0][0], "@icons:top right_origin"
-            )
+                self.assertEqual(enum_edit.value, 'top right')
+                self.assertEqual(
+                    patched_cache.call_args[0][0], "@icons:top right_origin"
+                )
 
 
 @skip_if_null
@@ -408,7 +406,7 @@ class TestCustomImageEnumEditor(unittest.TestCase):
                     ],
                     prefix='@icons:',
                     suffix='_origin',
-                    path=os.getcwd(),
+                    path='dummy_path',
                     cols=4,
                 ),
                 style="custom",
@@ -417,7 +415,7 @@ class TestCustomImageEnumEditor(unittest.TestCase):
         )
 
         with store_exceptions_on_all_threads():
-            gui, combobox = self.setup_gui(enum_edit, view)
+            self.setup_gui(enum_edit, view)
 
     def test_custom_editor_selection(self):
         enum_edit = EnumModel()
@@ -483,21 +481,21 @@ class TestReadOnlyImageEnumEditor(unittest.TestCase):
 
         return gui, control
 
-    @patch(cache_to_patch, wraps=image_cache)
-    def test_readonly_editor_value_changed(self, patched_cache):
+    def test_readonly_editor_value_changed(self):
         enum_edit = EnumModel()
 
         with store_exceptions_on_all_threads():
-            gui, control = self.setup_gui(enum_edit, get_view("readonly"))
+            with patch(cache_to_patch, wraps=image_cache) as patched_cache:
+                gui, control = self.setup_gui(enum_edit, get_view("readonly"))
 
-            self.assertEqual(enum_edit.value, 'top left')
-            self.assertEqual(
-                patched_cache.call_args[0][0], "@icons:top left_origin"
-            )
+                self.assertEqual(enum_edit.value, 'top left')
+                self.assertEqual(
+                    patched_cache.call_args[0][0], "@icons:top left_origin"
+                )
 
-            enum_edit.value = 'top right'
-            gui.process_events()
+                enum_edit.value = 'top right'
+                gui.process_events()
 
-            self.assertEqual(
-                patched_cache.call_args[0][0], "@icons:top right_origin"
-            )
+                self.assertEqual(
+                    patched_cache.call_args[0][0], "@icons:top right_origin"
+                )
