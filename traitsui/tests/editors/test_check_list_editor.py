@@ -5,6 +5,7 @@ from pyface.gui import GUI
 from traits.api import HasTraits, List, Str
 from traitsui.api import CheckListEditor, UItem, View
 from traitsui.tests._tools import (
+    get_all_button_status,
     is_current_backend_qt4,
     is_current_backend_wx,
     skip_if_null,
@@ -44,16 +45,20 @@ def get_mapped_view(style):
 
 
 def get_combobox_text(combobox):
-    """ Return the text given a combobox control """
+    """ Return the text given a combobox control. """
     if is_current_backend_wx():
         return combobox.GetString(combobox.GetSelection())
 
     elif is_current_backend_qt4():
         return combobox.currentText()
 
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
+
 
 def set_combobox_index(editor, idx):
-    """ Set combobox index to given index value. """
+    """ Set the choice index of a combobox control given editor and index
+    number. """
     if is_current_backend_wx():
         import wx
 
@@ -69,27 +74,13 @@ def set_combobox_index(editor, idx):
         # manually
         editor.update_object(idx)
 
-
-def get_all_button_status(widget):
-    """ Gets status of all check buttons in the layout of a given widget."""
-    if is_current_backend_wx():
-        button_status = []
-        for item in widget.GetSizer().GetChildren():
-            button = item.GetWindow()
-            if button.value != "":  # There are empty invisible buttons
-                button_status.append(button.GetValue())
-        return button_status
-
-    elif is_current_backend_qt4():
-        layout = widget.layout()
-        button_status = []
-        for i in range(layout.count()):
-            button_status.append(layout.itemAt(i).widget().isChecked())
-        return button_status
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
 def click_checkbox_button(widget, button_idx):
-    """ Simulate a checkbox click given widget and button number."""
+    """ Simulate a checkbox click given widget and button number. Assumes
+    all sizer children (wx) or layout items (qt) are buttons."""
     if is_current_backend_wx():
         import wx
 
@@ -103,6 +94,9 @@ def click_checkbox_button(widget, button_idx):
     elif is_current_backend_qt4():
         layout = widget.layout()
         layout.itemAt(button_idx).widget().click()
+
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
 def set_text_in_line_edit(line_edit, text):
@@ -118,7 +112,11 @@ def set_text_in_line_edit(line_edit, text):
         line_edit.setText(text)
         line_edit.editingFinished.emit()
 
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
 
+
+@skip_if_null
 class TestCheckListEditorMapping(unittest.TestCase):
 
     def setup_ui(self, model, view):
@@ -166,13 +164,15 @@ class TestCheckListEditorMapping(unittest.TestCase):
         with store_exceptions_on_all_threads():
             editor = self.setup_ui(model, formatted_view)
 
-            with self.assertRaises(AssertionError):  # FIXME issue #841
+            # FIXME issue enthought/traitsui#841
+            with self.assertRaises(AssertionError):
                 self.assertEqual(editor.names, ["ONE", "TWO"])
             self.assertEqual(editor.names, ["one", "two"])
 
             check_list_editor_factory.values = [(2, "two"), (1, "one")]
 
-            with self.assertRaises(AssertionError):  # FIXME issue #841
+            # FIXME issue enthought/traitsui#841
+            with self.assertRaises(AssertionError):
                 self.assertEqual(editor.names, ["TWO", "ONE"])
             self.assertEqual(editor.names, ["two", "one"])
 
@@ -192,7 +192,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
                 style=style,
             )
         )
-        model = ListModel(possible_values=["one", "two"])
+        model = ListModel()
 
         with store_exceptions_on_all_threads():
             editor = self.setup_ui(model, formatted_view)
@@ -224,35 +224,33 @@ class TestCheckListEditorMapping(unittest.TestCase):
         with store_exceptions_on_all_threads():
             editor = self.setup_ui(model, formatted_view)
 
-            with self.assertRaises(AssertionError):  # FIXME issue #841
+            # FIXME issue enthought/traitsui#841
+            with self.assertRaises(AssertionError):
                 self.assertEqual(editor.names, ["ONE", "TWO"])
             self.assertEqual(editor.names, ["one", "two"])
 
             model.possible_values = [(2, "two"), (1, "one")]
 
-            with self.assertRaises(AssertionError):  # FIXME issue #841
+            # FIXME issue enthought/traitsui#841
+            with self.assertRaises(AssertionError):
                 self.assertEqual(editor.names, ["TWO", "ONE"])
             self.assertEqual(editor.names, ["two", "one"])
 
-    @skip_if_null
     def test_simple_editor_mapping_values(self):
         self.check_checklist_mappings_value_change("simple")
 
-    @skip_if_null
     def test_simple_editor_mapping_values_tuple(self):
         self.check_checklist_mappings_tuple_value_change("simple")
 
-    @skip_if_null
     def test_simple_editor_mapping_name(self):
         self.check_checklist_mappings_name_change("simple")
 
-    @skip_if_null
     def test_simple_editor_mapping_name_tuple(self):
         self.check_checklist_mappings_tuple_name_change("simple")
 
-    @skip_if_null
     def test_custom_editor_mapping_values(self):
-        if is_current_backend_wx():  # FIXME issue #842
+        # FIXME issue enthought/traitsui#842
+        if is_current_backend_wx():
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -260,9 +258,9 @@ class TestCheckListEditorMapping(unittest.TestCase):
         else:
             self.check_checklist_mappings_value_change("custom")
 
-    @skip_if_null
     def test_custom_editor_mapping_values_tuple(self):
-        if is_current_backend_wx():  # FIXME issue #842
+        # FIXME issue enthought/traitsui#842
+        if is_current_backend_wx():
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -270,9 +268,9 @@ class TestCheckListEditorMapping(unittest.TestCase):
         else:
             self.check_checklist_mappings_tuple_value_change("custom")
 
-    @skip_if_null
     def test_custom_editor_mapping_name(self):
-        if is_current_backend_wx():  # FIXME issue #842
+        # FIXME issue enthought/traitsui#842
+        if is_current_backend_wx():
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -280,9 +278,9 @@ class TestCheckListEditorMapping(unittest.TestCase):
         else:
             self.check_checklist_mappings_name_change("custom")
 
-    @skip_if_null
     def test_custom_editor_mapping_name_tuple(self):
-        if is_current_backend_wx():  # FIXME issue #842
+        # FIXME issue enthought/traitsui#842
+        if is_current_backend_wx():
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -291,6 +289,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
             self.check_checklist_mappings_tuple_name_change("custom")
 
 
+@skip_if_null
 class TestSimpleCheckListEditor(unittest.TestCase):
 
     def setup_gui(self, model, view):
@@ -304,7 +303,6 @@ class TestSimpleCheckListEditor(unittest.TestCase):
 
         return gui, editor, combobox
 
-    @skip_if_null
     def test_simple_check_list_editor_text(self):
         list_edit = ListModel()
 
@@ -318,7 +316,6 @@ class TestSimpleCheckListEditor(unittest.TestCase):
 
             self.assertEqual(get_combobox_text(combobox), "Two")
 
-    @skip_if_null
     def test_simple_check_list_editor_text_mapped(self):
         view = get_mapped_view("simple")
         list_edit = ListModel()
@@ -326,18 +323,19 @@ class TestSimpleCheckListEditor(unittest.TestCase):
         with store_exceptions_on_all_threads():
             gui, _, combobox = self.setup_gui(list_edit, view)
 
-            with self.assertRaises(AssertionError):  # FIXME issue #841
+            # FIXME issue enthought/traitsui#841
+            with self.assertRaises(AssertionError):
                 self.assertEqual(get_combobox_text(combobox), "One")
             self.assertEqual(get_combobox_text(combobox), "one")
 
             list_edit.value = [2]
             gui.process_events()
 
-            with self.assertRaises(AssertionError):  # FIXME issue #841
+            # FIXME issue enthought/traitsui#841
+            with self.assertRaises(AssertionError):
                 self.assertEqual(get_combobox_text(combobox), "Two")
             self.assertEqual(get_combobox_text(combobox), "two")
 
-    @skip_if_null
     def test_simple_check_list_editor_index(self):
         list_edit = ListModel()
 
@@ -356,7 +354,6 @@ class TestSimpleCheckListEditor(unittest.TestCase):
 
             self.assertEqual(list_edit.value, ["one"])
 
-    @skip_if_null
     def test_simple_check_list_editor_invalid_current_values(self):
         list_edit = ListModel(value=[1, "two", "a", object(), "one"])
 
@@ -365,7 +362,6 @@ class TestSimpleCheckListEditor(unittest.TestCase):
 
             self.assertEqual(list_edit.value, ["two", "one"])
 
-    @skip_if_null
     def test_simple_check_list_editor_invalid_current_values_str(self):
         class StrModel(HasTraits):
             value = Str()
@@ -378,6 +374,7 @@ class TestSimpleCheckListEditor(unittest.TestCase):
             self.assertEqual(str_edit.value, "two,one")
 
 
+@skip_if_null
 class TestCustomCheckListEditor(unittest.TestCase):
 
     def setup_gui(self, model, view):
@@ -391,7 +388,6 @@ class TestCustomCheckListEditor(unittest.TestCase):
 
         return gui, editor, widget
 
-    @skip_if_null
     def test_custom_check_list_editor_button_update(self):
         list_edit = ListModel()
 
@@ -416,7 +412,6 @@ class TestCustomCheckListEditor(unittest.TestCase):
                 get_all_button_status(widget), [True, False, False, True]
             )
 
-    @skip_if_null
     def test_custom_check_list_editor_click(self):
         list_edit = ListModel()
 
@@ -435,7 +430,6 @@ class TestCustomCheckListEditor(unittest.TestCase):
 
             self.assertEqual(list_edit.value, [])
 
-    @skip_if_null
     def test_custom_check_list_editor_click_initial_value(self):
         list_edit = ListModel(value=["two"])
 
@@ -449,7 +443,6 @@ class TestCustomCheckListEditor(unittest.TestCase):
 
             self.assertEqual(list_edit.value, [])
 
-    @skip_if_null
     def test_custom_check_list_editor_invalid_current_values_str(self):
         class StrModel(HasTraits):
             value = Str()
@@ -467,6 +460,7 @@ class TestCustomCheckListEditor(unittest.TestCase):
             self.assertEqual(str_edit.value, "three,one")
 
 
+@skip_if_null
 class TestTextCheckListEditor(unittest.TestCase):
 
     def setup_gui(self, model, view):
@@ -480,7 +474,6 @@ class TestTextCheckListEditor(unittest.TestCase):
 
         return gui, editor, line_edit
 
-    @skip_if_null
     def test_text_check_list_object_list(self):
         list_edit = ListModel()
 
@@ -494,7 +487,6 @@ class TestTextCheckListEditor(unittest.TestCase):
 
             self.assertEqual(list_edit.value, ["one", "two"])
 
-    @skip_if_null
     def test_text_check_list_object_str(self):
         class StrModel(HasTraits):
             value = Str()
