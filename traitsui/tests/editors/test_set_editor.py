@@ -269,9 +269,13 @@ class TestSimpleSetEditor(unittest.TestCase):
 
     def test_simple_set_editor_use_button(self):
         with store_exceptions_on_all_threads():
-            gui, editor = self.setup_gui(ListModel(), get_view())
+            # Initiate with non-alphabetical list
+            gui, editor = self.setup_gui(
+                ListModel(value=["two", "one"]), get_view()
+            )
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
+            # Used list is sorted alphabetically
             self.assertEqual(get_list_items(editor._used), ["one", "two"])
 
             click_on_item(editor, 1, in_used=False)
@@ -539,12 +543,14 @@ class TestSimpleSetEditor(unittest.TestCase):
 
     def test_simple_set_editor_use_ordered_selected(self):
         with store_exceptions_on_all_threads():
+            # Initiate with non-alphabetical list
             gui, editor = self.setup_gui(
-                ListModel(), get_view(ordered=True)
+                ListModel(value=["two", "one"]), get_view(ordered=True)
             )
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
-            self.assertEqual(get_list_items(editor._used), ["one", "two"])
+            # Used list maintains the order
+            self.assertEqual(get_list_items(editor._used), ["two", "one"])
 
             click_on_item(editor, 1, in_used=False)
             gui.process_events()
@@ -558,7 +564,7 @@ class TestSimpleSetEditor(unittest.TestCase):
             self.assertEqual(get_list_items(editor._unused), ["four"])
             # Button inserts at the top
             self.assertEqual(
-                get_list_items(editor._used), ["three", "one", "two"]
+                get_list_items(editor._used), ["three", "two", "one"]
             )
             self.assertEqual(
                 editor._get_selected_strings(editor._used), ["three"]
