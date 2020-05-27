@@ -51,7 +51,7 @@ def get_view(style):
 
 
 def click_on_image(image_control):
-    """ Clicks on the image controlled by given image_control."""
+    """ Click on the image controlled by given image_control."""
     if is_current_backend_wx():
         import wx
 
@@ -68,7 +68,7 @@ def click_on_image(image_control):
 
 
 def get_button_strings(control):
-    """ Return the list of string associated with the buttons under given
+    """ Return the list of strings associated with the buttons under given
     control. Assumes all sizer children (wx) or layout items (qt) are buttons.
     """
     button_strings = []
@@ -91,7 +91,7 @@ def get_button_strings(control):
 
 
 def get_all_button_selected_status(control):
-    """ Returns a list with selected (wx) or checked (qt) button status under
+    """ Return a list with selected (wx) or checked (qt) button status under
     given control. Assumes all sizer children (wx) or layout items (qt) are
     buttons.
     """
@@ -113,8 +113,8 @@ def get_all_button_selected_status(control):
 
 
 def get_button_control(control, button_idx):
-    """ Get button control from specified parent control given index. Assumes
-    all sizer children (wx) or layout items (qt) are buttons.
+    """ Get button control from a specified parent control given a button index.
+    Assumes all sizer children (wx) or layout items (qt) are buttons.
     """
     if is_current_backend_wx():
         return control.GetSizer().GetChildren()[button_idx].GetWindow()
