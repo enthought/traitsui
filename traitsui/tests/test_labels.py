@@ -251,6 +251,9 @@ class TestAnyToolkit(unittest.TestCase):
             pass
 
     def test_show_right_with_no_label(self):
+        # Bug: If one set show_left=False, show_label=False on a non-resizable
+        # item like a checkbox, the Qt backend tried to set the label's size
+        # policy and failed because label=None.
         with store_exceptions_on_all_threads(), \
                 create_ui(NoLabelResizeTestDialog()):
             pass
