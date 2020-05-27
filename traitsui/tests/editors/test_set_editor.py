@@ -5,6 +5,8 @@ from pyface.gui import GUI
 from traits.api import HasTraits, List
 from traitsui.api import SetEditor, UItem, View
 from traitsui.tests._tools import (
+    click_button,
+    is_control_enabled,
     is_current_backend_qt4,
     is_current_backend_wx,
     skip_if_null,
@@ -32,7 +34,7 @@ def get_view(can_move_all=True, ordered=False):
 
 
 def get_list_items(list_widget):
-    """ Return a list of strings. """
+    """ Return a list of strings from the list widget. """
     items = []
 
     if is_current_backend_wx():
@@ -43,11 +45,20 @@ def get_list_items(list_widget):
         for i in range(list_widget.count()):
             items.append(list_widget.item(i).text())
 
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
+
     return items
 
 
-def click_on_item(editor, item_no, in_used=False):
-    """ Simulate a click on an item in a specified list. """
+def click_on_item(editor, item_idx, in_used=False):
+    """ Simulate a click on an item in a specified list.
+
+    The function deselects all items in both used and unused lists, then
+    selects an item at index item_idx either in the used list (if
+    in_used=True) or in the unused list. Finally the function simulates a
+    click on the selected item.
+    """
     unused_list = editor._unused
     used_list = editor._used
 
@@ -61,7 +72,7 @@ def click_on_item(editor, item_no, in_used=False):
             used_list.Deselect(i)
         # Select the item in the correct list
         list_with_selection = used_list if in_used else unused_list
-        list_with_selection.SetSelection(item_no)
+        list_with_selection.SetSelection(item_idx)
 
         event = wx.CommandEvent(
             wx.EVT_LISTBOX.typeId, list_with_selection.GetId()
@@ -70,21 +81,30 @@ def click_on_item(editor, item_no, in_used=False):
 
     elif is_current_backend_qt4():
         for i in range(unused_list.count()):
-            status = (not in_used) and (item_no == i)
+            status = (not in_used) and (item_idx == i)
             unused_list.item(i).setSelected(status)
 
         for i in range(used_list.count()):
-            status = (in_used) and (item_no == i)
+            status = (in_used) and (item_idx == i)
             used_list.item(i).setSelected(status)
 
         if in_used:
-            used_list.itemClicked.emit(used_list.item(item_no))
+            used_list.itemClicked.emit(used_list.item(item_idx))
         else:
-            unused_list.itemClicked.emit(unused_list.item(item_no))
+            unused_list.itemClicked.emit(unused_list.item(item_idx))
+
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
-def double_click_on_item(editor, item_no, in_used=False):
-    """ Simulate a double click on an item in a specified list. """
+def double_click_on_item(editor, item_idx, in_used=False):
+    """ Simulate a double click on an item in a specified list.
+
+    The function deselects all items in both used and unused lists, then
+    selects an item at index item_idx either in the used list (if
+    in_used=True) or in the unused list. Finally the function simulates a
+    double click on the selected item.
+    """
     unused_list = editor._unused
     used_list = editor._used
 
@@ -98,7 +118,7 @@ def double_click_on_item(editor, item_no, in_used=False):
             used_list.Deselect(i)
         # Select the item in the correct list
         list_with_selection = used_list if in_used else unused_list
-        list_with_selection.SetSelection(item_no)
+        list_with_selection.SetSelection(item_idx)
 
         event = wx.CommandEvent(
             wx.EVT_LISTBOX_DCLICK.typeId, list_with_selection.GetId()
@@ -107,41 +127,23 @@ def double_click_on_item(editor, item_no, in_used=False):
 
     elif is_current_backend_qt4():
         for i in range(unused_list.count()):
-            status = (not in_used) and (item_no == i)
+            status = (not in_used) and (item_idx == i)
             unused_list.item(i).setSelected(status)
 
         for i in range(used_list.count()):
-            status = (in_used) and (item_no == i)
+            status = (in_used) and (item_idx == i)
             used_list.item(i).setSelected(status)
 
         if in_used:
-            used_list.itemDoubleClicked.emit(used_list.item(item_no))
+            used_list.itemDoubleClicked.emit(used_list.item(item_idx))
         else:
-            unused_list.itemDoubleClicked.emit(unused_list.item(item_no))
+            unused_list.itemDoubleClicked.emit(unused_list.item(item_idx))
+
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
-def get_button_enabled(button):
-    """ Return if the button is enabled or not."""
-    if is_current_backend_wx():
-        return button.IsEnabled()
-
-    elif is_current_backend_qt4():
-        return button.isEnabled()
-
-
-def click_button(button):
-    """ Click the provided button. """
-    if is_current_backend_wx():
-        import wx
-
-        event = wx.CommandEvent(wx.EVT_BUTTON.typeId, button.GetId())
-        event.SetEventObject(button)
-        wx.PostEvent(button, event)
-
-    elif is_current_backend_qt4():
-        button.click()
-
-
+@skip_if_null
 class TestSetEditorMapping(unittest.TestCase):
 
     def setup_ui(self, model, view):
@@ -149,7 +151,6 @@ class TestSetEditorMapping(unittest.TestCase):
         self.addCleanup(ui.dispose)
         return ui.get_editors("value")[0]
 
-    @skip_if_null
     def test_simple_editor_mapping_values(self):
         class IntListModel(HasTraits):
             value = List()
@@ -169,7 +170,8 @@ class TestSetEditorMapping(unittest.TestCase):
         with store_exceptions_on_all_threads():
             editor = self.setup_ui(IntListModel(), formatted_view)
 
-            with self.assertRaises(AssertionError):  # FIXME issue #782
+            # FIXME issue enthought/traitsui#782
+            with self.assertRaises(AssertionError):
                 self.assertEqual(editor.names, ["FALSE", "TRUE"])
                 self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
                 self.assertEqual(
@@ -189,7 +191,6 @@ class TestSetEditorMapping(unittest.TestCase):
                 editor.inverse_mapping, {1: "TRUE", 0: "FALSE"}
             )
 
-    @skip_if_null
     def test_simple_editor_mapping_name(self):
         class IntListModel(HasTraits):
             value = List()
@@ -210,7 +211,8 @@ class TestSetEditorMapping(unittest.TestCase):
         with store_exceptions_on_all_threads():
             editor = self.setup_ui(model, formatted_view)
 
-            if is_current_backend_wx():  # FIXME issue #835
+            # FIXME issue enthought/traitsui#835
+            if is_current_backend_wx():
                 with self.assertRaises(AssertionError):
                     self.assertEqual(editor.names, ["FALSE", "TRUE"])
                     self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
@@ -231,7 +233,8 @@ class TestSetEditorMapping(unittest.TestCase):
 
             model.possible_values = [1, 0]
 
-            if is_current_backend_wx():  # FIXME issue #835
+            # FIXME issue enthought/traitsui#835
+            if is_current_backend_wx():
                 with self.assertRaises(AssertionError):
                     self.assertEqual(editor.names, ["TRUE", "FALSE"])
                     self.assertEqual(editor.mapping, {"TRUE": 1, "FALSE": 0})
@@ -251,6 +254,7 @@ class TestSetEditorMapping(unittest.TestCase):
                 )
 
 
+@skip_if_null
 class TestSimpleSetEditor(unittest.TestCase):
 
     def setup_gui(self, model, view):
@@ -263,7 +267,6 @@ class TestSimpleSetEditor(unittest.TestCase):
 
         return gui, editor
 
-    @skip_if_null
     def test_simple_set_editor_use_button(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
@@ -274,8 +277,8 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_on_item(editor, 1, in_used=False)
             gui.process_events()
 
-            self.assertTrue(get_button_enabled(editor._use))
-            self.assertFalse(get_button_enabled(editor._unuse))
+            self.assertTrue(is_control_enabled(editor._use))
+            self.assertFalse(is_control_enabled(editor._unuse))
 
             click_button(editor._use)
             gui.process_events()
@@ -287,7 +290,6 @@ class TestSimpleSetEditor(unittest.TestCase):
             )
             self.assertEqual(editor._get_selected_strings(editor._used), [])
 
-    @skip_if_null
     def test_simple_set_editor_unuse_button(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
@@ -298,8 +300,8 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_on_item(editor, 0, in_used=True)
             gui.process_events()
 
-            self.assertFalse(get_button_enabled(editor._use))
-            self.assertTrue(get_button_enabled(editor._unuse))
+            self.assertFalse(is_control_enabled(editor._use))
+            self.assertTrue(is_control_enabled(editor._unuse))
 
             click_button(editor._unuse)
             gui.process_events()
@@ -310,7 +312,6 @@ class TestSimpleSetEditor(unittest.TestCase):
             )
             self.assertEqual(get_list_items(editor._used), ["two"])
 
-    @skip_if_null
     def test_simple_set_editor_use_dclick(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
@@ -328,7 +329,6 @@ class TestSimpleSetEditor(unittest.TestCase):
             )
             self.assertEqual(editor._get_selected_strings(editor._used), [])
 
-    @skip_if_null
     def test_simple_set_editor_unuse_dclick(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
@@ -345,7 +345,6 @@ class TestSimpleSetEditor(unittest.TestCase):
             )
             self.assertEqual(get_list_items(editor._used), ["two"])
 
-    @skip_if_null
     def test_simple_set_editor_use_all(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
@@ -356,8 +355,8 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_on_item(editor, 1, in_used=False)
             gui.process_events()
 
-            self.assertTrue(get_button_enabled(editor._use_all))
-            self.assertFalse(get_button_enabled(editor._unuse_all))
+            self.assertTrue(is_control_enabled(editor._use_all))
+            self.assertFalse(is_control_enabled(editor._unuse_all))
 
             click_button(editor._use_all)
             gui.process_events()
@@ -368,7 +367,6 @@ class TestSimpleSetEditor(unittest.TestCase):
                 get_list_items(editor._used), ["one", "two", "four", "three"]
             )
 
-    @skip_if_null
     def test_simple_set_editor_unuse_all(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
@@ -379,8 +377,8 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_on_item(editor, 0, in_used=True)
             gui.process_events()
 
-            self.assertFalse(get_button_enabled(editor._use_all))
-            self.assertTrue(get_button_enabled(editor._unuse_all))
+            self.assertFalse(is_control_enabled(editor._use_all))
+            self.assertTrue(is_control_enabled(editor._unuse_all))
 
             click_button(editor._unuse_all)
             gui.process_events()
@@ -391,7 +389,6 @@ class TestSimpleSetEditor(unittest.TestCase):
             )
             self.assertEqual(get_list_items(editor._used), [])
 
-    @skip_if_null
     def test_simple_set_editor_move_up(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(
@@ -404,8 +401,8 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_on_item(editor, 1, in_used=True)
             gui.process_events()
 
-            self.assertTrue(get_button_enabled(editor._up))
-            self.assertFalse(get_button_enabled(editor._down))
+            self.assertTrue(is_control_enabled(editor._up))
+            self.assertFalse(is_control_enabled(editor._down))
 
             click_button(editor._up)
             gui.process_events()
@@ -413,7 +410,6 @@ class TestSimpleSetEditor(unittest.TestCase):
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             self.assertEqual(get_list_items(editor._used), ["two", "one"])
 
-    @skip_if_null
     def test_simple_set_editor_move_down(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(
@@ -426,8 +422,8 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_on_item(editor, 0, in_used=True)
             gui.process_events()
 
-            self.assertFalse(get_button_enabled(editor._up))
-            self.assertTrue(get_button_enabled(editor._down))
+            self.assertFalse(is_control_enabled(editor._up))
+            self.assertTrue(is_control_enabled(editor._down))
 
             click_button(editor._down)
             gui.process_events()
@@ -435,7 +431,6 @@ class TestSimpleSetEditor(unittest.TestCase):
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             self.assertEqual(get_list_items(editor._used), ["two", "one"])
 
-    @skip_if_null
     def test_simple_set_editor_use_all_button(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
@@ -446,8 +441,8 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_on_item(editor, 1, in_used=False)
             gui.process_events()
 
-            self.assertTrue(get_button_enabled(editor._use_all))
-            self.assertFalse(get_button_enabled(editor._unuse_all))
+            self.assertTrue(is_control_enabled(editor._use_all))
+            self.assertFalse(is_control_enabled(editor._unuse_all))
 
             click_button(editor._use_all)
             gui.process_events()
@@ -458,7 +453,6 @@ class TestSimpleSetEditor(unittest.TestCase):
                 get_list_items(editor._used), ["one", "two", "four", "three"]
             )
 
-    @skip_if_null
     def test_simple_set_editor_unuse_all_button(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
@@ -469,8 +463,8 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_on_item(editor, 0, in_used=True)
             gui.process_events()
 
-            self.assertFalse(get_button_enabled(editor._use_all))
-            self.assertTrue(get_button_enabled(editor._unuse_all))
+            self.assertFalse(is_control_enabled(editor._use_all))
+            self.assertTrue(is_control_enabled(editor._unuse_all))
 
             click_button(editor._unuse_all)
             gui.process_events()
@@ -481,7 +475,6 @@ class TestSimpleSetEditor(unittest.TestCase):
             )
             self.assertEqual(get_list_items(editor._used), [])
 
-    @skip_if_null
     def test_simple_set_editor_default_selection_unused(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(ListModel(), get_view())
@@ -500,7 +493,6 @@ class TestSimpleSetEditor(unittest.TestCase):
                 get_list_items(editor._used), ["four", "one", "two"]
             )
 
-    @skip_if_null
     def test_simple_set_editor_default_selection_used(self):
         # When all items are used, top used item is selected by default
         list_edit = ListModel(value=["one", "two", "three", "four"])
@@ -521,7 +513,6 @@ class TestSimpleSetEditor(unittest.TestCase):
                 get_list_items(editor._used), ["one", "three", "two"]
             )
 
-    @skip_if_null
     def test_simple_set_editor_deleted_valid_values(self):
         editor_factory = SetEditor(values=["one", "two", "three", "four"])
         view = View(UItem("value", editor=editor_factory, style="simple",))
@@ -537,7 +528,8 @@ class TestSimpleSetEditor(unittest.TestCase):
             gui.process_events()
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
-            if is_current_backend_wx():  # FIXME issue #840
+            # FIXME issue enthought/traitsui#840
+            if is_current_backend_wx():
                 with self.assertRaises(AssertionError):
                     self.assertEqual(get_list_items(editor._used), ["two"])
                 self.assertEqual(get_list_items(editor._used), ["one", "two"])
@@ -545,7 +537,6 @@ class TestSimpleSetEditor(unittest.TestCase):
                 self.assertEqual(get_list_items(editor._used), ["two"])
             self.assertEqual(list_edit.value, ["two"])
 
-    @skip_if_null
     def test_simple_set_editor_use_ordered_selected(self):
         with store_exceptions_on_all_threads():
             gui, editor = self.setup_gui(
@@ -558,8 +549,8 @@ class TestSimpleSetEditor(unittest.TestCase):
             click_on_item(editor, 1, in_used=False)
             gui.process_events()
 
-            self.assertTrue(get_button_enabled(editor._use))
-            self.assertFalse(get_button_enabled(editor._unuse))
+            self.assertTrue(is_control_enabled(editor._use))
+            self.assertFalse(is_control_enabled(editor._unuse))
 
             click_button(editor._use)
             gui.process_events()
@@ -573,7 +564,6 @@ class TestSimpleSetEditor(unittest.TestCase):
                 editor._get_selected_strings(editor._used), ["three"]
             )
 
-    @skip_if_null
     def test_simple_set_editor_unordeder_button_existence(self):
         with store_exceptions_on_all_threads():
             _, editor = self.setup_gui(ListModel(), get_view())
@@ -581,7 +571,6 @@ class TestSimpleSetEditor(unittest.TestCase):
             self.assertIsNone(editor._up)
             self.assertIsNone(editor._down)
 
-    @skip_if_null
     def test_simple_set_editor_cant_move_all_button_existence(self):
         with store_exceptions_on_all_threads():
             _, editor = self.setup_gui(

@@ -161,6 +161,36 @@ def press_ok_button(ui):
         ok_button.click()
 
 
+def click_button(button):
+    """Click the button given its control."""
+
+    if is_current_backend_wx():
+        import wx
+
+        event = wx.CommandEvent(wx.EVT_BUTTON.typeId, button.GetId())
+        event.SetEventObject(button)
+        wx.PostEvent(button, event)
+
+    elif is_current_backend_qt4():
+        button.click()
+
+    else:
+        raise NotImplementedError()
+
+
+def is_control_enabled(control):
+    """Return if the given control is enabled or not."""
+
+    if is_current_backend_wx():
+        return control.IsEnabled()
+
+    elif is_current_backend_qt4():
+        return control.isEnabled()
+
+    else:
+        raise NotImplementedError()
+
+
 def get_dialog_size(ui_control):
     """Return the size of the dialog.
 
