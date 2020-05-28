@@ -24,18 +24,6 @@ def get_html_tag(tag):
     return HTML_NS_PREFIX + tag
 
 
-class TestDemoUtility(unittest.TestCase):
-    """ Test various utility-like functions supporting demo.
-    """
-
-    def test_user_name_for(self):
-        # Test the function that returns a nice name
-        base_name = "शुभ_प्रभात"
-        actual = demo.user_name_for(base_name)
-        expected = "शुभ प्रभात"
-        self.assertEqual(actual, expected)
-
-
 class TestDemoPathDescription(unittest.TestCase):
     """ Test ``DemoPath.description`` """
 
