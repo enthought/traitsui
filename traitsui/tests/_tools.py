@@ -60,10 +60,10 @@ def store_exceptions_on_all_threads():
         traits.trait_notifiers.handle_exception = handle_exception
         yield
     finally:
-        if len(exceptions) > 0:
-            raise exceptions[0]
         sys.excepthook = sys.__excepthook__
         traits.trait_notifiers.handle_exception = _original_handle_exception
+        if len(exceptions) > 0:
+            raise exceptions[0]
 
 
 def _is_current_backend(backend_name=""):
