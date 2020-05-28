@@ -30,11 +30,15 @@ from traitsui.editors.image_enum_editor import ToolkitEditorFactory
 
 from .editor import Editor
 
+from .enum_editor import BaseEditor as BaseEnumEditor
+
 from .helper import bitmap_cache, position_window, TraitsUIPanel
 
 from .constants import WindowColor
 
 from .image_control import ImageControl
+
+from .toolkit import _popEventHandlers
 
 # -------------------------------------------------------------------------
 #  'ReadonlyEditor' class:
@@ -97,7 +101,7 @@ class SimpleEditor(ReadonlyEditor):
         ImageEnumDialog(self)
 
 
-class CustomEditor(Editor):
+class CustomEditor(BaseEnumEditor):
     """ Custom style of image enumeration editor, which displays a grid of
     ImageControls. The user can click an image to select the corresponding
     value.
@@ -113,13 +117,24 @@ class CustomEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self._create_image_grid(parent)
+        super(CustomEditor, self).init(parent)
 
-    def _create_image_grid(self, parent):
+        # Create the panel to hold the ImageControl buttons:
+        self.control = TraitsUIPanel(parent, -1)
+        self._create_image_grid()
+
+    def rebuild_editor(self):
+        self._create_image_grid()
+
+    def _create_image_grid(self):
         """ Populates a specified window with a grid of image buttons.
         """
-        # Create the panel to hold the ImageControl buttons:
-        self.control = panel = TraitsUIPanel(parent, -1)
+        # Clear any existing content:
+        panel = self.control
+        panel.SetSizer(None)
+        for child in panel.GetChildren():
+            _popEventHandlers(child)
+        panel.DestroyChildren()
 
         # Create the main sizer:
         if self.factory.cols > 1:
@@ -129,10 +144,9 @@ class CustomEditor(Editor):
 
         # Add the set of all possible choices:
         factory = self.factory
-        mapping = factory._mapping
         cur_value = self.value
-        for name in self.factory._names:
-            value = mapping[name]
+        for name in self.names:
+            value = self.mapping[name]
             control = ImageControl(
                 panel,
                 bitmap_cache(
