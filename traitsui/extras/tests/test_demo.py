@@ -54,6 +54,17 @@ class TestDemoPathDescription(unittest.TestCase):
             img_node = next(tree.iter(get_html_tag("img")))
             self.assertEqual(img_node.attrib["src"], "any_image.jpg")
 
+    def test_description_use_css(self):
+        with tempfile.TemporaryDirectory() as directory:
+            model = demo.DemoPath(
+                name=directory,
+                css_filename="default.css",
+            )
+
+            tree = ET.fromstring(model.description)
+        link_node = next(tree.iter(get_html_tag("link")))
+        self.assertEqual(link_node.attrib["href"], "default.css")
+
 
 class TestDemoPathInitLocals(unittest.TestCase):
     """ Test ``DemoPath.init_dic`` """
