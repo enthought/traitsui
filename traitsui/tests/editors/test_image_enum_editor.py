@@ -351,7 +351,12 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
 
             self.assertEqual(enum_edit.value, 'top left')
 
+            # Smoke test for ImageEnumItemDelegate painting
+            combobox.showPopup()
+            gui.process_events()
+
             combobox.setCurrentIndex(1)
+            combobox.hidePopup()
             gui.process_events()
 
             self.assertEqual(enum_edit.value, 'top right')
