@@ -318,62 +318,48 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
         enum_edit = EnumModel()
 
         with store_exceptions_on_all_threads():
-            with patch(cache_to_patch, wraps=image_cache) as patched_cache:
-                gui, control = self.setup_gui(enum_edit, get_view("simple"))
+            gui, control = self.setup_gui(enum_edit, get_view("simple"))
 
-                self.assertEqual(enum_edit.value, 'top left')
-                self.assertEqual(
-                    patched_cache.call_args[0][0], "@icons:top left_origin"
-                )
+            self.assertEqual(enum_edit.value, 'top left')
 
-                # Set up ImageEnumDialog
-                click_on_image(control)
-                gui.process_events()
+            # Set up ImageEnumDialog
+            click_on_image(control)
+            gui.process_events()
 
-                # Check created buttons
-                image_grid_control = control.GetChildren()[0].GetChildren()[0]
-                self.assertEqual(
-                    get_button_strings(image_grid_control),
-                    ['top left', 'top right', 'bottom left', 'bottom right']
-                )
+            # Check created buttons
+            image_grid_control = control.GetChildren()[0].GetChildren()[0]
+            self.assertEqual(
+                get_button_strings(image_grid_control),
+                ['top left', 'top right', 'bottom left', 'bottom right']
+            )
 
-                # Select new image
-                click_on_image(get_button_control(image_grid_control, 1))
-                gui.process_events()
+            # Select new image
+            click_on_image(get_button_control(image_grid_control, 1))
+            gui.process_events()
 
-                self.assertEqual(enum_edit.value, 'top right')
-                self.assertEqual(
-                    patched_cache.call_args[0][0], "@icons:top right_origin"
-                )
+            self.assertEqual(enum_edit.value, 'top right')
 
-                # Check that dialog window is closed
-                self.assertEqual(list(control.GetChildren()), [])
+            # Check that dialog window is closed
+            self.assertEqual(list(control.GetChildren()), [])
 
     @skip_if_not_qt4
     def test_simple_editor_combobox(self):
         enum_edit = EnumModel()
 
         with store_exceptions_on_all_threads():
-            with patch(cache_to_patch, wraps=image_cache) as patched_cache:
-                gui, combobox = self.setup_gui(enum_edit, get_view("simple"))
+            gui, combobox = self.setup_gui(enum_edit, get_view("simple"))
 
-                self.assertEqual(enum_edit.value, 'top left')
-                self.assertEqual(
-                    patched_cache.call_args[0][0], "@icons:top left_origin"
-                )
+            self.assertEqual(enum_edit.value, 'top left')
 
-                # Smoke test for ImageEnumItemDelegate painting
-                combobox.showPopup()
-                gui.process_events()
+            # Smoke test for ImageEnumItemDelegate painting
+            combobox.showPopup()
+            gui.process_events()
 
-                combobox.setCurrentIndex(1)
-                combobox.hidePopup()
-                gui.process_events()
+            combobox.setCurrentIndex(1)
+            combobox.hidePopup()
+            gui.process_events()
 
-                self.assertEqual(enum_edit.value, 'top right')
-                self.assertEqual(
-                    patched_cache.call_args[0][0], "@icons:top right_origin"
-                )
+            self.assertEqual(enum_edit.value, 'top right')
 
 
 @skip_if_null
