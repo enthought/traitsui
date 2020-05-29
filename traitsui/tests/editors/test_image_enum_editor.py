@@ -288,9 +288,6 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
         editor = ui.get_editors("value")[0]
         control = editor.control
 
-        if is_current_backend_qt4():
-            self.addCleanup(control.clear)
-
         return gui, control
 
     def test_simple_editor_more_cols(self):
@@ -356,10 +353,10 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
 
             # Smoke test for ImageEnumItemDelegate painting
             combobox.showPopup()
+            combobox.hidePopup()
             gui.process_events()
 
             combobox.setCurrentIndex(1)
-            combobox.hidePopup()
             gui.process_events()
 
             self.assertEqual(enum_edit.value, 'top right')
