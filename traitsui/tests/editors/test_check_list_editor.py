@@ -304,7 +304,7 @@ class TestSimpleCheckListEditor(unittest.TestCase):
         return gui, editor, combobox
 
     def test_simple_check_list_editor_text(self):
-        list_edit = ListModel()
+        list_edit = ListModel(value=["one"])
 
         with store_exceptions_on_all_threads():
             gui, _, combobox = self.setup_gui(list_edit, get_view("simple"))
@@ -318,7 +318,7 @@ class TestSimpleCheckListEditor(unittest.TestCase):
 
     def test_simple_check_list_editor_text_mapped(self):
         view = get_mapped_view("simple")
-        list_edit = ListModel()
+        list_edit = ListModel(value=[1])
 
         with store_exceptions_on_all_threads():
             gui, _, combobox = self.setup_gui(list_edit, view)
@@ -337,12 +337,12 @@ class TestSimpleCheckListEditor(unittest.TestCase):
             self.assertEqual(get_combobox_text(combobox), "two")
 
     def test_simple_check_list_editor_index(self):
-        list_edit = ListModel()
+        list_edit = ListModel(value=["one"])
 
         with store_exceptions_on_all_threads():
             gui, editor, _ = self.setup_gui(list_edit, get_view("simple"))
 
-            self.assertEqual(list_edit.value, [])
+            self.assertEqual(list_edit.value, ["one"])
 
             set_combobox_index(editor, 1)
             gui.process_events()
