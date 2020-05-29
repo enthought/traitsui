@@ -1,3 +1,4 @@
+import sys
 import unittest
 from unittest.mock import patch
 
@@ -21,6 +22,8 @@ if is_current_backend_wx():
 elif is_current_backend_qt4():
     from traitsui.qt4.helper import pixmap_cache as image_cache
     cache_to_patch = "traitsui.qt4.image_enum_editor.pixmap_cache"
+
+is_linux = (sys.platform == 'linux')
 
 
 class EnumModel(HasTraits):
@@ -290,6 +293,7 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
 
         return gui, control
 
+    @unittest.skipIf(is_linux, "Issue enthought/traitsui#854")
     def test_simple_editor_more_cols(self):
         # Smoke test for setting up an editor with more than one column
         enum_edit = EnumModel()
@@ -343,6 +347,7 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
             self.assertEqual(list(control.GetChildren()), [])
 
     @skip_if_not_qt4
+    @unittest.skipIf(is_linux, "Issue enthought/traitsui#854")
     def test_simple_editor_combobox(self):
         enum_edit = EnumModel()
 
