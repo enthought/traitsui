@@ -60,10 +60,10 @@ def store_exceptions_on_all_threads():
         traits.trait_notifiers.handle_exception = handle_exception
         yield
     finally:
-        if len(exceptions) > 0:
-            raise exceptions[0]
         sys.excepthook = sys.__excepthook__
         traits.trait_notifiers.handle_exception = _original_handle_exception
+        if len(exceptions) > 0:
+            raise exceptions[0]
 
 
 def _is_current_backend(backend_name=""):
@@ -206,6 +206,32 @@ def get_dialog_size(ui_control):
     elif is_current_backend_qt4():
         return ui_control.size().width(), ui_control.size().height()
 
+
+def get_all_button_status(control):
+    """Get status of all 2-state (wx) or checkable (qt) buttons under given
+    control.
+
+    Assumes all sizer children (wx) or layout items (qt) are buttons.
+    """
+    button_status = []
+
+    if is_current_backend_wx():
+        for item in control.GetSizer().GetChildren():
+            button = item.GetWindow()
+            # Ignore empty buttons (assumption that they are invisible)
+            if button.value != "":
+                button_status.append(button.GetValue())
+
+    elif is_current_backend_qt4():
+        layout = control.layout()
+        for i in range(layout.count()):
+            button = layout.itemAt(i).widget()
+            button_status.append(button.isChecked())
+
+    else:
+        raise NotImplementedError()
+
+    return button_status
 
 # ######### Debug tools
 
