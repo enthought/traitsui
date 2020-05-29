@@ -230,17 +230,13 @@ class TestImageEnumEditorMapping(unittest.TestCase):
                 {"top right": "TOP RIGHT", "top left": "TOP LEFT"}
             )
 
+    @unittest.skip("Issue enthought/traitsui#844")
     def test_simple_editor_mapping_values(self):
-        # FIXME issue enthought/traitsui#844
-        error_msg = "'ImageEnumModel' object has no attribute 'reset'"
-        with self.assertRaisesRegex(AttributeError, error_msg):
-            self.check_enum_mappings_value_change("simple")
+        self.check_enum_mappings_value_change("simple")
 
+    @unittest.skip("Issue enthought/traitsui#844")
     def test_simple_editor_mapping_name(self):
-        # FIXME issue enthought/traitsui#844
-        error_msg = "'ImageEnumModel' object has no attribute 'reset'"
-        with self.assertRaisesRegex(AttributeError, error_msg):
-            self.check_enum_mappings_name_change("simple")
+        self.check_enum_mappings_name_change("simple")
 
     def test_custom_editor_mapping_values(self):
         self.check_enum_mappings_value_change("custom")
