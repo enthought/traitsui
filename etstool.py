@@ -109,7 +109,7 @@ dependencies = {
     "docutils"
 }
 
-# Additional toolkit-independent dependencies for testing
+# Additional toolkit-independent dependencies for demo testing
 test_dependencies = {
     "apptools",
     "chaco",
