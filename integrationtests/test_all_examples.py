@@ -218,7 +218,6 @@ def run_file(file_path):
         content = f.read()
 
     globals = {
-        "__package__": __package__,
         "__name__": "traitsui",   # as long as it is not __main__
         "__file__": file_path,
     }
