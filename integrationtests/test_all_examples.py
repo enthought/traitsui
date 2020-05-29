@@ -112,7 +112,7 @@ skip_file_if(
     os.path.join(TUTORIALS, "view_standalone.py"),
 )
 skip_file_if(
-    is_current_backend_qt4, "Failing on Qt, need fixing",
+    is_current_backend_qt4, "Failing on Qt, see enthought/traitsui#773",
     os.path.join(TUTORIALS, "wizard.py"),
 )
 
