@@ -222,7 +222,7 @@ def test(runtime, toolkit, environment):
         environ["EXCLUDE_TESTS"] = "(wx|qt)"
 
     commands = [
-        #"edm run -e {environment} -- coverage run -p -m unittest discover -v traitsui",
+        "edm run -e {environment} -- coverage run -p -m unittest discover -v traitsui",
         "edm run -e {environment} -- coverage run -p -m unittest -v integrationtests.test_all_examples",
     ]
 
