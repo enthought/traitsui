@@ -288,6 +288,9 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
         editor = ui.get_editors("value")[0]
         control = editor.control
 
+        if is_current_backend_qt4():
+            self.addCleanup(control.clear)
+
         return gui, control
 
     def test_simple_editor_more_cols(self):
