@@ -109,6 +109,14 @@ dependencies = {
     "docutils"
 }
 
+# Additional toolkit-independent dependencies for testing
+test_dependencies = {
+    "apptools",
+    "chaco",
+    "h5py",
+    "pytables",
+}
+
 extra_dependencies = {
     # XXX once pyside2 is available in EDM, we will want it here
     'pyside2': set(),
@@ -156,6 +164,7 @@ def install(runtime, toolkit, environment, editable):
         dependencies
         | extra_dependencies.get(toolkit, set())
         | runtime_dependencies.get(runtime, set())
+        | test_dependencies
     )
 
     install_traitsui = "edm run -e {environment} -- pip install "
@@ -213,7 +222,7 @@ def test(runtime, toolkit, environment):
         environ["EXCLUDE_TESTS"] = "(wx|qt)"
 
     commands = [
-        "edm run -e {environment} -- coverage run -p -m unittest discover -v traitsui",
+        #"edm run -e {environment} -- coverage run -p -m unittest discover -v traitsui",
         "edm run -e {environment} -- coverage run -p -m unittest -v integrationtests.test_all_examples",
     ]
 

@@ -15,6 +15,7 @@ import contextlib
 from itertools import chain
 import os
 import unittest
+from unittest import mock
 
 from traits.api import HasTraits
 
@@ -68,18 +69,6 @@ skip_file_if(
     os.path.join(DEMO, "demo.py"),
 )
 skip_file_if(
-    lambda: True, "Missing dependency: apptools",
-    os.path.join(DEMO, "Advanced", "Adapted_tree_editor_demo.py"),
-)
-skip_file_if(
-    lambda: True, "Missing dependency: h5py",
-    os.path.join(DEMO, "Advanced", "HDF5_tree_demo.py"),
-)
-skip_file_if(
-    lambda: True, "Missing dependency: h5py",
-    os.path.join(DEMO, "Advanced", "HDF5_tree_demo2.py"),
-)
-skip_file_if(
     is_current_backend_wx, "ProgressRenderer is not implemented in wx.",
     os.path.join(DEMO, "Advanced", "Table_editor_with_progress_column.py"),
 )
@@ -100,7 +89,8 @@ skip_file_if(
     os.path.join(DEMO, "Extras", "windows", "internet_explorer.py"),
 )
 skip_file_if(
-    lambda: True, "Missing dependency: chaco",
+    is_current_backend_wx,
+    "enable tries to import a missing constant. See enthought/enable#307",
     os.path.join(DEMO, "Useful", "demo_group_size.py"),
 )
 skip_file_if(
@@ -232,7 +222,11 @@ def run_file(file_path):
         "__name__": "traitsui",   # as long as it is not __main__
         "__file__": file_path,
     }
-    with replace_configure_traits():
+    with replace_configure_traits(), \
+            mock.patch("sys.argv", [file_path]):
+        # Some example reads sys.argv to allow more arguments
+        # But all examples should support being run without additional
+        # arguments.
         exec(content, globals)
 
 
