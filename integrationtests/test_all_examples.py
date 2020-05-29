@@ -73,7 +73,7 @@ skip_file_if(
     os.path.join(DEMO, "Advanced", "Table_editor_with_progress_column.py"),
 )
 skip_file_if(
-    lambda: not is_current_backend_wx(), "Require wx",
+    lambda: not is_current_backend_wx(), "Only support wx",
     os.path.join(DEMO, "Extras", "animated_GIF.py"),
 )
 skip_file_if(
@@ -81,11 +81,11 @@ skip_file_if(
     os.path.join(DEMO, "Extras", "Tree_editor_with_TreeNodeRenderer.py"),
 )
 skip_file_if(
-    lambda: not is_current_backend_wx(), "Require wx",
+    lambda: not is_current_backend_wx(), "Only support wx",
     os.path.join(DEMO, "Extras", "windows", "flash.py"),
 )
 skip_file_if(
-    lambda: not is_current_backend_wx(), "Require wx",
+    lambda: not is_current_backend_wx(), "Only support wx",
     os.path.join(DEMO, "Extras", "windows", "internet_explorer.py"),
 )
 skip_file_if(
