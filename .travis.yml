@@ -3,6 +3,11 @@ dist: xenial
 services:
   - xvfb
 
+addons:
+  apt:
+    packages:
+    - libglu1-mesa-dev
+
 env:
   global:
     - INSTALL_EDM_VERSION=2.0.0
