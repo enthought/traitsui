@@ -155,25 +155,14 @@ class TestImageEnumEditorMapping(unittest.TestCase):
         with store_exceptions_on_all_threads():
             editor = self.setup_ui(EnumModel(), formatted_view)
 
-            # FIXME issue enthought/traitsui#782
-            with self.assertRaises(AssertionError):
-                self.assertEqual(editor.names, ["TOP LEFT", "TOP RIGHT"])
-                self.assertEqual(
-                    editor.mapping,
-                    {"TOP LEFT": "top left", "TOP RIGHT": "top right"}
-                )
-                self.assertEqual(
-                    editor.inverse_mapping,
-                    {"top left": "TOP LEFT", "top right": "TOP RIGHT"}
-                )
-            self.assertEqual(editor.names, ["top left", "top right"])
+            self.assertEqual(editor.names, ["TOP LEFT", "TOP RIGHT"])
             self.assertEqual(
                 editor.mapping,
-                {"top left": "top left", "top right": "top right"}
+                {"TOP LEFT": "top left", "TOP RIGHT": "top right"}
             )
             self.assertEqual(
                 editor.inverse_mapping,
-                {"top left": "top left", "top right": "top right"}
+                {"top left": "TOP LEFT", "top right": "TOP RIGHT"}
             )
 
             image_enum_editor_factory.values = ["top right", "top left"]
