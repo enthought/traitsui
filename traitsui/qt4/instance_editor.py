@@ -400,7 +400,10 @@ class CustomEditor(Editor):
 
 
 @simulate(CustomEditor)
-class CustomEditorSimulator(BaseSimulator):
+class CustomInstanceEditorSimulator(BaseSimulator):
+    """ A simulator for custom instance editor: it delegates commands and
+    queries to the internal UI panel.
+    """
 
     @contextlib.contextmanager
     def get_ui(self):
@@ -478,6 +481,9 @@ class SimpleEditor(CustomEditor):
 
 @simulate(SimpleEditor)
 class SimpleInstanceEditorSimulator(BaseSimulator):
+    """ A simulator for simple instance editor. It launches the dialog and
+    delegates commands and queries to the dialog UI.
+    """
 
     @contextlib.contextmanager
     def get_ui(self):
