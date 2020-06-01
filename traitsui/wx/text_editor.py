@@ -75,7 +75,8 @@ class SimpleEditor(Editor):
             style |= wx.TE_PASSWORD
 
         multi_line = (style & wx.TE_MULTILINE) != 0
-        self.scrollable = multi_line
+        if multi_line:
+            self.scrollable = True
 
         if factory.enter_set and (not multi_line):
             control = wx.TextCtrl(
@@ -95,19 +96,6 @@ class SimpleEditor(Editor):
         self.control = control
         self.set_error_state(False)
         self.set_tooltip()
-
-    def dispose(self):
-        factory = self.factory
-        control = self.control
-        parent = control.GetParent()
-
-        if factory.enter_set and (not self.scrollable):
-            parent.Unbind(wx.EVT_TEXT_ENTER,  id=control.GetId())
-
-        control.Unbind(wx.EVT_KILL_FOCUS)
-        if factory.auto_set:
-            parent.Unbind(wx.EVT_TEXT, id=control.GetId())
-        super().dispose()
 
     def update_object(self, event):
         """ Handles the user entering input data in the edit control.
