@@ -309,15 +309,3 @@ class EditorWithListFactory(EditorFactory):
 
     #: Name of the trait on 'object' containing the enumeration data
     name = Str()
-
-    #: Fired when the **values** trait has been updated:
-    values_modified = Event()
-
-    def _values_changed(self):
-        """ Recomputes the mappings whenever the **values** trait is changed.
-        """
-        self._names, self._mapping, self._inverse_mapping = enum_values_changed(
-            self.values, strfunc=self.string_value
-        )
-
-        self.values_modified = True

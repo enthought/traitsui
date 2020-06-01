@@ -170,17 +170,10 @@ class TestSetEditorMapping(unittest.TestCase):
         with store_exceptions_on_all_threads():
             editor = self.setup_ui(IntListModel(), formatted_view)
 
-            # FIXME issue enthought/traitsui#782
-            with self.assertRaises(AssertionError):
-                self.assertEqual(editor.names, ["FALSE", "TRUE"])
-                self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
-                self.assertEqual(
-                    editor.inverse_mapping, {0: "FALSE", 1: "TRUE"}
-                )
-            self.assertEqual(editor.names, ["0", "1"])
-            self.assertEqual(editor.mapping, {"0": 0, "1": 1})
+            self.assertEqual(editor.names, ["FALSE", "TRUE"])
+            self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
             self.assertEqual(
-                editor.inverse_mapping, {0: "0", 1: "1"}
+                editor.inverse_mapping, {0: "FALSE", 1: "TRUE"}
             )
 
             set_editor_factory.values = [1, 0]
@@ -211,47 +204,19 @@ class TestSetEditorMapping(unittest.TestCase):
         with store_exceptions_on_all_threads():
             editor = self.setup_ui(model, formatted_view)
 
-            # FIXME issue enthought/traitsui#835
-            if is_current_backend_wx():
-                with self.assertRaises(AssertionError):
-                    self.assertEqual(editor.names, ["FALSE", "TRUE"])
-                    self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
-                    self.assertEqual(
-                        editor.inverse_mapping, {0: "FALSE", 1: "TRUE"}
-                    )
-                self.assertEqual(editor.names, ["0", "1"])
-                self.assertEqual(editor.mapping, {"0": 0, "1": 1})
-                self.assertEqual(
-                    editor.inverse_mapping, {0: "0", 1: "1"}
-                )
-            else:
-                self.assertEqual(editor.names, ["FALSE", "TRUE"])
-                self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
-                self.assertEqual(
-                    editor.inverse_mapping, {0: "FALSE", 1: "TRUE"}
-                )
+            self.assertEqual(editor.names, ["FALSE", "TRUE"])
+            self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
+            self.assertEqual(
+                editor.inverse_mapping, {0: "FALSE", 1: "TRUE"}
+            )
 
             model.possible_values = [1, 0]
 
-            # FIXME issue enthought/traitsui#835
-            if is_current_backend_wx():
-                with self.assertRaises(AssertionError):
-                    self.assertEqual(editor.names, ["TRUE", "FALSE"])
-                    self.assertEqual(editor.mapping, {"TRUE": 1, "FALSE": 0})
-                    self.assertEqual(
-                        editor.inverse_mapping, {1: "TRUE", 0: "FALSE"}
-                    )
-                self.assertEqual(editor.names, ["1", "0"])
-                self.assertEqual(editor.mapping, {"1": 1, "0": 0})
-                self.assertEqual(
-                    editor.inverse_mapping, {1: "1", 0: "0"}
-                )
-            else:
-                self.assertEqual(editor.names, ["TRUE", "FALSE"])
-                self.assertEqual(editor.mapping, {"TRUE": 1, "FALSE": 0})
-                self.assertEqual(
-                    editor.inverse_mapping, {1: "TRUE", 0: "FALSE"}
-                )
+            self.assertEqual(editor.names, ["TRUE", "FALSE"])
+            self.assertEqual(editor.mapping, {"TRUE": 1, "FALSE": 0})
+            self.assertEqual(
+                editor.inverse_mapping, {1: "TRUE", 0: "FALSE"}
+            )
 
 
 @skip_if_null

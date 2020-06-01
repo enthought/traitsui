@@ -31,9 +31,11 @@ from traits.api import Property
 # traitsui.editors.set_editor file.
 from traitsui.editors.set_editor import ToolkitEditorFactory
 
+from traitsui.helper import enum_values_changed
+
 from .editor import Editor
 
-from .helper import enum_values_changed, TraitsUIPanel
+from .helper import TraitsUIPanel
 
 
 # -------------------------------------------------------------------------
@@ -81,8 +83,10 @@ class SimpleEditor(Editor):
                 self._values_changed, self._name, dispatch="ui"
             )
         else:
+            self._value = lambda: self.factory.values
+            self.values_changed()
             factory.on_trait_change(
-                self.update_editor, "values_modified", dispatch="ui"
+                self._values_changed, "values", dispatch="ui"
             )
 
         self.control = panel = TraitsUIPanel(parent, -1)
@@ -139,25 +143,16 @@ class SimpleEditor(Editor):
     def _get_names(self):
         """ Gets the current set of enumeration names.
         """
-        if self._object is None:
-            return self.factory._names
-
         return self._names
 
     def _get_mapping(self):
         """ Gets the current mapping.
         """
-        if self._object is None:
-            return self.factory._mapping
-
         return self._mapping
 
     def _get_inverse_mapping(self):
         """ Gets the current inverse mapping.
         """
-        if self._object is None:
-            return self.factory._inverse_mapping
-
         return self._inverse_mapping
 
     def _create_listbox(self, parent, sizer, handler1, handler2, title):
@@ -197,14 +192,16 @@ class SimpleEditor(Editor):
         return button
 
     def values_changed(self):
-        """ Recomputes the cached data based on the underlying enumeration model.
+        """ Recomputes the cached data based on the underlying enumeration model
+            or the values of the factory.
         """
         self._names, self._mapping, self._inverse_mapping = enum_values_changed(
-            self._value()
+            self._value(), self.string_value
         )
 
     def _values_changed(self):
-        """ Handles the underlying object model's enumeration set being changed.
+        """ Handles the underlying object model's enumeration set or factory's
+            values being changed.
         """
         self.values_changed()
         self.update_editor()
@@ -287,7 +284,7 @@ class SimpleEditor(Editor):
             )
         else:
             self.factory.on_trait_change(
-                self.update_editor, "values_modified", remove=True
+                self._values_changed, "values", remove=True
             )
 
         self.context_object.on_trait_change(
