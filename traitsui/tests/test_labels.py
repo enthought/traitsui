@@ -133,10 +133,9 @@ class TestLabels(unittest.TestCase):
         # that are shown to the *right* of the corresponding elements
 
         from pyface import qt
-
-        with store_exceptions_on_all_threads():
-            dialog = ShowRightLabelsDialog()
-            ui = dialog.edit_traits()
+        dialog = ShowRightLabelsDialog()
+        with store_exceptions_on_all_threads(), \
+                create_ui(dialog) as ui:
 
             # get reference to label objects
             labels = ui.control.findChildren(qt.QtGui.QLabel)
