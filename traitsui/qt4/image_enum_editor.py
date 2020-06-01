@@ -57,6 +57,8 @@ class ReadonlyEditor(BaseEditor, BaseEnumEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
+        super(ReadonlyEditor, self).init(parent)
+
         self.control = QtGui.QLabel()
         self.control.setPixmap(self.get_pixmap(self.str_value))
         self.set_tooltip()
@@ -66,6 +68,12 @@ class ReadonlyEditor(BaseEditor, BaseEnumEditor):
             editor.
         """
         self.control.setPixmap(self.get_pixmap(self.str_value))
+
+    def rebuild_editor(self):
+        """ Rebuilds the contents of the editor whenever the original factory
+            object's **values** trait changes.
+        """
+        pass
 
 
 class SimpleEditor(BaseEditor, SimpleEnumEditor):
