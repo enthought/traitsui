@@ -883,11 +883,6 @@ class FillPanel(object):
 
                     editor_factory = ToolkitEditorFactory()
 
-                # If the item has an invalid state extended trait name, set it
-                # in the editor factory:
-                if item.invalid != "":
-                    editor_factory.invalid = item.invalid
-
             # Set up the background image (if used):
             item_panel = panel
 
@@ -903,6 +898,11 @@ class FillPanel(object):
 
             if item.format_str != "":
                 editor.format_str = item.format_str
+
+            # If the item has an invalid state extended trait name, set it
+            # in the editor:
+            if item.invalid != "":
+                editor.invalid_trait_name = item.invalid
 
             # Tell editor to actually build the editing widget:
             editor.prepare(item_panel)

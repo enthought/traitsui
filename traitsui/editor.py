@@ -126,6 +126,10 @@ class Editor(HasPrivateTraits):
     #: Format string to use for formatting (used if **format_func** is not set)
     format_str = Str()
 
+    #: The extended trait name of the trait containing editor invalid state
+    #: status:
+    invalid_trait_name = Str()
+
     #: The current editor invalid state status:
     invalid = Bool(False)
 
@@ -490,7 +494,7 @@ class Editor(HasPrivateTraits):
                 raise
 
         # Synchronize the application invalid state status with the editor's:
-        self.sync_value(self.factory.invalid, "invalid", "from")
+        self.sync_value(self.invalid_trait_name, "invalid", "from")
 
     # ------------------------------------------------------------------------
     # private methods

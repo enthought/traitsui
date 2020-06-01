@@ -359,6 +359,7 @@ class CSVListEditor(TextEditor):
             description=description,
             format_func=self.format_func,
             format_str=self.format_str,
+            invalid_trait_name=self.invalid,
         )
 
     def custom_editor(self, ui, object, name, description, parent):
@@ -374,6 +375,7 @@ class CSVListEditor(TextEditor):
             description=description,
             format_func=self.format_func,
             format_str=self.format_str,
+            invalid_trait_name=self.invalid,
         )
 
     def text_editor(self, ui, object, name, description, parent):
@@ -389,6 +391,7 @@ class CSVListEditor(TextEditor):
             description=description,
             format_func=self.format_func,
             format_str=self.format_str,
+            invalid_trait_name=self.invalid,
         )
 
     def readonly_editor(self, ui, object, name, description, parent):
@@ -404,4 +407,5 @@ class CSVListEditor(TextEditor):
             description=description,
             format_func=self.format_func,
             format_str=self.format_str,
+            invalid_trait_name=self.invalid,
         )
