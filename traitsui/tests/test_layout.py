@@ -27,7 +27,9 @@ from traitsui.view import View
 from traitsui.group import HGroup, VGroup
 
 from traitsui.tests._tools import (
+    create_ui,
     skip_if_not_qt4,
+    skip_if_null,
     store_exceptions_on_all_threads,
 )
 
@@ -35,6 +37,13 @@ from traitsui.tests._tools import (
 _DIALOG_WIDTH = 500
 _DIALOG_HEIGHT = 500
 _TXT_WIDTH = 100
+
+
+class MultipleTrait(HasTraits):
+    """ An object with multiple traits to test layout and alignments."""
+
+    txt1 = Str("text1")
+    txt2 = Str("text2")
 
 
 class VResizeDialog(HasTraits):
@@ -71,11 +80,10 @@ class TestLayout(unittest.TestCase):
 
         from pyface import qt
 
-        with store_exceptions_on_all_threads():
-            dialog = VResizeDialog()
-            ui = dialog.edit_traits()
-
-            text = ui.control.findChild(qt.QtGui.QLineEdit)
+        with store_exceptions_on_all_threads(), \
+                create_ui(VResizeDialog()) as ui:
+            editor, = ui.get_editors("txt")
+            text = editor.control
 
             # horizontal size should be large
             self.assertGreater(text.width(), _DIALOG_WIDTH - 100)
@@ -91,11 +99,11 @@ class TestLayout(unittest.TestCase):
 
         from pyface import qt
 
-        with store_exceptions_on_all_threads():
-            dialog = HResizeDialog()
-            ui = dialog.edit_traits()
+        with store_exceptions_on_all_threads(), \
+                create_ui(HResizeDialog()) as ui:
 
-            text = ui.control.findChild(qt.QtGui.QLineEdit)
+            editor, = ui.get_editors("txt")
+            text = editor.control
 
             # vertical size should be large
             self.assertGreater(text.height(), _DIALOG_HEIGHT - 100)
@@ -104,6 +112,34 @@ class TestLayout(unittest.TestCase):
             # ??? maybe not: some elements (e.g., the text field) have
             # 'Expanding' as their default behavior
             # self.assertLess(text.width(), _TXT_WIDTH+100)
+
+
+@skip_if_null
+class TestOrientation(unittest.TestCase):
+    """ Toolkit-agnostic tests on the layout orientations."""
+
+    def test_vertical_layout(self):
+        view = View(
+            VGroup(
+                Item("txt1"),
+                Item("txt2"),
+            )
+        )
+        with store_exceptions_on_all_threads(), \
+                create_ui(MultipleTrait(), ui_kwargs=dict(view=view)):
+            pass
+
+    def test_horizontal_layout(self):
+        # layout
+        view = View(
+            HGroup(
+                Item("txt1"),
+                Item("txt2"),
+            )
+        )
+        with store_exceptions_on_all_threads(), \
+                create_ui(MultipleTrait(), ui_kwargs=dict(view=view)):
+            pass
 
 
 if __name__ == "__main__":
