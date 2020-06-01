@@ -186,6 +186,11 @@ class CustomEditor(SimpleEditor):
 @simulate(CustomEditor)
 @simulate(SimpleEditor)
 class TextEditorSimulator(BaseSimulator):
+    """ A simulator for testing GUI components with the simple and custom
+    styled TextEditor.
+
+    See ``traitsui.testing.api``.
+    """
 
     def set_text(self, text, confirmed=True):
         if not self.editor.control.isEnabled():

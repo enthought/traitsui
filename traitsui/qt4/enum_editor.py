@@ -302,6 +302,10 @@ class SimpleEditor(BaseEditor):
 
 @simulate(SimpleEditor)
 class SimpleEnumEditorSimulator(BaseSimulator):
+    """ A simulator for testing GUI components with the simple EnumEditor.
+
+    See ``traitsui.testing.api``.
+    """
 
     def click_index(self, index):
         self.editor.control.setCurrentIndex(index)
