@@ -30,6 +30,7 @@ from traitsui.helper import enum_values_changed
 from .constants import OKColor, ErrorColor
 from .editor import Editor
 
+from traitsui.testing.api import BaseSimulator, Disabled, simulate
 
 # default formatting function (would import from string, but not in Python 3)
 capitalize = lambda s: s.capitalize()
@@ -297,6 +298,25 @@ class SimpleEditor(BaseEditor):
         if self.control is not None:
             text = self.control.lineEdit().text()
             return self.update_text_object(text)
+
+
+@simulate(SimpleEditor)
+class SimpleEnumEditorSimulator(BaseSimulator):
+
+    def click_index(self, index):
+        self.editor.control.setCurrentIndex(index)
+
+    def set_text(self, text, confirmed=True):
+        if not self.editor.control.isEditable():
+            raise Disabled("This combox box is not editable by text.")
+
+        self.editor.control.setEditText(text)
+        line_edit = self.editor.control.lineEdit()
+        if line_edit is not None and confirmed:
+            line_edit.editingFinished.emit()
+
+    def get_text(self):
+        return self.editor.control.currentText()
 
 
 class RadioEditor(BaseEditor):

@@ -1,4 +1,7 @@
 
+import contextlib
+
+
 class BaseSimulator:
     """ The base class for all simulators to be used for simulating user
     interactions with GUI components for testing TraitsUI and applications
@@ -28,18 +31,21 @@ class BaseSimulator:
     def __init__(self, editor):
         self.editor = editor
 
+    @contextlib.contextmanager
     def get_ui(self):
-        """ Return an instance of traitsui.ui.UI for delegating actions to.
+        """ A context manager to yield an instance of traitsui.ui.UI for
+        delegating actions to.
 
         Subclass may override this method, e.g. to delegate actions or queries
-        on a different simulator. Default implementation is to return
-        NotImplemented, and the original UI will be used.
+        on a different simulator. Default implementation is to yield
+        NotImplemented and perform no additional clean ups; the original UI
+        will be used.
 
-        Returns
-        -------
+        Yields
+        ------
         ui : traitsui.ui.UI or NotImplemeneted
         """
-        return NotImplemented
+        yield NotImplemented
 
     def get_text(self):
         """ Return the text value being presented by the editor.
@@ -59,7 +65,7 @@ class BaseSimulator:
             "{!r} has not implemented 'get_text'.".format(self.__class__)
         )
 
-    def set_text(self, text):
+    def set_text(self, text, confirmed=True):
         """ Set the text value for an editor.
 
         This is an optional method. Subclass may not have implemented this
@@ -69,6 +75,10 @@ class BaseSimulator:
         ----------
         text : str
             Text to be set on the GUI component.
+        confirmed : boolean, optional
+            Whether the text change is confirmed. Useful for testing the absent
+            of events when ``auto_set`` is set to false. Default is to confirm
+            the change.
 
         Raises
         ------
@@ -281,16 +291,16 @@ def set_editor_value(ui, name, setter, registry=REGISTRY):
         editor.
     """
     simulator, name = _get_one_simulator(ui=ui, name=name, registry=registry)
-    alternative_ui = simulator.get_ui()
-    if alternative_ui is not NotImplemented:
-        set_editor_value(
-            ui=alternative_ui,
-            name=name,
-            getter=getter,
-            registry=registry,
-        )
-    else:
-        setter(simulator)
+    with simulator.get_ui() as alternative_ui:
+        if alternative_ui is not NotImplemented:
+            set_editor_value(
+                ui=alternative_ui,
+                name=name,
+                setter=setter,
+                registry=registry,
+            )
+        else:
+            setter(simulator)
 
 
 def get_editor_value(ui, name, getter, registry=REGISTRY):
@@ -315,15 +325,15 @@ def get_editor_value(ui, name, getter, registry=REGISTRY):
         Any value returned by the getter.
     """
     simulator, name = _get_one_simulator(ui=ui, name=name, registry=registry)
-    alternative_ui = simulator.get_ui()
-    if alternative_ui is not NotImplemented:
-        return get_editor_value(
-            ui=alternative_ui,
-            name=name,
-            getter=getter,
-            registry=registry,
-        )
-    return getter(simulator)
+    with simulator.get_ui() as alternative_ui:
+        if alternative_ui is not NotImplemented:
+            return get_editor_value(
+                ui=alternative_ui,
+                name=name,
+                getter=getter,
+                registry=registry,
+            )
+        return getter(simulator)
 
 
 def _get_one_simulator(ui, name, registry=REGISTRY):
@@ -374,7 +384,6 @@ def _get_simulators(ui, name, registry=REGISTRY):
     ----------
     ui : traitsui.ui.UI
     name : str
-
     """
     if "." in name:
         editor_name, name = name.split(".", 1)
@@ -383,7 +392,7 @@ def _get_simulators(ui, name, registry=REGISTRY):
     editors = ui.get_editors(editor_name)
 
     simulators = [
-        registry.get_simulator_class(editor)(editor)
+        registry.get_simulator_class(editor.__class__)(editor)
         for editor in editors
     ]
     return simulators, name

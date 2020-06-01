@@ -5,7 +5,7 @@ from traits.api import (
     Bool, Button, Date, Enum, Instance, HasTraits, List, Str, Int,
     on_trait_change, Property
 )
-from traitsui.api import ModelView, View, Item, CheckListEditor
+from traitsui.api import EnumEditor, Item, ModelView, View
 from traitsui.testing.api import Disabled, UITester
 from traitsui.tests._tools import (
     requires_one_of,
@@ -20,6 +20,20 @@ class Parent(HasTraits):
     last_name = Str()
     age = Int()
     employment_status = Enum(["employed", "unemployed"])
+
+    def default_traits_view(self):
+        return View(
+            Item("first_name"),
+            Item("last_name"),
+            Item("age"),
+            Item(
+                "employment_status",
+                editor=EnumEditor(
+                    values=["employed", "unemployed"],
+                    evaluate=True,
+                )
+            ),
+        )
 
 
 class Child(HasTraits):
@@ -60,8 +74,12 @@ class TestUITesterIntegration(unittest.TestCase):
         father = Parent(first_name="M", last_name="C")
         mother = Parent(first_name="J", last_name="E", age=50)
         child = Child(mother=mother, father=father)
+        view = View(
+            Item("model.father", style="simple"),
+            Item("model.mother", style="custom"),
+        )
         app = SimpleApplication(model=child)
-        with self.tester.create_ui(app) as ui:
+        with self.tester.create_ui(app, dict(view=view)) as ui:
             self.tester.set_text(ui, "father.first_name", "B")
             self.assertEqual(app.model.father.first_name, "B")
 
@@ -83,7 +101,11 @@ class TestUITesterIntegration(unittest.TestCase):
         mother = Parent(first_name="J", last_name="E", age=50)
         child = Child(mother=mother, father=father)
         app = SimpleApplication(model=child)
-        with self.tester.create_ui(app) as ui:
+        view = View(
+            Item("model.father", style="simple"),
+            Item("model.mother", style="custom"),
+        )
+        with self.tester.create_ui(app, dict(view=view)) as ui:
             app.model.father.first_name = "B"
             actual = self.tester.get_text(ui, "father.first_name")
             self.assertEqual(actual, "B")

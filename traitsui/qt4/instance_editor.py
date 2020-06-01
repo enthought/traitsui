@@ -14,6 +14,7 @@
     the PyQt user interface toolkit..
 """
 
+import contextlib
 
 from pyface.qt import QtCore, QtGui
 
@@ -31,6 +32,8 @@ from .editor import Editor
 from .drop_editor import _DropEventFilter
 from .constants import DropColor
 from .helper import position_window
+
+from traitsui.testing.api import BaseSimulator, simulate
 
 
 OrientationMap = {
@@ -396,6 +399,14 @@ class CustomEditor(Editor):
         self.resynch_editor()
 
 
+@simulate(CustomEditor)
+class CustomEditorSimulator(BaseSimulator):
+
+    @contextlib.contextmanager
+    def get_ui(self):
+        yield self.editor._ui
+
+
 class SimpleEditor(CustomEditor):
     """ Simple style of editor for instances, which displays a button. Clicking
     the button displays a dialog box in which the instance can be edited.
@@ -463,3 +474,15 @@ class SimpleEditor(CustomEditor):
                 self._dialog_ui.control.close()
             self._dialog_ui.dispose()
             self._dialog_ui = None
+
+
+@simulate(SimpleEditor)
+class SimpleInstanceEditorSimulator(BaseSimulator):
+
+    @contextlib.contextmanager
+    def get_ui(self):
+        self.editor._button.click()
+        try:
+            yield self.editor._dialog_ui
+        finally:
+            self.editor._dialog_ui.dispose()

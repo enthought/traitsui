@@ -29,6 +29,7 @@ from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
 from .constants import OKColor
 
+from traitsui.testing.api import BaseSimulator, Disabled, simulate
 
 
 class SimpleEditor(Editor):
@@ -180,6 +181,24 @@ class CustomEditor(SimpleEditor):
     #: FIXME: The wx version exposes a wx constant.
     #: Flag for window style. This value overrides the default.
     base_style = QtGui.QTextEdit
+
+
+@simulate(CustomEditor)
+@simulate(SimpleEditor)
+class TextEditorSimulator(BaseSimulator):
+
+    def set_text(self, text, confirmed=True):
+        if not self.editor.control.isEnabled():
+            raise Disabled("Text field is disabled.")
+
+        self.editor.control.setText(text)
+
+        factory = self.editor.factory
+        if factory.auto_set and not factory.is_grid_cell and confirmed:
+            self.editor.control.textEdited.emit(text)
+
+    def get_text(self):
+        return self.editor.control.text()
 
 
 class ReadonlyEditor(BaseReadonlyEditor):
