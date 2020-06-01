@@ -883,14 +883,6 @@ class FillPanel(object):
 
                     editor_factory = ToolkitEditorFactory()
 
-                # If the item has formatting traits set them in the editor
-                # factory:
-                if item.format_func is not None:
-                    editor_factory.format_func = item.format_func
-
-                if item.format_str != "":
-                    editor_factory.format_str = item.format_str
-
                 # If the item has an invalid state extended trait name, set it
                 # in the editor factory:
                 if item.invalid != "":
@@ -904,6 +896,13 @@ class FillPanel(object):
             editor = factory_method(
                 ui, object, name, item.tooltip, item_panel
             ).trait_set(item=item, object_name=item.object)
+
+            # If the item has formatting traits set them in the editor:
+            if item.format_func is not None:
+                editor.format_func = item.format_func
+
+            if item.format_str != "":
+                editor.format_str = item.format_str
 
             # Tell editor to actually build the editing widget:
             editor.prepare(item_panel)

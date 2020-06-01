@@ -135,6 +135,8 @@ class EditorFactory(HasPrivateTraits):
             object=object,
             name=name,
             description=description,
+            format_func=self.format_func,
+            format_str=self.format_str,
         )
 
     def custom_editor(self, ui, object, name, description, parent):
@@ -147,6 +149,8 @@ class EditorFactory(HasPrivateTraits):
             object=object,
             name=name,
             description=description,
+            format_func=self.format_func,
+            format_str=self.format_str,
         )
 
     def text_editor(self, ui, object, name, description, parent):
@@ -159,6 +163,8 @@ class EditorFactory(HasPrivateTraits):
             object=object,
             name=name,
             description=description,
+            format_func=self.format_func,
+            format_str=self.format_str,
         )
 
     def readonly_editor(self, ui, object, name, description, parent):
@@ -171,6 +177,8 @@ class EditorFactory(HasPrivateTraits):
             object=object,
             name=name,
             description=description,
+            format_func=self.format_func,
+            format_str=self.format_str,
         )
 
     # -------------------------------------------------------------------------
@@ -198,26 +206,6 @@ class EditorFactory(HasPrivateTraits):
                 if index == len(editor_factory_modules) - 1:
                     raise e
         return None
-
-    def string_value(self, value, format_func=None):
-        """ Returns the text representation of a specified object trait value.
-
-        If the **format_func** attribute is set on the editor factory, then
-        this method calls that function to do the formatting.  If the
-        **format_str** attribute is set on the editor factory, then this
-        method uses that string for formatting. If neither attribute is
-        set, then this method just calls the appropriate text type to format.
-        """
-        if self.format_func is not None:
-            return self.format_func(value)
-
-        if self.format_str != "":
-            return self.format_str % value
-
-        if format_func is not None:
-            return format_func(value)
-
-        return str(value)
 
     # -------------------------------------------------------------------------
     #  Property getters
