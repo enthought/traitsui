@@ -19,13 +19,18 @@ import sys
 import traceback
 from functools import partial
 from contextlib import contextmanager
-from unittest import skipIf, TestSuite
+from unittest import skip, skipIf, TestSuite
 
 from pyface.toolkit import toolkit_object
 from traits.etsconfig.api import ETSConfig
 import traits.trait_notifiers
 
 # ######### Testing tools
+
+# Toolkit names as are used by ETSConfig
+WX = "wx"
+QT = "qt4"
+NULL = "null"
 
 
 @contextmanager
@@ -71,13 +76,13 @@ def _is_current_backend(backend_name=""):
 
 
 #: Return True if current backend is 'wx'
-is_current_backend_wx = partial(_is_current_backend, backend_name="wx")
+is_current_backend_wx = partial(_is_current_backend, backend_name=WX)
 
 #: Return True if current backend is 'qt4'
-is_current_backend_qt4 = partial(_is_current_backend, backend_name="qt4")
+is_current_backend_qt4 = partial(_is_current_backend, backend_name=QT)
 
 #: Return True if current backend is 'null'
-is_current_backend_null = partial(_is_current_backend, backend_name="null")
+is_current_backend_null = partial(_is_current_backend, backend_name=NULL)
 
 
 #: Test decorator: Skip test if backend is not 'wx'
@@ -97,6 +102,21 @@ skip_if_null = skipIf(
 
 #: True if current platform is MacOS
 is_mac_os = sys.platform == "Darwin"
+
+
+def requires_one_of(backends):
+
+    def decorator(test_item):
+
+        if ETSConfig.toolkit not in backends:
+            return skip(
+                "Test only support these backends: {!r}".format(backends)
+            )(test_item)
+
+        else:
+            return test_item
+
+    return decorator
 
 
 def count_calls(func):
