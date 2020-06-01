@@ -26,21 +26,12 @@ from traitsui.group import VGroup, HGroup
 
 from traitsui.tests._tools import (
     create_ui,
+    is_control_enabled,
     is_current_backend_qt4,
-    is_current_backend_wx,
     skip_if_not_qt4,
     skip_if_null,
     store_exceptions_on_all_threads,
 )
-
-
-def is_enabled(control):
-    if is_current_backend_qt4():
-        return control.isEnabled()
-    elif is_current_backend_wx():
-        return control.IsEnabled()
-    else:
-        raise NotImplementedError()
 
 
 _DIALOG_WIDTH = 500
@@ -220,11 +211,11 @@ class TestLabels(unittest.TestCase):
                 unlabelled_editor = ui.get_editors("unlabelled_item")[0]
                 self.assertIsNone(unlabelled_editor.label_control)
 
-            self.assertTrue(is_enabled(labelled_editor.label_control))
+            self.assertTrue(is_control_enabled(labelled_editor.label_control))
 
             dialog.bool_item = False
 
-            self.assertFalse(is_enabled(labelled_editor.label_control))
+            self.assertFalse(is_control_enabled(labelled_editor.label_control))
 
             dialog.bool_item = True
 
