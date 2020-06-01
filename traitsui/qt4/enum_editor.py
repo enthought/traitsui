@@ -58,17 +58,12 @@ class BaseEditor(Editor):
     #  BaseEditor Interface
     # -------------------------------------------------------------------------
 
-    def values_changed(self, object):
+    def values_changed(self):
         """ Recomputes the cached data based on the underlying enumeration model
             or the values of the factory.
         """
-        if object is self._object:
-            values = self._value()
-        else:
-            values = self.factory.values
-
         self._names, self._mapping, self._inverse_mapping = enum_values_changed(
-            values, self.string_value
+            self._value(), self.string_value
         )
 
     def rebuild_editor(self):
@@ -92,12 +87,13 @@ class BaseEditor(Editor):
             self._object, self._name, self._value = self.parse_extended_name(
                 factory.name
             )
-            self.values_changed(self._object)
+            self.values_changed()
             self._object.on_trait_change(
                 self._values_changed, " " + self._name, dispatch="ui"
             )
         else:
-            self.values_changed(factory)
+            self._value = lambda: self.factory.values
+            self.values_changed()
             factory.on_trait_change(
                 self._values_changed, "values", dispatch="ui"
             )
@@ -139,11 +135,11 @@ class BaseEditor(Editor):
 
     # Trait change handlers --------------------------------------------------
 
-    def _values_changed(self, object, name, new):
+    def _values_changed(self):
         """ Handles the underlying object model's enumeration set or factory's
             values being changed.
         """
-        self.values_changed(object)
+        self.values_changed()
         self.rebuild_editor()
 
 

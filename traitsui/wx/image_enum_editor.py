@@ -38,7 +38,7 @@ from .constants import WindowColor
 
 from .image_control import ImageControl
 
-from .toolkit import _popEventHandlers
+from .toolkit import GUIToolkit
 
 # -------------------------------------------------------------------------
 #  'ReadonlyEditor' class:
@@ -124,17 +124,18 @@ class CustomEditor(BaseEnumEditor):
         self._create_image_grid()
 
     def rebuild_editor(self):
+        # Clear any existing content:
+        self.control.SetSizer(None)
+        GUIToolkit("traitsui", "wx", "traitsui.wx").destroy_children(
+            self.control
+        )
+
         self._create_image_grid()
 
     def _create_image_grid(self):
         """ Populates a specified window with a grid of image buttons.
         """
-        # Clear any existing content:
         panel = self.control
-        panel.SetSizer(None)
-        for child in panel.GetChildren():
-            _popEventHandlers(child)
-        panel.DestroyChildren()
 
         # Create the main sizer:
         if self.factory.cols > 1:
