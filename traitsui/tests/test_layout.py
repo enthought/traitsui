@@ -82,7 +82,8 @@ class TestLayout(unittest.TestCase):
 
         with store_exceptions_on_all_threads(), \
                 create_ui(VResizeDialog()) as ui:
-            text = ui.control.findChild(qt.QtGui.QLineEdit)
+            editor, = ui.get_editors("txt")
+            text = editor.control
 
             # horizontal size should be large
             self.assertGreater(text.width(), _DIALOG_WIDTH - 100)
@@ -101,7 +102,8 @@ class TestLayout(unittest.TestCase):
         with store_exceptions_on_all_threads(), \
                 create_ui(HResizeDialog()) as ui:
 
-            text = ui.control.findChild(qt.QtGui.QLineEdit)
+            editor, = ui.get_editors("txt")
+            text = editor.control
 
             # vertical size should be large
             self.assertGreater(text.height(), _DIALOG_HEIGHT - 100)
