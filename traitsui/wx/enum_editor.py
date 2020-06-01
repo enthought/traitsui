@@ -29,6 +29,8 @@ from traits.api import Property
 # traitsui.editors.drop_editor file.
 from traitsui.editors.enum_editor import ToolkitEditorFactory
 
+from traitsui.testing.api import BaseSimulator, Disabled, simulate
+
 from .editor import Editor
 
 from .constants import OKColor, ErrorColor
@@ -322,6 +324,48 @@ class SimpleEditor(BaseEditor):
             self._no_enum_update -= 1
 
         self.update_editor()
+
+
+@simulate(SimpleEditor)
+class SimpleEnumEditorSimulator(BaseSimulator):
+
+    def get_text(self):
+        control = self.editor.control
+        if self.editor.factory.evaluate is None:
+            return control.GetString(control.GetSelection())
+        else:
+            return control.GetValue()
+
+    def set_text(self, text, confirmed=True):
+        factory = self.editor.factory
+        if factory.evaluate is None:
+            raise Disabled("Cannot set text when evaluate is None.")
+
+        control = self.editor.control
+
+        if confirmed:
+            event_type = wx.EVT_TEXT_ENTER.typeId
+            control.SetValue(text)
+        else:
+            event_type = wx.EVT_TEXT.typeId
+        event = wx.CommandEvent(event_type, control.GetId())
+        event.SetString(text)
+        wx.PostEvent(control.GetParent(), event)
+
+    def click_index(self, index):
+        control = self.editor.control
+        control.SetSelection(index)
+
+        # SetSelection does not emit events.
+        if self.editor.factory.evaluate is None:
+            event_type = wx.EVT_CHOICE.typeId
+        else:
+            event_type = wx.EVT_COMBOBOX.typeId
+        event = wx.CommandEvent(event_type, control.GetId())
+        text = control.GetString(index)
+        event.SetString(text)
+        event.SetInt(index)
+        wx.PostEvent(control.GetParent(), event)
 
 
 class RadioEditor(BaseEditor):

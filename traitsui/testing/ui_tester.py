@@ -250,11 +250,13 @@ class UITester:
     def _set_editor_value(self, ui, name, setter):
         self._ensure_started()
         with store_exceptions_on_all_threads():
-            set_editor_value(ui, name, setter, registry=self.registry)
+            set_editor_value(
+                ui, name, setter, self.gui, registry=self.registry)
             self.gui.process_events()
 
     def _get_editor_value(self, ui, name, getter):
         self._ensure_started()
         with store_exceptions_on_all_threads():
             self.gui.process_events()
-            return get_editor_value(ui, name, getter, registry=self.registry)
+            return get_editor_value(
+                ui, name, getter, self.gui, registry=self.registry)

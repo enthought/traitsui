@@ -34,6 +34,8 @@ from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
 from .constants import OKColor
 
+from traitsui.testing.api import BaseSimulator, Disabled, simulate
+
 
 # Readonly text editor with view state colors:
 HoverColor = wx.LIGHT_GREY
@@ -73,8 +75,7 @@ class SimpleEditor(Editor):
             style |= wx.TE_PASSWORD
 
         multi_line = (style & wx.TE_MULTILINE) != 0
-        if multi_line:
-            self.scrollable = True
+        self.scrollable = multi_line
 
         if factory.enter_set and (not multi_line):
             control = wx.TextCtrl(
@@ -94,6 +95,19 @@ class SimpleEditor(Editor):
         self.control = control
         self.set_error_state(False)
         self.set_tooltip()
+
+    def dispose(self):
+        factory = self.factory
+        control = self.control
+        parent = control.GetParent()
+
+        if factory.enter_set and (not self.scrollable):
+            parent.Unbind(wx.EVT_TEXT_ENTER,  id=control.GetId())
+
+        control.Unbind(wx.EVT_KILL_FOCUS)
+        if factory.auto_set:
+            parent.Unbind(wx.EVT_TEXT, id=control.GetId())
+        super().dispose()
 
     def update_object(self, event):
         """ Handles the user entering input data in the edit control.
@@ -175,6 +189,19 @@ class CustomEditor(SimpleEditor):
 
     #: Flag for window style. This value overrides the default.
     base_style = wx.TE_MULTILINE
+
+
+@simulate(CustomEditor)
+@simulate(SimpleEditor)
+class TextEditorSimulator(BaseSimulator):
+
+    def set_text(self, text, confirmed=True):
+        if not self.editor.control.IsEnabled():
+            raise Disabled("Text field is disabled.")
+        self.editor.control.SetValue(text)
+
+    def get_text(self):
+        return self.editor.control.GetValue()
 
 
 class ReadonlyEditor(BaseReadonlyEditor):

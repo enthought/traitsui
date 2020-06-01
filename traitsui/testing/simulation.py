@@ -274,7 +274,7 @@ def simulate(editor_class, registry=REGISTRY):
     return wrapper
 
 
-def set_editor_value(ui, name, setter, registry=REGISTRY):
+def set_editor_value(ui, name, setter, gui, registry=REGISTRY):
     """ Perform actions to modify GUI components.
 
     Parameters
@@ -286,6 +286,8 @@ def set_editor_value(ui, name, setter, registry=REGISTRY):
         e.g. "model.attr1.attr2"
     setter : callable(BaseSimulator)
         Callable to perform simulation.
+    gui : pyface.gui.GUI
+        Object for driving the GUI event loop.
     registry : SimulatorRegistry, optional
         The registry from which to find a BaseSimulator for the retrieved
         editor.
@@ -297,13 +299,15 @@ def set_editor_value(ui, name, setter, registry=REGISTRY):
                 ui=alternative_ui,
                 name=name,
                 setter=setter,
+                gui=gui,
                 registry=registry,
             )
         else:
             setter(simulator)
+        gui.process_events()
 
 
-def get_editor_value(ui, name, getter, registry=REGISTRY):
+def get_editor_value(ui, name, getter, gui, registry=REGISTRY):
     """ Perform a query on GUI components for inspection purposes.
 
     Parameters
@@ -315,6 +319,8 @@ def get_editor_value(ui, name, getter, registry=REGISTRY):
         e.g. "model.attr1.attr2"
     getter : callable(BaseSimulator) -> any
         Callable to retrieve value or values from the GUI.
+    gui : pyface.gui.GUI
+        Object for driving the GUI event loop.
     registry : SimulatorRegistry, optional
         The registry from which to find a BaseSimulator for the retrieved
         editor.
@@ -326,11 +332,13 @@ def get_editor_value(ui, name, getter, registry=REGISTRY):
     """
     simulator, name = _get_one_simulator(ui=ui, name=name, registry=registry)
     with simulator.get_ui() as alternative_ui:
+        gui.process_events()
         if alternative_ui is not NotImplemented:
             return get_editor_value(
                 ui=alternative_ui,
                 name=name,
                 getter=getter,
+                gui=gui,
                 registry=registry,
             )
         return getter(simulator)

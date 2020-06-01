@@ -19,6 +19,7 @@
 toolkit.
 """
 
+import contextlib
 
 import wx
 
@@ -33,6 +34,7 @@ from traitsui.ui_traits import AView
 from traitsui.helper import user_name_for
 from traitsui.handler import Handler
 from traitsui.instance_choice import InstanceChoiceItem
+from traitsui.testing.api import BaseSimulator, simulate
 
 from . import toolkit
 from .editor import Editor
@@ -479,6 +481,20 @@ class CustomEditor(Editor):
         self.resynch_editor()
 
 
+@simulate(CustomEditor)
+class CustomInstanceEditorSimulator(BaseSimulator):
+
+    @contextlib.contextmanager
+    def get_ui(self):
+        self.editor.resynch_editor()
+        ui = self.editor._ui
+        try:
+            yield ui
+        finally:
+            ui.dispose()
+            self.editor._ui = None
+
+
 class SimpleEditor(CustomEditor):
     """ Simple style of editor for instances, which displays a button. Clicking
     the button displays a dialog box in which the instance can be edited.
@@ -509,13 +525,7 @@ class SimpleEditor(CustomEditor):
             button.
         """
         # Create the user interface:
-        factory = self.factory
-        view = self.ui.handler.trait_view_for(
-            self.ui.info, factory.view, self.value, self.object_name, self.name
-        )
-        ui = self.value.edit_traits(
-            view, self.control, factory.kind, id=factory.id
-        )
+        ui = self._create_ui()
 
         # Check to see if the view was 'modal', in which case it will already
         # have been closed (i.e. is None) by the time we get control back:
@@ -539,3 +549,30 @@ class SimpleEditor(CustomEditor):
                 label = user_name_for(self.name)
             button.SetLabel(label)
             button.Enable(isinstance(self.value, HasTraits))
+
+    def _create_ui(self):
+        """ Create the user interface for editing the instance.
+
+        Returns
+        -------
+        ui: UI
+        """
+        factory = self.factory
+        view = self.ui.handler.trait_view_for(
+            self.ui.info, factory.view, self.value, self.object_name, self.name
+        )
+        return self.value.edit_traits(
+            view, self.control, factory.kind, id=factory.id
+        )
+
+
+@simulate(SimpleEditor)
+class SimpleInstanceEditorSimulator(BaseSimulator):
+
+    @contextlib.contextmanager
+    def get_ui(self):
+        ui = self.editor._create_ui()
+        try:
+            yield ui
+        finally:
+            ui.dispose()

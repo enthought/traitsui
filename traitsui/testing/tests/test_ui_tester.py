@@ -31,6 +31,7 @@ class Parent(HasTraits):
                 editor=EnumEditor(
                     values=["employed", "unemployed"],
                     evaluate=True,
+                    auto_set=False,
                 )
             ),
         )
