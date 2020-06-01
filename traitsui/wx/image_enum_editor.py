@@ -38,7 +38,7 @@ from .constants import WindowColor
 
 from .image_control import ImageControl
 
-from .toolkit import GUIToolkit
+from traitsui.wx import toolkit
 
 # -------------------------------------------------------------------------
 #  'ReadonlyEditor' class:
@@ -126,9 +126,7 @@ class CustomEditor(BaseEnumEditor):
     def rebuild_editor(self):
         # Clear any existing content:
         self.control.SetSizer(None)
-        GUIToolkit("traitsui", "wx", "traitsui.wx").destroy_children(
-            self.control
-        )
+        toolkit.destroy_children(self.control)
 
         self._create_image_grid()
 
