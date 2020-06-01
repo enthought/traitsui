@@ -3,12 +3,13 @@ import contextlib
 
 
 class BaseSimulator:
-    """ The base class for all simulators to be used for simulating user
-    interactions with GUI components for testing TraitsUI and applications
-    written using TraitsUI.
+    """ The base class whose subclasses are responsible simulating user
+    interactions with a specific GUI component. This is typically used for
+    testing GUI applications written using TraitsUI.
 
-    Each simulator should be associated with one or many specific Editor of
-    TraitsUI.
+    Each simulator subclass can be associated with one or many toolkit specific
+    subclasses of Editor. Each instance of a BaseSimulator should be associated
+    with a single instance of Editor in a UI.
 
     Concrete implementations should aim at programmatically triggering UI
     events by manipulating UI components, e.g. clicking a button, instead of

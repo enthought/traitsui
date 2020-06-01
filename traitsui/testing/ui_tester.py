@@ -14,9 +14,11 @@ class UITester:
 
     An instance of UITester can be instantiated inside a test and then be
     used to drive changes on a Traits application via GUI components, imitating
-    user interactions.
+    user interactions. Inspection methods are also defined.
 
-    Several inspection methods are also supported.
+    Note that for a given GUI component, not all types of user interactions are
+    possible. The corresponding methods are likely not implemented in that
+    sitations.
 
     ``UITester`` can be used as a context manager. Alternatively its ``start``
     and ``stop`` methods can be used in a test's set up and tear down code.
@@ -86,7 +88,7 @@ class UITester:
         by a name (or extended name).
 
         This method may not be implemented by editors that do not support
-        text editing.
+        the representation of text.
 
         Parameters
         ----------
