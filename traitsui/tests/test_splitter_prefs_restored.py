@@ -18,7 +18,11 @@ import unittest
 
 from traits.api import Int
 from traitsui.api import Action, Group, Handler, HSplit, Item, View
-from traitsui.tests._tools import skip_if_not_qt4
+from traitsui.tests._tools import (
+    create_ui,
+    skip_if_not_qt4,
+    store_exceptions_on_all_threads,
+)
 
 
 class TmpClass(Handler):
@@ -95,52 +99,50 @@ class TestSplitterPrefsRestored(unittest.TestCase):
                 obj.get(attr_names[0], None), attr_names=attr_names[1:]
             )
 
-        ui = TmpClass().edit_traits()
-        handler = ui.handler
+        with store_exceptions_on_all_threads(), create_ui(TmpClass()) as ui:
 
-        # set the layout to a known state
-        handler.reset_prefs(ui.info)
+            handler = ui.handler
 
-        # save the current layout and check (sanity test)
-        handler.save_prefs(ui.info)
-        self.assertEqual(
-            _get_nattr(handler._prefs), _get_nattr(ui.get_prefs())
-        )
+            # set the layout to a known state
+            handler.reset_prefs(ui.info)
 
-        # collapse splitter to right and check prefs has been updated
-        handler.collapse_right(ui.info)
-        self.assertNotEqual(
-            _get_nattr(handler._prefs), _get_nattr(ui.get_prefs())
-        )
+            # save the current layout and check (sanity test)
+            handler.save_prefs(ui.info)
+            self.assertEqual(
+                _get_nattr(handler._prefs), _get_nattr(ui.get_prefs())
+            )
 
-        # restore the original layout.
-        handler.restore_prefs(ui.info)
-        self.assertEqual(
-            _get_nattr(handler._prefs), _get_nattr(ui.get_prefs())
-        )
+            # collapse splitter to right and check prefs has been updated
+            handler.collapse_right(ui.info)
+            self.assertNotEqual(
+                _get_nattr(handler._prefs), _get_nattr(ui.get_prefs())
+            )
 
-        # collapse to left and check
-        handler.collapse_left(ui.info)
-        self.assertNotEqual(
-            _get_nattr(handler._prefs), _get_nattr(ui.get_prefs())
-        )
+            # restore the original layout.
+            handler.restore_prefs(ui.info)
+            self.assertEqual(
+                _get_nattr(handler._prefs), _get_nattr(ui.get_prefs())
+            )
 
-        # save the collapsed layout
-        handler.save_prefs(ui.info)
-        collapsed_splitter_state = _get_nattr(handler._prefs)
-        self.assertEqual(
-            _get_nattr(handler._prefs), _get_nattr(ui.get_prefs())
-        )
+            # collapse to left and check
+            handler.collapse_left(ui.info)
+            self.assertNotEqual(
+                _get_nattr(handler._prefs), _get_nattr(ui.get_prefs())
+            )
 
-        # dispose the ui.
-        ui.dispose()
+            # save the collapsed layout
+            handler.save_prefs(ui.info)
+            collapsed_splitter_state = _get_nattr(handler._prefs)
+            self.assertEqual(
+                _get_nattr(handler._prefs), _get_nattr(ui.get_prefs())
+            )
 
         # create a new ui and check that the splitter remembers the last state
         # (collapsed)
-        ui2 = TmpClass().edit_traits()
-        self.assertEqual(
-            collapsed_splitter_state, _get_nattr(ui2.get_prefs())
-        )
+        with store_exceptions_on_all_threads(), create_ui(TmpClass()) as ui2:
+            self.assertEqual(
+                collapsed_splitter_state, _get_nattr(ui2.get_prefs())
+            )
 
 
 if __name__ == "__main__":
