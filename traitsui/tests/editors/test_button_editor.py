@@ -69,8 +69,6 @@ class TestButtonEditor(unittest.TestCase):
             self.assertEqual(get_button_text(button), "New Label")
 
     @skip_if_null
-    @unittest.skipIf(
-        is_current_backend_wx, "AttributeError. TODO: Open an issue.")
     def test_styles(self):
         # simple smoke test of buttons
         gui = GUI()
@@ -85,7 +83,5 @@ class TestButtonEditor(unittest.TestCase):
         self.check_button_text_update(simple_view)
 
     @skip_if_null
-    @unittest.skipIf(
-        is_current_backend_wx, "AttributeError. TODO: Open an issue.")
     def test_custom_button_editor(self):
         self.check_button_text_update(custom_view)
