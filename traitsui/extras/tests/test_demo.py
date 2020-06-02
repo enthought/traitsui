@@ -133,9 +133,9 @@ class TestDemoPathChildren(unittest.TestCase):
             # In that subdirectory, there is one Python file that is not
             # __init__.py
             subdir_node, = children
-            children = subdir_node.get_children()
-            self.assertEqual(len(children), 1)
-            example, = children
+            file_nodes = subdir_node.get_children()
+            self.assertEqual(len(file_nodes), 1)
+            example, = file_nodes
             self.assertEqual(example.name, "example.py")
 
             # This is the test objective: The __init__.py and traits api are
