@@ -239,8 +239,8 @@ class TestDatetimeEditorQt(GuiTestAssistant, unittest.TestCase):
     @contextlib.contextmanager
     def launch_editor(self, object, view):
         ui = object.edit_traits(view=view)
-        editor, = ui._editors
         try:
+            editor, = ui._editors
             yield editor
         finally:
             ui.dispose()
