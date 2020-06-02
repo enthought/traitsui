@@ -28,6 +28,7 @@ from traitsui.view import View
 from traitsui.editors.list_str_editor import ListStrEditor
 
 from traitsui.tests._tools import (
+    create_ui,
     press_ok_button,
     skip_if_not_qt4,
     skip_if_not_wx,
@@ -97,12 +98,11 @@ class TestListStrEditorSelection(unittest.TestCase):
     def test_wx_list_str_selected_index(self):
         # behavior: when starting up, the
 
-        with store_exceptions_on_all_threads():
-            obj = ListStrEditorWithSelectedIndex(
-                values=["value1", "value2"], selected_index=1
-            )
-            ui = obj.edit_traits(view=single_select_view)
-
+        obj = ListStrEditorWithSelectedIndex(
+            values=["value1", "value2"], selected_index=1
+        )
+        with store_exceptions_on_all_threads(), \
+                create_ui(obj, dict(view=single_select_view)) as ui:
             # the following is equivalent to setting the text in the text
             # control, then pressing OK
 
@@ -123,11 +123,11 @@ class TestListStrEditorSelection(unittest.TestCase):
     def test_wx_list_str_multi_selected_index(self):
         # behavior: when starting up, the
 
-        with store_exceptions_on_all_threads():
-            obj = ListStrEditorWithSelectedIndex(
-                values=["value1", "value2"], selected_indices=[1]
-            )
-            ui = obj.edit_traits(view=multi_select_view)
+        obj = ListStrEditorWithSelectedIndex(
+            values=["value1", "value2"], selected_indices=[1]
+        )
+        with store_exceptions_on_all_threads(), \
+                create_ui(obj, dict(view=multi_select_view)) as ui:
 
             # the following is equivalent to setting the text in the text
             # control, then pressing OK
@@ -162,13 +162,13 @@ class TestListStrEditorSelection(unittest.TestCase):
             helper = EventLoopHelper(gui=GUI(), qt_app=qt_app)
 
             # open the UI and run until the dialog is closed
-            ui = obj.edit_traits(view=single_select_item_view)
-            with helper.delete_widget(ui.control):
-                press_ok_button(ui)
+            with create_ui(obj, dict(view=single_select_item_view)) as ui:
+                with helper.delete_widget(ui.control):
+                    press_ok_button(ui)
 
             # now run again and change the selection
-            ui = obj.edit_traits(view=single_select_item_view)
-            with event_loop():
+            with create_ui(obj, dict(view=single_select_item_view)) as ui, \
+                    event_loop():
                 editor = ui.get_editors("values")[0]
 
                 list_view = editor.list_view
