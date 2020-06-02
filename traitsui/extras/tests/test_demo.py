@@ -88,6 +88,7 @@ class TestDemoPathInitLocals(unittest.TestCase):
             model = demo.DemoPath(
                 name=directory,
             )
+            self.assertIn("a", model.init_dic)
             self.assertEqual(model.init_dic["a"], 1)
             # traits api is still imported.
             self.assertIn("HasTraits", model.init_dic)
