@@ -36,9 +36,9 @@ class TestDemoPathDescription(unittest.TestCase):
             )
 
             tree = ET.fromstring(model.description)
-            body_node = next(tree.iter(get_html_tag("body")))
-            div_node, = list(body_node)
-            self.assertEqual(list(div_node), [])
+        body_node = next(tree.iter(get_html_tag("body")))
+        div_node, = list(body_node)
+        self.assertEqual(list(div_node), [])
 
     def test_use_index_rst(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -51,8 +51,8 @@ class TestDemoPathDescription(unittest.TestCase):
             )
 
             tree = ET.fromstring(model.description)
-            img_node = next(tree.iter(get_html_tag("img")))
-            self.assertEqual(img_node.attrib["src"], "any_image.jpg")
+        img_node = next(tree.iter(get_html_tag("img")))
+        self.assertEqual(img_node.attrib["src"], "any_image.jpg")
 
     def test_description_use_css(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -62,6 +62,7 @@ class TestDemoPathDescription(unittest.TestCase):
             )
 
             tree = ET.fromstring(model.description)
+
         link_node = next(tree.iter(get_html_tag("link")))
         self.assertEqual(link_node.attrib["href"], "default.css")
 
