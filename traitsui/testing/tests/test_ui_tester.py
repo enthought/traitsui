@@ -97,9 +97,6 @@ class TestUITesterIntegration(unittest.TestCase):
             self.tester.set_text(ui, "father.employment_status", "unemployed")
             self.assertEqual(app.model.father.employment_status, "unemployed")
 
-            self.tester.click_index(ui, "mother.employment_status", 1)
-            self.assertEqual(app.model.mother.employment_status, "unemployed")
-
     def test_instance_text_editor_query(self):
         # Test popagating queries to instance simple/custom editors
         father = Parent(first_name="M", last_name="C")
@@ -129,24 +126,36 @@ LOCAL_REGISTRY = SimulatorRegistry()
 
 if is_current_backend_qt4():
 
-    from traitsui.qt4.text_editor import SimpleEditor as QtTextEditor
+    from traitsui.qt4.enum_editor import SimpleEditor as QtEnumEditor
 
-    @simulate(QtTextEditor, LOCAL_REGISTRY)
+    @simulate(QtEnumEditor, LOCAL_REGISTRY)
     class QtCustomSimulator(BaseSimulator):
 
-        def get_placeholder_text(self):
-            return self.editor.control.placeholderText()
+        def click_some_index(self, index):
+            self.editor.control.setCurrentIndex(index)
 
 
 if is_current_backend_wx():
 
-    from traitsui.wx.text_editor import SimpleEditor as WxTextEditor
+    from traitsui.wx.enum_editor import SimpleEditor as WxEnumEditor
 
-    @simulate(WxTextEditor, LOCAL_REGISTRY)
+    @simulate(WxEnumEditor, LOCAL_REGISTRY)
     class WxCustomSimulator(BaseSimulator):
 
-        def get_placeholder_text(self):
-            return self.editor.control.GetHint()
+        def click_some_index(self, index):
+            control = self.editor.control
+            control.SetSelection(index)
+
+            # SetSelection does not emit events.
+            if self.editor.factory.evaluate is None:
+                event_type = wx.EVT_CHOICE.typeId
+            else:
+                event_type = wx.EVT_COMBOBOX.typeId
+            event = wx.CommandEvent(event_type, control.GetId())
+            text = control.GetString(index)
+            event.SetString(text)
+            event.SetInt(index)
+            wx.PostEvent(control.GetParent(), event)
 
 
 @requires_one_of([QT, WX])
@@ -159,17 +168,15 @@ class TestUITesterSimulateExtension(unittest.TestCase):
         tester = UITester()
         tester.add_registry(LOCAL_REGISTRY)
 
-        view = View(
-            Item("first_name", editor=TextEditor(placeholder="Enter name"))
-        )
-        child = Child(first_name="Paul")
-        with tester, tester.create_ui(child, dict(view=view)) as ui:
+        parent = Parent()
+        with tester, tester.create_ui(parent) as ui:
 
-            actual = tester.get_editor_value(
-                ui, "first_name", lambda s: s.get_placeholder_text()
+            self.assertEqual(parent.employment_status, "employed")
+            tester.set_editor_value(
+                ui, "employment_status", lambda s: s.click_some_index(1)
             )
-            self.assertEqual(actual, "Enter name")
+            self.assertEqual(parent.employment_status, "unemployed")
 
             # the default simulator from TraitsUI is still accessible.
-            actual = tester.get_text(ui, "first_name")
-            self.assertEqual(actual, "Paul")
+            tester.set_text(ui, "employment_status", "employed")
+            self.assertEqual(parent.employment_status, "employed")

@@ -353,21 +353,6 @@ class SimpleEnumEditorSimulator(BaseSimulator):
         event.SetString(text)
         wx.PostEvent(control.GetParent(), event)
 
-    def click_index(self, index):
-        control = self.editor.control
-        control.SetSelection(index)
-
-        # SetSelection does not emit events.
-        if self.editor.factory.evaluate is None:
-            event_type = wx.EVT_CHOICE.typeId
-        else:
-            event_type = wx.EVT_COMBOBOX.typeId
-        event = wx.CommandEvent(event_type, control.GetId())
-        text = control.GetString(index)
-        event.SetString(text)
-        event.SetInt(index)
-        wx.PostEvent(control.GetParent(), event)
-
 
 class RadioEditor(BaseEditor):
     """ Enumeration editor, used for the "custom" style, that displays radio
