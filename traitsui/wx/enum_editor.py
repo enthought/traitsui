@@ -30,6 +30,7 @@ from traits.api import Property
 from traitsui.editors.enum_editor import ToolkitEditorFactory
 
 from traitsui.testing.api import BaseSimulator, Disabled, simulate
+from traitsui.testing.simulation import DEFAULT_REGISTRY
 
 from .editor import Editor
 
@@ -326,7 +327,7 @@ class SimpleEditor(BaseEditor):
         self.update_editor()
 
 
-@simulate(SimpleEditor)
+@simulate(SimpleEditor, registry=DEFAULT_REGISTRY)
 class SimpleEnumEditorSimulator(BaseSimulator):
 
     def get_text(self):

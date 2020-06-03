@@ -1,6 +1,8 @@
 
 import contextlib
 
+_TRAITSUI, _ = __name__.split(".", 1)
+
 
 class BaseSimulator:
     """ The base class whose subclasses are responsible simulating user
@@ -252,22 +254,28 @@ class SimulatorRegistry:
             ) from None
 
 
-#: Default registry for providing default simulators.
-REGISTRY = SimulatorRegistry()
+#: Registry for providing traitsui default simulators.
+DEFAULT_REGISTRY = SimulatorRegistry()
 
 
-def simulate(editor_class, registry=REGISTRY):
+def simulate(editor_class, registry):
     """ Decorator for registering a subclass of BaseSimulator for simulating
     a particular subclass of Editor.
+
+    When this decorator is used outside of TraitsUI, it is highly recommended
+    that a separate registry is used instead of TraitsUI's default registry.
+    This will prevent conflicts with default simulators being contributed by
+    TraitsUI now or in the future.
+
+    See ``UITester`` for supplying a list of registries to try in the order
+    of priority.
 
     Parameters
     ----------
     editor_class : subclass of traitsui.editor.Editor
         The Editor class to simulate.
-    registry : SimulatorRegistry, optional
-        Registry to used. Default is to use a global registry provided
-        by TraitsUI.
-        To undo a registration, see ``SimulatorRegistry.unregister``.
+    registry : SimulatorRegistry
+        Registry to be used for mapping the editor to the simulator.
     """
     def wrapper(simulator_class):
         registry.register(editor_class, simulator_class)
@@ -275,7 +283,7 @@ def simulate(editor_class, registry=REGISTRY):
     return wrapper
 
 
-def set_editor_value(ui, name, setter, gui, registry=REGISTRY):
+def set_editor_value(ui, name, setter, gui, registries):
     """ Perform actions to modify GUI components.
 
     Parameters
@@ -289,11 +297,13 @@ def set_editor_value(ui, name, setter, gui, registry=REGISTRY):
         Callable to perform simulation.
     gui : pyface.gui.GUI
         Object for driving the GUI event loop.
-    registry : SimulatorRegistry, optional
-        The registry from which to find a BaseSimulator for the retrieved
-        editor.
+    registries : list of SimulatorRegistry
+        The registries from which to find a BaseSimulator for the retrieved
+        editor. The first registry that returns a simulator will stop other
+        registries from being used.
     """
-    simulator, name = _get_one_simulator(ui=ui, name=name, registry=registry)
+    simulator, name = _get_one_simulator(
+        ui=ui, name=name, registries=registries)
     with simulator.get_ui() as alternative_ui:
         if alternative_ui is not NotImplemented:
             set_editor_value(
@@ -301,14 +311,14 @@ def set_editor_value(ui, name, setter, gui, registry=REGISTRY):
                 name=name,
                 setter=setter,
                 gui=gui,
-                registry=registry,
+                registries=registries,
             )
         else:
             setter(simulator)
         gui.process_events()
 
 
-def get_editor_value(ui, name, getter, gui, registry=REGISTRY):
+def get_editor_value(ui, name, getter, gui, registries):
     """ Perform a query on GUI components for inspection purposes.
 
     Parameters
@@ -322,16 +332,18 @@ def get_editor_value(ui, name, getter, gui, registry=REGISTRY):
         Callable to retrieve value or values from the GUI.
     gui : pyface.gui.GUI
         Object for driving the GUI event loop.
-    registry : SimulatorRegistry, optional
-        The registry from which to find a BaseSimulator for the retrieved
-        editor.
+    registries : list of SimulatorRegistry
+        The registries from which to find a BaseSimulator for the retrieved
+        editor. The first registry that returns a simulator will stop other
+        registries from being used.
 
     Returns
     -------
     value : any
         Any value returned by the getter.
     """
-    simulator, name = _get_one_simulator(ui=ui, name=name, registry=registry)
+    simulator, name = _get_one_simulator(
+        ui=ui, name=name, registries=registries)
     with simulator.get_ui() as alternative_ui:
         gui.process_events()
         if alternative_ui is not NotImplemented:
@@ -340,12 +352,12 @@ def get_editor_value(ui, name, getter, gui, registry=REGISTRY):
                 name=name,
                 getter=getter,
                 gui=gui,
-                registry=registry,
+                registries=registries,
             )
         return getter(simulator)
 
 
-def _get_one_simulator(ui, name, registry=REGISTRY):
+def _get_one_simulator(ui, name, registries):
     """ Return one instance of BaseSimulation for an editor uniquely identified
     from the given UI and name.
 
@@ -356,9 +368,9 @@ def _get_one_simulator(ui, name, registry=REGISTRY):
     name : str
         A single or an extended name for retreiving an editor on a UI.
         e.g. "attr", "model.attr1.attr2"
-    registry : SimulatorRegistry, optional
-        The registry from which to find a BaseSimulator for the retrieved
-        editor.
+    registries : list of SimulatorRegistry
+        The registries from which to find a BaseSimulator for the retrieved
+        editor, in a descending order of priority.
 
     Returns
     -------
@@ -372,7 +384,8 @@ def _get_one_simulator(ui, name, registry=REGISTRY):
     ValuError
         If zero or more than one editors are found.
     """
-    simulators, new_name = _get_simulators(ui=ui, name=name, registry=registry)
+    simulators, new_name = _get_simulators(
+        ui=ui, name=name, registries=registries)
 
     if not simulators:
         raise ValueError(
@@ -385,7 +398,7 @@ def _get_one_simulator(ui, name, registry=REGISTRY):
     return simulator, new_name
 
 
-def _get_simulators(ui, name, registry=REGISTRY):
+def _get_simulators(ui, name, registries):
     """ Return instances of BaseSimulator from an instance of traitsui.ui.UI
     with a given extended name.
 
@@ -393,6 +406,10 @@ def _get_simulators(ui, name, registry=REGISTRY):
     ----------
     ui : traitsui.ui.UI
     name : str
+    registries : list of SimulatorRegistry
+        The registries from which to find a BaseSimulator for the retrieved
+        editor. The first registry that returns a simulator will stop other
+        registries from being used.
     """
     if "." in name:
         editor_name, name = name.split(".", 1)
@@ -400,8 +417,20 @@ def _get_simulators(ui, name, registry=REGISTRY):
         editor_name = name
     editors = ui.get_editors(editor_name)
 
-    simulators = [
-        registry.get_simulator_class(editor.__class__)(editor)
-        for editor in editors
-    ]
+    simulators = []
+    for editor in editors:
+        editor_class = editor.__class__
+        for registry in registries:
+            try:
+                simulator_class = registry.get_simulator_class(editor_class)
+            except KeyError:
+                continue
+            else:
+                break
+        else:
+            raise KeyError(
+                "No simulators can be found for {!r}".format(editor_class)
+            )
+        simulators.append(simulator_class(editor))
+
     return simulators, name

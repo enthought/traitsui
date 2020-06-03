@@ -4,7 +4,7 @@ from contextlib import contextmanager
 from pyface.gui import GUI
 
 from traitsui.testing.simulation import (
-    get_editor_value, set_editor_value, REGISTRY
+    get_editor_value, set_editor_value, DEFAULT_REGISTRY,
 )
 from traitsui.tests._tools import store_exceptions_on_all_threads
 
@@ -24,17 +24,22 @@ class UITester:
     and ``stop`` methods can be used in a test's set up and tear down code.
     """
 
-    def __init__(self, registry=REGISTRY):
+    def __init__(self, registries=None):
         """ Initialize a tester for testing GUI and traits interaction.
 
         Parameters
         ----------
-        registry : SimulatorRegistry, optional
-            A registry of simulators for different editors.
-            Default is a registry provided by TraitsUI.
+        registries : list of SimulatorRegistry, optional
+            Registries of simulators for different editors, in the order
+            of decreasing priority. Default is a list containing TraitsUI's
+            registry only.
         """
         self.gui = None
-        self.registry = registry
+
+        if registries is None:
+            self.registries = [DEFAULT_REGISTRY]
+        else:
+            self.registries = registries
 
     def start(self):
         """ Start GUI testing.
@@ -102,7 +107,7 @@ class UITester:
         -------
         text : str
         """
-        return self._get_editor_value(
+        return self.get_editor_value(
             ui=ui, name=name, getter=lambda s: s.get_text()
         )
 
@@ -129,7 +134,7 @@ class UITester:
             configured such that no events are fired until the user confirms
             the change.
         """
-        self._set_editor_value(
+        self.set_editor_value(
             ui=ui,
             name=name,
             setter=lambda s: s.set_text(text, confirmed=confirmed)
@@ -154,7 +159,7 @@ class UITester:
         -------
         date : datetime.date
         """
-        return self._get_editor_value(
+        return self.get_editor_value(
             ui=ui, name=name, getter=lambda s: s.get_date()
         )
 
@@ -175,7 +180,7 @@ class UITester:
         date : datetime.date
             The date to be set.
         """
-        self._set_editor_value(
+        self.set_editor_value(
             ui=ui, name=name, setter=lambda s: s.set_date(date)
         )
 
@@ -196,7 +201,7 @@ class UITester:
         date : datetime.date
             The date to be set.
         """
-        self._set_editor_value(
+        self.set_editor_value(
             ui=ui, name=name, setter=lambda s: s.click_date(date)
         )
 
@@ -215,7 +220,7 @@ class UITester:
             A single or an extended name for retreiving an editor on a UI.
             e.g. "attr", "model.attr1.attr2"
         """
-        self._set_editor_value(
+        self.set_editor_value(
             ui=ui, name=name, setter=lambda s: s.click()
         )
 
@@ -238,9 +243,64 @@ class UITester:
         index : int
             A 0-based index to indicate where the click event should occur.
         """
-        self._set_editor_value(
+        self.set_editor_value(
             ui=ui, name=name, setter=lambda s: s.click_index(index)
         )
+
+    def set_editor_value(self, ui, name, setter):
+        """ General method for setting value(s) on an editor via a simulator.
+
+        Useful for calling a custom method on a custom simulator.
+
+        Parameters
+        ----------
+        ui : traitsui.ui.UI
+            The UI created, e.g. by ``create_ui``.
+        name : str
+            A single or an extended name for retreiving an editor on a UI.
+            e.g. "attr", "model.attr1.attr2"
+        setter : callable(BaseSimulator)
+            Callable for simulating user interaction on the editor retrieved.
+            The callable will receive an instance of a BaseSimulator
+            created for the found editor. The simulator type refers to the
+            first simulator class found in the registries provided to this
+            tester.
+        """
+        self._ensure_started()
+        with store_exceptions_on_all_threads():
+            set_editor_value(
+                ui, name, setter, self.gui, registries=self.registries)
+            self.gui.process_events()
+
+    def get_editor_value(self, ui, name, getter):
+        """ General method for getting value(s) on an editor via a simulator.
+
+        Useful for calling a custom method on a custom simulator.
+
+        Parameters
+        ----------
+        ui : traitsui.ui.UI
+            The UI created, e.g. by ``create_ui``.
+        name : str
+            A single or an extended name for retreiving an editor on a UI.
+            e.g. "attr", "model.attr1.attr2"
+        getter : callable(BaseSimulator) -> any
+            Callable for querying GUI component state on the editor retrieved.
+            The callable will receive an instance of a BaseSimulator
+            created for the found editor. The simulator type refers to the
+            first simulator class found in the registries provided to this
+            tester.
+
+        Returns
+        -------
+        value : any
+            Value returned by the getter.
+        """
+        self._ensure_started()
+        with store_exceptions_on_all_threads():
+            self.gui.process_events()
+            return get_editor_value(
+                ui, name, getter, self.gui, registries=self.registries)
 
     # Private methods
 
@@ -248,17 +308,3 @@ class UITester:
         if self.gui is None:
             raise ValueError(
                 "'start' has not been called on {!r}.".format(self))
-
-    def _set_editor_value(self, ui, name, setter):
-        self._ensure_started()
-        with store_exceptions_on_all_threads():
-            set_editor_value(
-                ui, name, setter, self.gui, registry=self.registry)
-            self.gui.process_events()
-
-    def _get_editor_value(self, ui, name, getter):
-        self._ensure_started()
-        with store_exceptions_on_all_threads():
-            self.gui.process_events()
-            return get_editor_value(
-                ui, name, getter, self.gui, registry=self.registry)

@@ -35,6 +35,7 @@ from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 from .constants import OKColor
 
 from traitsui.testing.api import BaseSimulator, Disabled, simulate
+from traitsui.testing.simulation import DEFAULT_REGISTRY
 
 
 # Readonly text editor with view state colors:
@@ -179,8 +180,8 @@ class CustomEditor(SimpleEditor):
     base_style = wx.TE_MULTILINE
 
 
-@simulate(CustomEditor)
-@simulate(SimpleEditor)
+@simulate(CustomEditor, registry=DEFAULT_REGISTRY)
+@simulate(SimpleEditor, registry=DEFAULT_REGISTRY)
 class TextEditorSimulator(BaseSimulator):
 
     def set_text(self, text, confirmed=True):

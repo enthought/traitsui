@@ -30,6 +30,7 @@ from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 from .constants import OKColor
 
 from traitsui.testing.api import BaseSimulator, Disabled, simulate
+from traitsui.testing.simulation import DEFAULT_REGISTRY
 
 
 class SimpleEditor(Editor):
@@ -183,8 +184,8 @@ class CustomEditor(SimpleEditor):
     base_style = QtGui.QTextEdit
 
 
-@simulate(CustomEditor)
-@simulate(SimpleEditor)
+@simulate(CustomEditor, registry=DEFAULT_REGISTRY)
+@simulate(SimpleEditor, registry=DEFAULT_REGISTRY)
 class TextEditorSimulator(BaseSimulator):
     """ A simulator for testing GUI components with the simple and custom
     styled TextEditor.

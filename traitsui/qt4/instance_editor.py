@@ -34,6 +34,7 @@ from .constants import DropColor
 from .helper import position_window
 
 from traitsui.testing.api import BaseSimulator, simulate
+from traitsui.testing.simulation import DEFAULT_REGISTRY
 
 
 OrientationMap = {
@@ -399,7 +400,7 @@ class CustomEditor(Editor):
         self.resynch_editor()
 
 
-@simulate(CustomEditor)
+@simulate(CustomEditor, registry=DEFAULT_REGISTRY)
 class CustomInstanceEditorSimulator(BaseSimulator):
     """ A simulator for custom instance editor: it delegates commands and
     queries to the internal UI panel.
@@ -479,7 +480,7 @@ class SimpleEditor(CustomEditor):
             self._dialog_ui = None
 
 
-@simulate(SimpleEditor)
+@simulate(SimpleEditor, registry=DEFAULT_REGISTRY)
 class SimpleInstanceEditorSimulator(BaseSimulator):
     """ A simulator for simple instance editor. It launches the dialog and
     delegates commands and queries to the dialog UI.

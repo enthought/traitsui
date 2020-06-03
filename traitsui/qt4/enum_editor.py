@@ -31,6 +31,7 @@ from .constants import OKColor, ErrorColor
 from .editor import Editor
 
 from traitsui.testing.api import BaseSimulator, Disabled, simulate
+from traitsui.testing.simulation import DEFAULT_REGISTRY
 
 # default formatting function (would import from string, but not in Python 3)
 capitalize = lambda s: s.capitalize()
@@ -300,7 +301,7 @@ class SimpleEditor(BaseEditor):
             return self.update_text_object(text)
 
 
-@simulate(SimpleEditor)
+@simulate(SimpleEditor, registry=DEFAULT_REGISTRY)
 class SimpleEnumEditorSimulator(BaseSimulator):
     """ A simulator for testing GUI components with the simple EnumEditor.
 

@@ -35,6 +35,7 @@ from traitsui.helper import user_name_for
 from traitsui.handler import Handler
 from traitsui.instance_choice import InstanceChoiceItem
 from traitsui.testing.api import BaseSimulator, simulate
+from traitsui.testing.simulation import DEFAULT_REGISTRY
 
 from . import toolkit
 from .editor import Editor
@@ -481,7 +482,7 @@ class CustomEditor(Editor):
         self.resynch_editor()
 
 
-@simulate(CustomEditor)
+@simulate(CustomEditor, registry=DEFAULT_REGISTRY)
 class CustomInstanceEditorSimulator(BaseSimulator):
 
     @contextlib.contextmanager
@@ -566,7 +567,7 @@ class SimpleEditor(CustomEditor):
         )
 
 
-@simulate(SimpleEditor)
+@simulate(SimpleEditor, registry=DEFAULT_REGISTRY)
 class SimpleInstanceEditorSimulator(BaseSimulator):
 
     @contextlib.contextmanager
