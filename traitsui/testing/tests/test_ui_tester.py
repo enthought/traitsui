@@ -132,7 +132,8 @@ if is_current_backend_qt4():
     class QtCustomSimulator(BaseSimulator):
 
         def click_some_index(self, index):
-            self.editor.control.setCurrentIndex(index)
+            text = self.editor.control.itemText(index)
+            self.editor.control.currentIndexChanged[str].emit(text)
 
 
 if is_current_backend_wx():
