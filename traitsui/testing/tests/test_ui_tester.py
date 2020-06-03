@@ -149,6 +149,7 @@ if is_current_backend_wx():
             return self.editor.control.GetHint()
 
 
+@requires_one_of([QT, WX])
 class TestUITesterSimulateExtension(unittest.TestCase):
     """ Test when the existing simulators are not enough, it is easy to
     contribute new ones.
