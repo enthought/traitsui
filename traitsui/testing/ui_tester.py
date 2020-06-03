@@ -31,15 +31,15 @@ class UITester:
         ----------
         registries : list of SimulatorRegistry, optional
             Registries of simulators for different editors, in the order
-            of decreasing priority. Default is a list containing TraitsUI's
-            registry only.
+            of decreasing priority. A shallow copy will be made.
+            Default is a list containing TraitsUI's registry only.
         """
         self.gui = None
 
         if registries is None:
-            self.registries = [DEFAULT_REGISTRY]
+            self._registries = [DEFAULT_REGISTRY]
         else:
-            self.registries = registries
+            self._registries = registries.copy()
 
     def start(self):
         """ Start GUI testing.
@@ -61,6 +61,16 @@ class UITester:
 
     def __exit__(self, *args, **kwargs):
         self.stop()
+
+    def add_registry(self, registry):
+        """ Add a SimulatorRegistry to the top of the registry list, i.e.
+        registry with the highest priority.
+
+        Parameters
+        ----------
+        registry : SimulatorRegistry
+        """
+        self._registries.insert(0, registry)
 
     @contextmanager
     def create_ui(self, object, ui_kwargs=None):
@@ -269,7 +279,7 @@ class UITester:
         self._ensure_started()
         with store_exceptions_on_all_threads():
             set_editor_value(
-                ui, name, setter, self.gui, registries=self.registries)
+                ui, name, setter, self.gui, registries=self._registries)
             self.gui.process_events()
 
     def get_editor_value(self, ui, name, getter):
@@ -300,7 +310,7 @@ class UITester:
         with store_exceptions_on_all_threads():
             self.gui.process_events()
             return get_editor_value(
-                ui, name, getter, self.gui, registries=self.registries)
+                ui, name, getter, self.gui, registries=self._registries)
 
     # Private methods
 

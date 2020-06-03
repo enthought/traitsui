@@ -302,20 +302,40 @@ def set_editor_value(ui, name, setter, gui, registries):
         editor. The first registry that returns a simulator will stop other
         registries from being used.
     """
-    simulator, name = _get_one_simulator(
-        ui=ui, name=name, registries=registries)
-    with simulator.get_ui() as alternative_ui:
-        if alternative_ui is not NotImplemented:
-            set_editor_value(
-                ui=alternative_ui,
-                name=name,
-                setter=setter,
-                gui=gui,
-                registries=registries,
-            )
-        else:
-            setter(simulator)
-        gui.process_events()
+    editor, name = _get_editor(ui, name)
+    editor_class = editor.__class__
+
+    exceptions = []
+
+    for simulator_class in _iter_simulator_classes(registries, editor_class):
+        simulator = simulator_class(editor)
+        with simulator.get_ui() as alternative_ui:
+            try:
+                if alternative_ui is not NotImplemented:
+                    set_editor_value(
+                        ui=alternative_ui,
+                        name=name,
+                        setter=setter,
+                        gui=gui,
+                        registries=registries,
+                    )
+                else:
+                    setter(simulator)
+
+            except NotImplementedError as e:
+                exceptions.append(e)
+                continue
+            else:
+                gui.process_events()
+                return
+
+    raise NotImplementedError(
+        "No implementation found for simulating {!r}. "
+        "These simulators are tried:\n{}".format(
+            editor,
+            "\n".join(str(exception) for exception in exceptions)
+        )
+    )
 
 
 def get_editor_value(ui, name, getter, gui, registries):
@@ -342,24 +362,65 @@ def get_editor_value(ui, name, getter, gui, registries):
     value : any
         Any value returned by the getter.
     """
-    simulator, name = _get_one_simulator(
-        ui=ui, name=name, registries=registries)
-    with simulator.get_ui() as alternative_ui:
-        gui.process_events()
-        if alternative_ui is not NotImplemented:
-            return get_editor_value(
-                ui=alternative_ui,
-                name=name,
-                getter=getter,
-                gui=gui,
-                registries=registries,
-            )
-        return getter(simulator)
+    editor, name = _get_editor(ui, name)
+    editor_class = editor.__class__
+
+    exceptions = []
+
+    for simulator_class in _iter_simulator_classes(registries, editor_class):
+        simulator = simulator_class(editor)
+        with simulator.get_ui() as alternative_ui:
+            gui.process_events()
+            try:
+                if alternative_ui is not NotImplemented:
+                    return get_editor_value(
+                        ui=alternative_ui,
+                        name=name,
+                        getter=getter,
+                        gui=gui,
+                        registries=registries,
+                    )
+                else:
+                    return getter(simulator)
+
+            except NotImplementedError as e:
+                exceptions.append(e)
+                continue
+
+    raise NotImplementedError(
+        "No implementation found for simulating {!r}. "
+        "These simulators are tried:\n{}".format(
+            editor,
+            "\n".join(str(exception) for exception in exceptions)
+        )
+    )
 
 
-def _get_one_simulator(ui, name, registries):
-    """ Return one instance of BaseSimulation for an editor uniquely identified
-    from the given UI and name.
+def _iter_simulator_classes(registries, editor_class):
+    """ For a given list of SimulatorRegistry, yield all the simulator classes
+    for the given Editor class.
+
+    Parameters
+    ----------
+    registries : list of SimulatorRegistry
+        List of registries to obtain simulators from.
+    editor_class : traitsui.ui.editor.Editor
+        The editor class to obtain simulators for.
+
+    Yields
+    ------
+    simulator_class : subclass of BaseSimulator
+    """
+    for registry in registries:
+        try:
+            yield registry.get_simulator_class(editor_class)
+        except KeyError:
+            continue
+
+
+def _get_editors(ui, name):
+    """ Return a list of Editor from an instance of traitsui.ui.UI
+    with a given extended name.
 
     Parameters
     ----------
@@ -368,69 +429,44 @@ def _get_one_simulator(ui, name, registries):
     name : str
         A single or an extended name for retreiving an editor on a UI.
         e.g. "attr", "model.attr1.attr2"
-    registries : list of SimulatorRegistry
-        The registries from which to find a BaseSimulator for the retrieved
-        editor, in a descending order of priority.
 
     Returns
     -------
-    simulator : BaseSimulator
-        Simulator for the editor found.
-    name : str
-        Modified name if the original name is an extended name.
-
-    Raises
-    ------
-    ValuError
-        If zero or more than one editors are found.
-    """
-    simulators, new_name = _get_simulators(
-        ui=ui, name=name, registries=registries)
-
-    if not simulators:
-        raise ValueError(
-            "No editors can be found with name {!r}".format(name)
-        )
-    if len(simulators) > 1:
-        raise ValueError("Found multiple editors with name {!r}.".format(name))
-
-    simulator, = simulators
-    return simulator, new_name
-
-
-def _get_simulators(ui, name, registries):
-    """ Return instances of BaseSimulator from an instance of traitsui.ui.UI
-    with a given extended name.
-
-    Parameters
-    ----------
-    ui : traitsui.ui.UI
-    name : str
-    registries : list of SimulatorRegistry
-        The registries from which to find a BaseSimulator for the retrieved
-        editor. The first registry that returns a simulator will stop other
-        registries from being used.
+    editors : list of Editor
+        The editors found. The list may be empty.
     """
     if "." in name:
         editor_name, name = name.split(".", 1)
     else:
         editor_name = name
-    editors = ui.get_editors(editor_name)
+    return ui.get_editors(editor_name), name
 
-    simulators = []
-    for editor in editors:
-        editor_class = editor.__class__
-        for registry in registries:
-            try:
-                simulator_class = registry.get_simulator_class(editor_class)
-            except KeyError:
-                continue
-            else:
-                break
-        else:
-            raise KeyError(
-                "No simulators can be found for {!r}".format(editor_class)
-            )
-        simulators.append(simulator_class(editor))
 
-    return simulators, name
+def _get_editor(ui, name):
+    """ Return a single Editor from an instance of traitsui.ui.UI with
+    a given extended name. Raise if zero or many editors are found.
+
+    Parameters
+    ----------
+    ui : traitsui.ui.UI
+        The UI from which an editor will be retrieved.
+    name : str
+        A single or an extended name for retreiving an editor on a UI.
+        e.g. "attr", "model.attr1.attr2"
+
+    Returns
+    -------
+    editor : Editor
+        The single editor found.
+    name : str
+        Modified name if the original name is an extended name.
+    """
+    editors, new_name = _get_editors(ui, name)
+    if not editors:
+        raise ValueError(
+            "No editors can be found with name {!r}".format(name)
+        )
+    if len(editors) > 1:
+        raise ValueError("Found multiple editors with name {!r}.".format(name))
+    editor, = editors
+    return editor, new_name
