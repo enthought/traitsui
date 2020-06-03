@@ -5,9 +5,13 @@ from traits.api import (
     Bool, Button, Date, Enum, Instance, HasTraits, List, Str, Int,
     on_trait_change, Property
 )
-from traitsui.api import EnumEditor, Item, ModelView, View
-from traitsui.testing.api import Disabled, UITester
+from traitsui.api import EnumEditor, Item, ModelView, TextEditor, View
+from traitsui.testing.api import (
+    BaseSimulator, Disabled, simulate, SimulatorRegistry, UITester,
+)
 from traitsui.tests._tools import (
+    is_current_backend_qt4,
+    is_current_backend_wx,
     requires_one_of,
     QT,
     WX,
@@ -118,3 +122,53 @@ class TestUITesterIntegration(unittest.TestCase):
             app.model.father.employment_status = "unemployed"
             actual = self.tester.get_text(ui, "father.employment_status")
             self.assertEqual(actual, "unemployed")
+
+
+# Test contributing custom simulator methods
+LOCAL_REGISTRY = SimulatorRegistry()
+
+if is_current_backend_qt4():
+
+    from traitsui.qt4.text_editor import SimpleEditor as QtTextEditor
+
+    @simulate(QtTextEditor, LOCAL_REGISTRY)
+    class QtCustomSimulator(BaseSimulator):
+
+        def get_placeholder_text(self):
+            return self.control.placeholderText()
+
+
+if is_current_backend_wx():
+
+    from traitsui.wx.text_editor import SimpleEditor as WxTextEditor
+
+    @simulate(WxTextEditor, LOCAL_REGISTRY)
+    class WxCustomSimulator(BaseSimulator):
+
+        def get_placeholder_text(self):
+            return self.editor.control.GetHint()
+
+
+class TestUITesterSimulateExtension(unittest.TestCase):
+    """ Test when the existing simulators are not enough, it is easy to
+    contribute new ones.
+    """
+
+    def test_custom_simulator_used(self):
+        tester = UITester()
+        tester.add_registry(LOCAL_REGISTRY)
+
+        view = View(
+            Item("first_name", editor=TextEditor(placeholder="Enter name"))
+        )
+        child = Child(first_name="Paul")
+        with tester, tester.create_ui(child, dict(view=view)) as ui:
+
+            actual = tester.get_editor_value(
+                ui, "first_name", lambda s: s.get_placeholder_text()
+            )
+            self.assertEqual(actual, "Enter name")
+
+            # the default simulator from TraitsUI is still accessible.
+            actual = tester.get_text(ui, "first_name")
+            self.assertEqual(actual, "Paul")
