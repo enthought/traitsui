@@ -135,7 +135,7 @@ if is_current_backend_qt4():
     class QtCustomSimulator(BaseSimulator):
 
         def get_placeholder_text(self):
-            return self.control.placeholderText()
+            return self.editor.control.placeholderText()
 
 
 if is_current_backend_wx():
