@@ -471,12 +471,6 @@ class TestTextCheckListEditor(unittest.TestCase):
         gui.process_events()
         editor = ui.get_editors("value")[0]
         line_edit = editor.control
-
-        # FIXME issue enthought/traitsui#851
-        if is_current_backend_wx():
-            import wx
-            self.addCleanup(line_edit.Unbind, wx.EVT_KILL_FOCUS)
-
         return gui, editor, line_edit
 
     def test_text_check_list_object_list(self):
