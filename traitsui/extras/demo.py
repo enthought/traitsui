@@ -98,6 +98,9 @@ exec_str = """from traits.api import *
 
 """
 
+# The name of the file being looked up for the description of a directory
+DESCRIPTION_RST_FILENAME = "index.rst"
+
 # ----------------------------------------------------------------------------
 #  Return a 'user-friendly' name for a specified string:
 # ----------------------------------------------------------------------------
@@ -540,6 +543,8 @@ class DemoImageFile(DemoFileBase):
 
 
 class DemoPath(DemoTreeNodeObject):
+    """ This class represents a directory.
+    """
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -552,7 +557,7 @@ class DemoPath(DemoTreeNodeObject):
     path = Property(depends_on='parent.path,name')
 
     #: Description of what the demo does:
-    description = Property(HTML, depends_on="_description")
+    description = Property(HTML, depends_on="path,css_filename")
 
     #: The base URL for links:
     base_url = Property(depends_on='path')
@@ -565,9 +570,6 @@ class DemoPath(DemoTreeNodeObject):
 
     #: UI form of the 'name':
     nice_name = Property()
-
-    #: Source code contained in the '__init__.py' file:
-    source = Property(Code)
 
     #: Dictionary containing symbols defined by the path's '__init__.py' file:
     init_dic = Property()
@@ -652,25 +654,18 @@ class DemoPath(DemoTreeNodeObject):
 
     @cached_property
     def _get_description(self):
-        if not self._description:
-            self._get_init()
+        index_rst = os.path.join(self.path, DESCRIPTION_RST_FILENAME)
+        if os.path.exists(index_rst):
+            with open(index_rst, "r", encoding="utf-8") as f:
+                description = f.read()
+        else:
+            description = ""
 
         if self.css_filename:
-            result = publish_html_str(
-                self._description, self.css_filename)
+            result = publish_html_str(description, self.css_filename)
         else:
-            result = publish_html_str(self._description)
+            result = publish_html_str(description)
         return result
-
-    # -------------------------------------------------------------------------
-    #  Implementation of the 'source' property:
-    # -------------------------------------------------------------------------
-
-    def _get_source(self):
-        if self._source is None:
-            self._get_init()
-
-        return self._source
 
     # -------------------------------------------------------------------------
     #  Implementation of the 'init_dic' property:
@@ -681,23 +676,6 @@ class DemoPath(DemoTreeNodeObject):
         description, source = parse_source(join(self.path, "__init__.py"))
         exec((exec_str + source), init_dic)
         return init_dic
-
-    # -------------------------------------------------------------------------
-    #  Initializes the description and source from the path's '__init__.py'
-    #  file:
-    # -------------------------------------------------------------------------
-
-    def _get_init(self):
-        if self.use_files:
-            # Read in the '__init__.py' source file (if any):
-            self._description, source = parse_source(
-                join(self.path, "__init__.py")
-            )
-        else:
-            self._description = ".. image:: traits_ui_demo.jpg"
-            source = ""
-
-        self._source = exec_str + source
 
     # -------------------------------------------------------------------------
     #  Returns whether or not the object has children:
