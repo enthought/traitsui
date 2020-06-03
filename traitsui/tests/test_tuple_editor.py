@@ -25,7 +25,6 @@ from traitsui.api import Item, TupleEditor, View
 from traitsui.tests._tools import (
     create_ui,
     skip_if_null,
-    store_exceptions_on_all_threads,
 )
 
 
@@ -43,7 +42,7 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
     def test_value_update(self):
         # Regression test for #179
         model = DummyModel()
-        with store_exceptions_on_all_threads(), create_ui(model) as ui:
+        with create_ui(model) as ui:
             with self.assertTraitChanges(model, "data", count=1):
                 model.data = (3, 4.6, "nono")
 

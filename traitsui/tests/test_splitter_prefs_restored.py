@@ -21,7 +21,6 @@ from traitsui.api import Action, Group, Handler, HSplit, Item, View
 from traitsui.tests._tools import (
     create_ui,
     skip_if_not_qt4,
-    store_exceptions_on_all_threads,
 )
 
 
@@ -99,7 +98,7 @@ class TestSplitterPrefsRestored(unittest.TestCase):
                 obj.get(attr_names[0], None), attr_names=attr_names[1:]
             )
 
-        with store_exceptions_on_all_threads(), create_ui(TmpClass()) as ui:
+        with create_ui(TmpClass()) as ui:
 
             handler = ui.handler
 
@@ -139,7 +138,7 @@ class TestSplitterPrefsRestored(unittest.TestCase):
 
         # create a new ui and check that the splitter remembers the last state
         # (collapsed)
-        with store_exceptions_on_all_threads(), create_ui(TmpClass()) as ui2:
+        with create_ui(TmpClass()) as ui2:
             self.assertEqual(
                 collapsed_splitter_state, _get_nattr(ui2.get_prefs())
             )

@@ -31,7 +31,6 @@ from traitsui.tests._tools import (
     skip_if_not_qt4,
     skip_if_not_wx,
     skip_if_null,
-    store_exceptions_on_all_threads,
 )
 
 
@@ -61,7 +60,7 @@ class TestUI(unittest.TestCase):
         # UI.reset(destroy=True) destroys all ui children of the top control
 
         foo = FooDialog()
-        with store_exceptions_on_all_threads(), create_ui(foo) as ui:
+        with create_ui(foo) as ui:
 
             ui.reset(destroy=True)
 
@@ -78,7 +77,7 @@ class TestUI(unittest.TestCase):
         from pyface import qt
 
         foo = FooDialog()
-        with store_exceptions_on_all_threads(), create_ui(foo) as ui:
+        with create_ui(foo) as ui:
 
             # decorate children's `deleteLater` function to check that it is
             # called on `reset`. check only with the editor parts (only widgets
@@ -106,7 +105,7 @@ class TestUI(unittest.TestCase):
         import wx
 
         foo = FooDialog()
-        with store_exceptions_on_all_threads(), create_ui(foo) as ui:
+        with create_ui(foo) as ui:
 
             self.assertEqual(len(ui._editors), 2)
             self.assertIsInstance(
@@ -137,7 +136,7 @@ class TestUI(unittest.TestCase):
         from pyface import qt
 
         foo = FooDialog()
-        with store_exceptions_on_all_threads(), create_ui(foo) as ui:
+        with create_ui(foo) as ui:
 
             self.assertEqual(len(ui._editors), 2)
             self.assertIsInstance(
@@ -165,7 +164,7 @@ class TestUI(unittest.TestCase):
         import wx
 
         foo = FooDialog()
-        with store_exceptions_on_all_threads(), create_ui(foo) as ui:
+        with create_ui(foo) as ui:
 
             # keep reference to the control to check that it was destroyed
             control = ui.control
@@ -193,7 +192,7 @@ class TestUI(unittest.TestCase):
         from pyface import qt
 
         foo = FooDialog()
-        with store_exceptions_on_all_threads(), create_ui(foo) as ui:
+        with create_ui(foo) as ui:
 
             # keep reference to the control to check that it was deleted
             control = ui.control
@@ -212,7 +211,7 @@ class TestUI(unittest.TestCase):
     @skip_if_null
     def test_no_spring_trait(self):
         obj = DisallowNewTraits()
-        with store_exceptions_on_all_threads(), create_ui(obj):
+        with create_ui(obj):
             pass
 
         self.assertTrue("spring" not in obj.traits())
