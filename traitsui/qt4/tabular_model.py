@@ -344,6 +344,12 @@ class TabularModel(QtCore.QAbstractTableModel):
         """
         editor = self._editor
 
+        if new_row == -1:
+            # In some cases, the new row may be reported as -1 (e.g. when
+            # dragging and dropping a row at the bottom of existing rows). In
+            # that case, adjust to the number of existing rows.
+            new_row = self.rowCount(None)
+        
         # Sort rows in descending order so they can be removed without
         # invalidating the indices.
         current_rows.sort()
