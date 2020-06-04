@@ -390,17 +390,20 @@ class TestListStrEditor(unittest.TestCase):
                 self.assertEqual(sorted(editor.multi_selected_indices), [1, 2])
 
     def test_list_str_editor_item_count(self):
+        gui = GUI()
         model = ListStrModel()
 
         # Without auto_add
         with store_exceptions_on_all_threads(), \
                 create_ui(model, dict(view=get_view())) as ui:
+            gui.process_events()
             editor = ui.get_editors("value")[0]
             self.assertEqual(editor.item_count, 3)
 
         # With auto_add
         with store_exceptions_on_all_threads(), \
                 create_ui(model, dict(view=get_view(auto_add=True))) as ui:
+            gui.process_events()
             editor = ui.get_editors("value")[0]
             self.assertEqual(editor.item_count, 3)
 
