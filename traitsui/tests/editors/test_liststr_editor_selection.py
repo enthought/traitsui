@@ -97,7 +97,7 @@ def get_selected_indices(editor):
     """
     if is_current_backend_wx():
         import wx
-
+        # "item" in this context means "index of the item"
         item = -1
         selected = []
         while True:
@@ -118,6 +118,8 @@ def get_selected_indices(editor):
 
 
 def set_selected_single(editor, index):
+    """ Selects a specified item in an editor with multi_select=False.
+    """
     if is_current_backend_wx():
         clear_selection(editor)
         editor.control.Select(index)
@@ -134,6 +136,9 @@ def set_selected_single(editor, index):
 
 
 def set_selected_multiple(editor, indices):
+    """ Clears old selection and selects specified items in an editor with
+    multi_select=True.
+    """
     if is_current_backend_wx():
         clear_selection(editor)
         for index in indices:
@@ -153,6 +158,8 @@ def set_selected_multiple(editor, indices):
 
 
 def clear_selection(editor):
+    """ Clears existing selection.
+    """
     if is_current_backend_wx():
         import wx
 
@@ -171,6 +178,8 @@ def clear_selection(editor):
 
 
 def right_click_item(control, index):
+    """ Right clicks on the specified item.
+    """
 
     if is_current_backend_wx():
         import wx
@@ -443,7 +452,8 @@ class TestListStrEditor(unittest.TestCase):
             model.value = ["two", "three"]
             gui.process_events()
 
-            # Model selection is reset, but editor selection values are not
+            # Internal view model selection is reset, but editor selection
+            # values are not (see issue enthought/traitsui#872)
             self.assertEqual(get_selected_indices(editor), [])
             self.assertEqual(editor.selected_index, 1)
             self.assertEqual(editor.selected, "one")
@@ -474,7 +484,8 @@ class TestListStrEditor(unittest.TestCase):
             model.value = []
             gui.process_events()
 
-            # Model selection is reset, but editor selection values are not
+            # Internal view model selection is reset, but editor selection
+            # values are not (see issue enthought/traitsui#872)
             self.assertEqual(get_selected_indices(editor), [])
             self.assertEqual(editor.selected_index, 0)
             self.assertEqual(editor.selected, "two")
@@ -506,7 +517,8 @@ class TestListStrEditor(unittest.TestCase):
             model.value = ["two", "three"]
             gui.process_events()
 
-            # Model selection is reset, but editor selection values are not
+            # Internal view model selection is reset, but editor selection
+            # values are not (see issue enthought/traitsui#872)
             self.assertEqual(get_selected_indices(editor), [])
             self.assertEqual(editor.multi_selected_indices, [1])
             self.assertEqual(editor.multi_selected, ["one"])
@@ -538,7 +550,8 @@ class TestListStrEditor(unittest.TestCase):
             model.value = []
             gui.process_events()
 
-            # Model selection is reset, but editor selection values are not
+            # Internal view model selection is reset, but editor selection
+            # values are not (see issue enthought/traitsui#872)
             self.assertEqual(get_selected_indices(editor), [])
             self.assertEqual(editor.multi_selected_indices, [0])
             self.assertEqual(editor.multi_selected, ["two"])
@@ -601,8 +614,8 @@ class TestListStrEditor(unittest.TestCase):
         with store_exceptions_on_all_threads():
             self.setup_gui(ListStrModel(), get_view(title="testing"))
 
-    @skip_if_not_wx
-    def test_list_str_editor_menu(self):
+    @skip_if_not_wx  # see `right_click_item` and issue enthought/traitsui#868
+    def test_list_str_editor_right_click(self):
         class ListStrModelRightClick(HasTraits):
             value = List(["one", "two", "three"])
             right_clicked = Str()
