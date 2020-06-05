@@ -13,7 +13,6 @@
 """
 
 import unittest
-from unittest import mock
 
 from traits.api import HasTraits, List, Str
 from traitsui.api import Item, TabularEditor, View
@@ -26,9 +25,7 @@ from traitsui.tests._tools import (
     store_exceptions_on_all_threads,
 )
 try:
-    from pyface.qt import QtCore, QtGui
-    from traitsui.qt4.tabular_model import TabularModel
-    from traitsui.qt4.tabular_editor import TabularEditor as QtTabularEditor
+    from pyface.qt import QtCore
 except ImportError:
     # The entire test case should be skipped if the current backend is not Qt
     # But if it is Qt, then re-raise
@@ -62,7 +59,7 @@ class TestTabularModel(unittest.TestCase):
                 create_ui(obj, dict(view=view)) as ui:
             editor, = ui.get_editors("names")
 
-            model =  editor.model
+            model = editor.model
             # sanity check
             self.assertEqual(model.rowCount(None), 3)
 
@@ -91,7 +88,7 @@ class TestTabularModel(unittest.TestCase):
                 create_ui(obj, dict(view=view)) as ui:
             editor, = ui.get_editors("names")
 
-            model =  editor.model
+            model = editor.model
             # sanity check
             self.assertEqual(model.rowCount(None), 3)
 
@@ -121,7 +118,7 @@ class TestTabularModel(unittest.TestCase):
                 create_ui(obj, dict(view=view)) as ui:
             editor, = ui.get_editors("names")
 
-            model =  editor.model
+            model = editor.model
             # sanity check
             self.assertEqual(model.rowCount(None), 3)
 
@@ -151,7 +148,7 @@ class TestTabularModel(unittest.TestCase):
                 create_ui(obj, dict(view=view)) as ui:
             editor, = ui.get_editors("names")
 
-            model =  editor.model
+            model = editor.model
 
             # -1 is an invalid row. This should not cause segfault.
             model.moveRows([1], -1)
