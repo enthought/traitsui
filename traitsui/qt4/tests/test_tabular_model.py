@@ -52,7 +52,7 @@ def get_view(adapter):
 class TestTabularModel(unittest.TestCase):
 
     def test_drop_mime_data_below_list(self):
-
+        # Test dragging an item in the list and drop it below the last item
         obj = DummyHasTraits(names=["A", "B", "C", "D"])
         view = get_view(TabularAdapter(columns=["Name"]))
         with store_exceptions_on_all_threads(), \
@@ -81,7 +81,8 @@ class TestTabularModel(unittest.TestCase):
             self.assertEqual(content, ["A", "C", "D", "B"])
 
     def test_drop_mime_data_within_list(self):
-
+        # Test dragging an item in the list and drop it somewhere within the
+        # list
         obj = DummyHasTraits(names=["A", "B", "C", "D"])
         view = get_view(TabularAdapter(columns=["Name"]))
 
@@ -142,6 +143,7 @@ class TestTabularModel(unittest.TestCase):
             self.assertEqual(content, ["A", "B", "C", "A"])
 
     def test_move_rows_invalid_index(self):
+        # Test the last resort to prevent segfault
 
         obj = DummyHasTraits(names=["A", "B", "C"])
         view = get_view(TabularAdapter(columns=["Name"]))
