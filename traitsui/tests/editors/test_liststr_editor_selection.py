@@ -124,7 +124,6 @@ def set_selected_single(editor, index):
     """ Selects a specified item in an editor with multi_select=False.
     """
     if is_current_backend_wx():
-        clear_selection(editor)
         editor.control.Select(index)
 
     elif is_current_backend_qt4():
@@ -150,8 +149,8 @@ def set_selected_multiple(editor, indices):
     elif is_current_backend_qt4():
         from pyface.qt.QtGui import QItemSelectionModel
 
+        clear_selection(editor)
         smodel = editor.list_view.selectionModel()
-        smodel.clearSelection()
         for index in indices:
             mi = editor.model.index(index)
             smodel.select(mi, QItemSelectionModel.Select)
