@@ -19,6 +19,7 @@ Test case for bug (wx, Mac OS X)
 A ListStrEditor was not checking for valid item indexes under Wx.  This was
 most noticeable when the selected_index was set in the editor factory.
 """
+import platform
 import unittest
 
 from pyface.gui import GUI
@@ -38,6 +39,8 @@ from traitsui.tests._tools import (
     skip_if_null,
     store_exceptions_on_all_threads,
 )
+
+is_windows = platform.system() == "Windows"
 
 
 class ListStrModel(HasTraits):
@@ -198,6 +201,10 @@ def right_click_item(control, index):
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
+@unittest.skipIf(
+    is_windows and is_current_backend_qt4(),
+    "Issue enthought/traitsui#854; possible test interactions on Windows"
+)
 @unittest.skipIf(is_current_backend_wx(), "Issue enthought/traitsui#752")
 @skip_if_null
 class TestListStrEditor(unittest.TestCase):
