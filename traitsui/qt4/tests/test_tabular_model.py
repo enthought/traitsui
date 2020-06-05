@@ -53,7 +53,7 @@ class TestTabularModel(unittest.TestCase):
 
     def test_drop_mime_data_below_list(self):
 
-        obj = DummyHasTraits(names=["A", "B", "C"])
+        obj = DummyHasTraits(names=["A", "B", "C", "D"])
         view = get_view(TabularAdapter(columns=["Name"]))
         with store_exceptions_on_all_threads(), \
                 create_ui(obj, dict(view=view)) as ui:
@@ -61,27 +61,28 @@ class TestTabularModel(unittest.TestCase):
 
             model = editor.model
             # sanity check
-            self.assertEqual(model.rowCount(None), 3)
+            self.assertEqual(model.rowCount(None), 4)
 
             # drag and drop row=1 from within the table.
             # drag creates a PyMimeData object for dropMimeData to consume.
             index = model.createIndex(1, 0)
             mime_data = model.mimeData([index])
-            content = mime_data.instance()   # content should be 'B'
 
-            # When dropped below the list, the "parent" is invalid.
+            # when
+            # dropped below the list, the "parent" is invalid.
             parent = QtCore.QModelIndex()   # invalid index object
             model.dropMimeData(mime_data, QtCore.Qt.MoveAction, -1, -1, parent)
 
-            # Check row index 2
-            index = model.createIndex(2, 0)
-            mime_data = model.mimeData([index])
-            # Same content as the one dragged.
-            self.assertEqual(mime_data.instance(), content)
+            # then
+            mime_data = model.mimeData(
+                [model.createIndex(i, 0) for i in range(model.rowCount(None),)]
+            )
+            content = mime_data.instance()
+            self.assertEqual(content, ["A", "C", "D", "B"])
 
     def test_drop_mime_data_within_list(self):
 
-        obj = DummyHasTraits(names=["A", "B", "C"])
+        obj = DummyHasTraits(names=["A", "B", "C", "D"])
         view = get_view(TabularAdapter(columns=["Name"]))
 
         with store_exceptions_on_all_threads(), \
@@ -90,24 +91,24 @@ class TestTabularModel(unittest.TestCase):
 
             model = editor.model
             # sanity check
-            self.assertEqual(model.rowCount(None), 3)
+            self.assertEqual(model.rowCount(None), 4)
 
             # drag and drop from within the table.
-            # drag creates a PyMimeData object for dropMimeData to consume.
-            index = model.createIndex(1, 0)  # row = 0, column=0
+            # drag row index 0
+            index = model.createIndex(0, 0)
             mime_data = model.mimeData([index])
-            content = mime_data.instance()   # content should be 'B'
 
             # when
-            # drop it to row index 0
-            parent = model.createIndex(0, 0)
+            # drop it to row index 2
+            parent = model.createIndex(2, 0)
             model.dropMimeData(mime_data, QtCore.Qt.MoveAction, -1, -1, parent)
 
             # then
-            index = model.createIndex(0, 0)  # row = 0, column = 0
-            mime_data = model.mimeData([index])
-            # Same content as the one dragged.
-            self.assertEqual(mime_data.instance(), content)
+            mime_data = model.mimeData(
+                [model.createIndex(i, 0) for i in range(model.rowCount(None),)]
+            )
+            content = mime_data.instance()
+            self.assertEqual(content, ["B", "C", "A", "D"])
 
     def test_copy_item(self):
         # Test copy 'A' to the row after 'C'
@@ -123,21 +124,22 @@ class TestTabularModel(unittest.TestCase):
             self.assertEqual(model.rowCount(None), 3)
 
             # drag and drop from within the table for copy action.
-            index = model.createIndex(0, 0)  # row = 0, column=0
+            # drag index 0
+            index = model.createIndex(0, 0)
             mime_data = model.mimeData([index])
-            content = mime_data.instance()   # content should be 'A'
 
             # when
-            parent = model.createIndex(2, 0)  # the location of 'C'
+            # drop to index 2
+            parent = model.createIndex(2, 0)
             model.dropMimeData(mime_data, QtCore.Qt.CopyAction, -1, -1, parent)
 
             # then
             self.assertEqual(model.rowCount(None), 4)
-
-            index = model.createIndex(3, 0)
-            mime_data = model.mimeData([index])
-            # Same content as the one dragged.
-            self.assertEqual(mime_data.instance(), content)
+            mime_data = model.mimeData(
+                [model.createIndex(i, 0) for i in range(model.rowCount(None),)]
+            )
+            content = mime_data.instance()
+            self.assertEqual(content, ["A", "B", "C", "A"])
 
     def test_move_rows_invalid_index(self):
 
@@ -149,11 +151,16 @@ class TestTabularModel(unittest.TestCase):
             editor, = ui.get_editors("names")
 
             model = editor.model
+            # sanity check
+            self.assertEqual(model.rowCount(None), 3)
 
+            # when
             # -1 is an invalid row. This should not cause segfault.
             model.moveRows([1], -1)
 
-            # -1 is converted to the last row (index = 2)
-            mime_data = model.mimeData([model.createIndex(2, 0)])
+            # then
+            mime_data = model.mimeData(
+                [model.createIndex(i, 0) for i in range(model.rowCount(None),)]
+            )
             content = mime_data.instance()
-            self.assertEqual(content, ["B"])
+            self.assertEqual(content, ["A", "C", "B"])
