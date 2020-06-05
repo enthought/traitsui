@@ -79,6 +79,7 @@ class TestTabularModel(unittest.TestCase):
             )
             content = mime_data.instance()
             self.assertEqual(content, ["A", "C", "D", "B"])
+            self.assertEqual(obj.names, content)
 
     def test_drop_mime_data_within_list(self):
         # Test dragging an item in the list and drop it somewhere within the
@@ -110,6 +111,7 @@ class TestTabularModel(unittest.TestCase):
             )
             content = mime_data.instance()
             self.assertEqual(content, ["B", "C", "A", "D"])
+            self.assertEqual(obj.names, content)
 
     def test_copy_item(self):
         # Test copy 'A' to the row after 'C'
@@ -141,6 +143,7 @@ class TestTabularModel(unittest.TestCase):
             )
             content = mime_data.instance()
             self.assertEqual(content, ["A", "B", "C", "A"])
+            self.assertEqual(obj.names, content)
 
     def test_move_rows_invalid_index(self):
         # Test the last resort to prevent segfault
@@ -166,3 +169,4 @@ class TestTabularModel(unittest.TestCase):
             )
             content = mime_data.instance()
             self.assertEqual(content, ["A", "C", "B"])
+            self.assertEqual(obj.names, content)
