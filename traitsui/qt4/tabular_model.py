@@ -277,6 +277,9 @@ class TabularModel(QtCore.QAbstractTableModel):
         if action == QtCore.Qt.IgnoreAction:
             return False
 
+        # If dropped directly onto the parent, both row and column are -1.
+        # See https://doc.qt.io/qt-5/qabstractitemmodel.html#dropMimeData
+        # When dropped below the list, the "parent" is invalid.
         if row == -1:
             if parent.isValid():
                 row = parent.row()
