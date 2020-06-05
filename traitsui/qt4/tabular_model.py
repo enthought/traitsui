@@ -352,7 +352,7 @@ class TabularModel(QtCore.QAbstractTableModel):
             # This is a last resort to prevent segmentation faults.
             logger.debug(
                 "Received invalid row %d. Adjusting to the last row.", new_row)
-            new_row = self.rowCount(None) - 1
+            new_row = max(0, self.rowCount(None) - 1)
 
         # Sort rows in descending order so they can be removed without
         # invalidating the indices.
