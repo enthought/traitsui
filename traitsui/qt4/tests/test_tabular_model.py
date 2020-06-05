@@ -111,3 +111,21 @@ class TestTabularModel(unittest.TestCase):
             mime_data = model.mimeData([index])
             # Same content as the one dragged.
             self.assertEqual(mime_data.instance(), content)
+
+    def test_move_rows_invalid_index(self):
+
+        obj = DummyHasTraits(names=["A", "B", "C"])
+
+        with store_exceptions_on_all_threads(), \
+                create_ui(obj, dict(view=view)) as ui:
+            editor, = ui.get_editors("names")
+
+            model =  editor.model
+
+            # -1 is an invalid row. This should not cause segfault.
+            model.moveRows([1], -1)
+
+            # -1 is converted to the last row (index = 2)
+            mime_data = model.mimeData([model.createIndex(2, 0)])
+            content = mime_data.instance()
+            self.assertEqual(content, ["B"])
