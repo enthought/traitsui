@@ -24,6 +24,7 @@ from traitsui.tests._tools import (
     GuiTestAssistant,
     is_current_backend_qt4,
     skip_if_not_qt4,
+    store_exceptions_on_all_threads,
     no_gui_test_assistant,
 )
 
@@ -168,7 +169,8 @@ class TestTextEditor(unittest.TestCase):
         # Smoke test to test setup and tear down of an editor.
         foo = Foo()
         view = get_view(style=style, auto_set=auto_set)
-        with create_ui(foo, dict(view=view)):
+        with store_exceptions_on_all_threads(), \
+                create_ui(foo, dict(view=view)):
             pass
 
     def test_simple_editor_init_and_dispose(self):
@@ -191,7 +193,8 @@ class TestTextEditor(unittest.TestCase):
         foo = Foo()
         view = get_view(style="simple", auto_set=True)
         gui = GUI()
-        with create_ui(foo, dict(view=view)) as ui:
+        with store_exceptions_on_all_threads(), \
+                create_ui(foo, dict(view=view)) as ui:
             editor, = ui.get_editors("name")
             set_text(editor, "NEW")
             gui.process_events()
@@ -202,7 +205,8 @@ class TestTextEditor(unittest.TestCase):
         foo = Foo(name="")
         view = get_view(style="simple", auto_set=False)
         gui = GUI()
-        with create_ui(foo, dict(view=view)) as ui:
+        with store_exceptions_on_all_threads(), \
+                create_ui(foo, dict(view=view)) as ui:
             editor, = ui.get_editors("name")
 
             set_text(editor, "NEW")
@@ -220,7 +224,8 @@ class TestTextEditor(unittest.TestCase):
         foo = Foo()
         view = get_view(auto_set=True, style="custom")
         gui = GUI()
-        with create_ui(foo, dict(view=view)) as ui:
+        with store_exceptions_on_all_threads(), \
+                create_ui(foo, dict(view=view)) as ui:
             editor, = ui.get_editors("name")
 
             set_text(editor, "NEW")
@@ -233,7 +238,8 @@ class TestTextEditor(unittest.TestCase):
         foo = Foo()
         view = get_view(auto_set=False, style="custom")
         gui = GUI()
-        with create_ui(foo, dict(view=view)) as ui:
+        with store_exceptions_on_all_threads(), \
+                create_ui(foo, dict(view=view)) as ui:
             editor, = ui.get_editors("name")
 
             set_text(editor, "NEW")
