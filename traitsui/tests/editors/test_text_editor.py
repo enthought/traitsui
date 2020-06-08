@@ -101,19 +101,29 @@ class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
             else:
                 self.assertEqual(placeholder, "Enter name")
 
-    def check_editor_init_and_dispose(self, style):
+    def check_editor_init_and_dispose(self, style, auto_set):
         # Smoke test to test setup and tear down of an editor.
         # This test can be pull out to become toolkit-agnostic once
         # wx TextEditor also implements dispose.
         foo = Foo()
-        view = View(Item("name", editor=TextEditor(), style=style))
+        view = View(
+            Item("name", editor=TextEditor(auto_set=auto_set), style=style)
+        )
         with create_ui(foo, dict(view=view)):
             pass
 
     def test_simple_editor_init_and_dispose(self):
         # Smoke test to test setup and tear down of an editor.
-        self.check_editor_init_and_dispose(style="simple")
+        self.check_editor_init_and_dispose(style="simple", auto_set=True)
 
     def test_custom_editor_init_and_dispose(self):
         # Smoke test to test setup and tear down of an editor.
-        self.check_editor_init_and_dispose(style="custom")
+        self.check_editor_init_and_dispose(style="custom", auto_set=True)
+
+    def test_simple_editor_init_and_dispose_no_auto_set(self):
+        # Smoke test to test setup and tear down of an editor.
+        self.check_editor_init_and_dispose(style="simple", auto_set=False)
+
+    def test_custom_editor_init_and_dispose_no_auto_set(self):
+        # Smoke test to test setup and tear down of an editor.
+        self.check_editor_init_and_dispose(style="custom", auto_set=False)

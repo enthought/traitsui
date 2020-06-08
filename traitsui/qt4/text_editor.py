@@ -72,16 +72,19 @@ class SimpleEditor(Editor):
         if factory.password:
             control.setEchoMode(QtGui.QLineEdit.Password)
 
-        if factory.auto_set and not factory.is_grid_cell:
-            if wtype == QtGui.QTextEdit:
-                control.textChanged.connect(self.update_object)
-            else:
-                control.textEdited.connect(self.update_object)
-
+        self._signals = []
+        if wtype == QtGui.QTextEdit:
+            self._signals.append((control.textChanged, self.update_object))
         else:
-            # Assume enter_set is set, otherwise the value will never get
-            # updated.
-            control.editingFinished.connect(self.update_object)
+            # QLineEdit
+            if factory.auto_set and not factory.is_grid_cell:
+                self._signals.append((control.textEdited, self.update_object))
+            else:
+                self._signals.append(
+                    (control.editingFinished, self.update_object)
+                )
+        for signal, handler in self._signals:
+            signal.connect(handler)
 
         placeholder = self.factory.placeholder
 
@@ -100,15 +103,9 @@ class SimpleEditor(Editor):
 
     def dispose(self):
         if self.control is not None:
-            control = self.control
-            if self.factory.auto_set and not self.factory.is_grid_cell:
-                if isinstance(control, QtGui.QTextEdit):
-                    control.textChanged.disconnect(self.update_object)
-                else:
-                    control.textEdited.disconnect(self.update_object)
-
-            else:
-                control.editingFinished.disconnect(self.update_object)
+            while self._signals:
+                signal, handler = self._signals.pop()
+                signal.disconnect(handler)
 
         super().dispose()
 
