@@ -41,7 +41,7 @@ capitalize = lambda s: s.capitalize()
 
 
 class BaseCheckListEditor(EditorWithList):
-    """ Base class that implement the common logic of simple and custom
+    """ Base class that implements the common logic of simple and custom
     CheckListEditor.
     """
 
