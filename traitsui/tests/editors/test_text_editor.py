@@ -78,7 +78,7 @@ def set_text(editor, text):
 
 
 def key_press_return(editor):
-    """ Imitate user confirming the text by pressing the return key.
+    """ Imitate user pressing the return key.
     """
     if is_current_backend_qt4():
         from pyface.qt import QtGui
@@ -166,8 +166,6 @@ class TestTextEditor(unittest.TestCase):
 
     def check_editor_init_and_dispose(self, style, auto_set):
         # Smoke test to test setup and tear down of an editor.
-        # This test can be pull out to become toolkit-agnostic once
-        # wx TextEditor also implements dispose.
         foo = Foo()
         view = get_view(style=style, auto_set=auto_set)
         with create_ui(foo, dict(view=view)):
