@@ -579,7 +579,7 @@ class TabularEditor(Editor):
     def _multi_selected_items_changed(self, event):
         """ Handles the editor's 'multi_selected' trait being modified.
         """
-        values = self.values
+        values = self.value
         try:
             self._multi_selected_rows_items_changed(
                 TraitListEvent(
