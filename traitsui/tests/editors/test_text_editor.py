@@ -82,13 +82,12 @@ def key_press_return(editor):
     """
     if is_current_backend_qt4():
         from pyface.qt import QtGui
-        control = editor.control
 
         # ideally we should fire keyPressEvent, but the editor does not
         # bind to this event. Pressing return key will fire editingFinished
         # event on a QLineEdit
         if editor.base_style == QtGui.QLineEdit:
-            control.editingFinished.emit()
+            editor.control.editingFinished.emit()
         else:
             editor.control.append("")
     else:
