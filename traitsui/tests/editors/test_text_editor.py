@@ -157,6 +157,15 @@ class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
             else:
                 self.assertEqual(placeholder, "Enter name")
 
+
+# We should be able to run this test case against wx.
+# Not running them now to avoid test interaction. See enthought/traitsui#752
+@skip_if_not_qt4
+class TestTextEditor(unittest.TestCase):
+    """ Tests that can be run with any toolkit as long as there is an
+    implementation for simulating user interactions.
+    """
+
     def check_editor_init_and_dispose(self, style, auto_set):
         # Smoke test to test setup and tear down of an editor.
         # This test can be pull out to become toolkit-agnostic once
