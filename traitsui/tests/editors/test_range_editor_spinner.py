@@ -33,6 +33,7 @@ from traitsui.view import View
 from traitsui.editors.range_editor import RangeEditor
 
 from traitsui.tests._tools import (
+    create_ui,
     press_ok_button,
     skip_if_not_wx,
     skip_if_not_qt4,
@@ -60,10 +61,9 @@ class TestRangeEditorSpinner(unittest.TestCase):
         # Bug: when editing the text part of a spin control box, pressing
         # the OK button raises an AttributeError on Mac OS X
 
+        num = NumberWithSpinnerEditor()
         try:
-            with store_exceptions_on_all_threads():
-                num = NumberWithSpinnerEditor()
-                ui = num.edit_traits()
+            with store_exceptions_on_all_threads(), create_ui(num) as ui:
 
                 # the following is equivalent to clicking in the text control
                 # of the range editor, enter a number, and clicking ok without
@@ -100,9 +100,8 @@ class TestRangeEditorSpinner(unittest.TestCase):
         if wx.VERSION >= (3, 0):
             return
 
-        with store_exceptions_on_all_threads():
-            num = NumberWithSpinnerEditor()
-            ui = num.edit_traits()
+        num = NumberWithSpinnerEditor()
+        with store_exceptions_on_all_threads(), create_ui(num) as ui:
 
             # the following is equivalent to clicking in the text control of
             # the range editor, enter a number, and clicking ok without
@@ -135,9 +134,8 @@ class TestRangeEditorSpinner(unittest.TestCase):
 
         from pyface import qt
 
-        with store_exceptions_on_all_threads():
-            num = NumberWithSpinnerEditor()
-            ui = num.edit_traits()
+        num = NumberWithSpinnerEditor()
+        with store_exceptions_on_all_threads(), create_ui(num) as ui:
 
             # the following is equivalent to clicking in the text control of
             # the range editor, enter a number, and clicking ok without

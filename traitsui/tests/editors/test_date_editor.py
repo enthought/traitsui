@@ -106,8 +106,8 @@ class TestDateEditorCustomQt(unittest.TestCase):
     def launch_editor(self, view_factory):
         foo = Foo()
         ui = foo.edit_traits(view=view_factory())
-        editor, = ui._editors
         try:
+            editor, = ui._editors
             yield foo, editor
         finally:
             ui.dispose()

@@ -25,7 +25,11 @@ from traitsui.ui_editors.data_frame_editor import (
 )
 from traitsui.view import View
 
-from traitsui.tests._tools import store_exceptions_on_all_threads, skip_if_null
+from traitsui.tests._tools import (
+    create_ui,
+    store_exceptions_on_all_threads,
+    skip_if_null,
+)
 
 
 class DataFrameViewer(HasTraits):
@@ -381,10 +385,8 @@ class TestDataFrameEditor(unittest.TestCase):
             columns=["X", "Y", "Z"]
         )
         viewer = DataFrameViewer(data=df)
-        with store_exceptions_on_all_threads():
-            ui = viewer.edit_traits()
+        with store_exceptions_on_all_threads(), create_ui(viewer) as ui:
             viewer.df_updated = True
-            ui.dispose()
 
     @skip_if_null
     def test_data_frame_editor_with_refresh(self):
@@ -401,10 +403,8 @@ class TestDataFrameEditor(unittest.TestCase):
             columns=["X", "Y", "Z"]
         )
         viewer = DataFrameViewer(data=df)
-        with store_exceptions_on_all_threads():
-            ui = viewer.edit_traits()
+        with store_exceptions_on_all_threads(), create_ui(viewer) as ui:
             viewer.df_refreshed = True
-            ui.dispose()
 
     @skip_if_null
     def test_data_frame_editor_multi_select(self):
