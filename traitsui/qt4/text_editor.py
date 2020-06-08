@@ -13,7 +13,6 @@
 """ Defines the various text editors for the PyQt user interface toolkit.
 """
 
-
 from pyface.qt import QtCore, QtGui
 
 from traits.api import TraitError
@@ -28,7 +27,6 @@ from .editor import Editor
 from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
 from .constants import OKColor
-
 
 
 class SimpleEditor(Editor):
@@ -104,10 +102,9 @@ class SimpleEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        if self.control is not None:
-            while self._signals:
-                signal, handler = self._signals.pop()
-                signal.disconnect(handler)
+        while self._signals:
+            signal, handler = self._signals.pop()
+            signal.disconnect(handler)
 
         super().dispose()
 
