@@ -98,6 +98,20 @@ class SimpleEditor(Editor):
         self.set_error_state(False)
         self.set_tooltip()
 
+    def dispose(self):
+        if self.control is not None:
+            control = self.control
+            if self.factory.auto_set and not self.factory.is_grid_cell:
+                if isinstance(control, QtGui.QTextEdit):
+                    control.textChanged.disconnect(self.update_object)
+                else:
+                    control.textEdited.disconnect(self.update_object)
+
+            else:
+                control.editingFinished.disconnect(self.update_object)
+
+        super().dispose()
+
     def update_object(self):
         """ Handles the user entering input data in the edit control.
         """

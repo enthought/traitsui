@@ -18,6 +18,7 @@ from traits.api import (
 )
 from traitsui.api import TextEditor, View, Item
 from traitsui.tests._tools import (
+    create_ui,
     GuiTestAssistant,
     skip_if_not_qt4,
     no_gui_test_assistant,
@@ -99,3 +100,20 @@ class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
                 pass
             else:
                 self.assertEqual(placeholder, "Enter name")
+
+    def check_editor_init_and_dispose(self, style):
+        # Smoke test to test setup and tear down of an editor.
+        # This test can be pull out to become toolkit-agnostic once
+        # wx TextEditor also implements dispose.
+        foo = Foo()
+        view = View(Item("name", editor=TextEditor(), style=style))
+        with create_ui(foo, dict(view=view)):
+            pass
+
+    def test_simple_editor_init_and_dispose(self):
+        # Smoke test to test setup and tear down of an editor.
+        self.check_editor_init_and_dispose(style="simple")
+
+    def test_custom_editor_init_and_dispose(self):
+        # Smoke test to test setup and tear down of an editor.
+        self.check_editor_init_and_dispose(style="custom")
