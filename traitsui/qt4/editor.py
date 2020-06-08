@@ -36,7 +36,22 @@ class Editor(UIEditor):
             if itm is None:
                 break
 
-            itm.widget().setParent(None)
+            widget = itm.widget()
+            self.dispose_child(widget)
+            widget.setParent(None)
+
+    def dispose_child(self, child):
+        """ Carry out necessary clean up before a child widget is removed from
+        the control layout.
+
+        Subclass should override this method if children widgets require
+        cleanup. Default implementation does nothing to the given child widget.
+
+        Parameters
+        ----------
+        child : QWidget
+        """
+        pass
 
     def _control_changed(self, control):
         """ Handles the **control** trait being set.

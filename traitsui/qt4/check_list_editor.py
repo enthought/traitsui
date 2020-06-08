@@ -108,6 +108,14 @@ class SimpleEditor(BaseCheckListEditor):
         self.create_control(parent)
         super(SimpleEditor, self).init(parent)
 
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None:
+            self.control.activated[int].disconnect(self.update_object)
+
+        super().dispose()
+
     def create_control(self, parent):
         """ Creates the initial editor control.
         """
@@ -154,6 +162,30 @@ class CustomEditor(BaseCheckListEditor):
         """
         self.create_control(parent)
         super(CustomEditor, self).init(parent)
+
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None:
+            self.clear_layout()
+
+        if self._mapper is not None:
+            self._mapper.mapped[str].disconnect(self.update_object)
+            self._mapper = None
+
+        super().dispose()
+
+    def dispose_child(self, child):
+        """ Carry out necessary clean up before a child widget is removed from
+        the control layout.
+
+        Parameters
+        ----------
+        child : QWidget
+        """
+        if self._mapper is not None:
+            child.clicked.disconnect(self._mapper.map)
+            self._mapper.removeMappings(child)
 
     def create_control(self, parent):
         """ Creates the initial editor control.
