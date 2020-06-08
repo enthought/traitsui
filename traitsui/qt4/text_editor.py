@@ -102,6 +102,8 @@ class SimpleEditor(Editor):
         self.set_tooltip()
 
     def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
         if self.control is not None:
             while self._signals:
                 signal, handler = self._signals.pop()
