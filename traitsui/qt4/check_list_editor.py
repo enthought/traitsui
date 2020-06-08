@@ -45,6 +45,10 @@ class BaseCheckListEditor(EditorWithList):
     CheckListEditor.
     """
 
+    # -------------------------------------------------------------------------
+    #  Trait definitions:
+    # -------------------------------------------------------------------------
+
     #: Checklist item names
     names = List(Str)
 
@@ -96,10 +100,6 @@ class BaseCheckListEditor(EditorWithList):
 class SimpleEditor(BaseCheckListEditor):
     """ Simple style of editor for checklists, which displays a combo box.
     """
-
-    # -------------------------------------------------------------------------
-    #  Trait definitions:
-    # -------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
