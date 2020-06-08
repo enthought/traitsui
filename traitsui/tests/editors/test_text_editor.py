@@ -66,7 +66,6 @@ def set_text(editor, text):
 
     if is_current_backend_qt4():
         from pyface.qt import QtGui
-        control = editor.control
         if editor.base_style == QtGui.QLineEdit:
             editor.control.clear()
             editor.control.insert(text)
