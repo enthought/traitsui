@@ -40,37 +40,16 @@ logger = logging.getLogger(__name__)
 capitalize = lambda s: s.capitalize()
 
 
-# -------------------------------------------------------------------------
-#  'SimpleEditor' class:
-# -------------------------------------------------------------------------
-
-
-class SimpleEditor(EditorWithList):
-    """ Simple style of editor for checklists, which displays a combo box.
+class BaseCheckListEditor(EditorWithList):
+    """ Base class that implement the common logic of simple and custom
+    CheckListEditor.
     """
-
-    # -------------------------------------------------------------------------
-    #  Trait definitions:
-    # -------------------------------------------------------------------------
 
     #: Checklist item names
     names = List(Str)
 
     #: Checklist item values
     values = List()
-
-    def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
-        """
-        self.create_control(parent)
-        super(SimpleEditor, self).init(parent)
-
-    def create_control(self, parent):
-        """ Creates the initial editor control.
-        """
-        self.control = QtGui.QComboBox()
-        self.control.activated[int].connect(self.update_object)
 
     def list_updated(self, values):
         """ Handles updates to the list of legal checklist values.
@@ -105,6 +84,38 @@ class SimpleEditor(EditorWithList):
 
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
+        Subclass should implement this method
+        """
+        raise NotImplementedError("rebuild_editor must be implemented.")
+
+# -------------------------------------------------------------------------
+#  'SimpleEditor' class:
+# -------------------------------------------------------------------------
+
+
+class SimpleEditor(BaseCheckListEditor):
+    """ Simple style of editor for checklists, which displays a combo box.
+    """
+
+    # -------------------------------------------------------------------------
+    #  Trait definitions:
+    # -------------------------------------------------------------------------
+
+    def init(self, parent):
+        """ Finishes initializing the editor by creating the underlying toolkit
+            widget.
+        """
+        self.create_control(parent)
+        super(SimpleEditor, self).init(parent)
+
+    def create_control(self, parent):
+        """ Creates the initial editor control.
+        """
+        self.control = QtGui.QComboBox()
+        self.control.activated[int].connect(self.update_object)
+
+    def rebuild_editor(self):
+        """ Rebuilds the editor after its definition is modified.
         """
         control = self.control
         control.clear()
@@ -132,10 +143,17 @@ class SimpleEditor(EditorWithList):
             pass
 
 
-class CustomEditor(SimpleEditor):
+class CustomEditor(BaseCheckListEditor):
     """ Custom style of editor for checklists, which displays a set of check
         boxes.
     """
+
+    def init(self, parent):
+        """ Finishes initializing the editor by creating the underlying toolkit
+            widget.
+        """
+        self.create_control(parent)
+        super(CustomEditor, self).init(parent)
 
     def create_control(self, parent):
         """ Creates the initial editor control.
