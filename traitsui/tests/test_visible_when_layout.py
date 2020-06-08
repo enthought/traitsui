@@ -28,6 +28,7 @@ from traitsui.item import Item
 from traitsui.view import View
 
 from traitsui.tests._tools import (
+    create_ui,
     get_dialog_size,
     skip_if_not_qt4,
     store_exceptions_on_all_threads,
@@ -86,9 +87,8 @@ class TestVisibleWhenLayout(unittest.TestCase):
         # The expected behavior is that the size of the dialog should be at
         # most the size of the largest combination of elements.
 
-        with store_exceptions_on_all_threads():
-            dialog = VisibleWhenProblem()
-            ui = dialog.edit_traits()
+        dialog = VisibleWhenProblem()
+        with store_exceptions_on_all_threads(), create_ui(dialog) as ui:
 
             # have the dialog switch from group one to two and back to one
             dialog.which = "two"

@@ -12,6 +12,7 @@ from traitsui.item import Item
 from traitsui.view import View
 
 from traitsui.tests._tools import (
+    create_ui,
     press_ok_button,
     skip_if_not_qt4,
     store_exceptions_on_all_threads,
@@ -38,9 +39,8 @@ class TestTupleEditor(unittest.TestCase):
 
         from pyface import qt
 
-        with store_exceptions_on_all_threads():
-            val = TupleEditor()
-            ui = val.edit_traits()
+        val = TupleEditor()
+        with store_exceptions_on_all_threads(), create_ui(val) as ui:
 
             # the following is equivalent to clicking in the text control of
             # the range editor, enter a number, and clicking ok without

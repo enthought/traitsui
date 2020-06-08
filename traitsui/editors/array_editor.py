@@ -110,8 +110,8 @@ class ArrayStructure(HasTraits):
         content = []
         shape = object.shape
         items = []
-        format_func = self.editor.factory.format_func
-        format_str = self.editor.factory.format_str
+        format_func = self.editor.format_func
+        format_str = self.editor.format_str
         for i in range(shape[0]):
             name = "f%d" % i
             self.add_trait(
@@ -146,8 +146,8 @@ class ArrayStructure(HasTraits):
     def _two_dim_view(self, object, style, width, trait):
         content = []
         shape = object.shape
-        format_func = self.editor.factory.format_func
-        format_str = self.editor.factory.format_str
+        format_func = self.editor.format_func
+        format_str = self.editor.format_str
         for i in range(shape[0]):
             items = []
             for j in range(shape[1]):

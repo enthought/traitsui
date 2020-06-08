@@ -26,6 +26,7 @@ from traitsui.api import (
 )
 
 from traitsui.tests._tools import (
+    create_ui,
     press_ok_button,
     skip_if_null,
     skip_if_not_qt4,
@@ -129,12 +130,12 @@ class TestTreeView(unittest.TestCase):
         when it's disposed of.
         """
 
-        with store_exceptions_on_all_threads():
-            bogus = Bogus(bogus_list=[Bogus()])
-            tree_editor_view = BogusTreeView(
-                bogus=bogus, hide_root=hide_root, nodes=nodes
-            )
-            ui = tree_editor_view.edit_traits()
+        bogus = Bogus(bogus_list=[Bogus()])
+        tree_editor_view = BogusTreeView(
+            bogus=bogus, hide_root=hide_root, nodes=nodes
+        )
+        with store_exceptions_on_all_threads(), \
+                create_ui(tree_editor_view) as ui:
 
             # The TreeEditor sets a listener on the bogus object's
             # children list
@@ -155,12 +156,12 @@ class TestTreeView(unittest.TestCase):
         when it's disposed of.
         """
 
-        with store_exceptions_on_all_threads():
-            bogus = BogusTreeNodeObject(bogus_list=[BogusTreeNodeObject()])
-            tree_editor_view = BogusTreeNodeObjectView(
-                bogus=bogus, hide_root=hide_root, nodes=nodes
-            )
-            ui = tree_editor_view.edit_traits()
+        bogus = BogusTreeNodeObject(bogus_list=[BogusTreeNodeObject()])
+        tree_editor_view = BogusTreeNodeObjectView(
+            bogus=bogus, hide_root=hide_root, nodes=nodes
+        )
+        with store_exceptions_on_all_threads(), \
+                create_ui(tree_editor_view) as ui:
 
             # The TreeEditor sets a listener on the bogus object's
             # children list
@@ -263,9 +264,9 @@ class TestTreeView(unittest.TestCase):
     def test_smoke_save_restore_prefs(self):
         bogus = Bogus(bogus_list=[Bogus()])
         tree_editor_view = BogusTreeView(bogus=bogus)
-        ui = tree_editor_view.edit_traits()
-        prefs = ui.get_prefs()
-        ui.set_prefs(prefs)
+        with create_ui(tree_editor_view) as ui:
+            prefs = ui.get_prefs()
+            ui.set_prefs(prefs)
 
     @skip_if_not_qt4
     def test_smoke_word_wrap(self):

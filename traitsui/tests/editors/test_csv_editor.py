@@ -25,6 +25,7 @@ from traitsui.editors.csv_list_editor import CSVListEditor
 import traitsui.editors.csv_list_editor as csv_list_editor
 
 from traitsui.tests._tools import (
+    create_ui,
     is_current_backend_wx,
     is_current_backend_qt4,
     press_ok_button,
@@ -55,11 +56,10 @@ class TestCSVEditor(unittest.TestCase):
         # its disposal, causing errors when the hooked data is accessed after
         # the window is closed (Issue #48)
 
+        list_of_floats = ListOfFloats(data=[1, 2, 3])
+        csv_view = ListOfFloatsWithCSVEditor(model=list_of_floats)
         try:
-            with store_exceptions_on_all_threads():
-                list_of_floats = ListOfFloats(data=[1, 2, 3])
-                csv_view = ListOfFloatsWithCSVEditor(model=list_of_floats)
-                ui = csv_view.edit_traits()
+            with store_exceptions_on_all_threads(), create_ui(csv_view) as ui:
                 press_ok_button(ui)
 
                 # raise an exception if still hooked
@@ -84,10 +84,9 @@ class TestCSVEditor(unittest.TestCase):
             txt_ctrl = ui.control.findChild(qt.QtGui.QLineEdit)
             return txt_ctrl.text()
 
-        with store_exceptions_on_all_threads():
-            list_of_floats = ListOfFloats(data=[1.0])
-            csv_view = ListOfFloatsWithCSVEditor(model=list_of_floats)
-            ui = csv_view.edit_traits()
+        list_of_floats = ListOfFloats(data=[1.0])
+        csv_view = ListOfFloatsWithCSVEditor(model=list_of_floats)
+        with store_exceptions_on_all_threads(), create_ui(csv_view) as ui:
 
             # add element to list, make sure that editor knows about it
             list_of_floats.data.append(3.14)

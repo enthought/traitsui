@@ -120,6 +120,16 @@ class Editor(HasPrivateTraits):
     #: The trait the editor is editing (not its value, but the trait itself):
     value_trait = Property()
 
+    #: Function to use for string formatting
+    format_func = Callable()
+
+    #: Format string to use for formatting (used if **format_func** is not set)
+    format_str = Str()
+
+    #: The extended trait name of the trait containing editor invalid state
+    #: status:
+    invalid_trait_name = Str()
+
     #: The current editor invalid state status:
     invalid = Bool(False)
 
@@ -183,7 +193,12 @@ class Editor(HasPrivateTraits):
     def string_value(self, value, format_func=None):
         """ Returns the text representation of a specified object trait value.
 
-        This simply delegates to the factory's `string_value` method.
+        If the **format_func** attribute is set on the editor, then this method
+        calls that function to do the formatting.  If the **format_str**
+        attribute is set on the editor, then this method uses that string for
+        formatting. If neither attribute is set, then this method just calls
+        the appropriate text type to format.
+
         Sub-classes may choose to override the default implementation.
 
         Parameters
@@ -193,7 +208,16 @@ class Editor(HasPrivateTraits):
         format_func : callable or None
             A function that takes a value and returns a string.
         """
-        return self.factory.string_value(value, format_func)
+        if self.format_func is not None:
+            return self.format_func(value)
+
+        if self.format_str != "":
+            return self.format_str % value
+
+        if format_func is not None:
+            return format_func(value)
+
+        return str(value)
 
     def restore_prefs(self, prefs):
         """ Restores saved user preference information for the editor.
@@ -470,7 +494,7 @@ class Editor(HasPrivateTraits):
                 raise
 
         # Synchronize the application invalid state status with the editor's:
-        self.sync_value(self.factory.invalid, "invalid", "from")
+        self.sync_value(self.invalid_trait_name, "invalid", "from")
 
     # ------------------------------------------------------------------------
     # private methods

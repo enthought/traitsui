@@ -21,6 +21,7 @@ from traitsui.editors.code_editor import CodeEditor
 
 
 from traitsui.tests._tools import (
+    create_ui,
     skip_if_not_qt4,
     store_exceptions_on_all_threads,
 )
@@ -60,10 +61,9 @@ class TestCodeEditor(unittest.TestCase):
             return txt_ctrl.line_number_widget.isVisible()
 
         def test_line_numbers_visibility(show=True):
-            with store_exceptions_on_all_threads():
-                code_model = CodeModel()
-                code_view = CodeView(model=code_model, show_line_numbers=show)
-                ui = code_view.edit_traits()
+            code_model = CodeModel()
+            code_view = CodeView(model=code_model, show_line_numbers=show)
+            with store_exceptions_on_all_threads(), create_ui(code_view) as ui:
                 self.assertEqual(is_line_numbers_visible(ui), show)
                 ui.control.close()
 
@@ -76,10 +76,9 @@ class TestCodeEditor(unittest.TestCase):
         """
         from pyface import qt
 
-        with store_exceptions_on_all_threads():
-            code_model = CodeModel()
-            code_view = CodeView(model=code_model, style="readonly")
-            ui = code_view.edit_traits()
+        code_model = CodeModel()
+        code_view = CodeView(model=code_model, style="readonly")
+        with store_exceptions_on_all_threads(), create_ui(code_view) as ui:
             txt_ctrl = ui.control.findChild(qt.QtGui.QPlainTextEdit)
             self.assertTrue(txt_ctrl.isReadOnly())
 
