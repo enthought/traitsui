@@ -226,7 +226,6 @@ class CustomEditor(BaseCheckListEditor):
         incr[-1] = -sum(incr[:-1]) + 1
 
         # Add the set of all possible choices:
-        check_boxes = []
         layout = self.control.layout()
         index = 0
         for i in range(rows):
@@ -240,17 +239,16 @@ class CustomEditor(BaseCheckListEditor):
                     else:
                         cb.setCheckState(QtCore.Qt.Unchecked)
 
+                    cb.clicked.connect(self._mapper.map)
+                    self._rebuild_signals.append(
+                        (cb.clicked, self._mapper.map)
+                    )
                     self._mapper.setMapping(cb, labels[index])
 
                     layout.addWidget(cb, i, j)
-                    check_boxes.append(cb)
 
                     index += incr[j]
                     n -= 1
-
-        for check_box in check_boxes:
-            check_box.clicked.connect(self._mapper.map)
-            self._rebuild_signals.append((check_box.clicked, self._mapper.map))
 
     def update_object(self, label):
         """ Handles the user clicking one of the custom check boxes.
