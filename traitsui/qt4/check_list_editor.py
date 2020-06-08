@@ -160,32 +160,33 @@ class CustomEditor(BaseCheckListEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
+        # signals to be connected once when the editor is initialized
+        self._init_signals = []
+        # signals to be connected and disconnected when the editor is rebuilt.
+        self._rebuild_signals = []
+
         self.create_control(parent)
+
         super(CustomEditor, self).init(parent)
 
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
+        while self._init_signals:
+            signal, handler = self._init_signals.pop()
+            signal.disconnect(handler)
+
+        while self._rebuild_signals:
+            signal, handler = self._rebuild_signals.pop()
+            signal.disconnect(handler)
+
         if self.control is not None:
             self.clear_layout()
 
         if self._mapper is not None:
-            self._mapper.mapped[str].disconnect(self.update_object)
             self._mapper = None
 
         super().dispose()
-
-    def dispose_child(self, child):
-        """ Carry out necessary clean up before a child widget is removed from
-        the control layout.
-
-        Parameters
-        ----------
-        child : QWidget
-        """
-        if self._mapper is not None:
-            child.clicked.disconnect(self._mapper.map)
-            self._mapper.removeMappings(child)
 
     def create_control(self, parent):
         """ Creates the initial editor control.
@@ -196,10 +197,17 @@ class CustomEditor(BaseCheckListEditor):
 
         self._mapper = QtCore.QSignalMapper()
         self._mapper.mapped[str].connect(self.update_object)
+        self._init_signals.append(
+            (self._mapper.mapped[str], self.update_object)
+        )
 
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
         """
+        while self._rebuild_signals:
+            signal, handler = self._rebuild_signals.pop()
+            signal.disconnect(handler)
+
         # Clear any existing content:
         self.clear_layout()
 
@@ -218,6 +226,7 @@ class CustomEditor(BaseCheckListEditor):
         incr[-1] = -sum(incr[:-1]) + 1
 
         # Add the set of all possible choices:
+        check_boxes = []
         layout = self.control.layout()
         index = 0
         for i in range(rows):
@@ -231,13 +240,17 @@ class CustomEditor(BaseCheckListEditor):
                     else:
                         cb.setCheckState(QtCore.Qt.Unchecked)
 
-                    cb.clicked.connect(self._mapper.map)
                     self._mapper.setMapping(cb, labels[index])
 
                     layout.addWidget(cb, i, j)
+                    check_boxes.append(cb)
 
                     index += incr[j]
                     n -= 1
+
+        for check_box in check_boxes:
+            check_box.clicked.connect(self._mapper.map)
+            self._rebuild_signals.append((check_box.clicked, self._mapper.map))
 
     def update_object(self, label):
         """ Handles the user clicking one of the custom check boxes.
