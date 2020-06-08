@@ -377,32 +377,16 @@ class TestListStrEditor(unittest.TestCase):
             editor.multi_selected[0] = "two"
             gui.process_events()
 
-            # FIXME issue enthought/traitsui#791
-            if is_current_backend_qt4():
-                with self.assertRaises(AssertionError):
-                    self.assertEqual(get_selected_indices(editor), [1, 2])
-                    self.assertEqual(editor.multi_selected_indices, [1, 2])
-                self.assertEqual(get_selected_indices(editor), [2, 0])
-                self.assertEqual(editor.multi_selected_indices, [0, 2])
-            else:
-                self.assertEqual(sorted(get_selected_indices(editor)), [1, 2])
-                self.assertEqual(sorted(editor.multi_selected_indices), [1, 2])
+            self.assertEqual(sorted(get_selected_indices(editor)), [1, 2])
+            self.assertEqual(sorted(editor.multi_selected_indices), [1, 2])
 
             # If a change in multi_selected involves an invalid value, nothing
             # is changed
             editor.multi_selected[0] = "four"
             gui.process_events()
 
-            # FIXME issue enthought/traitsui#791
-            if is_current_backend_qt4():
-                with self.assertRaises(AssertionError):
-                    self.assertEqual(get_selected_indices(editor), [1, 2])
-                    self.assertEqual(editor.multi_selected_indices, [1, 2])
-                self.assertEqual(get_selected_indices(editor), [2, 0])
-                self.assertEqual(editor.multi_selected_indices, [0, 2])
-            else:
-                self.assertEqual(sorted(get_selected_indices(editor)), [1, 2])
-                self.assertEqual(sorted(editor.multi_selected_indices), [1, 2])
+            self.assertEqual(sorted(get_selected_indices(editor)), [1, 2])
+            self.assertEqual(sorted(editor.multi_selected_indices), [1, 2])
 
     def test_list_str_editor_item_count(self):
         gui = GUI()
