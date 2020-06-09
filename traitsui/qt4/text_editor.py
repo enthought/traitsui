@@ -72,17 +72,18 @@ class SimpleEditor(Editor):
 
         self._signals = []
         if wtype == QtGui.QTextEdit:
+            control.textChanged.connect(self.update_object)
             self._signals.append((control.textChanged, self.update_object))
         else:
             # QLineEdit
             if factory.auto_set and not factory.is_grid_cell:
+                control.textEdited.connect(self.update_object)
                 self._signals.append((control.textEdited, self.update_object))
             else:
+                control.editingFinished.connect(self.update_object)
                 self._signals.append(
                     (control.editingFinished, self.update_object)
                 )
-        for signal, handler in self._signals:
-            signal.connect(handler)
 
         placeholder = self.factory.placeholder
 
