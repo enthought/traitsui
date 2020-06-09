@@ -168,6 +168,8 @@ class CustomEditor(SimpleEditor):
         self.set_tooltip()
 
     def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
         if self.control is not None:
             self.control.clicked.disconnect(self.update_object)
 
