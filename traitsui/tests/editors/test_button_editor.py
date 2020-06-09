@@ -116,7 +116,7 @@ class TestButtonEditorValuesTrait(unittest.TestCase):
             with create_ui(instance, dict(view=view)):
                 pass
 
-            # Mutating trait afterward the GUI is closed is okay
+            # It is okay to mutate trait after the GUI is disposed.
             instance.values = ["Item3"]
 
     def test_simple_editor_values_trait_init_and_dispose(self):
