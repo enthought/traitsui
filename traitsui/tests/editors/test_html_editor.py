@@ -20,6 +20,7 @@ from traitsui.tests._tools import (
 
 
 class HTMLModel(HasTraits):
+    """ Dummy class for testing HTMLEditor."""
 
     content = Str()
 
