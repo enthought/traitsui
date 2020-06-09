@@ -46,7 +46,8 @@ class TestStyledDateEditor(unittest.TestCase):
                 editor=StyledDateEditor(
                     dates_trait="special_days",
                     styles_trait="styles_mapping",
-                )
+                ),
+                style="custom",
             )
         )
         with store_exceptions_on_all_threads(), \
