@@ -109,7 +109,6 @@ class TestButtonEditorValuesTrait(unittest.TestCase):
 
     def check_editor_values_trait_init_and_dispose(self, style):
         # Smoke test to check init and dispose when values_trait is used.
-        gui = GUI()
         instance = ButtonTextEdit(values=["Item1", "Item2"])
         view = self.get_view(style=style)
         with store_exceptions_on_all_threads():
