@@ -15,7 +15,7 @@
 
 from pyface.qt import QtCore, QtGui
 
-from traits.api import TraitError
+from traits.api import Any, Callable, List, TraitError, Tuple
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -45,6 +45,13 @@ class SimpleEditor(Editor):
 
     #: Function used to evaluate textual user input:
     evaluate = evaluate_trait
+
+    # -- private trait definitions ------------------------------------------
+
+    #: A list of Qt signals connected.
+    #: First item in the tuple is the Qt signal. The second item is the event
+    #: handler.
+    _signals = List(Tuple(Any, Callable))
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
