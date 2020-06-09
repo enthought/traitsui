@@ -9,7 +9,6 @@ from .date_editor import SimpleEditor
 from .date_editor import CustomEditor as DateCustomEditor
 
 
-
 class CustomEditor(DateCustomEditor):
 
     dates = Dict()
@@ -17,10 +16,7 @@ class CustomEditor(DateCustomEditor):
     styles = Dict()
 
     def init(self, parent):
-        self.control = QtGui.QCalendarWidget()
-
-        if not self.factory.allow_future:
-            self.control.setMaximumDate(QtCore.QDate.currentDate())
+        super().init(parent)
 
         if not self.factory.allow_past:
             self.control.setMinimumDate(QtCore.QDate.currentDate())
@@ -28,10 +24,6 @@ class CustomEditor(DateCustomEditor):
         if self.factory.dates_trait and self.factory.styles_trait:
             self.sync_value(self.factory.dates_trait, "dates", "from")
             self.sync_value(self.factory.styles_trait, "styles", "from")
-
-        self.control.clicked.connect(self.update_object)
-
-        return
 
     def _dates_changed(self, old, new):
         # Someone changed out the entire dict.  The easiest, most robust
