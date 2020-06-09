@@ -408,9 +408,9 @@ class _ListStrEditor(Editor):
         try:
             self._multi_selected_indices_items_changed(
                 TraitListEvent(
-                    0,
-                    [values.index(item) for item in event.removed],
-                    [values.index(item) for item in event.added],
+                    index=0,
+                    removed=[values.index(item) for item in event.removed],
+                    added=[values.index(item) for item in event.added],
                 )
             )
         except Exception:

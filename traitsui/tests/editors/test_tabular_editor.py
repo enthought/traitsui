@@ -339,31 +339,15 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
             report.multi_selected[0] = people[1]
             gui.process_events()
 
-            # FIXME issue enthought/traitsui#791
-            if is_current_backend_qt4():
-                with self.assertRaises(AssertionError):
-                    self.assertEqual(get_selected_rows(editor), [1, 2])
-                    self.assertEqual(report.selected_rows, [1, 2])
-                self.assertEqual(get_selected_rows(editor), [2, 0])
-                self.assertEqual(report.selected_rows, [0, 2])
-            else:
-                self.assertEqual(sorted(get_selected_rows(editor)), [1, 2])
-                self.assertEqual(sorted(report.selected_rows), [1, 2])
+            self.assertEqual(sorted(get_selected_rows(editor)), [1, 2])
+            self.assertEqual(sorted(report.selected_rows), [1, 2])
 
             # If there's a single invalid value, nothing is updated
             report.multi_selected[0] = Person(name="invalid", age=-1)
             gui.process_events()
 
-            # FIXME issue enthought/traitsui#791
-            if is_current_backend_qt4():
-                with self.assertRaises(AssertionError):
-                    self.assertEqual(get_selected_rows(editor), [1, 2])
-                    self.assertEqual(report.selected_rows, [1, 2])
-                self.assertEqual(get_selected_rows(editor), [2, 0])
-                self.assertEqual(report.selected_rows, [0, 2])
-            else:
-                self.assertEqual(sorted(get_selected_rows(editor)), [1, 2])
-                self.assertEqual(sorted(report.selected_rows), [1, 2])
+            self.assertEqual(sorted(get_selected_rows(editor)), [1, 2])
+            self.assertEqual(sorted(report.selected_rows), [1, 2])
 
     def test_selected_reacts_to_model_changes(self):
         with self.report_and_editor(get_view()) as (report, editor):
