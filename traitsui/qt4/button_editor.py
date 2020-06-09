@@ -75,6 +75,19 @@ class SimpleEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
+
+        if self.factory.values_trait:
+            self.object.on_trait_change(
+                self._update_menu,
+                self.factory.values_trait,
+                remove=True,
+            )
+            self.object.on_trait_change(
+                self._update_menu,
+                self.factory.values_trait + "_items",
+                remove=True,
+            )
+
         if self.control is not None:
             self.control.clicked.disconnect(self.update_object)
         super(SimpleEditor, self).dispose()
@@ -153,3 +166,10 @@ class CustomEditor(SimpleEditor):
         self.sync_value(self.factory.label_value, "label", "from")
         self.control.clicked.connect(self.update_object)
         self.set_tooltip()
+
+    def dispose(self):
+        if self.control is not None:
+            self.control.clicked.disconnect(self.update_object)
+
+        # enthought/traitsui#884
+        Editor.dispose(self)

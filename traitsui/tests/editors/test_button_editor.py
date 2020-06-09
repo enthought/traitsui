@@ -2,12 +2,14 @@ import unittest
 
 from pyface.gui import GUI
 
-from traits.api import Button, HasTraits, Str
+from traits.api import Button, HasTraits, List, Str
 from traitsui.api import ButtonEditor, Item, UItem, View
 from traitsui.tests._tools import (
+    create_ui,
     is_current_backend_qt4,
     is_current_backend_wx,
     skip_if_null,
+    skip_if_not_qt4,
     store_exceptions_on_all_threads,
 )
 
@@ -17,6 +19,8 @@ class ButtonTextEdit(HasTraits):
     play_button = Button("Play")
 
     play_button_label = Str("I'm a play button")
+
+    values = List()
 
     traits_view = View(
         Item("play_button", style="simple"),
@@ -85,3 +89,40 @@ class TestButtonEditor(unittest.TestCase):
     @skip_if_null
     def test_custom_button_editor(self):
         self.check_button_text_update(custom_view)
+
+
+@skip_if_not_qt4
+class TestButtonEditorValuesTrait(unittest.TestCase):
+    """ The values_trait is only supported by Qt.
+
+    See discussion enthought/traitsui#879
+    """
+
+    def get_view(self, style):
+        return View(
+            Item(
+                "play_button",
+                editor=ButtonEditor(values_trait="values"),
+                style=style,
+            ),
+        )
+
+    def check_editor_values_trait_init_and_dispose(self, style):
+        # Smoke test to check init and dispose when values_trait is used.
+        gui = GUI()
+        instance = ButtonTextEdit(values=["Item1", "Item2"])
+        view = self.get_view(style=style)
+        with store_exceptions_on_all_threads():
+            with create_ui(instance, dict(view=view)):
+                pass
+
+            # Mutating trait afterward the GUI is closed is okay
+            instance.values = ["Item3"]
+
+    def test_simple_editor_values_trait_init_and_dispose(self):
+        # Smoke test to check init and dispose when values_trait is used.
+        self.check_editor_values_trait_init_and_dispose(style="simple")
+
+    def test_custom_editor_values_trait_init_and_dispose(self):
+        # Smoke test to check init and dispose when values_trait is used.
+        self.check_editor_values_trait_init_and_dispose(style="custom")
