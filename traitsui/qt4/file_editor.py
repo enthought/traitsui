@@ -36,8 +36,9 @@ class SimpleEditor(SimpleTextEditor):
         and drop a file onto this control.
     """
 
-    #: List of tuple(Qt signal, callable) that are connected and will need
-    #: to be removed in dispose.
+    #: List of tuple(signal, slot) to be removed in dispose.
+    #: First item in the tuple is the Qt signal, the second item is the event
+    #: handler.
     _connections_to_remove = List(Tuple(Any(), Callable()))
 
     def init(self, parent):
