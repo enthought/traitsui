@@ -14,12 +14,13 @@
 from os.path import abspath, splitext, isfile, exists
 
 from pyface.qt import QtCore, QtGui, is_qt5
-from traits.api import List, Event, File, Str, TraitError
+from traits.api import Any, Callable, List, Event, File, Str, TraitError, Tuple
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.file_editor file.
 from traitsui.editors.file_editor import ToolkitEditorFactory
+from .editor import Editor
 from .text_editor import SimpleEditor as SimpleTextEditor
 from .helper import IconButton
 
@@ -35,6 +36,10 @@ class SimpleEditor(SimpleTextEditor):
         and drop a file onto this control.
     """
 
+    #: List of tuple(Qt signal, callable) that are connected and will need
+    #: to be removed in dispose.
+    _connections_to_be_removed = List(Tuple(Any(), Callable()))
+
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -48,15 +53,33 @@ class SimpleEditor(SimpleTextEditor):
 
         if self.factory.auto_set:
             control.textEdited.connect(self.update_object)
+            self._connections_to_be_removed.append(
+                (control.textEdited, self.update_object)
+            )
         else:
             # Assume enter_set is set, or else the value will never get
             # updated.
             control.editingFinished.connect(self.update_object)
+            self._connections_to_be_removed.append(
+                (control.editingFinished, self.update_object)
+            )
 
         button = IconButton(QtGui.QStyle.SP_DirIcon, self.show_file_dialog)
+        self._connections_to_be_removed.append(
+            (button.clicked, self.show_file_dialog)
+        )
         layout.addWidget(button)
 
         self.set_tooltip(control)
+
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        while self._connections_to_be_removed:
+            signal, handler = self._connections_to_be_removed.pop()
+            signal.disconnect(handler)
+        # enthought/traitsui#884
+        Editor.dispose(self)
 
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
