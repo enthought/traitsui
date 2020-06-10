@@ -38,7 +38,7 @@ class SimpleEditor(SimpleTextEditor):
 
     #: List of tuple(Qt signal, callable) that are connected and will need
     #: to be removed in dispose.
-    _connections_to_be_removed = List(Tuple(Any(), Callable()))
+    _connections_to_remove = List(Tuple(Any(), Callable()))
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -53,19 +53,19 @@ class SimpleEditor(SimpleTextEditor):
 
         if self.factory.auto_set:
             control.textEdited.connect(self.update_object)
-            self._connections_to_be_removed.append(
+            self._connections_to_remove.append(
                 (control.textEdited, self.update_object)
             )
         else:
             # Assume enter_set is set, or else the value will never get
             # updated.
             control.editingFinished.connect(self.update_object)
-            self._connections_to_be_removed.append(
+            self._connections_to_remove.append(
                 (control.editingFinished, self.update_object)
             )
 
         button = IconButton(QtGui.QStyle.SP_DirIcon, self.show_file_dialog)
-        self._connections_to_be_removed.append(
+        self._connections_to_remove.append(
             (button.clicked, self.show_file_dialog)
         )
         layout.addWidget(button)
@@ -75,8 +75,8 @@ class SimpleEditor(SimpleTextEditor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        while self._connections_to_be_removed:
-            signal, handler = self._connections_to_be_removed.pop()
+        while self._connections_to_remove:
+            signal, handler = self._connections_to_remove.pop()
             signal.disconnect(handler)
         # enthought/traitsui#884
         Editor.dispose(self)
