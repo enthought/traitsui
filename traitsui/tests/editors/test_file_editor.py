@@ -40,6 +40,7 @@ class TestFileEditor(unittest.TestCase):
             pass
 
     def test_simple_editor_init_and_dispose(self):
+        # This may fail if run against wx, see enthought/traitsui#889
         self.check_init_and_dispose("simple")
 
     def test_custom_editor_init_and_dispose(self):
