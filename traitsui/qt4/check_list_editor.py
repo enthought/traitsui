@@ -173,12 +173,12 @@ class CustomEditor(BaseCheckListEditor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        while self._connections_to_dispose:
-            signal, handler = self._connections_to_dispose.pop()
-            signal.disconnect(handler)
-
         while self._connections_to_rebuild:
             signal, handler = self._connections_to_rebuild.pop()
+            signal.disconnect(handler)
+
+        while self._connections_to_dispose:
+            signal, handler = self._connections_to_dispose.pop()
             signal.disconnect(handler)
 
         if self.control is not None:
