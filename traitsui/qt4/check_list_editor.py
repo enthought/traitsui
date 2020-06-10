@@ -40,9 +40,13 @@ logger = logging.getLogger(__name__)
 capitalize = lambda s: s.capitalize()
 
 
-class BaseCheckListEditor(EditorWithList):
-    """ Base class that implements the common logic of simple and custom
-    CheckListEditor.
+# -------------------------------------------------------------------------
+#  'SimpleEditor' class:
+# -------------------------------------------------------------------------
+
+
+class SimpleEditor(EditorWithList):
+    """ Simple style of editor for checklists, which displays a combo box.
     """
 
     # -------------------------------------------------------------------------
@@ -54,6 +58,27 @@ class BaseCheckListEditor(EditorWithList):
 
     #: Checklist item values
     values = List()
+
+    def init(self, parent):
+        """ Finishes initializing the editor by creating the underlying toolkit
+            widget.
+        """
+        self.create_control(parent)
+        super(SimpleEditor, self).init(parent)
+
+    def create_control(self, parent):
+        """ Creates the initial editor control.
+        """
+        self.control = QtGui.QComboBox()
+        self.control.activated[int].connect(self.update_object)
+
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None:
+            self.control.activated[int].disconnect(self.update_object)
+
+        super().dispose()
 
     def list_updated(self, values):
         """ Handles updates to the list of legal checklist values.
@@ -88,42 +113,6 @@ class BaseCheckListEditor(EditorWithList):
 
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
-        Subclass should implement this method
-        """
-        raise NotImplementedError("rebuild_editor must be implemented.")
-
-# -------------------------------------------------------------------------
-#  'SimpleEditor' class:
-# -------------------------------------------------------------------------
-
-
-class SimpleEditor(BaseCheckListEditor):
-    """ Simple style of editor for checklists, which displays a combo box.
-    """
-
-    def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
-        """
-        self.create_control(parent)
-        super(SimpleEditor, self).init(parent)
-
-    def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
-        if self.control is not None:
-            self.control.activated[int].disconnect(self.update_object)
-
-        super().dispose()
-
-    def create_control(self, parent):
-        """ Creates the initial editor control.
-        """
-        self.control = QtGui.QComboBox()
-        self.control.activated[int].connect(self.update_object)
-
-    def rebuild_editor(self):
-        """ Rebuilds the editor after its definition is modified.
         """
         control = self.control
         control.clear()
@@ -151,7 +140,7 @@ class SimpleEditor(BaseCheckListEditor):
             pass
 
 
-class CustomEditor(BaseCheckListEditor):
+class CustomEditor(SimpleEditor):
     """ Custom style of editor for checklists, which displays a set of check
         boxes.
     """
@@ -163,12 +152,18 @@ class CustomEditor(BaseCheckListEditor):
     #: editor.
     _connections_to_rebuild = List(Tuple(Any, Callable))
 
-    def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+    def create_control(self, parent):
+        """ Creates the initial editor control.
         """
-        self.create_control(parent)
-        super(CustomEditor, self).init(parent)
+        self.control = QtGui.QWidget()
+        layout = QtGui.QGridLayout(self.control)
+        layout.setContentsMargins(0, 0, 0, 0)
+
+        self._mapper = QtCore.QSignalMapper()
+        self._mapper.mapped[str].connect(self.update_object)
+        self._connections_to_dispose.append(
+            (self._mapper.mapped[str], self.update_object)
+        )
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -184,20 +179,8 @@ class CustomEditor(BaseCheckListEditor):
         if self._mapper is not None:
             self._mapper = None
 
-        super().dispose()
-
-    def create_control(self, parent):
-        """ Creates the initial editor control.
-        """
-        self.control = QtGui.QWidget()
-        layout = QtGui.QGridLayout(self.control)
-        layout.setContentsMargins(0, 0, 0, 0)
-
-        self._mapper = QtCore.QSignalMapper()
-        self._mapper.mapped[str].connect(self.update_object)
-        self._connections_to_dispose.append(
-            (self._mapper.mapped[str], self.update_object)
-        )
+        # enthought/traitsui#884
+        EditorWithList.dispose(self)
 
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
