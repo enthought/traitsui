@@ -48,9 +48,8 @@ class SimpleEditor(Editor):
 
     # -- private trait definitions ------------------------------------------
 
-    #: A list of Qt signals connected.
-    #: First item in the tuple is the Qt signal. The second item is the event
-    #: handler.
+    #: A list of tuple(Qt signal, slot) connected which need to be disconnected
+    #: in dispose.
     _signals = List(Tuple(Any, Callable))
 
     def init(self, parent):
