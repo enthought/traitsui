@@ -171,6 +171,8 @@ class CustomEditor(SimpleTextEditor):
             widget.
         """
         control = _TreeView(self)
+        control.doubleClicked.connect(self._on_dclick)
+
         self._model = model = QtGui.QFileSystemModel()
 
         current_path = abspath(self.str_value)
@@ -222,6 +224,15 @@ class CustomEditor(SimpleTextEditor):
         else:
             header.setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
         header.setStretchLastSection(False)
+
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None:
+            self.control.doubleClicked.disconnect(self._on_dclick)
+
+        # Skip dispose from simple text editor (enthought/traitsui#884)
+        Editor.dispose(self)
 
     def update_object(self, idx):
         """ Handles the user changing the contents of the edit control.
@@ -280,7 +291,6 @@ class _TreeView(QtGui.QTreeView):
 
     def __init__(self, editor):
         super(_TreeView, self).__init__()
-        self.doubleClicked.connect(editor._on_dclick)
         self._editor = editor
 
     def event(self, event):
