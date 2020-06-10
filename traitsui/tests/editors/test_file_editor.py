@@ -15,6 +15,7 @@ from traitsui.api import FileEditor, Item, View
 from traitsui.tests._tools import (
     create_ui,
     skip_if_not_qt4,
+    store_exceptions_on_all_threads,
 )
 
 
@@ -32,5 +33,6 @@ class TestFileEditor(unittest.TestCase):
         # Test init and dispose by opening and closing the UI
         view = View(Item("filepath", editor=FileEditor()))
         obj = FileModel()
-        with create_ui(obj, dict(view=view)):
+        with store_exceptions_on_all_threads(), \
+                create_ui(obj, dict(view=view)):
             pass
