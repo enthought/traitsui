@@ -181,9 +181,6 @@ class CustomEditor(BaseCheckListEditor):
             signal, handler = self._connections_to_dispose.pop()
             signal.disconnect(handler)
 
-        if self.control is not None:
-            self.clear_layout()
-
         if self._mapper is not None:
             self._mapper = None
 
