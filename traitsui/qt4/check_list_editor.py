@@ -20,7 +20,7 @@ import logging
 
 from pyface.qt import QtCore, QtGui
 
-from traits.api import List, Str, TraitError
+from traits.api import Any, Callable, List, Str, TraitError, Tuple
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -156,28 +156,29 @@ class CustomEditor(BaseCheckListEditor):
         boxes.
     """
 
+    #: List of tuple(signal, slot) to be disconnected in dispose
+    _connections_to_dispose = List(Tuple(Any, Callable))
+
+    #: List of tuple(signal, slot) to be disconnected while rebuilding the
+    #: editor.
+    _connections_to_rebuild = List(Tuple(Any, Callable))
+
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        # signals to be connected once when the editor is initialized
-        self._init_signals = []
-        # signals to be connected and disconnected when the editor is rebuilt.
-        self._rebuild_signals = []
-
         self.create_control(parent)
-
         super(CustomEditor, self).init(parent)
 
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        while self._init_signals:
-            signal, handler = self._init_signals.pop()
+        while self._connections_to_dispose:
+            signal, handler = self._connections_to_dispose.pop()
             signal.disconnect(handler)
 
-        while self._rebuild_signals:
-            signal, handler = self._rebuild_signals.pop()
+        while self._connections_to_rebuild:
+            signal, handler = self._connections_to_rebuild.pop()
             signal.disconnect(handler)
 
         if self.control is not None:
@@ -197,15 +198,15 @@ class CustomEditor(BaseCheckListEditor):
 
         self._mapper = QtCore.QSignalMapper()
         self._mapper.mapped[str].connect(self.update_object)
-        self._init_signals.append(
+        self._connections_to_dispose.append(
             (self._mapper.mapped[str], self.update_object)
         )
 
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
         """
-        while self._rebuild_signals:
-            signal, handler = self._rebuild_signals.pop()
+        while self._connections_to_rebuild:
+            signal, handler = self._connections_to_rebuild.pop()
             signal.disconnect(handler)
 
         # Clear any existing content:
@@ -240,7 +241,7 @@ class CustomEditor(BaseCheckListEditor):
                         cb.setCheckState(QtCore.Qt.Unchecked)
 
                     cb.clicked.connect(self._mapper.map)
-                    self._rebuild_signals.append(
+                    self._connections_to_rebuild.append(
                         (cb.clicked, self._mapper.map)
                     )
                     self._mapper.setMapping(cb, labels[index])
