@@ -50,7 +50,7 @@ class SimpleEditor(Editor):
 
     #: A list of tuple(Qt signal, slot) connected which need to be disconnected
     #: in dispose.
-    _signals = List(Tuple(Any, Callable))
+    _connections_to_remove = List(Tuple(Any, Callable))
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -76,18 +76,20 @@ class SimpleEditor(Editor):
         if factory.password:
             control.setEchoMode(QtGui.QLineEdit.Password)
 
-        self._signals = []
+        self._connections_to_remove = []
         if wtype == QtGui.QTextEdit:
             control.textChanged.connect(self.update_object)
-            self._signals.append((control.textChanged, self.update_object))
+            self._connections_to_remove.append(
+                (control.textChanged, self.update_object))
         else:
             # QLineEdit
             if factory.auto_set and not factory.is_grid_cell:
                 control.textEdited.connect(self.update_object)
-                self._signals.append((control.textEdited, self.update_object))
+                self._connections_to_remove.append(
+                    (control.textEdited, self.update_object))
             else:
                 control.editingFinished.connect(self.update_object)
-                self._signals.append(
+                self._connections_to_remove.append(
                     (control.editingFinished, self.update_object)
                 )
 
@@ -109,8 +111,8 @@ class SimpleEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        while self._signals:
-            signal, handler = self._signals.pop()
+        while self._connections_to_remove:
+            signal, handler = self._connections_to_remove.pop()
             signal.disconnect(handler)
 
         super().dispose()
