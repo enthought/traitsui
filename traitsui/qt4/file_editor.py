@@ -79,7 +79,7 @@ class SimpleEditor(SimpleTextEditor):
         while self._connections_to_remove:
             signal, handler = self._connections_to_remove.pop()
             signal.disconnect(handler)
-        # enthought/traitsui#884
+        # skip the dispose from TextEditor (enthought/traitsui#884)
         Editor.dispose(self)
 
     def update_object(self):
