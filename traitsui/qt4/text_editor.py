@@ -76,7 +76,6 @@ class SimpleEditor(Editor):
         if factory.password:
             control.setEchoMode(QtGui.QLineEdit.Password)
 
-        self._connections_to_remove = []
         if wtype == QtGui.QTextEdit:
             control.textChanged.connect(self.update_object)
             self._connections_to_remove.append(
