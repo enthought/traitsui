@@ -66,6 +66,8 @@ class SimpleEditor(SimpleTextEditor):
             )
 
         button = IconButton(QtGui.QStyle.SP_DirIcon, self.show_file_dialog)
+        # Call to connect should be moved out of IconButton
+        # (enthought/traitsui#888)
         self._connections_to_remove.append(
             (button.clicked, self.show_file_dialog)
         )
