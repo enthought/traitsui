@@ -875,6 +875,7 @@ class _TableView(QtGui.QTableView):
         else:
             return self.horizontalHeader().sectionSizeHint(column)
 
+
     def resizeColumnsToContents(self):
         """ Reimplemented to support proportional column width specifications.
 
@@ -895,6 +896,9 @@ class _TableView(QtGui.QTableView):
             requested.append(width)
             min_widths.append(self.sizeHintForColumn(column))
 
+        if self._user_widths is not None and len(self._user_widths) != len(self._editor.adapter.columns):
+            self._user_widths = None
+
         widths = compute_column_widths(
             available_space, requested, min_widths, self._user_widths
         )
@@ -910,12 +914,11 @@ class _TableView(QtGui.QTableView):
         This affects the column widths when not using auto-sizing.
         """
         if not self._is_resizing:
-            if self._user_widths is None:
+            if self._user_widths is None or len(self._user_widths) != len(self._editor.adapter.columns):
                 self._user_widths = [None] * len(self._editor.adapter.columns)
             self._user_widths[index] = new
-            if not self._editor.factory.auto_resize:
+            if self._editor.factory is not None and not self._editor.factory.auto_resize:
                 self.resizeColumnsToContents()
-
     @contextmanager
     def _resizing(self):
         """ Context manager that guards against recursive column resizing. """
