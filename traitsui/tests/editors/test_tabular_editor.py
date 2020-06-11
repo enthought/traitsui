@@ -394,6 +394,13 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
             ]
             editor.adapter.columns = []
 
+    def test_adapter_columns_changes_reduce_columns(self):
+        # Test workaround for enthought/traits#752
+        # The factory is set to None but signals are not disconnected.
+        with store_exceptions_on_all_threads(), \
+                self.report_and_editor(get_view()) as (_, editor):
+            editor.adapter.columns = [("Name", "name")]
+
     @contextlib.contextmanager
     def report_and_editor(self, view):
         """

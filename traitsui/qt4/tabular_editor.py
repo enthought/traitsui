@@ -926,7 +926,8 @@ class _TableView(QtGui.QTableView):
             if self._user_widths is None:
                 self._user_widths = [None] * len(self._editor.adapter.columns)
             self._user_widths[index] = new
-            if not self._editor.factory.auto_resize:
+            if (self._editor.factory is not None
+                    and not self._editor.factory.auto_resize):
                 self.resizeColumnsToContents()
 
     @contextmanager
