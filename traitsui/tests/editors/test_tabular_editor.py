@@ -385,6 +385,15 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
             with self.assertTraitChanges(editor, "update", count=1):
                 report.update = True
 
+    def test_adapter_columns_changes(self):
+        # Regression test for enthought/traitsui#894
+        with store_exceptions_on_all_threads(), \
+                self.report_and_editor(get_view()) as (report, editor):
+            editor.adapter.columns = [
+                ("Name", "name"), ("Age", "age"),
+            ]
+            editor.adapter.columns = []
+
     @contextlib.contextmanager
     def report_and_editor(self, view):
         """

@@ -247,7 +247,7 @@ class TabularEditor(Editor):
         # Rebuild the editor columns and headers whenever the adapter's
         # 'columns' changes:
         self.on_trait_change(
-            self.update_editor, "adapter.columns", dispatch="ui"
+            self._adapter_columns_updated, "adapter.columns", dispatch="ui"
         )
 
     def dispose(self):
@@ -266,7 +266,7 @@ class TabularEditor(Editor):
             self.refresh_editor, "adapter.+update", remove=True
         )
         self.on_trait_change(
-            self.update_editor, "adapter.columns", remove=True
+            self._adapter_columns_updated, "adapter.columns", remove=True
         )
 
         self.adapter.cleanup()
@@ -391,6 +391,19 @@ class TabularEditor(Editor):
         """
         if not self.factory.multi_select:
             self.selected_column = self.column_clicked.column
+
+    def _adapter_columns_updated(self):
+        """ Update the view when the adapter columns trait changes.
+        Note that this change handler is added after the UI is instantiated,
+        and removed when the UI is disposed.
+        """
+        # Invalidate internal state of the view related to the columns
+        n_columns = len(self.adapter.columns)
+        if (self.control is not None
+                and self.control._user_widths is not None
+                and len(self.control._user_widths) != n_columns):
+            self.control._user_widths = None
+        self.update_editor()
 
     def _update_changed(self):
         self.update_editor()
