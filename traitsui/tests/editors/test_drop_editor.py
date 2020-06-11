@@ -29,10 +29,20 @@ class Model(HasTraits):
 class TestDropEditor(unittest.TestCase):
     """ Test DropEditor. """
 
-    def test_init_dispose(self):
+    def test_init_dispose_editable(self):
 
         obj = Model()
-        view = View(Item("value", editor=DropEditor()))
+        view = View(Item("value", editor=DropEditor(readonly=False)))
+        with store_exceptions_on_all_threads():
+                with create_ui(obj, dict(view=view)):
+                    pass
+                # Mutating value after UI is closed should be okay.
+                obj.value = "New"
+
+    def test_init_dispose_readonly(self):
+
+        obj = Model()
+        view = View(Item("value", editor=DropEditor(readonly=True)))
         with store_exceptions_on_all_threads():
                 with create_ui(obj, dict(view=view)):
                     pass
