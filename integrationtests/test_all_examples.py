@@ -14,10 +14,8 @@
 import contextlib
 from itertools import chain
 import os
-import shutil
-import subprocess
 import sys
-import tempfile
+import traceback
 import unittest
 from unittest import mock
 
@@ -252,10 +250,12 @@ class TestExample(unittest.TestCase):
 
                 try:
                     run_file(file_path)
-                except subprocess.CalledProcessError as exc:
+                except Exception as exc:
+                    message = "".join(
+                        traceback.format_exception(*sys.exc_info())
+                    )
                     self.fail(
-                        "Executing {} failed with exception {}.\n"
-                        "Output: {}".format(
-                            file_path, exc, exc.output
+                        "Executing {} failed with exception {}\n {}".format(
+                            file_path, exc, message
                         )
                     )
