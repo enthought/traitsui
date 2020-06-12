@@ -40,9 +40,9 @@ from traits.api import (
     Property,
     TraitListEvent,
 )
+
 from traitsui.tabular_adapter import TabularAdapter
 from traitsui.helper import compute_column_widths
-from traitsui.qt4 import toolkit
 from .editor import Editor
 from .tabular_model import TabularModel
 
@@ -270,8 +270,6 @@ class TabularEditor(Editor):
         )
 
         self.adapter.cleanup()
-
-        toolkit.destroy_control(self.control)
 
         super(TabularEditor, self).dispose()
 
@@ -928,7 +926,8 @@ class _TableView(QtGui.QTableView):
             if self._user_widths is None:
                 self._user_widths = [None] * len(self._editor.adapter.columns)
             self._user_widths[index] = new
-            if not self._editor.factory.auto_resize:
+            if (self._editor.factory is not None
+                    and not self._editor.factory.auto_resize):
                 self.resizeColumnsToContents()
 
     @contextmanager
