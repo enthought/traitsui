@@ -14,6 +14,10 @@
 import contextlib
 from itertools import chain
 import os
+import shutil
+import subprocess
+import sys
+import tempfile
 import unittest
 from unittest import mock
 
@@ -165,6 +169,11 @@ def get_python_files(directory):
     return sorted(paths)
 
 
+# Replace HasTraits.configure_traits with edit_traits so any GUI launched
+# is immediately closed.
+FAKE_HAS_TRAITS = """
+\"\"\" Faked docstring as some examples depend on __doc__ \"\"\"
+
 def replaced_configure_traits(
         instance,
         filename=None,
@@ -177,8 +186,6 @@ def replaced_configure_traits(
         scrollable=None,
         **args
 ):
-    """ Mocked configure_traits to launch then close the GUI.
-    """
     ui = instance.edit_traits(
         view=view,
         parent=None,
@@ -191,19 +198,10 @@ def replaced_configure_traits(
     )
     ui.dispose()
 
+from traits.api import HasTraits
+HasTraits.configure_traits = replaced_configure_traits
 
-@contextlib.contextmanager
-def replace_configure_traits():
-    """ Context manager to temporarily replace HasTraits.configure_traits
-    with a mocked version such that GUI launched are closed soon after they
-    are open.
-    """
-    original_func = HasTraits.configure_traits
-    HasTraits.configure_traits = replaced_configure_traits
-    try:
-        yield
-    finally:
-        HasTraits.configure_traits = original_func
+"""
 
 
 def run_file(file_path):
@@ -217,16 +215,18 @@ def run_file(file_path):
     with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
 
-    globals = {
-        "__name__": "__main__",
-        "__file__": file_path,
-    }
-    with replace_configure_traits(), \
-            mock.patch("sys.argv", [file_path]):
-        # Some example reads sys.argv to allow more arguments
-        # But all examples should support being run without additional
-        # arguments.
-        exec(content, globals)
+    with tempfile.NamedTemporaryFile("w", encoding="utf-8") as temp_file:
+        temp_file.write(FAKE_HAS_TRAITS)
+        temp_file.write("__file__ = {!r}\n".format(file_path))
+        temp_file.write(content)
+        temp_file.flush()
+        subprocess.run(
+            [sys.executable, temp_file.name],
+            check=True,
+            encoding="utf-8",
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
 
 
 @skip_if_null
@@ -245,9 +245,10 @@ class TestExample(unittest.TestCase):
 
                 try:
                     run_file(file_path)
-                except Exception as exc:
+                except subprocess.CalledProcessError as exc:
                     self.fail(
-                        "Executing {} failed with exception {}".format(
-                            file_path, exc
+                        "Executing {} failed with exception {}.\n"
+                        "Output: {}".format(
+                            file_path, exc, exc.output
                         )
                     )
