@@ -218,7 +218,7 @@ def run_file(file_path):
         content = f.read()
 
     globals = {
-        "__name__": "traitsui",   # as long as it is not __main__
+        "__name__": "__main__",
         "__file__": file_path,
     }
     with replace_configure_traits(), \
