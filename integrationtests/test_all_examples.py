@@ -73,11 +73,11 @@ skip_file_if(
     os.path.join(DEMO, "demo.py"),
 )
 skip_file_if(
-    is_current_backend_wx(), "ProgressRenderer is not implemented in wx.",
+    is_current_backend_wx, "ProgressRenderer is not implemented in wx.",
     os.path.join(DEMO, "Advanced", "Table_editor_with_progress_column.py"),
 )
 skip_file_if(
-    is_current_backend_qt4(), "ScrubberEditor is not implemented in qt.",
+    is_current_backend_qt4, "ScrubberEditor is not implemented in qt.",
     os.path.join(DEMO, "Advanced", "Scrubber_editor_demo.py"),
 )
 skip_file_if(
