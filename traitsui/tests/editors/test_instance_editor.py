@@ -4,6 +4,7 @@ from traits.api import HasTraits, Instance, Str
 from traitsui.item import Item
 from traitsui.view import View
 from traitsui.tests._tools import (
+    create_ui,
     press_ok_button,
     skip_if_not_qt4,
     store_exceptions_on_all_threads,
@@ -24,9 +25,8 @@ class TestInstanceEditor(unittest.TestCase):
 
     @skip_if_not_qt4
     def test_simple_editor(self):
-        with store_exceptions_on_all_threads():
-            obj = NonmodalInstanceEditor()
-            ui = obj.edit_traits()
+        obj = NonmodalInstanceEditor()
+        with store_exceptions_on_all_threads(), create_ui(obj) as ui:
             editor = ui.get_editors("inst")[0]
 
             # make the dialog appear
@@ -40,9 +40,8 @@ class TestInstanceEditor(unittest.TestCase):
 
     @skip_if_not_qt4
     def test_simple_editor_parent_closed(self):
-        with store_exceptions_on_all_threads():
-            obj = NonmodalInstanceEditor()
-            ui = obj.edit_traits()
+        obj = NonmodalInstanceEditor()
+        with store_exceptions_on_all_threads(), create_ui(obj) as ui:
             editor = ui.get_editors("inst")[0]
 
             # make the dialog appear

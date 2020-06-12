@@ -131,6 +131,30 @@ def filter_tests(test_suite, exclusion_pattern):
     return filtered_test_suite
 
 
+@contextmanager
+def create_ui(object, ui_kwargs=None):
+    """ Context manager for creating a UI and then dispose it when exiting
+    the context.
+
+    Parameters
+    ----------
+    object : HasTraits
+        An object from which ``edit_traits`` can be called to create a UI
+    ui_kwargs : dict or None
+        Keyword arguments to be provided to ``edit_traits``.
+
+    Yields
+    ------
+    ui: UI
+    """
+    ui_kwargs = {} if ui_kwargs is None else ui_kwargs
+    ui = object.edit_traits(**ui_kwargs)
+    try:
+        yield ui
+    finally:
+        ui.dispose()
+
+
 # ######### Utility tools to test on both qt4 and wx
 
 
@@ -161,6 +185,36 @@ def press_ok_button(ui):
         ok_button.click()
 
 
+def click_button(button):
+    """Click the button given its control."""
+
+    if is_current_backend_wx():
+        import wx
+
+        event = wx.CommandEvent(wx.EVT_BUTTON.typeId, button.GetId())
+        event.SetEventObject(button)
+        wx.PostEvent(button, event)
+
+    elif is_current_backend_qt4():
+        button.click()
+
+    else:
+        raise NotImplementedError()
+
+
+def is_control_enabled(control):
+    """Return if the given control is enabled or not."""
+
+    if is_current_backend_wx():
+        return control.IsEnabled()
+
+    elif is_current_backend_qt4():
+        return control.isEnabled()
+
+    else:
+        raise NotImplementedError()
+
+
 def get_dialog_size(ui_control):
     """Return the size of the dialog.
 
@@ -176,6 +230,32 @@ def get_dialog_size(ui_control):
     elif is_current_backend_qt4():
         return ui_control.size().width(), ui_control.size().height()
 
+
+def get_all_button_status(control):
+    """Get status of all 2-state (wx) or checkable (qt) buttons under given
+    control.
+
+    Assumes all sizer children (wx) or layout items (qt) are buttons.
+    """
+    button_status = []
+
+    if is_current_backend_wx():
+        for item in control.GetSizer().GetChildren():
+            button = item.GetWindow()
+            # Ignore empty buttons (assumption that they are invisible)
+            if button.value != "":
+                button_status.append(button.GetValue())
+
+    elif is_current_backend_qt4():
+        layout = control.layout()
+        for i in range(layout.count()):
+            button = layout.itemAt(i).widget()
+            button_status.append(button.isChecked())
+
+    else:
+        raise NotImplementedError()
+
+    return button_status
 
 # ######### Debug tools
 

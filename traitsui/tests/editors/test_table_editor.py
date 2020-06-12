@@ -5,6 +5,7 @@ from traits.api import HasTraits, Instance, Int, List, Str, Tuple
 
 from traitsui.api import EvalTableFilter, Item, ObjectColumn, TableEditor, View
 from traitsui.tests._tools import (
+    create_ui,
     is_current_backend_qt4,
     is_current_backend_wx,
     press_ok_button,
@@ -267,8 +268,8 @@ class TestTableEditor(unittest.TestCase):
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=simple_view)
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=simple_view)) as ui:
             gui.process_events()
             press_ok_button(ui)
             gui.process_events()
@@ -280,8 +281,8 @@ class TestTableEditor(unittest.TestCase):
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=filtered_view)
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=filtered_view)) as ui:
             gui.process_events()
 
             filter = ui.get_editors("values")[0].filter
@@ -299,8 +300,8 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected = object_list.values[5]
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=select_row_view)
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=select_row_view)) as ui:
             editor = ui.get_editors("values")[0]
             gui.process_events()
             if is_current_backend_qt4():
@@ -321,8 +322,8 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selections = object_list.values[5:7]
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=select_rows_view)
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=select_rows_view)) as ui:
             editor = ui.get_editors("values")[0]
             gui.process_events()
             if is_current_backend_qt4():
@@ -343,8 +344,8 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected_index = 5
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=select_row_index_view)
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=select_row_index_view)) as ui:
             editor = ui.get_editors("values")[0]
             gui.process_events()
             if is_current_backend_qt4():
@@ -365,8 +366,9 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected_indices = [5, 7, 8]
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=select_row_indices_view)
+        view = select_row_indices_view
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             gui.process_events()
             if is_current_backend_qt4():
@@ -387,8 +389,8 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected_column = "value"
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=select_column_view)
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=select_column_view)) as ui:
             editor = ui.get_editors("values")[0]
             gui.process_events()
             if is_current_backend_qt4():
@@ -409,8 +411,8 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected_columns = ["value", "other_value"]
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=select_columns_view)
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=select_columns_view)) as ui:
             editor = ui.get_editors("values")[0]
             gui.process_events()
             if is_current_backend_qt4():
@@ -431,8 +433,9 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected_index = 1
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=select_column_index_view)
+        view = select_column_index_view
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             gui.process_events()
             if is_current_backend_qt4():
@@ -453,8 +456,9 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected_indices = [0, 1]
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=select_column_indices_view)
+        view = select_column_indices_view
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             gui.process_events()
             if is_current_backend_qt4():
@@ -475,8 +479,8 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected_cell = (object_list.values[5], "value")
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=select_cell_view)
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=select_cell_view)) as ui:
             editor = ui.get_editors("values")[0]
             gui.process_events()
             if is_current_backend_qt4():
@@ -501,8 +505,8 @@ class TestTableEditor(unittest.TestCase):
             (object_list.values[8], "value"),
         ]
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=select_cells_view)
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=select_cells_view)) as ui:
             editor = ui.get_editors("values")[0]
             gui.process_events()
             if is_current_backend_qt4():
@@ -527,8 +531,9 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected_cell_index = (5, 1)
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=select_cell_index_view)
+        view = select_cell_index_view
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             gui.process_events()
             if is_current_backend_qt4():
@@ -549,8 +554,9 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected_cell_indices = [(5, 0), (6, 1), (8, 0)]
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=select_cell_indices_view)
+        view = select_cell_indices_view
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             gui.process_events()
             if is_current_backend_qt4():
@@ -585,8 +591,8 @@ class TestTableEditor(unittest.TestCase):
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
 
-        with store_exceptions_on_all_threads():
-            ui = object_list.edit_traits(view=progress_view)
+        with store_exceptions_on_all_threads(), \
+                create_ui(object_list, dict(view=progress_view)) as ui:
             gui.process_events()
             press_ok_button(ui)
             gui.process_events()

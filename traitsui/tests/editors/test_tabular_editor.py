@@ -12,12 +12,18 @@
 import contextlib
 import unittest
 
+from pyface.gui import GUI
 from traits.api import Event, HasTraits, Instance, Int, List, Str
 from traits.testing.api import UnittestTools
 
 from traitsui.api import Item, TabularEditor, View
 from traitsui.tabular_adapter import TabularAdapter
-from traitsui.tests._tools import skip_if_null
+from traitsui.tests._tools import (
+    is_current_backend_wx,
+    is_current_backend_qt4,
+    skip_if_null,
+    store_exceptions_on_all_threads,
+)
 
 
 class Person(HasTraits):
@@ -39,30 +45,312 @@ class Report(HasTraits):
 
     selected_row = Int(-1)
 
+    multi_selected = List(Instance(Person))
+
+    selected_rows = List(Int())
+
     # Event for triggering a UI repaint.
     refresh = Event()
 
     # Event for triggering a UI table update.
     update = Event()
 
-    traits_view = View(
-        Item(
-            name="people",
-            editor=TabularEditor(
-                adapter=ReportAdapter(),
-                selected="selected",
-                selected_row="selected_row",
-                refresh="refresh",
-                update="update",
-            ),
+
+def get_view(multi_select=False):
+    if multi_select:
+        return View(
+            Item(
+                name="people",
+                editor=TabularEditor(
+                    adapter=ReportAdapter(),
+                    selected="multi_selected",
+                    selected_row="selected_rows",
+                    refresh="refresh",
+                    update="update",
+                    multi_select=True,
+                ),
+            )
         )
-    )
+    else:
+        return View(
+            Item(
+                name="people",
+                editor=TabularEditor(
+                    adapter=ReportAdapter(),
+                    selected="selected",
+                    selected_row="selected_row",
+                    refresh="refresh",
+                    update="update",
+                ),
+            )
+        )
 
 
+def get_selected_rows(editor):
+    """ Returns a list of all currently selected rows.
+    """
+    if is_current_backend_wx():
+        import wx
+        # "item" in this context means "row number"
+        item = -1
+        selected = []
+        while True:
+            item = editor.control.GetNextItem(
+                item, wx.LIST_NEXT_ALL, wx.LIST_STATE_SELECTED
+            )
+            if item == -1:
+                break
+            selected.append(item)
+        return selected
+
+    elif is_current_backend_qt4():
+        rows = editor.control.selectionModel().selectedRows()
+        return [r.row() for r in rows]
+
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
+
+
+def set_selected_single(editor, row):
+    """ Selects a specified row in an editor with multi_select=False.
+    """
+    if is_current_backend_wx():
+        editor.control.Select(row)
+
+    elif is_current_backend_qt4():
+        from pyface.qt.QtGui import QItemSelectionModel
+
+        smodel = editor.control.selectionModel()
+        mi = editor.model.index(row, 0)
+        # Add `Rows` flag to select the whole row
+        smodel.select(
+            mi, QItemSelectionModel.ClearAndSelect | QItemSelectionModel.Rows
+        )
+
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
+
+
+def set_selected_multiple(editor, rows):
+    """ Clears old selection and selects specified rows in an editor
+    with multi_select=True.
+    """
+    if is_current_backend_wx():
+        clear_selection(editor)
+        for row in rows:
+            editor.control.Select(row)
+
+    elif is_current_backend_qt4():
+        from pyface.qt.QtGui import QItemSelectionModel
+
+        clear_selection(editor)
+        smodel = editor.control.selectionModel()
+        for row in rows:
+            mi = editor.model.index(row, 0)
+            # Add `Rows` flag to select the whole row
+            smodel.select(
+                mi, QItemSelectionModel.Select | QItemSelectionModel.Rows
+            )
+
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
+
+
+def clear_selection(editor):
+    """ Clears existing selection.
+    """
+    if is_current_backend_wx():
+        import wx
+
+        currently_selected = get_selected_rows(editor)
+        # Deselect all currently selected items
+        for selected_row in currently_selected:
+            editor.control.SetItemState(
+                selected_row, 0, wx.LIST_STATE_SELECTED
+            )
+
+    elif is_current_backend_qt4():
+        editor.control.selectionModel().clearSelection()
+
+    else:
+        raise unittest.SkipTest("Test not implemented for this toolkit")
+
+
+@skip_if_null
 class TestTabularEditor(UnittestTools, unittest.TestCase):
-    @skip_if_null
+
+    @unittest.skipIf(is_current_backend_wx(), "Issue enthought/traitsui#752")
+    def test_tabular_editor_single_selection(self):
+        gui = GUI()
+
+        with store_exceptions_on_all_threads(), \
+                self.report_and_editor(get_view()) as (report, editor):
+            gui.process_events()
+            people = report.people
+
+            self.assertEqual(report.selected_row, -1)
+            self.assertIsNone(report.selected)
+
+            set_selected_single(editor, 1)
+            gui.process_events()
+
+            self.assertEqual(report.selected_row, 1)
+            self.assertEqual(report.selected, people[1])
+
+            set_selected_single(editor, 2)
+            gui.process_events()
+
+            self.assertEqual(report.selected_row, 2)
+            self.assertEqual(report.selected, people[2])
+
+            # Can't clear selection via UI when multi_select=False
+
+    @unittest.skipIf(is_current_backend_wx(), "Issue enthought/traitsui#752")
+    def test_tabular_editor_multi_selection(self):
+        gui = GUI()
+        view = get_view(multi_select=True)
+
+        with store_exceptions_on_all_threads(), \
+                self.report_and_editor(view) as (report, editor):
+            gui.process_events()
+            people = report.people
+
+            self.assertEqual(report.selected_rows, [])
+            self.assertEqual(report.multi_selected, [])
+
+            set_selected_multiple(editor, [0, 1])
+            gui.process_events()
+
+            self.assertEqual(report.selected_rows, [0, 1])
+            self.assertEqual(report.multi_selected, people[:2])
+
+            set_selected_multiple(editor, [2])
+            gui.process_events()
+
+            self.assertEqual(report.selected_rows, [2])
+            self.assertEqual(report.multi_selected, [people[2]])
+
+            clear_selection(editor)
+            gui.process_events()
+
+            self.assertEqual(report.selected_rows, [])
+            self.assertEqual(report.multi_selected, [])
+
+    @unittest.skipIf(is_current_backend_wx(), "Issue enthought/traitsui#752")
+    def test_tabular_editor_single_selection_changed(self):
+        gui = GUI()
+
+        with store_exceptions_on_all_threads(), \
+                self.report_and_editor(get_view()) as (report, editor):
+            gui.process_events()
+            people = report.people
+
+            self.assertEqual(get_selected_rows(editor), [])
+
+            report.selected_row = 1
+            gui.process_events()
+
+            self.assertEqual(get_selected_rows(editor), [1])
+            self.assertEqual(report.selected, people[1])
+
+            report.selected = people[2]
+            gui.process_events()
+
+            self.assertEqual(get_selected_rows(editor), [2])
+            self.assertEqual(report.selected_row, 2)
+
+            # Selected set to invalid value doesn't change anything
+            report.selected = Person(name="invalid", age=-1)
+            gui.process_events()
+
+            self.assertEqual(get_selected_rows(editor), [2])
+            self.assertEqual(report.selected_row, 2)
+
+            # -1 clears selection
+            report.selected_row = -1
+            gui.process_events()
+
+            self.assertEqual(get_selected_rows(editor), [])
+            self.assertEqual(report.selected, None)
+
+    @unittest.skipIf(is_current_backend_wx(), "Issue enthought/traitsui#752")
+    def test_tabular_editor_multi_selection_changed(self):
+        gui = GUI()
+        view = get_view(multi_select=True)
+
+        with store_exceptions_on_all_threads(), \
+                self.report_and_editor(view) as (report, editor):
+            gui.process_events()
+            people = report.people
+
+            self.assertEqual(get_selected_rows(editor), [])
+
+            report.selected_rows = [0, 1]
+            gui.process_events()
+
+            self.assertEqual(get_selected_rows(editor), [0, 1])
+            self.assertEqual(report.multi_selected, people[:2])
+
+            report.multi_selected = [people[2], people[0]]
+            gui.process_events()
+
+            self.assertEqual(sorted(get_selected_rows(editor)), [0, 2])
+            self.assertEqual(sorted(report.selected_rows), [0, 2])
+
+            # If there's a single invalid value, nothing is updated
+            invalid_person = Person(name="invalid", age=-1)
+            report.multi_selected = [people[2], invalid_person]
+            gui.process_events()
+
+            self.assertEqual(sorted(get_selected_rows(editor)), [0, 2])
+            self.assertEqual(sorted(report.selected_rows), [0, 2])
+
+            # Empty list clears selection
+            report.selected_rows = []
+            gui.process_events()
+
+            self.assertEqual(get_selected_rows(editor), [])
+            self.assertEqual(report.multi_selected, [])
+
+    @unittest.skipIf(is_current_backend_wx(), "Issue enthought/traitsui#752")
+    def test_tabular_editor_multi_selection_items_changed(self):
+        gui = GUI()
+        view = get_view(multi_select=True)
+
+        with store_exceptions_on_all_threads(), \
+                self.report_and_editor(view) as (report, editor):
+            gui.process_events()
+            people = report.people
+
+            self.assertEqual(get_selected_rows(editor), [])
+
+            report.selected_rows.extend([0, 1])
+            gui.process_events()
+
+            self.assertEqual(get_selected_rows(editor), [0, 1])
+            self.assertEqual(report.multi_selected, people[:2])
+
+            report.selected_rows[1] = 2
+            gui.process_events()
+
+            self.assertEqual(get_selected_rows(editor), [0, 2])
+            self.assertEqual(report.multi_selected, people[0:3:2])
+
+            report.multi_selected[0] = people[1]
+            gui.process_events()
+
+            self.assertEqual(sorted(get_selected_rows(editor)), [1, 2])
+            self.assertEqual(sorted(report.selected_rows), [1, 2])
+
+            # If there's a single invalid value, nothing is updated
+            report.multi_selected[0] = Person(name="invalid", age=-1)
+            gui.process_events()
+
+            self.assertEqual(sorted(get_selected_rows(editor)), [1, 2])
+            self.assertEqual(sorted(report.selected_rows), [1, 2])
+
     def test_selected_reacts_to_model_changes(self):
-        with self.report_and_editor() as (report, editor):
+        with self.report_and_editor(get_view()) as (report, editor):
             people = report.people
 
             self.assertIsNone(report.selected)
@@ -84,9 +372,8 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
             self.assertIsNone(report.selected)
             self.assertEqual(report.selected_row, -1)
 
-    @skip_if_null
     def test_event_synchronization(self):
-        with self.report_and_editor() as (report, editor):
+        with self.report_and_editor(get_view()) as (report, editor):
             with self.assertTraitChanges(editor, "refresh", count=1):
                 report.refresh = True
             # Should happen every time.
@@ -99,7 +386,7 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
                 report.update = True
 
     @contextlib.contextmanager
-    def report_and_editor(self):
+    def report_and_editor(self, view):
         """
         Context manager to temporarily create and clean up a Report model object
         and the corresponding TabularEditor.
@@ -108,9 +395,10 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
             people=[
                 Person(name="Theresa", age=60),
                 Person(name="Arlene", age=46),
+                Person(name="Karen", age=40),
             ]
         )
-        ui = report.edit_traits()
+        ui = report.edit_traits(view=view)
         try:
             editor, = ui.get_editors("people")
             yield report, editor
