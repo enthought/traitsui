@@ -73,8 +73,12 @@ skip_file_if(
     os.path.join(DEMO, "demo.py"),
 )
 skip_file_if(
-    is_current_backend_wx, "ProgressRenderer is not implemented in wx.",
+    is_current_backend_wx(), "ProgressRenderer is not implemented in wx.",
     os.path.join(DEMO, "Advanced", "Table_editor_with_progress_column.py"),
+)
+skip_file_if(
+    is_current_backend_qt4(), "ScrubberEditor is not implemented in qt.",
+    os.path.join(DEMO, "Advanced", "Scrubber_editor_demo.py"),
 )
 skip_file_if(
     lambda: not is_current_backend_wx(), "Only support wx",
@@ -169,11 +173,6 @@ def get_python_files(directory):
     return sorted(paths)
 
 
-# Replace HasTraits.configure_traits with edit_traits so any GUI launched
-# is immediately closed.
-FAKE_HAS_TRAITS = """
-\"\"\" Faked docstring as some examples depend on __doc__ \"\"\"
-
 def replaced_configure_traits(
         instance,
         filename=None,
@@ -186,6 +185,8 @@ def replaced_configure_traits(
         scrollable=None,
         **args
 ):
+    """ Mocked configure_traits to launch then close the GUI.
+    """
     ui = instance.edit_traits(
         view=view,
         parent=None,
@@ -198,15 +199,23 @@ def replaced_configure_traits(
     )
     ui.dispose()
 
-from traits.api import HasTraits
-HasTraits.configure_traits = replaced_configure_traits
 
-"""
+@contextlib.contextmanager
+def replace_configure_traits():
+    """ Context manager to temporarily replace HasTraits.configure_traits
+    with a mocked version such that GUI launched are closed soon after they
+    are open.
+    """
+    original_func = HasTraits.configure_traits
+    HasTraits.configure_traits = replaced_configure_traits
+    try:
+        yield
+    finally:
+        HasTraits.configure_traits = original_func
 
 
 def run_file(file_path):
     """ Execute a given Python file.
-
     Parameters
     ----------
     file_path : str
@@ -215,18 +224,16 @@ def run_file(file_path):
     with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
 
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8") as temp_file:
-        temp_file.write(FAKE_HAS_TRAITS)
-        temp_file.write("__file__ = {!r}\n".format(file_path))
-        temp_file.write(content)
-        temp_file.flush()
-        subprocess.run(
-            [sys.executable, temp_file.name],
-            check=True,
-            encoding="utf-8",
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-        )
+    globals = {
+        "__name__": "__main__",
+        "__file__": file_path,
+    }
+    with replace_configure_traits(), \
+            mock.patch("sys.argv", [file_path]):
+        # Some example reads sys.argv to allow more arguments
+        # But all examples should support being run without additional
+        # arguments.
+        exec(content, globals)
 
 
 @skip_if_null
