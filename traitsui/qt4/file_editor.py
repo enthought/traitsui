@@ -66,8 +66,7 @@ class SimpleEditor(SimpleTextEditor):
             )
 
         button = IconButton(QtGui.QStyle.SP_DirIcon, self.show_file_dialog)
-        # Call to connect should be moved out of IconButton
-        # (enthought/traitsui#888)
+
         self._connections_to_remove.append(
             (button.clicked, self.show_file_dialog)
         )
@@ -81,6 +80,10 @@ class SimpleEditor(SimpleTextEditor):
         while self._connections_to_remove:
             signal, handler = self._connections_to_remove.pop()
             signal.disconnect(handler)
+
+        # IconButton.clicked signal should be disconnected here.
+        # (enthought/traitsui#888)
+
         # skip the dispose from TextEditor (enthought/traitsui#884)
         Editor.dispose(self)
 
