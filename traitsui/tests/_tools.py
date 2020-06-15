@@ -16,11 +16,13 @@
 
 import re
 import sys
+import time
 import traceback
 from functools import partial
 from contextlib import contextmanager
 from unittest import skipIf, TestSuite
 
+from pyface.api import GUI
 from pyface.toolkit import toolkit_object
 from traits.etsconfig.api import ETSConfig
 import traits.trait_notifiers
@@ -129,6 +131,32 @@ def filter_tests(test_suite, exclusion_pattern):
                 setattr(item, 'setUp', lambda: item.skipTest(skip_msg))
             filtered_test_suite.addTest(item)
     return filtered_test_suite
+
+
+#: If Qt processEvents returns after this many milliseconds, we try again.
+#: False positive is okay.
+_TOLERANCE_MILLISECS = 5000
+
+
+def process_events(allow_user_events=True):
+    """ Process all events, including events posted by the processed events.
+    """
+    if is_current_backend_qt4():
+        from pyface.qt import QtCore
+        if allow_user_events:
+            events = QtCore.QEventLoop.AllEvents
+        else:
+            events = QtCore.QEventLoop.ExcludeUserInputEvents
+
+        start = None
+        while start is None or duration_millisecs >= _TOLERANCE_MILLISECS - 1:
+            start = time.time()
+            QtCore.QCoreApplication.processEvents(
+                events, _TOLERANCE_MILLISECS
+            )
+            duration_millisecs = (time.time() - start) * 1000
+    else:
+        GUI.process_events(allow_user_events=allow_user_events)
 
 
 @contextmanager
