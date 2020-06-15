@@ -152,6 +152,13 @@ class CustomEditor(SimpleEditor):
     #: editor.
     _connections_to_rebuild = List(Tuple(Any, Callable))
 
+    def init(self, parent):
+        """ Finishes initializing the editor by creating the underlying toolkit
+            widget.
+        """
+        self.create_control(parent)
+        EditorWithList.init(self, parent)
+
     def create_control(self, parent):
         """ Creates the initial editor control.
         """
