@@ -66,10 +66,6 @@ class SimpleEditor(SimpleTextEditor):
             )
 
         button = IconButton(QtGui.QStyle.SP_DirIcon, self.show_file_dialog)
-
-        self._connections_to_remove.append(
-            (button.clicked, self.show_file_dialog)
-        )
         layout.addWidget(button)
 
         self.set_tooltip(control)
