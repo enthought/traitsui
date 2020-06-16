@@ -19,7 +19,7 @@ class DateModel(HasTraits):
     styles_mapping = Dict(Str, Instance(CellFormat))
 
 
-def example_model():
+def get_example_model():
     return DateModel(
         special_days={
             "public-holidays": [datetime.date(2020, 1, 1)],
@@ -39,7 +39,7 @@ class TestStyledDateEditor(unittest.TestCase):
 
     def test_init_and_dispose(self):
         # Smoke test to test init and dispose.
-        instance = example_model()
+        instance = get_example_model()
         view = View(
             Item(
                 "selected_date",
