@@ -389,14 +389,24 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
         # Regression test for enthought/traitsui#894
         with store_exceptions_on_all_threads(), \
                 self.report_and_editor(get_view()) as (report, editor):
+            # This ensures the the cached user widths in the view has a length
+            # of 2 One of them is non-None
             editor.adapter.columns = [
                 ("Name", "name"), ("Age", "age"),
             ]
+            # Set the columns to an empty list should not fail because the
+            # cached user widths has been invalidated.
+            # The cached user widths should have been updated if columns is
+            # changed. Otherwise recalculation of column widths.
             editor.adapter.columns = []
 
-    def test_adapter_columns_changes_reduce_columns(self):
-        # Test workaround for enthought/traits#431
-        # The factory is set to None but signals are not disconnected.
+    def test_view_column_resized_attribute_error_workaround(self):
+        # This tests the workaround which checks if `factory` is None before
+        # using it while resizing the columns
+        # Maybe related to enthought/traitsui#854 and enthought/traits#431
+        # Changing the columns causes a header-resize signal to be emitted.
+        # If the signal is processed after the UI is disposed, that will
+        # cause AttributeError because the factory would have been set to None.
         with store_exceptions_on_all_threads(), \
                 self.report_and_editor(get_view()) as (_, editor):
             editor.adapter.columns = [("Name", "name")]
