@@ -389,16 +389,17 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
         # Regression test for enthought/traitsui#894
         with store_exceptions_on_all_threads(), \
                 self.report_and_editor(get_view()) as (report, editor):
-            # This ensures the the cached user widths in the view has a length
-            # of 2 One of them is non-None
+
+            # Reproduce the scenario when the column count is reduced.
             editor.adapter.columns = [
                 ("Name", "name"), ("Age", "age"),
             ]
-            # Set the columns to an empty list should not fail because the
-            # cached user widths has been invalidated.
-            # The cached user widths should have been updated if columns is
-            # changed. Otherwise recalculation of column widths.
-            editor.adapter.columns = []
+            # Recalculating column widths take into account the user defined
+            # widths, cached in the view. The cache should be invalidated
+            # when the columns is updated such that recalculation does not
+            # fail.
+            editor.adapter.columns = [("Name", "name")]
+            GUI.process_events()
 
     def test_view_column_resized_attribute_error_workaround(self):
         # This tests the workaround which checks if `factory` is None before
