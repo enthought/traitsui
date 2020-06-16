@@ -402,11 +402,9 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
 
     def test_view_column_resized_attribute_error_workaround(self):
         # This tests the workaround which checks if `factory` is None before
-        # using it while resizing the columns
+        # using it while resizing the columns.
+        # The resize event is processed after UI.dispose is called.
         # Maybe related to enthought/traitsui#854 and enthought/traits#431
-        # Changing the columns causes a header-resize signal to be emitted.
-        # If the signal is processed after the UI is disposed, that will
-        # cause AttributeError because the factory would have been set to None.
         with store_exceptions_on_all_threads(), \
                 self.report_and_editor(get_view()) as (_, editor):
             editor.adapter.columns = [("Name", "name")]
