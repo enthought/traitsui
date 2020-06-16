@@ -140,6 +140,12 @@ _TOLERANCE_MILLISECS = 5000
 
 def process_events(allow_user_events=True):
     """ Process all events, including events posted by the processed events.
+
+    Parameters
+    ----------
+    allow_user_events : bool
+        If allow_user_events is ``False`` then user generated events are not
+        processed.
     """
     if is_current_backend_qt4():
         from pyface.qt import QtCore
