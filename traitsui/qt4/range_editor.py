@@ -720,8 +720,7 @@ class RangeTextEditor(TextEditor):
 
 
 def SimpleEnumEditor(
-    parent, factory, ui, object, name, description, format_func=None,
-    format_str='', invalid_trait_name=''
+    parent, factory, ui, object, name, description, **kwargs
 ):
     return CustomEnumEditor(
         parent, factory, ui, object, name, description, "simple"
@@ -729,8 +728,7 @@ def SimpleEnumEditor(
 
 
 def CustomEnumEditor(
-    parent, factory, ui, object, name, description, style="custom",
-    format_func=None, format_str='', invalid_trait_name=''
+    parent, factory, ui, object, name, description, style="custom", **kwargs
 ):
     """ Factory adapter that returns a enumeration editor of the specified
     style.
