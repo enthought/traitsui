@@ -155,6 +155,13 @@ def process_events(allow_user_events=True):
             events = QtCore.QEventLoop.ExcludeUserInputEvents
 
         start = None
+
+        # Qt won't raise if there are still events to be processed before
+        # the time limit is reached. There are no other safe way to tell
+        # if there are pending events (`hasPendingEvents` is deprecated).
+        # The minus-one is to account for precision differences between Python
+        # and Qt, false positive triggers another redundant run that should
+        # return immediately so that is fine.
         while start is None or duration_millisecs >= _TOLERANCE_MILLISECS - 1:
             start = time.time()
             QtCore.QCoreApplication.processEvents(
