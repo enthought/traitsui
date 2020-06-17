@@ -310,6 +310,7 @@ class LiveWindow(BaseDialog):
 
         ui.finish()
         self.ui = self.undo = self.redo = self.revert = self.control = None
+        self.ok = None
 
     def _on_close_page(self, event):
         """ Handles the user clicking the window/dialog "close" button/icon.

@@ -228,8 +228,7 @@ class _LiveWindow(BaseDialog):
         """Close the dialog and set the given return code.
         """
         super(_LiveWindow, self).close(rc)
-
-        self.undo = self.redo = self.revert = None
+        self.undo = self.redo = self.revert = self.ok = None
 
     def _on_finished(self, result):
         """Handles the user finishing with the dialog.

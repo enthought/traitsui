@@ -224,6 +224,7 @@ class ModalDialog(BaseDialog):
 
         ui.finish()
         self.ui = self.apply = self.revert = self.help = self.control = None
+        self.ok = None
 
     def _copy_context(self, context):
         """ Creates a copy of a *context* dictionary.

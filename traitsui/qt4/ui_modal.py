@@ -183,7 +183,7 @@ class _ModalDialog(BaseDialog):
         """
         super(_ModalDialog, self).close(rc)
 
-        self.apply = self.revert = self.help = None
+        self.apply = self.revert = self.help = self.ok = None
 
     def _copy_context(self, context):
         """Creates a copy of a *context* dictionary.
