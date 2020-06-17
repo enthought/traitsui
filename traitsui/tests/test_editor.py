@@ -21,7 +21,11 @@ from traitsui.editor import Editor
 from traitsui.editor_factory import EditorFactory
 from traitsui.handler import default_handler
 from traitsui.ui import UI
-from traitsui.tests._tools import GuiTestAssistant, no_gui_test_assistant
+from traitsui.tests._tools import (
+    GuiTestAssistant,
+    no_gui_test_assistant,
+    process_cascade_events,
+)
 
 
 class FakeControl(HasTraits):
@@ -190,7 +194,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         # test the value in the control changes
         with self.assertTraitChanges(editor.control, control_name, count=1):
             self.gui.set_trait_later(object, name, value)
-            self.event_loop_helper.event_loop_with_timeout(repeat=6)
+            process_cascade_events()
 
     def change_control_value(self, editor, object, name, value):
         if editor.is_event:
@@ -201,7 +205,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         # test the value in the user object changes
         with self.assertTraitChanges(object, name, count=1):
             self.gui.set_trait_later(editor.control, control_name, value)
-            self.event_loop_helper.event_loop_with_timeout(repeat=6)
+            process_cascade_events()
 
     def test_lifecycle(self):
         editor = create_editor()
