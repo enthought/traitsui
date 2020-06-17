@@ -141,6 +141,9 @@ _TOLERANCE_MILLISECS = 5000
 def process_cascade_events(allow_user_events=True):
     """ Process all events, including events posted by the processed events.
 
+    Use this function with caution, as an infinite cascade of events will
+    cause this function to enter an infinite loop.
+
     Parameters
     ----------
     allow_user_events : bool
