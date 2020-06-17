@@ -1,3 +1,4 @@
+import contextlib
 import platform
 import unittest
 
@@ -6,9 +7,11 @@ from pyface.gui import GUI
 from traits.api import Enum, HasTraits, Int, List
 from traitsui.api import EnumEditor, UItem, View
 from traitsui.tests._tools import (
+    create_ui,
     get_all_button_status,
     is_current_backend_qt4,
     is_current_backend_wx,
+    process_cascade_events,
     skip_if_null,
     store_exceptions_on_all_threads,
 )
@@ -171,10 +174,10 @@ def set_list_widget_selected_index(list_widget, idx):
 @skip_if_null
 class TestEnumEditorMapping(unittest.TestCase):
 
+    @contextlib.contextmanager
     def setup_ui(self, model, view):
-        ui = model.edit_traits(view=view)
-        self.addCleanup(ui.dispose)
-        return ui.get_editors("value")[0]
+        with create_ui(model, dict(view=view)) as ui:
+            yield ui.get_editors("value")[0]
 
     def check_enum_mappings_value_change(self, style, mode):
         class IntEnumModel(HasTraits):
@@ -193,8 +196,8 @@ class TestEnumEditorMapping(unittest.TestCase):
             )
         )
 
-        with store_exceptions_on_all_threads():
-            editor = self.setup_ui(IntEnumModel(), formatted_view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_ui(IntEnumModel(), formatted_view) as editor:
 
             self.assertEqual(editor.names, ["FALSE", "TRUE"])
             self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
@@ -228,8 +231,8 @@ class TestEnumEditorMapping(unittest.TestCase):
         )
         model = IntEnumModel()
 
-        with store_exceptions_on_all_threads():
-            editor = self.setup_ui(model, formatted_view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_ui(model, formatted_view) as editor:
 
             self.assertEqual(editor.names, ["FALSE", "TRUE"])
             self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
@@ -281,66 +284,63 @@ class TestEnumEditorMapping(unittest.TestCase):
 @skip_if_null
 class TestSimpleEnumEditor(unittest.TestCase):
 
+    @contextlib.contextmanager
     def setup_gui(self, model, view):
-        gui = GUI()
-        ui = model.edit_traits(view=view)
-        self.addCleanup(ui.dispose)
-
-        gui.process_events()
-        editor = ui.get_editors("value")[0]
-        combobox = editor.control
-
-        return gui, combobox
+        with create_ui(model, dict(view=view)) as ui:
+            process_cascade_events()
+            editor = ui.get_editors("value")[0]
+            combobox = editor.control
+            yield combobox
 
     def check_enum_text_update(self, view):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads():
-            gui, combobox = self.setup_gui(enum_edit, view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(enum_edit, view) as combobox:
 
             self.assertEqual(get_combobox_text(combobox), "one")
 
             enum_edit.value = "two"
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(get_combobox_text(combobox), "two")
 
     def check_enum_object_update(self, view):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads():
-            gui, combobox = self.setup_gui(enum_edit, view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(enum_edit, view) as combobox:
 
             self.assertEqual(enum_edit.value, "one")
 
             set_combobox_text(combobox, "two")
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(enum_edit.value, "two")
 
     def check_enum_index_update(self, view):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads():
-            gui, combobox = self.setup_gui(enum_edit, view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(enum_edit, view) as combobox:
 
             self.assertEqual(enum_edit.value, "one")
 
             set_combobox_index(combobox, 1)
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(enum_edit.value, "two")
 
     def check_enum_text_bad_update(self, view):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads():
-            gui, combobox = self.setup_gui(enum_edit, view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(enum_edit, view) as combobox:
 
             self.assertEqual(enum_edit.value, "one")
 
             set_combobox_text(combobox, "t")
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(enum_edit.value, "one")
 
@@ -369,20 +369,20 @@ class TestSimpleEnumEditor(unittest.TestCase):
         view = get_evaluate_view("simple", auto_set=False)
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads():
-            gui, combobox = self.setup_gui(enum_edit, view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(enum_edit, view) as combobox:
 
             self.assertEqual(enum_edit.value, "one")
 
             set_combobox_text(combobox, "two")
-            gui.process_events()
+            process_cascade_events()
 
             # wx modifies the value without the need to finish entry
             if is_current_backend_qt4():
                 self.assertEqual(enum_edit.value, "one")
 
                 finish_combobox_text_entry(combobox)
-                gui.process_events()
+                process_cascade_events()
 
             self.assertEqual(enum_edit.value, "two")
 
@@ -391,9 +391,9 @@ class TestSimpleEnumEditor(unittest.TestCase):
         enum_edit = EnumModel()
         resizable_view = View(UItem("value", style="simple", resizable=True))
 
-        with store_exceptions_on_all_threads():
-            ui = enum_edit.edit_traits(view=resizable_view)
-            self.addCleanup(ui.dispose)
+        with store_exceptions_on_all_threads(), \
+                create_ui(enum_edit, dict(view=resizable_view)):
+            pass
 
     def test_simple_editor_rebuild_editor_evaluate(self):
         # Smoke test for `wx.enum_editor.SimpleEditor.rebuild_editor`
@@ -403,8 +403,8 @@ class TestSimpleEnumEditor(unittest.TestCase):
         )
         view = View(UItem("value", editor=enum_editor_factory, style="simple"))
 
-        with store_exceptions_on_all_threads():
-            gui, combobox = self.setup_gui(EnumModel(), view)
+        with store_exceptions_on_all_threads(), \
+                create_ui(EnumModel(), dict(view=view)):
 
             enum_editor_factory.values = ["one", "two", "three"]
 
@@ -412,22 +412,19 @@ class TestSimpleEnumEditor(unittest.TestCase):
 @skip_if_null
 class TestRadioEnumEditor(unittest.TestCase):
 
+    @contextlib.contextmanager
     def setup_gui(self, model, view):
-        gui = GUI()
-        ui = model.edit_traits(view=view)
-        self.addCleanup(ui.dispose)
-
-        gui.process_events()
-        editor = ui.get_editors("value")[0]
-        widget = editor.control
-
-        return gui, widget
+        with create_ui(model, dict(view=view)) as ui:
+            process_cascade_events()
+            editor = ui.get_editors("value")[0]
+            widget = editor.control
+            yield widget
 
     def test_radio_enum_editor_button_update(self):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads():
-            gui, widget = self.setup_gui(enum_edit, get_view("custom"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(enum_edit, get_view("custom")) as widget:
 
             # The layout is: one, three, four \n two
             self.assertEqual(
@@ -435,7 +432,7 @@ class TestRadioEnumEditor(unittest.TestCase):
             )
 
             enum_edit.value = "two"
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(
                 get_all_button_status(widget), [False, False, False, True]
@@ -444,14 +441,14 @@ class TestRadioEnumEditor(unittest.TestCase):
     def test_radio_enum_editor_pick(self):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads():
-            gui, widget = self.setup_gui(enum_edit, get_view("custom"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(enum_edit, get_view("custom")) as widget:
 
             self.assertEqual(enum_edit.value, "one")
 
             # The layout is: one, three, four \n two
             click_radio_button(widget, 3)
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(enum_edit.value, "two")
 
@@ -459,40 +456,37 @@ class TestRadioEnumEditor(unittest.TestCase):
 @skip_if_null
 class TestListEnumEditor(unittest.TestCase):
 
+    @contextlib.contextmanager
     def setup_gui(self, model, view):
-        gui = GUI()
-        ui = model.edit_traits(view=view)
-        self.addCleanup(ui.dispose)
-
-        gui.process_events()
-        editor = ui.get_editors("value")[0]
-        list_widget = editor.control
-
-        return gui, list_widget
+        with create_ui(model, dict(view=view)) as ui:
+            process_cascade_events()
+            editor = ui.get_editors("value")[0]
+            list_widget = editor.control
+            yield list_widget
 
     def check_enum_text_update(self, view):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads():
-            gui, list_widget = self.setup_gui(enum_edit, view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(enum_edit, view) as list_widget:
 
             self.assertEqual(get_list_widget_text(list_widget), "one")
 
             enum_edit.value = "two"
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(get_list_widget_text(list_widget), "two")
 
     def check_enum_index_update(self, view):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads():
-            gui, list_widget = self.setup_gui(enum_edit, view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(enum_edit, view) as list_widget:
 
             self.assertEqual(enum_edit.value, "one")
 
             set_list_widget_selected_index(list_widget, 1)
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(enum_edit.value, "two")
 
