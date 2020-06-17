@@ -272,5 +272,5 @@ class TestTreeView(unittest.TestCase):
     def test_smoke_word_wrap(self):
         bogus = Bogus(bogus_list=[Bogus()])
         tree_editor_view = BogusTreeView(bogus=bogus, word_wrap=True)
-        ui = tree_editor_view.edit_traits()
-        ui.dispose()
+        with create_ui(tree_editor_view):
+            pass
