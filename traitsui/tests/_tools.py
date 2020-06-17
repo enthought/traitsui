@@ -196,7 +196,13 @@ def create_ui(object, ui_kwargs=None):
     try:
         yield ui
     finally:
+        # At the end of a test, there may be events to be processed.
+        # If dispose happens first, those events will be processed after
+        # various editor states are removed, causing errors.
+        process_cascade_events()
         ui.dispose()
+        # Dispose may push more events to the event queue. Flush those too.
+        process_cascade_events()
 
 
 # ######### Utility tools to test on both qt4 and wx
