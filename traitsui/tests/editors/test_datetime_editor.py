@@ -5,6 +5,7 @@ import unittest
 from traits.api import HasTraits, Datetime
 from traitsui.api import DatetimeEditor, Item, View
 from traitsui.tests._tools import (
+    create_ui,
     GuiTestAssistant,
     skip_if_not_qt4,
     store_exceptions_on_all_threads,
@@ -250,9 +251,6 @@ class TestDatetimeEditorQt(GuiTestAssistant, unittest.TestCase):
 
     @contextlib.contextmanager
     def launch_editor(self, object, view):
-        ui = object.edit_traits(view=view)
-        try:
+        with create_ui(object, dict(view=view)) as ui:
             editor, = ui._editors
             yield editor
-        finally:
-            ui.dispose()
