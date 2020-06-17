@@ -11,133 +11,66 @@
 
 """ Tests for traitsui.tests._tools """
 
-from functools import partial
-import time
-import types
 import unittest
 
-from pyface.gui import GUI
-from pyface.window import Window
 from traitsui.tests._tools import (
     is_current_backend_qt4,
     is_current_backend_wx,
-    process_events,
+    skip_if_not_qt4,
+    skip_if_not_wx,
+    process_cascade_events,
 )
 
 
-def resize_window(control, length):
-    """ Post a resize event for the given window control.
+if is_current_backend_qt4():
 
-    Parameters
-    ----------
-    control : any
-        Toolkit-specific control, e.g. QWindow for Qt
-    length : int
-        New size event. Used for both width and height.
-    """
+    # Create a QObject that will emit a new event to itself as long as
+    # it has not received enough.
 
-    if is_current_backend_qt4():
+    from pyface.qt import QtCore
 
-        from pyface.qt import QtCore, QtGui
-        old_size = QtCore.QSize(length, length + 1)
-        size = QtCore.QSize(length, length)
-        event = QtGui.QResizeEvent(size, old_size)
-        QtCore.QCoreApplication.postEvent(
-            control, event
-        )
+    class DummyQObject(QtCore.QObject):
 
-    elif is_current_backend_wx():
+        def __init__(self, max_n_events):
+            super().__init__()
+            self.max_n_events = max_n_events
+            self.n_events = 0
 
-        import wx
-        size = wx.Size(length, length)
-        event = wx.SizeEvent(size)
-        wx.PostEvent(control, event)
+        def event(self, event):
+            self.n_events += 1
 
-    else:
-        raise unittest.SkipTest("Not implemented.")
+            if self.n_events < self.max_n_events:
+                new_event = QtCore.QEvent(QtCore.QEvent.User)
+                QtCore.QCoreApplication.postEvent(self, new_event)
+            return True
 
 
-def get_width(event):
-    """ Get the width for a given resize event.
+if is_current_backend_wx():
 
-    Parameters
-    ----------
-    event : any
-        Toolkit-specific event object, e.g. QResizeEvent for Qt
+    # Create a wx.EvtHandler that will emit a new event to itself as long as
+    # it has not received enough.
 
-    Returns
-    -------
-    width : int
-    """
-    if is_current_backend_qt4():
-        return event.size().width()
-    else:
-        return event.GetSize().GetWidth()
-    raise unittest.SkipTest("Not implemented")
+    import wx
+    import wx.lib.newevent
 
+    NewEvent, EVT_SOME_NEW_EVENT = wx.lib.newevent.NewEvent()
 
-def new_on_resize(event, window, max_length, sleep):
-    """ New method for overriding handlers for resize events so that
-    we can record the last size seen. The event is then considered handled and
-    the window is not actually resized.
+    class DummyWxHandler(wx.EvtHandler):
 
-    This method if the current event size length is less than the given
-    maximum length, this method will emit another resize event.
-    This imitates a cascade of events being posted to the event queue.
+        def __init__(self, max_n_events):
+            super().__init__()
+            self.max_n_events = max_n_events
+            self.n_events = 0
 
-    Used for patching objects in tests.
+        def TryBefore(self, event):
+            self.n_events += 1
+            if self.n_events < self.max_n_events:
+                self.post_event()
+            return True
 
-    Parameters
-    ----------
-    event : any
-        Toolkit-specific event object.
-    window : pyface.window.Window
-        The window to be resized.
-    max_length : int
-        Maximum length of the resize event.
-    sleep : float
-        Call time.sleep for the given amount of second.
-    """
-    length = get_width(event)
-    window._size = (length, length)
-    time.sleep(sleep)
-    if length < max_length:
-        resize_window(window.control, length + 1)
-
-
-def modify_resize(window, max_length, sleep):
-    """ Modify / bind event handler for the resize event
-    such that we get more events into the event queue from
-    processing events.
-
-    Parameters
-    ----------
-    window : pyface.window.Window
-        The window to be resized.
-    max_length : int
-        Maximum length of the resize event.
-    sleep : float
-        Call time.sleep for the given amount of second.
-    """
-
-    if is_current_backend_qt4():
-        window.control.resizeEvent =  partial(
-            new_on_resize, window=window, max_length=max_length,
-            sleep=sleep,
-        )
-
-    elif is_current_backend_wx():
-        import wx
-        window.control.Bind(
-            wx.EVT_SIZE,
-            partial(
-                new_on_resize, window=window, max_length=max_length,
-                sleep=sleep,
-            ),
-        )
-
-    else:
-        raise unittest.SkipTest("Not implemented.")
+        def post_event(self):
+            event = NewEvent()
+            wx.PostEvent(self, event)
 
 
 class TestProcessEventsRepeated(unittest.TestCase):
@@ -145,25 +78,35 @@ class TestProcessEventsRepeated(unittest.TestCase):
     posted by the processed events.
     """
 
-    def get_window(self):
-        window = Window()
-        window.open()
+    @skip_if_not_qt4
+    def test_qt_process_events_process_all(self):
+        from pyface.qt import QtCore
 
-        def cleanup():
-            window.close()
-            window.destroy()
-            GUI.process_events()
+        q_object = DummyQObject(max_n_events=10)
+        self.addCleanup(q_object.deleteLater)
 
-        self.addCleanup(cleanup)
-        return window
+        QtCore.QCoreApplication.postEvent(
+            q_object, QtCore.QEvent(QtCore.QEvent.User)
+        )
 
-    def test_process_events_process_all(self):
-        window = self.get_window()
+        # As a demonstration, check calling processEvents does not process
+        # cascade of events.
+        QtCore.QCoreApplication.processEvents(QtCore.QEventLoop.AllEvents)
+        self.assertEqual(q_object.n_events, 1)
 
-        modify_resize(window, max_length=200, sleep=0)
+        # when
+        process_cascade_events()
 
-        resize_window(window.control, 1)
+        # then
+        self.assertEqual(q_object.n_events, 10)
 
-        process_events()
+    @skip_if_not_wx
+    def test_wx_process_events_process_all(self):
+        wx_handler = DummyWxHandler(max_n_events=10)
+        wx_handler.post_event()
 
-        self.assertEqual(window._size, (200, 200))
+        # when
+        process_cascade_events()
+
+        # then
+        self.assertEqual(wx_handler.n_events, 10)

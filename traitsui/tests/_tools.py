@@ -138,7 +138,7 @@ def filter_tests(test_suite, exclusion_pattern):
 _TOLERANCE_MILLISECS = 5000
 
 
-def process_events(allow_user_events=True):
+def process_cascade_events(allow_user_events=True):
     """ Process all events, including events posted by the processed events.
 
     Parameters
