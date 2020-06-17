@@ -19,6 +19,7 @@ Test case for bug (wx, Mac OS X)
 A ListStrEditor was not checking for valid item indexes under Wx.  This was
 most noticeable when the selected_index was set in the editor factory.
 """
+import contextlib
 import platform
 import unittest
 
@@ -34,6 +35,7 @@ from traitsui.tests._tools import (
     is_current_backend_wx,
     is_current_backend_qt4,
     press_ok_button,
+    process_cascade_events,
     skip_if_not_qt4,
     skip_if_not_wx,
     skip_if_null,
@@ -208,19 +210,16 @@ def right_click_item(control, index):
 @skip_if_null
 class TestListStrEditor(unittest.TestCase):
 
+    @contextlib.contextmanager
     def setup_gui(self, model, view):
-        gui = GUI()
-        ui = model.edit_traits(view=view)
-        self.addCleanup(ui.dispose)
-
-        gui.process_events()
-        editor = ui.get_editors("value")[0]
-
-        return gui, editor
+        with create_ui(model, dict(view=view)) as ui:
+            process_cascade_events()
+            editor = ui.get_editors("value")[0]
+            yield editor
 
     def test_list_str_editor_single_selection(self):
-        with store_exceptions_on_all_threads():
-            gui, editor = self.setup_gui(ListStrModel(), get_view())
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(ListStrModel(), get_view()) as editor:
 
             if is_current_backend_qt4():  # No initial selection
                 self.assertEqual(editor.selected_index, -1)
@@ -230,19 +229,19 @@ class TestListStrEditor(unittest.TestCase):
                 self.assertEqual(editor.selected, "one")
 
             set_selected_single(editor, 1)
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(editor.selected_index, 1)
             self.assertEqual(editor.selected, "two")
 
             set_selected_single(editor, 2)
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(editor.selected_index, 2)
             self.assertEqual(editor.selected, "three")
 
             clear_selection(editor)
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(editor.selected_index, -1)
             self.assertEqual(editor.selected, None)
@@ -250,33 +249,33 @@ class TestListStrEditor(unittest.TestCase):
     def test_list_str_editor_multi_selection(self):
         view = get_view(multi_select=True)
 
-        with store_exceptions_on_all_threads():
-            gui, editor = self.setup_gui(ListStrModel(), view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(ListStrModel(), view) as editor:
 
             self.assertEqual(editor.multi_selected_indices, [])
             self.assertEqual(editor.multi_selected, [])
 
             set_selected_multiple(editor, [0, 1])
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(editor.multi_selected_indices, [0, 1])
             self.assertEqual(editor.multi_selected, ["one", "two"])
 
             set_selected_multiple(editor, [2])
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(editor.multi_selected_indices, [2])
             self.assertEqual(editor.multi_selected, ["three"])
 
             clear_selection(editor)
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(editor.multi_selected_indices, [])
             self.assertEqual(editor.multi_selected, [])
 
     def test_list_str_editor_single_selection_changed(self):
-        with store_exceptions_on_all_threads():
-            gui, editor = self.setup_gui(ListStrModel(), get_view())
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(ListStrModel(), get_view()) as editor:
 
             if is_current_backend_qt4():  # No initial selection
                 self.assertEqual(get_selected_indices(editor), [])
@@ -284,27 +283,27 @@ class TestListStrEditor(unittest.TestCase):
                 self.assertEqual(get_selected_indices(editor), [0])
 
             editor.selected_index = 1
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(get_selected_indices(editor), [1])
             self.assertEqual(editor.selected, "two")
 
             editor.selected = "three"
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(get_selected_indices(editor), [2])
             self.assertEqual(editor.selected_index, 2)
 
             # Selected set to invalid value doesn't change anything
             editor.selected = "four"
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(get_selected_indices(editor), [2])
             self.assertEqual(editor.selected_index, 2)
 
             # Selected index changed to
             editor.selected_index = -1
-            gui.process_events()
+            process_cascade_events()
 
             if is_current_backend_qt4():
                 # -1 clears selection
@@ -318,25 +317,25 @@ class TestListStrEditor(unittest.TestCase):
     def test_list_str_editor_multi_selection_changed(self):
         view = get_view(multi_select=True)
 
-        with store_exceptions_on_all_threads():
-            gui, editor = self.setup_gui(ListStrModel(), view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(ListStrModel(), view) as editor:
 
             self.assertEqual(get_selected_indices(editor), [])
 
             editor.multi_selected_indices = [0, 1]
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(get_selected_indices(editor), [0, 1])
             self.assertEqual(editor.multi_selected, ["one", "two"])
 
             editor.multi_selected = ["three", "one"]
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(sorted(get_selected_indices(editor)), [0, 2])
             self.assertEqual(sorted(editor.multi_selected_indices), [0, 2])
 
             editor.multi_selected = ["three", "four"]
-            gui.process_events()
+            process_cascade_events()
 
             if is_current_backend_qt4():
                 # Invalid values assigned to multi_selected are ignored
@@ -349,7 +348,7 @@ class TestListStrEditor(unittest.TestCase):
 
             # Setting selected indices to an empty list clears selection
             editor.multi_selected_indices = []
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(get_selected_indices(editor), [])
             self.assertEqual(editor.multi_selected, [])
@@ -357,25 +356,25 @@ class TestListStrEditor(unittest.TestCase):
     def test_list_str_editor_multi_selection_items_changed(self):
         view = get_view(multi_select=True)
 
-        with store_exceptions_on_all_threads():
-            gui, editor = self.setup_gui(ListStrModel(), view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(ListStrModel(), view) as editor:
 
             self.assertEqual(get_selected_indices(editor), [])
 
             editor.multi_selected_indices.extend([0, 1])
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(get_selected_indices(editor), [0, 1])
             self.assertEqual(editor.multi_selected, ["one", "two"])
 
             editor.multi_selected_indices[1] = 2
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(get_selected_indices(editor), [0, 2])
             self.assertEqual(editor.multi_selected, ["one", "three"])
 
             editor.multi_selected[0] = "two"
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(sorted(get_selected_indices(editor)), [1, 2])
             self.assertEqual(sorted(editor.multi_selected_indices), [1, 2])
@@ -383,7 +382,7 @@ class TestListStrEditor(unittest.TestCase):
             # If a change in multi_selected involves an invalid value, nothing
             # is changed
             editor.multi_selected[0] = "four"
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(sorted(get_selected_indices(editor)), [1, 2])
             self.assertEqual(sorted(editor.multi_selected_indices), [1, 2])
@@ -395,43 +394,43 @@ class TestListStrEditor(unittest.TestCase):
         # Without auto_add
         with store_exceptions_on_all_threads(), \
                 create_ui(model, dict(view=get_view())) as ui:
-            gui.process_events()
+            process_cascade_events()
             editor = ui.get_editors("value")[0]
             self.assertEqual(editor.item_count, 3)
 
         # With auto_add
         with store_exceptions_on_all_threads(), \
                 create_ui(model, dict(view=get_view(auto_add=True))) as ui:
-            gui.process_events()
+            process_cascade_events()
             editor = ui.get_editors("value")[0]
             self.assertEqual(editor.item_count, 3)
 
     def test_list_str_editor_refresh_editor(self):
         # Smoke test for refresh_editor/refresh_
-        with store_exceptions_on_all_threads():
-            gui, editor = self.setup_gui(ListStrModel(), get_view())
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(ListStrModel(), get_view()) as editor:
             if is_current_backend_qt4():
                 editor.refresh_editor()
             elif is_current_backend_wx():
                 editor._refresh()
-            gui.process_events()
+            process_cascade_events()
 
     @skip_if_not_qt4
     def test_list_str_editor_update_editor_single_qt(self):
         # QT editor uses selected items as the source of truth when updating
         model = ListStrModel()
 
-        with store_exceptions_on_all_threads():
-            gui, editor = self.setup_gui(model, get_view())
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(model, get_view()) as editor:
 
             set_selected_single(editor, 0)
-            gui.process_events()
+            process_cascade_events()
             # Sanity check
             self.assertEqual(editor.selected_index, 0)
             self.assertEqual(editor.selected, "one")
 
             model.value = ["two", "one"]
-            gui.process_events()
+            process_cascade_events()
 
             # Selected remains "one" and indices are updated accordingly
             self.assertEqual(get_selected_indices(editor), [1])
@@ -440,7 +439,7 @@ class TestListStrEditor(unittest.TestCase):
 
             # Removing "one" creates a case of no longer valid selection
             model.value = ["two", "three"]
-            gui.process_events()
+            process_cascade_events()
 
             # Internal view model selection is reset, but editor selection
             # values are not (see issue enthought/traitsui#872)
@@ -453,17 +452,17 @@ class TestListStrEditor(unittest.TestCase):
         # WX editor uses selected indices as the source of truth when updating
         model = ListStrModel()
 
-        with store_exceptions_on_all_threads():
-            gui, editor = self.setup_gui(model, get_view())
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(model, get_view()) as editor:
 
             set_selected_single(editor, 0)
-            gui.process_events()
+            process_cascade_events()
             # Sanity check
             self.assertEqual(editor.selected_index, 0)
             self.assertEqual(editor.selected, "one")
 
             model.value = ["two", "one"]
-            gui.process_events()
+            process_cascade_events()
 
             # Selected_index remains 0 and selected is updated accordingly
             self.assertEqual(get_selected_indices(editor), [0])
@@ -472,7 +471,7 @@ class TestListStrEditor(unittest.TestCase):
 
             # Empty list creates a case of no longer valid selection
             model.value = []
-            gui.process_events()
+            process_cascade_events()
 
             # Internal view model selection is reset, but editor selection
             # values are not (see issue enthought/traitsui#872)
@@ -486,17 +485,17 @@ class TestListStrEditor(unittest.TestCase):
         model = ListStrModel()
         view = get_view(multi_select=True)
 
-        with store_exceptions_on_all_threads():
-            gui, editor = self.setup_gui(model, view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(model, view) as editor:
 
             set_selected_multiple(editor, [0])
-            gui.process_events()
+            process_cascade_events()
             # Sanity check
             self.assertEqual(editor.multi_selected_indices, [0])
             self.assertEqual(editor.multi_selected, ["one"])
 
             model.value = ["two", "one"]
-            gui.process_events()
+            process_cascade_events()
 
             # Selected remains "one" and indices are updated accordingly
             self.assertEqual(get_selected_indices(editor), [1])
@@ -505,7 +504,7 @@ class TestListStrEditor(unittest.TestCase):
 
             # Removing "one" creates a case of no longer valid selection.
             model.value = ["two", "three"]
-            gui.process_events()
+            process_cascade_events()
 
             # Internal view model selection is reset, but editor selection
             # values are not (see issue enthought/traitsui#872)
@@ -519,17 +518,17 @@ class TestListStrEditor(unittest.TestCase):
         model = ListStrModel()
         view = get_view(multi_select=True)
 
-        with store_exceptions_on_all_threads():
-            gui, editor = self.setup_gui(model, view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(model, view) as editor:
 
             set_selected_multiple(editor, [0])
-            gui.process_events()
+            process_cascade_events()
             # Sanity check
             self.assertEqual(editor.multi_selected_indices, [0])
             self.assertEqual(editor.multi_selected, ["one"])
 
             model.value = ["two", "one"]
-            gui.process_events()
+            process_cascade_events()
 
             # Selected_index remains 0 and selected is updated accordingly
             self.assertEqual(get_selected_indices(editor), [0])
@@ -538,7 +537,7 @@ class TestListStrEditor(unittest.TestCase):
 
             # Empty list creates a case of no longer valid selection
             model.value = []
-            gui.process_events()
+            process_cascade_events()
 
             # Internal view model selection is reset, but editor selection
             # values are not (see issue enthought/traitsui#872)
@@ -553,17 +552,17 @@ class TestListStrEditor(unittest.TestCase):
         def change_value(model, value):
             model.value = value
 
-        with store_exceptions_on_all_threads():
-            gui, editor = self.setup_gui(model, get_view())
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(model, get_view()) as editor:
 
             set_selected_single(editor, 0)
-            gui.process_events()
+            process_cascade_events()
             # Sanity check
             self.assertEqual(editor.selected_index, 0)
             self.assertEqual(editor.selected, "one")
 
             editor.callx(change_value, model, ["two", "one"])
-            gui.process_events()
+            process_cascade_events()
 
             # Nothing is updated
             self.assertEqual(get_selected_indices(editor), [0])
@@ -572,17 +571,17 @@ class TestListStrEditor(unittest.TestCase):
 
     @skip_if_not_qt4  # wx editor doesn't have a `setx` method
     def test_list_str_editor_setx(self):
-        with store_exceptions_on_all_threads():
-            gui, editor = self.setup_gui(ListStrModel(), get_view())
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(ListStrModel(), get_view()) as editor:
 
             set_selected_single(editor, 0)
-            gui.process_events()
+            process_cascade_events()
             # Sanity check
             self.assertEqual(editor.selected_index, 0)
             self.assertEqual(editor.selected, "one")
 
             editor.setx(selected="two")
-            gui.process_events()
+            process_cascade_events()
 
             # Specified attribute is modified
             self.assertEqual(editor.selected, "two")
@@ -596,13 +595,16 @@ class TestListStrEditor(unittest.TestCase):
 
     def test_list_str_editor_horizontal_lines(self):
         # Smoke test for painting horizontal lines
-        with store_exceptions_on_all_threads():
-            self.setup_gui(ListStrModel(), get_view(horizontal_lines=True))
+        view = get_view(horizontal_lines=True)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(ListStrModel(), view):
+            pass
 
     def test_list_str_editor_title(self):
         # Smoke test for adding a title
-        with store_exceptions_on_all_threads():
-            self.setup_gui(ListStrModel(), get_view(title="testing"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(ListStrModel(), get_view(title="testing")):
+            pass
 
     @skip_if_not_wx  # see `right_click_item` and issue enthought/traitsui#868
     def test_list_str_editor_right_click(self):
@@ -617,14 +619,14 @@ class TestListStrEditor(unittest.TestCase):
             right_clicked_index="object.right_clicked_index",
         )
 
-        with store_exceptions_on_all_threads():
-            gui, editor = self.setup_gui(model, view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(model, view) as editor:
 
             self.assertEqual(model.right_clicked, "")
             self.assertEqual(model.right_clicked_index, 0)
 
             right_click_item(editor.control, 1)
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(model.right_clicked, "two")
             self.assertEqual(model.right_clicked_index, 1)
