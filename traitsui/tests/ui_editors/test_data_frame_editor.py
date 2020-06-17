@@ -314,9 +314,8 @@ class TestDataFrameEditor(unittest.TestCase):
     @skip_if_null
     def test_data_frame_editor(self):
         viewer = sample_data()
-        with store_exceptions_on_all_threads():
-            ui = viewer.edit_traits()
-            ui.dispose()
+        with store_exceptions_on_all_threads(), create_ui(viewer):
+            pass
 
     @skip_if_null
     def test_data_frame_editor_alternate_adapter(self):
@@ -331,44 +330,42 @@ class TestDataFrameEditor(unittest.TestCase):
             )
         )
         viewer = sample_data()
-        with store_exceptions_on_all_threads():
-            ui = viewer.edit_traits(view=alternate_adapter_view)
-            ui.dispose()
+        with store_exceptions_on_all_threads(), \
+                create_ui(viewer, dict(view=alternate_adapter_view)):
+            pass
 
     @skip_if_null
     def test_data_frame_editor_numerical_index(self):
         viewer = sample_data_numerical_index()
-        with store_exceptions_on_all_threads():
-            ui = viewer.edit_traits()
-            ui.dispose()
+        with store_exceptions_on_all_threads(), create_ui(viewer):
+            pass
 
     @skip_if_null
     def test_data_frame_editor_text_data(self):
         viewer = sample_text_data()
-        with store_exceptions_on_all_threads():
-            ui = viewer.edit_traits()
-            ui.dispose()
+        with store_exceptions_on_all_threads(), create_ui(viewer):
+            pass
 
     @skip_if_null
     def test_data_frame_editor_format_mapping(self):
         viewer = sample_data()
-        with store_exceptions_on_all_threads():
-            ui = viewer.edit_traits(view=format_mapping_view)
-            ui.dispose()
+        with store_exceptions_on_all_threads(), \
+                create_ui(viewer, dict(view=format_mapping_view)):
+            pass
 
     @skip_if_null
     def test_data_frame_editor_font_mapping(self):
         viewer = sample_data()
-        with store_exceptions_on_all_threads():
-            ui = viewer.edit_traits(view=font_mapping_view)
-            ui.dispose()
+        with store_exceptions_on_all_threads(), \
+                create_ui(viewer, dict(view=font_mapping_view)):
+            pass
 
     @skip_if_null
     def test_data_frame_editor_columns(self):
         viewer = sample_data()
-        with store_exceptions_on_all_threads():
-            ui = viewer.edit_traits(view=columns_view)
-            ui.dispose()
+        with store_exceptions_on_all_threads(), \
+                create_ui(viewer, dict(view=columns_view)):
+            pass
 
     @skip_if_null
     def test_data_frame_editor_with_update_refresh(self):
@@ -412,9 +409,9 @@ class TestDataFrameEditor(unittest.TestCase):
             Item("data", editor=DataFrameEditor(multi_select=True), width=400)
         )
         viewer = sample_data()
-        with store_exceptions_on_all_threads():
-            ui = viewer.edit_traits(view=view)
-            ui.dispose()
+        with store_exceptions_on_all_threads(), \
+                create_ui(viewer, dict(view=view)):
+            pass
 
     @skip_if_null
     def test_adapter_set_text(self):
