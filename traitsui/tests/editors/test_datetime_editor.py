@@ -7,6 +7,7 @@ from traitsui.api import DatetimeEditor, Item, View
 from traitsui.tests._tools import (
     create_ui,
     GuiTestAssistant,
+    process_cascade_events,
     skip_if_not_qt4,
     store_exceptions_on_all_threads,
     no_gui_test_assistant,
@@ -77,7 +78,7 @@ class TestDatetimeEditorQt(GuiTestAssistant, unittest.TestCase):
             instance.date_time = datetime.datetime(1980, 1, 1)
 
             # does not seem needed to flush the event loop, but just in case.
-            self.gui.process_events()
+            process_cascade_events()
 
             displayed_value = to_datetime(editor.control.dateTime())
 
@@ -104,7 +105,7 @@ class TestDatetimeEditorQt(GuiTestAssistant, unittest.TestCase):
             editor.minimum_datetime = new_minimum_datetime
 
             # does not seem needed to flush the event loop, but just in case.
-            self.gui.process_events()
+            process_cascade_events()
 
             displayed_value = to_datetime(editor.control.dateTime())
 
@@ -132,7 +133,7 @@ class TestDatetimeEditorQt(GuiTestAssistant, unittest.TestCase):
             editor.minimum_datetime = new_minimum_datetime
 
             # does not seem needed to flush the event loop, but just in case.
-            self.gui.process_events()
+            process_cascade_events()
 
             displayed_value = to_datetime(editor.control.dateTime())
 
@@ -153,7 +154,7 @@ class TestDatetimeEditorQt(GuiTestAssistant, unittest.TestCase):
             q_maximum_datetime = editor.control.maximumDateTime()
 
             # does not seem needed to flush the event loop, but just in case.
-            self.gui.process_events()
+            process_cascade_events()
 
             actual_maximum_datetime = to_datetime(q_maximum_datetime)
 
@@ -172,7 +173,7 @@ class TestDatetimeEditorQt(GuiTestAssistant, unittest.TestCase):
             instance.date_time = datetime.datetime(2020, 1, 1)
 
             # does not seem needed to flush the event loop, but just in case.
-            self.gui.process_events()
+            process_cascade_events()
 
             displayed_value = to_datetime(editor.control.dateTime())
 
@@ -199,7 +200,7 @@ class TestDatetimeEditorQt(GuiTestAssistant, unittest.TestCase):
             editor.maximum_datetime = new_maximum_datetime
 
             # does not seem needed to flush the event loop, but just in case.
-            self.gui.process_events()
+            process_cascade_events()
 
             displayed_value = to_datetime(editor.control.dateTime())
 
@@ -221,7 +222,7 @@ class TestDatetimeEditorQt(GuiTestAssistant, unittest.TestCase):
             instance.date_time = new_value
 
             # does not seem needed to flush the event loop, but just in case.
-            self.gui.process_events()
+            process_cascade_events()
 
             displayed_value = to_datetime(editor.control.dateTime())
 
