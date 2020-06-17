@@ -1,14 +1,15 @@
+import contextlib
 import sys
 import unittest
 from unittest.mock import patch
 
-from pyface.gui import GUI
-
 from traits.api import Enum, HasTraits, List
 from traitsui.api import ImageEnumEditor, UItem, View
 from traitsui.tests._tools import (
+    create_ui,
     is_current_backend_qt4,
     is_current_backend_wx,
+    process_cascade_events,
     skip_if_null,
     skip_if_not_qt4,
     skip_if_not_wx,
@@ -130,10 +131,10 @@ def get_button_control(control, button_idx):
 @skip_if_not_qt4
 class TestImageEnumEditorMapping(unittest.TestCase):
 
+    @contextlib.contextmanager
     def setup_ui(self, model, view):
-        ui = model.edit_traits(view=view)
-        self.addCleanup(ui.dispose)
-        return ui.get_editors("value")[0]
+        with create_ui(model, dict(view=view)) as ui:
+            yield ui.get_editors("value")[0]
 
     def check_enum_mappings_value_change(self, style):
 
@@ -152,8 +153,8 @@ class TestImageEnumEditorMapping(unittest.TestCase):
             )
         )
 
-        with store_exceptions_on_all_threads():
-            editor = self.setup_ui(EnumModel(), formatted_view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_ui(EnumModel(), formatted_view) as editor:
 
             self.assertEqual(editor.names, ["TOP LEFT", "TOP RIGHT"])
             self.assertEqual(
@@ -197,8 +198,8 @@ class TestImageEnumEditorMapping(unittest.TestCase):
         )
         model = PossibleEnumModel()
 
-        with store_exceptions_on_all_threads():
-            editor = self.setup_ui(model, formatted_view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_ui(model, formatted_view) as editor:
 
             self.assertEqual(editor.names, ["TOP LEFT", "TOP RIGHT"])
             self.assertEqual(
@@ -259,8 +260,8 @@ class TestImageEnumEditorMapping(unittest.TestCase):
         )
         model = PossibleEnumModel()
 
-        with store_exceptions_on_all_threads():
-            editor = self.setup_ui(model, formatted_view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_ui(model, formatted_view) as editor:
 
             # Readonly editor doesn't set up full mapping, only check that
             # str_value is mapped as expected
@@ -271,16 +272,13 @@ class TestImageEnumEditorMapping(unittest.TestCase):
 @skip_if_null
 class TestSimpleImageEnumEditor(unittest.TestCase):
 
+    @contextlib.contextmanager
     def setup_gui(self, model, view):
-        gui = GUI()
-        ui = model.edit_traits(view=view)
-        self.addCleanup(ui.dispose)
-
-        gui.process_events()
-        editor = ui.get_editors("value")[0]
-        control = editor.control
-
-        return gui, control
+        with create_ui(model, dict(view=view)) as ui:
+            process_cascade_events()
+            editor = ui.get_editors("value")[0]
+            control = editor.control
+            yield control
 
     @unittest.skipIf(
         is_linux and is_current_backend_qt4(),
@@ -313,14 +311,14 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
     def test_simple_editor_popup_editor(self):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads():
-            gui, control = self.setup_gui(enum_edit, get_view("simple"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(enum_edit, get_view("simple")) as control:
 
             self.assertEqual(enum_edit.value, 'top left')
 
             # Set up ImageEnumDialog
             click_on_image(control)
-            gui.process_events()
+            process_cascade_events()
 
             # Check created buttons
             image_grid_control = control.GetChildren()[0].GetChildren()[0]
@@ -331,7 +329,7 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
 
             # Select new image
             click_on_image(get_button_control(image_grid_control, 1))
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(enum_edit.value, 'top right')
 
@@ -346,18 +344,18 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
     def test_simple_editor_combobox(self):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads():
-            gui, combobox = self.setup_gui(enum_edit, get_view("simple"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(enum_edit, get_view("simple")) as combobox:
 
             self.assertEqual(enum_edit.value, 'top left')
 
             # Smoke test for ImageEnumItemDelegate painting
             combobox.showPopup()
-            gui.process_events()
+            process_cascade_events()
 
             combobox.setCurrentIndex(1)
             combobox.hidePopup()
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(enum_edit.value, 'top right')
 
@@ -365,16 +363,13 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
 @skip_if_null
 class TestCustomImageEnumEditor(unittest.TestCase):
 
+    @contextlib.contextmanager
     def setup_gui(self, model, view):
-        gui = GUI()
-        ui = model.edit_traits(view=view)
-        self.addCleanup(ui.dispose)
-
-        gui.process_events()
-        editor = ui.get_editors("value")[0]
-        control = editor.control
-
-        return gui, control
+        with create_ui(model, dict(view=view)) as ui:
+            process_cascade_events()
+            editor = ui.get_editors("value")[0]
+            control = editor.control
+            yield control
 
     def test_custom_editor_more_cols(self):
         # Smoke test for setting up an editor with more than one column
@@ -396,14 +391,15 @@ class TestCustomImageEnumEditor(unittest.TestCase):
             resizable=True,
         )
 
-        with store_exceptions_on_all_threads():
-            self.setup_gui(enum_edit, view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(enum_edit, view):
+            pass
 
     def test_custom_editor_selection(self):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads():
-            gui, control = self.setup_gui(enum_edit, get_view("custom"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(enum_edit, get_view("custom")) as control:
             self.assertEqual(
                 get_button_strings(control),
                 ['top left', 'top right', 'bottom left', 'bottom right']
@@ -416,15 +412,15 @@ class TestCustomImageEnumEditor(unittest.TestCase):
             )
 
             click_on_image(get_button_control(control, 1))
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(enum_edit.value, 'top right')
 
     def test_custom_editor_value_changed(self):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads():
-            gui, control = self.setup_gui(enum_edit, get_view("custom"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(enum_edit, get_view("custom")) as control:
             self.assertEqual(
                 get_button_strings(control),
                 ['top left', 'top right', 'bottom left', 'bottom right']
@@ -437,7 +433,7 @@ class TestCustomImageEnumEditor(unittest.TestCase):
             )
 
             enum_edit.value = 'top right'
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(
                 get_all_button_selected_status(control),
@@ -448,23 +444,12 @@ class TestCustomImageEnumEditor(unittest.TestCase):
 @skip_if_null
 class TestReadOnlyImageEnumEditor(unittest.TestCase):
 
-    def setup_gui(self, model, view):
-        gui = GUI()
-        ui = model.edit_traits(view=view)
-        self.addCleanup(ui.dispose)
-
-        gui.process_events()
-        editor = ui.get_editors("value")[0]
-        control = editor.control
-
-        return gui, control
-
     def test_readonly_editor_value_changed(self):
         enum_edit = EnumModel()
 
         with store_exceptions_on_all_threads():
-            with patch(cache_to_patch, wraps=image_cache) as patched_cache:
-                gui, control = self.setup_gui(enum_edit, get_view("readonly"))
+            with patch(cache_to_patch, wraps=image_cache) as patched_cache, \
+                    create_ui(enum_edit, dict(view=get_view("readonly"))):
 
                 self.assertEqual(enum_edit.value, 'top left')
                 self.assertEqual(
@@ -472,7 +457,7 @@ class TestReadOnlyImageEnumEditor(unittest.TestCase):
                 )
 
                 enum_edit.value = 'top right'
-                gui.process_events()
+                process_cascade_events()
 
                 self.assertEqual(
                     patched_cache.call_args[0][0], "@icons:top right_origin"
