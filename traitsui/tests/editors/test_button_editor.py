@@ -1,13 +1,12 @@
 import unittest
 
-from pyface.gui import GUI
-
 from traits.api import Button, HasTraits, Str
 from traitsui.api import ButtonEditor, Item, UItem, View
 from traitsui.tests._tools import (
     create_ui,
     is_current_backend_qt4,
     is_current_backend_wx,
+    process_cascade_events,
     skip_if_null,
     store_exceptions_on_all_threads,
 )
@@ -59,7 +58,7 @@ class TestButtonEditor(unittest.TestCase):
         with store_exceptions_on_all_threads(), \
                 create_ui(button_text_edit, dict(view=view)) as ui:
 
-            gui.process_events()
+            process_cascade_events()
             editor, = ui.get_editors("play_button")
             button = editor.control
 
@@ -71,7 +70,6 @@ class TestButtonEditor(unittest.TestCase):
     @skip_if_null
     def test_styles(self):
         # simple smoke test of buttons
-        gui = GUI()
         button_text_edit = ButtonTextEdit()
         with store_exceptions_on_all_threads(), create_ui(button_text_edit):
             pass
