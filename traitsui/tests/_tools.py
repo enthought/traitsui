@@ -138,25 +138,14 @@ def filter_tests(test_suite, exclusion_pattern):
 _TOLERANCE_MILLISECS = 5000
 
 
-def process_cascade_events(allow_user_events=True):
+def process_cascade_events():
     """ Process all events, including events posted by the processed events.
 
     Use this function with caution, as an infinite cascade of events will
     cause this function to enter an infinite loop.
-
-    Parameters
-    ----------
-    allow_user_events : bool
-        If allow_user_events is ``False`` then user generated events are not
-        processed.
     """
     if is_current_backend_qt4():
         from pyface.qt import QtCore
-        if allow_user_events:
-            events = QtCore.QEventLoop.AllEvents
-        else:
-            events = QtCore.QEventLoop.ExcludeUserInputEvents
-
         start = None
 
         # Qt won't raise if there are still events to be processed before
@@ -168,11 +157,11 @@ def process_cascade_events(allow_user_events=True):
         while start is None or duration_millisecs >= _TOLERANCE_MILLISECS - 1:
             start = time.time()
             QtCore.QCoreApplication.processEvents(
-                events, _TOLERANCE_MILLISECS
+                QtCore.QEventLoop.AllEvents, _TOLERANCE_MILLISECS
             )
             duration_millisecs = (time.time() - start) * 1000
     else:
-        GUI.process_events(allow_user_events=allow_user_events)
+        GUI.process_events()
 
 
 @contextmanager
