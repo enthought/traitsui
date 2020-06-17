@@ -42,11 +42,8 @@ class TestColorColumn(TestCase):
     def test_color_column(self):
         # Behaviour: column ui should display without error
 
-        with store_exceptions_on_all_threads():
-            d1 = MyEntry(name="a", value=2, color=(1.0, 0.3, 0.1))
-            d2 = MyEntry(name="b", value=3, color=(0.1, 0.0, 0.9))
-            data = MyData(data_list=[d1, d2])
-
-            ui = data.edit_traits()
-
-            ui.dispose()
+        d1 = MyEntry(name="a", value=2, color=(1.0, 0.3, 0.1))
+        d2 = MyEntry(name="b", value=3, color=(0.1, 0.0, 0.9))
+        data = MyData(data_list=[d1, d2])
+        with store_exceptions_on_all_threads(), create_ui(data):
+            pass
