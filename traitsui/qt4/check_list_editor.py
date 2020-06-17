@@ -145,9 +145,6 @@ class CustomEditor(SimpleEditor):
         boxes.
     """
 
-    #: List of tuple(signal, slot) to be disconnected in dispose
-    _connections_to_dispose = List(Tuple(Any, Callable))
-
     #: List of tuple(signal, slot) to be disconnected while rebuilding the
     #: editor.
     _connections_to_rebuild = List(Tuple(Any, Callable))
@@ -168,9 +165,6 @@ class CustomEditor(SimpleEditor):
 
         self._mapper = QtCore.QSignalMapper()
         self._mapper.mapped[str].connect(self.update_object)
-        self._connections_to_dispose.append(
-            (self._mapper.mapped[str], self.update_object)
-        )
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -179,11 +173,9 @@ class CustomEditor(SimpleEditor):
             signal, handler = self._connections_to_rebuild.pop()
             signal.disconnect(handler)
 
-        while self._connections_to_dispose:
-            signal, handler = self._connections_to_dispose.pop()
-            signal.disconnect(handler)
-
+        # signal from create_control
         if self._mapper is not None:
+            self._mapper.mapped[str].disconnect(self.update_object)
             self._mapper = None
 
         # enthought/traitsui#884
