@@ -52,7 +52,6 @@ def get_button_text(button):
 
 class TestButtonEditor(unittest.TestCase):
     def check_button_text_update(self, view):
-        gui = GUI()
         button_text_edit = ButtonTextEdit()
 
         with store_exceptions_on_all_threads(), \

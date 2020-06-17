@@ -572,7 +572,6 @@ class TestTableEditor(unittest.TestCase):
             ),
             buttons=["OK"],
         )
-        gui = GUI()
         object_list = ObjectList(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
