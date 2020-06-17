@@ -719,14 +719,16 @@ class RangeTextEditor(TextEditor):
 # -------------------------------------------------------------------------
 
 
-def SimpleEnumEditor(parent, factory, ui, object, name, description):
+def SimpleEnumEditor(
+    parent, factory, ui, object, name, description, **kwargs
+):
     return CustomEnumEditor(
         parent, factory, ui, object, name, description, "simple"
     )
 
 
 def CustomEnumEditor(
-    parent, factory, ui, object, name, description, style="custom"
+    parent, factory, ui, object, name, description, style="custom", **kwargs
 ):
     """ Factory adapter that returns a enumeration editor of the specified
     style.
