@@ -12,7 +12,10 @@ from traits.api import (
 )
 from traitsui.api import DateRangeEditor, View, Item
 
-from traitsui.tests._tools import skip_if_not_qt4
+from traitsui.tests._tools import (
+    create_ui,
+    skip_if_not_qt4,
+)
 
 
 class Foo(HasTraits):
@@ -205,12 +208,9 @@ class TestDateRangeEditorQt(unittest.TestCase):
     @contextlib.contextmanager
     def launch_editor(self, view_factory):
         foo = Foo()
-        ui = foo.edit_traits(view=view_factory())
-        try:
+        with create_ui(foo, dict(view=view_factory())) as ui:
             editor, = ui._editors
             yield foo, editor
-        finally:
-            ui.dispose()
 
     def check_select_status(self, editor, date, selected):
         from pyface.qt import QtCore, QtGui
