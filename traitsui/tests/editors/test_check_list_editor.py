@@ -315,20 +315,10 @@ class TestCheckListEditorMapping(unittest.TestCase):
             self.check_checklist_mappings_tuple_name_change("custom")
 
     def test_simple_editor_checklist_values_change_dispose(self):
-        if is_current_backend_wx():
-            # Missing cleanup in wx (enthought/traitsui#752)
-            with self.assertRaises(AttributeError):
-                self.check_checklist_values_change_after_ui_dispose("simple")
-        else:
-            self.check_checklist_values_change_after_ui_dispose("simple")
+        self.check_checklist_values_change_after_ui_dispose("simple")
 
     def test_custom_editor_checklist_values_change_dispose(self):
-        if is_current_backend_wx():
-            # Missing cleanup in wx (enthought/traitsui#752)
-            with self.assertRaises(AttributeError):
-                self.check_checklist_values_change_after_ui_dispose("custom")
-        else:
-            self.check_checklist_values_change_after_ui_dispose("custom")
+        self.check_checklist_values_change_after_ui_dispose("custom")
 
 
 @skip_if_null
