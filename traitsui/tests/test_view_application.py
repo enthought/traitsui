@@ -27,9 +27,6 @@ class ClosableHandler(Handler):
         self.info = info
         return True
 
-    def test_close(self):
-        self.info.ui.dispose()
-
 
 simple_view = View(
     Item("cell"), title="Enter IDs and conditions", buttons=["OK", "Cancel"]
