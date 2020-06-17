@@ -16,11 +16,13 @@
 
 import re
 import sys
+import time
 import traceback
 from functools import partial
 from contextlib import contextmanager
 from unittest import skipIf, TestSuite
 
+from pyface.api import GUI
 from pyface.toolkit import toolkit_object
 from traits.etsconfig.api import ETSConfig
 import traits.trait_notifiers
@@ -131,6 +133,48 @@ def filter_tests(test_suite, exclusion_pattern):
     return filtered_test_suite
 
 
+#: If Qt processEvents returns after this many milliseconds, we try again.
+#: False positive is okay.
+_TOLERANCE_MILLISECS = 5000
+
+
+def process_cascade_events(allow_user_events=True):
+    """ Process all events, including events posted by the processed events.
+
+    Use this function with caution, as an infinite cascade of events will
+    cause this function to enter an infinite loop.
+
+    Parameters
+    ----------
+    allow_user_events : bool
+        If allow_user_events is ``False`` then user generated events are not
+        processed.
+    """
+    if is_current_backend_qt4():
+        from pyface.qt import QtCore
+        if allow_user_events:
+            events = QtCore.QEventLoop.AllEvents
+        else:
+            events = QtCore.QEventLoop.ExcludeUserInputEvents
+
+        start = None
+
+        # Qt won't raise if there are still events to be processed before
+        # the time limit is reached. There are no other safe way to tell
+        # if there are pending events (`hasPendingEvents` is deprecated).
+        # The minus-one is to account for precision differences between Python
+        # and Qt, false positive triggers another redundant run that should
+        # return immediately so that is fine.
+        while start is None or duration_millisecs >= _TOLERANCE_MILLISECS - 1:
+            start = time.time()
+            QtCore.QCoreApplication.processEvents(
+                events, _TOLERANCE_MILLISECS
+            )
+            duration_millisecs = (time.time() - start) * 1000
+    else:
+        GUI.process_events(allow_user_events=allow_user_events)
+
+
 @contextmanager
 def create_ui(object, ui_kwargs=None):
     """ Context manager for creating a UI and then dispose it when exiting
@@ -152,7 +196,13 @@ def create_ui(object, ui_kwargs=None):
     try:
         yield ui
     finally:
+        # At the end of a test, there may be events to be processed.
+        # If dispose happens first, those events will be processed after
+        # various editor states are removed, causing errors.
+        process_cascade_events()
         ui.dispose()
+        # Dispose may push more events to the event queue. Flush those too.
+        process_cascade_events()
 
 
 # ######### Utility tools to test on both qt4 and wx
