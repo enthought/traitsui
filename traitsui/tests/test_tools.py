@@ -100,6 +100,9 @@ class TestProcessEventsRepeated(unittest.TestCase):
         # then
         self.assertEqual(q_object.n_events, 10)
 
+        q_object.deleteLater()
+        process_cascade_events()
+
     @skip_if_not_wx
     def test_wx_process_events_process_all(self):
         wx_handler = DummyWxHandler(max_n_events=10)
@@ -110,3 +113,6 @@ class TestProcessEventsRepeated(unittest.TestCase):
 
         # then
         self.assertEqual(wx_handler.n_events, 10)
+
+        wx_handler.Destroy()
+        process_cascade_events()
