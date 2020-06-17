@@ -270,8 +270,6 @@ class TestTableEditor(unittest.TestCase):
         with store_exceptions_on_all_threads(), \
                 create_ui(object_list, dict(view=simple_view)) as ui:
             process_cascade_events()
-            press_ok_button(ui)
-            process_cascade_events()
 
     @skip_if_null
     def test_filtered_table_editor(self):
@@ -285,7 +283,6 @@ class TestTableEditor(unittest.TestCase):
 
             filter = ui.get_editors("values")[0].filter
 
-            press_ok_button(ui)
             process_cascade_events()
 
         self.assertIsNotNone(filter)
@@ -306,7 +303,6 @@ class TestTableEditor(unittest.TestCase):
             elif is_current_backend_wx():
                 selected = editor.selected_row
 
-            press_ok_button(ui)
             process_cascade_events()
 
         self.assertIs(selected, object_list.values[5])
@@ -327,7 +323,6 @@ class TestTableEditor(unittest.TestCase):
             elif is_current_backend_wx():
                 selected = editor.selected_rows
 
-            press_ok_button(ui)
             process_cascade_events()
 
         self.assertEqual(selected, object_list.values[5:7])
@@ -348,7 +343,6 @@ class TestTableEditor(unittest.TestCase):
             elif is_current_backend_wx():
                 selected = editor.selected_row_index
 
-            press_ok_button(ui)
             process_cascade_events()
 
         self.assertEqual(selected, 5)
@@ -370,7 +364,6 @@ class TestTableEditor(unittest.TestCase):
             elif is_current_backend_wx():
                 selected = editor.selected_row_indices
 
-            press_ok_button(ui)
             process_cascade_events()
 
         self.assertEqual(selected, [5, 7, 8])
@@ -391,7 +384,6 @@ class TestTableEditor(unittest.TestCase):
             elif is_current_backend_wx():
                 selected = editor.selected_column
 
-            press_ok_button(ui)
             process_cascade_events()
 
         self.assertEqual(selected, "value")
@@ -412,7 +404,6 @@ class TestTableEditor(unittest.TestCase):
             elif is_current_backend_wx():
                 selected = editor.selected_columns
 
-            press_ok_button(ui)
             process_cascade_events()
 
         self.assertEqual(selected, ["value", "other_value"])
@@ -434,7 +425,6 @@ class TestTableEditor(unittest.TestCase):
             elif is_current_backend_wx():
                 selected = editor.selected_column_index
 
-            press_ok_button(ui)
             process_cascade_events()
 
         self.assertEqual(selected, 1)
@@ -456,7 +446,6 @@ class TestTableEditor(unittest.TestCase):
             elif is_current_backend_wx():
                 selected = editor.selected_column_indices
 
-            press_ok_button(ui)
             process_cascade_events()
 
         self.assertEqual(selected, [0, 1])
@@ -477,7 +466,6 @@ class TestTableEditor(unittest.TestCase):
             elif is_current_backend_wx():
                 selected = editor.selected_cell
 
-            press_ok_button(ui)
             process_cascade_events()
 
         self.assertEqual(selected, (object_list.values[5], "value"))
@@ -502,7 +490,6 @@ class TestTableEditor(unittest.TestCase):
             elif is_current_backend_wx():
                 selected = editor.selected_cells
 
-            press_ok_button(ui)
             process_cascade_events()
 
         self.assertEqual(selected, [
@@ -528,7 +515,6 @@ class TestTableEditor(unittest.TestCase):
             elif is_current_backend_wx():
                 selected = editor.selected_cell_index
 
-            press_ok_button(ui)
             process_cascade_events()
 
         self.assertEqual(selected, (5, 1))
@@ -550,7 +536,6 @@ class TestTableEditor(unittest.TestCase):
             elif is_current_backend_wx():
                 selected = editor.selected_cell_indices
 
-            press_ok_button(ui)
             process_cascade_events()
 
         self.assertEqual(selected, [(5, 0), (6, 1), (8, 0)])
@@ -578,6 +563,4 @@ class TestTableEditor(unittest.TestCase):
 
         with store_exceptions_on_all_threads(), \
                 create_ui(object_list, dict(view=progress_view)) as ui:
-            process_cascade_events()
-            press_ok_button(ui)
             process_cascade_events()

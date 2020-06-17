@@ -65,7 +65,6 @@ class TestCodeEditor(unittest.TestCase):
             code_view = CodeView(model=code_model, show_line_numbers=show)
             with store_exceptions_on_all_threads(), create_ui(code_view) as ui:
                 self.assertEqual(is_line_numbers_visible(ui), show)
-                ui.control.close()
 
         test_line_numbers_visibility(True)
         test_line_numbers_visibility(False)
@@ -93,5 +92,3 @@ class TestCodeEditor(unittest.TestCase):
             code_view.model = code_model2
             self.assertTrue(txt_ctrl.isReadOnly())
             self.assertEqual(txt_ctrl.toPlainText(), code_model.code)
-
-            ui.control.close()

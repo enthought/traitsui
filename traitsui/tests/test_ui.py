@@ -192,7 +192,7 @@ class TestUI(unittest.TestCase):
         from pyface import qt
 
         foo = FooDialog()
-        with create_ui(foo) as ui:
+        with create_ui(foo, dispose=False) as ui:
 
             # keep reference to the control to check that it was deleted
             control = ui.control

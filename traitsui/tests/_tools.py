@@ -165,7 +165,7 @@ def process_cascade_events():
 
 
 @contextmanager
-def create_ui(object, ui_kwargs=None):
+def create_ui(object, ui_kwargs=None, dispose=True):
     """ Context manager for creating a UI and then dispose it when exiting
     the context.
 
@@ -189,9 +189,13 @@ def create_ui(object, ui_kwargs=None):
         # If dispose happens first, those events will be processed after
         # various editor states are removed, causing errors.
         process_cascade_events()
-        ui.dispose()
-        # Dispose may push more events to the event queue. Flush those too.
-        process_cascade_events()
+        if dispose:
+            if ui.owner is not None:
+                ui.owner.close()
+            else:
+                ui.dispose()
+            # Dispose may push more events to the event queue. Flush those too.
+            process_cascade_events()
 
 
 # ######### Utility tools to test on both qt4 and wx

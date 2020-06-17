@@ -646,9 +646,6 @@ class TestListStrEditorSelection(unittest.TestCase):
             obj.selected_index = 0
             selected_2 = get_selected_indices(editor)
 
-            # press the OK button and close the dialog
-            press_ok_button(ui)
-
         # the number traits should be between 3 and 8
         self.assertEqual(selected_1, [1])
         self.assertEqual(selected_2, [0])
@@ -670,9 +667,6 @@ class TestListStrEditorSelection(unittest.TestCase):
 
             obj.selected_indices = [0]
             selected_2 = get_selected_indices(editor)
-
-            # press the OK button and close the dialog
-            press_ok_button(ui)
 
         # the number traits should be between 3 and 8
         self.assertEqual(selected_1, [1])
@@ -696,8 +690,7 @@ class TestListStrEditorSelection(unittest.TestCase):
 
             # open the UI and run until the dialog is closed
             with create_ui(obj, dict(view=single_select_item_view)) as ui:
-                with helper.delete_widget(ui.control):
-                    press_ok_button(ui)
+                pass
 
             # now run again and change the selection
             with create_ui(obj, dict(view=single_select_item_view)) as ui, \
