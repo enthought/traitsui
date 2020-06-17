@@ -23,7 +23,6 @@ import contextlib
 import platform
 import unittest
 
-from pyface.gui import GUI
 from traits.has_traits import HasTraits
 from traits.trait_types import List, Int, Str
 from traitsui.item import Item
@@ -388,7 +387,6 @@ class TestListStrEditor(unittest.TestCase):
             self.assertEqual(sorted(editor.multi_selected_indices), [1, 2])
 
     def test_list_str_editor_item_count(self):
-        gui = GUI()
         model = ListStrModel()
 
         # Without auto_add

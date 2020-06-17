@@ -2,8 +2,6 @@ import contextlib
 import platform
 import unittest
 
-from pyface.gui import GUI
-
 from traits.api import Enum, HasTraits, Int, List
 from traitsui.api import EnumEditor, UItem, View
 from traitsui.tests._tools import (

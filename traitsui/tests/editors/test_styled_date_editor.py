@@ -32,7 +32,6 @@ def get_example_model():
     )
 
 
-
 # StyledDateEditor is currently only implemented for Qt
 @skip_if_not_qt4
 class TestStyledDateEditor(unittest.TestCase):

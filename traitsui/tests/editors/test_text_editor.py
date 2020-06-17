@@ -9,7 +9,6 @@
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 # ------------------------------------------------------------------------------
-import contextlib
 import unittest
 
 from traits.api import (

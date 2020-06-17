@@ -1,8 +1,6 @@
 import contextlib
 import unittest
 
-from pyface.gui import GUI
-
 from traits.api import HasTraits, List
 from traitsui.api import SetEditor, UItem, View
 from traitsui.tests._tools import (
