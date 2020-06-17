@@ -18,6 +18,7 @@ from traits.api import (
 )
 from traitsui.api import TextEditor, View, Item
 from traitsui.tests._tools import (
+    create_ui,
     GuiTestAssistant,
     skip_if_not_qt4,
     no_gui_test_assistant,
@@ -27,16 +28,6 @@ from traitsui.tests._tools import (
 class Foo(HasTraits):
 
     name = Str()
-
-
-@contextlib.contextmanager
-def launch_ui(gui_test_case, object, view):
-    ui = object.edit_traits(view=view)
-    try:
-        yield ui
-    finally:
-        with gui_test_case.delete_widget(ui.control):
-            ui.dispose()
 
 
 # Skips tests if the backend is not either qt4 or qt5
@@ -51,7 +42,7 @@ class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
             placeholder="Enter name",
         )
         view = View(Item(name="name", editor=editor))
-        with launch_ui(self, object=foo, view=view) as ui:
+        with create_ui(foo, dict(view=view)) as ui:
             name_editor, = ui.get_editors("name")
             self.assertEqual(
                 name_editor.control.placeholderText(),
@@ -66,7 +57,7 @@ class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
             read_only=True,
         )
         view = View(Item(name="name", editor=editor))
-        with launch_ui(self, object=foo, view=view) as ui:
+        with create_ui(foo, dict(view=view)) as ui:
             name_editor, = ui.get_editors("name")
             self.assertEqual(
                 name_editor.control.placeholderText(),
@@ -75,7 +66,7 @@ class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
 
     def test_text_editor_default_view(self):
         foo = Foo()
-        with launch_ui(self, object=foo, view=None) as ui:
+        with create_ui(foo) as ui:
             name_editor, = ui.get_editors("name")
             self.assertEqual(
                 name_editor.control.placeholderText(),
@@ -90,7 +81,7 @@ class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
             style="custom",
             editor=TextEditor(placeholder="Enter name"),
         ))
-        with launch_ui(self, object=foo, view=view) as ui:
+        with create_ui(foo, dict(view=view)) as ui:
             name_editor, = ui.get_editors("name")
             try:
                 placeholder = name_editor.control.placeholderText()
