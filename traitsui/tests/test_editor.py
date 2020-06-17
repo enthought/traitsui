@@ -182,6 +182,17 @@ def create_editor(
     return editor
 
 
+def process_and_dispose(disposable):
+    """ Call ``dispose`` on the given object while making sure the event queue
+    is flushed before and after calling it.
+    """
+    # Process any pending events
+    process_cascade_events()
+    disposable.dispose()
+    # dispose may push more events, process them too.
+    process_cascade_events()
+
+
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
 class TestEditor(GuiTestAssistant, unittest.TestCase):
 
@@ -240,7 +251,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         self.assertEqual(editor.value, "even newer test")
         self.assertEqual(editor.object.user_value, "even newer test")
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         self.assertIsNone(editor.object)
         self.assertIsNone(editor.factory)
@@ -276,7 +287,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         self.assertEqual(editor.value, "even newer test")
         self.assertEqual(editor.object.user_value, "even newer test")
 
-        editor.dispose()
+        process_and_dispose(editor)
 
     def test_event_trait(self):
         editor = create_editor(name="user_event", is_event=True)
@@ -294,7 +305,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         self.change_user_value(editor, user_object, "user_event", True)
         self.change_control_value(editor, user_object, "user_event", True)
 
-        editor.dispose()
+        process_and_dispose(editor)
 
     def test_chained_object(self):
         context = {
@@ -341,7 +352,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         self.assertIs(editor.object, new_user_object)
         self.assertEqual(editor.object.user_value, "new object")
 
-        editor.dispose()
+        process_and_dispose(editor)
 
     def test_factory_sync_simple(self):
         factory = StubEditorFactory(auxiliary_value="test")
@@ -351,7 +362,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         # preparation copies the auxiliary value from the factory
         self.assertIs(editor.auxiliary_value, "test")
 
-        editor.dispose()
+        process_and_dispose(editor)
 
     def test_factory_sync_cv_simple(self):
         factory = StubEditorFactory()
@@ -361,7 +372,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         # preparation copies the auxiliary CV int value from the factory
         self.assertIs(editor.auxiliary_cv_int, 0)
 
-        editor.dispose()
+        process_and_dispose(editor)
 
     def test_parse_extended_name(self):
         context = {
@@ -401,7 +412,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         self.assertEqual(name, "user_auxiliary.user_value")
         self.assertEqual(value, "other_test")
 
-        editor.dispose()
+        process_and_dispose(editor)
 
     # Testing sync_value "from" ---------------------------------------------
 
@@ -422,7 +433,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         self.assertEqual(editor.auxiliary_value, 11)
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(editor, "auxiliary_value"):
             user_object.user_auxiliary = 12
@@ -442,7 +453,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         self.assertEqual(editor.auxiliary_value, 11)
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(editor, "auxiliary_value"):
             user_object.user_auxiliary = 12
@@ -467,7 +478,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         self.assertEqual(editor.auxiliary_value, 11)
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(editor, "auxiliary_value"):
             other_object.user_auxiliary = 12
@@ -496,7 +507,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         self.assertEqual(editor.auxiliary_value, 12)
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(editor, "auxiliary_value"):
             user_object.user_auxiliary.user_value = 13
@@ -523,7 +534,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         self.assertEqual(editor.auxiliary_list, ["one", "four", "five"])
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(editor, "auxiliary_list"):
             user_object.user_list = ["one", "two", "three"]
@@ -541,7 +552,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         with self.assertTraitChanges(editor, "auxiliary_event", count=1):
             user_object.user_event = True
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(editor, "auxiliary_event"):
             user_object.user_event = True
@@ -563,7 +574,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         self.assertEqual(editor.auxiliary_cv_int, 11)
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(editor, "auxiliary_cv_int"):
             user_object.user_auxiliary = 12
@@ -586,7 +597,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         self.assertEqual(user_object.user_auxiliary, 11)
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(user_object, "user_auxiliary"):
             editor.auxiliary_value = 12
@@ -607,7 +618,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         self.assertEqual(user_object.user_auxiliary, 11)
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(user_object, "user_auxiliary"):
             editor.auxiliary_value = 12
@@ -633,7 +644,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         self.assertEqual(other_object.user_auxiliary, 11)
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(other_object, "user_auxiliary"):
             editor.auxiliary_value = 12
@@ -661,7 +672,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         self.assertEqual(user_object.user_auxiliary.user_value, 11)
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(
                 user_object.user_auxiliary, "user_value"
@@ -690,7 +701,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         self.assertEqual(user_object.user_list, ["one", "four", "five"])
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(user_object, "user_list"):
             editor.auxiliary_list = ["one", "two", "three"]
@@ -708,7 +719,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         with self.assertTraitChanges(user_object, "user_event", count=1):
             editor.auxiliary_event = True
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(user_object, "user_event"):
             editor.auxiliary_event = True
@@ -731,7 +742,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         self.assertEqual(user_object.user_auxiliary, 11)
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(user_object, "user_auxiliary"):
             editor.auxiliary_cv_float = 12.0
@@ -760,7 +771,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         self.assertEqual(user_object.user_auxiliary, 12)
 
-        editor.dispose()
+        process_and_dispose(editor)
 
         with self.assertTraitDoesNotChange(editor, "auxiliary_value"):
             user_object.user_auxiliary = 13
