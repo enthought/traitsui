@@ -13,6 +13,8 @@
 
 import unittest
 
+from pyface.api import GUI
+
 from traitsui.tests._tools import (
     is_current_backend_qt4,
     is_current_backend_wx,
@@ -82,8 +84,18 @@ class TestProcessEventsRepeated(unittest.TestCase):
     def test_qt_process_events_process_all(self):
         from pyface.qt import QtCore
 
-        q_object = DummyQObject(max_n_events=10)
-        self.addCleanup(q_object.deleteLater)
+        def cleanup(q_object):
+            q_object.deleteLater()
+            # If the test fails, run process events at least the same
+            # number of times as max_n_events
+            for _ in range(q_object.max_n_events):
+                QtCore.QCoreApplication.processEvents(
+                    QtCore.QEventLoop.AllEvents
+                )
+
+        max_n_events = 10
+        q_object = DummyQObject(max_n_events=max_n_events)
+        self.addCleanup(cleanup, q_object)
 
         QtCore.QCoreApplication.postEvent(
             q_object, QtCore.QEvent(QtCore.QEvent.User)
@@ -98,14 +110,18 @@ class TestProcessEventsRepeated(unittest.TestCase):
         process_cascade_events()
 
         # then
-        self.assertEqual(q_object.n_events, 10)
-
-        q_object.deleteLater()
-        process_cascade_events()
+        self.assertEqual(q_object.n_events, max_n_events)
 
     @skip_if_not_wx
     def test_wx_process_events_process_all(self):
+
+        def cleanup(wx_handler):
+            GUI.process_events()
+            wx_handler.Destroy()
+
         wx_handler = DummyWxHandler(max_n_events=10)
+        self.addCleanup(cleanup, wx_handler)
+
         wx_handler.post_event()
 
         # when
@@ -113,6 +129,3 @@ class TestProcessEventsRepeated(unittest.TestCase):
 
         # then
         self.assertEqual(wx_handler.n_events, 10)
-
-        wx_handler.Destroy()
-        process_cascade_events()
