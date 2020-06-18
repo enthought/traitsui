@@ -13,6 +13,8 @@
 
 import unittest
 
+from pyface.api import GUI
+
 from traits.api import Any, Bool, Event, Float, HasTraits, Int, List, Undefined
 from traits.trait_base import xgetattr
 
@@ -237,6 +239,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         self.assertEqual(editor.object.user_value, "even newer test")
 
         editor.dispose()
+        GUI.process_events()
 
         self.assertIsNone(editor.object)
         self.assertIsNone(editor.factory)

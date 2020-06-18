@@ -200,10 +200,6 @@ def right_click_item(control, index):
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
-@unittest.skipIf(
-    is_windows and is_current_backend_qt4(),
-    "Issue enthought/traitsui#854; possible test interactions on Windows"
-)
 @unittest.skipIf(is_current_backend_wx(), "Issue enthought/traitsui#752")
 @skip_if_null
 class TestListStrEditor(unittest.TestCase):

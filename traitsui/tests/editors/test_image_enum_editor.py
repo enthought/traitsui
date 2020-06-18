@@ -282,10 +282,6 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
 
         return gui, control
 
-    @unittest.skipIf(
-        is_linux and is_current_backend_qt4(),
-        "Issue enthought/traitsui#854, possible test interactions on Linux"
-    )
     def test_simple_editor_more_cols(self):
         # Smoke test for setting up an editor with more than one column
         enum_edit = EnumModel()
@@ -338,11 +334,6 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
             # Check that dialog window is closed
             self.assertEqual(list(control.GetChildren()), [])
 
-    @skip_if_not_qt4
-    @unittest.skipIf(
-        is_linux,
-        "Issue enthought/traitsui#854, possible test interactions on Linux"
-    )
     def test_simple_editor_combobox(self):
         enum_edit = EnumModel()
 

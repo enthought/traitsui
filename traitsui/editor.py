@@ -20,6 +20,8 @@
 from contextlib import contextmanager
 from functools import partial
 
+from pyface.api import GUI
+
 from traits.api import (
     Any,
     Bool,
@@ -291,7 +293,7 @@ class Editor(HasPrivateTraits):
 
         # Break linkages to references we no longer need:
         for name in self.trait_names(clean_up=True):
-            setattr(self, name, None)
+            GUI.invoke_later(setattr, self, name, None)
 
     # -- Undo/redo methods --------------------------------------------------
 
