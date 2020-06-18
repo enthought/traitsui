@@ -213,7 +213,7 @@ def test(runtime, toolkit, environment):
         environ["EXCLUDE_TESTS"] = "(wx|qt)"
 
     commands = [
-        "edm run -e {environment} -- coverage run -p -m unittest discover -v traitsui"
+        "edm run -e {environment} -- coverage run -p -m unittest traitsui.tests.editors.test_image_enum_editor.TestSimpleImageEnumEditor.test_simple_editor_combobox"
     ]
 
     # We run in a tempdir to avoid accidentally picking up wrong traitsui
