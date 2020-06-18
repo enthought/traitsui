@@ -89,7 +89,7 @@ class TestProcessEventsRepeated(unittest.TestCase):
             q_object, QtCore.QEvent(QtCore.QEvent.User)
         )
 
-        # As a demonstration, check calling processEvents does not process
+        # sanity check calling processEvents does not process
         # cascade of events.
         QtCore.QCoreApplication.processEvents(QtCore.QEventLoop.AllEvents)
         self.assertEqual(q_object.n_events, 1)
