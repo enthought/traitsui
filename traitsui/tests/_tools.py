@@ -133,11 +133,6 @@ def filter_tests(test_suite, exclusion_pattern):
     return filtered_test_suite
 
 
-#: If Qt processEvents returns after this many milliseconds, we try again.
-#: False positive is okay.
-_TOLERANCE_MILLISECS = 5000
-
-
 def process_cascade_events():
     """ Process all events, including events posted by the processed events.
 
@@ -145,21 +140,10 @@ def process_cascade_events():
     cause this function to enter an infinite loop.
     """
     if is_current_backend_qt4():
-        from pyface.qt import QtCore
-        start = None
-
-        # Qt won't raise if there are still events to be processed before
-        # the time limit is reached. There are no other safe way to tell
-        # if there are pending events (`hasPendingEvents` is deprecated).
-        # The minus-one is to account for precision differences between Python
-        # and Qt, false positive triggers another redundant run that should
-        # return immediately so that is fine.
-        while start is None or duration_millisecs >= _TOLERANCE_MILLISECS - 1:
-            start = time.time()
-            QtCore.QCoreApplication.processEvents(
-                QtCore.QEventLoop.AllEvents, _TOLERANCE_MILLISECS
-            )
-            duration_millisecs = (time.time() - start) * 1000
+        from pyface.qt import QtCore, QtGui
+        app = QtGui.QApplication.instance()
+        while app.hasPendingEvents():
+            app.processEvents(QtCore.QEventLoop.AllEvents)
     else:
         GUI.process_events()
 
