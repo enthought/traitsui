@@ -109,6 +109,11 @@ dependencies = {
     "docutils"
 }
 
+# NOTE : pyface is always installed from source
+source_dependencies = {
+    "traits",
+}
+
 extra_dependencies = {
     # XXX once pyside2 is available in EDM, we will want it here
     'pyside2': set(),
@@ -133,6 +138,9 @@ environment_vars = {
 }
 
 
+github_url_fmt = "git+http://github.com/enthought/{0}.git#egg={0}"
+
+
 @click.group()
 def cli():
     pass
@@ -147,7 +155,8 @@ def cli():
     default=False,
     help="Install main package in 'editable' mode?  [default: --not-editable]",
 )
-def install(runtime, toolkit, environment, editable):
+@click.option('--source/--no-source', default=False)
+def install(runtime, toolkit, environment, editable, source):
     """ Install project and dependencies into a clean EDM environment.
 
     """
@@ -190,6 +199,19 @@ def install(runtime, toolkit, environment, editable):
 
     click.echo("Creating environment '{environment}'".format(**parameters))
     execute(commands, parameters)
+
+    if source:
+        cmd_fmt = "edm plumbing remove-package --environment {environment} --force "
+        commands = [cmd_fmt+dependency for dependency in source_dependencies]
+        execute(commands, parameters)
+        source_pkgs = [github_url_fmt.format(pkg) for pkg in source_dependencies]
+        commands = [
+            "python -m pip install {pkg} --no-deps".format(pkg=pkg)
+            for pkg in source_pkgs
+        ]
+        commands = ["edm run -e {environment} -- " + command for command in commands]
+        execute(commands, parameters)
+
     click.echo('Done install')
 
 
