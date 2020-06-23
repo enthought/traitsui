@@ -111,7 +111,7 @@ dependencies = {
 
 # NOTE : pyface is always installed from source
 source_dependencies = {
-    "traits",
+    "traits": "git+http://github.com/enthought/traits.git#egg=traits",
 }
 
 extra_dependencies = {
@@ -202,9 +202,9 @@ def install(runtime, toolkit, environment, editable, source):
 
     if source:
         cmd_fmt = "edm plumbing remove-package --environment {environment} --force "
-        commands = [cmd_fmt+dependency for dependency in source_dependencies]
+        commands = [cmd_fmt+dependency for dependency in source_dependencies.keys()]
         execute(commands, parameters)
-        source_pkgs = [github_url_fmt.format(pkg) for pkg in source_dependencies]
+        source_pkgs = source_dependencies.values()
         commands = [
             "python -m pip install {pkg} --no-deps".format(pkg=pkg)
             for pkg in source_pkgs
