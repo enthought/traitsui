@@ -120,7 +120,8 @@ class TestProcessEventsRepeated(unittest.TestCase):
             GUI.process_events()
             wx_handler.Destroy()
 
-        wx_handler = DummyWxHandler(max_n_events=10)
+        max_n_events = 10
+        wx_handler = DummyWxHandler(max_n_events=max_n_events)
         self.addCleanup(cleanup, wx_handler)
 
         wx_handler.post_event()
@@ -129,4 +130,4 @@ class TestProcessEventsRepeated(unittest.TestCase):
         process_cascade_events()
 
         # then
-        self.assertEqual(wx_handler.n_events, 10)
+        self.assertEqual(wx_handler.n_events, max_n_events)
