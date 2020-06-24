@@ -20,6 +20,7 @@ import traceback
 import unittest
 from unittest import mock
 
+from pyface.api import GUI
 from traits.api import HasTraits
 
 from traitsui.tests._tools import (
@@ -196,7 +197,9 @@ def replaced_configure_traits(
         scrollable=scrollable,
         **args,
     )
+    GUI.process_events()
     ui.dispose()
+    GUI.process_events()
 
 
 @contextlib.contextmanager
