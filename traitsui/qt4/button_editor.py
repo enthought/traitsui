@@ -173,5 +173,6 @@ class CustomEditor(SimpleEditor):
         if self.control is not None:
             self.control.clicked.disconnect(self.update_object)
 
+        # FIXME: Maybe better to let this class subclass Editor directly
         # enthought/traitsui#884
         Editor.dispose(self)
