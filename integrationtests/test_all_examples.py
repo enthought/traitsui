@@ -12,6 +12,7 @@
 """
 
 import contextlib
+import io
 from itertools import chain
 import os
 import sys
@@ -227,8 +228,11 @@ def run_file(file_path):
         "__file__": file_path,
     }
     with replace_configure_traits(), \
+            mock.patch("sys.stdout", new_callable=io.StringIO), \
             mock.patch("sys.argv", [file_path]):
-        # Some example reads sys.argv to allow more arguments
+        # Mock stdout: Examples typically print educational information.
+        # They are expected but they should not pollute test output.
+        # Move argv: Some example reads sys.argv to allow more arguments
         # But all examples should support being run without additional
         # arguments.
         exec(content, globals)
