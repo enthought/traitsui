@@ -275,3 +275,7 @@ class TestExample(unittest.TestCase):
                             file_path, exc, message
                         )
                     )
+                finally:
+                    # Whatever failure, always flush the GUI event queue
+                    # before running the next one.
+                    GUI.process_events()
