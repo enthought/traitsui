@@ -5,6 +5,7 @@ from pyface.gui import GUI
 from traits.api import HasTraits, List, Str
 from traitsui.api import CheckListEditor, UItem, View
 from traitsui.tests._tools import (
+    create_ui,
     get_all_button_status,
     is_current_backend_qt4,
     is_current_backend_wx,
@@ -236,6 +237,31 @@ class TestCheckListEditorMapping(unittest.TestCase):
                 self.assertEqual(editor.names, ["TWO", "ONE"])
             self.assertEqual(editor.names, ["two", "one"])
 
+    def check_checklist_values_change_after_ui_dispose(self, style):
+        # Check the available values can change after the ui is closed
+
+        class ListModel(HasTraits):
+            value = List()
+            possible_values = List(["one", "two"])
+
+        check_list_editor_factory = CheckListEditor(
+            name="object.possible_values",
+        )
+        view = View(
+            UItem(
+                "value",
+                editor=check_list_editor_factory,
+                style=style,
+            )
+        )
+        model = ListModel()
+
+        with store_exceptions_on_all_threads():
+            with create_ui(model, dict(view=view)):
+                pass
+
+            model.possible_values = ["two", "one"]
+
     def test_simple_editor_mapping_values(self):
         self.check_checklist_mappings_value_change("simple")
 
@@ -287,6 +313,22 @@ class TestCheckListEditorMapping(unittest.TestCase):
                 self.check_checklist_mappings_tuple_name_change("custom")
         else:
             self.check_checklist_mappings_tuple_name_change("custom")
+
+    def test_simple_editor_checklist_values_change_dispose(self):
+        if is_current_backend_wx():
+            # Missing cleanup in wx (enthought/traitsui#752)
+            with self.assertRaises(AttributeError):
+                self.check_checklist_values_change_after_ui_dispose("simple")
+        else:
+            self.check_checklist_values_change_after_ui_dispose("simple")
+
+    def test_custom_editor_checklist_values_change_dispose(self):
+        if is_current_backend_wx():
+            # Missing cleanup in wx (enthought/traitsui#752)
+            with self.assertRaises(AttributeError):
+                self.check_checklist_values_change_after_ui_dispose("custom")
+        else:
+            self.check_checklist_values_change_after_ui_dispose("custom")
 
 
 @skip_if_null

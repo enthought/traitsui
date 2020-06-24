@@ -46,6 +46,13 @@ class SimpleEditor(Editor):
         self.update_minimum_datetime()
         self.update_maximum_datetime()
 
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None:
+            self.control.dateTimeChanged.disconnect(self.update_object)
+        super().dispose()
+
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.

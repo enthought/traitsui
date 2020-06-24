@@ -6,7 +6,11 @@ from traits.api import Date, HasTraits, List
 from traitsui.api import DateEditor, View, Item
 from traitsui.editors.date_editor import CellFormat
 
-from traitsui.tests._tools import skip_if_not_qt4
+from traitsui.tests._tools import (
+    create_ui,
+    skip_if_not_qt4,
+    store_exceptions_on_all_threads,
+)
 
 
 class Foo(HasTraits):
@@ -158,3 +162,32 @@ class TestDateEditorCustomQt(unittest.TestCase):
             expected,
             "Expected color: {!r}. Got color: {!r}".format(expected, actual),
         )
+
+
+# Run this test case against wx too once enthought/traitsui#752 is fixed.
+@skip_if_not_qt4
+class TestDateEditorInitDispose(unittest.TestCase):
+    """ Test the init and dispose of date editor."""
+
+    def check_init_and_dispose(self, view):
+        with store_exceptions_on_all_threads(), \
+                create_ui(Foo(), dict(view=view)):
+            pass
+
+    def test_simple_date_editor(self):
+        view = View(
+            Item(
+                name="single_date",
+                style="simple",
+            )
+        )
+        self.check_init_and_dispose(view)
+
+    def test_custom_date_editor(self):
+        view = View(
+            Item(
+                name="single_date",
+                style="custom",
+            )
+        )
+        self.check_init_and_dispose(view)
