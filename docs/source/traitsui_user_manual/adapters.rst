@@ -12,10 +12,11 @@ are the ListStrEditor, the TabularEditor and the TreeEditor.  In this section
 we will look more closely at each of these and discuss how they can be
 customized as needed.
 
-The TreeEditor and TreeNodes
-============================
 
 .. _tree-nodes:
+
+The TreeEditor and TreeNodes
+============================
 
 .. module:: traitsui.tree_node
    :noindex:
@@ -301,6 +302,8 @@ There are a number of examples of use of the
 - :github-demo:`HDF5 Tree <Advanced/HDF5_tree_demo.py>`
 - :github-demo:`Tree Editor with Renderer <Extras/Tree_editor_with_TreeNodeRenderer.py>`
 
+
+.. _advanced-tabular-adapter:
 
 The TabularAdapter Class
 ========================

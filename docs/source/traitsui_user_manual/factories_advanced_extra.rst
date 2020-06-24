@@ -609,7 +609,9 @@ TabularAdapter
 The tabular editor works in conjunction with an adapter class, derived from
 TabularAdapter. The tabular adapter interfaces between the tabular editor and
 the data being displayed. The tabular adapter is the reason for the flexibility
-and power of the tabular editor to display a wide variety of data.
+and power of the tabular editor to display a wide variety of data. For more
+detailed information about the TabularAdapter class please see
+:ref:`advanced-tabular-adapter`.
 
 The most important attribute of TabularAdapter is **columns**, which is list of
 columns to be displayed. Each entry in the **columns** list can be either a
@@ -940,7 +942,8 @@ Defining Nodes
 ::::::::::::::
 
 For details on the attributes of the TreeNode class, refer to the *Traits API
-Reference*.
+Reference*. More information about the TreeNode class is also available in
+:ref:`tree-nodes`.
 
 You must specify the classes whose instances the node type applies to. Use the
 **node_for** attribute of TreeNode to specify a list of classes; often, this
