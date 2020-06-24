@@ -27,6 +27,7 @@ from traitsui.tests._tools import (
     is_current_backend_wx,
     is_current_backend_qt4,
     skip_if_null,
+    store_exceptions_on_all_threads,
 )
 
 
@@ -197,16 +198,17 @@ def replaced_configure_traits(
         scrollable=scrollable,
         **args,
     )
-    GUI.process_events()
+    with store_exceptions_on_all_threads():
+        GUI.process_events()
 
-    # Temporary fix for enthought/traitsui#907
-    if is_current_backend_qt4():
-        ui.control.hide()
-    if is_current_backend_wx():
-        ui.control.Hide()
+        # Temporary fix for enthought/traitsui#907
+        if is_current_backend_qt4():
+            ui.control.hide()
+        if is_current_backend_wx():
+            ui.control.Hide()
 
-    ui.dispose()
-    GUI.process_events()
+        ui.dispose()
+        GUI.process_events()
 
 
 @contextlib.contextmanager
