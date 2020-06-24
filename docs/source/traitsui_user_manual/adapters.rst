@@ -12,11 +12,12 @@ are the ListStrEditor, the TabularEditor and the TreeEditor.  In this section
 we will look more closely at each of these and discuss how they can be
 customized as needed.
 
-
-.. _tree-nodes:
+.. _advanced-tree-node:
 
 The TreeEditor and TreeNodes
 ============================
+
+.. _tree-nodes:
 
 .. module:: traitsui.tree_node
    :noindex:

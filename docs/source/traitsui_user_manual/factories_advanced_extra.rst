@@ -943,7 +943,7 @@ Defining Nodes
 
 For details on the attributes of the TreeNode class, refer to the *Traits API
 Reference*. More information about the TreeNode class is also available in
-:ref:`tree-nodes`.
+:ref:`advanced-tree-node`.
 
 You must specify the classes whose instances the node type applies to. Use the
 **node_for** attribute of TreeNode to specify a list of classes; often, this
