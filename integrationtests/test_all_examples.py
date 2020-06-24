@@ -198,6 +198,13 @@ def replaced_configure_traits(
         **args,
     )
     GUI.process_events()
+
+    # Temporary fix for enthought/traitsui#907
+    if is_current_backend_qt4():
+        ui.control.hide()
+    if is_current_backend_wx():
+        ui.control.Hide()
+
     ui.dispose()
     GUI.process_events()
 
