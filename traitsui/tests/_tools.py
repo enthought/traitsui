@@ -154,12 +154,12 @@ def process_cascade_events():
         # The minus-one is to account for precision differences between Python
         # and Qt, false positive triggers another redundant run that should
         # return immediately so that is fine.
-        while start is None or duration_millisecs >= _TOLERANCE_MILLISECS - 1:
+        while (start is None
+                or (time.time() - start) * 1000 >= _TOLERANCE_MILLISECS - 1):
             start = time.time()
             QtCore.QCoreApplication.processEvents(
                 QtCore.QEventLoop.AllEvents, _TOLERANCE_MILLISECS
             )
-            duration_millisecs = (time.time() - start) * 1000
     else:
         GUI.process_events()
 
