@@ -116,6 +116,7 @@ class TestProcessEventsRepeated(unittest.TestCase):
     def test_wx_process_events_process_all(self):
 
         def cleanup(wx_handler):
+            # In case of test failure, always flush the GUI event queue.
             GUI.process_events()
             wx_handler.Destroy()
 
