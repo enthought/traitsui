@@ -385,6 +385,31 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
             with self.assertTraitChanges(editor, "update", count=1):
                 report.update = True
 
+    def test_adapter_columns_changes(self):
+        # Regression test for enthought/traitsui#894
+        with store_exceptions_on_all_threads(), \
+                self.report_and_editor(get_view()) as (report, editor):
+
+            # Reproduce the scenario when the column count is reduced.
+            editor.adapter.columns = [
+                ("Name", "name"), ("Age", "age"),
+            ]
+            # Recalculating column widths take into account the user defined
+            # widths, cached in the view. The cache should be invalidated
+            # when the columns is updated such that recalculation does not
+            # fail.
+            editor.adapter.columns = [("Name", "name")]
+            GUI.process_events()
+
+    def test_view_column_resized_attribute_error_workaround(self):
+        # This tests the workaround which checks if `factory` is None before
+        # using it while resizing the columns.
+        # The resize event is processed after UI.dispose is called.
+        # Maybe related to enthought/traitsui#854 and enthought/traits#431
+        with store_exceptions_on_all_threads(), \
+                self.report_and_editor(get_view()) as (_, editor):
+            editor.adapter.columns = [("Name", "name")]
+
     @contextlib.contextmanager
     def report_and_editor(self, view):
         """
