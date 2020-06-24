@@ -13,10 +13,9 @@
 """ Defines the various text editors for the PyQt user interface toolkit.
 """
 
-
 from pyface.qt import QtCore, QtGui
 
-from traits.api import TraitError
+from traits.api import Any, Callable, List, TraitError, Tuple
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -28,7 +27,6 @@ from .editor import Editor
 from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
 from .constants import OKColor
-
 
 
 class SimpleEditor(Editor):
@@ -47,6 +45,12 @@ class SimpleEditor(Editor):
 
     #: Function used to evaluate textual user input:
     evaluate = evaluate_trait
+
+    # -- private trait definitions ------------------------------------------
+
+    #: A list of tuple(Qt signal, slot) connected which need to be disconnected
+    #: in dispose.
+    _connections_to_remove = List(Tuple(Any, Callable))
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -72,16 +76,21 @@ class SimpleEditor(Editor):
         if factory.password:
             control.setEchoMode(QtGui.QLineEdit.Password)
 
-        if factory.auto_set and not factory.is_grid_cell:
-            if wtype == QtGui.QTextEdit:
-                control.textChanged.connect(self.update_object)
-            else:
-                control.textEdited.connect(self.update_object)
-
+        if wtype == QtGui.QTextEdit:
+            control.textChanged.connect(self.update_object)
+            self._connections_to_remove.append(
+                (control.textChanged, self.update_object))
         else:
-            # Assume enter_set is set, otherwise the value will never get
-            # updated.
-            control.editingFinished.connect(self.update_object)
+            # QLineEdit
+            if factory.auto_set and not factory.is_grid_cell:
+                control.textEdited.connect(self.update_object)
+                self._connections_to_remove.append(
+                    (control.textEdited, self.update_object))
+            else:
+                control.editingFinished.connect(self.update_object)
+                self._connections_to_remove.append(
+                    (control.editingFinished, self.update_object)
+                )
 
         placeholder = self.factory.placeholder
 
@@ -97,6 +106,15 @@ class SimpleEditor(Editor):
             self.control.setSizePolicy(policy)
         self.set_error_state(False)
         self.set_tooltip()
+
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        while self._connections_to_remove:
+            signal, handler = self._connections_to_remove.pop()
+            signal.disconnect(handler)
+
+        super().dispose()
 
     def update_object(self):
         """ Handles the user entering input data in the edit control.
