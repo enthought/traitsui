@@ -26,7 +26,7 @@ class TraitObject(HasTraits):
     list_str = List(Str)
 
 
-class TestListStrEditor(unittest.TestCase):
+class TestListStrAdapter(unittest.TestCase):
 
     def test_list_str_adapter_length(self):
         """Test the ListStringAdapter len method"""

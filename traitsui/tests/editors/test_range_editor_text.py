@@ -27,6 +27,7 @@ from traitsui.view import View
 from traitsui.editors.range_editor import RangeEditor
 
 from traitsui.tests._tools import (
+    create_ui,
     press_ok_button,
     skip_if_not_wx,
     skip_if_not_qt4,
@@ -66,9 +67,8 @@ class TestRangeEditorText(unittest.TestCase):
         # the OK button should update the value of the HasTraits class
         # (tests a bug where this fails with an AttributeError)
 
-        with store_exceptions_on_all_threads():
-            num = NumberWithRangeEditor()
-            ui = num.edit_traits()
+        num = NumberWithRangeEditor()
+        with store_exceptions_on_all_threads(), create_ui(num) as ui:
 
             # the following is equivalent to setting the text in the text
             # control, then pressing OK
@@ -88,9 +88,8 @@ class TestRangeEditorText(unittest.TestCase):
         # should not be adjusted by the slider part of the range editor
         from pyface import qt
 
-        with store_exceptions_on_all_threads():
-            num = FloatWithRangeEditor()
-            ui = num.edit_traits()
+        num = FloatWithRangeEditor()
+        with store_exceptions_on_all_threads(), create_ui(num) as ui:
 
             # the following is equivalent to setting the text in the text
             # control, then pressing OK

@@ -4,7 +4,11 @@ from traits.api import HasTraits, Str, Int, List
 from traitsui.api import View, Group, Item, TableEditor, ObjectColumn, RGBColor
 from traitsui.color_column import ColorColumn
 
-from traitsui.tests._tools import skip_if_null, store_exceptions_on_all_threads
+from traitsui.tests._tools import (
+    create_ui,
+    skip_if_null,
+    store_exceptions_on_all_threads,
+)
 
 
 class MyEntry(HasTraits):

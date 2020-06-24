@@ -28,6 +28,7 @@ from traitsui.item import Item
 from traitsui.view import View
 
 from traitsui.tests._tools import (
+    create_ui,
     is_current_backend_null,
     is_mac_os,
     skip_if_not_qt4,
@@ -92,10 +93,9 @@ class TestActions(unittest.TestCase):
         # Behavior: when clicking on a menu or toolbar action,
         # the corresponding function should be executed
 
-        with store_exceptions_on_all_threads():
-            # create dialog with toolbar adn menu
-            dialog = DialogWithToolbar()
-            ui = dialog.edit_traits()
+        # create dialog with toolbar adn menu
+        dialog = DialogWithToolbar()
+        with store_exceptions_on_all_threads(), create_ui(dialog) as ui:
 
             # press toolbar or menu button
             trigger_action_func(ui)
