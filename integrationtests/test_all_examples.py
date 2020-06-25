@@ -130,9 +130,10 @@ class ExampleSearcher:
         return sorted(accepted_files), sorted(skipped_files)
 
 
-# -----------------------------------------------------------------------------
+# =============================================================================
 # Configuration
-# -----------------------------------------------------------------------------
+# =============================================================================
+
 EXAMPLES = os.path.join(HERE, "..", "examples")
 DEMO = os.path.join(EXAMPLES, "demo")
 TUTORIALS = os.path.join(EXAMPLES, "tutorials", "doc_examples", "examples")
