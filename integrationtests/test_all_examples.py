@@ -30,10 +30,110 @@ from traitsui.tests._tools import (
     store_exceptions_on_all_threads,
 )
 
-
 # This test file is not distributed nor is it in a package.
 HERE = os.path.dirname(__file__)
 
+
+class ExampleSearcher:
+    """ This object collects and reports example files to be tested."""
+
+    def __init__(self, source_dirs):
+        """
+        Parameters
+        ----------
+        source_dirs : list of str
+            List of directory paths from which Python files will be collected.
+        """
+        self.source_dirs = source_dirs
+        self.files_may_be_skipped = {}
+
+    def skip_file_if(self, condition, reason, filepath):
+        """ Mark a file to be skipped for a given condition.
+
+        Parameters
+        ----------
+        condition: callable() -> bool
+            The condition for skipping a file.
+        reason : str
+            Reason for skipping the file.
+        filepath : str
+            Path of the file which may be skipped from tests.
+        """
+        filepath = os.path.abspath(filepath)
+        self.files_may_be_skipped[filepath] = (condition, reason)
+
+    def is_skipped(self, filepath):
+        """ Return if the Python file should be skipped in test.
+
+        Parameters
+        ----------
+        path : str
+            Path to a file.
+
+        Returns
+        -------
+        skipped : bool
+            True if the file should be skipped.
+        reason : str
+            Reason why it should be skipped.
+        """
+        path = os.path.abspath(filepath)
+        if path not in self.files_may_be_skipped:
+            return False, ""
+        condition, reason = self.files_may_be_skipped[path]
+        return condition(), reason
+
+    def validate(self):
+        """ Validate configuration. Currently this checks all files that may
+        be skipped still exist.
+        """
+        for filepath in self.files_may_be_skipped:
+            if not os.path.exists(filepath):
+                raise RuntimeError("{} does not exist.".format(filepath))
+
+    @staticmethod
+    def _is_python_file(path):
+        """ Return true if the given path is (public) Python file."""
+        _, basename = os.path.split(path)
+        _, ext = os.path.splitext(basename)
+        return (
+            ext == ".py"
+            and not basename.startswith("_")
+        )
+
+    def get_python_files(self):
+        """ Report Python files to be tested or to be skipped.
+
+        Returns
+        -------
+        accepted_files : list of str
+            Python file paths to be tested.
+        skipped_files : (filepath: str, reason: str)
+            Skipped files. First item is the file path, second
+            item is the reason why it is skipped.
+        """
+        accepted_files = []
+        skipped_files = []
+        for source_dir in self.source_dirs:
+            for root, _, files in os.walk(source_dir):
+                for filename in files:
+                    path = os.path.abspath(os.path.join(root, filename))
+                    if not self._is_python_file(path):
+                        continue
+
+                    skipped, reason = self.is_skipped(path)
+                    if skipped:
+                        skipped_files.append((path, reason))
+                    else:
+                        accepted_files.append(path)
+
+        # Avoid arbitrary ordering from the OS
+        return sorted(accepted_files), sorted(skipped_files)
+
+
+# -----------------------------------------------------------------------------
+# Configuration
+# -----------------------------------------------------------------------------
 EXAMPLES = os.path.join(HERE, "..", "examples")
 DEMO = os.path.join(EXAMPLES, "demo")
 TUTORIALS = os.path.join(EXAMPLES, "tutorials", "doc_examples", "examples")
@@ -45,133 +145,60 @@ SOURCE_DIRS = [
     TUTORIALS,
 ]
 
-
-#: Mapping from filepath to tuple(condition: callable -> bool, reason: str)
-FILES_MAY_BE_SKIPPED = {}
-
-
-def skip_file_if(condition, reason, filepath):
-    """ Mark a file to be skipped for a given condition.
-
-    Parameters
-    ----------
-    condition: callable() -> bool
-        The condition for skipping a file.
-    reason : str
-        Reason for skipping the file.
-    filepath : str
-        Path of the file which may be skipped from tests.
-    """
-    filepath = os.path.abspath(filepath)
-    FILES_MAY_BE_SKIPPED[filepath] = (
-        condition,
-        "{reason} (File: {filepath})".format(reason=reason, filepath=filepath)
-    )
-
-
-skip_file_if(
+SEARCHER = ExampleSearcher(source_dirs=SOURCE_DIRS)
+SEARCHER.skip_file_if(
     lambda: True, "Not a target file to be tested",
     os.path.join(DEMO, "demo.py"),
 )
-skip_file_if(
+SEARCHER.skip_file_if(
     is_current_backend_wx, "ProgressRenderer is not implemented in wx.",
     os.path.join(DEMO, "Advanced", "Table_editor_with_progress_column.py"),
 )
-skip_file_if(
+SEARCHER.skip_file_if(
     is_current_backend_qt4, "ScrubberEditor is not implemented in qt.",
     os.path.join(DEMO, "Advanced", "Scrubber_editor_demo.py"),
 )
-skip_file_if(
+SEARCHER.skip_file_if(
     lambda: not is_current_backend_wx(), "Only support wx",
     os.path.join(DEMO, "Extras", "animated_GIF.py"),
 )
-skip_file_if(
+SEARCHER.skip_file_if(
     lambda: not is_current_backend_qt4(), "Only support Qt",
     os.path.join(DEMO, "Extras", "Tree_editor_with_TreeNodeRenderer.py"),
 )
-skip_file_if(
+SEARCHER.skip_file_if(
     lambda: not is_current_backend_wx(), "Only support wx",
     os.path.join(DEMO, "Extras", "windows", "flash.py"),
 )
-skip_file_if(
+SEARCHER.skip_file_if(
     lambda: not is_current_backend_wx(), "Only support wx",
     os.path.join(DEMO, "Extras", "windows", "internet_explorer.py"),
 )
-skip_file_if(
+SEARCHER.skip_file_if(
     is_current_backend_wx,
     "enable tries to import a missing constant. See enthought/enable#307",
     os.path.join(DEMO, "Useful", "demo_group_size.py"),
 )
-skip_file_if(
+SEARCHER.skip_file_if(
     lambda: True, "Require wx and is blocking.",
     os.path.join(TUTORIALS, "view_multi_object.py"),
 )
-skip_file_if(
+SEARCHER.skip_file_if(
     lambda: True, "Require wx and is blocking.",
     os.path.join(TUTORIALS, "view_standalone.py"),
 )
-skip_file_if(
+SEARCHER.skip_file_if(
     is_current_backend_qt4, "Failing on Qt, see enthought/traitsui#773",
     os.path.join(TUTORIALS, "wizard.py"),
 )
 
-
-def check_special_files():
-    """ Check all files that may be skipped still exist."""
-    for filepath in FILES_MAY_BE_SKIPPED:
-        if not os.path.exists(filepath):
-            raise RuntimeError("{} does not exist.".format(filepath))
+# Validate configuration.
+SEARCHER.validate()
 
 
-def is_python_file(path):
-    """ Return true if the given path is (public) Python file."""
-    _, basename = os.path.split(path)
-    _, ext = os.path.splitext(basename)
-    return (
-        ext == ".py"
-        and not basename.startswith("_")
-    )
-
-
-def is_skipped(path):
-    """ Return if the Python file should be skipped in test.
-
-    Parameters
-    ----------
-    path : str
-        Path to a file.
-
-    Returns
-    -------
-    skipped : bool
-    reason : str
-    """
-    if path not in FILES_MAY_BE_SKIPPED:
-        return False, ""
-    condition, reason = FILES_MAY_BE_SKIPPED[os.path.abspath(path)]
-    return condition(), reason
-
-
-def get_python_files(directory):
-    """ Recursively walk a directory and report Python files to be tested.
-
-    Parameters
-    ----------
-    directory : str
-        Path of the directory to be walked.
-
-    Returns
-    -------
-    paths : list of str
-        List of Python file paths.
-    """
-    paths = []
-    for root, _, files in os.walk(directory):
-        for filename in files:
-            path = os.path.abspath(os.path.join(root, filename))
-            if is_python_file(path):
-                paths.append(path)
-    return sorted(paths)
+# =============================================================================
+# Test run utility functions
+# =============================================================================
 
 
 def replaced_configure_traits(
@@ -254,16 +281,10 @@ def run_file(file_path):
 class TestExample(unittest.TestCase):
 
     def test_run(self):
-        check_special_files()
-        file_paths = chain.from_iterable(
-            get_python_files(source_dir) for source_dir in SOURCE_DIRS
-        )
-        for file_path in file_paths:
-            with self.subTest(file_path=file_path):
-                skipped, reason = is_skipped(file_path)
-                if skipped:
-                    raise unittest.SkipTest(reason)
+        accepted_files, skipped_files = SEARCHER.get_python_files()
 
+        for file_path in accepted_files:
+            with self.subTest(file_path=file_path):
                 try:
                     run_file(file_path)
                 except Exception as exc:
@@ -279,3 +300,14 @@ class TestExample(unittest.TestCase):
                     # Whatever failure, always flush the GUI event queue
                     # before running the next one.
                     process_cascade_events()
+
+        # Report skipped files
+        for file_path, reason in skipped_files:
+            with self.subTest(file_path=file_path):
+                # make up for unittest not reporting the parameter in skip
+                # message.
+                raise unittest.SkipTest(
+                    "{reason} (File: {file_path})".format(
+                        reason=reason, file_path=file_path
+                    )
+                )
