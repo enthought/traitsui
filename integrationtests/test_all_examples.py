@@ -13,7 +13,6 @@
 
 import contextlib
 import io
-from itertools import chain
 import os
 import sys
 import traceback
