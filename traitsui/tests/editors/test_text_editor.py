@@ -12,8 +12,6 @@
 import contextlib
 import unittest
 
-from pyface.api import GUI
-
 from traits.api import (
     HasTraits,
     Str,
@@ -23,6 +21,7 @@ from traitsui.tests._tools import (
     create_ui,
     GuiTestAssistant,
     is_current_backend_qt4,
+    process_cascade_events,
     skip_if_not_qt4,
     store_exceptions_on_all_threads,
     no_gui_test_assistant,
@@ -182,30 +181,28 @@ class TestTextEditor(unittest.TestCase):
     def test_simple_auto_set_update_text(self):
         foo = Foo()
         view = get_view(style="simple", auto_set=True)
-        gui = GUI()
         with store_exceptions_on_all_threads(), \
                 create_ui(foo, dict(view=view)) as ui:
             editor, = ui.get_editors("name")
             set_text(editor, "NEW")
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(foo.name, "NEW")
 
     def test_simple_auto_set_false_do_not_update(self):
         foo = Foo(name="")
         view = get_view(style="simple", auto_set=False)
-        gui = GUI()
         with store_exceptions_on_all_threads(), \
                 create_ui(foo, dict(view=view)) as ui:
             editor, = ui.get_editors("name")
 
             set_text(editor, "NEW")
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(foo.name, "")
 
             key_press_return(editor)
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(foo.name, "NEW")
 
@@ -213,13 +210,12 @@ class TestTextEditor(unittest.TestCase):
         # the auto_set flag is disregard for custom editor.
         foo = Foo()
         view = get_view(auto_set=True, style="custom")
-        gui = GUI()
         with store_exceptions_on_all_threads(), \
                 create_ui(foo, dict(view=view)) as ui:
             editor, = ui.get_editors("name")
 
             set_text(editor, "NEW")
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(foo.name, "NEW")
 
@@ -227,15 +223,14 @@ class TestTextEditor(unittest.TestCase):
         # the auto_set flag is disregard for custom editor.
         foo = Foo()
         view = get_view(auto_set=False, style="custom")
-        gui = GUI()
         with store_exceptions_on_all_threads(), \
                 create_ui(foo, dict(view=view)) as ui:
             editor, = ui.get_editors("name")
 
             set_text(editor, "NEW")
-            gui.process_events()
+            process_cascade_events()
 
             key_press_return(editor)
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(foo.name, "NEW\n")

@@ -396,7 +396,7 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
             # when the columns is updated such that recalculation does not
             # fail.
             editor.adapter.columns = [("Name", "name")]
-            GUI.process_events()
+            process_cascade_events()
 
     def test_view_column_resized_attribute_error_workaround(self):
         # This tests the workaround which checks if `factory` is None before
