@@ -276,6 +276,10 @@ def run_file(file_path):
         exec(content, globals)
 
 
+# =============================================================================
+# Test cases
+# =============================================================================
+
 @skip_if_null
 class TestExample(unittest.TestCase):
 
