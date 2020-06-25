@@ -46,17 +46,17 @@ class ExampleSearcher:
         self.source_dirs = source_dirs
         self.files_may_be_skipped = {}
 
-    def skip_file_if(self, condition, reason, filepath):
+    def skip_file_if(self, filepath, condition, reason):
         """ Mark a file to be skipped for a given condition.
 
         Parameters
         ----------
+        filepath : str
+            Path of the file which may be skipped from tests.
         condition: callable() -> bool
             The condition for skipping a file.
         reason : str
             Reason for skipping the file.
-        filepath : str
-            Path of the file which may be skipped from tests.
         """
         filepath = os.path.abspath(filepath)
         self.files_may_be_skipped[filepath] = (condition, reason)
@@ -146,49 +146,49 @@ SOURCE_DIRS = [
 
 SEARCHER = ExampleSearcher(source_dirs=SOURCE_DIRS)
 SEARCHER.skip_file_if(
-    lambda: True, "Not a target file to be tested",
     os.path.join(DEMO, "demo.py"),
+    lambda: True, "Not a target file to be tested",
 )
 SEARCHER.skip_file_if(
-    is_current_backend_wx, "ProgressRenderer is not implemented in wx.",
     os.path.join(DEMO, "Advanced", "Table_editor_with_progress_column.py"),
+    is_current_backend_wx, "ProgressRenderer is not implemented in wx.",
 )
 SEARCHER.skip_file_if(
-    is_current_backend_qt4, "ScrubberEditor is not implemented in qt.",
     os.path.join(DEMO, "Advanced", "Scrubber_editor_demo.py"),
+    is_current_backend_qt4, "ScrubberEditor is not implemented in qt.",
 )
 SEARCHER.skip_file_if(
-    lambda: not is_current_backend_wx(), "Only support wx",
     os.path.join(DEMO, "Extras", "animated_GIF.py"),
+    lambda: not is_current_backend_wx(), "Only support wx",
 )
 SEARCHER.skip_file_if(
-    lambda: not is_current_backend_qt4(), "Only support Qt",
     os.path.join(DEMO, "Extras", "Tree_editor_with_TreeNodeRenderer.py"),
+    lambda: not is_current_backend_qt4(), "Only support Qt",
 )
 SEARCHER.skip_file_if(
-    lambda: not is_current_backend_wx(), "Only support wx",
     os.path.join(DEMO, "Extras", "windows", "flash.py"),
-)
-SEARCHER.skip_file_if(
     lambda: not is_current_backend_wx(), "Only support wx",
-    os.path.join(DEMO, "Extras", "windows", "internet_explorer.py"),
 )
 SEARCHER.skip_file_if(
+    os.path.join(DEMO, "Extras", "windows", "internet_explorer.py"),
+    lambda: not is_current_backend_wx(), "Only support wx",
+)
+SEARCHER.skip_file_if(
+    os.path.join(DEMO, "Useful", "demo_group_size.py"),
     is_current_backend_wx,
     "enable tries to import a missing constant. See enthought/enable#307",
-    os.path.join(DEMO, "Useful", "demo_group_size.py"),
 )
 SEARCHER.skip_file_if(
-    lambda: True, "Require wx and is blocking.",
     os.path.join(TUTORIALS, "view_multi_object.py"),
-)
-SEARCHER.skip_file_if(
     lambda: True, "Require wx and is blocking.",
-    os.path.join(TUTORIALS, "view_standalone.py"),
 )
 SEARCHER.skip_file_if(
-    is_current_backend_qt4, "Failing on Qt, see enthought/traitsui#773",
+    os.path.join(TUTORIALS, "view_standalone.py"),
+    lambda: True, "Require wx and is blocking.",
+)
+SEARCHER.skip_file_if(
     os.path.join(TUTORIALS, "wizard.py"),
+    is_current_backend_qt4, "Failing on Qt, see enthought/traitsui#773",
 )
 
 # Validate configuration.
