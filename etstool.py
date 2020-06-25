@@ -213,6 +213,7 @@ def test(runtime, toolkit, environment):
     parameters = get_parameters(runtime, toolkit, environment)
     environ = environment_vars.get(toolkit, {}).copy()
     environ['PYTHONUNBUFFERED'] = "1"
+    environ['TRAITS_DEBUG'] = "1"
 
     if toolkit == "wx":
         environ["EXCLUDE_TESTS"] = "qt"

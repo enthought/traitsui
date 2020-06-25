@@ -226,6 +226,8 @@ class EditorFactory(HasPrivateTraits):
         try:
             SimpleEditor = self._get_toolkit_editor("SimpleEditor")
         except Exception as e:
+            from traitsui.api import raise_to_debug
+            raise_to_debug()
             msg = "Can't import SimpleEditor for {}: {}"
             logger.debug(msg.format(self.__class__, e))
             SimpleEditor = toolkit_object("editor_factory:SimpleEditor")
