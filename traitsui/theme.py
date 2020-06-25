@@ -76,7 +76,7 @@ class Theme(HasPrivateTraits):
 
                 self._content_color = color
 
-            return self._content_color
+        return self._content_color
 
     def _set_content_color(self, color):
         self._content_color = color
@@ -93,18 +93,18 @@ class Theme(HasPrivateTraits):
 
                 self._label_color = color
 
-            return self._label_color
+        return self._label_color
 
     def _set_label_color(self, color):
         self._label_color = color
 
     @cached_property
     def _get_image_slice(self):
+        if self.image is None:
+            return None
+
         if ETSConfig.toolkit == "wx":
             from traitsui.wx.image_slice import image_slice_for
-
-            if self.image is None:
-                return None
 
             return image_slice_for(self.image)
 
