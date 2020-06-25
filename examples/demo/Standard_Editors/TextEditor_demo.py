@@ -13,14 +13,12 @@ When editing an Int, consider styles 'simple' and 'readonly'.
 # FIXME:? as of 7/1/2011, Password style 'text' showed typed characters.
 # It no longer does. Should it?
 
-# Imports:
 from traits.api import HasTraits, Str, Int, Password
 
 from traitsui.api import Item, Group, View
 
+
 # The main demo class:
-
-
 class TextEditorDemo(HasTraits):
     """ Defines the TextEditor demo class.
     """
@@ -45,7 +43,7 @@ class TextEditorDemo(HasTraits):
     text_int_group = Group(
         Item('int_trait', style='simple', label='Simple'),
         # custom and text styles are not useful for editing integers, not
-        # shown:
+        # shown.
         Item('_'),
         Item('int_trait', style='readonly', label='ReadOnly'),
         label='Integer'
@@ -55,18 +53,20 @@ class TextEditorDemo(HasTraits):
     text_pass_group = Group(
         Item('password', style='simple', label='Simple'),
         # custom and text style are the same as simple, not shown.
+        # readonly style is not useful for passwords.
         label='Password'
     )
 
     # The view includes one group per data type. These will be displayed
     # on separate tabbed panels:
-    traits_view = View(
+    view = View(
         text_str_group,
         text_pass_group,
         text_int_group,
         title='TextEditor',
         buttons=['OK']
     )
+
 
 # Create the demo:
 demo = TextEditorDemo()
