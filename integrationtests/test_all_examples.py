@@ -46,7 +46,7 @@ SOURCE_DIRS = [
 ]
 
 
-#: Mapping from filepath to a callable() -> (skipped: bool, reason: str)
+#: Mapping from filepath to tuple(condition: callable -> bool, reason: str)
 FILES_MAY_BE_SKIPPED = {}
 
 
@@ -62,11 +62,11 @@ def skip_file_if(condition, reason, filepath):
     filepath : str
         Path of the file which may be skipped from tests.
     """
-    def wrapped():
-        return condition(), reason
-
     filepath = os.path.abspath(filepath)
-    FILES_MAY_BE_SKIPPED[filepath] = wrapped
+    FILES_MAY_BE_SKIPPED[filepath] = (
+        condition,
+        "{reason} (File: {filepath})".format(reason=reason, filepath=filepath)
+    )
 
 
 skip_file_if(
@@ -148,8 +148,8 @@ def is_skipped(path):
     """
     if path not in FILES_MAY_BE_SKIPPED:
         return False, ""
-    skipped, reason = FILES_MAY_BE_SKIPPED[path]()
-    return skipped, reason
+    condition, reason = FILES_MAY_BE_SKIPPED[os.path.abspath(path)]
+    return condition(), reason
 
 
 def get_python_files(directory):
