@@ -151,11 +151,13 @@ def process_cascade_events():
         # Qt won't raise if there are still events to be processed before
         # the time limit is reached. There are no other safe way to tell
         # if there are pending events (`hasPendingEvents` is deprecated).
-        # The minus-one is to account for precision differences between Python
+        # The offset is to account for precision differences between Python
         # and Qt, false positive triggers another redundant run that should
         # return immediately so that is fine.
+        # The precision is worse on Windows, typically around ~15 milliseconds.
+        # Give it a 1% error offset, which should be more than enough.
         while (start is None
-                or (time.time() - start) * 1000 >= _TOLERANCE_MILLISECS - 1):
+                or (time.time() - start) * 1000 >= _TOLERANCE_MILLISECS - 50):
             start = time.time()
             QtCore.QCoreApplication.processEvents(
                 QtCore.QEventLoop.AllEvents, _TOLERANCE_MILLISECS
