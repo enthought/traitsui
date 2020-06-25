@@ -20,12 +20,12 @@ import traceback
 import unittest
 from unittest import mock
 
-from pyface.api import GUI
 from traits.api import HasTraits
 
 from traitsui.tests._tools import (
     is_current_backend_wx,
     is_current_backend_qt4,
+    process_cascade_events,
     skip_if_null,
     store_exceptions_on_all_threads,
 )
@@ -199,7 +199,7 @@ def replaced_configure_traits(
         **args,
     )
     with store_exceptions_on_all_threads():
-        GUI.process_events()
+        process_cascade_events()
 
         # Temporary fix for enthought/traitsui#907
         if is_current_backend_qt4():
@@ -208,7 +208,7 @@ def replaced_configure_traits(
             ui.control.Hide()
 
         ui.dispose()
-        GUI.process_events()
+        process_cascade_events()
 
 
 @contextlib.contextmanager
@@ -278,4 +278,4 @@ class TestExample(unittest.TestCase):
                 finally:
                     # Whatever failure, always flush the GUI event queue
                     # before running the next one.
-                    GUI.process_events()
+                    process_cascade_events()
