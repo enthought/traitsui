@@ -270,7 +270,7 @@ def run_file(file_path):
             mock.patch("sys.argv", [file_path]):
         # Mock stdout: Examples typically print educational information.
         # They are expected but they should not pollute test output.
-        # Move argv: Some example reads sys.argv to allow more arguments
+        # Mock argv: Some example reads sys.argv to allow more arguments
         # But all examples should support being run without additional
         # arguments.
         exec(content, globals)
