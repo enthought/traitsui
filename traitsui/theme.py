@@ -18,9 +18,8 @@
 """ Defines 'theme' related classes.
 """
 
-
-
 from traits.api import HasPrivateTraits, Property, cached_property
+from traits.etsconfig.api import ETSConfig
 
 from .ui_traits import Image, HasBorder, HasMargin, Alignment
 
@@ -66,15 +65,16 @@ class Theme(HasPrivateTraits):
     # -- Property Implementations ---------------------------------------------
 
     def _get_content_color(self):
-        import wx
+        if ETSConfig.toolkit == "wx":
+            import wx
 
-        if self._content_color is None:
-            color = wx.BLACK
-            islice = self.image_slice
-            if islice is not None:
-                color = islice.content_color
+            if self._content_color is None:
+                color = wx.BLACK
+                islice = self.image_slice
+                if islice is not None:
+                    color = islice.content_color
 
-            self._content_color = color
+                self._content_color = color
 
         return self._content_color
 
@@ -82,15 +82,16 @@ class Theme(HasPrivateTraits):
         self._content_color = color
 
     def _get_label_color(self):
-        import wx
+        if ETSConfig.toolkit == "wx":
+            import wx
 
-        if self._label_color is None:
-            color = wx.BLACK
-            islice = self.image_slice
-            if islice is not None:
-                color = islice.label_color
+            if self._label_color is None:
+                color = wx.BLACK
+                islice = self.image_slice
+                if islice is not None:
+                    color = islice.label_color
 
-            self._label_color = color
+                self._label_color = color
 
         return self._label_color
 
@@ -99,12 +100,13 @@ class Theme(HasPrivateTraits):
 
     @cached_property
     def _get_image_slice(self):
-        from traitsui.wx.image_slice import image_slice_for
-
         if self.image is None:
             return None
 
-        return image_slice_for(self.image)
+        if ETSConfig.toolkit == "wx":
+            from traitsui.wx.image_slice import image_slice_for
+
+            return image_slice_for(self.image)
 
 
 #: The default theme:
