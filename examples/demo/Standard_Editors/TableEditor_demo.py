@@ -8,85 +8,81 @@ This demo shows the full behavior of a straightforward TableEditor.  Only
 one style of TableEditor is implemented, so that is the one shown.
 """
 
-# Import statements:
-from traits.api \
-    import HasTraits, HasStrictTraits, Str, Int, Regex, List
+from traits.api import HasTraits, HasStrictTraits, Str, Int, Regex, List
 
-from traitsui.api \
-    import View, Group, Item, TableEditor
+from traitsui.api import (
+    View, Group, Item, TableEditor, ObjectColumn, ExpressionColumn,
+    EvalFilterTemplate, MenuFilterTemplate, RuleFilterTemplate, EvalTableFilter
+)
 
-from traitsui.table_column \
-    import ObjectColumn, ExpressionColumn
-
-from traitsui.table_filter \
-    import EvalFilterTemplate, MenuFilterTemplate, RuleFilterTemplate, \
-    EvalTableFilter
 
 # A helper class for the 'Department' class below:
-
-
 class Employee(HasTraits):
     first_name = Str()
     last_name = Str()
     age = Int()
-    phone = Regex(value='000-0000', regex='\d\d\d[-]\d\d\d\d')
+    phone = Regex(value='000-0000', regex=r'\d\d\d[-]\d\d\d\d')
 
-    traits_view = View(
+    view = View(
         'first_name', 'last_name', 'age', 'phone',
         title='Create new employee',
         width=0.18,
         buttons=['OK', 'Cancel']
     )
 
-# The definition of the demo TableEditor:
+
+# For readability, the TableEditor of the demo is defined here, rather than in
+# the View:
 table_editor = TableEditor(
-    columns=[ObjectColumn(name='first_name', width=0.20),
-             ObjectColumn(name='last_name', width=0.20),
-             ExpressionColumn(
-        label='Full Name',
-        width=0.30,
-        expression="'%s %s' % (object.first_name, "
-        "object.last_name )"),
-        ObjectColumn(name='age', width=0.10,
-                     horizontal_alignment='center'),
-        ObjectColumn(name='phone', width=0.20)],
+    columns=[
+        ObjectColumn(name='first_name', width=0.20),
+        ObjectColumn(name='last_name', width=0.20),
+        ExpressionColumn(
+            label='Full Name',
+            width=0.30,
+            expression="'%s %s' % (object.first_name, "
+            "object.last_name )"
+        ),
+        ObjectColumn(name='age', width=0.10, horizontal_alignment='center'),
+        ObjectColumn(name='phone', width=0.20)
+            ],
     deletable=True,
     sort_model=True,
     auto_size=False,
     orientation='vertical',
     edit_view=View(
-        Group('first_name', 'last_name', 'age', 'phone',
-                            show_border=True
-              ),
+        Group('first_name', 'last_name', 'age', 'phone', show_border=True),
         resizable=True
     ),
     filters=[EvalFilterTemplate, MenuFilterTemplate, RuleFilterTemplate],
     search=EvalTableFilter(),
     show_toolbar=True,
-    row_factory=Employee)
+    row_factory=Employee,
+)
+
 
 # The class to be edited with the TableEditor:
-
-
 class Department(HasStrictTraits):
 
     employees = List(Employee)
 
-    traits_view = View(
+    view = View(
         Group(
-            Item('employees',
-                 show_label=False,
-                 editor=table_editor
-                 ),
+            Item(
+                'employees',
+                show_label=False,
+                editor=table_editor
+            ),
             show_border=True,
         ),
-        title='TableEditor',
+        title='Department Personnel',
         width=.4,
         height=.4,
         resizable=True,
         buttons=['OK'],
         kind='live'
     )
+
 
 # Create some employees:
 employees = [
