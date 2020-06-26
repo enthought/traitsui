@@ -10,8 +10,6 @@ When editing a Password, use style 'simple' (shows asterisks).
 
 When editing an Int, consider styles 'simple' and 'readonly'.
 """
-# FIXME:? as of 7/1/2011, Password style 'text' showed typed characters.
-# It no longer does. Should it?
 
 from traits.api import HasTraits, Str, Int, Password
 
@@ -59,7 +57,7 @@ class TextEditorDemo(HasTraits):
 
     # The view includes one group per data type. These will be displayed
     # on separate tabbed panels:
-    view = View(
+    traits_view = View(
         text_str_group,
         text_pass_group,
         text_int_group,
