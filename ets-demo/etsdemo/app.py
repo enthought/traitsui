@@ -16,10 +16,6 @@
 # -------------------------------------------------------------------------
 
 """ A Traits UI demo that borrows heavily from the design of the wxPython demo.
-
-This copy of the demo application will only be maintained until ``ets-demo``
-is released and distributed. This allows other ETS packages to continue to be
-able to import the demo application until ``ets-demo`` is released.
 """
 
 
