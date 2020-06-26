@@ -3,12 +3,16 @@ Edit a string, password, or integer
 
 The TextEditor displays a Str, Password, or Int trait for the user to edit.
 
-When editing a Str, consider styles 'simple' (one-line), 'custom' (multi-line),
-or read-only (multi-line).
+The demo shows all styles of the editor for each of the traits, however certain
+styles are more useful than others:
 
-When editing a Password, use style 'simple' (shows asterisks).
+  - When editing a Str, consider styles 'simple' (one-line), 'custom'
+    (multi-line), or 'readonly' (multi-line).
 
-When editing an Int, consider styles 'simple' and 'readonly'.
+  - When editing a Password, style 'simple' is recommended (shows asterisks).
+
+  - When editing an Int, consider styles 'simple' and 'readonly'.
+
 """
 
 from traits.api import HasTraits, Str, Int, Password
@@ -32,7 +36,8 @@ class TextEditorDemo(HasTraits):
         Item('_'),
         Item('string_trait', style='custom', label='Custom'),
         Item('_'),
-        # text style is the same as simple, not shown.
+        Item('string_trait', style='text', label='Text'),
+        Item('_'),
         Item('string_trait', style='readonly', label='ReadOnly'),
         label='String'
     )
@@ -40,8 +45,10 @@ class TextEditorDemo(HasTraits):
     # TextEditor display without multi-line capability (for an integer):
     text_int_group = Group(
         Item('int_trait', style='simple', label='Simple'),
-        # custom and text styles are not useful for editing integers, not
-        # shown.
+        Item('_'),
+        Item('int_trait', style='custom', label='Custom'),
+        Item('_'),
+        Item('int_trait', style='text', label='Text'),
         Item('_'),
         Item('int_trait', style='readonly', label='ReadOnly'),
         label='Integer'
@@ -50,8 +57,12 @@ class TextEditorDemo(HasTraits):
     # TextEditor display with secret typing capability (for Password traits):
     text_pass_group = Group(
         Item('password', style='simple', label='Simple'),
-        # custom and text style are the same as simple, not shown.
-        # readonly style is not useful for passwords.
+        Item('_'),
+        Item('password', style='custom', label='Custom'),
+        Item('_'),
+        Item('password', style='text', label='Text'),
+        Item('_'),
+        Item('password', style='readonly', label='ReadOnly'),
         label='Password'
     )
 
