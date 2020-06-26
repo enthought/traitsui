@@ -34,7 +34,7 @@ class Employee(HasTraits):
     age = Int()
     phone = Regex(value='000-0000', regex=r'\d\d\d[-]\d\d\d\d')
 
-    view = View(
+    traits_view = View(
         'first_name', 'last_name', 'age', 'phone',
         title='Create new employee',
         width=0.18,
@@ -77,7 +77,7 @@ class Department(HasStrictTraits):
 
     employees = List(Employee)
 
-    view = View(
+    traits_view = View(
         Group(
             Item(
                 'employees',
