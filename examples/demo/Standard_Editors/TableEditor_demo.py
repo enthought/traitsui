@@ -2,11 +2,10 @@
 #  License: BSD Style.
 
 """
-WARNING
--------
+**WARNING**
 
-This demo might not work as expected and some documented features might be
-missing.
+  This demo might not work as expected and some documented features might be
+  missing.
 
 -------------------------------------------------------------------------------
 
@@ -56,7 +55,7 @@ table_editor = TableEditor(
         ),
         ObjectColumn(name='age', width=0.10, horizontal_alignment='center'),
         ObjectColumn(name='phone', width=0.20)
-            ],
+    ],
     deletable=True,
     sort_model=True,
     auto_size=False,
