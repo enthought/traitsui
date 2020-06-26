@@ -2,6 +2,14 @@
 #  License: BSD Style.
 
 """
+WARNING
+-------
+
+This demo might not work as expected and some documented features might be
+missing.
+
+-------------------------------------------------------------------------------
+
 Implementation of a TableEditor demo plugin for Traits UI demo program
 
 This demo shows the full behavior of a straightforward TableEditor.  Only
