@@ -15,7 +15,7 @@ import textwrap
 import unittest
 from xml.etree import ElementTree as ET
 
-from traitsui.extras import demo
+from etsdemo.app import DemoPath
 
 HTML_NS_PREFIX = "{http://www.w3.org/1999/xhtml}"
 
@@ -31,7 +31,7 @@ class TestDemoPathDescription(unittest.TestCase):
         # If the directory is empty, the content of the description should
         # be empty.
         with tempfile.TemporaryDirectory() as directory:
-            model = demo.DemoPath(
+            model = DemoPath(
                 name=directory,
             )
 
@@ -46,7 +46,7 @@ class TestDemoPathDescription(unittest.TestCase):
             with open(index_rst, "w", encoding="utf-8") as f:
                 f.write(".. image:: any_image.jpg\n")
 
-            model = demo.DemoPath(
+            model = DemoPath(
                 name=directory,
             )
 
@@ -56,7 +56,7 @@ class TestDemoPathDescription(unittest.TestCase):
 
     def test_description_use_css(self):
         with tempfile.TemporaryDirectory() as directory:
-            model = demo.DemoPath(
+            model = DemoPath(
                 name=directory,
                 css_filename="default.css",
             )
@@ -72,7 +72,7 @@ class TestDemoPathInitLocals(unittest.TestCase):
 
     def test_init_dict_with_empty_directory(self):
         with tempfile.TemporaryDirectory() as directory:
-            model = demo.DemoPath(
+            model = DemoPath(
                 name=directory,
             )
             # traits api is still imported.
@@ -85,7 +85,7 @@ class TestDemoPathInitLocals(unittest.TestCase):
             init_py = os.path.join(directory, "__init__.py")
             with open(init_py, "w", encoding="utf-8") as f:
                 f.write("a = 1\n")
-            model = demo.DemoPath(
+            model = DemoPath(
                 name=directory,
             )
             self.assertIn("a", model.init_dic)
@@ -120,7 +120,7 @@ class TestDemoPathChildren(unittest.TestCase):
             with open(example_py, "w", encoding="utf-8") as f:
                 f.write(example_content)
 
-            model = demo.DemoPath(
+            model = DemoPath(
                 name=directory,
                 use_files=False,
             )
