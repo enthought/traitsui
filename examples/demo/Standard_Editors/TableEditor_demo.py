@@ -20,7 +20,10 @@ from traits.api import HasTraits, HasStrictTraits, Str, Int, Regex, List
 
 from traitsui.api import (
     View, Group, Item, TableEditor, ObjectColumn, ExpressionColumn,
-    EvalFilterTemplate, MenuFilterTemplate, RuleFilterTemplate, EvalTableFilter
+    EvalTableFilter
+)
+from traitsui.table_filter import (
+    EvalFilterTemplate, MenuFilterTemplate, RuleFilterTemplate
 )
 
 
