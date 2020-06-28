@@ -12,5 +12,8 @@ build/
 dist/
 docs/build/
 
+# ignore mypy cache
+.mypy_cache/
+
 # Ignore the auto-generated version file
 traitsui/_version.py
