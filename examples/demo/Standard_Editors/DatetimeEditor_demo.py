@@ -15,7 +15,7 @@ class DateEditorDemo(HasTraits):
     datetime = Datetime()
     info_string = Str('The editors for Traits Datetime objects.')
 
-    view = View(
+    traits_view = View(
         Item(
             'info_string',
             show_label=False,
@@ -41,7 +41,7 @@ class DateEditorDemo(HasTraits):
         print(self.datetime)
 
 
-#-- Set Up The Demo ------------------------------------------------------
+# -- Set Up The Demo ------------------------------------------------------
 
 demo = DateEditorDemo(
     datetime=datetime.datetime.now()

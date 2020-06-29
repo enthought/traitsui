@@ -12,44 +12,52 @@ The four tabs of this demo show variations on the interface as follows:
    Ord II:   Creates a set whose order is specifed by the user, has "move all"
 """
 
-# Imports:
-from traits.api \
-    import HasTraits, List
+from traits.api import HasTraits, List
 
-from traitsui.api \
-    import Item, Group, View, SetEditor
+from traitsui.api import Item, Group, View, SetEditor
+
 
 # Define the main demo class:
-
-
 class SetEditorDemo(HasTraits):
     """ Defines the SetEditor demo class.
     """
 
     # Define a trait each for four SetEditor variants:
-    unord_nma_set = List(editor=SetEditor(
-        values=['kumquats', 'pomegranates', 'kiwi'],
-        can_move_all=False,
-        left_column_title='Available Fruit',
-        right_column_title='Exotic Fruit Bowl'))
+    unord_nma_set = List(
+        editor=SetEditor(
+            values=['kumquats', 'pomegranates', 'kiwi'],
+            left_column_title='Available Fruit',
+            right_column_title='Exotic Fruit Bowl',
+            can_move_all=False
+        )
+    )
 
-    unord_ma_set = List(editor=SetEditor(
-        values=['kumquats', 'pomegranates', 'kiwi'],
-        left_column_title='Available Fruit',
-        right_column_title='Exotic Fruit Bowl'))
+    unord_ma_set = List(
+        editor=SetEditor(
+            values=['kumquats', 'pomegranates', 'kiwi'],
+            left_column_title='Available Fruit',
+            right_column_title='Exotic Fruit Bowl'
+        )
+    )
 
-    ord_nma_set = List(editor=SetEditor(
-        values=['apples', 'berries', 'cantaloupe'],
-        ordered=True,
-        can_move_all=False,
-        left_column_title='Available Fruit',
-        right_column_title='Fruit Bowl'))
+    ord_nma_set = List(
+        editor=SetEditor(
+            values=['apples', 'berries', 'cantaloupe'],
+            left_column_title='Available Fruit',
+            right_column_title='Fruit Bowl',
+            ordered=True,
+            can_move_all=False
+        )
+    )
 
-    ord_ma_set = List(editor=SetEditor(
-        values=['apples', 'berries', 'cantaloupe'],
-        ordered=True,
-        left_column_title='Available Fruit',
-        right_column_title='Fruit Bowl'))
+    ord_ma_set = List(
+        editor=SetEditor(
+            values=['apples', 'berries', 'cantaloupe'],
+            left_column_title='Available Fruit',
+            right_column_title='Fruit Bowl',
+            ordered=True
+        )
+    )
 
     # SetEditor display, unordered, no move-all buttons:
     no_nma_group = Group(
@@ -81,7 +89,7 @@ class SetEditorDemo(HasTraits):
 
     # The view includes one group per data type. These will be displayed
     # on separate tabbed panels:
-    view = View(
+    traits_view = View(
         no_nma_group,
         no_ma_group,
         o_nma_group,
@@ -89,6 +97,7 @@ class SetEditorDemo(HasTraits):
         title='SetEditor',
         buttons=['OK']
     )
+
 
 # Create the demo:
 demo = SetEditorDemo()

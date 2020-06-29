@@ -10,17 +10,14 @@ Fixme: This version of the demo only shows the old-style InstanceEditor
 capabilities.
 """
 
-# Imports:
-from traits.api \
-    import HasTraits, Str, Range, Bool, Instance
+from traits.api import HasTraits, Str, Range, Bool, Instance
 
-from traitsui.api \
-    import Item, Group, View
+from traitsui.api import Item, Group, View
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Classes:
-#-------------------------------------------------------------------------
-
+# -------------------------------------------------------------------------
 
 class SampleClass(HasTraits):
     """ This Sample class is used to demonstrate the InstanceEditor demo.
@@ -36,7 +33,7 @@ class SampleClass(HasTraits):
     # The InstanceEditor uses whatever view is defined for the class.  The
     # default view lists the fields alphabetically, so it's best to define one
     # explicitly:
-    view = View('name', 'occupation', 'age', 'registered_voter')
+    traits_view = View('name', 'occupation', 'age', 'registered_voter')
 
 
 class InstanceEditorDemo(HasTraits):
@@ -58,12 +55,13 @@ class InstanceEditorDemo(HasTraits):
     )
 
     # Demo View:
-    view = View(
+    traits_view = View(
         inst_group,
         title='InstanceEditor',
         buttons=['OK'],
         resizable=True
     )
+
 
 # Create the demo:
 demo = InstanceEditorDemo()

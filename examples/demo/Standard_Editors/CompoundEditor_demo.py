@@ -7,22 +7,21 @@ Implementation of a CompoundEditor demo plugin for Traits UI demo program.
 This demo shows each of the four styles of the CompoundEditor
 """
 
-# Imports:
-from traits.api \
-    import HasTraits, Trait, Range
+from traits.api import Enum, HasTraits, Range, Union
 
-from traitsui.api \
-    import Item, Group, View
+from traitsui.api import Item, Group, View
+
 
 # Define the demo class:
-
-
 class CompoundEditorDemo(HasTraits):
     """ Defines the main CompoundEditor demo class.
     """
 
     # Define a compund trait to view:
-    compound_trait = Trait(1, Range(1, 6), 'a', 'b', 'c', 'd', 'e', 'f')
+    compound_trait = Union(
+        Range(1, 6), Enum('a', 'b', 'c', 'd', 'e', 'f'),
+        default_value=1
+    )
 
     # Display specification (one Item per editor style):
     comp_group = Group(
@@ -36,12 +35,13 @@ class CompoundEditorDemo(HasTraits):
     )
 
     # Demo view:
-    view = View(
+    traits_view = View(
         comp_group,
         title='CompoundEditor',
         buttons=['OK'],
         resizable=True
     )
+
 
 # Create the demo:
 demo = CompoundEditorDemo()

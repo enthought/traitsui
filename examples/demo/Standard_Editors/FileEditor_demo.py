@@ -7,16 +7,12 @@ Implementation of a FileEditor demo plugin for Traits UI demo program.
 This demo shows each of the four styles of the FileEditor
 """
 
-# Imports:
-from traits.api \
-    import HasTraits, File
+from traits.api import HasTraits, File
 
-from traitsui.api \
-    import Item, Group, View
+from traitsui.api import Item, Group, View
+
 
 # Define the demo class:
-
-
 class FileEditorDemo(HasTraits):
     """ Defines the main FileEditor demo class. """
 
@@ -35,12 +31,13 @@ class FileEditorDemo(HasTraits):
     )
 
     # Demo view:
-    view = View(
+    traits_view = View(
         file_group,
         title='FileEditor',
         buttons=['OK'],
         resizable=True
     )
+
 
 # Create the demo:
 demo = FileEditorDemo()

@@ -52,14 +52,18 @@ class HTMLEditorDemo(HasTraits):
 
     # Demo view
     traits_view = View(
-        UItem('my_html_trait',
-              # we specify the editor explicitly in order to set format_text:
-              editor=HTMLEditor(format_text=True)),
+        UItem(
+            'my_html_trait',
+            # we specify the editor explicitly in order to set format_text:
+            editor=HTMLEditor(format_text=True)
+        ),
         title='HTMLEditor',
         buttons=['OK'],
         width=800,
         height=600,
-        resizable=True)
+        resizable=True
+    )
+
 
 # Create the demo:
 demo = HTMLEditorDemo()

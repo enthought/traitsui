@@ -7,16 +7,12 @@ Implementation of a TupleEditor demo plugin for Traits UI demo program.
 This demo shows each of the four styles of the TupleEditor
 """
 
-# Imports:
-from traits.api \
-    import HasTraits, Tuple, Range, Str
+from traits.api import HasTraits, Tuple, Range, Str
 
-from traitsui.api \
-    import Item, Group, View, Color
+from traitsui.api import Item, Group, View, Color
+
 
 # The main demo class:
-
-
 class TupleEditorDemo(HasTraits):
     """ Defines the TupleEditor demo class.
     """
@@ -36,7 +32,7 @@ class TupleEditorDemo(HasTraits):
     )
 
     # Demo view
-    view = View(
+    traits_view = View(
         tuple_group,
         title='TupleEditor',
         buttons=['OK'],

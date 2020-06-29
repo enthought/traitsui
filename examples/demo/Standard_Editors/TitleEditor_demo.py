@@ -20,12 +20,9 @@ This demonstration shows three variations of using a TitleEditor:
    into the value field to cause the title to changed.
 """
 
-# Imports:
-from traits.api \
-    import HasTraits, Enum, Str, Float, Property, cached_property
+from traits.api import HasTraits, Enum, Str, Float, Property, cached_property
 
-from traitsui.api \
-    import View, VGroup, HGroup, Item, TitleEditor
+from traitsui.api import View, VGroup, HGroup, Item, TitleEditor
 
 
 class TitleEditorDemo(HasTraits):
@@ -48,7 +45,7 @@ class TitleEditorDemo(HasTraits):
     value = Float()
 
     # Define the test view:
-    view = View(
+    traits_view = View(
         VGroup(
             VGroup(
                 HGroup(
@@ -87,16 +84,23 @@ class TitleEditorDemo(HasTraits):
         width=0.4
     )
 
-    #-- Property Implementations ---------------------------------------------
+    # -- Property Implementations ---------------------------------------------
 
     @cached_property
     def _get_title_3(self):
-        try:
-            return ('The square root of %s is %s' %
-                    (self.value, self.value ** 0.5))
-        except:
-            return ('The square root of %s is %si' %
-                    (self.value, (-self.value) ** 0.5))
+        if self.value >= 0:
+            return (
+                'The square root of {} is {}'.format(
+                    self.value, self.value ** 0.5
+                )
+            )
+        else:
+            return (
+                'The square root of {} is {}i'.format(
+                    self.value, (-self.value) ** 0.5
+                )
+            )
+
 
 # Create the demo:
 demo = TitleEditorDemo()

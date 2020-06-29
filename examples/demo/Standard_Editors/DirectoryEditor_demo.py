@@ -7,16 +7,12 @@ Implementation of a DirectoryEditor demo plugin for Traits UI demo program.
 This demo shows each of the four styles of the DirectoryEditor
 """
 
-# Imports:
-from traits.api \
-    import HasTraits, Directory
+from traits.api import HasTraits, Directory
 
-from traitsui.api \
-    import Item, Group, View
+from traitsui.api import Item, Group, View
+
 
 # Define the demo class:
-
-
 class DirectoryEditorDemo(HasTraits):
     """ Define the main DirectoryEditor demo class. """
 
@@ -35,12 +31,14 @@ class DirectoryEditorDemo(HasTraits):
     )
 
     # Demo view:
-    view = View(
+    traits_view = View(
         dir_group,
         title='DirectoryEditor',
+        width=400,
         buttons=['OK'],
         resizable=True
     )
+
 
 # Create the demo:
 demo = DirectoryEditorDemo()
