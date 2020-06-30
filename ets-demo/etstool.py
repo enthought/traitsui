@@ -184,7 +184,7 @@ def install(runtime, toolkit, environment, editable):
         else:
             # XXX this is mainly for TravisCI workers; need a generic solution
             commands.append(
-                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-14.04 wxPython"
+                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-14.04 wxPython"   # noqa: E501
             )
 
     click.echo("Creating environment '{environment}'".format(**parameters))
@@ -279,7 +279,11 @@ def test_all():
 
 def get_parameters(runtime, toolkit, environment):
     """ Set up parameters dictionary for format() substitution """
-    parameters = {'runtime': runtime, 'toolkit': toolkit, 'environment': environment}
+    parameters = {
+        'runtime': runtime,
+        'toolkit': toolkit,
+        'environment': environment,
+    }
     if toolkit not in supported_combinations[runtime]:
         msg = ("Python {runtime} and toolkit {toolkit} not supported by " +
                "test environments")
