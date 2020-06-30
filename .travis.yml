@@ -42,6 +42,7 @@ before_install:
   - edm install -y wheel click coverage
 install:
   - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
+  - if [[ ${TRAVIS_EVENT_TYPE} == 'cron' ]]; then for toolkit in ${TOOLKITS}; do edm run -- python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit} --source || exit; done; fi
 script:
   - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py test --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
 
