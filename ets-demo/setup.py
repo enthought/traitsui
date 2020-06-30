@@ -59,7 +59,6 @@ if __name__ == "__main__":
         long_description_content_type="text/x-rst",
         install_requires=install_requires,
         extras_require=extras_require,
-        package_data={"traits-stubs": ["./*.pyi", "./**/*.pyi"]},
         license="BSD",
         python_requires=">=3.5",
     )
