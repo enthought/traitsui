@@ -7,7 +7,7 @@ Implementation of a CompoundEditor demo plugin for Traits UI demo program.
 This demo shows each of the four styles of the CompoundEditor
 """
 
-from traits.api import Enum, HasTraits, Range, Union
+from traits.api import Either, Enum, HasTraits, Range
 
 from traitsui.api import Item, Group, View
 
@@ -18,9 +18,13 @@ class CompoundEditorDemo(HasTraits):
     """
 
     # Define a compund trait to view:
-    compound_trait = Union(
-        Range(1, 6), Enum('a', 'b', 'c', 'd', 'e', 'f'),
-        default_value=1
+    # Note: In Traits 6.1 a new Trait type `Union` has been added, which is
+    # recommended over `Either`:
+    # compound_trait = Union(
+    #     Range(1, 6), Enum('a', 'b', 'c', 'd', 'e', 'f'), default_value=1
+    # )
+    compound_trait = Either(
+        Range(1, 6), Enum('a', 'b', 'c', 'd', 'e', 'f'), default=1
     )
 
     # Display specification (one Item per editor style):
