@@ -218,8 +218,6 @@ class TestLabels(unittest.TestCase):
 
             dialog.bool_item = True
 
-            ui.dispose()
-
 
 @skip_if_null
 class TestAnyToolkit(unittest.TestCase):

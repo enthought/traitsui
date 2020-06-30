@@ -59,9 +59,9 @@ class TestCSVEditor(unittest.TestCase):
         list_of_floats = ListOfFloats(data=[1, 2, 3])
         csv_view = ListOfFloatsWithCSVEditor(model=list_of_floats)
         try:
-            with store_exceptions_on_all_threads(), create_ui(csv_view) as ui:
-                press_ok_button(ui)
-
+            with store_exceptions_on_all_threads():
+                with create_ui(csv_view) as ui:
+                    pass
                 # raise an exception if still hooked
                 list_of_floats.data.append(2)
 
@@ -99,8 +99,6 @@ class TestCSVEditor(unittest.TestCase):
 
             expected = csv_list_editor._format_list_str([1.0, 3.14])
             self.assertEqual(value_str, expected)
-
-            press_ok_button(ui)
 
 
 if __name__ == "__main__":
