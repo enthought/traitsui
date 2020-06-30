@@ -35,9 +35,6 @@ class TestInstanceEditor(unittest.TestCase):
             # close the ui dialog
             press_ok_button(editor._dialog_ui)
 
-            # close the main ui
-            press_ok_button(ui)
-
     @skip_if_not_qt4
     def test_simple_editor_parent_closed(self):
         obj = NonmodalInstanceEditor()
@@ -46,6 +43,3 @@ class TestInstanceEditor(unittest.TestCase):
 
             # make the dialog appear
             editor._button.click()
-
-            # close the main ui
-            press_ok_button(ui)

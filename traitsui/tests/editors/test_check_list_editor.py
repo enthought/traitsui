@@ -1,6 +1,5 @@
+import contextlib
 import unittest
-
-from pyface.gui import GUI
 
 from traits.api import HasTraits, List, Str
 from traitsui.api import CheckListEditor, UItem, View
@@ -9,6 +8,7 @@ from traitsui.tests._tools import (
     get_all_button_status,
     is_current_backend_qt4,
     is_current_backend_wx,
+    process_cascade_events,
     skip_if_null,
     store_exceptions_on_all_threads,
 )
@@ -120,10 +120,10 @@ def set_text_in_line_edit(line_edit, text):
 @skip_if_null
 class TestCheckListEditorMapping(unittest.TestCase):
 
+    @contextlib.contextmanager
     def setup_ui(self, model, view):
-        ui = model.edit_traits(view=view)
-        self.addCleanup(ui.dispose)
-        return ui.get_editors("value")[0]
+        with create_ui(model, dict(view=view)) as ui:
+            yield ui.get_editors("value")[0]
 
     def check_checklist_mappings_value_change(self, style):
         check_list_editor_factory = CheckListEditor(
@@ -139,8 +139,8 @@ class TestCheckListEditorMapping(unittest.TestCase):
         )
         model = ListModel()
 
-        with store_exceptions_on_all_threads():
-            editor = self.setup_ui(model, formatted_view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_ui(model, formatted_view) as editor:
 
             self.assertEqual(editor.names, ["ONE", "TWO"])
 
@@ -162,8 +162,8 @@ class TestCheckListEditorMapping(unittest.TestCase):
         )
         model = ListModel()
 
-        with store_exceptions_on_all_threads():
-            editor = self.setup_ui(model, formatted_view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_ui(model, formatted_view) as editor:
 
             # FIXME issue enthought/traitsui#841
             with self.assertRaises(AssertionError):
@@ -195,8 +195,8 @@ class TestCheckListEditorMapping(unittest.TestCase):
         )
         model = ListModel()
 
-        with store_exceptions_on_all_threads():
-            editor = self.setup_ui(model, formatted_view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_ui(model, formatted_view) as editor:
 
             self.assertEqual(editor.names, ["ONE", "TWO"])
 
@@ -222,8 +222,8 @@ class TestCheckListEditorMapping(unittest.TestCase):
         )
         model = ListModel()
 
-        with store_exceptions_on_all_threads():
-            editor = self.setup_ui(model, formatted_view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_ui(model, formatted_view) as editor:
 
             # FIXME issue enthought/traitsui#841
             with self.assertRaises(AssertionError):
@@ -315,92 +315,78 @@ class TestCheckListEditorMapping(unittest.TestCase):
             self.check_checklist_mappings_tuple_name_change("custom")
 
     def test_simple_editor_checklist_values_change_dispose(self):
-        if is_current_backend_wx():
-            # Missing cleanup in wx (enthought/traitsui#752)
-            with self.assertRaises(AttributeError):
-                self.check_checklist_values_change_after_ui_dispose("simple")
-        else:
-            self.check_checklist_values_change_after_ui_dispose("simple")
+        self.check_checklist_values_change_after_ui_dispose("simple")
 
     def test_custom_editor_checklist_values_change_dispose(self):
-        if is_current_backend_wx():
-            # Missing cleanup in wx (enthought/traitsui#752)
-            with self.assertRaises(AttributeError):
-                self.check_checklist_values_change_after_ui_dispose("custom")
-        else:
-            self.check_checklist_values_change_after_ui_dispose("custom")
+        self.check_checklist_values_change_after_ui_dispose("custom")
 
 
 @skip_if_null
 class TestSimpleCheckListEditor(unittest.TestCase):
 
+    @contextlib.contextmanager
     def setup_gui(self, model, view):
-        gui = GUI()
-        ui = model.edit_traits(view=view)
-        self.addCleanup(ui.dispose)
-
-        gui.process_events()
-        editor = ui.get_editors("value")[0]
-        combobox = editor.control
-
-        return gui, editor, combobox
+        with create_ui(model, dict(view=view)) as ui:
+            process_cascade_events()
+            editor = ui.get_editors("value")[0]
+            yield editor
 
     def test_simple_check_list_editor_text(self):
         list_edit = ListModel(value=["one"])
 
-        with store_exceptions_on_all_threads():
-            gui, _, combobox = self.setup_gui(list_edit, get_view("simple"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(list_edit, get_view("simple")) as editor:
 
-            self.assertEqual(get_combobox_text(combobox), "One")
+            self.assertEqual(get_combobox_text(editor.control), "One")
 
             list_edit.value = ["two"]
-            gui.process_events()
+            process_cascade_events()
 
-            self.assertEqual(get_combobox_text(combobox), "Two")
+            self.assertEqual(get_combobox_text(editor.control), "Two")
 
     def test_simple_check_list_editor_text_mapped(self):
         view = get_mapped_view("simple")
         list_edit = ListModel(value=[1])
 
-        with store_exceptions_on_all_threads():
-            gui, _, combobox = self.setup_gui(list_edit, view)
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(list_edit, view) as editor:
 
             # FIXME issue enthought/traitsui#841
             with self.assertRaises(AssertionError):
-                self.assertEqual(get_combobox_text(combobox), "One")
-            self.assertEqual(get_combobox_text(combobox), "one")
+                self.assertEqual(get_combobox_text(editor.control), "One")
+            self.assertEqual(get_combobox_text(editor.control), "one")
 
             list_edit.value = [2]
-            gui.process_events()
+            process_cascade_events()
 
             # FIXME issue enthought/traitsui#841
             with self.assertRaises(AssertionError):
-                self.assertEqual(get_combobox_text(combobox), "Two")
-            self.assertEqual(get_combobox_text(combobox), "two")
+                self.assertEqual(get_combobox_text(editor.control), "Two")
+            self.assertEqual(get_combobox_text(editor.control), "two")
 
     def test_simple_check_list_editor_index(self):
         list_edit = ListModel(value=["one"])
 
-        with store_exceptions_on_all_threads():
-            gui, editor, _ = self.setup_gui(list_edit, get_view("simple"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(list_edit, get_view("simple")) as editor:
 
             self.assertEqual(list_edit.value, ["one"])
 
             set_combobox_index(editor, 1)
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(list_edit.value, ["two"])
 
             set_combobox_index(editor, 0)
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(list_edit.value, ["one"])
 
     def test_simple_check_list_editor_invalid_current_values(self):
         list_edit = ListModel(value=[1, "two", "a", object(), "one"])
 
-        with store_exceptions_on_all_threads():
-            gui, _, _ = self.setup_gui(list_edit, get_view("simple"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(list_edit, get_view("simple")):
 
             self.assertEqual(list_edit.value, ["two", "one"])
 
@@ -410,8 +396,8 @@ class TestSimpleCheckListEditor(unittest.TestCase):
 
         str_edit = StrModel(value="alpha, \ttwo, beta,\n lambda, one")
 
-        with store_exceptions_on_all_threads():
-            gui, _, _ = self.setup_gui(str_edit, get_view("simple"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(str_edit, get_view("simple")):
 
             self.assertEqual(str_edit.value, "two,one")
 
@@ -419,69 +405,68 @@ class TestSimpleCheckListEditor(unittest.TestCase):
 @skip_if_null
 class TestCustomCheckListEditor(unittest.TestCase):
 
+    @contextlib.contextmanager
     def setup_gui(self, model, view):
-        gui = GUI()
-        ui = model.edit_traits(view=view)
-        self.addCleanup(ui.dispose)
-
-        gui.process_events()
-        editor = ui.get_editors("value")[0]
-        widget = editor.control
-
-        return gui, editor, widget
+        with create_ui(model, dict(view=view)) as ui:
+            process_cascade_events()
+            editor = ui.get_editors("value")[0]
+            yield editor
 
     def test_custom_check_list_editor_button_update(self):
         list_edit = ListModel()
 
-        with store_exceptions_on_all_threads():
-            gui, _, widget = self.setup_gui(list_edit, get_view("custom"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(list_edit, get_view("custom")) as editor:
 
             self.assertEqual(
-                get_all_button_status(widget), [False, False, False, False]
+                get_all_button_status(editor.control),
+                [False, False, False, False]
             )
 
             list_edit.value = ["two", "four"]
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(
-                get_all_button_status(widget), [False, True, False, True]
+                get_all_button_status(editor.control),
+                [False, True, False, True]
             )
 
             list_edit.value = ["one", "four"]
-            gui.process_events()
+            process_cascade_events()
 
             self.assertEqual(
-                get_all_button_status(widget), [True, False, False, True]
+                get_all_button_status(editor.control),
+                [True, False, False, True]
             )
 
     def test_custom_check_list_editor_click(self):
         list_edit = ListModel()
 
-        with store_exceptions_on_all_threads():
-            gui, _, widget = self.setup_gui(list_edit, get_view("custom"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(list_edit, get_view("custom")) as editor:
 
             self.assertEqual(list_edit.value, [])
 
-            click_checkbox_button(widget, 1)
-            gui.process_events()
+            click_checkbox_button(editor.control, 1)
+            process_cascade_events()
 
             self.assertEqual(list_edit.value, ["two"])
 
-            click_checkbox_button(widget, 1)
-            gui.process_events()
+            click_checkbox_button(editor.control, 1)
+            process_cascade_events()
 
             self.assertEqual(list_edit.value, [])
 
     def test_custom_check_list_editor_click_initial_value(self):
         list_edit = ListModel(value=["two"])
 
-        with store_exceptions_on_all_threads():
-            gui, _, widget = self.setup_gui(list_edit, get_view("custom"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(list_edit, get_view("custom")) as editor:
 
             self.assertEqual(list_edit.value, ["two"])
 
-            click_checkbox_button(widget, 1)
-            gui.process_events()
+            click_checkbox_button(editor.control, 1)
+            process_cascade_events()
 
             self.assertEqual(list_edit.value, [])
 
@@ -491,13 +476,13 @@ class TestCustomCheckListEditor(unittest.TestCase):
 
         str_edit = StrModel(value="alpha, \ttwo, three,\n lambda, one")
 
-        with store_exceptions_on_all_threads():
-            gui, _, widget = self.setup_gui(str_edit, get_view("custom"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(str_edit, get_view("custom")) as editor:
 
             self.assertEqual(str_edit.value, "two,three,one")
 
-            click_checkbox_button(widget, 1)
-            gui.process_events()
+            click_checkbox_button(editor.control, 1)
+            process_cascade_events()
 
             self.assertEqual(str_edit.value, "three,one")
 
@@ -505,32 +490,24 @@ class TestCustomCheckListEditor(unittest.TestCase):
 @skip_if_null
 class TestTextCheckListEditor(unittest.TestCase):
 
+    @contextlib.contextmanager
     def setup_gui(self, model, view):
-        gui = GUI()
-        ui = model.edit_traits(view=view)
-        self.addCleanup(ui.dispose)
+        with create_ui(model, dict(view=view)) as ui:
 
-        gui.process_events()
-        editor = ui.get_editors("value")[0]
-        line_edit = editor.control
-
-        # FIXME issue enthought/traitsui#851
-        if is_current_backend_wx():
-            import wx
-            self.addCleanup(line_edit.Unbind, wx.EVT_KILL_FOCUS)
-
-        return gui, editor, line_edit
+            process_cascade_events()
+            editor = ui.get_editors("value")[0]
+            yield editor
 
     def test_text_check_list_object_list(self):
         list_edit = ListModel()
 
-        with store_exceptions_on_all_threads():
-            gui, _, line_edit = self.setup_gui(list_edit, get_view("text"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(list_edit, get_view("text")) as editor:
 
             self.assertEqual(list_edit.value, [])
 
-            set_text_in_line_edit(line_edit, "['one', 'two']")
-            gui.process_events()
+            set_text_in_line_edit(editor.control, "['one', 'two']")
+            process_cascade_events()
 
             self.assertEqual(list_edit.value, ["one", "two"])
 
@@ -540,12 +517,12 @@ class TestTextCheckListEditor(unittest.TestCase):
 
         str_edit = StrModel(value="three, four")
 
-        with store_exceptions_on_all_threads():
-            gui, _, line_edit = self.setup_gui(str_edit, get_view("text"))
+        with store_exceptions_on_all_threads(), \
+                self.setup_gui(str_edit, get_view("text")) as editor:
 
             self.assertEqual(str_edit.value, "three, four")
 
-            set_text_in_line_edit(line_edit, "one, two")
-            gui.process_events()
+            set_text_in_line_edit(editor.control, "one, two")
+            process_cascade_events()
 
             self.assertEqual(str_edit.value, "one, two")

@@ -82,8 +82,6 @@ class TestRangeEditorSpinner(unittest.TestCase):
                     spintxt = spin.FindWindowByName("text", spin)
                     spintxt.SetValue("4")
 
-                # press the OK button and close the dialog
-                press_ok_button(ui)
         except AttributeError:
             # if all went well, we should not be here
             self.fail("AttributeError raised")
@@ -120,9 +118,6 @@ class TestRangeEditorSpinner(unittest.TestCase):
                 spintxt = spin.FindWindowByName("text")
                 spintxt.SetValue("4")
 
-            # press the OK button and close the dialog
-            press_ok_button(ui)
-
             # if all went well, the number traits has been updated and its
             # value is 4
             self.assertEqual(num.number, 4)
@@ -145,9 +140,6 @@ class TestRangeEditorSpinner(unittest.TestCase):
             lineedit = ui.control.findChild(qt.QtGui.QLineEdit)
             lineedit.setFocus()
             lineedit.setText("4")
-
-            # press the OK button and close the dialog
-            press_ok_button(ui)
 
         # if all went well, the number traits has been updated and its value is
         # 4

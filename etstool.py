@@ -109,9 +109,12 @@ dependencies = {
     "docutils"
 }
 
-# NOTE : pyface is always installed from source
-source_dependencies = {
-    "traits": "git+http://github.com/enthought/traits.git#egg=traits",
+# Additional toolkit-independent dependencies for demo testing
+test_dependencies = {
+    "apptools",
+    "chaco",
+    "h5py",
+    "pytables",
 }
 
 extra_dependencies = {
@@ -162,6 +165,7 @@ def install(runtime, toolkit, environment, editable, source):
         dependencies
         | extra_dependencies.get(toolkit, set())
         | runtime_dependencies.get(runtime, set())
+        | test_dependencies
     )
 
     install_traitsui = "edm run -e {environment} -- pip install "
@@ -173,7 +177,7 @@ def install(runtime, toolkit, environment, editable, source):
     commands = [
         "edm environments create {environment} --force --version={runtime}",
         "edm install -y -e {environment} " + packages,
-        "edm run -e {environment} -- pip install -r ci-src-requirements.txt --no-dependencies",
+        "edm run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
         "edm run -e {environment} -- python setup.py clean --all",
         install_traitsui,
     ]
@@ -231,8 +235,13 @@ def test(runtime, toolkit, environment):
     else:
         environ["EXCLUDE_TESTS"] = "(wx|qt)"
 
+    parameters["integrationtests"] = os.path.abspath("integrationtests")
     commands = [
-        "edm run -e {environment} -- coverage run -p -m unittest discover -v traitsui"
+        "edm run -e {environment} -- coverage run -p -m unittest discover -v traitsui",
+        # coverage run prevents local images to be loaded for demo examples
+        # which are not defined in Python packages. Run with python directly
+        # instead.
+        "edm run -e {environment} -- python -m unittest discover -v {integrationtests}",
     ]
 
     # We run in a tempdir to avoid accidentally picking up wrong traitsui
