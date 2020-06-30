@@ -59,9 +59,6 @@ class TestTupleEditor(unittest.TestCase):
             # is 4
             self.assertEqual(val.tup, (4, 6))
 
-            # press the OK button and close the dialog
-            press_ok_button(ui)
-
 
 if __name__ == "__main__":
     # Executing the file opens the dialog for manual testing

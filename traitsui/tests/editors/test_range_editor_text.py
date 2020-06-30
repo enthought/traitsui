@@ -76,9 +76,6 @@ class TestRangeEditorText(unittest.TestCase):
             textctrl = ui.control.FindWindowByName("text")
             textctrl.SetValue("1")
 
-            # press the OK button and close the dialog
-            press_ok_button(ui)
-
         # the number traits should be between 3 and 8
         self.assertTrue(3 <= num.number <= 8)
 
@@ -97,9 +94,6 @@ class TestRangeEditorText(unittest.TestCase):
             lineedit.setFocus()
             lineedit.setText("4")
             lineedit.editingFinished.emit()
-
-            # press the OK button and close the dialog
-            press_ok_button(ui)
 
         # the number trait should be 4 extactly
         self.assertEqual(num.number, 4.0)
