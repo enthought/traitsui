@@ -191,9 +191,12 @@ def create_ui(object, ui_kwargs=None):
         # If dispose happens first, those events will be processed after
         # various editor states are removed, causing errors.
         process_cascade_events()
-        ui.dispose()
-        # Dispose may push more events to the event queue. Flush those too.
-        process_cascade_events()
+        try:
+            ui.dispose()
+        finally:
+            # dispose is not atomic and may push more events to the event
+            # queue. Flush those too.
+            process_cascade_events()
 
 
 # ######### Utility tools to test on both qt4 and wx
