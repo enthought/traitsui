@@ -45,11 +45,11 @@ class ImageEnumEditorDemo(HasTraits):
     img_group = Group(
         Item('image_from_list', style='simple', label='Simple'),
         Item('_'),
-        Item('image_from_list', style='custom', label='Custom'),
-        Item('_'),
         Item('image_from_list', style='text', label='Text'),
         Item('_'),
-        Item('image_from_list', style='readonly', label='ReadOnly')
+        Item('image_from_list', style='readonly', label='ReadOnly'),
+        Item('_'),
+        Item('image_from_list', style='custom', label='Custom')
     )
 
     # Demo view:

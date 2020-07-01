@@ -35,6 +35,7 @@ class DirectoryEditorDemo(HasTraits):
         dir_group,
         title='DirectoryEditor',
         width=400,
+        height=600,
         buttons=['OK'],
         resizable=True
     )

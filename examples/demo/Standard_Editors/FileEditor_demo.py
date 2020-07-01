@@ -34,6 +34,8 @@ class FileEditorDemo(HasTraits):
     traits_view = View(
         file_group,
         title='FileEditor',
+        width=400,
+        height=600,
         buttons=['OK'],
         resizable=True
     )
