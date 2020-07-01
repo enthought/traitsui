@@ -1,11 +1,11 @@
 """
-This demonstrates using the Traits file dialog with a file dialog extension,
+This demonstrates using the TraitsUI file dialog with a file dialog extension,
 in this case, the <b>ImageInfo</b> extension, which displays (if possible) the
 contents, width and height information for the currently selected image file
 so that the user can quickly verify they are opening the correct file before
 leaving the file dialog.
 
-For more information about why you would want to use the Traits file dialog
+For more information about why you would want to use the TraitsUI file dialog
 over the standard OS file dialog, select the <b>File Open</b> demo. For a
 demonstration of writing a custom file dialog extension, select the
 <b>File Open with Custom Extension</b> demo.
@@ -15,18 +15,13 @@ image file formats (i.e. *.png, *.gif, *.jpg, *.jpeg) files to be viewed and
 selected.
 """
 
-#-- Imports --------------------------------------------------------------
+from traits.api import HasTraits, File, Button
 
-from traits.api \
-    import HasTraits, File, Button
+from traitsui.api import View, HGroup, Item
 
-from traitsui.api \
-    import View, HGroup, Item
+from traitsui.file_dialog import open_file, ImageInfo
 
-from traitsui.file_dialog  \
-    import open_file, ImageInfo
-
-#-- FileDialogDemo Class -------------------------------------------------
+# -- FileDialogDemo Class -------------------------------------------------
 
 # Demo specific file dialig id:
 demo_id = 'traitsui.demo.standard_editors.file_dialog.image_info'
@@ -48,7 +43,7 @@ class FileDialogDemo(HasTraits):
     # The button used to display the file dialog:
     open = Button('Open...')
 
-    #-- Traits View Definitions ----------------------------------------------
+    # -- Traits View Definitions ----------------------------------------------
 
     view = View(
         HGroup(
@@ -59,7 +54,7 @@ class FileDialogDemo(HasTraits):
         width=0.5
     )
 
-    #-- Traits Event Handlers ------------------------------------------------
+    # -- Traits Event Handlers ------------------------------------------------
 
     def _open_changed(self):
         """ Handles the user clicking the 'Open...' button.
@@ -69,6 +64,7 @@ class FileDialogDemo(HasTraits):
                               id=demo_id)
         if file_name != '':
             self.file_name = file_name
+
 
 # Create the demo:
 demo = FileDialogDemo()

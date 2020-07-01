@@ -1,33 +1,25 @@
 """
-This demonstrates using the Traits file dialog with a custom written file
+This demonstrates using the TraitsUI file dialog with a custom written file
 dialog extension, in this case an extension called <b>LineCountInfo</b>, which
 displays the number of text lines in the currently selected file.
 
-For more information about why you would want to use the Traits file dialog
+For more information about why you would want to use the TraitsUI file dialog
 over the standard OS file dialog, select the <b>File Open</b> demo.
 """
 
-#-- Imports --------------------------------------------------------------
+from os.path import getsize
 
-from os.path \
-    import getsize
+from traits.api import HasTraits, File, Button, Property, cached_property
 
-from traits.api \
-    import HasTraits, File, Button, Property, cached_property
+from traitsui.api import View, VGroup, HGroup, Item
 
-from traitsui.api \
-    import View, VGroup, HGroup, Item
+from traitsui.file_dialog import open_file, MFileDialogModel
 
-from traitsui.file_dialog  \
-    import open_file, MFileDialogModel
+from traitsui.helper import commatize
 
-from traitsui.helper \
-    import commatize
 from io import open
 
-#-- LineCountInfo Class --------------------------------------------------
-
-
+# -- LineCountInfo Class --------------------------------------------------
 class LineCountInfo(MFileDialogModel):
     """ Defines a file dialog extension that displays the number of text lines
         in the currently selected file.
@@ -36,7 +28,7 @@ class LineCountInfo(MFileDialogModel):
     # The number of text lines in the currently selected file:
     lines = Property(depends_on='file_name')
 
-    #-- Traits View Definitions ----------------------------------------------
+    # -- Traits View Definitions ----------------------------------------------
 
     view = View(
         VGroup(
@@ -46,7 +38,7 @@ class LineCountInfo(MFileDialogModel):
         )
     )
 
-    #-- Property Implementations ---------------------------------------------
+    # -- Property Implementations ---------------------------------------------
 
     @cached_property
     def _get_lines(self):
@@ -65,11 +57,10 @@ class LineCountInfo(MFileDialogModel):
 
         return ('%s lines' % commatize(len(data.splitlines())))
 
-#-- FileDialogDemo Class -------------------------------------------------
+# -- FileDialogDemo Class -------------------------------------------------
 
 # Demo specific file dialig id:
-demo_id = ('traitsui.demo.standard_editors.file_dialog.'
-           'line_count_info')
+demo_id = 'traitsui.demo.standard_editors.file_dialog.line_count_info'
 
 
 class FileDialogDemo(HasTraits):
@@ -80,7 +71,7 @@ class FileDialogDemo(HasTraits):
     # The button used to display the file dialog:
     open = Button('Open...')
 
-    #-- Traits View Definitions ----------------------------------------------
+    # -- Traits View Definitions ----------------------------------------------
 
     view = View(
         HGroup(
@@ -91,7 +82,7 @@ class FileDialogDemo(HasTraits):
         width=0.5
     )
 
-    #-- Traits Event Handlers ------------------------------------------------
+    # -- Traits Event Handlers ------------------------------------------------
 
     def _open_changed(self):
         """ Handles the user clicking the 'Open...' button.
@@ -99,6 +90,7 @@ class FileDialogDemo(HasTraits):
         file_name = open_file(extensions=LineCountInfo(), id=demo_id)
         if file_name != '':
             self.file_name = file_name
+
 
 # Create the demo:
 demo = FileDialogDemo()
