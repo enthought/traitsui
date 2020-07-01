@@ -2,6 +2,13 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Implementation of an InstanceEditor demo plugin for the Traits UI demo program.
 
 This demo shows each of the four styles of the InstanceEditor
@@ -9,6 +16,8 @@ This demo shows each of the four styles of the InstanceEditor
 Fixme: This version of the demo only shows the old-style InstanceEditor
 capabilities.
 """
+# Issue related to the demo warning: enthought/traitsui#939
+
 
 from traits.api import HasTraits, Str, Range, Bool, Instance
 

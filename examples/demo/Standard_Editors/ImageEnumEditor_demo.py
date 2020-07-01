@@ -2,11 +2,21 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Implementation of an ImageEnumEditor demo plugin for the Traits UI demo
 program.
 
 This demo shows each of the four styles of the ImageEnumEditor.
 """
+# Issues related to the demo warning: enthought/traitsui#913,
+# enthought/traitsui#947
+
 
 from traits.api import Enum, HasTraits, Str
 

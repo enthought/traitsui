@@ -4,6 +4,16 @@
 # DataFrameEditor_demo.py -- Example of using dataframe editors
 
 # Dataset from https://www.kaggle.com/mokosan/lord-of-the-rings-character-data
+"""
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+"""
+# Issue related to the demo warning: enthought/traitsui#944
+
 
 import numpy as np
 from pandas import DataFrame

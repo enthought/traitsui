@@ -2,10 +2,20 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Implementation of a ColorEditor demo plugin for Traits UI demo program.
 
 This demo shows each of the four styles of the ColorEditor
 """
+# Issues related to the demo warning: enthought/traitsui#913,
+# enthought/traitsui#946
+
 
 from traits.api import HasTraits
 

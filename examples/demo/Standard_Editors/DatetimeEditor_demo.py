@@ -2,8 +2,18 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 A Traits UI editor that edits a datetime panel.
 """
+# Issue related to the demo warning: enthought/traitsui#943
+
+
 import datetime
 
 from traits.api import HasTraits, Datetime, Str

@@ -2,10 +2,19 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Implementation of a CompoundEditor demo plugin for Traits UI demo program.
 
 This demo shows each of the four styles of the CompoundEditor
 """
+# Issue related to the demo warning: enthought/traitsui#945
+
 
 from traits.api import Either, Enum, HasTraits, Range
 

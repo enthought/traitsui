@@ -1,10 +1,19 @@
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Demonstrate the CSVListEditor class.
 
 This editor allows the user to enter a *single* line of input text, containing
 comma-separated values (or another separator may be specified). Your program
 specifies an element Trait type of Int, Float, Str, Enum, or Range.
 """
+# Issue related to the demo warning: enthought/traitsui#913
+
 
 from traits.api import (
     HasTraits, List, Int, Float, Enum, Range, Str, Button, Property
