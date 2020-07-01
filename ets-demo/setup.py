@@ -11,6 +11,12 @@
 import setuptools
 
 
+INCLUDES = [
+    "etsdemo", "etsdemo.*",
+]
+PACKAGES = setuptools.find_packages(include=INCLUDES)
+
+
 def get_long_description():
     """ Read long description from README.rst. """
     with open("README.rst", "r", encoding="utf-8") as readme:
@@ -57,6 +63,7 @@ if __name__ == "__main__":
         description="Enthought Tool Suite Demo Application",
         long_description=get_long_description(),
         long_description_content_type="text/x-rst",
+        packages=PACKAGES,
         install_requires=install_requires,
         extras_require=extras_require,
         license="BSD",
