@@ -1,4 +1,11 @@
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 This demonstrates using the TraitsUI file dialog with a custom written file
 dialog extension, in this case an extension called <b>LineCountInfo</b>, which
 displays the number of text lines in the currently selected file.
@@ -6,6 +13,7 @@ displays the number of text lines in the currently selected file.
 For more information about why you would want to use the TraitsUI file dialog
 over the standard OS file dialog, select the <b>File Open</b> demo.
 """
+# Issue related to the demo warning: enthought/traitsui#953
 
 from os.path import getsize
 

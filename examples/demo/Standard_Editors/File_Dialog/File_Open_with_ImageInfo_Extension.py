@@ -1,4 +1,11 @@
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 This demonstrates using the TraitsUI file dialog with a file dialog extension,
 in this case, the <b>ImageInfo</b> extension, which displays (if possible) the
 contents, width and height information for the currently selected image file
@@ -14,6 +21,7 @@ This example also shows setting a file name filter which only allows common
 image file formats (i.e. *.png, *.gif, *.jpg, *.jpeg) files to be viewed and
 selected.
 """
+# Issue related to the demo warning: enthought/traitsui#953
 
 from traits.api import HasTraits, File, Button
 

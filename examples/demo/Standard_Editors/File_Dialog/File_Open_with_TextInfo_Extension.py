@@ -1,4 +1,11 @@
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 This demonstrates using the TraitsUI file dialog with a file dialog extension,
 in this case, the <b>TextInfo</b> extension, which displays (if possible) the
 contents of the currently selected file in a read-only text editor so the user
@@ -13,6 +20,7 @@ demonstration of writing a custom file dialog extension, select the
 This example also shows setting a file name filter which only allows Python
 source (i.e. *.py) files to be viewed and selected.
 """
+# Issue related to the demo warning: enthought/traitsui#953
 
 from traits.api import HasTraits, File, Button
 

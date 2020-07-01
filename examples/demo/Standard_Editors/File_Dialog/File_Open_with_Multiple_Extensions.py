@@ -1,4 +1,11 @@
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 This demonstrates using the TraitsUI file dialog with multiple file dialog
 extensions, in this case, the <b>FileInfo</b>, <b>TextInfo</b> and
 <b>ImageInfo</b> extensions.
@@ -15,6 +22,7 @@ your new arrangement has been correctly restored. Try a different file dialog
 demo to verify that the customizations are not affected by any of the other
 demos because this demo specifies a custom id when invoking the file dialog.
 """
+# Issue related to the demo warning: enthought/traitsui#953
 
 from traits.api import HasTraits, File, Button
 

@@ -1,4 +1,11 @@
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 This demonstrates using the TraitsUI file dialog with a file dialog extension,
 in this case, the <b>FileInfo</b> extension, which displays information about
 the currently selected file, such as:
@@ -13,6 +20,7 @@ over the standard OS file dialog, select the <b>File Open</b> demo. For a
 demonstration of writing a custom file dialog extension, select the
 <b>File Open with Custom Extension</b> demo.
 """
+# Issue related to the demo warning: enthought/traitsui#953
 
 from traits.api import HasTraits, File, Button
 

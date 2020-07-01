@@ -1,4 +1,11 @@
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 This demonstrates one of the simplest cases of using the TraitsUI file dialog
 to select a file for opening (i.e. reading or editing).
 
@@ -52,6 +59,7 @@ TraitsUI file dialog are:
  - It's easy to use. That's what this particular example is all about. So take
    a look at the source code for this example to see how easy it is...
 """
+# Issue related to the demo warning: enthought/traitsui#953
 
 from traits.api import HasTraits, File, Button
 
