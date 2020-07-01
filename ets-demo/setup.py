@@ -31,7 +31,7 @@ if __name__ == "__main__":
         "pyside2": ["pyside2", "shiboken2", "pygments"],
     }
     setuptools.setup(
-        name="ets-demo",
+        name="etsdemo",
         version="0.0.1",
         url="https://github.com/enthought/traitsui",
         author="Enthought",
