@@ -8,7 +8,8 @@ In this example, the listener just increments a click counter.
 """
 
 from traits.api import HasTraits, Button, Int
-from traitsui.api import View
+
+from traitsui.api import Item, View
 
 
 class ButtonEditorDemo(HasTraits):
@@ -16,7 +17,7 @@ class ButtonEditorDemo(HasTraits):
 
     # Define a Button trait:
     my_button_trait = Button('Click Me')
-    click_counter = Int()
+    click_counter = Int(0)
 
     # When the button is clicked, do something.
     # The listener method is named '_TraitName_fired', where
@@ -27,11 +28,12 @@ class ButtonEditorDemo(HasTraits):
     # Demo view:
     traits_view = View(
         'my_button_trait',
-        'click_counter',
+        Item('click_counter', style='readonly'),
         title='ButtonEditor',
         buttons=['OK'],
         resizable=True
     )
+
 
 # Create the demo:
 demo = ButtonEditorDemo()

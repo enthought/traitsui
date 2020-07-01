@@ -2,6 +2,13 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Implementation of an InstanceEditor demo plugin for the Traits UI demo program.
 
 This demo shows each of the four styles of the InstanceEditor
@@ -9,18 +16,17 @@ This demo shows each of the four styles of the InstanceEditor
 Fixme: This version of the demo only shows the old-style InstanceEditor
 capabilities.
 """
+# Issue related to the demo warning: enthought/traitsui#939
 
-# Imports:
-from traits.api \
-    import HasTraits, Str, Range, Bool, Instance
 
-from traitsui.api \
-    import Item, Group, View
+from traits.api import HasTraits, Str, Range, Bool, Instance
 
-#-------------------------------------------------------------------------
+from traitsui.api import Item, Group, View
+
+
+# -------------------------------------------------------------------------
 #  Classes:
-#-------------------------------------------------------------------------
-
+# -------------------------------------------------------------------------
 
 class SampleClass(HasTraits):
     """ This Sample class is used to demonstrate the InstanceEditor demo.
@@ -36,7 +42,7 @@ class SampleClass(HasTraits):
     # The InstanceEditor uses whatever view is defined for the class.  The
     # default view lists the fields alphabetically, so it's best to define one
     # explicitly:
-    view = View('name', 'occupation', 'age', 'registered_voter')
+    traits_view = View('name', 'occupation', 'age', 'registered_voter')
 
 
 class InstanceEditorDemo(HasTraits):
@@ -58,12 +64,13 @@ class InstanceEditorDemo(HasTraits):
     )
 
     # Demo View:
-    view = View(
+    traits_view = View(
         inst_group,
         title='InstanceEditor',
         buttons=['OK'],
         resizable=True
     )
+
 
 # Create the demo:
 demo = InstanceEditorDemo()
