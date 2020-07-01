@@ -15,9 +15,6 @@ from traitsui.api import View, VGroup, HGroup, Item
 
 from traitsui.file_dialog import open_file, MFileDialogModel
 
-from traitsui.helper import commatize
-
-from io import open
 
 # -- LineCountInfo Class --------------------------------------------------
 class LineCountInfo(MFileDialogModel):
@@ -46,16 +43,16 @@ class LineCountInfo(MFileDialogModel):
             if getsize(self.file_name) > 10000000:
                 return 'File too big...'
 
-            fh = open(self.file_name, 'rU', encoding='utf8')
-            data = fh.read()
-            fh.close()
-        except:
+            with open(self.file_name, 'r', encoding='utf8') as fh:
+                data = fh.read()
+        except OSError:
             return ''
 
         if (data.find('\x00') >= 0) or (data.find('\xFF') >= 0):
             return 'File contains binary data...'
 
-        return ('%s lines' % commatize(len(data.splitlines())))
+        return ('{:n} lines'.format(len(data.splitlines())))
+
 
 # -- FileDialogDemo Class -------------------------------------------------
 
