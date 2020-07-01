@@ -35,7 +35,7 @@ class LineCountInfo(MFileDialogModel):
 
     # -- Traits View Definitions ----------------------------------------------
 
-    view = View(
+    traits_view = View(
         VGroup(
             Item('lines', style='readonly'),
             label='Line Count Info',
@@ -78,7 +78,7 @@ class FileDialogDemo(HasTraits):
 
     # -- Traits View Definitions ----------------------------------------------
 
-    view = View(
+    traits_view = View(
         HGroup(
             Item('open', show_label=False),
             '_',
