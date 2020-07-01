@@ -11,9 +11,9 @@ SET operation=%1
 SET runtime=%2
 SET toolkit=%3
 
-CALL edm run -- python etstool.py !operation! --runtime=!runtime! --toolkit=|toolkit| || GOTO error
+CALL edm run -- python etstool.py !operation! --runtime=!runtime! --toolkit=!toolkit! || GOTO error
 PUSHD ets-demo
-CALL edm run -- python etstool.py !operation! --runtime=!runtime! --toolkit=|toolkit| || GOTO error
+CALL edm run -- python etstool.py !operation! --runtime=!runtime! --toolkit=!toolkit! || GOTO error
 POPD
 
 GOTO end
