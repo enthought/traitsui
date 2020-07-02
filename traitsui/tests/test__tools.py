@@ -39,13 +39,17 @@ if is_current_backend_qt4():
             self.n_events = 0
 
         def event(self, event):
-            if event.type() != QtCore.QEvent.User + 1:
+            if event.type() != QtCore.QEvent.Type(QtCore.QEvent.User + 1):
                 return super().event(event)
 
             self.n_events += 1
 
             if self.n_events < self.max_n_events:
-                new_event = QtCore.QEvent(QtCore.QEvent.User + 1)
+                new_event = QtCore.QEvent(
+                    QtCore.QEvent(
+                        QtCore.QEvent.Type(QtCore.QEvent.User + 1)
+                    )
+                )
                 QtCore.QCoreApplication.postEvent(self, new_event)
             return True
 
@@ -101,7 +105,10 @@ class TestProcessEventsRepeated(unittest.TestCase):
         self.addCleanup(cleanup, q_object)
 
         QtCore.QCoreApplication.postEvent(
-            q_object, QtCore.QEvent(QtCore.QEvent.User)
+            q_object,
+            QtCore.QEvent(
+                QtCore.QEvent.Type(QtCore.QEvent.User + 1)
+            )
         )
 
         # sanity check calling processEvents does not process
