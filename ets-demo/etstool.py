@@ -28,6 +28,11 @@ You can then do::
 
     python etstool.py install --runtime=... --toolkit=...
 
+If you need to make local changes, it might be convenient to include the
+``--editable`` flag::
+
+    python etstool.py install --runtime=... --toolkit=... --editable
+
 to create a test environment from the current codebase and::
 
     python etstool.py test --runtime=... --toolkit=...
@@ -36,7 +41,8 @@ to run tests in that environment.  You can remove the environment with::
 
     python etstool.py cleanup --runtime=... --toolkit=...
 
-If you make changes you will either need to remove and re-install the
+If you make changes and you have not used ``--editable`` flag in the
+``install`` command, you will either need to remove and re-install the
 environment or manually update the environment using ``edm``, as
 the install performs a ``pip install .`` rather than a ``pip install -e .``,
 so changes in your code will not be automatically mirrored in the test
@@ -54,10 +60,10 @@ using::
 
     python etstool.py test_all
 
-Currently supported runtime values are ``2.7`` and ``3.5``, and currently
-supported toolkits are ``null``, ``pyqt``, ``pyside`` and ``wx``.  Not all
-combinations of toolkits and runtimes will work, but the tasks will fail with
-a clear error if that is the case.
+Currently supported runtime values are ``3.6``, and currently
+supported toolkits are ``null``, ``pyqt``, ``pyqt5``, ``pyside``, ``pyside2``
+and ``wx``.  Not all combinations of toolkits and runtimes will work, but the
+tasks will fail with a clear error if that is the case.
 
 Tests can still be run via the usual means in other environments if that suits
 a developer's purpose.
@@ -66,9 +72,7 @@ Changing This File
 ------------------
 
 To change the packages installed during a test run, change the dependencies
-variable below.  To install a package from github, or one which is not yet
-available via EDM, add it to the `ci-src-requirements.txt` file (these will be
-installed by `pip`).
+variable below.
 
 Other changes to commands should be a straightforward change to the listed
 commands for each task. See the EDM documentation for more information about
