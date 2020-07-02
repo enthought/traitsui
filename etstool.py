@@ -109,6 +109,11 @@ dependencies = {
     "docutils"
 }
 
+# NOTE : pyface is always installed from source
+source_dependencies = {
+    "traits": "git+http://github.com/enthought/traits.git#egg=traits",
+}
+
 # Additional toolkit-independent dependencies for demo testing
 test_dependencies = {
     "apptools",
