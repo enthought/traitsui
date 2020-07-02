@@ -43,8 +43,9 @@ This example demonstrates:
 Additional notes:
 
  - You can change the current selection using the up and down arrow keys.
- - You can move a selected row up and down in the table using the left and
-   right arrow keys.
+ - If the demo is running under WX, you can move a selected row up and down in
+   the table using the left and right arrow keys.
+ - If the demo is running under QT, you can move rows by clicking and dragging.
 
 Hopefully, this simple example conveys some of the power and flexibility that
 the :py:class:`TabularAdapter` class provides you. But, just in case it
@@ -97,16 +98,17 @@ feels stand out about this approach are:
 
 """
 
+from functools import partial
 from random import randint, choice, shuffle
-from traits.api import HasTraits, Str, Int, List, Instance, Property, \
-    Constant
+
+from traits.api import HasTraits, Str, Int, List, Instance, Property, Constant
 from traits.etsconfig.api import ETSConfig
-from traitsui.api import View, Group, Item, TabularEditor, Color
-from traitsui.tabular_adapter import TabularAdapter
+from traitsui.api import (
+    View, Group, Item, TabularAdapter, TabularEditor, Color
+)
 
-#-- Person Class Definition ----------------------------------------------
 
-
+# -- Person Class Definition ----------------------------------------------
 class Person(HasTraits):
 
     name = Str()
@@ -117,16 +119,14 @@ class Person(HasTraits):
     surname = Property(fget=lambda self: self.name.split()[-1],
                        depends_on='name')
 
-#-- MarriedPerson Class Definition ---------------------------------------
 
-
+# -- MarriedPerson Class Definition ---------------------------------------
 class MarriedPerson(Person):
 
     partner = Instance(Person)
 
-#-- Tabular Adapter Definition -------------------------------------------
 
-
+# -- Tabular Adapter Definition -------------------------------------------
 class ReportAdapter(TabularAdapter):
     """ The tabular adapter interfaces between the tabular editor and the data
     being displayed. For more details, please refer to the traitsUI user guide.
@@ -144,8 +144,9 @@ class ReportAdapter(TabularAdapter):
     # (and optionally set methods). The cell is identified by its column
     # ID (age, spouse).
 
-    # Font fails with wx in OSX; see traitsui issue #13:
-    # font                      = 'Courier 10'
+    # Overwrite default value
+    font = 'Courier 10'
+
     age_alignment = Constant('right')
     MarriedPerson_age_image = Property()
     MarriedPerson_bg_color = Color(0xE0E0FF)
@@ -161,8 +162,8 @@ class ReportAdapter(TabularAdapter):
     def _get_MarriedPerson_spouse_text(self):
         return self.item.partner.name
 
-#-- Tabular Editor Definition --------------------------------------------
 
+# -- Tabular Editor Definition --------------------------------------------
 # The tabular editor works in conjunction with an adapter class, derived from
 # TabularAdapter.
 tabular_editor = TabularEditor(
@@ -172,14 +173,13 @@ tabular_editor = TabularEditor(
     show_row_titles=ETSConfig.toolkit == 'qt4',
 )
 
-#-- Report Class Definition ----------------------------------------------
 
-
+# -- Report Class Definition ----------------------------------------------
 class Report(HasTraits):
 
     people = List(Person)
 
-    view = View(
+    traits_view = View(
         Group(
             Item('people', id='table', editor=tabular_editor),
             show_labels=False
@@ -191,214 +191,91 @@ class Report(HasTraits):
         resizable=True
     )
 
-#-- Generate 10,000 random single and married people ---------------------
 
+# -- Generate 10,000 random single and married people ---------------------
 male_names = [
-    'Michael',
-    'Edward',
-    'Timothy',
-    'James',
-    'George',
-    'Ralph',
-    'David',
-    'Martin',
-    'Bryce',
-    'Richard',
-    'Eric',
-    'Travis',
-    'Robert',
-    'Bryan',
-    'Alan',
-    'Harold',
-    'John',
-    'Stephen',
-    'Gael',
-    'Frederic',
-    'Eli',
-    'Scott',
-    'Samuel',
-    'Alexander',
-    'Tobias',
-    'Sven',
-    'Peter',
-    'Albert',
-    'Thomas',
-    'Horatio',
-    'Julius',
-    'Henry',
-    'Walter',
-    'Woodrow',
-    'Dylan',
-    'Elmer']
+    'Michael', 'Edward', 'Timothy', 'James', 'George', 'Ralph', 'David',
+    'Martin', 'Bryce', 'Richard', 'Eric', 'Travis', 'Robert', 'Bryan', 'Alan',
+    'Harold', 'John', 'Stephen', 'Gael', 'Frederic', 'Eli', 'Scott', 'Samuel',
+    'Alexander', 'Tobias', 'Sven', 'Peter', 'Albert', 'Thomas', 'Horatio',
+    'Julius', 'Henry', 'Walter', 'Woodrow', 'Dylan', 'Elmer'
+]
 
 female_names = [
-    'Leah',
-    'Jaya',
-    'Katrina',
-    'Vibha',
-    'Diane',
-    'Lisa',
-    'Jean',
-    'Alice',
-    'Rebecca',
-    'Delia',
-    'Christine',
-    'Marie',
-    'Dorothy',
-    'Ellen',
-    'Victoria',
-    'Elizabeth',
-    'Margaret',
-    'Joyce',
-    'Sally',
-    'Ethel',
-    'Esther',
-    'Suzanne',
-    'Monica',
-    'Hortense',
-    'Samantha',
-    'Tabitha',
-    'Judith',
-    'Ariel',
-    'Helen',
-    'Mary',
-    'Jane',
-    'Janet',
-    'Jennifer',
-    'Rita',
-    'Rena',
-    'Rianna']
+    'Leah', 'Jaya', 'Katrina', 'Vibha', 'Diane', 'Lisa', 'Jean', 'Alice',
+    'Rebecca', 'Delia', 'Christine', 'Marie', 'Dorothy', 'Ellen', 'Victoria',
+    'Elizabeth', 'Margaret', 'Joyce', 'Sally', 'Ethel', 'Esther', 'Suzanne',
+    'Monica', 'Hortense', 'Samantha', 'Tabitha', 'Judith', 'Ariel', 'Helen',
+    'Mary', 'Jane', 'Janet', 'Jennifer', 'Rita', 'Rena', 'Rianna'
+]
 
 all_names = male_names + female_names
 
-male_name = lambda: choice(male_names)
-female_name = lambda: choice(female_names)
-any_name = lambda: choice(all_names)
-age = lambda: randint(15, 72)
+male_name = partial(choice, male_names)
+female_name = partial(choice, female_names)
+any_name = partial(choice, all_names)
+age = partial(randint, 15, 72)
 
-family_name = lambda: choice(['Jones',
-                              'Smith',
-                              'Thompson',
-                              'Hayes',
-                              'Thomas',
-                              'Boyle',
-                              "O'Reilly",
-                              'Lebowski',
-                              'Lennon',
-                              'Starr',
-                              'McCartney',
-                              'Harrison',
-                              'Harrelson',
-                              'Steinbeck',
-                              'Rand',
-                              'Hemingway',
-                              'Zhivago',
-                              'Clemens',
-                              'Heinlien',
-                              'Farmer',
-                              'Niven',
-                              'Van Vogt',
-                              'Sturbridge',
-                              'Washington',
-                              'Adams',
-                              'Bush',
-                              'Kennedy',
-                              'Ford',
-                              'Lincoln',
-                              'Jackson',
-                              'Johnson',
-                              'Eisenhower',
-                              'Truman',
-                              'Roosevelt',
-                              'Wilson',
-                              'Coolidge',
-                              'Mack',
-                              'Moon',
-                              'Monroe',
-                              'Springsteen',
-                              'Rigby',
-                              "O'Neil",
-                              'Philips',
-                              'Clinton',
-                              'Clapton',
-                              'Santana',
-                              'Midler',
-                              'Flack',
-                              'Conner',
-                              'Bond',
-                              'Seinfeld',
-                              'Costanza',
-                              'Kramer',
-                              'Falk',
-                              'Moore',
-                              'Cramdon',
-                              'Baird',
-                              'Baer',
-                              'Spears',
-                              'Simmons',
-                              'Roberts',
-                              'Michaels',
-                              'Stuart',
-                              'Montague',
-                              'Miller'])
 
-address = lambda: '%d %s %s' % (randint(11,
-                                        999),
-                                choice(['Spring',
-                                        'Summer',
-                                        'Moonlight',
-                                        'Winding',
-                                        'Windy',
-                                        'Whispering',
-                                        'Falling',
-                                        'Roaring',
-                                        'Hummingbird',
-                                        'Mockingbird',
-                                        'Bluebird',
-                                        'Robin',
-                                        'Babbling',
-                                        'Cedar',
-                                        'Pine',
-                                        'Ash',
-                                        'Maple',
-                                        'Oak',
-                                        'Birch',
-                                        'Cherry',
-                                        'Blossom',
-                                        'Rosewood',
-                                        'Apple',
-                                        'Peach',
-                                        'Blackberry',
-                                        'Strawberry',
-                                        'Starlight',
-                                        'Wilderness',
-                                        'Dappled',
-                                        'Beaver',
-                                        'Acorn',
-                                        'Pecan',
-                                        'Pheasant',
-                                        'Owl']),
-                                choice(['Way',
-                                        'Lane',
-                                        'Boulevard',
-                                        'Street',
-                                        'Drive',
-                                        'Circle',
-                                        'Avenue',
-                                        'Trail']))
+def family_name():
+    return choice([
+        'Jones', 'Smith', 'Thompson', 'Hayes', 'Thomas', 'Boyle', "O'Reilly",
+        'Lebowski', 'Lennon', 'Starr', 'McCartney', 'Harrison', 'Harrelson',
+        'Steinbeck', 'Rand', 'Hemingway', 'Zhivago', 'Clemens', 'Heinlien',
+        'Farmer', 'Niven', 'Van Vogt', 'Sturbridge', 'Washington', 'Adams',
+        'Bush', 'Kennedy', 'Ford', 'Lincoln', 'Jackson', 'Johnson',
+        'Eisenhower', 'Truman', 'Roosevelt', 'Wilson', 'Coolidge', 'Mack',
+        'Moon', 'Monroe', 'Springsteen', 'Rigby', "O'Neil", 'Philips',
+        'Clinton', 'Clapton', 'Santana', 'Midler', 'Flack', 'Conner', 'Bond',
+        'Seinfeld', 'Costanza', 'Kramer', 'Falk', 'Moore', 'Cramdon', 'Baird',
+        'Baer', 'Spears', 'Simmons', 'Roberts', 'Michaels', 'Stuart',
+        'Montague', 'Miller'
+    ])
 
-people = [Person(name='%s %s' % (any_name(), family_name()),
-                 age=age(),
-                 address=address()) for i in range(5000)]
 
-marrieds = [(MarriedPerson(name='%s %s' % (female_name(), last_name),
-                           age=age(),
-                           address=address),
-             MarriedPerson(name='%s %s' % (male_name(), last_name),
-                           age=age(),
-                           address=address))
-            for last_name, address in
-            [(family_name(), address()) for i in range(2500)]]
+def address():
+    number = randint(11, 999)
+    text_1 = choice([
+        'Spring', 'Summer', 'Moonlight', 'Winding', 'Windy', 'Whispering',
+        'Falling', 'Roaring', 'Hummingbird', 'Mockingbird', 'Bluebird',
+        'Robin', 'Babbling', 'Cedar', 'Pine', 'Ash', 'Maple', 'Oak', 'Birch',
+        'Cherry', 'Blossom', 'Rosewood', 'Apple', 'Peach', 'Blackberry',
+        'Strawberry', 'Starlight', 'Wilderness', 'Dappled', 'Beaver', 'Acorn',
+        'Pecan', 'Pheasant', 'Owl'
+    ])
+    text_2 = choice([
+        'Way', 'Lane', 'Boulevard', 'Street', 'Drive', 'Circle', 'Avenue',
+        'Trail'
+    ])
+    return '%d %s %s' % (number, text_1, text_2)
+
+
+people = [
+    Person(
+        name='%s %s' % (any_name(), family_name()),
+        age=age(),
+        address=address()
+    )
+    for i in range(5000)
+]
+
+marrieds = [
+    (
+        MarriedPerson(
+            name='%s %s' % (female_name(), last_name),
+            age=age(),
+            address=address
+        ),
+        MarriedPerson(
+            name='%s %s' % (male_name(), last_name),
+            age=age(),
+            address=address
+        )
+    )
+    for last_name, address in [
+        (family_name(), address()) for i in range(2500)
+    ]
+]
 
 for female, male in marrieds:
     female.partner = male
@@ -406,6 +283,7 @@ for female, male in marrieds:
     people.extend([female, male])
 
 shuffle(people)
+
 
 # Create the demo:
 demo = Report(people=people)

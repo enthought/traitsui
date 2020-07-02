@@ -5,29 +5,26 @@ A demonstration of how the TabularEditor can be used to display (large) NumPy
 arrays, in this case 100,000 random 3D points from a unit cube.
 
 In addition to showing the coordinates of each point, it also displays the
-index of each point in the array, as well as a red flag if the point lies within
-0.25 of the center of the cube.
+index of each point in the array, as well as a red flag if the point lies
+within 0.25 of the center of the cube.
 """
-
-#-- Imports --------------------------------------------------------------
 
 from numpy import sqrt
 from numpy.random import random
+
 from traits.api import HasTraits, Property, Array
-from traitsui.api import View, Item, TabularEditor, Font
-from traitsui.tabular_adapter import TabularAdapter
-
-#-- Tabular Adapter Definition -------------------------------------------
+from traitsui.api import View, Item, TabularAdapter, TabularEditor
 
 
+# -- Tabular Adapter Definition -------------------------------------------
 class ArrayAdapter(TabularAdapter):
 
     columns = [('i', 'index'), ('x', 0), ('y', 1), ('z', 2)]
 
-    # Font fails with wx in OSX; see traitsui issue #13:
-    # font        = Font('Courier 10')
+    font = 'Courier 10'
     alignment = 'right'
     format = '%.4f'
+
     index_text = Property()
     index_image = Property()
 
@@ -41,24 +38,29 @@ class ArrayAdapter(TabularAdapter):
 
         return None
 
-#-- ShowArray Class Definition -------------------------------------------
+# -- ShowArray Class Definition -------------------------------------------
 
 
 class ShowArray(HasTraits):
 
     data = Array
 
-    view = View(
-        Item('data',
-             show_label=False,
-             style='readonly',
-             editor=TabularEditor(adapter=ArrayAdapter())
-             ),
+    traits_view = View(
+        Item(
+            'data',
+            show_label=False,
+            style='readonly',
+            editor=TabularEditor(
+                adapter=ArrayAdapter(),
+                auto_resize=True
+            )
+        ),
         title='Array Viewer',
         width=0.3,
         height=0.8,
         resizable=True
     )
+
 
 # Create the demo:
 demo = ShowArray(data=random((100000, 3)))
