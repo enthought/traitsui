@@ -39,13 +39,13 @@ if is_current_backend_qt4():
             self.n_events = 0
 
         def event(self, event):
-            if event.type() != QtCore.QEvent.User:
+            if event.type() != QtCore.QEvent.User + 1:
                 return super().event(event)
 
             self.n_events += 1
 
             if self.n_events < self.max_n_events:
-                new_event = QtCore.QEvent(QtCore.QEvent.User)
+                new_event = QtCore.QEvent(QtCore.QEvent.User + 1)
                 QtCore.QCoreApplication.postEvent(self, new_event)
             return True
 
