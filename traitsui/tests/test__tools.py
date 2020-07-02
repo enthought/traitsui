@@ -33,22 +33,23 @@ if is_current_backend_qt4():
 
     class DummyQObject(QtCore.QObject):
 
+        # Mutating global state...
+        EVENT_ID = QtCore.QEvent.registerEventType(QtCore.QEvent.User + 1)
+
         def __init__(self, max_n_events):
             super().__init__()
             self.max_n_events = max_n_events
             self.n_events = 0
 
         def event(self, event):
-            if event.type() != QtCore.QEvent.Type(QtCore.QEvent.User + 1):
+            if event.type() != QtCore.QEvent.Type(self.EVENT_ID):
                 return super().event(event)
 
             self.n_events += 1
 
             if self.n_events < self.max_n_events:
                 new_event = QtCore.QEvent(
-                    QtCore.QEvent(
-                        QtCore.QEvent.Type(QtCore.QEvent.User + 1)
-                    )
+                    QtCore.QEvent.Type(self.EVENT_ID)
                 )
                 QtCore.QCoreApplication.postEvent(self, new_event)
             return True
@@ -89,6 +90,13 @@ class TestProcessEventsRepeated(unittest.TestCase):
 
     @skip_if_not_qt4
     def test_qt_process_events_process_all(self):
+
+        if DummyQObject.EVENT_ID == -1:
+            self.fail(
+                "All custom event numbers are taken or the program is "
+                "shutting down."
+            )
+
         from pyface.qt import QtCore
 
         def cleanup(q_object):
@@ -106,9 +114,7 @@ class TestProcessEventsRepeated(unittest.TestCase):
 
         QtCore.QCoreApplication.postEvent(
             q_object,
-            QtCore.QEvent(
-                QtCore.QEvent.Type(QtCore.QEvent.User + 1)
-            )
+            QtCore.QEvent(QtCore.QEvent.Type(DummyQObject.EVENT_ID))
         )
 
         # sanity check calling processEvents does not process
