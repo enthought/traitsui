@@ -13,15 +13,15 @@
 Tasks for Test Runs
 ===================
 
-This file is intended to be used with a python environment with the
-click library to automate the process of setting up test environments
-and running the test within them.  This improves repeatability and
+This file is intended to be used in a Python environment equipped with the
+click library, to automate the process of setting up test environments
+and running the tests within them.  This improves repeatability and
 reliability of tests be removing many of the variables around the
 developer's particular Python environment.  Test environment setup and
 package management is performed using `EDM
 <http://docs.enthought.com/edm/>`_
 
-To use this to run you tests, you will need to install EDM and click
+To use this to run your tests, you will need to install EDM and click
 into your working environment.  You will also need to have git
 installed to access required source code from github repositories.
 You can then do::
@@ -38,7 +38,7 @@ to run tests in that environment.  You can remove the environment with::
 
 If you make changes you will either need to remove and re-install the
 environment or manually update the environment using ``edm``, as
-the install performs a ``python setup.py install`` rather than a ``develop``,
+the install performs a ``pip install .`` rather than a ``pip install -e .``,
 so changes in your code will not be automatically mirrored in the test
 environment.  You can update with a command like::
 
@@ -72,7 +72,7 @@ installed by `pip`).
 
 Other changes to commands should be a straightforward change to the listed
 commands for each task. See the EDM documentation for more information about
-how to run commands within an EDM enviornment.
+how to run commands within an EDM environment.
 
 """
 
@@ -172,7 +172,7 @@ def install(runtime, toolkit, environment, editable):
         install_here,
     ]
 
-    # pip install pyqt5 and pyside2, because we don't have them in EDM yet
+    # pip install pyside2, because we don't have it in EDM yet
     if toolkit == 'pyside2':
         commands.append(
             "edm run -e {environment} -- pip install pyside2==5.11"
