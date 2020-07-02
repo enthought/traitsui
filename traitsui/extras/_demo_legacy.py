@@ -23,8 +23,6 @@ able to import the demo application until ``ets-demo`` is released.
 (enthought/traitsui#950)
 """
 
-
-
 import contextlib
 import glob
 from io import StringIO
@@ -78,11 +76,9 @@ from traitsui.api import (
     Item,
     ModelView,
     ObjectTreeNode,
-    spring,
     ShellEditor,
     spring,
     Tabbed,
-    TitleEditor,
     ToolBar,
     TreeEditor,
     TreeNodeObject,
@@ -152,8 +148,8 @@ def extract_docstring_from_source(source):
     source_lines = source.splitlines()
 
     # Extract module docstring lines and recombine
-    docstring = eval("\n".join(source_lines[tstart[0] - 1 : tend[0]]))
-    source_lines = source_lines[: tstart[0] - 1] + source_lines[tend[0] :]
+    docstring = eval("\n".join(source_lines[tstart[0] - 1: tend[0]]))
+    source_lines = source_lines[: tstart[0] - 1] + source_lines[tend[0]:]
     source = "\n".join(source_lines)
     source = source.strip()
 
@@ -805,7 +801,8 @@ class DemoPath(DemoTreeNodeObject):
                         demoobj = DemoPath(parent=self, name="")
                         demoobj.nice_name = keyword
                         demoobj.config_dict = config_dict
-                        demoobj.css_filename = os.path.join("..", self.css_filename)
+                        demoobj.css_filename = os.path.join(
+                            "..", self.css_filename)
                         dirs.append(demoobj)
                     elif len(names) == 1:
                         try:
@@ -1072,7 +1069,9 @@ class Demo(ModelView):
                 editor=demo_tree_editor,
             ),
             id="traitsui.demos.demo.Demo",
-            toolbar=ToolBar(previous_tool, parent_tool, next_tool, show_tool_names=True),
+            toolbar=ToolBar(
+                previous_tool, parent_tool, next_tool, show_tool_names=True
+            ),
             resizable=True,
             width=1200,
             height=700,
@@ -1168,7 +1167,11 @@ def publish_html_file(rst_file_path, html_out_path, css_path=None):
 
 
 def demo(
-    use_files=False, dir_name=None, config_filename="", title="Traits UI Demos", css_filename="default.css"
+    use_files=False,
+    dir_name=None,
+    config_filename="",
+    title="Traits UI Demos",
+    css_filename="default.css",
 ):
     if dir_name is None:
         dir_name = dirname(abspath(sys.argv[0]))
