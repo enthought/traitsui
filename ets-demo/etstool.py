@@ -61,9 +61,9 @@ using::
     python etstool.py test_all
 
 Currently supported runtime values are ``3.6``, and currently
-supported toolkits are ``null``, ``pyqt``, ``pyqt5``, ``pyside``, ``pyside2``
-and ``wx``.  Not all combinations of toolkits and runtimes will work, but the
-tasks will fail with a clear error if that is the case.
+supported toolkits are ``null``, ``pyqt``, ``pyqt5``, ``pyside2`` and ``wx``.
+Not all combinations of toolkits and runtimes will work, but the tasks will
+fail with a clear error if that is the case.
 
 Tests can still be run via the usual means in other environments if that suits
 a developer's purpose.
@@ -91,7 +91,7 @@ from contextlib import contextmanager
 import click
 
 supported_combinations = {
-    '3.6': {'pyside', 'pyside2', 'pyqt', 'pyqt5', 'wx', 'null'},
+    '3.6': {'pyside2', 'pyqt', 'pyqt5', 'wx', 'null'},
 }
 
 # Default Python version to use in the comamnds below if none is specified.
@@ -114,7 +114,6 @@ dependencies = {
 }
 
 extra_dependencies = {
-    'pyside': {'pyside'},
     # XXX once pyside2 is available in EDM, we will want it here
     'pyside2': set(),
     'pyqt': {'pyqt<4.12'},  # FIXME: build 1 of.4-12 appears to be bad
