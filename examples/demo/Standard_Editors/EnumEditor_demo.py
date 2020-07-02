@@ -21,7 +21,6 @@ An Enum can be displayed / edited in one of five styles:
 
 """
 
-# Imports:
 from traits.api import HasTraits, Enum
 
 from traitsui.api import Item, Group, View, EnumEditor
@@ -39,10 +38,17 @@ class EnumEditorDemo(HasTraits):
         Item('name_list', style='simple', label='Simple'),
         Item('_'),
 
-        Item('name_list', style='simple',
-             editor=EnumEditor(values=name_list, completion_mode='popup',
-                               evaluate=True),
-             label='Simple (text entry)'),
+        # The simple style also supports text entry:
+        Item(
+            'name_list',
+            style='simple',
+            label='Simple (text entry)',
+            editor=EnumEditor(
+                values=name_list,
+                completion_mode='popup',
+                evaluate=True
+            ),
+        ),
         Item('_'),
 
         # The custom style defaults to radio button mode:
@@ -50,14 +56,18 @@ class EnumEditorDemo(HasTraits):
         Item('_'),
 
         # The custom style can also display in list mode, with extra work:
-        Item('name_list', style='custom', label='Custom list',
-             editor=EnumEditor(values=name_list.values, mode='list')),
+        Item(
+            'name_list',
+            style='custom',
+            label='Custom list',
+            editor=EnumEditor(values=name_list, mode='list')
+        ),
         Item('_'),
 
-        Item('name_list', style='readonly', label='ReadOnly'),
+        Item('name_list', style='text', label='Text'),
         Item('_'),
 
-        Item('name_list', style='text', label='Text')
+        Item('name_list', style='readonly', label='ReadOnly')
     )
 
     # Demo view:
@@ -67,6 +77,7 @@ class EnumEditorDemo(HasTraits):
         buttons=['OK'],
         resizable=True
     )
+
 
 # Create the demo:
 demo = EnumEditorDemo()

@@ -3,7 +3,7 @@ Boolean editor (checkbox or text)
 
 A Boolean (True/False) trait is displayed and edited as a checkbox, by default.
 
-It can also be displayed as text 'True' / 'False', either editable or read-only.
+It can also be displayed as text 'True'/'False', either editable or read-only.
 
 This example also shows how to listen for a change in a trait, and take
 action when its value changes.
@@ -59,6 +59,7 @@ class BooleanEditorDemo(HasTraits):
         buttons=['OK'],
         resizable=True
     )
+
 
 # Create the demo view (but do not yet display it):
 demo = BooleanEditorDemo()

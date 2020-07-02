@@ -142,12 +142,9 @@ class TestTreeView(unittest.TestCase):
             notifiers_list = bogus.trait(trait)._notifiers(False)
             self.assertEqual(expected_listeners, len(notifiers_list))
 
-            # Manually close the UI
-            press_ok_button(ui)
-
-            # The listener should be removed after the UI has been closed
-            notifiers_list = bogus.trait(trait)._notifiers(False)
-            self.assertEqual(0, len(notifiers_list))
+        # The listener should be removed after the UI has been closed
+        notifiers_list = bogus.trait(trait)._notifiers(False)
+        self.assertEqual(0, len(notifiers_list))
 
     def _test_tree_node_object_releases_listeners(
         self, hide_root, nodes=None, trait="bogus_list", expected_listeners=1
@@ -175,12 +172,9 @@ class TestTreeView(unittest.TestCase):
                 # change the children
                 bogus.bogus_list.append(BogusTreeNodeObject())
 
-            # Manually close the UI
-            press_ok_button(ui)
-
-            # The listener should be removed after the UI has been closed
-            notifiers_list = bogus.trait(trait)._notifiers(False)
-            self.assertEqual(0, len(notifiers_list))
+        # The listener should be removed after the UI has been closed
+        notifiers_list = bogus.trait(trait)._notifiers(False)
+        self.assertEqual(0, len(notifiers_list))
 
     @skip_if_not_qt4
     def test_tree_editor_listeners_with_shown_root(self):
@@ -272,5 +266,5 @@ class TestTreeView(unittest.TestCase):
     def test_smoke_word_wrap(self):
         bogus = Bogus(bogus_list=[Bogus()])
         tree_editor_view = BogusTreeView(bogus=bogus, word_wrap=True)
-        ui = tree_editor_view.edit_traits()
-        ui.dispose()
+        with create_ui(tree_editor_view):
+            pass

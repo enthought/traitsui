@@ -2,8 +2,18 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 A Traits UI editor that edits a datetime panel.
 """
+# Issue related to the demo warning: enthought/traitsui#943
+
+
 import datetime
 
 from traits.api import HasTraits, Datetime, Str
@@ -15,7 +25,7 @@ class DateEditorDemo(HasTraits):
     datetime = Datetime()
     info_string = Str('The editors for Traits Datetime objects.')
 
-    view = View(
+    traits_view = View(
         Item(
             'info_string',
             show_label=False,
@@ -41,7 +51,7 @@ class DateEditorDemo(HasTraits):
         print(self.datetime)
 
 
-#-- Set Up The Demo ------------------------------------------------------
+# -- Set Up The Demo ------------------------------------------------------
 
 demo = DateEditorDemo(
     datetime=datetime.datetime.now()

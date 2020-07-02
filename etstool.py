@@ -155,7 +155,8 @@ def cli():
     default=False,
     help="Install main package in 'editable' mode?  [default: --not-editable]",
 )
-def install(runtime, toolkit, environment, editable):
+@click.option('--source/--no-source', default=False)
+def install(runtime, toolkit, environment, editable, source):
     """ Install project and dependencies into a clean EDM environment.
 
     """
@@ -176,7 +177,7 @@ def install(runtime, toolkit, environment, editable):
     commands = [
         "edm environments create {environment} --force --version={runtime}",
         "edm install -y -e {environment} " + packages,
-        "edm run -e {environment} -- pip install -r ci-src-requirements.txt --no-dependencies",
+        "edm run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
         "edm run -e {environment} -- python setup.py clean --all",
         install_traitsui,
     ]
@@ -199,6 +200,19 @@ def install(runtime, toolkit, environment, editable):
 
     click.echo("Creating environment '{environment}'".format(**parameters))
     execute(commands, parameters)
+
+    if source:
+        cmd_fmt = "edm plumbing remove-package --environment {environment} --force "
+        commands = [cmd_fmt+dependency for dependency in source_dependencies.keys()]
+        execute(commands, parameters)
+        source_pkgs = source_dependencies.values()
+        commands = [
+            "python -m pip install {pkg} --no-deps".format(pkg=pkg)
+            for pkg in source_pkgs
+        ]
+        commands = ["edm run -e {environment} -- " + command for command in commands]
+        execute(commands, parameters)
+
     click.echo('Done install')
 
 
