@@ -1,6 +1,4 @@
-# -------------------------------------------------------------------------
-#
-#  Copyright (c) 2005, Enthought, Inc.
+#  Copyright (c) 2020, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
@@ -9,11 +7,6 @@
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   09/15/2005
-#
-# -------------------------------------------------------------------------
 
 """ A Traits UI demo that borrows heavily from the design of the wxPython demo.
 """
