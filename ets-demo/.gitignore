@@ -1,8 +1,6 @@
 # file types to ignore
 *.pyc
 *.pyd
-*.so
-*.enamlc
 *~
 .DS_Store
 
