@@ -2,6 +2,13 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 This shows the three different types of editor that can be applied to a list
 of objects:
 
@@ -12,6 +19,7 @@ of objects:
 Each editor style is editing the exact same list of objects. Note that any
 changes made in one editor are automatically reflected in the others.
 """
+# Issue related to the demo warning: enthought/traitsui#948
 
 from traits.api import HasStrictTraits, Str, Int, Regex, List, Instance
 
