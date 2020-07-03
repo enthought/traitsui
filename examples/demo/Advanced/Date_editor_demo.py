@@ -2,11 +2,19 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Implementation of a DateEditor demo plugin for Traits UI demo program.
 
 This demo shows a few different styles of the DateEditor and how it can be
 customized.
 """
+# Issue related to the demo warning: enthought/traitsui#962
 
 from traits.api import HasTraits, Date, List, Str
 from traitsui.api import View, Item, DateEditor, Group

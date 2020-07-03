@@ -2,10 +2,18 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Implementation of a DateRangeEditor demo plugin for Traits UI demo program.
 
 This demo shows a custom style DateRaneEditor.
 """
+# Issue related to the demo warning: enthought/traitsui#962
 
 from traits.api import HasTraits, Date, Tuple
 from traits.etsconfig.api import ETSConfig
