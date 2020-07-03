@@ -2,10 +2,13 @@
 #  License: BSD Style.
 
 """
-A Traits UI editor that wraps a Qt calendar panel.
+Implementation of a DateRangeEditor demo plugin for Traits UI demo program.
+
+This demo shows a custom style DateRaneEditor.
 """
 
 from traits.api import HasTraits, Date, Tuple
+from traits.etsconfig.api import ETSConfig
 from traitsui.api import View, Item, DateRangeEditor, Group
 
 
@@ -13,23 +16,28 @@ class DateRangeEditorDemo(HasTraits):
     """ Demo class to show DateRangeEditor. """
     date_range = Tuple(Date, Date)
 
-    view = View(
-                Group(Item('date_range',
-                           editor=DateRangeEditor(),
-                           style='custom',
-                           label='Date range'),
-                      label='Date range'),
-                resizable=True)
+    traits_view = View(
+        Group(
+            Item(
+                'date_range',
+                editor=DateRangeEditor(),
+                style='custom',
+                label='Date range'
+            ),
+            label='Date range'
+        ),
+        resizable=True
+    )
 
     def _date_range_changed(self):
         print(self.date_range)
 
 
-#-- Set Up The Demo ------------------------------------------------------
+# -- Set Up The Demo ------------------------------------------------------
 
-demo = DateRangeEditorDemo()
 
 if __name__ == "__main__":
-    demo.configure_traits()
-
-#-- eof -----------------------------------------------------------------------
+    if ETSConfig.toolkit == "qt4":
+        # DateRangeEditor is currently only available for qt backend.
+        demo = DateRangeEditorDemo()
+        demo.configure_traits()
