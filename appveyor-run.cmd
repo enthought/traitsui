@@ -7,14 +7,15 @@
 ::
 SETLOCAL EnableDelayedExpansion
 
-SET counter=0
+SET operation=%1
+SET runtime=%2
+SET toolkit=%3
 
-FOR %%x IN (%*) DO (
-SET /A counter=!counter! + 1
-IF !counter! EQU 1 SET operation=%%x
-IF !counter! EQU 2 SET runtime=%%x
-IF !counter! GTR 2 CALL edm run -- python etstool.py !operation! --runtime=!runtime! --toolkit=%%x || GOTO error
-)
+CALL edm run -- python etstool.py !operation! --runtime=!runtime! --toolkit=!toolkit! || GOTO error
+PUSHD ets-demo
+CALL edm run -- python etstool.py !operation! --runtime=!runtime! --toolkit=!toolkit! || GOTO error
+POPD
+
 GOTO end
 
 :error:
