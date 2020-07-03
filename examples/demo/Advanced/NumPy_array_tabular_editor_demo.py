@@ -49,10 +49,13 @@ class ShowArray(HasTraits):
         Item(
             'data',
             show_label=False,
-            style='readonly',
             editor=TabularEditor(
                 adapter=ArrayAdapter(),
-                auto_resize=True
+                auto_resize=True,
+                # Do not allow any kind of editing of the array:
+                editable=False,
+                operations=[],
+                drag_move=False
             )
         ),
         title='Array Viewer',
