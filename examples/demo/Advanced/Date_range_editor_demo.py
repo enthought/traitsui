@@ -2,16 +2,10 @@
 #  License: BSD Style.
 
 """
-**WARNING**
-
-  This demo might not work as expected and some documented features might be
-  missing.
-
--------------------------------------------------------------------------------
-
 Implementation of a DateRangeEditor demo plugin for Traits UI demo program.
 
-This demo shows a custom style DateRaneEditor.
+This demo shows a custom style DateRangeEditor. Note that this demo only works
+with qt backend.
 """
 # Issue related to the demo warning: enthought/traitsui#962
 
