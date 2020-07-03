@@ -31,6 +31,9 @@ if is_current_backend_qt4():
 
     from pyface.qt import QtCore
 
+    class CustomEvent(QtCore.QEvent):
+        pass
+
     class DummyQObject(QtCore.QObject):
 
         def __init__(self, max_n_events):
@@ -39,13 +42,16 @@ if is_current_backend_qt4():
             self.n_events = 0
 
         def event(self, event):
-            if event.type() != QtCore.QEvent.User:
+            if not isinstance(event, CustomEvent):
                 return super().event(event)
 
             self.n_events += 1
 
             if self.n_events < self.max_n_events:
-                new_event = QtCore.QEvent(QtCore.QEvent.User)
+                event_type = QtCore.QEvent.Type(
+                    int(event.type()) + self.n_events
+                )
+                new_event = CustomEvent(event_type)
                 QtCore.QCoreApplication.postEvent(self, new_event)
             return True
 
@@ -101,7 +107,7 @@ class TestProcessEventsRepeated(unittest.TestCase):
         self.addCleanup(cleanup, q_object)
 
         QtCore.QCoreApplication.postEvent(
-            q_object, QtCore.QEvent(QtCore.QEvent.User)
+            q_object, CustomEvent(QtCore.QEvent.Type(QtCore.QEvent.User + 1))
         )
 
         # sanity check calling processEvents does not process
