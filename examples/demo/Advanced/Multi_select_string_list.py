@@ -14,7 +14,8 @@ This demo uses two TabularEditors, side-by-side. Selections from the left table
 are shown in the right table. Each table has only one column.
 
 """
-# Issue related to the demo warning: enthought/traitsui#960
+# Issues related to the demo warning: enthought/traitsui#14,
+# enthought/traitsui#15, enthought/traitsui#960
 
 from traits.api import HasPrivateTraits, List, Str, Property
 from traitsui.api import View, HGroup, UItem, TabularAdapter, TabularEditor
