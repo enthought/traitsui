@@ -1,4 +1,11 @@
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Creating a multi-select list box
 
 How to use a TabularEditor to create a multi-select list box.
@@ -7,6 +14,7 @@ This demo uses two TabularEditors, side-by-side. Selections from the left table
 are shown in the right table. Each table has only one column.
 
 """
+# Issue related to the demo warning: enthought/traitsui#960
 
 from traits.api import HasPrivateTraits, List, Str, Property
 from traitsui.api import View, HGroup, UItem, TabularAdapter, TabularEditor

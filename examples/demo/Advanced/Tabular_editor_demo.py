@@ -1,4 +1,11 @@
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Tabular editor
 
 The TabularEditor can be used for many of the same purposes as the TableEditor,
@@ -97,6 +104,7 @@ feels stand out about this approach are:
   the documentation.
 
 """
+# Issue related to the demo warning: enthought/traitsui#960
 
 from functools import partial
 from random import randint, choice, shuffle

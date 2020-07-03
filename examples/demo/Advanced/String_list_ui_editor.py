@@ -2,6 +2,13 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Another demo showing how to use a TabularEditor to create a multi-select list
 box. This demo creates a reusable StringListEditor class and uses that instead
 of defining the editor as part of the demo class.
@@ -10,6 +17,7 @@ This approach greatly simplifies the actual demo class and shows how to
 construct a reusable Traits UI-based editor that can be used in other
 applications.
 """
+# Issue related to the demo warning: enthought/traitsui#960
 
 from traits.api import HasPrivateTraits, List, Str, Property, on_trait_change
 from traits.etsconfig.api import ETSConfig

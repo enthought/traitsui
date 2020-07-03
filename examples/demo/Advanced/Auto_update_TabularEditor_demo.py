@@ -1,4 +1,11 @@
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Auto-update from a list to a TabularEditor
 
 Demonstrates using a TabularEditor with the 'auto_update' feature enabled,
@@ -18,6 +25,8 @@ long lists are used, since enabling this feature adds and removed Traits
 listeners to each item in the list.
 
 """
+# Issues related to the demo warning: enthought/traitsui#913,
+# enthought/traitsui#960
 
 from traits.api import HasTraits, Str, Float, List, Instance, Button
 from traitsui.api import (

@@ -1,4 +1,11 @@
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Defining column-specific context menu in a Tabular Editor. Shows how the
 example for the Table Editor (`Table_Editor_with_context_menu_demo.py`) can be
 adapted to work with a Tabular Editor.
@@ -15,6 +22,8 @@ occur on a number of traits into a category of event, which can be handled by
 a single event handler defined for the category (in this case, the category
 is 'affects_average').
 """
+# Issue related to the demo warning: enthought/traitsui#960
+
 
 from random import randint
 from traits.api import HasStrictTraits, Str, Int, Float, List, Property
