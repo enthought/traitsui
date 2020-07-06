@@ -10,9 +10,7 @@ environment:
 
   matrix:
     - RUNTIME: '3.6'
-      TOOLKITS: "null"
-    - RUNTIME: '3.6'
-      TOOLKITS: "pyside2 pyqt"
+      TOOLKITS: "null pyqt pyqt5 pyside2"
     - RUNTIME: '3.6'
       TOOLKITS: "wx"
 

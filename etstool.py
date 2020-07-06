@@ -140,7 +140,8 @@ doc_dependencies = {
 
 environment_vars = {
     'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
-    'pyqt': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt5"},
+    'pyqt': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt"},
+    'pyqt5': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt5"},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
 }
