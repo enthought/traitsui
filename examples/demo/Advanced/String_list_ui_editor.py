@@ -2,6 +2,13 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Another demo showing how to use a TabularEditor to create a multi-select list
 box. This demo creates a reusable StringListEditor class and uses that instead
 of defining the editor as part of the demo class.
@@ -10,26 +17,24 @@ This approach greatly simplifies the actual demo class and shows how to
 construct a reusable Traits UI-based editor that can be used in other
 applications.
 """
-
-#-- Imports ------------------------------------------------------------------
+# Issue related to the demo warning: enthought/traitsui#960
 
 from traits.api import HasPrivateTraits, List, Str, Property, on_trait_change
-
-from traitsui.api import View, HGroup, Item, TabularEditor
-from traitsui.tabular_adapter import TabularAdapter
-from traitsui.basic_editor_factory import BasicEditorFactory
-
 from traits.etsconfig.api import ETSConfig
+
+from traitsui.api import (
+    BasicEditorFactory, HGroup, Item, TabularAdapter, TabularEditor, View
+)
+
 if ETSConfig.toolkit == 'wx':
     from traitsui.wx.ui_editor import UIEditor
 else:
     from traitsui.qt4.ui_editor import UIEditor
 
-#-- Define the reusable StringListEditor class and its helper classes --------
+
+# -- Define the reusable StringListEditor class and its helper classes --------
 
 # Define the tabular adapter used by the Traits UI string list editor:
-
-
 class MultiSelectAdapter(TabularAdapter):
 
     # The columns in the table (just the string value):
@@ -41,9 +46,8 @@ class MultiSelectAdapter(TabularAdapter):
     def _get_value_text(self):
         return self.item
 
+
 # Define the actual Traits UI string list editor:
-
-
 class _StringListEditor(UIEditor):
 
     # Indicate that the editor is scrollable/resizable:
@@ -56,35 +60,35 @@ class _StringListEditor(UIEditor):
     selected = List(Str)
 
     # The traits UI view used by the editor:
-    view = View(
-        Item('choices',
-             show_label=False,
-             editor=TabularEditor(
-                 show_titles=False,
-                 selected='selected',
-                 editable=False,
-                 multi_select=True,
-                 adapter=MultiSelectAdapter())
-             ),
+    traits_view = View(
+        Item(
+            'choices',
+            show_label=False,
+            editor=TabularEditor(
+                show_titles=False,
+                selected='selected',
+                editable=False,
+                multi_select=True,
+                adapter=MultiSelectAdapter()
+            )
+        ),
         id='string_list_editor',
         resizable=True
     )
 
     def init_ui(self, parent):
 
-        self.sync_value(self.factory.choices, 'choices', 'from',
-                        is_list=True)
+        self.sync_value(self.factory.choices, 'choices', 'from', is_list=True)
         self.selected = self.value
 
         return self.edit_traits(parent=parent, kind='subpanel')
 
-    @on_trait_change(' selected')
+    @on_trait_change('selected')
     def _selected_modified(self):
         self.value = self.selected
 
+
 # Define the StringListEditor class used by client code:
-
-
 class StringListEditor(BasicEditorFactory):
 
     # The editor implementation class:
@@ -93,9 +97,8 @@ class StringListEditor(BasicEditorFactory):
     # The extended trait name containing the editor's set of choices:
     choices = Str()
 
-#-- Define the demo class ----------------------------------------------------
 
-
+# -- Define the demo class ----------------------------------------------------
 class MultiSelect(HasPrivateTraits):
     """ This class demonstrates using the StringListEditor to select a set
         of string values from a set of choices.
@@ -113,25 +116,32 @@ class MultiSelect(HasPrivateTraits):
 
     # A traits view showing the list of choices on the left-hand side, and
     # the currently selected choices on the right-hand side:
-    view = View(
+    traits_view = View(
         HGroup(
-            Item('selected',
-                 show_label=False,
-                 editor=StringListEditor(choices='choices')
-                 ),
-            Item('result',
-                 show_label=False,
-                 editor=StringListEditor(choices='selected')
-                 )
+            Item(
+                'selected',
+                show_label=False,
+                editor=StringListEditor(choices='choices')
+            ),
+            Item(
+                'result',
+                show_label=False,
+                editor=StringListEditor(choices='selected')
+            )
         ),
         width=0.20,
         height=0.25
     )
 
+
 # Create the demo:
-demo = MultiSelect(choices=['one', 'two', 'three', 'four', 'five', 'six',
-                            'seven', 'eight', 'nine', 'ten'],
-                   selected=['two', 'five', 'nine'])
+demo = MultiSelect(
+    choices=[
+        'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+        'ten'
+    ],
+    selected=['two', 'five', 'nine']
+)
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
