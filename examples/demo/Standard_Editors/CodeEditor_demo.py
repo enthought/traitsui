@@ -7,16 +7,12 @@ Implementation of a CodeEditor demo plugin for Traits UI demo program.
 This demo shows each of the four styles of the CodeEditor
 """
 
-# Imports:
-from traits.api \
-    import HasTraits, Code
+from traits.api import HasTraits, Code
 
-from traitsui.api \
-    import Item, Group, View
+from traitsui.api import Item, Group, View
+
 
 # The main demo class:
-
-
 class CodeEditorDemo(HasTraits):
     """ Defines the CodeEditor demo class.
     """
@@ -36,10 +32,13 @@ class CodeEditorDemo(HasTraits):
     )
 
     # Demo view:
-    view = View(
+    traits_view = View(
         code_group,
         title='CodeEditor',
-        buttons=['OK'])
+        width=600,
+        height=600,
+        buttons=['OK']
+    )
 
 
 # Create the demo:

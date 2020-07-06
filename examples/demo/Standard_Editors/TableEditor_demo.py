@@ -14,6 +14,8 @@ Implementation of a TableEditor demo plugin for Traits UI demo program
 This demo shows the full behavior of a straightforward TableEditor.  Only
 one style of TableEditor is implemented, so that is the one shown.
 """
+# Issue related to the demo warning: enthought/traitsui#948
+
 
 from traits.api import HasTraits, HasStrictTraits, Str, Int, Regex, List
 

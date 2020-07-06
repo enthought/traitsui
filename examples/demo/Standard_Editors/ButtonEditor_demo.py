@@ -1,37 +1,48 @@
 """
-Button editor
+Implementation of a ButtonEditor demo plugin for Traits UI demo program.
 
-A Button trait is displayed as a button in a Traits UI view. When the button is
-clicked, Traits UI will execute a method of your choice (a 'listener').
-
-In this example, the listener just increments a click counter.
+This demo shows each of the two styles of the ButtonEditor.
+(As of this writing, they are identical.)
 """
 
-from traits.api import HasTraits, Button, Int
-from traitsui.api import View
+from traits.api import HasTraits, Button
+from traitsui.api import Item, View, Group, message
 
+
+# -------------------------------------------------------------------------
+#  Demo Class
+# -------------------------------------------------------------------------
 
 class ButtonEditorDemo(HasTraits):
-    """ Defines the main ButtonEditor demo class. """
+    """ This class specifies the details of the ButtonEditor demo.
+    """
 
-    # Define a Button trait:
-    my_button_trait = Button('Click Me')
-    click_counter = Int()
+    # To demonstrate any given Trait editor, an appropriate Trait is required.
+    fire_event = Button('Click Me')
 
-    # When the button is clicked, do something.
-    # The listener method is named '_TraitName_fired', where
-    # 'TraitName' is the name of the button trait.
-    def _my_button_trait_fired(self):
-        self.click_counter += 1
+    def _fire_event_fired():
+        message("Button clicked!")
 
-    # Demo view:
+    # ButtonEditor display
+    # (Note that Text and ReadOnly versions are not applicable)
+    event_group = Group(
+        Item('fire_event', style='simple', label='Simple'),
+        Item('_'),
+        Item('fire_event', style='custom', label='Custom'),
+        Item('_'),
+        Item(label='[text style unavailable]'),
+        Item('_'),
+        Item(label='[readonly style unavailable]')
+    )
+
+    # Demo view
     traits_view = View(
-        'my_button_trait',
-        'click_counter',
+        event_group,
         title='ButtonEditor',
         buttons=['OK'],
-        resizable=True
+        width=250
     )
+
 
 # Create the demo:
 demo = ButtonEditorDemo()

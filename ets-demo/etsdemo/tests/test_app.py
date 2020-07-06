@@ -1,13 +1,12 @@
-#  Copyright (c) 2020, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2020 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
+# Thanks for using Enthought open source!
 
 import os
 import tempfile
@@ -15,7 +14,11 @@ import textwrap
 import unittest
 from xml.etree import ElementTree as ET
 
-from traitsui.extras import demo
+from etsdemo.app import (
+    DemoPath,
+    extract_docstring_from_source,
+    parse_source,
+)
 
 HTML_NS_PREFIX = "{http://www.w3.org/1999/xhtml}"
 
@@ -31,7 +34,7 @@ class TestDemoPathDescription(unittest.TestCase):
         # If the directory is empty, the content of the description should
         # be empty.
         with tempfile.TemporaryDirectory() as directory:
-            model = demo.DemoPath(
+            model = DemoPath(
                 name=directory,
             )
 
@@ -46,7 +49,7 @@ class TestDemoPathDescription(unittest.TestCase):
             with open(index_rst, "w", encoding="utf-8") as f:
                 f.write(".. image:: any_image.jpg\n")
 
-            model = demo.DemoPath(
+            model = DemoPath(
                 name=directory,
             )
 
@@ -56,7 +59,7 @@ class TestDemoPathDescription(unittest.TestCase):
 
     def test_description_use_css(self):
         with tempfile.TemporaryDirectory() as directory:
-            model = demo.DemoPath(
+            model = DemoPath(
                 name=directory,
                 css_filename="default.css",
             )
@@ -72,7 +75,7 @@ class TestDemoPathInitLocals(unittest.TestCase):
 
     def test_init_dict_with_empty_directory(self):
         with tempfile.TemporaryDirectory() as directory:
-            model = demo.DemoPath(
+            model = DemoPath(
                 name=directory,
             )
             # traits api is still imported.
@@ -85,7 +88,7 @@ class TestDemoPathInitLocals(unittest.TestCase):
             init_py = os.path.join(directory, "__init__.py")
             with open(init_py, "w", encoding="utf-8") as f:
                 f.write("a = 1\n")
-            model = demo.DemoPath(
+            model = DemoPath(
                 name=directory,
             )
             self.assertIn("a", model.init_dic)
@@ -120,7 +123,7 @@ class TestDemoPathChildren(unittest.TestCase):
             with open(example_py, "w", encoding="utf-8") as f:
                 f.write(example_content)
 
-            model = demo.DemoPath(
+            model = DemoPath(
                 name=directory,
                 use_files=False,
             )
@@ -144,3 +147,87 @@ class TestDemoPathChildren(unittest.TestCase):
             example.run_code()
             self.assertIn("CONSTANT", example.locals)
             self.assertIn("HasTraits", example.locals)
+
+
+class TestParseSource(unittest.TestCase):
+
+    def test_extract_docstring_from_source(self):
+        source_code = b""
+        with self.assertRaises(TypeError):
+            docstring, source = extract_docstring_from_source(source_code)
+
+        source_code = u""
+        docstring, source = extract_docstring_from_source(source_code)
+        self.assertEqual((u"", u""), (docstring, source))
+
+        source_code = u'''""" Module description """\nx=1\ny=2'''
+        docstring, source = extract_docstring_from_source(source_code)
+        expected = (u" Module description ", "x=1\ny=2")
+        self.assertEqual(expected, (docstring, source))
+
+    def test_parse_source(self):
+        docstring, source = parse_source("non-existent-file.<>|:")
+        self.assertIn("Sorry, something went wrong.", docstring)
+
+    def test_simple_source(self):
+        source_code = "\n".join(['"""', "Docstring", '"""', "a = 1"])
+        docstring, source = extract_docstring_from_source(source_code)
+        self.assertEqual(docstring, "\nDocstring\n")
+        self.assertEqual(source, "a = 1")
+
+    def test_alternate_quotes(self):
+        source_code = "\n".join(["'''", "Docstring", "'''", "a = 1"])
+        docstring, source = extract_docstring_from_source(source_code)
+        self.assertEqual(docstring, "\nDocstring\n")
+        self.assertEqual(source, "a = 1")
+
+    def test_string_in_source(self):
+        source_code = "\n".join(
+            ['"""', "Docstring", '"""', '"string in source"', "a = 1"]
+        )
+        docstring, source = extract_docstring_from_source(source_code)
+        self.assertEqual(docstring, "\nDocstring\n")
+        self.assertEqual(source, "\n".join(['"string in source"', "a = 1"]))
+
+    def test_string_in_docstring(self):
+        source_code = "\n".join(
+            ['"""', "Docstring", '"string in docstring"', '"""', "a = 1"]
+        )
+        docstring, source = extract_docstring_from_source(source_code)
+        self.assertEqual(
+            docstring,
+            "\n".join(["", "Docstring", '"string in docstring"', ""]),
+        )
+        self.assertEqual(source, "\n".join(["a = 1"]))
+
+    def test_ignore_class_docstring(self):
+        source_code = "\n".join(["class Foo:", '    """Class docstring"""'])
+        docstring, source = extract_docstring_from_source(source_code)
+        self.assertEqual(docstring, "")
+        self.assertEqual(
+            source, "\n".join(["class Foo:", '    """Class docstring"""'])
+        )
+
+    def test_ignore_starting_comment(self):
+        source_code = "\n".join(
+            [
+                "# Copyright notice.",
+                "# Something about the author.",
+                '"""',
+                "Docstring",
+                '"""',
+                "a = 1",
+            ]
+        )
+        docstring, source = extract_docstring_from_source(source_code)
+        self.assertEqual(docstring, "\nDocstring\n")
+        self.assertEqual(
+            source,
+            "\n".join(
+                [
+                    "# Copyright notice.",
+                    "# Something about the author.",
+                    "a = 1",
+                ]
+            ),
+        )

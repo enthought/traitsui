@@ -1,4 +1,11 @@
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Creating a multi-select list box
 
 How to use a TabularEditor to create a multi-select list box.
@@ -7,10 +14,11 @@ This demo uses two TabularEditors, side-by-side. Selections from the left table
 are shown in the right table. Each table has only one column.
 
 """
+# Issues related to the demo warning: enthought/traitsui#14,
+# enthought/traitsui#15, enthought/traitsui#960
 
 from traits.api import HasPrivateTraits, List, Str, Property
-from traitsui.api import View, HGroup, UItem, TabularEditor
-from traitsui.tabular_adapter import TabularAdapter
+from traitsui.api import View, HGroup, UItem, TabularAdapter, TabularEditor
 
 
 class MultiSelectAdapter(TabularAdapter):
@@ -45,31 +53,40 @@ class MultiSelect(HasPrivateTraits):
     choices = List(Str)
     selected = List(Str)
 
-    view = View(
+    traits_view = View(
         HGroup(
-            UItem('choices',
-                  editor=TabularEditor(
-                      show_titles=True,
-                      selected='selected',
-                      editable=False,
-                      multi_select=True,
-                      adapter=MultiSelectAdapter())
-                  ),
-            UItem('selected',
-                  editor=TabularEditor(
-                      show_titles=True,
-                      editable=False,
-                      adapter=MultiSelectAdapter())
-                  )
+            UItem(
+                'choices',
+                editor=TabularEditor(
+                    show_titles=True,
+                    selected='selected',
+                    editable=False,
+                    multi_select=True,
+                    adapter=MultiSelectAdapter()
+                )
+            ),
+            UItem(
+                'selected',
+                editor=TabularEditor(
+                    show_titles=True,
+                    editable=False,
+                    adapter=MultiSelectAdapter()
+                )
+            )
         ),
         resizable=True,
         width=200,
         height=300
     )
 
+
 # Create the demo:
-demo = MultiSelect(choices=['one', 'two', 'three', 'four', 'five', 'six',
-                            'seven', 'eight', 'nine', 'ten'])
+demo = MultiSelect(
+    choices=[
+        'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+        'ten'
+    ]
+)
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':

@@ -39,6 +39,9 @@ if is_current_backend_qt4():
             self.n_events = 0
 
         def event(self, event):
+            if event.type() != QtCore.QEvent.User:
+                return super().event(event)
+
             self.n_events += 1
 
             if self.n_events < self.max_n_events:

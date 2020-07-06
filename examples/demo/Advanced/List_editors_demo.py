@@ -2,6 +2,13 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 This shows the three different types of editor that can be applied to a list
 of objects:
 
@@ -12,35 +19,34 @@ of objects:
 Each editor style is editing the exact same list of objects. Note that any
 changes made in one editor are automatically reflected in the others.
 """
+# Issue related to the demo warning: enthought/traitsui#948
 
-# Imports:
-from traits.api \
-    import HasStrictTraits, Str, Int, Regex, List, Instance
+from traits.api import HasStrictTraits, Str, Int, Regex, List, Instance
 
-from traitsui.api \
-    import View, Item, Tabbed, TableEditor, ListEditor
+from traitsui.api import (
+    Item, ListEditor, ObjectColumn, RuleTableFilter, Tabbed, TableEditor, View
+)
 
-from traitsui.table_column \
-    import ObjectColumn
+from traitsui.table_filter import (
+    RuleFilterTemplate, MenuFilterTemplate, EvalFilterTemplate
+)
 
-from traitsui.table_filter \
-    import RuleTableFilter, RuleFilterTemplate, \
-    MenuFilterTemplate, EvalFilterTemplate
 
 # 'Person' class:
-
-
 class Person(HasStrictTraits):
 
     # Trait definitions:
     name = Str()
     age = Int()
-    phone = Regex(value='000-0000', regex='\d\d\d[-]\d\d\d\d')
+    phone = Regex(value='000-0000', regex=r'\d\d\d[-]\d\d\d\d')
 
     # Traits view definition:
-    traits_view = View('name', 'age', 'phone',
-                       width=0.18,
-                       buttons=['OK', 'Cancel'])
+    traits_view = View(
+        'name', 'age', 'phone',
+        width=0.18,
+        buttons=['OK', 'Cancel']
+    )
+
 
 # Sample data:
 people = [
@@ -58,9 +64,11 @@ people = [
 filters = [EvalFilterTemplate, MenuFilterTemplate, RuleFilterTemplate]
 
 table_editor = TableEditor(
-    columns=[ObjectColumn(name='name', width=0.4),
-             ObjectColumn(name='age', width=0.2),
-             ObjectColumn(name='phone', width=0.4)],
+    columns=[
+        ObjectColumn(name='name', width=0.4),
+        ObjectColumn(name='age', width=0.2),
+        ObjectColumn(name='phone', width=0.4)
+    ],
     editable=True,
     deletable=True,
     sortable=True,
@@ -68,12 +76,12 @@ table_editor = TableEditor(
     auto_size=False,
     filters=filters,
     search=RuleTableFilter(),
-    row_factory=Person
+    row_factory=Person,
+    show_toolbar=True
 )
 
+
 # 'ListTraitTest' class:
-
-
 class ListTraitTest(HasStrictTraits):
 
     # Trait definitions:
@@ -82,28 +90,34 @@ class ListTraitTest(HasStrictTraits):
     # Traits view definitions:
     traits_view = View(
         Tabbed(
-            Item('people',
-                 label='Table',
-                 id='table',
-                 editor=table_editor),
-            Item('people',
-                 label='List',
-                 id='list',
-                 style='custom',
-                 editor=ListEditor(style='custom',
-                                   rows=5)),
-            Item('people',
-                 label='Notebook',
-                 id='notebook',
-                 style='custom',
-                 editor=ListEditor(use_notebook=True,
-                                   deletable=True,
-                                   export='DockShellWindow',
-                                   page_name='.name')),
+            Item('people', label='Table', id='table', editor=table_editor),
+            Item(
+                'people',
+                label='List',
+                id='list',
+                style='custom',
+                editor=ListEditor(style='custom', rows=5)
+            ),
+            Item(
+                'people',
+                label='Notebook',
+                id='notebook',
+                style='custom',
+                editor=ListEditor(
+                    use_notebook=True,
+                    deletable=True,
+                    export='DockShellWindow',
+                    page_name='.name'
+                )
+            ),
             id='splitter',
-            show_labels=False),
+            show_labels=False
+        ),
         id='traitsui.demo.Traits UI Demo.Advanced.List_editors_demo',
-        dock='horizontal')
+        dock='horizontal',
+        width=600
+    )
+
 
 # Create the demo:
 demo = ListTraitTest(people=people)
