@@ -937,7 +937,7 @@ class TabularEditor(Editor):
         """
         cws = self._cached_widths
         if cws is not None:
-            cws = [(None, cw)[cw >= 0] for cw in cws]
+            cws = [cw if cw is not None and cw >= 0 else None for cw in cws]
 
         return {"cached_widths": cws}
 
