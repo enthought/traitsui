@@ -402,7 +402,7 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
         # This tests the workaround which checks if `factory` is None before
         # using it while resizing the columns.
         # The resize event is processed after UI.dispose is called.
-        # Maybe related to enthought/traitsui#854 and enthought/traits#431
+        # Maybe related to enthought/traits#431
         with store_exceptions_on_all_threads(), \
                 self.report_and_editor(get_view()) as (_, editor):
             editor.adapter.columns = [("Name", "name")]
