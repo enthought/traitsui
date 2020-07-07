@@ -11,6 +11,7 @@
 
 """ Tests for traitsui.tests._tools """
 
+import sys
 import unittest
 
 from pyface.api import GUI
@@ -18,6 +19,7 @@ from pyface.api import GUI
 from traitsui.tests._tools import (
     is_current_backend_qt4,
     is_current_backend_wx,
+    is_mac_os,
     skip_if_not_qt4,
     skip_if_not_wx,
     process_cascade_events,
@@ -86,6 +88,23 @@ class TestProcessEventsRepeated(unittest.TestCase):
     @skip_if_not_qt4
     def test_qt_process_events_process_all(self):
         from pyface.qt import QtCore
+
+        if QtCore.__version_info__ < (5, 0, 0) and is_mac_os:
+            # On Qt4 and OSX, Qt QEventLoop.processEvents says nothing was "
+            # processed even when there are events processed, causing the "
+            # loop to break too soon. (See enthought/traitsui#951)"
+            self.skipTest(
+                "process_cascade_events is not reliable on Qt4 + OSX"
+            )
+
+        if QtCore.__version_info__[0] >= 5 and sys.platform.startswith("win"):
+            # On Qt4 and some Windows, Qt QEventLoop.processEvents says
+            # nothing was processed even when there are events processed,
+            # causing the loop to break too soon.
+            # (See enthought/traitsui#951)
+            self.skipTest(
+                "process_cascade_events is not reliable on Qt4 + some windows"
+            )
 
         def cleanup(q_object):
             q_object.deleteLater()
