@@ -333,10 +333,6 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
             self.assertEqual(list(editor.control.GetChildren()), [])
 
     @skip_if_not_qt4
-    @unittest.skipIf(
-        is_linux,
-        "Issue enthought/traitsui#854, possible test interactions on Linux"
-    )
     def test_simple_editor_combobox(self):
         enum_edit = EnumModel()
 
