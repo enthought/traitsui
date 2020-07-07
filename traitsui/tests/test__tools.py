@@ -123,8 +123,8 @@ class TestProcessEventsRepeated(unittest.TestCase):
 
         n_left_behind_events = q_object.n_events - actual
         msg = (
-            "Expected {max_n_events} events processed on the objects after "
-            "running process_cascade_events and zero events left. "
+            "Expected {max_n_events} events processed on the objects and zero "
+            "events left on the queue after running process_cascade_events. "
             "Found {actual} processed with {n_left_behind_events} left "
             "behind.".format(
                 max_n_events=max_n_events,
