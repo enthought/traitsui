@@ -122,17 +122,18 @@ class TestProcessEventsRepeated(unittest.TestCase):
             QtCore.QCoreApplication.processEvents(QtCore.QEventLoop.AllEvents)
 
         n_left_behind_events = q_object.n_events - actual
-        self.assertEqual(n_left_behind_events, 0)
-        self.assertEqual(
-            actual, max_n_events,
+        msg = (
             "Expected {max_n_events} events processed on the objects after "
-            "running process_cascade_events, found {actual} and there are "
-            "{n_left_behind_events} left behind.".format(
+            "running process_cascade_events and zero events left. "
+            "Found {actual} processed with {n_left_behind_events} left "
+            "behind.".format(
                 max_n_events=max_n_events,
                 actual=actual,
                 n_left_behind_events=n_left_behind_events,
             )
         )
+        self.assertEqual(n_left_behind_events, 0, msg)
+        self.assertEqual(actual, max_n_events)
 
     @skip_if_not_wx
     def test_wx_process_events_process_all(self):
