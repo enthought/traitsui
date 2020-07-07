@@ -115,7 +115,7 @@ class TestProcessEventsRepeated(unittest.TestCase):
         # then
         actual = q_object.n_events
 
-        # If process_cascade_events fails for genuine reasons, then there
+        # If process_cascade_events did not do what it promises, then there
         # are still pending tasks left. Run process events at least the same
         # number of times as max_n_events to verify
         for _ in range(max_n_events):
@@ -133,7 +133,11 @@ class TestProcessEventsRepeated(unittest.TestCase):
             )
         )
         self.assertEqual(n_left_behind_events, 0, msg)
-        self.assertEqual(actual, max_n_events)
+
+        # If the previous assertion passes but this one fails, that means some
+        # events have gone missing, and that would likely be a problem for the
+        # test setup, not for the process_cascade_events.
+        self.assertEqual(actual, max_n_events, msg)
 
     @skip_if_not_wx
     def test_wx_process_events_process_all(self):
