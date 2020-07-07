@@ -141,8 +141,11 @@ _TOLERANCE_MILLISECS = 5000
 def process_cascade_events():
     """ Process all events, including events posted by the processed events.
 
-    Use this function with caution, as an infinite cascade of events will
-    cause this function to enter an infinite loop.
+    Cautions:
+    - An infinite cascade of events will cause this function to enter an
+      infinite loop.
+    - There still exists technical difficulties with Qt.
+      See enthought/traitsui#951
     """
     if is_current_backend_qt4():
         from pyface.qt import QtCore
