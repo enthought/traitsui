@@ -113,7 +113,26 @@ class TestProcessEventsRepeated(unittest.TestCase):
         process_cascade_events()
 
         # then
-        self.assertEqual(q_object.n_events, max_n_events)
+        actual = q_object.n_events
+
+        # If process_cascade_events fails for genuine reasons, then there
+        # are still pending tasks left. Run process events at least the same
+        # number of times as max_n_events to verify
+        for _ in range(max_n_events):
+            QtCore.QCoreApplication.processEvents(QtCore.QEventLoop.AllEvents)
+
+        n_left_behind_events = q_object.n_events - actual
+        self.assertEqual(n_left_behind_events, 0)
+        self.assertEqual(
+            actual, max_n_events,
+            "Expected {max_n_events} events processed on the objects after "
+            "running process_cascade_events, found {actual} and there are "
+            "{n_left_behind_events} left behind.".format(
+                max_n_events=max_n_events,
+                actual=actual,
+                n_left_behind_events=n_left_behind_events,
+            )
+        )
 
     @skip_if_not_wx
     def test_wx_process_events_process_all(self):
