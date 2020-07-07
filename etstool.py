@@ -87,8 +87,8 @@ from contextlib import contextmanager
 import click
 
 supported_combinations = {
-    '3.5': {'pyside2', 'pyqt', 'null'},
-    '3.6': {'pyside2', 'pyqt', 'wx', 'null'},
+    '3.5': {'pyside2', 'pyqt', 'pyqt5', 'null'},
+    '3.6': {'pyside2', 'pyqt', 'pyqt5', 'wx', 'null'},
 }
 
 # Default Python version to use in the comamnds below if none is specified.
