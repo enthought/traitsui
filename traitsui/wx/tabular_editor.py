@@ -579,13 +579,13 @@ class TabularEditor(Editor):
     def _multi_selected_items_changed(self, event):
         """ Handles the editor's 'multi_selected' trait being modified.
         """
-        values = self.values
+        values = self.value
         try:
             self._multi_selected_rows_items_changed(
                 TraitListEvent(
-                    0,
-                    [values.index(item) for item in event.removed],
-                    [values.index(item) for item in event.added],
+                    index=0,
+                    removed=[values.index(item) for item in event.removed],
+                    added=[values.index(item) for item in event.added],
                 )
             )
         except:
@@ -937,7 +937,7 @@ class TabularEditor(Editor):
         """
         cws = self._cached_widths
         if cws is not None:
-            cws = [(None, cw)[cw >= 0] for cw in cws]
+            cws = [cw if cw is not None and cw >= 0 else None for cw in cws]
 
         return {"cached_widths": cws}
 

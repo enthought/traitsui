@@ -1,17 +1,19 @@
-from nose.tools import assert_raises
+import unittest
 
 from traits.api import HasTraits, Int
 from traitsui.tests._tools import skip_if_not_null
 
 
-@skip_if_not_null
-def test_configure_traits_error():
-    """ Verify that configure_traits fails with NotImplementedError. """
+class TestNullToolkit(unittest.TestCase):
 
-    class Test(HasTraits):
-        x = Int()
+    @skip_if_not_null
+    def test_configure_traits_error(self):
+        """ Verify that configure_traits fails with NotImplementedError. """
 
-    t = Test()
+        class Test(HasTraits):
+            x = Int()
 
-    with assert_raises(NotImplementedError):
-        t.configure_traits()
+        t = Test()
+
+        with self.assertRaises(NotImplementedError):
+            t.configure_traits()
