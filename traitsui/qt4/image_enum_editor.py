@@ -89,6 +89,10 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
         )
         return control
 
+    def dispose(self):
+        self.control._dispose()
+        super().dispose()
+
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -169,6 +173,18 @@ class ImageEnumComboBox(QtGui.QComboBox):
             view.setMinimumWidth(width)
         else:
             self.setItemDelegate(delegate)
+
+    def _dispose(self):
+        """ Dispose objects on this widget. To be called by editors.
+        """
+        # Replace the model with the standard one.
+        # After the editor has disposed itself, the widget may not have been
+        # garbage collected and the model still reacts to events fired
+        # afterwards (e.g. rowCount will be called) and runs into exceptions.
+        # QComboBox requires that the model must not be None.
+        # QStandardItemModel is the default model type when a QComboxBox is
+        # created.
+        self.setModel(QtGui.QStandardItemModel())
 
     def paintEvent(self, event):
         """ Reimplemented to draw the ComboBox frame and paint the image
