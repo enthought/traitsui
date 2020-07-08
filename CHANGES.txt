@@ -13,9 +13,10 @@ Joris Vankerschaver, Corran Webster.
 
 Fixes
 ~~~~~
+* Fix handling of minimum and maximum datetimes in Qt DatetimeEditor (#803)
 * Fix error in wx TabularEditor (#969)
 * Fix wx panel error due to alignments (#829)
-* Fix various issues in the demo application (#808)
+* Fix various issues in the demo application (#799, #808)
 * Fix format_func not used when EnumEditor is initialized with static values
   (#848)
 * Fix demo application description (#850)
@@ -27,6 +28,7 @@ Fixes
   items (#875)
 * Fix TabularAdapter crashes when column number reduces (#897)
 * Fix theme pickling issue (#915)
+* Fix error from example's tutor.py script (#813)
 
 Documentation
 ~~~~~~~~~~~~~
