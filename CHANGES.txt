@@ -1,6 +1,47 @@
 Traits UI Changelog
 ===================
 
+Release 7.0.1
+-------------
+
+A bugfix release that fixes a number of issues since the 7.0.0 release.
+
+Thanks to Ieva Cerny, Kit Choi, Robert Kern, Federico Miorelli,
+Joris Vankerschaver, Corran Webster.
+
+Fixes
+~~~~~
+* Fix error in wx TabularEditor (#969)
+* Fix wx panel error due to alignments (#829)
+* Fix various issues in the demo application (#808)
+* Fix format_func not used when EnumEditor is initialized with static values
+  (#848)
+* Fix demo application description (#850)
+* Fix auto-add functionality in ListStrModel (#860)
+* Move format_func, format_str and invalid traits from factory to editor
+  (#859, #900)
+* Fix segmentation fault for TabularModel (#871, #873)
+* Fix event handling in ListStrEditor and TabularEditor for adding and removing
+  items (#875)
+* Fix TabularAdapter crashes when column number reduces (#897)
+* Fix theme pickling issue (#915)
+
+Documentation
+~~~~~~~~~~~~~
+* Add links from TabularEditor and TreeEditor to adapter documentation (#917)
+
+Tests
+~~~~~
+* Rewrite nose tests to unittest (#809)
+* Use unittest discover instead of nose.core (#810)
+* Add more tests for EnumEditor (#836)
+* Add CheckListEditor tests (#837)
+* Add SetEditor tests (#838)
+* Add ImageEnumEditor tests (#845)
+* Add more ListStrEditor tests (#869)
+* Add more TabularEditor tests (#874)
+* Make sure all UI in tests are disposed (#865)
+
 Release 7.0.0
 -------------
 
