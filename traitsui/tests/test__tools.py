@@ -97,15 +97,6 @@ class TestProcessEventsRepeated(unittest.TestCase):
                 "process_cascade_events is not reliable on Qt4 + OSX"
             )
 
-        if QtCore.__version_info__[0] == 5 and sys.platform.startswith("win"):
-            # On Qt5 and some Windows, Qt QEventLoop.processEvents says
-            # nothing was processed even when there are events processed,
-            # causing the loop to break too soon.
-            # (See enthought/traitsui#951)
-            self.skipTest(
-                "process_cascade_events is not reliable on Qt5 + some Windows"
-            )
-
         def cleanup(q_object):
             q_object.deleteLater()
             # If the test fails, run process events at least the same
