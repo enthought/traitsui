@@ -22,7 +22,7 @@ matrix:
 branches:
   only:
     - master
-    - maint/6.1
+    - maint/7.0
 
 cache:
   - C:\Users\appveyor\.cache -> appveyor-clean-cache.txt
