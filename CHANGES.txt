@@ -4,7 +4,9 @@ Traits UI Changelog
 Release 7.0.1
 -------------
 
-A bugfix release that fixes a number of issues since the 7.0.0 release.
+This is a bugfix release that fixes a number of issues since the 7.0.0 release.
+It includes fixes to various editors, improvements to tests and fixes to the
+demo application.
 
 Thanks to Ieva Cerny, Kit Choi, Robert Kern, Federico Miorelli,
 Joris Vankerschaver, Corran Webster.
