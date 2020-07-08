@@ -41,6 +41,7 @@ Tests
 * Add more ListStrEditor tests (#869)
 * Add more TabularEditor tests (#874)
 * Make sure all UI in tests are disposed (#865)
+* Add tests for layout and labels using any non-null toolkits (#846)
 
 Release 7.0.0
 -------------
