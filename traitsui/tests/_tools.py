@@ -139,11 +139,14 @@ def process_cascade_events():
     Cautions:
     - An infinite cascade of events will cause this function to enter an
       infinite loop.
-    - There still exists technical difficulties with Qt. With certain
-      combinations of Qt versions and platforms, the internal loop may return
-      too early such that there are still cascaded events unprocessed.
-      At the very least, events that are already posted prior to calling this
-      function will be processed. See enthought/traitsui#951
+    - There still exists technical difficulties with Qt. On Qt4 + OSX,
+      QEventLoop.processEvents may report false saying it had found no events
+      to process even though it actually had processed some.
+      Consequently the internal loop breaks too early such that there are
+      still cascaded events unprocessed. Problems are also observed on
+      Qt5 + Appveyor occasionally. At the very least, events that are already
+      posted prior to calling this function will be processed.
+      See enthought/traitsui#951
     """
     if is_current_backend_qt4():
         from pyface.qt import QtCore
