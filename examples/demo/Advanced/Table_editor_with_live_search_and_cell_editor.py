@@ -77,7 +77,7 @@ Finally:
 #-- Imports --------------------------------------------------------------
 
 from os \
-    import walk, getcwd, listdir
+    import walk, listdir
 
 from os.path \
     import basename, dirname, splitext, join
@@ -103,6 +103,8 @@ FileTypes = {
     'Java': ['.java'],
     'Ruby': ['.rb']
 }
+
+DEFAULT_ROOT = dirname(__file__)
 
 #-- The Live Search table editor definition ------------------------------
 
@@ -171,7 +173,7 @@ table_editor = TableEditor(
 class LiveSearch(HasTraits):
 
     # The currenty root directory being searched:
-    root = Directory(getcwd(), entries=10)
+    root = Directory(DEFAULT_ROOT, entries=10)
 
     # Should sub directories be included in the search:
     recursive = Bool(True)
@@ -288,7 +290,7 @@ class LiveSearch(HasTraits):
     def _get_source_files(self):
         root = self.root
         if root == '':
-            root = getcwd()
+            root = DEFAULT_ROOT
 
         file_types = FileTypes[self.file_type]
         if self.recursive:
