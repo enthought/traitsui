@@ -1,4 +1,5 @@
 build: false
+image: Visual Studio 2019
 shallow_clone: false
 skip_branch_with_pr: true
 environment:
@@ -9,15 +10,17 @@ environment:
 
   matrix:
     - RUNTIME: '3.6'
-      TOOLKITS: "null pyqt"
+      TOOLKITS: "null"
     - RUNTIME: '3.6'
-      TOOLKITS: "wx pyside2 pyqt5"
+      TOOLKITS: "pyside2 pyqt"
+    - RUNTIME: '3.6'
+      TOOLKITS: "wx"
 
 matrix:
   fast_finish: true
   allow_failures:
     - RUNTIME: '3.6'
-      TOOLKITS: "wx pyside2 pyqt5"
+      TOOLKITS: "wx"
 
 branches:
   only:

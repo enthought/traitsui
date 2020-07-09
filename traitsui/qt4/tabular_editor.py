@@ -247,7 +247,7 @@ class TabularEditor(Editor):
         # Rebuild the editor columns and headers whenever the adapter's
         # 'columns' changes:
         self.on_trait_change(
-            self.update_editor, "adapter.columns", dispatch="ui"
+            self._adapter_columns_updated, "adapter.columns", dispatch="ui"
         )
 
     def dispose(self):
@@ -266,7 +266,7 @@ class TabularEditor(Editor):
             self.refresh_editor, "adapter.+update", remove=True
         )
         self.on_trait_change(
-            self.update_editor, "adapter.columns", remove=True
+            self._adapter_columns_updated, "adapter.columns", remove=True
         )
 
         self.adapter.cleanup()
@@ -392,6 +392,19 @@ class TabularEditor(Editor):
         if not self.factory.multi_select:
             self.selected_column = self.column_clicked.column
 
+    def _adapter_columns_updated(self):
+        """ Update the view when the adapter columns trait changes.
+        Note that this change handler is added after the UI is instantiated,
+        and removed when the UI is disposed.
+        """
+        # Invalidate internal state of the view related to the columns
+        n_columns = len(self.adapter.columns)
+        if (self.control is not None
+                and self.control._user_widths is not None
+                and len(self.control._user_widths) != n_columns):
+            self.control._user_widths = None
+        self.update_editor()
+
     def _update_changed(self):
         self.update_editor()
 
@@ -446,7 +459,11 @@ class TabularEditor(Editor):
         except:
             pass
         else:
-            list_event = TraitListEvent(0, added, removed)
+            list_event = TraitListEvent(
+                index=0,
+                added=added,
+                removed=removed
+            )
             self._multi_selected_rows_items_changed(list_event)
 
     def _multi_selected_rows_changed(self, selected_rows):
@@ -909,7 +926,8 @@ class _TableView(QtGui.QTableView):
             if self._user_widths is None:
                 self._user_widths = [None] * len(self._editor.adapter.columns)
             self._user_widths[index] = new
-            if not self._editor.factory.auto_resize:
+            if (self._editor.factory is not None
+                    and not self._editor.factory.auto_resize):
                 self.resizeColumnsToContents()
 
     @contextmanager

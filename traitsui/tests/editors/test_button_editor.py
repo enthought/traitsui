@@ -2,12 +2,15 @@ import unittest
 
 from pyface.gui import GUI
 
-from traits.api import Button, HasTraits, Str
+from traits.api import Button, HasTraits, List, Str
 from traitsui.api import ButtonEditor, Item, UItem, View
 from traitsui.tests._tools import (
+    create_ui,
     is_current_backend_qt4,
     is_current_backend_wx,
+    process_cascade_events,
     skip_if_null,
+    skip_if_not_qt4,
     store_exceptions_on_all_threads,
 )
 
@@ -17,6 +20,8 @@ class ButtonTextEdit(HasTraits):
     play_button = Button("Play")
 
     play_button_label = Str("I'm a play button")
+
+    values = List()
 
     traits_view = View(
         Item("play_button", style="simple"),
@@ -52,14 +57,12 @@ def get_button_text(button):
 
 class TestButtonEditor(unittest.TestCase):
     def check_button_text_update(self, view):
-        gui = GUI()
         button_text_edit = ButtonTextEdit()
 
-        with store_exceptions_on_all_threads():
-            ui = button_text_edit.edit_traits(view=view)
-            self.addCleanup(ui.dispose)
+        with store_exceptions_on_all_threads(), \
+                create_ui(button_text_edit, dict(view=view)) as ui:
 
-            gui.process_events()
+            process_cascade_events()
             editor, = ui.get_editors("play_button")
             button = editor.control
 
@@ -71,12 +74,9 @@ class TestButtonEditor(unittest.TestCase):
     @skip_if_null
     def test_styles(self):
         # simple smoke test of buttons
-        gui = GUI()
         button_text_edit = ButtonTextEdit()
-        with store_exceptions_on_all_threads():
-            ui = button_text_edit.edit_traits()
-            self.addCleanup(ui.dispose)
-            gui.process_events()
+        with store_exceptions_on_all_threads(), create_ui(button_text_edit):
+            pass
 
     @skip_if_null
     def test_simple_button_editor(self):
@@ -85,3 +85,39 @@ class TestButtonEditor(unittest.TestCase):
     @skip_if_null
     def test_custom_button_editor(self):
         self.check_button_text_update(custom_view)
+
+
+@skip_if_not_qt4
+class TestButtonEditorValuesTrait(unittest.TestCase):
+    """ The values_trait is only supported by Qt.
+
+    See discussion enthought/traitsui#879
+    """
+
+    def get_view(self, style):
+        return View(
+            Item(
+                "play_button",
+                editor=ButtonEditor(values_trait="values"),
+                style=style,
+            ),
+        )
+
+    def check_editor_values_trait_init_and_dispose(self, style):
+        # Smoke test to check init and dispose when values_trait is used.
+        instance = ButtonTextEdit(values=["Item1", "Item2"])
+        view = self.get_view(style=style)
+        with store_exceptions_on_all_threads():
+            with create_ui(instance, dict(view=view)):
+                pass
+
+            # It is okay to mutate trait after the GUI is disposed.
+            instance.values = ["Item3"]
+
+    def test_simple_editor_values_trait_init_and_dispose(self):
+        # Smoke test to check init and dispose when values_trait is used.
+        self.check_editor_values_trait_init_and_dispose(style="simple")
+
+    def test_custom_editor_values_trait_init_and_dispose(self):
+        # Smoke test to check init and dispose when values_trait is used.
+        self.check_editor_values_trait_init_and_dispose(style="custom")

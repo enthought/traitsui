@@ -2,8 +2,19 @@
 #  License: BSD Style.
 
 """
-A Traits UI editor that wraps a WX calendar panel.
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
+Implementation of a DateEditor demo plugin for Traits UI demo program.
+
+This demo shows a few different styles of the DateEditor and how it can be
+customized.
 """
+# Issue related to the demo warning: enthought/traitsui#962
 
 from traits.api import HasTraits, Date, List, Str
 from traitsui.api import View, Item, DateEditor, Group
@@ -16,38 +27,44 @@ class DateEditorDemo(HasTraits):
     info_string = Str('The editors for Traits Date objects.  Showing both '
                       'the defaults, and one with alternate options.')
 
-    multi_select_editor = DateEditor(multi_select=True,
-                                     months=2,
-                                     allow_future=False,
-                                     padding=30,
-                                     on_mixed_select='max_change',
-                                     shift_to_select=False)
+    multi_select_editor = DateEditor(
+        allow_future=False,
+        multi_select=True,
+        shift_to_select=False,
+        on_mixed_select='max_change',
+        # Qt ignores these setting and always shows only 1 month:
+        months=2,
+        padding=30,
+    )
 
-    view = View(Item('info_string',
-                     show_label=False,
-                     style='readonly'),
-
-                Group(Item('single_date',
-                           label='Simple date editor'),
-                      Item('single_date',
-                           style='custom',
-                           label='Default custom editor'),
-                      Item('single_date',
-                           style='readonly',
-                           editor=DateEditor(strftime='You picked %B %d %Y',
-                                             message='Click a date above.'),
-                           label='ReadOnly editor'),
-                      label='Default settings for editors'),
-
-                Group(Item('multi_date',
-                           editor=multi_select_editor,
-                           style='custom',
-                           label='Multi-select custom editor'),
-                      label='More customized editor: multi-select; disallow '
-                            'future; two months; padding; selection '
-                            'style; etc.'),
-
-                resizable=True)
+    traits_view = View(
+        Item('info_string', show_label=False, style='readonly'),
+        Group(
+            Item('single_date', label='Simple date editor'),
+            Item('single_date', style='custom', label='Default custom editor'),
+            Item(
+                'single_date',
+                style='readonly',
+                editor=DateEditor(
+                    strftime='You picked %B %d %Y',
+                    message='Click a date above.'
+                ),
+                label='ReadOnly editor'
+            ),
+            label='Default settings for editors'
+        ),
+        Group(
+            Item(
+                'multi_date',
+                editor=multi_select_editor,
+                style='custom',
+                label='Multi-select custom editor'
+            ),
+            label='More customized editor: multi-select; disallow '
+                  'future; selection style; etc.'
+        ),
+        resizable=True
+    )
 
     def _multi_date_changed(self):
         """ Print each time the date value is changed in the editor. """
@@ -62,11 +79,9 @@ class DateEditorDemo(HasTraits):
         print(self.single_date)
 
 
-#-- Set Up The Demo ------------------------------------------------------
+# -- Set Up The Demo ------------------------------------------------------
 
 demo = DateEditorDemo()
 
 if __name__ == "__main__":
     demo.configure_traits()
-
-#-- eof -----------------------------------------------------------------------

@@ -77,6 +77,12 @@ class SimpleEditor(Editor):
 
         self.control.dateChanged.connect(self.update_object)
 
+    def dispose(self):
+        """ Disposes of the contents of an editor."""
+        if self.control is not None:
+            self.control.dateChanged.disconnect(self.update_object)
+        super().dispose()
+
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -113,6 +119,12 @@ class CustomEditor(Editor):
             self.control.setMaximumDate(QtCore.QDate.currentDate())
 
         self.control.clicked.connect(self.update_object)
+
+    def dispose(self):
+        """ Disposes of the contents of an editor."""
+        if self.control is not None:
+            self.control.clicked.disconnect(self.update_object)
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

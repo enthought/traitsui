@@ -87,8 +87,8 @@ from contextlib import contextmanager
 import click
 
 supported_combinations = {
-    '3.5': {'pyside2', 'pyqt', 'pyqt5', 'null'},
-    '3.6': {'pyside2', 'pyqt', 'pyqt5', 'wx', 'null'},
+    '3.5': {'pyside2', 'pyqt', 'null'},
+    '3.6': {'pyside2', 'pyqt', 'wx', 'null'},
 }
 
 # Default Python version to use in the comamnds below if none is specified.
@@ -100,21 +100,32 @@ DEFAULT_TOOLKIT = 'null'
 dependencies = {
     "numpy",
     "traits",
-    "pandas<0.24",
+    "pandas",
     "pygments",
     "pip",
     "nose",
     "coverage",
     "configobj",
-    "docutils"
+    "docutils",
+}
+
+# NOTE : pyface is always installed from source
+source_dependencies = {
+    "traits": "git+http://github.com/enthought/traits.git#egg=traits",
+}
+
+# Additional toolkit-independent dependencies for demo testing
+test_dependencies = {
+    "apptools",
+    "chaco",
+    "h5py",
+    "pytables",
 }
 
 extra_dependencies = {
-    'pyside': {'pyside'},
     # XXX once pyside2 is available in EDM, we will want it here
     'pyside2': set(),
-    'pyqt': {'pyqt<4.12'},  # FIXME: build of 4.12-1 appears to be bad
-    'pyqt5': {'pyqt5'},
+    'pyqt': {'pyqt5'},
     # XXX once wxPython 4 is available in EDM, we will want it here
     'wx': set(),
     'null': set()
@@ -128,10 +139,8 @@ doc_dependencies = {
 }
 
 environment_vars = {
-    'pyside': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside'},
     'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
-    'pyqt': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyqt'},
-    'pyqt5': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyqt5'},
+    'pyqt': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt5"},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
 }
@@ -146,7 +155,13 @@ def cli():
 @click.option('--runtime', default=DEFAULT_RUNTIME)
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
-def install(runtime, toolkit, environment):
+@click.option(
+    "--editable/--not-editable",
+    default=False,
+    help="Install main package in 'editable' mode?  [default: --not-editable]",
+)
+@click.option('--source/--no-source', default=False)
+def install(runtime, toolkit, environment, editable, source):
     """ Install project and dependencies into a clean EDM environment.
 
     """
@@ -155,15 +170,23 @@ def install(runtime, toolkit, environment):
         dependencies
         | extra_dependencies.get(toolkit, set())
         | runtime_dependencies.get(runtime, set())
+        | test_dependencies
     )
+
+    install_traitsui = "edm run -e {environment} -- pip install "
+    if editable:
+        install_traitsui += "--editable "
+    install_traitsui += "."
+
     # edm commands to setup the development environment
     commands = [
         "edm environments create {environment} --force --version={runtime}",
         "edm install -y -e {environment} " + packages,
-        "edm run -e {environment} -- pip install -r ci-src-requirements.txt --no-dependencies",
+        "edm run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
         "edm run -e {environment} -- python setup.py clean --all",
-        "edm run -e {environment} -- python setup.py install"
+        install_traitsui,
     ]
+
     # pip install pyqt5 and pyside2, because we don't have them in EDM yet
     if toolkit == 'pyside2':
         commands.append(
@@ -182,6 +205,19 @@ def install(runtime, toolkit, environment):
 
     click.echo("Creating environment '{environment}'".format(**parameters))
     execute(commands, parameters)
+
+    if source:
+        cmd_fmt = "edm plumbing remove-package --environment {environment} --force "
+        commands = [cmd_fmt+dependency for dependency in source_dependencies.keys()]
+        execute(commands, parameters)
+        source_pkgs = source_dependencies.values()
+        commands = [
+            "python -m pip install {pkg} --no-deps".format(pkg=pkg)
+            for pkg in source_pkgs
+        ]
+        commands = ["edm run -e {environment} -- " + command for command in commands]
+        execute(commands, parameters)
+
     click.echo('Done install')
 
 
@@ -196,12 +232,22 @@ def test(runtime, toolkit, environment):
     parameters = get_parameters(runtime, toolkit, environment)
     environ = environment_vars.get(toolkit, {}).copy()
     environ['PYTHONUNBUFFERED'] = "1"
+
+    if toolkit == "wx":
+        environ["EXCLUDE_TESTS"] = "qt"
+    elif toolkit in {"pyqt", "pyqt5", "pyside", "pyside2"}:
+        environ["EXCLUDE_TESTS"] = "wx"
+    else:
+        environ["EXCLUDE_TESTS"] = "(wx|qt)"
+
+    parameters["integrationtests"] = os.path.abspath("integrationtests")
     commands = [
-        "edm run -e {environment} -- coverage run -p -m nose.core -v traitsui.tests --nologcapture"]
-    # extra tests for qt
-    if toolkit in {'pyqt', 'pyside', 'pyqt5'}:
-        commands.append(
-            "edm run -e {environment} -- coverage run -p -m nose.core -v traitsui.qt4.tests --nologcapture")
+        "edm run -e {environment} -- coverage run -p -m unittest discover -v traitsui",
+        # coverage run prevents local images to be loaded for demo examples
+        # which are not defined in Python packages. Run with python directly
+        # instead.
+        "edm run -e {environment} -- python -m unittest discover -v {integrationtests}",
+    ]
 
     # We run in a tempdir to avoid accidentally picking up wrong traitsui
     # code from a local dir.  We need to ensure a good .coveragerc is in

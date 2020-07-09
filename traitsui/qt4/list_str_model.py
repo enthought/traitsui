@@ -49,7 +49,10 @@ class ListStrModel(QtCore.QAbstractListModel):
         """ Reimplemented to return items in the list.
         """
         editor = self._editor
-        return editor.adapter.len(editor.object, editor.name)
+        n = editor.adapter.len(editor.object, editor.name)
+        if editor.factory.auto_add:
+            n += 1
+        return n
 
     def data(self, mi, role):
         """ Reimplemented to return the data.
@@ -61,7 +64,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
             if editor.is_auto_add(index):
                 text = adapter.get_default_text(
-                    editor.object, editor.name, index
+                    editor.object, editor.name
                 )
             else:
                 text = adapter.get_text(editor.object, editor.name, index)
@@ -73,7 +76,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         elif role == QtCore.Qt.DecorationRole:
             if editor.is_auto_add(index):
                 image = adapter.get_default_image(
-                    editor.object, editor.name, index
+                    editor.object, editor.name
                 )
             else:
                 image = adapter.get_image(editor.object, editor.name, index)
@@ -117,7 +120,11 @@ class ListStrModel(QtCore.QAbstractListModel):
         """ Reimplmented to allow for modification of the object trait.
         """
         editor = self._editor
-        editor.adapter.set_text(editor.object, editor.name, mi.row(), value)
+        if editor.is_auto_add(mi.row()):
+            method = editor.adapter.insert
+        else:
+            method = editor.adapter.set_text
+        editor.callx(method, editor.object, editor.name, mi.row(), value)
         self.dataChanged.emit(mi, mi)
         return True
 

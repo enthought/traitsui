@@ -43,6 +43,11 @@ class SimpleEditor(Editor):
         self.control.stateChanged.connect(self.update_object)
         self.set_tooltip()
 
+    def dispose(self):
+        if self.control is not None:
+            self.control.stateChanged.disconnect(self.update_object)
+        super().dispose()
+
     def update_object(self, state):
         """ Handles the user clicking the checkbox.
         """

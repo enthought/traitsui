@@ -20,7 +20,7 @@
 
 import datetime
 
-from traits.api import Instance, Str
+from traits.api import Datetime, Str
 
 from ..editor_factory import EditorFactory
 
@@ -33,10 +33,10 @@ class DatetimeEditor(EditorFactory):
     # -------------------------------------------------------------------------
 
     #: The earliest datetime allowed by the editor
-    minimum_datetime = Instance(datetime.datetime)
+    minimum_datetime = Datetime(datetime.datetime(100, 1, 1))
 
     #: The latest datetime allowed by the editor
-    maximum_datetime = Instance(datetime.datetime)
+    maximum_datetime = Datetime(datetime.datetime.max)
 
     # -- ReadonlyEditor traits ------------------------------------------------
 

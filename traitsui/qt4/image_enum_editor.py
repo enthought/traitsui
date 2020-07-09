@@ -57,6 +57,8 @@ class ReadonlyEditor(BaseEditor, BaseEnumEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
+        super(ReadonlyEditor, self).init(parent)
+
         self.control = QtGui.QLabel()
         self.control.setPixmap(self.get_pixmap(self.str_value))
         self.set_tooltip()
@@ -66,6 +68,12 @@ class ReadonlyEditor(BaseEditor, BaseEnumEditor):
             editor.
         """
         self.control.setPixmap(self.get_pixmap(self.str_value))
+
+    def rebuild_editor(self):
+        """ Rebuilds the contents of the editor whenever the original factory
+            object's **values** trait changes.
+        """
+        pass
 
 
 class SimpleEditor(BaseEditor, SimpleEnumEditor):
@@ -80,6 +88,10 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
             QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum
         )
         return control
+
+    def dispose(self):
+        self.control._dispose()
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -161,6 +173,18 @@ class ImageEnumComboBox(QtGui.QComboBox):
             view.setMinimumWidth(width)
         else:
             self.setItemDelegate(delegate)
+
+    def _dispose(self):
+        """ Dispose objects on this widget. To be called by editors.
+        """
+        # Replace the model with the standard one.
+        # After the editor has disposed itself, the widget may not have been
+        # garbage collected and the model still reacts to events fired
+        # afterwards (e.g. rowCount will be called) and runs into exceptions.
+        # QComboBox requires that the model must not be None.
+        # QStandardItemModel is the default model type when a QComboxBox is
+        # created.
+        self.setModel(QtGui.QStandardItemModel())
 
     def paintEvent(self, event):
         """ Reimplemented to draw the ComboBox frame and paint the image

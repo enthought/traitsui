@@ -3,6 +3,11 @@ dist: xenial
 services:
   - xvfb
 
+addons:
+  apt:
+    packages:
+    - libglu1-mesa-dev
+
 env:
   global:
     - INSTALL_EDM_VERSION=2.0.0
@@ -10,14 +15,16 @@ env:
 
 matrix:
   include:
-    - env: RUNTIME=3.6 TOOLKITS="null pyqt pyside2"
-    - env: RUNTIME=3.6 TOOLKITS="wx pyqt5"
+    - env: RUNTIME=3.6 TOOLKITS="null pyside2"
+    - env: RUNTIME=3.6 TOOLKITS="pyqt"
+    - env: RUNTIME=3.6 TOOLKITS="wx"
     - os: osx
-      env: RUNTIME=3.6 TOOLKITS="null pyqt5 pyqt pyside2"
+      env: RUNTIME=3.6 TOOLKITS="null pyqt pyside2"
     - os: osx
       env: RUNTIME=3.6 TOOLKITS="wx"
   allow_failures:
-    - env: RUNTIME=3.6 TOOLKITS="wx pyqt5"
+    - env: RUNTIME=3.6 TOOLKITS="wx"
+    - env: RUNTIME=3.6 TOOLKITS="pyqt"
     - os: osx
       env: RUNTIME=3.6 TOOLKITS="wx"
   fast_finish: true
@@ -35,10 +42,22 @@ before_install:
   - edm install -y wheel click coverage
 install:
   - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
+  - if [[ ${TRAVIS_EVENT_TYPE} == 'cron' ]]; then for toolkit in ${TOOLKITS}; do edm run -- python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit} --source || exit; done; fi
+  # etsdemo
+  - pushd ets-demo && for toolkit in ${TOOLKITS}; do edm run -- python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done && popd
 script:
   - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py test --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
+  # etsdemo
+  - pushd ets-demo && edm run -- python etstool.py flake8 --runtime=${RUNTIME} --toolkit=${toolkit} && popd
+  - pushd ets-demo && for toolkit in ${TOOLKITS}; do edm run -- python etstool.py test --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done && popd
 
 after_success:
   - edm run -- coverage combine
   - edm run -- pip install codecov
   - edm run -- codecov
+
+notifications:
+  slack:
+    secure: yOeqCtSnSSlchM7zMKcy6UrSlHSzqUgaqrDCbGC06A8lKjBVLPfJ8+xc1fZuxPBHhqf6WJ+V1lbZUJB+XaWRwiRyKXWI6+GMagV5eVdX5FUdqAqQALMyLZx1ih3tJFsh+JGfEEat0Gd/zDIToDJC4SWwxMNCfihozkCPqgGA9tw=
+    on_success: change
+    on_failure: always
