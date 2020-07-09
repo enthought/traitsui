@@ -16,7 +16,6 @@
 
 import re
 import sys
-import timeit
 import traceback
 from functools import partial
 from contextlib import contextmanager
@@ -98,7 +97,7 @@ skip_if_null = skipIf(
 )
 
 #: True if current platform is MacOS
-is_mac_os = sys.platform == "Darwin"
+is_mac_os = sys.platform.startswith("darwin")
 
 
 def count_calls(func):
@@ -133,35 +132,27 @@ def filter_tests(test_suite, exclusion_pattern):
     return filtered_test_suite
 
 
-#: If Qt processEvents returns after this many milliseconds, we try again.
-#: False positive is okay.
-_TOLERANCE_MILLISECS = 5000
-
-
 def process_cascade_events():
-    """ Process all events, including events posted by the processed events.
+    """ Process all posted events, and attempt to process new events posted by
+    the processed events.
 
-    Use this function with caution, as an infinite cascade of events will
-    cause this function to enter an infinite loop.
+    Cautions:
+    - An infinite cascade of events will cause this function to enter an
+      infinite loop.
+    - There still exists technical difficulties with Qt. On Qt4 + OSX,
+      QEventLoop.processEvents may report false saying it had found no events
+      to process even though it actually had processed some.
+      Consequently the internal loop breaks too early such that there are
+      still cascaded events unprocessed. Problems are also observed on
+      Qt5 + Appveyor occasionally. At the very least, events that are already
+      posted prior to calling this function will be processed.
+      See enthought/traitsui#951
     """
     if is_current_backend_qt4():
         from pyface.qt import QtCore
-        start = None
-        timer = timeit.default_timer
-        # Qt won't raise if there are still events to be processed before
-        # the time limit is reached. There are no other safe way to tell
-        # if there are pending events (`hasPendingEvents` is deprecated).
-        # The offset is to account for precision differences between Python
-        # and Qt, false positive triggers another redundant run that should
-        # return immediately so that is fine.
-        # The precision is worse on Windows, typically around ~15 milliseconds.
-        # Give it a 1% error offset, which should be more than enough.
-        while (start is None
-                or (timer() - start) * 1000 >= _TOLERANCE_MILLISECS - 50):
-            start = timer()
-            QtCore.QCoreApplication.processEvents(
-                QtCore.QEventLoop.AllEvents, _TOLERANCE_MILLISECS
-            )
+        event_loop = QtCore.QEventLoop()
+        while event_loop.processEvents(QtCore.QEventLoop.AllEvents):
+            pass
     else:
         GUI.process_events()
 

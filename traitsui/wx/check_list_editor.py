@@ -75,6 +75,7 @@ class SimpleEditor(EditorWithList):
 
     def dispose(self):
         self.control.Unbind(wx.EVT_CHOICE)
+        super().dispose()
 
     def create_control(self, parent):
         """ Creates the initial editor control.

@@ -100,13 +100,13 @@ DEFAULT_TOOLKIT = 'null'
 dependencies = {
     "numpy",
     "traits",
-    "pandas<0.24",
+    "pandas",
     "pygments",
     "pip",
     "nose",
     "coverage",
     "configobj",
-    "docutils"
+    "docutils",
 }
 
 # NOTE : pyface is always installed from source

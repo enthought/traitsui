@@ -278,10 +278,6 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
             process_cascade_events()
             yield ui.get_editors("value")[0]
 
-    @unittest.skipIf(
-        is_linux and is_current_backend_qt4(),
-        "Issue enthought/traitsui#854, possible test interactions on Linux"
-    )
     def test_simple_editor_more_cols(self):
         # Smoke test for setting up an editor with more than one column
         enum_edit = EnumModel()
@@ -337,10 +333,6 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
             self.assertEqual(list(editor.control.GetChildren()), [])
 
     @skip_if_not_qt4
-    @unittest.skipIf(
-        is_linux,
-        "Issue enthought/traitsui#854, possible test interactions on Linux"
-    )
     def test_simple_editor_combobox(self):
         enum_edit = EnumModel()
 
