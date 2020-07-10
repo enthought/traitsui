@@ -32,6 +32,8 @@ class Foo(HasTraits):
 
     name = Str()
 
+    nickname = Str()
+
 
 def get_view(style, auto_set):
     """ Return the default view for the Foo object.
@@ -46,6 +48,15 @@ def get_view(style, auto_set):
     return View(
         Item("name", editor=TextEditor(auto_set=auto_set), style=style)
     )
+
+
+def get_text(editor):
+    """ Return the text from the widget for checking.
+    """
+    if is_current_backend_qt4():
+        return editor.control.text()
+    else:
+        raise unittest.SkipTest("Not implemented for the current toolkit.")
 
 
 def set_text(editor, text):
@@ -234,3 +245,17 @@ class TestTextEditor(unittest.TestCase):
             process_cascade_events()
 
             self.assertEqual(foo.name, "NEW\n")
+
+    def test_format_func_used(self):
+        # Regression test for enthought/traitsui#790
+        foo = Foo(name="william", nickname="bill")
+        view = View(
+            Item("name", format_func=lambda s: s.upper()),
+            Item("nickname"),
+        )
+        with store_exceptions_on_all_threads(), \
+                create_ui(foo, dict(view=view)) as ui:
+            name_editor, = ui.get_editors("name")
+            nickname_editor, = ui.get_editors("nickname")
+            self.assertEqual(get_text(name_editor), "WILLIAM")
+            self.assertEqual(get_text(nickname_editor), "bill")
