@@ -21,8 +21,6 @@ Fixes
   (#848)
 * Fix demo application description (#850)
 * Fix auto-add functionality in ListStrModel (#860)
-* Move format_func, format_str and invalid traits from factory to editor
-  (#859, #900)
 * Fix segmentation fault for TabularModel (#871, #873)
 * Fix event handling in ListStrEditor and TabularEditor for adding and removing
   items (#875)
