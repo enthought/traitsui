@@ -144,6 +144,9 @@ class UserObject(HasTraits):
     #: An event user value
     user_event = Event()
 
+    #: A state that is to be synchronized with the editor.
+    invalid_state = Bool()
+
 
 def create_editor(
         context=None,
@@ -398,6 +401,31 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         self.assertEqual(value, "other_test")
 
         editor.dispose()
+
+    # Test synchronizing built-in trait values between factory
+    # and editor.
+
+    def test_factory_sync_invalid_state(self):
+        # Test when object's trait that sets the invalid state changes,
+        # the invalid state on the editor changes
+        factory = StubEditorFactory(invalid="invalid_state")
+        user_object = UserObject(invalid_state=False)
+        context = {
+            "object": user_object,
+        }
+        editor = create_editor(context=context, factory=factory)
+        editor.prepare(None)
+        self.addCleanup(editor.dispose)
+
+        with self.assertTraitChanges(editor, "invalid", count=1):
+            user_object.invalid_state = True
+
+        self.assertTrue(editor.invalid)
+
+        with self.assertTraitChanges(editor, "invalid", count=1):
+            user_object.invalid_state = False
+
+        self.assertFalse(editor.invalid)
 
     # Testing sync_value "from" ---------------------------------------------
 
