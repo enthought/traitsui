@@ -19,6 +19,7 @@ Test cases for the UI object.
 
 import unittest
 
+from traits.api import Property
 from traits.has_traits import HasTraits, HasStrictTraits
 from traits.trait_types import Str, Int
 import traitsui
@@ -50,6 +51,20 @@ class DisallowNewTraits(HasStrictTraits):
     x = Int(10)
 
     traits_view = View(Item("x"), spring)
+
+
+class MaybeInvalidTrait(HasTraits):
+
+    name = Str()
+
+    name_is_invalid = Property(depends_on="name")
+
+    traits_view = View(
+        Item("name", invalid="name_is_invalid")
+    )
+
+    def _get_name_is_invalid(self):
+        return len(self.name) < 10
 
 
 class TestUI(unittest.TestCase):
@@ -215,3 +230,14 @@ class TestUI(unittest.TestCase):
             pass
 
         self.assertTrue("spring" not in obj.traits())
+
+    @skip_if_null
+    def test_invalid_state(self):
+        # Regression test for enthought/traitsui#983
+        obj = MaybeInvalidTrait(name="Name long enough to be valid")
+        with create_ui(obj) as ui:
+            editor, = ui.get_editors("name")
+            self.assertFalse(editor.invalid)
+
+            obj.name = "too short"
+            self.assertTrue(editor.invalid)
