@@ -402,8 +402,8 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         editor.dispose()
 
-    # Test synchronizing built-in trait values between from factory
-    # to editor.
+    # Test synchronizing built-in trait values between factory
+    # and editor.
 
     def test_factory_sync_invalid_state(self):
         # Test when object's trait that sets the invalid state changes,
