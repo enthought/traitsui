@@ -12,6 +12,9 @@
 import contextlib
 import unittest
 
+from packaging.version import Version
+
+from traits import __version__ as TRAITS_VERSION
 from traits.api import (
     HasTraits,
     Str,
@@ -246,8 +249,15 @@ class TestTextEditor(unittest.TestCase):
 
             self.assertEqual(foo.name, "NEW\n")
 
+    @unittest.skipUnless(
+        Version(TRAITS_VERSION) >= Version("6.1.0"),
+        "This test requires traits >= 6.1.0"
+    )
     def test_format_func_used(self):
         # Regression test for enthought/traitsui#790
+        # The test will fail with traits < 6.1.0 because the bug
+        # is fixed in traits, see enthought/traitsui#980 for moving those
+        # relevant code to traitsui.
         foo = Foo(name="william", nickname="bill")
         view = View(
             Item("name", format_func=lambda s: s.upper()),
