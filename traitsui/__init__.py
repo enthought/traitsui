@@ -28,6 +28,7 @@ __extras_require__ = {
     "pyqt5": ["pyqt>=5", "pygments"],
     "pyside": ["pyside>=1.2", "pygments"],
     "demo": ["configobj", "docutils"],
+    "test": ["packaging"],
 }
 
 
