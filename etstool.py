@@ -148,7 +148,11 @@ environment_vars = {
 }
 
 
-@click.group()
+def normalize(name):
+    return name.replace("_", "-")
+
+
+@click.group(context_settings={"token_normalize_func": normalize})
 def cli():
     pass
 
