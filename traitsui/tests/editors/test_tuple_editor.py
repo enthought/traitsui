@@ -73,7 +73,7 @@ class TestTupleEditor(unittest.TestCase, UnittestTools):
             lineedits[2].insert("fun")
 
             # if all went well, the tuple trait has been updated and its value
-            # is 4
+            # is (4, 6, "fun")
             self.assertEqual(val.tup, (4, 6, "fun"))
 
 
