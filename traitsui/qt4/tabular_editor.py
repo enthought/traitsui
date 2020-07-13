@@ -923,8 +923,9 @@ class _TableView(QtGui.QTableView):
         This affects the column widths when not using auto-sizing.
         """
         if not self._is_resizing:
-            if self._user_widths is None:
-                self._user_widths = [None] * len(self._editor.adapter.columns)
+            num_cols = len(self._editor.adapter.columns)
+            if self._user_widths is None or len(self._user_widths) != num_cols:
+                self._user_widths = [None] * num_cols
             self._user_widths[index] = new
             if (self._editor.factory is not None
                     and not self._editor.factory.auto_resize):
