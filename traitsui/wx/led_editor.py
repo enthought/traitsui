@@ -1,6 +1,4 @@
-# -------------------------------------------------------------------------
-#
-#  Copyright (c) 2007, Enthought, Inc.
+#  Copyright (c) 2007-2020, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
@@ -9,11 +7,6 @@
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   03/02/2007
-#
-# -------------------------------------------------------------------------
 
 """ Traits UI 'display only' LED numeric editor.
 """
@@ -28,9 +21,7 @@ from wx.gizmos import (
 
 from traits.api import Enum
 
-from traitsui.wx.editor import Editor
-
-from traitsui.basic_editor_factory import BasicEditorFactory
+from .editor import Editor
 
 
 # LED alignment styles:
@@ -41,16 +32,19 @@ LEDStyles = {
 }
 
 
-class _LEDEditor(Editor):
+class LEDEditor(Editor):
     """ Traits UI 'display only' LED numeric editor.
     """
+
+    #: The alignment of the numeric text within the control.
+    alignment = Enum("right", "center", "left")
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         self.control = LEDNumberCtrl(parent, -1)
-        self.control.SetAlignment(LEDStyles[self.factory.alignment])
+        self.control.SetAlignment(LEDStyles[self.alignment])
         self.set_tooltip()
 
     def update_editor(self):
@@ -59,18 +53,12 @@ class _LEDEditor(Editor):
         """
         self.control.SetValue(self.str_value)
 
-
-# -------------------------------------------------------------------------
-#  Create the editor factory object:
-# -------------------------------------------------------------------------
-
-# wxPython editor factory for LED editors:
+    def _alignment_changed(self):
+        if self.control is not None:
+            self.control.SetAlignment(LEDStyles[self.alignment])
 
 
-class LEDEditor(BasicEditorFactory):
-
-    #: The editor class to be created:
-    klass = _LEDEditor
-
-    #: The alignment of the numeric text within the control:
-    alignment = Enum("right", "left", "center")
+# editor names for factory to find
+ReadonlyEditor = LEDEditor
+SimpleEditor = LEDEditor
+CustomEditor = LEDEditor

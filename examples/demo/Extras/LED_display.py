@@ -11,24 +11,16 @@ This demo illustrates use of the LEDEditor for displaying numeric values
 using a simulated LED display control.
 """
 
-from threading  import Thread
-
+from threading import Thread
 from time import sleep
 
 from traits.api import HasTraits, Instance, Int, Bool, Float
 
-from traitsui.api import View, Item, HGroup, Handler, UIInfo, spring
-
-from traits.etsconfig.api import ETSConfig
-if ETSConfig.toolkit == 'wx':
-    from traitsui.wx.extra.led_editor import LEDEditor
-else:
-    from traitsui.qt4.extra.led_editor import LEDEditor
-
-# Handler class for the LEDDemo class view:
+from traitsui.api import View, Item, HGroup, Handler, LEDEditor, UIInfo, spring
 
 
 class LEDDemoHandler(Handler):
+    """ Handler class for the LEDDemo class view. """
 
     # The UIInfo object associated with the UI:
     info = Instance(UIInfo)
@@ -55,10 +47,9 @@ class LEDDemoHandler(Handler):
             sleep(.01)
         self.alive = False
 
-# The main demo class:
-
 
 class LEDDemo(HasTraits):
+    """ The main class for the LED Demo. """
 
     # A counter to display:
     counter1 = Int()
@@ -118,6 +109,7 @@ class LEDDemo(HasTraits):
         buttons=['OK'],
         handler=LEDDemoHandler
     )
+
 
 # Create the demo:
 demo = LEDDemo()
