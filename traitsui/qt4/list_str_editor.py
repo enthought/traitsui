@@ -123,6 +123,7 @@ class _ListStrEditor(Editor):
 
         if factory.title or factory.title_name:
             header_view = QtGui.QHeaderView(QtCore.Qt.Horizontal, self.control)
+            self._header_view = header_view
             header_view.setModel(self.model)
             header_view.setMaximumHeight(header_view.sizeHint().height())
             if is_qt5:
@@ -130,6 +131,8 @@ class _ListStrEditor(Editor):
             else:
                 header_view.setResizeMode(QtGui.QHeaderView.Stretch)
             layout.addWidget(header_view)
+        else:
+            self._header_view = None
 
         self.list_view = _ListView(self)
         layout.addWidget(self.list_view)
@@ -200,6 +203,11 @@ class _ListStrEditor(Editor):
         self.on_trait_change(
             self.refresh_editor, "adapter.+update", remove=True
         )
+        if self._header_view is not None:
+            self._header_view.setModel(None)
+            self._header_view = None
+
+        self.list_view._dispose()
 
         super(Editor, self).dispose()
 
@@ -511,6 +519,11 @@ class _ListView(QtGui.QListView):
 
         # Configure context menu behavior
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+
+    def _dispose(self):
+        """ Clean up states in this view.
+        """
+        self.setModel(None)
 
     def keyPressEvent(self, event):
         """ Reimplemented to support edit, insert, and delete by keyboard.
