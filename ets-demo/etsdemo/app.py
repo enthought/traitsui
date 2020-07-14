@@ -850,6 +850,7 @@ class DemoEmpty(DemoTreeNodeObject):
     def get_children(self):
         return []
 
+
 # -------------------------------------------------------------------------
 #  Defines the demo tree editor:
 # -------------------------------------------------------------------------

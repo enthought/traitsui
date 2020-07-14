@@ -16,21 +16,20 @@ ICON = pkg_resources.resource_filename("etsdemo", "images/enthought-icon.png")
 
 
 def info():
-  """ Provides information to the "eam" package.
-  """
-  return {
-      "name": "ETS Demo",
-      "description": "Application for browsing ETS examples and demos",
-      "license": "BSD",
-      "copyright": "(c) 2020 Enthought",
-      "version": version,
-      "schema_version": 2,
-      "commands": [
-          {
-              "name": "ETS Demo",
-               "command": "etsdemo",
-               "shortcut": "desktop",
-               "icon": ICON,
-          },
+    """ Provides information to the "eam" package. """
+    return {
+        "name": "ETS Demo",
+        "description": "Application for browsing ETS examples and demos",
+        "license": "BSD",
+        "copyright": "(c) 2020 Enthought",
+        "version": version,
+        "schema_version": 2,
+        "commands": [
+            {
+                "name": "ETS Demo",
+                "command": "etsdemo",
+                "shortcut": "desktop",
+                "icon": ICON,
+            },
         ],
     }

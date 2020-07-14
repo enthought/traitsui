@@ -11,13 +11,12 @@
 """ Test the EAM app metadata.
 """
 
-import io
 import os
 import subprocess
 import unittest
 
 try:
-    import eam
+    import eam   # noqa: #F401
 except ImportError:
     EAM_EXISTS = False
 else:
