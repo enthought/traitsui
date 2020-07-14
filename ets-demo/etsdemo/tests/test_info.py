@@ -12,6 +12,7 @@
 """
 
 import io
+import os
 import subprocess
 import unittest
 
@@ -22,13 +23,23 @@ except ImportError:
 else:
     EAM_EXISTS = True
 
+from etsdemo.info import info
 
-@unittest.skipUnless(EAM_EXISTS, "eam is not available.")
+
 class TestInfoForEAM(unittest.TestCase):
 
+    @unittest.skipUnless(EAM_EXISTS, "eam is not available.")
     def test_etsdemo_info(self):
         output = subprocess.check_output(
             ["eam", "--debug", "info"],
         )
         output = output.decode("utf-8")
         self.assertIn("etsdemo", output)
+
+    def test_etsdemo_icon_exists(self):
+        metadata = info()
+        command, = metadata["commands"]
+        icon = command["icon"]
+        self.assertTrue(
+            os.path.exists(icon), "Expected icon file to exist. Not found."
+        )
