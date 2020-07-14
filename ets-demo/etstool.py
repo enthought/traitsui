@@ -105,6 +105,7 @@ PACKAGE_NAME = "etsdemo"
 dependencies = {
     "configobj",
     "docutils",
+    "eam",
     "flake8",
     "traits",
     "traitsui",
