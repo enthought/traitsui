@@ -23,8 +23,10 @@ def fake_configure_traits(instance):
     try:
         GUI.process_events()
     finally:
-        ui.dispose()
-        GUI.process_events()
+        try:
+            ui.dispose()
+        finally:
+            GUI.process_events()
 
 
 def mock_demo_launch():
