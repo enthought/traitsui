@@ -285,4 +285,9 @@ if __name__ == "__main__":
         extras_require=extras_require,
         license="BSD",
         python_requires=">=3.5",
+        entry_points={
+            "gui_scripts": [
+                "etsdemo = etsdemo.main:main",
+            ],
+        },
     )

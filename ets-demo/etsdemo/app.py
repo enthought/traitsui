@@ -833,6 +833,23 @@ class DemoPath(DemoTreeNodeObject):
         return demo_file
 
 
+class DemoEmpty(DemoTreeNodeObject):
+    """ A class to represent an empty node in the demo application.
+    This serves as a placeholder when nothing can be shown.
+    """
+
+    # This node has no children
+    allows_children = Bool(False)
+
+    # This is the label shown on the view.
+    nice_name = Str("(Empty)")
+
+    def has_children(self):
+        return self.allows_children
+
+    def get_children(self):
+        return []
+
 # -------------------------------------------------------------------------
 #  Defines the demo tree editor:
 # -------------------------------------------------------------------------
@@ -940,6 +957,11 @@ demo_tree_editor = TreeEditor(
             label="nice_name",
             view=demo_content_view
         ),
+        ObjectTreeNode(
+            node_for=[DemoEmpty],
+            label="nice_name",
+            view=View(),
+        )
     ],
     selected='selected_node',
 
@@ -975,7 +997,7 @@ parent_tool = Action(
 class Demo(ModelView):
 
     #: Root path object for locating demo files:
-    model = Instance(DemoPath)
+    model = Instance(DemoTreeNodeObject)
 
     #: Path to the root demo directory:
     path = Str()
