@@ -2,18 +2,18 @@
 #  License: BSD Style.
 
 # wizard.py ---Example of a traits-based wizard UI
-from __future__ import absolute_import
 
 from traits.api import HasTraits, Str
+from traits.etsconfig.api import ETSConfig
 from traitsui.api import Item, View, VGroup
 
 
 class Person(HasTraits):
-    first_name = Str
-    last_name = Str
+    first_name = Str()
+    last_name = Str()
 
-    company = Str
-    position = Str
+    company = Str()
+    position = Str()
 
     view = View(
         VGroup(
@@ -32,4 +32,8 @@ class Person(HasTraits):
 
 person = Person(first_name='Postman', last_name='Pat', company="Enthought",
                 position="Software Developer")
-person.configure_traits(kind='wizard')
+
+
+if ETSConfig.toolkit == "wx":
+    # Wizard window is currently only available for wx backend.
+    person.configure_traits(kind='wizard')

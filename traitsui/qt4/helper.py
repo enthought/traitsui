@@ -14,7 +14,6 @@
     editors and trait editor factories.
 """
 
-from __future__ import absolute_import
 import os.path
 
 from pyface.qt import QtCore, QtGui, is_qt5, qt_api
@@ -22,7 +21,7 @@ from pyface.ui_traits import convert_image
 from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 
 from traitsui.ui_traits import SequenceTypes
-import six
+
 
 
 is_pyqt = qt_api in {"pyqt", "pyqt5"}
@@ -155,7 +154,7 @@ class IconButton(QtGui.QPushButton):
         # Get the minimum icon size to use.
         ico_sz = sty.pixelMetric(QtGui.QStyle.PM_ButtonIconSize)
 
-        if isinstance(icon, six.string_types):
+        if isinstance(icon, str):
             pm = pixmap_cache(icon)
 
             # Increase the icon size to accomodate the image if needed.

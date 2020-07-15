@@ -17,16 +17,15 @@
 """
 
 
-from __future__ import absolute_import
 
 from traits.trait_base import SequenceTypes
 
 from traits.api import (
+    BaseTuple,
     Bool,
     HasTraits,
     List,
-    Tuple,
-    Unicode,
+    Str,
     Int,
     Any,
     TraitType,
@@ -59,10 +58,10 @@ class ToolkitEditorFactory(EditorFactory):
     # -------------------------------------------------------------------------
 
     #: Trait definitions for each tuple field
-    types = Any
+    types = Any()
 
     #: Labels for each of the tuple fields
-    labels = List(Unicode)
+    labels = List(Str)
 
     #: Editors for each of the tuple fields:
     editors = List(EditorFactory)
@@ -122,13 +121,13 @@ class TupleStructure(HasTraits):
     # -------------------------------------------------------------------------
 
     #: Editor this structure is linked to
-    editor = Any
+    editor = Any()
 
     #: The constructed View for the tuple
-    view = Any
+    view = Any()
 
     #: Number of tuple fields
-    fields = Int
+    fields = Int()
 
     def __init__(self, editor):
         """ Initializes the object.
@@ -154,7 +153,7 @@ class TupleStructure(HasTraits):
 
         if types is None:
             type = editor.value_trait.handler
-            if isinstance(type, Tuple):
+            if isinstance(type, BaseTuple):
                 types = type.types
 
         if not isinstance(types, SequenceTypes):

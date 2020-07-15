@@ -16,7 +16,6 @@ Note that repeated clicking of the *Create Thread* button will create
 additional threads.
 """
 
-from __future__ import absolute_import
 from time import sleep
 from traits.api import HasTraits, Int, Button, List
 from traitsui.api import View, Item, ListEditor
@@ -27,7 +26,7 @@ from traitsui.api import View, Item, ListEditor
 class Counter(HasTraits):
 
     # The current count:
-    count = Int
+    count = Int()
 
     view = View(Item('count', style='readonly'))
 

@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 from operator import itemgetter
 
 import wx
@@ -50,7 +49,7 @@ from pyface.timer.api import do_later
 from .constants import standard_bitmap_width, screen_dx, screen_dy
 
 from .editor import Editor
-import six
+
 
 
 # -------------------------------------------------------------------------
@@ -99,7 +98,7 @@ def bitmap_cache(name, standard_size, path=None):
     if bitmap is not None:
         return bitmap
 
-    std_bitmap = bitmap = wx.BitmapFromImage(wx.Image(filename))
+    std_bitmap = bitmap = wx.Bitmap(wx.Image(filename))
     _bitmap_cache[filename] = bitmap
 
     dx = bitmap.GetWidth()
@@ -267,41 +266,6 @@ def top_level_window_for(control):
     return control
 
 
-def enum_values_changed(values):
-    """ Recomputes the mappings for a new set of enumeration values.
-    """
-
-    if isinstance(values, dict):
-        data = [(six.text_type(v), n) for n, v in values.items()]
-        if len(data) > 0:
-            data.sort(key=itemgetter(0))
-            col = data[0][0].find(":") + 1
-            if col > 0:
-                data = [(n[col:], v) for n, v in data]
-    elif not isinstance(values, SequenceTypes):
-        handler = values
-        if isinstance(handler, CTrait):
-            handler = handler.handler
-        if not isinstance(handler, BaseTraitHandler):
-            raise TraitError("Invalid value for 'values' specified")
-        if handler.is_mapped:
-            data = [(six.text_type(n), n) for n in handler.map.keys()]
-            data.sort(key=itemgetter(0))
-        else:
-            data = [(six.text_type(v), v) for v in handler.values]
-    else:
-        data = [(six.text_type(v), v) for v in values]
-
-    names = [x[0] for x in data]
-    mapping = {}
-    inverse_mapping = {}
-    for name, value in data:
-        mapping[name] = value
-        inverse_mapping[value] = name
-
-    return (names, mapping, inverse_mapping)
-
-
 def disconnect(control, *events):
     """ Disconnects a wx event handle from its associated control.
     """
@@ -353,6 +317,10 @@ class TraitsUIPanel(wx.Panel):
         """
         if event.GetWindow() in self.GetChildren():
             event.Skip()
+
+    def Destroy(self):
+        self.Unbind(wx.EVT_CHILD_FOCUS)
+        super().Destroy()
 
 
 # -------------------------------------------------------------------------
@@ -533,10 +501,10 @@ class PopupControl(HasPrivateTraits):
     control = Instance(wx.Window)
 
     #: The minimum width of the popup:
-    width = Int
+    width = Int()
 
     #: The minimum height of the popup:
-    height = Int
+    height = Int()
 
     #: Should the popup be resizable?
     resizable = Bool(False)
@@ -544,10 +512,10 @@ class PopupControl(HasPrivateTraits):
     # -- Public Traits --------------------------------------------------------
 
     #: The value (if any) set by the popup control:
-    value = Any
+    value = Any()
 
     #: Event fired when the popup control is closed:
-    closed = Event
+    closed = Event()
 
     # -- Private Traits -------------------------------------------------------
 
@@ -681,3 +649,7 @@ class Slider(wx.Slider):
 
     def _erase_background(self, event):
         pass
+
+    def Destroy(self):
+        self.Unbind(wx.EVT_ERASE_BACKGROUND)
+        super().Destroy()

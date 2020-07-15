@@ -17,7 +17,6 @@ A few key points:
      - the Controller's View can access model traits directly ('myname')
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, Str, Bool, TraitError
 from traitsui.api import View, VGroup, HGroup, Item, Controller
 
@@ -27,7 +26,7 @@ class MyModel(HasTraits):
     """
 
     # Simple model data:
-    myname = Str
+    myname = Str()
 
 
 class MyViewController(Controller):
@@ -36,10 +35,10 @@ class MyViewController(Controller):
     """
 
     # When False, the model.myname trait is not allowed to be empty:
-    allow_empty_string = Bool
+    allow_empty_string = Bool()
 
     # Last attempted value of model.myname to be set by user:
-    last_name = Str
+    last_name = Str()
 
     # Define the view associated with this controller:
     view = View(

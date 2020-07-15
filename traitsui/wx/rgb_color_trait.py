@@ -21,7 +21,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import Trait, TraitError
@@ -65,7 +64,7 @@ def convert_to_color(object, name, value):
     if isinstance(value, int):
         num = int(value)
         return (
-            (num // 0x10000) / 255.0, (num // 0x100) & 0xFF) / 255.0,
+            (num // 0x10000) / 255.0, ((num // 0x100) & 0xFF) / 255.0,
             (num & 0xFF) / 255.0,
         )
     if isinstance(value, wx.Colour):

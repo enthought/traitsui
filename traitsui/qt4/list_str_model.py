@@ -19,12 +19,11 @@
 """
 
 
-from __future__ import absolute_import, unicode_literals
 
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
-import six
+
 
 
 # MIME type for internal table drag/drop operations
@@ -50,7 +49,10 @@ class ListStrModel(QtCore.QAbstractListModel):
         """ Reimplemented to return items in the list.
         """
         editor = self._editor
-        return editor.adapter.len(editor.object, editor.name)
+        n = editor.adapter.len(editor.object, editor.name)
+        if editor.factory.auto_add:
+            n += 1
+        return n
 
     def data(self, mi, role):
         """ Reimplemented to return the data.
@@ -62,7 +64,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
             if editor.is_auto_add(index):
                 text = adapter.get_default_text(
-                    editor.object, editor.name, index
+                    editor.object, editor.name
                 )
             else:
                 text = adapter.get_text(editor.object, editor.name, index)
@@ -74,7 +76,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         elif role == QtCore.Qt.DecorationRole:
             if editor.is_auto_add(index):
                 image = adapter.get_default_image(
-                    editor.object, editor.name, index
+                    editor.object, editor.name
                 )
             else:
                 image = adapter.get_image(editor.object, editor.name, index)
@@ -118,7 +120,11 @@ class ListStrModel(QtCore.QAbstractListModel):
         """ Reimplmented to allow for modification of the object trait.
         """
         editor = self._editor
-        editor.adapter.set_text(editor.object, editor.name, mi.row(), value)
+        if editor.is_auto_add(mi.row()):
+            method = editor.adapter.insert
+        else:
+            method = editor.adapter.set_text
+        editor.callx(method, editor.object, editor.name, mi.row(), value)
         self.dataChanged.emit(mi, mi)
         return True
 
@@ -225,7 +231,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         """
         mime_data = QtCore.QMimeData()
         rows = list({index.row() for index in indexes})
-        data = QtCore.QByteArray(six.text_type(rows[0]).encode("utf8"))
+        data = QtCore.QByteArray(str(rows[0]).encode("utf8"))
         for row in rows[1:]:
             data.append((" %i" % row).encode("utf8"))
         mime_data.setData(mime_type, data)

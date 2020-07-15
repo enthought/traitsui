@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from math import log10, pow
@@ -57,19 +56,19 @@ class _ScrubberEditor(Editor):
     """
 
     #: The low end of the slider range:
-    low = Any
+    low = Any()
 
     #: The high end of the slider range:
-    high = Any
+    high = Any()
 
     #: The smallest allowed increment:
-    increment = Float
+    increment = Float()
 
     #: The current text being displayed:
-    text = Str
+    text = Str()
 
     #: The mapping to use (only for Enum's):
-    mapping = Any
+    mapping = Any()
 
     # -- Class Variables ------------------------------------------------------
 
@@ -234,7 +233,7 @@ class _ScrubberEditor(Editor):
             if (low is None) or (high is None) or isinstance(low, int):
                 increment = 1.0
             else:
-                increment = pow(10, round(log10((high - low) // 100.0)))
+                increment = pow(10, round(log10((high - low) / 100.0)))
 
         self.increment = increment
 

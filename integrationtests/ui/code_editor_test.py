@@ -15,7 +15,6 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import absolute_import
 from traits.api \
     import HasPrivateTraits, Code, Str
 
@@ -68,8 +67,8 @@ class CodeHandler(Handler):
 
 class TestCode(HasPrivateTraits):
 
-    code = Code
-    status = Str
+    code = Code()
+    status = Str()
 
     view = View(
         [Item('code',

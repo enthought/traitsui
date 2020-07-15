@@ -15,7 +15,6 @@
 #-------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------
-from __future__ import absolute_import, print_function
 
 import wx
 
@@ -89,8 +88,8 @@ class Employer(HasTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    company = Str
-    boss = Str
+    company = Str()
+    boss = Str()
 
     view = View('company', 'boss')
 
@@ -118,11 +117,11 @@ class Person(HasTraits):
         values=['one', 'two', 'three', 'four'],
         cols=4))
     font = KivaFont
-    street = Str
-    city = Str
-    state = Str
+    street = Str()
+    city = Str()
+    state = Str()
     zip = Int(78663)
-    password = Str
+    password = Str()
     books = List(Str, ['East of Eden', 'The Grapes of Wrath',
                        'Of Mice and Men'])
     call = Event(0, editor=ButtonEditor(label='Click to call'))

@@ -21,7 +21,7 @@
 
 
 # Standard library imports.
-from __future__ import absolute_import
+import logging
 import os
 import sys
 
@@ -33,6 +33,8 @@ from pyface.util.guisupport import (
     is_event_loop_running_wx,
     start_event_loop_wx,
 )
+
+logger = logging.getLogger(__name__)
 
 # File to redirect output to. If '', output goes to stdout.
 redirect_filename = ""
@@ -133,7 +135,10 @@ class ViewApplication(wx.App):
             super(ViewApplication, self).__init__(0)
 
         # Start the event loop in an IPython-conforming manner.
-        start_event_loop_wx(self)
+        try:
+            start_event_loop_wx(self)
+        except Exception:
+            logger.exception("Event loop failed to close cleanly:")
 
     def OnInit(self):
         """ Handles application initialization.

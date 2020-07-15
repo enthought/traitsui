@@ -17,16 +17,22 @@
 Test cases for the UI object.
 """
 
-from __future__ import absolute_import
-import nose
+import unittest
 
+from traits.api import Property
 from traits.has_traits import HasTraits, HasStrictTraits
 from traits.trait_types import Str, Int
 import traitsui
 from traitsui.item import Item, spring
 from traitsui.view import View
 
-from traitsui.tests._tools import *
+from traitsui.tests._tools import (
+    count_calls,
+    create_ui,
+    skip_if_not_qt4,
+    skip_if_not_wx,
+    skip_if_null,
+)
 
 
 class FooDialog(HasTraits):
@@ -47,166 +53,191 @@ class DisallowNewTraits(HasStrictTraits):
     traits_view = View(Item("x"), spring)
 
 
-@skip_if_not_wx
-def test_reset_with_destroy_wx():
-    # Characterization test:
-    # UI.reset(destroy=True) destroys all ui children of the top control
+class MaybeInvalidTrait(HasTraits):
 
-    foo = FooDialog()
-    ui = foo.edit_traits()
+    name = Str()
 
-    ui.reset(destroy=True)
+    name_is_invalid = Property(depends_on="name")
 
-    # the top control is still there
-    nose.tools.assert_is_not_none(ui.control)
-    # but its children are gone
-    nose.tools.assert_equal(len(ui.control.GetChildren()), 0)
-
-
-@skip_if_not_qt4
-def test_reset_with_destroy_qt():
-    # Characterization test:
-    # UI.reset(destroy=True) destroys all ui children of the top control
-
-    from pyface import qt
-
-    foo = FooDialog()
-    ui = foo.edit_traits()
-
-    # decorate children's `deleteLater` function to check that it is called
-    # on `reset`. check only with the editor parts (only widgets are scheduled,
-    # see traitsui.qt4.toolkit.GUIToolkit.destroy_children)
-    for c in ui.control.children():
-        c.deleteLater = count_calls(c.deleteLater)
-
-    ui.reset(destroy=True)
-
-    # the top control is still there
-    nose.tools.assert_is_not_none(ui.control)
-
-    # but its children are scheduled for removal
-    for c in ui.control.children():
-        if isinstance(c, qt.QtGui.QWidget):
-            nose.tools.assert_equal(c.deleteLater._n_calls, 1)
-
-
-@skip_if_not_wx
-def test_reset_without_destroy_wx():
-    # Characterization test:
-    # UI.reset(destroy=False) destroys all editor controls, but leaves editors
-    # and ui children intact
-
-    import wx
-
-    foo = FooDialog()
-    ui = foo.edit_traits()
-
-    nose.tools.assert_equal(len(ui._editors), 2)
-    nose.tools.assert_is_instance(
-        ui._editors[0], traitsui.wx.text_editor.SimpleEditor
-    )
-    nose.tools.assert_is_instance(
-        ui._editors[0].control, wx._controls.TextCtrl
+    traits_view = View(
+        Item("name", invalid="name_is_invalid")
     )
 
-    ui.reset(destroy=False)
-
-    nose.tools.assert_equal(len(ui._editors), 2)
-    nose.tools.assert_is_instance(
-        ui._editors[0], traitsui.wx.text_editor.SimpleEditor
-    )
-    nose.tools.assert_is_none(ui._editors[0].control)
-
-    # children are still there: check first text control
-    text_ctrl = ui.control.FindWindowByName("text")
-    nose.tools.assert_is_not_none(text_ctrl)
+    def _get_name_is_invalid(self):
+        return len(self.name) < 10
 
 
-@skip_if_not_qt4
-def test_reset_without_destroy_qt():
-    # Characterization test:
-    # UI.reset(destroy=False) destroys all editor controls, but leaves editors
-    # and ui children intact
+class TestUI(unittest.TestCase):
 
-    from pyface import qt
+    @skip_if_not_wx
+    def test_reset_with_destroy_wx(self):
+        # Characterization test:
+        # UI.reset(destroy=True) destroys all ui children of the top control
 
-    foo = FooDialog()
-    ui = foo.edit_traits()
+        foo = FooDialog()
+        with create_ui(foo) as ui:
 
-    nose.tools.assert_equal(len(ui._editors), 2)
-    nose.tools.assert_is_instance(
-        ui._editors[0], traitsui.qt4.text_editor.SimpleEditor
-    )
-    nose.tools.assert_is_instance(ui._editors[0].control, qt.QtGui.QLineEdit)
+            ui.reset(destroy=True)
 
-    ui.reset(destroy=False)
+            # the top control is still there
+            self.assertIsNotNone(ui.control)
+            # but its children are gone
+            self.assertEqual(len(ui.control.GetChildren()), 0)
 
-    nose.tools.assert_equal(len(ui._editors), 2)
-    nose.tools.assert_is_instance(
-        ui._editors[0], traitsui.qt4.text_editor.SimpleEditor
-    )
-    nose.tools.assert_is_none(ui._editors[0].control)
+    @skip_if_not_qt4
+    def test_reset_with_destroy_qt(self):
+        # Characterization test:
+        # UI.reset(destroy=True) destroys all ui children of the top control
 
-    # children are still there: check first text control
-    text_ctrl = ui.control.findChild(qt.QtGui.QLineEdit)
-    nose.tools.assert_is_not_none(text_ctrl)
+        from pyface import qt
 
+        foo = FooDialog()
+        with create_ui(foo) as ui:
 
-@skip_if_not_wx
-def test_destroy_after_ok_wx():
-    # Behavior: after pressing 'OK' in a dialog, the method UI.finish is
-    # called and the view control and its children are destroyed
+            # decorate children's `deleteLater` function to check that it is
+            # called on `reset`. check only with the editor parts (only widgets
+            # are scheduled.
+            # See traitsui.qt4.toolkit.GUIToolkit.destroy_children)
+            for c in ui.control.children():
+                c.deleteLater = count_calls(c.deleteLater)
 
-    import wx
+            ui.reset(destroy=True)
 
-    foo = FooDialog()
-    ui = foo.edit_traits()
+            # the top control is still there
+            self.assertIsNotNone(ui.control)
 
-    # keep reference to the control to check that it was destroyed
-    control = ui.control
+            # but its children are scheduled for removal
+            for c in ui.control.children():
+                if isinstance(c, qt.QtGui.QWidget):
+                    self.assertEqual(c.deleteLater._n_calls, 1)
 
-    # decorate control's `Destroy` function to check that it is called
-    control.Destroy = count_calls(control.Destroy)
+    @skip_if_not_wx
+    def test_reset_without_destroy_wx(self):
+        # Characterization test:
+        # UI.reset(destroy=False) destroys all editor controls, but leaves
+        # editors and ui children intact
 
-    # press the OK button and close the dialog
-    okbutton = ui.control.FindWindowByName("button")
-    click_event = wx.CommandEvent(
-        wx.wxEVT_COMMAND_BUTTON_CLICKED, okbutton.GetId()
-    )
-    okbutton.ProcessEvent(click_event)
+        import wx
 
-    nose.tools.assert_is_none(ui.control)
-    nose.tools.assert_equal(control.Destroy._n_calls, 1)
+        foo = FooDialog()
+        with create_ui(foo) as ui:
 
+            self.assertEqual(len(ui._editors), 2)
+            self.assertIsInstance(
+                ui._editors[0], traitsui.wx.text_editor.SimpleEditor
+            )
+            self.assertIsInstance(
+                ui._editors[0].control, wx.TextCtrl
+            )
 
-@skip_if_not_qt4
-def test_destroy_after_ok_qt():
-    # Behavior: after pressing 'OK' in a dialog, the method UI.finish is
-    # called and the view control and its children are destroyed
+            ui.reset(destroy=False)
 
-    from pyface import qt
+            self.assertEqual(len(ui._editors), 2)
+            self.assertIsInstance(
+                ui._editors[0], traitsui.wx.text_editor.SimpleEditor
+            )
+            self.assertIsNone(ui._editors[0].control)
 
-    foo = FooDialog()
-    ui = foo.edit_traits()
+            # children are still there: check first text control
+            text_ctrl = ui.control.FindWindowByName("text")
+            self.assertIsNotNone(text_ctrl)
 
-    # keep reference to the control to check that it was deleted
-    control = ui.control
+    @skip_if_not_qt4
+    def test_reset_without_destroy_qt(self):
+        # Characterization test:
+        # UI.reset(destroy=False) destroys all editor controls, but leaves
+        # editors and ui children intact
 
-    # decorate control's `deleteLater` function to check that it is called
-    control.deleteLater = count_calls(control.deleteLater)
+        from pyface import qt
 
-    # press the OK button and close the dialog
-    okb = control.findChild(qt.QtGui.QPushButton)
-    okb.click()
+        foo = FooDialog()
+        with create_ui(foo) as ui:
 
-    nose.tools.assert_is_none(ui.control)
-    nose.tools.assert_equal(control.deleteLater._n_calls, 1)
+            self.assertEqual(len(ui._editors), 2)
+            self.assertIsInstance(
+                ui._editors[0], traitsui.qt4.text_editor.SimpleEditor
+            )
+            self.assertIsInstance(ui._editors[0].control, qt.QtGui.QLineEdit)
 
+            ui.reset(destroy=False)
 
-@skip_if_null
-def test_no_spring_trait():
-    obj = DisallowNewTraits()
-    ui = obj.edit_traits()
-    ui.dispose()
+            self.assertEqual(len(ui._editors), 2)
+            self.assertIsInstance(
+                ui._editors[0], traitsui.qt4.text_editor.SimpleEditor
+            )
+            self.assertIsNone(ui._editors[0].control)
 
-    nose.tools.assert_true("spring" not in obj.traits())
+            # children are still there: check first text control
+            text_ctrl = ui.control.findChild(qt.QtGui.QLineEdit)
+            self.assertIsNotNone(text_ctrl)
+
+    @skip_if_not_wx
+    def test_destroy_after_ok_wx(self):
+        # Behavior: after pressing 'OK' in a dialog, the method UI.finish is
+        # called and the view control and its children are destroyed
+
+        import wx
+
+        foo = FooDialog()
+        with create_ui(foo) as ui:
+
+            # keep reference to the control to check that it was destroyed
+            control = ui.control
+
+            # decorate control's `Destroy` function to check that it is called
+            control.Destroy = count_calls(control.Destroy)
+
+            # press the OK button and close the dialog
+            okbutton = ui.control.FindWindowByName("button", ui.control)
+            self.assertEqual(okbutton.Label, 'OK')
+
+            click_event = wx.CommandEvent(
+                wx.wxEVT_COMMAND_BUTTON_CLICKED, okbutton.GetId()
+            )
+            okbutton.ProcessEvent(click_event)
+
+            self.assertIsNone(ui.control)
+            self.assertEqual(control.Destroy._n_calls, 1)
+
+    @skip_if_not_qt4
+    def test_destroy_after_ok_qt(self):
+        # Behavior: after pressing 'OK' in a dialog, the method UI.finish is
+        # called and the view control and its children are destroyed
+
+        from pyface import qt
+
+        foo = FooDialog()
+        with create_ui(foo) as ui:
+
+            # keep reference to the control to check that it was deleted
+            control = ui.control
+
+            # decorate control's `deleteLater` function to check that it is
+            # called
+            control.deleteLater = count_calls(control.deleteLater)
+
+            # press the OK button and close the dialog
+            okb = control.findChild(qt.QtGui.QPushButton)
+            okb.click()
+
+            self.assertIsNone(ui.control)
+            self.assertEqual(control.deleteLater._n_calls, 1)
+
+    @skip_if_null
+    def test_no_spring_trait(self):
+        obj = DisallowNewTraits()
+        with create_ui(obj):
+            pass
+
+        self.assertTrue("spring" not in obj.traits())
+
+    @skip_if_null
+    def test_invalid_state(self):
+        # Regression test for enthought/traitsui#983
+        obj = MaybeInvalidTrait(name="Name long enough to be valid")
+        with create_ui(obj) as ui:
+            editor, = ui.get_editors("name")
+            self.assertFalse(editor.invalid)
+
+            obj.name = "too short"
+            self.assertTrue(editor.invalid)

@@ -1,9 +1,16 @@
 """
-This demonstrates using the Traits file dialog with multiple file dialog
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
+This demonstrates using the TraitsUI file dialog with multiple file dialog
 extensions, in this case, the <b>FileInfo</b>, <b>TextInfo</b> and
 <b>ImageInfo</b> extensions.
 
-For more information about why you would want to use the Traits file dialog
+For more information about why you would want to use the TraitsUI file dialog
 over the standard OS file dialog, select the <b>File Open</b> demo. For a
 demonstration of writing a custom file dialog extension, select the
 <b>File Open with Custom Extension</b> demo.
@@ -15,20 +22,16 @@ your new arrangement has been correctly restored. Try a different file dialog
 demo to verify that the customizations are not affected by any of the other
 demos because this demo specifies a custom id when invoking the file dialog.
 """
+# Issue related to the demo warning: enthought/traitsui#953
 
-#-- Imports --------------------------------------------------------------
+from traits.api import HasTraits, File, Button
 
-from __future__ import absolute_import
-from traits.api \
-    import HasTraits, File, Button
+from traitsui.api import View, HGroup, Item
 
-from traitsui.api \
-    import View, HGroup, Item
+from traitsui.file_dialog import open_file, FileInfo, TextInfo, ImageInfo
 
-from traitsui.file_dialog  \
-    import open_file, FileInfo, TextInfo, ImageInfo
 
-#-- FileDialogDemo Class -------------------------------------------------
+# -- FileDialogDemo Class -------------------------------------------------
 
 # Demo specific file dialig id:
 demo_id = 'traitsui.demo.standard_editors.file_dialog.multiple_info'
@@ -40,14 +43,14 @@ extensions = [FileInfo(), TextInfo(), ImageInfo()]
 class FileDialogDemo(HasTraits):
 
     # The name of the selected file:
-    file_name = File
+    file_name = File()
 
     # The button used to display the file dialog:
     open = Button('Open...')
 
-    #-- Traits View Definitions ----------------------------------------------
+    # -- Traits View Definitions ----------------------------------------------
 
-    view = View(
+    traits_view = View(
         HGroup(
             Item('open', show_label=False),
             '_',
@@ -56,7 +59,7 @@ class FileDialogDemo(HasTraits):
         width=0.5
     )
 
-    #-- Traits Event Handlers ------------------------------------------------
+    # -- Traits Event Handlers ------------------------------------------------
 
     def _open_changed(self):
         """ Handles the user clicking the 'Open...' button.
@@ -64,6 +67,7 @@ class FileDialogDemo(HasTraits):
         file_name = open_file(extensions=extensions, id=demo_id)
         if file_name != '':
             self.file_name = file_name
+
 
 # Create the demo:
 demo = FileDialogDemo()

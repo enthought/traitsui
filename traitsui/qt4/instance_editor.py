@@ -15,7 +15,6 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traits.api import HasTraits, Instance, Property
@@ -62,7 +61,7 @@ class CustomEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: List of InstanceChoiceItem objects used by the editor
-    items = Property
+    items = Property()
 
     #: The view to use for displaying the instance
     view = AView

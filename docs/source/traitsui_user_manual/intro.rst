@@ -52,7 +52,7 @@ In the context of Traits, a model consists primarily of one or more subclasses
 or :term:`instance`\ s of the HasTraits class, whose :term:`trait attribute`\ s
 (typed attributes as defined in Traits) represent the model data. The specifics
 of building such a model are outside the scope of this manual; please see the
-`Traits User Manual <http://github.enthought.com/traits/index.html>`_ for further information.
+`Traits User Manual <http://docs.enthought.com/traits/index.html>`_ for further information.
 
 .. index:: View; as MVC view
 
@@ -119,8 +119,9 @@ are:
 
 .. index:: wxPython toolkit, Qt toolkit, null toolkit
 
-* 'qt4': `PyQt <http://riverbankcomputing.co.uk/pyqt/>`_, which provides Python
-  bindings for the `Qt <http://trolltech.com/products/qt>`_ framework version 4.
+* 'qt4' or 'qt': `PyQt <http://riverbankcomputing.co.uk/pyqt/>`_ or
+  `Qt for Python/PySide2 <https://doc.qt.io/qtforpython/>`_, which provides Python
+  bindings for the `Qt <https://www.qt.io/>`_ framework version 4 or 5.
 * 'wx': `wxPython <http://www.wxpython.org>`_, which provides Python bindings
   for the `wxWidgets <http://wxwidgets.org>`_ toolkit.
 * 'null': A do-nothing toolkit, for situations where neither of the other
@@ -142,9 +143,6 @@ order of precedence:
        ETSConfig.toolkit = 'wx'
 
 #. The user can define a value for the ETS_TOOLKIT environment variable.
-
-.. warning:: The default order of toolkits changed in TraitsUI 5.0 to
-   prefer 'qt4' over 'wx'.
 
 .. _structure-of-this-guide:
 

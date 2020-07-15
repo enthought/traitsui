@@ -76,9 +76,8 @@ Finally:
 
 #-- Imports --------------------------------------------------------------
 
-from __future__ import absolute_import
 from os \
-    import walk, getcwd, listdir
+    import walk, listdir
 
 from os.path \
     import basename, dirname, splitext, join
@@ -104,6 +103,8 @@ FileTypes = {
     'Java': ['.java'],
     'Ruby': ['.rb']
 }
+
+DEFAULT_ROOT = dirname(__file__)
 
 #-- The Live Search table editor definition ------------------------------
 
@@ -172,7 +173,7 @@ table_editor = TableEditor(
 class LiveSearch(HasTraits):
 
     # The currenty root directory being searched:
-    root = Directory(getcwd(), entries=10)
+    root = Directory(DEFAULT_ROOT, entries=10)
 
     # Should sub directories be included in the search:
     recursive = Bool(True)
@@ -181,7 +182,7 @@ class LiveSearch(HasTraits):
     file_type = Enum('Python', 'C', 'C++', 'Java', 'Ruby')
 
     # The current search string:
-    search = Str
+    search = Str()
 
     # Is the search case sensitive?
     case_sensitive = Bool(False)
@@ -199,7 +200,7 @@ class LiveSearch(HasTraits):
     selected_contents = Property  # List( Str )
 
     # The currently selected match:
-    selected_match = Int
+    selected_match = Int()
 
     # The text line corresponding to the selected match:
     selected_line = Property  # Int
@@ -289,7 +290,7 @@ class LiveSearch(HasTraits):
     def _get_source_files(self):
         root = self.root
         if root == '':
-            root = getcwd()
+            root = DEFAULT_ROOT
 
         file_types = FileTypes[self.file_type]
         if self.recursive:
@@ -376,7 +377,7 @@ class SourceFile(HasTraits):
     live_search = Instance(LiveSearch)
 
     # The full path and file name of the source file:
-    full_name = File
+    full_name = File()
 
     # The base file name of the source file:
     base_name = Property  # Str

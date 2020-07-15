@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from traits.api import HasPrivateTraits, Str, Float
 
@@ -43,7 +42,7 @@ class Message(HasPrivateTraits):
     # -------------------------------------------------------------------------
 
     #: The message to be displayed
-    message = Str
+    message = Str()
 
 
 # -------------------------------------------------------------------------

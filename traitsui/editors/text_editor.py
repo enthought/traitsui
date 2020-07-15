@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from traits.api import Dict, Str, Any, Bool
 
@@ -94,13 +93,16 @@ class ToolkitEditorFactory(EditorFactory):
     evaluate = evaluate_trait
 
     #: The object trait containing the function used to evaluate user input
-    evaluate_name = Str
+    evaluate_name = Str()
 
     #: The optional view to display when a read-only text editor is clicked:
     view = AView
 
     #: In a read-only text editor, allow selection and copying of the text.
     readonly_allow_selection = Bool(False)
+
+    #: Grayed-out placeholder text to be displayed when the editor is empty.
+    placeholder = Str()
 
     # -------------------------------------------------------------------------
     #  Traits view definition:

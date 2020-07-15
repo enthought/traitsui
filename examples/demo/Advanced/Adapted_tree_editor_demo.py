@@ -28,7 +28,6 @@ tree view.
 
 #-- Imports --------------------------------------------------------------
 
-from __future__ import absolute_import
 from os import getcwd
 
 from traits.api import (
@@ -100,7 +99,7 @@ class FileTreeDemo(HasTraits):
     root_path = Directory(entries=10)
 
     # The root of the file tree:
-    root = Property
+    root = Property()
 
     # The traits view to display:
     view = View(

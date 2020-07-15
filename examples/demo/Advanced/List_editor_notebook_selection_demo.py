@@ -21,7 +21,6 @@ the selected tab completely visible.
 #  and not by the physical layout of the notebook tabs.
 
 
-from __future__ import absolute_import
 from traits.api import HasStrictTraits, Str, Int, Regex, List, Instance, Range
 from traitsui.api import View, VGroup, Item, ListEditor
 
@@ -31,8 +30,8 @@ from traitsui.api import View, VGroup, Item, ListEditor
 class Person(HasStrictTraits):
 
     # Trait definitions:
-    name = Str
-    age = Int
+    name = Str()
+    age = Int()
     phone = Regex(value='000-0000', regex='\d\d\d[-]\d\d\d\d')
 
     # Traits view definition:

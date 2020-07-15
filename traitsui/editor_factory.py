@@ -20,11 +20,10 @@
 """
 
 
-from __future__ import absolute_import, print_function
 
 import logging
 
-import six
+
 
 from traits.api import (
     HasPrivateTraits,
@@ -57,10 +56,10 @@ class EditorFactory(HasPrivateTraits):
     # -------------------------------------------------------------------------
 
     #: Function to use for string formatting
-    format_func = Callable
+    format_func = Callable()
 
     #: Format string to use for formatting (used if **format_func** is not set).
-    format_str = Str
+    format_str = Str()
 
     #: Is the editor being used to create table grid cells?
     is_grid_cell = Bool(False)
@@ -70,24 +69,24 @@ class EditorFactory(HasPrivateTraits):
 
     #: The extended trait name of the trait containing editor invalid state
     #: status:
-    invalid = Str
+    invalid = Str()
 
     #: Text aligment to use in most readonly editors
     #: Possible values: left, right, top, bottom, just, vcenter, hcenter, center
     #: Example: left,vcenter
-    text_alignment = Str
+    text_alignment = Str()
 
     #: The editor class to use for 'simple' style views.
-    simple_editor_class = Property
+    simple_editor_class = Property()
 
     #: The editor class to use for 'custom' style views.
-    custom_editor_class = Property
+    custom_editor_class = Property()
 
     #: The editor class to use for 'text' style views.
-    text_editor_class = Property
+    text_editor_class = Property()
 
     #: The editor class to use for 'readonly' style views.
-    readonly_editor_class = Property
+    readonly_editor_class = Property()
 
     def __init__(self, *args, **traits):
         """ Initializes the factory object.
@@ -218,7 +217,7 @@ class EditorFactory(HasPrivateTraits):
         if format_func is not None:
             return format_func(value)
 
-        return six.text_type(value)
+        return str(value)
 
     # -------------------------------------------------------------------------
     #  Property getters
@@ -303,22 +302,10 @@ class EditorWithListFactory(EditorFactory):
 
     #: Values to enumerate (can be a list, tuple, dict, or a CTrait or
     #: TraitHandler that is "mapped"):
-    values = Any
+    values = Any()
 
     #: Extended name of the trait on **object** containing the enumeration data:
     object = Str("object")
 
     #: Name of the trait on 'object' containing the enumeration data
-    name = Str
-
-    #: Fired when the **values** trait has been updated:
-    values_modified = Event
-
-    def _values_changed(self):
-        """ Recomputes the mappings whenever the **values** trait is changed.
-        """
-        self._names, self._mapping, self._inverse_mapping = enum_values_changed(
-            self.values, strfunc=self.string_value
-        )
-
-        self.values_modified = True
+    name = Str()

@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 from traitsui.ui_editors.array_view_editor import (
     _ArrayViewEditor as BaseArrayViewEditor,
 )

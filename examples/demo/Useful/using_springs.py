@@ -15,7 +15,6 @@ that space with an adjacent widget, instead allowing empty space which varies
 depending on the overall size of the containing group.
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, Button
 from traitsui.api import View, VGroup, HGroup, Item, spring, Label
 

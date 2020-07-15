@@ -2,27 +2,32 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Implementation of a ColorEditor demo plugin for Traits UI demo program.
 
 This demo shows each of the four styles of the ColorEditor
 """
+# Issues related to the demo warning: enthought/traitsui#913,
+# enthought/traitsui#946
 
-# Imports:
-from __future__ import absolute_import
-from traits.api \
-    import HasTraits
 
-from traitsui.api \
-    import Item, Group, View, Color
+from traits.api import HasTraits
+
+from traitsui.api import Item, Group, View, Color
+
 
 # Demo class definition:
-
-
 class ColorEditorDemo(HasTraits):
     """ Defines the main ColorEditor demo. """
 
     # Define a Color trait to view:
-    color_trait = Color
+    color_trait = Color()
 
     # Items are used to define the demo display, one item per editor style:
     color_group = Group(
@@ -36,12 +41,13 @@ class ColorEditorDemo(HasTraits):
     )
 
     # Demo view
-    view1 = View(
+    traits_view = View(
         color_group,
         title='ColorEditor',
         buttons=['OK'],
         resizable=True
     )
+
 
 # Create the demo:
 demo = ColorEditorDemo()

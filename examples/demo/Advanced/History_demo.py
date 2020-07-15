@@ -23,7 +23,6 @@ value it had when the demo was run the previous time.
 
 #-- Imports --------------------------------------------------------------
 
-from __future__ import absolute_import
 from traits.api \
     import HasTraits, Str, File, Directory
 
@@ -35,9 +34,9 @@ from traitsui.api \
 
 class HistoryDemo(HasTraits):
 
-    name = Str
-    file = File
-    directory = Directory
+    name = Str()
+    file = File()
+    directory = Directory()
 
     view = View(
         Item('name',

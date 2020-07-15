@@ -16,7 +16,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from contextlib import contextmanager
 from functools import partial
@@ -49,7 +48,7 @@ from .context_value import ContextValue
 from .undo import UndoItem
 
 from .item import Item
-import six
+
 
 
 # Reference to an EditorFactory object
@@ -72,21 +71,21 @@ class Editor(HasPrivateTraits):
     object = Instance(HasTraits, clean_up=True)
 
     #: The name of the trait this editor is editing (e.g. 'value'):
-    name = ReadOnly
+    name = ReadOnly()
 
     #: The context object the editor is editing (e.g. object):
-    context_object = Property
+    context_object = Property()
 
     #: The extended name of the object trait being edited. That is,
     #: 'object_name.name' minus the context object name at the beginning. For
     #: example: 'link1.link2.value':
-    extended_name = Property
+    extended_name = Property()
 
     #: Original value of object.name (e.g. object.link1.link2.value):
     old_value = Any(clean_up=True)
 
     #: Text description of the object trait being edited:
-    description = ReadOnly
+    description = ReadOnly()
 
     #: The Item object used to create this editor:
     item = Instance(Item, (), clean_up=True)
@@ -113,13 +112,13 @@ class Editor(HasPrivateTraits):
     updating = Bool(False)
 
     #: Current value for object.name:
-    value = Property
+    value = Property()
 
     #: Current value of object trait as a string:
-    str_value = Property
+    str_value = Property()
 
     #: The trait the editor is editing (not its value, but the trait itself):
-    value_trait = Property
+    value_trait = Property()
 
     #: The current editor invalid state status:
     invalid = Bool(False)
@@ -282,9 +281,7 @@ class Editor(HasPrivateTraits):
         *undo_args
             Any arguments to pass to the undo factory.
         """
-        # Indicate that the contents of the user interface have been changed:
         ui = self.ui
-        ui.modified = True
 
         # Create an undo history entry if we are maintaining a history:
         undoable = ui._undoable
@@ -513,9 +510,13 @@ class Editor(HasPrivateTraits):
             self.item.style != "readonly"
             and object.base_trait(name).type != "event"
         ):
-            self.log_change(
-                self.get_undo_item, object, name, old_value, new_value
-            )
+            # Indicate that the contents of the UI have been changed:
+            self.ui.modified = True
+
+            if self.updating:
+                    self.log_change(
+                    self.get_undo_item, object, name, old_value, new_value
+                )
 
         # If the change was not caused by the editor itself:
         if not self.updating:
@@ -708,7 +709,7 @@ class Editor(HasPrivateTraits):
             or 3.
         """
         # In Unicode!
-        return six.text_type(value)
+        return str(value)
 
     # -- Traits property getters and setters --------------------------------
 

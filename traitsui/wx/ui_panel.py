@@ -19,12 +19,11 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 import wx.html as wh
 import re
 
-from cgi import escape
+from html import escape
 
 from traits.api import Instance, Undefined
 
@@ -58,7 +57,6 @@ from .helper import (
 from .constants import screen_dx, screen_dy, WindowColor
 
 from .ui_base import BaseDialog
-from .constants import is_mac
 
 
 # Pattern of all digits
@@ -1013,7 +1011,7 @@ class FillPanel(object):
             item_sizer.Add(
                 control,
                 growable,
-                flags | layout_style | wx.ALIGN_CENTER_VERTICAL,
+                flags | layout_style,
                 max(0, border_size + padding + item.padding),
             )
 
@@ -1184,6 +1182,7 @@ class HTMLHelpWindow(wx.Frame):
     def _on_ok(self, event):
         """ Handles the window being closed.
         """
+        self.Unbind(wx.EVT_BUTTON)
         self.Destroy()
 
 

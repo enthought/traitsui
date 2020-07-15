@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from traits.api import (
     Any,
@@ -211,7 +210,7 @@ class EvalTableFilter(TableFilter):
         if self._traits is None:
             self._traits = object.trait_names()
         try:
-            return eval(self.expression_, globals(), object.get(*self._traits))
+            return eval(self.expression_, globals(), object.trait_get(*self._traits))
         except:
             return False
 
@@ -243,7 +242,7 @@ class GenericTableFilterRule(HasPrivateTraits):
     name_editor = Instance(EditorFactory)
 
     #: Name of the object trait that this rule applies to
-    name = Str
+    name = Str()
 
     #: Operation to be applied in the rule
     operation = GenericTableFilterRuleOperation
@@ -252,7 +251,7 @@ class GenericTableFilterRule(HasPrivateTraits):
     value_editor = Instance(EditorFactory)
 
     #: Value to use in the operation when applying the rule to an object
-    value = Any
+    value = Any()
 
     # -------------------------------------------------------------------------
     #  Class constants:
@@ -264,7 +263,7 @@ class GenericTableFilterRule(HasPrivateTraits):
     def __init__(self, **traits):
         super(GenericTableFilterRule, self).__init__(**traits)
         if self.name == "":
-            names = list(self.filter._trait_values.keys())
+            names = list(self.filter._name_to_value.keys())
             if len(names) > 0:
                 names.sort()
                 self.name = names[0]
@@ -275,7 +274,7 @@ class GenericTableFilterRule(HasPrivateTraits):
         """
         filter = self.filter
         if (filter is not None) and (filter._object is not None):
-            self.value = filter._trait_values.get(name)
+            self.value = filter._name_to_value.get(name)
             self.value_editor = filter._object.base_trait(name).get_editor()
 
     # -------------------------------------------------------------------------
@@ -421,16 +420,16 @@ class RuleTableFilter(TableFilter):
     rules = List(GenericTableFilterRule)
 
     #: Event fired when the contents of the filter have changed
-    modified = Event
+    modified = Event()
 
     #: Persistence ID of the view
     view_id = Str("traitsui.table_filter.RuleTableFilter")
 
     #: Sample object that the filter will apply to
-    _object = Any
+    _object = Any()
 
     #: Map of trait names and default values
-    _trait_values = Any
+    _name_to_value = Any()
 
     # -------------------------------------------------------------------------
     #  Traits view definitions:
@@ -500,7 +499,7 @@ class RuleTableFilter(TableFilter):
             return self.edit_traits(view="error_view")
 
         names = object.editable_traits()
-        self._trait_values = object.get(names)
+        self._name_to_value = object.get(names)
         return View(
             [
                 ["name{Filter name}", "_"],
@@ -550,7 +549,7 @@ class RuleTableFilter(TableFilter):
         dict = self.__dict__.copy()
         if "_object" in dict:
             del dict["_object"]
-            del dict["_trait_values"]
+            del dict["_name_to_value"]
         return dict
 
     def _rules_changed(self, rules):

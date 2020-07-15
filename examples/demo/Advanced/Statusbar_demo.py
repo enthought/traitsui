@@ -18,7 +18,6 @@ Note the use of a timer thread to update the status bar once per second.
 
 """
 
-from __future__ import absolute_import
 from time import sleep, strftime
 from threading import Thread
 from traits.api import HasPrivateTraits, Str, Property
@@ -30,13 +29,13 @@ from traitsui.api import View, Item, StatusItem, Label
 class TextEditor(HasPrivateTraits):
 
     # The text being edited:
-    text = Str
+    text = Str()
 
     # The current length of the text being edited:
     length = Property(depends_on='text')
 
     # The current time:
-    time = Str
+    time = Str()
 
     # The view definition:
     view = View(

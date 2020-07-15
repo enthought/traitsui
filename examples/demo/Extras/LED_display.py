@@ -11,7 +11,6 @@ This demo illustrates use of the LEDEditor for displaying numeric values
 using a simulated LED display control.
 """
 
-from __future__ import absolute_import
 from threading  import Thread
 
 from time import sleep
@@ -62,10 +61,10 @@ class LEDDemoHandler(Handler):
 class LEDDemo(HasTraits):
 
     # A counter to display:
-    counter1 = Int
+    counter1 = Int()
 
     # A floating point value to display:
-    counter2 = Float
+    counter2 = Float()
 
     # The traits view:
     view = View(

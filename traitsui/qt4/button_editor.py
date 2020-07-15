@@ -14,10 +14,9 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
-from traits.api import Unicode, List, Str, on_trait_change
+from traits.api import Str, List, Str, on_trait_change
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -36,13 +35,13 @@ class SimpleEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: The button label
-    label = Unicode
+    label = Str()
 
     #: The list of items in a drop-down menu, if any
-    # menu_items = List
+    # menu_items = List()
 
     #: The selected item in the drop-down menu.
-    selected_item = Str
+    selected_item = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -76,6 +75,19 @@ class SimpleEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
+
+        if self.factory.values_trait:
+            self.object.on_trait_change(
+                self._update_menu,
+                self.factory.values_trait,
+                remove=True,
+            )
+            self.object.on_trait_change(
+                self._update_menu,
+                self.factory.values_trait + "_items",
+                remove=True,
+            )
+
         if self.control is not None:
             self.control.clicked.disconnect(self.update_object)
         super(SimpleEditor, self).dispose()
@@ -154,3 +166,13 @@ class CustomEditor(SimpleEditor):
         self.sync_value(self.factory.label_value, "label", "from")
         self.control.clicked.connect(self.update_object)
         self.set_tooltip()
+
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None:
+            self.control.clicked.disconnect(self.update_object)
+
+        # FIXME: Maybe better to let this class subclass Editor directly
+        # enthought/traitsui#884
+        Editor.dispose(self)

@@ -13,16 +13,16 @@
 #
 # ------------------------------------------------------------------------------
 
-from __future__ import absolute_import, print_function
 
+import re
 import sys
 import traceback
-import inspect
-from functools import partial, wraps
+from functools import partial
 from contextlib import contextmanager
-from unittest import skip
+from unittest import skipIf, TestSuite
 
-from nose import SkipTest
+from pyface.api import GUI
+from pyface.toolkit import toolkit_object
 from traits.etsconfig.api import ETSConfig
 import traits.trait_notifiers
 
@@ -61,36 +61,14 @@ def store_exceptions_on_all_threads():
         traits.trait_notifiers.handle_exception = handle_exception
         yield
     finally:
-        if len(exceptions) > 0:
-            raise exceptions[0]
         sys.excepthook = sys.__excepthook__
         traits.trait_notifiers.handle_exception = _original_handle_exception
+        if len(exceptions) > 0:
+            raise exceptions[0]
 
 
 def _is_current_backend(backend_name=""):
     return ETSConfig.toolkit == backend_name
-
-
-def skip_if_not_backend(item, backend_name=""):
-    """Decorator that skip tests if the backend is not the desired one."""
-
-    if inspect.isclass(item):
-        if not _is_current_backend(backend_name):
-            message = "" if backend_name != "" else "Test only for {}"
-            wrapper = skip(message)(item)
-        else:
-            wrapper = item
-    else:
-
-        @wraps(item)
-        def wrapper(*args, **kwargs):
-            if not _is_current_backend(backend_name):
-                message = "" if backend_name != "" else "Test only for {}"
-                raise SkipTest(message.format(backend_name))
-            else:
-                return item(*args, **kwargs)
-
-    return wrapper
 
 
 #: Return True if current backend is 'wx'
@@ -104,34 +82,22 @@ is_current_backend_null = partial(_is_current_backend, backend_name="null")
 
 
 #: Test decorator: Skip test if backend is not 'wx'
-skip_if_not_wx = partial(skip_if_not_backend, backend_name="wx")
+skip_if_not_wx = skipIf(not is_current_backend_wx(), "Test only for wx")
 
 #: Test decorator: Skip test if backend is not 'qt4'
-skip_if_not_qt4 = partial(skip_if_not_backend, backend_name="qt4")
+skip_if_not_qt4 = skipIf(not is_current_backend_qt4(), "Test only for qt4")
 
 #: Test decorator: Skip test if backend is not 'null'
-skip_if_not_null = partial(skip_if_not_backend, backend_name="null")
+skip_if_not_null = skipIf(not is_current_backend_null(), "Test only for null")
 
+#: Test decorator: Skip test if backend is 'null'
+skip_if_null = skipIf(
+    is_current_backend_null(),
+    "Test not working on the 'null' backend"
+)
 
 #: True if current platform is MacOS
-is_mac_os = sys.platform == "Darwin"
-
-
-def skip_if_null(test_func):
-    """Decorator that skip tests if the backend is set to 'null'.
-
-    Some tests handle both wx and Qt in one go, but many things are not
-    defined in the null backend. Use this decorator to skip the test.
-    """
-
-    @wraps(test_func)
-    def wrapper(*args, **kwargs):
-        if _is_current_backend("null"):
-            raise SkipTest("Test not working on the 'null' backend")
-        else:
-            return test_func(*args, **kwargs)
-
-    return wrapper
+is_mac_os = sys.platform.startswith("darwin")
 
 
 def count_calls(func):
@@ -147,6 +113,81 @@ def count_calls(func):
     wrapped._n_calls = 0
 
     return wrapped
+
+
+def filter_tests(test_suite, exclusion_pattern):
+    filtered_test_suite = TestSuite()
+    for item in test_suite:
+        if isinstance(item, TestSuite):
+            filtered = filter_tests(item, exclusion_pattern)
+            filtered_test_suite.addTest(filtered)
+        else:
+            match = re.search(exclusion_pattern, item.id())
+            if match is not None:
+                skip_msg = "Test excluded via pattern '{}'".format(
+                    exclusion_pattern
+                )
+                setattr(item, 'setUp', lambda: item.skipTest(skip_msg))
+            filtered_test_suite.addTest(item)
+    return filtered_test_suite
+
+
+def process_cascade_events():
+    """ Process all posted events, and attempt to process new events posted by
+    the processed events.
+
+    Cautions:
+    - An infinite cascade of events will cause this function to enter an
+      infinite loop.
+    - There still exists technical difficulties with Qt. On Qt4 + OSX,
+      QEventLoop.processEvents may report false saying it had found no events
+      to process even though it actually had processed some.
+      Consequently the internal loop breaks too early such that there are
+      still cascaded events unprocessed. Problems are also observed on
+      Qt5 + Appveyor occasionally. At the very least, events that are already
+      posted prior to calling this function will be processed.
+      See enthought/traitsui#951
+    """
+    if is_current_backend_qt4():
+        from pyface.qt import QtCore
+        event_loop = QtCore.QEventLoop()
+        while event_loop.processEvents(QtCore.QEventLoop.AllEvents):
+            pass
+    else:
+        GUI.process_events()
+
+
+@contextmanager
+def create_ui(object, ui_kwargs=None):
+    """ Context manager for creating a UI and then dispose it when exiting
+    the context.
+
+    Parameters
+    ----------
+    object : HasTraits
+        An object from which ``edit_traits`` can be called to create a UI
+    ui_kwargs : dict or None
+        Keyword arguments to be provided to ``edit_traits``.
+
+    Yields
+    ------
+    ui: UI
+    """
+    ui_kwargs = {} if ui_kwargs is None else ui_kwargs
+    ui = object.edit_traits(**ui_kwargs)
+    try:
+        yield ui
+    finally:
+        # At the end of a test, there may be events to be processed.
+        # If dispose happens first, those events will be processed after
+        # various editor states are removed, causing errors.
+        process_cascade_events()
+        try:
+            ui.dispose()
+        finally:
+            # dispose is not atomic and may push more events to the event
+            # queue. Flush those too.
+            process_cascade_events()
 
 
 # ######### Utility tools to test on both qt4 and wx
@@ -165,7 +206,7 @@ def press_ok_button(ui):
     if is_current_backend_wx():
         import wx
 
-        ok_button = ui.control.FindWindowByName("button")
+        ok_button = ui.control.FindWindowByName("button", ui.control)
         click_event = wx.CommandEvent(
             wx.wxEVT_COMMAND_BUTTON_CLICKED, ok_button.GetId()
         )
@@ -177,6 +218,36 @@ def press_ok_button(ui):
         # press the OK button and close the dialog
         ok_button = ui.control.findChild(qt.QtGui.QPushButton)
         ok_button.click()
+
+
+def click_button(button):
+    """Click the button given its control."""
+
+    if is_current_backend_wx():
+        import wx
+
+        event = wx.CommandEvent(wx.EVT_BUTTON.typeId, button.GetId())
+        event.SetEventObject(button)
+        wx.PostEvent(button, event)
+
+    elif is_current_backend_qt4():
+        button.click()
+
+    else:
+        raise NotImplementedError()
+
+
+def is_control_enabled(control):
+    """Return if the given control is enabled or not."""
+
+    if is_current_backend_wx():
+        return control.IsEnabled()
+
+    elif is_current_backend_qt4():
+        return control.isEnabled()
+
+    else:
+        raise NotImplementedError()
 
 
 def get_dialog_size(ui_control):
@@ -194,6 +265,32 @@ def get_dialog_size(ui_control):
     elif is_current_backend_qt4():
         return ui_control.size().width(), ui_control.size().height()
 
+
+def get_all_button_status(control):
+    """Get status of all 2-state (wx) or checkable (qt) buttons under given
+    control.
+
+    Assumes all sizer children (wx) or layout items (qt) are buttons.
+    """
+    button_status = []
+
+    if is_current_backend_wx():
+        for item in control.GetSizer().GetChildren():
+            button = item.GetWindow()
+            # Ignore empty buttons (assumption that they are invisible)
+            if button.value != "":
+                button_status.append(button.GetValue())
+
+    elif is_current_backend_qt4():
+        layout = control.layout()
+        for i in range(layout.count()):
+            button = layout.itemAt(i).widget()
+            button_status.append(button.isChecked())
+
+    else:
+        raise NotImplementedError()
+
+    return button_status
 
 # ######### Debug tools
 
@@ -269,3 +366,12 @@ def wx_find_event_by_number(evt_num):
     ]
 
     return possible
+
+
+GuiTestAssistant = toolkit_object("util.gui_test_assistant:GuiTestAssistant")
+no_gui_test_assistant = GuiTestAssistant.__name__ == "Unimplemented"
+if no_gui_test_assistant:
+
+    # ensure null toolkit has an inheritable GuiTestAssistant
+    class GuiTestAssistant(object):
+        pass

@@ -12,7 +12,6 @@
 """ General regression tests for various fixed bugs.
 """
 
-from __future__ import absolute_import
 import unittest
 
 from traits.api import DelegatesTo, Event, HasTraits, Instance, Undefined

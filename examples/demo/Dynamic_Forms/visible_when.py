@@ -21,7 +21,6 @@ but structurally very different demo of *dynamic restructuring of a user
 interface using an Instance editor and a Handler*.
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, Str, Range, Bool, Enum
 from traitsui.api import Item, Group, View, Label
 
@@ -31,13 +30,13 @@ class Person(HasTraits):
     """
 
     # General traits:
-    first_name = Str
-    last_name = Str
+    first_name = Str()
+    last_name = Str()
     age = Range(0, 120)
 
     # Traits for children only:
-    legal_guardian = Str
-    school = Str
+    legal_guardian = Str()
+    school = Str()
     grade = Range(1, 12)
 
     # Traits for adults only:

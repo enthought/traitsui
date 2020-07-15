@@ -14,7 +14,6 @@ the PyQt user interface toolkit.
 """
 
 
-from __future__ import absolute_import, division
 
 # Make sure that importing from this backend is OK:
 from traitsui.toolkit import assert_toolkit_import

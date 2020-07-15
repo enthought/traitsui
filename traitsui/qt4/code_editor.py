@@ -15,13 +15,11 @@ interface toolkit, useful for tools such as debuggers.
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
 from traits.api import (
     Str,
-    Unicode,
     List,
     Int,
     Event,
@@ -41,7 +39,7 @@ from pyface.key_pressed_event import KeyPressedEvent
 from .constants import OKColor, ErrorColor
 from .editor import Editor
 from .helper import pixmap_cache
-import six
+
 
 
 # Marker line constants:
@@ -76,37 +74,37 @@ class SourceEditor(Editor):
     readonly = Bool(False)
 
     #: The currently selected line
-    selected_line = Int
+    selected_line = Int()
 
     #: The start position of the selected
-    selected_start_pos = Int
+    selected_start_pos = Int()
 
     #: The end position of the selected
-    selected_end_pos = Int
+    selected_end_pos = Int()
 
     #: The currently selected text
-    selected_text = Unicode
+    selected_text = Str()
 
     #: The list of line numbers to mark
     mark_lines = List(Int)
 
     #: The current line number
-    line = Event
+    line = Event()
 
     #: The current column
-    column = Event
+    column = Event()
 
     #: The lines to be dimmed
     dim_lines = List(Int)
-    dim_color = Str
+    dim_color = Str()
     dim_style_number = Int(16)  # 0-15 are reserved for the python lexer
 
     #: The lines to have squiggles drawn under them
     squiggle_lines = List(Int)
-    squiggle_color = Str
+    squiggle_color = Str()
 
     #: The lexer to use.
-    lexer = Str
+    lexer = Str()
 
     # -------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -190,7 +188,7 @@ class SourceEditor(Editor):
         """
         if not self._locked:
             try:
-                value = six.text_type(self._widget.code.toPlainText())
+                value = str(self._widget.code.toPlainText())
                 if isinstance(self.value, SequenceTypes):
                     value = value.split()
                 self.value = value
@@ -248,7 +246,7 @@ class SourceEditor(Editor):
         self._mark_lines_changed()
 
     def _selection_changed(self):
-        self.selected_text = six.text_type(
+        self.selected_text = str(
             self._widget.code.textCursor().selectedText()
         )
         start = self._widget.code.textCursor().selectionStart()

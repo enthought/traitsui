@@ -19,15 +19,14 @@
 """
 
 
-from __future__ import absolute_import
 
 from pyface.ui_traits import Image
-from traits.api import Str, Range, Enum, Property, Trait
+from traits.api import Str, Range, Enum, Property, Either
 
 from ..editor_factory import EditorFactory
 from ..ui_traits import AView
 from ..view import View
-import six
+
 
 # -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -43,19 +42,19 @@ class ToolkitEditorFactory(EditorFactory):
     # -------------------------------------------------------------------------
 
     # Value to set when the button is clicked
-    value = Property
+    value = Property()
 
     # Optional label for the button
-    label = Str
+    label = Str()
 
     # The name of the external object trait that the button label is synced to
-    label_value = Str
+    label_value = Str()
 
     # The name of the trait on the object that contains the list of possible
     # values.  If this is set, then the value, label, and label_value traits
     # are ignored; instead, they will be set from this list.  When this button
     # is clicked, the value set will be the one selected from the drop-down.
-    values_trait = Trait(None, None, Str)
+    values_trait = Either(None, Str)
 
     # (Optional) Image to display on the button
     image = Image
@@ -86,7 +85,7 @@ class ToolkitEditorFactory(EditorFactory):
 
     def _set_value(self, value):
         self._value = value
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             try:
                 self._value = int(value)
             except:

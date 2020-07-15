@@ -19,7 +19,6 @@ As an extra <i>feature</i>, the <b>TabularEditor</b> also displays a:
  - Blue ball if the file size > 16KB.
 """
 
-from __future__ import absolute_import
 from time \
     import localtime, strftime
 
@@ -56,11 +55,11 @@ search_path = [join(dirname(traitsui.api.__file__),
 
 class FileInfo(HasPrivateTraits):
 
-    file_name = File
-    name = Property
-    size = Property
-    time = Property
-    date = Property
+    file_name = File()
+    name = Property()
+    size = Property()
+    time = Property()
+    date = Property()
 
     @cached_property
     def _get_name(self):
@@ -97,9 +96,9 @@ class FileInfoAdapter(TabularAdapter):
     size_alignment = Str('right')
     time_alignment = Str('right')
     date_alignment = Str('right')
-    big_text = Str
+    big_text = Str()
     big_width = Float(18)
-    big_image = Property
+    big_image = Property()
 
     def _get_big_image(self):
         size = self.item.size
@@ -126,10 +125,10 @@ class PythonBrowser(HasPrivateTraits):
 
     #-- Trait Definitions ----------------------------------------------------
 
-    dir = Directory
+    dir = Directory()
     files = List(FileInfo)
     file_info = Instance(FileInfo)
-    code = Code
+    code = Code()
 
     #-- Traits View Definitions ----------------------------------------------
 

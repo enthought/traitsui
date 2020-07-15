@@ -2,18 +2,25 @@
 #  License: BSD Style.
 
 """
-Implementation of an ImageEnumEditor demo plugin for the Traits UI demo program.
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
+Implementation of an ImageEnumEditor demo plugin for the Traits UI demo
+program.
 
 This demo shows each of the four styles of the ImageEnumEditor.
 """
+# Issues related to the demo warning: enthought/traitsui#913,
+# enthought/traitsui#947
 
-# Imports:
-from __future__ import absolute_import
-from traits.api \
-    import HasTraits, Str, Trait
 
-from traitsui.api \
-    import Item, Group, View, ImageEnumEditor
+from traits.api import Enum, HasTraits, Str
+
+from traitsui.api import Item, Group, View, ImageEnumEditor
 
 # This list of image names (with the standard suffix "_origin") is used to
 # construct an image enumeration trait to demonstrate the ImageEnumEditor:
@@ -23,9 +30,9 @@ image_list = ['top left', 'top right', 'bottom left', 'bottom right']
 class Dummy(HasTraits):
     """ Dummy class for ImageEnumEditor
     """
-    x = Str
+    x = Str()
 
-    view = View()
+    traits_view = View()
 
 
 class ImageEnumEditorDemo(HasTraits):
@@ -33,31 +40,36 @@ class ImageEnumEditorDemo(HasTraits):
     """
 
     # Define a trait to view:
-    image_from_list = Trait(editor=ImageEnumEditor(values=image_list,
-                                                   prefix='@icons:',
-                                                   suffix='_origin',
-                                                   cols=4,
-                                                   klass=Dummy),
-                            *image_list)
+    image_from_list = Enum(
+        *image_list,
+        editor=ImageEnumEditor(
+            values=image_list,
+            prefix='@icons:',
+            suffix='_origin',
+            cols=4,
+            klass=Dummy
+        )
+    )
 
     # Items are used to define the demo display, one Item per editor style:
     img_group = Group(
         Item('image_from_list', style='simple', label='Simple'),
         Item('_'),
-        Item('image_from_list', style='custom', label='Custom'),
-        Item('_'),
         Item('image_from_list', style='text', label='Text'),
         Item('_'),
-        Item('image_from_list', style='readonly', label='ReadOnly')
+        Item('image_from_list', style='readonly', label='ReadOnly'),
+        Item('_'),
+        Item('image_from_list', style='custom', label='Custom')
     )
 
     # Demo view:
-    view = View(
+    traits_view = View(
         img_group,
         title='ImageEnumEditor',
         buttons=['OK'],
         resizable=True
     )
+
 
 # Create the demo:
 demo = ImageEnumEditorDemo()

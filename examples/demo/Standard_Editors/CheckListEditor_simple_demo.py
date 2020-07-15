@@ -1,8 +1,8 @@
 """
 Checklist editor for a List of strings
 
-The checklist editor provides a simple way for the user to select multiple items
-from a list of known strings.
+The checklist editor provides a simple way for the user to select multiple
+items from a list of known strings.
 
 This example demonstrates the checklist editor's two most useful styles:
 
@@ -18,7 +18,6 @@ We do *not* demonstrate two styles which are not as useful for this editor:
     drop-down widget.
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, List
 from traitsui.api import UItem, Group, View, CheckListEditor, Label
 
@@ -27,17 +26,19 @@ class CheckListEditorDemo(HasTraits):
     """ Define the main CheckListEditor simple demo class. """
 
     # Specify the strings to be displayed in the checklist:
-    checklist = List(editor=CheckListEditor(
-        values=['one', 'two', 'three', 'four',
-                'five', 'six'],
-        cols=2))
+    checklist = List(
+        editor=CheckListEditor(
+            values=['one', 'two', 'three', 'four', 'five', 'six'],
+            cols=2
+        )
+    )
 
     # CheckListEditor display with two columns:
     checklist_group = Group(
-        '10',  # insert vertical space
+        '10',  # insert vertical space (10 empty pixels)
         Label('The custom style lets you select items from a checklist:'),
         UItem('checklist', style='custom'),
-        '10', '_', '10',  # a horizontal line with 10 empty pixels above and below
+        '10', '_', '10',  # horizontal line with vertical space above and below
         Label('The readonly style shows you which items are selected, '
               'as a Python list:'),
         UItem('checklist', style='readonly'),
@@ -49,6 +50,7 @@ class CheckListEditorDemo(HasTraits):
         buttons=['OK'],
         resizable=True
     )
+
 
 # Create the demo:
 demo = CheckListEditorDemo()

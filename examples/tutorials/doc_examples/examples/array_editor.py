@@ -4,7 +4,6 @@
 # array_editor.py -- Example of using array editors
 
 #--[Imports]--------------------------------------------------------------
-from __future__ import absolute_import
 from numpy import int16, float32
 
 from traits.api import HasPrivateTraits, Array

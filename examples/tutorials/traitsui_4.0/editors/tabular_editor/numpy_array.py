@@ -22,7 +22,6 @@ In this case, it also shows:
 
 #--<Imports>--------------------------------------------------------------
 
-from __future__ import absolute_import
 from os.path \
     import join, dirname
 
@@ -65,8 +64,8 @@ class ArrayAdapter(TabularAdapter):
     font = 'Courier 10'
     alignment = 'right'
     format = '%.4f'
-    index_text = Property
-    index_image = Property
+    index_text = Property()
+    index_image = Property()
 
     def _get_index_text(self):
         return str(self.row)

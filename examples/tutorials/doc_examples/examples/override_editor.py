@@ -3,7 +3,6 @@
 
 # override_editor.py --- Example of overriding a trait
 #                        editor
-from __future__ import absolute_import
 from traits.api import HasTraits, Trait
 from traitsui.api import Color, ColorEditor
 

@@ -8,32 +8,36 @@ For each of three CheckListEditor column formations, this demo shows
 each of the four styles of the CheckListEditor.
 """
 
-# Imports:
-from __future__ import absolute_import
-from traits.api \
-    import HasTraits, List
+from traits.api import HasTraits, List
 
-from traitsui.api \
-    import Item, Group, View, CheckListEditor
+from traitsui.api import Item, Group, View, CheckListEditor
+
 
 # Define the demo class:
-
-
 class CheckListEditorDemo(HasTraits):
     """ Define the main CheckListEditor demo class. """
 
     # Define a trait for each of three formations:
-    checklist_4col = List(editor=CheckListEditor(
-        values=['one', 'two', 'three', 'four'],
-        cols=4))
+    checklist_4col = List(
+        editor=CheckListEditor(
+            values=['one', 'two', 'three', 'four'],
+            cols=4
+        )
+    )
 
-    checklist_2col = List(editor=CheckListEditor(
-        values=['one', 'two', 'three', 'four'],
-        cols=2))
+    checklist_2col = List(
+        editor=CheckListEditor(
+            values=['one', 'two', 'three', 'four'],
+            cols=2
+        )
+    )
 
-    checklist_1col = List(editor=CheckListEditor(
-        values=['one', 'two', 'three', 'four'],
-        cols=1))
+    checklist_1col = List(
+        editor=CheckListEditor(
+            values=['one', 'two', 'three', 'four'],
+            cols=1
+        )
+    )
 
     # CheckListEditor display with four columns:
     cl_4_group = Group(
@@ -71,9 +75,9 @@ class CheckListEditorDemo(HasTraits):
         label='1-column'
     )
 
-    # The view includes one group per column formation.  These will be displayed
-    # on separate tabbed panels.
-    view1 = View(
+    # The view includes one group per column formation.  These will be
+    # displayed on separate tabbed panels.
+    traits_view = View(
         cl_4_group,
         cl_2_group,
         cl_1_group,
@@ -81,6 +85,7 @@ class CheckListEditorDemo(HasTraits):
         buttons=['OK'],
         resizable=True
     )
+
 
 # Create the demo:
 demo = CheckListEditorDemo()

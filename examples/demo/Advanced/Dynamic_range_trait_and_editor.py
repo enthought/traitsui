@@ -53,7 +53,6 @@ Notes:
 
 #-- Imports --------------------------------------------------------------
 
-from __future__ import absolute_import
 import logging
 import sys
 logging.basicConfig(stream=sys.stderr)
@@ -142,7 +141,7 @@ class Hotel(HasPrivateTraits):
 class Guest(HasPrivateTraits):
 
     # The name of the guest:
-    name = Str
+    name = Str()
 
     # The hotel the guest is staying at:
     hotel = Instance(Hotel)

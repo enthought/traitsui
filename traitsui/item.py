@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 
 import re
 
@@ -43,10 +42,8 @@ from .view_element import ViewSubElement
 
 from .ui_traits import ContainerDelegate, EditorStyle
 
-from .util import str_find, str_rfind
-
 from .editor_factory import EditorFactory
-import six
+
 
 
 # Pattern of all digits:
@@ -101,27 +98,27 @@ class Item(ViewSubElement):
 
     #: A unique identifier for the item. If not set, it defaults to the value
     #: of **name**.
-    id = Str
+    id = Str()
 
     #: User interface label for the item in the GUI. If this attribute is not
     #: set, the label is the value of **name** with slight modifications:
     #: underscores are replaced by spaces, and the first letter is capitalized.
     #: If an item's **name** is not specified, its label is displayed as
     #: static text, without any editor widget.
-    label = Str
+    label = Str()
 
     #: Name of the trait the item is editing:
-    name = Str
+    name = Str()
 
     #: Style-sheet to apply to item / group (Qt only)
-    style_sheet = Str
+    style_sheet = Str()
 
     #: Help text describing the purpose of the item. The built-in help handler
     #: displays this text in a pop-up window if the user clicks the widget's
     #: label. View-level help displays the help text for all items in a view.
     #: If this attribute is not set, the built-in help handler generates a
     #: description based on the trait definition.
-    help = Str
+    help = Str()
 
     #: The HasTraits object whose trait attribute the item is editing:
     object = ContainerDelegate
@@ -145,7 +142,7 @@ class Item(ViewSubElement):
     editor = ItemEditor
 
     #: Additional editor traits to be set if default traits editor to be used:
-    editor_args = Dict
+    editor_args = Dict()
 
     #: Should the item use extra space along its Group's non-layout axis? If set to
     #: True, the widget expands to fill any extra space that is available in the
@@ -181,7 +178,7 @@ class Item(ViewSubElement):
     #: vary from object to object, but that do not change over time. For example,
     #: displaying a 'maiden_name' item only for female employees in a company
     #: database.
-    defined_when = Str
+    defined_when = Str()
 
     #: Pre-condition for showing the item. If the expression evaluates to False,
     #: the widget is not visible (and disappears if it was previously visible).
@@ -189,14 +186,14 @@ class Item(ViewSubElement):
     #: **visible_when** conditions are checked each time that any trait value
     #: is edited in the display. Therefore, you can use **visible_when**
     #: conditions to hide or show widgets in response to user input.
-    visible_when = Str
+    visible_when = Str()
 
     #: Pre-condition for enabling the item. If the expression evaluates to False,
     #: the widget is disabled, that is, it does not accept input. All
     #: **enabled_when** conditions are checked each time that any trait value
     #: is edited in the display. Therefore, you can use **enabled_when**
     #: conditions to enable or disable widgets in response to user input.
-    enabled_when = Str
+    enabled_when = Str()
 
     #: Amount of extra space, in pixels, to add around the item. Values must be
     #: integers between -15 and 15. Use negative values to subtract from the
@@ -206,20 +203,20 @@ class Item(ViewSubElement):
     #: Tooltip to display over the item, when the mouse pointer is left idle
     #: over the widget. Make this text as concise as possible; use the **help**
     #: attribute to provide more detailed information.
-    tooltip = Str
+    tooltip = Str()
 
     #: A Callable to use for formatting the contents of the item. This function
     #: or method is called to create the string representation of the trait value
     #: to be edited. If the widget does not use a string representation, this
     #: attribute is ignored.
-    format_func = Callable
+    format_func = Callable()
 
     #: Python format string to use for formatting the contents of the item.
     #: The format string is applied to the string representation of the trait
     #: value before it is displayed in the widget. This attribute is ignored if
     #: the widget does not use a string representation, or if the
     #: **format_func** is set.
-    format_str = Str
+    format_str = Str()
 
     #: Requested width of the editor (in pixels or fraction of available width).
     #: For pixel values (i.e. values not in the range from 0.0 to 1.0), the
@@ -261,7 +258,7 @@ class Item(ViewSubElement):
 
     #: The extended trait name of the trait containing the item's invalid state
     #: status (passed through to the item's editor):
-    invalid = Str
+    invalid = Str()
 
     def __init__(self, value=None, **traits):
         """ Initializes the item object.
@@ -271,7 +268,7 @@ class Item(ViewSubElement):
         if value is None:
             return
 
-        if not isinstance(value, six.string_types):
+        if not isinstance(value, str):
             raise TypeError(
                 "The argument to Item must be a string of the "
                 "form: [id:][object.[object.]*][name]['['label']']`tooltip`"
@@ -287,8 +284,8 @@ class Item(ViewSubElement):
         value = self._parse_tooltip(value)
         value = self._option(value, "#", "resizable", True)
         value = self._option(value, "^", "emphasized", True)
-        value = self._split("id", value, ":", str_find, 0, 1)
-        value = self._split("object", value, ".", str_rfind, 0, 1)
+        value = self._split("id", value, ":", str.find, 0, 1)
+        value = self._split("object", value, ".", str.rfind, 0, 1)
 
         if value != "":
             self.name = value
@@ -356,7 +353,7 @@ class Item(ViewSubElement):
         if tlabel is None:
             return label
 
-        if isinstance(tlabel, six.string_types):
+        if isinstance(tlabel, str):
             if tlabel[0:3] == "...":
                 return label + tlabel[3:]
             if tlabel[-3:] == "...":

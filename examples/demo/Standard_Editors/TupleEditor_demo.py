@@ -2,22 +2,26 @@
 #  License: BSD Style.
 
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Implementation of a TupleEditor demo plugin for Traits UI demo program.
 
 This demo shows each of the four styles of the TupleEditor
 """
+# Issue related to the demo warning: enthought/traitsui#939
 
-# Imports:
-from __future__ import absolute_import
-from traits.api \
-    import HasTraits, Tuple, Range, Str
 
-from traitsui.api \
-    import Item, Group, View, Color
+from traits.api import HasTraits, Tuple, Range, Str
+
+from traitsui.api import Item, Group, View, Color
+
 
 # The main demo class:
-
-
 class TupleEditorDemo(HasTraits):
     """ Defines the TupleEditor demo class.
     """
@@ -37,7 +41,7 @@ class TupleEditorDemo(HasTraits):
     )
 
     # Demo view
-    view = View(
+    traits_view = View(
         tuple_group,
         title='TupleEditor',
         buttons=['OK'],

@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from os.path import abspath, split, splitext, isfile, exists
@@ -54,10 +53,10 @@ class SimpleEditor(SimpleTextEditor):
     """
 
     #: The history control (used if the factory 'entries' > 0):
-    history = Any
+    history = Any()
 
     #: The popup file control (an Instance( PopupFile )):
-    popup = Any
+    popup = Any()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -278,10 +277,10 @@ class CustomEditor(SimpleTextEditor):
     filter = filter_trait
 
     #: Event fired when the file system view should be rebuilt:
-    reload = Event
+    reload = Event()
 
     #: Event fired when the user double-clicks a file:
-    dclick = Event
+    dclick = Event()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -369,7 +368,7 @@ class CustomEditor(SimpleTextEditor):
 class PopupFile(PopupControl):
 
     #: The initially specified file name:
-    file_name = Str
+    file_name = Str()
 
     #: The file name filter to support:
     filter = filter_trait

@@ -15,7 +15,6 @@ Traits-based user interface.
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traits.api import TraitError
@@ -23,7 +22,7 @@ from traits.api import TraitError
 from traitsui.editor_factory import EditorFactory as BaseEditorFactory
 
 from .editor import Editor
-import six
+
 
 # -------------------------------------------------------------------------
 #  'EditorFactory' class
@@ -96,7 +95,7 @@ class TextEditor(Editor):
         if self.control is None:
             return
         try:
-            self.value = six.text_type(self.control.text())
+            self.value = str(self.control.text())
         except TraitError as excp:
             pass
 

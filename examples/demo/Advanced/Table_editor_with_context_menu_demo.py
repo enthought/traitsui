@@ -16,17 +16,13 @@ a single event handler defined for the category (in this case, the category
 is 'affects_average').
 """
 
-from __future__ import absolute_import
 from random import randint
 from traits.api import HasStrictTraits, Str, Int, Float, List, Property
-from traitsui.api import View, Item, TableEditor
-from traitsui.menu import Menu, Action
-from traitsui.table_column import ObjectColumn
+from traitsui.api import Action, Item, Menu, ObjectColumn, TableEditor, View
+
 
 # Define a custom table column for handling items which affect the player's
 # batting average:
-
-
 class AffectsAverageColumn(ObjectColumn):
 
     # Define the context menu for the column:
@@ -58,30 +54,26 @@ class AffectsAverageColumn(ObjectColumn):
 # The 'players' trait table editor:
 player_editor = TableEditor(
     editable=True,
-    sortable=True,
+    sortable=False,
     auto_size=False,
-    columns=[ObjectColumn(name='name',
-                          editable=False, width=0.28),
-             AffectsAverageColumn(name='at_bats',
-                                  label='AB'),
-             AffectsAverageColumn(name='strike_outs',
-                                  label='SO'),
-             AffectsAverageColumn(name='singles',
-                                  label='S'),
-             AffectsAverageColumn(name='doubles',
-                                  label='D'),
-             AffectsAverageColumn(name='triples',
-                                  label='T'),
-             AffectsAverageColumn(name='home_runs',
-                                  label='HR'),
-             AffectsAverageColumn(name='walks',
-                                  label='W'),
-             ObjectColumn(name='average',
-                          label='Ave',
-                          editable=False,
-                          width=0.09,
-                          horizontal_alignment='center',
-                          format='%0.3f')]
+    columns=[
+        ObjectColumn(name='name', editable=False, width=0.28),
+        AffectsAverageColumn(name='at_bats', label='AB'),
+        AffectsAverageColumn(name='strike_outs', label='SO'),
+        AffectsAverageColumn(name='singles', label='S'),
+        AffectsAverageColumn(name='doubles', label='D'),
+        AffectsAverageColumn(name='triples', label='T'),
+        AffectsAverageColumn(name='home_runs', label='HR'),
+        AffectsAverageColumn(name='walks', label='W'),
+        ObjectColumn(
+            name='average',
+            label='Ave',
+            editable=False,
+            width=0.09,
+            horizontal_alignment='center',
+            format='%0.3f'
+        )
+    ]
 )
 
 
@@ -89,14 +81,14 @@ player_editor = TableEditor(
 class Player(HasStrictTraits):
 
     # Trait definitions:
-    name = Str
-    at_bats = Int
+    name = Str()
+    at_bats = Int()
     strike_outs = Int(event='affects_average')
     singles = Int(event='affects_average')
     doubles = Int(event='affects_average')
     triples = Int(event='affects_average')
     home_runs = Int(event='affects_average')
-    walks = Int
+    walks = Int()
     average = Property(Float)
 
     def _get_average(self):
@@ -121,10 +113,7 @@ class Team(HasStrictTraits):
 
     # Trait view definitions:
     traits_view = View(
-        Item('players',
-             show_label=False,
-             editor=player_editor
-             ),
+        Item('players', show_label=False, editor=player_editor),
         title='Baseball Scoring Demo',
         width=0.5,
         height=0.5,
@@ -135,27 +124,32 @@ class Team(HasStrictTraits):
 def random_player(name):
     """ Generates and returns a random player.
     """
-    p = Player(name=name,
-               strike_outs=randint(0, 50),
-               singles=randint(0, 50),
-               doubles=randint(0, 20),
-               triples=randint(0, 5),
-               home_runs=randint(0, 30),
-               walks=randint(0, 50))
+    p = Player(
+        name=name,
+        strike_outs=randint(0, 50),
+        singles=randint(0, 50),
+        doubles=randint(0, 20),
+        triples=randint(0, 5),
+        home_runs=randint(0, 30),
+        walks=randint(0, 50)
+    )
     return p.trait_set(
-        at_bats=p.strike_outs +
-        p.singles +
-        p.doubles +
-        p.triples +
-        p.home_runs +
-        randint(
-            100,
-            200))
+        at_bats=(
+            p.strike_outs + p.singles + p.doubles + p.triples + p.home_runs +
+            randint(100, 200)
+        )
+    )
+
 
 # Create the demo:
-demo = view = Team(players=[random_player(name) for name in [
-    'Dave', 'Mike', 'Joe', 'Tom', 'Dick', 'Harry', 'Dirk', 'Fields', 'Stretch'
-]])
+demo = Team(
+    players=[
+        random_player(name) for name in [
+            'Dave', 'Mike', 'Joe', 'Tom', 'Dick', 'Harry', 'Dirk', 'Fields',
+            'Stretch'
+        ]
+    ]
+)
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':

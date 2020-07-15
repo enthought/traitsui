@@ -1,22 +1,22 @@
-from __future__ import absolute_import
 from pyface.qt import QtGui, QtCore
 
-from traits.api import Float, Any, Str, Trait
+from traits.api import Float, Any, Str, Either
+
 from traitsui.editors.api import RangeEditor
 from traitsui.qt4.editor import Editor
 from traitsui.qt4.extra.range_slider import RangeSlider
-import six
+
 
 
 class _BoundsEditor(Editor):
 
-    evaluate = Any
+    evaluate = Any()
 
-    min = Any
-    max = Any
-    low = Any
-    high = Any
-    format = Str
+    min = Any()
+    max = Any()
+    low = Any()
+    high = Any()
+    format = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -50,7 +50,7 @@ class _BoundsEditor(Editor):
 
         # The default size is a bit too big and probably doesn't need to grow.
         sh = self._label_lo.sizeHint()
-        sh.setWidth(sh.width() / 2)
+        sh.setWidth(sh.width() // 2)
         self._label_lo.setMaximumSize(sh)
 
         self.control.slider = slider = RangeSlider(QtCore.Qt.Horizontal)
@@ -71,7 +71,7 @@ class _BoundsEditor(Editor):
 
         # The default size is a bit too big and probably doesn't need to grow.
         sh = self._label_hi.sizeHint()
-        sh.setWidth(sh.width() / 2)
+        sh.setWidth(sh.width() // 2)
         self._label_hi.setMaximumSize(sh)
 
         self.set_tooltip(slider)
@@ -81,7 +81,7 @@ class _BoundsEditor(Editor):
     def update_low_on_enter(self):
         try:
             try:
-                low = eval(six.text_type(self._label_lo.text()).strip())
+                low = eval(str(self._label_lo.text()).strip())
                 if self.evaluate is not None:
                     low = self.evaluate(low)
             except Exception as ex:
@@ -103,7 +103,7 @@ class _BoundsEditor(Editor):
     def update_high_on_enter(self):
         try:
             try:
-                high = eval(six.text_type(self._label_hi.text()).strip())
+                high = eval(str(self._label_hi.text()).strip())
                 if self.evaluate is not None:
                     high = self.evaluate(high)
             except:
@@ -186,8 +186,8 @@ class _BoundsEditor(Editor):
 
 class BoundsEditor(RangeEditor):
 
-    min = Trait(None, Float)
-    max = Trait(None, Float)
+    min = Either(None, Float)
+    max = Either(None, Float)
 
     def _get_simple_editor_class(self):
         return _BoundsEditor

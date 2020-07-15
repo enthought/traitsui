@@ -1,4 +1,3 @@
-from __future__ import absolute_import, print_function
 
 from datetime import date
 
@@ -14,8 +13,8 @@ class Foo(HasTraits):
     dates = Dict()
     styles = Dict()
 
-    fast_dates = List
-    slow_dates = List
+    fast_dates = List()
+    slow_dates = List()
 
     current_date = Date()
 

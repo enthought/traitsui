@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from traits.api import Callable, Tuple, Property
 
@@ -37,13 +36,13 @@ class ToolkitEditorFactory(BasicEditorFactory):
     """
 
     #: Editor class to be instantiated.
-    klass = Property
+    klass = Property()
 
     #: Factory function used to create the custom control
-    factory = Callable
+    factory = Callable()
 
     #: Arguments to be passed to the user's custom editor factory
-    args = Tuple
+    args = Tuple()
 
     def __init__(self, *args, **traits):
         if len(args) >= 1:

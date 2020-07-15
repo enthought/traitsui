@@ -6,7 +6,6 @@ A simple demonstration of how to use the ImageEditor to add a graphic element
 to a Traits UI View.
 """
 
-from __future__ import absolute_import
 import traits
 
 # Imports:
@@ -37,9 +36,9 @@ search_path = [join(dirname(traits.api.__file__),
 class Employee(HasTraits):
 
     # Define the traits:
-    name = Str
-    dept = Str
-    email = Str
+    name = Str()
+    dept = Str()
+    email = Str()
 
     # Define the view:
     view = View(

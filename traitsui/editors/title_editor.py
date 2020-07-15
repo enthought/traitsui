@@ -18,7 +18,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from traits.api import Bool
 from ..editor_factory import EditorFactory

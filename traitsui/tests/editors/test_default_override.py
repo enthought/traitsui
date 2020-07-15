@@ -1,5 +1,4 @@
-from __future__ import absolute_import
-from nose.tools import assert_equals
+import unittest
 
 from traitsui.api import DefaultOverride, EditorFactory
 from traits.api import HasTraits, Int
@@ -36,53 +35,50 @@ dummy_object = Dummy()
 do = DefaultOverride(x=15, y=25, format_str="%r")
 
 
-def test_simple_override():
-    editor_name, editor, ui, obj, name, description, parent = do.simple_editor(
-        "ui", dummy_object, "x", "description", "parent"
-    )
-    assert_equals(editor_name, "simple_editor")
-    assert_equals(editor.x, 15)
-    assert_equals(editor.y, 25)
-    assert_equals(obj, dummy_object)
-    assert_equals(name, "x")
-    assert_equals(description, "description")
-    assert_equals(parent, "parent")
+class TestDefaultOverride(unittest.TestCase):
 
+    def test_simple_override(self):
+        editor_name, editor, ui, obj, name, description, parent = \
+            do.simple_editor("ui", dummy_object, "x", "description", "parent")
+        self.assertEqual(editor_name, "simple_editor")
+        self.assertEqual(editor.x, 15)
+        self.assertEqual(editor.y, 25)
+        self.assertEqual(obj, dummy_object)
+        self.assertEqual(name, "x")
+        self.assertEqual(description, "description")
+        self.assertEqual(parent, "parent")
 
-def test_text_override():
-    editor_name, editor, ui, obj, name, description, parent = do.text_editor(
-        "ui", dummy_object, "x", "description", "parent"
-    )
-    assert_equals(editor_name, "text_editor")
-    assert_equals(editor.x, 15)
-    assert_equals(editor.y, 25)
-    assert_equals(obj, dummy_object)
-    assert_equals(name, "x")
-    assert_equals(description, "description")
-    assert_equals(parent, "parent")
+    def test_text_override(self):
+        editor_name, editor, ui, obj, name, description, parent = \
+            do.text_editor("ui", dummy_object, "x", "description", "parent")
+        self.assertEqual(editor_name, "text_editor")
+        self.assertEqual(editor.x, 15)
+        self.assertEqual(editor.y, 25)
+        self.assertEqual(obj, dummy_object)
+        self.assertEqual(name, "x")
+        self.assertEqual(description, "description")
+        self.assertEqual(parent, "parent")
 
+    def test_custom_override(self):
+        editor_name, editor, ui, obj, name, description, parent = \
+            do.custom_editor("ui", dummy_object, "x", "description", "parent")
+        self.assertEqual(editor_name, "custom_editor")
+        self.assertEqual(editor.x, 15)
+        self.assertEqual(editor.y, 25)
+        self.assertEqual(obj, dummy_object)
+        self.assertEqual(name, "x")
+        self.assertEqual(description, "description")
+        self.assertEqual(parent, "parent")
 
-def test_custom_override():
-    editor_name, editor, ui, obj, name, description, parent = do.custom_editor(
-        "ui", dummy_object, "x", "description", "parent"
-    )
-    assert_equals(editor_name, "custom_editor")
-    assert_equals(editor.x, 15)
-    assert_equals(editor.y, 25)
-    assert_equals(obj, dummy_object)
-    assert_equals(name, "x")
-    assert_equals(description, "description")
-    assert_equals(parent, "parent")
-
-
-def test_readonly_override():
-    editor_name, editor, ui, obj, name, description, parent = do.readonly_editor(
-        "ui", dummy_object, "x", "description", "parent"
-    )
-    assert_equals(editor_name, "readonly_editor")
-    assert_equals(editor.x, 15)
-    assert_equals(editor.y, 25)
-    assert_equals(obj, dummy_object)
-    assert_equals(name, "x")
-    assert_equals(description, "description")
-    assert_equals(parent, "parent")
+    def test_readonly_override(self):
+        editor_name, editor, ui, obj, name, description, parent = \
+            do.readonly_editor(
+                "ui", dummy_object, "x", "description", "parent"
+            )
+        self.assertEqual(editor_name, "readonly_editor")
+        self.assertEqual(editor.x, 15)
+        self.assertEqual(editor.y, 25)
+        self.assertEqual(obj, dummy_object)
+        self.assertEqual(name, "x")
+        self.assertEqual(description, "description")
+        self.assertEqual(parent, "parent")

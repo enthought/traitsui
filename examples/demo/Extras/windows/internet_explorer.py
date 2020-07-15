@@ -5,7 +5,6 @@
 """
 
 # Imports:
-from __future__ import absolute_import
 from traitsui.wx.extra.windows.ie_html_editor \
     import IEHTMLEditor
 
@@ -24,10 +23,10 @@ class WebPage(HasTraits):
     url = Str('http://code.enthought.com')
 
     # The page title:
-    title = Str
+    title = Str()
 
     # The page status:
-    status = Str
+    status = Str()
 
     # The browser navigation buttons:
     back = Button('<--')

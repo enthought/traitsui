@@ -13,7 +13,6 @@ View(Item('my_range', editor=DefaultOverride(high_label='Max'))
 
 """
 
-from __future__ import absolute_import
 
 from traits.api import Dict
 from ..editor_factory import EditorFactory
@@ -25,7 +24,7 @@ class DefaultOverride(EditorFactory):
 
     """
 
-    _overrides = Dict
+    _overrides = Dict()
 
     def __init__(self, *args, **overrides):
         EditorFactory.__init__(self, *args)

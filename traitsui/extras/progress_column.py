@@ -16,7 +16,6 @@
 
 """ A column class for for the TableEditor that displays progress bars. """
 
-from __future__ import absolute_import
 from traits.api import Bool, Int, Str
 
 from traitsui.table_column import ObjectColumn

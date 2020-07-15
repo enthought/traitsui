@@ -15,7 +15,6 @@ PyQt user interface toolkit.
 """
 
 
-from __future__ import absolute_import
 from math import log10
 
 from pyface.qt import QtCore, QtGui
@@ -34,7 +33,7 @@ from .editor import Editor
 from .constants import OKColor, ErrorColor
 
 from .helper import IconButton
-import six
+
 
 # -------------------------------------------------------------------------
 #  'BaseRangeEditor' class:
@@ -51,7 +50,7 @@ class BaseRangeEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: Function to evaluate floats/ints
-    evaluate = Any
+    evaluate = Any()
 
     def _set_value(self, value):
         if self.evaluate is not None:
@@ -71,13 +70,13 @@ class SimpleSliderEditor(BaseRangeEditor):
     # -------------------------------------------------------------------------
 
     #: Low value for the slider range
-    low = Any
+    low = Any()
 
     #: High value for the slider range
-    high = Any
+    high = Any()
 
     #: Formatting string used to format value and labels
-    format = Str
+    format = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -142,7 +141,7 @@ class SimpleSliderEditor(BaseRangeEditor):
 
         # The default size is a bit too big and probably doesn't need to grow.
         sh = text.sizeHint()
-        sh.setWidth(sh.width() / 2)
+        sh.setWidth(sh.width() // 2)
         text.setMaximumSize(sh)
 
         panel.addWidget(text)
@@ -184,12 +183,12 @@ class SimpleSliderEditor(BaseRangeEditor):
 
         try:
             try:
-                value = eval(six.text_type(self.control.text.text()).strip())
+                value = eval(str(self.control.text.text()).strip())
             except Exception as ex:
                 # The entered something that didn't eval as a number, (e.g.,
                 # 'foo') pretend it didn't happen
                 value = self.value
-                self.control.text.setText(six.text_type(value))
+                self.control.text.setText(str(value))
                 # for compound editor, value may be non-numeric
                 if not isinstance(value, (int, float)):
                     return
@@ -332,10 +331,10 @@ class LargeRangeSliderEditor(BaseRangeEditor):
     high = Any(1)
 
     #: Low end of displayed range
-    cur_low = Float
+    cur_low = Float()
 
     #: High end of displayed range
-    cur_high = Float
+    cur_high = Float()
 
     #: Flag indicating that the UI is in the process of being updated
     ui_changing = Bool(False)
@@ -418,7 +417,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
 
         # The default size is a bit too big and probably doesn't need to grow.
         sh = text.sizeHint()
-        sh.setWidth(sh.width() / 2)
+        sh.setWidth(sh.width() // 2)
         text.setMaximumSize(sh)
 
         panel.addWidget(text)
@@ -451,7 +450,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         """ Handles the user pressing the Enter key in the text field.
         """
         try:
-            self.value = eval(six.text_type(self.control.text.text()).strip())
+            self.value = eval(str(self.control.text.text()).strip())
         except TraitError as excp:
             pass
 
@@ -601,10 +600,10 @@ class SimpleSpinEditor(BaseRangeEditor):
     # -------------------------------------------------------------------------
 
     # Low value for the slider range
-    low = Any
+    low = Any()
 
     # High value for the slider range
-    high = Any
+    high = Any()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -687,7 +686,7 @@ class RangeTextEditor(TextEditor):
     # -------------------------------------------------------------------------
 
     #: Function to evaluate floats/ints
-    evaluate = Any
+    evaluate = Any()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -701,7 +700,7 @@ class RangeTextEditor(TextEditor):
         """ Handles the user entering input data in the edit control.
         """
         try:
-            value = eval(six.text_type(self.control.text()))
+            value = eval(str(self.control.text()))
             if self.evaluate is not None:
                 value = self.evaluate(value)
             self.value = value
@@ -720,14 +719,16 @@ class RangeTextEditor(TextEditor):
 # -------------------------------------------------------------------------
 
 
-def SimpleEnumEditor(parent, factory, ui, object, name, description):
+def SimpleEnumEditor(
+    parent, factory, ui, object, name, description, **kwargs
+):
     return CustomEnumEditor(
         parent, factory, ui, object, name, description, "simple"
     )
 
 
 def CustomEnumEditor(
-    parent, factory, ui, object, name, description, style="custom"
+    parent, factory, ui, object, name, description, style="custom", **kwargs
 ):
     """ Factory adapter that returns a enumeration editor of the specified
     style.

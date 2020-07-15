@@ -6,22 +6,13 @@ This shows a table editor which has a checkbox column in addition to normal
 data columns.
 """
 
-# Imports:
-from __future__ import absolute_import
-from random \
-    import randint
+from random import randint
 
-from traits.api \
-    import HasStrictTraits, Str, Int, Float, List, Bool, Property
+from traits.api import HasStrictTraits, Str, Int, Float, List, Bool, Property
 
-from traitsui.api \
-    import View, Item, TableEditor
+from traitsui.api import Item, ObjectColumn, TableEditor, View
 
-from traitsui.table_column \
-    import ObjectColumn
-
-from traitsui.extras.checkbox_column \
-    import CheckboxColumn
+from traitsui.extras.checkbox_column import CheckboxColumn
 
 
 # Create a specialized column to set the text color differently based upon
@@ -33,7 +24,9 @@ class PlayerColumn(ObjectColumn):
     horizontal_alignment = 'center'
 
     def get_text_color(self, object):
-        return ['light grey', 'black'][object.in_lineup]
+        if object.in_lineup:
+            return 'black'
+        return 'light grey'
 
 
 # The 'players' trait table editor:
@@ -42,35 +35,43 @@ player_editor = TableEditor(
     configurable=False,
     auto_size=False,
     selected_indices='selected_player_indices',
-    columns=[CheckboxColumn(name='in_lineup', label='In Lineup',
-                            width=0.12),
-             PlayerColumn(name='name', editable=False, width=0.24,
-                          horizontal_alignment='left'),
-             PlayerColumn(name='at_bats', label='AB'),
-             PlayerColumn(name='strike_outs', label='SO'),
-             PlayerColumn(name='singles', label='S'),
-             PlayerColumn(name='doubles', label='D'),
-             PlayerColumn(name='triples', label='T'),
-             PlayerColumn(name='home_runs', label='HR'),
-             PlayerColumn(name='walks', label='W'),
-             PlayerColumn(name='average', label='Ave',
-                          editable=False, format='%0.3f')])
-
-# 'Player' class:
+    columns=[
+        CheckboxColumn(name='in_lineup', label='In Lineup', width=0.12),
+        PlayerColumn(
+            name='name',
+            editable=False,
+            width=0.24,
+            horizontal_alignment='left'
+        ),
+        PlayerColumn(name='at_bats', label='AB'),
+        PlayerColumn(name='strike_outs', label='SO'),
+        PlayerColumn(name='singles', label='S'),
+        PlayerColumn(name='doubles', label='D'),
+        PlayerColumn(name='triples', label='T'),
+        PlayerColumn(name='home_runs', label='HR'),
+        PlayerColumn(name='walks', label='W'),
+        PlayerColumn(
+            name='average',
+            label='Ave',
+            editable=False,
+            format='%0.3f'
+        )
+    ]
+)
 
 
 class Player(HasStrictTraits):
 
     # Trait definitions:
     in_lineup = Bool(True)
-    name = Str
-    at_bats = Int
-    strike_outs = Int
-    singles = Int
-    doubles = Int
-    triples = Int
-    home_runs = Int
-    walks = Int
+    name = Str()
+    at_bats = Int()
+    strike_outs = Int()
+    singles = Int()
+    doubles = Int()
+    triples = Int()
+    home_runs = Int()
+    walks = Int()
     average = Property(Float)
 
     def _get_average(self):
@@ -88,14 +89,11 @@ class Team(HasStrictTraits):
     # Trait definitions:
     players = List(Player)
 
-    selected_player_indices = List
+    selected_player_indices = List()
 
     # Trait view definitions:
     traits_view = View(
-        Item('players',
-             show_label=False,
-             editor=player_editor
-             ),
+        Item('players', show_label=False, editor=player_editor),
         title='Baseball Team Roster Demo',
         width=0.5,
         height=0.5,
@@ -106,27 +104,32 @@ class Team(HasStrictTraits):
 def random_player(name):
     """ Generates and returns a random player.
     """
-    p = Player(name=name,
-               strike_outs=randint(0, 50),
-               singles=randint(0, 50),
-               doubles=randint(0, 20),
-               triples=randint(0, 5),
-               home_runs=randint(0, 30),
-               walks=randint(0, 50))
+    p = Player(
+        name=name,
+        strike_outs=randint(0, 50),
+        singles=randint(0, 50),
+        doubles=randint(0, 20),
+        triples=randint(0, 5),
+        home_runs=randint(0, 30),
+        walks=randint(0, 50)
+    )
     return p.trait_set(
-        at_bats=p.strike_outs +
-        p.singles +
-        p.doubles +
-        p.triples +
-        p.home_runs +
-        randint(
-            100,
-            200))
+        at_bats=(
+            p.strike_outs + p.singles + p.doubles + p.triples + p.home_runs +
+            randint(100, 200)
+        )
+    )
+
 
 # Create the demo:
-demo = view = Team(players=[random_player(name) for name in [
-    'Dave', 'Mike', 'Joe', 'Tom', 'Dick', 'Harry', 'Dirk', 'Fields', 'Stretch'
-]])
+demo = Team(
+    players=[
+        random_player(name) for name in [
+            'Dave', 'Mike', 'Joe', 'Tom', 'Dick', 'Harry', 'Dirk', 'Fields',
+            'Stretch'
+        ]
+    ]
+)
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':

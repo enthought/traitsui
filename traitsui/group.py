@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from traits.api import (
     Bool,
@@ -44,10 +43,8 @@ from .include import Include
 
 from .ui_traits import SequenceTypes, ContainerDelegate, Orientation, Layout
 
-from .util import str_find
-
 from .dock_window_theme import dock_window_theme, DockWindowTheme
-import six
+
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
@@ -72,14 +69,14 @@ class Group(ViewSubElement):
     content = List(ViewSubElement)
 
     #: A unique identifier for the group.
-    id = Str
+    id = Str()
 
     #: User interface label for the group. How the label is displayed depends
     #: on the **show_border** attribute, and on the **layout** attribute of
     #: the group's parent group or view.
-    label = Str
+    label = Str()
 
-    style_sheet = Str
+    style_sheet = Str()
 
     #: Default context object for group items.
     object = ContainerDelegate
@@ -156,14 +153,14 @@ class Group(ViewSubElement):
     #: View-level help window (created by the default help handler), for any
     #: View that contains *only* this group. Group-level help is ignored for
     #: nested groups and multiple top-level groups
-    help = Str
+    help = Str()
 
     #: Pre-condition for including the group in the display. If the expression
     #: evaluates to False, the group is not defined in the display. Conditions
     #: for **defined_when** are evaluated only once, when the display is first
     #: constructed. Use this attribute for conditions based on attributes that
     #: vary from object to object, but that do not change over time.
-    defined_when = Str
+    defined_when = Str()
 
     #: Pre-condition for showing the group. If the expression evaluates to False,
     #: the group and its items are not visible (and they disappear if they were
@@ -172,14 +169,14 @@ class Group(ViewSubElement):
     #: that any trait value is edited in the display. Therefore, you can use
     #: **visible_when** conditions to hide or show groups in response to user
     #: input.
-    visible_when = Str
+    visible_when = Str()
 
     #: Pre-condition for enabling the group. If the expression evaluates to False,
     #: the group is disabled, that is, none of the widgets accept input. All
     #: **enabled_when** conditions are checked each time that any trait value
     #: is edited in the display. Therefore, you can use **enabled_when**
     #: conditions to enable or disable groups in response to user input.
-    enabled_when = Str
+    enabled_when = Str()
 
     #: Amount of padding (in pixels) to add around each item in the group. The
     #: value must be an integer between 0 and 15. (Unlike the Item class, the
@@ -203,7 +200,7 @@ class Group(ViewSubElement):
 
         # Process any embedded Group options first:
         for value in values:
-            if (isinstance(value, six.string_types)) and (value[0:1] in "-|"):
+            if (isinstance(value, str)) and (value[0:1] in "-|"):
                 # Parse Group trait options if specified as a string:
                 self._parse(value)
 
@@ -214,7 +211,7 @@ class Group(ViewSubElement):
             elif type(value) in SequenceTypes:
                 # Map (...) or [...] to a Group():
                 content.append(Group(*value))
-            elif isinstance(value, six.string_types):
+            elif isinstance(value, str):
                 if value[0:1] in "-|":
                     # We've already parsed Group trait options above:
                     pass
@@ -335,7 +332,7 @@ class Group(ViewSubElement):
         self.show_labels = show_labels
 
         # Parse all of the punctuation based sub-string options:
-        value = self._split("id", value, ":", str_find, 0, 1)
+        value = self._split("id", value, ":", str.find, 0, 1)
         if value != "":
             self.object = value
 
@@ -554,10 +551,10 @@ class ShadowGroup(Group):
     # -------------------------------------------------------------------------
 
     #: Group object this is a "shadow" for
-    shadow = ReadOnly
+    shadow = ReadOnly()
 
     #: Number of ShadowGroups in **content**
-    groups = ReadOnly
+    groups = ReadOnly()
 
     #: Name of the group
     id = ShadowDelegate

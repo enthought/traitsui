@@ -12,7 +12,6 @@ The *Start Threads* button is disabled while the threads are running, and
 becomes active again once all threads have finished running.
 """
 
-from __future__ import absolute_import
 from threading import Thread
 from time import sleep
 from traits.api import HasTraits, Int, Button
@@ -22,15 +21,15 @@ from traitsui.api import View, Item, VGroup
 class ThreadDemo(HasTraits):
 
     # The thread specific counters:
-    thread_0 = Int
-    thread_1 = Int
-    thread_2 = Int
+    thread_0 = Int()
+    thread_1 = Int()
+    thread_2 = Int()
 
     # The button used to start the threads running:
     start = Button('Start Threads')
 
     # The count of how many threads ae currently running:
-    running = Int
+    running = Int()
 
     view = View(
         VGroup(

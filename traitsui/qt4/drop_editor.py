@@ -15,7 +15,6 @@ target editor handles drag and drop operations as a drop target.
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtGui, QtCore
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -23,6 +22,7 @@ from pyface.qt import QtGui, QtCore
 # traitsui.editors.drop_editor file.
 from traitsui.editors.drop_editor import ToolkitEditorFactory
 
+from .editor import Editor as _BaseEditor
 from .text_editor import SimpleEditor as Editor
 from .constants import DropColor
 from .clipboard import PyMimeData, clipboard
@@ -56,6 +56,15 @@ class SimpleEditor(Editor):
         self.control.installEventFilter(drop_event_filter)
 
         self.control._qt4_editor = self
+
+    def dispose(self):
+        """ Disposes of the content of an editor.
+        """
+        if self.factory.readonly:
+            # enthought/traitsui#884
+            _BaseEditor.dispose(self)
+        else:
+            super(SimpleEditor, self).dispose()
 
     def string_value(self, value):
         """ Returns the text representation of a specified object trait value.

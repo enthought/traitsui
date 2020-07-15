@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from .dock_window_theme import DockWindowTheme
 

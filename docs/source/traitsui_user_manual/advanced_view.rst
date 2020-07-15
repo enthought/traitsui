@@ -1,6 +1,6 @@
 .. index:: View; internal, View; external, View; ways of displaying
    pair: View; context
-   
+
 .. _advanced-view-concepts:
 
 ======================
@@ -12,23 +12,23 @@ class to quickly construct a simple window for a single HasTraits object. This
 chapter explores a number of more complex techniques that significantly increase
 the power and versatility of the View object.
 
-* *Internal Views:* Views can be defined as attributes of a HasTraits class; 
-  one class can have multiple views. View attributes can be inherited by 
+* *Internal Views:* Views can be defined as attributes of a HasTraits class;
+  one class can have multiple views. View attributes can be inherited by
   subclasses.
 * *External Views:* A view can be defined as a module variable, inline as a
   function or method argument, or as an attribute of a :term:`Handler`.
-* *Ways of displaying Views:* You can display a View by calling 
+* *Ways of displaying Views:* You can display a View by calling
   configure_traits() or edit_traits() on a HasTraits object, or by calling the
   ui() method on the View object.
 * *View context:* You can pass a context to any of the methods for displaying
   views, which is a dictionary of labels and objects. In the default case, this
-  dictionary contains only one object, referenced as 'object', but you can 
+  dictionary contains only one object, referenced as 'object', but you can
   define contexts that contain multiple objects.
 * *Include objects:* You can use an Include object as a placeholder for view
   items defined elsewhere.
 
 .. index: View; internal
-  
+
 .. _internal-views:
 
 Internal Views
@@ -58,33 +58,33 @@ variation on Example 3:
 
 .. index:: configure_traits(); default view example,  default view; example
 .. index:: examples; default view
-   
+
 .. _example-5-using-configure-traits-with-a-default-view-object:
 
 .. rubric:: Example 5: Using configure_traits() with a default View object
 
 ::
 
-    # default_traits_view.py -- Sample code to demonstrate the use of 
+    # default_traits_view.py -- Sample code to demonstrate the use of
     #                           'traits_view'
     from traits.api import HasTraits, Str, Int
     from traitsui.api import View, Item, Group
     import traitsui
-    
+
     class SimpleEmployee2(HasTraits):
-        first_name = Str
-        last_name = Str
-        department = Str
-    
-        employee_number = Str
-        salary = Int
-    
+        first_name = Str()
+        last_name = Str()
+        department = Str()
+
+        employee_number = Str()
+        salary = Int()
+
         traits_view = View(Group(Item(name = 'first_name'),
                                  Item(name = 'last_name'),
                                  Item(name = 'department'),
                                  label = 'Personnel profile',
                                  show_border = True))
-    
+
     sam = SimpleEmployee2()
     sam.configure_traits()
 
@@ -94,9 +94,9 @@ same display as in Figure 3:
 
 .. figure:: images/ui_for_ex3.jpg
    :alt: User interface showing three fields enclosed in a border
-   
+
    Figure 5: User interface for Example 5
-   
+
 
 It is not strictly necessary to call this View attribute **traits_view**. If
 exactly one View attribute is defined for a HasTraits class, that View is always
@@ -124,12 +124,12 @@ example above would be implemented as follows:
     import traitsui
 
     class SimpleEmployee2(HasTraits):
-        first_name = Str
-        last_name = Str
-        department = Str
+        first_name = Str()
+        last_name = Str()
+        department = Str()
 
-        employee_number = Str
-        salary = Int
+        employee_number = Str()
+        salary = Int()
 
         def default_traits_view(self):
             return View(Group(Item(name = 'first_name'),
@@ -160,42 +160,42 @@ this by simply adding a second View attribute:
 
 .. index::
    pair: examples; multiple Views
-   
+
 .. _example-6-defining-multiple-view-objects-in-a-hastraits-class:
 
 .. rubric:: Example 6: Defining multiple View objects in a HasTraits class
 
 ::
 
-    # multiple_views.py -- Sample code to demonstrate the use of 
+    # multiple_views.py -- Sample code to demonstrate the use of
     #                      multiple views
     from traits.api import HasTraits, Str, Int
     from traitsui.api import View, Item, Group
     import traitsui
-    
+
     class SimpleEmployee3(HasTraits):
-        first_name = Str
-        last_name = Str
-        department = Str
-    
-        employee_number = Str
-        salary = Int
-    
+        first_name = Str()
+        last_name = Str()
+        department = Str()
+
+        employee_number = Str()
+        salary = Int()
+
         traits_view = View(Group(Item(name = 'first_name'),
                                  Item(name = 'last_name'),
                                  Item(name = 'department'),
                                  label = 'Personnel profile',
                                  show_border = True))
-    
+
         all_view = View(Group(Item(name = 'first_name'),
                               Item(name = 'last_name'),
                               Item(name = 'department'),
                               Item(name = 'employee_number'),
                               Item(name = 'salary'),
-                              label = 'Personnel database ' + 
+                              label = 'Personnel database ' +
                                       'entry',
                               show_border = True))
-    
+
     sam = SimpleEmployee3()
     sam.configure_traits()
     sam.configure_traits(view='all_view')
@@ -209,7 +209,7 @@ View name is specified in single quotes to indicate that it is associated with
 the object rather than being a module-level variable::
 
     configure_traits(view='all_view').
-    
+
 Note that if more than one View is defined for a model class, you must indicate
 which one is to be used as the default by naming it ``traits_view``. Otherwise,
 TraitsUI gives preference to none of them, and instead tries to construct a
@@ -243,7 +243,7 @@ argument, for example::
     object.configure_traits(view=View(Group(Item(name='a'),
                                             Item(name='b'),
                                             Item(name='c')))
-                                            
+
 However, this approach is apt to obfuscate the code unless the View is very
 simple.
 
@@ -282,7 +282,7 @@ object, i.e., it does not require an existing GUI to run in. It is therefore
 suitable for building command-line functions, as well as providing an accessible
 tool for the beginning TraitsUI programmer.
 
-The configure_traits() method also provides options for saving 
+The configure_traits() method also provides options for saving
 :term:`trait attribute` values to and restoring them from a file. Refer to the
 *Traits API Reference* for details.
 
@@ -374,26 +374,26 @@ example shows:
 
 .. index:: examples; context, context; examples, examples; multi-object Views
 .. index:: multi-object Views; examples
-   
+
 .. _example-7-using-a-multi-object-view-with-a-context:
 
 .. rubric:: Example 7: Using a multi-object view with a context
 
 ::
 
-    # multi_object_view.py -- Sample code to show multi-object view 
+    # multi_object_view.py -- Sample code to show multi-object view
     #                         with context
-    
+
     from traits.api import HasTraits, Str, Int, Bool
     from traitsui.api import View, Group, Item
-    
+
     # Sample class
     class House(HasTraits):
-       address = Str
-       bedrooms = Int
-       pool = Bool
-       price = Int
-    
+       address = Str()
+       bedrooms = Int()
+       pool = Bool()
+       price = Int()
+
     # View object designed to display two objects of class 'House'
     comp_view = View(
         Group(
@@ -416,19 +416,19 @@ example shows:
         title = 'House Comparison'
     )
     # A pair of houses to demonstrate the View
-    house1 = House(address='4743 Dudley Lane', 
-                   bedrooms=3, 
-                   pool=False, 
+    house1 = House(address='4743 Dudley Lane',
+                   bedrooms=3,
+                   pool=False,
                    price=150000)
-    house2 = House(address='11604 Autumn Ridge', 
-                   bedrooms=3, 
-                   pool=True, 
+    house2 = House(address='11604 Autumn Ridge',
+                   bedrooms=3,
+                   pool=True,
                    price=200000)
-    
+
     # ...And the actual display command
-    house1.configure_traits(view=comp_view, context={'h1':house1,  
+    house1.configure_traits(view=comp_view, context={'h1':house1,
                                                      'h2':house2})
-                                                     
+
 .. FIXME: This is a bit assymmetrical. Can we clean it up without complicating
    the example overly?
 
@@ -436,9 +436,9 @@ The resulting window has the desired appearance: [10]_
 
 .. figure:: images/ui_for_ex7.jpg
    :alt: UI showing side-by-side groups.
-         
+
    Figure 6: User interface for Example 7
-    
+
 For the purposes of this particular example, it makes sense to create a separate
 Group for each model object, and to use two model objects of the same class.
 Note, however, that neither is a requirement.
@@ -466,17 +466,17 @@ is not defined. Also, avoid extended trait references where one of the
 intermediate objects could be None, because there is no way to obtain a valid
 reference from None.
 
-Refer to the `Traits User Manual <http://github.enthought.com/traits/index.html>`_, in the chapter on trait
+Refer to the `Traits User Manual <http://docs.enthought.com/traits/index.html>`_, in the chapter on trait
 notification, for details of the extended trait name syntax.
 
-.. index:: 
+.. index::
    object: Include
 
 .. _include-objects:
 
 Include Objects
 ---------------
-   
+
 In addition to the Item and Group class, a third building block class for Views
 exists in TraitsUI: the Include class. For the sake of completeness, this
 section gives a brief description of Include objects and their purpose and
@@ -487,9 +487,9 @@ In essence, an Include object is a placeholder for a named Group or Item object
 that is specified outside the Group or View in which it appears. For example,
 the following two definitions, taken together, are equivalent to the third:
 
-.. index:: 
+.. index::
    pair: examples; Include
-   
+
 .. _example-8-using-an-include-object:
 
 .. rubric:: Example 8: Using an Include object
@@ -500,19 +500,19 @@ the following two definitions, taken together, are equivalent to the third:
     my_view = View(Group(Item('a'),
                          Item('b')),
                    Include('my_group'))
-    
+
     # ...plus this fragment...
     my_group = Group(Item('c'),
                      Item('d'),
                      Item('e'))
-    
+
     #...are equivalent to this:
     my_view = View(Group(Item('a'),
                          Item('b')),
                    Group(Item('c'),
                          Item('d'),
                          Item('e'))
-                         
+
 This opens an interesting possibility when a View is part of a model class: any
 Include objects belonging to that View can be defined differently for different
 instances or subclasses of that class. This technique is called *view
@@ -521,21 +521,21 @@ parameterization*.
 .. rubric:: Footnotes
 
 .. [7] Note that although the definition of a View within a HasTraits class has
-   the syntax of a trait attribute definition, the resulting View is not stored 
+   the syntax of a trait attribute definition, the resulting View is not stored
    as an attribute of the class.
-   
+
 .. [8] Assuming there is one; not all GUIs require an explicitly defined
    Handler.
-   
+
 .. [9] One possible exception is the case where a View object is defined as a
-   variable (i.e., outside any class) or within a custom Handler, and is 
-   associated more or less equally with multiple model objects; see 
+   variable (i.e., outside any class) or within a custom Handler, and is
+   associated more or less equally with multiple model objects; see
    :ref:`multi-object-views`.
 
 .. [10] If the script were designed to run within an existing GUI, it would make
-   sense to replace the last line with 
+   sense to replace the last line with
    ``comp_view.ui(context={'h1': house1, 'h2': house2})``, since neither object
    particularly dominates the view. However, the examples in this Manual are
-   designed to be fully executable from the Python command line, which is why 
+   designed to be fully executable from the Python command line, which is why
    configure_traits() was used instead.
-   
+

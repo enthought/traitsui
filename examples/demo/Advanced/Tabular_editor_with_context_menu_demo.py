@@ -1,6 +1,14 @@
 """
+**WARNING**
+
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
 Defining column-specific context menu in a Tabular Editor. Shows how the
-example for the Table Editor can be adapted to work with a Tabular Editor.
+example for the Table Editor (`Table_Editor_with_context_menu_demo.py`) can be
+adapted to work with a Tabular Editor.
 
 The demo is a simple baseball scoring system, which lists each player and
 their current batting statistics. After a given player has an at bat, you
@@ -14,31 +22,37 @@ occur on a number of traits into a category of event, which can be handled by
 a single event handler defined for the category (in this case, the category
 is 'affects_average').
 """
+# Issue related to the demo warning: enthought/traitsui#960
 
-from __future__ import absolute_import
+
 from random import randint
 from traits.api import HasStrictTraits, Str, Int, Float, List, Property
-from traits.etsconfig.api import ETSConfig
-from traitsui.api import View, Item, TabularEditor
-from traitsui.menu import Menu, Action
-from traitsui.tabular_adapter import TabularAdapter
+from traitsui.api import (
+    Action, Item, Menu, TabularAdapter, TabularEditor, View
+)
 
 
 # Define a custom tabular adapter for handling items which affect the player's
 # batting average:
 class PlayerAdapter(TabularAdapter):
 
+    # Overwrite default values
     alignment = 'center'
-
     width = 0.09
 
     def get_menu(self, object, trait, row, column):
         column_name = self.column_map[column]
         if column_name not in ['name', 'average']:
-            menu = Menu(Action(name='Add',
-                               action='editor.adapter.add(item, column)'),
-                        Action(name='Sub',
-                               action='editor.adapter.sub(item, column)'))
+            menu = Menu(
+                Action(
+                    name='Add',
+                    action='editor.adapter.add(item, column)'
+                ),
+                Action(
+                    name='Sub',
+                    action='editor.adapter.sub(item, column)'
+                )
+            )
             return menu
         else:
             return super(PlayerAdapter, self).get_menu(
@@ -85,7 +99,6 @@ player_editor = TabularEditor(
     stretch_last_section=False,
     auto_update=True,
     adapter=PlayerAdapter(columns=columns),
-    show_row_titles=ETSConfig.toolkit == 'qt4',
 )
 
 
@@ -93,14 +106,14 @@ player_editor = TabularEditor(
 class Player(HasStrictTraits):
 
     # Trait definitions:
-    name = Str
-    at_bats = Int
+    name = Str()
+    at_bats = Int()
     strike_outs = Int(event='affects_average')
     singles = Int(event='affects_average')
     doubles = Int(event='affects_average')
     triples = Int(event='affects_average')
     home_runs = Int(event='affects_average')
-    walks = Int
+    walks = Int()
     average = Property(Float)
 
     def _get_average(self):
@@ -125,10 +138,7 @@ class Team(HasStrictTraits):
 
     # Trait view definitions:
     traits_view = View(
-        Item('players',
-             show_label=False,
-             editor=player_editor
-             ),
+        Item('players', show_label=False, editor=player_editor),
         title='Baseball Scoring Demo',
         width=0.5,
         height=0.5,
@@ -139,27 +149,32 @@ class Team(HasStrictTraits):
 def random_player(name):
     """ Generates and returns a random player.
     """
-    p = Player(name=name,
-               strike_outs=randint(0, 50),
-               singles=randint(0, 50),
-               doubles=randint(0, 20),
-               triples=randint(0, 5),
-               home_runs=randint(0, 30),
-               walks=randint(0, 50))
+    p = Player(
+        name=name,
+        strike_outs=randint(0, 50),
+        singles=randint(0, 50),
+        doubles=randint(0, 20),
+        triples=randint(0, 5),
+        home_runs=randint(0, 30),
+        walks=randint(0, 50)
+    )
     return p.trait_set(
-        at_bats=p.strike_outs +
-        p.singles +
-        p.doubles +
-        p.triples +
-        p.home_runs +
-        randint(
-            100,
-            200))
+        at_bats=(
+            p.strike_outs + p.singles + p.doubles + p.triples + p.home_runs +
+            randint(100, 200)
+        )
+    )
+
 
 # Create the demo:
-demo = view = Team(players=[random_player(name) for name in [
-    'Dave', 'Mike', 'Joe', 'Tom', 'Dick', 'Harry', 'Dirk', 'Fields', 'Stretch'
-]])
+demo = Team(
+    players=[
+        random_player(name) for name in [
+            'Dave', 'Mike', 'Joe', 'Tom', 'Dick', 'Harry', 'Dirk', 'Fields',
+            'Stretch'
+        ]
+    ]
+)
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':

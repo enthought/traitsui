@@ -19,7 +19,6 @@ Most of the logic for determining which backend toolkit to use can now be
 found in :py:mod:`pyface.base_toolkit`.
 """
 
-from __future__ import absolute_import
 
 import logging
 

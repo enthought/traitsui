@@ -4,7 +4,6 @@
 """ Demonstrates how to use the Dynamic Views facility.
 """
 
-from __future__ import absolute_import
 
 from traits.api import Bool, HasTraits, Str, Instance, Button
 
@@ -56,7 +55,7 @@ class BaseFoo(HasFooView):
 
     # A derived trait set by the handler associated with out dynamic view
     # contribution:
-    derived = Str
+    derived = Str()
 
     ui_person = Group(
         Item(label='On this tab, notice how the sub-handler keeps\n'
@@ -97,7 +96,7 @@ class DerivedFoo(BaseFoo):
     knows_father = Bool(True)
     father_first_name = Str("My father's first name")
     father_last_name = Str("My father's last name")
-    father_derived = Str
+    father_derived = Str()
 
     ui_parents = Group(
         'knows_mother',

@@ -13,12 +13,10 @@
 """ Defines the various editors and the editor factory for single-selection
     enumerations, for the PyQt user interface toolkit.
 """
-from __future__ import absolute_import
 
 from functools import reduce
 
-import six
-from six.moves import range
+
 
 from pyface.qt import QtCore, QtGui
 
@@ -48,20 +46,21 @@ class BaseEditor(Editor):
     """
 
     #: Current set of enumeration names:
-    names = Property
+    names = Property()
 
     #: Current mapping from names to values:
-    mapping = Property
+    mapping = Property()
 
     #: Current inverse mapping from values to names:
-    inverse_mapping = Property
+    inverse_mapping = Property()
 
     # -------------------------------------------------------------------------
     #  BaseEditor Interface
     # -------------------------------------------------------------------------
 
     def values_changed(self):
-        """ Recomputes the cached data based on the underlying enumeration model.
+        """ Recomputes the cached data based on the underlying enumeration model
+            or the values of the factory.
         """
         self._names, self._mapping, self._inverse_mapping = enum_values_changed(
             self._value(), self.string_value
@@ -93,8 +92,10 @@ class BaseEditor(Editor):
                 self._values_changed, " " + self._name, dispatch="ui"
             )
         else:
+            self._value = lambda: self.factory.values
+            self.values_changed()
             factory.on_trait_change(
-                self.rebuild_editor, "values_modified", dispatch="ui"
+                self._values_changed, "values", dispatch="ui"
             )
 
     def dispose(self):
@@ -106,7 +107,7 @@ class BaseEditor(Editor):
             )
         else:
             self.factory.on_trait_change(
-                self.rebuild_editor, "values_modified", remove=True
+                self._values_changed, "values", remove=True
             )
 
         super(BaseEditor, self).dispose()
@@ -120,31 +121,23 @@ class BaseEditor(Editor):
     def _get_names(self):
         """ Gets the current set of enumeration names.
         """
-        if self._object is None:
-            return self.factory._names
-
         return self._names
 
     def _get_mapping(self):
         """ Gets the current mapping.
         """
-        if self._object is None:
-            return self.factory._mapping
-
         return self._mapping
 
     def _get_inverse_mapping(self):
         """ Gets the current inverse mapping.
         """
-        if self._object is None:
-            return self.factory._inverse_mapping
-
         return self._inverse_mapping
 
     # Trait change handlers --------------------------------------------------
 
     def _values_changed(self):
-        """ Handles the underlying object model's enumeration set being changed.
+        """ Handles the underlying object model's enumeration set or factory's
+            values being changed.
         """
         self.values_changed()
         self.rebuild_editor()
@@ -262,7 +255,7 @@ class SimpleEditor(BaseEditor):
         if self._no_enum_update == 0:
             self._no_enum_update += 1
             try:
-                self.value = self.mapping[six.text_type(text)]
+                self.value = self.mapping[str(text)]
             except Exception:
                 from traitsui.api import raise_to_debug
 
@@ -274,7 +267,7 @@ class SimpleEditor(BaseEditor):
         """
         if self._no_enum_update == 0:
 
-            value = six.text_type(text)
+            value = str(text)
             try:
                 value = self.mapping[value]
             except Exception:
@@ -466,7 +459,7 @@ class ListEditor(BaseEditor):
     def update_object(self, text):
         """ Handles the user selecting a list box item.
         """
-        value = six.text_type(text)
+        value = str(text)
         try:
             value = self.mapping[value]
         except Exception:

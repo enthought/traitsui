@@ -11,7 +11,6 @@
 # All configuration values have a default value; values that are commented out
 # serve to show the default value.
 
-from __future__ import absolute_import
 
 from io import open
 import os
@@ -44,7 +43,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'traitsui'
-copyright = '2008-2018, Enthought'
+copyright = '2008-2020, Enthought'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.

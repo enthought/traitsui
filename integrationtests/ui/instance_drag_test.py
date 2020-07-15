@@ -16,7 +16,6 @@
 #-------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------
-from __future__ import absolute_import, print_function
 
 from traits.api \
     import HasTraits, Str, Regex, List, Instance
@@ -41,7 +40,7 @@ from traitsui.editors.tree_editor \
 
 class Employee(HasTraits):
     name = Str('<unknown>')
-    title = Str
+    title = Str()
     phone = Regex(regex=r'\d\d\d-\d\d\d\d')
 
     view = View('title', 'phone')

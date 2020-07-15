@@ -14,7 +14,6 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtGui
 
 from traits.api import HasTraits, Instance, Str, Callable
@@ -326,7 +325,7 @@ class Editor(UIEditor):
         Parameters
         ----------
         direction : QtGui.QBoxLayout.Direction
-            Directionality of the group that contains this edito. Either
+            Directionality of the group that contains this editor. Either
             QtGui.QBoxLayout.LeftToRight or QtGui.QBoxLayout.TopToBottom
 
         resizable : bool
@@ -375,10 +374,10 @@ class EditorWithList(Editor):
     list_object = Instance(HasTraits)
 
     #: Name of the monitored trait
-    list_name = Str
+    list_name = Str()
 
     #: Function used to evaluate the current list object value:
-    list_value = Callable
+    list_value = Callable()
 
     def init(self, parent):
         """ Initializes the object.

@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from pyface.ui_traits import Image
 from traits.api import (
@@ -61,7 +60,7 @@ from .group import Group
 from .item import Item
 
 from .include import Include
-import six
+
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
@@ -321,10 +320,10 @@ class View(ViewElement):
     height = Height
 
     #: Class of dropped objects that can be added:
-    drop_class = Any
+    drop_class = Any()
 
     #: Event when the view has been updated:
-    updated = Event
+    updated = Event()
 
     #: What result should be returned if the user clicks the window or dialog
     #: close button or icon?
@@ -360,7 +359,7 @@ class View(ViewElement):
             elif type(value) in SequenceTypes:
                 content.append(Group(*value))
             elif (
-                isinstance(value, six.string_types)
+                isinstance(value, str)
                 and (value[:1] == "<")
                 and (value[-1:] == ">")
             ):

@@ -6,7 +6,6 @@ displaying lists of strings, or other data that can be logically mapped to a
 list of strings.
 """
 
-from __future__ import absolute_import
 from traits.api import HasTraits, List, Str
 from traitsui.api import View, Item, ListStrEditor
 

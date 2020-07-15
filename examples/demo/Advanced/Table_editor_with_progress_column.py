@@ -1,4 +1,8 @@
-from __future__ import absolute_import
+"""
+A demo to demonstrate the progress column in a TableEditor. The demo only works
+with qt backend.
+"""
+
 import random
 
 from pyface.api import GUI
@@ -9,16 +13,16 @@ from traitsui.extras.progress_column import ProgressColumn
 
 class Job(HasTraits):
 
-    name = Str
+    name = Str()
 
-    percent_complete = Int
+    percent_complete = Int()
 
 
 class JobManager(HasTraits):
 
     jobs = List(Instance(Job))
 
-    start = Button
+    start = Button()
 
     def populate(self):
         self.jobs = [
@@ -38,19 +42,22 @@ class JobManager(HasTraits):
         self.populate()
         GUI.invoke_after(1000, self.process)
 
-    view = View(
-        UItem('jobs', editor=TableEditor(
-            columns=[
-                ObjectColumn(name='name'),
-                ProgressColumn(name='percent_complete'),
-            ]
-        )),
+    traits_view = View(
+        UItem(
+            'jobs',
+            editor=TableEditor(
+                columns=[
+                    ObjectColumn(name='name'),
+                    ProgressColumn(name='percent_complete'),
+                ]
+            )
+        ),
         UItem('start'),
         resizable=True,
     )
 
 
-demo = view = job_manager = JobManager()
+demo = JobManager()
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':

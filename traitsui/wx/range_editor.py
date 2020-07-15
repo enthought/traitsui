@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 import sys
 import wx
 
@@ -62,7 +61,7 @@ class BaseRangeEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: Function to evaluate floats/ints
-    evaluate = Any
+    evaluate = Any()
 
     def _set_value(self, value):
         if self.evaluate is not None:
@@ -82,13 +81,13 @@ class SimpleSliderEditor(BaseRangeEditor):
     # -------------------------------------------------------------------------
 
     #: Low value for the slider range
-    low = Any
+    low = Any()
 
     #: High value for the slider range
-    high = Any
+    high = Any()
 
     #: Formatting string used to format value and labels
-    format = Str
+    format = Str()
 
     #: Flag indicating that the UI is in the process of being updated
     ui_changing = Bool(False)
@@ -373,10 +372,10 @@ class LargeRangeSliderEditor(BaseRangeEditor):
     high = Any(1)
 
     #: Low end of displayed range
-    cur_low = Float
+    cur_low = Float()
 
     #: High end of displayed range
-    cur_high = Float
+    cur_high = Float()
 
     #: Flag indicating that the UI is in the process of being updated
     ui_changing = Bool(False)
@@ -432,7 +431,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             style=wx.BU_EXACTFIT | wx.NO_BORDER,
         )
         panel.button_lo = button_lo
-        button_lo.Bind(wx.EVT_BUTTON, button_lo, id=self.reduce_range)
+        button_lo.Bind(wx.EVT_BUTTON, self.reduce_range)
         sizer.Add(button_lo, 1, wx.ALIGN_CENTER)
 
         # Slider:
@@ -462,7 +461,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             style=wx.BU_EXACTFIT | wx.NO_BORDER,
         )
         panel.button_hi = button_hi
-        button_hi.Bind(wx.EVT_BUTTON, button_hi, id=self.increase_range)
+        button_hi.Bind(wx.EVT_BUTTON, self.increase_range)
         sizer.Add(button_hi, 1, wx.ALIGN_CENTER)
 
         # Upper limit label:
@@ -722,10 +721,10 @@ class SimpleSpinEditor(BaseRangeEditor):
     # -------------------------------------------------------------------------
 
     #: Low value for the slider range
-    low = Any
+    low = Any()
 
     #: High value for the slider range
-    high = Any
+    high = Any()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -803,13 +802,13 @@ class RangeTextEditor(TextEditor):
     # -------------------------------------------------------------------------
 
     #: Low value for the slider range
-    low = Any
+    low = Any()
 
     #: High value for the slider range
-    high = Any
+    high = Any()
 
     #: Function to evaluate floats/ints
-    evaluate = Any
+    evaluate = Any()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -915,14 +914,16 @@ class RangeTextEditor(TextEditor):
             self.control.SetValue(int(self.value))
 
 
-def SimpleEnumEditor(parent, factory, ui, object, name, description):
+def SimpleEnumEditor(
+    parent, factory, ui, object, name, description, **kwargs
+):
     return CustomEnumEditor(
         parent, factory, ui, object, name, description, "simple"
     )
 
 
 def CustomEnumEditor(
-    parent, factory, ui, object, name, description, style="custom"
+    parent, factory, ui, object, name, description, style="custom", **kwargs
 ):
     """ Factory adapter that returns a enumeration editor of the specified
         style.

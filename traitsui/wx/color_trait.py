@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import Trait, TraitError
@@ -263,6 +262,8 @@ def get_color_editor(*args, **traits):
 def WxColor(default="white", allow_none=False, **metadata):
     """ Defines wxPython-specific color traits.
     """
+    if default is None:
+        allow_none = True
 
     if allow_none:
         return Trait(

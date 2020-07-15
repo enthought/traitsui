@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from pyface.ui_traits import (
     Alignment,
@@ -47,7 +46,7 @@ from traits.api import (
     TraitPrefixList,
     TraitType,
 )
-import six
+
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
@@ -90,7 +89,7 @@ ContainerDelegate = container_delegate = Delegate(
 HelpId = help_id_trait = Str(desc="the external help context identifier")
 
 # A button to add to a view:
-AButton = Any
+AButton = Any()
 # AButton = Trait( '', Str, Instance( 'traitsui.menu.Action' ) )
 
 # The set of buttons to add to the view:
@@ -99,7 +98,7 @@ Buttons = List(
 )
 
 # View trait specified by name or instance:
-AView = Any
+AView = Any()
 # AView = Trait( '', Str, Instance( 'traitsui.view.View' ) )
 
 # FIXME: on AButton and AView: TraitCompound handlers with deferred-import
@@ -157,7 +156,7 @@ class ViewStatus(TraitType):
     def validate(self, object, name, value):
         """ Validates that a specified value is valid for this trait.
         """
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             return [StatusItem(name=value)]
 
         if isinstance(value, StatusItem):
@@ -169,7 +168,7 @@ class ViewStatus(TraitType):
         result = []
         if isinstance(value, SequenceTypes):
             for item in value:
-                if isinstance(item, six.string_types):
+                if isinstance(item, str):
                     result.append(StatusItem(name=item))
                 elif isinstance(item, StatusItem):
                     result.append(item)
@@ -189,7 +188,7 @@ class ViewStatus(TraitType):
 def convert_theme(value, level=3):
     """ Converts a specified value to a Theme if possible.
     """
-    if not isinstance(value, six.string_types):
+    if not isinstance(value, str):
         return value
 
     if (value[:1] == "@") and (value.find(":") >= 2):

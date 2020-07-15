@@ -15,8 +15,8 @@
 """
 Test case for ListStrEditor and ListStrAdapter
 """
+import unittest
 
-from __future__ import absolute_import
 from traits.has_traits import HasTraits
 from traits.trait_types import List, Str
 from traitsui.list_str_adapter import ListStrAdapter
@@ -26,13 +26,15 @@ class TraitObject(HasTraits):
     list_str = List(Str)
 
 
-def test_list_str_adapter_length():
-    """Test the ListStringAdapter len method"""
+class TestListStrAdapter(unittest.TestCase):
 
-    object = TraitObject()
-    object.list_str = ["hello"]
+    def test_list_str_adapter_length(self):
+        """Test the ListStringAdapter len method"""
 
-    adapter = ListStrAdapter()
+        object = TraitObject()
+        object.list_str = ["hello"]
 
-    assert adapter.len(object, "list_str") == 1
-    assert adapter.len(None, "list_str") == 0
+        adapter = ListStrAdapter()
+
+        self.assertEqual(adapter.len(object, "list_str"), 1)
+        self.assertEqual(adapter.len(None, "list_str"), 0)

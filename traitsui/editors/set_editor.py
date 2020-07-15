@@ -18,7 +18,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from ..editor_factory import EditorWithListFactory
 
@@ -44,10 +43,10 @@ class ToolkitEditorFactory(EditorWithListFactory):
     can_move_all = Bool(True)
 
     #: Title of left column:
-    left_column_title = Str
+    left_column_title = Str()
 
     #: Title of right column:
-    right_column_title = Str
+    right_column_title = Str()
 
 
 # Define the SetEditor class

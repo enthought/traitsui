@@ -1,7 +1,6 @@
 #  Copyright (c) 2007, Enthought, Inc.
 #  License: BSD Style.
 
-from __future__ import absolute_import
 from traits.api import HasTraits, Float, List
 from traitsui.api import View, Item, RangeEditor
 
@@ -10,7 +9,7 @@ from traitsui.api import View, Item, RangeEditor
 
 
 class TestRangeEditor(HasTraits):
-    x = Float
+    x = Float()
     low = Float(123.123)
     high = Float(1123.123)
     list = List(Float(

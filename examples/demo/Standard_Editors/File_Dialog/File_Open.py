@@ -1,12 +1,19 @@
 """
-This demonstrates one of the simplest cases of using the Traits file dialog to
-select a file for opening (i.e. reading or editing).
+**WARNING**
 
-The first question of course is why use the Traits file dialog at all, when the
-standard OS file dialog is also available?
+  This demo might not work as expected and some documented features might be
+  missing.
+
+-------------------------------------------------------------------------------
+
+This demonstrates one of the simplest cases of using the TraitsUI file dialog
+to select a file for opening (i.e. reading or editing).
+
+The first question of course is why use the TraitsUI file dialog at all, when
+the standard OS file dialog is also available?
 
 And the answer is that you can use either, but the advantages of using the
-Traits file dialog are:
+TraitsUI file dialog are:
 
  - It supports history. That is, each time the user selects a file for opening,
    the file is added to a persistent history list, similar to many applications
@@ -22,8 +29,8 @@ Traits file dialog are:
    file.
 
  - There is a very nice synergy between the file system view and the history
-   list. Quite often users shuttle between several <i>favorite</i> locations
-   in the file system when opening files. The Traits file dialog automatically
+   list. Quite often users shuttle between several <i>favorite</i> locations in
+   the file system when opening files. The TraitsUI file dialog automatically
    discovers these favorite locations just by the user opening files. When a
    user opens the file dialog, they can select a previously opened file from
    the history list, which then automatically causes the file system view to
@@ -33,10 +40,10 @@ Traits file dialog are:
    set</i> of favorite directories just through simple use, without the user
    having to explicitly designate them as such.
 
- - It's customizable. The Traits file dialog accepts extension objects which
+ - It's customizable. The TraitsUI file dialog accepts extension objects which
    can be used to display additional file information or even modify the
    selection behavior of the dialog. Several extensions are provided with
-   Traits (and are demonstrated in some of the other examples), and you are
+   TraitsUI (and are demonstrated in some of the other examples), and you are
    free to write your own by implementing a very simple interface.
 
  - The history and user settings are customizable per application. Just by
@@ -52,33 +59,27 @@ Traits file dialog are:
  - It's easy to use. That's what this particular example is all about. So take
    a look at the source code for this example to see how easy it is...
 """
+# Issue related to the demo warning: enthought/traitsui#953
 
-#-- Imports --------------------------------------------------------------
+from traits.api import HasTraits, File, Button
 
-from __future__ import absolute_import
-from traits.api \
-    import HasTraits, File, Button
+from traitsui.api import View, HGroup, Item
 
-from traitsui.api \
-    import View, HGroup, Item
-
-from traitsui.file_dialog  \
-    import open_file
-
-#-- FileDialogDemo Class -------------------------------------------------
+from traitsui.file_dialog import open_file
 
 
+# -- FileDialogDemo Class -------------------------------------------------
 class FileDialogDemo(HasTraits):
 
     # The name of the selected file:
-    file_name = File
+    file_name = File()
 
     # The button used to display the file dialog:
     open = Button('Open...')
 
-    #-- Traits View Definitions ----------------------------------------------
+    # -- Traits View Definitions ----------------------------------------------
 
-    view = View(
+    traits_view = View(
         HGroup(
             Item('open', show_label=False),
             '_',
@@ -87,7 +88,7 @@ class FileDialogDemo(HasTraits):
         width=0.5
     )
 
-    #-- Traits Event Handlers ------------------------------------------------
+    # -- Traits Event Handlers ------------------------------------------------
 
     def _open_changed(self):
         """ Handles the user clicking the 'Open...' button.
@@ -95,6 +96,7 @@ class FileDialogDemo(HasTraits):
         file_name = open_file()
         if file_name != '':
             self.file_name = file_name
+
 
 # Create the demo:
 demo = FileDialogDemo()

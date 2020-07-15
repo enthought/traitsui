@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 from wx.adv import Animation, AnimationCtrl
 
 from traits.api import Bool, Str
@@ -85,4 +84,4 @@ class AnimatedGIFEditor(BasicEditorFactory):
 
     #: The optional trait used to control whether the animated GIF file is
     #: playing or not:
-    playing = Str
+    playing = Str()

@@ -7,17 +7,12 @@ Implemention of a ListEditor demo plugin for Traits UI demo program
 This demo shows each of the four styles of ListEditor
 """
 
-# Imports:
-from __future__ import absolute_import
-from traits.api \
-    import HasTraits, List, Str
+from traits.api import HasTraits, List, Str
 
-from traitsui.api \
-    import Item, Group, View
+from traitsui.api import Item, Group, View
+
 
 # Define the demo class:
-
-
 class ListEditorDemo(HasTraits):
     """ Defines the main ListEditor demo class. """
 
@@ -36,12 +31,15 @@ class ListEditorDemo(HasTraits):
     )
 
     # Demo view:
-    view = View(
+    traits_view = View(
         list_group,
         title='ListEditor',
         buttons=['OK'],
+        height=600,
+        width=400,
         resizable=True
     )
+
 
 # Create the demo:
 demo = ListEditorDemo()

@@ -20,14 +20,13 @@
 """
 
 
-from __future__ import absolute_import
 
 from traits.api import HasPrivateTraits, Str, Any, Dict, Tuple, Callable, Bool
 
 from .ui_traits import AView
 
 from .helper import user_name_for
-import six
+
 
 
 class InstanceChoiceItem(HasPrivateTraits):
@@ -37,7 +36,7 @@ class InstanceChoiceItem(HasPrivateTraits):
     # -------------------------------------------------------------------------
 
     #: User interface name for the item
-    name = Str
+    name = Str()
 
     #: View associated with this item
     view = AView
@@ -83,7 +82,7 @@ class InstanceChoice(InstanceChoiceItem):
     # -------------------------------------------------------------------------
 
     #: Object associated with the item
-    object = Any
+    object = Any()
 
     #: The name of the object trait containing its user interface name:
     name_trait = Str("name")
@@ -95,7 +94,7 @@ class InstanceChoice(InstanceChoiceItem):
             return self.name
 
         name = getattr(self.object, self.name_trait, None)
-        if isinstance(name, six.string_types):
+        if isinstance(name, str):
             return name
 
         return user_name_for(self.object.__class__.__name__)
@@ -126,10 +125,10 @@ class InstanceFactoryChoice(InstanceChoiceItem):
 
     #: A class (or other callable) that can be used to create an item compatible
     #: with this item
-    klass = Callable
+    klass = Callable()
 
     #: Tuple of arguments to pass to **klass** to create an instance
-    args = Tuple
+    args = Tuple()
 
     #: Dictionary of arguments to pass to **klass** to create an instance
     kw_args = Dict(Str, Any)
@@ -144,7 +143,7 @@ class InstanceFactoryChoice(InstanceChoiceItem):
             return self.name
 
         name = getattr(object, "name", None)
-        if isinstance(name, six.string_types):
+        if isinstance(name, str):
             return name
 
         if issubclass(type(self.klass), type):

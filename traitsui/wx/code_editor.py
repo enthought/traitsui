@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 import wx.stc as stc
 
@@ -73,34 +72,34 @@ class SourceEditor(Editor):
     readonly = Bool(False)
 
     #: The currently selected line
-    selected_line = Int
+    selected_line = Int()
 
     #: The currently selected text
-    selected_text = Str
+    selected_text = Str()
 
     #: The list of line numbers to mark
     mark_lines = List(Int)
 
     #: The current line number
-    line = Event
+    line = Event()
 
     #: The current column
-    column = Event
+    column = Event()
 
     #: calltip clicked event
-    calltip_clicked = Event
+    calltip_clicked = Event()
 
     #: The STC lexer use
-    lexer = Int
+    lexer = Int()
 
     #: The lines to be dimmed
     dim_lines = List(Int)
-    dim_color = Str
+    dim_color = Str()
     _dim_style_number = Int(16)  # 0-15 are reserved for the python lexer
 
     #: The lines to have squiggles drawn under them
     squiggle_lines = List(Int)
-    squiggle_color = Str
+    squiggle_color = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -129,10 +128,7 @@ class SourceEditor(Editor):
 
         # Set up the events
         control.Bind(wx.EVT_KILL_FOCUS, self.wx_update_object)
-        control.Bind(
-            stc.EVT_STC_CALLTIP_CLICK, self._calltip_clicked,
-            id=control.GetId(),
-        )
+        control.Bind(stc.EVT_STC_CALLTIP_CLICK, self._calltip_clicked)
 
         if factory.auto_scroll and (factory.selected_line != ""):
             control.Bind(wx.EVT_SIZE, self._update_selected_line)
@@ -207,9 +203,7 @@ class SourceEditor(Editor):
             or (factory.column != "")
             or (factory.selected_text != "")
         ):
-            stc.EVT_STC_UPDATEUI(
-                control, control.GetId(), self._position_changed
-            )
+            control.Bind(stc.EVT_STC_UPDATEUI, self._position_changed)
         self.set_tooltip()
 
     def wx_update_object(self, event):
@@ -390,18 +384,27 @@ class SourceEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        if self.factory.auto_set:
-            self._editor.on_trait_change(
-                self.update_object, "changed", remove=True
-            )
-        if self.factory.key_bindings is not None:
-            self._editor.on_trait_change(
-                self.key_pressed, "key_pressed", remove=True
-            )
+        if self.control is not None:
+            if self.factory.auto_set:
+                self._editor.on_trait_change(
+                    self.update_object, "changed", remove=True
+                )
+            if self.factory.key_bindings is not None:
+                self._editor.on_trait_change(
+                    self.key_pressed, "key_pressed", remove=True
+                )
 
-        self.control.Unbind(wx.EVT_KILL_FOCUS)
+            self.control.Unbind(wx.EVT_KILL_FOCUS)
+            self.control.Unbind(stc.EVT_STC_CALLTIP_CLICK)
+            self.control.Unbind(stc.EVT_STC_STYLENEEDED)
+            if (
+                (self.factory.line != "")
+                or (self.factory.column != "")
+                or (self.factory.selected_text != "")
+            ):
+                self.control.Unbind(stc.EVT_STC_UPDATEUI)
 
-        super(SourceEditor, self).dispose()
+        super().dispose()
 
     # -- UI preference save/restore interface ---------------------------------
 
