@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -88,7 +90,7 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="module-traitsui.editor_factory">
 <span id="traitsui-editor-factory-module"></span><h1>traitsui.editor_factory module<a class="headerlink" href="#module-traitsui.editor_factory" title="Permalink to this headline">¶</a></h1>
@@ -97,7 +99,7 @@ creating the Editor objects used in a Traits-based user interface.</p>
 <dl class="class">
 <dt id="traitsui.editor_factory.EditorFactory">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.editor_factory.</code><code class="sig-name descname">EditorFactory</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Represents a factory for creating the Editor objects in a Traits-based
 user interface.</p>
 <dl class="method">
@@ -238,12 +240,6 @@ Example: left,vcenter</p>
 TraitHandler that is “mapped”):</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="traitsui.editor_factory.EditorWithListFactory.values_modified">
-<code class="sig-name descname">values_modified</code><em class="property"> = Event()</em><a class="headerlink" href="#traitsui.editor_factory.EditorWithListFactory.values_modified" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fired when the <strong>values</strong> trait has been updated:</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -297,7 +293,7 @@ TraitHandler that is “mapped”):</p>
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.

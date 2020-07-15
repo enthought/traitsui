@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -88,18 +90,18 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="module-traitsui.toolkit">
 <span id="traitsui-toolkit-module"></span><h1>traitsui.toolkit module<a class="headerlink" href="#module-traitsui.toolkit" title="Permalink to this headline">¶</a></h1>
 <p>Defines the stub functions used for creating concrete implementations of
 the standard EditorFactory subclasses supplied with the Traits package.</p>
 <p>Most of the logic for determining which backend toolkit to use can now be
-found in <a class="reference external" href="https://docs.enthought.com/pyface/api/pyface.base_toolkit.html#module-pyface.base_toolkit" title="(in pyface v6.1.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyface.base_toolkit</span></code></a>.</p>
+found in <a class="reference external" href="https://docs.enthought.com/pyface/api/pyface.base_toolkit.html#module-pyface.base_toolkit" title="(in pyface v7.0.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyface.base_toolkit</span></code></a>.</p>
 <dl class="class">
 <dt id="traitsui.toolkit.Toolkit">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.toolkit.</code><code class="sig-name descname">Toolkit</code><span class="sig-paren">(</span><em class="sig-param">package</em>, <em class="sig-param">toolkit</em>, <em class="sig-param">*packages</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.toolkit.Toolkit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/pyface/api/pyface.base_toolkit.html#pyface.base_toolkit.Toolkit" title="(in pyface v6.1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyface.base_toolkit.Toolkit</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/pyface/api/pyface.base_toolkit.html#pyface.base_toolkit.Toolkit" title="(in pyface v7.0.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyface.base_toolkit.Toolkit</span></code></a></p>
 <p>Abstract base class for GUI toolkits.</p>
 <dl class="method">
 <dt id="traitsui.toolkit.Toolkit.array_editor">
@@ -615,7 +617,7 @@ will try all <code class="docutils literal notranslate"><span class="pre">traits
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.

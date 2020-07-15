@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -80,10 +82,60 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="traits-ui-changelog">
 <h1>Traits UI Changelog<a class="headerlink" href="#traits-ui-changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="release-7-0-1">
+<h2>Release 7.0.1<a class="headerlink" href="#release-7-0-1" title="Permalink to this headline">¶</a></h2>
+<p>This is a bugfix release that fixes a number of issues since the 7.0.0 release.
+It includes fixes to various editors, improvements to tests and fixes to the
+demo application.</p>
+<p>Thanks to Ieva Cerny, Kit Choi, Mark Dickinson, Robert Kern, Eric Larson,
+Federico Miorelli, Joris Vankerschaver, Corran Webster.</p>
+<div class="section" id="fixes">
+<h3>Fixes<a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Fix error from true division of integers for Qt RangeEditor and BoundsEditor
+(#999, #1000)</p></li>
+<li><p>Fix handling of minimum and maximum datetimes in Qt DatetimeEditor (#803)</p></li>
+<li><p>Fix error in wx TabularEditor (#969)</p></li>
+<li><p>Fix wx panel error due to alignments (#829)</p></li>
+<li><p>Fix various issues in the demo application (#799, #808)</p></li>
+<li><p>Fix format_func not used when EnumEditor is initialized with static values
+(#848)</p></li>
+<li><p>Fix demo application description (#850)</p></li>
+<li><p>Fix auto-add functionality in ListStrModel (#860)</p></li>
+<li><p>Fix segmentation fault for TabularModel (#871, #873)</p></li>
+<li><p>Fix event handling in ListStrEditor and TabularEditor for adding and removing
+items (#875)</p></li>
+<li><p>Fix TabularAdapter crashes when column number reduces (#897)</p></li>
+<li><p>Fix theme pickling issue (#915)</p></li>
+<li><p>Fix error from example’s tutor.py script (#813)</p></li>
+</ul>
+</div>
+<div class="section" id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Add links from TabularEditor and TreeEditor to adapter documentation (#917)</p></li>
+</ul>
+</div>
+<div class="section" id="tests">
+<h3>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Rewrite nose tests to unittest (#809)</p></li>
+<li><p>Use unittest discover instead of nose.core (#810)</p></li>
+<li><p>Add more tests for EnumEditor (#836)</p></li>
+<li><p>Add CheckListEditor tests (#837)</p></li>
+<li><p>Add SetEditor tests (#838)</p></li>
+<li><p>Add ImageEnumEditor tests (#845)</p></li>
+<li><p>Add more ListStrEditor tests (#869)</p></li>
+<li><p>Add more TabularEditor tests (#874)</p></li>
+<li><p>Make sure all UI in tests are disposed (#865)</p></li>
+<li><p>Add tests for layout and labels using any non-null toolkits (#846)</p></li>
+</ul>
+</div>
+</div>
 <div class="section" id="release-7-0-0">
 <h2>Release 7.0.0<a class="headerlink" href="#release-7-0-0" title="Permalink to this headline">¶</a></h2>
 <p>TraitsUI 7.0.0 is a major release which focuses on modernization of the
@@ -125,8 +177,8 @@ Talbert, Corran Webster.</p>
 <li><p>Enhancements to CI and testing (#683, #714, #740)</p></li>
 </ul>
 </div>
-<div class="section" id="fixes">
-<h3>Fixes<a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h3>Fixes<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Documentation fixes (#546, #766)</p></li>
 <li><p>Fix cgi.escape for Python 3.8 (#780)</p></li>
@@ -152,8 +204,8 @@ TableEditor and TabularEditor for the Qt toolkit which didn’t match
 the advertised behaviour in the documentation.</p>
 <p>Thanks to Qi Chen, Vladimir Chukharev, Mark Dickinson, Sandhya Govindaraju,
 Maxwell Grady, Scott Maddox, Sean Parsons, Rahul Poruri, Corran Webster.</p>
-<div class="section" id="id1">
-<h3>Fixes<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h3>Fixes<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Add “bool” to allowed types for TableColumn (#656)</p></li>
 <li><p>Fix tabular editor column widths (#652)</p></li>
@@ -182,8 +234,8 @@ Maxwell Grady, Scott Maddox, Sean Parsons, Rahul Poruri, Corran Webster.</p>
 the usability of Mayavi.</p>
 <p>Thanks to Mark Dickinson, Maxwell Grady, Prabhu Ramachandran, Matt Reay,
 Ajeet Vivekanandan, Corran Webster, John Wiggins.</p>
-<div class="section" id="id2">
-<h3>Fixes<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>Fixes<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Fix tree node copy failure to copy (#590)</p></li>
 <li><p>Fix/scroll to row preserve column (#588)</p></li>
@@ -202,8 +254,8 @@ Ajeet Vivekanandan, Corran Webster, John Wiggins.</p>
 <div class="section" id="release-6-1-1">
 <h2>Release 6.1.1<a class="headerlink" href="#release-6-1-1" title="Permalink to this headline">¶</a></h2>
 <p>A bugfix release to correct some critical issues with the TreeEditor.</p>
-<div class="section" id="id3">
-<h3>Fixes<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>Fixes<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Fix TreeNodeObject listener cache (#558).</p></li>
 <li><p>Fix tree node insertion (#561).</p></li>
@@ -253,8 +305,8 @@ Roger Serwy, Ajeet Vivekanandan, Corran Webster, John Wiggins.</p>
 <li><p>Allow drag move and drag copy modes on Qt TabularEditor (#363).</p></li>
 </ul>
 </div>
-<div class="section" id="id4">
-<h3>Fixes<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h3>Fixes<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Fixes to README (#478).</p></li>
 <li><p>Documentation fixes (#471, #508).</p></li>
@@ -329,8 +381,8 @@ Pradyun Gedam, Robert Kern, Marika Murphy, Pankaj Pandey, Steve Peak,
 Prabhu Ramachandran, Jonathan Rocher, John Thacker, Gregor Thalhammer,
 Senganal Thirunavukkarasu, John Tyree, Ioannis Tziakos, Alona Varshal,
 Corran Webster, John Wiggins</p>
-<div class="section" id="id5">
-<h3>Enhancements<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h3>Enhancements<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Support for Qt5 (#347, #352, #350, #433)</p></li>
 <li><p>Remove TraitsUI Themes (#342)</p></li>
@@ -354,8 +406,8 @@ Corran Webster, John Wiggins</p>
 <li><p>Add codecov coverage reports (#285, #328)</p></li>
 </ul>
 </div>
-<div class="section" id="id6">
-<h3>Fixes<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>Fixes<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Fix some issues for newer WxPython (#418)</p></li>
 <li><p>Fix Wx simple FileEditor (#426)</p></li>
@@ -391,8 +443,8 @@ Corran Webster, John Wiggins</p>
 </div>
 <div class="section" id="release-5-2-0">
 <h2>Release 5.2.0<a class="headerlink" href="#release-5-2-0" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id7">
-<h3>Enhancements<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h3>Enhancements<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Add support for multi-select in the DataFrameEditor (#413).</p></li>
 </ul>
@@ -400,8 +452,8 @@ Corran Webster, John Wiggins</p>
 </div>
 <div class="section" id="release-5-1-0">
 <h2>Release 5.1.0<a class="headerlink" href="#release-5-1-0" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id8">
-<h3>Enhancements<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id9">
+<h3>Enhancements<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Enthought Sphinx Theme Support (#219)</p></li>
 <li><p>Allow hiding groups in split layouts on Qt (#246)</p></li>
@@ -409,8 +461,8 @@ Corran Webster, John Wiggins</p>
 <li><p>Add toolbar in Qt UI panel (#263)</p></li>
 </ul>
 </div>
-<div class="section" id="id9">
-<h3>Fixes<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h3>Fixes<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Fix Qt TableEditor segfault on editing close (#277)</p></li>
 <li><p>Update tree nodes when adding children to am empty tree (#251)</p></li>
@@ -450,8 +502,8 @@ use explicitly.</p>
 (#196)</p></li>
 </ul>
 </div>
-<div class="section" id="id10">
-<h3>Enhancements<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id11">
+<h3>Enhancements<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Change the default backend from Wx to Qt (#212)</p></li>
 <li><p>Add a Qt version of the ProgressEditor (#217)</p></li>
@@ -460,8 +512,8 @@ use explicitly.</p>
 Editor. (#143)</p></li>
 </ul>
 </div>
-<div class="section" id="id11">
-<h3>Fixes<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id12">
+<h3>Fixes<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Fix failure to disconnect selection listeners for ListStrEditor in Qt (#223)</p></li>
 <li><p>Fix layout of TextEditors in some situations (#216)</p></li>
@@ -473,8 +525,8 @@ Editor. (#143)</p></li>
 </div>
 <div class="section" id="release-4-5-1">
 <h2>Release 4.5.1<a class="headerlink" href="#release-4-5-1" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id12">
-<h3>Fixes<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id13">
+<h3>Fixes<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Fix pypi installation problem (#206)</p></li>
 </ul>
@@ -482,8 +534,8 @@ Editor. (#143)</p></li>
 </div>
 <div class="section" id="release-4-5-0">
 <h2>Release 4.5.0<a class="headerlink" href="#release-4-5-0" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id13">
-<h3>Fixes<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id14">
+<h3>Fixes<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Application-modal Traits UI dialogs are correctly styled as
 application-modal under Qt. On Macs, they will now appear as independent
@@ -509,14 +561,14 @@ in Traits 4.4.0.  Other than that, there are a number of other minor changes,
 improvements and bugfixes.</p>
 <p>Corran Webster (corranwebster on GitHub) is now maintainer of TraitsUI.</p>
 <p>Change summary since 4.3.0</p>
-<div class="section" id="id14">
-<h3>New Features<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id15">
+<h3>New Features<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Changes for new Traits adaptation mechanism support (#113)</p></li>
 </ul>
 </div>
-<div class="section" id="id15">
-<h3>Enhancements<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id16">
+<h3>Enhancements<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Add Travis-CI support.</p></li>
 <li><p>Remove the use of the deprecated PySimpleApp under Wx and several other
@@ -527,8 +579,8 @@ support.  Should be roughly on par with Wx support.  No API changes.
 <li><p>Improvements to PyMimeData coercion to better handle lists of items. (#127)</p></li>
 </ul>
 </div>
-<div class="section" id="id16">
-<h3>Fixes<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id17">
+<h3>Fixes<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Fixes item selection issue #133 in ListStrEditor under Wx 2.9 (#137)</p></li>
 <li><p>Fixes to avoid asking for value of a Delegated Event (#123 and #136)</p></li>
@@ -544,8 +596,8 @@ before this file was created.</p>
 </div>
 <div class="section" id="traits-3-5-0-oct-15-2010">
 <h2>Traits 3.5.0 (Oct 15, 2010)<a class="headerlink" href="#traits-3-5-0-oct-15-2010" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id17">
-<h3>Enhancements<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id18">
+<h3>Enhancements<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>adding support for drop-down menu in Button traits, but only for qt backend</p></li>
 <li><p>adding ‘show_notebook_menu’ option to ListEditor so that the user can
@@ -554,8 +606,8 @@ right-click and show or hide the context menu (Qt)</p></li>
 selected text</p></li>
 </ul>
 </div>
-<div class="section" id="id18">
-<h3>Fixes<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id19">
+<h3>Fixes<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>fixed null color editor to work with tuples</p></li>
 <li><p>bug when opening a view with the ToolbarButton</p></li>
@@ -564,14 +616,14 @@ selected text</p></li>
 </div>
 <div class="section" id="traits-3-4-0-may-26-2010">
 <h2>Traits 3.4.0 (May 26, 2010)<a class="headerlink" href="#traits-3-4-0-may-26-2010" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id19">
-<h3>Enhancements<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id20">
+<h3>Enhancements<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>adding new example to make testing rgb color editor easier</p></li>
 </ul>
 </div>
-<div class="section" id="id20">
-<h3>Fixes<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id21">
+<h3>Fixes<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>fixed NumericColumn to not expect object to have model_selection attribute,
 and removed more dead theming code</p></li>
@@ -586,8 +638,8 @@ first before using os.path.isfile()</p></li>
 </div>
 <div class="section" id="traits-3-3-0-feb-24-2010">
 <h2>Traits 3.3.0 (Feb 24, 2010)<a class="headerlink" href="#traits-3-3-0-feb-24-2010" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id21">
-<h3>Enhancements<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id22">
+<h3>Enhancements<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
 <p>The major enhancement this release is that the entire Traits package has been
 changed to use relative imports so that it can be installed as a sub-package
 inside another larger library or package.  This was not previously possible,
@@ -595,8 +647,8 @@ since the various modules inside Traits would import each other directly
 through “traits.[module]”.  Many thanks to Darren Dale for the
 patch.</p>
 </div>
-<div class="section" id="id22">
-<h3>Fixes<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id23">
+<h3>Fixes<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
 <p>There have been numerous minor bugfixes since the last release.  The most notable
 ones are:</p>
 <ul class="simple">
@@ -614,8 +666,8 @@ been eliminated and normalized (tabs/spaces, line endings).</p></li>
 </div>
 <div class="section" id="traits-3-2-0-july-15-2009">
 <h2>Traits 3.2.0 (July 15, 2009)<a class="headerlink" href="#traits-3-2-0-july-15-2009" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id23">
-<h3>Enhancements<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id24">
+<h3>Enhancements<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Implemented editable_labels attribute in the TabularEditor for enabling editing of the labels (i.e. the first column)</p></li>
 <li><p>Saving/restoring window positions works with multiple displays of different sizes</p></li>
@@ -633,8 +685,8 @@ been eliminated and normalized (tabs/spaces, line endings).</p></li>
 <li><p>Removed sys.exit() call from SaveHandler.exit()</p></li>
 </ul>
 </div>
-<div class="section" id="id24">
-<h3>Fixes<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id25">
+<h3>Fixes<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 </div>
@@ -651,80 +703,86 @@ been eliminated and normalized (tabs/spaces, line endings).</p></li>
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Traits UI Changelog</a><ul>
-<li><a class="reference internal" href="#release-7-0-0">Release 7.0.0</a><ul>
-<li><a class="reference internal" href="#enhancements">Enhancements</a></li>
+<li><a class="reference internal" href="#release-7-0-1">Release 7.0.1</a><ul>
 <li><a class="reference internal" href="#fixes">Fixes</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a></li>
+<li><a class="reference internal" href="#tests">Tests</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#release-6-1-3">Release 6.1.3</a><ul>
+<li><a class="reference internal" href="#release-7-0-0">Release 7.0.0</a><ul>
+<li><a class="reference internal" href="#enhancements">Enhancements</a></li>
 <li><a class="reference internal" href="#id1">Fixes</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#release-6-1-2">Release 6.1.2</a><ul>
+<li><a class="reference internal" href="#release-6-1-3">Release 6.1.3</a><ul>
 <li><a class="reference internal" href="#id2">Fixes</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#release-6-1-1">Release 6.1.1</a><ul>
+<li><a class="reference internal" href="#release-6-1-2">Release 6.1.2</a><ul>
 <li><a class="reference internal" href="#id3">Fixes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-6-1-1">Release 6.1.1</a><ul>
+<li><a class="reference internal" href="#id4">Fixes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-6-1-0">Release 6.1.0</a><ul>
 <li><a class="reference internal" href="#enhancemenrs">Enhancemenrs</a></li>
-<li><a class="reference internal" href="#id4">Fixes</a></li>
+<li><a class="reference internal" href="#id5">Fixes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-6-0-0">Release 6.0.0</a><ul>
-<li><a class="reference internal" href="#id5">Enhancements</a></li>
-<li><a class="reference internal" href="#id6">Fixes</a></li>
+<li><a class="reference internal" href="#id6">Enhancements</a></li>
+<li><a class="reference internal" href="#id7">Fixes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-5-2-0">Release 5.2.0</a><ul>
-<li><a class="reference internal" href="#id7">Enhancements</a></li>
+<li><a class="reference internal" href="#id8">Enhancements</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-5-1-0">Release 5.1.0</a><ul>
-<li><a class="reference internal" href="#id8">Enhancements</a></li>
-<li><a class="reference internal" href="#id9">Fixes</a></li>
+<li><a class="reference internal" href="#id9">Enhancements</a></li>
+<li><a class="reference internal" href="#id10">Fixes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-5-0-0">Release 5.0.0</a><ul>
 <li><a class="reference internal" href="#new-features">New Features</a></li>
-<li><a class="reference internal" href="#id10">Enhancements</a></li>
-<li><a class="reference internal" href="#id11">Fixes</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#release-4-5-1">Release 4.5.1</a><ul>
+<li><a class="reference internal" href="#id11">Enhancements</a></li>
 <li><a class="reference internal" href="#id12">Fixes</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#release-4-5-0">Release 4.5.0</a><ul>
+<li><a class="reference internal" href="#release-4-5-1">Release 4.5.1</a><ul>
 <li><a class="reference internal" href="#id13">Fixes</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#release-4-5-0">Release 4.5.0</a><ul>
+<li><a class="reference internal" href="#id14">Fixes</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#release-4-4-0">Release 4.4.0</a><ul>
-<li><a class="reference internal" href="#id14">New Features</a></li>
-<li><a class="reference internal" href="#id15">Enhancements</a></li>
-<li><a class="reference internal" href="#id16">Fixes</a></li>
+<li><a class="reference internal" href="#id15">New Features</a></li>
+<li><a class="reference internal" href="#id16">Enhancements</a></li>
+<li><a class="reference internal" href="#id17">Fixes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#traits-3-5-0-oct-15-2010">Traits 3.5.0 (Oct 15, 2010)</a><ul>
-<li><a class="reference internal" href="#id17">Enhancements</a></li>
-<li><a class="reference internal" href="#id18">Fixes</a></li>
+<li><a class="reference internal" href="#id18">Enhancements</a></li>
+<li><a class="reference internal" href="#id19">Fixes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#traits-3-4-0-may-26-2010">Traits 3.4.0 (May 26, 2010)</a><ul>
-<li><a class="reference internal" href="#id19">Enhancements</a></li>
-<li><a class="reference internal" href="#id20">Fixes</a></li>
+<li><a class="reference internal" href="#id20">Enhancements</a></li>
+<li><a class="reference internal" href="#id21">Fixes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#traits-3-3-0-feb-24-2010">Traits 3.3.0 (Feb 24, 2010)</a><ul>
-<li><a class="reference internal" href="#id21">Enhancements</a></li>
-<li><a class="reference internal" href="#id22">Fixes</a></li>
+<li><a class="reference internal" href="#id22">Enhancements</a></li>
+<li><a class="reference internal" href="#id23">Fixes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#traits-3-2-0-july-15-2009">Traits 3.2.0 (July 15, 2009)</a><ul>
-<li><a class="reference internal" href="#id23">Enhancements</a></li>
-<li><a class="reference internal" href="#id24">Fixes</a></li>
+<li><a class="reference internal" href="#id24">Enhancements</a></li>
+<li><a class="reference internal" href="#id25">Fixes</a></li>
 </ul>
 </li>
 </ul>
@@ -768,7 +826,7 @@ been eliminated and normalized (tabs/spaces, line endings).</p></li>
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.

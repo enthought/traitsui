@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -88,7 +90,7 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="module-traitsui.tree_node">
 <span id="traitsui-tree-node-module"></span><h1>traitsui.tree_node module<a class="headerlink" href="#module-traitsui.tree_node" title="Permalink to this headline">¶</a></h1>
@@ -97,7 +99,7 @@ factory classes.</p>
 <dl class="class">
 <dt id="traitsui.tree_node.ITreeNode">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.tree_node.</code><code class="sig-name descname">ITreeNode</code><a class="headerlink" href="#traitsui.tree_node.ITreeNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.Interface</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.Interface</span></code></a></p>
 <dl class="method">
 <dt id="traitsui.tree_node.ITreeNode.activated">
 <code class="sig-name descname">activated</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNode.activated" title="Permalink to this definition">¶</a></dt>
@@ -344,7 +346,7 @@ specified object.</p>
 <dl class="class">
 <dt id="traitsui.tree_node.ITreeNodeAdapter">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.tree_node.</code><code class="sig-name descname">ITreeNodeAdapter</code><span class="sig-paren">(</span><em class="sig-param">adaptee</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/traits.adaptation.html#traits.adaptation.adapter.Adapter" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.adaptation.adapter.Adapter</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/traits.adaptation.html#traits.adaptation.adapter.Adapter" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.adaptation.adapter.Adapter</span></code></a></p>
 <p>Abstract base class for an adapter that implements the ITreeNode
 interface.</p>
 <p>Usage:</p>
@@ -630,7 +632,7 @@ specified object.</p>
 <dl class="class">
 <dt id="traitsui.tree_node.ITreeNodeAdapterBridge">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.tree_node.</code><code class="sig-name descname">ITreeNodeAdapterBridge</code><a class="headerlink" href="#traitsui.tree_node.ITreeNodeAdapterBridge" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Private class for use by a toolkit-specific implementation of the
 TreeEditor to allow bridging the TreeNode interface used by the editor
 to the ITreeNode interface used by object adapters.</p>
@@ -1350,7 +1352,7 @@ specified object.</p>
 <dl class="class">
 <dt id="traitsui.tree_node.TreeNode">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.tree_node.</code><code class="sig-name descname">TreeNode</code><span class="sig-paren">(</span><em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tree_node.TreeNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Represents a tree node. Used by the tree editor and tree editor factory
 classes.</p>
 <dl class="method">
@@ -1840,7 +1842,7 @@ specified object.</p>
 <dl class="class">
 <dt id="traitsui.tree_node.TreeNodeObject">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.tree_node.</code><code class="sig-name descname">TreeNodeObject</code><a class="headerlink" href="#traitsui.tree_node.TreeNodeObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Represents the object that corresponds to a tree node.</p>
 <dl class="method">
 <dt id="traitsui.tree_node.TreeNodeObject.tno_activated">
@@ -2126,7 +2128,7 @@ specified object.</p>
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.

@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -88,7 +90,7 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="module-traitsui.undo">
 <span id="traitsui-undo-module"></span><h1>traitsui.undo module<a class="headerlink" href="#module-traitsui.undo" title="Permalink to this headline">¶</a></h1>
@@ -97,7 +99,7 @@ support.</p>
 <dl class="class">
 <dt id="traitsui.undo.AbstractUndoItem">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.undo.</code><code class="sig-name descname">AbstractUndoItem</code><a class="headerlink" href="#traitsui.undo.AbstractUndoItem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Abstract base class for undo items.</p>
 <dl class="method">
 <dt id="traitsui.undo.AbstractUndoItem.merge_undo">
@@ -177,7 +179,7 @@ support.</p>
 <dl class="class">
 <dt id="traitsui.undo.UndoHistory">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.undo.</code><code class="sig-name descname">UndoHistory</code><a class="headerlink" href="#traitsui.undo.UndoHistory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
 <p>Manages a list of undoable changes.</p>
 <dl class="method">
 <dt id="traitsui.undo.UndoHistory.add">
@@ -380,7 +382,7 @@ the history; otherwise, it appends the new item.</p>
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.

@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -90,14 +92,14 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="module-traitsui.tests.editors.test_default_override">
 <span id="traitsui-tests-editors-test-default-override-module"></span><h1>traitsui.tests.editors.test_default_override module<a class="headerlink" href="#module-traitsui.tests.editors.test_default_override" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="traitsui.tests.editors.test_default_override.Dummy">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.tests.editors.test_default_override.</code><code class="sig-name descname">Dummy</code><a class="headerlink" href="#traitsui.tests.editors.test_default_override.Dummy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
@@ -133,7 +135,7 @@
 <dl class="class">
 <dt id="traitsui.tests.editors.test_default_override.NewInt">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.tests.editors.test_default_override.</code><code class="sig-name descname">NewInt</code><span class="sig-paren">(</span><em class="sig-param">default_value=&lt;traits.trait_type.NoDefaultSpecified object&gt;</em>, <em class="sig-param">**metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_default_override.NewInt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/trait_types.html#traits.trait_types.Int" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_types.Int</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/trait_types.html#traits.trait_types.Int" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_types.Int</span></code></a></p>
 <dl class="method">
 <dt id="traitsui.tests.editors.test_default_override.NewInt.create_editor">
 <code class="sig-name descname">create_editor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_default_override.NewInt.create_editor" title="Permalink to this definition">¶</a></dt>
@@ -142,25 +144,31 @@
 
 </dd></dl>
 
-<dl class="function">
-<dt id="traitsui.tests.editors.test_default_override.test_custom_override">
-<code class="sig-prename descclassname">traitsui.tests.editors.test_default_override.</code><code class="sig-name descname">test_custom_override</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_default_override.test_custom_override" title="Permalink to this definition">¶</a></dt>
+<dl class="class">
+<dt id="traitsui.tests.editors.test_default_override.TestDefaultOverride">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.tests.editors.test_default_override.</code><code class="sig-name descname">TestDefaultOverride</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_default_override.TestDefaultOverride" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="traitsui.tests.editors.test_default_override.TestDefaultOverride.test_custom_override">
+<code class="sig-name descname">test_custom_override</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_default_override.TestDefaultOverride.test_custom_override" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
-<dt id="traitsui.tests.editors.test_default_override.test_readonly_override">
-<code class="sig-prename descclassname">traitsui.tests.editors.test_default_override.</code><code class="sig-name descname">test_readonly_override</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_default_override.test_readonly_override" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="traitsui.tests.editors.test_default_override.TestDefaultOverride.test_readonly_override">
+<code class="sig-name descname">test_readonly_override</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_default_override.TestDefaultOverride.test_readonly_override" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
-<dt id="traitsui.tests.editors.test_default_override.test_simple_override">
-<code class="sig-prename descclassname">traitsui.tests.editors.test_default_override.</code><code class="sig-name descname">test_simple_override</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_default_override.test_simple_override" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="traitsui.tests.editors.test_default_override.TestDefaultOverride.test_simple_override">
+<code class="sig-name descname">test_simple_override</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_default_override.TestDefaultOverride.test_simple_override" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
-<dt id="traitsui.tests.editors.test_default_override.test_text_override">
-<code class="sig-prename descclassname">traitsui.tests.editors.test_default_override.</code><code class="sig-name descname">test_text_override</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_default_override.test_text_override" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="traitsui.tests.editors.test_default_override.TestDefaultOverride.test_text_override">
+<code class="sig-name descname">test_text_override</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_default_override.TestDefaultOverride.test_text_override" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 </div>
 
@@ -213,7 +221,7 @@
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.

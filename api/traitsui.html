@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -87,7 +89,7 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="traitsui-package">
 <h1>traitsui package<a class="headerlink" href="#traitsui-package" title="Permalink to this headline">¶</a></h1>
@@ -304,6 +306,29 @@
 </div>
 <div class="section" id="module-traitsui">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-traitsui" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="traitsui.load_tests">
+<code class="sig-prename descclassname">traitsui.</code><code class="sig-name descname">load_tests</code><span class="sig-paren">(</span><em class="sig-param">loader</em>, <em class="sig-param">standard_tests</em>, <em class="sig-param">pattern</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.load_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Custom test loading function that enables test filtering using regex
+exclusion pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loader</strong> (<em>unittest.TestLoader</em>) – The instance of test loader</p></li>
+<li><p><strong>standard_tests</strong> (<em>unittest.TestSuite</em>) – Tests that would be loaded by default from this module (no tests)</p></li>
+<li><p><strong>pattern</strong> (<em>str</em>) – An inclusion pattern used to match test files (test*.py default)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>filtered_package_tests</strong> – TestSuite representing all package tests that did not match specified
+exclusion pattern.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>unittest.TestSuite</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 
@@ -366,7 +391,7 @@
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.

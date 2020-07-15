@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -89,7 +91,7 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="module-traitsui.extras.saving">
 <span id="traitsui-extras-saving-module"></span><h1>traitsui.extras.saving module<a class="headerlink" href="#module-traitsui.extras.saving" title="Permalink to this headline">¶</a></h1>
@@ -99,7 +101,7 @@ UI application.</p>
 <dl class="class">
 <dt id="traitsui.extras.saving.CanSaveMixin">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.extras.saving.</code><code class="sig-name descname">CanSaveMixin</code><a class="headerlink" href="#traitsui.extras.saving.CanSaveMixin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
 <p>A mixin-class for objects that wish to support GUI saving via a
 SaveHandler. It is the responsiblity of the child class to manage
 its dirty flag, which describes whether its information has changed
@@ -298,7 +300,7 @@ If not, override that method to set it to something else.</p>
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.

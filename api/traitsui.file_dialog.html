@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -88,7 +90,7 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="module-traitsui.file_dialog">
 <span id="traitsui-file-dialog-module"></span><h1>traitsui.file_dialog module<a class="headerlink" href="#module-traitsui.file_dialog" title="Permalink to this headline">¶</a></h1>
@@ -204,7 +206,7 @@ IFileDialogView interfaces.</p>
 <dl class="class">
 <dt id="traitsui.file_dialog.IFileDialogModel">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">IFileDialogModel</code><a class="headerlink" href="#traitsui.file_dialog.IFileDialogModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.Interface</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.Interface</span></code></a></p>
 <p>Defines a model extension to a file dialog.</p>
 <dl class="attribute">
 <dt id="traitsui.file_dialog.IFileDialogModel.file_name">
@@ -217,7 +219,7 @@ IFileDialogView interfaces.</p>
 <dl class="class">
 <dt id="traitsui.file_dialog.IFileDialogView">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">IFileDialogView</code><a class="headerlink" href="#traitsui.file_dialog.IFileDialogView" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.Interface</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.Interface</span></code></a></p>
 <p>Defines a visual extension to a file dialog.</p>
 <dl class="attribute">
 <dt id="traitsui.file_dialog.IFileDialogView.is_fixed">
@@ -270,7 +272,7 @@ MFileDialogView mix-in classes.</p>
 <dl class="class">
 <dt id="traitsui.file_dialog.MFileDialogModel">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">MFileDialogModel</code><a class="headerlink" href="#traitsui.file_dialog.MFileDialogModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <dl class="attribute">
 <dt id="traitsui.file_dialog.MFileDialogModel.file_name">
 <code class="sig-name descname">file_name</code><em class="property"> = File()</em><a class="headerlink" href="#traitsui.file_dialog.MFileDialogModel.file_name" title="Permalink to this definition">¶</a></dt>
@@ -282,7 +284,7 @@ MFileDialogView mix-in classes.</p>
 <dl class="class">
 <dt id="traitsui.file_dialog.MFileDialogView">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.file_dialog.</code><code class="sig-name descname">MFileDialogView</code><a class="headerlink" href="#traitsui.file_dialog.MFileDialogView" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Defines a visual extension to a file dialog.</p>
 <dl class="attribute">
 <dt id="traitsui.file_dialog.MFileDialogView.is_fixed">
@@ -499,7 +501,7 @@ selected file name is returned.</p>
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.

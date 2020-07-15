@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -89,49 +91,70 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="module-traitsui.extras.demo">
 <span id="traitsui-extras-demo-module"></span><h1>traitsui.extras.demo module<a class="headerlink" href="#module-traitsui.extras.demo" title="Permalink to this headline">¶</a></h1>
 <p>A Traits UI demo that borrows heavily from the design of the wxPython demo.</p>
 <dl class="class">
 <dt id="traitsui.extras.demo.Demo">
-<em class="property">class </em><code class="sig-prename descclassname">traitsui.extras.demo.</code><code class="sig-name descname">Demo</code><a class="headerlink" href="#traitsui.extras.demo.Demo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.extras.demo.</code><code class="sig-name descname">Demo</code><span class="sig-paren">(</span><em class="sig-param">model=None</em>, <em class="sig-param">**metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.demo.Demo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.handler.html#traitsui.handler.ModelView" title="traitsui.handler.ModelView"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.handler.ModelView</span></code></a></p>
 <dl class="method">
 <dt id="traitsui.extras.demo.Demo.default_traits_view">
 <code class="sig-name descname">default_traits_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.demo.Demo.default_traits_view" title="Permalink to this definition">¶</a></dt>
-<dd><p>Constructs the default traits view.</p>
+<dd><p>Returns the name of the default traits view for the object’s class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.demo.Demo.do_next">
+<code class="sig-name descname">do_next</code><span class="sig-paren">(</span><em class="sig-param">event=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.demo.Demo.do_next" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.demo.Demo.do_parent">
+<code class="sig-name descname">do_parent</code><span class="sig-paren">(</span><em class="sig-param">event=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.demo.Demo.do_parent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.demo.Demo.do_previous">
+<code class="sig-name descname">do_previous</code><span class="sig-paren">(</span><em class="sig-param">event=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.demo.Demo.do_previous" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.demo.Demo.init">
+<code class="sig-name descname">init</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.demo.Demo.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the controls of a user interface.</p>
+<p>This method is called after all user interface elements have been
+created, but before the user interface is displayed. Override this
+method to customize the user interface before it is displayed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>info</strong> (<em>UIInfo object</em>) – The UIInfo object associated with the view</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>initialized</strong> – A Boolean, indicating whether the user interface was successfully
+initialized. A True value indicates that the UI can be displayed;
+a False value indicates that the display operation should be
+cancelled. The default implementation returns True without taking
+any other action.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="traitsui.extras.demo.Demo.next_button">
-<code class="sig-name descname">next_button</code><em class="property"> = Button(image=ImageResource(&quot;next&quot;), label=&quot;Next&quot;)</em><a class="headerlink" href="#traitsui.extras.demo.Demo.next_button" title="Permalink to this definition">¶</a></dt>
-<dd><p>Navifate to next node.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="traitsui.extras.demo.Demo.parent_button">
-<code class="sig-name descname">parent_button</code><em class="property"> = Button(image=ImageResource(&quot;parent&quot;), label=&quot;Parent&quot;)</em><a class="headerlink" href="#traitsui.extras.demo.Demo.parent_button" title="Permalink to this definition">¶</a></dt>
-<dd><p>Navigate to parent of selected node.</p>
+<dt id="traitsui.extras.demo.Demo.model">
+<code class="sig-name descname">model</code><em class="property"> = Instance(DemoPath)</em><a class="headerlink" href="#traitsui.extras.demo.Demo.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Root path object for locating demo files:</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="traitsui.extras.demo.Demo.path">
 <code class="sig-name descname">path</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.extras.demo.Demo.path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Path to the root demo directory:</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="traitsui.extras.demo.Demo.previous_button">
-<code class="sig-name descname">previous_button</code><em class="property"> = Button(image=ImageResource(&quot;previous&quot;), label=&quot;Previous&quot;)</em><a class="headerlink" href="#traitsui.extras.demo.Demo.previous_button" title="Permalink to this definition">¶</a></dt>
-<dd><p>Navigate to previous node.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="traitsui.extras.demo.Demo.root">
-<code class="sig-name descname">root</code><em class="property"> = Instance(DemoPath)</em><a class="headerlink" href="#traitsui.extras.demo.Demo.root" title="Permalink to this definition">¶</a></dt>
-<dd><p>Root path object for locating demo files:</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -151,7 +174,7 @@
 <dl class="class">
 <dt id="traitsui.extras.demo.DemoButton">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.extras.demo.</code><code class="sig-name descname">DemoButton</code><a class="headerlink" href="#traitsui.extras.demo.DemoButton" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <dl class="attribute">
 <dt id="traitsui.extras.demo.DemoButton.demo">
 <code class="sig-name descname">demo</code><em class="property"> = Instance(HasTraits)</em><a class="headerlink" href="#traitsui.extras.demo.DemoButton.demo" title="Permalink to this definition">¶</a></dt>
@@ -180,7 +203,7 @@
 <dl class="class">
 <dt id="traitsui.extras.demo.DemoError">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.extras.demo.</code><code class="sig-name descname">DemoError</code><a class="headerlink" href="#traitsui.extras.demo.DemoError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <dl class="attribute">
 <dt id="traitsui.extras.demo.DemoError.msg">
 <code class="sig-name descname">msg</code><em class="property"> = Code()</em><a class="headerlink" href="#traitsui.extras.demo.DemoError.msg" title="Permalink to this definition">¶</a></dt>
@@ -204,6 +227,12 @@
 <code class="sig-name descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.demo.DemoFile.init" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="traitsui.extras.demo.DemoFile.locals">
+<code class="sig-name descname">locals</code><em class="property"> = Dict(Str, Any)</em><a class="headerlink" href="#traitsui.extras.demo.DemoFile.locals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Local namespace for executed code:</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="traitsui.extras.demo.DemoFile.run_code">
 <code class="sig-name descname">run_code</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.demo.DemoFile.run_code" title="Permalink to this definition">¶</a></dt>
@@ -226,6 +255,18 @@
 <dt id="traitsui.extras.demo.DemoFileBase.allows_children">
 <code class="sig-name descname">allows_children</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.extras.demo.DemoFileBase.allows_children" title="Permalink to this definition">¶</a></dt>
 <dd><p>Files don’t allow children:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.demo.DemoFileBase.base_url">
+<code class="sig-name descname">base_url</code><em class="property"> = Property(depends_on='path')</em><a class="headerlink" href="#traitsui.extras.demo.DemoFileBase.base_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The base URL for links:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.demo.DemoFileBase.css_filename">
+<code class="sig-name descname">css_filename</code><em class="property"> = Str(&quot;default.css&quot;)</em><a class="headerlink" href="#traitsui.extras.demo.DemoFileBase.css_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>The css file for this node.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -277,7 +318,7 @@
 
 <dl class="attribute">
 <dt id="traitsui.extras.demo.DemoFileBase.path">
-<code class="sig-name descname">path</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.extras.demo.DemoFileBase.path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">path</code><em class="property"> = Property(depends_on='parent.path,name')</em><a class="headerlink" href="#traitsui.extras.demo.DemoFileBase.path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of file system path to this file:</p>
 </dd></dl>
 
@@ -356,10 +397,17 @@ any other action.</p>
 <dt id="traitsui.extras.demo.DemoPath">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.extras.demo.</code><code class="sig-name descname">DemoPath</code><a class="headerlink" href="#traitsui.extras.demo.DemoPath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#traitsui.extras.demo.DemoTreeNodeObject" title="traitsui.extras.demo.DemoTreeNodeObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.extras.demo.DemoTreeNodeObject</span></code></a></p>
+<p>This class represents a directory.</p>
 <dl class="attribute">
 <dt id="traitsui.extras.demo.DemoPath.allows_children">
 <code class="sig-name descname">allows_children</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.extras.demo.DemoPath.allows_children" title="Permalink to this definition">¶</a></dt>
 <dd><p>Paths do allow children:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.demo.DemoPath.base_url">
+<code class="sig-name descname">base_url</code><em class="property"> = Property(depends_on='path')</em><a class="headerlink" href="#traitsui.extras.demo.DemoPath.base_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The base URL for links:</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -376,9 +424,15 @@ This trait is set when a config file exists for the parent of this path.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="traitsui.extras.demo.DemoPath.css_filename">
+<code class="sig-name descname">css_filename</code><em class="property"> = Str(&quot;default.css&quot;)</em><a class="headerlink" href="#traitsui.extras.demo.DemoPath.css_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>The css file for this node.</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="traitsui.extras.demo.DemoPath.description">
-<code class="sig-name descname">description</code><em class="property"> = Property(HTML, depends_on=&quot;_description&quot;)</em><a class="headerlink" href="#traitsui.extras.demo.DemoPath.description" title="Permalink to this definition">¶</a></dt>
-<dd><p>Description of the contents of the directory:</p>
+<code class="sig-name descname">description</code><em class="property"> = Property(HTML, depends_on=&quot;path,css_filename&quot;)</em><a class="headerlink" href="#traitsui.extras.demo.DemoPath.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description of what the demo does:</p>
 </dd></dl>
 
 <dl class="method">
@@ -437,14 +491,8 @@ dictionary.</p>
 
 <dl class="attribute">
 <dt id="traitsui.extras.demo.DemoPath.path">
-<code class="sig-name descname">path</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.extras.demo.DemoPath.path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">path</code><em class="property"> = Property(depends_on='parent.path,name')</em><a class="headerlink" href="#traitsui.extras.demo.DemoPath.path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of file system path to this package:</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="traitsui.extras.demo.DemoPath.source">
-<code class="sig-name descname">source</code><em class="property"> = Property(Code)</em><a class="headerlink" href="#traitsui.extras.demo.DemoPath.source" title="Permalink to this definition">¶</a></dt>
-<dd><p>Source code contained in the ‘__init__.py’ file:</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -505,7 +553,7 @@ dictionary.</p>
 
 <dl class="function">
 <dt id="traitsui.extras.demo.demo">
-<code class="sig-prename descclassname">traitsui.extras.demo.</code><code class="sig-name descname">demo</code><span class="sig-paren">(</span><em class="sig-param">use_files=False</em>, <em class="sig-param">dir_name=None</em>, <em class="sig-param">config_filename=''</em>, <em class="sig-param">title='Traits UI Demos'</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.demo.demo" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">traitsui.extras.demo.</code><code class="sig-name descname">demo</code><span class="sig-paren">(</span><em class="sig-param">use_files=False</em>, <em class="sig-param">dir_name=None</em>, <em class="sig-param">config_filename=''</em>, <em class="sig-param">title='Traits UI Demos'</em>, <em class="sig-param">css_filename='default.css'</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.demo.demo" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
@@ -640,7 +688,7 @@ Otherwise, return the input <cite>rst_str</cite>.</p>
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.

@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -88,7 +90,7 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="module-traitsui.ui_traits">
 <span id="traitsui-ui-traits-module"></span><h1>traitsui.ui_traits module<a class="headerlink" href="#module-traitsui.ui_traits" title="Permalink to this headline">¶</a></h1>
@@ -96,7 +98,7 @@
 <dl class="class">
 <dt id="traitsui.ui_traits.ATheme">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.ui_traits.</code><code class="sig-name descname">ATheme</code><span class="sig-paren">(</span><em class="sig-param">value=None</em>, <em class="sig-param">**metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.ATheme" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/trait_type.html#traits.trait_type.TraitType" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_type.TraitType</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/trait_type.html#traits.trait_type.TraitType" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_type.TraitType</span></code></a></p>
 <p>Defines a trait whose value must be a traits UI Theme or a string that
 can be converted to one.</p>
 <dl class="attribute">
@@ -122,7 +124,7 @@ can be converted to one.</p>
 <dl class="class">
 <dt id="traitsui.ui_traits.StatusItem">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.ui_traits.</code><code class="sig-name descname">StatusItem</code><span class="sig-paren">(</span><em class="sig-param">value=None</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.StatusItem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
 <dl class="attribute">
 <dt id="traitsui.ui_traits.StatusItem.name">
 <code class="sig-name descname">name</code><em class="property"> = Str(&quot;status&quot;)</em><a class="headerlink" href="#traitsui.ui_traits.StatusItem.name" title="Permalink to this definition">¶</a></dt>
@@ -148,7 +150,7 @@ can be converted to one.</p>
 <dl class="class">
 <dt id="traitsui.ui_traits.ViewStatus">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.ui_traits.</code><code class="sig-name descname">ViewStatus</code><span class="sig-paren">(</span><em class="sig-param">default_value=&lt;traits.trait_type.NoDefaultSpecified object&gt;</em>, <em class="sig-param">**metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_traits.ViewStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/trait_type.html#traits.trait_type.TraitType" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_type.TraitType</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/trait_type.html#traits.trait_type.TraitType" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_type.TraitType</span></code></a></p>
 <p>Defines a trait whose value must be a single StatusItem instance or a
 list of StatusItem instances.</p>
 <dl class="attribute">
@@ -228,7 +230,7 @@ list of StatusItem instances.</p>
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.

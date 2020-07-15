@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -89,7 +91,7 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="module-traitsui.null.font_trait">
 <span id="traitsui-null-font-trait-module"></span><h1>traitsui.null.font_trait module<a class="headerlink" href="#module-traitsui.null.font_trait" title="Permalink to this headline">¶</a></h1>
@@ -97,7 +99,7 @@
 <dl class="class">
 <dt id="traitsui.null.font_trait.TraitFont">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.null.font_trait.</code><code class="sig-name descname">TraitFont</code><a class="headerlink" href="#traitsui.null.font_trait.TraitFont" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/trait_handler.html#traits.trait_handler.TraitHandler" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_handler.TraitHandler</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/trait_handler.html#traits.trait_handler.TraitHandler" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_handler.TraitHandler</span></code></a></p>
 <p>Ensures that values assigned to a trait attribute are valid font
 descriptor strings; the value actually assigned is the corresponding
 canonical font descriptor string.</p>
@@ -107,11 +109,11 @@ canonical font descriptor string.</p>
 <dd><p>Must return a string describing the type of value accepted by the
 trait handler.</p>
 <p>The string should be a phrase describing the type defined by the
-TraitHandler subclass, rather than a complete sentence. For example, use
-the phrase, “a square sprocket” instead of the sentence, “The value must
-be a square sprocket.” The value returned by info() is combined with
-other information whenever an error occurs and therefore makes more
-sense to the user if the result is a phrase. The info() method is
+TraitHandler subclass, rather than a complete sentence. For example,
+use the phrase, “a square sprocket” instead of the sentence, “The value
+must be a square sprocket.” The value returned by info() is combined
+with other information whenever an error occurs and therefore makes
+more sense to the user if the result is a phrase. The info() method is
 similar in purpose and use to the <strong>info</strong> attribute of a validator
 function.</p>
 <p>Note that the result can include information specific to the particular
@@ -183,7 +185,7 @@ default method returns the value of the ‘info_text’ attribute.</p>
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.

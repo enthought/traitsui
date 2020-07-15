@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -87,7 +89,7 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="advanced-trait-editors">
 <span id="id1"></span><h1>Advanced Trait Editors<a class="headerlink" href="#advanced-trait-editors" title="Permalink to this headline">¶</a></h1>
@@ -640,7 +642,9 @@ limitations of the underlying native control used by the tabular editor.</p></li
 <p>The tabular editor works in conjunction with an adapter class, derived from
 TabularAdapter. The tabular adapter interfaces between the tabular editor and
 the data being displayed. The tabular adapter is the reason for the flexibility
-and power of the tabular editor to display a wide variety of data.</p>
+and power of the tabular editor to display a wide variety of data. For more
+detailed information about the TabularAdapter class please see
+<a class="reference internal" href="adapters.html#advanced-tabular-adapter"><span class="std std-ref">The TabularAdapter Class</span></a>.</p>
 <p>The most important attribute of TabularAdapter is <strong>columns</strong>, which is list of
 columns to be displayed. Each entry in the <strong>columns</strong> list can be either a
 string, or a tuple consisting of a string and another value, which can be of any
@@ -955,7 +959,8 @@ subclasses of TreeNode).</p>
 <div class="section" id="defining-nodes">
 <span id="id16"></span><h3>Defining Nodes<a class="headerlink" href="#defining-nodes" title="Permalink to this headline">¶</a></h3>
 <p>For details on the attributes of the TreeNode class, refer to the <em>Traits API
-Reference</em>.</p>
+Reference</em>. More information about the TreeNode class is also available in
+<a class="reference internal" href="adapters.html#advanced-tree-node"><span class="std std-ref">The TreeEditor and TreeNodes</span></a>.</p>
 <p>You must specify the classes whose instances the node type applies to. Use the
 <strong>node_for</strong> attribute of TreeNode to specify a list of classes; often, this
 list contains only one class. You can have more than one node type that applies
@@ -1426,7 +1431,7 @@ or static.</p>
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.

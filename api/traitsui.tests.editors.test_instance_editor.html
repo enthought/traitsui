@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -90,37 +92,37 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="module-traitsui.tests.editors.test_instance_editor">
 <span id="traitsui-tests-editors-test-instance-editor-module"></span><h1>traitsui.tests.editors.test_instance_editor module<a class="headerlink" href="#module-traitsui.tests.editors.test_instance_editor" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="traitsui.tests.editors.test_instance_editor.EditedInstance">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.tests.editors.test_instance_editor.</code><code class="sig-name descname">EditedInstance</code><a class="headerlink" href="#traitsui.tests.editors.test_instance_editor.EditedInstance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.tests.editors.test_instance_editor.NonmodalInstanceEditor">
 <em class="property">class </em><code class="sig-prename descclassname">traitsui.tests.editors.test_instance_editor.</code><code class="sig-name descname">NonmodalInstanceEditor</code><a class="headerlink" href="#traitsui.tests.editors.test_instance_editor.NonmodalInstanceEditor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v6.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
 </dd></dl>
 
-<dl class="function">
-<dt id="traitsui.tests.editors.test_instance_editor.skip_if_not_qt4">
-<code class="sig-prename descclassname">traitsui.tests.editors.test_instance_editor.</code><code class="sig-name descname">skip_if_not_qt4</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">*</em>, <em class="sig-param">backend_name='qt4'</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_instance_editor.skip_if_not_qt4" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decorator that skip tests if the backend is not the desired one.</p>
+<dl class="class">
+<dt id="traitsui.tests.editors.test_instance_editor.TestInstanceEditor">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.tests.editors.test_instance_editor.</code><code class="sig-name descname">TestInstanceEditor</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_instance_editor.TestInstanceEditor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="traitsui.tests.editors.test_instance_editor.TestInstanceEditor.test_simple_editor">
+<code class="sig-name descname">test_simple_editor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_instance_editor.TestInstanceEditor.test_simple_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tests.editors.test_instance_editor.TestInstanceEditor.test_simple_editor_parent_closed">
+<code class="sig-name descname">test_simple_editor_parent_closed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_instance_editor.TestInstanceEditor.test_simple_editor_parent_closed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
-
-<dl class="function">
-<dt id="traitsui.tests.editors.test_instance_editor.test_simple_editor">
-<code class="sig-prename descclassname">traitsui.tests.editors.test_instance_editor.</code><code class="sig-name descname">test_simple_editor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_instance_editor.test_simple_editor" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="traitsui.tests.editors.test_instance_editor.test_simple_editor_parent_closed">
-<code class="sig-prename descclassname">traitsui.tests.editors.test_instance_editor.</code><code class="sig-name descname">test_simple_editor_parent_closed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_instance_editor.test_simple_editor_parent_closed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </div>
 
@@ -173,7 +175,7 @@
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.

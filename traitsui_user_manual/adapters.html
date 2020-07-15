@@ -14,9 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0.0',
+        VERSION:     '7.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
     </script>
@@ -87,7 +89,7 @@
           <div class="span9">
             
         <div class="bodywrapper">
-          <div class="body" id="spc-section-body">
+          <div class="body" id="spc-section-body" role="main">
             
   <div class="section" id="advanced-editor-adapters">
 <span id="id1"></span><h1>Advanced Editor Adapters<a class="headerlink" href="#advanced-editor-adapters" title="Permalink to this headline">¶</a></h1>
@@ -98,7 +100,7 @@ are the ListStrEditor, the TabularEditor and the TreeEditor.  In this section
 we will look more closely at each of these and discuss how they can be
 customized as needed.</p>
 <div class="section" id="the-treeeditor-and-treenodes">
-<h2>The TreeEditor and TreeNodes<a class="headerlink" href="#the-treeeditor-and-treenodes" title="Permalink to this headline">¶</a></h2>
+<span id="advanced-tree-node"></span><h2>The TreeEditor and TreeNodes<a class="headerlink" href="#the-treeeditor-and-treenodes" title="Permalink to this headline">¶</a></h2>
 <p id="tree-nodes">The <a class="reference internal" href="../api/traitsui.editors.tree_editor.html#traitsui.editors.tree_editor.TreeEditor" title="traitsui.editors.tree_editor.TreeEditor"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeEditor</span></code></a> internally associates
 with each node in the tree a pair consisting of the object that is associated
 with the node and something that to adheres to the <a class="reference internal" href="../api/traitsui.tree_node.html#traitsui.tree_node.TreeNode" title="traitsui.tree_node.TreeNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeNode</span></code></a>
@@ -360,7 +362,7 @@ smoothing over the TreeNode columns label API.</p>
 </div>
 </div>
 <div class="section" id="the-tabularadapter-class">
-<h2>The TabularAdapter Class<a class="headerlink" href="#the-tabularadapter-class" title="Permalink to this headline">¶</a></h2>
+<span id="advanced-tabular-adapter"></span><h2>The TabularAdapter Class<a class="headerlink" href="#the-tabularadapter-class" title="Permalink to this headline">¶</a></h2>
 <p>The power and flexibility of the tabular editor is mostly a result of the
 <a class="reference internal" href="../api/traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularAdapter</span></code></a> class, which is the base class from which all
 tabular editor adapters must be derived.</p>
@@ -906,7 +908,7 @@ well.</p>
         &copy; Copyright 2008-2020, Enthought
       </li>
       <li>
-      Last updated on Apr 24, 2020.
+      Last updated on Jul 15, 2020.
       </li>
       <li>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
