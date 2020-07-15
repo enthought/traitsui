@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editors.file_editor module &mdash; TraitsUI 7 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '7.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
+    <link rel="next" title="traitsui.editors.font_editor module" href="traitsui.editors.font_editor.html" >
+    <link rel="prev" title="traitsui.editors.enum_editor module" href="traitsui.editors.enum_editor.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
+  
+    <li><a href="#">traitsui.editors.file_editor module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editors.font_editor.html" title="traitsui.editors.font_editor module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editors.enum_editor.html" title="traitsui.editors.enum_editor module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <div class="section" id="module-traitsui.editors.file_editor">
+<span id="traitsui-editors-file-editor-module"></span><h1>traitsui.editors.file_editor module<a class="headerlink" href="#module-traitsui.editors.file_editor" title="Permalink to this headline">¶</a></h1>
+<p>Defines the file editor factory for all traits toolkit backends.</p>
+<dl class="attribute">
+<dt id="traitsui.editors.file_editor.FileEditor">
+<code class="sig-prename descclassname">traitsui.editors.file_editor.</code><code class="sig-name descname">FileEditor</code><a class="headerlink" href="#traitsui.editors.file_editor.FileEditor" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#traitsui.editors.file_editor.ToolkitEditorFactory" title="traitsui.editors.file_editor.ToolkitEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editors.file_editor.ToolkitEditorFactory</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.editors.file_editor.ToolkitEditorFactory">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.file_editor.</code><code class="sig-name descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.file_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.editors.text_editor.html#traitsui.editors.text_editor.ToolkitEditorFactory" title="traitsui.editors.text_editor.ToolkitEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editors.text_editor.ToolkitEditorFactory</span></code></a></p>
+<p>Editor factory for file editors.</p>
+<dl class="attribute">
+<dt id="traitsui.editors.file_editor.ToolkitEditorFactory.allow_dir">
+<code class="sig-name descname">allow_dir</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.file_editor.ToolkitEditorFactory.allow_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can the user select directories as well as files?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.file_editor.ToolkitEditorFactory.auto_set">
+<code class="sig-name descname">auto_set</code><em class="property"> = False</em><a class="headerlink" href="#traitsui.editors.file_editor.ToolkitEditorFactory.auto_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is user input set on every keystroke? (Overrides the default) (‘simple’
+style only):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.file_editor.ToolkitEditorFactory.dclick_name">
+<code class="sig-name descname">dclick_name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.file_editor.ToolkitEditorFactory.dclick_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional extended trait name used to notify when the user double-clicks
+an entry in the file tree view. The associated path is assigned it:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.file_editor.ToolkitEditorFactory.dialog_style">
+<code class="sig-name descname">dialog_style</code><em class="property"> = Str(&quot;open&quot;)</em><a class="headerlink" href="#traitsui.editors.file_editor.ToolkitEditorFactory.dialog_style" title="Permalink to this definition">¶</a></dt>
+<dd><p>The style of file dialog to use when the ‘Browse…’ button is clicked
+Should be one of ‘open’ or ‘save’</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.file_editor.ToolkitEditorFactory.enter_set">
+<code class="sig-name descname">enter_set</code><em class="property"> = True</em><a class="headerlink" href="#traitsui.editors.file_editor.ToolkitEditorFactory.enter_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is user input set when the Enter key is pressed? (Overrides the default)
+(‘simple’ style only):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.file_editor.ToolkitEditorFactory.entries">
+<code class="sig-name descname">entries</code><em class="property"> = Int(10)</em><a class="headerlink" href="#traitsui.editors.file_editor.ToolkitEditorFactory.entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of history entries to maintain:
+FIXME: add support</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.file_editor.ToolkitEditorFactory.filter">
+<code class="sig-name descname">filter</code><em class="property"> = filter_trait</em><a class="headerlink" href="#traitsui.editors.file_editor.ToolkitEditorFactory.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wildcard filter to apply to the file dialog:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.file_editor.ToolkitEditorFactory.filter_name">
+<code class="sig-name descname">filter_name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.file_editor.ToolkitEditorFactory.filter_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional extended trait name of the trait containing the list of filters:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.file_editor.ToolkitEditorFactory.reload_name">
+<code class="sig-name descname">reload_name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.file_editor.ToolkitEditorFactory.reload_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional extended trait name used to notify the editor when the file
+system view should be reloaded (‘custom’ style only):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.file_editor.ToolkitEditorFactory.root_path">
+<code class="sig-name descname">root_path</code><em class="property"> = File()</em><a class="headerlink" href="#traitsui.editors.file_editor.ToolkitEditorFactory.root_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>The root path of the file tree view (‘custom’ style only, not supported
+under wx). If not specified, the filesystem root is used.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.file_editor.ToolkitEditorFactory.root_path_name">
+<code class="sig-name descname">root_path_name</code><em class="property"> = Str()</em><a class="headerlink" href="#traitsui.editors.file_editor.ToolkitEditorFactory.root_path_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional extend trait name of the trait containing the root path.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.file_editor.ToolkitEditorFactory.truncate_ext">
+<code class="sig-name descname">truncate_ext</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.file_editor.ToolkitEditorFactory.truncate_ext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should file extension be truncated?</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.editors.enum_editor.html"
+                        title="previous chapter">traitsui.editors.enum_editor module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.editors.font_editor.html"
+                        title="next chapter">traitsui.editors.font_editor module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.editors.file_editor.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on Jul 15, 2020.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
