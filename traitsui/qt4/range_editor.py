@@ -141,7 +141,7 @@ class SimpleSliderEditor(BaseRangeEditor):
 
         # The default size is a bit too big and probably doesn't need to grow.
         sh = text.sizeHint()
-        sh.setWidth(sh.width() / 2)
+        sh.setWidth(sh.width() // 2)
         text.setMaximumSize(sh)
 
         panel.addWidget(text)
@@ -417,7 +417,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
 
         # The default size is a bit too big and probably doesn't need to grow.
         sh = text.sizeHint()
-        sh.setWidth(sh.width() / 2)
+        sh.setWidth(sh.width() // 2)
         text.setMaximumSize(sh)
 
         panel.addWidget(text)
