@@ -175,6 +175,9 @@ if __name__ == "__main__":
         package_data=dict(
             traitsui=[
                 'examples/demo/*',
+                'examples/demo/*/*',
+                'examples/demo/*/*/*',
+                'examples/demo/*/*',
                 'extras/images/*',
                 'image/library/*.zip',
                 'images/*',
