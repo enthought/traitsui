@@ -11,6 +11,7 @@
 
 """ Tests for traitsui.tests._tools """
 
+import os
 import sys
 import unittest
 
@@ -95,6 +96,16 @@ class TestProcessEventsRepeated(unittest.TestCase):
             # loop to break too soon. (See enthought/traitsui#951)"
             self.skipTest(
                 "process_cascade_events is not reliable on Qt4 + OSX"
+            )
+
+        is_appveyor = os.environ.get("APPVEYOR", None) is not None
+        if QtCore.__version_info__ <= (5, 12, 6) and is_appveyor:
+            # With Qt + Appveyor, process_cascade_events may
+            # _occasionally_ break out of its loop too early. This is only
+            # seen on Appveyor but has not been reproducible on other Windows
+            # machines (See enthought/traitsui#951)
+            self.skipTest(
+                "process_cascade_events is not reliable on Qt + Appveyor"
             )
 
         def cleanup(q_object):
