@@ -19,6 +19,7 @@ import traceback
 import unittest
 from unittest import mock
 
+import pkg_resources
 from traits.api import HasTraits
 
 from traitsui.tests._tools import (
@@ -134,9 +135,13 @@ class ExampleSearcher:
 # Configuration
 # =============================================================================
 
-EXAMPLES = os.path.join(HERE, "..", "examples")
-DEMO = os.path.join(EXAMPLES, "demo")
-TUTORIALS = os.path.join(EXAMPLES, "tutorials", "doc_examples", "examples")
+# Tutorial files are not part of the package data
+TUTORIALS = os.path.join(
+    HERE, "..", "examples", "tutorials", "doc_examples", "examples",
+)
+
+# Demo files are part of the package data.
+DEMO = pkg_resources.resource_filename("traitsui", "examples/demo")
 
 #: Explicitly include folders from which example files should be found
 #: recursively.
