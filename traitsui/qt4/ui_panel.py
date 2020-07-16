@@ -1284,14 +1284,14 @@ class HTMLHelpWindow(QtGui.QDialog):
 
 
 # -------------------------------------------------------------------------
-#  Creates a PyFace HeadingText control:
+#  Creates a Pyface HeadingText control:
 # -------------------------------------------------------------------------
 
 HeadingText = None
 
 
 def heading_text(*args, **kw):
-    """Create a PyFace HeadingText control.
+    """Create a Pyface HeadingText control.
     """
     global HeadingText
 

@@ -1554,7 +1554,7 @@ class TableEditorToolbar(HasPrivateTraits):
             self.control.SetSize(wx.Size(23 * len(actions), 16))
 
     # -------------------------------------------------------------------------
-    #  PyFace/Traits menu/toolbar controller interface:
+    #  Pyface/Traits menu/toolbar controller interface:
     # -------------------------------------------------------------------------
 
     def add_to_menu(self, menu_item):

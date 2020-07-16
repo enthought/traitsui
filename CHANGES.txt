@@ -268,7 +268,7 @@ required dependencies on TraitsUI.
 As part of the latter work, support for TraitsUI Themes have been removed. This
 was a feature that was only available under WxPython, was slow, was never used
 in production code, and was not supported for over a decade.  Some of the
-codebase remains as it is still used by the PyFace Dock infrastructure and
+codebase remains as it is still used by the Pyface Dock infrastructure and
 several editors, but ther long-term intention is to remove this completely.
 
 Another long-desired feature was the ability to write toolkit backends for
@@ -320,7 +320,7 @@ Enhancements
 * Expose a "refresh" trait for the DataFrameEditor (#288)
 * Use Enthought Deployment Manager to automate CI and testing (#321, #357)
 * Continuous integration on OS X (#322)
-* Reduce circular dependencies of PyFace on TraitsUI (#304)
+* Reduce circular dependencies of Pyface on TraitsUI (#304)
 * PEP8-compliant formatting of source (#290)
 * Add progress bar column for TableEditor (#287)
 * Add codecov coverage reports (#285, #328)

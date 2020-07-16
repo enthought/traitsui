@@ -53,7 +53,7 @@ class SourceEditor(Editor):
     """
 
     # -------------------------------------------------------------------------
-    #  PyFace PythonEditor interface:
+    #  Pyface PythonEditor interface:
     # -------------------------------------------------------------------------
 
     #: Event that is fired on keypresses:

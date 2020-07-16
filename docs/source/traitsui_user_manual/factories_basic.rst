@@ -752,7 +752,7 @@ ImageEditor()
 ImageEditor() generates a read-only display of an image. The image to be
 displayed is determined by the *image* parameter, or by the value of the trait
 attribute being edited, if *image* is not specified. In either case, the value
-must be a PyFace ImageResource (pyface.api.ImageResource), or a string
+must be a Pyface ImageResource (pyface.api.ImageResource), or a string
 that can be converted to one. If *image* is specified, then the type and value
 of the trait attribute being edited are irrelevant and are ignored.
 
@@ -801,7 +801,7 @@ function (see :ref:`enumeditor`), as well as some additional parameters.
 .. NOTE:: Image enumeration editors do not use ImageResource.
 
    Unlike most other images in the Traits and TraitsUI packages, images in the
-   wxWindows implementation of image enumeration editors do not use the PyFace
+   wxWindows implementation of image enumeration editors do not use the Pyface
    ImageResource class.
 
 In the wxWidgets implementation, image enumeration editors use the following
