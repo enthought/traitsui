@@ -165,6 +165,7 @@ if __name__ == "__main__":
             """.splitlines() if len(c.strip()) > 0],
         description='traitsui: traits-capable user interfaces',
         long_description=open('README.rst').read(),
+        long_description_content_type="text/x-rst",
         url='http://docs.enthought.com/traitsui',
         download_url='https://github.com/enthought/traitsui',
         install_requires=__requires__,
