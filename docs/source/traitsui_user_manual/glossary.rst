@@ -175,7 +175,7 @@ Appendix I: Glossary of Terms
         
    wx 
         A shorthand term for the low-level GUI toolkit on which TraitsUI and
-        PyFace are currently based (`wxWidgets <http://wxwidgets.org>`_) and its
+        Pyface are currently based (`wxWidgets <http://wxwidgets.org>`_) and its
         Python wrapper  (`wxPython <http://www.wxpython.org>`_). 
 
 .. rubric:: Footnotes

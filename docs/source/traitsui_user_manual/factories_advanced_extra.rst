@@ -424,7 +424,7 @@ The *on_select* and *on_dclick* parameters are callables to invoke when the user
 selects or double-clicks an item, respectively.
 
 You can define a shortcut menu that opens when the user right-clicks an item.
-Use the *menu* parameter to specify a TraitsUI or PyFace Menu, containing
+Use the *menu* parameter to specify a TraitsUI or Pyface Menu, containing
 Action objects for the menu commands.
 
 .. _editing-the-table:
@@ -1025,7 +1025,7 @@ Shortcut Menus on Nodes
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Use the **menu** attribute of TreeNode to define a shortcut menu that opens when
-the user right-clicks on a node. The value is a TraitsUI or PyFace menu
+the user right-clicks on a node. The value is a TraitsUI or Pyface menu
 containing Action objects for the menu commands. In Example 16, the following
 lines define the node type for employees, including a shortcut menu for employee
 nodes::

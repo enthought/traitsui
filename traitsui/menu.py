@@ -23,7 +23,7 @@
 
 from traits.api import Str
 
-# Import and rename the needed PyFace elements:
+# Import and rename the needed Pyface elements:
 from pyface.action.api import ToolBarManager as ToolBar
 from pyface.action.api import MenuBarManager as MenuBar
 from pyface.action.api import MenuManager as Menu

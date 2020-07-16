@@ -16,7 +16,7 @@
 # -------------------------------------------------------------------------
 
 """ Defines the DockableViewElement class, which allows Traits UIs and
-    Traits UI elements to be docked in external PyFace DockWindow windows.
+    Traits UI elements to be docked in external Pyface DockWindow windows.
 """
 
 
@@ -40,7 +40,7 @@ from pyface.dock.idockable import IDockable
 
 class DockableViewElement(HasPrivateTraits, IDockable):
     """ Allows Traits UIs and Traits UI elements to be docked in external
-        PyFace DockWindow windows.
+        Pyface DockWindow windows.
     """
 
     # -------------------------------------------------------------------------

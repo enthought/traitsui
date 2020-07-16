@@ -15,7 +15,7 @@
 #
 # ------------------------------------------------------------------------------
 
-""" Defines the table grid model used by the table editor based on the PyFace
+""" Defines the table grid model used by the table editor based on the Pyface
     grid control.
 """
 
