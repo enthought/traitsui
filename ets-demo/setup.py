@@ -252,6 +252,7 @@ if __name__ == "__main__":
         "wx": ["wxpython>=4", "numpy"],
         "pyqt5": ["pyqt>=5", "pygments"],
         "pyside2": ["pyside2", "shiboken2", "pygments"],
+        "test": ["eam"],
     }
     setuptools.setup(
         name="etsdemo",
@@ -281,8 +282,21 @@ if __name__ == "__main__":
         long_description=get_long_description(),
         long_description_content_type="text/x-rst",
         packages=setuptools.find_packages(include=["etsdemo", "etsdemo.*"]),
+        package_data={
+            "etsdemo": [
+                "images/*.png",
+            ],
+        },
         install_requires=install_requires,
         extras_require=extras_require,
         license="BSD",
         python_requires=">=3.5",
+        entry_points={
+            "gui_scripts": [
+                "etsdemo = etsdemo.main:main",
+            ],
+            "enthought_app_metadata": [
+                "etsdemo = etsdemo.info:info",
+            ],
+        },
     )
