@@ -177,7 +177,6 @@ if __name__ == "__main__":
                 'examples/demo/*',
                 'examples/demo/*/*',
                 'examples/demo/*/*/*',
-                'examples/demo/*/*',
                 'extras/images/*',
                 'image/library/*.zip',
                 'images/*',
