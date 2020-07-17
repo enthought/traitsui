@@ -109,6 +109,10 @@ def _get_placeholder_node(response, msg):
         Response returned from a distribution's entry point.
     msg : str
         User-facing message to show.
+
+    Returns
+    -------
+    node : DemoTreeNodeObject
     """
     return DemoVirtualDirectory(
         nice_name=response.get("name", "(Empty)"),
