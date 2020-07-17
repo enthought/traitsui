@@ -979,7 +979,7 @@ demo_tree_editor = TreeEditor(
             node_for=[DemoVirtualDirectory],
             label="nice_name",
             view=demo_virtual_dir_view,
-        )
+        ),
     ],
     hide_root=True,
     selected='selected_node',
