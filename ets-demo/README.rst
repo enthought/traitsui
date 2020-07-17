@@ -18,7 +18,7 @@ command line prompt::
 
 It can also be launched programmatically. For example, from Python prompt::
 
-    >> from etsdemo.main import main
+    >>> from etsdemo.main import main
     >>> main()
 
 
