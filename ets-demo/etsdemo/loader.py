@@ -22,6 +22,8 @@ from etsdemo.app import DemoPath, DemoVirtualDirectory
 
 logger = logging.getLogger(__name__)
 
+#: The entry point group name for other packages to contribute
+#: data files.
 ENTRY_POINT_GROUP = "etsdemo_data"
 
 
