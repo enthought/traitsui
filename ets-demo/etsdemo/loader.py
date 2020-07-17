@@ -43,13 +43,11 @@ def get_responses():
     ``root``: str
         The root directory where resource files are stored.
 
-    e.g.:
-    {
-        "version": 1,
-        "name": "Some Pretty Name",
-        "root": "/path/to/folder",
-    }
-
+    Returns
+    -------
+    responses: list of dict
+        Responses as are loaded from the entry points.
+        Note that the content has not been sanitized nor validated.
     """
     request = {}
     responses = []
