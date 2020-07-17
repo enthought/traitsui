@@ -16,10 +16,10 @@ command line prompt::
 
     $ etsdemo
 
-It can also be launched programmatically. e.g. in Python::
+It can also be launched programmatically. For example, from Python prompt::
 
-    from etsdemo.main import main
-    main()
+    >> from etsdemo.main import main
+    >>> main()
 
 
 How to contribute data via entry points
