@@ -11,17 +11,51 @@
 """ The main function for launching the demo application.
 """
 
-from etsdemo.app import Demo, DemoEmpty
+from etsdemo.app import Demo, DemoVirtualDirectory
+from etsdemo.loader import get_responses, response_to_node
 
 
-def _create_demo():
-    """ Create the demo object with everything setup ready to be launched. """
-    return Demo(model=DemoEmpty())
+def _create_demo(infos=None):
+    """ Create the demo object with everything setup ready to be launched.
 
+    Paramters
+    ---------
+    infos : list of dict, or None
+        List of responses specifying the demo resources.
+        Each response is a dictionary, in the format as specified by an
+        entry point.
+        If none, then responses are loaded from existing entry points installed
+        in the Python environment.
 
-def main():
-    """ Main function exposed to the entry point for launching the demo
-    application.
+    Returns
+    -------
+    demo : Demo
     """
-    demo = _create_demo()
+    if infos is None:
+        infos = get_responses()
+
+    resources = [
+        response_to_node(response)
+        for response in infos
+    ]
+    return Demo(
+        model=DemoVirtualDirectory(resources=resources),
+    )
+
+
+def main(infos=None):
+    """ Main function for launching the demo application.
+
+    Paramters
+    ---------
+    infos : list of dict, or None
+        List of responses specifying the demo resources.
+        Each response is a dictionary, in the format as specified by an
+        entry point. This allows packages to launch the demo application
+        with their own set of data files without the entry points and without
+        having to load files from other packages.
+        If none, then responses are loaded from existing entry points installed
+        in the Python environment.
+    """
+    demo = _create_demo(infos=infos)
     demo.configure_traits()

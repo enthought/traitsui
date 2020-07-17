@@ -15,7 +15,10 @@ from pyface.api import GUI
 
 from etsdemo.app import Demo
 from etsdemo import main as main_module
-from etsdemo.tests.testing import require_gui
+from etsdemo.tests.testing import (
+    mock_iter_entry_points,
+    require_gui,
+)
 
 
 def fake_configure_traits(instance):
@@ -38,18 +41,34 @@ def mock_demo_launch():
 
 class TestMain(unittest.TestCase):
 
-    def setUp(self):
-        self.demo_launch_patcher = mock_demo_launch()
-        self.demo_launch_patcher.start()
-
-    def tearDown(self):
-        self.demo_launch_patcher.stop()
-
     @require_gui
     def test_main(self):
-        # Main function must be launchable with no argument.
-        main_module.main()
+        # Main function must be launchable even if there are no data available.
+        with mock_iter_entry_points({}), mock_demo_launch():
+            main_module.main()
 
-    def test_create_demo(self):
+    def test_create_demo_default_entry_points(self):
         # This does not require GUI and it should not fail.
+        # This will load the entry points contributed by the dependencies
+        # of etsdemo.
         main_module._create_demo()
+
+    def test_create_demo_with_specific_info(self):
+        infos = [
+            {
+                "version": 1,
+                "name": "Pretty Demo",
+                "root": "",
+            },
+            {
+                "version": 1,
+                "name": "Delicious Demo",
+                "root": "",
+            }
+        ]
+        demo = main_module._create_demo(infos)
+        children = demo.model.get_children()
+        self.assertEqual(len(children), 2)
+        child1, child2 = children
+        self.assertEqual(child1.nice_name, "Pretty Demo")
+        self.assertEqual(child2.nice_name, "Delicious Demo")
