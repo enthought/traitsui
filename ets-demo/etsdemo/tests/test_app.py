@@ -15,9 +15,13 @@ import unittest
 from xml.etree import ElementTree as ET
 
 from etsdemo.app import (
+    Demo,
     DemoPath,
     extract_docstring_from_source,
     parse_source,
+    next_tool,
+    previous_tool,
+    parent_tool,
 )
 
 HTML_NS_PREFIX = "{http://www.w3.org/1999/xhtml}"
@@ -25,6 +29,51 @@ HTML_NS_PREFIX = "{http://www.w3.org/1999/xhtml}"
 
 def get_html_tag(tag):
     return HTML_NS_PREFIX + tag
+
+
+def get_action_enabled(action, model_view):
+    """ Helper funciton to return if a tool is enabled.
+
+    Parameters
+    ----------
+    action : Action
+    model_view : ModelView
+    """
+    context = model_view.trait_get()
+    context.update(model_view.trait_context())
+    return eval(
+        compile(action.enabled_when, "<string>", "eval"),
+        {},
+        context,
+    )
+
+
+class TestDemo(unittest.TestCase):
+    """ Test actions on the Demo class. """
+
+    def test_demo_previous_button_default(self):
+        # Make sure the previous button behaves in the default state.
+        # This ensures the enable flag can be computed (instead of crashing),
+        # and the action allowed by it does not crash.
+        demo = Demo(model=DemoPath())
+        if get_action_enabled(previous_tool, demo):
+            demo.perform(None, next_tool, None)
+
+    def test_demo_next_button_default(self):
+        # Make sure the next button behaves in the default state.
+        # This ensures the enable flag can be computed (instead of crashing),
+        # and the action allowed by it does not crash.
+        demo = Demo(model=DemoPath())
+        if get_action_enabled(next_tool, demo):
+            demo.perform(None, next_tool, None)
+
+    def test_demo_parent_button_default(self):
+        # Make sure the parent button behaves in the default state.
+        # This ensures the enable flag can be computed (instead of crashing),
+        # and the action allowed by it does not crash.
+        demo = Demo(model=DemoPath())
+        if get_action_enabled(parent_tool, demo):
+            demo.perform(None, parent_tool, None)
 
 
 class TestDemoPathDescription(unittest.TestCase):

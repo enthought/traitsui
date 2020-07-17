@@ -1028,6 +1028,8 @@ class Demo(ModelView):
         info.ui.title = self.title
 
     def _get__next_node(self):
+        if self.selected_node is None:
+            return None
         next = None
         node = self.selected_node
         children = node.tno_get_children(node)
@@ -1048,6 +1050,8 @@ class Demo(ModelView):
         return next
 
     def _get__previous_node(self):
+        if self.selected_node is None:
+            return None
         previous = None
         node = self.selected_node
         parent = node.parent
