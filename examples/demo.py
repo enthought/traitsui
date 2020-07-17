@@ -11,6 +11,6 @@ if __name__ == "__main__":
                 "version": 1,
                 "name": "TraitsUI Demo",
                 "root": os.path.realpath(os.path.join(HERE, "demo")),
-            }
+            },
         ]
     )
