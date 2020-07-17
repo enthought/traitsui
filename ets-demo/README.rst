@@ -45,10 +45,10 @@ function. For example::
     from setuptools import setup
 
     setup(
-        name='my_project',
+        name="my_project",
         ...
         entry_points={
-            'etsdemo_data': ['demo = my_project.info:info'],
+            "etsdemo_data": ["demo = my_project.info:info"],
         ...
     )
 
