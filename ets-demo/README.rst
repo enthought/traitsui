@@ -21,7 +21,6 @@ It can also be launched programmatically. For example, from Python prompt::
     >>> from etsdemo.main import main
     >>> main()
 
-
 How to contribute data via entry points
 ---------------------------------------
 
@@ -51,7 +50,6 @@ function. For example::
             "etsdemo_data": ["demo = my_project.info:info"],
         ...
     )
-
 
 Launch with specific data sources
 ---------------------------------
