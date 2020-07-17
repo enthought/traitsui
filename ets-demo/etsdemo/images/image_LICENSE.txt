@@ -10,8 +10,8 @@ released under a 3 clause BSD license.
 
 Files and orginal authors:
 ----------------------------------------------------------------------------
-examples/tutorials/images:
-                                 next.png | Nuvola
+images:
+                           next.png | Nuvola
                          parent.png | Nuvola
                        previous.png | Nuvola
                          reload.png | Nuvola
