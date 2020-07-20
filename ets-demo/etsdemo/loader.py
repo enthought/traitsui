@@ -96,7 +96,7 @@ def response_to_node(response):
     except KeyError:
         logger.exception("Failed to load response: %r", response)
         return _get_placeholder_node(
-            response, "Unable to load data. See log for more info."
+            response, "Unable to load data."
         )
 
 

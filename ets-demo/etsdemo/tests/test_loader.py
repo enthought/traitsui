@@ -93,7 +93,7 @@ class TestResponseToNode(unittest.TestCase):
         self.assertFalse(resource.has_children())
         self.assertEqual(resource.nice_name, "(Empty)")
         self.assertIn(
-            "Unable to load data. See log for more info.",
+            "Unable to load data.",
             resource.description
         )
         log_content, = watcher.output
