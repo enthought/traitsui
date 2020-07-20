@@ -15,7 +15,11 @@ from etsdemo.app import Demo, DemoVirtualDirectory
 from etsdemo.loader import get_responses, response_to_node
 
 
-def _create_demo(infos=None):
+#: Default application title
+_TITLE = "Enthought Tool Suite"
+
+
+def _create_demo(infos=None, title=_TITLE):
     """ Create the demo object with everything setup ready to be launched.
 
     Paramters
@@ -26,6 +30,8 @@ def _create_demo(infos=None):
         entry point.
         If none, then responses are loaded from existing entry points installed
         in the Python environment.
+    title : str, optional
+        Default application title.
 
     Returns
     -------
@@ -39,11 +45,12 @@ def _create_demo(infos=None):
         for response in infos
     ]
     return Demo(
+        title=title,
         model=DemoVirtualDirectory(resources=resources),
     )
 
 
-def main(infos=None):
+def main(infos=None, title=_TITLE):
     """ Main function for launching the demo application.
 
     Paramters
@@ -56,6 +63,8 @@ def main(infos=None):
         having to load files from other packages.
         If none, then responses are loaded from existing entry points installed
         in the Python environment.
+    title : str, optional
+        Default application title.
     """
-    demo = _create_demo(infos=infos)
+    demo = _create_demo(infos=infos, title=title)
     demo.configure_traits()

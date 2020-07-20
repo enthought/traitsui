@@ -72,3 +72,7 @@ class TestMain(unittest.TestCase):
         child1, child2 = children
         self.assertEqual(child1.nice_name, "Pretty Demo")
         self.assertEqual(child2.nice_name, "Delicious Demo")
+
+    def test_create_demo_with_title(self):
+        demo = main_module._create_demo([], "Nice Title")
+        self.assertEqual(demo.title, "Nice Title")
