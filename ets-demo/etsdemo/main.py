@@ -22,8 +22,8 @@ _TITLE = "Enthought Tool Suite"
 def _create_demo(infos=None, title=_TITLE):
     """ Create the demo object with everything setup ready to be launched.
 
-    Paramters
-    ---------
+    Parameters
+    ----------
     infos : list of dict, or None
         List of responses specifying the demo resources.
         Each response is a dictionary, in the format as specified by an
@@ -53,8 +53,8 @@ def _create_demo(infos=None, title=_TITLE):
 def main(infos=None, title=_TITLE):
     """ Main function for launching the demo application.
 
-    Paramters
-    ---------
+    Parameters
+    ----------
     infos : list of dict, or None
         List of responses specifying the demo resources.
         Each response is a dictionary, in the format as specified by an
