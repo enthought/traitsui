@@ -61,6 +61,8 @@ def get_responses():
             logger.exception("Failed to load entry point %r", entry_point)
             continue
 
+        # `request` is currently a placeholder for future extension of the API
+        # without having to change the function signature.
         try:
             response = loader(request)
         except Exception:
