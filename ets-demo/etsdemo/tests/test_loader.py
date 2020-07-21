@@ -77,12 +77,15 @@ class TestResponseToNode(unittest.TestCase):
             "name": "Amazing Demo",
             "root": "I_do_not_exist",
         }
-        resource = response_to_node(response)
+        with self.assertLogs(LOGGER_NAME) as watcher:
+            resource = response_to_node(response)
         self.assertEqual(resource.nice_name, "Amazing Demo")
         self.assertFalse(resource.has_children())
         self.assertIn(
-            "Unable to load data: Path ", resource.description,
+            "Unable to load data.", resource.description,
         )
+        log_content, = watcher.output
+        self.assertIn("TraitError", log_content)
 
     def test_bad_response_replaced(self):
         # If the response is badly formatted, replace with a placeholder.
@@ -98,6 +101,68 @@ class TestResponseToNode(unittest.TestCase):
         )
         log_content, = watcher.output
         self.assertIn("KeyError", log_content)
+
+    def test_bad_response_type_error(self):
+        bad_values = [
+            None,
+            "1",
+            1,
+            (),
+        ]
+        for bad_value in bad_values:
+            with self.subTest(bad_value=bad_value):
+                with self.assertLogs(LOGGER_NAME) as watcher:
+                    resource = response_to_node(bad_value)
+
+                self.assertFalse(resource.has_children())
+                self.assertEqual(resource.nice_name, "(Empty)")
+                self.assertIn(
+                    "Unable to load data.",
+                    resource.description
+                )
+                log_content, = watcher.output
+                self.assertIn("TypeError", log_content)
+
+    def test_bad_response_missing_name(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            response = {
+                "version": 1,
+                "root": temp_dir,
+            }
+            with self.assertLogs(LOGGER_NAME) as watcher:
+                resource = response_to_node(response)
+
+            self.assertFalse(resource.has_children())
+            self.assertEqual(resource.nice_name, "(Empty)")
+            log_content, = watcher.output
+            self.assertIn("KeyError: \'name\'", log_content)
+
+    def test_bad_response_missing_version(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            response = {
+                "name": "Name",
+                "root": temp_dir,
+            }
+            with self.assertLogs(LOGGER_NAME) as watcher:
+                resource = response_to_node(response)
+
+            self.assertFalse(resource.has_children())
+            log_content, = watcher.output
+            self.assertIn("KeyError: \'version\'", log_content)
+
+    def test_bad_response_bad_version(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            response = {
+                "version": 2,
+                "name": "Name",
+                "root": temp_dir,
+            }
+            with self.assertLogs(LOGGER_NAME) as watcher:
+                resource = response_to_node(response)
+
+            self.assertFalse(resource.has_children())
+            log_content, = watcher.output
+            self.assertIn("TraitError", log_content)
 
 
 class TestGetResponse(unittest.TestCase):

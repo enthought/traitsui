@@ -13,9 +13,10 @@ via entry points.
 """
 
 import logging
-import os
 
 import pkg_resources
+
+from traits.api import Directory, HasTraits, Range, Str
 
 from etsdemo.app import DemoPath, DemoVirtualDirectory
 
@@ -70,52 +71,61 @@ def get_responses():
 
 
 def response_to_node(response):
-    """ Convert a response (dict) to an instance of DemoTreeNodeObject
+    """ Convert a response to an instance of DemoTreeNodeObject
 
     Parameters
     ----------
-    response : dict
+    response : any
         Response obtained from an entry point.
+        It is expected to be a dict, but there is no guarantee so it can
+        be anything.
 
     Returns
     -------
     node : DemoTreeNodeObject
     """
-    root = response.get("root")
-    if root is not None and not os.path.exists(root):
-        return _get_placeholder_node(
-            response,
-            "Unable to load data: Path {!r} not found.".format(root)
-        )
+
+    # Still try to get the name if we can
+    try:
+        name = response["name"]
+    except (TypeError, KeyError):
+        name = "(Empty)"
 
     try:
-        return DemoPath(
-            nice_name=response["name"],
-            name=response["root"],
+        normalized = _Response(
+            version=response["version"],
+            name=response["name"],
+            root=response["root"],
         )
-    except KeyError:
+    except Exception:
         logger.exception("Failed to load response: %r", response)
-        return _get_placeholder_node(
-            response, "Unable to load data."
+        return DemoVirtualDirectory(
+            nice_name=name,
+            resources=[],
+            description="Unable to load data.",
         )
 
+    return normalized.to_node()
 
-def _get_placeholder_node(response, msg):
-    """ Return a placeholder node if the response is malformed.
 
-    Parameters
-    ----------
-    response : dict
-        Response returned from a distribution's entry point.
-    msg : str
-        User-facing message to show.
-
-    Returns
-    -------
-    node : DemoTreeNodeObject
+class _Response(HasTraits):
+    """ Object for normalizing the validating responses returned by entry
+    points.
     """
-    return DemoVirtualDirectory(
-        nice_name=response.get("name", "(Empty)"),
-        resources=[],
-        description=msg,
-    )
+
+    #: Version
+    version = Range(low=0, high=1)
+
+    #: Display name
+    name = Str()
+
+    #: Root directory for any nested data files.
+    root = Directory(exists=True)
+
+    def to_node(self):
+        """ Return an instance of DemoTreeNodeObject from this response.
+        """
+        return DemoPath(
+            nice_name=self.name,
+            name=self.root,
+        )
