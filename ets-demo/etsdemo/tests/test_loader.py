@@ -164,6 +164,20 @@ class TestResponseToNode(unittest.TestCase):
             log_content, = watcher.output
             self.assertIn("TraitError", log_content)
 
+    def test_bad_response_bad_name_type(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            response = {
+                "version": 1,
+                "name": 1,
+                "root": temp_dir,
+            }
+            with self.assertLogs(LOGGER_NAME) as watcher:
+                resource = response_to_node(response)
+
+            self.assertFalse(resource.has_children())
+            log_content, = watcher.output
+            self.assertIn("TraitError", log_content)
+
 
 class TestGetResponse(unittest.TestCase):
     """ Test the routine to obtain resources from entry points."""

@@ -100,7 +100,7 @@ def response_to_node(response):
     except (TypeError, KeyError, TraitError):
         logger.exception("Failed to load response: %r", response)
         return DemoVirtualDirectory(
-            nice_name=name,
+            nice_name=str(name),
             resources=[],
             description="Unable to load data.",
         )
