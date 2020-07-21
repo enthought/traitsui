@@ -16,7 +16,7 @@ import logging
 
 import pkg_resources
 
-from traits.api import Directory, HasTraits, Range, Str
+from traits.api import Directory, HasTraits, Range, Str, TraitError
 
 from etsdemo.app import DemoPath, DemoVirtualDirectory
 
@@ -49,7 +49,7 @@ def get_responses():
     Returns
     -------
     responses: list of dict
-        Responses as are loaded from the entry points.
+        Responses loaded from the entry points.
         Note that the content has not been sanitized nor validated.
     """
     request = {}
@@ -97,7 +97,7 @@ def response_to_node(response):
             name=response["name"],
             root=response["root"],
         )
-    except Exception:
+    except (TypeError, KeyError, TraitError):
         logger.exception("Failed to load response: %r", response)
         return DemoVirtualDirectory(
             nice_name=name,
