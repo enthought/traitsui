@@ -380,7 +380,7 @@ loop in Qt speech).
 
     .. code-block:: python
 
-        from pyface.qt.QtCore import QCoreApplication
+        from pyface.qt.QtGui import QApplication
 
         from traits.api import HasTraits, Int
 
@@ -390,7 +390,7 @@ loop in Qt speech).
 
 
         Counter().edit_traits()
-        QCoreApplication.instance().exec_()
+        QApplication.instance().exec_()
 
 There is a `similar example for wxPython <../_static/event_loop_wx.py>`_
 and a `toolkit-independent example that uses Pyface <../_static/event_loop.py>`_
