@@ -1,4 +1,4 @@
-from pyface.qt.QtCore import QApplication
+from pyface.qt.QtCore import QCoreApplication
 
 from traits.api import HasTraits, Int
 
@@ -8,4 +8,4 @@ class Counter(HasTraits):
 
 
 Counter().edit_traits()
-QApplication.instance().exec_()
+QCoreApplication.instance().exec_()

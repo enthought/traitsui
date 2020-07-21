@@ -8,4 +8,4 @@ class Counter(HasTraits):
 
 
 Counter().edit_traits()
-wx.PySimpleApp().MainLoop()
+wx.App().MainLoop()
