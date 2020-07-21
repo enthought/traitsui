@@ -8,6 +8,7 @@
 #
 # Thanks for using Enthought open source!
 
+import tempfile
 import unittest
 from unittest import mock
 
@@ -54,19 +55,20 @@ class TestMain(unittest.TestCase):
         main_module._create_demo()
 
     def test_create_demo_with_specific_info(self):
-        infos = [
-            {
-                "version": 1,
-                "name": "Pretty Demo",
-                "root": "",
-            },
-            {
-                "version": 1,
-                "name": "Delicious Demo",
-                "root": "",
-            }
-        ]
-        demo = main_module._create_demo(infos)
+        with tempfile.TemporaryDirectory() as temp_dir:
+            infos = [
+                {
+                    "version": 1,
+                    "name": "Pretty Demo",
+                    "root": temp_dir,
+                },
+                {
+                    "version": 1,
+                    "name": "Delicious Demo",
+                    "root": temp_dir,
+                }
+            ]
+            demo = main_module._create_demo(infos)
         children = demo.model.get_children()
         self.assertEqual(len(children), 2)
         child1, child2 = children
