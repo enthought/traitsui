@@ -82,7 +82,7 @@ input parameters graphically in the program.
 Object-oriented programming
 ```````````````````````````
 
-Software engineering is a difficult field. As programs, grow they become
+Software engineering is a difficult field. As programs grow they become
 harder and harder to grasp for the developer. This problem is not new and
 has sometimes been know as the "tar pit". Many attempts have been made to
 mitigate the difficulties. Most often they consist in finding useful
@@ -424,7 +424,7 @@ but the execution order is chosen by the user, and not by the developer.
 Defining callbacks for the modification of an attribute `foo` of a
 `HasTraits` object can be done be creating a method called
 `_foo_changed()`. Here is an example of a dialog with two textboxes,
-`input` and `output`. Each time `input` is modified, is content is
+`input` and `output`. Each time `input` is modified, its content is
 duplicated to output.
 
     `code snippet #4 <../_static/echo_box.py>`_
@@ -444,7 +444,7 @@ duplicated to output.
 
 
 Events that do not correspond to a modification of an attribute can be
-generated with a *Button* traits. The callback is then called
+generated with a *Button* trait. The callback is then called
 *_foo_fired()*.
 Here is an example of an interactive `traitsUI` application using a
 button:
@@ -803,7 +803,7 @@ and then a small dialog to illustrate how it works:
 
 The matplotlib figure traits editor created in the above example can be
 imported in a traitsUI application and combined with the power of traits.
-This editor allows to insert a matplotlib figure in a traitsUI dialog. It
+This editor allows you to insert a matplotlib figure in a traitsUI dialog. It
 can be modified using reactive programming, as demonstrated in section 3
 of this tutorial. However, once the dialog is up and running, you have to
 call *self.figure.canvas.draw()* to update the canvas if you made
