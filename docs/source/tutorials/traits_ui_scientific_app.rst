@@ -6,12 +6,8 @@ Writing a graphical application for scientific programming using TraitsUI |versi
 
 **A step by step guide for a non-programmer**
 
-.. |date| date::
-
 :Author:
-    Gael Varoquaux
-:Date:
-    |date|
+    Gael Varoquaux    
 :License:
     BSD
 
