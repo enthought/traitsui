@@ -196,6 +196,9 @@ class _ListStrEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
+        self.model.beginResetModel()
+        self.model.endResetModel()
+
         self.context_object.on_trait_change(
             self.update_editor, self.extended_name + "_items", remove=True
         )
