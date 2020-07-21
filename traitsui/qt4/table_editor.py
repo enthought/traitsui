@@ -327,6 +327,8 @@ class TableEditor(Editor, BaseTableEditor):
 
     def dispose(self):
         """ Disposes of the contents of an editor."""
+        self.model.beginResetModel()
+        self.model.endResetModel()
 
         # Make sure that the auxiliary UIs are properly disposed
         if self.toolbar_ui is not None:
