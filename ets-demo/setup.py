@@ -292,7 +292,7 @@ if __name__ == "__main__":
         license="BSD",
         python_requires=">=3.5",
         entry_points={
-            "gui_scripts": [
+            "console_scripts": [
                 "etsdemo = etsdemo.main:main",
             ],
             "enthought_app_metadata": [
