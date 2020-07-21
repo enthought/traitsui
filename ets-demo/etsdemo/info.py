@@ -28,7 +28,6 @@ def info():
             {
                 "name": "ETS Demo",
                 "command": "etsdemo",
-                "shortcut": "desktop",
                 "icon": ICON,
             },
         ],
