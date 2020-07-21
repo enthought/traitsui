@@ -164,7 +164,7 @@ if __name__ == "__main__":
             Topic :: Software Development :: Libraries
             """.splitlines() if len(c.strip()) > 0],
         description='traitsui: traits-capable user interfaces',
-        long_description=open('README.rst').read(),
+        long_description=open("README.rst").read().split(".. end_of_long_description")[0],
         long_description_content_type="text/x-rst",
         url='http://docs.enthought.com/traitsui',
         download_url='https://github.com/enthought/traitsui',
