@@ -828,9 +828,7 @@ physics experiment (Bose-Einstein condensation), at the university of
 Toronto.
 
 The reason I am providing this code is to give an example to study of how
-a full-blown application can be built. This code can be found in the
-`tutorial's zip file <http://gael-varoquaux.info/computers/traits_tutorial/traits_tutorial.zip>`_
-(it is the file `application.py`).
+a full-blown application can be built. 
 
 * The camera will be built as an object. Its real attributes (exposure
   time, gain...) will be represented as the object's attributes, and
