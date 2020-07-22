@@ -46,26 +46,25 @@ from traits.api import (
     TraitType,
 )
 try:
-    from traits.api import PrefixList as TraitPrefixList
+    from traits.api import PrefixList
 except ImportError:
-    from traits.api import TraitPrefixList
+    def PrefixList(args, **kwargs):
+        from traits.api import TraitPrefixList
+        return Trait(args[0], TraitPrefixList(*args), **kwargs)
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
 # -------------------------------------------------------------------------
 
 # Orientation trait:
-Orientation = Trait("vertical", TraitPrefixList("vertical", "horizontal"))
+Orientation = PrefixList(("vertical", "horizontal"))
 
 # Styles for user interface elements:
-EditorStyle = style_trait = Trait(
-    "simple", TraitPrefixList("simple", "custom", "text", "readonly"), cols=4
-)
+EditorStyle = style_trait = PrefixList(
+    ("simple", "custom", "text", "readonly"), cols=4)
 
 # Group layout trait:
-Layout = Trait(
-    "normal", TraitPrefixList("normal", "split", "tabbed", "flow", "fold")
-)
+Layout = PrefixList(("normal", "split", "tabbed", "flow", "fold"))
 
 # Trait for the default object being edited:
 AnObject = Expression("object")
