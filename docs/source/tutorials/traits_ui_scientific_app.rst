@@ -380,7 +380,7 @@ loop in Qt speech).
 
     .. code-block:: python
 
-        from pyface.qt.QtCore import QApplication
+        from pyface.qt.QtGui import QApplication
 
         from traits.api import HasTraits, Int
 
