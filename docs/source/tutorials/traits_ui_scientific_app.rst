@@ -282,25 +282,31 @@ like (see the TraitsUI manual):
         from traitsui.api import *
 
         class Camera(HasTraits):
-            gain = Enum(1, 2, 3, )
-            exposure = CInt(10, label="Exposure", )
+            """ Camera object """
+        
+            gain = Enum(1, 2, 3,
+                desc="the gain index of the camera",
+                label="gain", )
+        
+            exposure = CInt(10,
+                desc="the exposure time, in ms",
+                label="Exposure", )
 
-        class TextDisplay(HasTraits):
+        class Display(HasTraits):
             string = String()
-
+        
             view= View( Item('string', show_label=False, springy=True, style='custom' ))
-
+        
         class Container(HasTraits):
-            camera = Instance(Camera)
-            display = Instance(TextDisplay)
+            camera = Instance(Camera, ())
+            display = Instance(Display, ())
 
             view = View(
                         Item('camera', style='custom', show_label=False, ),
                         Item('display', style='custom', show_label=False, ),
-                    )
+                       )
 
-        container = Container(camera=Camera(), display=TextDisplay())
-        container.configure_traits()
+        Container().configure_traits()
 
 The call to *configure_traits()* creates the following dialog, with the
 representation of the *Camera* object created is the last example on top,
@@ -453,7 +459,7 @@ button:
 
     .. code-block:: python
 
-        from traits.api import *
+        from traits.api import HasTraits, Int, Button
         from traitsui.api import View, Item, ButtonEditor
 
         class Counter(HasTraits):
@@ -594,8 +600,8 @@ modification to traits objects by hand in the event loop:
 
         from threading import Thread
         from time import sleep
-        from traits.api import *
-        from traitsui.api import View, Item, ButtonEditor
+        from traits.api import Button, HasTraits, Instance, Str
+        from traitsui.api import View, Item
 
         class TextDisplay(HasTraits):
             string =  String()
