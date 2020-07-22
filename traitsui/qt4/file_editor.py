@@ -227,6 +227,9 @@ class CustomEditor(SimpleTextEditor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
+        self._model.beginResetModel()
+        self._model.endResetModel()
+
         if self.control is not None:
             self.control.doubleClicked.disconnect(self._on_dclick)
 
