@@ -33,7 +33,6 @@ from traits.api import (
     List,
     Str,
     Trait,
-    TraitPrefixList,
 )
 
 from .view_element import ViewElement, ViewSubElement
@@ -61,6 +60,7 @@ from .item import Item
 
 from .include import Include
 
+from .helpers import PrefixList
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
@@ -106,9 +106,8 @@ ATitle = Str(desc="the window title for the view")
 #   pages, which can be accessed by clicking **Next** and **Back** buttons.
 #   Changes to attribute values are applied only when the user clicks the
 #   **Finish** button on the last page.
-AKind = Trait(
-    "live",
-    TraitPrefixList(
+AKind = PrefixList(
+    (
         "panel",
         "subpanel",
         "modal",
@@ -120,6 +119,7 @@ AKind = Trait(
         "info",
         "wizard",
     ),
+    default_value='live',
     desc="the kind of view window to create",
     cols=4,
 )

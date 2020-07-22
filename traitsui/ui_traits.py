@@ -44,12 +44,8 @@ from traits.api import (
     TraitError,
     TraitType,
 )
-try:
-    from traits.api import PrefixList
-except ImportError:
-    def PrefixList(args, **kwargs):
-        from traits.api import Trait, TraitPrefixList
-        return Trait(args[0], TraitPrefixList(*args), **kwargs)
+
+from .helpers import PrefixList
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
