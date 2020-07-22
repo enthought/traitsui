@@ -9,6 +9,9 @@
 # Thanks for using Enthought open source!
 
 import unittest
+from unittest import mock
+
+import pkg_resources
 
 
 def require_gui(func):
@@ -22,3 +25,53 @@ def require_gui(func):
     except NotImplementedError:
         return unittest.skip("No GUI available.")(func)
     return func
+
+
+def create_iter_entry_points(fake_entry_points):
+    """ Return a new callable that mocks the interface of
+    pkg_resources.iter_entry_points with the given entry point data.
+
+    Currently the behaviour of a given non-None value for ``name`` is not
+    supported.
+
+    Parameters
+    ----------
+    fake_entry_points : dict(str, dict)
+        Mapping from distribution names to entry point definitions.
+    """
+
+    def iter_entry_points(group, name=None):
+
+        if name is not None:
+            # Mocking this logic is not currently needed.
+            raise ValueError(
+                "Currently the test code does not mock the behavior when name "
+                "is not None."
+            )
+
+        for dist_name, group_to_entry_points in fake_entry_points.items():
+            for entry_point_text in group_to_entry_points.get(group, []):
+                entry_point = pkg_resources.EntryPoint.parse(
+                    entry_point_text,
+                    dist=pkg_resources.get_distribution(dist_name),
+                )
+                yield entry_point
+
+    return iter_entry_points
+
+
+def mock_iter_entry_points(fake_entry_points):
+    """ Mock pkg_resources.iter_entry_points with the given entry point data.
+
+    Currently the behaviour of a given non-None value for ``name`` is not
+    supported.
+
+    Parameters
+    ----------
+    fake_entry_points : dict(str, dict)
+        Mapping from distribution names to entry point definitions.
+    """
+    return mock.patch.object(
+        pkg_resources, "iter_entry_points",
+        create_iter_entry_points(fake_entry_points)
+    )

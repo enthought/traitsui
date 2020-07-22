@@ -48,6 +48,7 @@ from traits.api import (
     HasTraits,
     HTML,
     Instance,
+    List,
     Property,
     Str,
 )
@@ -833,22 +834,29 @@ class DemoPath(DemoTreeNodeObject):
         return demo_file
 
 
-class DemoEmpty(DemoTreeNodeObject):
-    """ A class to represent an empty node in the demo application.
-    This serves as a placeholder when nothing can be shown.
+class DemoVirtualDirectory(DemoTreeNodeObject):
+    """ A class to represent a virtual directory that can contain
+    many other demo resources as nested objects, without actually requiring
+    the resources to be hosted in a common directory.
     """
 
-    # This node has no children
-    allows_children = Bool(False)
+    #: Description for this virtual directory.
+    description = Str()
+
+    # List of objects to be used as children nodes.
+    resources = List(Instance(DemoTreeNodeObject))
+
+    # This node can have children. This changes the icon on the view.
+    allows_children = Bool(True)
 
     # This is the label shown on the view.
-    nice_name = Str("(Empty)")
+    nice_name = Str("Data")
 
     def has_children(self):
-        return self.allows_children
+        return len(self.resources) > 0
 
     def get_children(self):
-        return []
+        return self.resources
 
 
 # -------------------------------------------------------------------------
@@ -935,6 +943,15 @@ demo_content_view = View(
     kind='subpanel',
 )
 
+demo_virtual_dir_view = View(
+    UItem(
+        "description",
+        style="readonly",
+    ),
+    id="demo_virtual_dir_view",
+    kind="subpanel",
+)
+
 
 demo_tree_editor = TreeEditor(
     nodes=[
@@ -959,13 +976,13 @@ demo_tree_editor = TreeEditor(
             view=demo_content_view
         ),
         ObjectTreeNode(
-            node_for=[DemoEmpty],
+            node_for=[DemoVirtualDirectory],
             label="nice_name",
-            view=View(),
-        )
+            view=demo_virtual_dir_view,
+        ),
     ],
+    hide_root=True,
     selected='selected_node',
-
 )
 
 

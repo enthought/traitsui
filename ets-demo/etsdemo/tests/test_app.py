@@ -17,6 +17,7 @@ from xml.etree import ElementTree as ET
 from etsdemo.app import (
     Demo,
     DemoPath,
+    DemoVirtualDirectory,
     extract_docstring_from_source,
     parse_source,
     next_tool,
@@ -196,6 +197,21 @@ class TestDemoPathChildren(unittest.TestCase):
             example.run_code()
             self.assertIn("CONSTANT", example.locals)
             self.assertIn("HasTraits", example.locals)
+
+
+class TestDemoVirtualDirectory(unittest.TestCase):
+
+    def test_no_resources(self):
+        node = DemoVirtualDirectory(resources=[])
+        self.assertFalse(node.tno_has_children(None))
+        self.assertEqual(node.tno_get_children(None), [])
+        self.assertTrue(node.tno_allows_children(None))
+
+    def test_some_resources(self):
+        node = DemoVirtualDirectory(resources=[DemoPath()])
+        self.assertTrue(node.tno_has_children(None))
+        self.assertEqual(node.tno_get_children(None), node.resources)
+        self.assertTrue(node.tno_allows_children(None))
 
 
 class TestParseSource(unittest.TestCase):

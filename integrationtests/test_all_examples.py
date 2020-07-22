@@ -152,10 +152,6 @@ SOURCE_DIRS = [
 
 SEARCHER = ExampleSearcher(source_dirs=SOURCE_DIRS)
 SEARCHER.skip_file_if(
-    os.path.join(DEMO, "demo.py"),
-    lambda: True, "Not a target file to be tested",
-)
-SEARCHER.skip_file_if(
     os.path.join(DEMO, "Advanced", "Table_editor_with_progress_column.py"),
     is_current_backend_wx, "ProgressRenderer is not implemented in wx.",
 )

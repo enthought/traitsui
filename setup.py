@@ -192,6 +192,9 @@ if __name__ == "__main__":
                 'qt = traitsui.qt4:toolkit',
                 'null = traitsui.null:toolkit',
             ],
+            'etsdemo_data': [
+                'demo = traitsui.extras._demo_info:info',
+            ]
         },
         platforms=["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
         zip_safe=False,
