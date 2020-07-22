@@ -1107,6 +1107,7 @@ class Demo(ModelView):
             resizable=True,
             width=1200,
             height=700,
+            icon=ImageResource("enthought-icon"),
         )
 
 
