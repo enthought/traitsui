@@ -90,6 +90,8 @@ TraitsUI along with all dependencies can be installed in a straightforward way
 using the `Enthought Deployment Manager <http://docs.enthought.com/edm/>`__,
 ``pip`` or other .
 
+.. end_of_long_description
+
 Running the Test Suite
 ----------------------
 
