@@ -122,6 +122,8 @@ A point object could be implemented in python with:
     `code snippet #0 <../_static/code_block0.py>`_
 
     .. code-block:: python
+        
+        # code_block0.py
 
         from numpy import cos, sin
 
@@ -220,6 +222,8 @@ to open a dialog to edit its properties :
 
     .. code-block:: python
 
+        # code_block1.py
+
         from traits.api import *
         from traitsui.api import *
 
@@ -277,6 +281,8 @@ like (see the TraitsUI manual):
     `code snippet #2 <../_static/container.py>`_
 
     .. code-block:: python
+
+        # container.py
 
         from traits.api import *
         from traitsui.api import *
@@ -386,6 +392,8 @@ loop in Qt speech).
 
     .. code-block:: python
 
+        # event_loop_qt.py
+
         from pyface.qt.QtGui import QApplication
 
         from traits.api import HasTraits, Int
@@ -437,6 +445,8 @@ duplicated to output.
 
     .. code-block:: python
 
+        # echo_box.py
+
         from traits.api import *
 
         class EchoBox(HasTraits):
@@ -458,6 +468,8 @@ button:
     `code snippet #5 <../_static/interactive.py>`_
 
     .. code-block:: python
+
+        # interactive.py
 
         from traits.api import HasTraits, Int, Button
         from traitsui.api import View, Item, ButtonEditor
@@ -545,6 +557,8 @@ method:
 
     .. code-block:: python
 
+        # thread_example.py
+
         from threading import Thread
         from time import sleep
 
@@ -597,6 +611,8 @@ modification to traits objects by hand in the event loop:
     `code snippet #7 <../_static/traits_thread.py>`_
 
     .. code-block:: python
+
+        # traits_thread.py
 
         from threading import Thread
         from time import sleep
@@ -732,6 +748,8 @@ displaying and positioning the editor.
     `code snippet #8 <../_static/mpl_figure_editor.py>`_
 
     .. code-block:: python
+
+        # mpl_figure_editor.py
 
         import wx
 
