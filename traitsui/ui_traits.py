@@ -41,7 +41,6 @@ from traits.api import (
     List,
     Range,
     Str,
-    Trait,
     TraitError,
     TraitType,
 )
@@ -49,7 +48,7 @@ try:
     from traits.api import PrefixList
 except ImportError:
     def PrefixList(args, **kwargs):
-        from traits.api import TraitPrefixList
+        from traits.api import Trait, TraitPrefixList
         return Trait(args[0], TraitPrefixList(*args), **kwargs)
 
 # -------------------------------------------------------------------------
