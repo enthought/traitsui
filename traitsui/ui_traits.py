@@ -43,10 +43,12 @@ from traits.api import (
     Str,
     Trait,
     TraitError,
-    TraitPrefixList,
     TraitType,
 )
-
+try:
+    from traits.api import PrefixList as TraitPrefixList
+except ImportError:
+    from traits.api import TraitPrefixList
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
