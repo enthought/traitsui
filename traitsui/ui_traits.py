@@ -41,29 +41,25 @@ from traits.api import (
     List,
     Range,
     Str,
-    Trait,
     TraitError,
-    TraitPrefixList,
     TraitType,
 )
 
+from .helper import PrefixList, SequenceTypes
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
 # -------------------------------------------------------------------------
 
 # Orientation trait:
-Orientation = Trait("vertical", TraitPrefixList("vertical", "horizontal"))
+Orientation = PrefixList(("vertical", "horizontal"))
 
 # Styles for user interface elements:
-EditorStyle = style_trait = Trait(
-    "simple", TraitPrefixList("simple", "custom", "text", "readonly"), cols=4
-)
+EditorStyle = style_trait = PrefixList(
+    ("simple", "custom", "text", "readonly"), cols=4)
 
 # Group layout trait:
-Layout = Trait(
-    "normal", TraitPrefixList("normal", "split", "tabbed", "flow", "fold")
-)
+Layout = PrefixList(("normal", "split", "tabbed", "flow", "fold"))
 
 # Trait for the default object being edited:
 AnObject = Expression("object")
@@ -250,9 +246,3 @@ class ATheme(TraitType):
 
 # The spacing between two items:
 Spacing = Range(-32, 32, 3)
-
-# -------------------------------------------------------------------------
-#  Other definitions:
-# -------------------------------------------------------------------------
-
-SequenceTypes = (tuple, list)
