@@ -594,7 +594,8 @@ physics experiment (Bose-Einstein condensation), at the university of
 Toronto.
 
 The reason I am providing this code is to give an example to study of how
-a full-blown application can be built. 
+a full-blown application can be built.  For more information on the 
+example, see the `archived page <https://web.archive.org/web/20151208222136/http://www.gael-varoquaux.info/computers/traits_tutorial>`_.
 
 * The camera will be built as an object. Its real attributes (exposure
   time, gain...) will be represented as the object's attributes, and
