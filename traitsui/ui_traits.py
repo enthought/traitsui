@@ -45,7 +45,7 @@ from traits.api import (
     TraitType,
 )
 
-from .helper import PrefixList
+from .helper import PrefixList, SequenceTypes
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
@@ -246,9 +246,3 @@ class ATheme(TraitType):
 
 # The spacing between two items:
 Spacing = Range(-32, 32, 3)
-
-# -------------------------------------------------------------------------
-#  Other definitions:
-# -------------------------------------------------------------------------
-
-SequenceTypes = (tuple, list)
