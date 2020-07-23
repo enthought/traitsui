@@ -194,7 +194,7 @@ class KeyBindings(HasPrivateTraits):
         """ Returns a clone of the KeyBindings object.
         """
         return self.__class__(*self.bindings, **traits).trait_set(
-            **self.get("prefix", "suffix")
+            **self.trait_get("prefix", "suffix")
         )
 
     def dispose(self):
