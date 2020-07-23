@@ -25,9 +25,6 @@ from operator import itemgetter
 
 from traits.api import BaseTraitHandler, CTrait, Enum, TraitError
 
-from .ui_traits import SequenceTypes
-
-
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
@@ -182,3 +179,24 @@ def compute_column_widths(available_space, requested, min_widths, user_widths):
             available_space -= widths[i]
 
     return widths
+
+
+# -------------------------------------------------------------------------
+#  Other definitions:
+# -------------------------------------------------------------------------
+
+SequenceTypes = (tuple, list)
+
+
+# -------------------------------------------------------------------------
+#  Wrapper for TraitPrefixList deprecation:
+# -------------------------------------------------------------------------
+
+try:
+    from traits.api import PrefixList
+except ImportError:
+    def PrefixList(list_, default_value=None, **kwargs):
+        from traits.api import Trait, TraitPrefixList
+        if default_value is None:
+            default_value = list_[0]
+        return Trait(default_value, TraitPrefixList(list_), **kwargs)
