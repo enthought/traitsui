@@ -121,24 +121,10 @@ A point object could be implemented in python with:
 
     `code snippet #0 <../_static/code_block0.py>`_
 
-    .. code-block:: python
-        
-        # code_block0.py
+    .. literalinclude:: code_snippets/code_block0.py
+       :language: python
 
-        from numpy import cos, sin
-
-        class Point(object):
-            """ 3D Point objects """
-            x = 0.
-            y = 0.
-            z = 0.
-
-            def rotate_z(self, theta):
-                """ rotate the point around the Z axis """
-                xtemp =  cos(theta) * self.x + sin(theta) * self.y
-                ytemp = -sin(theta) * self.x + cos(theta) * self.y
-                self.x = xtemp
-                self.y = ytemp
+    
 
 This code creates a *Point* class. Points objects can be created as
 `instances` of the Point class:
