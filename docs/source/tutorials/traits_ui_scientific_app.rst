@@ -119,8 +119,6 @@ to be rotated.
 
 A point object could be implemented in python with:
 
-    `code snippet #0 <../_static/code_block0.py>`_
-
     .. literalinclude:: ./code_snippets/code_block0.py
        :language: python
 
