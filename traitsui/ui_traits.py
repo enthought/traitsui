@@ -45,7 +45,7 @@ from traits.api import (
     TraitType,
 )
 
-from .helpers import PrefixList
+from .helper import PrefixList
 
 # -------------------------------------------------------------------------
 #  Trait definitions:

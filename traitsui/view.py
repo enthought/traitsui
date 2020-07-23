@@ -60,7 +60,7 @@ from .item import Item
 
 from .include import Include
 
-from .helpers import PrefixList
+from .helper import PrefixList
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
