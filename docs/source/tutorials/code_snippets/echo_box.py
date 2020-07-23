@@ -1,3 +1,5 @@
+# echo_box.py
+
 from traits.api import *
 
 class EchoBox(HasTraits):

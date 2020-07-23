@@ -1,3 +1,5 @@
+# event_loop_qt.py
+
 from pyface.qt.QtGui import QApplication
 
 from traits.api import HasTraits, Int
