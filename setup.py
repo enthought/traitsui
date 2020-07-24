@@ -131,7 +131,7 @@ if __name__ == "__main__":
     __requires__ = data['__requires__']
     __extras_require__ = data['__extras_require__']
     with open("README.rst", "r", encoding="utf-8") as readme:
-        LONG_DESCRIPTION=readme.read().split(".. end_of_long_description")[0]
+        LONG_DESCRIPTION = readme.read().split(".. end_of_long_description")[0]
 
     def additional_commands():
         try:
