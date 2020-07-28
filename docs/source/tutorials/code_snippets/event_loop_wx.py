@@ -1,3 +1,5 @@
+# event_loop_wx.py
+
 import wx
 
 from traits.api import HasTraits, Int

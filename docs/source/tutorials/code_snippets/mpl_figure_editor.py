@@ -1,3 +1,4 @@
+# mpl_figure_editor.py
 
 import wx
 

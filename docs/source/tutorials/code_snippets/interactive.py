@@ -1,3 +1,5 @@
+# interactive.py
+
 from traits.api import HasTraits, Int, Button
 from traitsui.api import View, Item, ButtonEditor
 
