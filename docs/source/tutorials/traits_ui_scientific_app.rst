@@ -312,8 +312,8 @@ loop in Qt speech).
     .. literalinclude:: code_snippets/event_loop_qt.py
         :language: python
 
-There is a `similar example for wxPython <code_snippets/event_loop_wx.py>`_
-and a `toolkit-independent example that uses Pyface <code_snippets/event_loop.py>`_
+There is a `similar example for wxPython <../_static/event_loop_wx.py>`_
+and a `toolkit-independent example that uses Pyface <../_static/event_loop.py>`_
 as well.
 
 The *Counter().edit_traits()* line creates a counter object and its
@@ -877,7 +877,7 @@ ____
 .. [#] The scipy website: `http://www.scipy.org <http://www.scipy.org>`_
 
 .. [#] The matplotlib website:
-   `http://matplotlib.sourceforge.net <http://matplotlib.sourceforge.net>`_
+   `https://matplotlib.org <https://matplotlib.org>`_
 
 .. [#] The traits and traitsUI user guide:
    `http://docs.enthought.com/traits <http://docs.enthought.com/traits>`_
