@@ -128,7 +128,7 @@ class _StickyDialog(QtGui.QDialog):
         self.setLayout(layout)
 
         # Set the dialog's window flags and properties.
-        flags = self.windowFlags()
+        flags = QtCore.Qt.Dialog
         if not ui.view.resizable:
             flags |= QtCore.Qt.WindowSystemMenuHint
             layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
