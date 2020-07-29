@@ -19,7 +19,7 @@
 """
 
 
-from wx.adv import Animation, AnimationCtrl
+from wx.adv import Animation, GenericAnimationCtrl
 
 from traits.api import Bool, Str
 
@@ -44,7 +44,7 @@ class _AnimatedGIFEditor(Editor):
             widget.
         """
         self._animate = Animation(self.value)
-        self.control = AnimationCtrl(parent, -1, self._animate)
+        self.control = GenericAnimationCtrl(parent, -1, self._animate)
         self.control.SetUseWindowBackgroundColour()
         self.sync_value(self.factory.playing, "playing", "from")
         self.set_tooltip()
