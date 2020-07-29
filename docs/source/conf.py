@@ -190,8 +190,10 @@ except ImportError as exc:
 # #html_theme = 'classic'
 
 # Useful aliases to avoid repeating long URLs.
+# Note this is a permalink to a specific commit to ensure the link 
+# is never broken, but it may become outdated 
 extlinks = {'github-demo': (
-    'https://github.com/enthought/traitsui/tree/master/examples/demo/%s',
+    'https://github.com/enthought/traitsui/tree/37804f400ed13f7d2b54decead20ab3e9f839183/traitsui/examples/demo/%s',
     'github-demo')
 }
 
