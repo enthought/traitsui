@@ -7,13 +7,13 @@
 -------------------------------------------------------------------------------
 
 This demonstrates using the TraitsUI file dialog with multiple file dialog
-extensions, in this case, the <b>FileInfo</b>, <b>TextInfo</b> and
-<b>ImageInfo</b> extensions.
+extensions, in this case, the **FileInfo**, **TextInfo** and
+**ImageInfo** extensions.
 
 For more information about why you would want to use the TraitsUI file dialog
-over the standard OS file dialog, select the <b>File Open</b> demo. For a
+over the standard OS file dialog, select the **File Open** demo. For a
 demonstration of writing a custom file dialog extension, select the
-<b>File Open with Custom Extension</b> demo.
+**File Open with Custom Extension** demo.
 
 Suggestion: Try resizing the dialog and dragging the various file dialog
 extensions around to create a better arrangement than the rather cramped
