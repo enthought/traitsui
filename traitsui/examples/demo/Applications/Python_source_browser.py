@@ -2,18 +2,18 @@
 #  License: BSD Style.
 
 """
-This demo shows a combination of the <b>DirectoryEditor</b>, the
-<b>TabularEditor</b> and the <b>CodeEditor</b> used to create a simple Python
+This demo shows a combination of the **DirectoryEditor**, the
+**TabularEditor** and the **CodeEditor** used to create a simple Python
 source browser:
 
- - Use the <b>DirectoryEditor</b> on the left to navigate to and select
+ - Use the **DirectoryEditor** on the left to navigate to and select
    directories containing Python source files.
- - Use the <b>TabularEditor</b> on the top-right to view information about and
+ - Use the **TabularEditor** on the top-right to view information about and
    to select Python source files in the currently selected directory.
  - View the currently selected Python source file's contents in the
-   <b>CodeEditor</b> in the bottom-right.
+   **CodeEditor** in the bottom-right.
 
-As an extra <i>feature</i>, the <b>TabularEditor</b> also displays a:
+As an extra *feature*, the **TabularEditor** also displays a:
 
  - Red ball if the file size > 64KB.
  - Blue ball if the file size > 16KB.
