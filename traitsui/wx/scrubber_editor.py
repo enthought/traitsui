@@ -459,7 +459,7 @@ class _ScrubberEditor(Editor):
         ):
             print("Im in an if statement")
             self._pop_up_editor()
-
+        print(event)
         event.Skip()
 
     def _enter_window(self, event):
@@ -472,13 +472,17 @@ class _ScrubberEditor(Editor):
         print(self._hover)
         print(self._pending)
         print(self.control)
+        print(self.control.FindFocus())
+        print(type(self.control.FindFocus()))
+        print(type(self.control.FindFocus()) == wx._core.TextCtrl)
 
         self._hover = True
 
         self.control.SetCursor(wx.Cursor(wx.CURSOR_HAND))
-
-        if not self._ignore_focus and not self._text:
+        
+        if not self._ignore_focus and (type(self.control.FindFocus()) != wx._core.TextCtrl):
             self._ignore_focus = True
+            print("here we go")
             self.control.SetFocus()
 
         self._ignore_focus = False
