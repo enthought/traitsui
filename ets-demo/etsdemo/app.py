@@ -1043,6 +1043,8 @@ class Demo(ModelView):
 
     def init(self, info):
         info.ui.title = self.title
+        if self.model.has_children():
+            self.selected_node = self.model.get_children()[0]
 
     def _get__next_node(self):
         if self.selected_node is None:
