@@ -3,6 +3,7 @@
 
 """
 This demo shows you how to use animated GIF files in a traits user interface.
+Note that this demo only works with wx backend.
 """
 
 from os.path import join, dirname, abspath
