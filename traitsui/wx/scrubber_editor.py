@@ -348,6 +348,9 @@ class _ScrubberEditor(Editor):
         text.SetFocus()
         control.Bind(wx.EVT_TEXT_ENTER, self._text_completed, id=text.GetId())
         text.Bind(wx.EVT_KILL_FOCUS, self._text_completed)
+
+        text.Bind(wx.EVT_KILL_FOCUS, self._left_down)
+
         text.Bind(wx.EVT_ENTER_WINDOW, self._enter_text)
         text.Bind(wx.EVT_LEAVE_WINDOW, self._leave_text)
         text.Bind(wx.EVT_CHAR, self._key_entered)
@@ -477,21 +480,25 @@ class _ScrubberEditor(Editor):
         print(type(self.control.FindFocus()) == wx._core.TextCtrl)
 
         self._hover = True
+        print('a')
 
         self.control.SetCursor(wx.Cursor(wx.CURSOR_HAND))
+        print('b')
         
         if not self._ignore_focus and (type(self.control.FindFocus()) != wx._core.TextCtrl):
+            print('c')
             self._ignore_focus = True
             print("here we go")
             self.control.SetFocus()
-
+        print('d')
         self._ignore_focus = False
-
+        print('e')
         if self._x is not None:
             if self.factory.active_color_ != self.factory.color_:
                 self.control.Refresh()
         elif self.factory.hover_color_ != self.factory.color_:
             self.control.Refresh()
+        print('f')
 
     def _leave_window(self, event):
         """ Handles the mouse leaving the window.
