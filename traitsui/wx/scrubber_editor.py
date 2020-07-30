@@ -333,8 +333,6 @@ class _ScrubberEditor(Editor):
         drop_down.Bind(wx.EVT_KILL_FOCUS, self._enum_completed)
 
     def _pop_up_text(self):
-        print("Im popping up text")
-        print(self.control)
         control = self.control
         self._text = text = wx.TextCtrl(
             control,
@@ -348,9 +346,7 @@ class _ScrubberEditor(Editor):
         text.SetFocus()
         control.Bind(wx.EVT_TEXT_ENTER, self._text_completed, id=text.GetId())
         text.Bind(wx.EVT_KILL_FOCUS, self._text_completed)
-
         text.Bind(wx.EVT_KILL_FOCUS, self._left_down)
-
         text.Bind(wx.EVT_ENTER_WINDOW, self._enter_text)
         text.Bind(wx.EVT_LEAVE_WINDOW, self._leave_text)
         text.Bind(wx.EVT_CHAR, self._key_entered)
@@ -451,63 +447,35 @@ class _ScrubberEditor(Editor):
     def _set_focus(self, event):
         """ Handle the control getting the keyboard focus.
         """
-        print('SETTING FOCUS')
-        print(self._ignore_focus)
-        print(self._x)
-        print(self._text)
         if (
             (not self._ignore_focus)
             and (self._x is None)
             and (self._text is None)
         ):
-            print("Im in an if statement")
             self._pop_up_editor()
-        print(event)
         event.Skip()
 
     def _enter_window(self, event):
         """ Handles the mouse entering the window.
         """
-        print('Im entering')
-        print(self._ignore_focus)
-        print(self._x)
-        print(self._text)
-        print(self._hover)
-        print(self._pending)
-        print(self.control)
-        print(self.control.FindFocus())
-        print(type(self.control.FindFocus()))
-        print(type(self.control.FindFocus()) == wx._core.TextCtrl)
 
         self._hover = True
-        print('a')
 
         self.control.SetCursor(wx.Cursor(wx.CURSOR_HAND))
-        print('b')
         
         if not self._ignore_focus and (type(self.control.FindFocus()) != wx._core.TextCtrl):
-            print('c')
             self._ignore_focus = True
-            print("here we go")
             self.control.SetFocus()
-        print('d')
         self._ignore_focus = False
-        print('e')
         if self._x is not None:
             if self.factory.active_color_ != self.factory.color_:
                 self.control.Refresh()
         elif self.factory.hover_color_ != self.factory.color_:
             self.control.Refresh()
-        print('f')
 
     def _leave_window(self, event):
         """ Handles the mouse leaving the window.
         """
-        print('Im leaving')
-        print(self._ignore_focus)
-        print(self._x)
-        print(self._hover)
-        print(self._pending)
         self._hover = False
 
         if self.factory.hover_color_ != self.factory.color_:
@@ -517,11 +485,6 @@ class _ScrubberEditor(Editor):
     def _left_down(self, event):
         """ Handles the left mouse being pressed.
         """
-        print("Im clicking")
-        print(self._ignore_focus)
-        print(self._x)
-        print(self._hover)
-        print(self._pending)
         self._x, self._y = event.GetX(), event.GetY()
         self._pending = True
 
@@ -537,11 +500,6 @@ class _ScrubberEditor(Editor):
     def _left_up(self, event):
         """ Handles the left mouse button being released.
         """
-        print("Ive clicked")
-        print(self._ignore_focus)
-        print(self._x)
-        print(self._hover)
-        print(self._pending)
         self.control.ReleaseMouse()
         if self._pending:
             self._pop_up_editor()
@@ -601,13 +559,11 @@ class _ScrubberEditor(Editor):
     def _enter_text(self, event):
         """ Handles the mouse entering the pop-up text control.
         """
-        print("im entering text")
         self._in_text_window = True
 
     def _leave_text(self, event):
         """ Handles the mouse leaving the pop-up text control.
         """
-        print("im leaving text")
         self._in_text_window = False
 
     def _text_completed(self, event):
