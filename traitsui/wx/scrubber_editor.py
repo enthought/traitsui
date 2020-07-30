@@ -458,7 +458,6 @@ class _ScrubberEditor(Editor):
     def _enter_window(self, event):
         """ Handles the mouse entering the window.
         """
-
         self._hover = True
 
         self.control.SetCursor(wx.Cursor(wx.CURSOR_HAND))
@@ -467,6 +466,7 @@ class _ScrubberEditor(Editor):
             self._ignore_focus = True
             self.control.SetFocus()
         self._ignore_focus = False
+        
         if self._x is not None:
             if self.factory.active_color_ != self.factory.color_:
                 self.control.Refresh()
@@ -480,7 +480,6 @@ class _ScrubberEditor(Editor):
 
         if self.factory.hover_color_ != self.factory.color_:
             self.control.Refresh()
-
 
     def _left_down(self, event):
         """ Handles the left mouse being pressed.

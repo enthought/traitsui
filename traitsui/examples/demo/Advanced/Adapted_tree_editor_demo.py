@@ -2,27 +2,27 @@
 #  License: BSD Style.
 
 """
-Demonstrates an alternative method of defining a <b>TreeEditor</b> by creating
-<b>ITreeNodeAdapter</b> subclasses.
+Demonstrates an alternative method of defining a **TreeEditor** by creating
+**ITreeNodeAdapter** subclasses.
 
-To run this demonstration successfully, you must have the <b>AppTools</b> egg
+To run this demonstration successfully, you must have the **AppTools** egg
 installed.
 
-Using <b>ITreeNodeAdapters</b> can be useful in cases where the kind of content
+Using **ITreeNodeAdapters** can be useful in cases where the kind of content
 of the tree is not always known ahead of time. For example, you might be
 creating a reusable tool or component which can display its data in a tree
 view, but you do not know what kind of data it will be asked to display when
 you write the code. Therefore, it may be impossible for you to specify a
-<b>TreeEditor</b> with a correct set of <b>TreeNode</b> objects that will work
+**TreeEditor** with a correct set of **TreeNode** objects that will work
 in all possible future cases.
 
-Using <b>ITreeNodeAdapter</b> subclasses, you can allow the clients of your code
-to solve this problem by providing one of more <b>ITreeNodeAdapters</b> that
+Using **ITreeNodeAdapter** subclasses, you can allow the clients of your code
+to solve this problem by providing one of more **ITreeNodeAdapters** that
 can be used to provide the correct tree node information for each type of data
-that will appear in the <b>TreeEditor</b> view.
+that will appear in the **TreeEditor** view.
 
-In this demo, we define an <b>ITreeNodeAdapter</b> subclass that adapts the
-<i>apptools.io.file.File</i> class to be displayed in a file explorer style
+In this demo, we define an **ITreeNodeAdapter** subclass that adapts the
+*apptools.io.file.File* class to be displayed in a file explorer style
 tree view.
 """
 
