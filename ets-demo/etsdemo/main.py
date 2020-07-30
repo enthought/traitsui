@@ -31,6 +31,13 @@ _THIS_PACKAGE, _ = __name__.split(".", 1)
 @contextlib.contextmanager
 def _set_logger(logger, level):
     """ Context manager for setting logging.
+
+    Parameters
+    ----------
+    logger : logging.Logger
+        Logger to be configured.
+    level : int
+        Logging level to set.
     """
     formatter = logging.Formatter(_LOG_FORMAT)
     handler = logging.StreamHandler()
