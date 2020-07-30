@@ -62,8 +62,7 @@ def _parse_command_line():
     namespace : argparse.Namespace
         Parsed command line arguments.
     """
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser = argparse.ArgumentParser()
     parser.add_argument(
         '--debug',
         help="Log debugging information to console.",
