@@ -29,9 +29,8 @@ from traitsui.view import View
 from traitsui.tests._tools import (
     count_calls,
     create_ui,
-    skip_if_not_qt4,
-    skip_if_not_wx,
-    skip_if_null,
+    requires_toolkit,
+    ToolkitName,
 )
 
 
@@ -69,7 +68,7 @@ class MaybeInvalidTrait(HasTraits):
 
 class TestUI(unittest.TestCase):
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_reset_with_destroy_wx(self):
         # Characterization test:
         # UI.reset(destroy=True) destroys all ui children of the top control
@@ -84,7 +83,7 @@ class TestUI(unittest.TestCase):
             # but its children are gone
             self.assertEqual(len(ui.control.GetChildren()), 0)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_reset_with_destroy_qt(self):
         # Characterization test:
         # UI.reset(destroy=True) destroys all ui children of the top control
@@ -111,7 +110,7 @@ class TestUI(unittest.TestCase):
                 if isinstance(c, qt.QtGui.QWidget):
                     self.assertEqual(c.deleteLater._n_calls, 1)
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_reset_without_destroy_wx(self):
         # Characterization test:
         # UI.reset(destroy=False) destroys all editor controls, but leaves
@@ -142,7 +141,7 @@ class TestUI(unittest.TestCase):
             text_ctrl = ui.control.FindWindowByName("text")
             self.assertIsNotNone(text_ctrl)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_reset_without_destroy_qt(self):
         # Characterization test:
         # UI.reset(destroy=False) destroys all editor controls, but leaves
@@ -171,7 +170,7 @@ class TestUI(unittest.TestCase):
             text_ctrl = ui.control.findChild(qt.QtGui.QLineEdit)
             self.assertIsNotNone(text_ctrl)
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_destroy_after_ok_wx(self):
         # Behavior: after pressing 'OK' in a dialog, the method UI.finish is
         # called and the view control and its children are destroyed
@@ -199,7 +198,7 @@ class TestUI(unittest.TestCase):
             self.assertIsNone(ui.control)
             self.assertEqual(control.Destroy._n_calls, 1)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_destroy_after_ok_qt(self):
         # Behavior: after pressing 'OK' in a dialog, the method UI.finish is
         # called and the view control and its children are destroyed
@@ -223,7 +222,7 @@ class TestUI(unittest.TestCase):
             self.assertIsNone(ui.control)
             self.assertEqual(control.deleteLater._n_calls, 1)
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_no_spring_trait(self):
         obj = DisallowNewTraits()
         with create_ui(obj):
@@ -231,7 +230,7 @@ class TestUI(unittest.TestCase):
 
         self.assertTrue("spring" not in obj.traits())
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_invalid_state(self):
         # Regression test for enthought/traitsui#983
         obj = MaybeInvalidTrait(name="Name long enough to be valid")

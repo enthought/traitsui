@@ -19,9 +19,9 @@ from traits.testing.api import UnittestTools
 from traitsui.tests._tools import (
     create_ui,
     press_ok_button,
-    skip_if_not_qt4,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -38,7 +38,7 @@ class TupleEditor(HasTraits):
 
 class TestTupleEditor(unittest.TestCase, UnittestTools):
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_value_update(self):
         # Regression test for #179
         model = TupleEditor()
@@ -46,7 +46,7 @@ class TestTupleEditor(unittest.TestCase, UnittestTools):
             with self.assertTraitChanges(model, "tup", count=1):
                 model.tup = (3, 4, "nono")
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_qt_tuple_editor(self):
         # Behavior: when editing the text of a tuple editor,
         # value get updated immediately.

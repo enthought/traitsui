@@ -26,11 +26,12 @@ import traitsui.editors.csv_list_editor as csv_list_editor
 
 from traitsui.tests._tools import (
     create_ui,
-    is_current_backend_wx,
-    is_current_backend_qt4,
+    is_wx,
+    is_qt,
     press_ok_button,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -50,7 +51,7 @@ class ListOfFloatsWithCSVEditor(ModelView):
 
 class TestCSVEditor(unittest.TestCase):
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_csv_editor_disposal(self):
         # Bug: CSVListEditor does not un-hook the traits notifications after
         # its disposal, causing errors when the hooked data is accessed after
@@ -69,7 +70,7 @@ class TestCSVEditor(unittest.TestCase):
             # if all went well, we should not be here
             self.fail("AttributeError raised")
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_csv_editor_external_append(self):
         # Behavior: CSV editor is notified when an element is appended to the
         # list externally
@@ -92,9 +93,9 @@ class TestCSVEditor(unittest.TestCase):
             list_of_floats.data.append(3.14)
 
             # get current value from editor
-            if is_current_backend_wx():
+            if is_wx():
                 value_str = _wx_get_text_value(ui)
-            elif is_current_backend_qt4():
+            elif is_qt():
                 value_str = _qt_get_text_value(ui)
 
             expected = csv_list_editor._format_list_str([1.0, 3.14])

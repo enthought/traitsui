@@ -17,7 +17,7 @@ TraitsUI file dialog are:
 
  - It supports history. That is, each time the user selects a file for opening,
    the file is added to a persistent history list, similar to many applications
-   <i>Open recent...</i> function, but built directly into the file dialog.
+   *Open recent...* function, but built directly into the file dialog.
    The amount of history remembered can be specified by the developer, with the
    default being the last 10 files opened.
 
@@ -29,15 +29,15 @@ TraitsUI file dialog are:
    file.
 
  - There is a very nice synergy between the file system view and the history
-   list. Quite often users shuttle between several <i>favorite</i> locations in
+   list. Quite often users shuttle between several *favorite* locations in
    the file system when opening files. The TraitsUI file dialog automatically
    discovers these favorite locations just by the user opening files. When a
    user opens the file dialog, they can select a previously opened file from
    the history list, which then automatically causes the file system view to
    expand the selected file's containing folder, thus allowing them to select a
    different file in the same location. Since the history list is updated each
-   time a user selects a file, It tends to automatically discover a <i>working
-   set</i> of favorite directories just through simple use, without the user
+   time a user selects a file, It tends to automatically discover a *working
+   set* of favorite directories just through simple use, without the user
    having to explicitly designate them as such.
 
  - It's customizable. The TraitsUI file dialog accepts extension objects which

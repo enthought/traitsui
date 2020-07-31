@@ -23,11 +23,12 @@ import pkg_resources
 from traits.api import HasTraits
 
 from traitsui.tests._tools import (
-    is_current_backend_wx,
-    is_current_backend_qt4,
+    is_qt,
+    is_wx,
     process_cascade_events,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 # This test file is not distributed nor is it in a package.
@@ -153,31 +154,31 @@ SOURCE_DIRS = [
 SEARCHER = ExampleSearcher(source_dirs=SOURCE_DIRS)
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Advanced", "Table_editor_with_progress_column.py"),
-    is_current_backend_wx, "ProgressRenderer is not implemented in wx.",
+    is_wx, "ProgressRenderer is not implemented in wx.",
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Advanced", "Scrubber_editor_demo.py"),
-    is_current_backend_qt4, "ScrubberEditor is not implemented in qt.",
+    is_qt, "ScrubberEditor is not implemented in qt.",
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Extras", "animated_GIF.py"),
-    lambda: not is_current_backend_wx(), "Only support wx",
+    lambda: not is_wx(), "Only support wx",
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Extras", "Tree_editor_with_TreeNodeRenderer.py"),
-    lambda: not is_current_backend_qt4(), "Only support Qt",
+    lambda: not is_qt(), "Only support Qt",
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Extras", "windows", "flash.py"),
-    lambda: not is_current_backend_wx(), "Only support wx",
+    lambda: not is_wx(), "Only support wx",
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Extras", "windows", "internet_explorer.py"),
-    lambda: not is_current_backend_wx(), "Only support wx",
+    lambda: not is_wx(), "Only support wx",
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Useful", "demo_group_size.py"),
-    is_current_backend_wx,
+    is_wx,
     "enable tries to import a missing constant. See enthought/enable#307",
 )
 SEARCHER.skip_file_if(
@@ -190,7 +191,7 @@ SEARCHER.skip_file_if(
 )
 SEARCHER.skip_file_if(
     os.path.join(TUTORIALS, "wizard.py"),
-    is_current_backend_qt4, "Failing on Qt, see enthought/traitsui#773",
+    is_qt, "Failing on Qt, see enthought/traitsui#773",
 )
 
 # Validate configuration.
@@ -230,9 +231,9 @@ def replaced_configure_traits(
         process_cascade_events()
 
         # Temporary fix for enthought/traitsui#907
-        if is_current_backend_qt4():
+        if is_qt():
             ui.control.hide()
-        if is_current_backend_wx():
+        if is_wx():
             ui.control.Hide()
 
         ui.dispose()
@@ -282,7 +283,7 @@ def run_file(file_path):
 # Test cases
 # =============================================================================
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestExample(unittest.TestCase):
 
     def test_run(self):

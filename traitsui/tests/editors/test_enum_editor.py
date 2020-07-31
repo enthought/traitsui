@@ -7,11 +7,12 @@ from traitsui.api import EnumEditor, UItem, View
 from traitsui.tests._tools import (
     create_ui,
     get_all_button_status,
-    is_current_backend_qt4,
-    is_current_backend_wx,
+    is_qt,
+    is_wx,
     process_cascade_events,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -45,7 +46,7 @@ def get_evaluate_view(style, auto_set=True, mode="radio"):
 
 def get_combobox_text(combobox):
     """ Return the text given a combobox control """
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         if isinstance(combobox, wx.Choice):
@@ -53,7 +54,7 @@ def get_combobox_text(combobox):
         else:
             return combobox.GetValue()
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         return combobox.currentText()
 
     else:
@@ -62,7 +63,7 @@ def get_combobox_text(combobox):
 
 def set_combobox_text(combobox, text):
     """ Set the text given a combobox control """
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         if isinstance(combobox, wx.Choice):
@@ -77,7 +78,7 @@ def set_combobox_text(combobox, text):
             event.SetString(text)
             wx.PostEvent(combobox, event)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         combobox.setEditText(text)
 
     else:
@@ -86,7 +87,7 @@ def set_combobox_text(combobox, text):
 
 def set_combobox_index(combobox, idx):
     """ Set the choice index given a combobox control and index number """
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         if isinstance(combobox, wx.Choice):
@@ -99,7 +100,7 @@ def set_combobox_index(combobox, idx):
         event.SetInt(idx)
         wx.PostEvent(combobox, event)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         combobox.setCurrentIndex(idx)
 
     else:
@@ -108,13 +109,13 @@ def set_combobox_index(combobox, idx):
 
 def finish_combobox_text_entry(combobox):
     """ Finish text entry given combobox. """
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         event = wx.CommandEvent(wx.EVT_TEXT_ENTER.typeId, combobox.GetId())
         wx.PostEvent(combobox, event)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         combobox.lineEdit().editingFinished.emit()
 
     else:
@@ -124,7 +125,7 @@ def finish_combobox_text_entry(combobox):
 def click_radio_button(widget, button_idx):
     """ Simulate a radio button click given widget and button number. Assumes
     all sizer children (wx) or layout items (qt) are buttons."""
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         sizer_items = widget.GetSizer().GetChildren()
@@ -133,7 +134,7 @@ def click_radio_button(widget, button_idx):
         event.SetEventObject(button)
         wx.PostEvent(widget, event)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         widget.layout().itemAt(button_idx).widget().click()
 
     else:
@@ -142,11 +143,11 @@ def click_radio_button(widget, button_idx):
 
 def get_list_widget_text(list_widget):
     """ Return the text of currently selected item in given list widget. """
-    if is_current_backend_wx():
+    if is_wx():
         selected_item_idx = list_widget.GetSelection()
         return list_widget.GetString(selected_item_idx)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         return list_widget.currentItem().text()
 
     else:
@@ -155,21 +156,21 @@ def get_list_widget_text(list_widget):
 
 def set_list_widget_selected_index(list_widget, idx):
     """ Set the choice index given a list widget control and index number. """
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         list_widget.SetSelection(idx)
         event = wx.CommandEvent(wx.EVT_LISTBOX.typeId, list_widget.GetId())
         wx.PostEvent(list_widget, event)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         list_widget.setCurrentRow(idx)
 
     else:
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestEnumEditorMapping(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -254,7 +255,7 @@ class TestEnumEditorMapping(unittest.TestCase):
 
     def test_radio_editor_mapping_values(self):
         # FIXME issue enthought/traitsui#842
-        if is_current_backend_wx():
+        if is_wx():
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -264,7 +265,7 @@ class TestEnumEditorMapping(unittest.TestCase):
 
     def test_radio_editor_mapping_name(self):
         # FIXME issue enthought/traitsui#842
-        if is_current_backend_wx():
+        if is_wx():
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -279,7 +280,7 @@ class TestEnumEditorMapping(unittest.TestCase):
         self.check_enum_mappings_name_change("custom", "list")
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSimpleEnumEditor(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -375,7 +376,7 @@ class TestSimpleEnumEditor(unittest.TestCase):
             process_cascade_events()
 
             # wx modifies the value without the need to finish entry
-            if is_current_backend_qt4():
+            if is_qt():
                 self.assertEqual(enum_edit.value, "one")
 
                 finish_combobox_text_entry(editor.control)
@@ -406,7 +407,7 @@ class TestSimpleEnumEditor(unittest.TestCase):
             enum_editor_factory.values = ["one", "two", "three"]
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestRadioEnumEditor(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -451,7 +452,7 @@ class TestRadioEnumEditor(unittest.TestCase):
             self.assertEqual(enum_edit.value, "two")
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestListEnumEditor(unittest.TestCase):
 
     @contextlib.contextmanager

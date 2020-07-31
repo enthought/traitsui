@@ -23,11 +23,12 @@ from traitsui.api import TextEditor, View, Item
 from traitsui.tests._tools import (
     create_ui,
     GuiTestAssistant,
-    is_current_backend_qt4,
-    process_cascade_events,
-    skip_if_not_qt4,
-    store_exceptions_on_all_threads,
+    is_qt,
     no_gui_test_assistant,
+    process_cascade_events,
+    requires_toolkit,
+    store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -56,7 +57,7 @@ def get_view(style, auto_set):
 def get_text(editor):
     """ Return the text from the widget for checking.
     """
-    if is_current_backend_qt4():
+    if is_qt():
         return editor.control.text()
     else:
         raise unittest.SkipTest("Not implemented for the current toolkit.")
@@ -68,7 +69,7 @@ def set_text(editor, text):
     via pressing a return key or causing the widget to lose focus.
     """
 
-    if is_current_backend_qt4():
+    if is_qt():
         from pyface.qt import QtGui
         if editor.base_style == QtGui.QLineEdit:
             editor.control.clear()
@@ -84,7 +85,7 @@ def set_text(editor, text):
 def key_press_return(editor):
     """ Imitate user pressing the return key.
     """
-    if is_current_backend_qt4():
+    if is_qt():
         from pyface.qt import QtGui
 
         # ideally we should fire keyPressEvent, but the editor does not
@@ -99,7 +100,7 @@ def key_press_return(editor):
 
 
 # Skips tests if the backend is not either qt4 or qt5
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
 class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
     """ Test on TextEditor with Qt backend."""
@@ -162,7 +163,7 @@ class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
 
 # We should be able to run this test case against wx.
 # Not running them now to avoid test interaction. See enthought/traitsui#752
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestTextEditor(unittest.TestCase):
     """ Tests that can be run with any toolkit as long as there is an
     implementation for simulating user interactions.

@@ -898,6 +898,11 @@ demo_file_view = View(
                 ),
             ),
             Tabbed(
+                UItem(
+                    "demo",
+                    style="custom",
+                    resizable=True,
+                ),
                 Item(
                     "log",
                     style="readonly",
@@ -913,11 +918,6 @@ demo_file_view = View(
                     editor=ShellEditor(share=True),
                     label="Shell",
                     show_label=False
-                ),
-                UItem(
-                    "demo",
-                    style="custom",
-                    resizable=True,
                 ),
             ),
             dock="horizontal",
@@ -1043,6 +1043,8 @@ class Demo(ModelView):
 
     def init(self, info):
         info.ui.title = self.title
+        if self.model.has_children():
+            self.selected_node = self.model.get_children()[0]
 
     def _get__next_node(self):
         if self.selected_node is None:

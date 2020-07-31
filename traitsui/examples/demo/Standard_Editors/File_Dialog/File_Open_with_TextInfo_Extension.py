@@ -7,15 +7,15 @@
 -------------------------------------------------------------------------------
 
 This demonstrates using the TraitsUI file dialog with a file dialog extension,
-in this case, the <b>TextInfo</b> extension, which displays (if possible) the
+in this case, the **TextInfo** extension, which displays (if possible) the
 contents of the currently selected file in a read-only text editor so the user
 can quickly verify they are opening the correct file before leaving the file
 dialog.
 
 For more information about why you would want to use the TraitsUI file dialog
-over the standard OS file dialog, select the <b>File Open</b> demo. For a
+over the standard OS file dialog, select the **File Open** demo. For a
 demonstration of writing a custom file dialog extension, select the
-<b>File Open with Custom Extension</b> demo.
+**File Open with Custom Extension** demo.
 
 This example also shows setting a file name filter which only allows Python
 source (i.e. *.py) files to be viewed and selected.

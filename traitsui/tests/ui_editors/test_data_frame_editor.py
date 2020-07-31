@@ -27,8 +27,9 @@ from traitsui.view import View
 
 from traitsui.tests._tools import (
     create_ui,
+    requires_toolkit,
     store_exceptions_on_all_threads,
-    skip_if_null,
+    ToolkitName,
 )
 
 
@@ -93,7 +94,7 @@ def sample_text_data():
 
 class TestDataFrameEditor(unittest.TestCase):
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_get_item(self):
         viewer = sample_data()
         adapter = DataFrameAdapter()
@@ -104,7 +105,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(item_0_df.columns, ["X", "Y", "Z"])
         self.assertEqual(item_0_df.index[0], "one")
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_empty_dataframe(self):
         data = DataFrame()
         viewer = DataFrameViewer(data=data)
@@ -115,7 +116,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(item_0_df.values, np.array([]).reshape(0, 0))
         assert_array_equal(item_0_df.columns, [])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_no_rows(self):
         data = DataFrame(columns=["X", "Y", "Z"])
         viewer = DataFrameViewer(data=data)
@@ -126,7 +127,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(item_0_df.values, np.array([]).reshape(0, 3))
         assert_array_equal(item_0_df.columns, ["X", "Y", "Z"])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_get_item_numerical(self):
         viewer = sample_data_numerical_index()
         adapter = DataFrameAdapter()
@@ -137,7 +138,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(item_0_df.columns, ["X", "Y", "Z"])
         self.assertEqual(item_0_df.index[0], 1)
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_delete_start(self):
         viewer = sample_data()
         adapter = DataFrameAdapter()
@@ -149,7 +150,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(data.columns, ["X", "Y", "Z"])
         assert_array_equal(data.index, ["two", "three", "four"])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_delete_start_numerical_index(self):
         viewer = sample_data_numerical_index()
         adapter = DataFrameAdapter()
@@ -161,7 +162,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(data.columns, ["X", "Y", "Z"])
         assert_array_equal(data.index, [2, 3, 4])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_delete_middle(self):
         viewer = sample_data()
         adapter = DataFrameAdapter()
@@ -173,7 +174,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(data.columns, ["X", "Y", "Z"])
         assert_array_equal(data.index, ["one", "three", "four"])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_delete_middle_numerical_index(self):
         viewer = sample_data_numerical_index()
         adapter = DataFrameAdapter()
@@ -185,7 +186,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(data.columns, ["X", "Y", "Z"])
         assert_array_equal(data.index, [1, 3, 4])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_delete_end(self):
         viewer = sample_data()
         adapter = DataFrameAdapter()
@@ -197,7 +198,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(data.columns, ["X", "Y", "Z"])
         assert_array_equal(data.index, ["one", "two", "three"])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_delete_end_numerical_index(self):
         viewer = sample_data_numerical_index()
         adapter = DataFrameAdapter()
@@ -209,7 +210,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(data.columns, ["X", "Y", "Z"])
         assert_array_equal(data.index, [1, 2, 3])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_insert_start(self):
         viewer = sample_data()
         adapter = DataFrameAdapter()
@@ -227,7 +228,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(data.columns, ["X", "Y", "Z"])
         assert_array_equal(data.index, ["new", "one", "two", "three", "four"])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_insert_start_numerical_index(self):
         viewer = sample_data_numerical_index()
         adapter = DataFrameAdapter()
@@ -243,7 +244,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(data.columns, ["X", "Y", "Z"])
         assert_array_equal(data.index, [0, 1, 2, 3, 4])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_insert_middle(self):
         viewer = sample_data()
         adapter = DataFrameAdapter()
@@ -261,7 +262,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(data.columns, ["X", "Y", "Z"])
         assert_array_equal(data.index, ["one", "new", "two", "three", "four"])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_insert_middle_numerical_index(self):
         viewer = sample_data_numerical_index()
         adapter = DataFrameAdapter()
@@ -277,7 +278,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(data.columns, ["X", "Y", "Z"])
         assert_array_equal(data.index, [1, 0, 2, 3, 4])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_insert_end(self):
         viewer = sample_data()
         adapter = DataFrameAdapter()
@@ -295,7 +296,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(data.columns, ["X", "Y", "Z"])
         assert_array_equal(data.index, ["one", "two", "three", "four", "new"])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_insert_end_numerical_index(self):
         viewer = sample_data_numerical_index()
         adapter = DataFrameAdapter()
@@ -311,13 +312,13 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(data.columns, ["X", "Y", "Z"])
         assert_array_equal(data.index, [1, 2, 3, 4, 0])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor(self):
         viewer = sample_data()
         with store_exceptions_on_all_threads(), create_ui(viewer):
             pass
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_alternate_adapter(self):
         class AlternateAdapter(DataFrameAdapter):
             pass
@@ -334,40 +335,40 @@ class TestDataFrameEditor(unittest.TestCase):
                 create_ui(viewer, dict(view=alternate_adapter_view)):
             pass
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_numerical_index(self):
         viewer = sample_data_numerical_index()
         with store_exceptions_on_all_threads(), create_ui(viewer):
             pass
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_text_data(self):
         viewer = sample_text_data()
         with store_exceptions_on_all_threads(), create_ui(viewer):
             pass
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_format_mapping(self):
         viewer = sample_data()
         with store_exceptions_on_all_threads(), \
                 create_ui(viewer, dict(view=format_mapping_view)):
             pass
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_font_mapping(self):
         viewer = sample_data()
         with store_exceptions_on_all_threads(), \
                 create_ui(viewer, dict(view=font_mapping_view)):
             pass
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_columns(self):
         viewer = sample_data()
         with store_exceptions_on_all_threads(), \
                 create_ui(viewer, dict(view=columns_view)):
             pass
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_with_update_refresh(self):
         class DataFrameViewer(HasTraits):
             data = Instance(DataFrame)
@@ -385,7 +386,7 @@ class TestDataFrameEditor(unittest.TestCase):
         with store_exceptions_on_all_threads(), create_ui(viewer) as ui:
             viewer.df_updated = True
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_with_refresh(self):
         class DataFrameViewer(HasTraits):
             data = Instance(DataFrame)
@@ -403,7 +404,7 @@ class TestDataFrameEditor(unittest.TestCase):
         with store_exceptions_on_all_threads(), create_ui(viewer) as ui:
             viewer.df_refreshed = True
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_multi_select(self):
         view = View(
             Item("data", editor=DataFrameEditor(multi_select=True), width=400)
@@ -413,7 +414,7 @@ class TestDataFrameEditor(unittest.TestCase):
                 create_ui(viewer, dict(view=view)):
             pass
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_set_text(self):
         viewer = sample_data()
         columns = [(column, column) for column in viewer.data.columns]
@@ -426,7 +427,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(item_0_df.values, [[10, 1, 2]])
         assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_set_text_invalid(self):
         viewer = sample_data()
         columns = [(column, column) for column in viewer.data.columns]
@@ -440,7 +441,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(item_0_df.values, [[0, 1, 2]])
         assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_set_index_text(self):
         viewer = sample_data()
         columns = (
@@ -457,7 +458,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
         self.assertEqual(item_0_df.index[0], 'NewIndex')
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_set_index_text_numeric(self):
         viewer = sample_data_numerical_index()
         columns = (
@@ -474,7 +475,7 @@ class TestDataFrameEditor(unittest.TestCase):
         assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
         self.assertEqual(item_0_df.index[0], 100)
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_set_index_text_numeric_invalid(self):
         viewer = sample_data_numerical_index()
         columns = (

@@ -28,9 +28,9 @@ from traitsui.group import HGroup, VGroup
 
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_not_qt4,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -72,7 +72,7 @@ class HResizeDialog(HasTraits):
 
 class TestLayout(unittest.TestCase):
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_qt_resizable_in_vgroup(self):
         # Behavior: Item.resizable controls whether a component can resize
         # along the non-layout axis of its group. In a VGroup, resizing should
@@ -91,7 +91,7 @@ class TestLayout(unittest.TestCase):
             # vertical size should be unchanged
             self.assertLess(text.height(), 100)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_qt_resizable_in_hgroup(self):
         # Behavior: Item.resizable controls whether a component can resize
         # along the non-layout axis of its group. In a HGroup, resizing should
@@ -114,7 +114,7 @@ class TestLayout(unittest.TestCase):
             # self.assertLess(text.width(), _TXT_WIDTH+100)
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestOrientation(unittest.TestCase):
     """ Toolkit-agnostic tests on the layout orientations."""
 

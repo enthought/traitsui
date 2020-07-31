@@ -724,8 +724,6 @@ class FillPanel(object):
                 if self.is_horizontal:
                     if subgroup.springy:
                         growable = 1
-                    if subgroup.orientation == "horizontal":
-                        style |= wx.ALIGN_CENTER_VERTICAL
                 sizer.Add(sg_sizer, growable, style, 2)
 
     def add_items(self, content, panel, sizer):

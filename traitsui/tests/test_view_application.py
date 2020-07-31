@@ -12,7 +12,7 @@ from pyface.timer.api import CallbackTimer
 from traits.api import HasTraits, Instance, Int
 from traitsui.api import Handler, Item, UIInfo, View, toolkit
 
-from ._tools import GuiTestAssistant, is_current_backend_qt4, no_gui_test_assistant
+from ._tools import GuiTestAssistant, is_qt, no_gui_test_assistant
 
 
 class SimpleModel(HasTraits):
@@ -45,7 +45,7 @@ class TestViewApplication(GuiTestAssistant, unittest.TestCase):
         self.event_loop_timeout = False
         self.closed = False
 
-        if is_current_backend_qt4():
+        if is_qt():
             if len(self.qt_app.topLevelWidgets()) > 0:
                 with self.event_loop_with_timeout(repeat=5):
                     self.gui.invoke_later(self.qt_app.closeAllWindows)
@@ -81,14 +81,14 @@ class TestViewApplication(GuiTestAssistant, unittest.TestCase):
             self.gui.invoke_after(100, self.close_dialog)
 
     def close_dialog(self):
-        if is_current_backend_qt4():
+        if is_qt():
             self.handler.info.ui.control.close()
             self.closed = True
         else:
             raise NotImplementedError("Can't close current backend")
 
     def click_button(self, text):
-        if is_current_backend_qt4():
+        if is_qt():
             from pyface.qt.QtGui import QPushButton
             from pyface.ui.qt4.util.testing import find_qt_widget
 

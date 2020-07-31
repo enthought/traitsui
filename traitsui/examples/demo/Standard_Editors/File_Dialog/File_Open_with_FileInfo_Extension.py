@@ -7,7 +7,7 @@
 -------------------------------------------------------------------------------
 
 This demonstrates using the TraitsUI file dialog with a file dialog extension,
-in this case, the <b>FileInfo</b> extension, which displays information about
+in this case, the **FileInfo** extension, which displays information about
 the currently selected file, such as:
 
  - File size.
@@ -16,9 +16,9 @@ the currently selected file, such as:
  - Date and time last created.
 
 For more information about why you would want to use the TraitsUI file dialog
-over the standard OS file dialog, select the <b>File Open</b> demo. For a
+over the standard OS file dialog, select the **File Open** demo. For a
 demonstration of writing a custom file dialog extension, select the
-<b>File Open with Custom Extension</b> demo.
+**File Open with Custom Extension** demo.
 """
 # Issue related to the demo warning: enthought/traitsui#953
 

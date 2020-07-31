@@ -29,14 +29,14 @@ from traitsui.view import View
 
 from traitsui.tests._tools import (
     create_ui,
-    is_current_backend_null,
     is_mac_os,
-    skip_if_not_qt4,
-    skip_if_not_wx,
+    is_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
-if is_current_backend_null():
+if is_null():
     raise unittest.SkipTest("Not supported using the null backend")
 
 
@@ -103,9 +103,9 @@ class TestActions(unittest.TestCase):
             # verify that the action was triggered
             self.assertTrue(dialog.action_successful)
 
-    # ----- Qt4 tests
+    # ----- Qt tests
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_qt_toolbar_action(self):
         # Behavior: when clicking on a toolbar action, the corresponding
         # function should be executed
@@ -120,7 +120,7 @@ class TestActions(unittest.TestCase):
 
         self._test_actions(qt_trigger_toolbar_action)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_qt_menu_action(self):
         # Behavior: when clicking on a menu action, the corresponding function
         # should be executed
@@ -135,7 +135,7 @@ class TestActions(unittest.TestCase):
 
         self._test_actions(qt_trigger_menu_action)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_qt_button_action(self):
         # Behavior: when clicking on a button action, the corresponding
         # function should be executed
@@ -152,7 +152,7 @@ class TestActions(unittest.TestCase):
         not is_mac_os,
         "Problem with triggering toolbar actions on Linux and Windows. Issue #428.",  # noqa: E501
     )
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_wx_toolbar_action(self):
         # Behavior: when clicking on a toolbar action, the corresponding
         # function should be executed
@@ -176,7 +176,7 @@ class TestActions(unittest.TestCase):
 
         self._test_actions(_wx_trigger_toolbar_action)
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_wx_button_action(self):
         # Behavior: when clicking on a button action, the corresponding
         # function should be executed

@@ -14,7 +14,8 @@ from traitsui.api import DateRangeEditor, View, Item
 
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_not_qt4,
+    requires_toolkit,
+    ToolkitName,
 )
 
 
@@ -51,7 +52,7 @@ class TestDateRangeEditorGeneric(unittest.TestCase):
             DateRangeEditor(multi_select=False)
 
 
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestDateRangeEditorQt(unittest.TestCase):
     def setUp(self):
         push_exception_handler(reraise_exceptions=True)

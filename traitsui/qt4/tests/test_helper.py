@@ -12,7 +12,7 @@ import textwrap
 import unittest
 
 from pyface.qt import QtGui
-from traitsui.tests._tools import skip_if_not_qt4
+from traitsui.tests._tools import requires_toolkit, ToolkitName
 from traitsui.qt4.helper import wrap_text_with_elision
 from traitsui.qt4.font_trait import create_traitsfont
 
@@ -40,7 +40,7 @@ def get_expected_lines(text, width):
     return expected_lines
 
 
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestWrapText(unittest.TestCase):
     def test_wrap_text_basic(self):
         font = create_traitsfont("Courier")

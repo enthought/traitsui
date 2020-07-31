@@ -116,7 +116,7 @@ dependencies = {
 extra_dependencies = {
     # XXX once pyside2 is available in EDM, we will want it here
     'pyside2': set(),
-    'pyqt': {'pyqt<4.12'},  # FIXME: build 1 of.4-12 appears to be bad
+    'pyqt': {'pyqt<4.12'},  # FIXME: build 1 of 4.12.1 appears to be bad
     'pyqt5': {'pyqt5'},
     # XXX once wxPython 4 is available in EDM, we will want it here
     'wx': set(),
@@ -167,12 +167,16 @@ def install(runtime, toolkit, environment, editable):
     install_here += "."
 
     # edm commands to setup the development environment
-    commands = [
-        "edm environments create {environment} --force --version={runtime}",
+    if sys.platform == 'linux':
+        commands = ["edm environments create {environment} --platform=rh6-x86_64 --force --version={runtime}"]  # noqa: E501
+    else:
+        commands = ["edm environments create {environment} --force --version={runtime}"]  # noqa: E501
+
+    commands.extend([
         "edm install -y -e {environment} " + packages,
         "edm run -e {environment} -- python setup.py clean --all",
         install_here,
-    ]
+    ])
 
     # pip install pyside2, because we don't have it in EDM yet
     if toolkit == 'pyside2':

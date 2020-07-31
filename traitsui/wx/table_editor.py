@@ -453,7 +453,7 @@ class TableEditor(Editor, BaseTableEditor):
                 tb_sizer.Add((1, 1), 1, wx.EXPAND)
                 tb_sizer.Add(toolbar.control, 0)
 
-            sizer.Add(tb_sizer, 0, wx.ALIGN_RIGHT | wx.EXPAND)
+            sizer.Add(tb_sizer, 0, wx.EXPAND)
 
     def dispose(self):
         """ Disposes of the contents of an editor.

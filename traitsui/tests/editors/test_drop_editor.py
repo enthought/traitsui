@@ -14,8 +14,9 @@ from traits.api import HasTraits, Str
 from traitsui.api import DropEditor, Item, View
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_not_qt4,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -25,7 +26,7 @@ class Model(HasTraits):
 
 
 # Run this test against wx when enthought/traitsui#752 is fixed.
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestDropEditor(unittest.TestCase):
     """ Test DropEditor. """
 
