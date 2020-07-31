@@ -13,11 +13,10 @@
 
 import unittest
 
-from traits.api import HasTraits, File, Bool
-from traitsui.api import View, Item
-from traitsui.wx.animated_gif_editor import AnimatedGIFEditor
 import pkg_resources
 
+from traits.api import Bool, File, HasTraits,
+from traitsui.api import Item, View
 from traitsui.tests._tools import (
     create_ui,
     skip_if_not_wx,
