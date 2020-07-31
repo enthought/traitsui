@@ -345,8 +345,6 @@ class _ScrubberEditor(Editor):
         text.SetSelection(-1, -1)
         text.SetFocus()
         control.Bind(wx.EVT_TEXT_ENTER, self._text_completed, id=text.GetId())
-        text.Bind(wx.EVT_KILL_FOCUS, self._text_completed)
-        text.Bind(wx.EVT_KILL_FOCUS, self._left_down)
         text.Bind(wx.EVT_ENTER_WINDOW, self._enter_text)
         text.Bind(wx.EVT_LEAVE_WINDOW, self._leave_text)
         text.Bind(wx.EVT_CHAR, self._key_entered)
@@ -463,7 +461,7 @@ class _ScrubberEditor(Editor):
 
         self.control.SetCursor(wx.Cursor(wx.CURSOR_HAND))
         
-        if not self._ignore_focus and (type(self.control.FindFocus()) != wx._core.TextCtrl):
+        if not self._ignore_focus:
             self._ignore_focus = True
             self.control.SetFocus()
         self._ignore_focus = False
