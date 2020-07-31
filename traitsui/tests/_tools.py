@@ -13,13 +13,14 @@
 #
 # ------------------------------------------------------------------------------
 
-
+import enum
 import re
 import sys
 import traceback
 from functools import partial
 from contextlib import contextmanager
 from unittest import skipIf, TestSuite
+import warnings
 
 from pyface.api import GUI
 from pyface.toolkit import toolkit_object
@@ -67,33 +68,102 @@ def store_exceptions_on_all_threads():
             raise exceptions[0]
 
 
+# Toolkit constants
+
+class ToolkitName(enum.Enum):
+    wx = "wx"
+    qt = "qt"
+    null = "null"
+
+
+def is_wx():
+    """ Return true if the toolkit backend is wx. """
+    return ETSConfig.toolkit == ToolkitName.wx.name
+
+
+def is_qt():
+    """ Return true if the toolkit backend is Qt
+    (that includes Qt4 or Qt5, etc.)
+    """
+    return ETSConfig.toolkit.startswith(ToolkitName.qt.name)
+
+
+def is_null():
+    """ Return true if the toolkit backend is null.
+    """
+    return ETSConfig.toolkit == ToolkitName.null.name
+
+
+def requires_toolkit(toolkits):
+    """ Decorator factory for skipping tests if the current toolkit is not
+    one of the given values.
+
+    Parameters
+    ----------
+    toolkits : iterable of members of ToolkitName
+        e.g. ``list(ToolkitName)`` to include all toolkits.
+    """
+    mapping = {
+        ToolkitName.null: is_null,
+        ToolkitName.qt: is_qt,
+        ToolkitName.wx: is_wx,
+    }
+    return skipIf(
+        not any(mapping[toolkit]() for toolkit in toolkits),
+        "Test requires one of these toolkits: {}".format(toolkits)
+    )
+
+
+def _deprecated(func):
+    # Emit warning to ease tension across pending pull requests.
+    # This function should be removed when no more active PRs are relying
+    # on this.
+    def wrapped(*args, **kwargs):
+        warnings.warn(
+            "{!r} will be removed. "
+            "Use is_wx, is_qt or is_null or requires_toolkit instead.".format(
+                func
+            ),
+            DeprecationWarning,
+            stacklevel=3,
+        )
+        return func(*args, **kwargs)
+    return wrapped
+
+
 def _is_current_backend(backend_name=""):
     return ETSConfig.toolkit == backend_name
 
 
 #: Return True if current backend is 'wx'
-is_current_backend_wx = partial(_is_current_backend, backend_name="wx")
+is_current_backend_wx = _deprecated(
+    partial(_is_current_backend, backend_name="wx")
+)
 
 #: Return True if current backend is 'qt4'
-is_current_backend_qt4 = partial(_is_current_backend, backend_name="qt4")
+is_current_backend_qt4 = _deprecated(
+    partial(_is_current_backend, backend_name="qt4")
+)
 
 #: Return True if current backend is 'null'
-is_current_backend_null = partial(_is_current_backend, backend_name="null")
+is_current_backend_null = _deprecated(
+    partial(_is_current_backend, backend_name="null")
+)
 
+#: Test decorator: Skip test if backend is not wx
+skip_if_not_wx = _deprecated(requires_toolkit([ToolkitName.wx]))
 
-#: Test decorator: Skip test if backend is not 'wx'
-skip_if_not_wx = skipIf(not is_current_backend_wx(), "Test only for wx")
+#: Test decorator: Skip test if backend is not qt
+skip_if_not_qt4 = _deprecated(requires_toolkit([ToolkitName.qt]))
 
-#: Test decorator: Skip test if backend is not 'qt4'
-skip_if_not_qt4 = skipIf(not is_current_backend_qt4(), "Test only for qt4")
-
-#: Test decorator: Skip test if backend is not 'null'
-skip_if_not_null = skipIf(not is_current_backend_null(), "Test only for null")
+#: Test decorator: Skip test if backend is not null
+skip_if_not_null = _deprecated(requires_toolkit([ToolkitName.null]))
 
 #: Test decorator: Skip test if backend is 'null'
-skip_if_null = skipIf(
-    is_current_backend_null(),
-    "Test not working on the 'null' backend"
+#: For future proofing tests in case of new toolkits, consider using
+#: requires_toolkit instead.
+skip_if_null = _deprecated(
+    skipIf(is_null(), "Test not working on the 'null' backend")
 )
 
 #: True if current platform is MacOS
