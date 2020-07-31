@@ -898,6 +898,11 @@ demo_file_view = View(
                 ),
             ),
             Tabbed(
+                UItem(
+                    "demo",
+                    style="custom",
+                    resizable=True,
+                ),
                 Item(
                     "log",
                     style="readonly",
@@ -913,11 +918,6 @@ demo_file_view = View(
                     editor=ShellEditor(share=True),
                     label="Shell",
                     show_label=False
-                ),
-                UItem(
-                    "demo",
-                    style="custom",
-                    resizable=True,
                 ),
             ),
             dock="horizontal",

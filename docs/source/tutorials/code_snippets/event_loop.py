@@ -1,3 +1,5 @@
+# event_loop.py
+
 from traits.api import *
 from pyface.api import GUI
 

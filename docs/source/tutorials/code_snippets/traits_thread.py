@@ -1,3 +1,5 @@
+# traits_thread.py
+
 from threading import Thread
 from time import sleep
 from traits.api import Button, HasTraits, Instance, Str

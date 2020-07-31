@@ -1,3 +1,5 @@
+# container.py
+
 from traits.api import *
 from traitsui.api import *
 

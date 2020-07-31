@@ -189,9 +189,9 @@ except ImportError as exc:
 # #html_style = 'default.css'
 # #html_theme = 'classic'
 
-# Useful aliases to avoid repeating long URLs.
+# Useful aliases to avoid repeating long URLs. 
 extlinks = {'github-demo': (
-    'https://github.com/enthought/traitsui/tree/master/examples/demo/%s',
+    'https://github.com/enthought/traitsui/tree/master/traitsui/examples/demo/%s',
     'github-demo')
 }
 

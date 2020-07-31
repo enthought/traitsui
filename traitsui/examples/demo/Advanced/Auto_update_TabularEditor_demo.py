@@ -15,7 +15,7 @@ of any object in the list associated with the editor is modified.
 To interact with the demo:
   - Select an employee from the list.
   - Adjust their salary increase.
-  - Click the <b>Give raise</b> button.
+  - Click the **Give raise** button.
   - Observe that the table automatically updates to reflect the employees new
     salary.
 
