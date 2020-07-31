@@ -14,6 +14,8 @@ import textwrap
 import unittest
 from xml.etree import ElementTree as ET
 
+from traitsui.api import Handler, UI, UIInfo
+
 from etsdemo.app import (
     Demo,
     DemoPath,
@@ -75,6 +77,33 @@ class TestDemo(unittest.TestCase):
         demo = Demo(model=DemoPath())
         if get_action_enabled(parent_tool, demo):
             demo.perform(None, parent_tool, None)
+
+    def test_demo_init_set_children(self):
+        # Test if there are children, the first one will be selected.
+        resources = [DemoPath(), DemoPath()]
+        model = DemoVirtualDirectory(resources=resources)
+        demo = Demo(model=model)
+        demo.selected_node = None
+
+        # when
+        info = UIInfo(ui=UI(handler=Handler()))
+        demo.init(info)
+
+        # then
+        self.assertIs(demo.selected_node, resources[0])
+
+    def test_demo_init_no_children_to_be_set(self):
+        # Test if there are no children, nothing is selected.
+        model = DemoVirtualDirectory(resources=[])
+        demo = Demo(model=model)
+        demo.selected_node = None
+
+        # when
+        info = UIInfo(ui=UI(handler=Handler()))
+        demo.init(info)
+
+        # then
+        self.assertIsNone(demo.selected_node)
 
 
 class TestDemoPathDescription(unittest.TestCase):
