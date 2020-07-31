@@ -29,9 +29,9 @@ from traitsui.editors.range_editor import RangeEditor
 from traitsui.tests._tools import (
     create_ui,
     press_ok_button,
-    skip_if_not_wx,
-    skip_if_not_qt4,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -61,7 +61,7 @@ class FloatWithRangeEditor(HasTraits):
 
 class TestRangeEditorText(unittest.TestCase):
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_wx_text_editing(self):
         # behavior: when editing the text part of a spin control box, pressing
         # the OK button should update the value of the HasTraits class
@@ -79,7 +79,7 @@ class TestRangeEditorText(unittest.TestCase):
         # the number traits should be between 3 and 8
         self.assertTrue(3 <= num.number <= 8)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_avoid_slider_feedback(self):
         # behavior: when editing the text box part of a range editor, the value
         # should not be adjusted by the slider part of the range editor

@@ -14,8 +14,9 @@ from traits.api import HasTraits, Str
 from traitsui.api import HTMLEditor, Item, View
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_not_qt4,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -40,7 +41,7 @@ def get_view(base_url_name):
 
 
 # Run this against wx as well once enthought/traitsui#752 is fixed.
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestHTMLEditor(unittest.TestCase):
     """ Test HTMLEditor """
 

@@ -24,10 +24,11 @@ from traitsui.tests._tools import (
     create_ui,
     GuiTestAssistant,
     is_qt,
-    process_cascade_events,
-    skip_if_not_qt4,
-    store_exceptions_on_all_threads,
     no_gui_test_assistant,
+    process_cascade_events,
+    requires_toolkit,
+    store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -99,7 +100,7 @@ def key_press_return(editor):
 
 
 # Skips tests if the backend is not either qt4 or qt5
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
 class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
     """ Test on TextEditor with Qt backend."""
@@ -162,7 +163,7 @@ class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
 
 # We should be able to run this test case against wx.
 # Not running them now to avoid test interaction. See enthought/traitsui#752
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestTextEditor(unittest.TestCase):
     """ Tests that can be run with any toolkit as long as there is an
     implementation for simulating user interactions.

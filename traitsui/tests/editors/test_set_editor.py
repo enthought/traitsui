@@ -10,8 +10,9 @@ from traitsui.tests._tools import (
     is_qt,
     is_wx,
     process_cascade_events,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -144,7 +145,7 @@ def double_click_on_item(editor, item_idx, in_used=False):
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSetEditorMapping(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -220,7 +221,7 @@ class TestSetEditorMapping(unittest.TestCase):
             )
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSimpleSetEditor(unittest.TestCase):
 
     @contextlib.contextmanager

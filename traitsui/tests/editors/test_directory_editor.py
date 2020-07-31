@@ -14,8 +14,9 @@ from traits.api import Directory, Event, HasTraits
 from traitsui.api import DirectoryEditor, Item, View
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_not_qt4,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -27,7 +28,7 @@ class DirectoryModel(HasTraits):
 
 
 # Run this against wx too when enthought/traitsui#752 is also fixed.
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestDirectoryEditor(unittest.TestCase):
     """ Test DirectoryEditor. """
 

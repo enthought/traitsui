@@ -21,9 +21,9 @@ from traitsui.tests._tools import (
     is_qt,
     is_wx,
     is_mac_os,
-    skip_if_not_qt4,
-    skip_if_not_wx,
     process_cascade_events,
+    requires_toolkit,
+    ToolkitName,
 )
 
 
@@ -86,7 +86,7 @@ class TestProcessEventsRepeated(unittest.TestCase):
     posted by the processed events.
     """
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_qt_process_events_process_all(self):
         from pyface.qt import QtCore
 
@@ -160,7 +160,7 @@ class TestProcessEventsRepeated(unittest.TestCase):
         # test setup, not for the process_cascade_events.
         self.assertEqual(actual, max_n_events, msg)
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_wx_process_events_process_all(self):
 
         def cleanup(wx_handler):

@@ -30,9 +30,9 @@ from traitsui.view import View
 from traitsui.tests._tools import (
     create_ui,
     get_dialog_size,
-    ToolkitName,
     requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 _TEXT_WIDTH = 200

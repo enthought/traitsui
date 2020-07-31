@@ -9,8 +9,9 @@ from traitsui.tests._tools import (
     is_qt,
     is_wx,
     process_cascade_events,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -117,7 +118,7 @@ def set_text_in_line_edit(line_edit, text):
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestCheckListEditorMapping(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -321,7 +322,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
         self.check_checklist_values_change_after_ui_dispose("custom")
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSimpleCheckListEditor(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -402,7 +403,7 @@ class TestSimpleCheckListEditor(unittest.TestCase):
             self.assertEqual(str_edit.value, "two,one")
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestCustomCheckListEditor(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -487,7 +488,7 @@ class TestCustomCheckListEditor(unittest.TestCase):
             self.assertEqual(str_edit.value, "three,one")
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestTextCheckListEditor(unittest.TestCase):
 
     @contextlib.contextmanager

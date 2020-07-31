@@ -4,8 +4,9 @@ from traits.api import HasTraits, Int
 from traitsui.api import RangeEditor, UItem, View
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -14,7 +15,7 @@ class RangeModel(HasTraits):
     value = Int()
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestRangeEditor(unittest.TestCase):
 
     def check_range_enum_editor_format_func(self, style):

@@ -10,10 +10,9 @@ from traitsui.tests._tools import (
     is_qt,
     is_wx,
     process_cascade_events,
-    skip_if_null,
-    skip_if_not_qt4,
-    skip_if_not_wx,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 # Import needed bitmap/pixmap cache and prepare for patching
@@ -128,7 +127,7 @@ def get_button_control(control, button_idx):
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestImageEnumEditorMapping(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -269,7 +268,6 @@ class TestImageEnumEditorMapping(unittest.TestCase):
             self.assertEqual(editor.str_value, "TOP LEFT")
 
 
-@skip_if_null
 class TestSimpleImageEnumEditor(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -278,6 +276,7 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
             process_cascade_events()
             yield ui.get_editors("value")[0]
 
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_simple_editor_more_cols(self):
         # Smoke test for setting up an editor with more than one column
         enum_edit = EnumModel()
@@ -301,7 +300,7 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
         with store_exceptions_on_all_threads():
             self.setup_gui(enum_edit, view)
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_simple_editor_popup_editor(self):
         enum_edit = EnumModel()
 
@@ -332,7 +331,7 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
             # Check that dialog window is closed
             self.assertEqual(list(editor.control.GetChildren()), [])
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_simple_editor_combobox(self):
         enum_edit = EnumModel()
 
@@ -352,7 +351,7 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
             self.assertEqual(enum_edit.value, 'top right')
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestCustomImageEnumEditor(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -431,7 +430,7 @@ class TestCustomImageEnumEditor(unittest.TestCase):
             )
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestReadOnlyImageEnumEditor(unittest.TestCase):
 
     def test_readonly_editor_value_changed(self):

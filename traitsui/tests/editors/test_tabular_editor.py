@@ -23,8 +23,9 @@ from traitsui.tests._tools import (
     is_wx,
     is_qt,
     process_cascade_events,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -178,7 +179,7 @@ def clear_selection(editor):
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestTabularEditor(UnittestTools, unittest.TestCase):
 
     @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")

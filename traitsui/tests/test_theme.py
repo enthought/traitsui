@@ -2,7 +2,7 @@ import pickle
 import unittest
 from unittest.mock import patch
 
-from traitsui.tests._tools import skip_if_not_wx
+from traitsui.tests._tools import requires_toolkit, ToolkitName
 from traitsui.theme import Theme
 
 
@@ -15,7 +15,7 @@ class TestTheme(unittest.TestCase):
         # A regression test for issue enthought/traitsui#825
         pickle.dumps(self.theme)
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_theme_content_color_default(self):
         import wx
         self.assertEqual(self.theme.content_color, wx.BLACK)
@@ -24,7 +24,7 @@ class TestTheme(unittest.TestCase):
         self.theme.content_color = "red"
         self.assertEqual(self.theme.content_color, "red")
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_theme_label_color_default(self):
         import wx
         self.assertEqual(self.theme.label_color, wx.BLACK)
@@ -33,7 +33,7 @@ class TestTheme(unittest.TestCase):
         self.theme.label_color = "red"
         self.assertEqual(self.theme.label_color, "red")
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_theme_get_image_slice(self):
         self.theme.image = "mock_image"
         with patch("traitsui.wx.image_slice.image_slice_for") as slice_func:

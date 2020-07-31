@@ -28,9 +28,9 @@ from traitsui.tests._tools import (
     create_ui,
     is_control_enabled,
     is_qt,
-    skip_if_not_qt4,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -127,7 +127,7 @@ class EnableWhenDialog(HasTraits):
 
 class TestLabels(unittest.TestCase):
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_qt_show_labels_right_without_colon(self):
         # Behavior: traitsui should not append a colon ':' to labels
         # that are shown to the *right* of the corresponding elements
@@ -188,15 +188,15 @@ class TestLabels(unittest.TestCase):
             # the size of the window should still be 500
             self.assertEqual(ui.control.width(), _DIALOG_WIDTH)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_qt_labels_right_resizing_vertical(self):
         self._test_qt_labels_right_resizing(VResizeTestDialog)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_qt_labels_right_resizing_horizontal(self):
         self._test_qt_labels_right_resizing(HResizeTestDialog)
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_labels_enabled_when(self):
         # Behaviour: label should enable/disable along with editor
 
@@ -219,7 +219,7 @@ class TestLabels(unittest.TestCase):
             dialog.bool_item = True
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestAnyToolkit(unittest.TestCase):
     """ Toolkit-agnostic tests for labels with different orientations."""
 

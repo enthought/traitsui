@@ -35,10 +35,9 @@ from traitsui.tests._tools import (
     is_qt,
     press_ok_button,
     process_cascade_events,
-    skip_if_not_qt4,
-    skip_if_not_wx,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 is_windows = platform.system() == "Windows"
@@ -202,7 +201,7 @@ def right_click_item(control, index):
 
 
 @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestListStrEditor(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -409,7 +408,7 @@ class TestListStrEditor(unittest.TestCase):
                 editor._refresh()
             process_cascade_events()
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_list_str_editor_update_editor_single_qt(self):
         # QT editor uses selected items as the source of truth when updating
         model = ListStrModel()
@@ -441,7 +440,7 @@ class TestListStrEditor(unittest.TestCase):
             self.assertEqual(editor.selected_index, 1)
             self.assertEqual(editor.selected, "one")
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_list_str_editor_update_editor_single_wx(self):
         # WX editor uses selected indices as the source of truth when updating
         model = ListStrModel()
@@ -473,7 +472,7 @@ class TestListStrEditor(unittest.TestCase):
             self.assertEqual(editor.selected_index, 0)
             self.assertEqual(editor.selected, "two")
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_list_str_editor_update_editor_multi_qt(self):
         # QT editor uses selected items as the source of truth when updating
         model = ListStrModel()
@@ -506,7 +505,7 @@ class TestListStrEditor(unittest.TestCase):
             self.assertEqual(editor.multi_selected_indices, [1])
             self.assertEqual(editor.multi_selected, ["one"])
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_list_str_editor_update_editor_multi_wx(self):
         # WX editor uses selected indices as the source of truth when updating
         model = ListStrModel()
@@ -539,7 +538,7 @@ class TestListStrEditor(unittest.TestCase):
             self.assertEqual(editor.multi_selected_indices, [0])
             self.assertEqual(editor.multi_selected, ["two"])
 
-    @skip_if_not_qt4  # wx editor doesn't have a `callx` method
+    @requires_toolkit([ToolkitName.qt])  # wx editor doesn't have a `callx` method
     def test_list_str_editor_callx(self):
         model = ListStrModel()
 
@@ -563,7 +562,7 @@ class TestListStrEditor(unittest.TestCase):
             self.assertEqual(editor.selected_index, 0)
             self.assertEqual(editor.selected, "one")
 
-    @skip_if_not_qt4  # wx editor doesn't have a `setx` method
+    @requires_toolkit([ToolkitName.qt])  # wx editor doesn't have a `setx` method
     def test_list_str_editor_setx(self):
         with store_exceptions_on_all_threads(), \
                 self.setup_gui(ListStrModel(), get_view()) as editor:
@@ -600,7 +599,7 @@ class TestListStrEditor(unittest.TestCase):
                 self.setup_gui(ListStrModel(), get_view(title="testing")):
             pass
 
-    @skip_if_not_wx  # see `right_click_item` and issue enthought/traitsui#868
+    @requires_toolkit([ToolkitName.wx])  # see `right_click_item` and issue enthought/traitsui#868
     def test_list_str_editor_right_click(self):
         class ListStrModelRightClick(HasTraits):
             value = List(["one", "two", "three"])
@@ -628,7 +627,7 @@ class TestListStrEditor(unittest.TestCase):
 
 class TestListStrEditorSelection(unittest.TestCase):
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_wx_list_str_selected_index(self):
         # behavior: when starting up, the
 
@@ -650,7 +649,7 @@ class TestListStrEditorSelection(unittest.TestCase):
         self.assertEqual(selected_1, [1])
         self.assertEqual(selected_2, [0])
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_wx_list_str_multi_selected_index(self):
         # behavior: when starting up, the
 
@@ -672,7 +671,7 @@ class TestListStrEditorSelection(unittest.TestCase):
         self.assertEqual(selected_1, [1])
         self.assertEqual(selected_2, [0])
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_selection_listener_disconnected(self):
         """ Check that selection listeners get correctly disconnected """
         from pyface.api import GUI

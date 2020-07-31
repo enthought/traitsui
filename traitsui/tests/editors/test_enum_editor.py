@@ -10,8 +10,9 @@ from traitsui.tests._tools import (
     is_qt,
     is_wx,
     process_cascade_events,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -169,7 +170,7 @@ def set_list_widget_selected_index(list_widget, idx):
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestEnumEditorMapping(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -279,7 +280,7 @@ class TestEnumEditorMapping(unittest.TestCase):
         self.check_enum_mappings_name_change("custom", "list")
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSimpleEnumEditor(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -406,7 +407,7 @@ class TestSimpleEnumEditor(unittest.TestCase):
             enum_editor_factory.values = ["one", "two", "three"]
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestRadioEnumEditor(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -451,7 +452,7 @@ class TestRadioEnumEditor(unittest.TestCase):
             self.assertEqual(enum_edit.value, "two")
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestListEnumEditor(unittest.TestCase):
 
     @contextlib.contextmanager

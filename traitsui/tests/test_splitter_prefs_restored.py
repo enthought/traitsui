@@ -20,7 +20,8 @@ from traits.api import Int
 from traitsui.api import Action, Group, Handler, HSplit, Item, View
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_not_qt4,
+    requires_toolkit,
+    ToolkitName,
 )
 
 
@@ -84,7 +85,7 @@ class TmpClass(Handler):
 
 class TestSplitterPrefsRestored(unittest.TestCase):
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_splitter_prefs_are_restored(self):
         # the keys for the splitter prefs (i.e. prefs['h_split']['structure'])
         splitter_keys = ("h_split", "structure")

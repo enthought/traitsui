@@ -9,9 +9,9 @@ from traitsui.tests._tools import (
     is_wx,
     process_cascade_events,
     press_ok_button,
-    skip_if_not_qt4,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -261,7 +261,7 @@ select_cell_indices_view = View(
 
 class TestTableEditor(unittest.TestCase):
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -271,7 +271,7 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=simple_view)) as ui:
             process_cascade_events()
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_filtered_table_editor(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -287,7 +287,7 @@ class TestTableEditor(unittest.TestCase):
 
         self.assertIsNotNone(filter)
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_row(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -307,7 +307,7 @@ class TestTableEditor(unittest.TestCase):
 
         self.assertIs(selected, object_list.values[5])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_rows(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -327,7 +327,7 @@ class TestTableEditor(unittest.TestCase):
 
         self.assertEqual(selected, object_list.values[5:7])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_row_index(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -347,7 +347,7 @@ class TestTableEditor(unittest.TestCase):
 
         self.assertEqual(selected, 5)
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_row_indices(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -368,7 +368,7 @@ class TestTableEditor(unittest.TestCase):
 
         self.assertEqual(selected, [5, 7, 8])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_column(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -388,7 +388,7 @@ class TestTableEditor(unittest.TestCase):
 
         self.assertEqual(selected, "value")
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_columns(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -408,7 +408,7 @@ class TestTableEditor(unittest.TestCase):
 
         self.assertEqual(selected, ["value", "other_value"])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_column_index(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -429,7 +429,7 @@ class TestTableEditor(unittest.TestCase):
 
         self.assertEqual(selected, 1)
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_column_indices(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -450,7 +450,7 @@ class TestTableEditor(unittest.TestCase):
 
         self.assertEqual(selected, [0, 1])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cell(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -470,7 +470,7 @@ class TestTableEditor(unittest.TestCase):
 
         self.assertEqual(selected, (object_list.values[5], "value"))
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cells(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -498,7 +498,7 @@ class TestTableEditor(unittest.TestCase):
             (object_list.values[8], "value"),
         ])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cell_index(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -519,7 +519,7 @@ class TestTableEditor(unittest.TestCase):
 
         self.assertEqual(selected, (5, 1))
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cell_indices(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -540,7 +540,7 @@ class TestTableEditor(unittest.TestCase):
 
         self.assertEqual(selected, [(5, 0), (6, 1), (8, 0)])
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_progress_column(self):
         from traitsui.extras.progress_column import ProgressColumn
 

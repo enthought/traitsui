@@ -35,9 +35,9 @@ from traitsui.editors.range_editor import RangeEditor
 from traitsui.tests._tools import (
     create_ui,
     press_ok_button,
-    skip_if_not_wx,
-    skip_if_not_qt4,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -56,7 +56,7 @@ class NumberWithSpinnerEditor(HasTraits):
 
 class TestRangeEditorSpinner(unittest.TestCase):
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_wx_spin_control_editing_should_not_crash(self):
         # Bug: when editing the text part of a spin control box, pressing
         # the OK button raises an AttributeError on Mac OS X
@@ -86,7 +86,7 @@ class TestRangeEditorSpinner(unittest.TestCase):
             # if all went well, we should not be here
             self.fail("AttributeError raised")
 
-    @skip_if_not_wx
+    @requires_toolkit([ToolkitName.wx])
     def test_wx_spin_control_editing_does_not_update(self):
         # Bug: when editing the text part of a spin control box, pressing
         # the OK button does not update the value of the HasTraits class
@@ -122,7 +122,7 @@ class TestRangeEditorSpinner(unittest.TestCase):
             # value is 4
             self.assertEqual(num.number, 4)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_qt_spin_control_editing(self):
         # Behavior: when editing the text part of a spin control box, pressing
         # the OK button updates the value of the HasTraits class
