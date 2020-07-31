@@ -121,7 +121,7 @@ def _deprecated(func):
     def wrapped(*args, **kwargs):
         warnings.warn(
             "{!r} will be removed. "
-            "Use is_wx, is_qt or is_null or requires_toolkit instead.".format(
+            "Use is_wx, is_qt, is_null or requires_toolkit instead.".format(
                 func
             ),
             DeprecationWarning,
