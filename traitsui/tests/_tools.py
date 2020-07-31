@@ -218,7 +218,7 @@ def process_cascade_events():
       posted prior to calling this function will be processed.
       See enthought/traitsui#951
     """
-    if is_current_backend_qt4():
+    if is_qt():
         from pyface.qt import QtCore
         event_loop = QtCore.QEventLoop()
         while event_loop.processEvents(QtCore.QEventLoop.AllEvents):
@@ -264,7 +264,7 @@ def create_ui(object, ui_kwargs=None):
 
 
 def get_children(node):
-    if ETSConfig.toolkit == "wx":
+    if is_wx():
         return node.GetChildren()
     else:
         return node.children()
@@ -273,7 +273,7 @@ def get_children(node):
 def press_ok_button(ui):
     """Press the OK button in a wx or qt dialog."""
 
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         ok_button = ui.control.FindWindowByName("button", ui.control)
@@ -282,7 +282,7 @@ def press_ok_button(ui):
         )
         ok_button.ProcessEvent(click_event)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         from pyface import qt
 
         # press the OK button and close the dialog
@@ -293,14 +293,14 @@ def press_ok_button(ui):
 def click_button(button):
     """Click the button given its control."""
 
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         event = wx.CommandEvent(wx.EVT_BUTTON.typeId, button.GetId())
         event.SetEventObject(button)
         wx.PostEvent(button, event)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         button.click()
 
     else:
@@ -310,10 +310,10 @@ def click_button(button):
 def is_control_enabled(control):
     """Return if the given control is enabled or not."""
 
-    if is_current_backend_wx():
+    if is_wx():
         return control.IsEnabled()
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         return control.isEnabled()
 
     else:
@@ -329,10 +329,10 @@ def get_dialog_size(ui_control):
         >>> get_dialog_size(ui.control)
     """
 
-    if is_current_backend_wx():
+    if is_wx():
         return ui_control.GetSize()
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         return ui_control.size().width(), ui_control.size().height()
 
 
@@ -344,14 +344,14 @@ def get_all_button_status(control):
     """
     button_status = []
 
-    if is_current_backend_wx():
+    if is_wx():
         for item in control.GetSizer().GetChildren():
             button = item.GetWindow()
             # Ignore empty buttons (assumption that they are invisible)
             if button.value != "":
                 button_status.append(button.GetValue())
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         layout = control.layout()
         for i in range(layout.count()):
             button = layout.itemAt(i).widget()

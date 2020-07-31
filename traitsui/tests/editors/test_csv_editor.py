@@ -26,8 +26,8 @@ import traitsui.editors.csv_list_editor as csv_list_editor
 
 from traitsui.tests._tools import (
     create_ui,
-    is_current_backend_wx,
-    is_current_backend_qt4,
+    is_wx,
+    is_qt,
     press_ok_button,
     skip_if_null,
     store_exceptions_on_all_threads,
@@ -92,9 +92,9 @@ class TestCSVEditor(unittest.TestCase):
             list_of_floats.data.append(3.14)
 
             # get current value from editor
-            if is_current_backend_wx():
+            if is_wx():
                 value_str = _wx_get_text_value(ui)
-            elif is_current_backend_qt4():
+            elif is_qt():
                 value_str = _qt_get_text_value(ui)
 
             expected = csv_list_editor._format_list_str([1.0, 3.14])

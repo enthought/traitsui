@@ -27,7 +27,7 @@ from traitsui.group import VGroup, HGroup
 from traitsui.tests._tools import (
     create_ui,
     is_control_enabled,
-    is_current_backend_qt4,
+    is_qt,
     skip_if_not_qt4,
     skip_if_null,
     store_exceptions_on_all_threads,
@@ -206,7 +206,7 @@ class TestLabels(unittest.TestCase):
 
             labelled_editor = ui.get_editors("labelled_item")[0]
 
-            if is_current_backend_qt4():
+            if is_qt():
                 unlabelled_editor = ui.get_editors("unlabelled_item")[0]
                 self.assertIsNone(unlabelled_editor.label_control)
 

@@ -18,8 +18,8 @@ import unittest
 from pyface.api import GUI
 
 from traitsui.tests._tools import (
-    is_current_backend_qt4,
-    is_current_backend_wx,
+    is_qt,
+    is_wx,
     is_mac_os,
     skip_if_not_qt4,
     skip_if_not_wx,
@@ -27,7 +27,7 @@ from traitsui.tests._tools import (
 )
 
 
-if is_current_backend_qt4():
+if is_qt():
 
     # Create a QObject that will emit a new event to itself as long as
     # it has not received enough.
@@ -53,7 +53,7 @@ if is_current_backend_qt4():
             return True
 
 
-if is_current_backend_wx():
+if is_wx():
 
     # Create a wx.EvtHandler that will emit a new event to itself as long as
     # it has not received enough.

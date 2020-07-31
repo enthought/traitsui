@@ -6,8 +6,8 @@ from traits.api import Button, HasTraits, List, Str
 from traitsui.api import ButtonEditor, Item, UItem, View
 from traitsui.tests._tools import (
     create_ui,
-    is_current_backend_qt4,
-    is_current_backend_wx,
+    is_qt,
+    is_wx,
     process_cascade_events,
     skip_if_null,
     skip_if_not_qt4,
@@ -48,10 +48,10 @@ custom_view = View(
 
 def get_button_text(button):
     """ Return the button text given a button control """
-    if is_current_backend_wx():
+    if is_wx():
         return button.GetLabel()
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         return button.text()
 
 

@@ -20,8 +20,8 @@ from traitsui.api import Item, TabularEditor, View
 from traitsui.tabular_adapter import TabularAdapter
 from traitsui.tests._tools import (
     create_ui,
-    is_current_backend_wx,
-    is_current_backend_qt4,
+    is_wx,
+    is_qt,
     process_cascade_events,
     skip_if_null,
     store_exceptions_on_all_threads,
@@ -91,7 +91,7 @@ def get_view(multi_select=False):
 def get_selected_rows(editor):
     """ Returns a list of all currently selected rows.
     """
-    if is_current_backend_wx():
+    if is_wx():
         import wx
         # "item" in this context means "row number"
         item = -1
@@ -105,7 +105,7 @@ def get_selected_rows(editor):
             selected.append(item)
         return selected
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         rows = editor.control.selectionModel().selectedRows()
         return [r.row() for r in rows]
 
@@ -116,10 +116,10 @@ def get_selected_rows(editor):
 def set_selected_single(editor, row):
     """ Selects a specified row in an editor with multi_select=False.
     """
-    if is_current_backend_wx():
+    if is_wx():
         editor.control.Select(row)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         from pyface.qt.QtGui import QItemSelectionModel
 
         smodel = editor.control.selectionModel()
@@ -137,12 +137,12 @@ def set_selected_multiple(editor, rows):
     """ Clears old selection and selects specified rows in an editor
     with multi_select=True.
     """
-    if is_current_backend_wx():
+    if is_wx():
         clear_selection(editor)
         for row in rows:
             editor.control.Select(row)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         from pyface.qt.QtGui import QItemSelectionModel
 
         clear_selection(editor)
@@ -161,7 +161,7 @@ def set_selected_multiple(editor, rows):
 def clear_selection(editor):
     """ Clears existing selection.
     """
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         currently_selected = get_selected_rows(editor)
@@ -171,7 +171,7 @@ def clear_selection(editor):
                 selected_row, 0, wx.LIST_STATE_SELECTED
             )
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         editor.control.selectionModel().clearSelection()
 
     else:
@@ -181,7 +181,7 @@ def clear_selection(editor):
 @skip_if_null
 class TestTabularEditor(UnittestTools, unittest.TestCase):
 
-    @unittest.skipIf(is_current_backend_wx(), "Issue enthought/traitsui#752")
+    @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_tabular_editor_single_selection(self):
 
         with store_exceptions_on_all_threads(), \
@@ -206,7 +206,7 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
 
             # Can't clear selection via UI when multi_select=False
 
-    @unittest.skipIf(is_current_backend_wx(), "Issue enthought/traitsui#752")
+    @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_tabular_editor_multi_selection(self):
         view = get_view(multi_select=True)
 
@@ -236,7 +236,7 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
             self.assertEqual(report.selected_rows, [])
             self.assertEqual(report.multi_selected, [])
 
-    @unittest.skipIf(is_current_backend_wx(), "Issue enthought/traitsui#752")
+    @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_tabular_editor_single_selection_changed(self):
 
         with store_exceptions_on_all_threads(), \
@@ -272,7 +272,7 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
             self.assertEqual(get_selected_rows(editor), [])
             self.assertEqual(report.selected, None)
 
-    @unittest.skipIf(is_current_backend_wx(), "Issue enthought/traitsui#752")
+    @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_tabular_editor_multi_selection_changed(self):
         view = get_view(multi_select=True)
 
@@ -310,7 +310,7 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
             self.assertEqual(get_selected_rows(editor), [])
             self.assertEqual(report.multi_selected, [])
 
-    @unittest.skipIf(is_current_backend_wx(), "Issue enthought/traitsui#752")
+    @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_tabular_editor_multi_selection_items_changed(self):
         view = get_view(multi_select=True)
 

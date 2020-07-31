@@ -7,8 +7,8 @@ from traits.api import Enum, HasTraits, List
 from traitsui.api import ImageEnumEditor, UItem, View
 from traitsui.tests._tools import (
     create_ui,
-    is_current_backend_qt4,
-    is_current_backend_wx,
+    is_qt,
+    is_wx,
     process_cascade_events,
     skip_if_null,
     skip_if_not_qt4,
@@ -17,10 +17,10 @@ from traitsui.tests._tools import (
 )
 
 # Import needed bitmap/pixmap cache and prepare for patching
-if is_current_backend_wx():
+if is_wx():
     from traitsui.wx.helper import bitmap_cache as image_cache
     cache_to_patch = "traitsui.wx.image_enum_editor.bitmap_cache"
-elif is_current_backend_qt4():
+elif is_qt():
     from traitsui.qt4.helper import pixmap_cache as image_cache
     cache_to_patch = "traitsui.qt4.image_enum_editor.pixmap_cache"
 
@@ -52,7 +52,7 @@ def get_view(style):
 
 def click_on_image(image_control):
     """ Click on the image controlled by given image_control."""
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         event_down = wx.MouseEvent(wx.EVT_LEFT_DOWN.typeId)
@@ -62,7 +62,7 @@ def click_on_image(image_control):
         event_up.SetY(0)
         wx.PostEvent(image_control, event_up)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         image_control.click()
 
     else:
@@ -75,12 +75,12 @@ def get_button_strings(control):
     """
     button_strings = []
 
-    if is_current_backend_wx():
+    if is_wx():
         for item in control.GetSizer().GetChildren():
             button = item.GetWindow()
             button_strings.append(button.value)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         layout = control.layout()
         for i in range(layout.count()):
             button = layout.itemAt(i).widget()
@@ -99,11 +99,11 @@ def get_all_button_selected_status(control):
     """
     button_status = []
 
-    if is_current_backend_wx():
+    if is_wx():
         for item in control.GetSizer().GetChildren():
             button_status.append(item.GetWindow().Selected())
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         layout = control.layout()
         for i in range(layout.count()):
             button_status.append(layout.itemAt(i).widget().isChecked())
@@ -118,10 +118,10 @@ def get_button_control(control, button_idx):
     """ Get button control from a specified parent control given a button index.
     Assumes all sizer children (wx) or layout items (qt) are buttons.
     """
-    if is_current_backend_wx():
+    if is_wx():
         return control.GetSizer().GetChildren()[button_idx].GetWindow()
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         return control.layout().itemAt(button_idx).widget()
 
     else:

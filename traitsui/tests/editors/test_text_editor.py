@@ -23,7 +23,7 @@ from traitsui.api import TextEditor, View, Item
 from traitsui.tests._tools import (
     create_ui,
     GuiTestAssistant,
-    is_current_backend_qt4,
+    is_qt,
     process_cascade_events,
     skip_if_not_qt4,
     store_exceptions_on_all_threads,
@@ -56,7 +56,7 @@ def get_view(style, auto_set):
 def get_text(editor):
     """ Return the text from the widget for checking.
     """
-    if is_current_backend_qt4():
+    if is_qt():
         return editor.control.text()
     else:
         raise unittest.SkipTest("Not implemented for the current toolkit.")
@@ -68,7 +68,7 @@ def set_text(editor, text):
     via pressing a return key or causing the widget to lose focus.
     """
 
-    if is_current_backend_qt4():
+    if is_qt():
         from pyface.qt import QtGui
         if editor.base_style == QtGui.QLineEdit:
             editor.control.clear()
@@ -84,7 +84,7 @@ def set_text(editor, text):
 def key_press_return(editor):
     """ Imitate user pressing the return key.
     """
-    if is_current_backend_qt4():
+    if is_qt():
         from pyface.qt import QtGui
 
         # ideally we should fire keyPressEvent, but the editor does not

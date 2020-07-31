@@ -31,8 +31,8 @@ from traitsui.editors.list_str_editor import ListStrEditor
 
 from traitsui.tests._tools import (
     create_ui,
-    is_current_backend_wx,
-    is_current_backend_qt4,
+    is_wx,
+    is_qt,
     press_ok_button,
     process_cascade_events,
     skip_if_not_qt4,
@@ -99,7 +99,7 @@ single_select_item_view = View(
 def get_selected_indices(editor):
     """ Returns a list of the indices of all currently selected list items.
     """
-    if is_current_backend_wx():
+    if is_wx():
         import wx
         # "item" in this context means "index of the item"
         item = -1
@@ -113,7 +113,7 @@ def get_selected_indices(editor):
             selected.append(item)
         return selected
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         indices = editor.list_view.selectionModel().selectedRows()
         return [i.row() for i in indices]
 
@@ -124,10 +124,10 @@ def get_selected_indices(editor):
 def set_selected_single(editor, index):
     """ Selects a specified item in an editor with multi_select=False.
     """
-    if is_current_backend_wx():
+    if is_wx():
         editor.control.Select(index)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         from pyface.qt.QtGui import QItemSelectionModel
 
         smodel = editor.list_view.selectionModel()
@@ -142,12 +142,12 @@ def set_selected_multiple(editor, indices):
     """ Clears old selection and selects specified items in an editor with
     multi_select=True.
     """
-    if is_current_backend_wx():
+    if is_wx():
         clear_selection(editor)
         for index in indices:
             editor.control.Select(index)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         from pyface.qt.QtGui import QItemSelectionModel
 
         clear_selection(editor)
@@ -163,7 +163,7 @@ def set_selected_multiple(editor, indices):
 def clear_selection(editor):
     """ Clears existing selection.
     """
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         currently_selected = get_selected_indices(editor)
@@ -173,7 +173,7 @@ def clear_selection(editor):
                 selected_index, 0, wx.LIST_STATE_SELECTED
             )
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         editor.list_view.selectionModel().clearSelection()
 
     else:
@@ -184,7 +184,7 @@ def right_click_item(control, index):
     """ Right clicks on the specified item.
     """
 
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         event = wx.ListEvent(
@@ -193,7 +193,7 @@ def right_click_item(control, index):
         event.SetIndex(index)
         wx.PostEvent(control, event)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         # Couldn't figure out how to close the context menu programatically
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
@@ -201,7 +201,7 @@ def right_click_item(control, index):
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
-@unittest.skipIf(is_current_backend_wx(), "Issue enthought/traitsui#752")
+@unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
 @skip_if_null
 class TestListStrEditor(unittest.TestCase):
 
@@ -216,10 +216,10 @@ class TestListStrEditor(unittest.TestCase):
         with store_exceptions_on_all_threads(), \
                 self.setup_gui(ListStrModel(), get_view()) as editor:
 
-            if is_current_backend_qt4():  # No initial selection
+            if is_qt():  # No initial selection
                 self.assertEqual(editor.selected_index, -1)
                 self.assertEqual(editor.selected, None)
-            elif is_current_backend_wx():  # First element selected initially
+            elif is_wx():  # First element selected initially
                 self.assertEqual(editor.selected_index, 0)
                 self.assertEqual(editor.selected, "one")
 
@@ -272,9 +272,9 @@ class TestListStrEditor(unittest.TestCase):
         with store_exceptions_on_all_threads(), \
                 self.setup_gui(ListStrModel(), get_view()) as editor:
 
-            if is_current_backend_qt4():  # No initial selection
+            if is_qt():  # No initial selection
                 self.assertEqual(get_selected_indices(editor), [])
-            elif is_current_backend_wx():  # First element selected initially
+            elif is_wx():  # First element selected initially
                 self.assertEqual(get_selected_indices(editor), [0])
 
             editor.selected_index = 1
@@ -300,11 +300,11 @@ class TestListStrEditor(unittest.TestCase):
             editor.selected_index = -1
             process_cascade_events()
 
-            if is_current_backend_qt4():
+            if is_qt():
                 # -1 clears selection
                 self.assertEqual(get_selected_indices(editor), [])
                 self.assertEqual(editor.selected, None)
-            elif is_current_backend_wx():
+            elif is_wx():
                 # Visually selects everything but doesn't update `selected`
                 self.assertEqual(editor.selected, "four")
                 self.assertEqual(get_selected_indices(editor), [0, 1, 2])
@@ -332,11 +332,11 @@ class TestListStrEditor(unittest.TestCase):
             editor.multi_selected = ["three", "four"]
             process_cascade_events()
 
-            if is_current_backend_qt4():
+            if is_qt():
                 # Invalid values assigned to multi_selected are ignored
                 self.assertEqual(get_selected_indices(editor), [2])
                 self.assertEqual(editor.multi_selected_indices, [2])
-            elif is_current_backend_wx():
+            elif is_wx():
                 # Selection indices are not updated at all
                 self.assertEqual(get_selected_indices(editor), [0, 2])
                 self.assertEqual(editor.multi_selected_indices, [0, 2])
@@ -403,9 +403,9 @@ class TestListStrEditor(unittest.TestCase):
         # Smoke test for refresh_editor/refresh_
         with store_exceptions_on_all_threads(), \
                 self.setup_gui(ListStrModel(), get_view()) as editor:
-            if is_current_backend_qt4():
+            if is_qt():
                 editor.refresh_editor()
-            elif is_current_backend_wx():
+            elif is_wx():
                 editor._refresh()
             process_cascade_events()
 

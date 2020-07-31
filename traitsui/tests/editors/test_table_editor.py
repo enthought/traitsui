@@ -5,8 +5,8 @@ from traits.api import HasTraits, Instance, Int, List, Str, Tuple
 from traitsui.api import EvalTableFilter, Item, ObjectColumn, TableEditor, View
 from traitsui.tests._tools import (
     create_ui,
-    is_current_backend_qt4,
-    is_current_backend_wx,
+    is_qt,
+    is_wx,
     process_cascade_events,
     press_ok_button,
     skip_if_not_qt4,
@@ -298,9 +298,9 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=select_row_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_row
 
             process_cascade_events()
@@ -318,9 +318,9 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=select_rows_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_rows
 
             process_cascade_events()
@@ -338,9 +338,9 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=select_row_index_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected_indices
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_row_index
 
             process_cascade_events()
@@ -359,9 +359,9 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected_indices
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_row_indices
 
             process_cascade_events()
@@ -379,9 +379,9 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=select_column_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_column
 
             process_cascade_events()
@@ -399,9 +399,9 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=select_columns_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_columns
 
             process_cascade_events()
@@ -420,9 +420,9 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected_indices
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_column_index
 
             process_cascade_events()
@@ -441,9 +441,9 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected_indices
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_column_indices
 
             process_cascade_events()
@@ -461,9 +461,9 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=select_cell_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_cell
 
             process_cascade_events()
@@ -485,9 +485,9 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=select_cells_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_cells
 
             process_cascade_events()
@@ -510,9 +510,9 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected_indices
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_cell_index
 
             process_cascade_events()
@@ -531,9 +531,9 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected_indices
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_cell_indices
 
             process_cascade_events()

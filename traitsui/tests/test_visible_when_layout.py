@@ -30,7 +30,8 @@ from traitsui.view import View
 from traitsui.tests._tools import (
     create_ui,
     get_dialog_size,
-    skip_if_not_qt4,
+    ToolkitName,
+    requires_toolkit,
     store_exceptions_on_all_threads,
 )
 
@@ -78,7 +79,7 @@ class VisibleWhenProblem(HasTraits):
 
 class TestVisibleWhenLayout(unittest.TestCase):
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_visible_when_layout(self):
         # Bug: The size of a dialog that contains elements that are activated
         # by "visible_when" can end up being the *sum* of the sizes of the

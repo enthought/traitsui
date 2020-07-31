@@ -6,8 +6,8 @@ from traitsui.api import CheckListEditor, UItem, View
 from traitsui.tests._tools import (
     create_ui,
     get_all_button_status,
-    is_current_backend_qt4,
-    is_current_backend_wx,
+    is_qt,
+    is_wx,
     process_cascade_events,
     skip_if_null,
     store_exceptions_on_all_threads,
@@ -47,10 +47,10 @@ def get_mapped_view(style):
 
 def get_combobox_text(combobox):
     """ Return the text given a combobox control. """
-    if is_current_backend_wx():
+    if is_wx():
         return combobox.GetString(combobox.GetSelection())
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         return combobox.currentText()
 
     else:
@@ -60,7 +60,7 @@ def get_combobox_text(combobox):
 def set_combobox_index(editor, idx):
     """ Set the choice index of a combobox control given editor and index
     number. """
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         choice = editor.control
@@ -69,7 +69,7 @@ def set_combobox_index(editor, idx):
         event.SetString(choice.GetString(idx))
         wx.PostEvent(choice, event)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         # Cannot initiate update programatically because of `activated`
         # event. At least check that it updates as expected when done
         # manually
@@ -82,7 +82,7 @@ def set_combobox_index(editor, idx):
 def click_checkbox_button(widget, button_idx):
     """ Simulate a checkbox click given widget and button number. Assumes
     all sizer children (wx) or layout items (qt) are buttons."""
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         sizer_items = widget.GetSizer().GetChildren()
@@ -92,7 +92,7 @@ def click_checkbox_button(widget, button_idx):
         event.SetEventObject(button)
         wx.PostEvent(widget, event)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         layout = widget.layout()
         layout.itemAt(button_idx).widget().click()
 
@@ -102,14 +102,14 @@ def click_checkbox_button(widget, button_idx):
 
 def set_text_in_line_edit(line_edit, text):
     """ Set text in text widget and complete editing. """
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         line_edit.SetValue(text)
         event = wx.CommandEvent(wx.EVT_TEXT_ENTER.typeId, line_edit.GetId())
         wx.PostEvent(line_edit, event)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         line_edit.setText(text)
         line_edit.editingFinished.emit()
 
@@ -276,7 +276,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
 
     def test_custom_editor_mapping_values(self):
         # FIXME issue enthought/traitsui#842
-        if is_current_backend_wx():
+        if is_wx():
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -286,7 +286,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
 
     def test_custom_editor_mapping_values_tuple(self):
         # FIXME issue enthought/traitsui#842
-        if is_current_backend_wx():
+        if is_wx():
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -296,7 +296,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
 
     def test_custom_editor_mapping_name(self):
         # FIXME issue enthought/traitsui#842
-        if is_current_backend_wx():
+        if is_wx():
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
@@ -306,7 +306,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
 
     def test_custom_editor_mapping_name_tuple(self):
         # FIXME issue enthought/traitsui#842
-        if is_current_backend_wx():
+        if is_wx():
             import wx
 
             with self.assertRaises(wx._core.wxAssertionError):
