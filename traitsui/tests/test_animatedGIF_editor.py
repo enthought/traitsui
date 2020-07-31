@@ -28,8 +28,6 @@ class AnimatedGIF(HasTraits):
 
     gif_file = File(filename)
 
-    playing = Bool(True)
-
 
 @skip_if_not_wx
 class TestAnimatedGIFEditor(unittest.TestCase):
