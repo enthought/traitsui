@@ -13,7 +13,8 @@ from traits.api import HasTraits, Int
 from traitsui.api import Item, View
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_not_qt4,
+    requires_toolkit,
+    ToolkitName,
 )
 
 
@@ -21,7 +22,7 @@ class ObjectWithNumber(HasTraits):
     number = Int()
 
 
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestStickyDialog(unittest.TestCase):
     """ Test _StickyDialog used by the UI's Qt backend.
     """
