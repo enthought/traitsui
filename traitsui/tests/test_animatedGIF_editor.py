@@ -37,7 +37,6 @@ class TestAnimatedGIFEditor(unittest.TestCase):
         obj1 = AnimatedGIF()
         view = View(
             Item('gif_file', editor=AnimatedGIFEditor(playing='playing')),
-            Item('playing'),
         )
         
         # This should not fail.
