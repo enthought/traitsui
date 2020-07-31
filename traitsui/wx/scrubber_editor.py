@@ -345,7 +345,6 @@ class _ScrubberEditor(Editor):
         text.SetSelection(-1, -1)
         text.SetFocus()
         control.Bind(wx.EVT_TEXT_ENTER, self._text_completed, id=text.GetId())
-        text.Bind(wx.EVT_KILL_FOCUS, self._text_completed)
         text.Bind(wx.EVT_ENTER_WINDOW, self._enter_text)
         text.Bind(wx.EVT_LEAVE_WINDOW, self._leave_text)
         text.Bind(wx.EVT_CHAR, self._key_entered)
@@ -452,7 +451,6 @@ class _ScrubberEditor(Editor):
             and (self._text is None)
         ):
             self._pop_up_editor()
-
         event.Skip()
 
     def _enter_window(self, event):
@@ -461,13 +459,12 @@ class _ScrubberEditor(Editor):
         self._hover = True
 
         self.control.SetCursor(wx.Cursor(wx.CURSOR_HAND))
-
+        
         if not self._ignore_focus:
             self._ignore_focus = True
             self.control.SetFocus()
-
         self._ignore_focus = False
-
+        
         if self._x is not None:
             if self.factory.active_color_ != self.factory.color_:
                 self.control.Refresh()
