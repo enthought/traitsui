@@ -8,14 +8,14 @@
 #
 #  Thanks for using Enthought open source!
 #
-""" Tests to exercise logic for layouts, e.g. VGroup, HGroup.
+""" Tests pertaining to the AnimatedGIFEditor
 """
 
 import unittest
 
 import pkg_resources
 
-from traits.api import Bool, File, HasTraits,
+from traits.api import Bool, File, HasTraits
 from traitsui.api import Item, View
 from traitsui.tests._tools import (
     create_ui,
