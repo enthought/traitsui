@@ -33,7 +33,6 @@ def get_example_model():
     )
 
 
-
 # StyledDateEditor is currently only implemented for Qt
 @requires_toolkit([ToolkitName.qt])
 class TestStyledDateEditor(unittest.TestCase):

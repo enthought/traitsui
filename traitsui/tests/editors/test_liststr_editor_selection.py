@@ -538,7 +538,8 @@ class TestListStrEditor(unittest.TestCase):
             self.assertEqual(editor.multi_selected_indices, [0])
             self.assertEqual(editor.multi_selected, ["two"])
 
-    @requires_toolkit([ToolkitName.qt])  # wx editor doesn't have a `callx` method
+    # wx editor doesn't have a `callx` method
+    @requires_toolkit([ToolkitName.qt])
     def test_list_str_editor_callx(self):
         model = ListStrModel()
 
@@ -562,7 +563,8 @@ class TestListStrEditor(unittest.TestCase):
             self.assertEqual(editor.selected_index, 0)
             self.assertEqual(editor.selected, "one")
 
-    @requires_toolkit([ToolkitName.qt])  # wx editor doesn't have a `setx` method
+    # wx editor doesn't have a `setx` method
+    @requires_toolkit([ToolkitName.qt])
     def test_list_str_editor_setx(self):
         with store_exceptions_on_all_threads(), \
                 self.setup_gui(ListStrModel(), get_view()) as editor:
@@ -599,7 +601,8 @@ class TestListStrEditor(unittest.TestCase):
                 self.setup_gui(ListStrModel(), get_view(title="testing")):
             pass
 
-    @requires_toolkit([ToolkitName.wx])  # see `right_click_item` and issue enthought/traitsui#868
+    # see `right_click_item` and issue enthought/traitsui#868
+    @requires_toolkit([ToolkitName.wx])
     def test_list_str_editor_right_click(self):
         class ListStrModelRightClick(HasTraits):
             value = List(["one", "two", "three"])
