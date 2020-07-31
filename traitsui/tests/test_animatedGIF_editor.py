@@ -35,7 +35,7 @@ class AnimatedGIF(HasTraits):
 class TestAnimatedGIFEditor(unittest.TestCase):
 
     def test_animated_gif_editor(self):
-        # Regression test for enthought/traitsui#1087
+        # Regression test for enthought/traitsui#1071
         obj1 = AnimatedGIF()
         view = View(
             Item('gif_file', editor=AnimatedGIFEditor(playing='playing')),
