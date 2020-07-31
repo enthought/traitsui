@@ -28,9 +28,9 @@ from traitsui.api import (
 from traitsui.tests._tools import (
     create_ui,
     press_ok_button,
-    skip_if_null,
-    skip_if_not_qt4,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -176,21 +176,21 @@ class TestTreeView(unittest.TestCase):
         notifiers_list = bogus.trait(trait)._notifiers(False)
         self.assertEqual(0, len(notifiers_list))
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_editor_listeners_with_shown_root(self):
         nodes = [
             TreeNode(node_for=[Bogus], children="bogus_list", label="=Bogus")
         ]
         self._test_tree_editor_releases_listeners(hide_root=False, nodes=nodes)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_editor_listeners_with_hidden_root(self):
         nodes = [
             TreeNode(node_for=[Bogus], children="bogus_list", label="=Bogus")
         ]
         self._test_tree_editor_releases_listeners(hide_root=True, nodes=nodes)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_editor_label_listener(self):
         nodes = [
             TreeNode(node_for=[Bogus], children="bogus_list", label="name")
@@ -199,7 +199,7 @@ class TestTreeView(unittest.TestCase):
             hide_root=False, nodes=nodes, trait="name"
         )
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_editor_xgetattr_label_listener(self):
         nodes = [
             TreeNode(
@@ -215,7 +215,7 @@ class TestTreeView(unittest.TestCase):
             expected_listeners=2,
         )
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_node_object_listeners_with_shown_root(self):
         nodes = [
             ObjectTreeNode(
@@ -228,7 +228,7 @@ class TestTreeView(unittest.TestCase):
             nodes=nodes, hide_root=False
         )
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_node_object_listeners_with_hidden_root(self):
         nodes = [
             ObjectTreeNode(
@@ -241,7 +241,7 @@ class TestTreeView(unittest.TestCase):
             nodes=nodes, hide_root=True
         )
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_node_object_label_listener(self):
         nodes = [
             ObjectTreeNode(
@@ -254,7 +254,7 @@ class TestTreeView(unittest.TestCase):
             nodes=nodes, hide_root=False, trait="name"
         )
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_smoke_save_restore_prefs(self):
         bogus = Bogus(bogus_list=[Bogus()])
         tree_editor_view = BogusTreeView(bogus=bogus)
@@ -262,7 +262,7 @@ class TestTreeView(unittest.TestCase):
             prefs = ui.get_prefs()
             ui.set_prefs(prefs)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_smoke_word_wrap(self):
         bogus = Bogus(bogus_list=[Bogus()])
         tree_editor_view = BogusTreeView(bogus=bogus, word_wrap=True)

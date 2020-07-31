@@ -7,11 +7,12 @@ from traitsui.tests._tools import (
     create_ui,
     click_button,
     is_control_enabled,
-    is_current_backend_qt4,
-    is_current_backend_wx,
+    is_qt,
+    is_wx,
     process_cascade_events,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -38,11 +39,11 @@ def get_list_items(list_widget):
     """ Return a list of strings from the list widget. """
     items = []
 
-    if is_current_backend_wx():
+    if is_wx():
         for i in range(list_widget.GetCount()):
             items.append(list_widget.GetString(i))
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         for i in range(list_widget.count()):
             items.append(list_widget.item(i).text())
 
@@ -63,7 +64,7 @@ def click_on_item(editor, item_idx, in_used=False):
     unused_list = editor._unused
     used_list = editor._used
 
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         # First deselect all items
@@ -80,7 +81,7 @@ def click_on_item(editor, item_idx, in_used=False):
         )
         wx.PostEvent(editor.control, event)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         for i in range(unused_list.count()):
             status = (not in_used) and (item_idx == i)
             unused_list.item(i).setSelected(status)
@@ -109,7 +110,7 @@ def double_click_on_item(editor, item_idx, in_used=False):
     unused_list = editor._unused
     used_list = editor._used
 
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
         # First deselect all items
@@ -126,7 +127,7 @@ def double_click_on_item(editor, item_idx, in_used=False):
         )
         wx.PostEvent(editor.control, event)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         for i in range(unused_list.count()):
             status = (not in_used) and (item_idx == i)
             unused_list.item(i).setSelected(status)
@@ -144,7 +145,7 @@ def double_click_on_item(editor, item_idx, in_used=False):
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSetEditorMapping(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -220,7 +221,7 @@ class TestSetEditorMapping(unittest.TestCase):
             )
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSimpleSetEditor(unittest.TestCase):
 
     @contextlib.contextmanager
@@ -489,7 +490,7 @@ class TestSimpleSetEditor(unittest.TestCase):
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             # FIXME issue enthought/traitsui#840
-            if is_current_backend_wx():
+            if is_wx():
                 with self.assertRaises(AssertionError):
                     self.assertEqual(get_list_items(editor._used), ["two"])
                 self.assertEqual(get_list_items(editor._used), ["one", "two"])

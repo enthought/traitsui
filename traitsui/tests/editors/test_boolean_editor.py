@@ -16,8 +16,9 @@ from traits.api import HasTraits, Bool
 from traitsui.api import BooleanEditor, Item, View
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_not_qt4,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -28,7 +29,7 @@ class BoolModel(HasTraits):
 
 # Run this against wx once enthought/traitsui#752 is also fixed for
 # BooleanEditor
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestBooleanEditor(unittest.TestCase):
 
     def test_init_dispose(self):

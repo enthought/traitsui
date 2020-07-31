@@ -20,16 +20,17 @@ from traitsui.tabular_adapter import TabularAdapter
 
 from traitsui.tests._tools import (
     create_ui,
-    is_current_backend_qt4,
-    skip_if_not_qt4,
+    is_qt,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 try:
     from pyface.qt import QtCore
 except ImportError:
     # The entire test case should be skipped if the current backend is not Qt
     # But if it is Qt, then re-raise
-    if is_current_backend_qt4():
+    if is_qt():
         raise
 
 
@@ -48,7 +49,7 @@ def get_view(adapter):
     )
 
 
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestTabularModel(unittest.TestCase):
 
     def test_drop_mime_data_below_list(self):

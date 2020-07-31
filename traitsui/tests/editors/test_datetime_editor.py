@@ -8,8 +8,9 @@ from traitsui.tests._tools import (
     create_ui,
     GuiTestAssistant,
     process_cascade_events,
-    skip_if_not_qt4,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
     no_gui_test_assistant,
 )
 
@@ -37,7 +38,7 @@ def get_date_time_simple_view(editor_factory):
     return view
 
 
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
 class TestDatetimeEditorQt(GuiTestAssistant, unittest.TestCase):
     """ Tests for DatetimeEditor using Qt. """

@@ -6,8 +6,9 @@ from traitsui.view import View
 from traitsui.tests._tools import (
     create_ui,
     press_ok_button,
-    skip_if_not_qt4,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -23,7 +24,7 @@ class NonmodalInstanceEditor(HasTraits):
 
 class TestInstanceEditor(unittest.TestCase):
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_simple_editor(self):
         obj = NonmodalInstanceEditor()
         with store_exceptions_on_all_threads(), create_ui(obj) as ui:
@@ -35,7 +36,7 @@ class TestInstanceEditor(unittest.TestCase):
             # close the ui dialog
             press_ok_button(editor._dialog_ui)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_simple_editor_parent_closed(self):
         obj = NonmodalInstanceEditor()
         with store_exceptions_on_all_threads(), create_ui(obj) as ui:

@@ -6,12 +6,12 @@ from traits.api import Button, HasTraits, List, Str
 from traitsui.api import ButtonEditor, Item, UItem, View
 from traitsui.tests._tools import (
     create_ui,
-    is_current_backend_qt4,
-    is_current_backend_wx,
+    is_qt,
+    is_wx,
     process_cascade_events,
-    skip_if_null,
-    skip_if_not_qt4,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -48,13 +48,14 @@ custom_view = View(
 
 def get_button_text(button):
     """ Return the button text given a button control """
-    if is_current_backend_wx():
+    if is_wx():
         return button.GetLabel()
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         return button.text()
 
 
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestButtonEditor(unittest.TestCase):
     def check_button_text_update(self, view):
         button_text_edit = ButtonTextEdit()
@@ -71,23 +72,20 @@ class TestButtonEditor(unittest.TestCase):
             button_text_edit.play_button_label = "New Label"
             self.assertEqual(get_button_text(button), "New Label")
 
-    @skip_if_null
     def test_styles(self):
         # simple smoke test of buttons
         button_text_edit = ButtonTextEdit()
         with store_exceptions_on_all_threads(), create_ui(button_text_edit):
             pass
 
-    @skip_if_null
     def test_simple_button_editor(self):
         self.check_button_text_update(simple_view)
 
-    @skip_if_null
     def test_custom_button_editor(self):
         self.check_button_text_update(custom_view)
 
 
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestButtonEditorValuesTrait(unittest.TestCase):
     """ The values_trait is only supported by Qt.
 

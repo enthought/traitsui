@@ -6,8 +6,9 @@ from traitsui.color_column import ColorColumn
 
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -38,7 +39,8 @@ class MyData(HasTraits):
 
 
 class TestColorColumn(TestCase):
-    @skip_if_null
+
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_color_column(self):
         # Behaviour: column ui should display without error
 

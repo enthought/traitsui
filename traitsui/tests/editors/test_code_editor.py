@@ -22,8 +22,9 @@ from traitsui.editors.code_editor import CodeEditor
 
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_not_qt4,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -49,7 +50,7 @@ class CodeView(ModelView):
 
 class TestCodeEditor(unittest.TestCase):
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_code_editor_show_line_numbers(self):
         """ CodeEditor should honor the `show_line_numbers` setting
         """
@@ -70,7 +71,7 @@ class TestCodeEditor(unittest.TestCase):
         test_line_numbers_visibility(True)
         test_line_numbers_visibility(False)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_code_editor_readonly(self):
         """ Test readonly editor style for CodeEditor
         """

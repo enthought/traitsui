@@ -8,8 +8,9 @@ from traitsui.editors.date_editor import CellFormat
 
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_not_qt4,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -54,7 +55,7 @@ def multi_select_selected_color_view():
     return view
 
 
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestDateEditorCustomQt(unittest.TestCase):
     def test_single_select_qt4(self):
         with self.launch_editor(single_select_custom_view) as (foo, editor):
@@ -162,7 +163,7 @@ class TestDateEditorCustomQt(unittest.TestCase):
 
 
 # Run this test case against wx too once enthought/traitsui#752 is fixed.
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestDateEditorInitDispose(unittest.TestCase):
     """ Test the init and dispose of date editor."""
 

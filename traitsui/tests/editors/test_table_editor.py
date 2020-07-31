@@ -5,13 +5,13 @@ from traits.api import HasTraits, Instance, Int, List, Str, Tuple
 from traitsui.api import EvalTableFilter, Item, ObjectColumn, TableEditor, View
 from traitsui.tests._tools import (
     create_ui,
-    is_current_backend_qt4,
-    is_current_backend_wx,
+    is_qt,
+    is_wx,
     process_cascade_events,
     press_ok_button,
-    skip_if_not_qt4,
-    skip_if_null,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -261,7 +261,7 @@ select_cell_indices_view = View(
 
 class TestTableEditor(unittest.TestCase):
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -271,7 +271,7 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=simple_view)) as ui:
             process_cascade_events()
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_filtered_table_editor(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -287,7 +287,7 @@ class TestTableEditor(unittest.TestCase):
 
         self.assertIsNotNone(filter)
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_row(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -298,16 +298,16 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=select_row_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_row
 
             process_cascade_events()
 
         self.assertIs(selected, object_list.values[5])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_rows(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -318,16 +318,16 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=select_rows_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_rows
 
             process_cascade_events()
 
         self.assertEqual(selected, object_list.values[5:7])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_row_index(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -338,16 +338,16 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=select_row_index_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected_indices
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_row_index
 
             process_cascade_events()
 
         self.assertEqual(selected, 5)
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_row_indices(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -359,16 +359,16 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected_indices
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_row_indices
 
             process_cascade_events()
 
         self.assertEqual(selected, [5, 7, 8])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_column(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -379,16 +379,16 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=select_column_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_column
 
             process_cascade_events()
 
         self.assertEqual(selected, "value")
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_columns(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -399,16 +399,16 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=select_columns_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_columns
 
             process_cascade_events()
 
         self.assertEqual(selected, ["value", "other_value"])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_column_index(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -420,16 +420,16 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected_indices
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_column_index
 
             process_cascade_events()
 
         self.assertEqual(selected, 1)
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_column_indices(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -441,16 +441,16 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected_indices
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_column_indices
 
             process_cascade_events()
 
         self.assertEqual(selected, [0, 1])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cell(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -461,16 +461,16 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=select_cell_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_cell
 
             process_cascade_events()
 
         self.assertEqual(selected, (object_list.values[5], "value"))
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cells(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -485,9 +485,9 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=select_cells_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_cells
 
             process_cascade_events()
@@ -498,7 +498,7 @@ class TestTableEditor(unittest.TestCase):
             (object_list.values[8], "value"),
         ])
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cell_index(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -510,16 +510,16 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected_indices
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_cell_index
 
             process_cascade_events()
 
         self.assertEqual(selected, (5, 1))
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cell_indices(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -531,16 +531,16 @@ class TestTableEditor(unittest.TestCase):
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
-            if is_current_backend_qt4():
+            if is_qt():
                 selected = editor.selected_indices
-            elif is_current_backend_wx():
+            elif is_wx():
                 selected = editor.selected_cell_indices
 
             process_cascade_events()
 
         self.assertEqual(selected, [(5, 0), (6, 1), (8, 0)])
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_progress_column(self):
         from traitsui.extras.progress_column import ProgressColumn
 

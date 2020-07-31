@@ -17,7 +17,8 @@ from traits.api import HasTraits, Int
 from traitsui.api import HGroup, Item, spring, VGroup, View
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_null,
+    requires_toolkit,
+    ToolkitName,
 )
 
 
@@ -27,7 +28,7 @@ class ObjectWithNumber(HasTraits):
     number3 = Int()
 
 
-@skip_if_null
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUIPanel(unittest.TestCase):
 
     def test_grouped_layout_with_springy(self):

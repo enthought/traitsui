@@ -7,8 +7,9 @@ from traitsui.api import Item, StyledDateEditor, View
 from traitsui.editors.date_editor import CellFormat
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_not_qt4,
+    requires_toolkit,
     store_exceptions_on_all_threads,
+    ToolkitName,
 )
 
 
@@ -32,9 +33,8 @@ def get_example_model():
     )
 
 
-
 # StyledDateEditor is currently only implemented for Qt
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestStyledDateEditor(unittest.TestCase):
 
     def test_init_and_dispose(self):
