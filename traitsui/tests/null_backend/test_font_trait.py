@@ -3,12 +3,12 @@ import unittest
 from traits.api import HasTraits
 
 from traitsui.toolkit_traits import Font
-from traitsui.tests._tools import skip_if_not_null
+from traitsui.tests._tools import requires_toolkit, ToolkitName
 
 
 class TestFontTrait(unittest.TestCase):
 
-    @skip_if_not_null
+    @requires_toolkit([ToolkitName.null])
     def test_font_trait_default(self):
         class Foo(HasTraits):
             font = Font()
@@ -16,7 +16,7 @@ class TestFontTrait(unittest.TestCase):
         f = Foo()
         self.assertEqual(f.font, "10 pt Arial")
 
-    @skip_if_not_null
+    @requires_toolkit([ToolkitName.null])
     def test_font_trait_examples(self):
         """
         An assigned font string is parsed, and the substrings are put

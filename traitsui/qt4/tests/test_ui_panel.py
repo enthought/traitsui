@@ -6,8 +6,9 @@ from traitsui.menu import ToolBar, Action
 
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_not_qt4,
+    requires_toolkit,
     process_cascade_events,
+    ToolkitName,
 )
 
 
@@ -47,7 +48,7 @@ class FooDialog(HasTraits):
         return FooPanel()
 
 
-@skip_if_not_qt4
+@requires_toolkit([ToolkitName.qt])
 class TestUIPanel(unittest.TestCase):
     def setup_qt4_dock_window(self):
         from pyface.qt import QtGui
