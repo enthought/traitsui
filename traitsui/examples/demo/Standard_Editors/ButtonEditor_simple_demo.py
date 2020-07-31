@@ -25,6 +25,13 @@ class ButtonEditorDemo(HasTraits):
     def _my_button_trait_fired(self):
         self.click_counter += 1
 
+    # This is added as a workaround to an unsolved issue with Qt5 and OSX 
+    # (see enthought/traitsui #913 for details).  This should not be seen 
+    # as the expected thing to need to do. 
+    def _click_counter_changed(self):
+        from pyface.api import GUI
+        GUI.process_events()
+
     # Demo view:
     traits_view = View(
         'my_button_trait',
