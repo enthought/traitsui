@@ -17,10 +17,8 @@ import enum
 import re
 import sys
 import traceback
-from functools import partial
 from contextlib import contextmanager
 from unittest import skipIf, TestSuite
-import warnings
 
 from pyface.api import GUI
 from pyface.toolkit import toolkit_object
@@ -113,58 +111,6 @@ def requires_toolkit(toolkits):
         "Test requires one of these toolkits: {}".format(toolkits)
     )
 
-
-def _deprecated(func):
-    # Emit warning to ease tension across pending pull requests.
-    # This function should be removed when no more active PRs are relying
-    # on this.
-    def wrapped(*args, **kwargs):
-        warnings.warn(
-            "{!r} will be removed. "
-            "Use is_wx, is_qt, is_null or requires_toolkit instead.".format(
-                func
-            ),
-            DeprecationWarning,
-            stacklevel=3,
-        )
-        return func(*args, **kwargs)
-    return wrapped
-
-
-def _is_current_backend(backend_name=""):
-    return ETSConfig.toolkit == backend_name
-
-
-#: Return True if current backend is 'wx'
-is_current_backend_wx = _deprecated(
-    partial(_is_current_backend, backend_name="wx")
-)
-
-#: Return True if current backend is 'qt4'
-is_current_backend_qt4 = _deprecated(
-    partial(_is_current_backend, backend_name="qt4")
-)
-
-#: Return True if current backend is 'null'
-is_current_backend_null = _deprecated(
-    partial(_is_current_backend, backend_name="null")
-)
-
-#: Test decorator: Skip test if backend is not wx
-skip_if_not_wx = _deprecated(requires_toolkit([ToolkitName.wx]))
-
-#: Test decorator: Skip test if backend is not qt
-skip_if_not_qt4 = _deprecated(requires_toolkit([ToolkitName.qt]))
-
-#: Test decorator: Skip test if backend is not null
-skip_if_not_null = _deprecated(requires_toolkit([ToolkitName.null]))
-
-#: Test decorator: Skip test if backend is 'null'
-#: For future proofing tests in case of new toolkits, consider using
-#: requires_toolkit instead.
-skip_if_null = _deprecated(
-    skipIf(is_null(), "Test not working on the 'null' backend")
-)
 
 #: True if current platform is MacOS
 is_mac_os = sys.platform.startswith("darwin")
