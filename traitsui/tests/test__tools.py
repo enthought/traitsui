@@ -22,8 +22,8 @@ from traitsui.tests._tools import (
     is_wx,
     is_mac_os,
     process_cascade_events,
-    reraise_exceptions,
     requires_toolkit,
+    reraise_exceptions,
     ToolkitName,
 )
 
