@@ -217,12 +217,10 @@ class TestExceptionHandling(unittest.TestCase):
                 raise ZeroDivisionError()
 
         obj = Foo()
-        gui = GUI()
         with self.assertRaises(RuntimeError) as exception_context, \
                 self.assertLogs("traitsui") as watcher:
             with reraise_exceptions():
-                gui.set_trait_later(obj, "value", 2)
-                gui.process_events()
+                obj.value = 2
 
         error_msg = str(exception_context.exception)
         self.assertIn("ZeroDivisionError", error_msg)
