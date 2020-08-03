@@ -21,7 +21,7 @@
 
 
 
-import collections
+import collections.abc
 
 
 
@@ -151,12 +151,12 @@ class UndoItem(AbstractUndoItem):
                         self.new_value = v2
                         return True
 
-                elif isinstance(v1, collections.Sequence):
+                elif isinstance(v1, collections.abc.Sequence):
                     # Merge sequence types only if a single element has changed
                     # from the 'original' value, and the element type is a
                     # simple Python type:
                     v1 = self.old_value
-                    if isinstance(v1, collections.Sequence):
+                    if isinstance(v1, collections.abc.Sequence):
                         # Note: wxColour says it's a sequence type, but it
                         # doesn't support 'len', so we handle the exception
                         # just in case other classes have similar behavior:
