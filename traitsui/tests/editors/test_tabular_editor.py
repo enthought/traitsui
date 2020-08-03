@@ -24,7 +24,7 @@ from traitsui.tests._tools import (
     is_qt,
     process_cascade_events,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -185,7 +185,7 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
     @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_tabular_editor_single_selection(self):
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.report_and_editor(get_view()) as (report, editor):
             process_cascade_events()
             people = report.people
@@ -211,7 +211,7 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
     def test_tabular_editor_multi_selection(self):
         view = get_view(multi_select=True)
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.report_and_editor(view) as (report, editor):
             process_cascade_events()
             people = report.people
@@ -240,7 +240,7 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
     @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_tabular_editor_single_selection_changed(self):
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.report_and_editor(get_view()) as (report, editor):
             process_cascade_events()
             people = report.people
@@ -277,7 +277,7 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
     def test_tabular_editor_multi_selection_changed(self):
         view = get_view(multi_select=True)
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.report_and_editor(view) as (report, editor):
             process_cascade_events()
             people = report.people
@@ -315,7 +315,7 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
     def test_tabular_editor_multi_selection_items_changed(self):
         view = get_view(multi_select=True)
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.report_and_editor(view) as (report, editor):
             process_cascade_events()
             people = report.people
@@ -385,7 +385,7 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
 
     def test_adapter_columns_changes(self):
         # Regression test for enthought/traitsui#894
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.report_and_editor(get_view()) as (report, editor):
 
             # Reproduce the scenario when the column count is reduced.
@@ -404,7 +404,7 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
         # using it while resizing the columns.
         # The resize event is processed after UI.dispose is called.
         # Maybe related to enthought/traits#431
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.report_and_editor(get_view()) as (_, editor):
             editor.adapter.columns = [("Name", "name")]
 

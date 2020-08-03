@@ -15,7 +15,7 @@ from traitsui.api import FileEditor, Item, View
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -36,7 +36,7 @@ class TestFileEditor(unittest.TestCase):
         # Test init and dispose by opening and closing the UI
         view = View(Item("filepath", editor=FileEditor(), style=style))
         obj = FileModel()
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(obj, dict(view=view)):
             pass
 
@@ -57,7 +57,7 @@ class TestFileEditor(unittest.TestCase):
             ),
         )
         obj = FileModel()
-        with store_exceptions_on_all_threads():
+        with reraise_exceptions():
             with create_ui(obj, dict(view=view)):
                 pass
             # should not fail.

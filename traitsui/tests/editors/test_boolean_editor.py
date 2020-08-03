@@ -17,7 +17,7 @@ from traitsui.api import BooleanEditor, Item, View
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -36,6 +36,6 @@ class TestBooleanEditor(unittest.TestCase):
         # Test init and dispose of the editor.
         view = View(Item("true_or_false", editor=BooleanEditor()))
         obj = BoolModel()
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(obj, dict(view=view)):
             pass

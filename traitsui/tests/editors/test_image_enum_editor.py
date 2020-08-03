@@ -11,7 +11,7 @@ from traitsui.tests._tools import (
     is_wx,
     process_cascade_events,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -152,7 +152,7 @@ class TestImageEnumEditorMapping(unittest.TestCase):
             )
         )
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_ui(EnumModel(), formatted_view) as editor:
 
             self.assertEqual(editor.names, ["TOP LEFT", "TOP RIGHT"])
@@ -197,7 +197,7 @@ class TestImageEnumEditorMapping(unittest.TestCase):
         )
         model = PossibleEnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_ui(model, formatted_view) as editor:
 
             self.assertEqual(editor.names, ["TOP LEFT", "TOP RIGHT"])
@@ -259,7 +259,7 @@ class TestImageEnumEditorMapping(unittest.TestCase):
         )
         model = PossibleEnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_ui(model, formatted_view) as editor:
 
             # Readonly editor doesn't set up full mapping, only check that
@@ -297,14 +297,14 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
             resizable=True,
         )
 
-        with store_exceptions_on_all_threads():
+        with reraise_exceptions():
             self.setup_gui(enum_edit, view)
 
     @requires_toolkit([ToolkitName.wx])
     def test_simple_editor_popup_editor(self):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(enum_edit, get_view("simple")) as editor:
 
             self.assertEqual(enum_edit.value, 'top left')
@@ -335,7 +335,7 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
     def test_simple_editor_combobox(self):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(enum_edit, get_view("simple")) as editor:
 
             self.assertEqual(enum_edit.value, 'top left')
@@ -380,14 +380,14 @@ class TestCustomImageEnumEditor(unittest.TestCase):
             resizable=True,
         )
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(enum_edit, view):
             pass
 
     def test_custom_editor_selection(self):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(enum_edit, get_view("custom")) as editor:
             self.assertEqual(
                 get_button_strings(editor.control),
@@ -408,7 +408,7 @@ class TestCustomImageEnumEditor(unittest.TestCase):
     def test_custom_editor_value_changed(self):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(enum_edit, get_view("custom")) as editor:
             self.assertEqual(
                 get_button_strings(editor.control),
@@ -436,7 +436,7 @@ class TestReadOnlyImageEnumEditor(unittest.TestCase):
     def test_readonly_editor_value_changed(self):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads():
+        with reraise_exceptions():
             with patch(cache_to_patch, wraps=image_cache) as patched_cache, \
                     create_ui(enum_edit, dict(view=get_view("readonly"))):
 

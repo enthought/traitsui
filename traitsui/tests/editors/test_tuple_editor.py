@@ -20,7 +20,7 @@ from traitsui.tests._tools import (
     create_ui,
     press_ok_button,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -54,7 +54,7 @@ class TestTupleEditor(unittest.TestCase, UnittestTools):
         from pyface import qt
 
         val = TupleEditor()
-        with store_exceptions_on_all_threads(), create_ui(val) as ui:
+        with reraise_exceptions(), create_ui(val) as ui:
 
             # the following is equivalent to clicking in the text control of
             # the range editor, enter a number, and clicking ok without

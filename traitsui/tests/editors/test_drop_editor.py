@@ -15,7 +15,7 @@ from traitsui.api import DropEditor, Item, View
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -34,7 +34,7 @@ class TestDropEditor(unittest.TestCase):
 
         obj = Model()
         view = View(Item("value", editor=DropEditor(readonly=False)))
-        with store_exceptions_on_all_threads():
+        with reraise_exceptions():
             with create_ui(obj, dict(view=view)):
                 pass
             # Mutating value after UI is closed should be okay.
@@ -44,7 +44,7 @@ class TestDropEditor(unittest.TestCase):
 
         obj = Model()
         view = View(Item("value", editor=DropEditor(readonly=True)))
-        with store_exceptions_on_all_threads():
+        with reraise_exceptions():
             with create_ui(obj, dict(view=view)):
                 pass
             # Mutating value after UI is closed should be okay.

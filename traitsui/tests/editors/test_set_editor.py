@@ -11,7 +11,7 @@ from traitsui.tests._tools import (
     is_wx,
     process_cascade_events,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -169,7 +169,7 @@ class TestSetEditorMapping(unittest.TestCase):
             )
         )
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_ui(IntListModel(), formatted_view) as editor:
 
             self.assertEqual(editor.names, ["FALSE", "TRUE"])
@@ -203,7 +203,7 @@ class TestSetEditorMapping(unittest.TestCase):
         )
         model = IntListModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_ui(model, formatted_view) as editor:
 
             self.assertEqual(editor.names, ["FALSE", "TRUE"])
@@ -232,7 +232,7 @@ class TestSimpleSetEditor(unittest.TestCase):
     def test_simple_set_editor_use_button(self):
         # Initiate with non-alphabetical list
         model = ListModel(value=["two", "one"])
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(model, get_view()) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
@@ -256,7 +256,7 @@ class TestSimpleSetEditor(unittest.TestCase):
             self.assertEqual(editor._get_selected_strings(editor._used), [])
 
     def test_simple_set_editor_unuse_button(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListModel(), get_view()) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
@@ -278,7 +278,7 @@ class TestSimpleSetEditor(unittest.TestCase):
             self.assertEqual(get_list_items(editor._used), ["two"])
 
     def test_simple_set_editor_use_dclick(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListModel(), get_view()) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
@@ -295,7 +295,7 @@ class TestSimpleSetEditor(unittest.TestCase):
             self.assertEqual(editor._get_selected_strings(editor._used), [])
 
     def test_simple_set_editor_unuse_dclick(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListModel(), get_view()) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
@@ -311,7 +311,7 @@ class TestSimpleSetEditor(unittest.TestCase):
             self.assertEqual(get_list_items(editor._used), ["two"])
 
     def test_simple_set_editor_use_all(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListModel(), get_view()) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
@@ -333,7 +333,7 @@ class TestSimpleSetEditor(unittest.TestCase):
             )
 
     def test_simple_set_editor_unuse_all(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListModel(), get_view()) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
@@ -355,7 +355,7 @@ class TestSimpleSetEditor(unittest.TestCase):
             self.assertEqual(get_list_items(editor._used), [])
 
     def test_simple_set_editor_move_up(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListModel(), get_view(ordered=True)) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
@@ -374,7 +374,7 @@ class TestSimpleSetEditor(unittest.TestCase):
             self.assertEqual(get_list_items(editor._used), ["two", "one"])
 
     def test_simple_set_editor_move_down(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListModel(), get_view(ordered=True)) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
@@ -393,7 +393,7 @@ class TestSimpleSetEditor(unittest.TestCase):
             self.assertEqual(get_list_items(editor._used), ["two", "one"])
 
     def test_simple_set_editor_use_all_button(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListModel(), get_view()) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
@@ -415,7 +415,7 @@ class TestSimpleSetEditor(unittest.TestCase):
             )
 
     def test_simple_set_editor_unuse_all_button(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListModel(), get_view()) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
@@ -437,7 +437,7 @@ class TestSimpleSetEditor(unittest.TestCase):
             self.assertEqual(get_list_items(editor._used), [])
 
     def test_simple_set_editor_default_selection_unused(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListModel(), get_view()) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
@@ -458,7 +458,7 @@ class TestSimpleSetEditor(unittest.TestCase):
         # When all items are used, top used item is selected by default
         list_edit = ListModel(value=["one", "two", "three", "four"])
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(list_edit, get_view()) as editor:
 
             self.assertEqual(get_list_items(editor._unused), [])
@@ -479,7 +479,7 @@ class TestSimpleSetEditor(unittest.TestCase):
         view = View(UItem("value", editor=editor_factory, style="simple",))
         list_edit = ListModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(list_edit, view) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
@@ -501,7 +501,7 @@ class TestSimpleSetEditor(unittest.TestCase):
     def test_simple_set_editor_use_ordered_selected(self):
         # Initiate with non-alphabetical list
         model = ListModel(value=["two", "one"])
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(model, get_view(ordered=True)) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
@@ -527,7 +527,7 @@ class TestSimpleSetEditor(unittest.TestCase):
             )
 
     def test_simple_set_editor_unordeder_button_existence(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListModel(), get_view()) as editor:
 
             self.assertIsNone(editor._up)
@@ -535,7 +535,7 @@ class TestSimpleSetEditor(unittest.TestCase):
 
     def test_simple_set_editor_cant_move_all_button_existence(self):
         view = get_view(can_move_all=False)
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListModel(), view) as editor:
 
             self.assertIsNone(editor._use_all)

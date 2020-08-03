@@ -15,7 +15,7 @@ from traitsui.api import DirectoryEditor, Item, View
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -36,7 +36,7 @@ class TestDirectoryEditor(unittest.TestCase):
         # Test init and dispose by opening and closing the UI
         view = View(Item("dir_path", editor=DirectoryEditor(), style=style))
         obj = DirectoryModel()
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(obj, dict(view=view)):
             pass
 
@@ -57,7 +57,7 @@ class TestDirectoryEditor(unittest.TestCase):
             ),
         )
         obj = DirectoryModel()
-        with store_exceptions_on_all_threads():
+        with reraise_exceptions():
             with create_ui(obj, dict(view=view)):
                 pass
             # should not fail.

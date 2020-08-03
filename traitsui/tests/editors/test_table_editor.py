@@ -10,7 +10,7 @@ from traitsui.tests._tools import (
     process_cascade_events,
     press_ok_button,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -267,7 +267,7 @@ class TestTableEditor(unittest.TestCase):
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=simple_view)) as ui:
             process_cascade_events()
 
@@ -277,7 +277,7 @@ class TestTableEditor(unittest.TestCase):
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=filtered_view)) as ui:
             process_cascade_events()
 
@@ -294,7 +294,7 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected = object_list.values[5]
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=select_row_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
@@ -314,7 +314,7 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selections = object_list.values[5:7]
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=select_rows_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
@@ -334,7 +334,7 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected_index = 5
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=select_row_index_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
@@ -355,7 +355,7 @@ class TestTableEditor(unittest.TestCase):
         object_list.selected_indices = [5, 7, 8]
 
         view = select_row_indices_view
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
@@ -375,7 +375,7 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected_column = "value"
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=select_column_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
@@ -395,7 +395,7 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected_columns = ["value", "other_value"]
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=select_columns_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
@@ -416,7 +416,7 @@ class TestTableEditor(unittest.TestCase):
         object_list.selected_index = 1
 
         view = select_column_index_view
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
@@ -437,7 +437,7 @@ class TestTableEditor(unittest.TestCase):
         object_list.selected_indices = [0, 1]
 
         view = select_column_indices_view
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
@@ -457,7 +457,7 @@ class TestTableEditor(unittest.TestCase):
         )
         object_list.selected_cell = (object_list.values[5], "value")
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=select_cell_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
@@ -481,7 +481,7 @@ class TestTableEditor(unittest.TestCase):
             (object_list.values[8], "value"),
         ]
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=select_cells_view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
@@ -506,7 +506,7 @@ class TestTableEditor(unittest.TestCase):
         object_list.selected_cell_index = (5, 1)
 
         view = select_cell_index_view
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
@@ -527,7 +527,7 @@ class TestTableEditor(unittest.TestCase):
         object_list.selected_cell_indices = [(5, 0), (6, 1), (8, 0)]
 
         view = select_cell_indices_view
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=view)) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
@@ -561,6 +561,6 @@ class TestTableEditor(unittest.TestCase):
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(object_list, dict(view=progress_view)) as ui:
             process_cascade_events()

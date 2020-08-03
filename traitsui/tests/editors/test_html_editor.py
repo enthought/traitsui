@@ -15,7 +15,7 @@ from traitsui.api import HTMLEditor, Item, View
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -49,7 +49,7 @@ class TestHTMLEditor(unittest.TestCase):
         # Smoke test to check init and dispose do not fail.
         model = HTMLModel()
         view = get_view(base_url_name="")
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(model, dict(view=view)):
             pass
 
@@ -58,7 +58,7 @@ class TestHTMLEditor(unittest.TestCase):
         # fails because sync_value is unhooked in the base class.
         model = HTMLModel()
         view = get_view(base_url_name="model_base_url")
-        with store_exceptions_on_all_threads():
+        with reraise_exceptions():
             with create_ui(model, dict(view=view)):
                 pass
             # It is okay to modify base_url after the UI is closed

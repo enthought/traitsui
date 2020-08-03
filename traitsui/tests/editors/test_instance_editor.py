@@ -7,7 +7,7 @@ from traitsui.tests._tools import (
     create_ui,
     press_ok_button,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -27,7 +27,7 @@ class TestInstanceEditor(unittest.TestCase):
     @requires_toolkit([ToolkitName.qt])
     def test_simple_editor(self):
         obj = NonmodalInstanceEditor()
-        with store_exceptions_on_all_threads(), create_ui(obj) as ui:
+        with reraise_exceptions(), create_ui(obj) as ui:
             editor = ui.get_editors("inst")[0]
 
             # make the dialog appear
@@ -39,7 +39,7 @@ class TestInstanceEditor(unittest.TestCase):
     @requires_toolkit([ToolkitName.qt])
     def test_simple_editor_parent_closed(self):
         obj = NonmodalInstanceEditor()
-        with store_exceptions_on_all_threads(), create_ui(obj) as ui:
+        with reraise_exceptions(), create_ui(obj) as ui:
             editor = ui.get_editors("inst")[0]
 
             # make the dialog appear

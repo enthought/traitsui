@@ -11,7 +11,7 @@ from traitsui.tests._tools import (
     is_wx,
     process_cascade_events,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -195,7 +195,7 @@ class TestEnumEditorMapping(unittest.TestCase):
             )
         )
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_ui(IntEnumModel(), formatted_view) as editor:
 
             self.assertEqual(editor.names, ["FALSE", "TRUE"])
@@ -230,7 +230,7 @@ class TestEnumEditorMapping(unittest.TestCase):
         )
         model = IntEnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_ui(model, formatted_view) as editor:
 
             self.assertEqual(editor.names, ["FALSE", "TRUE"])
@@ -293,7 +293,7 @@ class TestSimpleEnumEditor(unittest.TestCase):
     def check_enum_text_update(self, view):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(enum_edit, view) as editor:
 
             self.assertEqual(get_combobox_text(editor.control), "one")
@@ -306,7 +306,7 @@ class TestSimpleEnumEditor(unittest.TestCase):
     def check_enum_object_update(self, view):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(enum_edit, view) as editor:
 
             self.assertEqual(enum_edit.value, "one")
@@ -319,7 +319,7 @@ class TestSimpleEnumEditor(unittest.TestCase):
     def check_enum_index_update(self, view):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(enum_edit, view) as editor:
 
             self.assertEqual(enum_edit.value, "one")
@@ -332,7 +332,7 @@ class TestSimpleEnumEditor(unittest.TestCase):
     def check_enum_text_bad_update(self, view):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(enum_edit, view) as editor:
 
             self.assertEqual(enum_edit.value, "one")
@@ -367,7 +367,7 @@ class TestSimpleEnumEditor(unittest.TestCase):
         view = get_evaluate_view("simple", auto_set=False)
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(enum_edit, view) as editor:
 
             self.assertEqual(enum_edit.value, "one")
@@ -389,7 +389,7 @@ class TestSimpleEnumEditor(unittest.TestCase):
         enum_edit = EnumModel()
         resizable_view = View(UItem("value", style="simple", resizable=True))
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(enum_edit, dict(view=resizable_view)):
             pass
 
@@ -401,7 +401,7 @@ class TestSimpleEnumEditor(unittest.TestCase):
         )
         view = View(UItem("value", editor=enum_editor_factory, style="simple"))
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(EnumModel(), dict(view=view)):
 
             enum_editor_factory.values = ["one", "two", "three"]
@@ -420,7 +420,7 @@ class TestRadioEnumEditor(unittest.TestCase):
     def test_radio_enum_editor_button_update(self):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(enum_edit, get_view("custom")) as editor:
 
             # The layout is: one, three, four \n two
@@ -440,7 +440,7 @@ class TestRadioEnumEditor(unittest.TestCase):
     def test_radio_enum_editor_pick(self):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(enum_edit, get_view("custom")) as editor:
 
             self.assertEqual(enum_edit.value, "one")
@@ -465,7 +465,7 @@ class TestListEnumEditor(unittest.TestCase):
     def check_enum_text_update(self, view):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(enum_edit, view) as editor:
 
             self.assertEqual(get_list_widget_text(editor.control), "one")
@@ -478,7 +478,7 @@ class TestListEnumEditor(unittest.TestCase):
     def check_enum_index_update(self, view):
         enum_edit = EnumModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(enum_edit, view) as editor:
 
             self.assertEqual(enum_edit.value, "one")

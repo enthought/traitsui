@@ -27,7 +27,7 @@ from traitsui.tests._tools import (
     is_wx,
     process_cascade_events,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -227,7 +227,7 @@ def replaced_configure_traits(
         scrollable=scrollable,
         **args,
     )
-    with store_exceptions_on_all_threads():
+    with reraise_exceptions():
         process_cascade_events()
 
         # Temporary fix for enthought/traitsui#907

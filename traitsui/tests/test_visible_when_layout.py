@@ -31,7 +31,7 @@ from traitsui.tests._tools import (
     create_ui,
     get_dialog_size,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -89,7 +89,7 @@ class TestVisibleWhenLayout(unittest.TestCase):
         # most the size of the largest combination of elements.
 
         dialog = VisibleWhenProblem()
-        with store_exceptions_on_all_threads(), create_ui(dialog) as ui:
+        with reraise_exceptions(), create_ui(dialog) as ui:
 
             # have the dialog switch from group one to two and back to one
             dialog.which = "two"

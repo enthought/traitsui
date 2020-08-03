@@ -23,7 +23,7 @@ from traitsui.editors.code_editor import CodeEditor
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -64,7 +64,7 @@ class TestCodeEditor(unittest.TestCase):
         def test_line_numbers_visibility(show=True):
             code_model = CodeModel()
             code_view = CodeView(model=code_model, show_line_numbers=show)
-            with store_exceptions_on_all_threads(), create_ui(code_view) as ui:
+            with reraise_exceptions(), create_ui(code_view) as ui:
                 self.assertEqual(is_line_numbers_visible(ui), show)
                 ui.control.close()
 
@@ -79,7 +79,7 @@ class TestCodeEditor(unittest.TestCase):
 
         code_model = CodeModel()
         code_view = CodeView(model=code_model, style="readonly")
-        with store_exceptions_on_all_threads(), create_ui(code_view) as ui:
+        with reraise_exceptions(), create_ui(code_view) as ui:
             txt_ctrl = ui.control.findChild(qt.QtGui.QPlainTextEdit)
             self.assertTrue(txt_ctrl.isReadOnly())
 

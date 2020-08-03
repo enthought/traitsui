@@ -32,7 +32,7 @@ from traitsui.tests._tools import (
     is_mac_os,
     is_null,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -95,7 +95,7 @@ class TestActions(unittest.TestCase):
 
         # create dialog with toolbar adn menu
         dialog = DialogWithToolbar()
-        with store_exceptions_on_all_threads(), create_ui(dialog) as ui:
+        with reraise_exceptions(), create_ui(dialog) as ui:
 
             # press toolbar or menu button
             trigger_action_func(ui)

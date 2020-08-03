@@ -28,7 +28,7 @@ from traitsui.view import View
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -315,7 +315,7 @@ class TestDataFrameEditor(unittest.TestCase):
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor(self):
         viewer = sample_data()
-        with store_exceptions_on_all_threads(), create_ui(viewer):
+        with reraise_exceptions(), create_ui(viewer):
             pass
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -331,40 +331,40 @@ class TestDataFrameEditor(unittest.TestCase):
             )
         )
         viewer = sample_data()
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(viewer, dict(view=alternate_adapter_view)):
             pass
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_numerical_index(self):
         viewer = sample_data_numerical_index()
-        with store_exceptions_on_all_threads(), create_ui(viewer):
+        with reraise_exceptions(), create_ui(viewer):
             pass
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_text_data(self):
         viewer = sample_text_data()
-        with store_exceptions_on_all_threads(), create_ui(viewer):
+        with reraise_exceptions(), create_ui(viewer):
             pass
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_format_mapping(self):
         viewer = sample_data()
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(viewer, dict(view=format_mapping_view)):
             pass
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_font_mapping(self):
         viewer = sample_data()
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(viewer, dict(view=font_mapping_view)):
             pass
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_columns(self):
         viewer = sample_data()
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(viewer, dict(view=columns_view)):
             pass
 
@@ -383,7 +383,7 @@ class TestDataFrameEditor(unittest.TestCase):
             columns=["X", "Y", "Z"]
         )
         viewer = DataFrameViewer(data=df)
-        with store_exceptions_on_all_threads(), create_ui(viewer) as ui:
+        with reraise_exceptions(), create_ui(viewer) as ui:
             viewer.df_updated = True
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -401,7 +401,7 @@ class TestDataFrameEditor(unittest.TestCase):
             columns=["X", "Y", "Z"]
         )
         viewer = DataFrameViewer(data=df)
-        with store_exceptions_on_all_threads(), create_ui(viewer) as ui:
+        with reraise_exceptions(), create_ui(viewer) as ui:
             viewer.df_refreshed = True
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -410,7 +410,7 @@ class TestDataFrameEditor(unittest.TestCase):
             Item("data", editor=DataFrameEditor(multi_select=True), width=400)
         )
         viewer = sample_data()
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(viewer, dict(view=view)):
             pass
 

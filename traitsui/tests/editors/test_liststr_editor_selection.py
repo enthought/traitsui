@@ -36,7 +36,7 @@ from traitsui.tests._tools import (
     press_ok_button,
     process_cascade_events,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -212,7 +212,7 @@ class TestListStrEditor(unittest.TestCase):
             yield editor
 
     def test_list_str_editor_single_selection(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListStrModel(), get_view()) as editor:
 
             if is_qt():  # No initial selection
@@ -243,7 +243,7 @@ class TestListStrEditor(unittest.TestCase):
     def test_list_str_editor_multi_selection(self):
         view = get_view(multi_select=True)
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListStrModel(), view) as editor:
 
             self.assertEqual(editor.multi_selected_indices, [])
@@ -268,7 +268,7 @@ class TestListStrEditor(unittest.TestCase):
             self.assertEqual(editor.multi_selected, [])
 
     def test_list_str_editor_single_selection_changed(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListStrModel(), get_view()) as editor:
 
             if is_qt():  # No initial selection
@@ -311,7 +311,7 @@ class TestListStrEditor(unittest.TestCase):
     def test_list_str_editor_multi_selection_changed(self):
         view = get_view(multi_select=True)
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListStrModel(), view) as editor:
 
             self.assertEqual(get_selected_indices(editor), [])
@@ -350,7 +350,7 @@ class TestListStrEditor(unittest.TestCase):
     def test_list_str_editor_multi_selection_items_changed(self):
         view = get_view(multi_select=True)
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListStrModel(), view) as editor:
 
             self.assertEqual(get_selected_indices(editor), [])
@@ -385,14 +385,14 @@ class TestListStrEditor(unittest.TestCase):
         model = ListStrModel()
 
         # Without auto_add
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(model, dict(view=get_view())) as ui:
             process_cascade_events()
             editor = ui.get_editors("value")[0]
             self.assertEqual(editor.item_count, 3)
 
         # With auto_add
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(model, dict(view=get_view(auto_add=True))) as ui:
             process_cascade_events()
             editor = ui.get_editors("value")[0]
@@ -400,7 +400,7 @@ class TestListStrEditor(unittest.TestCase):
 
     def test_list_str_editor_refresh_editor(self):
         # Smoke test for refresh_editor/refresh_
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListStrModel(), get_view()) as editor:
             if is_qt():
                 editor.refresh_editor()
@@ -413,7 +413,7 @@ class TestListStrEditor(unittest.TestCase):
         # QT editor uses selected items as the source of truth when updating
         model = ListStrModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(model, get_view()) as editor:
 
             set_selected_single(editor, 0)
@@ -445,7 +445,7 @@ class TestListStrEditor(unittest.TestCase):
         # WX editor uses selected indices as the source of truth when updating
         model = ListStrModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(model, get_view()) as editor:
 
             set_selected_single(editor, 0)
@@ -478,7 +478,7 @@ class TestListStrEditor(unittest.TestCase):
         model = ListStrModel()
         view = get_view(multi_select=True)
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(model, view) as editor:
 
             set_selected_multiple(editor, [0])
@@ -511,7 +511,7 @@ class TestListStrEditor(unittest.TestCase):
         model = ListStrModel()
         view = get_view(multi_select=True)
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(model, view) as editor:
 
             set_selected_multiple(editor, [0])
@@ -546,7 +546,7 @@ class TestListStrEditor(unittest.TestCase):
         def change_value(model, value):
             model.value = value
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(model, get_view()) as editor:
 
             set_selected_single(editor, 0)
@@ -566,7 +566,7 @@ class TestListStrEditor(unittest.TestCase):
     # wx editor doesn't have a `setx` method
     @requires_toolkit([ToolkitName.qt])
     def test_list_str_editor_setx(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListStrModel(), get_view()) as editor:
 
             set_selected_single(editor, 0)
@@ -591,13 +591,13 @@ class TestListStrEditor(unittest.TestCase):
     def test_list_str_editor_horizontal_lines(self):
         # Smoke test for painting horizontal lines
         view = get_view(horizontal_lines=True)
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListStrModel(), view):
             pass
 
     def test_list_str_editor_title(self):
         # Smoke test for adding a title
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(ListStrModel(), get_view(title="testing")):
             pass
 
@@ -615,7 +615,7 @@ class TestListStrEditor(unittest.TestCase):
             right_clicked_index="object.right_clicked_index",
         )
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(model, view) as editor:
 
             self.assertEqual(model.right_clicked, "")
@@ -637,7 +637,7 @@ class TestListStrEditorSelection(unittest.TestCase):
         obj = ListStrEditorWithSelectedIndex(
             values=["value1", "value2"], selected_index=1
         )
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(obj, dict(view=single_select_view)) as ui:
             editor = ui.get_editors("values")[0]
             # the following is equivalent to setting the text in the text
@@ -659,7 +659,7 @@ class TestListStrEditorSelection(unittest.TestCase):
         obj = ListStrEditorWithSelectedIndex(
             values=["value1", "value2"], selected_indices=[1]
         )
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(obj, dict(view=multi_select_view)) as ui:
             editor = ui.get_editors("values")[0]
             # the following is equivalent to setting the text in the text
@@ -684,7 +684,7 @@ class TestListStrEditorSelection(unittest.TestCase):
 
         obj = ListStrEditorWithSelectedIndex(values=["value1", "value2"])
 
-        with store_exceptions_on_all_threads():
+        with reraise_exceptions():
             qt_app = QApplication.instance()
             if qt_app is None:
                 qt_app = QApplication([])

@@ -22,7 +22,7 @@ from traitsui.tests._tools import (
     create_ui,
     is_qt,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 try:
@@ -56,7 +56,7 @@ class TestTabularModel(unittest.TestCase):
         # Test dragging an item in the list and drop it below the last item
         obj = DummyHasTraits(names=["A", "B", "C", "D"])
         view = get_view(TabularAdapter(columns=["Name"]))
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(obj, dict(view=view)) as ui:
             editor, = ui.get_editors("names")
 
@@ -88,7 +88,7 @@ class TestTabularModel(unittest.TestCase):
         obj = DummyHasTraits(names=["A", "B", "C", "D"])
         view = get_view(TabularAdapter(columns=["Name"]))
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(obj, dict(view=view)) as ui:
             editor, = ui.get_editors("names")
 
@@ -119,7 +119,7 @@ class TestTabularModel(unittest.TestCase):
         obj = DummyHasTraits(names=["A", "B", "C"])
         view = get_view(TabularAdapter(columns=["Name"], can_drop=True))
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(obj, dict(view=view)) as ui:
             editor, = ui.get_editors("names")
 
@@ -152,7 +152,7 @@ class TestTabularModel(unittest.TestCase):
         obj = DummyHasTraits(names=["A", "B", "C"])
         view = get_view(TabularAdapter(columns=["Name"]))
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(obj, dict(view=view)) as ui:
             editor, = ui.get_editors("names")
 
