@@ -17,6 +17,7 @@ import unittest
 
 from pyface.api import GUI
 
+from traits.api import HasTraits, Int
 from traitsui.tests._tools import (
     is_qt,
     is_wx,
@@ -200,6 +201,27 @@ class TestExceptionHandling(unittest.TestCase):
                 self.assertLogs("traitsui") as watcher:
             with reraise_exceptions():
                 gui.invoke_later(raise_error)
+                gui.process_events()
+
+        error_msg = str(exception_context.exception)
+        self.assertIn("ZeroDivisionError", error_msg)
+        log_content, = watcher.output
+        self.assertIn("ZeroDivisionError", log_content)
+
+    def test_error_from_trait_change_captured(self):
+
+        class Foo(HasTraits):
+            value = Int()
+
+            def _value_changed(self):
+                raise ZeroDivisionError()
+
+        obj = Foo()
+        gui = GUI()
+        with self.assertRaises(RuntimeError) as exception_context, \
+                self.assertLogs("traitsui") as watcher:
+            with reraise_exceptions():
+                gui.set_trait_later(obj, "value", 2)
                 gui.process_events()
 
         error_msg = str(exception_context.exception)
