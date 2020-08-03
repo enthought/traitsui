@@ -12,7 +12,6 @@
 """ Tests for traitsui.tests._tools """
 
 import os
-import sys
 import unittest
 
 from pyface.api import GUI
