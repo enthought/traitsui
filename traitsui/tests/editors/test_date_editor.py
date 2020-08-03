@@ -9,7 +9,7 @@ from traitsui.editors.date_editor import CellFormat
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -168,7 +168,7 @@ class TestDateEditorInitDispose(unittest.TestCase):
     """ Test the init and dispose of date editor."""
 
     def check_init_and_dispose(self, view):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(Foo(), dict(view=view)):
             pass
 

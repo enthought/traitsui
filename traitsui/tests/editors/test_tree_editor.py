@@ -29,7 +29,7 @@ from traitsui.tests._tools import (
     create_ui,
     press_ok_button,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -134,7 +134,7 @@ class TestTreeView(unittest.TestCase):
         tree_editor_view = BogusTreeView(
             bogus=bogus, hide_root=hide_root, nodes=nodes
         )
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(tree_editor_view) as ui:
 
             # The TreeEditor sets a listener on the bogus object's
@@ -157,7 +157,7 @@ class TestTreeView(unittest.TestCase):
         tree_editor_view = BogusTreeNodeObjectView(
             bogus=bogus, hide_root=hide_root, nodes=nodes
         )
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(tree_editor_view) as ui:
 
             # The TreeEditor sets a listener on the bogus object's

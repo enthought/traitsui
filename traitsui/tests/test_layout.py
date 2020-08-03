@@ -29,7 +29,7 @@ from traitsui.group import HGroup, VGroup
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -80,7 +80,7 @@ class TestLayout(unittest.TestCase):
 
         from pyface import qt
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(VResizeDialog()) as ui:
             editor, = ui.get_editors("txt")
             text = editor.control
@@ -99,7 +99,7 @@ class TestLayout(unittest.TestCase):
 
         from pyface import qt
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(HResizeDialog()) as ui:
 
             editor, = ui.get_editors("txt")
@@ -125,7 +125,7 @@ class TestOrientation(unittest.TestCase):
                 Item("txt2"),
             )
         )
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(MultipleTrait(), ui_kwargs=dict(view=view)):
             pass
 
@@ -137,7 +137,7 @@ class TestOrientation(unittest.TestCase):
                 Item("txt2"),
             )
         )
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(MultipleTrait(), ui_kwargs=dict(view=view)):
             pass
 

@@ -36,7 +36,7 @@ from traitsui.tests._tools import (
     create_ui,
     press_ok_button,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -63,7 +63,7 @@ class TestRangeEditorSpinner(unittest.TestCase):
 
         num = NumberWithSpinnerEditor()
         try:
-            with store_exceptions_on_all_threads(), create_ui(num) as ui:
+            with reraise_exceptions(), create_ui(num) as ui:
 
                 # the following is equivalent to clicking in the text control
                 # of the range editor, enter a number, and clicking ok without
@@ -99,7 +99,7 @@ class TestRangeEditorSpinner(unittest.TestCase):
             return
 
         num = NumberWithSpinnerEditor()
-        with store_exceptions_on_all_threads(), create_ui(num) as ui:
+        with reraise_exceptions(), create_ui(num) as ui:
 
             # the following is equivalent to clicking in the text control of
             # the range editor, enter a number, and clicking ok without
@@ -130,7 +130,7 @@ class TestRangeEditorSpinner(unittest.TestCase):
         from pyface import qt
 
         num = NumberWithSpinnerEditor()
-        with store_exceptions_on_all_threads(), create_ui(num) as ui:
+        with reraise_exceptions(), create_ui(num) as ui:
 
             # the following is equivalent to clicking in the text control of
             # the range editor, enter a number, and clicking ok without

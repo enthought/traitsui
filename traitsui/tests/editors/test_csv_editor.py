@@ -30,7 +30,7 @@ from traitsui.tests._tools import (
     is_qt,
     press_ok_button,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -60,7 +60,7 @@ class TestCSVEditor(unittest.TestCase):
         list_of_floats = ListOfFloats(data=[1, 2, 3])
         csv_view = ListOfFloatsWithCSVEditor(model=list_of_floats)
         try:
-            with store_exceptions_on_all_threads():
+            with reraise_exceptions():
                 with create_ui(csv_view) as ui:
                     pass
                 # raise an exception if still hooked
@@ -87,7 +87,7 @@ class TestCSVEditor(unittest.TestCase):
 
         list_of_floats = ListOfFloats(data=[1.0])
         csv_view = ListOfFloatsWithCSVEditor(model=list_of_floats)
-        with store_exceptions_on_all_threads(), create_ui(csv_view) as ui:
+        with reraise_exceptions(), create_ui(csv_view) as ui:
 
             # add element to list, make sure that editor knows about it
             list_of_floats.data.append(3.14)

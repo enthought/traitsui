@@ -10,7 +10,7 @@ from traitsui.tests._tools import (
     is_wx,
     process_cascade_events,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -140,7 +140,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
         )
         model = ListModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_ui(model, formatted_view) as editor:
 
             self.assertEqual(editor.names, ["ONE", "TWO"])
@@ -163,7 +163,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
         )
         model = ListModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_ui(model, formatted_view) as editor:
 
             # FIXME issue enthought/traitsui#841
@@ -196,7 +196,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
         )
         model = ListModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_ui(model, formatted_view) as editor:
 
             self.assertEqual(editor.names, ["ONE", "TWO"])
@@ -223,7 +223,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
         )
         model = ListModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_ui(model, formatted_view) as editor:
 
             # FIXME issue enthought/traitsui#841
@@ -257,7 +257,7 @@ class TestCheckListEditorMapping(unittest.TestCase):
         )
         model = ListModel()
 
-        with store_exceptions_on_all_threads():
+        with reraise_exceptions():
             with create_ui(model, dict(view=view)):
                 pass
 
@@ -335,7 +335,7 @@ class TestSimpleCheckListEditor(unittest.TestCase):
     def test_simple_check_list_editor_text(self):
         list_edit = ListModel(value=["one"])
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(list_edit, get_view("simple")) as editor:
 
             self.assertEqual(get_combobox_text(editor.control), "One")
@@ -349,7 +349,7 @@ class TestSimpleCheckListEditor(unittest.TestCase):
         view = get_mapped_view("simple")
         list_edit = ListModel(value=[1])
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(list_edit, view) as editor:
 
             # FIXME issue enthought/traitsui#841
@@ -368,7 +368,7 @@ class TestSimpleCheckListEditor(unittest.TestCase):
     def test_simple_check_list_editor_index(self):
         list_edit = ListModel(value=["one"])
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(list_edit, get_view("simple")) as editor:
 
             self.assertEqual(list_edit.value, ["one"])
@@ -386,7 +386,7 @@ class TestSimpleCheckListEditor(unittest.TestCase):
     def test_simple_check_list_editor_invalid_current_values(self):
         list_edit = ListModel(value=[1, "two", "a", object(), "one"])
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(list_edit, get_view("simple")):
 
             self.assertEqual(list_edit.value, ["two", "one"])
@@ -397,7 +397,7 @@ class TestSimpleCheckListEditor(unittest.TestCase):
 
         str_edit = StrModel(value="alpha, \ttwo, beta,\n lambda, one")
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(str_edit, get_view("simple")):
 
             self.assertEqual(str_edit.value, "two,one")
@@ -416,7 +416,7 @@ class TestCustomCheckListEditor(unittest.TestCase):
     def test_custom_check_list_editor_button_update(self):
         list_edit = ListModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(list_edit, get_view("custom")) as editor:
 
             self.assertEqual(
@@ -443,7 +443,7 @@ class TestCustomCheckListEditor(unittest.TestCase):
     def test_custom_check_list_editor_click(self):
         list_edit = ListModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(list_edit, get_view("custom")) as editor:
 
             self.assertEqual(list_edit.value, [])
@@ -461,7 +461,7 @@ class TestCustomCheckListEditor(unittest.TestCase):
     def test_custom_check_list_editor_click_initial_value(self):
         list_edit = ListModel(value=["two"])
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(list_edit, get_view("custom")) as editor:
 
             self.assertEqual(list_edit.value, ["two"])
@@ -477,7 +477,7 @@ class TestCustomCheckListEditor(unittest.TestCase):
 
         str_edit = StrModel(value="alpha, \ttwo, three,\n lambda, one")
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(str_edit, get_view("custom")) as editor:
 
             self.assertEqual(str_edit.value, "two,three,one")
@@ -502,7 +502,7 @@ class TestTextCheckListEditor(unittest.TestCase):
     def test_text_check_list_object_list(self):
         list_edit = ListModel()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(list_edit, get_view("text")) as editor:
 
             self.assertEqual(list_edit.value, [])
@@ -518,7 +518,7 @@ class TestTextCheckListEditor(unittest.TestCase):
 
         str_edit = StrModel(value="three, four")
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 self.setup_gui(str_edit, get_view("text")) as editor:
 
             self.assertEqual(str_edit.value, "three, four")

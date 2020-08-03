@@ -29,7 +29,7 @@ from traitsui.tests._tools import (
     is_control_enabled,
     is_qt,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -134,7 +134,7 @@ class TestLabels(unittest.TestCase):
 
         from pyface import qt
         dialog = ShowRightLabelsDialog()
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(dialog) as ui:
 
             # get reference to label objects
@@ -157,7 +157,7 @@ class TestLabels(unittest.TestCase):
 
         from pyface import qt
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(dialog_class()) as ui:
 
             # all labels
@@ -201,7 +201,7 @@ class TestLabels(unittest.TestCase):
         # Behaviour: label should enable/disable along with editor
 
         dialog = EnableWhenDialog()
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(dialog) as ui:
 
             labelled_editor = ui.get_editors("labelled_item")[0]
@@ -224,17 +224,17 @@ class TestAnyToolkit(unittest.TestCase):
     """ Toolkit-agnostic tests for labels with different orientations."""
 
     def test_group_show_right_labels(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(ShowRightLabelsDialog()):
             pass
 
     def test_horizontal_resizable_and_labels(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(HResizeTestDialog()):
             pass
 
     def test_all_resizable_with_labels(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(VResizeTestDialog()):
             pass
 
@@ -242,12 +242,12 @@ class TestAnyToolkit(unittest.TestCase):
         # Bug: If one set show_left=False, show_label=False on a non-resizable
         # item like a checkbox, the Qt backend tried to set the label's size
         # policy and failed because label=None.
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(NoLabelResizeTestDialog()):
             pass
 
     def test_enable_when_flag(self):
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(EnableWhenDialog()):
             pass
 

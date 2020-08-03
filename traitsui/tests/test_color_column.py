@@ -7,7 +7,7 @@ from traitsui.color_column import ColorColumn
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -47,5 +47,5 @@ class TestColorColumn(TestCase):
         d1 = MyEntry(name="a", value=2, color=(1.0, 0.3, 0.1))
         d2 = MyEntry(name="b", value=3, color=(0.1, 0.0, 0.9))
         data = MyData(data_list=[d1, d2])
-        with store_exceptions_on_all_threads(), create_ui(data):
+        with reraise_exceptions(), create_ui(data):
             pass

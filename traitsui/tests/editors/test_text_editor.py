@@ -27,7 +27,7 @@ from traitsui.tests._tools import (
     no_gui_test_assistant,
     process_cascade_events,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -173,7 +173,7 @@ class TestTextEditor(unittest.TestCase):
         # Smoke test to test setup and tear down of an editor.
         foo = Foo()
         view = get_view(style=style, auto_set=auto_set)
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(foo, dict(view=view)):
             pass
 
@@ -196,7 +196,7 @@ class TestTextEditor(unittest.TestCase):
     def test_simple_auto_set_update_text(self):
         foo = Foo()
         view = get_view(style="simple", auto_set=True)
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(foo, dict(view=view)) as ui:
             editor, = ui.get_editors("name")
             set_text(editor, "NEW")
@@ -207,7 +207,7 @@ class TestTextEditor(unittest.TestCase):
     def test_simple_auto_set_false_do_not_update(self):
         foo = Foo(name="")
         view = get_view(style="simple", auto_set=False)
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(foo, dict(view=view)) as ui:
             editor, = ui.get_editors("name")
 
@@ -225,7 +225,7 @@ class TestTextEditor(unittest.TestCase):
         # the auto_set flag is disregard for custom editor.
         foo = Foo()
         view = get_view(auto_set=True, style="custom")
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(foo, dict(view=view)) as ui:
             editor, = ui.get_editors("name")
 
@@ -238,7 +238,7 @@ class TestTextEditor(unittest.TestCase):
         # the auto_set flag is disregard for custom editor.
         foo = Foo()
         view = get_view(auto_set=False, style="custom")
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(foo, dict(view=view)) as ui:
             editor, = ui.get_editors("name")
 
@@ -264,7 +264,7 @@ class TestTextEditor(unittest.TestCase):
             Item("name", format_func=lambda s: s.upper()),
             Item("nickname"),
         )
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(foo, dict(view=view)) as ui:
             name_editor, = ui.get_editors("name")
             nickname_editor, = ui.get_editors("nickname")

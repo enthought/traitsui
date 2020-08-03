@@ -5,7 +5,7 @@ from traitsui.api import RangeEditor, UItem, View
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -33,7 +33,7 @@ class TestRangeEditor(unittest.TestCase):
             )
         )
 
-        with store_exceptions_on_all_threads(),\
+        with reraise_exceptions(),\
                 create_ui(obj, dict(view=view)) as ui:
             editor = ui.get_editors("value")[0]
 

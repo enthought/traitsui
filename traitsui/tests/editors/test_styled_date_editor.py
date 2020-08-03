@@ -8,7 +8,7 @@ from traitsui.editors.date_editor import CellFormat
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -50,6 +50,6 @@ class TestStyledDateEditor(unittest.TestCase):
                 style="custom",
             )
         )
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(instance, dict(view=view)):
             pass

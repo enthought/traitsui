@@ -30,7 +30,7 @@ from traitsui.tests._tools import (
     create_ui,
     press_ok_button,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -68,7 +68,7 @@ class TestRangeEditorText(unittest.TestCase):
         # (tests a bug where this fails with an AttributeError)
 
         num = NumberWithRangeEditor()
-        with store_exceptions_on_all_threads(), create_ui(num) as ui:
+        with reraise_exceptions(), create_ui(num) as ui:
 
             # the following is equivalent to setting the text in the text
             # control, then pressing OK
@@ -86,7 +86,7 @@ class TestRangeEditorText(unittest.TestCase):
         from pyface import qt
 
         num = FloatWithRangeEditor()
-        with store_exceptions_on_all_threads(), create_ui(num) as ui:
+        with reraise_exceptions(), create_ui(num) as ui:
 
             # the following is equivalent to setting the text in the text
             # control, then pressing OK

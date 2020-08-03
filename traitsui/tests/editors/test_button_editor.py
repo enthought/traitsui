@@ -10,7 +10,7 @@ from traitsui.tests._tools import (
     is_wx,
     process_cascade_events,
     requires_toolkit,
-    store_exceptions_on_all_threads,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -60,7 +60,7 @@ class TestButtonEditor(unittest.TestCase):
     def check_button_text_update(self, view):
         button_text_edit = ButtonTextEdit()
 
-        with store_exceptions_on_all_threads(), \
+        with reraise_exceptions(), \
                 create_ui(button_text_edit, dict(view=view)) as ui:
 
             process_cascade_events()
@@ -75,7 +75,7 @@ class TestButtonEditor(unittest.TestCase):
     def test_styles(self):
         # simple smoke test of buttons
         button_text_edit = ButtonTextEdit()
-        with store_exceptions_on_all_threads(), create_ui(button_text_edit):
+        with reraise_exceptions(), create_ui(button_text_edit):
             pass
 
     def test_simple_button_editor(self):
@@ -105,7 +105,7 @@ class TestButtonEditorValuesTrait(unittest.TestCase):
         # Smoke test to check init and dispose when values_trait is used.
         instance = ButtonTextEdit(values=["Item1", "Item2"])
         view = self.get_view(style=style)
-        with store_exceptions_on_all_threads():
+        with reraise_exceptions():
             with create_ui(instance, dict(view=view)):
                 pass
 
