@@ -22,6 +22,7 @@ from traitsui.tests._tools import (
     is_wx,
     is_mac_os,
     process_cascade_events,
+    reraise_exceptions,
     requires_toolkit,
     ToolkitName,
 )
@@ -179,3 +180,29 @@ class TestProcessEventsRepeated(unittest.TestCase):
 
         # then
         self.assertEqual(wx_handler.n_events, max_n_events)
+
+
+class TestExceptionHandling(unittest.TestCase):
+
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+    def test_error_from_gui_captured_and_raise(self):
+
+        def raise_error():
+            raise ZeroDivisionError()
+
+        # without the context manager:
+        # with Qt5, the test run will be aborted prematurely.
+        # with Qt4, the traceback is printed and the test passes.
+        # with Wx, the traceback is printed and the test passes.
+        # With the context manager, the exception is reraised.
+        gui = GUI()
+        with self.assertRaises(RuntimeError) as exception_context, \
+                self.assertLogs("traitsui") as watcher:
+            with reraise_exceptions():
+                gui.invoke_later(raise_error)
+                gui.process_events()
+
+        error_msg = str(exception_context.exception)
+        self.assertIn("ZeroDivisionError", error_msg)
+        log_content, = watcher.output
+        self.assertIn("ZeroDivisionError", log_content)

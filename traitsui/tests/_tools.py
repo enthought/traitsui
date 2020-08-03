@@ -14,6 +14,7 @@
 # ------------------------------------------------------------------------------
 
 import enum
+import logging
 import re
 import sys
 import traceback
@@ -24,48 +25,86 @@ import warnings
 
 from pyface.api import GUI
 from pyface.toolkit import toolkit_object
+from traits.api import (
+    pop_exception_handler,
+    push_exception_handler,
+)
 from traits.etsconfig.api import ETSConfig
-import traits.trait_notifiers
 
 # ######### Testing tools
 
 
-@contextmanager
-def store_exceptions_on_all_threads():
-    """Context manager that captures all exceptions, even those coming from
-    the UI thread. On exit, the first exception is raised (if any).
+_TRAITSUI_LOGGER = logging.getLogger("traitsui")
 
-    It also temporarily overwrites the global function
-    traits.trait_notifier.handle_exception , which logs exceptions to
-    console without re-raising them by default.
+
+def _serialize_exception(exc_type, value, tb):
+    """ Serialize exception and traceback for reporting.
+    This is such that the stack frame is not prevented from being garbage
+    collected.
     """
+    return (
+        str(exc_type),
+        str(value),
+        str("".join(traceback.format_exception(exc_type, value, tb)))
+    )
 
-    exceptions = []
 
-    def _print_uncaught_exception(type, value, tb):
-        message = "Uncaught exception:\n"
-        message += "".join(traceback.format_exception(type, value, tb))
-        print(message)
+@contextmanager
+def reraise_exceptions(logger=_TRAITSUI_LOGGER):
+    """ Context manager to capture all exceptions occurred in the context and
+    then reraise a RuntimeError if there are any exceptions captured.
+
+    Exceptions from traits change notifications are also captured and reraised.
+
+    Depending on the GUI toolkit backend, unexpected exceptions occurred in the
+    GUI event loop may (1) cause fatal early exit of the test suite or (2) be
+    printed to the console without causing the test to error. This context
+    manager is intended for testing purpose such that unexpected exceptions
+    will result in a test error.
+
+    Parameters
+    ----------
+    logger : logging.Logger
+        Logger to use for logging errors.
+    """
+    serialized_exceptions = []
 
     def excepthook(type, value, tb):
-        exceptions.append(value)
-        _print_uncaught_exception(type, value, tb)
+        serialized = _serialize_exception(type, value, tb)
+        serialized_exceptions.append(serialized)
+        logger.error(
+            "Unexpected error captured in sys excepthook. \n%s",
+            serialized[-1]
+        )
 
-    def handle_exception(object, trait_name, old, new):
+    def handler(object, name, old, new):
         type, value, tb = sys.exc_info()
-        exceptions.append(value)
-        _print_uncaught_exception(type, value, tb)
+        serialized_exceptions.append(_serialize_exception(type, value, tb))
+        logger.exception(
+            "Unexpected error occurred from change handler "
+            "(object: %r, name: %r, old: %r, new: %r).",
+            object, name, old, new,
+        )
 
-    _original_handle_exception = traits.trait_notifiers.handle_exception
+    push_exception_handler(handler=handler)
+    sys.excepthook = excepthook
     try:
-        sys.excepthook = excepthook
-        traits.trait_notifiers.handle_exception = handle_exception
         yield
     finally:
         sys.excepthook = sys.__excepthook__
-        traits.trait_notifiers.handle_exception = _original_handle_exception
-        if len(exceptions) > 0:
-            raise exceptions[0]
+        pop_exception_handler()
+        if serialized_exceptions:
+            msg = "Uncaught exceptions found.\n"
+            msg += "\n".join(
+                "=== Exception (type: {}, value: {}) ===\n"
+                "{}".format(*record)
+                for record in serialized_exceptions
+            )
+            raise RuntimeError(msg)
+
+
+# Temporary alias to avoid conflicts across PRs.
+store_exceptions_on_all_threads = reraise_exceptions
 
 
 # Toolkit constants
