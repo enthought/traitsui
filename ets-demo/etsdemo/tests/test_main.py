@@ -8,6 +8,7 @@
 #
 # Thanks for using Enthought open source!
 
+import io
 import tempfile
 import unittest
 from unittest import mock
@@ -41,12 +42,44 @@ def mock_demo_launch():
 
 
 class TestMain(unittest.TestCase):
+    """ Test main function."""
 
     @require_gui
     def test_main(self):
         # Main function must be launchable even if there are no data available.
-        with mock_iter_entry_points({}), mock_demo_launch():
+        # In normal running situation, the console should be clean
+        argv = ["etsdemo"]
+        mocked_io = io.StringIO()
+        with mock_iter_entry_points({}), \
+                mock_demo_launch(), \
+                mocked_io, \
+                mock.patch("sys.stdout", mocked_io), \
+                mock.patch("sys.stderr", mocked_io), \
+                mock.patch("sys.argv", argv):
             main_module.main()
+            console_output = mocked_io.getvalue()
+
+        self.assertEqual(console_output, "")
+
+    @require_gui
+    def test_main_with_log(self):
+        # Test logging configuration with the main function.
+        argv = ["etsdemo", "-v"]
+        mocked_io = io.StringIO()
+        with mock_iter_entry_points({}), \
+                mock_demo_launch(), \
+                mocked_io, \
+                mock.patch("sys.stdout", mocked_io), \
+                mock.patch("sys.stderr", mocked_io), \
+                mock.patch("sys.argv", argv):
+            main_module.main()
+            console_output = mocked_io.getvalue()
+
+        self.assertIn("Found 0 resource(s).", console_output)
+
+
+class TestCreateDemo(unittest.TestCase):
+    """ Test _create_demo """
 
     def test_create_demo_default_entry_points(self):
         # This does not require GUI and it should not fail.
