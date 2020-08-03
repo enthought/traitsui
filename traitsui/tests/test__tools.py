@@ -191,10 +191,10 @@ class TestExceptionHandling(unittest.TestCase):
             raise ZeroDivisionError()
 
         # without the context manager:
-        # with Qt5, the test run will be aborted prematurely.
-        # with Qt4, the traceback is printed and the test passes.
-        # with Wx, the traceback is printed and the test passes.
-        # With the context manager, the exception is reraised.
+        #   - with Qt5, the test run will be aborted prematurely.
+        #   - with Qt4, the traceback is printed and the test passes.
+        #   - with Wx, the traceback is printed and the test passes.
+        # With the context manager, the exception is always reraised.
         gui = GUI()
         with self.assertRaises(RuntimeError) as exception_context, \
                 self.assertLogs("traitsui") as watcher:
