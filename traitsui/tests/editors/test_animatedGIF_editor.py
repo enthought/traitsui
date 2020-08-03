@@ -19,7 +19,8 @@ from traits.api import Bool, File, HasTraits
 from traitsui.api import Item, View
 from traitsui.tests._tools import (
     create_ui,
-    skip_if_not_wx,
+    requires_toolkit,
+    ToolkitName,
 )
 
 filename = pkg_resources.resource_filename("traitsui", "examples/demo/Extras/images/logo_32x32.gif")
@@ -29,7 +30,7 @@ class AnimatedGIF(HasTraits):
     gif_file = File(filename)
 
 
-@skip_if_not_wx
+@requires_toolkit([ToolkitName.wx])
 class TestAnimatedGIFEditor(unittest.TestCase):
 
     def test_animated_gif_editor(self):
@@ -39,7 +40,7 @@ class TestAnimatedGIFEditor(unittest.TestCase):
         view = View(
             Item('gif_file', editor=AnimatedGIFEditor(playing='playing')),
         )
-        
+
         # This should not fail.
         with create_ui(obj1, dict(view=view)):
             pass
