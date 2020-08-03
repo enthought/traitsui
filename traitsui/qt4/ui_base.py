@@ -128,16 +128,10 @@ class _StickyDialog(QtGui.QDialog):
         self.setLayout(layout)
 
         # Set the dialog's window flags and properties.
-        if ui.view.resizable:
-            flags = QtCore.Qt.Window
-        else:
-            flags = QtCore.Qt.Dialog | QtCore.Qt.WindowSystemMenuHint
+        flags = QtCore.Qt.Dialog
+        if not ui.view.resizable:
+            flags |= QtCore.Qt.WindowSystemMenuHint
             layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
-            if ui.view.resizable:
-                flags |= (
-                    QtCore.Qt.WindowMinimizeButtonHint
-                    | QtCore.Qt.WindowMaximizeButtonHint
-                )
         try:
             flags |= QtCore.Qt.WindowCloseButtonHint
             if ui.view.resizable:
