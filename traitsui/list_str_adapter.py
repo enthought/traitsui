@@ -18,8 +18,6 @@
 """  Defines adapter interfaces for use with the ListStrEditor.
 """
 
-
-
 from traits.api import (
     Any,
     Bool,
@@ -162,15 +160,16 @@ class ListStrAdapter(HasPrivateTraits):
 
     def get_drag(self, object, trait, index):
         """ Returns the 'drag' value for a specified *object.trait[index]*
-            list item. A result of *None* means that the item cannot be dragged.
+            list item. A result of *None* means that the item cannot be
+            dragged.
         """
         return self._result_for("get_drag", object, trait, index)
 
     def get_can_drop(self, object, trait, index, value):
         """ Returns whether the specified *value* can be dropped on the
-            specified *object.trait[index]* list item. A value of **True** means
-            the *value* can be dropped; and a value of **False** indicates that
-            it cannot be dropped.
+            specified *object.trait[index]* list item. A value of **True**
+            means the *value* can be dropped; and a value of **False**
+            indicates that it cannot be dropped.
         """
         return self._result_for("get_can_drop", object, trait, index, value)
 

@@ -19,8 +19,6 @@
     factories that use the same class for creating all editor styles.
 """
 
-
-
 from traits.api import Any
 
 from .editor_factory import EditorFactory

@@ -24,8 +24,6 @@
     of its associated class's parent classes.
 """
 
-
-
 from traits.api import HasStrictTraits, List, Dict, Str, Int, Any, TraitError
 
 from .view_element import ViewElement

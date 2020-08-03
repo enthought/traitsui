@@ -19,8 +19,6 @@
     interface.
 """
 
-
-
 import shelve
 import os
 
@@ -428,7 +426,7 @@ class UI(HasPrivateTraits):
                     object = context.get(prefix[:col])
                     if object is not None:
                         method = getattr(handler, name)
-                        trait_name = prefix[col + 1 :]
+                        trait_name = prefix[col + 1:]
                         self._dispatchers.append(
                             Dispatcher(method, info, object, trait_name)
                         )
@@ -438,10 +436,10 @@ class UI(HasPrivateTraits):
         # If there are any Editor object's whose 'visible', 'enabled' or
         # 'checked' state is controlled by a 'visible_when', 'enabled_when' or
         # 'checked_when' expression, set up an 'anytrait' changed notification
-        # handler on each object in the 'context' that will cause the 'visible',
-        # 'enabled' or 'checked' state of each affected Editor to be set. Also
-        # trigger the evaluation immediately, so the visible, enabled or checked
-        # state of each Editor can be correctly initialized:
+        # handler on each object in the 'context' that will cause the
+        # 'visible', 'enabled' or 'checked' state of each affected Editor to be
+        #  set. Also trigger the evaluation immediately, so the visible,
+        # enabled or checked state of each Editor can be correctly initialized:
         if (len(self._visible) + len(self._enabled) + len(self._checked)) > 0:
             for object in context.values():
                 object.on_trait_change(self._evaluate_when, dispatch="ui")

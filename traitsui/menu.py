@@ -19,8 +19,6 @@
     and standard actions and buttons.
 """
 
-
-
 from traits.api import Str
 
 # Import and rename the needed Pyface elements:
@@ -43,11 +41,11 @@ class Action(PyFaceAction):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
-    #: Pre-condition for showing the action. If the expression evaluates to False,
-    #: the action is not visible (and disappears if it was previously visible).
-    #: If the value evaluates to True, the action becomes visible. All
-    #: **visible_when** conditions are checked each time that any trait value
-    #: is edited in the display. Therefore, you can use **visible_when**
+    #: Pre-condition for showing the action. If the expression evaluates to
+    #: False, the action is not visible (and disappears if it was previously
+    #: visible). If the value evaluates to True, the action becomes visible.
+    #: All **visible_when** conditions are checked each time that any trait
+    #: value is edited in the display. Therefore, you can use **visible_when**
     #: conditions to hide or show actions in response to user input.
     visible_when = Str()
 
@@ -63,10 +61,10 @@ class Action(PyFaceAction):
     #: in menus.
     checked_when = Str()
 
-    #: Pre-condition for including the action in the menu bar or toolbar. If the
-    #: expression evaluates to False, the action is not defined in the display.
-    #: Conditions for **defined_when** are evaluated only once, when the display
-    #: is first constructed.
+    #: Pre-condition for including the action in the menu bar or toolbar. If
+    #: the expression evaluates to False, the action is not defined in the
+    #: display. Conditions for **defined_when** are evaluated only once, when
+    #: the display is first constructed.
     defined_when = Str()
 
     #: The method to call to perform the action, on the Handler for the window.
@@ -132,10 +130,11 @@ NoButton = Action(name="")
 #: **Redo** cancels the most recent "undo" operation.
 UndoButton = Action(name="Undo")
 
-#: When the user clicks the **Revert** button, all changes made in the window are
-#: cancelled and the original values are restored. If the changes have been
-#: applied to the model (because the user clicked **Apply** or because the window
-#: is live), the model data is restored as well. The window remains open.
+#: When the user clicks the **Revert** button, all changes made in the window
+#: are cancelled and the original values are restored. If the changes have been
+#: applied to the model (because the user clicked **Apply** or because the
+#: window is live), the model data is restored as well. The window remains
+#: open.
 RevertButton = Action(name="Revert")
 
 #: When the user clicks the **Apply** button, all changes made in the window are

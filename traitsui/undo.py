@@ -19,11 +19,7 @@
     support.
 """
 
-
-
 import collections
-
-
 
 from traits.api import (
     Event,
@@ -147,7 +143,7 @@ class UndoItem(AbstractUndoItem):
                     i = 0
                     while (i < n) and (v1[i] == v2[i]):
                         i += 1
-                    if v1[i + (n2 <= n1) :] == v2[i + (n2 >= n1) :]:
+                    if v1[i + (n2 <= n1):] == v2[i + (n2 >= n1):]:
                         self.new_value = v2
                         return True
 

@@ -18,8 +18,6 @@
 """ Defines common traits used within the traits.ui package.
 """
 
-
-
 from pyface.ui_traits import (
     Alignment,
     Border,
@@ -101,8 +99,8 @@ AView = Any()
 # Instance traits are just broken. The Instance trait tries to update the
 # top-level CTrait's fast_validate table when the import is resolved. However,
 # sometimes the CTrait gets copied for unknown reasons and the copy's
-# fast_validate table is not updated although the TraitCompound's slow_validates
-# table is modified.
+# fast_validate table is not updated although the TraitCompound's
+# slow_validates table is modified.
 
 # -------------------------------------------------------------------------
 #  'StatusItem' class:

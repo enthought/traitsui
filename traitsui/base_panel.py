@@ -15,8 +15,6 @@ from pyface.action.api import ActionController
 from traits.api import Any, Instance
 from traitsui.menu import Action
 
-
-
 # Set of all predefined system button names:
 SystemButtons = {"Undo", "Redo", "Apply", "Revert", "OK", "Cancel", "Help"}
 

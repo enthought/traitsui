@@ -18,8 +18,6 @@
 """ Defines tree node classes and editors for various types of values.
 """
 
-
-
 import inspect
 from operator import itemgetter
 
@@ -38,7 +36,6 @@ from traits.api import (
 from .tree_node import ObjectTreeNode, TreeNode, TreeNodeObject
 
 from .editors.tree_editor import TreeEditor
-
 
 
 class SingleValueTreeNodeObject(TreeNodeObject):
