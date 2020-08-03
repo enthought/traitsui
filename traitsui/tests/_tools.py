@@ -101,10 +101,6 @@ def reraise_exceptions(logger=_TRAITSUI_LOGGER):
             raise RuntimeError(msg)
 
 
-# Temporary alias to avoid conflicts across PRs.
-store_exceptions_on_all_threads = reraise_exceptions
-
-
 # Toolkit constants
 
 class ToolkitName(enum.Enum):
