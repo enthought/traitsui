@@ -51,6 +51,7 @@ class SimpleApplication(ModelView):
     model = Instance(Model)
 
 
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUITesterCreateUI(unittest.TestCase):
     """ Test UITester.create_ui
     """
@@ -159,6 +160,7 @@ class StubRegistry(AbstractRegistry):
         return self._get_handler()
 
 
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUITesterManageRegistry(unittest.TestCase):
     """ Test the logic regarding the order of registries.
     """
@@ -261,6 +263,7 @@ class TestUITesterManageRegistry(unittest.TestCase):
         )
 
 
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUserInteractorWithCustomActionRegistry(unittest.TestCase):
     """ Test logic specific to the _CustomActionRegistry
     """
