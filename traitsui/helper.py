@@ -19,8 +19,6 @@
     user interfaces.
 """
 
-
-
 from operator import itemgetter
 
 from traits.api import BaseTraitHandler, CTrait, Enum, TraitError
@@ -58,7 +56,7 @@ def commatize(value):
     """
     s = str(abs(value))
     s = s.rjust(((len(s) + 2) / 3) * 3)
-    result = ",".join([s[i : i + 3] for i in range(0, len(s), 3)]).lstrip()
+    result = ",".join([s[i: i + 3] for i in range(0, len(s), 3)]).lstrip()
     if value >= 0:
         return result
 

@@ -19,8 +19,6 @@
     (i.e., View, Group, Item, Include) derive from.
 """
 
-
-
 import re
 
 from traits.api import HasPrivateTraits, Instance, Bool
@@ -134,7 +132,7 @@ class ViewSubElement(ViewElement):
         if col < 0:
             return value
 
-        items = (value[:col].strip(), value[col + 1 :].strip())
+        items = (value[:col].strip(), value[col + 1:].strip())
         if items[assign] != "":
             setattr(self, name, items[assign])
 
@@ -145,7 +143,7 @@ class ViewSubElement(ViewElement):
         """
         col = string.find(option)
         if col >= 0:
-            string = string[:col] + string[col + len(option) :]
+            string = string[:col] + string[col + len(option):]
             setattr(self, name, value)
 
         return string

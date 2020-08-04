@@ -19,8 +19,6 @@
     an active Traits-based user interface.
 """
 
-
-
 from traits.api import HasPrivateTraits, Instance, Constant, Bool
 
 

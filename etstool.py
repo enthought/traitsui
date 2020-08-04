@@ -122,7 +122,7 @@ test_dependencies = {
 extra_dependencies = {
     # XXX once pyside2 is available in EDM, we will want it here
     'pyside2': set(),
-    'pyqt': {'pyqt<4.12'}, # FIXME: build 1 of 4.12.1 appears to be bad
+    'pyqt': {'pyqt<4.12'},  # FIXME: build 1 of 4.12.1 appears to be bad
     'pyqt5': {'pyqt5'},
     # XXX once wxPython 4 is available in EDM, we will want it here
     'wx': set(),
@@ -266,6 +266,7 @@ def test(runtime, toolkit, environment):
         execute(commands, parameters)
     click.echo('Done test')
 
+
 @cli.command()
 @click.option('--runtime', default=DEFAULT_RUNTIME)
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
@@ -296,6 +297,7 @@ def test_clean(runtime, toolkit):
         test(args=args, standalone_mode=False)
     finally:
         cleanup(args=args, standalone_mode=False)
+
 
 @cli.command()
 @click.option('--runtime', default=DEFAULT_RUNTIME)

@@ -19,8 +19,6 @@
     classes for numeric and table editors.
 """
 
-
-
 import os
 
 from traits.api import (
@@ -128,8 +126,8 @@ class TableColumn(HasPrivateTraits):
     #: The tooltip to display when the mouse is over the column:
     tooltip = Str()
 
-    #: The width of the column (< 0.0: Default, 0.0..1.0: fraction of total table
-    #: width, > 1.0: absolute width in pixels):
+    #: The width of the column (< 0.0: Default, 0.0..1.0: fraction of total
+    #: table width, > 1.0: absolute width in pixels):
     width = Float(-1.0)
 
     #: The width of the column while it is being edited (< 0.0: Default,
@@ -142,8 +140,8 @@ class TableColumn(HasPrivateTraits):
     #: > 1.0: absolute height in pixels):
     edit_height = Float(-1.0)
 
-    #: The resize mode for this column.  This takes precedence over other settings
-    #: (like **width**, above).
+    #: The resize mode for this column.  This takes precedence over other
+    #: settings (like **width**, above).
     #: - "interactive": column can be resized by users or programmatically
     #: - "fixed": users cannot resize the column, but it can be set programmatically
     #: - "stretch": the column will be resized to fill the available space

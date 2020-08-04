@@ -18,8 +18,6 @@
 """ Displays a message to the user as a modal window.
 """
 
-
-
 from traits.api import HasPrivateTraits, Str, Float
 
 from .view import View
@@ -119,8 +117,8 @@ class AutoCloseMessage(HasPrivateTraits):
 
 
 # -------------------------------------------------------------------------
-#  Displays a user specified message that closes automatically after a specified
-#  time interval:
+#  Displays a user specified message that closes automatically after a
+#  specified time interval:
 # -------------------------------------------------------------------------
 
 

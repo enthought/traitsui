@@ -19,8 +19,6 @@
     factory classes.
 """
 
-
-
 from itertools import zip_longest
 
 
@@ -652,13 +650,13 @@ class ITreeNode(Interface):
         """
 
     def when_column_labels_change(self, object, listener, remove):
-        """ Sets up or removes a listener for the column labels being changed on
-        a specified object.
+        """ Sets up or removes a listener for the column labels being changed
+        on a specified object.
 
         This will fire when either the list is reassigned or when it is
         modified. I.e., it listens both to the trait change event and the
-        trait_items change event. Implement the listener appropriately to handle
-        either case.
+        trait_items change event. Implement the listener appropriately to
+        handle either case.
         """
 
     def get_tooltip(self):
@@ -862,13 +860,13 @@ class ITreeNodeAdapter(Adapter):
         return []
 
     def when_column_labels_change(self, listener, remove):
-        """ Sets up or removes a listener for the column labels being changed on
-        a specified object.
+        """ Sets up or removes a listener for the column labels being changed
+        on a specified object.
 
         This will fire when either the list is reassigned or when it is
         modified. I.e., it listens both to the trait change event and the
-        trait_items change event. Implement the listener appropriately to handle
-        either case.
+        trait_items change event. Implement the listener appropriately to
+        handle either case.
         """
         pass
 
@@ -1102,13 +1100,13 @@ class ITreeNodeAdapterBridge(HasPrivateTraits):
         return self.adapter.get_column_labels()
 
     def when_column_labels_change(self, object, listener, remove):
-        """ Sets up or removes a listener for the column labels being changed on
-        a specified object.
+        """ Sets up or removes a listener for the column labels being changed
+        on a specified object.
 
         This will fire when either the list is reassigned or when it is
         modified. I.e., it listens both to the trait change event and the
-        trait_items change event. Implement the listener appropriately to handle
-        either case.
+        trait_items change event. Implement the listener appropriately to
+        handle either case.
         """
         return self.adapter.when_column_labels_change(listener, remove)
 

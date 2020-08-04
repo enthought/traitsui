@@ -109,7 +109,7 @@ class DelegatingHandler(Handler):
                                 "\tto method [%s] on handler[%s]", name, h
                             )
                             method = getattr(h, name)
-                            trait_name = prefix[col + 1 :]
+                            trait_name = prefix[col + 1:]
                             self._dispatchers.append(
                                 Dispatcher(method, info, object, trait_name)
                             )

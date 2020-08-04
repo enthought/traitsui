@@ -19,10 +19,6 @@
     a Traits-based user interface.
 """
 
-
-
-
-
 # avoid deprecation warning
 from inspect import getfullargspec
 
@@ -138,7 +134,8 @@ class Handler(HasPrivateTraits):
         Returns
         -------
         allow_close : bool
-            A Boolean, indicating whether the window should be allowed to close.
+            A Boolean, indicating whether the window should be allowed to
+            close.
         """
         return True
 
@@ -599,8 +596,8 @@ class ModelView(Controller):
         wrapped around the original model). Because of this, the ModelView
         context dictionary specifies the ModelView instance itself as the
         special *object* value, and assigns the original model object as the
-        *model* value. Thus, the traits of the ModelView object can be referenced
-        in its View definition using unadorned trait names.
+        *model* value. Thus, the traits of the ModelView object can be
+        referenced in its View definition using unadorned trait names.
     """
 
     # -- HasTraits Method Overrides -------------------------------------------

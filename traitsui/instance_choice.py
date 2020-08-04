@@ -19,14 +19,11 @@
     instance editor factory classes.
 """
 
-
-
 from traits.api import HasPrivateTraits, Str, Any, Dict, Tuple, Callable, Bool
 
 from .ui_traits import AView
 
 from .helper import user_name_for
-
 
 
 class InstanceChoiceItem(HasPrivateTraits):
@@ -116,15 +113,15 @@ class InstanceFactoryChoice(InstanceChoiceItem):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
-    #: Indicates whether an instance compatible with this item can be dragged and
-    #: dropped rather than created
+    #: Indicates whether an instance compatible with this item can be dragged
+    #: and dropped rather than created
     droppable = Bool(False)
 
     #: Indicates whether the item can be selected by the user
     selectable = Bool(True)
 
-    #: A class (or other callable) that can be used to create an item compatible
-    #: with this item
+    #: A class (or other callable) that can be used to create an item
+    #: compatible with this item
     klass = Callable()
 
     #: Tuple of arguments to pass to **klass** to create an instance
@@ -182,8 +179,8 @@ class InstanceDropChoice(InstanceFactoryChoice):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
-    #: Indicates whether an instance compatible with this item can be dragged and
-    #: dropped rather than created . This value overrides the default.
+    #: Indicates whether an instance compatible with this item can be dragged
+    #: and dropped rather than created . This value overrides the default.
     droppable = True
 
     #: Indicates whether the item can be selected by the user. This value

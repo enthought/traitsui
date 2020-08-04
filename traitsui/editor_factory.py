@@ -19,11 +19,7 @@
     creating the Editor objects used in a Traits-based user interface.
 """
 
-
-
 import logging
-
-
 
 from traits.api import (
     HasPrivateTraits,

@@ -20,7 +20,6 @@
 from traitsui.table_column import ObjectColumn
 
 
-
 class ColorColumn(ObjectColumn):
     """ Table column object for RGBColor traits. """
 

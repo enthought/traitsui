@@ -19,8 +19,6 @@
     their function by creating an embedded Traits UI.
 """
 
-
-
 from traits.api import Instance
 
 from .ui import UI

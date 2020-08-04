@@ -20,8 +20,6 @@
     by the application.
 """
 
-
-
 from traits.api import (
     Any,
     Event,
