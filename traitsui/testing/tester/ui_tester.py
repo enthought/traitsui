@@ -111,6 +111,10 @@ class UITester:
         with tester.create_ui(obj) as ui:
             interactor = tester.find_by_name(ui, "text")
 
+    The returned value is an instance of ``UserInteractor``. It wraps the
+    UI editor instance found and allows further test actions to be performed on
+    the editor.
+
     Since it is fairly typical for a UI editor to have a nested UI (and those
     nested UI may bave more nested UI), to locate these nested UIs,
     ``UserInteractor.find_by_name``  can be used::
