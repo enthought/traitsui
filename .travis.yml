@@ -17,6 +17,7 @@ matrix:
   include:
     - env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5 pyside2"
     - env: RUNTIME=3.6 TOOLKITS="wx"
+    - env: RUNTIME=3.6 TOOLKITS="pyqt5" TRAITS_REQUIRES="^=6.0"
     - os: osx
       env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5 pyside2"
     - os: osx
