@@ -94,9 +94,13 @@ DEFAULT_RUNTIME = '3.6'
 # Default toolkit to use if none specified.
 DEFAULT_TOOLKIT = 'null'
 
+# Traits version requirement (empty string to mean no specific requirement).
+# The requirement is to be interpreted by EDM
+TRAITS_VERSION_REQUIRES = os.environ.get("TRAITS_REQUIRES", "")
+
 dependencies = {
     "numpy",
-    "traits",
+    "traits" + TRAITS_VERSION_REQUIRES,
     "pandas",
     "pygments",
     "pip",
