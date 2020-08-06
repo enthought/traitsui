@@ -1,0 +1,17 @@
+ETS Demo Changelog
+==================
+
+Release 0.1.0
+-------------
+
+This is an initial release of the Enthought Tool Suite Demo GUI application.
+The package itself does not include any demo materials. It relies on other
+projects to contribute data files via entry points.
+
+The application was initially hosted and advertised via
+``traitsui.extras.demo.demo``. The functionality is now supported via
+``etsdemo.main.main`` and projects are encouraged to migrate.
+``traitsui.extras.demo.demo`` will eventually be deprecated and removed.
+
+See README for further details on how to contribute data and to launch
+the application.
