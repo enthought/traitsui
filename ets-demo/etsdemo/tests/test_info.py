@@ -30,7 +30,7 @@ class TestInfoForEAM(unittest.TestCase):
     @unittest.skipUnless(EAM_EXISTS, "eam is not available.")
     def test_etsdemo_info(self):
         output = subprocess.check_output(
-            ["eam", "--debug", "info"],
+            ["eam", "info"],
         )
         output = output.decode("utf-8")
         self.assertIn("etsdemo", output)
