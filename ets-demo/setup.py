@@ -250,7 +250,7 @@ if __name__ == "__main__":
     ]
     extras_require = {
         "wx": ["wxpython>=4", "numpy"],
-        "pyqt5": ["pyqt>=5", "pygments"],
+        "pyqt5": ["pyqt5", "pygments"],
         "pyside2": ["pyside2", "shiboken2", "pygments"],
         "test": ["eam"],
     }
