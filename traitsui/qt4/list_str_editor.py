@@ -388,8 +388,8 @@ class _ListStrEditor(Editor):
         self.activated_index = index = mi.row()
         self.activated = self.adapter.get_item(self.object, self.name, index)
 
-    def _on_context_menu(self, point):
-        """ Handle a context menu request.
+    def _on_mouse_right_click(self, point):
+        """ Handle a mouse right click event
         """
         mi = self.list_view.indexAt(point)
         if mi.isValid():
@@ -527,6 +527,13 @@ class _ListView(QtGui.QListView):
         """ Clean up states in this view.
         """
         self.setModel(None)
+
+    def mouseReleaseEvent(self, event):
+        """ Reimplemented to support listening to right clicked item."""
+        if event.button() == QtCore.Qt.RightButton:
+            event.accept()
+            self._editor._on_mouse_right_click(event.pos())
+        super(_ListView, self).mouseReleaseEvent(event)
 
     def keyPressEvent(self, event):
         """ Reimplemented to support edit, insert, and delete by keyboard.
