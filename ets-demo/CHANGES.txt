@@ -14,4 +14,4 @@ The application was initially hosted and advertised via
 ``traitsui.extras.demo.demo`` will eventually be deprecated and removed.
 
 See README for further details on how to contribute data and to launch
-the application locally.
+the application.
