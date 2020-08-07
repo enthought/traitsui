@@ -25,7 +25,7 @@ Or with wxPython dependencies::
 
     pip install etsdemo[wx]
 
-To install additional test dependencies::
+To install with additional test dependencies::
 
     pip install etsdemo[test]
 
