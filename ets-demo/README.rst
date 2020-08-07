@@ -8,6 +8,30 @@ packages can be used.
 
 The actual demonstration materials are not provided by this package.
 
+Installation
+------------
+
+The application requires a GUI backend to run, and a few options are supported.
+
+To install from PyPI with PySide2 dependencies::
+
+    $ pip install etsdemo[pyside2]
+
+Or with PyQt5 dependencies::
+
+    $ pip install etsdemo[pyqt5]
+
+Or with wxPython dependencies::
+
+    $ pip install etsdemo[wx]
+
+(Warning: The application currently suffers from a few major issues with the
+wxPython backend.)
+
+To install with additional test dependencies::
+
+    $ pip install etsdemo[test]
+
 How to run
 ----------
 
