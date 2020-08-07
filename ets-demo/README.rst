@@ -15,19 +15,19 @@ The application requires a GUI backend to run, and a few options are supported.
 
 To install from PyPI with PySide2 dependencies::
 
-    pip install etsdemo[pyside2]
+    $ pip install etsdemo[pyside2]
 
 Or with PyQt5 dependencies::
 
-    pip install etsdemo[pyqt5]
+    $ pip install etsdemo[pyqt5]
 
 Or with wxPython dependencies::
 
-    pip install etsdemo[wx]
+    $ pip install etsdemo[wx]
 
 To install with additional test dependencies::
 
-    pip install etsdemo[test]
+    $ pip install etsdemo[test]
 
 How to run
 ----------
