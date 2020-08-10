@@ -117,11 +117,15 @@ class TestDemoImageFile(unittest.TestCase):
 
             # when
             image_node.init()
+            tree = ET.fromstring(image_node.description)
 
-            # then
-            # The path may have been normalized by docutils to confirm to file
-            # URI. That is desirable but difficult to test.
-            self.assertIn("<img ", image_node.description)
+        # then
+        # The image path should be either a fully specified absolute path
+        # following the file scheme, or a file name relative to the
+        # base_url given to the HTML editor.
+        img_xml = next(tree.iter(get_html_tag("img")))
+        self.assertEqual(img_xml.attrib["src"], basename)
+        self.assertEqual(image_node.base_url, dirname)
 
 
 class TestDemoPathDescription(unittest.TestCase):

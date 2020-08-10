@@ -517,7 +517,7 @@ class DemoImageFile(DemoFileBase):
 
     def init(self):
         super(DemoImageFile, self).init()
-        rst_content = ".. image:: {}".format(self.path)
+        rst_content = ".. image:: {}".format(self.name)
         self.description = publish_html_str(rst_content, self.css_filename)
 
 
