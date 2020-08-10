@@ -18,6 +18,7 @@ from traitsui.api import Handler, UI, UIInfo
 
 from etsdemo.app import (
     Demo,
+    DemoImageFile,
     DemoPath,
     DemoVirtualDirectory,
     extract_docstring_from_source,
@@ -104,6 +105,22 @@ class TestDemo(unittest.TestCase):
 
         # then
         self.assertIsNone(demo.selected_node)
+
+
+class TestDemoImageFile(unittest.TestCase):
+
+    def test_description_contains_file_uri(self):
+        with tempfile.NamedTemporaryFile() as file_obj:
+            dirname, basename = os.path.split(file_obj.name)
+            parent = DemoPath(name=dirname)
+            image_node = DemoImageFile(parent=parent, name=basename)
+
+            # when
+            image_node.init()
+
+            # then
+            self.assertIn(basename, image_node.description)
+            self.assertIn("<img ", image_node.description)
 
 
 class TestDemoPathDescription(unittest.TestCase):

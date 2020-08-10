@@ -505,18 +505,6 @@ class DemoFile(DemoFileBase):
         return None
 
 
-# HTML template for displaying an image file:
-_image_template = """<html>
-<head>
-<link rel="stylesheet" type="text/css" href="{}">
-</head>
-<body>
-<img src="{}">
-</body>
-</html>
-"""
-
-
 class DemoContentFile(DemoFileBase):
 
     def init(self):
@@ -529,7 +517,8 @@ class DemoImageFile(DemoFileBase):
 
     def init(self):
         super(DemoImageFile, self).init()
-        self.description = _image_template.format(self.css_filename, self.path)
+        rst_content = ".. image:: {}".format(self.path)
+        self.description = publish_html_str(rst_content, self.css_filename)
 
 
 class DemoPath(DemoTreeNodeObject):
