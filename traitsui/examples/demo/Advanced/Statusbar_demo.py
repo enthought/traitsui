@@ -11,8 +11,8 @@ the object attribute that will contain the statusbar information.
 
 In this example, there are two statusbar fields:
 
- - The current length of the text input data (variable width)
- - The current time (fixed width, updated once per second).
+- The current length of the text input data (variable width)
+- The current time (fixed width, updated once per second).
 
 Note the use of a timer thread to update the status bar once per second.
 

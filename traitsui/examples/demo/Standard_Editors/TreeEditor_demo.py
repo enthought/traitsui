@@ -6,13 +6,10 @@ structure.
 
 In this case, the tree has the following hierarchy:
 
-  - Partner
-
-    - Company
-
-      - Department
-
-        - Employee
+- Partner
+ - Company
+  - Department
+   - Employee
 
 The TreeEditor generates a hierarchical tree control, consisting of nodes. It
 is useful for cases where objects contain lists of other objects.

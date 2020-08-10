@@ -16,43 +16,43 @@ relative to the table editor. See the Traits UI User Manual for details.
 
 This example defines three classes:
 
- - *Person*: A single person.
- - *MarriedPerson*: A married person (subclass of Person).
- - *Report*: Defines a report based on a list of single and married people.
+- *Person*: A single person.
+- *MarriedPerson*: A married person (subclass of Person).
+- *Report*: Defines a report based on a list of single and married people.
 
 It creates a tabular display of 10,000 single and married people showing the
 following information:
 
- - Name of the person.
- - Age of the person.
- - The person's address.
- - The name of the person's spouse (if any).
+- Name of the person.
+- Age of the person.
+- The person's address.
+- The name of the person's spouse (if any).
 
 In addition:
 
- - It uses a Courier 10 point font for each line in the table.
- - It displays age column right, instead of left, justified.
- - If the person is a minor (age < 18) and married, it displays a red flag
-   image in the age column.
- - If the person is married, it makes the background color for that row a light
-   blue.
+- It uses a Courier 10 point font for each line in the table.
+- It displays age column right, instead of left, justified.
+- If the person is a minor (age < 18) and married, it displays a red flag
+  image in the age column.
+- If the person is married, it makes the background color for that row a light
+  blue.
 
- - If this demo is running under QT, it displays each person's surname
-   in a row label.
+- If this demo is running under QT, it displays each person's surname
+in a row label.
 
 This example demonstrates:
 
- - How to set up a *TabularEditor*.
- - The display speed of the *TabularEditor*.
- - How to create a *TabularAdapter* that meets each of the specified display
-   requirements.
+- How to set up a *TabularEditor*.
+- The display speed of the *TabularEditor*.
+- How to create a *TabularAdapter* that meets each of the specified display
+requirements.
 
 Additional notes:
 
- - You can change the current selection using the up and down arrow keys.
- - If the demo is running under WX, you can move a selected row up and down in
-   the table using the left and right arrow keys.
- - If the demo is running under QT, you can move rows by clicking and dragging.
+- You can change the current selection using the up and down arrow keys.
+- If the demo is running under WX, you can move a selected row up and down in
+  the table using the left and right arrow keys.
+- If the demo is running under QT, you can move rows by clicking and dragging.
 
 Hopefully, this simple example conveys some of the power and flexibility that
 the :py:class:`TabularAdapter` class provides you. But, just in case it

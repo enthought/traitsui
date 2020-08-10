@@ -10,14 +10,14 @@ tuples.
 
 An Enum can be displayed / edited in one of five styles:
 
-  * 'simple' displays a drop-down list of allowed values
-  * 'custom' by default, displays one or more columns of radio buttons (only
-    one of which is selected at a time).
-  * 'custom' in 'list' mode (see source code below), displays a list of all the
-    allowed values at once.
-  * 'readonly' displays the current value as non-editable text.
-  * 'text' displays the current value as text. You can also edit this text,
-    but your text must be in the list of allowed values.
+* 'simple' displays a drop-down list of allowed values
+* 'custom' by default, displays one or more columns of radio buttons (only
+  one of which is selected at a time).
+* 'custom' in 'list' mode (see source code below), displays a list of all the
+  allowed values at once.
+* 'readonly' displays the current value as non-editable text.
+* 'text' displays the current value as text. You can also edit this text,
+  but your text must be in the list of allowed values.
 
 """
 

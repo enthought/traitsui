@@ -6,12 +6,10 @@ The TextEditor displays a Str, Password, or Int trait for the user to edit.
 The demo shows all styles of the editor for each of the traits, however certain
 styles are more useful than others:
 
-  - When editing a Str, consider styles 'simple' (one-line), 'custom'
-    (multi-line), or 'readonly' (multi-line).
-
-  - When editing a Password, style 'simple' is recommended (shows asterisks).
-
-  - When editing an Int, consider styles 'simple' and 'readonly'.
+- When editing a Str, consider styles 'simple' (one-line), 'custom'
+  (multi-line), or 'readonly' (multi-line).
+- When editing a Password, style 'simple' is recommended (shows asterisks).
+- When editing an Int, consider styles 'simple' and 'readonly'.
 
 """
 

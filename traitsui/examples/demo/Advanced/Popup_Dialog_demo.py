@@ -14,17 +14,19 @@ value. If you click anywhere else outside of the pop-up dialog, the pop-up
 dialog will simply disappear, leaving the person's new gender value as is.
 
 The main items of interest in this demo are:
- - The: kind = 'popup' trait set in the PersonHandler View which marks the view
-   as being a popup view.
- - The parent = info.gender.control value passed to the edit_traits method
-   when the popup dialog is created in the object_gender_changed method. This
-   value specifies the control that the popup dialog should be positioned near.
+
+- The: kind = 'popup' trait set in the PersonHandler View which marks the view
+  as being a popup view.
+- The parent = info.gender.control value passed to the edit_traits method
+  when the popup dialog is created in the object_gender_changed method. This
+  value specifies the control that the popup dialog should be positioned near.
 
 Notes:
- - Traits UI will automatically position the popup dialog near the specified
-   control in such a way that the pop-up dialog will not overlay the control
-   and will be entirely on the screen (as long as these two conditions do not
-   conflict).
+
+- Traits UI will automatically position the popup dialog near the specified
+  control in such a way that the pop-up dialog will not overlay the control
+  and will be entirely on the screen (as long as these two conditions do not
+  conflict).
 """
 
 #-- Imports --------------------------------------------------------------

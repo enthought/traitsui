@@ -12,9 +12,8 @@ would separate these.
 
 A few key points:
 
-     - the Controller itself accesses the model as self.model
-
-     - the Controller's View can access model traits directly ('myname')
+- the Controller itself accesses the model as self.model
+- the Controller's View can access model traits directly ('myname')
 """
 
 from traits.api import HasTraits, Str, Bool, TraitError

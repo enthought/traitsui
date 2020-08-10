@@ -13,9 +13,9 @@ limits would often be calculated from other user input or model data.
 
 The demo is divided into three tabs:
 
- * A dynamic range using a simple slider.
- * A dynamic range using a large-range slider.
- * A dynamic range using a spinner.
+* A dynamic range using a simple slider.
+* A dynamic range using a large-range slider.
+* A dynamic range using a spinner.
 
 In each section of the demo, the top-most 'value' trait can have its range
 end points changed dynamically by modifying the 'low' and 'high' sliders

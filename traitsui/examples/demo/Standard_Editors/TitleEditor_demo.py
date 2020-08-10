@@ -10,14 +10,14 @@ the view.
 
 This demonstration shows three variations of using a TitleEditor:
 
- * In the first example, the TitleEditor values are supplied by an Enum trait.
-   Simply select a new value for the title from the drop-down list to cause the
-   title to change.
- * In the second example, the TitleEditor values are supplied by a Str trait.
-   Simply type a new value into the title field to cause the title to change.
- * In the third example, the TitleEditor values are supplied by a Property
-   whose value is derived from a calculation on a Float trait. Type a number
-   into the value field to cause the title to changed.
+* In the first example, the TitleEditor values are supplied by an Enum trait.
+  Simply select a new value for the title from the drop-down list to cause the
+  title to change.
+* In the second example, the TitleEditor values are supplied by a Str trait.
+  Simply type a new value into the title field to cause the title to change.
+* In the third example, the TitleEditor values are supplied by a Property
+  whose value is derived from a calculation on a Float trait. Type a number
+  into the value field to cause the title to changed.
 """
 
 from traits.api import HasTraits, Enum, Str, Float, Property, cached_property
