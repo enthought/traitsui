@@ -56,7 +56,29 @@ def multi_select_selected_color_view():
 
 
 @requires_toolkit([ToolkitName.qt])
+class TestDateEditorSimpleQt(unittest.TestCase):
+
+    def test_simple_editor_date_none(self):
+        # Test view when the date is None
+        view = View(
+            Item(
+                name="single_date",
+                style="simple",
+            )
+        )
+        model = Foo()
+        model.single_date = None
+        with reraise_exceptions(), \
+                create_ui(model, dict(view=view)) as ui:
+            editor, = ui.get_editors("single_date")
+            displayed_text = editor.control.lineEdit().displayText()
+            self.assertEqual(displayed_text, "")
+
+
+@requires_toolkit([ToolkitName.qt])
 class TestDateEditorCustomQt(unittest.TestCase):
+    """ Test for Qt Custom DateEditor."""
+
     def test_single_select_qt4(self):
         with self.launch_editor(single_select_custom_view) as (foo, editor):
             date = datetime.date(2018, 2, 3)
