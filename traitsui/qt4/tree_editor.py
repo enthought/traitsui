@@ -17,7 +17,7 @@
 
 
 import copy
-import collections
+import collections.abc
 from itertools import zip_longest
 import logging
 
