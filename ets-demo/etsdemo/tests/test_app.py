@@ -119,7 +119,8 @@ class TestDemoImageFile(unittest.TestCase):
             image_node.init()
 
             # then
-            self.assertIn(basename, image_node.description)
+            # The path may have been normalized by docutils to confirm to file
+            # URI. That is desirable but difficult to test.
             self.assertIn("<img ", image_node.description)
 
 
