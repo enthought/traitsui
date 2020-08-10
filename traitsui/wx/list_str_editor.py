@@ -556,7 +556,10 @@ class _ListStrEditor(Editor):
     def _right_clicked(self, event):
         """ Handles an item being right clicked.
         """
-        self.right_clicked_index = index = event.GetIndex()
+        index = event.GetIndex()
+        if index == -1:
+            return
+        self.right_clicked_index = index
         self.right_clicked = self.adapter.get_item(
             self.object, self.name, index
         )
