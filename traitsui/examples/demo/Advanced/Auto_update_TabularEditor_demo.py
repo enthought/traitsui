@@ -13,11 +13,12 @@ which allows the tabular editor to automatically update itself when the content
 of any object in the list associated with the editor is modified.
 
 To interact with the demo:
-  - Select an employee from the list.
-  - Adjust their salary increase.
-  - Click the **Give raise** button.
-  - Observe that the table automatically updates to reflect the employees new
-    salary.
+
+- Select an employee from the list.
+- Adjust their salary increase.
+- Click the **Give raise** button.
+- Observe that the table automatically updates to reflect the employees new
+salary.
 
 In order for auto-update to work correctly, the editor trait should be a list
 of objects derived from HasTraits. Also, performance can be affected when very

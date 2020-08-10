@@ -25,15 +25,15 @@ If the list of 'titles' is empty, no column headers will be displayed.
 If the number of column headers is less than the number of array columns, then
 there are two cases:
 
-    - If (number of array_columns) % (number of titles) == 0, then the titles
-      are used to construct a series of repeating column headers with increasing
-      subscripts (e.g. an (n x 6) array with titles of ['x','y','z'] would
-      result in column headers of: 'x0', 'y0', 'z0', 'x1', 'y1', 'z1').
+- If (number of array_columns) % (number of titles) == 0, then the titles
+  are used to construct a series of repeating column headers with increasing
+  subscripts (e.g. an (n x 6) array with titles of ['x','y','z'] would
+  result in column headers of: 'x0', 'y0', 'z0', 'x1', 'y1', 'z1').
 
-    - In all other cases the titles are used as the column headers for the
-      first set of columns, and the remaining column headers are set to the
-      empty string (e.g. an (n x 5) array with titles of ['x','y','z'] would
-      result in column headers of: 'x', 'y', 'z', '', '').
+- In all other cases the titles are used as the column headers for the
+  first set of columns, and the remaining column headers are set to the
+  empty string (e.g. an (n x 5) array with titles of ['x','y','z'] would
+  result in column headers of: 'x', 'y', 'z', '', '').
 
 Setting 'transpose' to True will logically transpose the input array (e.g. an
 (3 x n) array will be displayed as an (n x 3) array).

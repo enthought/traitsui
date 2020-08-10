@@ -13,11 +13,11 @@ across the top line of the view.
 You specify the root directory to search for files in using the 'Path' field.
 You can either:
 
-  - Type in a directory name.
-  - Click the '...' button and select a directory from the drop-down tree view
-    that is displayed.
-  - Click on the directory name drop-down to display a history list of the 10
-    most recently visited directories, and select a directory from the list.
+- Type in a directory name.
+- Click the '...' button and select a directory from the drop-down tree view
+  that is displayed.
+- Click on the directory name drop-down to display a history list of the 10
+  most recently visited directories, and select a directory from the list.
 
 You can specify whether sub-directories should be included or not by toggling
 the 'Recursive' checkbox on or off.
@@ -39,17 +39,17 @@ You can specify whether the search is case sensitive or not by toggling the
 The results of the search are displayed in a table below the input fields.
 The table contains four columns:
 
-  - #: The number of lines matching the search string in the file.
-  - Matches: A list of all lines containing search string matches in the file.
-    Normally, only the first match is displayed, but you can click on this
-    field to display the entire list of matches (the table row will expand and a
-    CodeEditor will be displayed showing the complete list of matching source
-    code file lines). You can click on or cursor to lines in the code editor to
-    display the corresponding source code line in context in the code editor
-    that appears at the bottom of the view.
-  - Name: Displays the base name of the source file with no path information.
-  - Path: Displays the portion of the source file path not included in the
-    the root directory being used for the search.
+- #: The number of lines matching the search string in the file.
+- Matches: A list of all lines containing search string matches in the file.
+  Normally, only the first match is displayed, but you can click on this
+  field to display the entire list of matches (the table row will expand and a
+  CodeEditor will be displayed showing the complete list of matching source
+  code file lines). You can click on or cursor to lines in the code editor to
+  display the corresponding source code line in context in the code editor
+  that appears at the bottom of the view.
+- Name: Displays the base name of the source file with no path information.
+- Path: Displays the portion of the source file path not included in the
+  the root directory being used for the search.
 
 Selecting a line in the table editor will display the contents of the
 corresponding source file in the Code Editor displayed at the bottom of the
@@ -65,13 +65,12 @@ You can also exit the 'Matches' code editor by pressing the Escape key.
 
 Finally:
 
-  - You can click and drag the little circle to the right of the currently
-    selected file to drag and drop the file. This can be useful, for example, to
-    drag and drop the file into your favorite text editor.
-
-  - Similarly, you can also drag the contents of the 'Name' column into your
-    favorite text editor to edit the file corresponding to that line in the
-    table.
+- You can click and drag the little circle to the right of the currently
+  selected file to drag and drop the file. This can be useful, for example, to
+  drag and drop the file into your favorite text editor.
+- Similarly, you can also drag the contents of the 'Name' column into your
+  favorite text editor to edit the file corresponding to that line in the
+  table.
 """
 
 #-- Imports --------------------------------------------------------------
