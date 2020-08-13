@@ -116,6 +116,8 @@ source_dependencies = {
 }
 
 # Additional toolkit-independent dependencies for demo testing
+# This should correspond to the "examples" dependencies in extras_requires but
+# the following names are used by EDM.
 test_dependencies = {
     "apptools",
     "chaco",
