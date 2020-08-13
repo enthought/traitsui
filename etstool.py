@@ -122,6 +122,7 @@ test_dependencies = {
     "apptools",
     "chaco",
     "h5py",
+    "pandas",
     "pytables",
 }
 
