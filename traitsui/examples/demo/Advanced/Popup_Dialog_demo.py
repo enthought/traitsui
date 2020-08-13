@@ -2,6 +2,8 @@
 #  License: BSD Style.
 
 """
+Note: This demo only works on the wx backend.
+
 Demonstrates using a popup view within another view.
 
 Try changing the gender of the person from 'Male' to 'Female' using the
