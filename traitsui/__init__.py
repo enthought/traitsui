@@ -37,6 +37,7 @@ __extras_require__ = {
         "chaco",   # for a very simple example, see enthought/traitsui#1139
         "h5py",
         "numpy",
+        "pandas",
         "tables",
     ],
     "test": ["packaging"],
