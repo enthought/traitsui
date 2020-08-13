@@ -8,6 +8,7 @@ from traitsui.editors.date_editor import CellFormat
 
 from traitsui.tests._tools import (
     create_ui,
+    process_cascade_events,
     requires_toolkit,
     reraise_exceptions,
     ToolkitName,
@@ -71,6 +72,7 @@ class TestDateEditorSimpleQt(unittest.TestCase):
         with reraise_exceptions(), \
                 create_ui(model, dict(view=view)) as ui:
             editor, = ui.get_editors("single_date")
+            process_cascade_events()
             displayed_text = editor.control.lineEdit().displayText()
             self.assertEqual(displayed_text, "")
 
