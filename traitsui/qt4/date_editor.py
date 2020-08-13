@@ -22,6 +22,7 @@
 
 import datetime
 
+from pyface.api import GUI
 from pyface.qt import QtCore, QtGui
 from traits.api import Bool, Date, Dict, Instance, Set
 
@@ -76,6 +77,8 @@ class SimpleEditor(Editor):
             self.control.setMaximumDate(max_date)
 
         self.control.dateChanged.connect(self.update_object)
+        GUI.invoke_later(self.update_editor)
+ 
 
     def dispose(self):
         """ Disposes of the contents of an editor."""
@@ -91,6 +94,8 @@ class SimpleEditor(Editor):
         if value:
             q_date = QtCore.QDate(value.year, value.month, value.day)
             self.control.setDate(q_date)
+        else:  # value is None
+            self.control.lineEdit().setText("")
 
     def update_object(self, q_date):
         """ Handles the user entering input data in the edit control.
