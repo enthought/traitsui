@@ -84,7 +84,7 @@ class SettableCachedProperty(HasTraits):
         Item('c'),
         '_',
         Item('d',
-             editor=RangeEditor(low=1, high=400, mode='slider')),
+             editor=RangeEditor(low=1, high=400, mode='slider'), style='readonly'),
         Item('d'),
         width=0.3
     )
