@@ -74,6 +74,27 @@ class TestDateEditorSimpleQt(unittest.TestCase):
             displayed_text = editor.control.lineEdit().displayText()
             self.assertEqual(displayed_text, "")
 
+    def test_simple_editor_date_changed_to_none(self):
+        # Test view when the date is changed from a valid date to None
+        view = View(
+            Item(
+                name="single_date",
+                style="simple",
+            )
+        )
+        model = Foo()
+        model.single_date = datetime.date(2019, 2, 1)
+        with reraise_exceptions(), \
+                create_ui(model, dict(view=view)) as ui:
+            editor, = ui.get_editors("single_date")
+            displayed_text = editor.control.lineEdit().displayText()
+            self.assertNotEqual(displayed_text, "")
+
+            # change value to None
+            model.single_date = None
+            displayed_text = editor.control.lineEdit().displayText()
+            self.assertEqual(displayed_text, "")
+
 
 @requires_toolkit([ToolkitName.qt])
 class TestDateEditorCustomQt(unittest.TestCase):
