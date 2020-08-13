@@ -27,7 +27,10 @@ __extras_require__ = {
     "pyqt": ["pyqt>=4.10", "pygments"],
     "pyqt5": ["pyqt5", "pygments"],
     "pyside2": ["pyside2", "shiboken2", "pygments"],
-    "demo": ["configobj", "docutils"],
+    "demo": [
+        # to be deprecated, see enthought/traitsui#950
+        "configobj", "docutils",
+    ],
     "examples": [
         # Dependencies for examples
         "apptools",
