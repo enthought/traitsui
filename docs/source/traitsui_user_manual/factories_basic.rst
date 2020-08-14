@@ -561,6 +561,8 @@ tags, and then strips out the tags.
                               'Low'     : '4:Low',
                               'Lowest'  : '5:Lowest', })))
 
+    EnumExample().configure_traits()
+
 The enumeration editor strips the characters up to and including the colon. It
 assumes that all the items have the colon in the same position; therefore, if
 some of your tags have multiple digits, you should use zeros to pad the items
