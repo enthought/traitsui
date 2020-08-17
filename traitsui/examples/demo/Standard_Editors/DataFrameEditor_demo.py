@@ -11,6 +11,8 @@
   missing.
 
 -------------------------------------------------------------------------------
+
+To run this demonstration successfully, you must have **pandas** installed.
 """
 # Issue related to the demo warning: enthought/traitsui#944
 

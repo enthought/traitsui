@@ -12,6 +12,9 @@
 """
 This demo illustrates use of TreeNodeRenderers for displaying more complex
 contents inside the cells of a TreeEditor.
+
+To run this demonstration successfully, you must have **NumPy**
+(``numpy``) installed.
 """
 
 from random import choice, uniform
