@@ -2,8 +2,6 @@
 #  License: BSD Style.
 
 """
-Note: This demo only works on the wx backend.
-
 Demonstrates using a popup view within another view.
 
 Try changing the gender of the person from 'Male' to 'Female' using the
@@ -24,7 +22,7 @@ The main items of interest in this demo are:
   value specifies the control that the popup dialog should be positioned near.
 
 Notes:
-
+- This demo only works on the wx backend.
 - Traits UI will automatically position the popup dialog near the specified
   control in such a way that the pop-up dialog will not overlay the control
   and will be entirely on the screen (as long as these two conditions do not
