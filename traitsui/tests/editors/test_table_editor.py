@@ -500,12 +500,12 @@ class TestTableEditor(unittest.TestCase):
         )
         tester = UITester()
         with tester.create_ui(object_list, dict(view=view)) as ui:
-            interactor = tester.find_by_name(ui, "values")
+            wrapper = tester.find_by_name(ui, "values")
 
-            interactor.locate(Cell(5, 0)).perform(MouseClick())
+            wrapper.locate(Cell(5, 0)).perform(MouseClick())
             self.assertEqual(object_list.selected.value, str(5 ** 2))
 
-            interactor.locate(Cell(6, 0)).perform(MouseClick())
+            wrapper.locate(Cell(6, 0)).perform(MouseClick())
             self.assertEqual(object_list.selected.value, str(6 ** 2))
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -530,19 +530,19 @@ class TestTableEditor(unittest.TestCase):
         )
         tester = UITester()
         with tester.create_ui(object_list, dict(view=view)) as ui:
-            interactor = tester.find_by_name(ui, "values").locate(Cell(5, 0))
-            interactor.perform(MouseClick())             # activate edit mode
-            interactor.perform(KeySequence("abc"))
+            wrapper = tester.find_by_name(ui, "values").locate(Cell(5, 0))
+            wrapper.perform(MouseClick())             # activate edit mode
+            wrapper.perform(KeySequence("abc"))
             self.assertEqual(object_list.selected.value, "abc")
 
             # second column refers to an Int type
             original = object_list.selected.other_value
-            interactor = tester.find_by_name(ui, "values").locate(Cell(5, 1))
-            interactor.perform(MouseClick())
-            interactor.perform(KeySequence("abc"))       # invalid
+            wrapper = tester.find_by_name(ui, "values").locate(Cell(5, 1))
+            wrapper.perform(MouseClick())
+            wrapper.perform(KeySequence("abc"))       # invalid
             self.assertEqual(object_list.selected.other_value, original)
 
-            interactor.perform(KeySequence("\b\b\b12"))  # now ok
+            wrapper.perform(KeySequence("\b\b\b12"))  # now ok
             self.assertEqual(object_list.selected.other_value, 12)
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -552,14 +552,14 @@ class TestTableEditor(unittest.TestCase):
         )
         tester = UITester()
         with tester.create_ui(object_list, dict(view=select_row_view)) as ui:
-            interactor = tester.find_by_name(ui, "values").locate(Cell(0, 1))
+            wrapper = tester.find_by_name(ui, "values").locate(Cell(0, 1))
 
-            actual = interactor.inspect(DisplayedText())
+            actual = wrapper.inspect(DisplayedText())
             self.assertEqual(actual, "0")
 
             object_list.values[0].other_value = 123
 
-            actual = interactor.inspect(DisplayedText())
+            actual = wrapper.inspect(DisplayedText())
             self.assertEqual(actual, "123")
 
     @requires_toolkit([ToolkitName.qt])

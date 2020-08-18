@@ -15,9 +15,9 @@ class _IndexedListEditor:
         self.index = index
 
     @classmethod
-    def from_location(cls, interactor, location):
+    def from_location(cls, wrapper, location):
         return cls(
-            editor=interactor.editor,
+            editor=wrapper.editor,
             index=location.index,
         )
 
@@ -31,8 +31,8 @@ class _IndexedListEditor:
         registry.register(
             target_class=cls,
             interaction_class=command.MouseClick,
-            handler=lambda interactor, _: (
-                interactor.editor.mouse_click(delay=interactor.delay)
+            handler=lambda wrapper, _: (
+                wrapper.editor.mouse_click(delay=wrapper.delay)
             )
         )
 
@@ -54,9 +54,9 @@ class _IndexedRadioEditor:
         self.index = index
 
     @classmethod
-    def from_location(cls, interactor, location):
+    def from_location(cls, wrapper, location):
         return cls(
-            editor=interactor.editor,
+            editor=wrapper.editor,
             index=location.index,
         )
 
@@ -70,8 +70,8 @@ class _IndexedRadioEditor:
         registry.register(
             target_class=cls,
             interaction_class=command.MouseClick,
-            handler=lambda interactor, _: interactor.editor.mouse_click(
-                delay=interactor.delay,
+            handler=lambda wrapper, _: wrapper.editor.mouse_click(
+                delay=wrapper.delay,
             ),
         )
 
@@ -99,15 +99,15 @@ class _IndexedSimpleEditor:
         registry.register(
             target_class=cls,
             interaction_class=command.MouseClick,
-            handler=lambda interactor, _: interactor.editor.mouse_click(
-                delay=interactor.delay,
+            handler=lambda wrapper, _: wrapper.editor.mouse_click(
+                delay=wrapper.delay,
             ),
         )
 
     @classmethod
-    def from_location(cls, interactor, location):
+    def from_location(cls, wrapper, location):
         return cls(
-            editor=interactor.editor,
+            editor=wrapper.editor,
             index=location.index,
         )
 

@@ -37,13 +37,13 @@ class TestInteractorAction(unittest.TestCase):
         handler = mock.Mock()
         button = wx.Button(self.frame)
         button.Bind(wx.EVT_BUTTON, handler)
-        interactor = UIWrapper(
+        wrapper = UIWrapper(
             editor=button,
             registries=[default_registry.get_default_registry()],
         )
 
         # when
-        interactor.perform(command.MouseClick())
+        wrapper.perform(command.MouseClick())
 
         # then
         self.assertEqual(handler.call_count, 1)
@@ -53,13 +53,13 @@ class TestInteractorAction(unittest.TestCase):
         button = wx.Button(self.frame)
         button.Bind(wx.EVT_BUTTON, handler)
         button.Enable(False)
-        interactor = UIWrapper(
+        wrapper = UIWrapper(
             editor=button,
             registries=[default_registry.get_default_registry()],
         )
 
         # when
-        interactor.perform(command.MouseClick())
+        wrapper.perform(command.MouseClick())
 
         # then
         self.assertEqual(handler.call_count, 0)

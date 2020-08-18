@@ -1,13 +1,13 @@
 from traitsui.testing import locator
 
 
-def find_by_id_in_nested_ui(interactor, location):
-    new_interactor = interactor.locate(locator.NestedUI())
+def find_by_id_in_nested_ui(wrapper, location):
+    new_interactor = wrapper.locate(locator.NestedUI())
     return new_interactor.find_by_id(location.id).editor
 
 
-def find_by_name_in_nested_ui(interactor, location):
-    new_interactor = interactor.locate(locator.NestedUI())
+def find_by_name_in_nested_ui(wrapper, location):
+    new_interactor = wrapper.locate(locator.NestedUI())
     return new_interactor.find_by_name(location.name).editor
 
 

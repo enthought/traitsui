@@ -31,12 +31,12 @@ class TestInteractorAction(unittest.TestCase):
         click_slot = mock.Mock()
         button.clicked.connect(click_slot)
 
-        interactor = interactor = UIWrapper(
+        wrapper = wrapper = UIWrapper(
             editor=button,
             registries=[default_registry.get_default_registry()],
         )
 
-        interactor.perform(command.MouseClick())
+        wrapper.perform(command.MouseClick())
 
         self.assertEqual(click_slot.call_count, 1)
 
@@ -47,7 +47,7 @@ class TestInteractorAction(unittest.TestCase):
         click_slot = mock.Mock()
         button.clicked.connect(click_slot)
 
-        interactor = interactor = UIWrapper(
+        wrapper = wrapper = UIWrapper(
             editor=button,
             registries=[default_registry.get_default_registry()],
         )
@@ -55,7 +55,7 @@ class TestInteractorAction(unittest.TestCase):
         # when
         # clicking won't fail, it just does not do anything.
         # This is consistent with the actual UI.
-        interactor.perform(command.MouseClick())
+        wrapper.perform(command.MouseClick())
 
         # then
         self.assertEqual(click_slot.call_count, 0)
@@ -64,11 +64,11 @@ class TestInteractorAction(unittest.TestCase):
         textbox = QtGui.QLineEdit()
         change_slot = mock.Mock()
         textbox.textEdited.connect(change_slot)
-        interactor = create_interactor(editor=textbox)
+        wrapper = create_interactor(editor=textbox)
 
         # when
         default_registry.key_sequence_qwidget(
-            interactor, command.KeySequence("abc"))
+            wrapper, command.KeySequence("abc"))
 
         # then
         self.assertEqual(textbox.text(), "abc")
@@ -78,28 +78,28 @@ class TestInteractorAction(unittest.TestCase):
     def test_key_sequence_disabled(self):
         textbox = QtGui.QLineEdit()
         textbox.setEnabled(False)
-        interactor = create_interactor(editor=textbox)
+        wrapper = create_interactor(editor=textbox)
 
         # then
         # this will fail, because one should not be allowed to set
         # cursor on the widget to type anything
         with self.assertRaises(Disabled):
             default_registry.key_sequence_qwidget(
-                interactor, command.KeySequence("abc"))
+                wrapper, command.KeySequence("abc"))
 
     def test_key_press(self):
         textbox = QtGui.QLineEdit()
         change_slot = mock.Mock()
         textbox.editingFinished.connect(change_slot)
-        interactor = create_interactor(editor=textbox)
+        wrapper = create_interactor(editor=textbox)
 
         # sanity check
         default_registry.key_sequence_qwidget(
-            interactor, command.KeySequence("abc"))
+            wrapper, command.KeySequence("abc"))
         self.assertEqual(change_slot.call_count, 0)
 
         default_registry.key_press_qwidget(
-            interactor, command.KeyClick("Enter"))
+            wrapper, command.KeyClick("Enter"))
         self.assertEqual(change_slot.call_count, 1)
 
     def test_key_press_disabled(self):
@@ -107,11 +107,11 @@ class TestInteractorAction(unittest.TestCase):
         textbox.setEnabled(False)
         change_slot = mock.Mock()
         textbox.editingFinished.connect(change_slot)
-        interactor = create_interactor(editor=textbox)
+        wrapper = create_interactor(editor=textbox)
 
         with self.assertRaises(Disabled):
             default_registry.key_press_qwidget(
-                interactor, command.KeyClick("Enter"))
+                wrapper, command.KeyClick("Enter"))
         self.assertEqual(change_slot.call_count, 0)
 
     def test_mouse_click_combobox(self):

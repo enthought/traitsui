@@ -11,7 +11,7 @@ class Disabled(SimulationError):
 
 
 class ActionNotSupported(SimulationError):
-    """ Raised when an action is not supported by an interactor.
+    """ Raised when an action is not supported by an wrapper.
     """
 
     def __init__(self, target_class, interaction_class, supported):

@@ -11,9 +11,9 @@ class _SimpleEditorWithTreeNode:
         self.node = node
 
     @classmethod
-    def from_location(cls, interactor, location):
+    def from_location(cls, wrapper, location):
         return cls(
-            editor=interactor.editor,
+            editor=wrapper.editor,
             node=location,
         )
 
@@ -27,38 +27,38 @@ class _SimpleEditorWithTreeNode:
         registry.register(
             target_class=cls,
             interaction_class=command.MouseClick,
-            handler=lambda interactor, _: interactor.editor._mouse_click(
-                delay=interactor.delay,
+            handler=lambda wrapper, _: wrapper.editor._mouse_click(
+                delay=wrapper.delay,
             ),
         )
         registry.register(
             target_class=cls,
             interaction_class=command.MouseDClick,
-            handler=lambda interactor, _: interactor.editor._mouse_dclick(
-                delay=interactor.delay,
+            handler=lambda wrapper, _: wrapper.editor._mouse_dclick(
+                delay=wrapper.delay,
             ),
         )
         registry.register(
             target_class=cls,
             interaction_class=command.KeySequence,
-            handler=lambda interactor, action: interactor.editor._key_sequence(
+            handler=lambda wrapper, action: wrapper.editor._key_sequence(
                 sequence=action.sequence,
-                delay=interactor.delay,
+                delay=wrapper.delay,
             ),
         )
         registry.register(
             target_class=cls,
             interaction_class=command.KeyClick,
-            handler=lambda interactor, action: interactor.editor._key_press(
+            handler=lambda wrapper, action: wrapper.editor._key_press(
                 key=action.key,
-                delay=interactor.delay,
+                delay=wrapper.delay,
             ),
         )
         registry.register(
             target_class=cls,
             interaction_class=query.DisplayedText,
-            handler=lambda interactor, _: (
-                interactor.editor._get_displayed_text()
+            handler=lambda wrapper, _: (
+                wrapper.editor._get_displayed_text()
             ),
         )
 
@@ -113,7 +113,7 @@ def register(registry):
     registry.register_location_solver(
         target_class=SimpleEditor,
         locator_class=locator.NestedUI,
-        solver=lambda interactor, _: interactor.editor._editor._node_ui,
+        solver=lambda wrapper, _: wrapper.editor._editor._node_ui,
     )
     registry_helper.register_find_by_in_nested_ui(
         registry=registry,

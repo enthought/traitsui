@@ -67,12 +67,12 @@ def _get_editor_by_name(ui, name):
     return editor
 
 
-def _resolve_ui_editor_by_id(interactor, location):
-    return _get_editor_by_id(interactor.editor, location.id)
+def _resolve_ui_editor_by_id(wrapper, location):
+    return _get_editor_by_id(wrapper.editor, location.id)
 
 
-def _resolve_ui_editor_by_name(interactor, location):
-    return _get_editor_by_name(interactor.editor, location.name)
+def _resolve_ui_editor_by_name(wrapper, location):
+    return _get_editor_by_name(wrapper.editor, location.name)
 
 
 def get_ui_registry():
@@ -92,6 +92,6 @@ def get_ui_registry():
     registry.register_location_solver(
         target_class=UI,
         locator_class=locator.NestedUI,
-        solver=lambda interactor, _: interactor.editor,
+        solver=lambda wrapper, _: wrapper.editor,
     )
     return registry

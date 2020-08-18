@@ -28,12 +28,12 @@ from traitsui.testing.wx.implementation import (
 )
 
 
-def resolve_location_simple_editor(interactor, _):
-    return interactor.editor.edit_instance(None)
+def resolve_location_simple_editor(wrapper, _):
+    return wrapper.editor.edit_instance(None)
 
 
-def resolve_location_custom_instance_editor(interactor, _):
-    return interactor.editor._ui
+def resolve_location_custom_instance_editor(wrapper, _):
+    return wrapper.editor._ui
 
 
 def get_default_registry():
@@ -70,38 +70,38 @@ def get_generic_registry():
     registry.register(
         target_class=wx.TextCtrl,
         interaction_class=command.KeyClick,
-        handler=lambda interactor, action: (
+        handler=lambda wrapper, action: (
             helpers.key_press_text_ctrl(
-                control=interactor.editor,
+                control=wrapper.editor,
                 key=action.key,
-                delay=interactor.delay,
+                delay=wrapper.delay,
             )
         ),
     )
     registry.register(
         target_class=wx.TextCtrl,
         interaction_class=command.KeySequence,
-        handler=lambda interactor, action: (
+        handler=lambda wrapper, action: (
             helpers.key_sequence_text_ctrl(
-                control=interactor.editor,
+                control=wrapper.editor,
                 sequence=action.sequence,
-                delay=interactor.delay,
+                delay=wrapper.delay,
             )
         ),
     )
     registry.register(
         target_class=wx.StaticText,
         interaction_class=query.DisplayedText,
-        handler=lambda interactor, action: (
-            interactor.editor.GetLabel()
+        handler=lambda wrapper, action: (
+            wrapper.editor.GetLabel()
         ),
     )
     registry.register(
         target_class=wx.Button,
         interaction_class=command.MouseClick,
-        handler=lambda interactor, _: (
+        handler=lambda wrapper, _: (
             helpers.mouse_click_button(
-                control=interactor.editor, delay=interactor.delay,
+                control=wrapper.editor, delay=wrapper.delay,
             )
         )
     )

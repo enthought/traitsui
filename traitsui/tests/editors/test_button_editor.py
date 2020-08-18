@@ -55,7 +55,7 @@ if is_wx():
         LOCAL_REGISTRY.register(
             target_class=target_class,
             interaction_class=query.DisplayedText,
-            handler=lambda interactor, _: interactor.editor.control.GetLabel(),
+            handler=lambda wrapper, _: wrapper.editor.control.GetLabel(),
         )
 elif is_qt():
     from traitsui.qt4.button_editor import CustomEditor, SimpleEditor
@@ -63,7 +63,7 @@ elif is_qt():
         LOCAL_REGISTRY.register(
             target_class=target_class,
             interaction_class=query.DisplayedText,
-            handler=lambda interactor, _: interactor.editor.control.text(),
+            handler=lambda wrapper, _: wrapper.editor.control.text(),
         )
 
 

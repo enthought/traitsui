@@ -19,11 +19,11 @@ class _IndexedNotebookEditor:
         self.index = index
 
     @classmethod
-    def from_location(cls, interactor, location):
+    def from_location(cls, wrapper, location):
         # Raise IndexError early
-        interactor.editor._uis[location.index]
+        wrapper.editor._uis[location.index]
         return cls(
-            editor=interactor.editor,
+            editor=wrapper.editor,
             index=location.index,
         )
 
@@ -37,7 +37,7 @@ class _IndexedNotebookEditor:
         registry.register_location_solver(
             target_class=cls,
             locator_class=locator.NestedUI,
-            solver=lambda interactor, _: interactor.editor.get_nested_ui(),
+            solver=lambda wrapper, _: wrapper.editor.get_nested_ui(),
         )
         registry_helper.register_find_by_in_nested_ui(
             registry=registry,
@@ -46,8 +46,8 @@ class _IndexedNotebookEditor:
         registry.register(
             target_class=cls,
             interaction_class=command.MouseClick,
-            handler=lambda interactor, _: (
-                interactor.editor.mouse_click(delay=interactor.delay)
+            handler=lambda wrapper, _: (
+                wrapper.editor.mouse_click(delay=wrapper.delay)
             ),
         )
 
@@ -67,9 +67,9 @@ class _IndexedCustomEditor:
         self.index = index
 
     @classmethod
-    def from_location(cls, interactor, location):
+    def from_location(cls, wrapper, location):
         return cls(
-            editor=interactor.editor,
+            editor=wrapper.editor,
             index=location.index,
         )
 
@@ -83,7 +83,7 @@ class _IndexedCustomEditor:
         registry.register_location_solver(
             target_class=cls,
             locator_class=locator.NestedUI,
-            solver=lambda interactor, _: interactor.editor._get_nested_ui(),
+            solver=lambda wrapper, _: wrapper.editor._get_nested_ui(),
         )
         registry_helper.register_find_by_in_nested_ui(
             registry=registry,

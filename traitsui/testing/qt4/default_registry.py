@@ -39,43 +39,43 @@ from traitsui.testing.qt4.implementation import (
 from traitsui.testing.interactor_registry import InteractionRegistry
 
 
-def resolve_location_simple_editor(interactor, location):
-    if interactor.editor._dialog_ui is None:
-        interactor.editor._button.click()
-    return interactor.editor._dialog_ui
+def resolve_location_simple_editor(wrapper, location):
+    if wrapper.editor._dialog_ui is None:
+        wrapper.editor._button.click()
+    return wrapper.editor._dialog_ui
 
 
-def resolve_location_custom_instance_editor(interactor, location):
-    return interactor.editor._ui
+def resolve_location_custom_instance_editor(wrapper, location):
+    return wrapper.editor._ui
 
 
-def resolve_location_range_editor(interactor, location):
+def resolve_location_range_editor(wrapper, location):
     type_to_widget = {
-        locator.WidgetType.slider: interactor.editor.control.slider,
-        locator.WidgetType.textbox: interactor.editor.control.text,
+        locator.WidgetType.slider: wrapper.editor.control.slider,
+        locator.WidgetType.textbox: wrapper.editor.control.text,
     }
     return type_to_widget[location]
 
 
-def key_sequence_qwidget(interactor, action):
-    if not interactor.editor.isEnabled():
-        raise Disabled("{!r} is disabled.".format(interactor.editor))
-    QTest.keyClicks(interactor.editor, action.sequence, delay=interactor.delay)
+def key_sequence_qwidget(wrapper, action):
+    if not wrapper.editor.isEnabled():
+        raise Disabled("{!r} is disabled.".format(wrapper.editor))
+    QTest.keyClicks(wrapper.editor, action.sequence, delay=wrapper.delay)
 
 
-def key_press_qwidget(interactor, action):
-    if not interactor.editor.isEnabled():
-        raise Disabled("{!r} is disabled.".format(interactor.editor))
+def key_press_qwidget(wrapper, action):
+    if not wrapper.editor.isEnabled():
+        raise Disabled("{!r} is disabled.".format(wrapper.editor))
     helpers.key_press(
-        interactor.editor, action.key, delay=interactor.delay
+        wrapper.editor, action.key, delay=wrapper.delay
     )
 
 
-def mouse_click_qwidget(interactor, action):
+def mouse_click_qwidget(wrapper, action):
     QTest.mouseClick(
-        interactor.editor,
+        wrapper.editor,
         QtCore.Qt.LeftButton,
-        delay=interactor.delay,
+        delay=wrapper.delay,
     )
 
 
@@ -160,21 +160,21 @@ def get_generic_registry():
     registry.register(
         target_class=QtGui.QPushButton,
         interaction_class=query.DisplayedText,
-        handler=lambda interactor, _: interactor.editor.text(),
+        handler=lambda wrapper, _: wrapper.editor.text(),
     )
     registry.register(
         target_class=QtGui.QLineEdit,
         interaction_class=query.DisplayedText,
-        handler=lambda interactor, _: interactor.editor.displayText(),
+        handler=lambda wrapper, _: wrapper.editor.displayText(),
     )
     registry.register(
         target_class=QtGui.QTextEdit,
         interaction_class=query.DisplayedText,
-        handler=lambda interactor, _: interactor.editor.toPlainText(),
+        handler=lambda wrapper, _: wrapper.editor.toPlainText(),
     )
     registry.register(
         target_class=QtGui.QLabel,
         interaction_class=query.DisplayedText,
-        handler=lambda interactor, _: interactor.editor.text(),
+        handler=lambda wrapper, _: wrapper.editor.text(),
     )
     return registry

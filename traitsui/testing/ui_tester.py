@@ -95,9 +95,9 @@ class UITester:
         class MyEditor(Editor):
             ...
 
-        def click(interactor, action):
-            # ``interactor`` is an instance of UIWrapper
-            interactor.editor.control.click()
+        def click(wrapper, action):
+            # ``wrapper`` is an instance of UIWrapper
+            wrapper.editor.control.click()
 
         my_registry = InteractionRegistry()
         my_registry.register(
@@ -188,7 +188,7 @@ class UITester:
 
         Returns
         -------
-        interactor : BaseUserInteractor
+        wrapper : BaseUserInteractor
         """
         return (
             self._get_ui_interactor(ui).locate(locator.TargetByName(name=name))
@@ -209,7 +209,7 @@ class UITester:
 
         Returns
         -------
-        interactor : BaseUserInteractor
+        wrapper : BaseUserInteractor
         """
         return self._get_ui_interactor(ui).locate(locator.TargetById(id=id))
 
@@ -263,7 +263,7 @@ class UIWrapper:
             e.g. ``traitsui.testing.command.MouseClick``
         """
         self._resolve(
-            lambda interactor: interactor._perform_or_inspect(action),
+            lambda wrapper: wrapper._perform_or_inspect(action),
             catches=ActionNotSupported,
         )
 
@@ -279,12 +279,12 @@ class UIWrapper:
             e.g. ``traitsui.testing.query.DisplayedText``
         """
         return self._resolve(
-            lambda interactor: interactor._perform_or_inspect(action),
+            lambda wrapper: wrapper._perform_or_inspect(action),
             catches=ActionNotSupported,
         )
 
     def locate(self, location):
-        """ Return a new interactor for performing user actions on a specific
+        """ Return a new wrapper for performing user actions on a specific
         location specified.
 
         Implementations must validate the type of the location given.
@@ -296,7 +296,7 @@ class UIWrapper:
         location : Location
         """
         return self._resolve(
-            lambda interactor: interactor._new_from_location(location),
+            lambda wrapper: wrapper._new_from_location(location),
             catches=LocationNotSupported,
         )
 
@@ -312,7 +312,7 @@ class UIWrapper:
 
         Returns
         -------
-        interactor : UIWrapper
+        wrapper : UIWrapper
         """
         return self.locate(locator.TargetByName(name=name))
 
@@ -328,12 +328,12 @@ class UIWrapper:
 
         Returns
         -------
-        interactor : UIWrapper
+        wrapper : UIWrapper
         """
         return self.locate(locator.TargetById(id=id))
 
     def _resolve(self, function, catches):
-        """ Execute the given callable with this interactor, if fails, try
+        """ Execute the given callable with this wrapper, if fails, try
         again with the default target (if there is one).
 
         Parameters

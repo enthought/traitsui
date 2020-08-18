@@ -87,29 +87,29 @@ class BadAction:
     pass
 
 
-def raise_error(interactor, action):
+def raise_error(wrapper, action):
     raise ZeroDivisionError()
 
 
 if is_qt():
     from traitsui.qt4.button_editor import SimpleEditor as SimpleButtonEditor
 
-    def click_n_times(interactor, action):
+    def click_n_times(wrapper, action):
         for _ in range(action.n_times):
-            if not interactor.editor.control.isEnabled():
+            if not wrapper.editor.control.isEnabled():
                 raise Disabled("Button is disabled.")
-            interactor.editor.control.click()
+            wrapper.editor.control.click()
 
-    def is_enabled(interactor, action):
-        return interactor.editor.control.isEnabled()
+    def is_enabled(wrapper, action):
+        return wrapper.editor.control.isEnabled()
 
 
 if is_wx():
     from traitsui.wx.button_editor import SimpleEditor as SimpleButtonEditor
 
-    def click_n_times(interactor, action):  # noqa: F811
+    def click_n_times(wrapper, action):  # noqa: F811
         import wx
-        control = interactor.editor.control
+        control = wrapper.editor.control
         if not control.IsEnabled():
             raise Disabled("Button is disabled.")
         event = wx.CommandEvent(wx.EVT_BUTTON.typeId, control.GetId())
@@ -117,8 +117,8 @@ if is_wx():
         for _ in range(action.n_times):
             wx.PostEvent(control, event)
 
-    def is_enabled(interactor, action):   # noqa: F811
-        return interactor.editor.control.IsEnabled()
+    def is_enabled(wrapper, action):   # noqa: F811
+        return wrapper.editor.control.IsEnabled()
 
 
 def get_local_registry():
@@ -147,7 +147,7 @@ class TestUITesterSimulate(unittest.TestCase):
     """
 
     def check_command_propagated_to_nested_ui(self, style):
-        # the default interactor for the instance editor is used, and then
+        # the default wrapper for the instance editor is used, and then
         # the custom simulation on the button is used.
         order = Order()
         view = get_view_with_instance_editor(style)
@@ -162,17 +162,17 @@ class TestUITesterSimulate(unittest.TestCase):
             self.assertEqual(order.submit_n_events, 3)
 
     def test_command_custom_interactor_with_simple_instance_editor(self):
-        # Check command is propagated by the interactor get_ui for
+        # Check command is propagated by the wrapper get_ui for
         # simple instance editor.
         self.check_command_propagated_to_nested_ui("simple")
 
     def test_command_custom_interactor_with_custom_instance_editor(self):
-        # Check command is propagated by the interactor get_ui for
+        # Check command is propagated by the wrapper get_ui for
         # custom instance editor.
         self.check_command_propagated_to_nested_ui("custom")
 
     def check_query_propagated_to_nested_ui(self, style):
-        # the default interactor for the instance editor is used, and then
+        # the default wrapper for the instance editor is used, and then
         # the custom simulation on the button is used.
         order = Order()
         view = get_view_with_instance_editor(style, enabled_when="False")
@@ -187,12 +187,12 @@ class TestUITesterSimulate(unittest.TestCase):
             self.assertIs(actual, False)
 
     def test_query_custom_interactor_with_simple_instance_editor(self):
-        # Check query is propagated by the interactor get_ui for
+        # Check query is propagated by the wrapper get_ui for
         # simple instance editor.
         self.check_query_propagated_to_nested_ui("simple")
 
     def test_query_custom_interactor_with_custom_instance_editor(self):
-        # Check query is propagated by the interactor get_ui for
+        # Check query is propagated by the wrapper get_ui for
         # custom instance editor.
         self.check_query_propagated_to_nested_ui("custom")
 
@@ -266,7 +266,7 @@ class TestUITesterSimulate(unittest.TestCase):
         new_registry.register_location_solver(
             target_class=SimpleButtonEditor,
             locator_class=locator.DefaultTarget,
-            solver=lambda interactor, _: interactor.editor.control,
+            solver=lambda wrapper, _: wrapper.editor.control,
         )
         tester = UITester([new_registry, registry])
         with tester.create_ui(order, dict(view=view)) as ui:
@@ -297,10 +297,10 @@ class TestUITesterFind(unittest.TestCase):
     def test_create_ui_interactor(self):
         tester = UITester(delay=1000)
         with tester.create_ui(Order()) as ui:
-            interactor = tester._get_ui_interactor(ui)
-            self.assertIs(interactor.editor, ui)
-            self.assertEqual(interactor.registries, tester._registries)
-            self.assertEqual(interactor.delay, tester.delay)
+            wrapper = tester._get_ui_interactor(ui)
+            self.assertIs(wrapper.editor, ui)
+            self.assertEqual(wrapper.registries, tester._registries)
+            self.assertEqual(wrapper.delay, tester.delay)
 
     def test_ui_interactor_locate_by_name(self):
         tester = UITester()
@@ -367,10 +367,10 @@ class TestUITesterFind(unittest.TestCase):
         item2 = Item("submit_button", id="item2")
         view = View(item1, item2)
         with tester.create_ui(Order(), dict(view=view)) as ui:
-            interactor = tester.find_by_id(ui, "item2")
-            self.assertIs(interactor.editor.item, item2)
-            self.assertEqual(interactor.registries, tester._registries)
-            self.assertEqual(interactor.delay, tester.delay)
+            wrapper = tester.find_by_id(ui, "item2")
+            self.assertIs(wrapper.editor.item, item2)
+            self.assertEqual(wrapper.registries, tester._registries)
+            self.assertEqual(wrapper.delay, tester.delay)
 
     def test_find_by_id_multiple(self):
         # The uniqueness is not enforced. The first one is returned.
@@ -380,8 +380,8 @@ class TestUITesterFind(unittest.TestCase):
         item3 = Item("submit_button", id="item2")
         view = View(item1, item2, item3)
         with tester.create_ui(Order(), dict(view=view)) as ui:
-            interactor = tester.find_by_id(ui, "item2")
-            self.assertIs(interactor.editor.item, item2)
+            wrapper = tester.find_by_id(ui, "item2")
+            self.assertIs(wrapper.editor.item, item2)
 
     def test_find_by_id_in_nested(self):
         order = Order()
@@ -405,10 +405,10 @@ class TestUITesterFind(unittest.TestCase):
         item2 = Item("submit_n_events", id="item2")
         view = View(item1, item2)
         with tester.create_ui(Order(), dict(view=view)) as ui:
-            interactor = tester.find_by_name(ui, "submit_n_events")
-            self.assertIs(interactor.editor.item, item2)
-            self.assertEqual(interactor.registries, tester._registries)
-            self.assertEqual(interactor.delay, tester.delay)
+            wrapper = tester.find_by_name(ui, "submit_n_events")
+            self.assertIs(wrapper.editor.item, item2)
+            self.assertEqual(wrapper.registries, tester._registries)
+            self.assertEqual(wrapper.delay, tester.delay)
 
     def test_find_by_name_in_nested(self):
         order = Order()
@@ -434,7 +434,7 @@ class TestUITesterLocate(unittest.TestCase):
     def setUp(self):
         self.target_class = FakeTarget
         self.registry = InteractionRegistry()
-        self.interactor = UIWrapper(
+        self.wrapper = UIWrapper(
             editor=FakeTarget(),
             registries=[self.registry],
         )
@@ -443,7 +443,7 @@ class TestUITesterLocate(unittest.TestCase):
 
         target = (1, 2, 3)
 
-        def resolve_target(interactor, location):
+        def resolve_target(wrapper, location):
             return target
 
         self.registry.register_location_solver(
@@ -452,7 +452,7 @@ class TestUITesterLocate(unittest.TestCase):
             solver=resolve_target,
         )
 
-        new_location = self.interactor.locate(0)
+        new_location = self.wrapper.locate(0)
         self.assertIs(new_location.editor, target)
 
     def test_locate_with_unknown_location(self):
@@ -463,4 +463,4 @@ class TestUITesterLocate(unittest.TestCase):
             solver=mock.Mock(),
         )
         with self.assertRaises(LocationNotSupported):
-            self.interactor.locate("123")
+            self.wrapper.locate("123")

@@ -18,9 +18,9 @@ class _SimpleSliderEditorWithSlider:
         registry.register(
             target_class=cls,
             interaction_class=command.KeyClick,
-            handler=lambda interactor, action: (
-                interactor.editor.key_press(
-                    key=action.key, delay=interactor.delay,
+            handler=lambda wrapper, action: (
+                wrapper.editor.key_press(
+                    key=action.key, delay=wrapper.delay,
                 )
             )
         )
@@ -33,13 +33,13 @@ class _SimpleSliderEditorWithSlider:
         )
 
 
-def resolve_location_simple_slider(interactor, location):
+def resolve_location_simple_slider(wrapper, location):
     if location == locator.WidgetType.slider:
         return _SimpleSliderEditorWithSlider(
-            editor=interactor.editor,
+            editor=wrapper.editor,
         )
     if location == locator.WidgetType.textbox:
-        return interactor.editor.control.text
+        return wrapper.editor.control.text
 
     raise NotImplementedError()
 

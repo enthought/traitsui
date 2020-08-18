@@ -11,10 +11,10 @@ class _IndexedCustomCheckListEditor:
         self.index = index
 
     @classmethod
-    def from_location_index(cls, interactor, location):
+    def from_location_index(cls, wrapper, location):
         # Conform to the call signature specified in the register
         return cls(
-            editor=interactor.editor,
+            editor=wrapper.editor,
             index=location.index,
         )
 
@@ -28,8 +28,8 @@ class _IndexedCustomCheckListEditor:
         registry.register(
             target_class=cls,
             interaction_class=command.MouseClick,
-            handler=lambda interactor, _: interactor.editor.mouse_click(
-                delay=interactor.delay,
+            handler=lambda wrapper, _: wrapper.editor.mouse_click(
+                delay=wrapper.delay,
             )
         )
 
