@@ -30,10 +30,13 @@ class UIWrapper:
     (2) Search for a nested UI target within the wrapped UI target.
     (3) Perform user interaction on the UI target, e.g. mouse click.
 
+    A UI target is an object which can be searched for nested UI targets,
+    either as intermediate things (like editors or a table widget), or as a
+    leaf widget which can be operated upon (e.g. a mouse click).
+
     For example, a ``UIWrapper`` may wrap an instance of traitsui.ui.UI in
     which more UI targets can be located. A ``UIWrapper`` may also wrap a
-    leaf widget on which user interactoins. It may also wrap a UI target
-    somewhere in between in the hierarchy of GUI components.
+    leaf widget on which user interactions can be performed.
 
     For locating a nested UI target, the ``locate`` method is provided.
     For simulating user interactions such as a mouse click or visual

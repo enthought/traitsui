@@ -64,7 +64,7 @@ class UITester:
 
     Since it is fairly typical for a UI target to have a nested UI (and those
     nested UI may bave more nested UI), to locate these nested UIs,
-    ``UIWrapper.find_by_name``  can be used::
+    ``UIWrapper.find_by_name`` can be used::
 
         class Person(HasTraits):
             name = Str()
@@ -79,7 +79,7 @@ class UITester:
             wrapper = tester.find_by_name(ui, "person").find_by_name("name")
 
     Performing an interaction (commands)
-    -------------------------------
+    ------------------------------------
     After locating the GUI element, we typically want to perform some user
     actions on it for testing. Examples of user interactions that produce side
     effects are clicking or double clicking a mouse button, typing some keys
@@ -108,7 +108,7 @@ class UITester:
 
         with tester.create_ui(app, dict(view=view)) as ui:
             text = (
-                tester.find_by_name(ui, "text").inspect(query.DisplayedText()
+                tester.find_by_name(ui, "text").inspect(query.DisplayedText())
             )
             assert text == "Hello"
 
@@ -122,7 +122,7 @@ class UITester:
     a custom interaction type ``ManyMouseClick`` for this target::
 
         custom_registry = InteractionRegistry()
-        custom_registry.register(
+        custom_registry.register_handler(
             target_class=MyEditor,
             interaction_class=ManyMouseClick,
             handler=lambda wrapper, interaction: wrapper.target.do_something()
@@ -130,28 +130,32 @@ class UITester:
 
     Then the registry can be used in a UITester::
 
-        tester = UITester([custom_registry])
+        tester = UITester(interaction_registries=[custom_registry])
 
     This is how TraitsUI supplies testing support for specific editors; the
     default setup of ``UITester`` comes with a registry for testing TraitsUI
     editors.
 
-    See documentation on ``InteractionRegistry`` for details.
+    Similar the location resolution logic can be extended via the
+    ``location_registries`` parameter.
+
+    See documentation on ``InteractionRegistry`` and ``LocationRegistry`` for
+    details.
+
+    Attributes
+    ----------
+    interaction_registries : list of InteractionRegistry, optional
+        Registries of interaction for different target, in the order
+        of decreasing priority. A shallow copy will be made.
+    location_registries : list of LocationRegistry, optional
+        Registries for resolving nested UI targets, in the order
+        of decreasing priority. A shallow copy will be made.
+        Note that an additional registry for resolving editors in a
+        traitsui UI object is always added.
     """
 
     def __init__(self, interaction_registries=None, location_registries=None):
         """ Instantiate the UI tester.
-
-        Parameters
-        ----------
-        interaction_registries : list of InteractionRegistry, optional
-            Registries of interaction for different target, in the order
-            of decreasing priority. A shallow copy will be made.
-        location_registries : list of LocationRegistry, optional
-            Registries for resolving nested UI targets, in the order
-            of decreasing priority. A shallow copy will be made.
-            Note that an additional registry for resolving editors in a
-            traitsui UI object is always added.
         """
 
         if interaction_registries is None:
@@ -185,11 +189,8 @@ class UITester:
         return _create_ui(object, ui_kwargs)
 
     def find_by_name(self, ui, name):
-        """ Find the UI target with the given name and return an object for
-        simulating user interactions with the target. The list of
-        ``InteractorRegistry`` in this tester is used for finding the target
-        specified. If no specific wrapper can be found from the registries,
-        a default wrapper wrapping the found target is returned.
+        """ Find the TraitsUI editor with the given name and return a new
+        ``UIWrapper`` object for further interactions with the ditor.
 
         Parameters
         ----------

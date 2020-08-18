@@ -134,7 +134,8 @@ class InteractionRegistry:
         )
 
     def get_handler(self, target_class, interaction_class):
-        """ Return a callable for handling an interaction for a given target type.
+        """ Return a callable for handling an interaction for a given target
+        type.
 
         Parameters
         ----------
