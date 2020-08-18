@@ -14,7 +14,6 @@ from traitsui.testing.locator import (  # noqa: F401
 )
 from traitsui.testing import query    # noqa: F401
 from traitsui.testing.query import (  # noqa: F401
-    CustomAction,
     DisplayedText,
 )
 from traitsui.testing.interactor_registry import (  # noqa: F401
