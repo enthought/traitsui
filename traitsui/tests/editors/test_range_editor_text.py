@@ -19,12 +19,14 @@ Test case for bug (wx, Mac OS X)
 A RangeEditor in mode 'text' for an Int allows values out of range.
 """
 import unittest
+from unittest import mock
 
 from traits.has_traits import HasTraits
 from traits.trait_types import Float, Int
 from traitsui.item import Item
 from traitsui.view import View
 from traitsui.editors.range_editor import RangeEditor
+from traitsui.testing.api import command, locator, UITester
 
 from traitsui.tests._tools import (
     create_ui,
@@ -55,7 +57,9 @@ class FloatWithRangeEditor(HasTraits):
     number = Float(5.0)
 
     traits_view = View(
-        Item("number", editor=RangeEditor(low=0.0, high=12.0)), buttons=["OK"]
+        Item("number", editor=RangeEditor(low=0.0, high=12.0)),
+        height=100,
+        buttons=["OK"],
     )
 
 
@@ -68,13 +72,12 @@ class TestRangeEditorText(unittest.TestCase):
         # (tests a bug where this fails with an AttributeError)
 
         num = NumberWithRangeEditor()
-        with reraise_exceptions(), create_ui(num) as ui:
-
-            # the following is equivalent to setting the text in the text
-            # control, then pressing OK
-
-            textctrl = ui.control.FindWindowByName("text")
-            textctrl.SetValue("1")
+        tester = UITester()
+        with tester.create_ui(num) as ui, \
+                mock.patch("wx.MessageDialog.ShowModal"):
+            text = tester.find_by_name(ui, "number")
+            text.perform(command.KeySequence("\b\b\b\b1"))
+            text.perform(command.KeyClick("Enter"))
 
         # the number traits should be between 3 and 8
         self.assertTrue(3 <= num.number <= 8)
@@ -83,17 +86,14 @@ class TestRangeEditorText(unittest.TestCase):
     def test_avoid_slider_feedback(self):
         # behavior: when editing the text box part of a range editor, the value
         # should not be adjusted by the slider part of the range editor
-        from pyface import qt
-
         num = FloatWithRangeEditor()
-        with reraise_exceptions(), create_ui(num) as ui:
+        tester = UITester()
+        with tester.create_ui(num) as ui:
 
-            # the following is equivalent to setting the text in the text
-            # control, then pressing OK
-            lineedit = ui.control.findChild(qt.QtGui.QLineEdit)
-            lineedit.setFocus()
-            lineedit.setText("4")
-            lineedit.editingFinished.emit()
+            text = tester.find_by_name(ui, "number")\
+                .locate(locator.WidgetType.textbox)
+            text.perform(command.KeySequence("\b\b\b\b4"))
+            text.perform(command.KeyClick("Enter"))
 
         # the number trait should be 4 extactly
         self.assertEqual(num.number, 4.0)

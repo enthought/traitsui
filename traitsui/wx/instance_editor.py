@@ -527,6 +527,7 @@ class SimpleEditor(CustomEditor):
             # have its own:
             if ui.history is None:
                 ui.history = self.ui.history
+        return ui
 
     def resynch_editor(self):
         """ Resynchronizes the contents of the editor when the object trait

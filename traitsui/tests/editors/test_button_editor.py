@@ -3,6 +3,7 @@ import unittest
 from pyface.gui import GUI
 
 from traits.api import Button, HasTraits, List, Str
+from traits.testing.api import UnittestTools
 from traitsui.api import ButtonEditor, Item, UItem, View
 from traitsui.tests._tools import (
     create_ui,
@@ -13,6 +14,7 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
+from traitsui.testing.api import command, InteractionRegistry, query, UITester
 
 
 class ButtonTextEdit(HasTraits):
@@ -46,36 +48,45 @@ custom_view = View(
 )
 
 
-def get_button_text(button):
-    """ Return the button text given a button control """
-    if is_wx():
-        return button.GetLabel()
-
-    elif is_qt():
-        return button.text()
+LOCAL_REGISTRY = InteractionRegistry()
+if is_wx():
+    from traitsui.wx.button_editor import CustomEditor, SimpleEditor
+    for target_class in [CustomEditor, SimpleEditor]:
+        LOCAL_REGISTRY.register(
+            target_class=target_class,
+            interaction_class=query.DisplayedText,
+            handler=lambda interactor, _: interactor.editor.control.GetLabel(),
+        )
+elif is_qt():
+    from traitsui.qt4.button_editor import CustomEditor, SimpleEditor
+    for target_class in [CustomEditor, SimpleEditor]:
+        LOCAL_REGISTRY.register(
+            target_class=target_class,
+            interaction_class=query.DisplayedText,
+            handler=lambda interactor, _: interactor.editor.control.text(),
+        )
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestButtonEditor(unittest.TestCase):
+class TestButtonEditor(unittest.TestCase, UnittestTools):
     def check_button_text_update(self, view):
         button_text_edit = ButtonTextEdit()
 
-        with reraise_exceptions(), \
-                create_ui(button_text_edit, dict(view=view)) as ui:
-
-            process_cascade_events()
-            editor, = ui.get_editors("play_button")
-            button = editor.control
-
-            self.assertEqual(get_button_text(button), "I'm a play button")
+        tester = UITester()
+        tester.add_registry(LOCAL_REGISTRY)
+        with tester.create_ui(button_text_edit, dict(view=view)) as ui:
+            button = tester.find_by_name(ui, "play_button")
+            actual = button.inspect(query.DisplayedText())
+            self.assertEqual(actual, "I'm a play button")
 
             button_text_edit.play_button_label = "New Label"
-            self.assertEqual(get_button_text(button), "New Label")
+            actual = button.inspect(query.DisplayedText())
+            self.assertEqual(actual, "New Label")
 
     def test_styles(self):
         # simple smoke test of buttons
         button_text_edit = ButtonTextEdit()
-        with reraise_exceptions(), create_ui(button_text_edit):
+        with UITester().create_ui(button_text_edit):
             pass
 
     def test_simple_button_editor(self):
@@ -83,6 +94,23 @@ class TestButtonEditor(unittest.TestCase):
 
     def test_custom_button_editor(self):
         self.check_button_text_update(custom_view)
+
+    def check_button_fired_event(self, view):
+        button_text_edit = ButtonTextEdit()
+
+        tester = UITester()
+        with tester.create_ui(button_text_edit, dict(view=view)) as ui:
+            button = tester.find_by_name(ui, "play_button")
+
+            with self.assertTraitChanges(
+                    button_text_edit, "play_button", count=1):
+                button.perform(command.MouseClick())
+
+    def test_simple_button_editor_clicked(self):
+        self.check_button_fired_event(simple_view)
+
+    def test_custom_button_editor_clicked(self):
+        self.check_button_fired_event(custom_view)
 
 
 @requires_toolkit([ToolkitName.qt])
@@ -106,7 +134,7 @@ class TestButtonEditorValuesTrait(unittest.TestCase):
         instance = ButtonTextEdit(values=["Item1", "Item2"])
         view = self.get_view(style=style)
         with reraise_exceptions():
-            with create_ui(instance, dict(view=view)):
+            with UITester().create_ui(instance, dict(view=view)):
                 pass
 
             # It is okay to mutate trait after the GUI is disposed.

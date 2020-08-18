@@ -19,7 +19,7 @@ import re
 import sys
 import traceback
 from contextlib import contextmanager
-from unittest import skipIf, TestSuite
+from unittest import skip, skipIf, TestSuite
 
 from pyface.api import GUI
 from pyface.toolkit import toolkit_object
@@ -30,6 +30,11 @@ from traits.api import (
 from traits.etsconfig.api import ETSConfig
 
 # ######### Testing tools
+
+# Toolkit names as are used by ETSConfig
+WX = "wx"
+QT = "qt4"
+NULL = "null"
 
 
 _TRAITSUI_LOGGER = logging.getLogger("traitsui")
@@ -149,6 +154,21 @@ def requires_toolkit(toolkits):
 
 #: True if current platform is MacOS
 is_mac_os = sys.platform.startswith("darwin")
+
+
+def requires_one_of(backends):
+
+    def decorator(test_item):
+
+        if ETSConfig.toolkit not in backends:
+            return skip(
+                "Test only support these backends: {!r}".format(backends)
+            )(test_item)
+
+        else:
+            return test_item
+
+    return decorator
 
 
 def count_calls(func):

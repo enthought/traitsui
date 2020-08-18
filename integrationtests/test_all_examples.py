@@ -30,6 +30,7 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
+from traitsui.testing.api import command, locator, query, UITester
 
 # This test file is not distributed nor is it in a package.
 HERE = os.path.dirname(__file__)
@@ -279,6 +280,14 @@ def run_file(file_path):
         exec(content, globals)
 
 
+def load_demo(file_path, variable_name="demo"):
+    with open(file_path, "r", encoding="utf-8") as f:
+        content = f.read()
+    globals_ = globals().copy()
+    exec(content, globals_)
+    return globals_[variable_name]
+
+
 # =============================================================================
 # Test cases
 # =============================================================================
@@ -317,3 +326,154 @@ class TestExample(unittest.TestCase):
                         reason=reason, file_path=file_path
                     )
                 )
+
+
+class TestInteractExample(unittest.TestCase):
+    """ Test examples with more interactions."""
+
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+    def test_run_auto_editable_readonly_table_cells(self):
+        # Test Auto_editable_readonly_table_cells in examples/demos/Advanced
+        filepath = os.path.join(
+            DEMO, "Advanced", "Auto_editable_readonly_table_cells.py"
+        )
+        demo = load_demo(filepath)
+        tester = UITester()
+        with tester.create_ui(demo) as ui:
+            range_editor = tester.find_by_name(ui, "max_n")
+            text = range_editor.locate(locator.WidgetType.textbox)
+            text.perform(command.KeySequence("\b\b3"))
+            text.perform(command.KeyClick("Enter"))
+
+            self.assertEqual(demo.max_n, 3)
+
+            slider = range_editor.locate(locator.WidgetType.slider)
+            for _ in range(5):
+                slider.perform(command.KeyClick("Right"))
+
+            self.assertEqual(demo.max_n, 53)
+
+            text.perform(command.KeySequence("\b\b\b40"))
+            text.perform(command.KeyClick("Enter"))
+
+            for _ in range(5):
+                slider.perform(command.KeyClick("Left"))
+
+            self.assertEqual(demo.max_n, 1)
+
+    @requires_toolkit([ToolkitName.qt])
+    def test_run_list_editors_demo(self):
+        # Test List_editors_demo in examples/demos/Advanced
+        filepath = os.path.join(
+            DEMO, "Advanced", "List_editors_demo.py"
+        )
+        demo = load_demo(filepath)
+        tester = UITester()
+        with tester.create_ui(demo) as ui:
+            main_tab = tester.find_by_id(ui, "splitter")
+
+            # List tab
+            main_tab.locate(locator.Index(1)).perform(command.MouseClick())
+            item = tester.find_by_id(ui, "list").locate(locator.Index(7))
+            item.find_by_name("name").perform(
+                command.KeySequence("\b\b\b\b\b\bDavid")
+            )
+            self.assertEqual(demo.people[7].name, "David")
+
+            # Notebook tab
+            main_tab.locate(locator.Index(2)).perform(command.MouseClick())
+            notebook = tester.find_by_id(ui, "notebook")
+            notebook.locate(locator.Index(1)).perform(command.MouseClick())
+            name_field = notebook.locate(locator.Index(1)).find_by_name("name")
+            name_field.perform(command.KeySequence("\b\b\b\bSimon"))
+            self.assertEqual(demo.people[1].name, "Simon")
+
+            # Table tab
+            main_tab.locate(locator.Index(0)).perform(command.MouseClick())
+            table = tester.find_by_id(ui, "table")
+
+            # Pick a person object
+            person = demo.people[6]
+
+            # Find the row that refers to this object.
+            # The view has sorted the items.
+            for i in range(len(demo.people)):
+                name_cell = table.locate(locator.Cell(i, 0))
+                displayed = name_cell.inspect(query.DisplayedText())
+                if displayed == person.name:
+                    break
+            else:
+                self.fail(
+                    "Could not find the row for {!r}".format(person.name)
+                )
+
+            age_cell = table.locate(locator.Cell(i, 1))
+            age_cell.perform(command.MouseClick())
+            age_cell.perform(command.KeySequence("50"))
+            self.assertEqual(person.age, 50)
+
+    @requires_toolkit([ToolkitName.qt])
+    def test_run_tree_editor_demo(self):
+        # Test TreeEditor_demo in examples/demo/Standard_Editors
+        filepath = os.path.join(
+            DEMO, "Standard_Editors", "TreeEditor_demo.py"
+        )
+        demo = load_demo(filepath)
+        tester = UITester()
+        with tester.create_ui(demo) as ui:
+            root_actor = tester.find_by_name(ui, "company")
+
+            # Enthought->Department->Business->(First employee)
+            node = root_actor.locate(locator.TreeNode((0, 0, 0, 0), 0))
+            node.perform(command.MouseClick())
+
+            name_actor = root_actor.find_by_name("name")
+            name_actor.perform(command.KeySequence("\b\b\b\b\bJames"))
+            self.assertEqual(
+                demo.company.departments[0].employees[0].name,
+                "James",
+            )
+
+            # Enthought->Department->Scientific
+            demo.company.departments[1].name = "Scientific Group"
+            node = root_actor.locate(locator.TreeNode((0, 0, 1), 0))
+            self.assertEqual(
+                node.inspect(query.DisplayedText()), "Scientific Group"
+            )
+
+            # Enthought->Department->Business
+            node = root_actor.locate(locator.TreeNode((0, 0, 0), 0))
+            node.perform(command.MouseClick())
+            node.perform(command.MouseDClick())
+
+            name_actor = root_actor.find_by_name("name")
+            name_actor.perform(command.KeySequence(" Group"))
+            self.assertEqual(
+                demo.company.departments[0].name,
+                "Business Group",
+            )
+
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+    def test_converter(self):
+        # Test converter.py in examples/demo/Applications
+        filepath = os.path.join(
+            DEMO, "Applications", "converter.py"
+        )
+        demo = load_demo(filepath, "popup")
+        tester = UITester()
+        with tester.create_ui(demo) as ui:
+            input_amount = tester.find_by_name(ui, "input_amount")
+            output_amount = tester.find_by_name(ui, "output_amount")
+
+            input_amount.perform(command.KeySequence("\b\b\b\b14.0"))
+            self.assertEqual(
+                output_amount.inspect(query.DisplayedText())[:4],
+                "1.16",
+            )
+
+            tester.find_by_id(ui, "Undo").perform(command.MouseClick())
+
+            self.assertEqual(
+                output_amount.inspect(query.DisplayedText()),
+                "1.0",
+            )

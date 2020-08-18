@@ -13,6 +13,7 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
+from traitsui.testing.api import command, locator, UITester
 
 
 class ListModel(HasTraits):
@@ -443,19 +444,16 @@ class TestCustomCheckListEditor(unittest.TestCase):
     def test_custom_check_list_editor_click(self):
         list_edit = ListModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(list_edit, get_view("custom")) as editor:
-
+        tester = UITester()
+        with tester.create_ui(list_edit, dict(view=get_view("custom"))) as ui:
             self.assertEqual(list_edit.value, [])
 
-            click_checkbox_button(editor.control, 1)
-            process_cascade_events()
-
+            check_list = tester.find_by_name(ui, "value")
+            item_1 = check_list.locate(locator.Index(1))
+            item_1.perform(command.MouseClick())
             self.assertEqual(list_edit.value, ["two"])
 
-            click_checkbox_button(editor.control, 1)
-            process_cascade_events()
-
+            item_1.perform(command.MouseClick())
             self.assertEqual(list_edit.value, [])
 
     def test_custom_check_list_editor_click_initial_value(self):

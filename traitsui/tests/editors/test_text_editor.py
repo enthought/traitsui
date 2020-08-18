@@ -18,8 +18,18 @@ from traits import __version__ as TRAITS_VERSION
 from traits.api import (
     HasTraits,
     Str,
+    pop_exception_handler,
+    push_exception_handler,
 )
+from traits.testing.api import UnittestTools
 from traitsui.api import TextEditor, View, Item
+from traitsui.testing.api import (
+    DisplayedText,
+    KeyClick,
+    KeySequence,
+    InteractionRegistry,
+    UITester,
+)
 from traitsui.tests._tools import (
     create_ui,
     GuiTestAssistant,
@@ -54,55 +64,10 @@ def get_view(style, auto_set):
     )
 
 
-def get_text(editor):
-    """ Return the text from the widget for checking.
-    """
-    if is_qt():
-        return editor.control.text()
-    else:
-        raise unittest.SkipTest("Not implemented for the current toolkit.")
-
-
-def set_text(editor, text):
-    """ Imitate user changing the text on the text box to a new value. Note
-    that this is equivalent to "clear and insert", which excludes confirmation
-    via pressing a return key or causing the widget to lose focus.
-    """
-
-    if is_qt():
-        from pyface.qt import QtGui
-        if editor.base_style == QtGui.QLineEdit:
-            editor.control.clear()
-            editor.control.insert(text)
-            editor.control.textEdited.emit(text)
-        else:
-            editor.control.setText(text)
-            editor.control.textChanged.emit()
-    else:
-        raise unittest.SkipTest("Not implemented for the current toolkit.")
-
-
-def key_press_return(editor):
-    """ Imitate user pressing the return key.
-    """
-    if is_qt():
-        from pyface.qt import QtGui
-
-        # ideally we should fire keyPressEvent, but the editor does not
-        # bind to this event. Pressing return key will fire editingFinished
-        # event on a QLineEdit
-        if editor.base_style == QtGui.QLineEdit:
-            editor.control.editingFinished.emit()
-        else:
-            editor.control.append("")
-    else:
-        raise unittest.SkipTest("Not implemented for the current toolkit.")
-
-
 # Skips tests if the backend is not either qt4 or qt5
 @requires_toolkit([ToolkitName.qt])
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
-class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
+class TestTextEditorQt(GuiTestAssistant, UnittestTools, unittest.TestCase):
     """ Test on TextEditor with Qt backend."""
 
     def test_text_editor_placeholder_text(self):
@@ -164,17 +129,21 @@ class TestTextEditorQt(GuiTestAssistant, unittest.TestCase):
 # We should be able to run this test case against wx.
 # Not running them now to avoid test interaction. See enthought/traitsui#752
 @requires_toolkit([ToolkitName.qt])
-class TestTextEditor(unittest.TestCase):
+class TestTextEditor(unittest.TestCase, UnittestTools):
     """ Tests that can be run with any toolkit as long as there is an
     implementation for simulating user interactions.
     """
+
+    def setUp(self):
+        push_exception_handler(reraise_exceptions=True)
+        self.addCleanup(pop_exception_handler)
 
     def check_editor_init_and_dispose(self, style, auto_set):
         # Smoke test to test setup and tear down of an editor.
         foo = Foo()
         view = get_view(style=style, auto_set=auto_set)
-        with reraise_exceptions(), \
-                create_ui(foo, dict(view=view)):
+        tester = UITester()
+        with tester.create_ui(foo, dict(view=view)):
             pass
 
     def test_simple_editor_init_and_dispose(self):
@@ -196,28 +165,21 @@ class TestTextEditor(unittest.TestCase):
     def test_simple_auto_set_update_text(self):
         foo = Foo()
         view = get_view(style="simple", auto_set=True)
-        with reraise_exceptions(), \
-                create_ui(foo, dict(view=view)) as ui:
-            editor, = ui.get_editors("name")
-            set_text(editor, "NEW")
-            process_cascade_events()
-
+        tester = UITester()
+        with tester.create_ui(foo, dict(view=view)) as ui:
+            with self.assertTraitChanges(foo, "name", count=3):
+                tester.find_by_name(ui, "name").perform(KeySequence("NEW"))
             self.assertEqual(foo.name, "NEW")
 
     def test_simple_auto_set_false_do_not_update(self):
         foo = Foo(name="")
         view = get_view(style="simple", auto_set=False)
-        with reraise_exceptions(), \
-                create_ui(foo, dict(view=view)) as ui:
-            editor, = ui.get_editors("name")
-
-            set_text(editor, "NEW")
-            process_cascade_events()
-
+        tester = UITester()
+        with tester.create_ui(foo, dict(view=view)) as ui:
+            tester.find_by_name(ui, "name").perform(KeySequence("NEW"))
             self.assertEqual(foo.name, "")
 
-            key_press_return(editor)
-            process_cascade_events()
+            tester.find_by_name(ui, "name").perform(KeyClick("Enter"))
 
             self.assertEqual(foo.name, "NEW")
 
@@ -225,29 +187,19 @@ class TestTextEditor(unittest.TestCase):
         # the auto_set flag is disregard for custom editor.
         foo = Foo()
         view = get_view(auto_set=True, style="custom")
-        with reraise_exceptions(), \
-                create_ui(foo, dict(view=view)) as ui:
-            editor, = ui.get_editors("name")
-
-            set_text(editor, "NEW")
-            process_cascade_events()
-
+        tester = UITester()
+        with tester.create_ui(foo, dict(view=view)) as ui:
+            tester.find_by_name(ui, "name").perform(KeySequence("NEW"))
             self.assertEqual(foo.name, "NEW")
 
     def test_custom_auto_set_false_update_text(self):
         # the auto_set flag is disregard for custom editor.
         foo = Foo()
         view = get_view(auto_set=False, style="custom")
-        with reraise_exceptions(), \
-                create_ui(foo, dict(view=view)) as ui:
-            editor, = ui.get_editors("name")
-
-            set_text(editor, "NEW")
-            process_cascade_events()
-
-            key_press_return(editor)
-            process_cascade_events()
-
+        tester = UITester()
+        with tester.create_ui(foo, dict(view=view)) as ui:
+            tester.find_by_name(ui, "name").perform(KeySequence("NEW"))
+            tester.find_by_name(ui, "name").perform(KeyClick("Enter"))
             self.assertEqual(foo.name, "NEW\n")
 
     @unittest.skipUnless(
@@ -264,9 +216,26 @@ class TestTextEditor(unittest.TestCase):
             Item("name", format_func=lambda s: s.upper()),
             Item("nickname"),
         )
-        with reraise_exceptions(), \
-                create_ui(foo, dict(view=view)) as ui:
-            name_editor, = ui.get_editors("name")
-            nickname_editor, = ui.get_editors("nickname")
-            self.assertEqual(get_text(name_editor), "WILLIAM")
-            self.assertEqual(get_text(nickname_editor), "bill")
+        tester = UITester()
+        with tester.create_ui(foo, dict(view=view)) as ui:
+            display_name = (
+                tester.find_by_name(ui, "name").inspect(DisplayedText())
+            )
+            display_nickname = (
+                tester.find_by_name(ui, "nickname").inspect(DisplayedText())
+            )
+            self.assertEqual(display_name, "WILLIAM")
+            self.assertEqual(display_nickname, "bill")
+
+    def test_password_style(self):
+        foo = Foo(name="william")
+        view = View(
+            Item("name", editor=TextEditor(password=True))
+        )
+        tester = UITester()
+        with tester.create_ui(foo, dict(view=view)) as ui:
+            actual = tester.find_by_name(ui, "name").inspect(DisplayedText())
+            # password mask character is platform dependent
+            self.assertEqual(len(actual), len(foo.name))
+            self.assertNotEqual(actual, foo.name)
+            self.assertEqual(len(set(actual)), 1)
