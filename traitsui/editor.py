@@ -691,26 +691,6 @@ class Editor(HasPrivateTraits):
                 self.error(excp)
                 raise
 
-    def _str(self, value):
-        """ Returns the text representation of a specified value.
-
-        This is a convenience method to cover the differences between Python
-        2 and Python 3 strings.
-
-        Parameters
-        ----------
-        value : any
-            The value to be represented as a string.
-
-        Returns
-        -------
-        string : unicode
-            The string of the value, as an appropriate text type for Python 2
-            or 3.
-        """
-        # In Unicode!
-        return str(value)
-
     # -- Traits property getters and setters --------------------------------
 
     @cached_property
