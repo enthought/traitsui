@@ -76,7 +76,7 @@ class InteractionRegistry:
     type::
 
         registry = InteractionRegistry()
-        registry.register(
+        registry.register_handler(
             target_class=traitsui.qt4.button_editor.SimpleEditor,
             interaction_class=traitsui.testing.tester.command.MouseClick,
             handler=mouse_click_qt_button,
@@ -85,7 +85,7 @@ class InteractionRegistry:
     Similarly, a wx implementation of clicking a button can be registered
     to the registry (the content of ``mouse_click_wx_button`` is not shown)::
 
-        registry.register(
+        registry.register_handler(
             target_class=traitsui.wx.button_editor.SimpleEditor,
             interaction_class=traitsui.testing.tester.command.MouseClick,
             handler=mouse_click_wx_button,
@@ -198,12 +198,12 @@ class LocationRegistry:
     The solvers can then be registered for the container UI target::
 
         registry = LocationRegistry()
-        registry.register(
+        registry.register_solver(
             target_class=MyUIContainer,
             locator_class=NestedUI,
             solver=get_nested_ui,
         )
-        registry.register(
+        registry.register_solver(
             target_class=MyUIContainer,
             locator_class=WidgetType,
             solver=get_widget_by_type,
