@@ -62,6 +62,8 @@ class StubRegistry:
         return self.solver
 
 
+# Use of perform/inspect requires the GUI event loop
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUIWrapperInteractionRegistries(unittest.TestCase):
     """ Test the logic regarding the order of (interaction) registries.
     """
