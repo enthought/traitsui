@@ -70,9 +70,9 @@ class TestContextvalue(UnittestTools, unittest.TestCase):
         self.assertIs(cve.cv_str, cv)
 
     def test_cv_unicode_constant(self):
-        cve = CVExample(cv_unicode=u"test")
+        cve = CVExample(cv_unicode="test")
 
-        self.assertEqual(cve.cv_unicode, u"test")
+        self.assertEqual(cve.cv_unicode, "test")
 
     def test_cv_unicode_context_value(self):
         cv = ContextValue("trait_name")
