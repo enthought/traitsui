@@ -10,40 +10,52 @@
 #
 
 
-class SimulationError(Exception):
-    """ Raised when simulating user interactions on GUI."""
+class TesterError(Exception):
+    """ Custom exception for UITester/UIWrapper. """
     pass
 
 
-class EditorNotFound(LookupError, SimulationError):
-    """ Raised when an Editor cannot be found by the UI tester or the
-    interactor.
-    """
-    pass
-
-
-class ActionNotSupported(SimulationError):
-    """ Raised when an action is not supported by an interactor.
+class InteractionNotSupported(TesterError):
+    """ Raised when an interaction is not supported by a wrapper.
 
     Parameters
     ----------
-    editor_class : subclass of traitsui.editor.Editor
-        Editor class for which the action is targeting.
-    action_class : subclass of type
-        Any class for the action.
+    target_class : subclass of type
+        The type of a UI target being operated on.
+    interaction_class : subclass of type
+        Any class for the interaction.
     supported : list of types
-        List of supported action types.
+        List of supported interaction types.
     """
 
-    def __init__(self, editor_class, action_class, supported):
-        self.editor_class = editor_class
-        self.action_class = action_class
+    def __init__(self, target_class, interaction_class, supported):
+        self.target_class = target_class
+        self.interaction_class = interaction_class
         self.supported = supported
 
     def __str__(self):
         return (
-            "No handler is found for editor {!r} with action {!r}. "
+            "No handler is found for target {!r} with interaction {!r}. "
             "Supported these: {!r}".format(
-                self.editor_class, self.action_class, self.supported
+                self.target_class, self.interaction_class, self.supported
+            )
+        )
+
+
+class LocationNotSupported(TesterError):
+    """ Raised when attempt to resolve a location on a UI fails
+    because the location type is not supported.
+    """
+
+    def __init__(self, target_class, locator_class, supported):
+        self.target_class = target_class
+        self.locator_class = locator_class
+        self.supported = supported
+
+    def __str__(self):
+        return (
+            "Location {!r} is not supported for {!r}. "
+            "Supported these: {!r}".format(
+                self.locator_class, self.target_class, self.supported
             )
         )

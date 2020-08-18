@@ -9,40 +9,16 @@
 #  Thanks for using Enthought open source!
 #
 
-""" This module defines action objects that can be passed to
-``UserInteractor.inspect`` where the actions represent 'queries'.
+""" This module defines interaction objects that can be passed to
+``UIWrapper.inspect`` where the actions represent 'queries'.
 
 Implementations for these actions are expected to return value(s), ideally
 without incurring side-effects.
 """
 
 
-class CustomAction:
-    """ This is a special action for tests to wrap any arbitrary function
-    to be used with UITester.
-
-    The wrapped function will be called with an instance of ``UserInteractor``
-    which contains a toolkit specific editor. With that, the wrapped function
-    is likely toolkit specific.
-
-    Attributes
-    ----------
-    func : callable(UserInteractor) -> any
-    """
-    def __init__(self, func):
-        self.func = func
-
-
-class NestedUI:
-    """ An object representing an action to obtain a nested UI.
-
-    Implementations should return an instance of ``traitsui.ui.UI``.
-    """
-    pass
-
-
 class DisplayedText:
-    """ An object representing an action to obtain the displayed (echoed)
+    """ An object representing an interaction to obtain the displayed (echoed)
     plain text.
 
     E.g. For a textbox using a password styling, the displayed text should

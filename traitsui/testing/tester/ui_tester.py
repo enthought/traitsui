@@ -9,66 +9,13 @@
 #  Thanks for using Enthought open source!
 #
 
-from contextlib import contextmanager
-
-from traitsui.testing.tester import query
-from traitsui.testing.tester.abstract_registry import AbstractRegistry
-from traitsui.testing.tester.exceptions import (
-    ActionNotSupported,
-    EditorNotFound,
-)
+from traitsui.ui import UI
+from traitsui.testing.tester import locator
+from traitsui.testing.tester.registry import LocationRegistry
+from traitsui.testing.tester.ui_wrapper import UIWrapper
 from traitsui.tests._tools import (
     create_ui as _create_ui,
-    process_cascade_events,
-    reraise_exceptions,
 )
-
-
-@contextmanager
-def _event_processed():
-    """ Context manager to ensure GUI events are processed upon entering
-    and exiting the context.
-    """
-    with reraise_exceptions():
-        process_cascade_events()
-        try:
-            yield
-        finally:
-            process_cascade_events()
-
-
-class _CustomActionRegistry(AbstractRegistry):
-    """ This registry is defined such that CustomAction can be used with
-    any editor.
-    This allows arbitrary extension using the UITester API.
-    """
-
-    def get_handler(self, editor_class, action_class):
-        """ Return a callable for handling an action for a given editor class.
-
-        Parameters
-        ----------
-        editor_class : subclass of traitsui.editor.Editor
-            A toolkit specific Editor class.
-        action_class : subclass of type
-            Any class.
-
-        Returns
-        -------
-        handler : callable(UserInteractor, action) -> any
-        """
-        if issubclass(action_class, query.CustomAction):
-            return _CustomActionRegistry._custom_action_handler
-
-        raise ActionNotSupported(
-            editor_class=editor_class,
-            action_class=action_class,
-            supported=[query.CustomAction],
-        )
-
-    @staticmethod
-    def _custom_action_handler(interactor, action):
-        return action.func(interactor)
 
 
 class UITester:
@@ -104,20 +51,20 @@ class UITester:
     Locating GUI elements
     ---------------------
     After creating an ``UI`` object, ``UITester.find_by_name`` can be used
-    to locate a specific UI editor::
+    to locate a specific UI target::
 
         obj = App()
         tester = UITester()
         with tester.create_ui(obj) as ui:
-            interactor = tester.find_by_name(ui, "text")
+            wrapper = tester.find_by_name(ui, "text")
 
-    The returned value is an instance of ``UserInteractor``. It wraps the
-    UI editor instance found and allows further test actions to be performed on
-    the editor.
+    The returned value is an instance of ``UIWrapper``. It wraps the
+    UI target instance found and allows further test actions to be performed on
+    the target.
 
-    Since it is fairly typical for a UI editor to have a nested UI (and those
+    Since it is fairly typical for a UI target to have a nested UI (and those
     nested UI may bave more nested UI), to locate these nested UIs,
-    ``UserInteractor.find_by_name``  can be used::
+    ``UIWrapper.find_by_name``  can be used::
 
         class Person(HasTraits):
             name = Str()
@@ -129,18 +76,18 @@ class UITester:
         account = Account(person=Person())
         tester = UITester()
         with tester.create_ui(account, dict(view=view)) as ui:
-            interactor = tester.find_by_name(ui, "person").find_by_name("name")
+            wrapper = tester.find_by_name(ui, "person").find_by_name("name")
 
-    Performing an action (commands)
+    Performing an interaction (commands)
     -------------------------------
     After locating the GUI element, we typically want to perform some user
     actions on it for testing. Examples of user interactions that produce side
     effects are clicking or double clicking a mouse button, typing some keys
     on the keyboard, etc.
 
-    To perform an action for side effects, call the ``UserInteractor.perform``
-    method with the action required. A set of predefined command types can be
-    found in the ``traitsui.testing.tester.command``.
+    To perform an interaction for side effects, call the ``UIWrapper.perform``
+    method with the interaction required. A set of predefined command types can
+    be found in the ``traitsui.testing.tester.command``.
 
     Example::
 
@@ -153,7 +100,7 @@ class UITester:
     Sometimes, the test may want to inspect visual elements on the GUI, e.g.
     checking if a textbox has displayed the expected value.
 
-    To perform an action for queries, call the ``UserInteractor.inspect``
+    To perform an interaction for queries, call the ``UIWrapper.inspect``
     method with the query required. A set of predefined query types can be
     found in the ``traitsui.testing.tester.query``.
 
@@ -167,46 +114,18 @@ class UITester:
 
     Extending the API
     -----------------
-    There are two ways to extend the API.
+    THe API can be extended by defining a registry for mapping target and
+    interaction types to a specific implementation that handles the
+    interaction.
 
-    (1) Provide a custom function in an ad-hoc fashion using
-        ``traitsui.testing.tester.query.CustomAction``.
-    (2) Define a registry for mapping editor and action types to a specific
-        implementation that handles the action.
+    For example, suppose there is a custom UI target ``MyEditor``, to implement
+    a custom interaction type ``ManyMouseClick`` for this target::
 
-    Using CustomAction
-    ^^^^^^^^^^^^^^^^^^
-    This method is quick and easy but it does not scale well with multiple
-    toolkit support.
-
-    For example::
-
-        def test_my_editor(self):
-
-            def custom_function(interactor):
-                # Toolkit specific code
-                return interactor.editor.control.getText()
-
-            tester = UITester()
-            with tester.create_ui(obj) as ui:
-                value = tester.find_by_name(ui, "my_trait").inspect(
-                    query.CustomAction(func=custom_function)
-                )
-
-    Using registry
-    ^^^^^^^^^^^^^^
-    This method is more scalable for supporting multiple toolkit. This is the
-    preferred approach for library code to support testing of UI editor they
-    maintain.
-
-    For example, suppose there is a custom UI editor ``MyEditor``, to implement
-    a custom action type ``ManyMouseClick`` for this editor::
-
-        custom_registry = EditorActionRegistry()
+        custom_registry = InteractionRegistry()
         custom_registry.register(
-            editor_class=MyEditor,
-            action_class=ManyMouseClick,
-            handler=lambda interactor, action: interactor.editor.do_something()
+            target_class=MyEditor,
+            interaction_class=ManyMouseClick,
+            handler=lambda wrapper, interaction: wrapper.target.do_something()
         )
 
     Then the registry can be used in a UITester::
@@ -217,28 +136,35 @@ class UITester:
     default setup of ``UITester`` comes with a registry for testing TraitsUI
     editors.
 
-    See documentation on the ``AbstractRegistry`` and ``EditorActionRegistry``
-    for details.
+    See documentation on ``InteractionRegistry`` for details.
     """
 
-    def __init__(self, registries=None):
+    def __init__(self, interaction_registries=None, location_registries=None):
         """ Instantiate the UI tester.
 
         Parameters
         ----------
-        registries : list of AbstractRegistry, optional
-            Registries of interactors for different editors, in the order
+        interaction_registries : list of InteractionRegistry, optional
+            Registries of interaction for different target, in the order
             of decreasing priority. A shallow copy will be made.
-            Default is a list containing default implementations provided
-            by TraitsUI as well as a registry for supporting ``CustomAction``.
+        location_registries : list of LocationRegistry, optional
+            Registries for resolving nested UI targets, in the order
+            of decreasing priority. A shallow copy will be made.
+            Note that an additional registry for resolving editors in a
+            traitsui UI object is always added.
         """
 
-        if registries is None:
-            self._registries = [
-                _CustomActionRegistry(),
-            ]
+        if interaction_registries is None:
+            self._interaction_registries = []
         else:
-            self._registries = registries.copy()
+            self._interaction_registries = interaction_registries.copy()
+
+        if location_registries is None:
+            self._location_registries = []
+        else:
+            self._location_registries = location_registries.copy()
+        # The find_by_name method in this class depends on this registry
+        self._location_registries.append(_get_ui_registry())
 
     def create_ui(self, object, ui_kwargs=None):
         """ Context manager to create a UI and dispose it upon exit.
@@ -259,122 +185,34 @@ class UITester:
         return _create_ui(object, ui_kwargs)
 
     def find_by_name(self, ui, name):
-        """ Find the UI editor with the given name and return an object for
-        simulating user interactions with the editor. The list of
-        ``InteractorRegistry`` in this tester is used for finding the editor
-        specified. If no specific interactor can be found from the registries,
-        a default interactor wrapping the found editor is returned.
+        """ Find the UI target with the given name and return an object for
+        simulating user interactions with the target. The list of
+        ``InteractorRegistry`` in this tester is used for finding the target
+        specified. If no specific wrapper can be found from the registries,
+        a default wrapper wrapping the found target is returned.
 
         Parameters
         ----------
         ui : traitsui.ui.UI
             The UI created, e.g. by ``create_ui``.
         name : str
-            A single or an extended name for retreiving an editor on a UI.
+            A single or an extended name for retreiving a target on a UI.
             e.g. "attr", "model.attr1.attr2"
 
         Returns
         -------
-        interactor : UserInteractor
+        wrapper : UIWrapper
         """
-        editor = _get_editor_by_name(ui, name)
-        return UserInteractor(
-            editor=editor,
-            registries=self._registries,
-        )
-
-
-class UserInteractor:
-    """
-    Attributes
-    ----------
-    editor : Editor
-        An instance of Editor. It is assumed to be in a state after the UI
-        has been initialized but before it is disposed of.
-    """
-
-    def __init__(self, editor, registries):
-        self.editor = editor
-        self.registries = registries
-
-    def find_by_name(self, name):
-        """ Find an editor inside the nested UI in the current editor
-
-        Similar to UITester, but the UI is given by the editor in this
-        interactor.
-
-        Parameters
-        ----------
-        ui : traitsui.ui.UI
-            The UI created, e.g. by ``create_ui``.
-        name : str
-            A single name for retreiving an editor on a UI.
-
-        Returns
-        -------
-        interactor : UserInteractor
-        """
-        ui = self.inspect(query.NestedUI())
-        editor = _get_editor_by_name(ui, name)
-        return UserInteractor(
-            editor=editor,
-            registries=self.registries,
-        )
-
-    def perform(self, action):
-        """ Perform a user action that causes side effects.
-
-        Parameters
-        ----------
-        action : object
-            An action instance that defines the user action.
-            See ``traitsui.testing.tester.command`` module for builtin
-            query objects.
-            e.g. ``traitsui.testing.tester.command.MouseClick``
-        """
-        self._perform_or_inspect(action)
-
-    def inspect(self, action):
-        """ Return a value or values for inspection.
-
-        Parameters
-        ----------
-        action : object
-            An action instance that defines the inspection.
-            See ``traitsui.testing.tester.query`` module for builtin
-            query objects.
-            e.g. ``traitsui.testing.tester.query.DisplayedText``
-        """
-        return self._perform_or_inspect(action)
-
-    def _perform_or_inspect(self, action):
-        """ Perform a user action or a user inspection.
-        """
-        action_class = action.__class__
-        supported = []
-        for registry in self.registries:
-            try:
-                handler = registry.get_handler(
-                    editor_class=self.editor.__class__,
-                    action_class=action_class,
-                )
-            except ActionNotSupported as e:
-                supported.extend(e.supported)
-                continue
-            else:
-                with _event_processed():
-                    return handler(self, action)
-
-        raise ActionNotSupported(
-            editor_class=self.editor.__class__,
-            action_class=action.__class__,
-            supported=supported,
-        )
+        return UIWrapper(
+            target=ui,
+            interaction_registries=self._interaction_registries,
+            location_registries=self._location_registries,
+        ).find_by_name(name=name)
 
 
 def _get_editor_by_name(ui, name):
     """ Return a single Editor from an instance of traitsui.ui.UI with
-    a given name. Raise if zero or many editors are found.
+    a given extended name. Raise if zero or many editors are found.
 
     Parameters
     ----------
@@ -387,22 +225,35 @@ def _get_editor_by_name(ui, name):
     -------
     editor : Editor
         The single editor found.
-
-    Raises
-    ------
-    EditorNotFound
-        If the editor cannot be found.
-    ValueError
-        If multiple editors are associated with the given name.
     """
     editors = ui.get_editors(name)
 
+    all_names = [editor.name for editor in ui._editors]
     if not editors:
-        raise EditorNotFound(
-            "No editors can be found with name {!r}.".format(name)
+        raise ValueError(
+            "No editors can be found with name {!r}. "
+            "Found these: {!r}".format(name, all_names)
         )
     if len(editors) > 1:
         raise ValueError(
             "Found multiple editors with name {!r}.".format(name))
     editor, = editors
     return editor
+
+
+def _get_ui_registry():
+    """ Return a LocationRegistry with traitsui.ui.UI as the target.
+
+    Parameters
+    ----------
+    registry : LocationRegistry
+    """
+    registry = LocationRegistry()
+    registry.register(
+        target_class=UI,
+        locator_class=locator.TargetByName,
+        solver=lambda wrapper, location: (
+            _get_editor_by_name(wrapper.target, location.name)
+        ),
+    )
+    return registry

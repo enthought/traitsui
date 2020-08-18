@@ -9,8 +9,8 @@
 #  Thanks for using Enthought open source!
 #
 
-""" This module defines action objects that can be passed to
-``UserInteractor.perform`` where the actions represent 'commands'.
+""" This module defines interaction objects that can be passed to
+``UIWrapper.perform`` where the actions represent 'commands'.
 
 Implementations for these actions are expected to produce the
 documented side effects without returning any values.
