@@ -47,7 +47,7 @@ class TestInteractionRegistry(unittest.TestCase):
             pass
 
         # when
-        registry.register(
+        registry.register_handler(
             target_class=SpecificEditor,
             interaction_class=UserAction,
             handler=handler,
@@ -80,9 +80,9 @@ class TestInteractionRegistry(unittest.TestCase):
             pass
 
         registry = InteractionRegistry()
-        registry.register(SpecificEditor, UserAction, handler)
-        registry.register(SpecificEditor2, UserAction2, handler)
-        registry.register(SpecificEditor2, UserAction3, handler)
+        registry.register_handler(SpecificEditor, UserAction, handler)
+        registry.register_handler(SpecificEditor2, UserAction2, handler)
+        registry.register_handler(SpecificEditor2, UserAction3, handler)
 
         with self.assertRaises(InteractionNotSupported) as exception_context:
             registry.get_handler(SpecificEditor2, None)
@@ -104,10 +104,10 @@ class TestInteractionRegistry(unittest.TestCase):
             pass
 
         registry = InteractionRegistry()
-        registry.register(SpecificEditor, UserAction, handler)
+        registry.register_handler(SpecificEditor, UserAction, handler)
 
         with self.assertRaises(ValueError):
-            registry.register(SpecificEditor, UserAction, handler)
+            registry.register_handler(SpecificEditor, UserAction, handler)
 
 
 class TestLocationRegistry(unittest.TestCase):
@@ -129,7 +129,7 @@ class TestLocationRegistry(unittest.TestCase):
             return 1
 
         registry = LocationRegistry()
-        registry.register(
+        registry.register_solver(
             target_class=float, locator_class=str, solver=solver)
 
         self.assertIs(registry.get_solver(float, str), solver)
@@ -140,7 +140,7 @@ class TestLocationRegistry(unittest.TestCase):
             return 1
 
         registry = LocationRegistry()
-        registry.register(
+        registry.register_solver(
             target_class=float, locator_class=str, solver=solver)
 
         with self.assertRaises(LocationNotSupported) as exception_context:

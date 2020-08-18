@@ -249,7 +249,7 @@ def _get_ui_registry():
     registry : LocationRegistry
     """
     registry = LocationRegistry()
-    registry.register(
+    registry.register_solver(
         target_class=UI,
         locator_class=locator.TargetByName,
         solver=lambda wrapper, location: (

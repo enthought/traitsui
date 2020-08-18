@@ -108,7 +108,7 @@ class InteractionRegistry:
             ),
         )
 
-    def register(self, target_class, interaction_class, handler):
+    def register_handler(self, target_class, interaction_class, handler):
         """ Register a handler for a given target type and interaction type.
 
         Parameters
@@ -228,7 +228,7 @@ class LocationRegistry:
             ),
         )
 
-    def register(self, target_class, locator_class, solver):
+    def register_solver(self, target_class, locator_class, solver):
         """ Register a solver for resolving the next UI target for the given
         target type and locator type.
 
