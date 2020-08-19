@@ -57,7 +57,7 @@ class _TargetToKeyRegistry:
 
 
 class TargetRegistry:
-    """ An object for registring interaction and location resolution logic
+    """ An object for registering interaction and location resolution logic
     for different UI target types.
 
     Registering interaction handler (register_handler)
@@ -74,7 +74,7 @@ class TargetRegistry:
             # wrapper is an instance of UIWrapper
             wrapper.target.control.click()
 
-    The functon can then be registered with the target type and an interaction
+    The function can then be registered with the target type and an interaction
     type::
 
         registry = TargetRegistry()
@@ -99,7 +99,7 @@ class TargetRegistry:
     Registering location solver (register_solver)
     ---------------------------------------------
 
-    Resoling a location on a UI target is logically similar to making a query
+    Resolving a location on a UI target is logically similar to making a query
     for a nested UI target. This query is separated out to support the
     ``UIWrapper.locate`` method independently of the query method
     ``UIWrapper.inspect``.
@@ -138,7 +138,7 @@ class TargetRegistry:
 
     The solvers can then be registered for the container UI target::
 
-        registry = LocationRegistry()
+        registry = TargetRegistry()
         registry.register_solver(
             target_class=MyUIContainer,
             locator_class=NestedUI,
@@ -154,7 +154,7 @@ class TargetRegistry:
     support ``UIWrapper.locate``. If the nested UI has other locator solvers,
     then it would be possible to do chain location resolutions, like this::
 
-        container.locate(NestedUI()).locate(Index(1))
+        container.locate(NestedUI()).locate(NestedUI())
     """
 
     def __init__(self):

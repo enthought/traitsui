@@ -63,7 +63,7 @@ class UITester:
     the target.
 
     Since it is fairly typical for a UI target to have a nested UI (and those
-    nested UI may bave more nested UI), to locate these nested UIs,
+    nested UI may have more nested UI), to locate these nested UIs,
     ``UIWrapper.find_by_name`` can be used::
 
         class Person(HasTraits):
@@ -114,7 +114,7 @@ class UITester:
 
     Extending the API
     -----------------
-    THe API can be extended by defining a registry for mapping target and
+    The API can be extended by defining a registry for mapping target and
     interaction types to a specific implementation that handles the
     interaction.
 
@@ -179,7 +179,7 @@ class UITester:
 
     def find_by_name(self, ui, name):
         """ Find the TraitsUI editor with the given name and return a new
-        ``UIWrapper`` object for further interactions with the ditor.
+        ``UIWrapper`` object for further interactions with the editor.
 
         Parameters
         ----------
