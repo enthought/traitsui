@@ -18,5 +18,8 @@ from traitsui.testing.tester.registry import TargetRegistry
 
 def get_default_registry():
     # side-effect to determine current toolkit
-    module = importlib.import_module(".default_registry", "traitsui.testing.tester." + ETSConfig.toolkit)
-    return module.get_default_registry()
+    if ETSConfig.toolkit:
+        module = importlib.import_module(".default_registry", "traitsui.testing.tester." + ETSConfig.toolkit)
+        return module.get_default_registry()
+    else:
+        return TargetRegistry()
