@@ -399,14 +399,26 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
             editor.adapter.columns = [("Name", "name")]
             process_cascade_events()
 
-    def test_view_column_resized_attribute_error_workaround(self):
-        # This tests the workaround which checks if `factory` is None before
-        # using it while resizing the columns.
-        # The resize event is processed after UI.dispose is called.
-        # Maybe related to enthought/traits#431
-        with reraise_exceptions(), \
-                self.report_and_editor(get_view()) as (_, editor):
+    def test_view_column_resized_not_called_on_disposed(self):
+        # A workaround / guard was added to check if `factory` is None
+        # in _TableView.columnResized. (see enthought/traitsui##897)
+        # This was caused by the factory attribute being removed as part of
+        # UI.dispose when there are resize events left unprocessed.
+        report = Report(
+            people=[
+                Person(name="Theresa", age=60),
+                Person(name="Arlene", age=46),
+                Person(name="Karen", age=40),
+            ]
+        )
+        view = get_view()
+        with reraise_exceptions():
+            ui = report.edit_traits(view=view)
+            editor, = ui.get_editors("people")
             editor.adapter.columns = [("Name", "name")]
+            # Avoid calling process_cascade_events here.
+            ui.dispose()
+            process_cascade_events()
 
     @contextlib.contextmanager
     def report_and_editor(self, view):
