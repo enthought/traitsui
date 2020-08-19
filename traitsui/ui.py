@@ -273,8 +273,8 @@ class UI(HasPrivateTraits):
     def finish(self):
         """ Finishes disposing of a user interface.
         """
-        # Hide the view control to prevent resizing events from being emitted
-        # when we are tearing things down.
+        # Hide the view control to prevent events (e.g. resize) from being
+        # emitted when we are tearing things down.
         toolkit().hide_control(self.control)
 
         # Reset the contents of the user interface
