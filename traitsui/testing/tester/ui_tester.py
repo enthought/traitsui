@@ -11,6 +11,7 @@
 
 from traitsui.ui import UI
 from traitsui.testing.tester import locator
+from traitsui.testing.tester.default_registry import get_default_registry
 from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.ui_wrapper import UIWrapper
 from traitsui.tests._tools import (
@@ -131,7 +132,7 @@ class UITester:
         of decreasing priority. A shallow copy will be made.
     """
 
-    def __init__(self, registries=None):
+    def __init__(self, registries=None, delay=0):
         """ Instantiate the UI tester.
         """
 
@@ -142,6 +143,8 @@ class UITester:
 
         # The find_by_name method in this class depends on this registry
         self._registries.append(_get_ui_registry())
+        self._registries.append(get_default_registry())
+        self.delay = delay
 
     def create_ui(self, object, ui_kwargs=None):
         """ Context manager to create a UI and dispose it upon exit.
@@ -179,6 +182,7 @@ class UITester:
         return UIWrapper(
             target=ui,
             registries=self._registries,
+            delay=self.delay,
         ).find_by_name(name=name)
 
 
