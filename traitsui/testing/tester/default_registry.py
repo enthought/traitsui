@@ -14,12 +14,13 @@ import importlib
 from traits.etsconfig.api import ETSConfig
 
 from traitsui.testing.tester.registry import TargetRegistry
+from traitsui.tests._tools import is_null
 
 
 def get_default_registry():
     # side-effect to determine current toolkit
-    if ETSConfig.toolkit:
+    if is_null():
+        return TargetRegistry()
+    else:
         module = importlib.import_module(".default_registry", "traitsui.testing.tester." + ETSConfig.toolkit)
         return module.get_default_registry()
-    else:
-        return TargetRegistry()
