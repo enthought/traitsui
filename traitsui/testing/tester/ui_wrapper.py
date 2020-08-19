@@ -49,7 +49,7 @@ class UIWrapper:
         a leaf target that can be operated on.
     """
 
-    def __init__(self, target, registries):
+    def __init__(self, target, registries, delay=0):
         """ Initializer
 
         Parameters
@@ -63,6 +63,7 @@ class UIWrapper:
         """
         self.target = target
         self._registries = registries
+        self.delay = delay
 
     def locate(self, location):
         """ Attempt to resolve the given location and return a new
@@ -80,6 +81,7 @@ class UIWrapper:
         return UIWrapper(
             target=self._get_next_target(location),
             registries=self._registries,
+            delay=self.delay,
         )
 
     def find_by_name(self, name):
