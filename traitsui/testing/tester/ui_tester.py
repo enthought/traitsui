@@ -170,8 +170,7 @@ class UITester:
         ui : traitsui.ui.UI
             The UI created, e.g. by ``create_ui``.
         name : str
-            A single or an extended name for retreiving a target on a UI.
-            e.g. "attr", "model.attr1.attr2"
+            A single name for retrieving a target on a UI.
 
         Returns
         -------
@@ -192,7 +191,7 @@ def _get_editor_by_name(ui, name):
     ui : traitsui.ui.UI
         The UI from which an editor will be retrieved.
     name : str
-        A single name for retreiving an editor on a UI.
+        A single name for retrieving an editor on a UI.
 
     Returns
     -------
