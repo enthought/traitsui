@@ -426,6 +426,10 @@ class GUIToolkit(Toolkit):
         """
         event.Skip()
 
+    def hide_control(self, control):
+        """ Hide a GUI toolkit control."""
+        control.Hide()
+
     def destroy_control(self, control):
         """ Destroys a specified GUI toolkit control.
         """

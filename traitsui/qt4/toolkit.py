@@ -375,6 +375,10 @@ class GUIToolkit(Toolkit):
         """
         event.ignore()
 
+    def hide_control(self, control):
+        """ Hide a GUI toolkit control."""
+        control.hide()
+
     def destroy_control(self, control):
         """ Destroys a specified GUI toolkit control.
         """
@@ -384,7 +388,7 @@ class GUIToolkit(Toolkit):
 
         # This may be called from within the finished() signal handler so we
         # need to do the delete after the handler has returned.
-        control.hide()
+        self.hide_control(control)
         control.deleteLater()
 
         # PyQt v4.3.1 and earlier deleteLater() didn't transfer ownership to

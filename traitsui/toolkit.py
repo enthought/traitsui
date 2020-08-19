@@ -315,6 +315,12 @@ class Toolkit(Toolkit):
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
+    def hide_control(self, control):
+        """ Hide a GUI toolkit control."""
+        raise NotImplementedError(
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
+
     def destroy_control(self, control):
         """ Destroys a specified GUI toolkit control.
         """
