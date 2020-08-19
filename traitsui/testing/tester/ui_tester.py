@@ -11,7 +11,7 @@
 
 from traitsui.ui import UI
 from traitsui.testing.tester import locator
-from traitsui.testing.tester.registry import LocationRegistry
+from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.ui_wrapper import UIWrapper
 from traitsui.tests._tools import (
     create_ui as _create_ui,
@@ -121,7 +121,7 @@ class UITester:
     For example, suppose there is a custom UI target ``MyEditor``, to implement
     a custom interaction type ``ManyMouseClick`` for this target::
 
-        custom_registry = InteractionRegistry()
+        custom_registry = TargetRegistry()
         custom_registry.register_handler(
             target_class=MyEditor,
             interaction_class=ManyMouseClick,
@@ -130,45 +130,34 @@ class UITester:
 
     Then the registry can be used in a UITester::
 
-        tester = UITester(interaction_registries=[custom_registry])
+        tester = UITester(registries=[custom_registry])
 
     This is how TraitsUI supplies testing support for specific editors; the
     default setup of ``UITester`` comes with a registry for testing TraitsUI
     editors.
 
-    Similar the location resolution logic can be extended via the
-    ``location_registries`` parameter.
+    Similar the location resolution logic can be extended.
 
-    See documentation on ``InteractionRegistry`` and ``LocationRegistry`` for
-    details.
+    See documentation on ``TargetRegistry`` for details.
 
     Attributes
     ----------
-    interaction_registries : list of InteractionRegistry, optional
+    registries : list of TargetRegistry, optional
         Registries of interaction for different target, in the order
         of decreasing priority. A shallow copy will be made.
-    location_registries : list of LocationRegistry, optional
-        Registries for resolving nested UI targets, in the order
-        of decreasing priority. A shallow copy will be made.
-        Note that an additional registry for resolving editors in a
-        traitsui UI object is always added.
     """
 
-    def __init__(self, interaction_registries=None, location_registries=None):
+    def __init__(self, registries=None):
         """ Instantiate the UI tester.
         """
 
-        if interaction_registries is None:
-            self._interaction_registries = []
+        if registries is None:
+            self._registries = []
         else:
-            self._interaction_registries = interaction_registries.copy()
+            self._registries = registries.copy()
 
-        if location_registries is None:
-            self._location_registries = []
-        else:
-            self._location_registries = location_registries.copy()
         # The find_by_name method in this class depends on this registry
-        self._location_registries.append(_get_ui_registry())
+        self._registries.append(_get_ui_registry())
 
     def create_ui(self, object, ui_kwargs=None):
         """ Context manager to create a UI and dispose it upon exit.
@@ -206,8 +195,7 @@ class UITester:
         """
         return UIWrapper(
             target=ui,
-            interaction_registries=self._interaction_registries,
-            location_registries=self._location_registries,
+            registries=self._registries,
         ).find_by_name(name=name)
 
 
@@ -243,13 +231,13 @@ def _get_editor_by_name(ui, name):
 
 
 def _get_ui_registry():
-    """ Return a LocationRegistry with traitsui.ui.UI as the target.
+    """ Return a TargetRegistry with traitsui.ui.UI as the target.
 
     Parameters
     ----------
-    registry : LocationRegistry
+    registry : TargetRegistry
     """
-    registry = LocationRegistry()
+    registry = TargetRegistry()
     registry.register_solver(
         target_class=UI,
         locator_class=locator.TargetByName,

@@ -49,7 +49,7 @@ class UIWrapper:
         a leaf target that can be operated on.
     """
 
-    def __init__(self, target, interaction_registries, location_registries):
+    def __init__(self, target, registries):
         """ Initializer
 
         Parameters
@@ -57,16 +57,12 @@ class UIWrapper:
         target : any
             An object on which further UI target can be searched for, or can be
             a leaf target that can be operated on.
-        interaction_registries : list of InteractionRegistry
+        registries : list of TargetRegistry
             Registries of interaction for different target, in the order
-            of decreasing priority.
-        location_registries : list of LocationRegistry
-            Registries for resolving nested UI targets, in the order
             of decreasing priority.
         """
         self.target = target
-        self._interaction_registries = interaction_registries
-        self._location_registries = location_registries
+        self._registries = registries
 
     def locate(self, location):
         """ Attempt to resolve the given location and return a new
@@ -83,8 +79,7 @@ class UIWrapper:
         """
         return UIWrapper(
             target=self._get_next_target(location),
-            interaction_registries=self._interaction_registries,
-            location_registries=self._location_registries,
+            registries=self._registries,
         )
 
     def find_by_name(self, name):
@@ -147,7 +142,7 @@ class UIWrapper:
         """
         interaction_class = interaction.__class__
         supported = []
-        for registry in self._interaction_registries:
+        for registry in self._registries:
             try:
                 handler = registry.get_handler(
                     target_class=self.target.__class__,
@@ -185,7 +180,7 @@ class UIWrapper:
             wrapped UI target.
         """
         supported = set()
-        for registry in self._location_registries:
+        for registry in self._registries:
             try:
                 handler = registry.get_solver(
                     self.target.__class__,

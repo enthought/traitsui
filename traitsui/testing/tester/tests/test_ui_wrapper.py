@@ -42,8 +42,7 @@ def example_ui_wrapper(**kwargs):
     """
     values = dict(
         target=None,
-        interaction_registries=[],
-        location_registries=[],
+        registries=[],
     )
     values.update(kwargs)
     return UIWrapper(**values)
@@ -75,7 +74,7 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
         registry2 = StubRegistry(handler=lambda w, l: 2)
 
         wrapper = example_ui_wrapper(
-            interaction_registries=[registry2, registry1],
+            registries=[registry2, registry1],
         )
         value = wrapper.inspect(None)
 
@@ -83,7 +82,7 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
 
         # reverse order
         wrapper = example_ui_wrapper(
-            interaction_registries=[registry1, registry2]
+            registries=[registry1, registry2]
         )
         value = wrapper.inspect(None)
 
@@ -106,7 +105,7 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
         registry2 = StubRegistry(handler=registry2_handler)
 
         wrapper = example_ui_wrapper(
-            interaction_registries=[registry1, registry2],
+            registries=[registry1, registry2],
         )
         wrapper.perform(None)
 
@@ -134,7 +133,7 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
                 )
 
         wrapper = example_ui_wrapper(
-            interaction_registries=[EmptyRegistry1(), EmptyRegistry2()],
+            registries=[EmptyRegistry1(), EmptyRegistry2()],
         )
         with self.assertRaises(InteractionNotSupported) as exception_context:
             wrapper.perform(None)
@@ -154,7 +153,7 @@ class TestUIWrapperLocationRegistry(unittest.TestCase):
         registry2 = StubRegistry(solver=lambda w, l: 2)
 
         wrapper = example_ui_wrapper(
-            location_registries=[registry2, registry1],
+            registries=[registry2, registry1],
         )
         wrapper = wrapper.locate(None)
 
@@ -162,7 +161,7 @@ class TestUIWrapperLocationRegistry(unittest.TestCase):
 
         # swap the order
         wrapper = example_ui_wrapper(
-            location_registries=[registry1, registry2],
+            registries=[registry1, registry2],
         )
         wrapper = wrapper.locate(None)
 
@@ -187,19 +186,14 @@ class TestUIWrapperLocationRegistry(unittest.TestCase):
         registry2 = StubRegistry(solver=solver2)
 
         wrapper = example_ui_wrapper(
-            interaction_registries=[EmptyRegistry()],  # to be propagated.
-            location_registries=[registry1, registry2],
+            registries=[registry1, registry2],
         )
         new_wrapper = wrapper.locate(None)
 
         self.assertEqual(new_wrapper.target, 2)
         self.assertEqual(
-            new_wrapper._interaction_registries,
-            wrapper._interaction_registries,
-        )
-        self.assertEqual(
-            new_wrapper._location_registries,
-            wrapper._location_registries,
+            new_wrapper._registries,
+            wrapper._registries,
         )
 
     def test_registry_all_declined(self):
@@ -224,7 +218,7 @@ class TestUIWrapperLocationRegistry(unittest.TestCase):
                 )
 
         wrapper = example_ui_wrapper(
-            location_registries=[EmptyRegistry1(), EmptyRegistry2()],
+            registries=[EmptyRegistry1(), EmptyRegistry2()],
         )
         with self.assertRaises(LocationNotSupported) as exception_context:
             wrapper.locate(None)
@@ -254,7 +248,7 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
             gui.set_trait_later(model, "number", 2)
 
         wrapper = example_ui_wrapper(
-            interaction_registries=[StubRegistry(handler=handler)],
+            registries=[StubRegistry(handler=handler)],
         )
 
         with self.assertTraitChanges(model, "number"):
@@ -272,7 +266,7 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
             gui.invoke_later(raise_error)
 
         wrapper = example_ui_wrapper(
-            interaction_registries=[StubRegistry(handler=handler)],
+            registries=[StubRegistry(handler=handler)],
         )
 
         with self.assertRaises(RuntimeError), self.assertLogs("traitsui"):
@@ -286,7 +280,7 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
             raise ZeroDivisionError()
 
         wrapper = example_ui_wrapper(
-            interaction_registries=[StubRegistry(handler=handler)],
+            registries=[StubRegistry(handler=handler)],
         )
 
         with self.assertRaises(ZeroDivisionError):

@@ -56,10 +56,12 @@ class _TargetToKeyRegistry:
         return action_to_handler[key]
 
 
-class InteractionRegistry:
-    """ A registry for mapping from target type + interaction type to a specific
-    implementation for simulating user interaction.
+class TargetRegistry:
+    """ An object for registring interaction and location resolution logic
+    for different UI target types.
 
+    Registering interaction handler (register_handler)
+    --------------------------------------------------
     The interaction type can be a subclass of any type. There are a few
     pre-defined interaction types in
     - ``traitsui.testing.tester.command``
@@ -75,7 +77,7 @@ class InteractionRegistry:
     The functon can then be registered with the target type and an interaction
     type::
 
-        registry = InteractionRegistry()
+        registry = TargetRegistry()
         registry.register_handler(
             target_class=traitsui.qt4.button_editor.SimpleEditor,
             interaction_class=traitsui.testing.tester.command.MouseClick,
@@ -93,75 +95,14 @@ class InteractionRegistry:
 
     Then this registry can be used with the ``UITester`` and ``UIWrapper`` to
     support ``UIWrapper.perform`` and ``UIWrapper.inspect``.
-    """
 
-    def __init__(self):
-        self._registry = _TargetToKeyRegistry(
-            exception_maker=(
-                lambda target_class, key, available_keys: (
-                    InteractionNotSupported(
-                        target_class=target_class,
-                        interaction_class=key,
-                        supported=available_keys,
-                    )
-                )
-            ),
-        )
+    Registering location solver (register_solver)
+    ---------------------------------------------
 
-    def register_handler(self, target_class, interaction_class, handler):
-        """ Register a handler for a given target type and interaction type.
-
-        Parameters
-        ----------
-        target_class : subclass of type
-            The type of a UI target being operated on.
-        interaction_class : subclass of type
-            Any class.
-        handler : callable(UIWrapper, interaction) -> any
-            The function to handle the particular interaction on a target.
-            ``interaction`` should be an instance of ``interaction_class``.
-
-        Raises
-        ------
-        ValueError
-            If a handler has already be registered for the same target type
-            and interaction class.
-        """
-        self._registry.register(
-            target_class=target_class,
-            key=interaction_class,
-            value=handler,
-        )
-
-    def get_handler(self, target_class, interaction_class):
-        """ Return a callable for handling an interaction for a given target
-        type.
-
-        Parameters
-        ----------
-        target_class : subclass of type
-            The type of a UI target being operated on.
-        interaction_class : subclass of type
-            Any class.
-
-        Returns
-        -------
-        handler : callable(UIWrapper, interaction) -> any
-            The function to handle the particular interaction on a target.
-            ``interaction`` should be an instance of ``interaction_class``.
-        """
-        return self._registry.get_value(
-            target_class=target_class,
-            key=interaction_class,
-        )
-
-
-class LocationRegistry:
-    """ A registry for mapping from target type + locator type to a specific
-    implementation for resolving a new target for furture user interactions
-    (or further location resolutions).
-
-    Used for supporting ``UIWrapper.locate``.
+    Resoling a location on a UI target is logically similar to making a query
+    for a nested UI target. This query is separated out to support the
+    ``UIWrapper.locate`` method independently of the query method
+    ``UIWrapper.inspect``.
 
     The locator type can be any subclass of ``type``. There are predefined
     locators in ``traitsui.testing.tester.locator``.
@@ -217,9 +158,18 @@ class LocationRegistry:
     """
 
     def __init__(self):
-        """ Initial registry is empty.
-        """
-        self._registry = _TargetToKeyRegistry(
+        self._interaction_registry = _TargetToKeyRegistry(
+            exception_maker=(
+                lambda target_class, key, available_keys: (
+                    InteractionNotSupported(
+                        target_class=target_class,
+                        interaction_class=key,
+                        supported=available_keys,
+                    )
+                )
+            ),
+        )
+        self._location_registry = _TargetToKeyRegistry(
             exception_maker=(
                 lambda target_class, key, available_keys: LocationNotSupported(
                     target_class=target_class,
@@ -227,6 +177,53 @@ class LocationRegistry:
                     supported=available_keys,
                 )
             ),
+        )
+
+    def register_handler(self, target_class, interaction_class, handler):
+        """ Register a handler for a given target type and interaction type.
+
+        Parameters
+        ----------
+        target_class : subclass of type
+            The type of a UI target being operated on.
+        interaction_class : subclass of type
+            Any class.
+        handler : callable(UIWrapper, interaction) -> any
+            The function to handle the particular interaction on a target.
+            ``interaction`` should be an instance of ``interaction_class``.
+
+        Raises
+        ------
+        ValueError
+            If a handler has already be registered for the same target type
+            and interaction class.
+        """
+        self._interaction_registry.register(
+            target_class=target_class,
+            key=interaction_class,
+            value=handler,
+        )
+
+    def get_handler(self, target_class, interaction_class):
+        """ Return a callable for handling an interaction for a given target
+        type.
+
+        Parameters
+        ----------
+        target_class : subclass of type
+            The type of a UI target being operated on.
+        interaction_class : subclass of type
+            Any class.
+
+        Returns
+        -------
+        handler : callable(UIWrapper, interaction) -> any
+            The function to handle the particular interaction on a target.
+            ``interaction`` should be an instance of ``interaction_class``.
+        """
+        return self._interaction_registry.get_value(
+            target_class=target_class,
+            key=interaction_class,
         )
 
     def register_solver(self, target_class, locator_class, solver):
@@ -249,7 +246,7 @@ class LocationRegistry:
             If a solver has already been registered for the given target
             type and locator type.
         """
-        self._registry.register(
+        self._location_registry.register(
             target_class=target_class,
             key=locator_class,
             value=solver,
@@ -270,7 +267,7 @@ class LocationRegistry:
         ------
         LocationNotSupported
         """
-        return self._registry.get_value(
+        return self._location_registry.get_value(
             target_class=target_class,
             key=locator_class,
         )

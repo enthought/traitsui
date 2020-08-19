@@ -72,12 +72,8 @@ class TestUITesterFindEditor(unittest.TestCase):
             expected, = ui.get_editors("submit_button")
             self.assertEqual(wrapper.target, expected)
             self.assertEqual(
-                wrapper._interaction_registries,
-                tester._interaction_registries,
-            )
-            self.assertEqual(
-                wrapper._location_registries,
-                tester._location_registries,
+                wrapper._registries,
+                tester._registries,
             )
 
     def test_no_editors_found(self):

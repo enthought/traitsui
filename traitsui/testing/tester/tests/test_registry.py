@@ -12,8 +12,7 @@
 import unittest
 
 from traitsui.testing.tester.registry import (
-    InteractionRegistry,
-    LocationRegistry,
+    TargetRegistry,
 )
 from traitsui.testing.tester.exceptions import (
     InteractionNotSupported,
@@ -24,7 +23,7 @@ from traitsui.testing.tester.exceptions import (
 class TestInteractionRegistry(unittest.TestCase):
 
     def test_registry_empty(self):
-        registry = InteractionRegistry()
+        registry = TargetRegistry()
         with self.assertRaises(InteractionNotSupported) as exception_context:
             registry.get_handler(None, None)
 
@@ -35,7 +34,7 @@ class TestInteractionRegistry(unittest.TestCase):
         )
 
     def test_register_editor_with_action(self):
-        registry = InteractionRegistry()
+        registry = TargetRegistry()
 
         class SpecificEditor:
             pass
@@ -79,7 +78,7 @@ class TestInteractionRegistry(unittest.TestCase):
         def handler(wrapper, interaction):
             pass
 
-        registry = InteractionRegistry()
+        registry = TargetRegistry()
         registry.register_handler(SpecificEditor, UserAction, handler)
         registry.register_handler(SpecificEditor2, UserAction2, handler)
         registry.register_handler(SpecificEditor2, UserAction3, handler)
@@ -103,7 +102,7 @@ class TestInteractionRegistry(unittest.TestCase):
         def handler(wrapper, interaction):
             pass
 
-        registry = InteractionRegistry()
+        registry = TargetRegistry()
         registry.register_handler(SpecificEditor, UserAction, handler)
 
         with self.assertRaises(ValueError):
@@ -113,7 +112,7 @@ class TestInteractionRegistry(unittest.TestCase):
 class TestLocationRegistry(unittest.TestCase):
 
     def test_location_registry_empty(self):
-        registry = LocationRegistry()
+        registry = TargetRegistry()
         with self.assertRaises(LocationNotSupported) as exception_context:
             registry.get_solver(None, None)
 
@@ -128,7 +127,7 @@ class TestLocationRegistry(unittest.TestCase):
         def solver(wrapper, location):
             return 1
 
-        registry = LocationRegistry()
+        registry = TargetRegistry()
         registry.register_solver(
             target_class=float, locator_class=str, solver=solver)
 
@@ -139,7 +138,7 @@ class TestLocationRegistry(unittest.TestCase):
         def solver(wrapper, location):
             return 1
 
-        registry = LocationRegistry()
+        registry = TargetRegistry()
         registry.register_solver(
             target_class=float, locator_class=str, solver=solver)
 
