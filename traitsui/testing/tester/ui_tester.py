@@ -62,22 +62,6 @@ class UITester:
     UI target instance found and allows further test actions to be performed on
     the target.
 
-    Since it is fairly typical for a UI target to have a nested UI (and those
-    nested UI may have more nested UI), to locate these nested UIs,
-    ``UIWrapper.find_by_name`` can be used::
-
-        class Person(HasTraits):
-            name = Str()
-
-        class Account(HasTraits):
-            person = Instance(Person)
-
-        view = View(Item(name="person", style="custom"))
-        account = Account(person=Person())
-        tester = UITester()
-        with tester.create_ui(account, dict(view=view)) as ui:
-            wrapper = tester.find_by_name(ui, "person").find_by_name("name")
-
     Performing an interaction (commands)
     ------------------------------------
     After locating the GUI element, we typically want to perform some user
