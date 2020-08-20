@@ -157,6 +157,24 @@ class UIWrapper:
                 with _event_processed():
                     return handler(self, interaction)
 
+        try:
+            # there may not be a handler registered for this interaction on
+            # the original target.  Instead, it may be registered for DefaultTarget
+            default_target = self.locate(locator.DefaultTarget)
+        # If there we can't solve from the current target to DefaultTarget this 
+        # interaction isn't supported and we can raise appropraite exception below
+        except LocationNotSupported:    
+            pass
+        else:
+            # if we can locate a DefaultTarget from the current target, try to
+            # perform the interactation on it instead
+            try:
+                default_target._perform_or_inspect(interaction)
+            # if we can't add to the list of things which are supported for
+            # the DefaultTarget
+            except InteractionNotSupported as e:
+                supported.extend(e.supported)
+
         raise InteractionNotSupported(
             target_class=self.target.__class__,
             interaction_class=interaction.__class__,

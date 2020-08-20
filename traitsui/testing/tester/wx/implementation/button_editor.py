@@ -9,8 +9,8 @@
 #  Thanks for using Enthought open source!
 #
 from traitsui.wx.button_editor import SimpleEditor
-from traitsui.testing import locator
-from traitsui.testing.wx import helpers
+from traitsui.testing.tester import locator
+from traitsui.testing.tester.wx import helpers
 
 
 def register(registry):

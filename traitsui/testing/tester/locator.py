@@ -35,3 +35,6 @@ class TargetByName:
     """
     def __init__(self, name):
         self.name = name
+
+class DefaultTarget:
+    pass
