@@ -11,7 +11,7 @@
 
 from pyface.qt import QtGui
 
-from traitsui.testing.tester import command
+from traitsui.testing.tester import command, query
 from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.qt4 import helpers
 from traitsui.testing.tester.qt4.implementation import (
@@ -27,10 +27,25 @@ def get_default_registry():
         The default registry containing implementations for TraitsUI editors
         that is qt specific.  
     """
-    registry = TargetRegistry()
+    registry = get_qobject_registry()
 
     button_editor.register(registry)
-    
+
+
+    return registry
+
+
+def get_qobject_registry():
+    """ Creates a generic registry for handling/solving qt objects. (i.e.
+    this registry is independent of TraitsUI)
+
+    Returns
+    -------
+    registry : TargetRegistry
+        Registry containing qt specific generic handlers and solvers.
+    """
+    registry = TargetRegistry()
+
     widget_classes = [
         QtGui.QPushButton,
     ]
@@ -45,4 +60,11 @@ def get_default_registry():
                 handler=handler,
             )
 
+    registry.register_handler(
+        target_class=QtGui.QPushButton,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, _: wrapper.target.text(),
+    )
+
     return registry
+

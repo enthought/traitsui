@@ -123,6 +123,12 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
                     interaction_class=None,
                     supported=[int],
                 )
+            def get_solver(self, target_class, interaction_class):
+                raise LocationNotSupported(
+                    target_class=None,
+                    locator_class=None,
+                    supported=[],
+                )
 
         class EmptyRegistry2:
             def get_handler(self, target_class, interaction_class):
@@ -130,6 +136,12 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
                     target_class=None,
                     interaction_class=None,
                     supported=[float],
+                )
+            def get_solver(self, target_class, interaction_class):
+                raise LocationNotSupported(
+                    target_class=None,
+                    locator_class=None,
+                    supported=[],
                 )
 
         wrapper = example_ui_wrapper(

@@ -8,7 +8,7 @@
 #
 #  Thanks for using Enthought open source!
 #
-from traitsui.testing.tester import locator
+from traitsui.testing.tester import locator, query
 from traitsui.qt4.button_editor import CustomEditor, SimpleEditor
 
 
@@ -17,13 +17,9 @@ def register(registry):
 
     If there are any conflicts, an error will occur.
     """
-    registry.register_solver(
-        target_class=SimpleEditor,
-        locator_class=locator.DefaultTarget,
-        solver=lambda wrapper, _: wrapper.editor.control,
-    )
-    registry.register_solver(
-        target_class=CustomEditor,
-        locator_class=locator.DefaultTarget,
-        solver=lambda wrapper, _: wrapper.editor.control,
-    )
+    for target_class in [SimpleEditor, CustomEditor]:
+        registry.register_solver(
+            target_class=target_class,
+            locator_class=locator.DefaultTarget,
+            solver=lambda wrapper, _: wrapper.target.control,
+        )

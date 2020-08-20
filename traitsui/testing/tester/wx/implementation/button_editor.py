@@ -8,15 +8,16 @@
 #
 #  Thanks for using Enthought open source!
 #
-from traitsui.wx.button_editor import SimpleEditor
-from traitsui.testing.tester import locator
+from traitsui.wx.button_editor import SimpleEditor, CustomEditor
+from traitsui.testing.tester import locator, query
 from traitsui.testing.tester.wx import helpers
 
 
 def register(registry):
-    registry.register_solver(
-        target_class=SimpleEditor,
-        locator_class=locator.DefaultTarget,
-        solver=lambda wrapper, _: wrapper.target.control,
-    )
+    for target_class in [SimpleEditor, CustomEditor]:
+        registry.register_solver(
+            target_class=target_class,
+            locator_class=locator.DefaultTarget,
+            solver=lambda wrapper, _: wrapper.target.control,
+        )
 
