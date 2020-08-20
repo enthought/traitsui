@@ -9,9 +9,32 @@
 #  Thanks for using Enthought open source!
 #
 
-from traitsui.testing.tester.registry import TargetRegistry
+from pyface.qt import QtGui
 
+from traitsui.testing.tester import command
+from traitsui.testing.tester.registry import TargetRegistry
+from traitsui.testing.tester.qt4 import helpers
+from traitsui.testing.tester.qt4.implementation import (
+    button_editor,
+)
 
 def get_default_registry():
     registry = TargetRegistry()
+
+    button_editor.register(registry)
+    
+    widget_classes = [
+        QtGui.QPushButton,
+    ]
+    handlers = [
+        (command.MouseClick, helpers.mouse_click_qwidget),
+    ]
+    for widget_class in widget_classes:
+        for interaction_class, handler in handlers:
+            registry.register_handler(
+                target_class=widget_class,
+                interaction_class=interaction_class,
+                handler=handler,
+            )
+
     return registry
