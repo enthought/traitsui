@@ -15,7 +15,7 @@ from pyface.qt.QtTest import QTest
 
 def mouse_click_qwidget(wrapper, action):
     QTest.mouseClick(
-        wrapper.editor,
+        wrapper.target,
         QtCore.Qt.LeftButton,
         delay=wrapper.delay,
     )

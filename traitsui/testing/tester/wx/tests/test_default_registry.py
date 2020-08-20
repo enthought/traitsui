@@ -15,7 +15,7 @@ from unittest import mock
 from pyface.api import GUI
 
 from traitsui.testing.tester import command
-from traitsui.testing.tester.ui_tester import UIWrapper
+from traitsui.testing.tester.ui_wrapper import UIWrapper
 
 try:
     import wx
@@ -47,7 +47,7 @@ class TestInteractorAction(unittest.TestCase):
         button.Bind(wx.EVT_BUTTON, handler)
         wrapper = UIWrapper(
             target=button,
-            _registries=[default_registry.get_default_registry()],
+            registries=[default_registry.get_default_registry()],
         )
 
         # when

@@ -37,7 +37,7 @@ def get_default_registry():
         interaction_class=command.MouseClick,
         handler=lambda wrapper, _: (
             helpers.mouse_click_button(
-                control=wrapper.editor, delay=wrapper.delay,
+                control=wrapper.target, delay=wrapper.delay,
             )
         )
     )
