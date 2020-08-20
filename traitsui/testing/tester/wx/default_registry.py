@@ -20,6 +20,14 @@ from traitsui.testing.tester.wx.implementation import (
 
 
 def get_default_registry():
+    """ Creates a default registry for UITester that is wx specific.
+
+    Returns
+    -------
+    registry : TargetRegistry
+        The default registry containing implementations for TraitsUI editors
+        that is wx specific.  
+    """
     registry = TargetRegistry()
 
     button_editor.register(registry)
