@@ -100,3 +100,11 @@ class TestUITesterFindEditor(unittest.TestCase):
         self.assertIn(
             "Found multiple editors", str(exception_context.exception),
         )
+
+    def test_delay_persisted(self):
+        tester = UITester(delay=.01)
+        view = View(Item("submit_button"))
+        with tester.create_ui(Order(), dict(view=view)) as ui:
+            wrapped = tester.find_by_name(ui,"submit_button")
+            self.assertEqual(wrapped.delay, .01)
+

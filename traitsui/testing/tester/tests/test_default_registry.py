@@ -20,4 +20,3 @@ class TestDefaultRegistry(unittest.TestCase):
     def test_load_default_registries(self):
         registry = get_default_registry()
         self.assertIsInstance(registry, TargetRegistry)
-        
