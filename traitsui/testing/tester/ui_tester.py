@@ -130,6 +130,10 @@ class UITester:
     registries : list of TargetRegistry, optional
         Registries of interaction for different target, in the order
         of decreasing priority. A shallow copy will be made.
+    delay : int, optional
+        Time delay (in ms) in which actions by the tester are performed. Note
+        it is propogated through to created child wrappers. The delay allows
+        visual confirmation test code is working as desired. Defaults to 0.  
     """
 
     def __init__(self, registries=None, delay=0):

@@ -11,7 +11,10 @@
 
 import importlib
 
+from traits.etsconfig.api import ETSConfig
+
 from traitsui.testing.tester.registry import TargetRegistry
+
 
 def get_default_registry():
     """ Creates a default registry for UITester that is toolkit specific.
@@ -24,7 +27,6 @@ def get_default_registry():
     """
     # side-effect to determine current toolkit
     from pyface.toolkit import toolkit_object
-    from traits.etsconfig.api import ETSConfig
 
     if ETSConfig.toolkit == "null":
         return TargetRegistry()
