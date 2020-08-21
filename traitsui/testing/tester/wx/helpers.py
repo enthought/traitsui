@@ -31,3 +31,28 @@ def mouse_click_button(wrapper, interaction):
         wx.wxEVT_COMMAND_BUTTON_CLICKED, control.GetId()
     )
     control.ProcessEvent(click_event)
+
+
+def key_press_text_ctrl(wrapper, interaction):
+    control = wrapper.target
+    if interaction.key == "Enter":
+        if not control.HasFocus():
+            control.SetFocus()
+        wx.MilliSleep(wrapper.delay)
+        event = wx.CommandEvent(wx.EVT_TEXT_ENTER.typeId, control.GetId())
+        control.ProcessEvent(event)
+    else:
+        raise ValueError("Only supported Enter key.")
+
+
+def key_sequence_text_ctrl(wrapper, interaction):
+    control = wrapper.target
+    if not control.HasFocus():
+        control.SetFocus()
+    for char in interaction.sequence:
+        wx.MilliSleep(wrapper.delay)
+        if char == "\b":
+            pos = control.GetInsertionPoint()
+            control.Remove(max(0, pos - 1), pos)
+        else:
+            control.AppendText(char)

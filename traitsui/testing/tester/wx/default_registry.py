@@ -11,11 +11,12 @@
 
 import wx 
 
-from traitsui.testing.tester import command
+from traitsui.testing.tester import command, query
 from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.wx import helpers
 from traitsui.testing.tester.wx.implementation import (
     button_editor,
+    text_editor,
 )
 
 
@@ -30,7 +31,11 @@ def get_default_registry():
     """
     registry = get_wobject_registry()
 
+    # ButtonEditor
     button_editor.register(registry)
+
+    # TextEditor
+    text_editor.register(registry)
     
     return registry
 
@@ -46,13 +51,26 @@ def get_wobject_registry():
     registry = TargetRegistry()
 
     registry.register_handler(
+        target_class=wx.TextCtrl,
+        interaction_class=command.KeyClick,
+        handler=helpers.key_press_text_ctrl
+    )
+    registry.register_handler(
+        target_class=wx.TextCtrl,
+        interaction_class=command.KeySequence,
+        handler=helpers.key_sequence_text_ctrl
+    )
+    registry.register_handler(
+        target_class=wx.StaticText,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, action: (
+            wrapper.target.GetLabel()
+        ),
+    )
+    registry.register_handler(
         target_class=wx.Button,
         interaction_class=command.MouseClick,
-        handler=lambda wrapper, _: (
-            helpers.mouse_click_button(
-                wrapper=wrapper, interaction=command.MouseClick(),
-            )
-        )
+        handler=helpers.mouse_click_button
     )
 
     return registry

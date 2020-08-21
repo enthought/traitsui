@@ -16,6 +16,7 @@ from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.qt4 import helpers
 from traitsui.testing.tester.qt4.implementation import (
     button_editor,
+    text_editor,
 )
 
 def get_default_registry():
@@ -29,7 +30,11 @@ def get_default_registry():
     """
     registry = get_qobject_registry()
 
+    # ButtonEditor
     button_editor.register(registry)
+
+    # TextEditor
+    text_editor.register(registry)
 
 
     return registry
@@ -47,9 +52,12 @@ def get_qobject_registry():
     registry = TargetRegistry()
 
     widget_classes = [
+        QtGui.QTextEdit,
         QtGui.QPushButton,
     ]
     handlers = [
+        (command.KeySequence, helpers.key_sequence_qwidget),
+        (command.KeyClick, helpers.key_press_qwidget),
         (command.MouseClick, helpers.mouse_click_qwidget),
     ]
     for widget_class in widget_classes:
@@ -59,6 +67,12 @@ def get_qobject_registry():
                 interaction_class=interaction_class,
                 handler=handler,
             )
+
+    registry.register_handler(
+        target_class=QtGui.QTextEdit,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, _: wrapper.target.toPlainText(),
+    )
 
     registry.register_handler(
         target_class=QtGui.QPushButton,
