@@ -261,7 +261,7 @@ def test(runtime, toolkit, environment):
         # coverage run prevents local images to be loaded for demo examples
         # which are not defined in Python packages. Run with python directly
         # instead.
-        "edm run -e {environment} -- python -W default -m unittest discover -v {integrationtests}",
+        "edm run -e {environment} -- python -X faulthandler -W default -m unittest discover -v {integrationtests}",
     ]
 
     # We run in a tempdir to avoid accidentally picking up wrong traitsui
