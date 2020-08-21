@@ -125,6 +125,7 @@ test_dependencies = {
     "numpy",
     "pandas",
     "pytables",
+    "six!=1.15.0",
 }
 
 extra_dependencies = {
