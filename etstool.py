@@ -124,7 +124,7 @@ test_dependencies = {
     "h5py",
     "numpy",
     "pandas",
-    "pytables",
+    "pytables==3.5.1-4",
     "six!=1.15.0",
 }
 
