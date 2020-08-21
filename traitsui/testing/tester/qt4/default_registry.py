@@ -52,12 +52,13 @@ def get_qobject_registry():
     registry = TargetRegistry()
 
     widget_classes = [
+        QtGui.QLineEdit,
         QtGui.QTextEdit,
         QtGui.QPushButton,
     ]
     handlers = [
         (command.KeySequence, helpers.key_sequence_qwidget),
-        (command.KeyClick, helpers.key_press_qwidget),
+        (command.KeyClick, helpers.key_click_qwidget),
         (command.MouseClick, helpers.mouse_click_qwidget),
     ]
     for widget_class in widget_classes:
@@ -67,6 +68,12 @@ def get_qobject_registry():
                 interaction_class=interaction_class,
                 handler=handler,
             )
+
+    registry.register_handler(
+        target_class=QtGui.QLineEdit,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, _: wrapper.target.displayText(),
+    )
 
     registry.register_handler(
         target_class=QtGui.QTextEdit,

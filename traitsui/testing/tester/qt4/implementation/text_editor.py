@@ -22,4 +22,3 @@ def register(registry):
             locator_class=locator.DefaultTarget,
             solver=lambda wrapper, _: wrapper.target.control,
         )
-

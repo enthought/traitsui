@@ -17,7 +17,7 @@ from pyface.qt.QtTest import QTest
 from traitsui.testing.exceptions import Disabled
 from traitsui.qt4.key_event_to_name import key_map as _KEY_MAP
 
-def key_press(widget, key, delay=0):
+def key_click(widget, key, delay=0):
     if "-" in key:
         *modifiers, key = key.split("-")
     else:
@@ -73,7 +73,7 @@ def key_sequence_qwidget(wrapper, interaction):
     QTest.keyClicks(wrapper.target, interaction.sequence, delay=wrapper.delay)
 
 
-def key_press_qwidget(wrapper, interaction):
+def key_click_qwidget(wrapper, interaction):
     if not wrapper.target.isEnabled():
         raise Disabled("{!r} is disabled.".format(wrapper.target))
-    key_press(wrapper.target, interaction.key, delay=wrapper.delay)
+    key_click(wrapper.target, interaction.key, delay=wrapper.delay)
