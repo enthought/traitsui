@@ -50,7 +50,7 @@ def get_wobject_registry():
         interaction_class=command.MouseClick,
         handler=lambda wrapper, _: (
             helpers.mouse_click_button(
-                control=wrapper.target, delay=wrapper.delay,
+                wrapper=wrapper, interaction=command.MouseClick(),
             )
         )
     )
