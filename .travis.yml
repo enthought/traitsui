@@ -32,12 +32,15 @@ matrix:
     - env: RUNTIME=3.6 TOOLKITS="pyqt5" TRAITS_REQUIRES="^=6.0"
     - os: osx
       env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5 pyside2"
+      osx_image: xcode12u
     - os: osx
       env: RUNTIME=3.6 TOOLKITS="wx"
+      osx_image: xcode12u
   allow_failures:
     - env: RUNTIME=3.6 TOOLKITS="wx"
     - os: osx
       env: RUNTIME=3.6 TOOLKITS="wx"
+      osx_image: xcode12u
   fast_finish: true
 
 cache:
