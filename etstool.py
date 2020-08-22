@@ -127,7 +127,7 @@ test_dependencies = {
     # This version is pinned due to the latest build causing failures on the
     # travis CI see issue #1156. Note: pytables is not a runtime dependency of
     # traitsui, it is only a test dependency for one of the integration tests
-    "pytables==3.5.1-4",
+    "pytables",
 }
 
 extra_dependencies = {
