@@ -39,7 +39,8 @@ branches:
 init:
   - ps: $Env:path = "C:/Enthought/edm;" + $Env:path
   - ps: md C:/Users/appveyor/.cache -Force
-  - sh: ls -la
+  - sh: pwd
+  - sh: ls -la "${HOME}"
   - sh: mkdir -p "${HOME}/download"
   - sh: export PATH="${PATH}:/usr/local/bin"
 
