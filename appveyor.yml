@@ -35,6 +35,11 @@ branches:
     - master
     - maint/6.1
 
+cache:
+  - C:\Users\appveyor\.cache -> appveyor-clean-cache.txt
+  - C:\Users\appveyor\AppData\Local\pip\Cache -> appveyor-clean-cache.txt
+  - '${HOME}/cache -> appveyor-clean-cache.txt'
+
 init:
   - ps: $Env:path = "C:/Enthought/edm;" + $Env:path
   - ps: md C:/Users/appveyor/.cache -Force
