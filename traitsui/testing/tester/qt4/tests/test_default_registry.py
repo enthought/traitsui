@@ -37,7 +37,7 @@ class TestInteractions(unittest.TestCase):
         click_slot = mock.Mock()
         button.clicked.connect(click_slot)
 
-        wrapper = wrapper = UIWrapper(
+        wrapper = UIWrapper(
             target=button,
             registries=[default_registry.get_default_registry()],
         )
@@ -53,7 +53,7 @@ class TestInteractions(unittest.TestCase):
         click_slot = mock.Mock()
         button.clicked.connect(click_slot)
 
-        wrapper = wrapper = UIWrapper(
+        wrapper = UIWrapper(
             target=button,
             registries=[default_registry.get_default_registry()],
         )
