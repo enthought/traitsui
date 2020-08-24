@@ -1,15 +1,9 @@
 import unittest
 
-from pyface.gui import GUI
-
 from traits.api import Button, HasTraits, List, Str
 from traits.testing.api import UnittestTools
 from traitsui.api import ButtonEditor, Item, UItem, View
 from traitsui.tests._tools import (
-    create_ui,
-    is_qt,
-    is_wx,
-    process_cascade_events,
     requires_toolkit,
     reraise_exceptions,
     ToolkitName,
@@ -76,7 +70,7 @@ class TestButtonEditor(unittest.TestCase, UnittestTools):
     def test_custom_button_editor(self):
         self.check_button_text_update(custom_view)
 
-    def check_button_fired_event(self,view):
+    def check_button_fired_event(self, view):
         button_text_edit = ButtonTextEdit()
 
         tester = UITester()

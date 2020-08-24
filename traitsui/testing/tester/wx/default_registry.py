@@ -11,8 +11,6 @@
 
 import wx
 
-from pyface.ui.wx.image_button import ImageButton
-
 from traitsui.testing.tester import command, query
 from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.wx import helpers
