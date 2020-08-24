@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-import wx 
+import wx
 
 from traitsui.testing.tester import command, query
 from traitsui.testing.tester.registry import TargetRegistry
@@ -27,9 +27,9 @@ def get_default_registry():
     -------
     registry : TargetRegistry
         The default registry containing implementations for TraitsUI editors
-        that is wx specific.  
+        that is wx specific.
     """
-    registry = get_wobject_registry()
+    registry = get_wx_object_registry()
 
     # ButtonEditor
     button_editor.register(registry)
@@ -39,7 +39,8 @@ def get_default_registry():
     
     return registry
 
-def get_wobject_registry():
+
+def get_wx_object_registry():
     """ Creates a generic registry for handling/solving wx objects. (i.e.
     this registry is independent of TraitsUI)
 
@@ -71,6 +72,27 @@ def get_wobject_registry():
         target_class=wx.Button,
         interaction_class=command.MouseClick,
         handler=helpers.mouse_click_button
+<<<<<<< HEAD
+=======
+    )
+
+    registry.register_handler(
+        target_class=wx.Button,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, _: wrapper.target.GetLabel()
+    )
+
+    registry.register_handler(
+        target_class=wx.Window,
+        interaction_class=command.MouseClick,
+        handler=helpers.mouse_click_ImageButton
+    )
+
+    registry.register_handler(
+        target_class=wx.Window,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, _: wrapper.target.GetLabel()
+>>>>>>> ui-tester-api-updates2
     )
 
     return registry

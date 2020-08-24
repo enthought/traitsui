@@ -23,11 +23,10 @@ class TestDefaultRegistry(unittest.TestCase):
         self.assertIsInstance(registry, TargetRegistry)
         if not is_null():
             self.assertGreaterEqual(
-                    len(registry._interaction_registry._target_to_key_to_value),
-                    1,
-                )
+                len(registry._interaction_registry._target_to_key_to_value),
+                1,
+            )
             self.assertGreaterEqual(
-                    len(registry._location_registry._target_to_key_to_value),
-                    1,
-                )
-        
+                len(registry._location_registry._target_to_key_to_value),
+                1,
+            )

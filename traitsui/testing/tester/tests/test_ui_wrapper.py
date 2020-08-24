@@ -23,6 +23,8 @@ from traitsui.testing.tester.exceptions import (
     InteractionNotSupported,
     LocationNotSupported,
 )
+from traitsui.testing.tester.registry import TargetRegistry
+from traitsui.testing.tester import locator
 from traitsui.testing.tester.ui_wrapper import (
     UIWrapper,
 )
@@ -117,12 +119,14 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
         # supported.
 
         class EmptyRegistry1:
+
             def get_handler(self, target_class, interaction_class):
                 raise InteractionNotSupported(
                     target_class=None,
                     interaction_class=None,
                     supported=[int],
                 )
+
             def get_solver(self, target_class, interaction_class):
                 raise LocationNotSupported(
                     target_class=None,
@@ -131,12 +135,14 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
                 )
 
         class EmptyRegistry2:
+
             def get_handler(self, target_class, interaction_class):
                 raise InteractionNotSupported(
                     target_class=None,
                     interaction_class=None,
                     supported=[float],
                 )
+
             def get_solver(self, target_class, interaction_class):
                 raise LocationNotSupported(
                     target_class=None,
@@ -297,3 +303,110 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
 
         with self.assertRaises(ZeroDivisionError):
             wrapper.perform(None)
+
+
+class Dummy1:
+    pass
+
+
+class Dummy2:
+    pass
+
+
+class DummyInteraction:
+    pass
+
+
+class DummyInteraction2:
+    pass
+
+
+class DummyInteraction3:
+    pass
+
+
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+class TestUIWrapperDefaultTarget(unittest.TestCase):
+
+    def test_interaction_from_DefaultTarget(self):
+        registry = TargetRegistry()
+        registry.register_solver(
+            target_class=Dummy1,
+            locator_class=locator.DefaultTarget,
+            solver=lambda wrapper, _: Dummy2(),
+        )
+
+        registry.register_handler(
+            target_class=Dummy2,
+            interaction_class=DummyInteraction,
+            handler=lambda wrapper, _: 1,
+        )
+
+        wrapper = UIWrapper(
+            target=Dummy1(),
+            registries=[registry],
+        )
+
+        self.assertEqual(wrapper.inspect(DummyInteraction()), 1)
+
+    def test_supported_interactions_through_DefaultTarget(self):
+        registry = TargetRegistry()
+        registry.register_solver(
+            target_class=Dummy1,
+            locator_class=locator.DefaultTarget,
+            solver=lambda wrapper, _: Dummy2(),
+        )
+        registry.register_handler(
+            target_class=Dummy1,
+            interaction_class=DummyInteraction3,
+            handler=lambda wrapper, _: 1,
+        )
+        registry.register_handler(
+            target_class=Dummy2,
+            interaction_class=DummyInteraction2,
+            handler=lambda wrapper, _: 1,
+        )
+
+        wrapper = UIWrapper(
+            target=Dummy1(),
+            registries=[registry],
+        )
+
+        with self.assertRaises(InteractionNotSupported) as exception_context:
+            wrapper.inspect(DummyInteraction())
+        self.assertEqual(len(exception_context.exception.supported), 2)
+
+    def test_location_not_supported_from_default_target_handler(self):
+        # Test we don't mask or misrepresent a LocationNotSupported error from
+        # a handler on the default target
+        registry = TargetRegistry()
+        registry.register_solver(
+            target_class=Dummy1,
+            locator_class=locator.DefaultTarget,
+            solver=lambda wrapper, _: Dummy2(),
+        )
+
+        exception = LocationNotSupported(
+            target_class=None,
+            locator_class=None,
+            supported=[],
+        )
+
+        def bad_handler(wrapper, _):
+            # probably programming error
+            raise exception
+
+        registry.register_handler(
+            target_class=Dummy2,
+            interaction_class=DummyInteraction,
+            handler=bad_handler,
+        )
+
+        wrapper = UIWrapper(
+            target=Dummy1(),
+            registries=[registry],
+        )
+        with self.assertRaises(LocationNotSupported) as exception_context:
+            wrapper.inspect(DummyInteraction())
+
+        self.assertIs(exception_context.exception, exception)

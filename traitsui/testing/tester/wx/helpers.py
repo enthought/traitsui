@@ -11,6 +11,7 @@
 
 import wx
 
+
 def mouse_click_button(wrapper, interaction):
     """ Performs a mouce click on a wx button.
 
@@ -21,7 +22,7 @@ def mouse_click_button(wrapper, interaction):
     interaction : instance of traitsui.testing.tester.command.MouseClick
         interaction is unused here, but it is included so that the function
         matches the expected format for a handler.  Note this handler is
-        intended to be used with an interaction_class of a MouseClick.  
+        intended to be used with an interaction_class of a MouseClick.
     """
     control = wrapper.target
     if not control.IsEnabled():
@@ -31,6 +32,34 @@ def mouse_click_button(wrapper, interaction):
         wx.wxEVT_COMMAND_BUTTON_CLICKED, control.GetId()
     )
     control.ProcessEvent(click_event)
+
+
+def mouse_click_ImageButton(wrapper, interaction):
+    """ Performs a mouce click on an pyface.ui.wx.ImageButton object.
+
+    Parameters
+    ----------
+    wrapper : UIWrapper
+        The wrapper object wrapping the ImageButton.
+    interaction : instance of traitsui.testing.tester.command.MouseClick
+        interaction is unused here, but it is included so that the function
+        matches the expected format for a handler.  Note this handler is
+        intended to be used with an interaction_class of a MouseClick.
+    """
+
+    control = wrapper.target
+    if not control.IsEnabled():
+        return
+    wx.MilliSleep(wrapper.delay)
+
+    left_down_event = wx.MouseEvent(
+        wx.wxEVT_LEFT_DOWN
+    )
+    left_up_event = wx.MouseEvent(
+        wx.wxEVT_LEFT_UP
+    )
+    control.ProcessEvent(left_down_event)
+    control.ProcessEvent(left_up_event)
 
 
 def key_press_text_ctrl(wrapper, interaction):

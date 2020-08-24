@@ -12,7 +12,6 @@
 import unittest
 from unittest import mock
 
-#from pyface.gui import GUI
 from traits.testing.api import UnittestTools
 from traitsui.tests._tools import (
     is_qt,
@@ -32,14 +31,14 @@ except ImportError:
 
 
 @requires_toolkit([ToolkitName.qt])
-class TestInteractorAction(unittest.TestCase, UnittestTools):
+class TestInteractions(unittest.TestCase):
 
     def test_mouse_click(self):
         button = QtGui.QPushButton()
         click_slot = mock.Mock()
         button.clicked.connect(click_slot)
 
-        wrapper = wrapper = UIWrapper(
+        wrapper = UIWrapper(
             target=button,
             registries=[default_registry.get_default_registry()],
         )
@@ -55,7 +54,7 @@ class TestInteractorAction(unittest.TestCase, UnittestTools):
         click_slot = mock.Mock()
         button.clicked.connect(click_slot)
 
-        wrapper = wrapper = UIWrapper(
+        wrapper = UIWrapper(
             target=button,
             registries=[default_registry.get_default_registry()],
         )
