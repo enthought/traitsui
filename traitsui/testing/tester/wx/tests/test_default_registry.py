@@ -12,10 +12,14 @@
 import unittest
 from unittest import mock
 
-from pyface.api import GUI
-
 from traitsui.testing.tester import command
 from traitsui.testing.tester.ui_wrapper import UIWrapper
+
+from traitsui.tests._tools import (
+    is_wx,
+    requires_toolkit,
+    ToolkitName,
+)
 
 try:
     import wx
@@ -23,11 +27,7 @@ try:
 except ImportError:
     if is_wx():
         raise
-from traitsui.tests._tools import (
-    is_wx,
-    requires_toolkit,
-    ToolkitName,
-)
+
 
 @requires_toolkit([ToolkitName.wx])
 class TestInteractions(unittest.TestCase):

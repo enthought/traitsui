@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-import wx 
+import wx
 
 from traitsui.testing.tester import command
 from traitsui.testing.tester.registry import TargetRegistry
@@ -26,13 +26,14 @@ def get_default_registry():
     -------
     registry : TargetRegistry
         The default registry containing implementations for TraitsUI editors
-        that is wx specific.  
+        that is wx specific.
     """
     registry = get_wobject_registry()
 
     button_editor.register(registry)
-    
+
     return registry
+
 
 def get_wobject_registry():
     """ Creates a generic registry for handling/solving wx objects. (i.e.

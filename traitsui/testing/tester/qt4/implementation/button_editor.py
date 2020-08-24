@@ -8,7 +8,7 @@
 #
 #  Thanks for using Enthought open source!
 #
-from traitsui.testing.tester import locator, query
+from traitsui.testing.tester import locator
 from traitsui.qt4.button_editor import CustomEditor, SimpleEditor
 
 

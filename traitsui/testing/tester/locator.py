@@ -36,6 +36,7 @@ class TargetByName:
     def __init__(self, name):
         self.name = name
 
+
 class DefaultTarget:
     """ A locator for locating a default target.  In many cases, handlers may
     not be registered for certain interactions on a given target.  Instead
@@ -46,6 +47,6 @@ class DefaultTarget:
     of these handlers on the original object, machinery is in place for the
     UIWrapper to try and locate a DefaultTarget and then look for the needed
     handler automatically, if it can not find a handler directly for the
-    original target and interaction. 
+    original target and interaction.
     """
     pass

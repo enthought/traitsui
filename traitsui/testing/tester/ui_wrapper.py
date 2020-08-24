@@ -50,7 +50,7 @@ class UIWrapper:
     delay : int, optional
         Time delay (in ms) in which actions by the wrapper are performed. Note
         it is propogated through to created child wrappers. The delay allows
-        visual confirmation test code is working as desired. Defaults to 0.  
+        visual confirmation test code is working as desired. Defaults to 0.
     """
 
     def __init__(self, target, registries, delay=0):
@@ -163,10 +163,12 @@ class UIWrapper:
 
         try:
             # there may not be a handler registered for this interaction on
-            # the original target.  Instead, it may be registered for DefaultTarget
+            # the original target. Instead, it may be registered for
+            # DefaultTarget
             default_target = self.locate(locator.DefaultTarget())
-        # If there we can't solve from the current target to DefaultTarget this 
-        # interaction isn't supported and we can raise appropraite exception below
+        # If there we can't solve from the current target to DefaultTarget this
+        # interaction isn't supported and we can raise appropraite exception
+        # below
         except LocationNotSupported:
             pass
         else:

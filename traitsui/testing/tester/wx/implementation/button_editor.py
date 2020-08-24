@@ -9,8 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 from traitsui.wx.button_editor import SimpleEditor, CustomEditor
-from traitsui.testing.tester import locator, query
-from traitsui.testing.tester.wx import helpers
+from traitsui.testing.tester import locator
 
 
 def register(registry):
@@ -25,4 +24,3 @@ def register(registry):
             locator_class=locator.DefaultTarget,
             solver=lambda wrapper, _: wrapper.target.control,
         )
-

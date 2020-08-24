@@ -12,7 +12,6 @@
 import unittest
 from unittest import mock
 
-#from pyface.gui import GUI
 from traitsui.tests._tools import (
     is_qt,
     requires_toolkit,

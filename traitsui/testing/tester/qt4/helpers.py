@@ -13,6 +13,7 @@
 from pyface.qt import QtCore
 from pyface.qt.QtTest import QTest
 
+
 def mouse_click_qwidget(wrapper, action):
     """ Performs a mouce click on a Qt widget.
 
@@ -23,7 +24,7 @@ def mouse_click_qwidget(wrapper, action):
     interaction : instance of traitsui.testing.tester.command.MouseClick
         interaction is unused here, but it is included so that the function
         matches the expected format for a handler.  Note this handler is
-        intended to be used with an interaction_class of a MouseClick.  
+        intended to be used with an interaction_class of a MouseClick.
     """
     QTest.mouseClick(
         wrapper.target,

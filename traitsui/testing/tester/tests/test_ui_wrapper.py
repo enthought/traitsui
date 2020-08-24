@@ -119,12 +119,14 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
         # supported.
 
         class EmptyRegistry1:
+
             def get_handler(self, target_class, interaction_class):
                 raise InteractionNotSupported(
                     target_class=None,
                     interaction_class=None,
                     supported=[int],
                 )
+
             def get_solver(self, target_class, interaction_class):
                 raise LocationNotSupported(
                     target_class=None,
@@ -133,12 +135,14 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
                 )
 
         class EmptyRegistry2:
+
             def get_handler(self, target_class, interaction_class):
                 raise InteractionNotSupported(
                     target_class=None,
                     interaction_class=None,
                     supported=[float],
                 )
+
             def get_solver(self, target_class, interaction_class):
                 raise LocationNotSupported(
                     target_class=None,
@@ -321,6 +325,7 @@ class DummyInteraction3:
     pass
 
 
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUIWrapperDefaultTarget(unittest.TestCase):
 
     def test_interaction_from_DefaultTarget(self):
@@ -328,7 +333,7 @@ class TestUIWrapperDefaultTarget(unittest.TestCase):
         registry.register_solver(
             target_class=Dummy1,
             locator_class=locator.DefaultTarget,
-            solver=lambda wrapper, _: Dummy2() ,
+            solver=lambda wrapper, _: Dummy2(),
         )
 
         registry.register_handler(
@@ -349,7 +354,7 @@ class TestUIWrapperDefaultTarget(unittest.TestCase):
         registry.register_solver(
             target_class=Dummy1,
             locator_class=locator.DefaultTarget,
-            solver=lambda wrapper, _: Dummy2() ,
+            solver=lambda wrapper, _: Dummy2(),
         )
         registry.register_handler(
             target_class=Dummy1,
@@ -378,9 +383,9 @@ class TestUIWrapperDefaultTarget(unittest.TestCase):
         registry.register_solver(
             target_class=Dummy1,
             locator_class=locator.DefaultTarget,
-            solver=lambda wrapper, _: Dummy2() ,
+            solver=lambda wrapper, _: Dummy2(),
         )
-        
+
         exception = LocationNotSupported(
             target_class=None,
             locator_class=None,
@@ -403,5 +408,5 @@ class TestUIWrapperDefaultTarget(unittest.TestCase):
         )
         with self.assertRaises(LocationNotSupported) as exception_context:
             wrapper.inspect(DummyInteraction())
-        
+
         self.assertIs(exception_context.exception, exception)
