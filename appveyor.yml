@@ -43,6 +43,8 @@ init:
   # and we cannot create files there.
   - sh: export PATH="${PATH}:/usr/local/bin"
   - sh: export XDG_CACHE_HOME="${HOME}/cache"
+  - sh: export LC_ALL=en_US.UTF-8
+  - sh: export LANG=en_US.UTF-8
   - sh: mkdir -p "${HOME}/cache/download"
   - sh: sysctl -n machdep.cpu.brand_string
 
