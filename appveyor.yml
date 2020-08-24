@@ -39,10 +39,9 @@ branches:
 init:
   - ps: $Env:path = "C:/Enthought/edm;" + $Env:path
   - ps: md C:/Users/appveyor/.cache -Force
-  - sh: pwd
-  - sh: ls -la "${HOME}"
-  - sh: mkdir -p "${HOME}/download"
   - sh: export PATH="${PATH}:/usr/local/bin"
+  - sh: export XDG_CACHE_HOME="${HOME}/cache"
+  - sh: mkdir -p "${HOME}/cache/download"
   - sh: sysctl -n machdep.cpu.brand_string
 
 install:
