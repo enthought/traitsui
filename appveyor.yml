@@ -8,9 +8,6 @@ environment:
     INSTALL_EDM_VERSION: "3.0.1"
 
   matrix:
-    - RUNTIME: '3.6'
-      TOOLKITS: "null"
-      os: Visual Studio 2019
     # - RUNTIME: '3.6'
     #   TOOLKITS: "pyqt"
     #   image: Visual Studio 2019
@@ -25,7 +22,12 @@ environment:
     #   image: Visual Studio 2019
     - RUNTIME: '3.6'
       TOOLKITS: "null"
-      os: macos
+      os: macOS
+      image: macos
+    - RUNTIME: '3.6'
+      TOOLKITS: "null"
+      os: win64
+      image: Visual Studio 2019
 
 matrix:
   #fast_finish: true
