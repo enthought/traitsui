@@ -43,6 +43,7 @@ init:
   - sh: ls -la "${HOME}"
   - sh: mkdir -p "${HOME}/download"
   - sh: export PATH="${PATH}:/usr/local/bin"
+  - sh: sysctl -n machdep.cpu.brand_string
 
 install:
   - cmd: install-edm-windows.cmd
