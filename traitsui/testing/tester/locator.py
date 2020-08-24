@@ -38,7 +38,7 @@ class TargetByName:
 
 
 class DefaultTarget:
-    """ A locator for locating a default target.  In many cases, handlers may
+    """ A locator for locating a default target.  In some cases, handlers may
     not be registered for certain interactions on a given target.  Instead
     there may be a solver registered a locator_class of DefaultTarget and a
     target_class of the original target.  The registered solver will then
@@ -48,5 +48,9 @@ class DefaultTarget:
     UIWrapper to try and locate a DefaultTarget and then look for the needed
     handler automatically, if it can not find a handler directly for the
     original target and interaction.
+
+    Note: This object will likely be used by developers implementing solvers/
+    handlers.  For those just using UITester, this object should work its magic
+    under-the-hood, and not be needed directly. 
     """
     pass

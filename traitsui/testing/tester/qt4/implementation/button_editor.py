@@ -17,6 +17,10 @@ def register(registry):
     for the given registry.
 
     If there are any conflicts, an error will occur.
+
+    Parameters
+    ----------
+    registry : TargetRegistry
     """
     for target_class in [SimpleEditor, CustomEditor]:
         registry.register_solver(
