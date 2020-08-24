@@ -26,7 +26,7 @@ environment:
     #   TOOLKITS: "wx"
     #   image: Visual Studio 2019
     - RUNTIME: '3.6'
-      TOOLKITS: "null"
+      TOOLKIT: "null"
 
 #matrix:
 # fast_finish: true
