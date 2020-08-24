@@ -61,13 +61,13 @@ init:
 # scripts/commands run immediately after cloning the repo
 install:
   - cmd: install-edm-windows.cmd
-  - ps: edm install -y wheel click coverage
+  - cmd: edm install -y wheel click coverage
   - cmd: appveyor-run.cmd install %runtime% %toolkits%
 
 test_script:
   - cmd: appveyor-run.cmd test %runtime% %toolkits%
 
 on_success:
-  - ps: edm run -- coverage combine
-  - ps: edm run -- pip install codecov
-  - ps: edm run -- codecov
+  - cmd: edm run -- coverage combine
+  - cmd: edm run -- pip install codecov
+  - cmd: edm run -- codecov
