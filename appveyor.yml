@@ -52,10 +52,10 @@ install:
   - cmd: install-edm-windows.cmd
   - sh: ./install-edm-osx.sh
   - edm install -y wheel click coverage
-  - sh: edm run -- python etstool.py install --runtime="${RUNTIME}" --toolkit="${toolkit}"
+  - sh: edm run -- python etstool.py install --runtime="${RUNTIME}" --toolkit="${TOOLKIT}"
   - cmd: edm run -- python etstool.py install --runtime=%RUNTIME% --toolkit=%toolkit%
 test_script:
-  - sh: edm run -- python etstool.py test --runtime="${RUNTIME}" --toolkit="${toolkit}"
+  - sh: edm run -- python etstool.py test --runtime="${RUNTIME}" --toolkit="${TOOLKIT}"
   - cmd: edm run -- python etstool.py test --runtime=%RUNTIME% --toolkit=%toolkit%
 on_success:
   - edm run -- coverage combine
