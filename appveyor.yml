@@ -1,13 +1,27 @@
-build: false
-image: Visual Studio 2019
-shallow_clone: false
-skip_branch_with_pr: true
-environment:
+# Ref : https://www.appveyor.com/docs/appveyor-yml/
+# Use https://ci.appveyor.com/account/EnthoughtOSS/tools/validate-yaml
+# to validate changes to the configuration file.
 
+# We do not use a Visual Studio project or solution file.
+build: false
+
+# OS Image to use for the worker machines.
+image: Visual Studio 2019
+
+# We do not use a shallow clone of the git repository
+# Ref https://www.appveyor.com/docs/how-to/repository-shallow-clone/
+shallow_clone: false
+
+# Do not build feature branch with open Pull Requests
+skip_branch_with_pr: true
+
+environment:
+  # environment variables
   global:
     PYTHONUNBUFFERED: "1"
     INSTALL_EDM_VERSION: "3.0.1"
 
+  # build/job matrix
   matrix:
     - RUNTIME: '3.6'
       TOOLKITS: "null"
@@ -20,32 +34,40 @@ environment:
     - RUNTIME: '3.6'
       TOOLKITS: "wx"
 
+# allowed failures in build/job matrix
 matrix:
   fast_finish: true
   allow_failures:
     - RUNTIME: '3.6'
       TOOLKITS: "wx"
 
+# branches to build
 branches:
   only:
     - master
     - maint/6.1
 
+# build cache to preserve files/folders between builds
 cache:
+  # .cache is used by edm
   - C:\Users\appveyor\.cache -> appveyor-clean-cache.txt
   - C:\Users\appveyor\AppData\Local\pip\Cache -> appveyor-clean-cache.txt
 
+# scripts/commands called before repo cloning in job
 init:
   - ps: $Env:path = "C:/Enthought/edm;" + $Env:path
   - ps: md C:/Users/appveyor/.cache -Force
 
+# scripts/commands run immediately after cloning the repo
 install:
-  - install-edm-windows.cmd
-  - edm install -y wheel click coverage
-  - appveyor-run.cmd install %runtime% %toolkits%
+  - cmd: install-edm-windows.cmd
+  - ps: edm install -y wheel click coverage
+  - cmd: appveyor-run.cmd install %runtime% %toolkits%
+
 test_script:
-  - appveyor-run.cmd test %runtime% %toolkits%
+  - cmd: appveyor-run.cmd test %runtime% %toolkits%
+
 on_success:
-  - edm run -- coverage combine
-  - edm run -- pip install codecov
-  - edm run -- codecov
+  - ps: edm run -- coverage combine
+  - ps: edm run -- pip install codecov
+  - ps: edm run -- codecov
