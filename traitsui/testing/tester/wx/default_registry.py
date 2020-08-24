@@ -11,7 +11,9 @@
 
 import wx
 
-from traitsui.testing.tester import command
+from pyface.ui.wx.image_button import ImageButton
+
+from traitsui.testing.tester import command, query
 from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.wx import helpers
 from traitsui.testing.tester.wx.implementation import (
@@ -49,11 +51,25 @@ def get_wx_object_registry():
     registry.register_handler(
         target_class=wx.Button,
         interaction_class=command.MouseClick,
-        handler=lambda wrapper, _: (
-            helpers.mouse_click_button(
-                wrapper=wrapper, interaction=command.MouseClick(),
-            )
-        )
+        handler=helpers.mouse_click_button
+    )
+
+    registry.register_handler(
+        target_class=wx.Button,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, _: wrapper.target.GetLabel()
+    )
+
+    registry.register_handler(
+        target_class=wx.Window,
+        interaction_class=command.MouseClick,
+        handler=helpers.mouse_click_ImageButton
+    )
+
+    registry.register_handler(
+        target_class=wx.Window,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, _: wrapper.target.GetLabel()
     )
 
     return registry

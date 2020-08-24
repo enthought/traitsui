@@ -24,3 +24,9 @@ def register(registry):
             locator_class=locator.DefaultTarget,
             solver=lambda wrapper, _: wrapper.target.control,
         )
+
+    """registry.register_solver(
+        target_class=CustomEditor,
+        locator_class=locator.DefaultTarget,
+        solver=lambda wrapper, _: wrapper.target._control,
+    )"""
