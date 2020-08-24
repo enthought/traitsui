@@ -162,7 +162,7 @@ class UIWrapper:
                     return handler(self, interaction)
 
         try_DefaultTarget = self._try_interaction_via_DefaultTarget(supported, interaction)
-        if try_DefaultTarget:
+        if try_DefaultTarget != -1:
             return try_DefaultTarget
 
         raise InteractionNotSupported(
@@ -173,15 +173,15 @@ class UIWrapper:
 
     def _try_interaction_via_DefaultTarget(self, supported, interaction):
         """ There may not be a handler registered for an interaction on
-            the original target (which is represented by self). Instead, it
-            may be registered for DefaultTarget.  To address this possibility,
-            this method attempts to resolve from the current target to a
-            DefaultTarget, and then sees if there is an appropriate handler
-            that can perform the given interaction on DefaultTarget instead. If
-            so, that handler will ultimately be called and this method returns
-            the result. If not, any interactions for which there are handlers
-            registered for DefaultTarget will be added to the list of supported
-            interactiontypes.
+        the original target (which is represented by self). Instead, it
+        may be registered for DefaultTarget.  To address this possibility,
+        this method attempts to resolve from the current target to a
+        DefaultTarget, and then sees if there is an appropriate handler
+        that can perform the given interaction on DefaultTarget instead. If
+        so, that handler will ultimately be called and this method returns
+        the result. If not, any interactions for which there are handlers
+        registered for DefaultTarget will be added to the list of supported
+        interactiontypes.
 
         Parameters
         ----------
@@ -215,6 +215,7 @@ class UIWrapper:
             # if we can't add to supported
             except InteractionNotSupported as e:
                 supported.extend(e.supported)
+        return -1
 
 
     def _get_next_target(self, location):
