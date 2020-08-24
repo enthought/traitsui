@@ -40,6 +40,8 @@ init:
   - ps: $Env:path = "C:\Enthought\edm;" + $Env:path
   - ps: md C:\Users\appveyor\.cache -Force
 
+clone_folder: c:\projects\traitsui
+
 install:
   - install-edm-windows.cmd
   - edm install -y wheel click coverage
