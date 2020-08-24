@@ -24,13 +24,11 @@ environment:
     - RUNTIME: '3.6'
       TOOLKIT: "null"
 
-#matrix:
-# fast_finish: true
 matrix:
   fast_finish: true
   allow_failures:
     - RUNTIME: '3.6'
-      TOOLKITS: "wx"
+      TOOLKIT: "wx"
 
 branches:
   only:
