@@ -10,6 +10,7 @@ environment:
   global:
     PYTHONUNBUFFERED: "1"
     INSTALL_EDM_VERSION: "3.0.1"
+    APPVEYOR_YML_DISABLE_PS_LINUX: true
 
   matrix:
     # - RUNTIME: '3.6'
