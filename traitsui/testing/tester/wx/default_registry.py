@@ -72,8 +72,6 @@ def get_wx_object_registry():
         target_class=wx.Button,
         interaction_class=command.MouseClick,
         handler=helpers.mouse_click_button
-<<<<<<< HEAD
-=======
     )
 
     registry.register_handler(
@@ -92,7 +90,6 @@ def get_wx_object_registry():
         target_class=wx.Window,
         interaction_class=query.DisplayedText,
         handler=lambda wrapper, _: wrapper.target.GetLabel()
->>>>>>> ui-tester-api-updates2
     )
 
     return registry
