@@ -39,6 +39,8 @@ branches:
 init:
   - ps: $Env:path = "C:/Enthought/edm;" + $Env:path
   - ps: md C:/Users/appveyor/.cache -Force
+  # note that on osx the .cache folder is owned by root
+  # and we cannot create files there.
   - sh: export PATH="${PATH}:/usr/local/bin"
   - sh: export XDG_CACHE_HOME="${HOME}/cache"
   - sh: mkdir -p "${HOME}/cache/download"
