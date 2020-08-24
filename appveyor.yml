@@ -13,18 +13,14 @@ environment:
     APPVEYOR_YML_DISABLE_PS_LINUX: true
 
   matrix:
-    # - RUNTIME: '3.6'
-    #   TOOLKITS: "pyqt"
-    #   image: Visual Studio 2019
-    # - RUNTIME: '3.6'
-    #   TOOLKITS: "pyqt5"
-    #   image: Visual Studio 2019
-    # - RUNTIME: '3.6'
-    #   TOOLKITS: "pyside2"
-    #   image: Visual Studio 2019
-    # - RUNTIME: '3.6'
-    #   TOOLKITS: "wx"
-    #   image: Visual Studio 2019
+    - RUNTIME: '3.6'
+      TOOLKITS: "pyqt"
+    - RUNTIME: '3.6'
+      TOOLKITS: "pyqt5"
+    - RUNTIME: '3.6'
+      TOOLKITS: "pyside2"
+    - RUNTIME: '3.6'
+      TOOLKITS: "wx"
     - RUNTIME: '3.6'
       TOOLKIT: "null"
 
