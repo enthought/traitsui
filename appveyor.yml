@@ -10,7 +10,7 @@ environment:
   matrix:
     - RUNTIME: '3.6'
       TOOLKITS: "null"
-      image: Visual Studio 2019
+      os: Visual Studio 2019
     # - RUNTIME: '3.6'
     #   TOOLKITS: "pyqt"
     #   image: Visual Studio 2019
@@ -24,8 +24,8 @@ environment:
     #   TOOLKITS: "wx"
     #   image: Visual Studio 2019
     - RUNTIME: '3.6'
-      TOOLKITS: "null pyqt pyqt5 pyside2"
-      image: macos
+      TOOLKITS: "null"
+      os: macos
 
 matrix:
   #fast_finish: true
