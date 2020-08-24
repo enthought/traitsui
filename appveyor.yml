@@ -37,8 +37,8 @@ cache:
   - C:\Users\appveyor\AppData\Local\pip\Cache -> appveyor-clean-cache.txt
 
 init:
-  - ps: $Env:path = "C:/Enthought/edm;" + $Env:path
-  - ps: md C:/Users/appveyor/.cache -Force
+  - ps: $Env:path = "C:\Enthought\edm;" + $Env:path
+  - ps: md C:\Users\appveyor\.cache -Force
 
 install:
   - install-edm-windows.cmd
