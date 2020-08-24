@@ -14,7 +14,7 @@ from functools import reduce
 from pyface.qt import QtCore
 from pyface.qt.QtTest import QTest
 
-from traitsui.testing.exceptions import Disabled
+from traitsui.testing.tester.exceptions import Disabled
 from traitsui.qt4.key_event_to_name import key_map as _KEY_MAP
 
 def key_click(widget, key, delay=0):

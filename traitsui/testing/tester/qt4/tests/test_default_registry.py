@@ -13,12 +13,14 @@ import unittest
 from unittest import mock
 
 #from pyface.gui import GUI
+from traits.testing.api import UnittestTools
 from traitsui.tests._tools import (
     is_qt,
     requires_toolkit,
     ToolkitName,
 )
-from traitsui.testing.tester import command
+from traitsui.testing.tester import command, query
+from traitsui.testing.tester.exceptions import Disabled
 from traitsui.testing.tester.ui_wrapper import UIWrapper
 
 try:
@@ -30,7 +32,7 @@ except ImportError:
 
 
 @requires_toolkit([ToolkitName.qt])
-class TestInteractorAction(unittest.TestCase):
+class TestInteractorAction(unittest.TestCase, UnittestTools):
 
     def test_mouse_click(self):
         button = QtGui.QPushButton()
@@ -65,3 +67,68 @@ class TestInteractorAction(unittest.TestCase):
 
         # then
         self.assertEqual(click_slot.call_count, 0)
+
+
+    def test_key_sequence(self):
+        textbox = QtGui.QLineEdit()
+        change_slot = mock.Mock()
+        textbox.textEdited.connect(change_slot)
+
+        wrapper = UIWrapper(
+            target=textbox,
+            registries=[default_registry.get_default_registry()],
+        )
+
+        # when
+        wrapper.perform(command.KeySequence("abc"))
+        # then
+        self.assertEqual(textbox.text(), "abc")
+        # each keystroke fires a signal
+        self.assertEqual(change_slot.call_count, 3)
+
+
+    def test_key_sequence_disabled(self):
+        textbox = QtGui.QLineEdit()
+        textbox.setEnabled(False)
+
+        wrapper = UIWrapper(
+            target=textbox,
+            registries=[default_registry.get_default_registry()],
+        )
+        
+        # then
+        # this will fail, because one should not be allowed to set
+        # cursor on the widget to type anything
+        with self.assertRaises(Disabled):
+            wrapper.perform(command.KeySequence("abc"))
+
+
+    def test_key_click(self):
+        textbox = QtGui.QLineEdit()
+        change_slot = mock.Mock()
+        textbox.editingFinished.connect(change_slot)
+        wrapper = UIWrapper(
+            target=textbox,
+            registries=[default_registry.get_default_registry()],
+        )
+        # sanity check
+        wrapper.perform(command.KeySequence("abc"))
+        self.assertEqual(change_slot.call_count, 0)
+
+        wrapper.perform(command.KeyClick("Enter"))
+        self.assertEqual(change_slot.call_count, 1)
+
+
+    def test_key_click_disabled(self):
+        textbox = QtGui.QLineEdit()
+        textbox.setEnabled(False)
+        change_slot = mock.Mock()
+        textbox.editingFinished.connect(change_slot)
+        wrapper = UIWrapper(
+            target=textbox,
+            registries=[default_registry.get_default_registry()],
+        )
+
+        with self.assertRaises(Disabled):
+            wrapper.perform(command.KeyClick("Enter"))
+        self.assertEqual(change_slot.call_count, 0)

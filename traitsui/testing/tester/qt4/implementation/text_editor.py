@@ -8,7 +8,7 @@
 #
 #  Thanks for using Enthought open source!
 #
-from traitsui.testing import locator
+from traitsui.testing.tester import locator
 from traitsui.qt4.text_editor import CustomEditor, ReadonlyEditor, SimpleEditor
 
 def register(registry):
