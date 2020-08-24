@@ -1,6 +1,5 @@
 build: false
 image:
-  - Visual Studio 2019
   - macos
 shallow_clone: false
 skip_branch_with_pr: true
