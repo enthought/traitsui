@@ -30,7 +30,7 @@ from traitsui.tests._tools import (
 )
 
 @requires_toolkit([ToolkitName.wx])
-class TestInteractorAction(unittest.TestCase):
+class TestInteractions(unittest.TestCase):
 
     def setUp(self):
         self.app = wx.App()

@@ -13,7 +13,8 @@ from traitsui.qt4.button_editor import CustomEditor, SimpleEditor
 
 
 def register(registry):
-    """ Register actions for the given registry.
+    """ Register solvers/handlers specific to qt Button Editors
+    for the given registry.
 
     If there are any conflicts, an error will occur.
     """

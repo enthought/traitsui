@@ -14,6 +14,11 @@ from traitsui.testing.tester.wx import helpers
 
 
 def register(registry):
+    """ Register solvers/handlers specific to wx Button Editors
+    for the given registry.
+
+    If there are any conflicts, an error will occur.
+    """
     for target_class in [SimpleEditor, CustomEditor]:
         registry.register_solver(
             target_class=target_class,

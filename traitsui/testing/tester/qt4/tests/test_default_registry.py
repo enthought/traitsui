@@ -30,7 +30,7 @@ except ImportError:
 
 
 @requires_toolkit([ToolkitName.qt])
-class TestInteractorAction(unittest.TestCase):
+class TestInteractions(unittest.TestCase):
 
     def test_mouse_click(self):
         button = QtGui.QPushButton()
