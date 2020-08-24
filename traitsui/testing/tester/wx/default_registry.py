@@ -28,14 +28,14 @@ def get_default_registry():
         The default registry containing implementations for TraitsUI editors
         that is wx specific.
     """
-    registry = get_wobject_registry()
+    registry = get_wx_object_registry()
 
     button_editor.register(registry)
 
     return registry
 
 
-def get_wobject_registry():
+def get_wx_object_registry():
     """ Creates a generic registry for handling/solving wx objects. (i.e.
     this registry is independent of TraitsUI)
 
