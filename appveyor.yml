@@ -50,9 +50,9 @@ install:
   - cmd: install-edm-windows.cmd
   - sh: ./install-edm-osx.sh
   - edm install -y wheel click coverage
-  - python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit}
+  - edm run -- python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit}
 test_script:
-  - python etstool.py test --runtime=${RUNTIME} --toolkit=${toolkit}
+  - edm run -- python etstool.py test --runtime=${RUNTIME} --toolkit=${toolkit}
 on_success:
   - edm run -- coverage combine
   - edm run -- pip install codecov
