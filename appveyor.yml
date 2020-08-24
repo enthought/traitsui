@@ -27,8 +27,8 @@ environment:
     - RUNTIME: '3.6'
       TOOLKITS: "null"
 
-matrix:
-  #fast_finish: true
+#matrix:
+# fast_finish: true
 
 branches:
   only:
