@@ -39,8 +39,7 @@ cache:
 init:
   - ps: $Env:path = "C:\Enthought\edm;" + $Env:path
   - ps: md C:\Users\appveyor\.cache -Force
-
-clone_folder: C:\Users\appveyor\projects\traitsui\
+  - cmd: RD /S /Q C:\Users\appveyor\projects\traitsui
 
 install:
   - install-edm-windows.cmd
