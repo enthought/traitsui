@@ -417,8 +417,10 @@ class TestTabularEditor(UnittestTools, unittest.TestCase):
             editor, = ui.get_editors("people")
             editor.adapter.columns = [("Name", "name")]
             # Avoid calling process_cascade_events here.
-            ui.dispose()
-            process_cascade_events()
+            try:
+                ui.dispose()
+            finally:
+                process_cascade_events()
 
     @contextlib.contextmanager
     def report_and_editor(self, view):
