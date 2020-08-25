@@ -29,7 +29,7 @@ def get_default_registry():
         The default registry containing implementations for TraitsUI editors
         that is wx specific.
     """
-    registry = get_wx_object_registry()
+    registry = TargetRegistry()
 
     # ButtonEditor
     button_editor.register(registry)
@@ -100,5 +100,4 @@ def get_wx_object_registry():
         interaction_class=query.DisplayedText,
         handler=lambda wrapper, _: wrapper.target.GetLabel()
     )
-
-    return registry
+    

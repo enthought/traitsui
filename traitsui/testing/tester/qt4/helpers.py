@@ -49,22 +49,20 @@ def key_click(widget, key, delay=0):
 
 ## Generic Handlers ############################
 
-def mouse_click_qwidget(wrapper, interaction):
+def mouse_click_qwidget(control, delay):
     """ Performs a mouce click on a Qt widget.
 
     Parameters
     ----------
-    wrapper : UIWrapper
-        The wrapper object wrapping the Qt widget.
-    interaction : instance of traitsui.testing.tester.command.MouseClick
-        interaction is unused here, but it is included so that the function
-        matches the expected format for a handler.  Note this handler is
-        intended to be used with an interaction_class of a MouseClick.
+    control : Qwidget
+        The Qt widget to be clicked.
+    delay : int
+        Time delay (in ms) in which click will be performed.
     """
     QTest.mouseClick(
-        wrapper.target,
+        control,
         QtCore.Qt.LeftButton,
-        delay=wrapper.delay,
+        delay=delay,
     )
 
 def key_sequence_qwidget(wrapper, interaction):

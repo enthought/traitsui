@@ -29,7 +29,7 @@ def get_default_registry():
         The default registry containing implementations for TraitsUI editors
         that is qt specific.
     """
-    registry = get_qobject_registry()
+    registry = TargetRegistry()
 
     # ButtonEditor
     button_editor.register(registry)
