@@ -65,13 +65,13 @@ def mouse_click_qwidget(control, delay):
         delay=delay,
     )
 
-def key_sequence_qwidget(wrapper, interaction):
-    if not wrapper.target.isEnabled():
-        raise Disabled("{!r} is disabled.".format(wrapper.target))
-    QTest.keyClicks(wrapper.target, interaction.sequence, delay=wrapper.delay)
+def key_sequence_qwidget(control, interaction, delay):
+    if not control.isEnabled():
+        raise Disabled("{!r} is disabled.".format(control))
+    QTest.keyClicks(control, interaction.sequence, delay=delay)
 
 
-def key_click_qwidget(wrapper, interaction):
-    if not wrapper.target.isEnabled():
-        raise Disabled("{!r} is disabled.".format(wrapper.target))
-    key_click(wrapper.target, interaction.key, delay=wrapper.delay)
+def key_click_qwidget(control, interaction, delay):
+    if not control.isEnabled():
+        raise Disabled("{!r} is disabled.".format(control))
+    key_click(control, interaction.key, delay=delay)
