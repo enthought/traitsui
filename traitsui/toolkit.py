@@ -321,6 +321,14 @@ class Toolkit(Toolkit):
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
+    def hide_children(self, control):
+        """ Recursively hide all of the children controls of a specified GUI
+        toolkit control.
+        """
+        raise NotImplementedError(
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
+
     def destroy_control(self, control):
         """ Destroys a specified GUI toolkit control.
         """

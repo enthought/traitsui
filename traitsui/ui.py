@@ -277,6 +277,7 @@ class UI(HasPrivateTraits):
         # Hide the view control to prevent events (e.g. resize) from being
         # emitted when we are tearing things down.
         toolkit().hide_control(self.control)
+        toolkit().hide_children(self.control)
 
         # Reset the contents of the user interface
         self.reset(destroy=False)

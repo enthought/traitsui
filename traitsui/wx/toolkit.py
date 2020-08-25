@@ -429,8 +429,14 @@ class GUIToolkit(Toolkit):
     def hide_control(self, control):
         """ Hide a GUI toolkit control."""
         control.Hide()
+
+    def hide_children(self, control):
+        """ Recursively hide the children controls of a specified GUI toolkit
+        control.
+        """
         for child in control.GetChildren():
             self.hide_control(child)
+            self.hide_children(child)
 
     def destroy_control(self, control):
         """ Destroys a specified GUI toolkit control.

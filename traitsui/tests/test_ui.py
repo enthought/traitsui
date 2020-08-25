@@ -18,10 +18,8 @@ Test cases for the UI object.
 """
 
 import unittest
-from unittest import mock
 
-from pyface.api import GUI, Window
-from traits.api import Any, Bool, Instance, Property
+from traits.api import Property
 from traits.has_traits import HasTraits, HasStrictTraits
 from traits.trait_types import Str, Int
 import traitsui
@@ -29,7 +27,6 @@ from traitsui.api import Group, View
 from traitsui.item import Item, spring
 
 from traitsui.basic_editor_factory import BasicEditorFactory
-from traitsui.editor import Editor
 from traitsui.tests._tools import (
     count_calls,
     create_ui,
@@ -40,7 +37,7 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
-from traitsui.toolkit import toolkit, toolkit_object
+from traitsui.toolkit import toolkit_object
 
 
 class FooDialog(HasTraits):
@@ -252,12 +249,16 @@ class TestUI(unittest.TestCase):
 
 
 # Regression test on an AttributeError commonly seen (enthought/traitsui#1145)
-# Code in ui_panel makes use toolkit specific attributes on the toolkit specific
-# Editor
+# Code in ui_panel makes use toolkit specific attributes on the toolkit
+# specific Editor
 ToolkitSpecificEditor = toolkit_object("editor:Editor")
 
 
 if is_qt():
+
+    # The following code is typical in Qt editors and looks reasonable.
+    # However an attribute error occurs in dispose if we don't hide the
+    # control and its children early.
 
     from pyface.qt import QtGui, QtCore
 
@@ -271,12 +272,9 @@ if is_qt():
             assert self._some_editor.factory is not None
             return super().sizeHint()
 
-
     class EditorWithCustomWidget(ToolkitSpecificEditor):
 
         def init(self, parent):
-            from pyface.qt import QtCore, QtGui
-
             # To reproduce an assertion from sizeHint, it is necessary to have
             # two widgets, where one of them is created with a nested UI.
             # When the nested UI is disposed, the original AttributeError is
@@ -302,6 +300,26 @@ if is_qt():
             pass
 
 
+if is_wx():
+
+    # Similar AttributeError can occur if one does not explicitly remove a
+    # bound event handler.
+    import wx
+
+    class EditorWithCustomWidget(ToolkitSpecificEditor):  # noqa: F811
+
+        def init(self, parent):
+            self.control = wx.TextCtrl(parent, -1, "dummy")
+            self.control.Bind(wx.EVT_KILL_FOCUS, self._access_attribute)
+            self.control.SetFocus()
+
+        def _access_attribute(self, event):
+            assert self.factory is not None
+
+        def dispose(self):
+            super().dispose()
+
+
 class DummyObject(HasTraits):
 
     number = Int()
@@ -309,7 +327,7 @@ class DummyObject(HasTraits):
 
 class TestUIDispose(unittest.TestCase):
 
-    @requires_toolkit([ToolkitName.qt])
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_absence_of_attribute_error_from_dispose(self):
         obj = DummyObject()
         view = View(
