@@ -14,6 +14,7 @@ from pyface.ui.wx.image_button import ImageButton
 
 from traitsui.wx.button_editor import SimpleEditor, CustomEditor
 from traitsui.testing.tester import command, locator, query
+from traitsui.testing.tester.wx import helpers
 
 
 def mouse_click_ImageButton(wrapper, interaction):
@@ -22,7 +23,8 @@ def mouse_click_ImageButton(wrapper, interaction):
     Parameters
     ----------
     wrapper : UIWrapper
-        The wrapper object wrapping the ImageButton.
+        The wrapper object wrapping the Custom Button Editor which utilizes
+        an ImageButton.
     interaction : instance of traitsui.testing.tester.command.MouseClick
         interaction is unused here, but it is included so that the function
         matches the expected format for a handler.  Note this handler is
@@ -54,25 +56,27 @@ def register(registry):
     ----------
     registry : TargetRegistry
     """
-    registry.register_solver(
+
+    registry.register_handler(
         target_class=SimpleEditor,
-        locator_class=locator.DefaultTarget,
-        solver=lambda wrapper, _: wrapper.target.control,
-    )
-    registry.register_solver(
-        target_class=CustomEditor,
-        locator_class=locator.DefaultTarget,
-        solver=lambda wrapper, _: wrapper.target._control,
-    )
-
-    registry.register_handler(
-        target_class=ImageButton,
         interaction_class=command.MouseClick,
-        handler=lambda wrapper, _: mouse_click_ImageButton(wrapper, command.MouseClick())
+        handler=helpers.mouse_click_button
     )
 
     registry.register_handler(
-        target_class=ImageButton,
+        target_class=SimpleEditor,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, _: wrapper.target.control.GetLabel()
+    )
+
+    registry.register_handler(
+        target_class=CustomEditor,
+        interaction_class=command.MouseClick,
+        handler=mouse_click_ImageButton
+    )
+
+    registry.register_handler(
+        target_class=CustomEditor,
         interaction_class=query.DisplayedText,
         handler=lambda wrapper, _: wrapper.target.control.GetLabel()
     )

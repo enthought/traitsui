@@ -27,7 +27,7 @@ def mouse_click_qwidget(wrapper, action):
         intended to be used with an interaction_class of a MouseClick.
     """
     QTest.mouseClick(
-        wrapper.target,
+        wrapper.target.control,
         QtCore.Qt.LeftButton,
         delay=wrapper.delay,
     )

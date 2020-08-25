@@ -26,7 +26,3 @@ class TestDefaultRegistry(unittest.TestCase):
                 len(registry._interaction_registry._target_to_key_to_value),
                 1,
             )
-            self.assertGreaterEqual(
-                len(registry._location_registry._target_to_key_to_value),
-                1,
-            )

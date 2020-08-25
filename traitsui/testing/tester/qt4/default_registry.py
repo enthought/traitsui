@@ -28,42 +28,8 @@ def get_default_registry():
         The default registry containing implementations for TraitsUI editors
         that is qt specific.
     """
-    registry = get_qobject_registry()
-
-    button_editor.register(registry)
-
-    return registry
-
-
-def get_qobject_registry():
-    """ Creates a generic registry for handling/solving qt objects. (i.e.
-    this registry is independent of TraitsUI)
-
-    Returns
-    -------
-    registry : TargetRegistry
-        Registry containing qt specific generic handlers and solvers.
-    """
     registry = TargetRegistry()
 
-    widget_classes = [
-        QtGui.QPushButton,
-    ]
-    handlers = [
-        (command.MouseClick, helpers.mouse_click_qwidget),
-    ]
-    for widget_class in widget_classes:
-        for interaction_class, handler in handlers:
-            registry.register_handler(
-                target_class=widget_class,
-                interaction_class=interaction_class,
-                handler=handler,
-            )
-
-    registry.register_handler(
-        target_class=QtGui.QPushButton,
-        interaction_class=query.DisplayedText,
-        handler=lambda wrapper, _: wrapper.target.text(),
-    )
+    button_editor.register(registry)
 
     return registry

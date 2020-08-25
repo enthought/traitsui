@@ -24,7 +24,7 @@ def mouse_click_button(wrapper, interaction):
         matches the expected format for a handler.  Note this handler is
         intended to be used with an interaction_class of a MouseClick.
     """
-    control = wrapper.target
+    control = wrapper.target.control
     if not control.IsEnabled():
         return
     wx.MilliSleep(wrapper.delay)

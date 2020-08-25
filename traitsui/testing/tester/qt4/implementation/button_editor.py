@@ -8,7 +8,8 @@
 #
 #  Thanks for using Enthought open source!
 #
-from traitsui.testing.tester import locator
+from traitsui.testing.tester import command, locator, query
+from traitsui.testing.tester.qt4 import helpers
 from traitsui.qt4.button_editor import CustomEditor, SimpleEditor
 
 
@@ -22,9 +23,16 @@ def register(registry):
     ----------
     registry : TargetRegistry
     """
+
+    handlers = [
+        (command.MouseClick, helpers.mouse_click_qwidget),
+        (query.DisplayedText, lambda wrapper, _: wrapper.target.control.text())
+    ]
+
     for target_class in [SimpleEditor, CustomEditor]:
-        registry.register_solver(
-            target_class=target_class,
-            locator_class=locator.DefaultTarget,
-            solver=lambda wrapper, _: wrapper.target.control,
-        )
+        for interaction_class, handler in handlers:
+            registry.register_handler(
+                target_class=target_class,
+                interaction_class=interaction_class,
+                handler=handler
+            )

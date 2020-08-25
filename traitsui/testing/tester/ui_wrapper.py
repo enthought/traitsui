@@ -161,61 +161,11 @@ class UIWrapper:
                 with _event_processed():
                     return handler(self, interaction)
 
-        try_DefaultTarget = self._try_interaction_via_DefaultTarget(supported, interaction)
-        if try_DefaultTarget != -1:
-            return try_DefaultTarget
-
         raise InteractionNotSupported(
             target_class=self.target.__class__,
             interaction_class=interaction.__class__,
             supported=supported,
         )
-
-    def _try_interaction_via_DefaultTarget(self, supported, interaction):
-        """ There may not be a handler registered for an interaction on
-        the original target (which is represented by self). Instead, it
-        may be registered for DefaultTarget.  To address this possibility,
-        this method attempts to resolve from the current target to a
-        DefaultTarget, and then sees if there is an appropriate handler
-        that can perform the given interaction on DefaultTarget instead. If
-        so, that handler will ultimately be called and this method returns
-        the result. If not, any interactions for which there are handlers
-        registered for DefaultTarget will be added to the list of supported
-        interactiontypes.
-
-        Parameters
-        ----------
-        supported : List
-            A list of the interactions currently known to be supported for
-            the wrapper object.  If no handler is found for the given
-            interaction with DefaultTarget as the target_class, any handlers
-            supported for DefaultTarget are added to the list. 
-        interaction : instance of interaction type
-            An object defining the interaction.
-
-        Returns
-        -------
-        Any
-            The output of the call to the appropriate handler (if found)
-        None
-            If no appropriate handler is found, the method returns None, and
-            simply adds to the supported list if necessary. 
-        """
-        try:
-            default_target = self.locate(locator.DefaultTarget())
-        # If we can't solve from the current target to DefaultTarget this
-        # interaction isn't supported, and there is nothing to add to supported
-        except LocationNotSupported:
-            pass
-        else:
-            # if we can locate a DefaultTarget try to perform the
-            # interactation on it instead
-            try:
-                return default_target._perform_or_inspect(interaction)
-            # if we can't add to supported
-            except InteractionNotSupported as e:
-                supported.extend(e.supported)
-        return -1
 
 
     def _get_next_target(self, location):
