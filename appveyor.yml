@@ -1,30 +1,34 @@
 build: false
-image: Visual Studio 2019
 shallow_clone: false
 skip_branch_with_pr: true
+image:
+  - MacOS
+  - Visual Studio 2019
+
 environment:
 
   global:
     PYTHONUNBUFFERED: "1"
     INSTALL_EDM_VERSION: "3.0.1"
+    APPVEYOR_YML_DISABLE_PS_LINUX: true
 
   matrix:
     - RUNTIME: '3.6'
-      TOOLKITS: "null"
+      TOOLKIT: "pyqt"
     - RUNTIME: '3.6'
-      TOOLKITS: "pyqt"
+      TOOLKIT: "pyqt5"
     - RUNTIME: '3.6'
-      TOOLKITS: "pyqt5"
+      TOOLKIT: "pyside2"
     - RUNTIME: '3.6'
-      TOOLKITS: "pyside2"
+      TOOLKIT: "wx"
     - RUNTIME: '3.6'
-      TOOLKITS: "wx"
+      TOOLKIT: "null"
 
 matrix:
   fast_finish: true
   allow_failures:
     - RUNTIME: '3.6'
-      TOOLKITS: "wx"
+      TOOLKIT: "wx"
 
 branches:
   only:
@@ -34,17 +38,29 @@ branches:
 cache:
   - C:\Users\appveyor\.cache -> appveyor-clean-cache.txt
   - C:\Users\appveyor\AppData\Local\pip\Cache -> appveyor-clean-cache.txt
+  - '${HOME}/cache -> appveyor-clean-cache.txt'
 
 init:
   - ps: $Env:path = "C:/Enthought/edm;" + $Env:path
   - ps: md C:/Users/appveyor/.cache -Force
+  # note that on osx the .cache folder is owned by root
+  # and we cannot create files there.
+  - sh: export PATH="${PATH}:/usr/local/bin"
+  - sh: export XDG_CACHE_HOME="${HOME}/cache"
+  - sh: export LC_ALL=en_US.UTF-8
+  - sh: export LANG=en_US.UTF-8
+  - sh: mkdir -p "${HOME}/cache/download"
+  - sh: sysctl -n machdep.cpu.brand_string
 
 install:
-  - install-edm-windows.cmd
+  - cmd: install-edm-windows.cmd
+  - sh: ./install-edm-osx.sh
   - edm install -y wheel click coverage
-  - appveyor-run.cmd install %runtime% %toolkits%
+  - sh: edm run -- python etstool.py install --runtime="${RUNTIME}" --toolkit="${TOOLKIT}"
+  - cmd: edm run -- python etstool.py install --runtime=%RUNTIME% --toolkit=%toolkit%
 test_script:
-  - appveyor-run.cmd test %runtime% %toolkits%
+  - sh: edm run -- python etstool.py test --runtime="${RUNTIME}" --toolkit="${TOOLKIT}"
+  - cmd: edm run -- python etstool.py test --runtime=%RUNTIME% --toolkit=%toolkit%
 on_success:
   - edm run -- coverage combine
   - edm run -- pip install codecov

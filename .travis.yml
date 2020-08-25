@@ -30,14 +30,8 @@ matrix:
     - env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5 pyside2"
     - env: RUNTIME=3.6 TOOLKITS="wx"
     - env: RUNTIME=3.6 TOOLKITS="pyqt5" TRAITS_REQUIRES="^=6.0"
-    - os: osx
-      env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5 pyside2"
-    - os: osx
-      env: RUNTIME=3.6 TOOLKITS="wx"
   allow_failures:
     - env: RUNTIME=3.6 TOOLKITS="wx"
-    - os: osx
-      env: RUNTIME=3.6 TOOLKITS="wx"
   fast_finish: true
 
 cache:
@@ -47,7 +41,6 @@ cache:
 before_install:
   - mkdir -p "${HOME}/.cache/download"
   - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then ./install-edm-linux.sh; export PATH="${HOME}/edm/bin:${PATH}"; fi
-  - if [[ ${TRAVIS_OS_NAME} == 'osx' ]]; then ./install-edm-osx.sh; export PATH="${PATH}:/usr/local/bin"; fi
   - edm install -y wheel click coverage
 install:
   - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
