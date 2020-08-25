@@ -25,7 +25,8 @@ def get_default_registry():
         The default registry containing implementations for TraitsUI editors
         that is toolkit specific.
     """
-
+    # side-effect to determine current toolkit
+    from pyface.toolkit import toolkit_object  # noqa
     if ETSConfig.toolkit == "null":
         return TargetRegistry()
     else:

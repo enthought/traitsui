@@ -58,16 +58,4 @@ def get_wx_object_registry():
         handler=lambda wrapper, _: wrapper.target.GetLabel()
     )
 
-    registry.register_handler(
-        target_class=wx.Window,
-        interaction_class=command.MouseClick,
-        handler=helpers.mouse_click_ImageButton
-    )
-
-    registry.register_handler(
-        target_class=wx.Window,
-        interaction_class=query.DisplayedText,
-        handler=lambda wrapper, _: wrapper.target.GetLabel()
-    )
-
     return registry
