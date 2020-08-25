@@ -46,6 +46,19 @@ def key_click_text_ctrl(control, interaction, delay):
         raise ValueError("Only supported Enter key.")
 
 
+"""def key_sequence_text_ctrl(control, interaction, delay):
+    if not control.IsEditable():
+        raise Disabled("{!r} is disabled.".format(control))
+    if not control.HasFocus():
+        control.SetFocus()
+    for char in interaction.sequence:
+        wx.MilliSleep(delay)
+        if char == "\b":
+            pos = control.GetInsertionPoint()
+            control.Remove(max(0, pos - 1), pos)
+        else:
+            control.AppendText(char)"""
+
 def key_sequence_text_ctrl(control, interaction, delay):
     if not control.IsEditable():
         raise Disabled("{!r} is disabled.".format(control))
@@ -57,4 +70,7 @@ def key_sequence_text_ctrl(control, interaction, delay):
             pos = control.GetInsertionPoint()
             control.Remove(max(0, pos - 1), pos)
         else:
-            control.AppendText(char)
+            char_key_event = wx.KeyEvent(wx.wxEVT_CHAR)
+            char_key_event.SetUnicodeKey(ord(char))
+            control.EmulateKeyPress(char_key_event)
+
