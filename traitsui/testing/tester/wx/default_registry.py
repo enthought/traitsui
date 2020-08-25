@@ -54,7 +54,7 @@ def get_wx_object_registry():
     registry.register_handler(
         target_class=wx.TextCtrl,
         interaction_class=command.KeyClick,
-        handler=helpers.key_press_text_ctrl
+        handler=helpers.key_click_text_ctrl
     )
     registry.register_handler(
         target_class=wx.TextCtrl,
@@ -65,9 +65,18 @@ def get_wx_object_registry():
         target_class=wx.StaticText,
         interaction_class=query.DisplayedText,
         handler=lambda wrapper, action: (
-            wrapper.target.GetLabel()
+            wrapper.target.label
         ),
     )
+    registry.register_handler(
+        target_class=wx.TextCtrl,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, action: (
+            wrapper.target.GetValue()
+        ),
+    )
+
+
     registry.register_handler(
         target_class=wx.Button,
         interaction_class=command.MouseClick,

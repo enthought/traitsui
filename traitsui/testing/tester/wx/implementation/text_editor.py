@@ -10,7 +10,7 @@
 #
 
 from traitsui.wx.text_editor import CustomEditor, ReadonlyEditor, SimpleEditor
-from traitsui.testing import locator
+from traitsui.testing.tester import locator
 
 
 def register(registry):

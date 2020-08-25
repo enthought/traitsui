@@ -62,7 +62,7 @@ def mouse_click_ImageButton(wrapper, interaction):
     control.ProcessEvent(left_up_event)
 
 
-def key_press_text_ctrl(wrapper, interaction):
+def key_click_text_ctrl(wrapper, interaction):
     control = wrapper.target
     if interaction.key == "Enter":
         if not control.HasFocus():
