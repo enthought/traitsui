@@ -13,6 +13,7 @@ import unittest
 
 from traitsui.testing.tester.default_registry import get_default_registry
 from traitsui.testing.tester.registry import TargetRegistry
+from traitsui.tests._tools import is_null
 
 
 class TestDefaultRegistry(unittest.TestCase):
@@ -20,3 +21,8 @@ class TestDefaultRegistry(unittest.TestCase):
     def test_load_default_registries(self):
         registry = get_default_registry()
         self.assertIsInstance(registry, TargetRegistry)
+        if not is_null():
+            self.assertGreaterEqual(
+                len(registry._interaction_registry._target_to_key_to_value),
+                1,
+            )

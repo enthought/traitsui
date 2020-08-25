@@ -105,6 +105,5 @@ class TestUITesterFindEditor(unittest.TestCase):
         tester = UITester(delay=.01)
         view = View(Item("submit_button"))
         with tester.create_ui(Order(), dict(view=view)) as ui:
-            wrapped = tester.find_by_name(ui,"submit_button")
+            wrapped = tester.find_by_name(ui, "submit_button")
             self.assertEqual(wrapped.delay, .01)
-

@@ -10,6 +10,9 @@
 #
 
 from traitsui.testing.tester.registry import TargetRegistry
+from traitsui.testing.tester.qt4.implementation import (
+    button_editor,
+)
 
 
 def get_default_registry():
@@ -19,7 +22,10 @@ def get_default_registry():
     -------
     registry : TargetRegistry
         The default registry containing implementations for TraitsUI editors
-        that is qt specific.  
+        that is qt specific.
     """
     registry = TargetRegistry()
+
+    button_editor.register(registry)
+
     return registry
