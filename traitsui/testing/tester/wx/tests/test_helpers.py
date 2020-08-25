@@ -12,6 +12,8 @@
 import unittest
 from unittest import mock
 
+from traitsui.testing.tester import command, query
+from traitsui.testing.tester.exceptions import Disabled
 from traitsui.testing.tester.wx import helpers
 
 from traitsui.tests._tools import (
@@ -61,3 +63,37 @@ class TestInteractions(unittest.TestCase):
 
         # then
         self.assertEqual(handler.call_count, 0)
+
+
+    def test_key_sequence(self):
+        textbox = wx.TextCtrl(self.frame)
+
+        helpers.key_sequence_text_ctrl(textbox, command.KeySequence("abc"), 0)
+
+        self.assertEqual(textbox.value, "abc")
+
+    def test_key_sequence_disabled(self):
+        textbox = wx.TextCtrl(self.frame)
+        textbox.SetEditable(False)
+
+        with self.assertRaises(Disabled):
+            helpers.key_sequence_text_ctrl(textbox, command.KeySequence("abc"), 0)
+
+
+    def test_key_click(self):
+        textbox = wx.TextCtrl(self.frame)
+        
+        # sanity check
+        helpers.key_sequence_text_ctrl(textbox, command.KeySequence("abc"), 0)
+        self.assertEqual(textbox.GetLastPosition(), 0)
+
+        helpers.key_click_text_ctrl(textbox, command.KeyClick("Enter"), 0)
+        self.assertEqual(textbox.GetLastPosition(), 2)
+
+
+    def test_key_click_disabled(self):
+        textbox = wx.TextCtrl(self.frame)
+        textbox.SetEditable(False)
+
+        with self.assertRaises(Disabled):
+            helpers.key_click_text_ctrl(textbox, command.KeyClick("Enter"), 0)

@@ -11,6 +11,8 @@
 
 import wx
 
+from traitsui.testing.tester.exceptions import Disabled
+
 
 def mouse_click_button(control, delay):
     """ Performs a mouce click on a wx button.
@@ -32,6 +34,8 @@ def mouse_click_button(control, delay):
 
 
 def key_click_text_ctrl(control, interaction, delay):
+    if not control.IsEditable():
+        raise Disabled("{!r} is disabled.".format(control))
     if interaction.key == "Enter":
         if not control.HasFocus():
             control.SetFocus()
@@ -43,6 +47,8 @@ def key_click_text_ctrl(control, interaction, delay):
 
 
 def key_sequence_text_ctrl(control, interaction, delay):
+    if not control.IsEditable():
+        raise Disabled("{!r} is disabled.".format(control))
     if not control.HasFocus():
         control.SetFocus()
     for char in interaction.sequence:
