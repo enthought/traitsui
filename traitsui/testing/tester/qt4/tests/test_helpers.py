@@ -17,12 +17,10 @@ from traitsui.tests._tools import (
     requires_toolkit,
     ToolkitName,
 )
-from traitsui.testing.tester import command
-from traitsui.testing.tester.ui_wrapper import UIWrapper
+from traitsui.testing.tester.qt4 import helpers
 
 try:
     from pyface.qt import QtGui
-    from traitsui.testing.tester.qt4 import default_registry
 except ImportError:
     if is_qt():
         raise
@@ -36,12 +34,7 @@ class TestInteractions(unittest.TestCase):
         click_slot = mock.Mock()
         button.clicked.connect(click_slot)
 
-        wrapper = UIWrapper(
-            target=button,
-            registries=[default_registry.get_default_registry()],
-        )
-
-        wrapper.perform(command.MouseClick())
+        helpers.mouse_click_qwidget(button, 0)
 
         self.assertEqual(click_slot.call_count, 1)
 
@@ -52,15 +45,10 @@ class TestInteractions(unittest.TestCase):
         click_slot = mock.Mock()
         button.clicked.connect(click_slot)
 
-        wrapper = UIWrapper(
-            target=button,
-            registries=[default_registry.get_default_registry()],
-        )
-
         # when
         # clicking won't fail, it just does not do anything.
         # This is consistent with the actual UI.
-        wrapper.perform(command.MouseClick())
+        helpers.mouse_click_qwidget(button, 0)
 
         # then
         self.assertEqual(click_slot.call_count, 0)

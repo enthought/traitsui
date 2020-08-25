@@ -14,7 +14,7 @@ from pyface.qt import QtCore
 from pyface.qt.QtTest import QTest
 
 
-def mouse_click_qwidget(wrapper, action):
+def mouse_click_qwidget(control, delay):
     """ Performs a mouce click on a Qt widget.
 
     Parameters
@@ -27,7 +27,7 @@ def mouse_click_qwidget(wrapper, action):
         intended to be used with an interaction_class of a MouseClick.
     """
     QTest.mouseClick(
-        wrapper.target.control,
+        control,
         QtCore.Qt.LeftButton,
-        delay=wrapper.delay,
+        delay=delay,
     )

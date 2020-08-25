@@ -25,7 +25,10 @@ def register(registry):
     """
 
     handlers = [
-        (command.MouseClick, helpers.mouse_click_qwidget),
+        (command.MouseClick, lambda wrapper, _:  helpers.mouse_click_qwidget(
+                                                    wrapper.target.control,
+                                                    wrapper.delay)
+        ),
         (query.DisplayedText, lambda wrapper, _: wrapper.target.control.text())
     ]
 

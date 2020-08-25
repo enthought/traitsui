@@ -60,7 +60,7 @@ def register(registry):
     registry.register_handler(
         target_class=SimpleEditor,
         interaction_class=command.MouseClick,
-        handler=helpers.mouse_click_button
+        handler=lambda wrapper, _: helpers.mouse_click_button(wrapper.target.control, wrapper.delay)
     )
 
     registry.register_handler(

@@ -12,8 +12,7 @@
 import unittest
 from unittest import mock
 
-from traitsui.testing.tester import command
-from traitsui.testing.tester.ui_wrapper import UIWrapper
+from traitsui.testing.tester.wx import helpers
 
 from traitsui.tests._tools import (
     is_wx,
@@ -23,7 +22,6 @@ from traitsui.tests._tools import (
 
 try:
     import wx
-    from traitsui.testing.tester.wx import default_registry
 except ImportError:
     if is_wx():
         raise
@@ -45,13 +43,9 @@ class TestInteractions(unittest.TestCase):
         handler = mock.Mock()
         button = wx.Button(self.frame)
         button.Bind(wx.EVT_BUTTON, handler)
-        wrapper = UIWrapper(
-            target=button,
-            registries=[default_registry.get_default_registry()],
-        )
 
         # when
-        wrapper.perform(command.MouseClick())
+        helpers.mouse_click_button(button, 0)
 
         # then
         self.assertEqual(handler.call_count, 1)
@@ -61,13 +55,9 @@ class TestInteractions(unittest.TestCase):
         button = wx.Button(self.frame)
         button.Bind(wx.EVT_BUTTON, handler)
         button.Enable(False)
-        wrapper = UIWrapper(
-            target=button,
-            registries=[default_registry.get_default_registry()],
-        )
 
         # when
-        wrapper.perform(command.MouseClick())
+        helpers.mouse_click_button(button, 0)
 
         # then
         self.assertEqual(handler.call_count, 0)
