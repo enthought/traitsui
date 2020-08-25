@@ -17,12 +17,10 @@ def mouse_click_button(control, delay):
 
     Parameters
     ----------
-    wrapper : UIWrapper
-        The wrapper object wrapping the wx button.
-    interaction : instance of traitsui.testing.tester.command.MouseClick
-        interaction is unused here, but it is included so that the function
-        matches the expected format for a handler.  Note this handler is
-        intended to be used with an interaction_class of a MouseClick.
+    control : wxObject
+        The wx Object to be clicked.  
+    delay: int
+        Time delay (in ms) in which click will be performed. 
     """
     if not control.IsEnabled():
         return
