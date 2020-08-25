@@ -378,6 +378,9 @@ class GUIToolkit(Toolkit):
     def hide_control(self, control):
         """ Hide a GUI toolkit control."""
         control.hide()
+        for w in control.children():
+            if isinstance(w, QtGui.QWidget):
+                self.hide_control(w)
 
     def destroy_control(self, control):
         """ Destroys a specified GUI toolkit control.

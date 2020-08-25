@@ -18,20 +18,29 @@ Test cases for the UI object.
 """
 
 import unittest
+from unittest import mock
 
-from traits.api import Property
+from pyface.api import GUI, Window
+from traits.api import Any, Bool, Instance, Property
 from traits.has_traits import HasTraits, HasStrictTraits
 from traits.trait_types import Str, Int
 import traitsui
+from traitsui.api import Group, View
 from traitsui.item import Item, spring
-from traitsui.view import View
 
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.editor import Editor
 from traitsui.tests._tools import (
     count_calls,
     create_ui,
+    is_qt,
+    is_wx,
+    process_cascade_events,
     requires_toolkit,
+    reraise_exceptions,
     ToolkitName,
 )
+from traitsui.toolkit import toolkit, toolkit_object
 
 
 class FooDialog(HasTraits):
@@ -240,3 +249,85 @@ class TestUI(unittest.TestCase):
 
             obj.name = "too short"
             self.assertTrue(editor.invalid)
+
+
+# Regression test on an AttributeError commonly seen (enthought/traitsui#1145)
+# Code in ui_panel makes use toolkit specific attributes on the toolkit specific
+# Editor
+ToolkitSpecificEditor = toolkit_object("editor:Editor")
+
+
+if is_qt():
+
+    from pyface.qt import QtGui, QtCore
+
+    class CustomWidget(QtGui.QLabel):
+
+        def __init__(self, editor, parent=None):
+            super(CustomWidget, self).__init__()
+            self._some_editor = editor
+
+        def sizeHint(self):
+            assert self._some_editor.factory is not None
+            return super().sizeHint()
+
+
+    class EditorWithCustomWidget(ToolkitSpecificEditor):
+
+        def init(self, parent):
+            from pyface.qt import QtCore, QtGui
+
+            # To reproduce an assertion from sizeHint, it is necessary to have
+            # two widgets, where one of them is created with a nested UI.
+            # When the nested UI is disposed, the original AttributeError is
+            # caused by the neighboring widgets trying to resize / repaint /
+            # ... adjust to fit the layout. These do not happen if the widgets
+            # are made to be hidden first before dispose is called.
+            self.control = QtGui.QSplitter(QtCore.Qt.Horizontal)
+            widget = CustomWidget(editor=self)
+            self.control.addWidget(widget)
+            self.control.setStretchFactor(0, 2)
+            self._ui = self.edit_traits(
+                parent=self.control,
+                kind="subpanel",
+                view=View(Item("_", label="DUMMY"), width=100, height=100),
+            )
+            self.control.addWidget(self._ui.control)
+
+        def dispose(self):
+            self._ui.dispose()
+            super().dispose()
+
+        def update_editor(self):
+            pass
+
+
+class DummyObject(HasTraits):
+
+    number = Int()
+
+
+class TestUIDispose(unittest.TestCase):
+
+    @requires_toolkit([ToolkitName.qt])
+    def test_absence_of_attribute_error_from_dispose(self):
+        obj = DummyObject()
+        view = View(
+            Group(
+                Item(
+                    "number",
+                    editor=BasicEditorFactory(klass=EditorWithCustomWidget),
+                ),
+            ),
+        )
+        with reraise_exceptions():
+
+            # create_ui is useful for other tests but not this one: it
+            # flushes the event loop prior to calling dispose. Here we want
+            # to test even if the event loop is not flushed before calling
+            # dispose, it would still be okay at the end.
+            ui = obj.edit_traits(view=view)
+            try:
+                ui.dispose()
+            finally:
+                process_cascade_events()
