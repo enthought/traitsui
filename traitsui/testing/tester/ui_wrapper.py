@@ -167,7 +167,6 @@ class UIWrapper:
             supported=supported,
         )
 
-
     def _get_next_target(self, location):
         """ Return the next UI target from the given location.
 

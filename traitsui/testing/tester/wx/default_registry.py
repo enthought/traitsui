@@ -9,9 +9,6 @@
 #  Thanks for using Enthought open source!
 #
 
-import wx
-
-from traitsui.testing.tester import command, query
 from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.wx.implementation import (
     button_editor,

@@ -9,11 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-from pyface.qt import QtGui
-
-from traitsui.testing.tester import command, query
 from traitsui.testing.tester.registry import TargetRegistry
-from traitsui.testing.tester.qt4 import helpers
 from traitsui.testing.tester.qt4.implementation import (
     button_editor,
 )

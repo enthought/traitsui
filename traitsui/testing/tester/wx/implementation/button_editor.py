@@ -10,10 +10,8 @@
 #
 import wx
 
-from pyface.ui.wx.image_button import ImageButton
-
 from traitsui.wx.button_editor import SimpleEditor, CustomEditor
-from traitsui.testing.tester import command, locator, query
+from traitsui.testing.tester import command, query
 from traitsui.testing.tester.wx import helpers
 
 
@@ -60,7 +58,8 @@ def register(registry):
     registry.register_handler(
         target_class=SimpleEditor,
         interaction_class=command.MouseClick,
-        handler=lambda wrapper, _: helpers.mouse_click_button(wrapper.target.control, wrapper.delay)
+        handler=(lambda wrapper, _: helpers.mouse_click_button(
+                 wrapper.target.control, wrapper.delay))
     )
 
     registry.register_handler(
