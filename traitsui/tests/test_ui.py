@@ -275,10 +275,11 @@ if is_qt():
     class EditorWithCustomWidget(ToolkitSpecificEditor):
 
         def init(self, parent):
-            # To reproduce an assertion from sizeHint, it is necessary to have
-            # two widgets, where one of them is created with a nested UI.
-            # When the nested UI is disposed, the original AttributeError is
-            # caused by the neighboring widgets trying to resize / repaint /
+            # This example reproduces a failure scenario where sizeHint tries
+            # to access a factory attribute that has been reset to None.
+            # We have two widgets, where one of them is created with a nested
+            # UI. When the nested UI is disposed, the original AttributeError
+            # is caused by the neighboring widgets trying to resize / repaint /
             # ... adjust to fit the layout. These do not happen if the widgets
             # are made to be hidden first before dispose is called.
             self.control = QtGui.QSplitter(QtCore.Qt.Horizontal)
