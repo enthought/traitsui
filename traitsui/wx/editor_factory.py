@@ -117,13 +117,14 @@ class TextEditor(Editor):
         self.set_tooltip()
 
     def dispose(self):
-        parent = self.control.GetParent()
-        parent.Unbind(
-            wx.EVT_TEXT_ENTER,
-            handler=self.update_object,
-            id=self.control.GetId(),
-        )
-        self.control.Unbind(wx.EVT_KILL_FOCUS, handler=self.update_object)
+        if self.control is not None:   # just in-case
+            parent = self.control.GetParent()
+            parent.Unbind(
+                wx.EVT_TEXT_ENTER,
+                handler=self.update_object,
+                id=self.control.GetId(),
+            )
+            self.control.Unbind(wx.EVT_KILL_FOCUS, handler=self.update_object)
         super().dispose()
 
     def update_object(self, event):
