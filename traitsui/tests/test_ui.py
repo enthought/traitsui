@@ -370,10 +370,6 @@ class TestUIDispose(unittest.TestCase):
                     "number",
                     editor=BasicEditorFactory(klass=EditorWithCustomWidget),
                 ),
-                Item(
-                    "number",
-                    editor=BasicEditorFactory(klass=EditorWithCustomWidget),
-                ),
             ),
         )
         with reraise_exceptions():
