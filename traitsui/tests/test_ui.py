@@ -310,7 +310,6 @@ if is_wx():
     import wx
     from traitsui.wx.helper import TraitsUIPanel
 
-
     class EditorWithCustomWidget(ToolkitSpecificEditor):  # noqa: F811
 
         def init(self, parent):
