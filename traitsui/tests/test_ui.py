@@ -303,19 +303,53 @@ if is_qt():
 
 if is_wx():
 
-    # Similar AttributeError can occur if one does not explicitly remove a
-    # bound event handler.
+    # Mimic causing a cascade of events where a handler to be called
+    # will require control/factory/... attributes that will be set
+    # to None in dispose. e.g. In enthought/traitsui#1073, the user closes the
+    # UI and that action causes a cascade of new events.
     import wx
+    from traitsui.wx.helper import TraitsUIPanel
+
 
     class EditorWithCustomWidget(ToolkitSpecificEditor):  # noqa: F811
 
         def init(self, parent):
-            self.control = wx.TextCtrl(parent, -1, "dummy")
-            self.control.Bind(wx.EVT_KILL_FOCUS, self._access_attribute)
-            self.control.SetFocus()
+            self.control = TraitsUIPanel(parent, -1)
 
-        def _access_attribute(self, event):
-            assert self.factory is not None
+            sizer = wx.BoxSizer(wx.HORIZONTAL)
+            self.control.text1 = wx.TextCtrl(parent, -1, "dummy")
+            sizer.Add(self.control.text1, 0, wx.LEFT | wx.EXPAND, 4)
+            self.control.text2 = wx.TextCtrl(parent, -1, "dummy")
+            sizer.Add(self.control.text2, 0, wx.LEFT | wx.EXPAND, 4)
+
+            self.control.text1.Bind(
+                wx.EVT_KILL_FOCUS, self._update_with_attr_access,
+            )
+            self.control.text2.Bind(
+                wx.EVT_KILL_FOCUS, self._update_with_attr_access,
+            )
+            self.control.SetSizerAndFit(sizer)
+            self._count = 0
+
+        def _update_with_attr_access(self, event):
+            if self._count > 1:
+                # prevent infinite loop
+                return
+
+            # Test objective: We should not run into AttributeError here
+            assert self.control is not None
+
+            if event.GetEventObject() is self.control.text1:
+                self.control.text2.SetFocus()
+                self._count += 1
+            if event.GetEventObject() is self.control.text2:
+                self.control.text1.SetFocus()
+                self._count += 1
+
+        def update_editor(self):
+            # Trigger cascade of events at initialization.
+            self.control.text1.SetFocus()
+            self.control.text2.SetFocus()
 
         def dispose(self):
             super().dispose()
@@ -333,6 +367,10 @@ class TestUIDispose(unittest.TestCase):
         obj = DummyObject()
         view = View(
             Group(
+                Item(
+                    "number",
+                    editor=BasicEditorFactory(klass=EditorWithCustomWidget),
+                ),
                 Item(
                     "number",
                     editor=BasicEditorFactory(klass=EditorWithCustomWidget),
