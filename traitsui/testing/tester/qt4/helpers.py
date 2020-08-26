@@ -18,6 +18,19 @@ from traitsui.testing.tester.exceptions import Disabled
 from traitsui.qt4.key_event_to_name import key_map as _KEY_MAP
 
 def key_click(widget, key, delay=0):
+    """ Performs a key click of the given key on the given widget after
+    a delay.
+
+    Parameters
+    ----------
+    widget : Qwidget
+        The Qt widget to be key clicked.
+    key : str
+        Standardized (pyface) name for a keyboard event.
+        e.g. "Enter", "Tab", "Space", "0", "1", "A", ...
+    delay : int 
+        Time delay (in ms) in which the key click will be performed.
+    """
     if "-" in key:
         *modifiers, key = key.split("-")
     else:
@@ -66,12 +79,39 @@ def mouse_click_qwidget(control, delay):
     )
 
 def key_sequence_qwidget(control, interaction, delay):
+    """ Performs simulated typing of a sequence of keys on the given widget
+    after a delay.
+    
+    Parameters
+    ----------
+    control : Qwidget
+        The Qt widget to be acted on.
+    interaction : instance of command.KeySequence
+        The interaction (command) object holding the sequence of key inputs
+        to be simulated being typed
+    delay : int 
+        Time delay (in ms) in which each key click in the sequence will be
+        performed.
+    """
     if not control.isEnabled():
         raise Disabled("{!r} is disabled.".format(control))
     QTest.keyClicks(control, interaction.sequence, delay=delay)
 
 
 def key_click_qwidget(control, interaction, delay):
+    """ Performs simulated typing of a sequence of keys on the given widget
+    after a delay.
+    
+    Parameters
+    ----------
+    control : Qwidget
+        The Qt widget to be acted on.
+    interaction : instance of command.KeyClick
+        The interaction (command) object holding the key input
+        to be simulated being typed
+    delay : int 
+        Time delay (in ms) in which the key click will be performed.
+    """
     if not control.isEnabled():
         raise Disabled("{!r} is disabled.".format(control))
     key_click(control, interaction.key, delay=delay)
