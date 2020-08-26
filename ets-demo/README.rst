@@ -63,7 +63,7 @@ data files. For example::
         }
 
 Then in ``setup.py``, add an entry point under the ``etsdemo_data`` group to
-reference the newly created function . For example::
+reference the newly created function. For example::
 
     from setuptools import setup
 
