@@ -75,6 +75,9 @@ function. For example::
         ...
     )
 
+Note that the entry point group must match `"etsdemo_data"`, but the
+entry point name (`"demo"` in the above example) can be any value.
+
 Launch with specific data sources
 ---------------------------------
 
