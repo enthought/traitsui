@@ -87,7 +87,7 @@ def key_sequence_qwidget(control, interaction, delay):
     control : Qwidget
         The Qt widget to be acted on.
     interaction : instance of command.KeySequence
-        The interaction (command) object holding the sequence of key inputs
+        The interaction object holding the sequence of key inputs
         to be simulated being typed
     delay : int 
         Time delay (in ms) in which each key click in the sequence will be
@@ -99,15 +99,14 @@ def key_sequence_qwidget(control, interaction, delay):
 
 
 def key_click_qwidget(control, interaction, delay):
-    """ Performs simulated typing of a sequence of keys on the given widget
-    after a delay.
+    """ Performs simulated typing of a key on the given widget after a delay.
     
     Parameters
     ----------
     control : Qwidget
         The Qt widget to be acted on.
     interaction : instance of command.KeyClick
-        The interaction (command) object holding the key input
+        The interaction object holding the key input
         to be simulated being typed
     delay : int 
         Time delay (in ms) in which the key click will be performed.
