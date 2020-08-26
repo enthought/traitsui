@@ -21,7 +21,6 @@ from traitsui.testing.tester import command
 from traitsui.testing.tester.exceptions import Disabled
 from traitsui.testing.tester.qt4 import helpers
 
-
 try:
     from pyface.qt import QtGui
 except ImportError:
@@ -76,6 +75,13 @@ class TestInteractions(unittest.TestCase):
             # each keystroke fires a signal
             self.assertEqual(change_slot.call_count, 3)
 
+        # for a QLabel, one can try a key sequence and nothing will happen
+        textbox = QtGui.QLabel()
+        helpers.key_sequence_qwidget(textbox,
+                                     command.KeySequence("abc"),
+                                     0)
+        self.assertEqual(textbox.text(), "")
+
     def test_key_sequence_disabled(self):
         textbox = QtGui.QLineEdit()
         textbox.setEnabled(False)
@@ -107,6 +113,11 @@ class TestInteractions(unittest.TestCase):
         helpers.key_click_qwidget(textbox, command.KeyClick("Enter"), 0)
         self.assertEqual(change_slot.call_count, 1)
         self.assertEqual(textbox.toPlainText(), "\n")
+
+        # for a QLabel, one can try a key click and nothing will happen
+        textbox = QtGui.QLabel()
+        helpers.key_click_qwidget(textbox, command.KeyClick("A"), 0)
+        self.assertEqual(textbox.text(), "")
 
     def test_key_click_disabled(self):
         textbox = QtGui.QLineEdit()
