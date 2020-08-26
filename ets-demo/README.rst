@@ -62,8 +62,8 @@ data files. For example::
             "root": pkg_resources.resource_filename("my_project", "data"),
         }
 
-Then add an entry point in ``setup.py`` that points to the newly created
-function. For example::
+Then in ``setup.py``, add an entry point under the ``etsdemo_data`` group to
+reference the newly created function. For example::
 
     from setuptools import setup
 
@@ -71,9 +71,12 @@ function. For example::
         name="my_project",
         ...
         entry_points={
-            "etsdemo_data": ["demo = my_project.info:info"],
+            "etsdemo_data": ["my_demo = my_project.info:info"],
         ...
     )
+
+Note that the entry point name (``"my_demo"`` in the above example) can be any
+value.
 
 Launch with specific data sources
 ---------------------------------
