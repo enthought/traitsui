@@ -75,7 +75,7 @@ reference the newly created function. For example::
         ...
     )
 
-Note that the entry point name (`"my_demo"` in the above example) can be any
+Note that the entry point name (``"my_demo"`` in the above example) can be any
 value.
 
 Launch with specific data sources
