@@ -56,18 +56,24 @@ class TestInteractions(unittest.TestCase):
         # then
         self.assertEqual(click_slot.call_count, 0)
 
+
     def test_key_sequence(self):
-        textbox = QtGui.QLineEdit()
-        change_slot = mock.Mock()
-        textbox.textEdited.connect(change_slot)
+        # test on different Qwidget objects
+        textboxes = [QtGui.QLineEdit(), QtGui.QTextEdit()]
+        for i, textbox in enumerate(textboxes):
+            change_slot = mock.Mock()
+            textbox.textChanged.connect(change_slot)
 
-        # when
-        helpers.key_sequence_qwidget(textbox, command.KeySequence("abc"), 0)
+            # when
+            helpers.key_sequence_qwidget(textbox, command.KeySequence("abc"), 0)
 
-        # then
-        self.assertEqual(textbox.text(), "abc")
-        # each keystroke fires a signal
-        self.assertEqual(change_slot.call_count, 3)
+            # then
+            if i == 0:
+                self.assertEqual(textbox.text(), "abc")
+            else:
+                self.assertEqual(textbox.toPlainText(), "abc")
+            # each keystroke fires a signal
+            self.assertEqual(change_slot.call_count, 3)
 
 
     def test_key_sequence_disabled(self):
@@ -85,12 +91,21 @@ class TestInteractions(unittest.TestCase):
         change_slot = mock.Mock()
         textbox.editingFinished.connect(change_slot)
         
-        # sanity check
+        # sanity check on editingFinished signal
         helpers.key_sequence_qwidget(textbox, command.KeySequence("abc"), 0)
         self.assertEqual(change_slot.call_count, 0)
 
         helpers.key_click_qwidget(textbox, command.KeyClick("Enter"), 0)
         self.assertEqual(change_slot.call_count, 1)
+
+        # test on a different Qwidget object - QtGui.QTextEdit()
+        textbox = QtGui.QTextEdit()
+        change_slot = mock.Mock()
+        # Now "Enter" should not finish editing, but instead go to next line
+        textbox.textChanged.connect(change_slot)
+        helpers.key_click_qwidget(textbox, command.KeyClick("Enter"), 0)
+        self.assertEqual(change_slot.call_count, 1)
+        self.assertEqual(textbox.toPlainText(), "\n")
 
 
     def test_key_click_disabled(self):

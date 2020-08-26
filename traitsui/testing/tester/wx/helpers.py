@@ -31,7 +31,7 @@ def key_click(widget, key, delay=0):
     Parameters
     ----------
     widget : wxObject
-        The wx Object to be clicked.
+        The wx Object to be clicked. Should be wx.TextCtrl instance
     key : str
         Standardized (pyface) name for a keyboard event.
         e.g. "Enter", "Tab", "Space", "0", "1", "A", ...
@@ -95,7 +95,7 @@ def key_click_text_ctrl(control, interaction, delay):
     Parameters
     ----------
     control : wxObject
-        The wx Object to be acted on.
+        The wx Object to be acted on. Should be wx.TextCtrl instance
     interaction : instance of command.KeyClick
         The interaction object holding the key input
         to be simulated being typed
@@ -108,6 +108,7 @@ def key_click_text_ctrl(control, interaction, delay):
         control.SetFocus()
     key_click(control, interaction.key, delay)
 
+
 def key_sequence_text_ctrl(control, interaction, delay):
     """ Performs simulated typing of a sequence of keys on the given wxObject
     after a delay.
@@ -115,7 +116,7 @@ def key_sequence_text_ctrl(control, interaction, delay):
     Parameters
     ----------
     control : wxObject
-        The wx Object to be acted on.
+        The wx Object to be acted on. Should be wx.TextCtrl instance
     interaction : instance of command.KeySequence
         The interaction object holding the sequence of key inputs
         to be simulated being typed
@@ -129,4 +130,3 @@ def key_sequence_text_ctrl(control, interaction, delay):
         control.SetFocus()
     for char in interaction.sequence:
         key_click(control, char, delay)
-
