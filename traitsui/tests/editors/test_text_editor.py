@@ -150,6 +150,10 @@ class TestTextEditor(unittest.TestCase, UnittestTools):
         # Smoke test to test setup and tear down of an editor.
         self.check_editor_init_and_dispose(style="custom", auto_set=True)
 
+    def test_readonly_editor_init_and_dispose(self):
+        # Smoke test to test setup and tear down of an editor.
+        self.check_editor_init_and_dispose(style="readonly", auto_set=True)
+
     def test_simple_editor_init_and_dispose_no_auto_set(self):
         # Smoke test to test setup and tear down of an editor.
         self.check_editor_init_and_dispose(style="simple", auto_set=False)
@@ -165,7 +169,10 @@ class TestTextEditor(unittest.TestCase, UnittestTools):
         with tester.create_ui(foo, dict(view=view)) as ui:
             with self.assertTraitChanges(foo, "name", count=3):
                 tester.find_by_name(ui, "name").perform(command.KeySequence("NEW"))
+                # with auto-set the displayed name should match the name trait
+            display_name = tester.find_by_name(ui, "name").inspect(query.DisplayedText())
             self.assertEqual(foo.name, "NEW")
+            self.assertEqual(display_name, foo.name)
 
 
     def test_simple_auto_set_false_do_not_update(self):
@@ -174,9 +181,16 @@ class TestTextEditor(unittest.TestCase, UnittestTools):
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
             tester.find_by_name(ui, "name").perform(command.KeySequence("NEW"))
+            # with auto-set as False the displayed name should match what has
+            # been typed not the trait itself, After "Enter" is pressed it
+            # should match the name trait
+            display_name = tester.find_by_name(ui, "name").inspect(query.DisplayedText())  # noqa
             self.assertEqual(foo.name, "")
+            self.assertEqual(display_name, "NEW")
             tester.find_by_name(ui, "name").perform(command.KeyClick("Enter"))
+            display_name = tester.find_by_name(ui, "name").inspect(query.DisplayedText())  # noqa
             self.assertEqual(foo.name, "NEW")
+            self.assertEqual(display_name, foo.name)
 
 
     def test_custom_auto_set_true_update_text(self):
@@ -187,7 +201,10 @@ class TestTextEditor(unittest.TestCase, UnittestTools):
         with tester.create_ui(foo, dict(view=view)) as ui:
             with self.assertTraitChanges(foo, "name", count=3):
                 tester.find_by_name(ui, "name").perform(command.KeySequence("NEW"))
+            # with auto-set the displayed name should match the name trait
+            display_name = tester.find_by_name(ui, "name").inspect(query.DisplayedText())
             self.assertEqual(foo.name, "NEW")
+            self.assertEqual(display_name, foo.name)
 
 
     def test_custom_auto_set_false_update_text(self):
@@ -198,22 +215,32 @@ class TestTextEditor(unittest.TestCase, UnittestTools):
         with tester.create_ui(foo, dict(view=view)) as ui:
             tester.find_by_name(ui, "name").perform(command.KeySequence("NEW"))
             tester.find_by_name(ui, "name").perform(command.KeyClick("Enter"))
+            display_name = tester.find_by_name(ui, "name").inspect(query.DisplayedText())  # noqa
             self.assertEqual(foo.name, "NEW\n")
+            self.assertEqual(display_name, foo.name)
 
 
-    @unittest.skipUnless(
-        Version(TRAITS_VERSION) >= Version("6.1.0"),
-        "This test requires traits >= 6.1.0"
-    )
-    def test_format_func_used(self):
+    def test_readonly_editor(self):
+        foo = Foo(name= "A name")
+        view = get_view(style="readonly", auto_set=True)
+        tester = UITester()
+        with tester.create_ui(foo, dict(view=view)) as ui:
+            # Trying to type should do nothing 
+            tester.find_by_name(ui, "name").perform(command.KeySequence("NEW"))
+            tester.find_by_name(ui, "name").perform(command.KeyClick("Space"))
+            display_name = tester.find_by_name(ui, "name").inspect(query.DisplayedText())  # noqa
+            self.assertEqual(display_name, "A name")
+
+
+    def check_format_func_used(self, style):
         # Regression test for enthought/traitsui#790
         # The test will fail with traits < 6.1.0 because the bug
         # is fixed in traits, see enthought/traitsui#980 for moving those
         # relevant code to traitsui.
         foo = Foo(name="william", nickname="bill")
         view = View(
-            Item("name", format_func=lambda s: s.upper()),
-            Item("nickname"),
+            Item("name", format_func=lambda s: s.upper(), style=style),
+            Item("nickname", style=style),
         )
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
@@ -225,3 +252,27 @@ class TestTextEditor(unittest.TestCase, UnittestTools):
             )
             self.assertEqual(display_name, "WILLIAM")
             self.assertEqual(display_nickname, "bill")
+
+
+    @unittest.skipUnless(
+        Version(TRAITS_VERSION) >= Version("6.1.0"),
+        "This test requires traits >= 6.1.0"
+    )
+    def test_format_func_used_simple(self):
+        self.check_format_func_used(style='simple')
+
+
+    @unittest.skipUnless(
+        Version(TRAITS_VERSION) >= Version("6.1.0"),
+        "This test requires traits >= 6.1.0"
+    )
+    def test_format_func_used_custom(self):
+        self.check_format_func_used(style='custom')
+
+
+    @unittest.skipUnless(
+        Version(TRAITS_VERSION) >= Version("6.1.0"),
+        "This test requires traits >= 6.1.0"
+    )
+    def test_format_func_used_readonly(self):
+        self.check_format_func_used(style='readonly')
