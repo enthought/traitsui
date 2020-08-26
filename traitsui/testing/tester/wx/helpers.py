@@ -35,7 +35,7 @@ def key_click(widget, key, delay=0):
     key : str
         Standardized (pyface) name for a keyboard event.
         e.g. "Enter", "Tab", "Space", "0", "1", "A", ...
-    delay : int 
+    delay : int
         Time delay (in ms) in which the key click will be performed.
     """
     if "-" in key:
@@ -50,7 +50,7 @@ def key_click(widget, key, delay=0):
                 KEY = ord(key)
             except:
                 raise ValueError(
-                    "Unknown key {!r}. Expected one of these: {!r}, or a unicode character".format(
+                    "Unknown key {!r}. Expected one of these: {!r}, or a unicode character".format(  # noqa
                         key, sorted(mapping)
                     ))
             else:
@@ -59,6 +59,11 @@ def key_click(widget, key, delay=0):
                 apply_modifiers(key_event, modifiers)
                 key_event.SetUnicodeKey(KEY)
                 widget.EmulateKeyPress(key_event)
+        else:
+            raise ValueError(
+                    "Unknown key {!r}. Expected one of these: {!r}, or a unicode character".format(  # noqa
+                        key, sorted(mapping)
+                    ))
 
     else:
         wx.MilliSleep(delay)
@@ -75,9 +80,9 @@ def mouse_click_button(control, delay):
     Parameters
     ----------
     control : wxObject
-        The wx Object to be clicked.  
+        The wx Object to be clicked.
     delay: int
-        Time delay (in ms) in which click will be performed. 
+        Time delay (in ms) in which click will be performed.
     """
     if not control.IsEnabled():
         return
@@ -91,7 +96,7 @@ def mouse_click_button(control, delay):
 def key_click_text_ctrl(control, interaction, delay):
     """ Performs simulated typing of a key on the given wxObject
     after a delay.
-    
+
     Parameters
     ----------
     control : wxObject
@@ -99,7 +104,7 @@ def key_click_text_ctrl(control, interaction, delay):
     interaction : instance of command.KeyClick
         The interaction object holding the key input
         to be simulated being typed
-    delay : int 
+    delay : int
         Time delay (in ms) in which the key click will be performed.
     """
     if not control.IsEditable():
@@ -112,7 +117,7 @@ def key_click_text_ctrl(control, interaction, delay):
 def key_sequence_text_ctrl(control, interaction, delay):
     """ Performs simulated typing of a sequence of keys on the given wxObject
     after a delay.
-    
+
     Parameters
     ----------
     control : wxObject
@@ -120,7 +125,7 @@ def key_sequence_text_ctrl(control, interaction, delay):
     interaction : instance of command.KeySequence
         The interaction object holding the sequence of key inputs
         to be simulated being typed
-    delay : int 
+    delay : int
         Time delay (in ms) in which each key click in the sequence will be
         performed.
     """

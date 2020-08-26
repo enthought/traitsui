@@ -31,7 +31,7 @@ def readonly_DisplayedText_handler(wrapper, interaction):
     Notes
     -----
     wx Readonly Editors occassionally use wx.TextCtrl as their control, and
-    other times use wx.StaticText.  
+    other times use wx.StaticText.
     '''
     if isinstance(wrapper.target.control, wx.TextCtrl):
         return wrapper.target.control.GetValue()
@@ -40,11 +40,11 @@ def readonly_DisplayedText_handler(wrapper, interaction):
 
 
 def register(registry):
-    
+
     handlers = [
         (command.KeyClick, (lambda wrapper, interaction: helpers.key_click_text_ctrl(
                             wrapper.target.control, interaction, wrapper.delay))),
-        (command.KeySequence, (lambda wrapper, interaction:  helpers.key_sequence_text_ctrl(
+        (command.KeySequence, (lambda wrapper, interaction: helpers.key_sequence_text_ctrl(
                                 wrapper.target.control, interaction, wrapper.delay))),
         (query.DisplayedText, lambda wrapper, _: wrapper.target.control.GetValue())
     ]

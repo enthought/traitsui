@@ -27,6 +27,7 @@ class MouseClick:
     """
     pass
 
+
 class KeySequence:
     """ An object representing the user typing a sequence of keys.
 

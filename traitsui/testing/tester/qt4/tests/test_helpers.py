@@ -56,7 +56,6 @@ class TestInteractions(unittest.TestCase):
         # then
         self.assertEqual(click_slot.call_count, 0)
 
-
     def test_key_sequence(self):
         # test on different Qwidget objects
         textboxes = [QtGui.QLineEdit(), QtGui.QTextEdit()]
@@ -65,7 +64,9 @@ class TestInteractions(unittest.TestCase):
             textbox.textChanged.connect(change_slot)
 
             # when
-            helpers.key_sequence_qwidget(textbox, command.KeySequence("abc"), 0)
+            helpers.key_sequence_qwidget(textbox,
+                                         command.KeySequence("abc"),
+                                         0)
 
             # then
             if i == 0:
@@ -75,22 +76,22 @@ class TestInteractions(unittest.TestCase):
             # each keystroke fires a signal
             self.assertEqual(change_slot.call_count, 3)
 
-
     def test_key_sequence_disabled(self):
         textbox = QtGui.QLineEdit()
         textbox.setEnabled(False)
-        
+
         # this will fail, because one should not be allowed to set
         # cursor on the widget to type anything
         with self.assertRaises(Disabled):
-            helpers.key_sequence_qwidget(textbox, command.KeySequence("abc"), 0)
-
+            helpers.key_sequence_qwidget(textbox,
+                                         command.KeySequence("abc"),
+                                         0)
 
     def test_key_click(self):
         textbox = QtGui.QLineEdit()
         change_slot = mock.Mock()
         textbox.editingFinished.connect(change_slot)
-        
+
         # sanity check on editingFinished signal
         helpers.key_sequence_qwidget(textbox, command.KeySequence("abc"), 0)
         self.assertEqual(change_slot.call_count, 0)
@@ -107,15 +108,12 @@ class TestInteractions(unittest.TestCase):
         self.assertEqual(change_slot.call_count, 1)
         self.assertEqual(textbox.toPlainText(), "\n")
 
-
     def test_key_click_disabled(self):
         textbox = QtGui.QLineEdit()
         textbox.setEnabled(False)
         change_slot = mock.Mock()
         textbox.editingFinished.connect(change_slot)
 
-
         with self.assertRaises(Disabled):
             helpers.key_click_qwidget(textbox, command.KeyClick("Enter"), 0)
         self.assertEqual(change_slot.call_count, 0)
-

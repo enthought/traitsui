@@ -32,5 +32,5 @@ def get_default_registry():
 
     # TextEditor
     text_editor.register(registry)
-    
+
     return registry

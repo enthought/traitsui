@@ -17,6 +17,7 @@ from pyface.qt.QtTest import QTest
 from traitsui.testing.tester.exceptions import Disabled
 from traitsui.qt4.key_event_to_name import key_map as _KEY_MAP
 
+
 def key_click(widget, key, delay=0):
     """ Performs a key click of the given key on the given widget after
     a delay.
@@ -28,7 +29,7 @@ def key_click(widget, key, delay=0):
     key : str
         Standardized (pyface) name for a keyboard event.
         e.g. "Enter", "Tab", "Space", "0", "1", "A", ...
-    delay : int 
+    delay : int
         Time delay (in ms) in which the key click will be performed.
     """
     if "-" in key:
@@ -60,7 +61,8 @@ def key_click(widget, key, delay=0):
         delay=delay,
     )
 
-## Generic Handlers ############################
+# Generic Handlers ###########################################################
+
 
 def mouse_click_qwidget(control, delay):
     """ Performs a mouce click on a Qt widget.
@@ -78,10 +80,11 @@ def mouse_click_qwidget(control, delay):
         delay=delay,
     )
 
+
 def key_sequence_qwidget(control, interaction, delay):
     """ Performs simulated typing of a sequence of keys on the given widget
     after a delay.
-    
+
     Parameters
     ----------
     control : Qwidget
@@ -89,7 +92,7 @@ def key_sequence_qwidget(control, interaction, delay):
     interaction : instance of command.KeySequence
         The interaction object holding the sequence of key inputs
         to be simulated being typed
-    delay : int 
+    delay : int
         Time delay (in ms) in which each key click in the sequence will be
         performed.
     """
@@ -100,7 +103,7 @@ def key_sequence_qwidget(control, interaction, delay):
 
 def key_click_qwidget(control, interaction, delay):
     """ Performs simulated typing of a key on the given widget after a delay.
-    
+
     Parameters
     ----------
     control : Qwidget
@@ -108,7 +111,7 @@ def key_click_qwidget(control, interaction, delay):
     interaction : instance of command.KeyClick
         The interaction object holding the key input
         to be simulated being typed
-    delay : int 
+    delay : int
         Time delay (in ms) in which the key click will be performed.
     """
     if not control.isEnabled():

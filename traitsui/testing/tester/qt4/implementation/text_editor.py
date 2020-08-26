@@ -30,12 +30,13 @@ def simple_DisplayedText_handler(wrapper, interaction):
     Notes
     -----
     Qt SimpleEditors occassionally use QtGui.QTextEdit as their control, and
-    other times use QtGui.QLineEdit  
+    other times use QtGui.QLineEdit
     '''
     if isinstance(wrapper.target.control, QtGui.QLineEdit):
         return wrapper.target.control.displayText()
     elif isinstance(wrapper.target.control, QtGui.QTextEdit):
         return wrapper.target.control.toPlainText()
+
 
 def register(registry):
     """ Register actions for the given registry.
@@ -48,7 +49,7 @@ def register(registry):
                             wrapper.target.control, interaction, wrapper.delay))),
         (command.KeyClick, (lambda wrapper, interaction: helpers.key_click_qwidget(
                             wrapper.target.control, interaction, wrapper.delay))),
-        (command.MouseClick,(lambda wrapper, _: helpers.mouse_click_qwidget(
+        (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_qwidget(
                             wrapper.target.control, wrapper.delay))),
     ]
     for target_class in [CustomEditor, ReadonlyEditor, SimpleEditor]:
