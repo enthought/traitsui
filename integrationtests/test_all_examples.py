@@ -229,8 +229,10 @@ def replaced_configure_traits(
     )
     with reraise_exceptions():
         process_cascade_events()
-        ui.dispose()
-        process_cascade_events()
+        try:
+            ui.dispose()
+        finally:
+            process_cascade_events()
 
 
 @contextlib.contextmanager
