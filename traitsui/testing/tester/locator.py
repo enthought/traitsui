@@ -17,6 +17,8 @@ a UI target where further location resolution or user interaction can be
 applied.
 """
 
+import enum
+
 
 class NestedUI:
     """ A locator for locating a nested ``traitsui.ui.UI`` object assuming
@@ -35,3 +37,10 @@ class TargetByName:
     """
     def __init__(self, name):
         self.name = name
+
+
+class WidgetType(enum.Enum):
+    """ An Enum of widget types.
+    """
+
+    textbox = "textbox"
