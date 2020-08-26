@@ -229,13 +229,6 @@ def replaced_configure_traits(
     )
     with reraise_exceptions():
         process_cascade_events()
-
-        # Temporary fix for enthought/traitsui#907
-        if is_qt():
-            ui.control.hide()
-        if is_wx():
-            ui.control.Hide()
-
         ui.dispose()
         process_cascade_events()
 
