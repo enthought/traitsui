@@ -26,6 +26,8 @@ from traitsui.item import Item
 from traitsui.view import View
 from traitsui.editors.range_editor import RangeEditor
 
+from traitsui.testing.tester import command, locator, query
+from traitsui.testing.tester.ui_tester import UITester
 from traitsui.tests._tools import (
     create_ui,
     press_ok_button,
@@ -68,7 +70,18 @@ class TestRangeEditorText(unittest.TestCase):
         # (tests a bug where this fails with an AttributeError)
 
         num = NumberWithRangeEditor()
-        with reraise_exceptions(), create_ui(num) as ui:
+        tester = UITester()
+        with tester.create_ui(num) as ui:
+            # the following is equivalent to setting the text in the text
+            # control, then pressing OK
+            text = tester.find_by_name(ui, "number").locate(locator.WidgetType.textbox)
+            text.perform(command.KeyClick("1"))
+            text.perform(command.KeyClick("Enter"))
+
+        # the number traits should be between 3 and 8
+        self.assertTrue(3 <= num.number <= 8)
+
+        """ with reraise_exceptions(), create_ui(num) as ui:
 
             # the following is equivalent to setting the text in the text
             # control, then pressing OK
@@ -77,7 +90,7 @@ class TestRangeEditorText(unittest.TestCase):
             textctrl.SetValue("1")
 
         # the number traits should be between 3 and 8
-        self.assertTrue(3 <= num.number <= 8)
+        self.assertTrue(3 <= num.number <= 8) """
 
     @requires_toolkit([ToolkitName.qt])
     def test_avoid_slider_feedback(self):
@@ -86,7 +99,8 @@ class TestRangeEditorText(unittest.TestCase):
         from pyface import qt
 
         num = FloatWithRangeEditor()
-        with reraise_exceptions(), create_ui(num) as ui:
+        tester = UITester()
+        with tester.create_ui(num) as ui:
 
             # the following is equivalent to setting the text in the text
             # control, then pressing OK
