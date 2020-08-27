@@ -302,11 +302,6 @@ class TestExample(unittest.TestCase):
                     # before running the next one.
                     process_cascade_events()
 
-                    # XXX temporary change to see how Appveyor + OSX + Qt4
-                    # reacts
-                    for _ in range(10):
-                        process_cascade_events()
-
         # Report skipped files
         for file_path, reason in skipped_files:
             with self.subTest(file_path=file_path):
