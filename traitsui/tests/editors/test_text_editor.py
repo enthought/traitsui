@@ -25,6 +25,7 @@ from traits.testing.api import UnittestTools
 from traitsui.api import TextEditor, View, Item
 from traitsui.testing.tester.ui_tester import UITester
 from traitsui.testing.tester import command, query
+from traitsui.testing.tester.exceptions import InteractionNotSupported
 from traitsui.tests._tools import (
     GuiTestAssistant,
     no_gui_test_assistant,
@@ -284,9 +285,11 @@ class TestTextEditor(unittest.TestCase, UnittestTools):
         view = get_view(style="readonly", auto_set=True)
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
+            with self.assertRaises(InteractionNotSupported):
+                tester.find_by_name(ui, "name").perform(command.KeySequence("NEW"))
             # Trying to type should do nothing
-            tester.find_by_name(ui, "name").perform(command.KeySequence("NEW"))
-            tester.find_by_name(ui, "name").perform(command.KeyClick("Space"))
+            with self.assertRaises(InteractionNotSupported):
+                tester.find_by_name(ui, "name").perform(command.KeyClick("Space"))
             display_name = tester.find_by_name(ui, "name").inspect(query.DisplayedText())  # noqa
             self.assertEqual(display_name, "A name")
 

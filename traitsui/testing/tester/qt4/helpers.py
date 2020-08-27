@@ -11,7 +11,7 @@
 
 from functools import reduce
 
-from pyface.qt import QtCore
+from pyface.qt import QtCore, QtGui
 from pyface.qt.QtTest import QTest
 
 from traitsui.testing.tester.exceptions import Disabled
@@ -29,24 +29,10 @@ def key_click(widget, key, delay=0):
     key : str
         Standardized (pyface) name for a keyboard event.
         e.g. "Enter", "Tab", "Space", "0", "1", "A", ...
+        Note: modifiers (e.g. Shift, Alt, etc. are not currently supported)
     delay : int
         Time delay (in ms) in which the key click will be performed.
     """
-    if "-" in key:
-        *modifiers, key = key.split("-")
-    else:
-        modifiers = []
-
-    modifier_to_qt = {
-        "Ctrl": QtCore.Qt.ControlModifier,
-        "Alt": QtCore.Qt.AltModifier,
-        "Meta": QtCore.Qt.MetaModifier,
-        "Shift": QtCore.Qt.ShiftModifier,
-    }
-    qt_modifiers = [modifier_to_qt[modifier] for modifier in modifiers]
-    qt_modifier = reduce(
-        lambda x, y: x | y, qt_modifiers, QtCore.Qt.NoModifier
-    )
 
     mapping = {name: event for event, name in _KEY_MAP.items()}
     if key not in mapping:
@@ -57,11 +43,36 @@ def key_click(widget, key, delay=0):
     QTest.keyClick(
         widget,
         mapping[key],
-        qt_modifier,
+        QtCore.Qt.NoModifier,
         delay=delay,
     )
 
+
 # Generic Handlers ###########################################################
+
+
+def displayed_text_qobject(widget):
+    ''' Helper function to define handlers for various Qwidgets to handle
+    query.DisplayedText interactions.
+
+    Parameters
+    ----------
+    widget : Qwidget 
+        The Qwidget object with text to be displayed.  Should be one of the
+        following QWidgets: 1) QtGui.QLineEdit 2) QtGui.QTextEdit or
+        3) QtGui.QLabel
+    
+    Notes
+    -----
+    Qt SimpleEditors occassionally use QtGui.QTextEdit as their control, and
+    other times use QtGui.QLineEdit
+    '''
+    if isinstance(widget, QtGui.QLineEdit):
+        return widget.displayText()
+    elif isinstance(widget, QtGui.QTextEdit):
+        return widget.toPlainText()
+    else:
+        return widget.text()
 
 
 def mouse_click_qwidget(control, delay):
