@@ -36,7 +36,7 @@ def readonly_DisplayedText_handler(wrapper, interaction):
     if isinstance(wrapper.target.control, wx.TextCtrl):
         return wrapper.target.control.GetValue()
     elif isinstance(wrapper.target.control, wx.StaticText):
-        return wrapper.target.control.label
+        return wrapper.target.control.GetLabel()
 
 
 def register(registry):
@@ -46,19 +46,28 @@ def register(registry):
                             wrapper.target.control, interaction, wrapper.delay))),
         (command.KeySequence, (lambda wrapper, interaction: helpers.key_sequence_text_ctrl(
                                 wrapper.target.control, interaction, wrapper.delay))),
-        (query.DisplayedText, lambda wrapper, _: wrapper.target.control.GetValue())
+        (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_text_ctrl(
+            wrapper.target.control, wrapper.delay))),
     ]
 
-    for target_class in [CustomEditor, SimpleEditor]:
+    for target_class in [CustomEditor, ReadonlyEditor, SimpleEditor]:
         for interaction_class, handler in handlers:
             registry.register_handler(
                 target_class=target_class,
                 interaction_class=interaction_class,
-                solver=handler,
+                handler=handler,
             )
+
+    for target_class in [CustomEditor, SimpleEditor]:
+        registry.register_handler(
+            target_class=target_class,
+            interaction_class=query.DisplayedText,
+            handler=lambda wrapper, _: wrapper.target.control.GetValue(),
+        )
+    
 
     registry.register_handler(
         target_class=ReadonlyEditor,
         interaction_class=query.DisplayedText,
-        solver=readonly_DisplayedText_handler,
+        handler=readonly_DisplayedText_handler,
     )

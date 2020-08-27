@@ -92,6 +92,26 @@ def mouse_click_button(control, delay):
     )
     control.ProcessEvent(click_event)
 
+def mouse_click_text_ctrl(control, delay):
+    """ Performs a mouce click on a wxTextCtrl.
+
+    Parameters
+    ----------
+    control : wxObject
+        The wx Object to be clicked.
+    delay: int
+        Time delay (in ms) in which click will be performed.
+    """
+    if not control.IsEnabled():
+        return
+    if not control.HasFocus():
+        control.SetFocus()
+    wx.MilliSleep(delay)
+    click_event = wx.CommandEvent(
+        wx.wxEVT_COMMAND_LEFT_CLICK, control.GetId()
+    )
+    control.ProcessEvent(click_event)
+
 
 def key_click_text_ctrl(control, interaction, delay):
     """ Performs simulated typing of a key on the given wxObject
@@ -100,13 +120,16 @@ def key_click_text_ctrl(control, interaction, delay):
     Parameters
     ----------
     control : wxObject
-        The wx Object to be acted on. Should be wx.TextCtrl instance
+        The wx Object to be acted on. Should be wx.TextCtrl instance. If it is
+        a wx.StaticText (i.e. from a ReadonlyEditor) nothing occurs.
     interaction : instance of command.KeyClick
         The interaction object holding the key input
         to be simulated being typed
     delay : int
         Time delay (in ms) in which the key click will be performed.
     """
+    if isinstance(control, wx.StaticText):
+        return
     if not control.IsEditable():
         raise Disabled("{!r} is disabled.".format(control))
     if not control.HasFocus():
@@ -121,7 +144,8 @@ def key_sequence_text_ctrl(control, interaction, delay):
     Parameters
     ----------
     control : wxObject
-        The wx Object to be acted on. Should be wx.TextCtrl instance
+        The wx Object to be acted on. Should be wx.TextCtrl instance. If it is
+        a wx.StaticText (i.e. from a ReadonlyEditor) nothing occurs.
     interaction : instance of command.KeySequence
         The interaction object holding the sequence of key inputs
         to be simulated being typed
@@ -129,6 +153,8 @@ def key_sequence_text_ctrl(control, interaction, delay):
         Time delay (in ms) in which each key click in the sequence will be
         performed.
     """
+    if isinstance(control, wx.StaticText):
+        return
     if not control.IsEditable():
         raise Disabled("{!r} is disabled.".format(control))
     if not control.HasFocus():
