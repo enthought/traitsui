@@ -39,7 +39,7 @@ def readonly_displayed_text_handler(wrapper, interaction):
         return wrapper.target.control.GetLabel()
     raise TypeError("readonly_displayed_text_handler expected a UIWrapper with"
                     " a ReadonlyEditor as a target. ReadonlyEditor control"
-                    " should always be either wx.TextCtrl, or wx.StaticText." 
+                    " should always be either wx.TextCtrl, or wx.StaticText."
                     " {} was found".format(wrapper.target.control))
 
 
@@ -55,12 +55,15 @@ def register(registry):
     """
 
     handlers = [
-        (command.KeyClick, (lambda wrapper, interaction: helpers.key_click_text_ctrl(
-                            wrapper.target.control, interaction, wrapper.delay))),
-        (command.KeySequence, (lambda wrapper, interaction: helpers.key_sequence_text_ctrl(
-                                wrapper.target.control, interaction, wrapper.delay))),
-        (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_object(
-            wrapper.target.control, wrapper.delay))),
+        (command.KeyClick,
+            (lambda wrapper, interaction: helpers.key_click_text_ctrl(
+                wrapper.target.control, interaction, wrapper.delay))),
+        (command.KeySequence,
+            (lambda wrapper, interaction: helpers.key_sequence_text_ctrl(
+                wrapper.target.control, interaction, wrapper.delay))),
+        (command.MouseClick,
+            (lambda wrapper, _: helpers.mouse_click_object(
+                wrapper.target.control, wrapper.delay))),
     ]
 
     for target_class in [CustomEditor, SimpleEditor]:
@@ -77,7 +80,6 @@ def register(registry):
             interaction_class=query.DisplayedText,
             handler=lambda wrapper, _: wrapper.target.control.GetValue(),
         )
-    
 
     registry.register_handler(
         target_class=ReadonlyEditor,

@@ -71,6 +71,7 @@ def mouse_click_button(control, delay):
     )
     control.ProcessEvent(click_event)
 
+
 def mouse_click_object(control, delay):
     """ Performs a mouce click on a wxTextCtrl.
 

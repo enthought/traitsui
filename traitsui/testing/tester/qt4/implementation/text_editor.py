@@ -26,12 +26,15 @@ def register(registry):
     """
 
     handlers = [
-        (command.KeySequence, (lambda wrapper, interaction: helpers.key_sequence_qwidget(
-                            wrapper.target.control, interaction, wrapper.delay))),
-        (command.KeyClick, (lambda wrapper, interaction: helpers.key_click_qwidget(
-                            wrapper.target.control, interaction, wrapper.delay))),
-        (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_qwidget(
-                            wrapper.target.control, wrapper.delay))),
+        (command.KeySequence,
+            (lambda wrapper, interaction: helpers.key_sequence_qwidget(
+                wrapper.target.control, interaction, wrapper.delay))),
+        (command.KeyClick,
+            (lambda wrapper, interaction: helpers.key_click_qwidget(
+                wrapper.target.control, interaction, wrapper.delay))),
+        (command.MouseClick,
+            (lambda wrapper, _: helpers.mouse_click_qwidget(
+                wrapper.target.control, wrapper.delay))),
     ]
     for target_class in [CustomEditor, SimpleEditor]:
         for interaction_class, handler in handlers:

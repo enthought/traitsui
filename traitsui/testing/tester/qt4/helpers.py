@@ -9,8 +9,6 @@
 #  Thanks for using Enthought open source!
 #
 
-from functools import reduce
-
 from pyface.qt import QtCore, QtGui
 from pyface.qt.QtTest import QTest
 
@@ -57,11 +55,11 @@ def displayed_text_qobject(widget):
 
     Parameters
     ----------
-    widget : Qwidget 
+    widget : Qwidget
         The Qwidget object with text to be displayed.  Should be one of the
         following QWidgets: 1) QtGui.QLineEdit 2) QtGui.QTextEdit or
         3) QtGui.QLabel
-    
+
     Notes
     -----
     Qt SimpleEditors occassionally use QtGui.QTextEdit as their control, and
