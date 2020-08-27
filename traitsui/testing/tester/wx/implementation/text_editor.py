@@ -16,7 +16,7 @@ from traitsui.testing.tester import command, query
 from traitsui.testing.tester.wx import helpers
 
 
-def readonly_DisplayedText_handler(wrapper, interaction):
+def readonly_displayed_text_handler(wrapper, interaction):
     ''' Handler for ReadonlyEditor to handle query.DisplayedText interactions.
 
     Parameters
@@ -36,17 +36,34 @@ def readonly_DisplayedText_handler(wrapper, interaction):
     if isinstance(wrapper.target.control, wx.TextCtrl):
         return wrapper.target.control.GetValue()
     elif isinstance(wrapper.target.control, wx.StaticText):
-        return wrapper.target.control.label
+        return wrapper.target.control.GetLabel()
+    raise TypeError("readonly_displayed_text_handler expected a UIWrapper with"
+                    " a ReadonlyEditor as a target. ReadonlyEditor control"
+                    " should always be either wx.TextCtrl, or wx.StaticText."
+                    " {} was found".format(wrapper.target.control))
 
 
 def register(registry):
+    """ Register interactions for the given registry.
+
+    If there are any conflicts, an error will occur.
+
+    Parameters
+    ----------
+    registry : TargetRegistry
+        The registry being registered to.
+    """
 
     handlers = [
-        (command.KeyClick, (lambda wrapper, interaction: helpers.key_click_text_ctrl(
-                            wrapper.target.control, interaction, wrapper.delay))),
-        (command.KeySequence, (lambda wrapper, interaction: helpers.key_sequence_text_ctrl(
-                                wrapper.target.control, interaction, wrapper.delay))),
-        (query.DisplayedText, lambda wrapper, _: wrapper.target.control.GetValue())
+        (command.KeyClick,
+            (lambda wrapper, interaction: helpers.key_click_text_ctrl(
+                wrapper.target.control, interaction, wrapper.delay))),
+        (command.KeySequence,
+            (lambda wrapper, interaction: helpers.key_sequence_text_ctrl(
+                wrapper.target.control, interaction, wrapper.delay))),
+        (command.MouseClick,
+            (lambda wrapper, _: helpers.mouse_click_object(
+                wrapper.target.control, wrapper.delay))),
     ]
 
     for target_class in [CustomEditor, SimpleEditor]:
@@ -54,11 +71,18 @@ def register(registry):
             registry.register_handler(
                 target_class=target_class,
                 interaction_class=interaction_class,
-                solver=handler,
+                handler=handler,
             )
+
+    for target_class in [CustomEditor, SimpleEditor]:
+        registry.register_handler(
+            target_class=target_class,
+            interaction_class=query.DisplayedText,
+            handler=lambda wrapper, _: wrapper.target.control.GetValue(),
+        )
 
     registry.register_handler(
         target_class=ReadonlyEditor,
         interaction_class=query.DisplayedText,
-        solver=readonly_DisplayedText_handler,
+        handler=readonly_displayed_text_handler,
     )

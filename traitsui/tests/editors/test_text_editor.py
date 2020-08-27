@@ -25,6 +25,7 @@ from traits.testing.api import UnittestTools
 from traitsui.api import TextEditor, View, Item
 from traitsui.testing.tester.ui_tester import UITester
 from traitsui.testing.tester import command, query
+from traitsui.testing.tester.exceptions import InteractionNotSupported
 from traitsui.tests._tools import (
     GuiTestAssistant,
     no_gui_test_assistant,
@@ -124,7 +125,7 @@ class TestTextEditorQt(GuiTestAssistant, UnittestTools, unittest.TestCase):
 
 # We should be able to run this test case against wx.
 # Not running them now to avoid test interaction. See enthought/traitsui#752
-@requires_toolkit([ToolkitName.qt])
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestTextEditor(unittest.TestCase, UnittestTools):
     """ Tests that can be run with any toolkit as long as there is an
     implementation for simulating user interactions.
@@ -167,52 +168,117 @@ class TestTextEditor(unittest.TestCase, UnittestTools):
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
             with self.assertTraitChanges(foo, "name", count=3):
-                tester.find_by_name(ui, "name").perform(command.KeySequence("NEW"))  # noqa
+                name_field = tester.find_by_name(ui, "name")
+                name_field.perform(command.KeySequence("NEW"))
                 # with auto-set the displayed name should match the name trait
-            display_name = tester.find_by_name(ui, "name").inspect(query.DisplayedText())  # noqa
+            display_name = name_field.inspect(query.DisplayedText())
             self.assertEqual(foo.name, "NEW")
             self.assertEqual(display_name, foo.name)
 
-    def test_simple_auto_set_false_do_not_update(self):
+    # Currently if auto_set is false, and enter_set is false (the default
+    # behavior), on Qt to ensure the text is actually set, Enter will set
+    # the value
+    @requires_toolkit([ToolkitName.qt])
+    def test_simple_auto_set_false_do_not_update_qt(self):
         foo = Foo(name="")
         view = get_view(style="simple", auto_set=False)
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
-            tester.find_by_name(ui, "name").perform(command.KeySequence("NEW"))
+            name_field = tester.find_by_name(ui, "name")
+            name_field.perform(command.KeySequence("NEW"))
             # with auto-set as False the displayed name should match what has
             # been typed not the trait itself, After "Enter" is pressed it
             # should match the name trait
-            display_name = tester.find_by_name(ui, "name").inspect(query.DisplayedText())  # noqa
+            display_name = name_field.inspect(query.DisplayedText())
             self.assertEqual(foo.name, "")
             self.assertEqual(display_name, "NEW")
-            tester.find_by_name(ui, "name").perform(command.KeyClick("Enter"))
-            display_name = tester.find_by_name(ui, "name").inspect(query.DisplayedText())  # noqa
+            name_field.perform(command.KeyClick("Enter"))
+            display_name = name_field.inspect(query.DisplayedText())
+            self.assertEqual(foo.name, "NEW")
+            self.assertEqual(display_name, foo.name)
+
+    # If auto_set is false, the value can be set by killing the focus. This
+    # can be done by simply moving to another textbox.
+    @requires_toolkit([ToolkitName.wx])
+    def test_simple_auto_set_false_do_not_update_wx(self):
+        foo = Foo(name="")
+        view = View(
+                    Item("name",
+                         editor=TextEditor(auto_set=False),
+                         style="simple"),
+                    Item("nickname",
+                         editor=TextEditor(auto_set=False),
+                         style="simple")
+        )
+        tester = UITester()
+        with tester.create_ui(foo, dict(view=view)) as ui:
+            name_field = tester.find_by_name(ui, "name")
+            name_field.perform(command.KeySequence("NEW"))
+            # with auto-set as False the displayed name should match what has
+            # been typed not the trait itself, After moving to another textbox
+            # it should match the name trait
+            display_name = name_field.inspect(query.DisplayedText())
+            self.assertEqual(foo.name, "")
+            self.assertEqual(display_name, "NEW")
+            tester.find_by_name(ui, "nickname").perform(command.MouseClick())
+            display_name = name_field.inspect(query.DisplayedText())
             self.assertEqual(foo.name, "NEW")
             self.assertEqual(display_name, foo.name)
 
     def test_custom_auto_set_true_update_text(self):
-        # the auto_set flag is disregard for custom editor.
+        # the auto_set flag is disregard for custom editor.  (not true on WX)
         foo = Foo()
         view = get_view(auto_set=True, style="custom")
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
             with self.assertTraitChanges(foo, "name", count=3):
-                tester.find_by_name(ui, "name").perform(command.KeySequence("NEW"))  # noqa
+                name_field = tester.find_by_name(ui, "name")
+                name_field.perform(command.KeySequence("NEW"))
             # with auto-set the displayed name should match the name trait
-            display_name = tester.find_by_name(ui, "name").inspect(query.DisplayedText())  # noqa
+            display_name = name_field.inspect(query.DisplayedText())
             self.assertEqual(foo.name, "NEW")
             self.assertEqual(display_name, foo.name)
 
+    @requires_toolkit([ToolkitName.qt])
     def test_custom_auto_set_false_update_text(self):
-        # the auto_set flag is disregard for custom editor.
+        # the auto_set flag is disregard for custom editor. (not true on WX)
         foo = Foo()
         view = get_view(auto_set=False, style="custom")
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
-            tester.find_by_name(ui, "name").perform(command.KeySequence("NEW"))
-            tester.find_by_name(ui, "name").perform(command.KeyClick("Enter"))
-            display_name = tester.find_by_name(ui, "name").inspect(query.DisplayedText())  # noqa
+            name_field = tester.find_by_name(ui, "name")
+            name_field.perform(command.KeySequence("NEW"))
+            name_field.perform(command.KeyClick("Enter"))
+            display_name = name_field.inspect(query.DisplayedText())
             self.assertEqual(foo.name, "NEW\n")
+            self.assertEqual(display_name, foo.name)
+
+    # If auto_set is false, the value can be set by killing the focus. This
+    # can be done by simply moving to another textbox.
+    @requires_toolkit([ToolkitName.wx])
+    def test_custom_auto_set_false_do_not_update_wx(self):
+        foo = Foo(name="")
+        view = View(
+                    Item("name",
+                         editor=TextEditor(auto_set=False),
+                         style="custom"),
+                    Item("nickname",
+                         editor=TextEditor(auto_set=False),
+                         style="custom")
+        )
+        tester = UITester()
+        with tester.create_ui(foo, dict(view=view)) as ui:
+            name_field = tester.find_by_name(ui, "name")
+            name_field.perform(command.KeySequence("NEW"))
+            # with auto-set as False the displayed name should match what has
+            # been typed not the trait itself, After moving to another textbox
+            # it should match the name trait
+            display_name = name_field.inspect(query.DisplayedText())
+            self.assertEqual(foo.name, "")
+            self.assertEqual(display_name, "NEW")
+            tester.find_by_name(ui, "nickname").perform(command.MouseClick())
+            display_name = name_field.inspect(query.DisplayedText())
+            self.assertEqual(foo.name, "NEW")
             self.assertEqual(display_name, foo.name)
 
     def test_readonly_editor(self):
@@ -220,10 +286,13 @@ class TestTextEditor(unittest.TestCase, UnittestTools):
         view = get_view(style="readonly", auto_set=True)
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
+            name_field = tester.find_by_name(ui, "name")
+            with self.assertRaises(InteractionNotSupported):
+                name_field.perform(command.KeySequence("NEW"))
             # Trying to type should do nothing
-            tester.find_by_name(ui, "name").perform(command.KeySequence("NEW"))
-            tester.find_by_name(ui, "name").perform(command.KeyClick("Space"))
-            display_name = tester.find_by_name(ui, "name").inspect(query.DisplayedText())  # noqa
+            with self.assertRaises(InteractionNotSupported):
+                name_field.perform(command.KeyClick("Space"))
+            display_name = name_field.inspect(query.DisplayedText())
             self.assertEqual(display_name, "A name")
 
     def check_format_func_used(self, style):
@@ -242,7 +311,7 @@ class TestTextEditor(unittest.TestCase, UnittestTools):
                 tester.find_by_name(ui, "name").inspect(query.DisplayedText())
             )
             display_nickname = (
-                tester.find_by_name(ui, "nickname").inspect(query.DisplayedText())  # noqa
+                tester.find_by_name(ui, "nickname").inspect(query.DisplayedText())  # noqa E501
             )
             self.assertEqual(display_name, "WILLIAM")
             self.assertEqual(display_nickname, "bill")

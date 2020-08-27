@@ -15,12 +15,7 @@ class TesterError(Exception):
     pass
 
 
-class SimulationError(Exception):
-    """ Raised when simulating user interactions on GUI."""
-    pass
-
-
-class Disabled(SimulationError):
+class Disabled(TesterError):
     """ Raised when a simulation fails because the widget is disabled.
     """
     pass
