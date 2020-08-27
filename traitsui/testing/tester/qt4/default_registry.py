@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-from traitsui.testing.tester.qt4.helpers import get_qobject_registry
+from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.qt4.implementation import (
     button_editor,
     range_editor,
@@ -26,7 +26,7 @@ def get_default_registry():
         The default registry containing implementations for TraitsUI editors
         that is qt specific.
     """
-    registry = get_qobject_registry()
+    registry = TargetRegistry()
 
     # ButtonEditor
     button_editor.register(registry)

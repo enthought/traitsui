@@ -17,10 +17,14 @@ from traitsui.wx.range_editor import (
 )
 
 from traitsui.testing.tester import locator
+from traitsui.testing.tester.wx.located_object_handlers import LocatedTextbox
+
+class RangeEditorTextbox(LocatedTextbox):
+    pass
 
 def resolve_location_simple_slider(wrapper, location):
     if location == locator.WidgetType.textbox:
-        return wrapper.editor.control.text
+        return RangeEditorTextbox(textbox=wrapper.editor.control.text)
 
     raise NotImplementedError()
 
@@ -37,3 +41,4 @@ def register(registry):
             locator_class=locator.WidgetType,
             solver=resolve_location_simple_slider,
         )
+    RangeEditorTextbox.register(registry)
