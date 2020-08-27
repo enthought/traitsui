@@ -22,7 +22,6 @@
 import shelve
 import os
 
-from pyface.api import GUI
 from pyface.ui_traits import Image
 from traits.api import (
     Any,
