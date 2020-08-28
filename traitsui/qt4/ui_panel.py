@@ -214,7 +214,7 @@ class _Panel(BasePanel):
         # Ensure the control has a size hint reflecting the View specification.
         # Yes, this is a hack, but it's too late to repair this convoluted
         # control building process, so we do what we have to...
-        self.control.sizeHint = _size_hint_wrapper(self.control.sizeHint, ui)
+        self.control.sizeHint = _size_hint_wrapper(ui)
 
     def _add_toolbar(self, parent):
         """ Adds a toolbar to the `parent` (QtWindow)
@@ -329,12 +329,12 @@ def _fill_panel(panel, content, ui, item_handler=None):
     panel.setCurrentIndex(active)
 
 
-def _size_hint_wrapper(f, ui):
+def _size_hint_wrapper(ui):
     """Wrap an existing sizeHint method with sizes from a UI object.
     """
 
     def sizeHint():
-        size = f()
+        size = QtCore.QSize(-1, -1)
         if ui.view.width > 0:
             size.setWidth(ui.view.width)
         if ui.view.height > 0:
