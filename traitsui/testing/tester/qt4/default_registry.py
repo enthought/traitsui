@@ -12,6 +12,7 @@
 from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.qt4.implementation import (
     button_editor,
+    text_editor,
 )
 
 
@@ -26,6 +27,10 @@ def get_default_registry():
     """
     registry = TargetRegistry()
 
+    # ButtonEditor
     button_editor.register(registry)
+
+    # TextEditor
+    text_editor.register(registry)
 
     return registry

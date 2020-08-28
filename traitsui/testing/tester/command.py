@@ -26,3 +26,35 @@ class MouseClick:
     implementations should not raise an exception.
     """
     pass
+
+
+class KeySequence:
+    """ An object representing the user typing a sequence of keys.
+
+    Implementations should raise ``Disabled`` if the widget is disabled.
+
+    Attribute
+    ---------
+    sequence : str
+        A string that represents a sequence of key inputs.
+        e.g. "Hello World"
+    """
+
+    def __init__(self, sequence):
+        self.sequence = sequence
+
+
+class KeyClick:
+    """ An object representing the user clicking a key on the keyboard.
+
+    Implementations should raise ``Disabled`` if the widget is disabled.
+
+    Attribute
+    ---------
+    key : str
+        Standardized (pyface) name for a keyboard event.
+        e.g. "Enter", "Tab", "Space", "0", "1", "A", ...
+    """
+
+    def __init__(self, key):
+        self.key = key
