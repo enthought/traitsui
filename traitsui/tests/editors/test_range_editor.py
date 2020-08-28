@@ -1,13 +1,11 @@
 import unittest
 
-from traits.api import HasTraits, Int, Range
+from traits.api import HasTraits, Int
 from traitsui.api import Item, RangeEditor, UItem, View
 from traitsui.testing.tester import command, locator, query
 from traitsui.testing.tester.ui_tester import UITester
 from traitsui.tests._tools import (
-    create_ui,
     requires_toolkit,
-    reraise_exceptions,
     ToolkitName,
 )
 
@@ -55,14 +53,21 @@ class TestRangeEditor(unittest.TestCase):
     @requires_toolkit([ToolkitName.qt])
     def check_set_with_text(self, mode):
         model = RangeModel()
-        view = View(Item("value", editor=RangeEditor(low=1, high=12, mode=mode, enter_set=True)))
+        view = View(
+            Item(
+                "value",
+                editor=RangeEditor(low=1, high=12, mode=mode)
+            )
+        )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field = tester.find_by_name(ui, "value")
             text = number_field.locate(locator.WidgetType.textbox)
             text.perform(command.KeySequence("\b\b\b\b\b4"))
             text.perform(command.KeyClick("Enter"))
+            displayed = text.inspect(query.DisplayedText())
             self.assertEqual(model.value, 4)
+            self.assertEqual(displayed, str(model.value))
 
     def test_simple_slider_editor_set_with_text(self):
         return self.check_set_with_text(mode='slider')
@@ -76,14 +81,18 @@ class TestRangeEditor(unittest.TestCase):
     def test_range_text_editor_set_with_text(self):
         return self.check_set_with_text(mode='text')
 
-
     # There is a problem with KeySequence on wx.  trying to include the key
     # '\b' does not succesffuly type a backspace.  Instead EmulateKeyPress
-    # seems to literally type "\x08" which lead to errors. 
+    # seems to literally type "\x08" which lead to errors.
     @requires_toolkit([ToolkitName.wx])
     def check_set_with_text_wx(self, mode):
         model = RangeModel()
-        view = View(Item("value", editor=RangeEditor(low=1, high=12, mode=mode)))
+        view = View(
+            Item(
+                "value",
+                editor=RangeEditor(low=1, high=12, mode=mode)
+            )
+        )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field = tester.find_by_name(ui, "value")
@@ -92,7 +101,9 @@ class TestRangeEditor(unittest.TestCase):
                 text.perform(command.KeyClick("Backspace"))
             text.perform(command.KeySequence("10"))
             text.perform(command.KeyClick("Enter"))
+            displayed = text.inspect(query.DisplayedText())
             self.assertEqual(model.value, 10)
+            self.assertEqual(displayed, str(model.value))
 
     def test_simple_slider_editor_set_with_text_wx(self):
         return self.check_set_with_text_wx(mode='slider')

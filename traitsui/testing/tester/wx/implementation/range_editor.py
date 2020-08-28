@@ -13,7 +13,6 @@ from traitsui.wx.range_editor import (
     LogRangeSliderEditor,
     RangeTextEditor,
     SimpleSliderEditor,
-    SimpleSpinEditor,
 )
 
 from traitsui.testing.tester import locator
@@ -25,6 +24,7 @@ def resolve_location_simple_slider(wrapper, location):
         return LocatedTextbox(textbox=wrapper.target.control.text)
 
     raise NotImplementedError()
+
 
 def resolve_location_range_text(wrapper, location):
     if location == locator.WidgetType.textbox:
