@@ -15,6 +15,7 @@
 
 import unittest
 
+from pyface.api import GUI
 from traits.api import Bool, HasTraits, Instance, List, Str
 from traitsui.api import (
     Item,
@@ -123,6 +124,29 @@ class BogusTreeNodeObjectView(HasTraits):
 
 
 class TestTreeView(unittest.TestCase):
+
+    def test_tree_editor_with_nested_ui(self):
+        tree_editor = TreeEditor(
+            nodes=[
+                TreeNode(
+                    node_for=[Bogus],
+                    auto_open=True,
+                    children="bogus_list",
+                    label="bogus",
+                    view=View(Item("name")),
+                ),
+            ],
+            hide_root=True,
+        )
+        bogus_list = [Bogus()]
+        object_view = BogusTreeView(bogus=Bogus(bogus_list=bogus_list))
+        view = View(Item("bogus", id="tree", editor=tree_editor))
+        with reraise_exceptions(), \
+                create_ui(object_view, dict(view=view)) as ui:
+            editor = ui.info.tree
+            editor.selected = bogus_list[0]
+            GUI.process_events()
+
     def _test_tree_editor_releases_listeners(
         self, hide_root, nodes=None, trait="bogus_list", expected_listeners=1
     ):
