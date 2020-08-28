@@ -81,29 +81,9 @@ class TestRangeEditorText(unittest.TestCase):
         # the number traits should be between 3 and 8
         self.assertTrue(3 <= num.number <= 8)
 
-    @requires_toolkit([ToolkitName.qt])
-    def test_avoid_slider_feedback(self):
-        # behavior: when editing the text box part of a range editor, the value
-        # should not be adjusted by the slider part of the range editor
-        from pyface import qt
-
-        num = FloatWithRangeEditor()
-        tester = UITester()
-        with tester.create_ui(num) as ui:
-
-            # the following is equivalent to setting the text in the text
-            # control, then pressing OK
-            lineedit = ui.control.findChild(qt.QtGui.QLineEdit)
-            lineedit.setFocus()
-            lineedit.setText("4")
-            lineedit.editingFinished.emit()
-
-        # the number trait should be 4 extactly
-        self.assertEqual(num.number, 4.0)
-
 
 if __name__ == "__main__":
     # Executing the file opens the dialog for manual testing
-    num = NumberWithTextEditor()
+    num = NumberWithRangeEditor()
     num.configure_traits()
     print(num.number)
