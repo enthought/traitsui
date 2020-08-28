@@ -97,7 +97,7 @@ class SimpleColorEditor(BaseSimpleEditor):
         if not self.factory.use_native_dialog:
             options |= QtGui.QColorDialog.DontUseNativeDialog
         color = QtGui.QColorDialog.getColor(
-            color, self.control, u"Select Color", options
+            color, self.control, "Select Color", options
         )
 
         if color.isValid():

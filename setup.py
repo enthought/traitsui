@@ -71,7 +71,7 @@ def git_version():
 
 
 def write_version_py(filename=None):
-    template = u"""\
+    template = """\
 # THIS FILE IS GENERATED FROM TRAITS SETUP.PY
 version = '{version}'
 full_version = '{full_version}'

@@ -162,7 +162,7 @@ def parse_source(file_name):
         # Print an error message instead of failing silently.
         # Ideally, the message would be output to the "log" tab.
         traceback_text = traceback.format_exc()
-        error_fmt = u"""Sorry, something went wrong.\n\n{}"""
+        error_fmt = """Sorry, something went wrong.\n\n{}"""
         error_msg = error_fmt.format(traceback_text)
         return (error_msg, "")
 

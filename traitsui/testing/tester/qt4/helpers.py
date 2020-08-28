@@ -12,9 +12,7 @@
 from pyface.qt import QtCore, QtGui
 from pyface.qt.QtTest import QTest
 
-from traitsui.testing.tester import command, query
 from traitsui.testing.tester.exceptions import Disabled
-from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.qt4.key_event_to_name import key_map as _KEY_MAP
 
 

@@ -11,9 +11,7 @@
 
 import wx
 
-from traitsui.testing.tester import command, query
 from traitsui.testing.tester.exceptions import Disabled
-from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.wx.key_event_to_name import key_map as _KEY_MAP
 
 
@@ -49,7 +47,6 @@ def key_click(widget, key, delay=0):
             widget.EmulateKeyPress(key_event)
     else:
         wx.MilliSleep(delay)
-        KEY = mapping[key]
         key_event = wx.KeyEvent(wx.wxEVT_CHAR)
         key_event.SetKeyCode(mapping[key])
         widget.EmulateKeyPress(key_event)
