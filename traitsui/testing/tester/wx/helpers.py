@@ -47,7 +47,6 @@ def key_click(widget, key, delay=0):
             widget.EmulateKeyPress(key_event)
     else:
         wx.MilliSleep(delay)
-        KEY = mapping[key]
         key_event = wx.KeyEvent(wx.wxEVT_CHAR)
         key_event.SetKeyCode(mapping[key])
         widget.EmulateKeyPress(key_event)
