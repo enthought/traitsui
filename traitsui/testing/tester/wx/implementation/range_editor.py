@@ -24,7 +24,8 @@ class RangeEditorTextbox(LocatedTextbox):
 
 def resolve_location_simple_slider(wrapper, location):
     if location == locator.WidgetType.textbox:
-        return RangeEditorTextbox(textbox=wrapper.editor.control.text)
+        print(wrapper.target)
+        return RangeEditorTextbox(textbox=wrapper.target.control.text)
 
     raise NotImplementedError()
 
