@@ -81,17 +81,6 @@ class TestRangeEditorText(unittest.TestCase):
         # the number traits should be between 3 and 8
         self.assertTrue(3 <= num.number <= 8)
 
-        """ with reraise_exceptions(), create_ui(num) as ui:
-
-            # the following is equivalent to setting the text in the text
-            # control, then pressing OK
-
-            textctrl = ui.control.FindWindowByName("text")
-            textctrl.SetValue("1")
-
-        # the number traits should be between 3 and 8
-        self.assertTrue(3 <= num.number <= 8) """
-
     @requires_toolkit([ToolkitName.qt])
     def test_avoid_slider_feedback(self):
         # behavior: when editing the text box part of a range editor, the value

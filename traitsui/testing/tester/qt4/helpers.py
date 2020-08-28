@@ -31,6 +31,7 @@ def key_click(widget, key, delay=0):
     delay : int
         Time delay (in ms) in which the key click will be performed.
     """
+    
     mapping = {name: event for event, name in _KEY_MAP.items()}
     if key not in mapping:
         raise ValueError(
