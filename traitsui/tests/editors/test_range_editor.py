@@ -16,8 +16,8 @@ class RangeModel(HasTraits):
 
     value = Int()
 
-class stuff(HasTraits):
-    value = Range(0, 12)
+class RangeTrait(HasTraits):
+    value = Range(1, 12)
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestRangeEditor(unittest.TestCase):
@@ -54,35 +54,17 @@ class TestRangeEditor(unittest.TestCase):
     def test_custom_editor_format_func(self):
         self.check_range_enum_editor_format_func("custom")
 
-    """def test_set_with_text(self):
-        model = stuff()
-        view = View(Item("value", style='simple'))
-        tester = UITester()
-        with tester.create_ui(model, dict(view=view)) as ui:
-            number_field = tester.find_by_name(ui, "value")
-            text = number_field.locate(locator.WidgetType.textbox)
-            text.perform(command.KeySequence("\b\b\b\b4"))
-            text.perform(command.KeyClick("Tab"))
-            display = text.inspect(query.DisplayedText())
-            print("________-")
-            print(display)
-            self.assertEqual(model.value, 4)
-            text.perform(command.KeySequence("\b4"))"""
-
     @requires_toolkit([ToolkitName.qt])
     def check_set_with_text(self, mode):
         model = RangeModel()
-        view = View(Item("value", editor=RangeEditor(low=0.0, high=12.0, mode=mode)), buttons=["OK"])
+        view = View(Item("value", editor=RangeEditor(low=1, high=12, mode=mode)), buttons=["OK"])
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field = tester.find_by_name(ui, "value")
             text = number_field.locate(locator.WidgetType.textbox)
             text.perform(command.KeySequence("\b\b\b\b\b4"))
-            #ok_button = tester.find_by_name(ui, 'OK')
-            #ok_button.perform(command.MouseClick)
             text.perform(command.KeyClick("Enter"))
             self.assertEqual(model.value, 4)
-            #text.perform(command.KeySequence("\b4"))
 
     def test_simple_slider_editor_set_with_text(self):
         return self.check_set_with_text(mode='slider')
@@ -90,8 +72,34 @@ class TestRangeEditor(unittest.TestCase):
     def test_large_range_slider_editor_set_with_text(self):
         return self.check_set_with_text(mode='xslider')
 
-    """def test_log_range_slider_editor_set_with_text(self):
-        return self.check_set_with_text(mode='logslider')"""
+    def test_log_range_slider_editor_set_with_text(self):
+        return self.check_set_with_text(mode='logslider')
 
     def test_range_text_editor_set_with_text(self):
         return self.check_set_with_text(mode='text')
+
+
+    # "Enter" is not currently working to set the value on wx.
+    @requires_toolkit([ToolkitName.wx])
+    def check_set_with_text_wx(self, mode):
+        model = RangeModel()
+        view = View(Item("value", editor=RangeEditor(low=1, high=12, mode=mode)), buttons=["OK"])
+        tester = UITester()
+        with tester.create_ui(model, dict(view=view)) as ui:
+            number_field = tester.find_by_name(ui, "value")
+            text = number_field.locate(locator.WidgetType.textbox)
+            text.perform(command.KeySequence("\b\b\b\b\b4"))
+            tester.find_by_name(ui, "OK").perform(command.MouseClick)
+            self.assertEqual(model.value, 4)
+
+    """def test_simple_slider_editor_set_with_text_wx(self):
+        return self.check_set_with_text_wx(mode='slider')
+
+    def test_large_range_slider_editor_set_with_text(self):
+        return self.check_set_with_text(mode='xslider')
+
+    def test_log_range_slider_editor_set_with_text(self):
+        return self.check_set_with_text(mode='logslider')
+
+    def test_range_text_editor_set_with_text(self):
+        return self.check_set_with_text(mode='text')"""
