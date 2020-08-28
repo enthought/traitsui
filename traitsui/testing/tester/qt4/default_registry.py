@@ -13,6 +13,7 @@ from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.qt4 import located_object_handlers
 from traitsui.testing.tester.qt4.implementation import (
     button_editor,
+    list_editor,
     range_editor,
     text_editor,
 )
@@ -39,5 +40,8 @@ def get_default_registry():
 
     # RangeEditor
     range_editor.register(registry)
+
+    # ListEditor
+    list_editor.register(registry)
 
     return registry

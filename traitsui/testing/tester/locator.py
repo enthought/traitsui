@@ -20,6 +20,19 @@ applied.
 import enum
 
 
+class Index:
+    """ A location uniquely specified by a single 0-based index.
+
+    Attributes
+    ----------
+    index : int
+        0-based index
+    """
+
+    def __init__(self, index):
+        self.index = index
+
+
 class NestedUI:
     """ A locator for locating a nested ``traitsui.ui.UI`` object assuming
     there is only one. If there are multiple, more location information
