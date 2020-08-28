@@ -527,6 +527,10 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         """
         if isinstance(event, wx.FocusEvent):
             event.Skip()
+        # There are cases where this method is called with self.control ==
+        # None.
+        if self.control is None:
+            return
         try:
             value = self.control.text.GetValue().strip()
             try:

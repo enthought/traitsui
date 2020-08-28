@@ -204,7 +204,7 @@ class TestTextEditor(unittest.TestCase, UnittestTools):
         foo = Foo(name="")
         view = View(
                     Item("name",
-                         editor=TextEditor(auto_set=False),
+                         editor=TextEditor(auto_set=False, enter_set=True),
                          style="simple"),
                     Item("nickname",
                          editor=TextEditor(auto_set=False),

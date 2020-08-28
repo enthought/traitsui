@@ -10,6 +10,7 @@
 #
 
 from traitsui.testing.tester.registry import TargetRegistry
+from traitsui.testing.tester.qt4 import located_object_handlers
 from traitsui.testing.tester.qt4.implementation import (
     button_editor,
     range_editor,
@@ -27,6 +28,8 @@ def get_default_registry():
         that is qt specific.
     """
     registry = TargetRegistry()
+
+    located_object_handlers.LocatedTextbox.register(registry)
 
     # ButtonEditor
     button_editor.register(registry)

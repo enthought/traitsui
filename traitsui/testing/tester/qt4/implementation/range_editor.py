@@ -21,19 +21,15 @@ from traitsui.testing.tester import locator
 from traitsui.testing.tester.qt4.located_object_handlers import LocatedTextbox
 
 
-class RangeEditorTextbox(LocatedTextbox):
-    pass
-
-
 def resolve_location_simple_slider(wrapper, location):
     if location == locator.WidgetType.textbox:
-        return RangeEditorTextbox(textbox=wrapper.target.control.text)
+        return LocatedTextbox(textbox=wrapper.target.control.text)
 
     raise NotImplementedError()
 
 def resolve_location_range_text(wrapper, location):
     if location == locator.WidgetType.textbox:
-        return RangeEditorTextbox(textbox=wrapper.target.control)
+        return LocatedTextbox(textbox=wrapper.target.control)
 
     raise NotImplementedError()
 
@@ -54,4 +50,3 @@ def register(registry):
         locator_class=locator.WidgetType,
         solver=resolve_location_range_text,
     )
-    RangeEditorTextbox.register(registry)
