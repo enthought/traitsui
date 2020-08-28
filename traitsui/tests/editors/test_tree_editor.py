@@ -125,6 +125,9 @@ class BogusTreeNodeObjectView(HasTraits):
 
 class TestTreeView(unittest.TestCase):
 
+    # test for wx is failing for other reasons.
+    # It might pass once we receive fix for enthought/pyface#558
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_editor_with_nested_ui(self):
         tree_editor = TreeEditor(
             nodes=[
