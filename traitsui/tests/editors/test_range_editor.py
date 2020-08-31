@@ -82,8 +82,8 @@ class TestRangeEditor(unittest.TestCase):
         return self.check_set_with_text(mode='text')
 
     # There is a problem with KeySequence on wx.  trying to include the key
-    # '\b' does not succesffuly type a backspace.  Instead EmulateKeyPress
-    # seems to literally type "\x08" which lead to errors.
+    # '\b' does not succesfully type a backspace.  Instead EmulateKeyPress
+    # seems to literally type "\x08" which leads to errors.
     @requires_toolkit([ToolkitName.wx])
     def check_set_with_text_wx(self, mode):
         model = RangeModel()

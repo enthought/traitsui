@@ -14,11 +14,28 @@ from traitsui.testing.tester.qt4 import helpers
 
 
 class LocatedTextbox:
+    """ Wrapper class for a located Textbox in Qt.
+    """
     def __init__(self, textbox):
+        """
+        Parameters
+        ----------
+        textbox : Instance of QtGui.QLineEdit
+        """
         self.textbox = textbox
 
     @classmethod
     def register(cls, registry):
+        """ Class method to register interactions on a LocatedTextbox for the
+        given registry.
+
+        If there are any conflicts, an error will occur.
+
+        Parameters
+        ----------
+        registry : TargetRegistry
+            The registry being registered to.
+        """
         handlers = [
             (command.KeySequence,
                 (lambda wrapper, interaction: helpers.key_sequence_qwidget(

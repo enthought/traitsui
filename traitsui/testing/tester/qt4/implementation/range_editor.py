@@ -20,7 +20,19 @@ from traitsui.testing.tester import locator
 from traitsui.testing.tester.qt4.located_object_handlers import LocatedTextbox
 
 
-def resolve_location_simple_slider(wrapper, location):
+def resolve_location_slider(wrapper, location):
+    """ Solver from a UIWrapper wrapped Range Editor to a LocatedTextbox
+    containing the textbox of interest
+
+    If there are any conflicts, an error will occur.
+
+    Parameters
+    ----------
+    wrapper : UIWrapper
+        Wrapper containing the Range Editor target.
+    location : locator.WidgetType.textbox
+        The location we are looking to resolve.
+    """
     if location == locator.WidgetType.textbox:
         return LocatedTextbox(textbox=wrapper.target.control.text)
 
@@ -28,6 +40,19 @@ def resolve_location_simple_slider(wrapper, location):
 
 
 def resolve_location_range_text(wrapper, location):
+    """ Solver from a UIWrapper wrapped RangeTextEditor to a LocatedTextbox
+    containing the textbox of interest
+
+    If there are any conflicts, an error will occur.
+
+    Parameters
+    ----------
+    wrapper : UIWrapper
+        Wrapper containing the RangeTextEditor target.
+    location : locator.WidgetType.textbox
+        The location we are looking to resolve.
+    """
+
     if location == locator.WidgetType.textbox:
         return LocatedTextbox(textbox=wrapper.target.control)
 
@@ -35,6 +60,15 @@ def resolve_location_range_text(wrapper, location):
 
 
 def register(registry):
+    """ Register interactions for the given registry.
+
+    If there are any conflicts, an error will occur.
+
+    Parameters
+    ----------
+    registry : TargetRegistry
+        The registry being registered to.
+    """
 
     targets = [SimpleSliderEditor,
                LogRangeSliderEditor,
@@ -43,7 +77,7 @@ def register(registry):
         registry.register_solver(
             target_class=target_class,
             locator_class=locator.WidgetType,
-            solver=resolve_location_simple_slider,
+            solver=resolve_location_slider,
         )
 
     registry.register_solver(
