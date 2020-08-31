@@ -1,3 +1,4 @@
+import copy
 import unittest
 
 from traits.api import HasStrictTraits, Instance, Int, List, Str
@@ -42,52 +43,63 @@ class ListTraitTest(HasStrictTraits):
 
     # Trait definitions:
     people = List(Instance(Person, ()))
+    num_columns = Int(1)
 
     # Traits view definitions:
-    traits_view = View(
-        Item(
-            'people',
-            label='List',
-            id='list',
-            style='custom',
-            editor=ListEditor(style='custom', columns=3),
-        ),
-        resizable=True
-    )
+    def default_traits_view(self):
+        view = View(
+            Item(
+                'people',
+                label='List',
+                id='list',
+                style='custom',
+                editor=ListEditor(style='custom', columns=self.num_columns),
+            ),
+            resizable=True
+        )
+        return view
+
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestCustomListEditor(unittest.TestCase):
 
     @requires_toolkit([ToolkitName.qt])
     def test_locate_element_and_edit_qt(self):
-        obj = ListTraitTest(people=people)
-        tester = UITester()
-        with tester.create_ui(obj) as ui:
-            # sanity check
-            self.assertEqual(obj.people[7].name, "Fields")
-            item = tester.find_by_name(ui, "people").locate(locator.Index(7))
-            item.find_by_name("name").perform(command.KeySequence("\b\b\b\b\b\bDavid"))
-            displayed = item.find_by_name("name").inspect(query.DisplayedText())
-            self.assertEqual(obj.people[7].name, "David")
-            self.assertEqual(displayed, obj.people[7].name)
+        # varying the number of columns in the view tests the logic for
+        # getting the correct nested ui 
+        for col in range(1,5):
+            obj = ListTraitTest(people=copy.deepcopy(people), num_columns=col)
+            tester = UITester()
+            with tester.create_ui(obj) as ui:
+                # sanity check
+                self.assertEqual(obj.people[7].name, "Fields")
+                item = tester.find_by_name(ui, "people").locate(locator.Index(7))
+                name_field = item.find_by_name("name")
+                name_field.perform(command.KeySequence("\b\b\b\b\b\bDavid"))
+                displayed = name_field.inspect(query.DisplayedText())
+                self.assertEqual(obj.people[7].name, "David")
+                self.assertEqual(displayed, obj.people[7].name)
 
     # The above test should in theory work for wx, but the tester currently 
     # has a bug for typing "\b" with wx (it types a literal "\x08" to the
     # textbox)
     @requires_toolkit([ToolkitName.wx])
     def test_locate_element_and_edit_wx(self):
-        obj = ListTraitTest(people=people)
-        tester = UITester()
-        with tester.create_ui(obj) as ui:
-            # sanity check
-            self.assertEqual(obj.people[7].name, "Fields")
-            item = tester.find_by_name(ui, "people").locate(locator.Index(7))
-            for _ in range(6):
-                item.find_by_name("name").perform(command.KeyClick("Backspace"))
-            item.find_by_name("name").perform(command.KeySequence("David"))
-            displayed = item.find_by_name("name").inspect(query.DisplayedText())
-            self.assertEqual(obj.people[7].name, "David")
-            self.assertEqual(displayed, obj.people[7].name)
+        # varying the number of columns in the view tests the logic for
+        # getting the correct nested ui
+        for col in range(1,5):
+            obj = ListTraitTest(people=copy.deepcopy(people), num_columns=col)
+            tester = UITester()
+            with tester.create_ui(obj) as ui:
+                # sanity check
+                self.assertEqual(obj.people[7].name, "Fields")
+                item = tester.find_by_name(ui, "people").locate(locator.Index(7))
+                for _ in range(6):
+                    item.find_by_name("name").perform(command.KeyClick("Backspace"))
+                item.find_by_name("name").perform(command.KeySequence("David"))
+                displayed = item.find_by_name("name").inspect(query.DisplayedText())
+                self.assertEqual(obj.people[7].name, "David")
+                self.assertEqual(displayed, obj.people[7].name)
 
     def test_useful_err_message(self):
         obj = ListTraitTest(people=people)
