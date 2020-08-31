@@ -24,11 +24,21 @@ class _IndexedCustomEditor:
     """
 
     def __init__(self, target, index):
+        """
+        Parameters
+        ----------
+        target : CustomEditor
+            The Custom List Editor 
+        index : int
+            The index of interest.
+        """
         self.target = target
         self.index = index
 
     @classmethod
     def from_location(cls, wrapper, location):
+        """ Helper method to create an _IndexedCustomEditor instance.
+        """
         return cls(
             target=wrapper.target,
             index=location.index,
@@ -36,6 +46,16 @@ class _IndexedCustomEditor:
 
     @classmethod
     def register(cls, registry):
+        """ Class method to register interactions on a _IndexedCustomEditor
+        for the given registry.
+
+        If there are any conflicts, an error will occur.
+
+        Parameters
+        ----------
+        registry : TargetRegistry
+            The registry being registered to.
+        """
         registry.register_solver(
             target_class=CustomEditor,
             locator_class=locator.Index,
@@ -54,6 +74,9 @@ class _IndexedCustomEditor:
         )
 
     def _get_nested_ui(self):
+        """ Method to get the nested ui corresponding to the List element at
+        the given index.
+        """
         row, column = divmod(self.index, self.target.factory.columns)
         # there are two columns for each list item (one for the item itself,
         # and another for the list menu button)
