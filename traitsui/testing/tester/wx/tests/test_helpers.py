@@ -33,7 +33,7 @@ except ImportError:
 class TestInteractions(unittest.TestCase):
 
     def setUp(self):
-        self.frame = wx.Frame(None, size=(1, 1))
+        self.frame = wx.Frame(None)
         self.frame.Show()
 
     def tearDown(self):
