@@ -2,7 +2,7 @@ import copy
 import unittest
 
 from traits.api import HasStrictTraits, Instance, Int, List, Str
-from traitsui.api import Item, ListEditor, Item, View
+from traitsui.api import Item, ListEditor, View
 from traitsui.testing.tester import command, locator, query
 from traitsui.testing.tester.exceptions import LocationNotSupported
 from traitsui.testing.tester.ui_tester import UITester
@@ -10,6 +10,7 @@ from traitsui.tests._tools import (
     requires_toolkit,
     ToolkitName,
 )
+
 
 # 'Person' class:
 class Person(HasStrictTraits):
@@ -37,6 +38,7 @@ people = [
     Person(name='Sally', age=43),
     Person(name='Fields', age=31)
 ]
+
 
 # 'ListTraitTest' class:
 class ListTraitTest(HasStrictTraits):
@@ -66,17 +68,19 @@ class TestCustomListEditor(unittest.TestCase):
     def test_locate_element_and_edit(self):
         # varying the number of columns in the view tests the logic for
         # getting the correct nested ui
-        for col in range(1,5):
+        for col in range(1, 5):
             obj = ListTraitTest(people=copy.deepcopy(people), num_columns=col)
             tester = UITester()
             with tester.create_ui(obj) as ui:
                 # sanity check
                 self.assertEqual(obj.people[7].name, "Fields")
-                item = tester.find_by_name(ui, "people").locate(locator.Index(7))
+                people_list = tester.find_by_name(ui, "people")
+                item = people_list.locate(locator.Index(7))
+                name_field = item.find_by_name("name")
                 for _ in range(6):
-                    item.find_by_name("name").perform(command.KeyClick("Backspace"))
-                item.find_by_name("name").perform(command.KeySequence("David"))
-                displayed = item.find_by_name("name").inspect(query.DisplayedText())
+                    name_field.perform(command.KeyClick("Backspace"))
+                name_field.perform(command.KeySequence("David"))
+                displayed = name_field.inspect(query.DisplayedText())
                 self.assertEqual(obj.people[7].name, "David")
                 self.assertEqual(displayed, obj.people[7].name)
 
@@ -85,5 +89,6 @@ class TestCustomListEditor(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(obj) as ui:
             with self.assertRaises(LocationNotSupported) as exc:
-                tester.find_by_name(ui, "people").locate(locator.WidgetType.textbox)
+                people_list = tester.find_by_name(ui, "people")
+                people_list.locate(locator.WidgetType.textbox)
             self.assertIn(locator.Index, exc.exception.supported)

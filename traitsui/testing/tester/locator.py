@@ -58,7 +58,8 @@ class WidgetType(enum.Enum):
     contain many sub-widgets (e.g. a textbox, slider, tabs, buttons, etc.).
 
     For example when working with a range editor, one could call
-    ``tester.find_by_name(ui, "ranged_number").locate(locator.WidgetType.textbox)``
+    ``tester.find_by_name(ui, "number").locate(locator.WidgetType.textbox)``
+    where number utilizes a Range Editor.
     """
 
     # A textbox within a UI
