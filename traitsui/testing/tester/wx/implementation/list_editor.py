@@ -18,6 +18,11 @@ from traitsui.wx.list_editor import (
 def find_by_name_in_nested_ui(wrapper, location):
     """ Helper function for resolving from an _IndexedCustomEditor to a
     TargetByName.
+
+    Parameters
+    ----------
+    wrapper : UIWrapper
+    location : instance of locator.TargetByName
     """
     new_interactor = wrapper.locate(locator.NestedUI())
     return new_interactor.find_by_name(location.name).target
@@ -42,6 +47,12 @@ class _IndexedCustomEditor:
     @classmethod
     def from_location(cls, wrapper, location):
         """ Helper method to create an _IndexedCustomEditor instance.
+        
+        Parameters
+        ----------
+        wrapper : UIWrapper
+            UI Wrapper wrapping the Custom List Editor
+        location : instance of locator.Index
         """
         return cls(
             target=wrapper.target,

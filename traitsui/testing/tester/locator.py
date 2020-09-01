@@ -21,7 +21,8 @@ import enum
 
 
 class Index:
-    """ A location uniquely specified by a single 0-based index.
+    """ A locator for locating a target that is uniquely specified by a single
+    0-based index.
 
     Attributes
     ----------
@@ -53,7 +54,12 @@ class TargetByName:
 
 
 class WidgetType(enum.Enum):
-    """ An Enum of widget types.
-    """
+     """ A locator for locating nested widgets within a UI. Many editors will
+     contain many sub-widgets (e.g. a textbox, slider, tabs, buttons, etc.).
 
+     For example when working with a range editor, one could call
+     ``tester.find_by_name(ui, "ranged_number").locate(locator.WidgetType.textbox)``
+     """
+
+    # A textbox within a UI
     textbox = "textbox"
