@@ -110,7 +110,14 @@ def key_click_text_ctrl(control, interaction, delay):
         raise Disabled("{!r} is disabled.".format(control))
     if not control.HasFocus():
         control.SetFocus()
-    key_click(control, interaction.key, delay)
+    # EmulateKeyPress in key_click seems to not be handling "Enter"
+    # correctly.
+    if interaction.key == "Enter":
+        wx.MilliSleep(delay)
+        event = wx.CommandEvent(wx.EVT_TEXT_ENTER.typeId, control.GetId())
+        control.ProcessEvent(event)
+    else:
+        key_click(control, interaction.key, delay)
 
 
 def key_sequence_text_ctrl(control, interaction, delay):
