@@ -50,7 +50,6 @@ class TestRangeEditor(unittest.TestCase):
     def test_custom_editor_format_func(self):
         self.check_range_enum_editor_format_func("custom")
 
-    @requires_toolkit([ToolkitName.qt])
     def check_set_with_text(self, mode):
         model = RangeModel()
         view = View(
@@ -80,39 +79,3 @@ class TestRangeEditor(unittest.TestCase):
 
     def test_range_text_editor_set_with_text(self):
         return self.check_set_with_text(mode='text')
-
-    # There is a problem with KeySequence on wx.  trying to include the key
-    # '\b' does not succesfully type a backspace.  Instead EmulateKeyPress
-    # seems to literally type "\x08" which leads to errors.
-    @requires_toolkit([ToolkitName.wx])
-    def check_set_with_text_wx(self, mode):
-        model = RangeModel()
-        view = View(
-            Item(
-                "value",
-                editor=RangeEditor(low=1, high=12, mode=mode)
-            )
-        )
-        tester = UITester()
-        with tester.create_ui(model, dict(view=view)) as ui:
-            number_field = tester.find_by_name(ui, "value")
-            text = number_field.locate(locator.WidgetType.textbox)
-            for _ in range(5):
-                text.perform(command.KeyClick("Backspace"))
-            text.perform(command.KeySequence("10"))
-            text.perform(command.KeyClick("Enter"))
-            displayed = text.inspect(query.DisplayedText())
-            self.assertEqual(model.value, 10)
-            self.assertEqual(displayed, str(model.value))
-
-    def test_simple_slider_editor_set_with_text_wx(self):
-        return self.check_set_with_text_wx(mode='slider')
-
-    def test_large_range_slider_editor_set_with_text_wx(self):
-        return self.check_set_with_text_wx(mode='xslider')
-
-    def test_log_range_slider_editor_set_with_text_wx(self):
-        return self.check_set_with_text_wx(mode='logslider')
-
-    def test_range_text_editor_set_with_text_wx(self):
-        return self.check_set_with_text_wx(mode='text')

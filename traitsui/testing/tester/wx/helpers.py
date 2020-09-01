@@ -140,4 +140,6 @@ def key_sequence_text_ctrl(control, interaction, delay):
     if not control.HasFocus():
         control.SetFocus()
     for char in interaction.sequence:
+        if char == '\b':
+            char = "Backspace"
         key_click(control, char, delay)
