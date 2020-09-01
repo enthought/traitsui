@@ -131,7 +131,9 @@ def mouse_click_child_in_panel(control, index, delay):
     if isinstance(obj, wx.CheckBox):
         mouse_click_checkbox(obj, delay)
     else:
-        raise NotImplementedError()
+        raise NotImplementedError(
+            "The only currently supported child object type is wx.CheckBox"
+        )
 
 
 def key_click_text_ctrl(control, interaction, delay):
