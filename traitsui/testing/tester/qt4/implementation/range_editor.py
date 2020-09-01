@@ -17,7 +17,7 @@ from traitsui.qt4.range_editor import (
 )
 
 from traitsui.testing.tester import locator
-from traitsui.testing.tester.qt4.located_object_handlers import LocatedTextbox
+from traitsui.testing.tester.qt4.common_ui_targets import LocatedTextbox
 
 
 def resolve_location_slider(wrapper, location):

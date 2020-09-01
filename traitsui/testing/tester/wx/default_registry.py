@@ -10,7 +10,7 @@
 #
 
 from traitsui.testing.tester.registry import TargetRegistry
-from traitsui.testing.tester.wx import located_object_handlers
+from traitsui.testing.tester.wx import common_ui_targets
 from traitsui.testing.tester.wx.implementation import (
     button_editor,
     range_editor,
@@ -29,7 +29,7 @@ def get_default_registry():
     """
     registry = TargetRegistry()
 
-    located_object_handlers.LocatedTextbox.register(registry)
+    common_ui_targets.LocatedTextbox.register(registry)
 
     # ButtonEditor
     button_editor.register(registry)

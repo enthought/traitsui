@@ -16,7 +16,7 @@ from traitsui.wx.range_editor import (
 )
 
 from traitsui.testing.tester import locator
-from traitsui.testing.tester.wx.located_object_handlers import LocatedTextbox
+from traitsui.testing.tester.wx.common_ui_targets import LocatedTextbox
 
 
 def resolve_location_slider(wrapper, location):
