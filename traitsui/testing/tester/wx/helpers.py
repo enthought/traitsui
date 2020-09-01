@@ -43,7 +43,7 @@ def key_click(widget, key, delay=0):
         else:
             wx.MilliSleep(delay)
             key_event = wx.KeyEvent(wx.wxEVT_CHAR)
-            key_event.SetKeyCode(KEY)
+            key_event.SetUnicodeKey(KEY)
             widget.EmulateKeyPress(key_event)
     else:
         wx.MilliSleep(delay)

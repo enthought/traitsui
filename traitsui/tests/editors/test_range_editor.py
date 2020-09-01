@@ -62,7 +62,9 @@ class TestRangeEditor(unittest.TestCase):
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field = tester.find_by_name(ui, "value")
             text = number_field.locate(locator.WidgetType.textbox)
-            text.perform(command.KeySequence("\b\b\b\b\b4"))
+            for _ in range(5):
+                text.perform(command.KeyClick("Backspace"))
+            text.perform(command.KeyClick("4"))
             text.perform(command.KeyClick("Enter"))
             displayed = text.inspect(query.DisplayedText())
             self.assertEqual(model.value, 4)
