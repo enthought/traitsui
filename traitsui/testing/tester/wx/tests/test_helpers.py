@@ -33,13 +33,8 @@ except ImportError:
 class TestInteractions(unittest.TestCase):
 
     def setUp(self):
-        self.app = wx.App()
-        self.frame = wx.Frame(None)
+        self.frame = wx.Frame(None, size=(1, 1))
         self.frame.Show()
-
-    def tearDown(self):
-        wx.CallAfter(self.app.ExitMainLoop)
-        self.app.MainLoop()
 
     def test_mouse_click(self):
         handler = mock.Mock()
