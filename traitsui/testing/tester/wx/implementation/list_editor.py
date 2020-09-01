@@ -9,23 +9,11 @@
 #  Thanks for using Enthought open source!
 #
 from traitsui.testing.tester import locator
+from traitsui.testing.tester.registry_helper import find_by_name_in_nested_ui
 
 from traitsui.wx.list_editor import (
     CustomEditor,
 )
-
-
-def find_by_name_in_nested_ui(wrapper, location):
-    """ Helper function for resolving from an _IndexedCustomEditor to a
-    TargetByName.
-
-    Parameters
-    ----------
-    wrapper : UIWrapper
-    location : instance of locator.TargetByName
-    """
-    new_interactor = wrapper.locate(locator.NestedUI())
-    return new_interactor.find_by_name(location.name).target
 
 
 class _IndexedCustomEditor:
