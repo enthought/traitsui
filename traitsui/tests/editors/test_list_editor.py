@@ -63,28 +63,7 @@ class ListTraitTest(HasStrictTraits):
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestCustomListEditor(unittest.TestCase):
 
-    @requires_toolkit([ToolkitName.qt])
-    def test_locate_element_and_edit_qt(self):
-        # varying the number of columns in the view tests the logic for
-        # getting the correct nested ui 
-        for col in range(1,5):
-            obj = ListTraitTest(people=copy.deepcopy(people), num_columns=col)
-            tester = UITester()
-            with tester.create_ui(obj) as ui:
-                # sanity check
-                self.assertEqual(obj.people[7].name, "Fields")
-                item = tester.find_by_name(ui, "people").locate(locator.Index(7))
-                name_field = item.find_by_name("name")
-                name_field.perform(command.KeySequence("\b\b\b\b\b\bDavid"))
-                displayed = name_field.inspect(query.DisplayedText())
-                self.assertEqual(obj.people[7].name, "David")
-                self.assertEqual(displayed, obj.people[7].name)
-
-    # The above test should in theory work for wx, but the tester currently 
-    # has a bug for typing "\b" with wx (it types a literal "\x08" to the
-    # textbox)
-    @requires_toolkit([ToolkitName.wx])
-    def test_locate_element_and_edit_wx(self):
+    def test_locate_element_and_edit(self):
         # varying the number of columns in the view tests the logic for
         # getting the correct nested ui
         for col in range(1,5):
