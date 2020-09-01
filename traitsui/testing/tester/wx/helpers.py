@@ -114,7 +114,7 @@ def mouse_click_object(control, delay):
 
 
 def mouse_click_child_in_panel(control, index, delay):
-    """
+    """ Performs a mouce click on a child oh a Wx Panel.
     Parameters
     ----------
     control : wx.Panel

@@ -31,6 +31,16 @@ class _IndexedCustomCheckListEditor:
 
     @classmethod
     def from_location_index(cls, wrapper, location):
+        """ Creates an instance of _IndexedCustomCheckListEditor from a
+        wrapper wrapping a Custom CheckListEditor, and a locator.Index
+        object.
+
+        Parameters
+        ----------
+        wrapper : UIWrapper
+            wrapper wrapping a Custom CheckListEditor
+        location : Instance of locator.Index
+        """
         # Conform to the call signature specified in the register
         return cls(
             target=wrapper.target,
@@ -39,6 +49,16 @@ class _IndexedCustomCheckListEditor:
 
     @classmethod
     def register(cls, registry):
+        """ Class method to register interactions on an 
+        _IndexedCustomCheckListEditor for the given registry.
+
+        If there are any conflicts, an error will occur.
+
+        Parameters
+        ----------
+        registry : TargetRegistry
+            The registry being registered to.
+        """
         registry.register_solver(
             target_class=CustomEditor,
             locator_class=locator.Index,
@@ -47,18 +67,22 @@ class _IndexedCustomCheckListEditor:
         registry.register_handler(
             target_class=cls,
             interaction_class=command.MouseClick,
-            handler=lambda wrapper, _: wrapper.target.mouse_click(
+            handler= lambda wrapper, _: helpers.mouse_click_qlayout(
+                layout=wrapper.target.target.control.layout(),
+                index=wrapper.target.index,
                 delay=wrapper.delay,
             )
         )
 
-    def mouse_click(self, delay=0):
-        helpers.mouse_click_qlayout(
-            layout=self.target.control.layout(),
-            index=self.index,
-            delay=delay,
-        )
-
 
 def register(registry):
+    """ Register interactions for the given registry.
+
+    If there are any conflicts, an error will occur.
+
+    Parameters
+    ----------
+    registry : TargetRegistry
+        The registry being registered to.
+    """
     _IndexedCustomCheckListEditor.register(registry)
