@@ -12,6 +12,7 @@
 from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.wx.implementation import (
     button_editor,
+    list_editor,
     text_editor,
 )
 
@@ -32,5 +33,8 @@ def get_default_registry():
 
     # TextEditor
     text_editor.register(registry)
+
+    # ListEditor
+    list_editor.register(registry)
 
     return registry
