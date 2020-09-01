@@ -91,7 +91,7 @@ def mouse_click_qwidget(control, delay):
 
 
 def mouse_click_qlayout(layout, index, delay=0):
-    """ Performing a mouse click on an index in a QLayout
+    """ Performs a mouse click on a widget at an index in a QLayout.
 
     Parameters
     ----------

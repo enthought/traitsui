@@ -49,7 +49,7 @@ class _IndexedCustomCheckListEditor:
 
     @classmethod
     def register(cls, registry):
-        """ Class method to register interactions on an 
+        """ Class method to register interactions on an
         _IndexedCustomCheckListEditor for the given registry.
 
         If there are any conflicts, an error will occur.
@@ -67,7 +67,7 @@ class _IndexedCustomCheckListEditor:
         registry.register_handler(
             target_class=cls,
             interaction_class=command.MouseClick,
-            handler = lambda wrapper, _: helpers.mouse_click_child_in_panel(
+            handler=lambda wrapper, _: helpers.mouse_click_child_in_panel(
                 control=wrapper.target.target.control,
                 index=wrapper.target.index,
                 delay=wrapper.delay,
