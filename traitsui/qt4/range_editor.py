@@ -177,7 +177,8 @@ class SimpleSliderEditor(BaseRangeEditor):
     def update_object_on_enter(self):
         """ Handles the user pressing the Enter key in the text field.
         """
-        # it is possible we get the event after the control has gone away
+        # It is possible the event is processed after the control is removed
+        # from the editor
         if self.control is None:
             return
 
@@ -449,7 +450,8 @@ class LargeRangeSliderEditor(BaseRangeEditor):
     def update_object_on_enter(self):
         """ Handles the user pressing the Enter key in the text field.
         """
-        # it is possible we get the event after the control has gone away
+        # It is possible the event is processed after the control is removed
+        # from the editor
         if self.control is None:
             return
         try:

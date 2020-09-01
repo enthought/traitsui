@@ -527,8 +527,8 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         """
         if isinstance(event, wx.FocusEvent):
             event.Skip()
-        # There are cases where this method is called with self.control ==
-        # None.
+        # It is possible the event is processed after the control is removed
+        # from the editor
         if self.control is None:
             return
         try:
@@ -852,8 +852,8 @@ class RangeTextEditor(TextEditor):
         if isinstance(event, wx.FocusEvent):
             event.Skip()
 
-        # There are cases where this method is called with self.control ==
-        # None.
+        # It is possible the event is processed after the control is removed
+        # from the editor
         if self.control is None:
             return
 

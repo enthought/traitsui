@@ -9,19 +9,27 @@
 #  Thanks for using Enthought open source!
 #
 
+""" This module contains targets for UIWrapper so that the logic related to
+them can be reused. All handlers and solvers for these objects are
+registered to the default registry via the register class methods. To use the
+logic in these objects, one simply needs to register a solver with their
+target_class of choice to one of these as the locator_class. For an example,
+see the implementation of range_editor.
+"""
+
 from traitsui.testing.tester import command, query
 from traitsui.testing.tester.wx import helpers
 
 
 class LocatedTextbox:
     """ Wrapper class for a located Textbox in Wx.
+
+    Parameters
+    ----------
+    textbox : Instance of wx.TextCtrl
     """
+
     def __init__(self, textbox):
-        """
-        Parameters
-        ----------
-        textbox : Instance of wx.TextCtrl
-        """
         self.textbox = textbox
 
     @classmethod

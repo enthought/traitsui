@@ -30,13 +30,20 @@ def resolve_location_slider(wrapper, location):
     ----------
     wrapper : UIWrapper
         Wrapper containing the Range Editor target.
-    location : locator.WidgetType.textbox
+    location : locator.WidgetType
         The location we are looking to resolve.
     """
     if location == locator.WidgetType.textbox:
         return LocatedTextbox(textbox=wrapper.target.control.text)
-
-    raise NotImplementedError()
+    if location in [locator.WidgetType.slider]:
+        raise NotImplementedError(
+            f"Logic for interacting with the {location}"
+            " has not been implemented."
+        )
+    raise ValueError(
+        f"Unable to resolve {location} on {wrapper.target}."
+        " Currently supported: {locator.WidgetType.textbox}"
+    )
 
 
 def resolve_location_range_text(wrapper, location):
@@ -49,14 +56,21 @@ def resolve_location_range_text(wrapper, location):
     ----------
     wrapper : UIWrapper
         Wrapper containing the RangeTextEditor target.
-    location : locator.WidgetType.textbox
+    location : locator.WidgetType
         The location we are looking to resolve.
     """
 
     if location == locator.WidgetType.textbox:
         return LocatedTextbox(textbox=wrapper.target.control)
-
-    raise NotImplementedError()
+    if location in [locator.WidgetType.slider]:
+        raise NotImplementedError(
+            f"Logic for interacting with the {location}"
+            " has not been implemented."
+        )
+    raise ValueError(
+        f"Unable to resolve {location} on {wrapper.target}."
+        " Currently supported: {locator.WidgetType.textbox}"
+    )
 
 
 def register(registry):

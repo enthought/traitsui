@@ -111,7 +111,7 @@ def key_click_text_ctrl(control, interaction, delay):
     if not control.HasFocus():
         control.SetFocus()
     # EmulateKeyPress in key_click seems to not be handling "Enter"
-    # correctly.  This is a temporary workaround.
+    # correctly.
     if interaction.key == "Enter":
         wx.MilliSleep(delay)
         event = wx.CommandEvent(wx.EVT_TEXT_ENTER.typeId, control.GetId())
