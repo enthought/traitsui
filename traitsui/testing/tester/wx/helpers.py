@@ -43,7 +43,7 @@ def key_click(widget, key, delay=0):
         else:
             wx.MilliSleep(delay)
             key_event = wx.KeyEvent(wx.wxEVT_CHAR)
-            key_event.SetUnicodeKey(KEY)
+            key_event.SetKeyCode(KEY)
             widget.EmulateKeyPress(key_event)
     else:
         wx.MilliSleep(delay)
@@ -140,6 +140,4 @@ def key_sequence_text_ctrl(control, interaction, delay):
     if not control.HasFocus():
         control.SetFocus()
     for char in interaction.sequence:
-        if char == '\b':
-            char = "Backspace"
         key_click(control, char, delay)

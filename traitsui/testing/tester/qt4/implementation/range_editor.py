@@ -62,11 +62,6 @@ def resolve_location_range_text(wrapper, location):
 
     if location == locator.WidgetType.textbox:
         return LocatedTextbox(textbox=wrapper.target.control)
-    if location in [locator.WidgetType.slider]:
-        raise NotImplementedError(
-            f"Logic for interacting with the {location}"
-            " has not been implemented."
-        )
     raise ValueError(
         f"Unable to resolve {location} on {wrapper.target}."
         " Currently supported: {locator.WidgetType.textbox}"
