@@ -36,6 +36,10 @@ class TestInteractions(unittest.TestCase):
         self.frame = wx.Frame(None, size=(1, 1))
         self.frame.Show()
 
+    def tearDown(self):
+        self.frame.Close()
+        self.frame.Destroy()
+
     def test_mouse_click(self):
         handler = mock.Mock()
         button = wx.Button(self.frame)
