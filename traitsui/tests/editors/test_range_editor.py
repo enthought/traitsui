@@ -79,7 +79,12 @@ class TestRangeEditor(unittest.TestCase):
     def test_log_range_slider_editor_set_with_text(self):
         return self.check_set_with_text(mode='logslider')
 
+    @requires_toolkit([ToolkitName.qt])
     def test_range_text_editor_set_with_text(self):
+        return self.check_set_with_text(mode='text')
+    
+    @requires_toolkit([ToolkitName.wx])
+    def test_range_text_editor_set_with_text_wx(self):
         # this test is seperate to avoid an invalid state after deleting
         # contents of textbox
         model = RangeModel()
