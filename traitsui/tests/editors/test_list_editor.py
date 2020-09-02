@@ -1,4 +1,3 @@
-import copy
 import unittest
 
 from traits.api import HasStrictTraits, Instance, Int, List, Str
@@ -27,17 +26,18 @@ class Person(HasStrictTraits):
     )
 
 
-# Sample data:
-people = [
-    Person(name='Dave', age=39),
-    Person(name='Mike', age=28),
-    Person(name='Joe', age=34),
-    Person(name='Tom', age=22),
-    Person(name='Dick', age=63),
-    Person(name='Harry', age=46),
-    Person(name='Sally', age=43),
-    Person(name='Fields', age=31)
-]
+def get_people():
+    # Sample data:
+    return [
+        Person(name='Dave', age=39),
+        Person(name='Mike', age=28),
+        Person(name='Joe', age=34),
+        Person(name='Tom', age=22),
+        Person(name='Dick', age=63),
+        Person(name='Harry', age=46),
+        Person(name='Sally', age=43),
+        Person(name='Fields', age=31)
+    ]
 
 
 # 'ListTraitTest' class:
@@ -69,7 +69,7 @@ class TestCustomListEditor(unittest.TestCase):
         # varying the number of columns in the view tests the logic for
         # getting the correct nested ui
         for col in range(1, 5):
-            obj = ListTraitTest(people=copy.deepcopy(people), num_columns=col)
+            obj = ListTraitTest(people=get_people(), num_columns=col)
             tester = UITester()
             with tester.create_ui(obj) as ui:
                 # sanity check
@@ -85,10 +85,19 @@ class TestCustomListEditor(unittest.TestCase):
                 self.assertEqual(displayed, obj.people[7].name)
 
     def test_useful_err_message(self):
-        obj = ListTraitTest(people=people)
+        obj = ListTraitTest(people=get_people())
         tester = UITester()
         with tester.create_ui(obj) as ui:
             with self.assertRaises(LocationNotSupported) as exc:
                 people_list = tester.find_by_name(ui, "people")
                 people_list.locate(locator.WidgetType.textbox)
             self.assertIn(locator.Index, exc.exception.supported)
+
+    def test_index_out_of_range(self):
+        obj = ListTraitTest(people=get_people())
+        tester = UITester()
+        with tester.create_ui(obj) as ui:
+            with self.assertRaises(IndexError):
+                people_list = tester.find_by_name(ui, "people")
+                item = people_list.locate(locator.Index(10))
+                item.find_by_name("name")
