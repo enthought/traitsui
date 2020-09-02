@@ -12,8 +12,9 @@
 from traitsui.testing.tester import locator
 
 def find_by_name_in_nested_ui(wrapper, location):
-    """ Helper function for resolving from an _IndexedCustomEditor to a
-    TargetByName.
+    """ Helper function for resolving from a target to a TargetByName. The
+    target mush have a solver registered from it to an instance of 
+    traitsui.ui.UI
 
     Parameters
     ----------
@@ -22,3 +23,19 @@ def find_by_name_in_nested_ui(wrapper, location):
     """
     new_interactor = wrapper.locate(locator.NestedUI())
     return new_interactor.find_by_name(location.name).target
+
+
+def register_nested_ui_solvers(registry, target_class, nested_ui_getter):
+        """ 
+        """
+
+        registry.register_solver(
+            target_class=target_class,
+            locator_class=locator.NestedUI,
+            solver=lambda wrapper, _: nested_ui_getter(wrapper.target),
+        )
+        registry.register_solver(
+            target_class=target_class,
+            locator_class=locator.TargetByName,
+            solver=find_by_name_in_nested_ui,
+        )

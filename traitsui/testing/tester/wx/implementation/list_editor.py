@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 from traitsui.testing.tester import locator
-from traitsui.testing.tester.registry_helper import find_by_name_in_nested_ui
+from traitsui.testing.tester.registry_helper import register_nested_ui_solvers
 
 from traitsui.wx.list_editor import (
     CustomEditor,
@@ -33,21 +33,6 @@ class _IndexedCustomEditor:
         self.index = index
 
     @classmethod
-    def from_location(cls, wrapper, location):
-        """ Helper method to create an _IndexedCustomEditor instance.
-        
-        Parameters
-        ----------
-        wrapper : UIWrapper
-            UI Wrapper wrapping the Custom List Editor
-        location : instance of locator.Index
-        """
-        return cls(
-            target=wrapper.target,
-            index=location.index,
-        )
-
-    @classmethod
     def register(cls, registry):
         """ Class method to register interactions on a _IndexedCustomEditor
         for the given registry.
@@ -62,18 +47,13 @@ class _IndexedCustomEditor:
         registry.register_solver(
             target_class=CustomEditor,
             locator_class=locator.Index,
-            solver=cls.from_location,
+            solver=lambda wrapper, location:
+                cls(target=wrapper.target, index=location.index)
         )
-        registry.register_solver(
+        register_nested_ui_solvers(
+            registry=registry,
             target_class=cls,
-            locator_class=locator.NestedUI,
-            solver=lambda wrapper, _: wrapper.target._get_nested_ui(),
-        )
-
-        registry.register_solver(
-            target_class=cls,
-            locator_class=locator.TargetByName,
-            solver=find_by_name_in_nested_ui,
+            nested_ui_getter=lambda target: target._get_nested_ui()
         )
 
     def _get_nested_ui(self):
