@@ -44,12 +44,16 @@ def key_click(widget, key, delay=0):
             wx.MilliSleep(delay)
             key_event = wx.KeyEvent(wx.wxEVT_CHAR)
             key_event.SetUnicodeKey(KEY)
-            widget.EmulateKeyPress(key_event)
+            success = widget.EmulateKeyPress(key_event)
+            if not success:
+                widget.write(key)
     else:
         wx.MilliSleep(delay)
         key_event = wx.KeyEvent(wx.wxEVT_CHAR)
         key_event.SetKeyCode(mapping[key])
-        widget.EmulateKeyPress(key_event)
+        success = widget.EmulateKeyPress(key_event)
+        if not success:
+            widget.Command(key_event, widget.GetId())
 
 
 def mouse_click_button(control, delay):
