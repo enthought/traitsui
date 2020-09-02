@@ -58,7 +58,7 @@ class TestRangeEditor(unittest.TestCase):
                 editor=RangeEditor(low=1, high=12, mode=mode)
             )
         )
-        tester = UITester()
+        tester = UITester(delay=500)
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field = tester.find_by_name(ui, "value")
             text = number_field.locate(locator.WidgetType.textbox)

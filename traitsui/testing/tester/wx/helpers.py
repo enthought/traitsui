@@ -115,7 +115,10 @@ def key_click_text_ctrl(control, interaction, delay):
     if not control.IsEditable():
         raise Disabled("{!r} is disabled.".format(control))
     if not control.HasFocus():
+        # setFocus resets the InsertionPoint to be 0. We want to preserve it
+        temp = control.GetInsertionPoint()
         control.SetFocus()
+        control.SetInsertionPoint(temp)
     # EmulateKeyPress in key_click seems to not be handling "Enter"
     # correctly.
     if interaction.key == "Enter":

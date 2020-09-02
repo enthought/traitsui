@@ -33,7 +33,9 @@ def resolve_location_slider(wrapper, location):
         The location we are looking to resolve.
     """
     if location == locator.WidgetType.textbox:
-        return LocatedTextbox(textbox=wrapper.target.control.text)
+        textbox = wrapper.target.control.text
+        textbox.SetInsertionPoint(textbox.GetLastPosition()+1)
+        return LocatedTextbox(textbox=textbox)
     if location in [locator.WidgetType.slider]:
         raise NotImplementedError(
             f"Logic for interacting with the {location}"
@@ -60,7 +62,12 @@ def resolve_location_range_text(wrapper, location):
     """
 
     if location == locator.WidgetType.textbox:
-        return LocatedTextbox(textbox=wrapper.target.control)
+        textbox = wrapper.target.control
+        # wx defaults to having insertion point start at 0
+        # for consistent behavior accross toolkits, we set this default to
+        # be the right most point of the textbox
+        textbox.SetInsertionPoint(textbox.GetLastPosition()+1)
+        return LocatedTextbox(textbox=textbox)
     raise ValueError(
         f"Unable to resolve {location} on {wrapper.target}."
         " Currently supported: {locator.WidgetType.textbox}"
