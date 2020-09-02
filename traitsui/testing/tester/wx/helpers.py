@@ -11,6 +11,7 @@
 
 import wx
 
+from traitsui.testing.tester.compat import check_key_compat
 from traitsui.testing.tester.exceptions import Disabled
 from traitsui.wx.key_event_to_name import key_map as _KEY_MAP
 
@@ -29,6 +30,11 @@ def key_click(widget, key, delay=0):
         Note: modifiers (e.g. Shift, Alt, etc. are not currently supported)
     delay : int
         Time delay (in ms) in which the key click will be performed.
+
+    Notes
+    -----
+    This function is currently unused due to issue on Windows
+    see traitsui issues #1182 and #1183
     """
 
     mapping = {name: event for event, name in _KEY_MAP.items()}
@@ -109,15 +115,24 @@ def key_click_text_ctrl(control, interaction, delay):
     if not control.IsEditable():
         raise Disabled("{!r} is disabled.".format(control))
     if not control.HasFocus():
+        # setFocus resets the InsertionPoint to be 0. We want to preserve it
+        temp = control.GetInsertionPoint()
         control.SetFocus()
+        control.SetInsertionPoint(temp)
     # EmulateKeyPress in key_click seems to not be handling "Enter"
     # correctly.
     if interaction.key == "Enter":
         wx.MilliSleep(delay)
         event = wx.CommandEvent(wx.EVT_TEXT_ENTER.typeId, control.GetId())
         control.ProcessEvent(event)
+    elif interaction.key == "Backspace":
+        wx.MilliSleep(delay)
+        pos = control.GetInsertionPoint()
+        control.Remove(max(0, pos - 1), pos)
     else:
-        key_click(control, interaction.key, delay)
+        check_key_compat(interaction.key)
+        wx.MilliSleep(delay)
+        control.WriteText(interaction.key)
 
 
 def key_sequence_text_ctrl(control, interaction, delay):
@@ -135,9 +150,15 @@ def key_sequence_text_ctrl(control, interaction, delay):
         Time delay (in ms) in which each key click in the sequence will be
         performed.
     """
+    # fail early
+    for char in interaction.sequence:
+        check_key_compat(char)
+
     if not control.IsEditable():
         raise Disabled("{!r} is disabled.".format(control))
     if not control.HasFocus():
         control.SetFocus()
+        control.SetInsertionPointEnd()
     for char in interaction.sequence:
-        key_click(control, char, delay)
+        wx.MilliSleep(delay)
+        control.WriteText(char)
