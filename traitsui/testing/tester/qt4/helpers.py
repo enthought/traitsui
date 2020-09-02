@@ -12,6 +12,7 @@
 from pyface.qt import QtCore, QtGui
 from pyface.qt.QtTest import QTest
 
+from traitsui.testing.tester.compat import check_key_compat
 from traitsui.testing.tester.exceptions import Disabled
 from traitsui.qt4.key_event_to_name import key_map as _KEY_MAP
 
@@ -90,6 +91,26 @@ def mouse_click_qwidget(control, delay):
     )
 
 
+def mouse_click_qlayout(layout, index, delay=0):
+    """ Performs a mouse click on a widget at an index in a QLayout.
+
+    Parameters
+    ----------
+    layout : Qlayout
+        The layout containing the widget to be clicked
+    index : int
+        The index of the widget in the layout to be clicked
+    """
+    if not 0 <= index < layout.count():
+        raise IndexError(index)
+    widget = layout.itemAt(index).widget()
+    QTest.mouseClick(
+        widget,
+        QtCore.Qt.LeftButton,
+        delay=delay,
+    )
+
+
 def key_sequence_qwidget(control, interaction, delay):
     """ Performs simulated typing of a sequence of keys on the given widget
     after a delay.
@@ -108,6 +129,30 @@ def key_sequence_qwidget(control, interaction, delay):
     if not control.isEnabled():
         raise Disabled("{!r} is disabled.".format(control))
     QTest.keyClicks(control, interaction.sequence, delay=delay)
+
+
+def key_sequence_textbox(control, interaction, delay):
+    """ Performs simulated typing of a sequence of keys on a widget that is
+    a textbox. The keys are restricted to values also supported for testing
+    wx.TextCtrl.
+
+    Parameters
+    ----------
+    control : QWidget
+        The Qt widget intended to hold text for editing.
+        e.g. QLineEdit and QTextEdit
+    interaction : instance of command.KeySequence
+        The interaction object holding the sequence of key inputs
+        to be simulated being typed
+    delay : int
+        Time delay (in ms) in which each key click in the sequence will be
+        performed.
+    """
+    for key in interaction.sequence:
+        check_key_compat(key)
+    if not control.hasFocus():
+        key_click(widget=control, key="End", delay=0)
+    key_sequence_qwidget(control=control, interaction=interaction, delay=delay)
 
 
 def key_click_qwidget(control, interaction, delay):

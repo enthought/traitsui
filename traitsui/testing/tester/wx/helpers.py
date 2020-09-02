@@ -11,6 +11,7 @@
 
 import wx
 
+from traitsui.testing.tester.compat import check_key_compat
 from traitsui.testing.tester.exceptions import Disabled
 from traitsui.wx.key_event_to_name import key_map as _KEY_MAP
 
@@ -71,6 +72,27 @@ def mouse_click_button(control, delay):
     control.ProcessEvent(click_event)
 
 
+def mouse_click_checkbox(control, delay):
+    """ Performs a mouce click on a wx check box.
+
+    Parameters
+    ----------
+    control : wxCheckBox
+        The wx Object to be clicked.
+    delay: int
+        Time delay (in ms) in which click will be performed.
+    """
+    if not control.IsEnabled():
+        return
+    wx.MilliSleep(delay)
+    click_event = wx.CommandEvent(
+        wx.wxEVT_COMMAND_CHECKBOX_CLICKED, control.GetId()
+    )
+    click_event.SetEventObject(control)
+    control.SetValue(not control.GetValue())
+    control.ProcessWindowEvent(click_event)
+
+
 def mouse_click_object(control, delay):
     """ Performs a mouce click on a wxTextCtrl.
 
@@ -90,6 +112,29 @@ def mouse_click_object(control, delay):
         wx.wxEVT_COMMAND_LEFT_CLICK, control.GetId()
     )
     control.ProcessEvent(click_event)
+
+
+def mouse_click_child_in_panel(control, index, delay):
+    """ Performs a mouce click on a child of a Wx Panel.
+    Parameters
+    ----------
+    control : wx.Panel
+        The Panel containing child objects, one of which will be clicked.
+    index : int
+        The index of the child object in the Panel to be clicked
+    delay : int
+        Time delay (in ms) in which click will be performed.
+    """
+    children_list = control.GetSizer().GetChildren()
+    if not 0 <= index <= len(children_list) - 1:
+        raise IndexError(index)
+    obj = children_list[index].GetWindow()
+    if isinstance(obj, wx.CheckBox):
+        mouse_click_checkbox(obj, delay)
+    else:
+        raise NotImplementedError(
+            "The only currently supported child object type is wx.CheckBox"
+        )
 
 
 def key_click_text_ctrl(control, interaction, delay):
@@ -135,9 +180,15 @@ def key_sequence_text_ctrl(control, interaction, delay):
         Time delay (in ms) in which each key click in the sequence will be
         performed.
     """
+    # fail early
+    for char in interaction.sequence:
+        check_key_compat(char)
+
     if not control.IsEditable():
         raise Disabled("{!r} is disabled.".format(control))
     if not control.HasFocus():
         control.SetFocus()
+        control.SetInsertionPointEnd()
     for char in interaction.sequence:
-        key_click(control, char, delay)
+        wx.MilliSleep(delay)
+        control.WriteText(char)
