@@ -27,7 +27,7 @@ def register(registry):
 
     handlers = [
         (command.KeySequence,
-            (lambda wrapper, interaction: helpers.key_sequence_qwidget(
+            (lambda wrapper, interaction: helpers.key_sequence_textbox(
                 wrapper.target.control, interaction, wrapper.delay))),
         (command.KeyClick,
             (lambda wrapper, interaction: helpers.key_click_qwidget(
