@@ -11,6 +11,7 @@
 
 import wx
 
+from traitsui.testing.tester.compat import check_key_compat
 from traitsui.testing.tester.exceptions import Disabled
 from traitsui.wx.key_event_to_name import key_map as _KEY_MAP
 
@@ -135,9 +136,15 @@ def key_sequence_text_ctrl(control, interaction, delay):
         Time delay (in ms) in which each key click in the sequence will be
         performed.
     """
+    # fail early
+    for char in interaction.sequence:
+        check_key_compat(char)
+
     if not control.IsEditable():
         raise Disabled("{!r} is disabled.".format(control))
     if not control.HasFocus():
         control.SetFocus()
+        control.SetInsertionPointEnd()
     for char in interaction.sequence:
-        key_click(control, char, delay)
+        wx.MilliSleep(delay)
+        control.WriteText(char)

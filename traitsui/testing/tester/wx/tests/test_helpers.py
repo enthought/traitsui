@@ -64,11 +64,50 @@ class TestInteractions(unittest.TestCase):
         self.assertEqual(handler.call_count, 0)
 
     def test_key_sequence(self):
+        # The insertion point is moved to the end
         textbox = wx.TextCtrl(self.frame)
+        textbox.SetValue("123")
+        handler = mock.Mock()
+        textbox.Bind(wx.EVT_TEXT, handler)
 
         helpers.key_sequence_text_ctrl(textbox, command.KeySequence("abc"), 0)
 
-        self.assertEqual(textbox.Value, "abc")
+        self.assertEqual(textbox.GetValue(), "123abc")
+        self.assertEqual(handler.call_count, 3)
+
+    def test_key_sequence_with_unicode(self):
+        handler = mock.Mock()
+        textbox = wx.TextCtrl(self.frame)
+        textbox.Bind(wx.EVT_TEXT, handler)
+        # This range is supported by Qt
+        for code in range(32, 127):
+            with self.subTest(code=code, word=chr(code)):
+                textbox.Clear()
+                handler.reset_mock()
+
+                # when
+                helpers.key_sequence_text_ctrl(
+                    textbox,
+                    command.KeySequence(chr(code) * 3),
+                    delay=0,
+                )
+
+                # then
+                self.assertEqual(textbox.Value, chr(code) * 3)
+                self.assertEqual(handler.call_count, 3)
+
+    def test_key_sequence_with_backspace_unsupported(self):
+        textbox = wx.TextCtrl(self.frame)
+
+        with self.assertRaises(ValueError) as exception_context:
+            helpers.key_sequence_text_ctrl(
+                textbox, command.KeySequence("\b"), 0
+            )
+
+        self.assertIn(
+            "is currently not supported.",
+            str(exception_context.exception),
+        )
 
     def test_key_sequence_disabled(self):
         textbox = wx.TextCtrl(self.frame)
