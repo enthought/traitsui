@@ -30,6 +30,11 @@ def key_click(widget, key, delay=0):
         Note: modifiers (e.g. Shift, Alt, etc. are not currently supported)
     delay : int
         Time delay (in ms) in which the key click will be performed.
+
+    Notes
+    -----
+    This function is currently unused due to issue on Windows
+    see traitsui issues #1182 and #1183
     """
 
     mapping = {name: event for event, name in _KEY_MAP.items()}
