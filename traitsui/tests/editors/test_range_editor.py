@@ -80,6 +80,8 @@ class TestRangeEditor(unittest.TestCase):
         return self.check_set_with_text(mode='logslider')
 
     def test_range_text_editor_set_with_text(self):
+        # this test is seperate to avoid an invalid state after deleting
+        # contents of textbox
         model = RangeModel()
         view = View(
             Item(
