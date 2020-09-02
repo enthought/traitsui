@@ -53,7 +53,11 @@ def key_click(widget, key, delay=0):
         key_event.SetKeyCode(mapping[key])
         success = widget.EmulateKeyPress(key_event)
         if not success:
-            widget.ProcessWindowEvent(key_event)
+            print('-----------------')
+            print(mapping[key])
+            print(widget.GetInsertionPoint())
+            print(key_event)
+            widget.HandleWindowEvent(key_event)
 
 
 def mouse_click_button(control, delay):
