@@ -20,6 +20,20 @@ applied.
 import enum
 
 
+class Index:
+    """ A locator for locating a target that is uniquely specified by a single
+    0-based index.
+
+    Attributes
+    ----------
+    index : int
+        0-based index
+    """
+
+    def __init__(self, index):
+        self.index = index
+
+
 class NestedUI:
     """ A locator for locating a nested ``traitsui.ui.UI`` object assuming
     there is only one. If there are multiple, more location information
@@ -44,7 +58,8 @@ class WidgetType(enum.Enum):
     contain many sub-widgets (e.g. a textbox, slider, tabs, buttons, etc.).
 
     For example when working with a range editor, one could call
-    ``tester.find_by_name(ui, "ranged_number").locate(locator.WidgetType.textbox)``
+    ``tester.find_by_name(ui, "number").locate(locator.WidgetType.textbox)``
+    where number utilizes a Range Editor.
     """
 
     # A textbox within a UI

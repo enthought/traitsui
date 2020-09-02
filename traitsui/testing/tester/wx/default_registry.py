@@ -13,6 +13,7 @@ from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.wx import common_ui_targets
 from traitsui.testing.tester.wx.implementation import (
     button_editor,
+    check_list_editor,
     range_editor,
     text_editor,
 )
@@ -33,6 +34,9 @@ def get_default_registry():
 
     # ButtonEditor
     button_editor.register(registry)
+
+    # CheckListEditor
+    check_list_editor.register(registry)
 
     # TextEditor
     text_editor.register(registry)
