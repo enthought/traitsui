@@ -117,6 +117,10 @@ def key_click_text_ctrl(control, interaction, delay):
         wx.MilliSleep(delay)
         event = wx.CommandEvent(wx.EVT_TEXT_ENTER.typeId, control.GetId())
         control.ProcessEvent(event)
+    elif interaction.key == "Backspace":
+        wx.MilliSleep(delay)
+        pos = control.GetInsertionPoint()
+        control.Remove(max(0, pos - 1), pos)
     else:
         key_click(control, interaction.key, delay)
 
