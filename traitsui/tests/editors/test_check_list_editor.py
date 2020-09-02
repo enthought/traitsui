@@ -13,6 +13,8 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
+from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.tester import command, locator
 
 
 class ListModel(HasTraits):
@@ -75,27 +77,6 @@ def set_combobox_index(editor, idx):
         # event. At least check that it updates as expected when done
         # manually
         editor.update_object(idx)
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
-def click_checkbox_button(widget, button_idx):
-    """ Simulate a checkbox click given widget and button number. Assumes
-    all sizer children (wx) or layout items (qt) are buttons."""
-    if is_wx():
-        import wx
-
-        sizer_items = widget.GetSizer().GetChildren()
-        button = sizer_items[button_idx].GetWindow()
-        button.SetValue(not button.GetValue())
-        event = wx.CommandEvent(wx.EVT_CHECKBOX.typeId, button.GetId())
-        event.SetEventObject(button)
-        wx.PostEvent(widget, event)
-
-    elif is_qt():
-        layout = widget.layout()
-        layout.itemAt(button_idx).widget().click()
 
     else:
         raise unittest.SkipTest("Test not implemented for this toolkit")
@@ -443,31 +424,26 @@ class TestCustomCheckListEditor(unittest.TestCase):
     def test_custom_check_list_editor_click(self):
         list_edit = ListModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(list_edit, get_view("custom")) as editor:
-
+        tester = UITester()
+        with tester.create_ui(list_edit, dict(view=get_view("custom"))) as ui:
             self.assertEqual(list_edit.value, [])
-
-            click_checkbox_button(editor.control, 1)
-            process_cascade_events()
-
+            check_list = tester.find_by_name(ui, "value")
+            item_1 = check_list.locate(locator.Index(1))
+            item_1.perform(command.MouseClick())
             self.assertEqual(list_edit.value, ["two"])
-
-            click_checkbox_button(editor.control, 1)
-            process_cascade_events()
-
+            item_1.perform(command.MouseClick())
             self.assertEqual(list_edit.value, [])
 
     def test_custom_check_list_editor_click_initial_value(self):
         list_edit = ListModel(value=["two"])
 
-        with reraise_exceptions(), \
-                self.setup_gui(list_edit, get_view("custom")) as editor:
-
+        tester = UITester()
+        with tester.create_ui(list_edit, dict(view=get_view("custom"))) as ui:
             self.assertEqual(list_edit.value, ["two"])
 
-            click_checkbox_button(editor.control, 1)
-            process_cascade_events()
+            check_list = tester.find_by_name(ui, "value")
+            item_1 = check_list.locate(locator.Index(1))
+            item_1.perform(command.MouseClick())
 
             self.assertEqual(list_edit.value, [])
 
@@ -477,13 +453,14 @@ class TestCustomCheckListEditor(unittest.TestCase):
 
         str_edit = StrModel(value="alpha, \ttwo, three,\n lambda, one")
 
-        with reraise_exceptions(), \
-                self.setup_gui(str_edit, get_view("custom")) as editor:
+        tester = UITester()
+        with tester.create_ui(str_edit, dict(view=get_view("custom"))) as ui:
 
             self.assertEqual(str_edit.value, "two,three,one")
 
-            click_checkbox_button(editor.control, 1)
-            process_cascade_events()
+            check_list = tester.find_by_name(ui, "value")
+            item_1 = check_list.locate(locator.Index(1))
+            item_1.perform(command.MouseClick())
 
             self.assertEqual(str_edit.value, "three,one")
 

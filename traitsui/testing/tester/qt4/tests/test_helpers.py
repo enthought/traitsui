@@ -82,6 +82,87 @@ class TestInteractions(unittest.TestCase):
                                      0)
         self.assertEqual(textbox.text(), "")
 
+    def test_key_sequence_textbox_with_unicode(self):
+        for code in range(32, 127):
+            with self.subTest(code=code, word=chr(code)):
+                textbox = QtGui.QLineEdit()
+                change_slot = mock.Mock()
+                textbox.textChanged.connect(change_slot)
+
+                # when
+                helpers.key_sequence_textbox(
+                    textbox,
+                    command.KeySequence(chr(code) * 3),
+                    delay=0,
+                )
+
+                # then
+                self.assertEqual(textbox.text(), chr(code) * 3)
+                self.assertEqual(change_slot.call_count, 3)
+
+    def test_key_sequence_unsupported_key(self):
+        textbox = QtGui.QLineEdit()
+
+        with self.assertRaises(ValueError) as exception_context:
+            # QTest does not support this character.
+            helpers.key_sequence_textbox(
+                textbox,
+                command.KeySequence(chr(31)),
+                delay=0,
+            )
+
+        self.assertIn(
+            "is currently not supported.",
+            str(exception_context.exception),
+        )
+
+    def test_key_sequence_backspace_character(self):
+        # Qt does convert backspace character to the backspace key
+        # But we disallow it for now to be consistent with wx.
+        textbox = QtGui.QLineEdit()
+
+        with self.assertRaises(ValueError) as exception_context:
+            helpers.key_sequence_textbox(
+                textbox,
+                command.KeySequence("\b"),
+                delay=0,
+            )
+
+        self.assertIn(
+            "is currently not supported.",
+            str(exception_context.exception),
+        )
+
+    def test_key_sequence_insert_point_qlineedit(self):
+        textbox = QtGui.QLineEdit()
+        textbox.setText("123")
+
+        # when
+        helpers.key_sequence_textbox(
+            textbox,
+            command.KeySequence("abc"),
+            delay=0,
+        )
+
+        # then
+        self.assertEqual(textbox.text(), "123abc")
+
+    def test_key_sequence_insert_point_qtextedit(self):
+        # The default insertion point moved to the end to be consistent
+        # with QLineEdit
+        textbox = QtGui.QTextEdit()
+        textbox.setText("123")
+
+        # when
+        helpers.key_sequence_textbox(
+            textbox,
+            command.KeySequence("abc"),
+            delay=0,
+        )
+
+        # then
+        self.assertEqual(textbox.toPlainText(), "123abc")
+
     def test_key_sequence_disabled(self):
         textbox = QtGui.QLineEdit()
         textbox.setEnabled(False)
