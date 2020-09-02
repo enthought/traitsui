@@ -91,6 +91,26 @@ def mouse_click_qwidget(control, delay):
     )
 
 
+def mouse_click_qlayout(layout, index, delay=0):
+    """ Performs a mouse click on a widget at an index in a QLayout.
+
+    Parameters
+    ----------
+    layout : Qlayout
+        The layout containing the widget to be clicked
+    index : int
+        The index of the widget in the layout to be clicked
+    """
+    if not 0 <= index < layout.count():
+        raise IndexError(index)
+    widget = layout.itemAt(index).widget()
+    QTest.mouseClick(
+        widget,
+        QtCore.Qt.LeftButton,
+        delay=delay,
+    )
+
+
 def key_sequence_qwidget(control, interaction, delay):
     """ Performs simulated typing of a sequence of keys on the given widget
     after a delay.
