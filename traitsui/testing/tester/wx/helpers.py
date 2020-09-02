@@ -122,7 +122,9 @@ def key_click_text_ctrl(control, interaction, delay):
         pos = control.GetInsertionPoint()
         control.Remove(max(0, pos - 1), pos)
     else:
-        key_click(control, interaction.key, delay)
+        check_key_compat(interaction.key)
+        wx.MilliSleep(delay)
+        control.WriteText(interaction.key)
 
 
 def key_sequence_text_ctrl(control, interaction, delay):
