@@ -53,7 +53,7 @@ def key_click(widget, key, delay=0):
         key_event.SetKeyCode(mapping[key])
         success = widget.EmulateKeyPress(key_event)
         if not success:
-            widget.Command(key_event, widget.GetId())
+            widget.Command(wx.CommandEvent(key_event, widget.GetId()))
 
 
 def mouse_click_button(control, delay):
