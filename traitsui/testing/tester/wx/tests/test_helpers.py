@@ -123,6 +123,8 @@ class TestInteractions(unittest.TestCase):
 
         helpers.key_click_text_ctrl(textbox, command.KeyClick("A"), 0)
         self.assertEqual(textbox.Value, "A")
+        helpers.key_click_text_ctrl(textbox, command.KeyClick("Backspace"), 0)
+        self.assertEqual(textbox.Value, "")
 
     def test_key_click_disabled(self):
         textbox = wx.TextCtrl(self.frame)
