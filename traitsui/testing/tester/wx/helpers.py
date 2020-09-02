@@ -15,6 +15,20 @@ from traitsui.testing.tester.exceptions import Disabled
 from traitsui.wx.key_event_to_name import key_map as _KEY_MAP
 
 
+def set_default_insertion_point(control):
+    """ By default wx sets the initial insertion point when entering a
+    text object to be 0.  To maintain agnosticity across toolkits, this
+    function overrides this and sets the insertion point to the right
+    most point of the text.
+
+    Parameters
+    ----------
+    control : Instance of wxTextEntry
+    """
+    control.SetInsertionPoint(control.GetLastPosition()+1)
+    return control
+
+
 def key_click(widget, key, delay=0):
     """ Performs a key click of the given key on the given widget after
     a delay.
