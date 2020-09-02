@@ -80,4 +80,25 @@ class TestRangeEditor(unittest.TestCase):
         return self.check_set_with_text(mode='logslider')
 
     def test_range_text_editor_set_with_text(self):
-        return self.check_set_with_text(mode='text')
+        model = RangeModel()
+        view = View(
+            Item(
+                "value",
+                editor=RangeEditor(low=1, high=12, mode='text')
+            )
+        )
+        tester = UITester()
+        with tester.create_ui(model, dict(view=view)) as ui:
+            number_field = tester.find_by_name(ui, "value")
+            text = number_field.locate(locator.WidgetType.textbox)
+            text.perform(command.KeyClick("1"))
+            text.perform(command.KeyClick("Enter"))
+            displayed = text.inspect(query.DisplayedText())
+            self.assertEqual(model.value, 11)
+            self.assertEqual(displayed, str(model.value))
+            text.perform(command.KeyClick("Backspace"))
+            text.perform(command.KeyClick("0"))
+            text.perform(command.KeyClick("Enter"))
+            displayed = text.inspect(query.DisplayedText())
+            self.assertEqual(model.value, 10)
+            self.assertEqual(displayed, str(model.value))
