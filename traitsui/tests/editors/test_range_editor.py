@@ -12,7 +12,7 @@ from traitsui.tests._tools import (
 
 class RangeModel(HasTraits):
 
-    value = Int()
+    value = Int(1)
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -50,7 +50,39 @@ class TestRangeEditor(unittest.TestCase):
     def test_custom_editor_format_func(self):
         self.check_range_enum_editor_format_func("custom")
 
-    def check_set_with_text(self, mode):
+    def check_set_with_text_valid(self, mode):
+        model = RangeModel()
+        view = View(
+            Item(
+                "value",
+                editor=RangeEditor(low=1, high=12, mode=mode)
+            )
+        )
+        tester = UITester()
+        with tester.create_ui(model, dict(view=view)) as ui:
+            # sanity check
+            self.assertEqual(model.value, 1)
+            number_field = tester.find_by_name(ui, "value")
+            text = number_field.locate(locator.WidgetType.textbox)
+            text.perform(command.KeyClick("0"))
+            text.perform(command.KeyClick("Enter"))
+            displayed = text.inspect(query.DisplayedText())
+            self.assertEqual(model.value, 10)
+            self.assertEqual(displayed, str(model.value))
+
+    def test_simple_slider_editor_set_with_text_valid(self):
+        return self.check_set_with_text_valid(mode='slider')
+
+    def test_large_range_slider_editor_set_with_text_valid(self):
+        return self.check_set_with_text_valid(mode='xslider')
+
+    def test_log_range_slider_editor_set_with_text_valid(self):
+        return self.check_set_with_text_valid(mode='logslider')
+
+    def test_range_text_editor_set_with_text_valid(self):
+        return self.check_set_with_text_valid(mode='text')
+
+    def check_set_with_text_after_empty(self, mode):
         model = RangeModel()
         view = View(
             Item(
@@ -62,6 +94,7 @@ class TestRangeEditor(unittest.TestCase):
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field = tester.find_by_name(ui, "value")
             text = number_field.locate(locator.WidgetType.textbox)
+            # Delete all contents of textbox
             for _ in range(5):
                 text.perform(command.KeyClick("Backspace"))
             text.perform(command.KeyClick("4"))
@@ -70,42 +103,18 @@ class TestRangeEditor(unittest.TestCase):
             self.assertEqual(model.value, 4)
             self.assertEqual(displayed, str(model.value))
 
-    def test_simple_slider_editor_set_with_text(self):
-        return self.check_set_with_text(mode='slider')
+    def test_simple_slider_editor_set_with_text_after_empty(self):
+        return self.check_set_with_text_after_empty(mode='slider')
 
-    def test_large_range_slider_editor_set_with_text(self):
-        return self.check_set_with_text(mode='xslider')
+    def test_large_range_slider_editor_set_with_text_after_empty(self):
+        return self.check_set_with_text_after_empty(mode='xslider')
 
-    def test_log_range_slider_editor_set_with_text(self):
-        return self.check_set_with_text(mode='logslider')
+    def test_log_range_slider_editor_set_with_text_after_empty(self):
+        return self.check_set_with_text_after_empty(mode='logslider')
 
+    # on wx the text style editor gives an error whenever the textbox
+    # is empty, even if enter has not been pressed. 
     @requires_toolkit([ToolkitName.qt])
-    def test_range_text_editor_set_with_text(self):
-        return self.check_set_with_text(mode='text')
-    
-    @requires_toolkit([ToolkitName.wx])
-    def test_range_text_editor_set_with_text_wx(self):
-        # this test is seperate to avoid an invalid state after deleting
-        # contents of textbox
-        model = RangeModel()
-        view = View(
-            Item(
-                "value",
-                editor=RangeEditor(low=1, high=12, mode='text')
-            )
-        )
-        tester = UITester()
-        with tester.create_ui(model, dict(view=view)) as ui:
-            number_field = tester.find_by_name(ui, "value")
-            text = number_field.locate(locator.WidgetType.textbox)
-            text.perform(command.KeyClick("1"))
-            text.perform(command.KeyClick("Enter"))
-            displayed = text.inspect(query.DisplayedText())
-            self.assertEqual(model.value, 11)
-            self.assertEqual(displayed, str(model.value))
-            text.perform(command.KeyClick("Backspace"))
-            text.perform(command.KeyClick("0"))
-            text.perform(command.KeyClick("Enter"))
-            displayed = text.inspect(query.DisplayedText())
-            self.assertEqual(model.value, 10)
-            self.assertEqual(displayed, str(model.value))
+    def test_range_text_editor_set_with_text_after_empty(self):
+        return self.check_set_with_text_after_empty(mode='text')
+
