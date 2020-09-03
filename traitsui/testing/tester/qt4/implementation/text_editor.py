@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-from traitsui.testing.tester import command, query
+from traitsui.testing.tester import query
 from traitsui.testing.tester.qt4 import helpers
 from traitsui.testing.tester.qt4.common_ui_targets import (
     register_editable_textbox_handlers,
@@ -34,10 +34,10 @@ def register(registry):
             target_class=target_class,
             widget_getter=lambda wrapper: wrapper.target.control,
         )
-    for target_class in [ReadonlyEditor]:
-        registry.register_handler(
-            target_class=target_class,
-            interaction_class=query.DisplayedText,
-            handler=lambda wrapper, _: helpers.displayed_text_qobject(
-                wrapper.target.control),
-        )
+
+    registry.register_handler(
+        target_class=ReadonlyEditor,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, _: helpers.displayed_text_qobject(
+            wrapper.target.control),
+    )
