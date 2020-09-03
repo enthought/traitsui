@@ -55,6 +55,82 @@ def mouse_click_checkbox(control, delay):
     control.ProcessWindowEvent(click_event)
 
 
+def mouse_click_combobox_or_choice(control, index, delay):
+    """ Simulates performing a mouce click on a wx combo box on the entry at
+    the given index.
+
+    Parameters
+    ----------
+    control : wxComboBox or wxChoice
+        The wx Object to be clicked.
+    index : int
+        The index of the item in the combobox to be clicked
+    delay: int
+        Time delay (in ms) in which click will be performed.
+    """
+    if not control.IsEnabled():
+        return
+    wx.MilliSleep(delay)
+    if isinstance(control, wx.ComboBox):
+        click_event = wx.CommandEvent(
+            wx.wxEVT_COMMAND_COMBOBOX_SELECTED, control.GetId()
+        )
+    elif isinstance(control, wx.Choice):
+        click_event = wx.CommandEvent(
+            wx.wxEVT_COMMAND_CHOICE_SELECTED, control.GetId()
+        )
+    else:
+        raise TypeError
+    click_event.SetEventObject(control)
+    click_event.SetString(control.GetString(index))
+    control.ProcessWindowEvent(click_event)
+
+
+def mouse_click_listbox(control, index, delay):
+    """ Simulates performing a mouce click on a wx list box on the entry at
+    the given index.
+
+    Parameters
+    ----------
+    control : wxListBox
+        The wx Object to be clicked.
+    index : int
+        The index of the item in the combobox to be clicked
+    delay: int
+        Time delay (in ms) in which click will be performed.
+    """
+    if not control.IsEnabled():
+        return
+    wx.MilliSleep(delay)
+    click_event = wx.CommandEvent(
+        wx.wxEVT_COMMAND_LISTBOX_SELECTED, control.GetId()
+    )
+    click_event.SetEventObject(control)
+    control.SetSelection(index)
+    control.ProcessWindowEvent(click_event)
+
+
+def mouse_click_radiobutton(control, delay):
+    """ Performs a mouce click on a wx radio button.
+
+    Parameters
+    ----------
+    control : wxRadioButton
+        The wx Object to be clicked.
+    delay: int
+        Time delay (in ms) in which click will be performed.
+    """
+    if not control.IsEnabled():
+        return
+    wx.MilliSleep(delay)
+    click_event = wx.CommandEvent(
+        wx.wxEVT_COMMAND_RADIOBUTTON_SELECTED, control.GetId()
+    )
+    click_event.SetEventObject(control)
+    control.SetValue(not control.GetValue())
+    control.ProcessWindowEvent(click_event)
+
+
 def mouse_click_object(control, delay):
     """ Performs a mouce click on a wxTextCtrl.
 
@@ -93,9 +169,12 @@ def mouse_click_child_in_panel(control, index, delay):
     obj = children_list[index].GetWindow()
     if isinstance(obj, wx.CheckBox):
         mouse_click_checkbox(obj, delay)
+    elif isinstance(obj, wx.RadioButton):
+        mouse_click_radiobutton(obj, delay)
     else:
         raise NotImplementedError(
-            "The only currently supported child object type is wx.CheckBox"
+            "The only currently supported child object types are wx.CheckBox"
+            " and wx.RadioButton"
         )
 
 

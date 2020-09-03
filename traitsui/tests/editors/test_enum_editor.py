@@ -14,7 +14,8 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
-
+from traitsui.testing.tester import command, locator
+from traitsui.testing.tester.ui_tester import UITester
 
 is_windows = platform.system() == "Windows"
 
@@ -318,14 +319,13 @@ class TestSimpleEnumEditor(unittest.TestCase):
 
     def check_enum_index_update(self, view):
         enum_edit = EnumModel()
-
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view) as editor:
+        tester = UITester(delay=500)
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
             self.assertEqual(enum_edit.value, "one")
 
-            set_combobox_index(editor.control, 1)
-            process_cascade_events()
+            combobox = tester.find_by_name(ui, "value")
+            combobox.locate(locator.Index(1)).perform(command.MouseClick())
 
             self.assertEqual(enum_edit.value, "two")
 
@@ -439,16 +439,15 @@ class TestRadioEnumEditor(unittest.TestCase):
 
     def test_radio_enum_editor_pick(self):
         enum_edit = EnumModel()
-
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, get_view("custom")) as editor:
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=get_view("custom"))) as ui:
 
             self.assertEqual(enum_edit.value, "one")
 
-            # The layout is: one, three, four \n two
-            click_radio_button(editor.control, 3)
-            process_cascade_events()
+            radio_editor = tester.find_by_name(ui, "value")
+            radio_editor.locate(locator.Index(3)).perform(command.MouseClick())
 
+            # The layout is: one, three, four \n two
             self.assertEqual(enum_edit.value, "two")
 
 
@@ -477,14 +476,13 @@ class TestListEnumEditor(unittest.TestCase):
 
     def check_enum_index_update(self, view):
         enum_edit = EnumModel()
-
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view) as editor:
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
             self.assertEqual(enum_edit.value, "one")
 
-            set_list_widget_selected_index(editor.control, 1)
-            process_cascade_events()
+            combobox = tester.find_by_name(ui, "value")
+            combobox.locate(locator.Index(1)).perform(command.MouseClick())
 
             self.assertEqual(enum_edit.value, "two")
 
