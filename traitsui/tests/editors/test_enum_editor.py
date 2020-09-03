@@ -319,7 +319,7 @@ class TestSimpleEnumEditor(unittest.TestCase):
 
     def check_enum_index_update(self, view):
         enum_edit = EnumModel()
-        tester = UITester(delay=500)
+        tester = UITester()
         with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
             self.assertEqual(enum_edit.value, "one")

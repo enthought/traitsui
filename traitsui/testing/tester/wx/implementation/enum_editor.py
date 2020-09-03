@@ -15,40 +15,8 @@ from traitsui.wx.enum_editor import (
     SimpleEditor,
 )
 from traitsui.testing.tester import command, locator
+from traitsui.testing.tester.base_classes import _IndexedEditor
 from traitsui.testing.tester.wx import helpers
-
-
-class _IndexedEditor:
-    """ Wrapper for Editor and index """
-
-    target_class = None
-    handlers = []
-    solvers = []
-
-    def __init__(self, target, index):
-        self.target = target
-        self.index = index
-
-    @classmethod
-    def register(cls, registry):
-        registry.register_solver(
-            target_class=cls.target_class,
-            locator_class=locator.Index,
-            solver=lambda wrapper, location: 
-                cls(target=wrapper.target, index=location.index),
-        )
-        for interaction_class, handler in cls.handlers:
-            registry.register_handler(
-                target_class=cls,
-                interaction_class=interaction_class,
-                handler=handler
-            )
-        for location_class, solver in cls.solvers:
-            registry.register_solver(
-                target_class=cls,
-                interaction_class=location_class,
-                solver=solver,
-            )
 
 
 class _IndexedListEditor(_IndexedEditor):
