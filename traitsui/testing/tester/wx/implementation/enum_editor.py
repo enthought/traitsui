@@ -18,8 +18,12 @@ from traitsui.testing.tester import command, locator
 from traitsui.testing.tester.wx import helpers
 
 
-class _IndexedListEditor:
-    """ Wrapper for (list) EnumEditor and index """
+class _IndexedEditor:
+    """ Wrapper for Editor and index """
+
+    target_class = None
+    handlers = []
+    solvers = []
 
     def __init__(self, target, index):
         self.target = target
@@ -28,73 +32,56 @@ class _IndexedListEditor:
     @classmethod
     def register(cls, registry):
         registry.register_solver(
-            target_class=ListEditor,
+            target_class=cls.target_class,
             locator_class=locator.Index,
             solver=lambda wrapper, location: 
                 cls(target=wrapper.target, index=location.index),
         )
-        registry.register_handler(
-            target_class=cls,
-            interaction_class=command.MouseClick,
-            handler=lambda wrapper, _: helpers.mouse_click_listbox(
-                control=wrapper.target.target.control,
-                index=wrapper.target.index,
-                delay=wrapper.delay,
+        for interaction_class, handler in cls.handlers:
+            registry.register_handler(
+                target_class=cls,
+                interaction_class=interaction_class,
+                handler=handler
             )
-        )
-
-
-class _IndexedRadioEditor:
-    """ Wrapper for RadioEditor and an index.
-    """
-
-    def __init__(self, target, index):
-        self.target = target
-        self.index = index
-
-    @classmethod
-    def register(cls, registry):
-        registry.register_solver(
-            target_class=RadioEditor,
-            locator_class=locator.Index,
-            solver=lambda wrapper, location:
-                cls(target=wrapper.target,index=location.index),
-        )
-        registry.register_handler(
-            target_class=cls,
-            interaction_class=command.MouseClick,
-            handler=lambda wrapper, _: helpers.mouse_click_child_in_panel(
-                control=wrapper.target.target.control,
-                index=wrapper.target.index,
-                delay=wrapper.delay,
+        for location_class, solver in cls.solvers:
+            registry.register_solver(
+                target_class=cls,
+                interaction_class=location_class,
+                solver=solver,
             )
+
+
+class _IndexedListEditor(_IndexedEditor):
+    target_class = ListEditor
+    handlers = [
+        (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_listbox(
+            control=wrapper.target.target.control,
+            index=wrapper.target.index,
+            delay=wrapper.delay))
         )
+    ]
 
 
-class _IndexedSimpleEditor:
-    """ Wrapper for (simple) EnumEditor and an index."""
-
-    def __init__(self, target, index):
-        self.target = target
-        self.index = index
-
-    @classmethod
-    def register(cls, registry):
-        registry.register_solver(
-            target_class=SimpleEditor,
-            locator_class=locator.Index,
-            solver=lambda wrapper, location:
-                cls(target=wrapper.target, index=location.index),
-        )
-        registry.register_handler(
-            target_class=cls,
-            interaction_class=command.MouseClick,
-            handler=lambda wrapper, _: helpers.mouse_click_combobox_or_choice(
+class _IndexedRadioEditor(_IndexedEditor):
+    target_class = RadioEditor
+    handlers = [
+        (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_child_in_panel(
                 control=wrapper.target.target.control,
                 index=wrapper.target.index,
-                delay=wrapper.delay,
-            ),
+                delay=wrapper.delay))
         )
+    ]
+
+
+class _IndexedSimpleEditor(_IndexedEditor):
+    target_class = SimpleEditor
+    handlers = [
+        (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_combobox_or_choice(
+                control=wrapper.target.target.control,
+                index=wrapper.target.index,
+                delay=wrapper.delay))
+        )
+    ]
 
 
 def register(registry):
