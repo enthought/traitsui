@@ -13,6 +13,7 @@ from traitsui.tests._tools import (
 
 is_windows = platform.system() == "Windows"
 
+
 class RangeModel(HasTraits):
 
     value = Int(1)
@@ -67,10 +68,10 @@ class TestRangeEditor(unittest.TestCase):
             self.assertEqual(model.value, 1)
             number_field = tester.find_by_name(ui, "value")
             text = number_field.locate(locator.WidgetType.textbox)
-            if is_windows and is_wx() and mode=='text':
+            if is_windows and is_wx() and mode == 'text':
                 # For RangeTextEditor on wx and windows, the textbox
                 # automatically gets focus and the full content is selected.
-                # Insertion point is moved to keep the test consistent   
+                # Insertion point is moved to keep the test consistent
                 text.target.textbox.SetInsertionPointEnd()
             text.perform(command.KeyClick("0"))
             text.perform(command.KeyClick("Enter"))
@@ -121,8 +122,7 @@ class TestRangeEditor(unittest.TestCase):
         return self.check_set_with_text_after_empty(mode='logslider')
 
     # on wx the text style editor gives an error whenever the textbox
-    # is empty, even if enter has not been pressed. 
+    # is empty, even if enter has not been pressed.
     @requires_toolkit([ToolkitName.qt])
     def test_range_text_editor_set_with_text_after_empty(self):
         return self.check_set_with_text_after_empty(mode='text')
-

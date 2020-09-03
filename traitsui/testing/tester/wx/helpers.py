@@ -13,7 +13,6 @@ import wx
 
 from traitsui.testing.tester.compat import check_key_compat
 from traitsui.testing.tester.exceptions import Disabled
-from traitsui.wx.key_event_to_name import key_map as _KEY_MAP
 
 
 def mouse_click_button(control, delay):
