@@ -14,7 +14,7 @@ from traitsui.testing.tester import locator
 
 def find_by_name_in_nested_ui(wrapper, location):
     """ Helper function for resolving from a target to a TargetByName. The
-    target must have a solver registered from it to an instance of 
+    target must have a solver registered from it to an instance of
     traitsui.ui.UI
 
     Parameters
@@ -39,7 +39,7 @@ def register_nested_ui_solvers(registry, target_class, nested_ui_getter):
         solvers
     nested_ui_getter : callable(target: target_class) -> traitsui.ui.UI
         A callable specific to the particular target_class that resolves a
-        NestedUI 
+        NestedUI
     """
 
     registry.register_solver(

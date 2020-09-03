@@ -44,7 +44,7 @@ def get_default_registry():
 
     # ListEditor
     list_editor.register(registry)
-    
+
     # RangeEditor
     range_editor.register(registry)
 
