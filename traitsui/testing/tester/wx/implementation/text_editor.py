@@ -57,16 +57,12 @@ def register(registry):
     handlers = [
         (command.KeyClick,
             (lambda wrapper, interaction: helpers.key_click_text_ctrl(
-                helpers.set_default_insertion_point(wrapper.target.control),
-                interaction,
-                wrapper.delay)
+                wrapper.target.control, interaction, wrapper.delay)
             )
         ),
         (command.KeySequence,
             (lambda wrapper, interaction: helpers.key_sequence_text_ctrl(
-                helpers.set_default_insertion_point(wrapper.target.control),
-                interaction,
-                wrapper.delay)
+                wrapper.target.control, interaction, wrapper.delay)
             )
         ),
         (command.MouseClick,

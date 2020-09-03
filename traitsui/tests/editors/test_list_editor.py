@@ -97,7 +97,7 @@ class TestCustomListEditor(unittest.TestCase):
         obj = ListTraitTest(people=get_people())
         tester = UITester()
         with tester.create_ui(obj) as ui:
+            people_list = tester.find_by_name(ui, "people")
+            item = people_list.locate(locator.Index(10))
             with self.assertRaises(IndexError):
-                people_list = tester.find_by_name(ui, "people")
-                item = people_list.locate(locator.Index(10))
                 item.find_by_name("name")
