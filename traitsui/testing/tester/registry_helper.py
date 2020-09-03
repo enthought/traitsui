@@ -14,7 +14,7 @@ from traitsui.testing.tester import locator
 
 def find_by_name_in_nested_ui(wrapper, location):
     """ Helper function for resolving from a target to a TargetByName. The
-    target mush have a solver registered from it to an instance of 
+    target must have a solver registered from it to an instance of 
     traitsui.ui.UI
 
     Parameters
@@ -27,28 +27,28 @@ def find_by_name_in_nested_ui(wrapper, location):
 
 
 def register_nested_ui_solvers(registry, target_class, nested_ui_getter):
-        """ Function to register solvers for a particular target type to
-        NestedUIs and TargetByNames within those NestedUIs.
+    """ Function to register solvers for a particular target type to
+    NestedUIs and TargetByNames within those NestedUIs.
 
-        Parameters
-        ----------
-        registry : TargetRegistry
-            The registry being registered to
-        target_class : subclass of type
-            The type of a UI target being used as the target_class for the
-            solvers
-        nested_ui_getter : callable
-            A callable specific to the particular target_class that resolves a
-            NestedUI 
-        """
+    Parameters
+    ----------
+    registry : TargetRegistry
+        The registry being registered to
+    target_class : subclass of type
+        The type of a UI target being used as the target_class for the
+        solvers
+    nested_ui_getter : callable(target: target_class) -> traitsui.ui.UI
+        A callable specific to the particular target_class that resolves a
+        NestedUI 
+    """
 
-        registry.register_solver(
-            target_class=target_class,
-            locator_class=locator.NestedUI,
-            solver=lambda wrapper, _: nested_ui_getter(wrapper.target),
-        )
-        registry.register_solver(
-            target_class=target_class,
-            locator_class=locator.TargetByName,
-            solver=find_by_name_in_nested_ui,
-        )
+    registry.register_solver(
+        target_class=target_class,
+        locator_class=locator.NestedUI,
+        solver=lambda wrapper, _: nested_ui_getter(wrapper.target),
+    )
+    registry.register_solver(
+        target_class=target_class,
+        locator_class=locator.TargetByName,
+        solver=find_by_name_in_nested_ui,
+    )
