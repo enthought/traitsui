@@ -56,15 +56,15 @@ def mouse_click_checkbox(control, delay):
 
 
 def mouse_click_combobox_or_choice(control, index, delay):
-    """ Simulates performing a mouce click on a wx combo box on the entry at
-    the given index.
+    """ Performs a mouce click on either a wx combo box or a wx choice on the
+    entry at the given index.
 
     Parameters
     ----------
     control : wxComboBox or wxChoice
         The wx Object to be clicked.
     index : int
-        The index of the item in the combobox to be clicked
+        The index of the item in the combobox/choice to be clicked
     delay: int
         Time delay (in ms) in which click will be performed.
     """
@@ -87,7 +87,7 @@ def mouse_click_combobox_or_choice(control, index, delay):
 
 
 def mouse_click_listbox(control, index, delay):
-    """ Simulates performing a mouce click on a wx list box on the entry at
+    """Performs a mouce click on a wx list box on the entry at
     the given index.
 
     Parameters
@@ -95,7 +95,7 @@ def mouse_click_listbox(control, index, delay):
     control : wxListBox
         The wx Object to be clicked.
     index : int
-        The index of the item in the combobox to be clicked
+        The index of the item in the list box to be clicked
     delay: int
         Time delay (in ms) in which click will be performed.
     """
@@ -154,6 +154,7 @@ def mouse_click_object(control, delay):
 
 def mouse_click_child_in_panel(control, index, delay):
     """ Performs a mouce click on a child of a Wx Panel.
+    
     Parameters
     ----------
     control : wx.Panel
