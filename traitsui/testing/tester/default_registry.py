@@ -23,14 +23,14 @@ def get_default_registry():
     -------
     registry : TargetRegistry
         The default registry containing implementations for TraitsUI editors
-        that is toolkit specific.  
+        that is toolkit specific.
     """
     # side-effect to determine current toolkit
-    from pyface.toolkit import toolkit_object
-
+    from pyface.toolkit import toolkit_object  # noqa
     if ETSConfig.toolkit == "null":
         return TargetRegistry()
     else:
         toolkit = {'wx': 'wx', 'qt4': 'qt4', 'qt': 'qt4'}[ETSConfig.toolkit]
-        module = importlib.import_module(".default_registry", "traitsui.testing.tester." + toolkit)
+        module = importlib.import_module(".default_registry",
+                                         "traitsui.testing.tester." + toolkit)
         return module.get_default_registry()

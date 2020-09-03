@@ -162,7 +162,7 @@ def parse_source(file_name):
         # Print an error message instead of failing silently.
         # Ideally, the message would be output to the "log" tab.
         traceback_text = traceback.format_exc()
-        error_fmt = u"""Sorry, something went wrong.\n\n{}"""
+        error_fmt = """Sorry, something went wrong.\n\n{}"""
         error_msg = error_fmt.format(traceback_text)
         return (error_msg, "")
 
@@ -453,7 +453,7 @@ class DemoFile(DemoFileBase):
     locals = Dict(Str, Any)
 
     def init(self):
-        super(DemoFile, self).init()
+        super().init()
         description, source = parse_source(self.path)
         self.description = publish_html_str(description, self.css_filename)
         self.source = source
@@ -508,7 +508,7 @@ class DemoFile(DemoFileBase):
 class DemoContentFile(DemoFileBase):
 
     def init(self):
-        super(DemoContentFile, self).init()
+        super().init()
         file_str = _read_file(self.path)
         self.description = publish_html_str(file_str, self.css_filename)
 
@@ -516,7 +516,7 @@ class DemoContentFile(DemoFileBase):
 class DemoImageFile(DemoFileBase):
 
     def init(self):
-        super(DemoImageFile, self).init()
+        super().init()
         rst_content = ".. image:: {}".format(self.name)
         self.description = publish_html_str(rst_content, self.css_filename)
 

@@ -103,7 +103,7 @@ class SimpleEditor(EditorWithList):
                     del cur_value[i]
                     modified = True
                 except TypeError as e:
-                    logger.warn(
+                    logger.warning(
                         "Unable to remove non-current value [%s] from "
                         "values %s",
                         cur_value[i],

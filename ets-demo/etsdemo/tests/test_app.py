@@ -272,13 +272,13 @@ class TestParseSource(unittest.TestCase):
         with self.assertRaises(TypeError):
             docstring, source = extract_docstring_from_source(source_code)
 
-        source_code = u""
+        source_code = ""
         docstring, source = extract_docstring_from_source(source_code)
-        self.assertEqual((u"", u""), (docstring, source))
+        self.assertEqual(("", ""), (docstring, source))
 
-        source_code = u'''""" Module description """\nx=1\ny=2'''
+        source_code = '''""" Module description """\nx=1\ny=2'''
         docstring, source = extract_docstring_from_source(source_code)
-        expected = (u" Module description ", "x=1\ny=2")
+        expected = (" Module description ", "x=1\ny=2")
         self.assertEqual(expected, (docstring, source))
 
     def test_parse_source(self):

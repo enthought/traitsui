@@ -15,6 +15,12 @@ class TesterError(Exception):
     pass
 
 
+class Disabled(TesterError):
+    """ Raised when a simulation fails because the widget is disabled.
+    """
+    pass
+
+
 class InteractionNotSupported(TesterError):
     """ Raised when an interaction is not supported by a wrapper.
 

@@ -652,7 +652,7 @@ class NotebookEditor(Editor):
                 if name is None:
                     name = str(
                         xgetattr(
-                            view_object, self.factory.page_name[1:], u"???"
+                            view_object, self.factory.page_name[1:], "???"
                         )
                     )
 
@@ -691,7 +691,7 @@ class NotebookEditor(Editor):
                 if handler_name is not None:
                     name = handler_name
                 else:
-                    name = str(name) or u"???"
+                    name = str(name) or "???"
                 view_object.on_trait_change(
                     self.update_page_name, page_name[1:], dispatch="ui"
                 )

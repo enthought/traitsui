@@ -17,6 +17,22 @@ a UI target where further location resolution or user interaction can be
 applied.
 """
 
+import enum
+
+
+class Index:
+    """ A locator for locating a target that is uniquely specified by a single
+    0-based index.
+
+    Attributes
+    ----------
+    index : int
+        0-based index
+    """
+
+    def __init__(self, index):
+        self.index = index
+
 
 class NestedUI:
     """ A locator for locating a nested ``traitsui.ui.UI`` object assuming
@@ -35,3 +51,16 @@ class TargetByName:
     """
     def __init__(self, name):
         self.name = name
+
+
+class WidgetType(enum.Enum):
+    """ A locator for locating nested widgets within a UI. Many editors will
+    contain many sub-widgets (e.g. a textbox, slider, tabs, buttons, etc.).
+
+    For example when working with a range editor, one could call
+    ``tester.find_by_name(ui, "number").locate(locator.WidgetType.textbox)``
+    where number utilizes a Range Editor.
+    """
+
+    # A textbox within a UI
+    textbox = "textbox"

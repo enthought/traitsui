@@ -10,6 +10,13 @@
 #
 
 from traitsui.testing.tester.registry import TargetRegistry
+from traitsui.testing.tester.wx import common_ui_targets
+from traitsui.testing.tester.wx.implementation import (
+    button_editor,
+    check_list_editor,
+    range_editor,
+    text_editor,
+)
 
 
 def get_default_registry():
@@ -19,7 +26,22 @@ def get_default_registry():
     -------
     registry : TargetRegistry
         The default registry containing implementations for TraitsUI editors
-        that is wx specific.  
+        that is wx specific.
     """
     registry = TargetRegistry()
+
+    common_ui_targets.LocatedTextbox.register(registry)
+
+    # ButtonEditor
+    button_editor.register(registry)
+
+    # CheckListEditor
+    check_list_editor.register(registry)
+
+    # TextEditor
+    text_editor.register(registry)
+
+    # RangeEditor
+    range_editor.register(registry)
+
     return registry

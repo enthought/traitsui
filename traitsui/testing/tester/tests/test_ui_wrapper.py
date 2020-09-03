@@ -117,6 +117,7 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
         # supported.
 
         class EmptyRegistry1:
+
             def get_handler(self, target_class, interaction_class):
                 raise InteractionNotSupported(
                     target_class=None,
@@ -125,6 +126,7 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
                 )
 
         class EmptyRegistry2:
+
             def get_handler(self, target_class, interaction_class):
                 raise InteractionNotSupported(
                     target_class=None,
