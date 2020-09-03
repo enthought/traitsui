@@ -13,44 +13,6 @@ import wx
 
 from traitsui.testing.tester.compat import check_key_compat
 from traitsui.testing.tester.exceptions import Disabled
-from traitsui.wx.key_event_to_name import key_map as _KEY_MAP
-
-
-def key_click(widget, key, delay=0):
-    """ Performs a key click of the given key on the given widget after
-    a delay.
-
-    Parameters
-    ----------
-    widget : wx.TextCtrl
-        The wx Object to be key cliecked to.
-    key : str
-        Standardized (pyface) name for a keyboard event.
-        e.g. "Enter", "Tab", "Space", "0", "1", "A", ...
-        Note: modifiers (e.g. Shift, Alt, etc. are not currently supported)
-    delay : int
-        Time delay (in ms) in which the key click will be performed.
-    """
-
-    mapping = {name: event for event, name in _KEY_MAP.items()}
-    if key not in mapping:
-        try:
-            KEY = ord(key)
-        except [TypeError, ValueError]:
-            raise ValueError(
-                "Unknown key {!r}. Expected one of these: {!r}, or a unicode character".format(  # noqa
-                    key, sorted(mapping)
-                ))
-        else:
-            wx.MilliSleep(delay)
-            key_event = wx.KeyEvent(wx.wxEVT_CHAR)
-            key_event.SetUnicodeKey(KEY)
-            widget.EmulateKeyPress(key_event)
-    else:
-        wx.MilliSleep(delay)
-        key_event = wx.KeyEvent(wx.wxEVT_CHAR)
-        key_event.SetKeyCode(mapping[key])
-        widget.EmulateKeyPress(key_event)
 
 
 def mouse_click_button(control, delay):
@@ -155,14 +117,19 @@ def key_click_text_ctrl(control, interaction, delay):
         raise Disabled("{!r} is disabled.".format(control))
     if not control.HasFocus():
         control.SetFocus()
-    # EmulateKeyPress in key_click seems to not be handling "Enter"
-    # correctly.
+        control.SetInsertionPointEnd()
     if interaction.key == "Enter":
         wx.MilliSleep(delay)
         event = wx.CommandEvent(wx.EVT_TEXT_ENTER.typeId, control.GetId())
         control.ProcessEvent(event)
+    elif interaction.key == "Backspace":
+        wx.MilliSleep(delay)
+        pos = control.GetInsertionPoint()
+        control.Remove(max(0, pos - 1), pos)
     else:
-        key_click(control, interaction.key, delay)
+        check_key_compat(interaction.key)
+        wx.MilliSleep(delay)
+        control.WriteText(interaction.key)
 
 
 def key_sequence_text_ctrl(control, interaction, delay):
