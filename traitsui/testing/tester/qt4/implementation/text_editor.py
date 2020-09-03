@@ -11,6 +11,9 @@
 
 from traitsui.testing.tester import command, query
 from traitsui.testing.tester.qt4 import helpers
+from traitsui.testing.tester.qt4.common_ui_targets import (
+    register_editable_textbox_handlers,
+)
 from traitsui.qt4.text_editor import CustomEditor, ReadonlyEditor, SimpleEditor
 
 
@@ -25,26 +28,13 @@ def register(registry):
         The registry being registered to.
     """
 
-    handlers = [
-        (command.KeySequence,
-            (lambda wrapper, interaction: helpers.key_sequence_textbox(
-                wrapper.target.control, interaction, wrapper.delay))),
-        (command.KeyClick,
-            (lambda wrapper, interaction: helpers.key_click_qwidget(
-                wrapper.target.control, interaction, wrapper.delay))),
-        (command.MouseClick,
-            (lambda wrapper, _: helpers.mouse_click_qwidget(
-                wrapper.target.control, wrapper.delay))),
-    ]
     for target_class in [CustomEditor, SimpleEditor]:
-        for interaction_class, handler in handlers:
-            registry.register_handler(
-                target_class=target_class,
-                interaction_class=interaction_class,
-                handler=handler,
-            )
-
-    for target_class in [CustomEditor, ReadonlyEditor, SimpleEditor]:
+        register_editable_textbox_handlers(
+            registry=registry,
+            target_class=target_class,
+            widget_getter=lambda wrapper: wrapper.target.control,
+        )
+    for target_class in [ReadonlyEditor]:
         registry.register_handler(
             target_class=target_class,
             interaction_class=query.DisplayedText,

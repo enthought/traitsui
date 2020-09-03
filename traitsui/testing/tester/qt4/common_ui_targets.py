@@ -44,22 +44,44 @@ class LocatedTextbox:
         registry : TargetRegistry
             The registry being registered to.
         """
-        handlers = [
-            (command.KeySequence,
-                (lambda wrapper, interaction: helpers.key_sequence_textbox(
-                    wrapper.target.textbox, interaction, wrapper.delay))),
-            (command.KeyClick,
-                (lambda wrapper, interaction: helpers.key_click_qwidget(
-                    wrapper.target.textbox, interaction, wrapper.delay))),
-            (command.MouseClick,
-                (lambda wrapper, _: helpers.mouse_click_qwidget(
-                    wrapper.target.textbox, wrapper.delay))),
-            (query.DisplayedText,
-                lambda wrapper, _: wrapper.target.textbox.displayText()),
-        ]
-        for interaction_class, handler in handlers:
-            registry.register_handler(
-                target_class=cls,
-                interaction_class=interaction_class,
-                handler=handler,
-            )
+        register_editable_textbox_handlers(
+            registry=registry,
+            target_class=cls,
+            widget_getter=lambda wrapper: wrapper.target.textbox,
+        )
+
+
+def register_editable_textbox_handlers(registry, target_class, widget_getter):
+    """ Register common interactions for an editable textbox (in Qt)
+
+    Parameters
+    ----------
+    registry : TargetRegistry
+        The registry being registered to.
+    target_class : subclass of type
+        The type of target being wrapped in a UIWrapper on which the
+        interaction will be performed.
+    widget_getter : callable(wrapper: UIWrapper) -> QWidget
+        A callable to return a Qt widget for editing text, i.e. QLineEdit
+        or QTextEdit.
+    """
+    handlers = [
+        (command.KeySequence,
+            (lambda wrapper, interaction: helpers.key_sequence_textbox(
+                widget_getter(wrapper), interaction, wrapper.delay))),
+        (command.KeyClick,
+            (lambda wrapper, interaction: helpers.key_click_qwidget(
+                widget_getter(wrapper), interaction, wrapper.delay))),
+        (command.MouseClick,
+            (lambda wrapper, _: helpers.mouse_click_qwidget(
+                widget_getter(wrapper), wrapper.delay))),
+        (query.DisplayedText,
+            lambda wrapper, _: helpers.displayed_text_qobject(
+                widget_getter(wrapper))),
+    ]
+    for interaction_class, handler in handlers:
+        registry.register_handler(
+            target_class=target_class,
+            interaction_class=interaction_class,
+            handler=handler,
+        )
