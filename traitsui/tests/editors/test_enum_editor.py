@@ -45,52 +45,6 @@ def get_evaluate_view(style, auto_set=True, mode="radio"):
     )
 
 
-def get_combobox_text(combobox):
-    """ Return the text given a combobox control """
-    if is_wx():
-        import wx
-
-        if isinstance(combobox, wx.Choice):
-            return combobox.GetString(combobox.GetSelection())
-        else:
-            return combobox.GetValue()
-
-    elif is_qt():
-        return combobox.currentText()
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
-def get_list_widget_text(list_widget):
-    """ Return the text of currently selected item in given list widget. """
-    if is_wx():
-        selected_item_idx = list_widget.GetSelection()
-        return list_widget.GetString(selected_item_idx)
-
-    elif is_qt():
-        return list_widget.currentItem().text()
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
-def set_list_widget_selected_index(list_widget, idx):
-    """ Set the choice index given a list widget control and index number. """
-    if is_wx():
-        import wx
-
-        list_widget.SetSelection(idx)
-        event = wx.CommandEvent(wx.EVT_LISTBOX.typeId, list_widget.GetId())
-        wx.PostEvent(list_widget, event)
-
-    elif is_qt():
-        list_widget.setCurrentRow(idx)
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestEnumEditorMapping(unittest.TestCase):
 
@@ -204,13 +158,6 @@ class TestEnumEditorMapping(unittest.TestCase):
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSimpleEnumEditor(unittest.TestCase):
 
-    @contextlib.contextmanager
-    def setup_gui(self, model, view):
-        with create_ui(model, dict(view=view)) as ui:
-            process_cascade_events()
-            editor = ui.get_editors("value")[0]
-            yield editor
-
     def check_enum_text_update(self, view):
         enum_edit = EnumModel()
 
@@ -311,8 +258,8 @@ class TestSimpleEnumEditor(unittest.TestCase):
         enum_edit = EnumModel()
         resizable_view = View(UItem("value", style="simple", resizable=True))
 
-        with reraise_exceptions(), \
-                create_ui(enum_edit, dict(view=resizable_view)):
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=resizable_view)):
             pass
 
     def test_simple_editor_rebuild_editor_evaluate(self):
@@ -323,9 +270,8 @@ class TestSimpleEnumEditor(unittest.TestCase):
         )
         view = View(UItem("value", editor=enum_editor_factory, style="simple"))
 
-        with reraise_exceptions(), \
-                create_ui(EnumModel(), dict(view=view)):
-
+        tester = UITester()
+        with tester.create_ui(EnumModel(), dict(view=view)):
             enum_editor_factory.values = ["one", "two", "three"]
 
 
@@ -375,13 +321,6 @@ class TestRadioEnumEditor(unittest.TestCase):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestListEnumEditor(unittest.TestCase):
-
-    @contextlib.contextmanager
-    def setup_gui(self, model, view):
-        with create_ui(model, dict(view=view)) as ui:
-            process_cascade_events()
-            editor = ui.get_editors("value")[0]
-            yield editor
 
     def check_enum_text_update(self, view):
         enum_edit = EnumModel()
