@@ -28,10 +28,10 @@ class _IndexedListEditor(_SourceWithLocation):
     locator_class = locator.Index
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_item_view(
-                model=wrapper.target.source.control.model(),
-                view=wrapper.target.source.control,
-                index=wrapper.target.source.control.model().index(wrapper.target.location, 0)))
-        )
+            model=wrapper.target.source.control.model(),
+            view=wrapper.target.source.control,
+            index=wrapper.target.source.control.model().index(
+                wrapper.target.location, 0)))),
     ]
 
 
@@ -42,9 +42,8 @@ class _IndexedRadioEditor(_SourceWithLocation):
     locator_class = locator.Index
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_qlayout(
-                layout=wrapper.target.source.control.layout(),
-                index=wrapper.target.location))
-        )
+            layout=wrapper.target.source.control.layout(),
+            index=wrapper.target.location))),
     ]
 
 
@@ -57,19 +56,18 @@ class _IndexedSimpleEditor(_SourceWithLocation):
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_combobox(
             combobox=wrapper.target.source.control,
             index=wrapper.target.location,
-            delay=wrapper.delay))
-        )
+            delay=wrapper.delay))),
     ]
 
 
 def displayed_text_handler(wrapper, interaction):
     """ Handler function used to query DisplayedText for different
-    styles of Enum Editor. 
+    styles of Enum Editor.
 
     Parameters
     ----------
     wrapper : UIWrapper
-        The UIWrapper containing that object with text to be displayed. 
+        The UIWrapper containing that object with text to be displayed.
     interaction : query.DisplayedText
         Unused in this function but included to match the expected format of a
         handler.  Should only be query.DisplayedText
@@ -79,7 +77,7 @@ def displayed_text_handler(wrapper, interaction):
         return control.currentText()
     elif isinstance(control, QtGui.QListWidget):
         return control.currentItem().text()
-    else: # QWdiget with a layout of radio buttons from Radio Editor
+    else:  # QWdiget with a layout of radio buttons from Radio Editor
         for index in range(control.layout().count()):
             if control.layout().itemAt(index).widget().isChecked():
                 return control.layout().itemAt(index).widget().text()
@@ -97,18 +95,16 @@ def register(registry):
     _IndexedSimpleEditor.register(registry)
 
     simple_editor_text_handlers = [
-        (command.KeyClick, (lambda wrapper, interaction:
-            helpers.key_click_qwidget(
+        (command.KeyClick,
+            (lambda wrapper, interaction: helpers.key_click_qwidget(
                 control=wrapper.target.control,
                 interaction=interaction,
-                delay=wrapper.delay))
-        ),
-        (command.KeySequence, (lambda wrapper, interaction:
-            helpers.key_sequence_qwidget(
+                delay=wrapper.delay))),
+        (command.KeySequence,
+            (lambda wrapper, interaction: helpers.key_sequence_qwidget(
                 control=wrapper.target.control,
                 interaction=interaction,
-                delay=wrapper.delay))
-        ),
+                delay=wrapper.delay))),
     ]
 
     for interaction_class, handler in simple_editor_text_handlers:
@@ -118,7 +114,7 @@ def register(registry):
             handler=handler
         )
 
-    for target_class in [SimpleEditor,RadioEditor,ListEditor]:
+    for target_class in [SimpleEditor, RadioEditor, ListEditor]:
         registry.register_handler(
             target_class=target_class,
             interaction_class=query.DisplayedText,

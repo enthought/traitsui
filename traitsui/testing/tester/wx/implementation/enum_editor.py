@@ -29,8 +29,7 @@ class _IndexedListEditor(_SourceWithLocation):
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_listbox(
             control=wrapper.target.source.control,
             index=wrapper.target.location,
-            delay=wrapper.delay))
-        )
+            delay=wrapper.delay))),
     ]
 
 
@@ -40,11 +39,11 @@ class _IndexedRadioEditor(_SourceWithLocation):
     source_class = RadioEditor
     locator_class = locator.Index
     handlers = [
-        (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_child_in_panel(
+        (command.MouseClick,
+            (lambda wrapper, _: helpers.mouse_click_child_in_panel(
                 control=wrapper.target.source.control,
                 index=wrapper.target.location,
-                delay=wrapper.delay))
-        )
+                delay=wrapper.delay))),
     ]
 
 
@@ -54,22 +53,22 @@ class _IndexedSimpleEditor(_SourceWithLocation):
     source_class = SimpleEditor
     locator_class = locator.Index
     handlers = [
-        (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_combobox_or_choice(
+        (command.MouseClick,
+            (lambda wrapper, _: helpers.mouse_click_combobox_or_choice(
                 control=wrapper.target.source.control,
                 index=wrapper.target.location,
-                delay=wrapper.delay))
-        ),
+                delay=wrapper.delay))),
     ]
 
 
 def displayed_text_handler(wrapper, interaction):
     """ Handler function used to query DisplayedText for different
-    styles of Enum Editor. 
+    styles of Enum Editor.
 
     Parameters
     ----------
     wrapper : UIWrapper
-        The UIWrapper containing that object with text to be displayed. 
+        The UIWrapper containing that object with text to be displayed.
     interaction : query.DisplayedText
         Unused in this function but included to match the expected format of a
         handler.  Should only be query.DisplayedText
@@ -77,7 +76,7 @@ def displayed_text_handler(wrapper, interaction):
     control = wrapper.target.control
     if isinstance(control, wx.ComboBox):
         return control.GetValue()
-    else: # wx.Choice or wx.ListBox
+    else:  # wx.Choice or wx.ListBox
         return control.GetString(control.GetSelection())
 
 
@@ -92,20 +91,17 @@ def register(registry):
     _IndexedRadioEditor.register(registry)
     _IndexedSimpleEditor.register(registry)
 
-
     simple_editor_text_handlers = [
-        (command.KeyClick, (lambda wrapper, interaction:
-            helpers.key_click_text_ctrl(
+        (command.KeyClick,
+            (lambda wrapper, interaction: helpers.key_click_text_ctrl(
                 control=wrapper.target.control,
                 interaction=interaction,
-                delay=wrapper.delay))
-        ),
-        (command.KeySequence, (lambda wrapper, interaction:
-            helpers.key_sequence_text_ctrl(
+                delay=wrapper.delay))),
+        (command.KeySequence,
+            (lambda wrapper, interaction: helpers.key_sequence_text_ctrl(
                 control=wrapper.target.control,
                 interaction=interaction,
-                delay=wrapper.delay))
-        ),
+                delay=wrapper.delay))),
     ]
 
     for interaction_class, handler in simple_editor_text_handlers:
@@ -115,7 +111,7 @@ def register(registry):
             handler=handler
         )
 
-    for target_class in [SimpleEditor,RadioEditor,ListEditor]:
+    for target_class in [SimpleEditor, RadioEditor, ListEditor]:
         registry.register_handler(
             target_class=target_class,
             interaction_class=query.DisplayedText,

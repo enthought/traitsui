@@ -48,7 +48,7 @@ def key_click(widget, key, delay=0):
 
 
 def check_q_model_index_valid(index):
-    """ Checks if a given QModelIndex is valid.  
+    """ Checks if a given QModelIndex is valid.
 
     Parameters
     ----------

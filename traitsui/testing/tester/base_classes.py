@@ -11,12 +11,13 @@
 
 from traitsui.testing.tester import locator
 
+
 class _SourceWithLocation:
     """ Wrapper base class to hold locator information together with a source
     (typically an editor).  This is useful for cases in which the location
     information is still necessary when performing actions such as a mouse
     click or key click.
-    
+
     For example, an Enum editor and an index.
     This class is meant to be subclassed for specific usecases, and the
     class level attributes overridden.
@@ -32,7 +33,7 @@ class _SourceWithLocation:
         Parameters
         ----------
         source : subclass of type
-            The source object. Typically this is an editor. 
+            The source object. Typically this is an editor.
         location : Any
             The location information of interest
         """
@@ -75,7 +76,7 @@ class _SourceWithLocation:
         registry.register_solver(
             target_class=cls.source_class,
             locator_class=cls.locator_class,
-            solver=lambda wrapper, location: 
+            solver=lambda wrapper, location:
                 cls.source_to_locator_solver(wrapper, location),
         )
         for interaction_class, handler in cls.handlers:

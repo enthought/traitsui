@@ -7,7 +7,6 @@ from traitsui.api import EnumEditor, UItem, View
 from traitsui.tests._tools import (
     create_ui,
     get_all_button_status,
-    is_qt,
     is_wx,
     process_cascade_events,
     requires_toolkit,
@@ -164,11 +163,11 @@ class TestSimpleEnumEditor(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(enum_edit, dict(view=view)) as ui:
             combobox = tester.find_by_name(ui, "value")
-            displayed  = combobox.inspect(query.DisplayedText())
+            displayed = combobox.inspect(query.DisplayedText())
             self.assertEqual(displayed, "one")
 
             combobox.locate(locator.Index(1)).perform(command.MouseClick())
-            displayed  = combobox.inspect(query.DisplayedText())
+            displayed = combobox.inspect(query.DisplayedText())
             self.assertEqual(displayed, "two")
 
     def check_enum_object_update(self, view):
