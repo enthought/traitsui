@@ -163,13 +163,12 @@ class TestTextEditor(unittest.TestCase, UnittestTools):
         self.check_editor_init_and_dispose(style="custom", auto_set=False)
 
     def test_simple_auto_set_update_text(self):
-        foo = Foo(name="a")
+        foo = Foo()
         view = get_view(style="simple", auto_set=True)
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
-            with self.assertTraitChanges(foo, "name", count=4):
+            with self.assertTraitChanges(foo, "name", count=3):
                 name_field = tester.find_by_name(ui, "name")
-                name_field.perform(command.KeyClick("Backspace"))
                 name_field.perform(command.KeySequence("NEW"))
                 # with auto-set the displayed name should match the name trait
             display_name = name_field.inspect(query.DisplayedText())
