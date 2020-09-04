@@ -54,6 +54,9 @@ class _SourceWithLocation:
         """
         if cls.locator_class == locator.Index:
             return cls(source=wrapper.target, location=location.index)
+        raise NotImplementedError(
+            "Currently, the only supported locator_class is locator.Index"
+        )
 
     @classmethod
     def register(cls, registry):
