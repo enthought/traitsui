@@ -22,32 +22,35 @@ from traitsui.testing.tester.qt4 import helpers
 
 
 class _IndexedListEditor(_IndexedEditor):
-    target_class = ListEditor
+    source_class = ListEditor
+    locator_class = locator.Index
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_item_view(
-                model=wrapper.target.target.control.model(),
-                view=wrapper.target.target.control,
-                index=wrapper.target.target.control.model().index(wrapper.target.index, 0)))
+                model=wrapper.target.source.control.model(),
+                view=wrapper.target.source.control,
+                index=wrapper.target.source.control.model().index(wrapper.target.location, 0)))
         )
     ]
 
 
 class _IndexedRadioEditor(_IndexedEditor):
-    target_class = RadioEditor
+    source_class = RadioEditor
+    locator_class = locator.Index
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_qlayout(
-                layout=wrapper.target.target.control.layout(),
-                index=wrapper.target.index))
+                layout=wrapper.target.source.control.layout(),
+                index=wrapper.target.location))
         )
     ]
 
 
 class _IndexedSimpleEditor(_IndexedEditor):
-    target_class = SimpleEditor
+    source_class = SimpleEditor
+    locator_class = locator.Index
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_combobox(
-            combobox=wrapper.target.target.control,
-            index=wrapper.target.index,
+            combobox=wrapper.target.source.control,
+            index=wrapper.target.location,
             delay=wrapper.delay))
         )
     ]

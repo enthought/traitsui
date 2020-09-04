@@ -21,33 +21,36 @@ from traitsui.testing.tester.wx import helpers
 
 
 class _IndexedListEditor(_IndexedEditor):
-    target_class = ListEditor
+    source_class = ListEditor
+    locator_class = locator.Index
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_listbox(
-            control=wrapper.target.target.control,
-            index=wrapper.target.index,
+            control=wrapper.target.source.control,
+            index=wrapper.target.location,
             delay=wrapper.delay))
         )
     ]
 
 
 class _IndexedRadioEditor(_IndexedEditor):
-    target_class = RadioEditor
+    source_class = RadioEditor
+    locator_class = locator.Index
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_child_in_panel(
-                control=wrapper.target.target.control,
-                index=wrapper.target.index,
+                control=wrapper.target.source.control,
+                index=wrapper.target.location,
                 delay=wrapper.delay))
         )
     ]
 
 
 class _IndexedSimpleEditor(_IndexedEditor):
-    target_class = SimpleEditor
+    source_class = SimpleEditor
+    locator_class = locator.Index
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_combobox_or_choice(
-                control=wrapper.target.target.control,
-                index=wrapper.target.index,
+                control=wrapper.target.source.control,
+                index=wrapper.target.location,
                 delay=wrapper.delay))
         ),
     ]

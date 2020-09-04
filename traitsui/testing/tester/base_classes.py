@@ -14,21 +14,27 @@ from traitsui.testing.tester import locator
 class _IndexedEditor:
     """ Wrapper for Editor and index """
 
-    target_class = None
+    source_class = None
+    locator_class = None
     handlers = []
     solvers = []
 
-    def __init__(self, target, index):
-        self.target = target
-        self.index = index
+    def __init__(self, source, location):
+        self.source = source
+        self.location = location
+
+    @classmethod
+    def source_to_locator_solver(cls, wrapper, location):
+        if cls.locator_class == locator.Index:
+            return cls(source=wrapper.target, location=location.index)
 
     @classmethod
     def register(cls, registry):
         registry.register_solver(
-            target_class=cls.target_class,
-            locator_class=locator.Index,
+            target_class=cls.source_class,
+            locator_class=cls.locator_class,
             solver=lambda wrapper, location: 
-                cls(target=wrapper.target, index=location.index),
+                cls.source_to_locator_solver(wrapper, location),
         )
         for interaction_class, handler in cls.handlers:
             registry.register_handler(
@@ -39,6 +45,6 @@ class _IndexedEditor:
         for location_class, solver in cls.solvers:
             registry.register_solver(
                 target_class=cls,
-                interaction_class=location_class,
+                locator_class=location_class,
                 solver=solver,
             )
