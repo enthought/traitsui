@@ -11,7 +11,7 @@
 
 from traitsui.testing.tester import query
 from traitsui.testing.tester.qt4 import helpers
-from traitsui.testing.tester.qt4.common_ui_targets import (
+from traitsui.testing.tester.qt4.registry_helper import (
     register_editable_textbox_handlers,
 )
 from traitsui.qt4.text_editor import CustomEditor, ReadonlyEditor, SimpleEditor
