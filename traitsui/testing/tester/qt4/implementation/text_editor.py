@@ -9,8 +9,11 @@
 #  Thanks for using Enthought open source!
 #
 
-from traitsui.testing.tester import command, query
+from traitsui.testing.tester import query
 from traitsui.testing.tester.qt4 import helpers
+from traitsui.testing.tester.qt4.registry_helper import (
+    register_editable_textbox_handlers,
+)
 from traitsui.qt4.text_editor import CustomEditor, ReadonlyEditor, SimpleEditor
 
 
@@ -25,29 +28,16 @@ def register(registry):
         The registry being registered to.
     """
 
-    handlers = [
-        (command.KeySequence,
-            (lambda wrapper, interaction: helpers.key_sequence_textbox(
-                wrapper.target.control, interaction, wrapper.delay))),
-        (command.KeyClick,
-            (lambda wrapper, interaction: helpers.key_click_qwidget(
-                wrapper.target.control, interaction, wrapper.delay))),
-        (command.MouseClick,
-            (lambda wrapper, _: helpers.mouse_click_qwidget(
-                wrapper.target.control, wrapper.delay))),
-    ]
     for target_class in [CustomEditor, SimpleEditor]:
-        for interaction_class, handler in handlers:
-            registry.register_handler(
-                target_class=target_class,
-                interaction_class=interaction_class,
-                handler=handler,
-            )
-
-    for target_class in [CustomEditor, ReadonlyEditor, SimpleEditor]:
-        registry.register_handler(
+        register_editable_textbox_handlers(
+            registry=registry,
             target_class=target_class,
-            interaction_class=query.DisplayedText,
-            handler=lambda wrapper, _: helpers.displayed_text_qobject(
-                wrapper.target.control),
+            widget_getter=lambda wrapper: wrapper.target.control,
         )
+
+    registry.register_handler(
+        target_class=ReadonlyEditor,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, _: helpers.displayed_text_qobject(
+            wrapper.target.control),
+    )

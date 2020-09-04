@@ -106,10 +106,10 @@ class TestRangeEditor(unittest.TestCase):
             # Delete all contents of textbox
             for _ in range(5):
                 text.perform(command.KeyClick("Backspace"))
-            text.perform(command.KeyClick("4"))
+            text.perform(command.KeySequence("11"))
             text.perform(command.KeyClick("Enter"))
             displayed = text.inspect(query.DisplayedText())
-            self.assertEqual(model.value, 4)
+            self.assertEqual(model.value, 11)
             self.assertEqual(displayed, str(model.value))
 
     def test_simple_slider_editor_set_with_text_after_empty(self):
