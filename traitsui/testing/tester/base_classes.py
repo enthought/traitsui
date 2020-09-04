@@ -41,11 +41,34 @@ class _SourceWithLocation:
 
     @classmethod
     def source_to_locator_solver(cls, wrapper, location):
+        """ Solver to resolve from the class of the Wrapper's target to a
+        location. The location will have to vary based on the class'
+        locator_class atrribute.
+
+        Parameters
+        ----------
+        wrapper : UIWrapper
+            the UIWrapper whose target is of type source_class
+        location : cls.locator_class
+            The locator object carrying the important location information
+        """
         if cls.locator_class == locator.Index:
             return cls(source=wrapper.target, location=location.index)
 
     @classmethod
     def register(cls, registry):
+        """ Class method to register interactions on a
+        _SourceWithLocation for the given registry. It is expected that this
+        class method will be called by subclasses, and thus interactions would
+        be registered to subclasses rather than the base class.
+
+        If there are any conflicts, an error will occur.
+
+        Parameters
+        ----------
+        registry : TargetRegistry
+            The registry being registered to.
+        """
         registry.register_solver(
             target_class=cls.source_class,
             locator_class=cls.locator_class,
