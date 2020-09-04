@@ -12,7 +12,7 @@
 from traitsui.testing.tester import locator
 
 
-class _SourceWithLocation:
+class _BaseSourceWithLocation:
     """ Wrapper base class to hold locator information together with a source
     (typically an editor).  This is useful for cases in which the location
     information is still necessary when performing actions such as a mouse
@@ -23,10 +23,16 @@ class _SourceWithLocation:
     class level attributes overridden.
     """
 
+    # the source class we want to interact with, typically an Editor
     source_class = None
+    # The locator_class that contains the relevant location information
+    # (e.g. locator.Index)
     locator_class = None
+    # the handlers we want to register for the given source_class
+    # must be given as a list of tuples where the first element is the
+    # interaction class (e.g. command.MouseClick) and the second is the
+    # actual handler function.
     handlers = []
-    solvers = []
 
     def __init__(self, source, location):
         """
@@ -40,24 +46,6 @@ class _SourceWithLocation:
         self.source = source
         self.location = location
 
-    @classmethod
-    def source_to_locator_solver(cls, wrapper, location):
-        """ Solver to resolve from the class of the Wrapper's target to a
-        location. The location will have to vary based on the class'
-        locator_class atrribute.
-
-        Parameters
-        ----------
-        wrapper : UIWrapper
-            the UIWrapper whose target is of type source_class
-        location : cls.locator_class
-            The locator object carrying the important location information
-        """
-        if cls.locator_class == locator.Index:
-            return cls(source=wrapper.target, location=location.index)
-        raise NotImplementedError(
-            "Currently, the only supported locator_class is locator.Index"
-        )
 
     @classmethod
     def register(cls, registry):
@@ -76,18 +64,11 @@ class _SourceWithLocation:
         registry.register_solver(
             target_class=cls.source_class,
             locator_class=cls.locator_class,
-            solver=lambda wrapper, location:
-                cls.source_to_locator_solver(wrapper, location),
+            solver=lambda wrapper, location: cls(wrapper.target, location),
         )
         for interaction_class, handler in cls.handlers:
             registry.register_handler(
                 target_class=cls,
                 interaction_class=interaction_class,
                 handler=handler
-            )
-        for location_class, solver in cls.solvers:
-            registry.register_solver(
-                target_class=cls,
-                locator_class=location_class,
-                solver=solver,
             )

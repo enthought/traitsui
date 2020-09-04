@@ -16,11 +16,11 @@ from traitsui.wx.enum_editor import (
     SimpleEditor,
 )
 from traitsui.testing.tester import command, locator, query
-from traitsui.testing.tester.base_classes import _SourceWithLocation
+from traitsui.testing.tester.base_classes import _BaseSourceWithLocation
 from traitsui.testing.tester.wx import helpers
 
 
-class _IndexedListEditor(_SourceWithLocation):
+class _IndexedListEditor(_BaseSourceWithLocation):
     """ Wrapper class for EnumListEditor and Index.
     """
     source_class = ListEditor
@@ -28,12 +28,12 @@ class _IndexedListEditor(_SourceWithLocation):
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_listbox(
             control=wrapper.target.source.control,
-            index=wrapper.target.location,
+            index=wrapper.target.location.index,
             delay=wrapper.delay))),
     ]
 
 
-class _IndexedRadioEditor(_SourceWithLocation):
+class _IndexedRadioEditor(_BaseSourceWithLocation):
     """ Wrapper class for EnumRadioEditor and Index.
     """
     source_class = RadioEditor
@@ -42,12 +42,12 @@ class _IndexedRadioEditor(_SourceWithLocation):
         (command.MouseClick,
             (lambda wrapper, _: helpers.mouse_click_child_in_panel(
                 control=wrapper.target.source.control,
-                index=wrapper.target.location,
+                index=wrapper.target.location.index,
                 delay=wrapper.delay))),
     ]
 
 
-class _IndexedSimpleEditor(_SourceWithLocation):
+class _IndexedSimpleEditor(_BaseSourceWithLocation):
     """ Wrapper class for Simple EnumEditor and Index.
     """
     source_class = SimpleEditor
@@ -56,7 +56,7 @@ class _IndexedSimpleEditor(_SourceWithLocation):
         (command.MouseClick,
             (lambda wrapper, _: helpers.mouse_click_combobox_or_choice(
                 control=wrapper.target.source.control,
-                index=wrapper.target.location,
+                index=wrapper.target.location.index,
                 delay=wrapper.delay))),
     ]
 

@@ -186,7 +186,7 @@ def mouse_click_combobox(combobox, index, delay=0):
     )
     # Otherwise the click won't get registered.
     key_click(
-        combobox.view().viewport(), key="Enter", delay=delay,
+        combobox.view().viewport(), key="Enter",
     )
 
 

@@ -17,11 +17,11 @@ from traitsui.qt4.enum_editor import (
     SimpleEditor,
 )
 from traitsui.testing.tester import command, locator, query
-from traitsui.testing.tester.base_classes import _SourceWithLocation
+from traitsui.testing.tester.base_classes import _BaseSourceWithLocation
 from traitsui.testing.tester.qt4 import helpers
 
 
-class _IndexedListEditor(_SourceWithLocation):
+class _IndexedListEditor(_BaseSourceWithLocation):
     """ Wrapper class for EnumListEditor and Index.
     """
     source_class = ListEditor
@@ -31,11 +31,12 @@ class _IndexedListEditor(_SourceWithLocation):
             model=wrapper.target.source.control.model(),
             view=wrapper.target.source.control,
             index=wrapper.target.source.control.model().index(
-                wrapper.target.location, 0)))),
+                wrapper.target.location.index, 0),
+            delay=wrapper.delay))),
     ]
 
 
-class _IndexedRadioEditor(_SourceWithLocation):
+class _IndexedRadioEditor(_BaseSourceWithLocation):
     """ Wrapper class for EnumRadioEditor and Index.
     """
     source_class = RadioEditor
@@ -43,11 +44,12 @@ class _IndexedRadioEditor(_SourceWithLocation):
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_qlayout(
             layout=wrapper.target.source.control.layout(),
-            index=wrapper.target.location))),
+            index=wrapper.target.location.index,
+            delay=wrapper.delay))),
     ]
 
 
-class _IndexedSimpleEditor(_SourceWithLocation):
+class _IndexedSimpleEditor(_BaseSourceWithLocation):
     """ Wrapper class for Simple EnumEditor and Index.
     """
     source_class = SimpleEditor
@@ -55,14 +57,13 @@ class _IndexedSimpleEditor(_SourceWithLocation):
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_combobox(
             combobox=wrapper.target.source.control,
-            index=wrapper.target.location,
+            index=wrapper.target.location.index,
             delay=wrapper.delay))),
     ]
 
 
-def displayed_text_handler(wrapper, interaction):
-    """ Handler function used to query DisplayedText for different
-    styles of Enum Editor.
+def radio_displayed_text_handler(wrapper, interaction):
+    """ Handler function used to query DisplayedText for EnumRadioEditor.
 
     Parameters
     ----------
@@ -73,14 +74,9 @@ def displayed_text_handler(wrapper, interaction):
         handler.  Should only be query.DisplayedText
     """
     control = wrapper.target.control
-    if isinstance(control, QtGui.QComboBox):
-        return control.currentText()
-    elif isinstance(control, QtGui.QListWidget):
-        return control.currentItem().text()
-    else:  # QWdiget with a layout of radio buttons from Radio Editor
-        for index in range(control.layout().count()):
-            if control.layout().itemAt(index).widget().isChecked():
-                return control.layout().itemAt(index).widget().text()
+    for index in range(control.layout().count()):
+        if control.layout().itemAt(index).widget().isChecked():
+            return control.layout().itemAt(index).widget().text()
 
 
 def register(registry):
@@ -105,6 +101,8 @@ def register(registry):
                 control=wrapper.target.control,
                 interaction=interaction,
                 delay=wrapper.delay))),
+        (query.DisplayedText,
+            lambda wrapper, _: wrapper.target.control.currentText())
     ]
 
     for interaction_class, handler in simple_editor_text_handlers:
@@ -114,9 +112,14 @@ def register(registry):
             handler=handler
         )
 
-    for target_class in [SimpleEditor, RadioEditor, ListEditor]:
-        registry.register_handler(
-            target_class=target_class,
-            interaction_class=query.DisplayedText,
-            handler=displayed_text_handler,
-        )
+    registry.register_handler(
+        target_class=RadioEditor,
+        interaction_class=query.DisplayedText,
+        handler=radio_displayed_text_handler,
+    )
+
+    registry.register_handler(
+        target_class=ListEditor,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, _: wrapper.target.control.currentItem().text(),
+    )
