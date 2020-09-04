@@ -83,6 +83,7 @@ def mouse_click_combobox_or_choice(control, index, delay):
         raise TypeError
     click_event.SetEventObject(control)
     click_event.SetString(control.GetString(index))
+    control.SetSelection(index)
     control.ProcessWindowEvent(click_event)
 
 
@@ -154,7 +155,7 @@ def mouse_click_object(control, delay):
 
 def mouse_click_child_in_panel(control, index, delay):
     """ Performs a mouce click on a child of a Wx Panel.
-    
+
     Parameters
     ----------
     control : wx.Panel

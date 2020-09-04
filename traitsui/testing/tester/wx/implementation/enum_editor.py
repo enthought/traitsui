@@ -59,10 +59,8 @@ class _IndexedSimpleEditor(_IndexedEditor):
 def displayed_text_handler(wrapper, interaction):
     control = wrapper.target.control
     if isinstance(control, wx.ComboBox):
-        print('hello')
         return control.GetValue()
     else: # wx.Choice or wx.ListBox
-        print('hola')
         return control.GetString(control.GetSelection())
 
 

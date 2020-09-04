@@ -214,15 +214,13 @@ class TestSimpleEnumEditor(unittest.TestCase):
     def check_enum_text_update(self, view):
         enum_edit = EnumModel()
 
-        tester = UITester(delay=500)
+        tester = UITester()
         with tester.create_ui(enum_edit, dict(view=view)) as ui:
-            print(enum_edit.value)
             combobox = tester.find_by_name(ui, "value")
             displayed  = combobox.inspect(query.DisplayedText())
             self.assertEqual(displayed, "one")
 
             combobox.locate(locator.Index(1)).perform(command.MouseClick())
-            print(enum_edit.value)
             displayed  = combobox.inspect(query.DisplayedText())
             self.assertEqual(displayed, "two")
 
