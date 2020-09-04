@@ -11,8 +11,16 @@
 
 from traitsui.testing.tester import locator
 
-class _IndexedEditor:
-    """ Wrapper for Editor and index """
+class _SourceWithLocation:
+    """ Wrapper base class to hold locator information together with a source
+    (typically an editor).  This is useful for cases in which the location
+    information is still necessary when performing actions such as a mouse
+    click or key click.
+    
+    For example, an Enum editor and an index.
+    This class is meant to be subclassed for specific usecases, and the
+    class level attributes overridden.
+    """
 
     source_class = None
     locator_class = None
@@ -20,6 +28,14 @@ class _IndexedEditor:
     solvers = []
 
     def __init__(self, source, location):
+        """
+        Parameters
+        ----------
+        source : subclass of type
+            The source object. Typically this is an editor. 
+        location : Any
+            The location information of interest
+        """
         self.source = source
         self.location = location
 

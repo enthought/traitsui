@@ -17,11 +17,13 @@ from traitsui.qt4.enum_editor import (
     SimpleEditor,
 )
 from traitsui.testing.tester import command, locator, query
-from traitsui.testing.tester.base_classes import _IndexedEditor
+from traitsui.testing.tester.base_classes import _SourceWithLocation
 from traitsui.testing.tester.qt4 import helpers
 
 
-class _IndexedListEditor(_IndexedEditor):
+class _IndexedListEditor(_SourceWithLocation):
+    """ Wrapper class for EnumListEditor and Index.
+    """
     source_class = ListEditor
     locator_class = locator.Index
     handlers = [
@@ -33,7 +35,9 @@ class _IndexedListEditor(_IndexedEditor):
     ]
 
 
-class _IndexedRadioEditor(_IndexedEditor):
+class _IndexedRadioEditor(_SourceWithLocation):
+    """ Wrapper class for EnumRadioEditor and Index.
+    """
     source_class = RadioEditor
     locator_class = locator.Index
     handlers = [
@@ -44,7 +48,9 @@ class _IndexedRadioEditor(_IndexedEditor):
     ]
 
 
-class _IndexedSimpleEditor(_IndexedEditor):
+class _IndexedSimpleEditor(_SourceWithLocation):
+    """ Wrapper class for Simple EnumEditor and Index.
+    """
     source_class = SimpleEditor
     locator_class = locator.Index
     handlers = [
@@ -57,6 +63,17 @@ class _IndexedSimpleEditor(_IndexedEditor):
 
 
 def displayed_text_handler(wrapper, interaction):
+    """ Handler function used to query DisplayedText for different
+    styles of Enum Editor. 
+
+    Parameters
+    ----------
+    wrapper : UIWrapper
+        The UIWrapper containing that object with text to be displayed. 
+    interaction : query.DisplayedText
+        Unused in this function but included to match the expected format of a
+        handler.  Should only be query.DisplayedText
+    """
     control = wrapper.target.control
     if isinstance(control, QtGui.QComboBox):
         return control.currentText()

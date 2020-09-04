@@ -48,6 +48,17 @@ def key_click(widget, key, delay=0):
 
 
 def check_q_model_index_valid(index):
+    """ Checks if a given QModelIndex is valid.  
+
+    Parameters
+    ----------
+    index : QModelIndex
+
+    Raises
+    ------
+    LookupError
+        If the index is not valid.
+    """
     if not index.isValid():
         row = index.row()
         column = index.column()
@@ -153,7 +164,17 @@ def mouse_click_item_view(model, view, index, delay=0):
 
 
 def mouse_click_combobox(combobox, index, delay=0):
-    """ Perform a mouse click on a QComboBox.
+    """ Perform a mouse click on a QComboBox at a given index.
+
+    Paramters
+    ---------
+    combobox : QtGui.ComboBox
+        The combobox to be clicked.
+    index : int
+        The index of the item in the combobox to be clicked.
+    delay : int
+        Time delay (in ms) in which each key click in the sequence will be
+        performed.
     """
     q_model_index = combobox.model().index(index, 0)
     check_q_model_index_valid(q_model_index)
