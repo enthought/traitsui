@@ -153,7 +153,7 @@ def mouse_click_object(control, delay):
     control.ProcessEvent(click_event)
 
 
-def mouse_click_child_in_panel(control, index, delay):
+def mouse_click_checkbox_child_in_panel(control, index, delay):
     """ Performs a mouce click on a child of a Wx Panel.
 
     Parameters
@@ -169,16 +169,27 @@ def mouse_click_child_in_panel(control, index, delay):
     if not 0 <= index <= len(children_list) - 1:
         raise IndexError(index)
     obj = children_list[index].GetWindow()
-    if isinstance(obj, wx.CheckBox):
-        mouse_click_checkbox(obj, delay)
-    elif isinstance(obj, wx.RadioButton):
-        mouse_click_radiobutton(obj, delay)
-    else:
-        raise NotImplementedError(
-            "The only currently supported child object types are wx.CheckBox"
-            " and wx.RadioButton"
-        )
+    mouse_click_checkbox(obj, delay)
 
+
+def mouse_click_radiobutton_child_in_panel(control, index, delay):
+    """ Performs a mouce click on a child of a Wx Panel.
+
+    Parameters
+    ----------
+    control : wx.Panel
+        The Panel containing child objects, one of which will be clicked.
+    index : int
+        The index of the child object in the Panel to be clicked
+    delay : int
+        Time delay (in ms) in which click will be performed.
+    """
+    children_list = control.GetSizer().GetChildren()
+    if not 0 <= index <= len(children_list) - 1:
+        raise IndexError(index)
+    obj = children_list[index].GetWindow()
+    mouse_click_radiobutton(obj, delay)
+   
 
 def key_click_text_ctrl(control, interaction, delay):
     """ Performs simulated typing of a key on the given wxObject

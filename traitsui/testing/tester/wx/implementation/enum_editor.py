@@ -40,7 +40,7 @@ class _IndexedRadioEditor(_BaseSourceWithLocation):
     locator_class = locator.Index
     handlers = [
         (command.MouseClick,
-            (lambda wrapper, _: helpers.mouse_click_child_in_panel(
+            (lambda wrapper, _: helpers.mouse_click_radiobutton_child_in_panel(
                 control=wrapper.target.source.control,
                 index=wrapper.target.location.index,
                 delay=wrapper.delay))),
