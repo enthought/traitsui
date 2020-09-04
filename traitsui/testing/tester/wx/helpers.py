@@ -124,8 +124,11 @@ def key_click_text_ctrl(control, interaction, delay):
         control.ProcessEvent(event)
     elif interaction.key == "Backspace":
         wx.MilliSleep(delay)
-        pos = control.GetInsertionPoint()
-        control.Remove(max(0, pos - 1), pos)
+        if control.GetStringSelection():
+            control.Remove(*control.GetSelection())
+        else:
+            pos = control.GetInsertionPoint()
+            control.Remove(max(0, pos - 1), pos)
     else:
         check_key_compat(interaction.key)
         wx.MilliSleep(delay)
