@@ -8,13 +8,14 @@
 #
 #  Thanks for using Enthought open source!
 #
+import wx
 
 from traitsui.wx.enum_editor import (
     ListEditor,
     RadioEditor,
     SimpleEditor,
 )
-from traitsui.testing.tester import command, locator
+from traitsui.testing.tester import command, locator, query
 from traitsui.testing.tester.base_classes import _IndexedEditor
 from traitsui.testing.tester.wx import helpers
 
@@ -48,8 +49,18 @@ class _IndexedSimpleEditor(_IndexedEditor):
                 control=wrapper.target.target.control,
                 index=wrapper.target.index,
                 delay=wrapper.delay))
-        )
+        ),
     ]
+
+
+def displayed_text_handler(wrapper, interaction):
+    control = wrapper.target.control
+    if isinstance(control, wx.ComboBox):
+        print('hello')
+        return control.GetValue()
+    else: # wx.Choice or wx.ListBox
+        print('hola')
+        return control.GetString(control.GetSelection())
 
 
 def register(registry):
@@ -62,3 +73,33 @@ def register(registry):
     _IndexedListEditor.register(registry)
     _IndexedRadioEditor.register(registry)
     _IndexedSimpleEditor.register(registry)
+
+
+    simple_editor_text_handlers = [
+        (command.KeyClick, (lambda wrapper, interaction:
+            helpers.key_click_text_ctrl(
+                control=wrapper.target.control,
+                interaction=interaction,
+                delay=wrapper.delay))
+        ),
+        (command.KeySequence, (lambda wrapper, interaction:
+            helpers.key_sequence_text_ctrl(
+                control=wrapper.target.control,
+                interaction=interaction,
+                delay=wrapper.delay))
+        ),
+    ]
+
+    for interaction_class, handler in simple_editor_text_handlers:
+        registry.register_handler(
+            target_class=SimpleEditor,
+            interaction_class=interaction_class,
+            handler=handler
+        )
+
+    for target_class in [SimpleEditor,RadioEditor,ListEditor]:
+        registry.register_handler(
+            target_class=target_class,
+            interaction_class=query.DisplayedText,
+            handler=displayed_text_handler,
+        )

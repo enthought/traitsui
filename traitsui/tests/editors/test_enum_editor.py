@@ -14,7 +14,7 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
-from traitsui.testing.tester import command, locator
+from traitsui.testing.tester import command, locator, query
 from traitsui.testing.tester.ui_tester import UITester
 
 is_windows = platform.system() == "Windows"
@@ -57,86 +57,6 @@ def get_combobox_text(combobox):
 
     elif is_qt():
         return combobox.currentText()
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
-def set_combobox_text(combobox, text):
-    """ Set the text given a combobox control """
-    if is_wx():
-        import wx
-
-        if isinstance(combobox, wx.Choice):
-            event_type = wx.EVT_CHOICE.typeId
-            event = wx.CommandEvent(event_type, combobox.GetId())
-            event.SetString(text)
-            wx.PostEvent(combobox, event)
-        else:
-            combobox.SetValue(text)
-            event_type = wx.EVT_COMBOBOX.typeId
-            event = wx.CommandEvent(event_type, combobox.GetId())
-            event.SetString(text)
-            wx.PostEvent(combobox, event)
-
-    elif is_qt():
-        combobox.setEditText(text)
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
-def set_combobox_index(combobox, idx):
-    """ Set the choice index given a combobox control and index number """
-    if is_wx():
-        import wx
-
-        if isinstance(combobox, wx.Choice):
-            event_type = wx.EVT_CHOICE.typeId
-        else:
-            event_type = wx.EVT_COMBOBOX.typeId
-        event = wx.CommandEvent(event_type, combobox.GetId())
-        text = combobox.GetString(idx)
-        event.SetString(text)
-        event.SetInt(idx)
-        wx.PostEvent(combobox, event)
-
-    elif is_qt():
-        combobox.setCurrentIndex(idx)
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
-def finish_combobox_text_entry(combobox):
-    """ Finish text entry given combobox. """
-    if is_wx():
-        import wx
-
-        event = wx.CommandEvent(wx.EVT_TEXT_ENTER.typeId, combobox.GetId())
-        wx.PostEvent(combobox, event)
-
-    elif is_qt():
-        combobox.lineEdit().editingFinished.emit()
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
-def click_radio_button(widget, button_idx):
-    """ Simulate a radio button click given widget and button number. Assumes
-    all sizer children (wx) or layout items (qt) are buttons."""
-    if is_wx():
-        import wx
-
-        sizer_items = widget.GetSizer().GetChildren()
-        button = sizer_items[button_idx].GetWindow()
-        event = wx.CommandEvent(wx.EVT_RADIOBUTTON.typeId, button.GetId())
-        event.SetEventObject(button)
-        wx.PostEvent(widget, event)
-
-    elif is_qt():
-        widget.layout().itemAt(button_idx).widget().click()
 
     else:
         raise unittest.SkipTest("Test not implemented for this toolkit")
@@ -294,26 +214,31 @@ class TestSimpleEnumEditor(unittest.TestCase):
     def check_enum_text_update(self, view):
         enum_edit = EnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view) as editor:
+        tester = UITester(delay=500)
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
+            print(enum_edit.value)
+            combobox = tester.find_by_name(ui, "value")
+            displayed  = combobox.inspect(query.DisplayedText())
+            self.assertEqual(displayed, "one")
 
-            self.assertEqual(get_combobox_text(editor.control), "one")
-
-            enum_edit.value = "two"
-            process_cascade_events()
-
-            self.assertEqual(get_combobox_text(editor.control), "two")
+            combobox.locate(locator.Index(1)).perform(command.MouseClick())
+            print(enum_edit.value)
+            displayed  = combobox.inspect(query.DisplayedText())
+            self.assertEqual(displayed, "two")
 
     def check_enum_object_update(self, view):
         enum_edit = EnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view) as editor:
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
             self.assertEqual(enum_edit.value, "one")
 
-            set_combobox_text(editor.control, "two")
-            process_cascade_events()
+            combobox = tester.find_by_name(ui, "value")
+            for _ in range(3):
+                combobox.perform(command.KeyClick("Backspace"))
+            combobox.perform(command.KeySequence("two"))
+            combobox.perform(command.KeyClick("Enter"))
 
             self.assertEqual(enum_edit.value, "two")
 
@@ -332,13 +257,16 @@ class TestSimpleEnumEditor(unittest.TestCase):
     def check_enum_text_bad_update(self, view):
         enum_edit = EnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view) as editor:
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
             self.assertEqual(enum_edit.value, "one")
 
-            set_combobox_text(editor.control, "t")
-            process_cascade_events()
+            combobox = tester.find_by_name(ui, "value")
+            for _ in range(3):
+                combobox.perform(command.KeyClick("Backspace"))
+            combobox.perform(command.KeyClick("H"))
+            combobox.perform(command.KeyClick("Enter"))
 
             self.assertEqual(enum_edit.value, "one")
 
@@ -367,21 +295,17 @@ class TestSimpleEnumEditor(unittest.TestCase):
         view = get_evaluate_view("simple", auto_set=False)
         enum_edit = EnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view) as editor:
-
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
             self.assertEqual(enum_edit.value, "one")
 
-            set_combobox_text(editor.control, "two")
-            process_cascade_events()
+            combobox = tester.find_by_name(ui, "value")
+            for _ in range(3):
+                combobox.perform(command.KeyClick("Backspace"))
+            combobox.perform(command.KeySequence("two"))
 
-            # wx modifies the value without the need to finish entry
-            if is_qt():
-                self.assertEqual(enum_edit.value, "one")
-
-                finish_combobox_text_entry(editor.control)
-                process_cascade_events()
-
+            self.assertEqual(enum_edit.value, "one")
+            combobox.perform(command.KeyClick("Enter"))
             self.assertEqual(enum_edit.value, "two")
 
     def test_simple_editor_resizable(self):
@@ -464,15 +388,17 @@ class TestListEnumEditor(unittest.TestCase):
     def check_enum_text_update(self, view):
         enum_edit = EnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view) as editor:
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
-            self.assertEqual(get_list_widget_text(editor.control), "one")
+            list_editor = tester.find_by_name(ui, "value")
+            displayed = list_editor.inspect(query.DisplayedText())
 
-            enum_edit.value = "two"
-            process_cascade_events()
+            self.assertEqual(displayed, "one")
 
-            self.assertEqual(get_list_widget_text(editor.control), "two")
+            list_editor.locate(locator.Index(1)).perform(command.MouseClick())
+            displayed = list_editor.inspect(query.DisplayedText())
+            self.assertEqual(displayed, "two")
 
     def check_enum_index_update(self, view):
         enum_edit = EnumModel()
@@ -481,8 +407,8 @@ class TestListEnumEditor(unittest.TestCase):
 
             self.assertEqual(enum_edit.value, "one")
 
-            combobox = tester.find_by_name(ui, "value")
-            combobox.locate(locator.Index(1)).perform(command.MouseClick())
+            list_editor = tester.find_by_name(ui, "value")
+            list_editor.locate(locator.Index(1)).perform(command.MouseClick())
 
             self.assertEqual(enum_edit.value, "two")
 

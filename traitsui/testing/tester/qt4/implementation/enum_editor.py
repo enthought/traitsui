@@ -9,12 +9,14 @@
 #  Thanks for using Enthought open source!
 #
 
+from pyface.qt import QtGui
+
 from traitsui.qt4.enum_editor import (
     ListEditor,
     RadioEditor,
     SimpleEditor,
 )
-from traitsui.testing.tester import command, locator
+from traitsui.testing.tester import command, locator, query
 from traitsui.testing.tester.base_classes import _IndexedEditor
 from traitsui.testing.tester.qt4 import helpers
 
@@ -51,6 +53,18 @@ class _IndexedSimpleEditor(_IndexedEditor):
     ]
 
 
+def displayed_text_handler(wrapper, interaction):
+    control = wrapper.target.control
+    if isinstance(control, QtGui.QComboBox):
+        return control.currentText()
+    elif isinstance(control, QtGui.QListWidget):
+        return control.currentItem().text()
+    else: # QWdiget with a layout of radio buttons from Radio Editor
+        for index in range(control.layout().count()):
+            if control.layout().itemAt(index).widget().isChecked():
+                return control.layout().itemAt(index).widget().text()
+
+
 def register(registry):
     """ Registry location and interaction handlers for EnumEditor.
 
@@ -61,3 +75,32 @@ def register(registry):
     _IndexedListEditor.register(registry)
     _IndexedRadioEditor.register(registry)
     _IndexedSimpleEditor.register(registry)
+
+    simple_editor_text_handlers = [
+        (command.KeyClick, (lambda wrapper, interaction:
+            helpers.key_click_qwidget(
+                control=wrapper.target.control,
+                interaction=interaction,
+                delay=wrapper.delay))
+        ),
+        (command.KeySequence, (lambda wrapper, interaction:
+            helpers.key_sequence_qwidget(
+                control=wrapper.target.control,
+                interaction=interaction,
+                delay=wrapper.delay))
+        ),
+    ]
+
+    for interaction_class, handler in simple_editor_text_handlers:
+        registry.register_handler(
+            target_class=SimpleEditor,
+            interaction_class=interaction_class,
+            handler=handler
+        )
+
+    for target_class in [SimpleEditor,RadioEditor,ListEditor]:
+        registry.register_handler(
+            target_class=target_class,
+            interaction_class=query.DisplayedText,
+            handler=displayed_text_handler,
+        )
