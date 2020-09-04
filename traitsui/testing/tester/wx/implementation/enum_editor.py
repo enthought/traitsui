@@ -61,9 +61,10 @@ class _IndexedSimpleEditor(_BaseSourceWithLocation):
     ]
 
 
-def displayed_text_handler(wrapper, interaction):
-    """ Handler function used to query DisplayedText for different
-    styles of Enum Editor.
+def simple_displayed_text_handler(wrapper, interaction):
+    """ Handler function used to query DisplayedText for Simple Enum Editor.
+    Note that depending on the factories evaluaute trait, the control for a
+    Simple Enum Editor can either be a wx.ComboBox or a wx.Choice.
 
     Parameters
     ----------
@@ -76,9 +77,25 @@ def displayed_text_handler(wrapper, interaction):
     control = wrapper.target.control
     if isinstance(control, wx.ComboBox):
         return control.GetValue()
-    else:  # wx.Choice or wx.ListBox
+    else:  # wx.Choice
         return control.GetString(control.GetSelection())
 
+
+def radio_displayed_text_handler(wrapper, interaction):
+    """ Handler function used to query DisplayedText for EnumRadioEditor.
+
+    Parameters
+    ----------
+    wrapper : UIWrapper
+        The UIWrapper containing that object with text to be displayed.
+    interaction : query.DisplayedText
+        Unused in this function but included to match the expected format of a
+        handler.  Should only be query.DisplayedText
+    """
+    children_list = wrapper.target.control.GetSizer().GetChildren()
+    for index in range(len(children_list)):
+        if children_list[index].GetWindow().GetValue():
+            return children_list[index].GetWindow().GetLabel()
 
 def register(registry):
     """ Registry location and interaction handlers for EnumEditor.
@@ -102,6 +119,7 @@ def register(registry):
                 control=wrapper.target.control,
                 interaction=interaction,
                 delay=wrapper.delay))),
+        (query.DisplayedText, simple_displayed_text_handler)
     ]
 
     for interaction_class, handler in simple_editor_text_handlers:
@@ -111,9 +129,14 @@ def register(registry):
             handler=handler
         )
 
-    for target_class in [SimpleEditor, RadioEditor, ListEditor]:
-        registry.register_handler(
-            target_class=target_class,
-            interaction_class=query.DisplayedText,
-            handler=displayed_text_handler,
-        )
+    registry.register_handler(
+        target_class=RadioEditor,
+        interaction_class=query.DisplayedText,
+        handler=radio_displayed_text_handler,
+    )
+    registry.register_handler(
+        target_class=ListEditor,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, _: wrapper.target.control.GetString(
+            wrapper.target.control.GetSelection()),
+    )

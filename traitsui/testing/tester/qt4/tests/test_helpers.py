@@ -209,3 +209,15 @@ class TestInteractions(unittest.TestCase):
         with self.assertRaises(Disabled):
             helpers.key_click_qwidget(textbox, command.KeyClick("Enter"), 0)
         self.assertEqual(change_slot.call_count, 0)
+
+    def test_check_q_model_index_valid(self):
+        self.widget = QtGui.QListWidget()
+        self.items = ["a", "b", "c"]
+        self.widget.addItems(self.items)
+        self.good_q_index = self.widget.model().index(1, 0)
+        self.bad_q_index = self.widget.model().index(10, 0)
+
+        self.model = self.widget.model()
+        helpers.check_q_model_index_valid(self.good_q_index)
+        with self.assertRaises(LookupError):
+            helpers.check_q_model_index_valid(self.bad_q_index)
