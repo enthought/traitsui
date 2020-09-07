@@ -35,6 +35,16 @@ class _IndexedNotebookEditor:
 
     @classmethod
     def from_location(cls, wrapper, location):
+        """ Helper method to create an instance of _IndexedNotebookEditor
+        but checking if the index is valid before doing so.
+
+        Parameters
+        ----------
+        wrapper : UIWrapper
+            the UIWrapper wrapping the Notebook List Editor
+        location : locator.Index
+            the locator.Index object containing the index
+        """
         # Raise IndexError early
         wrapper.target._uis[location.index]
         return cls(
@@ -69,7 +79,7 @@ class _IndexedNotebookEditor:
         registry.register_handler(
             target_class=cls,
             interaction_class=command.MouseClick,
-            handler=lambda wrapper, _: helpers.mouse_click_tab_index(
+            handler=lambda wrapper, _: helpers.mouse_click_notebook_tab_index(
                 control=wrapper.target.target.control,
                 index=wrapper.target.index,
                 delay=wrapper.delay),

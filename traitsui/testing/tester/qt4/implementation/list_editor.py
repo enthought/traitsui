@@ -18,13 +18,33 @@ from traitsui.qt4.list_editor import (
 
 
 class _IndexedNotebookEditor:
+    """ Wrapper for a ListEditor (Notebook) with an index.
+    """
 
     def __init__(self, target, index):
+        """
+        Parameters
+        ----------
+        target : NotebookEditor
+            The Notebook List Editor
+        index : int
+            The index of interest.
+        """
         self.target = target
         self.index = index
 
     @classmethod
     def from_location(cls, wrapper, location):
+        """ Helper method to create an instance of _IndexedNotebookEditor
+        but checking if the index is valid before doing so.
+
+        Parameters
+        ----------
+        wrapper : UIWrapper
+            the UIWrapper wrapping the Notebook List Editor
+        location : locator.Index
+            the locator.Index object containing the index
+        """
         # Raise IndexError early
         wrapper.target._uis[location.index]
         return cls(
@@ -34,6 +54,16 @@ class _IndexedNotebookEditor:
 
     @classmethod
     def register(cls, registry):
+        """ Class method to register interactions on a _IndexedNotebookEditor
+        for the given registry.
+
+        If there are any conflicts, an error will occur.
+
+        Parameters
+        ----------
+        registry : TargetRegistry
+            The registry being registered to.
+        """
         registry.register_solver(
             target_class=NotebookEditor,
             locator_class=locator.Index,
@@ -56,6 +86,9 @@ class _IndexedNotebookEditor:
         )
 
     def _get_nested_ui(self):
+        """ Method to get the nested ui corresponding to the List element at
+        the given index.
+        """
         return self.target._uis[self.index][1]
 
 
