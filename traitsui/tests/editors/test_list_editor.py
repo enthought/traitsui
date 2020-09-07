@@ -10,7 +10,6 @@ from traitsui.tests._tools import (
     ToolkitName,
 )
 
-import wx
 
 # 'Person' class:
 class Person(HasStrictTraits):
