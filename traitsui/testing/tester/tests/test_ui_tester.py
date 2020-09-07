@@ -107,3 +107,25 @@ class TestUITesterFindEditor(unittest.TestCase):
         with tester.create_ui(Order(), dict(view=view)) as ui:
             wrapped = tester.find_by_name(ui, "submit_button")
             self.assertEqual(wrapped.delay, .01)
+
+    def test_find_by_id(self):
+        tester = UITester(delay=123)
+        item1 = Item("submit_button", id="item1")
+        item2 = Item("submit_button", id="item2")
+        view = View(item1, item2)
+        with tester.create_ui(Order(), dict(view=view)) as ui:
+            wrapper = tester.find_by_id(ui, "item2")
+            self.assertIs(wrapper.target.item, item2)
+            self.assertEqual(wrapper._registries, tester._registries)
+            self.assertEqual(wrapper.delay, tester.delay)
+
+    def test_find_by_id_multiple(self):
+        # The uniqueness is not enforced. The first one is returned.
+        tester = UITester()
+        item1 = Item("submit_button", id="item1")
+        item2 = Item("submit_button", id="item2")
+        item3 = Item("submit_button", id="item2")
+        view = View(item1, item2, item3)
+        with tester.create_ui(Order(), dict(view=view)) as ui:
+            wrapper = tester.find_by_id(ui, "item2")
+            self.assertIs(wrapper.target.item, item2)
