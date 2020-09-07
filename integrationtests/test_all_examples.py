@@ -277,8 +277,8 @@ def run_file(file_path):
         # But all examples should support being run without additional
         # arguments.
         exec(content, globals)
-     
-     
+
+
 # =============================================================================
 # Test cases
 # =============================================================================
