@@ -216,8 +216,44 @@ def key_click_text_ctrl(control, interaction, delay):
         control.ProcessEvent(event)
     elif interaction.key == "Backspace":
         wx.MilliSleep(delay)
-        start_sel, end_sel = get_text_selection_span(control)
-        if (start_sel, end_sel) != (-1, -1):
+        if control.GetStringSelection():
+            control.Remove(*control.GetSelection())
+        else:
+            pos = control.GetInsertionPoint()
+            control.Remove(max(0, pos - 1), pos)
+    else:
+        check_key_compat(interaction.key)
+        wx.MilliSleep(delay)
+        control.WriteText(interaction.key)
+
+
+def key_click_combobox(control, interaction, delay):
+    """ Performs simulated typing of a key on the given wxComboBox
+    after a delay.
+
+    Parameters
+    ----------
+    control : wxComboBox
+        The wx Object to be acted on.
+    interaction : instance of command.KeyClick
+        The interaction object holding the key input
+        to be simulated being typed
+    delay : int
+        Time delay (in ms) in which the key click will be performed.
+    """
+    if not control.IsEditable():
+        raise Disabled("{!r} is disabled.".format(control))
+    if not control.HasFocus():
+        control.SetFocus()
+        control.SetInsertionPointEnd()
+    if interaction.key == "Enter":
+        wx.MilliSleep(delay)
+        event = wx.CommandEvent(wx.EVT_TEXT_ENTER.typeId, control.GetId())
+        control.ProcessEvent(event)
+    elif interaction.key == "Backspace":
+        wx.MilliSleep(delay)
+        start_sel, end_sel = control.GetTextSelection()
+        if start_sel != end_sel:
             control.Remove(start_sel, end_sel)
         else:
             pos = control.GetInsertionPoint()
@@ -227,18 +263,6 @@ def key_click_text_ctrl(control, interaction, delay):
         wx.MilliSleep(delay)
         control.WriteText(interaction.key)
 
-def get_text_selection_span(control):
-    if isinstance(control, wx.ComboBox):
-        a, b = control.GetTextSelection()
-        if a != b:
-            return (a, b)
-        else:
-            return (-1, -1)
-    else:  # control is wx.TextCtrl
-        if control.GetStringSelection():
-            return control.GetSelection()
-        else:
-            return (-1, -1)
 
 def key_sequence_text_ctrl(control, interaction, delay):
     """ Performs simulated typing of a sequence of keys on the given wxObject

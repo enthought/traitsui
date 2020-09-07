@@ -110,7 +110,7 @@ def register(registry):
 
     simple_editor_text_handlers = [
         (command.KeyClick,
-            (lambda wrapper, interaction: helpers.key_click_text_ctrl(
+            (lambda wrapper, interaction: helpers.key_click_combobox(
                 control=wrapper.target.control,
                 interaction=interaction,
                 delay=wrapper.delay))),
