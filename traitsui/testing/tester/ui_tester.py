@@ -189,7 +189,6 @@ class UITester:
             delay=self.delay,
         ).find_by_name(name=name)
 
-    
     def find_by_id(self, ui, id):
         """ Find the TraitsUI editor with the given identifier and return a new
         ``UIWrapper`` object for further interactions with the editor.
