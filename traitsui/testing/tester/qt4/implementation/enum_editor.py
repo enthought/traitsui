@@ -9,8 +9,6 @@
 #  Thanks for using Enthought open source!
 #
 
-from pyface.qt import QtGui
-
 from traitsui.qt4.enum_editor import (
     ListEditor,
     RadioEditor,

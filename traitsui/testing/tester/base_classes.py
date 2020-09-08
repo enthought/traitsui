@@ -9,8 +9,6 @@
 #  Thanks for using Enthought open source!
 #
 
-from traitsui.testing.tester import locator
-
 
 class _BaseSourceWithLocation:
     """ Wrapper base class to hold locator information together with a source
@@ -45,7 +43,6 @@ class _BaseSourceWithLocation:
         """
         self.source = source
         self.location = location
-
 
     @classmethod
     def register(cls, registry):

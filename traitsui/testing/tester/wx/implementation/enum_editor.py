@@ -97,6 +97,7 @@ def radio_displayed_text_handler(wrapper, interaction):
         if children_list[index].GetWindow().GetValue():
             return children_list[index].GetWindow().GetLabel()
 
+
 def register(registry):
     """ Registry location and interaction handlers for EnumEditor.
 

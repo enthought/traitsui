@@ -189,7 +189,7 @@ def mouse_click_radiobutton_child_in_panel(control, index, delay):
         raise IndexError(index)
     obj = children_list[index].GetWindow()
     mouse_click_radiobutton(obj, delay)
-   
+
 
 def key_click_text_ctrl(control, interaction, delay):
     """ Performs simulated typing of a key on the given wxObject
