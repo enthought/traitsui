@@ -186,7 +186,7 @@ def mouse_click_notebook_tab_index(control, index, delay=0):
     control.ProcessEvent(click_up_event)
 
 
-def mouse_click_child_in_panel(control, index, delay):
+def mouse_click_checkbox_child_in_panel(control, index, delay):
     """ Performs a mouce click on a child of a Wx Panel.
 
     Parameters
