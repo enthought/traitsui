@@ -17,6 +17,7 @@ from traitsui.testing.tester.qt4.implementation import (
     list_editor,
     range_editor,
     text_editor,
+    ui_base,
 )
 
 
@@ -47,5 +48,8 @@ def get_default_registry():
 
     # RangeEditor
     range_editor.register(registry)
+
+    # ui_base
+    ui_base.register(registry)
 
     return registry
