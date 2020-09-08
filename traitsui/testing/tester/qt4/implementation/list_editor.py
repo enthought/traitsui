@@ -8,12 +8,88 @@
 #
 #  Thanks for using Enthought open source!
 #
-from traitsui.testing.tester import locator
+from traitsui.testing.tester import command, locator
 from traitsui.testing.tester.registry_helper import register_nested_ui_solvers
-
+from traitsui.testing.tester.qt4 import helpers
 from traitsui.qt4.list_editor import (
     CustomEditor,
+    NotebookEditor,
 )
+
+
+class _IndexedNotebookEditor:
+    """ Wrapper for a ListEditor (Notebook) with an index.
+    """
+
+    def __init__(self, target, index):
+        """
+        Parameters
+        ----------
+        target : NotebookEditor
+            The Notebook List Editor
+        index : int
+            The index of interest.
+        """
+        self.target = target
+        self.index = index
+
+    @classmethod
+    def from_location(cls, wrapper, location):
+        """ Helper method to create an instance of _IndexedNotebookEditor
+        but checking if the index is valid before doing so.
+
+        Parameters
+        ----------
+        wrapper : UIWrapper
+            the UIWrapper wrapping the Notebook List Editor
+        location : locator.Index
+            the locator.Index object containing the index
+        """
+        # Raise IndexError early
+        wrapper.target._uis[location.index]
+        return cls(
+            target=wrapper.target,
+            index=location.index,
+        )
+
+    @classmethod
+    def register(cls, registry):
+        """ Class method to register interactions on a _IndexedNotebookEditor
+        for the given registry.
+
+        If there are any conflicts, an error will occur.
+
+        Parameters
+        ----------
+        registry : TargetRegistry
+            The registry being registered to.
+        """
+        registry.register_solver(
+            target_class=NotebookEditor,
+            locator_class=locator.Index,
+            solver=cls.from_location,
+        )
+
+        register_nested_ui_solvers(
+            registry=registry,
+            target_class=cls,
+            nested_ui_getter=lambda target: target._get_nested_ui()
+        )
+
+        registry.register_handler(
+            target_class=cls,
+            interaction_class=command.MouseClick,
+            handler=lambda wrapper, _: helpers.mouse_click_tab_index(
+                tab_widget=wrapper.target.target.control,
+                index=wrapper.target.index,
+                delay=wrapper.delay),
+        )
+
+    def _get_nested_ui(self):
+        """ Method to get the nested ui corresponding to the List element at
+        the given index.
+        """
+        return self.target._uis[self.index][1]
 
 
 class _IndexedCustomEditor:
@@ -84,6 +160,7 @@ def register(registry):
     registry : TargetRegistry
         The registry being registered to.
     """
-
+    # NotebookEditor
+    _IndexedNotebookEditor.register(registry)
     # CustomEditor
     _IndexedCustomEditor.register(registry)
