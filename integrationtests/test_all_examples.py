@@ -30,6 +30,8 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
+from traitsui.testing.tester import command, locator, query
+from traitsui.testing.tester.ui_tester import UITester
 
 # This test file is not distributed nor is it in a package.
 HERE = os.path.dirname(__file__)
@@ -279,6 +281,14 @@ def run_file(file_path):
         exec(content, globals)
 
 
+def load_demo(file_path, variable_name="demo"):
+    with open(file_path, "r", encoding="utf-8") as f:
+        content = f.read()
+    globals_ = globals().copy()
+    exec(content, globals_)
+    return globals_[variable_name]
+
+
 # =============================================================================
 # Test cases
 # =============================================================================
@@ -317,3 +327,40 @@ class TestExample(unittest.TestCase):
                         reason=reason, file_path=file_path
                     )
                 )
+
+
+class TestInteractExample(unittest.TestCase):
+    """ Test examples with more interactions."""
+
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+    def test_converter(self):
+        # Test converter.py in examples/demo/Applications
+        filepath = os.path.join(
+            DEMO, "Applications", "converter.py"
+        )
+        demo = load_demo(filepath, "popup")
+        tester = UITester(delay=500)
+        with tester.create_ui(demo) as ui:
+            input_amount = tester.find_by_name(ui, "input_amount")
+            output_amount = tester.find_by_name(ui, "output_amount")
+            # both of these have Simple Enum Editors !
+            input_units = tester.find_by_name(ui, "input_units")
+            output_units = tester.find_by_name(ui, "output_units")
+            
+            #print(ui.get_editors("input_units"))
+            #print(ui.get_editors("output_units"))
+
+            for _ in range(4):
+                input_amount.perform(command.KeyClick("Backspace"))
+            input_amount.perform(command.KeySequence("14.0"))
+            self.assertEqual(
+                output_amount.inspect(query.DisplayedText())[:4],
+                "1.16",
+            )
+
+            tester.find_by_id(ui, "Undo").perform(command.MouseClick())
+
+            self.assertEqual(
+                output_amount.inspect(query.DisplayedText()),
+                "1.0",
+            )
