@@ -12,6 +12,20 @@
 from traitsui.testing.tester import locator
 
 
+def find_by_id_in_nested_ui(wrapper, location):
+    """ Helper function for resolving from a target to a TargetById. The
+    target must have a solver registered from it to an instance of
+    traitsui.ui.UI
+
+    Parameters
+    ----------
+    wrapper : UIWrapper
+    location : instance of locator.TargetById
+    """
+    new_interactor = wrapper.locate(locator.NestedUI())
+    return new_interactor.find_by_id(location.id).target
+
+
 def find_by_name_in_nested_ui(wrapper, location):
     """ Helper function for resolving from a target to a TargetByName. The
     target must have a solver registered from it to an instance of
@@ -51,4 +65,9 @@ def register_nested_ui_solvers(registry, target_class, nested_ui_getter):
         target_class=target_class,
         locator_class=locator.TargetByName,
         solver=find_by_name_in_nested_ui,
+    )
+    registry.register_solver(
+        target_class=target_class,
+        locator_class=locator.TargetById,
+        solver=find_by_id_in_nested_ui,
     )

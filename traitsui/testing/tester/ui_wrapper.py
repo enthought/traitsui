@@ -102,6 +102,20 @@ class UIWrapper:
         """
         return self.locate(locator.TargetByName(name=name))
 
+    def find_by_id(self, id):
+        """ Find a target inside the current target using an id.
+
+        Parameters
+        ----------
+        id : str
+            Id for finding an item in the UI.
+
+        Returns
+        -------
+        wrapper : UIWrapper
+        """
+        return self.locate(locator.TargetById(id=id))
+
     def perform(self, interaction):
         """ Perform a user interaction that causes side effects.
 

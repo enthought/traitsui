@@ -189,6 +189,27 @@ class UITester:
             delay=self.delay,
         ).find_by_name(name=name)
 
+    def find_by_id(self, ui, id):
+        """ Find the TraitsUI editor with the given identifier and return a new
+        ``UIWrapper`` object for further interactions with the editor.
+
+        Parameters
+        ----------
+        ui : traitsui.ui.UI
+            The UI created, e.g. by ``create_ui``.
+        id : str
+            Id for finding an item in the UI.
+
+        Returns
+        -------
+        wrapper : UIWrapper
+        """
+        return UIWrapper(
+            target=ui,
+            registries=self._registries,
+            delay=self.delay,
+        ).find_by_id(id=id)
+
 
 def _get_editor_by_name(ui, name):
     """ Return a single Editor from an instance of traitsui.ui.UI with
@@ -221,6 +242,32 @@ def _get_editor_by_name(ui, name):
     return editor
 
 
+def _get_editor_by_id(ui, id):
+    """ Return single Editor from an instance of traitsui.ui.UI with
+    the given identifier.
+
+    Parameters
+    ----------
+    ui : traitsui.ui.UI
+        The UI from which an editor will be retrieved.
+    id : str
+        Id for finding an item in the UI.
+
+    Returns
+    -------
+    editor : Editor
+        The single editor found.
+    """
+    try:
+        editor = getattr(ui.info, id)
+    except AttributeError:
+        raise ValueError(
+            "No editors found with id {!r}. Got these: {!r}".format(
+                id, ui._names)
+            )
+    return editor
+
+
 def _get_ui_registry():
     """ Return a TargetRegistry with traitsui.ui.UI as the target.
 
@@ -234,6 +281,13 @@ def _get_ui_registry():
         locator_class=locator.TargetByName,
         solver=lambda wrapper, location: (
             _get_editor_by_name(wrapper.target, location.name)
+        ),
+    )
+    registry.register_solver(
+        target_class=UI,
+        locator_class=locator.TargetById,
+        solver=lambda wrapper, location: (
+            _get_editor_by_id(wrapper.target, location.id)
         ),
     )
     return registry

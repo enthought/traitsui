@@ -53,6 +53,17 @@ class TargetByName:
         self.name = name
 
 
+class TargetById:
+    """ A locator for locating the next UI target using an id.
+
+    Attributes
+    ----------
+    id : str
+    """
+    def __init__(self, id):
+        self.id = id
+
+
 class WidgetType(enum.Enum):
     """ A locator for locating nested widgets within a UI. Many editors will
     contain many sub-widgets (e.g. a textbox, slider, tabs, buttons, etc.).
