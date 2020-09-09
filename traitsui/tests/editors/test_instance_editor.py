@@ -11,6 +11,9 @@ from traitsui.tests._tools import (
     ToolkitName,
 )
 
+from traitsui.testing.tester import command, locator, query
+from traitsui.testing.tester.ui_tester import UITester
+
 
 class EditedInstance(HasTraits):
     value = Str()
@@ -27,14 +30,19 @@ class TestInstanceEditor(unittest.TestCase):
     @requires_toolkit([ToolkitName.qt])
     def test_simple_editor(self):
         obj = NonmodalInstanceEditor()
-        with reraise_exceptions(), create_ui(obj) as ui:
+        tester=UITester()
+        with tester.create_ui(obj) as ui:
+            instance = tester.find_by_name(ui, "inst")
+            editor = instance.locate(locator.NestedUI())
+            press_ok_button(editor.target)
+        """with reraise_exceptions(), create_ui(obj) as ui:
             editor = ui.get_editors("inst")[0]
 
             # make the dialog appear
             editor._button.click()
 
             # close the ui dialog
-            press_ok_button(editor._dialog_ui)
+            press_ok_button(editor._dialog_ui)"""
 
     @requires_toolkit([ToolkitName.qt])
     def test_simple_editor_parent_closed(self):
