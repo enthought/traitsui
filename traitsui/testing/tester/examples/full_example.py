@@ -24,6 +24,7 @@ from traitsui.api import (
 )
 from traitsui.testing.tester import command, locator, query
 from traitsui.testing.tester.ui_tester import UITester
+from traitsui.tests._tools import is_qt
 
 
 class ButtonExample(HasStrictTraits):
@@ -190,7 +191,7 @@ notebook = Notebook(editors=editors_list)
 
 
 if __name__ == '__main__':
-    notebook.configure_traits()
+    #notebook.configure_traits()
 
     tester = UITester(delay=500)
     with tester.create_ui(notebook) as ui:
@@ -218,7 +219,8 @@ if __name__ == '__main__':
         assert displayed == "Aaron"
         assert notebook.editors[1].name == ""
         textbox.perform(command.KeyClick("Enter"))
-        assert notebook.editors[1].name == "Aaron"
+        if is_qt():
+            assert notebook.editors[1].name == "Aaron"
 
         # Range Example
         range_example = editors.locate(locator.Index(2))
