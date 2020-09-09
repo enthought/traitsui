@@ -191,7 +191,7 @@ notebook = Notebook(editors=editors_list)
 
 
 if __name__ == '__main__':
-    #notebook.configure_traits()
+    notebook.configure_traits()
 
     tester = UITester(delay=500)
     with tester.create_ui(notebook) as ui:
