@@ -25,16 +25,13 @@ from traitsui.api import (
 from traitsui.testing.tester import command, locator, query
 from traitsui.testing.tester.ui_tester import UITester
 
+
 class ButtonExample(HasStrictTraits):
     cool_button = Button('Click Me')
     click_counter = Int(0)
 
     def _cool_button_fired(self):
-        self.click_counter += 1
-
-    # Currently there is some erroneous behavior with Qt5 and OSX causing
-    # the click_counter to not immediately increment when the button is 
-    # clicked. For more deailts, see enthought/traitsui #913.   
+        self.click_counter += 1  
     
     view = View(
         'cool_button',
@@ -253,8 +250,6 @@ if __name__ == '__main__':
         combobox.perform(command.KeySequence("R-1226"))
         combobox.perform(command.KeyClick("Enter"))
         radio = enum_example.find_by_id("name_list_radio")
-        # bug here for qt (this doesn't click but in the enum_example code it clicks just fine)
-        # this also works fine on wx right now
         radio.locate(locator.Index(5)).perform(command.MouseClick())
         custom_list = enum_example.find_by_id("name_list_list")
         custom_list.locate(locator.Index(3)).perform(command.MouseClick())
