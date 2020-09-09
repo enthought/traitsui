@@ -34,15 +34,10 @@ class TestInstanceEditor(unittest.TestCase):
         with tester.create_ui(obj) as ui:
             instance = tester.find_by_name(ui, "inst")
             editor = instance.locate(locator.NestedUI())
+            # the below code requires ui_base implementation to work
+            #ok_button = editor.find_by_id("OK")
+            #ok_button.perform(command.MouseClick())
             press_ok_button(editor.target)
-        """with reraise_exceptions(), create_ui(obj) as ui:
-            editor = ui.get_editors("inst")[0]
-
-            # make the dialog appear
-            editor._button.click()
-
-            # close the ui dialog
-            press_ok_button(editor._dialog_ui)"""
 
     @requires_toolkit([ToolkitName.qt])
     def test_simple_editor_parent_closed(self):
