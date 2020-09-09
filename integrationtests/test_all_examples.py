@@ -18,6 +18,7 @@ import sys
 import traceback
 import unittest
 from unittest import mock
+import time
 
 import pkg_resources
 from traits.api import HasTraits
@@ -339,9 +340,10 @@ class TestInteractExample(unittest.TestCase):
             DEMO, "Applications", "converter.py"
         )
         demo = load_demo(filepath, "popup")
-        tester = UITester(delay=500)
+        tester = UITester(delay=1500)
         with tester.create_ui(demo) as ui:
             input_amount = tester.find_by_name(ui, "input_amount")
+            input_amount.delay=200
             output_amount = tester.find_by_name(ui, "output_amount")
             # both of these have Simple Enum Editors !
             input_units = tester.find_by_name(ui, "input_units")
@@ -363,4 +365,15 @@ class TestInteractExample(unittest.TestCase):
             self.assertEqual(
                 output_amount.inspect(query.DisplayedText()),
                 "1.0",
+            )
+
+            for _ in range(3):
+                input_amount.perform(command.KeyClick("Backspace"))
+
+            input_units.locate(locator.Index(5)).perform(command.MouseClick())
+            output_units.locate(locator.Index(3)).perform(command.MouseClick())
+
+            self.assertEqual(
+                output_amount.inspect(query.DisplayedText())[:3],
+                "1.6",
             )
