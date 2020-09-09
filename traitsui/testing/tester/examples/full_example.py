@@ -48,7 +48,7 @@ class ButtonExample(HasStrictTraits):
 class TextboxExample(HasStrictTraits):
     name = Str()
     view = View(
-        Item("name", editor=TextEditor(auto_set=True), style='simple')
+        Item("name", editor=TextEditor(auto_set=False), style='simple')
     )
 
 
@@ -193,7 +193,7 @@ notebook = Notebook(editors=editors_list)
 
 
 if __name__ == '__main__':
-    #notebook.configure_traits()
+    notebook.configure_traits()
 
     tester = UITester(delay=500)
     with tester.create_ui(notebook) as ui:
@@ -206,6 +206,7 @@ if __name__ == '__main__':
         button.delay=100
         for _ in range(5):
             button.perform(command.MouseClick())
+        assert notebook.editors[0].click_counter >= 5
 
         # Textbox Example
         textbox_example = editors.locate(locator.Index(1))
@@ -216,6 +217,11 @@ if __name__ == '__main__':
         for _ in range(3):
             textbox.perform(command.KeyClick("Backspace"))
         textbox.perform(command.KeySequence("ron"))
+        displayed = textbox.inspect(query.DisplayedText())
+        assert displayed == "Aaron"
+        assert notebook.editors[1].name == ""
+        textbox.perform(command.KeyClick("Enter"))
+        assert notebook.editors[1].name == "Aaron"
 
         # Range Example
         range_example = editors.locate(locator.Index(2))
@@ -224,6 +230,7 @@ if __name__ == '__main__':
         range_text = number_field.locate(locator.WidgetType.textbox)
         range_text.perform(command.KeyClick("0"))
         range_text.perform(command.KeyClick("Enter"))
+        assert notebook.editors[2].value == 10
 
         # CheckList Example
         checklist_example = editors.locate(locator.Index(3))
@@ -234,6 +241,7 @@ if __name__ == '__main__':
         item_1.perform(command.MouseClick())
         item_2.perform(command.MouseClick())
         item_1.perform(command.MouseClick())
+        assert check_list.target.value == ["three"]
 
         # Enum Example
         enum_example = editors.locate(locator.Index(4))
