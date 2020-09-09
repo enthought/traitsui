@@ -1,10 +1,4 @@
-import contextlib
-import io
 import os
-import sys
-import traceback
-import unittest
-from unittest import mock
 import time
 
 import pkg_resources
@@ -33,7 +27,7 @@ if __name__ == '__main__':
     tester = UITester(delay=1500)
     with tester.create_ui(demo) as ui:
         input_amount = tester.find_by_name(ui, "input_amount")
-        input_amount.delay=200
+        input_amount.delay = 200
         output_amount = tester.find_by_name(ui, "output_amount")
         input_units = tester.find_by_name(ui, "input_units")
         output_units = tester.find_by_name(ui, "output_units")
