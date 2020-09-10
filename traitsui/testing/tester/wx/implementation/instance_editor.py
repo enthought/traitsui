@@ -10,7 +10,7 @@
 #
 from traitsui.testing.tester import command, locator
 from traitsui.testing.tester.registry_helper import register_nested_ui_solvers
-from traitsui.qt4.instance_editor import (
+from traitsui.wx.instance_editor import (
     CustomEditor,
     SimpleEditor
 )
