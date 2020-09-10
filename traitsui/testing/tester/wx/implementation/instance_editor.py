@@ -8,7 +8,6 @@
 #
 #  Thanks for using Enthought open source!
 #
-from traitsui.testing.tester import command, locator
 from traitsui.testing.tester.registry_helper import register_nested_ui_solvers
 from traitsui.wx.instance_editor import (
     CustomEditor,

@@ -8,12 +8,12 @@
 #
 #  Thanks for using Enthought open source!
 #
-from traitsui.testing.tester import command, locator
 from traitsui.testing.tester.registry_helper import register_nested_ui_solvers
 from traitsui.qt4.instance_editor import (
     CustomEditor,
     SimpleEditor
 )
+
 
 def _get_netsed_ui_simple(target):
     if target._dialog_ui is None:
