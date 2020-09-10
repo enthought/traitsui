@@ -75,3 +75,5 @@ class WidgetType(enum.Enum):
 
     # A textbox within a UI
     textbox = "textbox"
+    # A slide within a UI
+    slider = "slider"

@@ -48,3 +48,42 @@ class LocatedTextbox:
             target_class=cls,
             widget_getter=lambda wrapper: wrapper.target.textbox,
         )
+
+
+def slider_key_click(wrapper, interaction):
+    if interaction.key not in ["Left", "Right", "Up", "Down"]:
+        raise ValueError("Unexpected Key.")
+    else:
+        if interaction.key in ["Right", "Up"]:
+            wrapper.target.slider.value += wrapper.target.slider.singleStep()
+
+class LocatedSlider:
+    """ Wrapper class for a located Slider in Qt.
+
+    Parameters
+    ----------
+    textbox : Instance of QtGui.QSlider
+    """
+
+    def __init__(self, slider):
+        self.slider = slider
+
+    @classmethod
+    def register(cls, registry):
+        """ Class method to register interactions on a LocatedSlider for the
+        given registry.
+
+        If there are any conflicts, an error will occur.
+
+        Parameters
+        ----------
+        registry : TargetRegistry
+            The registry being registered to.
+        """
+        registry.register_handler(
+            target_class=cls,
+            interaction_class=command.KeyClick,
+            handler=slider_key_click
+        )
+
+
