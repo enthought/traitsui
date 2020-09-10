@@ -16,10 +16,22 @@ from traitsui.wx.instance_editor import (
 
 
 def _get_netsed_ui_simple(target):
+    """ Obtains a nested UI within a Simple Instance Editor.
+
+    Parameters
+    ----------
+    target : instance of SimpleEditor
+    """
     return target.edit_instance(None)
 
 
 def _get_netsed_ui_custom(target):
+    """ Obtains a nested UI within a Custom Instance Editor.
+
+    Parameters
+    ----------
+    target : instance of CustomEditor
+    """
     return target._ui
 
 
