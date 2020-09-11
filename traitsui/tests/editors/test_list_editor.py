@@ -152,7 +152,7 @@ class TestNotebookListEditor(unittest.TestCase):
         phonebook = Phonebook(
             people=[],
         )
-        tester = UITester(delay=500)
+        tester = UITester()
         with tester.create_ui(phonebook, dict(view=notebook_view)) as ui:
             with self.assertRaises(IndexError):
                 tester.find_by_name(ui, "people").\
