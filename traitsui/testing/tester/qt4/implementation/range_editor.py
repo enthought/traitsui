@@ -14,6 +14,7 @@ from traitsui.qt4.range_editor import (
     LogRangeSliderEditor,
     RangeTextEditor,
     SimpleSliderEditor,
+    SimpleSpinEditor,
 )
 
 from traitsui.testing.tester import locator
@@ -25,7 +26,8 @@ from traitsui.testing.tester.qt4.common_ui_targets import (
 
 def resolve_location_slider(wrapper, location):
     """ Solver from a UIWrapper wrapped Range Editor to a LocatedTextbox
-    containing the textbox of interest
+    containing the textbox of interest, or a LocatedSlider conttaining the
+    slider. 
 
     If there are any conflicts, an error will occur.
 
@@ -44,6 +46,30 @@ def resolve_location_slider(wrapper, location):
         f"Unable to resolve {location} on {wrapper.target}."
         " Currently supported: {locator.WidgetType.textbox} and"
         " {locator.WidgetType.slider}"
+    )
+
+
+def resolve_location_spin(wrapper, location):
+    """ Solver from a UIWrapper wrapped Range Editor to a LocatedTextbox
+    containing the textbox of interest.
+
+    If there are any conflicts, an error will occur.
+
+    Parameters
+    ----------
+    wrapper : UIWrapper
+        Wrapper containing the SimpleSpin Range Editor target.
+    location : locator.WidgetType
+        The location we are looking to resolve.
+    """
+    if location == locator.WidgetType.textbox:
+        # FIX ME: THIS CODE DOESNT BELONG HERE
+        textbox = wrapper.target.control.lineEdit()
+        textbox.end(False)
+        return LocatedTextbox(textbox=textbox)
+    raise ValueError(
+        f"Unable to resolve {location} on {wrapper.target}."
+        " Currently supported: {locator.WidgetType.textbox}"
     )
 
 
@@ -94,4 +120,9 @@ def register(registry):
         target_class=RangeTextEditor,
         locator_class=locator.WidgetType,
         solver=resolve_location_range_text,
+    )
+    registry.register_solver(
+        target_class=SimpleSpinEditor,
+        locator_class=locator.WidgetType,
+        solver=resolve_location_spin,
     )

@@ -83,6 +83,9 @@ class TestRangeEditor(unittest.TestCase):
     def test_simple_slider_editor_set_with_text_valid(self):
         return self.check_set_with_text_valid(mode='slider')
 
+    def test_simple_spin_editor_set_with_text_valid(self):
+        return self.check_set_with_text_valid(mode='spinner')
+
     def test_large_range_slider_editor_set_with_text_valid(self):
         return self.check_set_with_text_valid(mode='xslider')
 
@@ -116,6 +119,9 @@ class TestRangeEditor(unittest.TestCase):
 
     def test_simple_slider_editor_set_with_text_after_empty(self):
         return self.check_set_with_text_after_empty(mode='slider')
+
+    def test_simple_spin_editor_set_with_text_after_empty(self):
+        return self.check_set_with_text_after_empty(mode='spinner')
 
     def test_large_range_slider_editor_set_with_text_after_empty(self):
         return self.check_set_with_text_after_empty(mode='xslider')
