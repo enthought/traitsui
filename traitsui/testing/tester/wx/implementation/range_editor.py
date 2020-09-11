@@ -16,7 +16,7 @@ from traitsui.wx.range_editor import (
 )
 
 from traitsui.testing.tester import locator
-from traitsui.testing.tester.wx.common_ui_targets import LocatedTextbox
+from traitsui.testing.tester.wx.common_ui_targets import LocatedSlider, LocatedTextbox
 
 
 def resolve_location_slider(wrapper, location):
@@ -35,13 +35,11 @@ def resolve_location_slider(wrapper, location):
     if location == locator.WidgetType.textbox:
         return LocatedTextbox(textbox=wrapper.target.control.text)
     if location in [locator.WidgetType.slider]:
-        raise NotImplementedError(
-            f"Logic for interacting with the {location}"
-            " has not been implemented."
-        )
+        return LocatedSlider(slider=wrapper.target.control.slider)
     raise ValueError(
         f"Unable to resolve {location} on {wrapper.target}."
-        " Currently supported: {locator.WidgetType.textbox}"
+        " Currently supported: {locator.WidgetType.textbox} and"
+        " {locator.WidgetType.slider}"
     )
 
 
