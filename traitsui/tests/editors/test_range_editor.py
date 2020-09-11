@@ -1,7 +1,7 @@
 import platform
 import unittest
 
-from traits.api import HasTraits, Int
+from traits.api import HasTraits, Float, Int
 from traitsui.api import Item, RangeEditor, UItem, View
 from traitsui.testing.tester import command, locator, query
 from traitsui.testing.tester.ui_tester import UITester
@@ -17,6 +17,7 @@ is_windows = platform.system() == "Windows"
 class RangeModel(HasTraits):
 
     value = Int(1)
+    float_value = Float(0.1)
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -102,6 +103,7 @@ class TestRangeEditor(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field = tester.find_by_name(ui, "value")
+            
             text = number_field.locate(locator.WidgetType.textbox)
             # Delete all contents of textbox
             for _ in range(5):
@@ -126,3 +128,61 @@ class TestRangeEditor(unittest.TestCase):
     @requires_toolkit([ToolkitName.qt])
     def test_range_text_editor_set_with_text_after_empty(self):
         return self.check_set_with_text_after_empty(mode='text')
+    
+    def check_modify_slider(self, mode):
+        model = RangeModel(value=0)
+        view = View(
+            Item(
+                "value",
+                editor=RangeEditor(low=0, high=10, mode=mode)
+            )
+        )
+        tester = UITester()
+        with tester.create_ui(model, dict(view=view)) as ui:
+            number_field = tester.find_by_name(ui, "value")
+            slider = number_field.locate(locator.WidgetType.slider)
+            text = number_field.locate(locator.WidgetType.textbox)
+            # slider values are converted to a [0, 10000] scale.  A single 
+            # step is a change of 100 on that scale and a page step is 1000.
+            # Our range in [0, 10] so these correspond to changes of .1 and 1.
+            for _ in range(10):
+                slider.perform(command.KeyClick("Right"))
+            displayed = text.inspect(query.DisplayedText())
+            self.assertEqual(model.value, 1)
+            self.assertEqual(displayed, str(model.value))
+            slider.perform(command.KeyClick("Page Up"))
+            displayed = text.inspect(query.DisplayedText())
+            self.assertEqual(model.value, 2)
+            self.assertEqual(displayed, str(model.value))
+
+    def test_modify_slider_simple_slider(self):
+        return self.check_modify_slider('slider')
+
+    def test_modify_slider_large_range_slider(self):
+        return self.check_modify_slider('xslider')
+
+    def test_modify_slider_log_range_slider(self):
+        model = RangeModel()
+        view = View(
+            Item(
+                "float_value",
+                editor=RangeEditor(low=.1, high=1000000000, mode='logslider')
+            )
+        )
+        tester = UITester()
+        with tester.create_ui(model, dict(view=view)) as ui:
+            number_field = tester.find_by_name(ui, "float_value")
+            slider = number_field.locate(locator.WidgetType.slider)
+            text = number_field.locate(locator.WidgetType.textbox)
+            # 10 steps is equivalent to 1 page step
+            # on this scale either of those is equivalent to increasing the
+            # trait's value from 10^n to 10^(n+1)
+            for _ in range(10):
+                slider.perform(command.KeyClick("Right"))
+            displayed = text.inspect(query.DisplayedText())
+            self.assertEqual(model.float_value, 1.0)
+            self.assertEqual(displayed, str(model.float_value))
+            slider.perform(command.KeyClick("Page Up"))
+            displayed = text.inspect(query.DisplayedText())
+            self.assertEqual(model.float_value, 10.0)
+            self.assertEqual(displayed, str(model.float_value))

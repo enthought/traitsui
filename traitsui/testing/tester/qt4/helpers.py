@@ -171,3 +171,13 @@ def key_click_qwidget(control, interaction, delay):
     if not control.isEnabled():
         raise Disabled("{!r} is disabled.".format(control))
     key_click(control, interaction.key, delay=delay)
+
+
+def key_click_qslider(control, interaction, delay):
+    valid_keys = ["Left", "Right", "Up", "Down", "Page Up", "Page Down"]
+    if interaction.key not in valid_keys:
+        raise ValueError("Unexpected Key.")
+    else:
+        key_click(control, interaction.key, delay)
+        #if interaction.key in ["Right", "Up"]:
+        #    wrapper.target.slider.value += wrapper.target.slider.singleStep()
