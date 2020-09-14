@@ -8,6 +8,9 @@
 #
 #  Thanks for using Enthought open source!
 #
+
+from traitsui.testing.tester import command
+from traitsui.testing.tester.qt4.helpers import mouse_click_qwidget
 from traitsui.testing.tester.registry_helper import register_nested_ui_solvers
 from traitsui.qt4.instance_editor import (
     CustomEditor,
@@ -47,5 +50,12 @@ def register(registry):
     registry : TargetRegistry
         The registry being registered to.
     """
+    registry.register_handler(
+        target_class=SimpleEditor,
+        interaction_class=command.MouseClick,
+        handler=lambda wrapper, _: (
+            mouse_click_qwidget(wrapper.target._button, delay=wrapper.delay)
+        )
+    )
     register_nested_ui_solvers(registry, SimpleEditor, _get_netsed_ui_simple)
     register_nested_ui_solvers(registry, CustomEditor, _get_netsed_ui_custom)
