@@ -51,16 +51,27 @@ class _IndexedRadioEditor(_BaseSourceWithLocation):
     ]
 
 def convert_index(layout, index, row_major):
+    """ Helper function to convert an index for a QGridLayout so that the
+    index counts over the grid in the correct direction.  
+    The grid is always populated in row major order. The row_major trait of a
+    Radio Enum Editor simply changes what elements are assigned to each entry
+    in the grid, so that when displayed, they appear in column major order.
+    Qlayouts are indexed in the order they are populated, so to access
+    the correct element we may need to convert a column-major based index
+    into a row-major one.
+
+    Parameters
+    ----------
+    layout : QGridLayout
+        The layout of interest
+    index : int
+        the index of interest
+    row_major : bool
+        whether or not the grid entries are organized in row major order
+    """
     if row_major:
         return index
     else:
-        # the grid is always populated in row major order. The row_major trait
-        # simply changes what elements are assigned to each entry in the grid,
-        # so that when displayed, they appear in column major order.
-        # Qlayouts are indexed in the order they are populated, so to access
-        # the correct element we need to convert a column-major based index
-        # into a row-major one.
-
         n = layout.count()
         num_cols = layout.columnCount()
         num_rows = layout.rowCount()
