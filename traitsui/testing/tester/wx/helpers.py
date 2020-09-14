@@ -212,7 +212,7 @@ def key_click_text_entry(
         Useful for when the TextEntry.GetSelection is overridden by a subclass
         that does not conform to the common API.
     """
-    if not control.IsEditable():
+    if not (control.IsEnabled() and control.IsEditable()):
         raise Disabled("{!r} is disabled.".format(control))
     if not control.HasFocus():
         control.SetFocus()
@@ -274,7 +274,7 @@ def key_sequence_text_ctrl(control, interaction, delay):
     for char in interaction.sequence:
         check_key_compat(char)
 
-    if not control.IsEditable():
+    if not (control.IsEnabled() and control.IsEditable()):
         raise Disabled("{!r} is disabled.".format(control))
     if not control.HasFocus():
         control.SetFocus()

@@ -425,7 +425,9 @@ class ListEditor(BaseEditor):
         """
         control = self.control
         try:
+            print("my value: ", self.value)
             value = self.inverse_mapping[self.value]
+            print("my value2: ", self.value)
 
             for row in range(control.count()):
                 itm = control.item(row)

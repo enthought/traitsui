@@ -15,6 +15,7 @@ from traitsui.tests._tools import (
     ToolkitName,
 )
 from traitsui.testing.tester import command, locator, query
+from traitsui.testing.tester.exceptions import Disabled
 from traitsui.testing.tester.ui_tester import UITester
 
 is_windows = platform.system() == "Windows"
@@ -293,6 +294,24 @@ class TestSimpleEnumEditor(unittest.TestCase):
         with tester.create_ui(EnumModel(), dict(view=view)):
             enum_editor_factory.values = ["one", "two", "three"]
 
+    def test_simple_editor_disabled(self):
+        enum_edit = EnumModel(value="two")
+        view = View(
+            UItem(
+                "value",
+                style="simple",
+                enabled_when="value == 'one'",
+                editor=EnumEditor(evaluate=True, values=["one", "two"]),
+            ),
+        )
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
+            combobox = tester.find_by_name(ui, "value")
+            with self.assertRaises(Disabled):
+                combobox.perform(command.KeyClick("Enter"))
+            with self.assertRaises(Disabled):
+                combobox.perform(command.KeySequence("two"))
+
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestRadioEnumEditor(unittest.TestCase):
@@ -427,6 +446,7 @@ class TestListEnumEditor(unittest.TestCase):
     def test_list_evaluate_editor_index(self):
         self.check_enum_index_update(get_evaluate_view("custom", mode="list"))
 
+    @requires_toolkit([])
     def check_list_enum_none_selected(self, view):
         enum_edit = EnumModelWithNone()
         view = View(

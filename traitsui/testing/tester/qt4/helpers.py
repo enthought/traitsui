@@ -113,7 +113,7 @@ def mouse_click_qwidget(control, delay):
     )
 
 
-def mouse_click_qlayout(layout, index, delay=0):
+def mouse_click_qlayout(layout, index, delay):
     """ Performs a mouse click on a widget at an index in a QLayout.
 
     Parameters
@@ -133,7 +133,7 @@ def mouse_click_qlayout(layout, index, delay=0):
     )
 
 
-def mouse_click_item_view(model, view, index, delay=0):
+def mouse_click_item_view(model, view, index, delay):
     """ Perform mouse click on the given QAbstractItemModel (model) and
     QAbstractItemView (view) with the given row and column.
 
@@ -163,7 +163,7 @@ def mouse_click_item_view(model, view, index, delay=0):
     )
 
 
-def mouse_click_combobox(combobox, index, delay=0):
+def mouse_click_combobox(combobox, index, delay):
     """ Perform a mouse click on a QComboBox at a given index.
 
     Paramters
