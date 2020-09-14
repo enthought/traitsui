@@ -91,7 +91,7 @@ def mouse_click_qwidget(control, delay):
     )
 
 
-def mouse_click_tab_index(tab_widget, index, delay=0):
+def mouse_click_tab_index(tab_widget, index, delay):
     """ Performs a mouse click on a tab at an index in a QtGui.QTabWidget.
 
     Parameters
@@ -114,7 +114,7 @@ def mouse_click_tab_index(tab_widget, index, delay=0):
     )
 
 
-def mouse_click_qlayout(layout, index, delay=0):
+def mouse_click_qlayout(layout, index, delay):
     """ Performs a mouse click on a widget at an index in a QLayout.
 
     Parameters
