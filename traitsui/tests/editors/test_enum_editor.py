@@ -1,7 +1,6 @@
 import contextlib
 import platform
 import unittest
-import time
 
 from traits.api import Enum, HasTraits, Int, List
 from traitsui.api import EnumEditor, UItem, View
@@ -428,7 +427,7 @@ class TestListEnumEditor(unittest.TestCase):
     def test_list_evaluate_editor_index(self):
         self.check_enum_index_update(get_evaluate_view("custom", mode="list"))
 
-    def test_list_enum_none_selected(self):
+    def check_list_enum_none_selected(self, view):
         enum_edit = EnumModelWithNone()
         view = View(
             UItem(
@@ -441,11 +440,26 @@ class TestListEnumEditor(unittest.TestCase):
             ),
             resizable=True,
         )
-        tester = UITester(delay=1000)
+        tester = UITester()
         with tester.create_ui(enum_edit, dict(view=view)) as ui:
             self.assertEqual(enum_edit.value, None)
             list_editor = tester.find_by_name(ui, "value")
             displayed = list_editor.inspect(query.DisplayedSelectedText())
-            time.sleep(2)
             self.assertEqual(displayed, "")
+    
+    def test_list_enum_none_selected(self):
+        view = View(
+            UItem(
+                "value",
+                editor=EnumEditor(
+                    values=["one", "two", "three", "four"],
+                    mode="list",
+                ),
+                style="custom",
+            ),
+            resizable=True,
+        )
+        self.check_list_enum_none_selected(view)
 
+    def test_list_evaluate_none_selected(self):
+        self.check_list_enum_none_selected(get_evaluate_view("custom", mode="list"))
