@@ -56,7 +56,7 @@ def register(registry):
 
     handlers = [
         (command.KeyClick,
-            (lambda wrapper, interaction: helpers.key_click_text_ctrl(
+            (lambda wrapper, interaction: helpers.key_click_text_entry(
                 wrapper.target.control, interaction, wrapper.delay))),
         (command.KeySequence,
             (lambda wrapper, interaction: helpers.key_sequence_text_ctrl(

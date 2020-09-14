@@ -191,19 +191,26 @@ def mouse_click_radiobutton_child_in_panel(control, index, delay):
     mouse_click_radiobutton(obj, delay)
 
 
-def key_click_text_ctrl(control, interaction, delay):
+def key_click_text_entry(
+    control, interaction, delay,
+    get_selection=lambda control: control.GetSelection()):
     """ Performs simulated typing of a key on the given wxObject
     after a delay.
 
     Parameters
     ----------
-    control : wxTextCtrl
+    control : wxTextEntry
         The wx Object to be acted on.
     interaction : instance of command.KeyClick
         The interaction object holding the key input
         to be simulated being typed
     delay : int
         Time delay (in ms) in which the key click will be performed.
+    get_selection: callable(wx.TextEntry) -> tuple(int, int)
+        Callable that takes an instance of wx.TextEntry and return the
+        current selection span. Default is to call `GetSelection` method.
+        Useful for when the TextEntry.GetSelection is overridden by a subclass
+        that does not conform to the common API.
     """
     if not control.IsEditable():
         raise Disabled("{!r} is disabled.".format(control))
@@ -216,8 +223,9 @@ def key_click_text_ctrl(control, interaction, delay):
         control.ProcessEvent(event)
     elif interaction.key == "Backspace":
         wx.MilliSleep(delay)
-        if control.GetStringSelection():
-            control.Remove(*control.GetSelection())
+        start, end = get_selection(control)
+        if end > start:
+            control.Remove(start, end)
         else:
             pos = control.GetInsertionPoint()
             control.Remove(max(0, pos - 1), pos)
@@ -241,27 +249,10 @@ def key_click_combobox(control, interaction, delay):
     delay : int
         Time delay (in ms) in which the key click will be performed.
     """
-    if not control.IsEditable():
-        raise Disabled("{!r} is disabled.".format(control))
-    if not control.HasFocus():
-        control.SetFocus()
-        control.SetInsertionPointEnd()
-    if interaction.key == "Enter":
-        wx.MilliSleep(delay)
-        event = wx.CommandEvent(wx.EVT_TEXT_ENTER.typeId, control.GetId())
-        control.ProcessEvent(event)
-    elif interaction.key == "Backspace":
-        wx.MilliSleep(delay)
-        start_sel, end_sel = control.GetTextSelection()
-        if start_sel != end_sel:
-            control.Remove(start_sel, end_sel)
-        else:
-            pos = control.GetInsertionPoint()
-            control.Remove(max(0, pos - 1), pos)
-    else:
-        check_key_compat(interaction.key)
-        wx.MilliSleep(delay)
-        control.WriteText(interaction.key)
+    key_click_text_entry(
+        control, interaction, delay,
+        get_selection=lambda control: control.GetTextSelection(),
+    )
 
 
 def key_sequence_text_ctrl(control, interaction, delay):
