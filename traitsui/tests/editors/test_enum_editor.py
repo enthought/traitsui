@@ -1,6 +1,7 @@
 import contextlib
 import platform
 import unittest
+import time
 
 from traits.api import Enum, HasTraits, Int, List
 from traitsui.api import EnumEditor, UItem, View
@@ -23,6 +24,10 @@ is_windows = platform.system() == "Windows"
 class EnumModel(HasTraits):
 
     value = Enum("one", "two", "three", "four")
+
+class EnumModelWithNone(HasTraits):
+
+    value = Enum(None, "one", "two", "three", "four")
 
 
 def get_view(style):
@@ -334,6 +339,29 @@ class TestRadioEnumEditor(unittest.TestCase):
                         radio_editor.target.rebuild_editor()
                     radio_editor.locate(locator.Index(3)).perform(command.MouseClick())
                     self.assertEqual(enum_edit.value, "four")
+    
+    def test_radio_enum_displayed_selected_text(self):
+        enum_edit = EnumModel()
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=get_radio_view(cols=1))) as ui:
+            # sanity check
+            self.assertEqual(enum_edit.value, "one")
+            radio_editor = tester.find_by_name(ui, "value")
+            displayed = radio_editor.inspect(query.DisplayedSelectedText())
+            # Radio Editor capitalizes
+            self.assertEqual(displayed, "One")
+            radio_editor.locate(locator.Index(3)).perform(command.MouseClick())
+            displayed = radio_editor.inspect(query.DisplayedSelectedText())
+            self.assertEqual(displayed, "Four")
+
+    def test_radio_enum_none_selected(self):
+        enum_edit = EnumModelWithNone()
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=get_radio_view(cols=1))) as ui:
+            self.assertEqual(enum_edit.value, None)
+            radio_editor = tester.find_by_name(ui, "value")
+            displayed = radio_editor.inspect(query.DisplayedSelectedText())
+            self.assertEqual(displayed, "")
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -399,3 +427,25 @@ class TestListEnumEditor(unittest.TestCase):
 
     def test_list_evaluate_editor_index(self):
         self.check_enum_index_update(get_evaluate_view("custom", mode="list"))
+
+    def test_list_enum_none_selected(self):
+        enum_edit = EnumModelWithNone()
+        view = View(
+            UItem(
+                "value",
+                editor=EnumEditor(
+                    values=["one", "two", "three", "four"],
+                    mode="list",
+                ),
+                style="custom",
+            ),
+            resizable=True,
+        )
+        tester = UITester(delay=1000)
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
+            self.assertEqual(enum_edit.value, None)
+            list_editor = tester.find_by_name(ui, "value")
+            displayed = list_editor.inspect(query.DisplayedSelectedText())
+            time.sleep(2)
+            self.assertEqual(displayed, "")
+
