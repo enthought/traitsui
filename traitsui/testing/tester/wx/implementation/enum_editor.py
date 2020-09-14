@@ -133,7 +133,7 @@ def simple_displayed_text_handler(wrapper, interaction):
         return control.GetString(control.GetSelection())
 
 
-def radio_displayed_text_handler(wrapper, interaction):
+def radio_displayed_selected_text_handler(wrapper, interaction):
     """ Handler function used to query DisplayedText for EnumRadioEditor.
 
     Parameters
@@ -145,10 +145,10 @@ def radio_displayed_text_handler(wrapper, interaction):
         handler.  Should only be query.DisplayedText
     """
     children_list = wrapper.target.control.GetSizer().GetChildren()
-    for index in range(len(children_list)):
-        if children_list[index].GetWindow().GetValue():
-            return children_list[index].GetWindow().GetLabel()
-
+    for child in children_list:
+        if child.GetWindow().GetValue():
+            return child.GetWindow().GetLabel()
+    return ""
 
 def register(registry):
     """ Registry location and interaction handlers for EnumEditor.
@@ -184,12 +184,12 @@ def register(registry):
 
     registry.register_handler(
         target_class=RadioEditor,
-        interaction_class=query.DisplayedText,
-        handler=radio_displayed_text_handler,
+        interaction_class=query.DisplayedSelectedText,
+        handler=radio_displayed_selected_text_handler,
     )
     registry.register_handler(
         target_class=ListEditor,
-        interaction_class=query.DisplayedText,
+        interaction_class=query.DisplayedSelectedText,
         handler=lambda wrapper, _: wrapper.target.control.GetString(
             wrapper.target.control.GetSelection()),
     )

@@ -322,7 +322,7 @@ class TestRadioEnumEditor(unittest.TestCase):
 
     def test_radio_enum_editor_pick(self):
         for cols in range(1,4):
-            for row_major in [False]:
+            for row_major in [True, False]:
                 enum_edit = EnumModel()
                 tester = UITester()
                 with tester.create_ui(enum_edit, dict(view=get_radio_view(cols=cols))) as ui:
@@ -331,6 +331,7 @@ class TestRadioEnumEditor(unittest.TestCase):
                     radio_editor = tester.find_by_name(ui, "value")
                     if is_qt():
                         radio_editor.target.row_major = row_major
+                        radio_editor.target.rebuild_editor()
                     radio_editor.locate(locator.Index(3)).perform(command.MouseClick())
                     self.assertEqual(enum_edit.value, "four")
 
@@ -345,12 +346,12 @@ class TestListEnumEditor(unittest.TestCase):
         with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
             list_editor = tester.find_by_name(ui, "value")
-            displayed = list_editor.inspect(query.DisplayedText())
+            displayed = list_editor.inspect(query.DisplayedSelectedText())
 
             self.assertEqual(displayed, "one")
 
             list_editor.locate(locator.Index(1)).perform(command.MouseClick())
-            displayed = list_editor.inspect(query.DisplayedText())
+            displayed = list_editor.inspect(query.DisplayedSelectedText())
             self.assertEqual(displayed, "two")
 
     def check_enum_index_update(self, view):
