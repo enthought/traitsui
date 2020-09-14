@@ -80,7 +80,7 @@ def mouse_click_combobox_or_choice(control, index, delay):
             wx.wxEVT_COMMAND_CHOICE_SELECTED, control.GetId()
         )
     else:
-        raise TypeError
+        raise TypeError("Only supported controls are wxComboBox or wxChoice")
     click_event.SetEventObject(control)
     click_event.SetString(control.GetString(index))
     control.SetSelection(index)
@@ -188,7 +188,6 @@ def mouse_click_radiobutton_child_in_panel(control, index, delay):
     if not 0 <= index <= len(children_list) - 1:
         raise IndexError(index)
     obj = children_list[index].GetWindow()
-    print(obj)
     mouse_click_radiobutton(obj, delay)
 
 

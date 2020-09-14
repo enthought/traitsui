@@ -8,6 +8,12 @@
 #
 #  Thanks for using Enthought open source!
 #
+""" This module contains targets for UIWrapper so that the logic related to
+them can be reused. 
+To use the logic in these objects, if the class in this module is a base class
+(indicated by leading _Base) they simply need to subclass this class, override
+any necessary traits, and then call the register method.
+"""
 
 
 class _BaseSourceWithLocation:
@@ -21,24 +27,26 @@ class _BaseSourceWithLocation:
     class level attributes overridden.
     """
 
-    # the source class we want to interact with, typically an Editor
+    # The type of the source object on which the location information will be
+    # evaluated on
     source_class = None
-    # The locator_class that contains the relevant location information
+    # The type of the locator object that provides location information.
     # (e.g. locator.Index)
     locator_class = None
     # the handlers we want to register for the given source_class
     # must be given as a list of tuples where the first element is the
     # interaction class (e.g. command.MouseClick) and the second is the
-    # actual handler function.
+    # actual handler function.  See registry.TargetRegistry.register_handler
+    # for the signature of the callable. 
     handlers = []
 
     def __init__(self, source, location):
         """
         Parameters
         ----------
-        source : subclass of type
+        source : instance of source_class
             The source object. Typically this is an editor.
-        location : Any
+        location : instance of locator_class
             The location information of interest
         """
         self.source = source

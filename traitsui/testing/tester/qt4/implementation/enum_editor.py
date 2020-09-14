@@ -15,7 +15,7 @@ from traitsui.qt4.enum_editor import (
     SimpleEditor,
 )
 from traitsui.testing.tester import command, locator, query
-from traitsui.testing.tester.base_classes import _BaseSourceWithLocation
+from traitsui.testing.tester.common_ui_targets import _BaseSourceWithLocation
 from traitsui.testing.tester.qt4 import helpers
 
 
