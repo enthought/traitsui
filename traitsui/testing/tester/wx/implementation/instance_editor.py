@@ -18,7 +18,7 @@ from traitsui.wx.instance_editor import (
 )
 
 
-def _get_netsed_ui_simple(target):
+def _get_nested_ui_simple(target):
     """ Obtains a nested UI within a Simple Instance Editor.
 
     Parameters
@@ -28,7 +28,7 @@ def _get_netsed_ui_simple(target):
     return target._dialog_ui
 
 
-def _get_netsed_ui_custom(target):
+def _get_nested_ui_custom(target):
     """ Obtains a nested UI within a Custom Instance Editor.
 
     Parameters
@@ -55,5 +55,5 @@ def register(registry):
             wrapper.target._button, delay=wrapper.delay,
         )
     )
-    register_nested_ui_solvers(registry, SimpleEditor, _get_netsed_ui_simple)
-    register_nested_ui_solvers(registry, CustomEditor, _get_netsed_ui_custom)
+    register_nested_ui_solvers(registry, SimpleEditor, _get_nested_ui_simple)
+    register_nested_ui_solvers(registry, CustomEditor, _get_nested_ui_custom)
