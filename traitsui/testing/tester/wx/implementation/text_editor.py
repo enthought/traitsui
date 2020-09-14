@@ -12,8 +12,10 @@
 import wx
 
 from traitsui.wx.text_editor import CustomEditor, ReadonlyEditor, SimpleEditor
-from traitsui.testing.tester import command, query
-from traitsui.testing.tester.wx import helpers
+from traitsui.testing.tester import query
+from traitsui.testing.tester.wx.registry_helper import (
+    register_editable_textbox_handlers,
+)
 
 
 def readonly_displayed_text_handler(wrapper, interaction):
@@ -53,32 +55,11 @@ def register(registry):
     registry : TargetRegistry
         The registry being registered to.
     """
-
-    handlers = [
-        (command.KeyClick,
-            (lambda wrapper, interaction: helpers.key_click_text_entry(
-                wrapper.target.control, interaction, wrapper.delay))),
-        (command.KeySequence,
-            (lambda wrapper, interaction: helpers.key_sequence_text_ctrl(
-                wrapper.target.control, interaction, wrapper.delay))),
-        (command.MouseClick,
-            (lambda wrapper, _: helpers.mouse_click_object(
-                wrapper.target.control, wrapper.delay))),
-    ]
-
     for target_class in [CustomEditor, SimpleEditor]:
-        for interaction_class, handler in handlers:
-            registry.register_handler(
-                target_class=target_class,
-                interaction_class=interaction_class,
-                handler=handler,
-            )
-
-    for target_class in [CustomEditor, SimpleEditor]:
-        registry.register_handler(
+        register_editable_textbox_handlers(
+            registry=registry,
             target_class=target_class,
-            interaction_class=query.DisplayedText,
-            handler=lambda wrapper, _: wrapper.target.control.GetValue(),
+            widget_getter=lambda wrapper: wrapper.target.control,
         )
 
     registry.register_handler(
