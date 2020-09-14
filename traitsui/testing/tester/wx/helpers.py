@@ -188,6 +188,7 @@ def mouse_click_radiobutton_child_in_panel(control, index, delay):
     if not 0 <= index <= len(children_list) - 1:
         raise IndexError(index)
     obj = children_list[index].GetWindow()
+    print(obj)
     mouse_click_radiobutton(obj, delay)
 
 
