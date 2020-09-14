@@ -44,6 +44,21 @@ def get_evaluate_view(style, auto_set=True, mode="radio"):
     )
 
 
+def get_radio_view(cols):
+    return View(
+        UItem(
+            "value",
+            editor=EnumEditor(
+                values=["one", "two", "three", "four"],
+                cols=cols,
+                mode="radio",
+            ),
+            style="custom",
+        ),
+        resizable=True,
+    )
+
+
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestEnumEditorMapping(unittest.TestCase):
 
@@ -305,17 +320,17 @@ class TestRadioEnumEditor(unittest.TestCase):
             )
 
     def test_radio_enum_editor_pick(self):
-        enum_edit = EnumModel()
-        tester = UITester()
-        with tester.create_ui(enum_edit, dict(view=get_view("custom"))) as ui:
-
-            self.assertEqual(enum_edit.value, "one")
-
-            radio_editor = tester.find_by_name(ui, "value")
-            radio_editor.locate(locator.Index(3)).perform(command.MouseClick())
-
-            # The layout is: one, three, four \n two
-            self.assertEqual(enum_edit.value, "two")
+        for cols in range(1,4):
+            for row_major in [False]:
+                enum_edit = EnumModel()
+                tester = UITester()
+                with tester.create_ui(enum_edit, dict(view=get_radio_view(cols=cols))) as ui:
+                    # sanity check
+                    self.assertEqual(enum_edit.value, "one")
+                    radio_editor = tester.find_by_name(ui, "value")
+                    radio_editor.target.row_major = row_major
+                    radio_editor.locate(locator.Index(3)).perform(command.MouseClick())
+                    self.assertEqual(enum_edit.value, "four")
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])

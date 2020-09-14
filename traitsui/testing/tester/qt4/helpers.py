@@ -8,7 +8,7 @@
 #
 #  Thanks for using Enthought open source!
 #
-
+from functools import reduce
 from pyface.qt import QtCore, QtGui
 from pyface.qt.QtTest import QTest
 
