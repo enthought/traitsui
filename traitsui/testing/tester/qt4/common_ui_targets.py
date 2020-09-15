@@ -55,7 +55,7 @@ class LocatedSlider:
 
     Parameters
     ----------
-    textbox : Instance of QtGui.QSlider
+    slider : Instance of QtGui.QSlider
     """
 
     def __init__(self, slider):
