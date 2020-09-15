@@ -76,23 +76,13 @@ def column_major_to_row_major(index, n, num_rows, num_cols):
     num_empty_entries_last_row = num_cols * num_rows - n
 
     if index > num_rows * (num_cols - num_empty_entries_last_row):
-        # break the grid up into 2 grids.  One of size
-        # num_rows x (num_cols - num_empty_entries_last_row).  The other
-        # of size (num_rows-1) x num_empty_entries_last_row
         num_entries_grid1 = num_rows * (num_cols - num_empty_entries_last_row)
-        # find i2, j2 coordinates of the index in grid2 if we counted in
-        # column major order
         new_index = index - num_entries_grid1
         i2 = new_index % (num_rows - 1)
         j2 = new_index // (num_rows - 1)
-        # convert that back to an index found from row major order and add that
-        # to the number of elements from grid 1 that would be counted in row
-        # major order
         return (num_cols - num_empty_entries_last_row)*(i2+1) + \
             (i2 * num_empty_entries_last_row + j2)
     else:
-        # find i,j coordinates of index if we counted in column major order
         i = index % num_rows
         j = index // num_rows
-    # convert that back to an index found from row major order
     return i * num_cols + j
