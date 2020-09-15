@@ -17,6 +17,7 @@ from traitsui.qt4.enum_editor import (
 from traitsui.testing.tester import command, locator, query
 from traitsui.testing.tester.common_ui_targets import _BaseSourceWithLocation
 from traitsui.testing.tester.qt4 import helpers
+from traitsui.testing.tester.editors.layout import column_major_to_row_major
 
 
 class _IndexedListEditor(_BaseSourceWithLocation):
@@ -76,32 +77,7 @@ def convert_index(layout, index, row_major):
         n = layout.count()
         num_cols = layout.columnCount()
         num_rows = layout.rowCount()
-        # the last entries of the last row can be empty.
-        num_empty_entries_last_row = num_cols * num_rows - n
-
-        # count in column major order
-
-        # if the index of interest extends into the part of the grid where
-        # the columns have a missing entry in the last row
-        if index > num_rows * (num_cols - num_empty_entries_last_row):
-            # break the grid up into 2 grids.  One of size
-            # num_rows x (num_cols - num_empty_entries_last_row).  The other
-            # of size (num_rows-1) x num_empty_entries_last_row
-            num_entries_grid1 = index - \
-                num_rows * (num_cols - num_empty_entries_last_row)
-            # find i, j coordinates of the index in grid2 if we counted in
-            # column major order
-            new_index = index - num_entries_grid1
-            i = new_index % (num_rows - 1)
-            j = new_index // (num_empty_entries_last_row)
-            # convert that back to an index found from row major order
-            return num_entries_grid1 + (i * num_empty_entries_last_row + j)
-        else:
-            # find i,j coordinates of index if we counted in column major order
-            i = index % num_rows
-            j = index // num_rows
-        # convert that back to an index found from row major order
-        return i * num_cols + j
+        return column_major_to_row_major(index, n, num_rows, num_cols)
 
 
 class _IndexedSimpleEditor(_BaseSourceWithLocation):
