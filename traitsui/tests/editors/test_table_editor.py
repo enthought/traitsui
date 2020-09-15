@@ -3,8 +3,7 @@ from unittest.mock import Mock
 
 from traits.api import HasTraits, Instance, Int, List, Str, Tuple
 
-from traitsui.api import EvalTableFilter, Item, ObjectColumn, TableEditor, View
-from traitsui.menu import Action, Menu
+from traitsui.api import Action, EvalTableFilter, Item, ObjectColumn, TableEditor, View
 from traitsui.tests._tools import (
     create_ui,
     is_qt,
