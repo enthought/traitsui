@@ -97,7 +97,6 @@ class TestLayout(unittest.TestCase):
         )
         self.assertEqual(actual, 8)
 
-
     def test_column_major_index_long_overhang(self):
         # This is the layout for displaying numbers from 0-9 with column
         # major setup:

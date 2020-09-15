@@ -32,28 +32,64 @@ def column_major_to_row_major(index, n, num_rows, num_cols):
         the number of rows in the layout
     num_cols : int
         the number of columns in the layout
+
+    Notes
+    -----
+    Since elements are populated in row major order, the resulting grid ends
+    up having at most its last row as incomplete. The general approach for the
+    algorithm is to find the coordinates as if we had counted through the
+    grid in column major order, and then convert that back to a row major
+    index. The complications come from hte fact that the last row may be
+    missing entries.
+    Consider the example (n=17, num_row=4, num_cols=5)
+    0  4  8  11  14
+    1  5  9  12  15
+    2  6  10 13  16
+    3  7  /  /  /
+    Row major order is 0, 4, 11, 14, 1, 5, ...
+
+    If the given index is 7 then we are in a column of the matrix where
+    all rows are full.  This corresponds to the else branch below. From here,
+    we simply find the (i,j) coordiantes of the entry 7 above, with the upper
+    left corner representing (0,0).  Thus, (i,j) = (3,1).  Now, to convert
+    this to a row major index, we can simply take i * num_cols + j.
+
+    If the given index is 15, then we are in a column where the last row is
+    missing an entry.  See the if branch below.  In the case the logic used
+    before won't work, because it would expect the grid to be filled. (i.e.
+    if one tried to do this in the same way you would get (i,j) = (3,4)).
+    To adderess this we break up the grid into two grids:
+    0  4     and    8  11  14
+    1  5            9  12  15
+    2  6            10 13  16
+    3  7
+    we find the (i2,j2) coordiantes of the entry 15 above in grid2, with the
+    upper left corner of grid2 representing (0,0). Hence, (i2,j2) = (1,2).
+    We then find that index if we had counted in row major order for grid2,
+    which would be i2 * num_empty_entries_last_row + j2 = 5, and add that to
+    however many elements would need to be counted over from grid one to reach
+    element 15 if we had been counting in row major order. Which is
+    (num_cols - num_empty_entries_last_row)*(i2+1).
     """
     if index > n:
         raise ValueError("Index is higher number of elements in layout")
-    # the last entries of the last row can be empty.
     num_empty_entries_last_row = num_cols * num_rows - n
 
-    # if the index of interest extends into the part of the grid where
-    # the columns have a missing entry in the last row
     if index > num_rows * (num_cols - num_empty_entries_last_row):
         # break the grid up into 2 grids.  One of size
         # num_rows x (num_cols - num_empty_entries_last_row).  The other
         # of size (num_rows-1) x num_empty_entries_last_row
         num_entries_grid1 = num_rows * (num_cols - num_empty_entries_last_row)
-        # find i, j coordinates of the index in grid2 if we counted in
+        # find i2, j2 coordinates of the index in grid2 if we counted in
         # column major order
         new_index = index - num_entries_grid1
-        i = new_index % (num_rows - 1)
-        j = new_index // (num_rows - 1)
+        i2 = new_index % (num_rows - 1)
+        j2 = new_index // (num_rows - 1)
         # convert that back to an index found from row major order and add that
         # to the number of elements from grid 1 that would be counted in row
         # major order
-        return (num_cols - num_empty_entries_last_row)*(i+1)  + (i * num_empty_entries_last_row + j)
+        return (num_cols - num_empty_entries_last_row)*(i2+1) + \
+            (i2 * num_empty_entries_last_row + j2)
     else:
         # find i,j coordinates of index if we counted in column major order
         i = index % num_rows
