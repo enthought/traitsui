@@ -1,16 +1,14 @@
 import unittest
 
 from traits.api import HasTraits, Instance, Str
-from traitsui.api import InstanceEditor
 from traitsui.item import Item
 from traitsui.view import View
 from traitsui.tests._tools import (
-    press_ok_button,
     requires_toolkit,
     ToolkitName,
 )
 
-from traitsui.testing.tester import command, locator, query
+from traitsui.testing.tester import command, query
 from traitsui.testing.tester.ui_tester import UITester
 
 
