@@ -479,7 +479,7 @@ class TestCustomCheckListEditor(unittest.TestCase):
             self.assertEqual(str_edit.value, "three,one")
 
     def test_custom_check_list_editor_grid_layout(self):
-        for cols in range(1,8):
+        for cols in range(1, 8):
             list_edit = ListModel()
             tester = UITester()
             view = get_view_custom_cols(cols=cols)
