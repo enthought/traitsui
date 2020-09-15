@@ -67,11 +67,11 @@ class _IndexedCustomCheckListEditor:
         registry.register_handler(
             target_class=cls,
             interaction_class=command.MouseClick,
-            handler=lambda wrapper, _: helpers.mouse_click_child_in_panel(
-                control=wrapper.target.target.control,
-                index=wrapper.target.index,
-                delay=wrapper.delay,
-            )
+            handler=lambda wrapper, _:
+                (helpers.mouse_click_checkbox_child_in_panel(
+                    control=wrapper.target.target.control,
+                    index=wrapper.target.index,
+                    delay=wrapper.delay))
         )
 
 

@@ -8,7 +8,6 @@
 #
 #  Thanks for using Enthought open source!
 #
-
 from pyface.qt import QtCore, QtGui
 from pyface.qt.QtTest import QTest
 
@@ -45,6 +44,28 @@ def key_click(widget, key, delay=0):
         QtCore.Qt.NoModifier,
         delay=delay,
     )
+
+
+def check_q_model_index_valid(index):
+    """ Checks if a given QModelIndex is valid.
+
+    Parameters
+    ----------
+    index : QModelIndex
+
+    Raises
+    ------
+    LookupError
+        If the index is not valid.
+    """
+    if not index.isValid():
+        row = index.row()
+        column = index.column()
+        raise LookupError(
+            "Unabled to locate item with row {!r} and column {!r}.".format(
+                row, column,
+            )
+        )
 
 
 # Generic Handlers ###########################################################
@@ -131,6 +152,63 @@ def mouse_click_qlayout(layout, index, delay):
         widget,
         QtCore.Qt.LeftButton,
         delay=delay,
+    )
+
+
+def mouse_click_item_view(model, view, index, delay):
+    """ Perform mouse click on the given QAbstractItemModel (model) and
+    QAbstractItemView (view) with the given row and column.
+
+    Parameters
+    ----------
+    model : QAbstractItemModel
+        Model from which QModelIndex will be obtained
+    view : QAbstractItemView
+        View from which the widget identified by the index will be
+        found and key sequence be performed.
+    index : QModelIndex
+
+    Raises
+    ------
+    LookupError
+        If the index cannot be located.
+        Note that the index error provides more
+    """
+    check_q_model_index_valid(index)
+    rect = view.visualRect(index)
+    QTest.mouseClick(
+        view.viewport(),
+        QtCore.Qt.LeftButton,
+        QtCore.Qt.NoModifier,
+        rect.center(),
+        delay=delay,
+    )
+
+
+def mouse_click_combobox(combobox, index, delay):
+    """ Perform a mouse click on a QComboBox at a given index.
+
+    Paramters
+    ---------
+    combobox : QtGui.ComboBox
+        The combobox to be clicked.
+    index : int
+        The index of the item in the combobox to be clicked.
+    delay : int
+        Time delay (in ms) in which each key click in the sequence will be
+        performed.
+    """
+    q_model_index = combobox.model().index(index, 0)
+    check_q_model_index_valid(q_model_index)
+    mouse_click_item_view(
+        model=combobox.model(),
+        view=combobox.view(),
+        index=q_model_index,
+        delay=delay,
+    )
+    # Otherwise the click won't get registered.
+    key_click(
+        combobox.view().viewport(), key="Enter",
     )
 
 

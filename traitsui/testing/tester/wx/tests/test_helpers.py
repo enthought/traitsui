@@ -123,7 +123,7 @@ class TestInteractions(unittest.TestCase):
         handler = mock.Mock()
         textbox.Bind(wx.EVT_TEXT, handler)
 
-        helpers.key_click_text_ctrl(textbox, command.KeyClick("A"), 0)
+        helpers.key_click_text_entry(textbox, command.KeyClick("A"), 0)
 
         self.assertEqual(textbox.Value, "A")
         self.assertEqual(handler.call_count, 1)
@@ -134,7 +134,7 @@ class TestInteractions(unittest.TestCase):
         handler = mock.Mock()
         textbox.Bind(wx.EVT_TEXT, handler)
 
-        helpers.key_click_text_ctrl(textbox, command.KeyClick("Backspace"), 0)
+        helpers.key_click_text_entry(textbox, command.KeyClick("Backspace"), 0)
 
         self.assertEqual(textbox.Value, "")
         self.assertEqual(handler.call_count, 1)
@@ -150,7 +150,7 @@ class TestInteractions(unittest.TestCase):
         handler = mock.Mock()
         textbox.Bind(wx.EVT_TEXT, handler)
 
-        helpers.key_click_text_ctrl(textbox, command.KeyClick("Backspace"), 0)
+        helpers.key_click_text_entry(textbox, command.KeyClick("Backspace"), 0)
 
         self.assertEqual(textbox.Value, "E")
         self.assertEqual(handler.call_count, 1)
@@ -160,4 +160,4 @@ class TestInteractions(unittest.TestCase):
         textbox.SetEditable(False)
 
         with self.assertRaises(Disabled):
-            helpers.key_click_text_ctrl(textbox, command.KeyClick("Enter"), 0)
+            helpers.key_click_text_entry(textbox, command.KeyClick("Enter"), 0)
