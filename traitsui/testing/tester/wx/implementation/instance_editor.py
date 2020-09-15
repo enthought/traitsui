@@ -8,7 +8,10 @@
 #
 #  Thanks for using Enthought open source!
 #
+
+from traitsui.testing.tester import command
 from traitsui.testing.tester.registry_helper import register_nested_ui_solvers
+from traitsui.testing.tester.wx.helpers import mouse_click_button
 from traitsui.wx.instance_editor import (
     CustomEditor,
     SimpleEditor
@@ -22,7 +25,7 @@ def _get_nested_ui_simple(target):
     ----------
     target : instance of SimpleEditor
     """
-    return target.edit_instance(None)
+    return target._dialog_ui
 
 
 def _get_nested_ui_custom(target):
@@ -45,5 +48,12 @@ def register(registry):
     registry : TargetRegistry
         The registry being registered to.
     """
+    registry.register_handler(
+        target_class=SimpleEditor,
+        interaction_class=command.MouseClick,
+        handler=lambda wrapper, _: mouse_click_button(
+            wrapper.target._button, delay=wrapper.delay,
+        )
+    )
     register_nested_ui_solvers(registry, SimpleEditor, _get_nested_ui_simple)
     register_nested_ui_solvers(registry, CustomEditor, _get_nested_ui_custom)
