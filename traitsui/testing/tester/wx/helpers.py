@@ -76,6 +76,39 @@ def mouse_click_object(control, delay):
     control.ProcessEvent(click_event)
 
 
+def mouse_click_notebook_tab_index(control, index, delay=0):
+    """ Performs a mouseclick on a Noteboook List Editor on the tab specified
+    by index.
+
+    Parameters
+    ----------
+    control : wx.Window
+        The control of the DockWindow
+    index : int
+        The index of the child object in the Panel to be clicked
+    delay : int
+        Time delay (in ms) in which click will be performed.
+    """
+    controls_list = control.GetSizer().GetContents().get_controls()
+    wx.MilliSleep(delay)
+
+    # find the boundaries of the tab to be clicked
+    bx, by, bdx, bdy = controls_list[index].drag_bounds
+    # find the center
+    tab_center = wx.Point(bx + bdx//2, by + bdy//2)
+
+    click_down_event = wx.MouseEvent(
+        wx.wxEVT_LEFT_DOWN
+    )
+    click_down_event.SetPosition(tab_center)
+    click_up_event = wx.MouseEvent(
+        wx.wxEVT_LEFT_UP
+    )
+    click_up_event.SetPosition(tab_center)
+    control.ProcessEvent(click_down_event)
+    control.ProcessEvent(click_up_event)
+
+
 def mouse_click_child_in_panel(control, index, delay):
     """ Performs a mouce click on a child of a Wx Panel.
     Parameters

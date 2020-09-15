@@ -91,7 +91,30 @@ def mouse_click_qwidget(control, delay):
     )
 
 
-def mouse_click_qlayout(layout, index, delay=0):
+def mouse_click_tab_index(tab_widget, index, delay):
+    """ Performs a mouse click on a tab at an index in a QtGui.QTabWidget.
+
+    Parameters
+    ----------
+    tab_widget : QtGui.QTabWidget
+        The tab widget containing the tab to be clicked.
+    index : int
+        The index of the tab to be clicked.
+    delay : int
+        Time delay (in ms) in which click will be performed.
+    """
+    tabbar = tab_widget.tabBar()
+    rect = tabbar.tabRect(index)
+    QTest.mouseClick(
+        tabbar,
+        QtCore.Qt.LeftButton,
+        QtCore.Qt.NoModifier,
+        rect.center(),
+        delay=delay,
+    )
+
+
+def mouse_click_qlayout(layout, index, delay):
     """ Performs a mouse click on a widget at an index in a QLayout.
 
     Parameters
