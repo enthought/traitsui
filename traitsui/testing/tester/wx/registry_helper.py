@@ -35,7 +35,7 @@ def register_editable_textbox_handlers(registry, target_class, widget_getter):
             (lambda wrapper, interaction: helpers.key_sequence_text_ctrl(
                 widget_getter(wrapper), interaction, wrapper.delay))),
         (command.KeyClick,
-            (lambda wrapper, interaction: helpers.key_click_text_ctrl(
+            (lambda wrapper, interaction: helpers.key_click_text_entry(
                 widget_getter(wrapper), interaction, wrapper.delay))),
         (command.MouseClick,
             (lambda wrapper, _: helpers.mouse_click_object(
