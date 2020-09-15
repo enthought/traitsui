@@ -372,11 +372,18 @@ class RadioEditor(BaseEditor):
         n = len(names)
         cols = self.factory.cols
         rows = (n + cols - 1) // cols
+        # incr will keep track of how to increment index so that as we traverse
+        # the grid in row major order, the elements are added to appear in
+        # column major order
         incr = [n // cols] * cols
         rem = n % cols
         for i in range(cols):
             incr[i] += rem > i
         incr[-1] = -(reduce(lambda x, y: x + y, incr[:-1], 0) - 1)
+        # e.g for a gird:
+        # 0 2 4
+        # 1 3 5
+        # incr should be [2, 2, -3]
         if cols > 1:
             sizer = wx.GridSizer(0, cols, 2, 4)
         else:
@@ -385,6 +392,7 @@ class RadioEditor(BaseEditor):
         # Add the set of all possible choices:
         style = wx.RB_GROUP
         index = 0
+        # populate the layout in row_major order
         for i in range(rows):
             for j in range(cols):
                 if n > 0:

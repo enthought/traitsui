@@ -55,7 +55,6 @@ def register(registry):
     registry : TargetRegistry
         The registry being registered to.
     """
-
     for target_class in [CustomEditor, SimpleEditor]:
         register_editable_textbox_handlers(
             registry=registry,

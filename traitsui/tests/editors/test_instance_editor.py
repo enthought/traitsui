@@ -4,12 +4,12 @@ from traits.api import HasTraits, Instance, Str
 from traitsui.item import Item
 from traitsui.view import View
 from traitsui.tests._tools import (
-    create_ui,
-    press_ok_button,
     requires_toolkit,
-    reraise_exceptions,
     ToolkitName,
 )
+
+from traitsui.testing.tester import command, query
+from traitsui.testing.tester.ui_tester import UITester
 
 
 class EditedInstance(HasTraits):
@@ -19,28 +19,63 @@ class EditedInstance(HasTraits):
 
 class NonmodalInstanceEditor(HasTraits):
     inst = Instance(EditedInstance, ())
-    traits_view = View(Item("inst", style="simple"), buttons=["OK"])
 
 
+def get_view(style):
+    return View(Item("inst", style=style), buttons=["OK"])
+
+
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestInstanceEditor(unittest.TestCase):
 
-    @requires_toolkit([ToolkitName.qt])
     def test_simple_editor(self):
         obj = NonmodalInstanceEditor()
-        with reraise_exceptions(), create_ui(obj) as ui:
-            editor = ui.get_editors("inst")[0]
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=get_view("simple"))) as ui:
+            instance = tester.find_by_name(ui, "inst")
+            instance.perform(command.MouseClick())
+            value_txt = instance.find_by_name("value")
+            value_txt.perform(command.KeySequence("abc"))
+            self.assertEqual(obj.inst.value, "abc")
 
-            # make the dialog appear
-            editor._button.click()
+    def test_custom_editor(self):
+        obj = NonmodalInstanceEditor()
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=get_view("custom"))) as ui:
+            value_txt = tester.find_by_name(ui, "inst").find_by_name("value")
+            value_txt.perform(command.KeySequence("abc"))
+            self.assertEqual(obj.inst.value, "abc")
 
-            # close the ui dialog
-            press_ok_button(editor._dialog_ui)
+    def test_custom_editor_resynch_editor(self):
+        edited_inst = EditedInstance(value='hello')
+        obj = NonmodalInstanceEditor(inst=edited_inst)
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=get_view("custom"))) as ui:
+            value_txt = tester.find_by_name(ui, "inst").find_by_name("value")
+            displayed = value_txt.inspect(query.DisplayedText())
+            self.assertEqual(displayed, "hello")
+            edited_inst.value = "bye"
+            displayed = value_txt.inspect(query.DisplayedText())
+            self.assertEqual(displayed, "bye")
 
-    @requires_toolkit([ToolkitName.qt])
+    def test_simple_editor_resynch_editor(self):
+        edited_inst = EditedInstance(value='hello')
+        obj = NonmodalInstanceEditor(inst=edited_inst)
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=get_view("simple"))) as ui:
+            instance = tester.find_by_name(ui, "inst")
+            instance.perform(command.MouseClick())
+
+            value_txt = instance.find_by_name("value")
+            displayed = value_txt.inspect(query.DisplayedText())
+            self.assertEqual(displayed, "hello")
+            edited_inst.value = "bye"
+            displayed = value_txt.inspect(query.DisplayedText())
+            self.assertEqual(displayed, "bye")
+
     def test_simple_editor_parent_closed(self):
         obj = NonmodalInstanceEditor()
-        with reraise_exceptions(), create_ui(obj) as ui:
-            editor = ui.get_editors("inst")[0]
-
-            # make the dialog appear
-            editor._button.click()
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=get_view('simple'))) as ui:
+            instance = tester.find_by_name(ui, "inst")
+            instance.perform(command.MouseClick())

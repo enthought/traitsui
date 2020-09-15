@@ -17,6 +17,18 @@ without incurring side-effects.
 """
 
 
+class SelectedText:
+    """ An object representing an interaction to obtain the displayed (echoed)
+    plain text which is currently selected.
+
+    E.g. For a Enum List, with one entry currently selected, the displayed
+    selected text would be the label of that entry.
+
+    Implementations should return a ``str``, or None if nothing is selected.
+    """
+    pass
+
+
 class DisplayedText:
     """ An object representing an interaction to obtain the displayed (echoed)
     plain text.
