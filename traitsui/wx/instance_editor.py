@@ -23,7 +23,7 @@ toolkit.
 import wx
 
 from pyface.wx.drag_and_drop import PythonDropTarget
-from traits.api import HasTraits, Property
+from traits.api import HasTraits, Instance, Property
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -488,6 +488,9 @@ class SimpleEditor(CustomEditor):
     orientation = wx.HORIZONTAL
     extra = 2
 
+    #: The ui instance for the currently open editor dialog
+    _dialog_ui = Instance("traitsui.ui.UI")
+
     def create_editor(self, parent, sizer):
         """ Creates the editor control (a button).
         """
@@ -501,6 +504,10 @@ class SimpleEditor(CustomEditor):
         button = self._button
         if button is not None:
             button.Bind(wx.EVT_BUTTON, None, id=button.GetId())
+
+        if self._dialog_ui is not None:
+            self._dialog_ui.dispose()
+            self._dialog_ui = None
 
         super(SimpleEditor, self).dispose()
 
@@ -527,6 +534,7 @@ class SimpleEditor(CustomEditor):
             # have its own:
             if ui.history is None:
                 ui.history = self.ui.history
+        self._dialog_ui = ui
 
     def resynch_editor(self):
         """ Resynchronizes the contents of the editor when the object trait
