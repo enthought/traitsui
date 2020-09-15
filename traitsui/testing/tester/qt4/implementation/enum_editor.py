@@ -131,7 +131,7 @@ def radio_displayed_selected_text_handler(wrapper, interaction):
     for index in range(control.layout().count()):
         if control.layout().itemAt(index).widget().isChecked():
             return control.layout().itemAt(index).widget().text()
-    return ""
+    return None
 
 
 def register(registry):

@@ -148,7 +148,7 @@ def radio_displayed_selected_text_handler(wrapper, interaction):
     for child in children_list:
         if child.GetWindow().GetValue():
             return child.GetWindow().GetLabel()
-    return ""
+    return None
 
 def register(registry):
     """ Registry location and interaction handlers for EnumEditor.

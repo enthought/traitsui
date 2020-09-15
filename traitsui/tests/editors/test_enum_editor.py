@@ -379,7 +379,7 @@ class TestRadioEnumEditor(unittest.TestCase):
             self.assertEqual(enum_edit.value, None)
             radio_editor = tester.find_by_name(ui, "value")
             displayed = radio_editor.inspect(query.DisplayedSelectedText())
-            self.assertEqual(displayed, "")
+            self.assertEqual(displayed, None)
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -446,14 +446,15 @@ class TestListEnumEditor(unittest.TestCase):
     def test_list_evaluate_editor_index(self):
         self.check_enum_index_update(get_evaluate_view("custom", mode="list"))
 
-    @requires_toolkit([])
     def check_list_enum_none_selected(self, view):
         enum_edit = EnumModelWithNone()
         view = View(
             UItem(
                 "value",
                 editor=EnumEditor(
-                    values=["one", "two", "three", "four"],
+                    # Note that for the list style editor, in order to select
+                    # None, it must be one of the displayed options 
+                    values=[None, "one", "two", "three", "four"],
                     mode="list",
                 ),
                 style="custom",
@@ -464,15 +465,18 @@ class TestListEnumEditor(unittest.TestCase):
         with tester.create_ui(enum_edit, dict(view=view)) as ui:
             self.assertEqual(enum_edit.value, None)
             list_editor = tester.find_by_name(ui, "value")
+            # As a result the displayed text is actually the string 'None'
             displayed = list_editor.inspect(query.DisplayedSelectedText())
-            self.assertEqual(displayed, "")
+            self.assertEqual(displayed, 'None')
     
     def test_list_enum_none_selected(self):
         view = View(
             UItem(
                 "value",
                 editor=EnumEditor(
-                    values=["one", "two", "three", "four"],
+                    # Note that for the list style editor, in order to select
+                    # None, it must be one of the displayed options
+                    values=[None, "one", "two", "three", "four"],
                     mode="list",
                 ),
                 style="custom",
