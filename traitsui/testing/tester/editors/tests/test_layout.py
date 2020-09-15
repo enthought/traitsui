@@ -96,3 +96,35 @@ class TestLayout(unittest.TestCase):
             num_cols=4,
         )
         self.assertEqual(actual, 8)
+
+
+    def test_column_major_index_long_overhang(self):
+        # This is the layout for displaying numbers from 0-9 with column
+        # major setup:
+        # 0  2  3  4
+        # 1  /  /  /
+        # The index should be populated (row first) in this order:
+        # 0, 2, 3, 4, 1
+        actual = column_major_to_row_major(
+            index=4,
+            n=5,
+            num_rows=2,
+            num_cols=4,
+        )
+        self.assertEqual(actual, 3)
+
+    def test_column_major_index_full_grid(self):
+        # This is the layout for displaying numbers from 0-9 with column
+        # major setup:
+        # 0  3  6  9   12
+        # 1  4  7  10  13
+        # 2  5  8  11  14
+        # The index should be populated (row first) in this order:
+        # 0, 3, 6, 9, 12, 1, 4, 7, 10, 13, 2, 5, 8, 11, 14
+        actual = column_major_to_row_major(
+            index=11,
+            n=15,
+            num_rows=3,
+            num_cols=5,
+        )
+        self.assertEqual(actual, 13)

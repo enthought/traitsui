@@ -49,7 +49,7 @@ def column_major_to_row_major(index, n, num_rows, num_cols):
         # column major order
         new_index = index - num_entries_grid1
         i = new_index % (num_rows - 1)
-        j = new_index // (num_empty_entries_last_row)
+        j = new_index // (num_rows - 1)
         # convert that back to an index found from row major order and add that
         # to the number of elements from grid 1 that would be counted in row
         # major order
