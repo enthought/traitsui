@@ -365,11 +365,11 @@ class TestRadioEnumEditor(unittest.TestCase):
             # sanity check
             self.assertEqual(enum_edit.value, "one")
             radio_editor = tester.find_by_name(ui, "value")
-            displayed = radio_editor.inspect(query.DisplayedSelectedText())
+            displayed = radio_editor.inspect(query.SelectedText())
             # Radio Editor capitalizes
             self.assertEqual(displayed, "One")
             radio_editor.locate(locator.Index(3)).perform(command.MouseClick())
-            displayed = radio_editor.inspect(query.DisplayedSelectedText())
+            displayed = radio_editor.inspect(query.SelectedText())
             self.assertEqual(displayed, "Four")
 
     def test_radio_enum_none_selected(self):
@@ -378,7 +378,7 @@ class TestRadioEnumEditor(unittest.TestCase):
         with tester.create_ui(enum_edit, dict(view=get_radio_view(cols=1))) as ui:
             self.assertEqual(enum_edit.value, None)
             radio_editor = tester.find_by_name(ui, "value")
-            displayed = radio_editor.inspect(query.DisplayedSelectedText())
+            displayed = radio_editor.inspect(query.SelectedText())
             self.assertEqual(displayed, None)
 
 
@@ -392,12 +392,12 @@ class TestListEnumEditor(unittest.TestCase):
         with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
             list_editor = tester.find_by_name(ui, "value")
-            displayed = list_editor.inspect(query.DisplayedSelectedText())
+            displayed = list_editor.inspect(())
 
             self.assertEqual(displayed, "one")
 
             list_editor.locate(locator.Index(1)).perform(command.MouseClick())
-            displayed = list_editor.inspect(query.DisplayedSelectedText())
+            displayed = list_editor.inspect(query.SelectedText())
             self.assertEqual(displayed, "two")
 
     def check_enum_index_update(self, view):
@@ -466,7 +466,7 @@ class TestListEnumEditor(unittest.TestCase):
             self.assertEqual(enum_edit.value, None)
             list_editor = tester.find_by_name(ui, "value")
             # As a result the displayed text is actually the string 'None'
-            displayed = list_editor.inspect(query.DisplayedSelectedText())
+            displayed = list_editor.inspect(query.SelectedText())
             self.assertEqual(displayed, 'None')
     
     def test_list_enum_none_selected(self):

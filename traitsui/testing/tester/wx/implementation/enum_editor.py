@@ -113,7 +113,7 @@ class _IndexedSimpleEditor(_BaseSourceWithLocation):
     ]
 
 
-def simple_displayed_text_handler(wrapper, interaction):
+def simple_displayed_selected_text_handler(wrapper, interaction):
     """ Handler function used to query DisplayedText for Simple Enum Editor.
     Note that depending on the factories evaluaute trait, the control for a
     Simple Enum Editor can either be a wx.ComboBox or a wx.Choice.
@@ -133,16 +133,16 @@ def simple_displayed_text_handler(wrapper, interaction):
         return control.GetString(control.GetSelection())
 
 
-def radio_displayed_selected_text_handler(wrapper, interaction):
-    """ Handler function used to query DisplayedText for EnumRadioEditor.
+def radio_selected_text_handler(wrapper, interaction):
+    """ Handler function used to query SelectedText for EnumRadioEditor.
 
     Parameters
     ----------
     wrapper : UIWrapper
-        The UIWrapper containing that object with text to be displayed.
-    interaction : query.DisplayedText
+        The UIWrapper containing that object with text that is selected.
+    interaction : query.SelectedText
         Unused in this function but included to match the expected format of a
-        handler.  Should only be query.DisplayedText
+        handler.  Should only be query.SelectedText
     """
     children_list = wrapper.target.control.GetSizer().GetChildren()
     for child in children_list:
@@ -172,7 +172,8 @@ def register(registry):
                 control=wrapper.target.control,
                 interaction=interaction,
                 delay=wrapper.delay))),
-        (query.DisplayedText, simple_displayed_text_handler)
+        (query.DisplayedText, simple_displayed_selected_text_handler),
+        (query.SelectedText, simple_displayed_selected_text_handler)
     ]
 
     for interaction_class, handler in simple_editor_text_handlers:
@@ -184,12 +185,12 @@ def register(registry):
 
     registry.register_handler(
         target_class=RadioEditor,
-        interaction_class=query.DisplayedSelectedText,
-        handler=radio_displayed_selected_text_handler,
+        interaction_class=query.SelectedText,
+        handler=radio_selected_text_handler,
     )
     registry.register_handler(
         target_class=ListEditor,
-        interaction_class=query.DisplayedSelectedText,
+        interaction_class=query.SelectedText,
         handler=lambda wrapper, _: wrapper.target.control.GetString(
             wrapper.target.control.GetSelection()),
     )

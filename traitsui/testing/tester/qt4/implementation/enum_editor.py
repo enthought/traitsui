@@ -116,16 +116,16 @@ class _IndexedSimpleEditor(_BaseSourceWithLocation):
     ]
 
 
-def radio_displayed_selected_text_handler(wrapper, interaction):
-    """ Handler function used to query DisplayedText for EnumRadioEditor.
+def radio_selected_text_handler(wrapper, interaction):
+    """ Handler function used to query SelectedText for EnumRadioEditor.
 
     Parameters
     ----------
     wrapper : UIWrapper
         The UIWrapper containing that object with text to be displayed.
-    interaction : query.DisplayedText
+    interaction : query.SelectedText
         Unused in this function but included to match the expected format of a
-        handler.  Should only be query.DisplayedText
+        handler.  Should only be query.SelectedText
     """
     control = wrapper.target.control
     for index in range(control.layout().count()):
@@ -157,6 +157,8 @@ def register(registry):
                 interaction=interaction,
                 delay=wrapper.delay))),
         (query.DisplayedText,
+            lambda wrapper, _: wrapper.target.control.currentText()),
+        (query.SelectedText,
             lambda wrapper, _: wrapper.target.control.currentText())
     ]
 
@@ -169,12 +171,12 @@ def register(registry):
 
     registry.register_handler(
         target_class=RadioEditor,
-        interaction_class=query.DisplayedSelectedText,
-        handler=radio_displayed_selected_text_handler,
+        interaction_class=query.SelectedText,
+        handler=radio_selected_text_handler,
     )
 
     registry.register_handler(
         target_class=ListEditor,
-        interaction_class=query.DisplayedSelectedText,
+        interaction_class=query.SelectedText,
         handler=lambda wrapper, _: wrapper.target.control.currentItem().text(),
     )
