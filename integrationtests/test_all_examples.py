@@ -343,13 +343,6 @@ class TestInteractExample(unittest.TestCase):
         with tester.create_ui(demo) as ui:
             input_amount = tester.find_by_name(ui, "input_amount")
             output_amount = tester.find_by_name(ui, "output_amount")
-            # both of these have Simple Enum Editors !
-            input_units = tester.find_by_name(ui, "input_units")
-            output_units = tester.find_by_name(ui, "output_units")
-            
-            #print(ui.get_editors("input_units"))
-            #print(ui.get_editors("output_units"))
-
             for _ in range(4):
                 input_amount.perform(command.KeyClick("Backspace"))
             input_amount.perform(command.KeySequence("14.0"))
@@ -357,9 +350,7 @@ class TestInteractExample(unittest.TestCase):
                 output_amount.inspect(query.DisplayedText())[:4],
                 "1.16",
             )
-
             tester.find_by_id(ui, "Undo").perform(command.MouseClick())
-
             self.assertEqual(
                 output_amount.inspect(query.DisplayedText()),
                 "1.0",
