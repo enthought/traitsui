@@ -1,8 +1,10 @@
 import unittest
+from unittest.mock import Mock
 
 from traits.api import HasTraits, Instance, Int, List, Str, Tuple
 
 from traitsui.api import EvalTableFilter, Item, ObjectColumn, TableEditor, View
+from traitsui.menu import Action, Menu
 from traitsui.tests._tools import (
     create_ui,
     is_qt,
@@ -564,3 +566,21 @@ class TestTableEditor(unittest.TestCase):
         with reraise_exceptions(), \
                 create_ui(object_list, dict(view=progress_view)) as ui:
             process_cascade_events()
+
+    @requires_toolkit([ToolkitName.qt])
+    def test_on_perform_action(self):
+        # A test for issue #741, where actions with an on_perform function set
+        # would get called twice
+        object_list = ObjectList(
+            values=[ListItem(value=str(i ** 2)) for i in range(10)]
+        )
+        mock_function = Mock()
+        action = Action(on_perform=mock_function)
+
+        with reraise_exceptions(), \
+                create_ui(object_list, dict(view=simple_view)) as ui:
+            editor = ui.get_editors("values")[0]
+            process_cascade_events()
+            editor.set_menu_context(None, None, None)
+            editor.perform(action)
+        mock_function.assert_called_once()
