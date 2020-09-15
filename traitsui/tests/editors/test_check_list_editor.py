@@ -481,7 +481,7 @@ class TestCustomCheckListEditor(unittest.TestCase):
     def test_custom_check_list_editor_grid_layout(self):
         for cols in range(1,8):
             list_edit = ListModel()
-            tester = UITester(delay=1000)
+            tester = UITester()
             view = get_view_custom_cols(cols=cols)
             with tester.create_ui(list_edit, dict(view=view)) as ui:
                 self.assertEqual(list_edit.value, [])

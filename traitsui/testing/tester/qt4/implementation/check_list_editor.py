@@ -11,6 +11,7 @@
 
 from traitsui.qt4.check_list_editor import CustomEditor
 from traitsui.testing.tester import command, locator
+from traitsui.testing.tester.editors.layout import column_major_to_row_major
 from traitsui.testing.tester.qt4 import helpers
 
 
@@ -69,10 +70,35 @@ class _IndexedCustomCheckListEditor:
             interaction_class=command.MouseClick,
             handler=lambda wrapper, _: helpers.mouse_click_qlayout(
                 layout=wrapper.target.target.control.layout(),
-                index=wrapper.target.index,
+                index=convert_index(
+                    wrapper.target.target.control.layout(),
+                    wrapper.target.index
+                ),
                 delay=wrapper.delay,
             )
         )
+
+
+def convert_index(layout, index):
+    """ Helper function to convert an index for a QGridLayout so that the
+    index counts over the grid in the correct direction.
+    The grid is always populated in row major order, but it is done so in
+    such a way that the entries appear in column major order.
+    Qlayouts are indexed in the order they are populated, so to access
+    the correct element we may need to convert a column-major based index
+    into a row-major one.
+
+    Parameters
+    ----------
+    layout : QGridLayout
+        The layout of interest
+    index : int
+        the index of interest
+    """
+    n = layout.count()
+    num_cols = layout.columnCount()
+    num_rows = layout.rowCount()
+    return column_major_to_row_major(index, n, num_rows, num_cols)
 
 
 def register(registry):
