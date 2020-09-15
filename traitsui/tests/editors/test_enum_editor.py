@@ -449,7 +449,7 @@ class TestListEnumEditor(unittest.TestCase):
     def test_list_evaluate_editor_index(self):
         self.check_enum_index_update(get_evaluate_view("custom", mode="list"))
 
-    def check_list_enum_none_selected(self, view):
+    def test_list_enum_none_selected(self):
         enum_edit = EnumModelWithNone()
         view = View(
             UItem(
@@ -471,24 +471,3 @@ class TestListEnumEditor(unittest.TestCase):
             # As a result the displayed text is actually the string 'None'
             displayed = list_editor.inspect(query.SelectedText())
             self.assertEqual(displayed, 'None')
-
-    def test_list_enum_none_selected(self):
-        view = View(
-            UItem(
-                "value",
-                editor=EnumEditor(
-                    # Note that for the list style editor, in order to select
-                    # None, it must be one of the displayed options
-                    values=[None, "one", "two", "three", "four"],
-                    mode="list",
-                ),
-                style="custom",
-            ),
-            resizable=True,
-        )
-        self.check_list_enum_none_selected(view)
-
-    def test_list_evaluate_none_selected(self):
-        self.check_list_enum_none_selected(
-            get_evaluate_view("custom", mode="list")
-        )

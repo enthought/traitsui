@@ -33,6 +33,11 @@ def column_major_to_row_major(index, n, num_rows, num_cols):
     num_cols : int
         the number of columns in the layout
 
+    Returns
+    -------
+    int
+        The converted index (now corresponding to row_major order)
+
     Notes
     -----
     Since elements are populated in row major order, the resulting grid ends
@@ -74,6 +79,8 @@ def column_major_to_row_major(index, n, num_rows, num_cols):
     if index > n:
         raise ValueError("Index is higher number of elements in layout")
     num_empty_entries_last_row = num_cols * num_rows - n
+    if num_empty_entries_last_row < 0:
+        raise ValueError("n can not be greater than num_cols * num_rows")
 
     if index > num_rows * (num_cols - num_empty_entries_last_row):
         num_entries_grid1 = num_rows * (num_cols - num_empty_entries_last_row)
