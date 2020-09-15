@@ -68,7 +68,7 @@ class TestInstanceEditor(unittest.TestCase):
             instance = tester.find_by_name(ui, "inst")
             instance.perform(command.MouseClick())
 
-            value_txt = tester.find_by_name(ui, "inst").find_by_name("value")
+            value_txt = instance.find_by_name("value")
             displayed = value_txt.inspect(query.DisplayedText())
             self.assertEqual(displayed, "hello")
             edited_inst.value = "bye"
