@@ -33,6 +33,8 @@ def column_major_to_row_major(index, n, num_rows, num_cols):
     num_cols : int
         the number of columns in the layout
     """
+    if index > n:
+        raise ValueError("Index is higher number of elements in layout")
     # the last entries of the last row can be empty.
     num_empty_entries_last_row = num_cols * num_rows - n
 
@@ -42,15 +44,16 @@ def column_major_to_row_major(index, n, num_rows, num_cols):
         # break the grid up into 2 grids.  One of size
         # num_rows x (num_cols - num_empty_entries_last_row).  The other
         # of size (num_rows-1) x num_empty_entries_last_row
-        num_entries_grid1 = index - \
-            num_rows * (num_cols - num_empty_entries_last_row)
+        num_entries_grid1 = num_rows * (num_cols - num_empty_entries_last_row)
         # find i, j coordinates of the index in grid2 if we counted in
         # column major order
         new_index = index - num_entries_grid1
         i = new_index % (num_rows - 1)
         j = new_index // (num_empty_entries_last_row)
-        # convert that back to an index found from row major order
-        return num_entries_grid1 + (i * num_empty_entries_last_row + j)
+        # convert that back to an index found from row major order and add that
+        # to the number of elements from grid 1 that would be counted in row
+        # major order
+        return (num_cols - num_empty_entries_last_row)*(i+1)  + (i * num_empty_entries_last_row + j)
     else:
         # find i,j coordinates of index if we counted in column major order
         i = index % num_rows
