@@ -107,7 +107,6 @@ class TestRangeEditor(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field = tester.find_by_name(ui, "value")
-            
             text = number_field.locate(locator.WidgetType.textbox)
             # Delete all contents of textbox
             for _ in range(5):
@@ -136,7 +135,7 @@ class TestRangeEditor(unittest.TestCase):
     @requires_toolkit([ToolkitName.qt])
     def test_range_text_editor_set_with_text_after_empty(self):
         return self.check_set_with_text_after_empty(mode='text')
-    
+
     def check_modify_slider(self, mode):
         model = RangeModel(value=0)
         view = View(
@@ -150,7 +149,7 @@ class TestRangeEditor(unittest.TestCase):
             number_field = tester.find_by_name(ui, "value")
             slider = number_field.locate(locator.WidgetType.slider)
             text = number_field.locate(locator.WidgetType.textbox)
-            # slider values are converted to a [0, 10000] scale.  A single 
+            # slider values are converted to a [0, 10000] scale.  A single
             # step is a change of 100 on that scale and a page step is 1000.
             # Our range in [0, 10] so these correspond to changes of .1 and 1.
             for _ in range(10):

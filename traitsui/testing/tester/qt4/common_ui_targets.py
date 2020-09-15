@@ -79,5 +79,3 @@ class LocatedSlider:
             handler=lambda wrapper, interaction: helpers.key_click_qslider(
                 wrapper.target.slider, interaction, wrapper.delay)
         )
-
-
