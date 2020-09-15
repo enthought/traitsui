@@ -25,8 +25,6 @@ def _get_nested_ui_simple(target):
     ----------
     target : instance of SimpleEditor
     """
-    if target._dialog_ui is None:
-        target._button.click()
     return target._dialog_ui
 
 
