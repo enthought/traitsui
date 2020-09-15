@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 """ This module contains targets for UIWrapper so that the logic related to
-them can be reused. 
+them can be reused.
 To use the logic in these objects, if the class in this module is a base class
 (indicated by leading _Base) they simply need to subclass this class, override
 any necessary traits, and then call the register method.
@@ -37,7 +37,7 @@ class _BaseSourceWithLocation:
     # must be given as a list of tuples where the first element is the
     # interaction class (e.g. command.MouseClick) and the second is the
     # actual handler function.  See registry.TargetRegistry.register_handler
-    # for the signature of the callable. 
+    # for the signature of the callable.
     handlers = []
 
     def __init__(self, source, location):

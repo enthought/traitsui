@@ -52,7 +52,7 @@ class _IndexedRadioEditor(_BaseSourceWithLocation):
 
 def convert_index(source, index):
     """ Helper function to convert an index for a GridSizer so that the
-    index counts over the grid in the correct direction.  
+    index counts over the grid in the correct direction.
     The grid is always populated in row major order, however, the elements
     are assigned to each entry in the grid so that when displayed they appear
     in column major order.
@@ -78,12 +78,13 @@ def convert_index(source, index):
     num_empty_entries_last_row = num_cols * num_rows - n
 
     # if the index of interest extends into the part of the grid where
-    # the columns have a missing entry in the last row 
+    # the columns have a missing entry in the last row
     if index > num_rows * (num_cols - num_empty_entries_last_row):
-        # break the grid up into 2 grids.  One of size 
+        # break the grid up into 2 grids.  One of size
         # num_rows x (num_cols - num_empty_entries_last_row).  The other
         # of size (num_rows-1) x num_empty_entries_last_row
-        num_entries_grid1 = index - num_rows * (num_cols - num_empty_entries_last_row)
+        num_entries_grid1 = index - \
+            num_rows * (num_cols - num_empty_entries_last_row)
         # find i, j coordinates of the index in grid2 if we counted in
         # column major order
         new_index = index - num_entries_grid1
@@ -97,7 +98,7 @@ def convert_index(source, index):
         j = index // num_rows
     # convert that back to an index found from row major order
     return i * num_cols + j
-        
+
 
 class _IndexedSimpleEditor(_BaseSourceWithLocation):
     """ Wrapper class for Simple EnumEditor and Index.
@@ -149,6 +150,7 @@ def radio_selected_text_handler(wrapper, interaction):
         if child.GetWindow().GetValue():
             return child.GetWindow().GetLabel()
     return None
+
 
 def register(registry):
     """ Registry location and interaction handlers for EnumEditor.

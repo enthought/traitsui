@@ -22,7 +22,7 @@ class SelectedText:
     plain text which is currently selected.
 
     E.g. For a Enum List, with one entry currently selected, the displayed
-    selected text would be the label of that entry.  
+    selected text would be the label of that entry.
 
     Implementations should return a ``str``, or None if nothing is selected.
     """

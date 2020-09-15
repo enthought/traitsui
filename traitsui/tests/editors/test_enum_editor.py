@@ -25,6 +25,7 @@ class EnumModel(HasTraits):
 
     value = Enum("one", "two", "three", "four")
 
+
 class EnumModelWithNone(HasTraits):
 
     value = Enum(None, "one", "two", "three", "four")
@@ -50,7 +51,7 @@ def get_evaluate_view(style, auto_set=True, mode="radio"):
     )
 
 
-def get_radio_view(cols):
+def get_radio_view(cols=1):
     return View(
         UItem(
             "value",
@@ -344,24 +345,26 @@ class TestRadioEnumEditor(unittest.TestCase):
             )
 
     def test_radio_enum_editor_pick(self):
-        for cols in range(1,4):
+        for cols in range(1, 4):
             for row_major in [True, False]:
                 enum_edit = EnumModel()
                 tester = UITester()
-                with tester.create_ui(enum_edit, dict(view=get_radio_view(cols=cols))) as ui:
+                view = get_radio_view(cols=cols)
+                with tester.create_ui(enum_edit, dict(view=view)) as ui:
                     # sanity check
                     self.assertEqual(enum_edit.value, "one")
                     radio_editor = tester.find_by_name(ui, "value")
                     if is_qt():
                         radio_editor.target.row_major = row_major
                         radio_editor.target.rebuild_editor()
-                    radio_editor.locate(locator.Index(3)).perform(command.MouseClick())
+                    item = radio_editor.locate(locator.Index(3))
+                    item.perform(command.MouseClick())
                     self.assertEqual(enum_edit.value, "four")
-    
+
     def test_radio_enum_displayed_selected_text(self):
         enum_edit = EnumModel()
         tester = UITester()
-        with tester.create_ui(enum_edit, dict(view=get_radio_view(cols=1))) as ui:
+        with tester.create_ui(enum_edit, dict(view=get_radio_view())) as ui:
             # sanity check
             self.assertEqual(enum_edit.value, "one")
             radio_editor = tester.find_by_name(ui, "value")
@@ -375,7 +378,7 @@ class TestRadioEnumEditor(unittest.TestCase):
     def test_radio_enum_none_selected(self):
         enum_edit = EnumModelWithNone()
         tester = UITester()
-        with tester.create_ui(enum_edit, dict(view=get_radio_view(cols=1))) as ui:
+        with tester.create_ui(enum_edit, dict(view=get_radio_view())) as ui:
             self.assertEqual(enum_edit.value, None)
             radio_editor = tester.find_by_name(ui, "value")
             displayed = radio_editor.inspect(query.SelectedText())
@@ -392,7 +395,7 @@ class TestListEnumEditor(unittest.TestCase):
         with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
             list_editor = tester.find_by_name(ui, "value")
-            displayed = list_editor.inspect(())
+            displayed = list_editor.inspect(query.SelectedText())
 
             self.assertEqual(displayed, "one")
 
@@ -453,7 +456,7 @@ class TestListEnumEditor(unittest.TestCase):
                 "value",
                 editor=EnumEditor(
                     # Note that for the list style editor, in order to select
-                    # None, it must be one of the displayed options 
+                    # None, it must be one of the displayed options
                     values=[None, "one", "two", "three", "four"],
                     mode="list",
                 ),
@@ -468,7 +471,7 @@ class TestListEnumEditor(unittest.TestCase):
             # As a result the displayed text is actually the string 'None'
             displayed = list_editor.inspect(query.SelectedText())
             self.assertEqual(displayed, 'None')
-    
+
     def test_list_enum_none_selected(self):
         view = View(
             UItem(
@@ -486,4 +489,6 @@ class TestListEnumEditor(unittest.TestCase):
         self.check_list_enum_none_selected(view)
 
     def test_list_evaluate_none_selected(self):
-        self.check_list_enum_none_selected(get_evaluate_view("custom", mode="list"))
+        self.check_list_enum_none_selected(
+            get_evaluate_view("custom", mode="list")
+        )

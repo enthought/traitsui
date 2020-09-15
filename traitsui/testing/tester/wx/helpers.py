@@ -193,7 +193,8 @@ def mouse_click_radiobutton_child_in_panel(control, index, delay):
 
 def key_click_text_entry(
     control, interaction, delay,
-    get_selection=lambda control: control.GetSelection()):
+    get_selection=lambda control: control.GetSelection()
+):
     """ Performs simulated typing of a key on the given wxObject
     after a delay.
 
