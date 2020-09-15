@@ -24,7 +24,8 @@ from traitsui.testing.tester.wx.common_ui_targets import (
 
 def resolve_location_slider(wrapper, location):
     """ Solver from a UIWrapper wrapped Range Editor to a LocatedTextbox
-    containing the textbox of interest
+    containing the textbox of interest, or a LocatedSlider containing the
+    slider.
 
     If there are any conflicts, an error will occur.
 
