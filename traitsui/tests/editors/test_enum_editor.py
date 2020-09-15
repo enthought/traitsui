@@ -375,6 +375,9 @@ class TestRadioEnumEditor(unittest.TestCase):
             displayed = radio_editor.inspect(query.SelectedText())
             self.assertEqual(displayed, "Four")
 
+    # it appears that on windows the behavior is different - it forces
+    # enum_edit.value to be 'one'
+    @unittest.skipIf(is_windows and is_wx, "windows/wx behavior is unique")
     def test_radio_enum_none_selected(self):
         enum_edit = EnumModelWithNone()
         tester = UITester()
