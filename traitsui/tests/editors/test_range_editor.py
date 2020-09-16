@@ -55,7 +55,7 @@ class TestRangeEditor(unittest.TestCase):
     def test_custom_editor_format_func(self):
         self.check_range_enum_editor_format_func("custom")
 
-    def check_set_with_text_valid(self, mode):
+    def check_slider_set_with_text_valid(self, mode):
         model = RangeModel()
         view = View(
             Item(
@@ -69,11 +69,6 @@ class TestRangeEditor(unittest.TestCase):
             self.assertEqual(model.value, 1)
             number_field = tester.find_by_name(ui, "value")
             text = number_field.locate(locator.WidgetType.textbox)
-            if is_windows and is_wx() and mode == 'text':
-                # For RangeTextEditor on wx and windows, the textbox
-                # automatically gets focus and the full content is selected.
-                # Insertion point is moved to keep the test consistent
-                text.target.textbox.SetInsertionPointEnd()
             text.perform(command.KeyClick("0"))
             text.perform(command.KeyClick("Enter"))
             displayed = text.inspect(query.DisplayedText())
@@ -81,22 +76,68 @@ class TestRangeEditor(unittest.TestCase):
             self.assertEqual(displayed, str(model.value))
 
     def test_simple_slider_editor_set_with_text_valid(self):
-        return self.check_set_with_text_valid(mode='slider')
-
-    @requires_toolkit([ToolkitName.qt])
-    def test_simple_spin_editor_set_with_text_valid(self):
-        return self.check_set_with_text_valid(mode='spinner')
+        return self.check_slider_set_with_text_valid(mode='slider')
 
     def test_large_range_slider_editor_set_with_text_valid(self):
-        return self.check_set_with_text_valid(mode='xslider')
+        return self.check_slider_set_with_text_valid(mode='xslider')
 
     def test_log_range_slider_editor_set_with_text_valid(self):
-        return self.check_set_with_text_valid(mode='logslider')
+        return self.check_slider_set_with_text_valid(mode='logslider')
 
     def test_range_text_editor_set_with_text_valid(self):
-        return self.check_set_with_text_valid(mode='text')
+        model = RangeModel()
+        view = View(
+            Item(
+                "value",
+                editor=RangeEditor(low=1, high=12, mode="text")
+            )
+        )
+        tester = UITester()
+        with tester.create_ui(model, dict(view=view)) as ui:
+            # sanity check
+            self.assertEqual(model.value, 1)
+            number_field_text = tester.find_by_name(ui, "value")
+            if is_windows and is_wx():
+                # For RangeTextEditor on wx and windows, the textbox
+                # automatically gets focus and the full content is selected.
+                # Insertion point is moved to keep the test consistent
+                number_field_text.target.textbox.SetInsertionPointEnd()
+            number_field_text.perform(command.KeyClick("0"))
+            number_field_text.perform(command.KeyClick("Enter"))
+            displayed = number_field_text.inspect(query.DisplayedText())
+            self.assertEqual(model.value, 10)
+            self.assertEqual(displayed, str(model.value))
 
-    def check_set_with_text_after_empty(self, mode):
+    # SimpleSpinEditor not yet implemented on Wx.
+    @requires_toolkit([ToolkitName.qt])
+    def test_simple_spin_editor_set_with_text_valid(self):
+        from traitsui.testing.tester.registry import TargetRegistry
+        from traitsui.testing.tester.qt4.implementation.range_editor import (
+            _register_simple_spin
+        )
+        model = RangeModel()
+        view = View(
+            Item(
+                "value",
+                editor=RangeEditor(low=1, high=12, mode="spinner")
+            )
+        )
+        LOCAL_REGISTRY = TargetRegistry()
+        _register_simple_spin(LOCAL_REGISTRY)
+        tester = UITester([LOCAL_REGISTRY])
+        with tester.create_ui(model, dict(view=view)) as ui:
+            # sanity check
+            self.assertEqual(model.value, 1)
+            number_field = tester.find_by_name(ui, "value")
+            # For whatever reason, "End" was not working here
+            number_field.perform(command.KeyClick("Right"))
+            number_field.perform(command.KeyClick("0"))
+            number_field.perform(command.KeyClick("Enter"))
+            displayed = number_field.inspect(query.DisplayedText())
+            self.assertEqual(model.value, 10)
+            self.assertEqual(displayed, str(model.value))
+
+    def check_slider_set_with_text_after_empty(self, mode):
         model = RangeModel()
         view = View(
             Item(
@@ -118,23 +159,64 @@ class TestRangeEditor(unittest.TestCase):
             self.assertEqual(displayed, str(model.value))
 
     def test_simple_slider_editor_set_with_text_after_empty(self):
-        return self.check_set_with_text_after_empty(mode='slider')
-
-    @requires_toolkit([ToolkitName.qt])
-    def test_simple_spin_editor_set_with_text_after_empty(self):
-        return self.check_set_with_text_after_empty(mode='spinner')
+        return self.check_slider_set_with_text_after_empty(mode='slider')
 
     def test_large_range_slider_editor_set_with_text_after_empty(self):
-        return self.check_set_with_text_after_empty(mode='xslider')
+        return self.check_slider_set_with_text_after_empty(mode='xslider')
 
     def test_log_range_slider_editor_set_with_text_after_empty(self):
-        return self.check_set_with_text_after_empty(mode='logslider')
+        return self.check_slider_set_with_text_after_empty(mode='logslider')
 
     # on wx the text style editor gives an error whenever the textbox
     # is empty, even if enter has not been pressed.
     @requires_toolkit([ToolkitName.qt])
     def test_range_text_editor_set_with_text_after_empty(self):
-        return self.check_set_with_text_after_empty(mode='text')
+        model = RangeModel()
+        view = View(
+            Item(
+                "value",
+                editor=RangeEditor(low=1, high=12, mode="text")
+            )
+        )
+        tester = UITester()
+        with tester.create_ui(model, dict(view=view)) as ui:
+            number_field_text = tester.find_by_name(ui, "value")
+            # Delete all contents of textbox
+            for _ in range(5):
+                number_field_text.perform(command.KeyClick("Backspace"))
+            number_field_text.perform(command.KeySequence("11"))
+            number_field_text.perform(command.KeyClick("Enter"))
+            displayed = number_field_text.inspect(query.DisplayedText())
+            self.assertEqual(model.value, 11)
+            self.assertEqual(displayed, str(model.value))
+
+    # SimpleSpinEditor not yet implemented on Wx.
+    @requires_toolkit([ToolkitName.qt])
+    def test_simple_spin_editor_set_with_text_after_empty(self):
+        from traitsui.testing.tester.registry import TargetRegistry
+        from traitsui.testing.tester.qt4.implementation.range_editor import (
+            _register_simple_spin
+        )
+        model = RangeModel()
+        view = View(
+            Item(
+                "value",
+                editor=RangeEditor(low=1, high=12, mode="spinner")
+            )
+        )
+        LOCAL_REGISTRY = TargetRegistry()
+        _register_simple_spin(LOCAL_REGISTRY)
+        tester = UITester([LOCAL_REGISTRY])
+        with tester.create_ui(model, dict(view=view)) as ui:
+            number_field_text = tester.find_by_name(ui, "value")
+            # Delete all contents of textbox
+            for _ in range(5):
+                number_field_text.perform(command.KeyClick("Backspace"))
+            number_field_text.perform(command.KeySequence("11"))
+            number_field_text.perform(command.KeyClick("Enter"))
+            displayed = number_field_text.inspect(query.DisplayedText())
+            self.assertEqual(model.value, 11)
+            self.assertEqual(displayed, str(model.value))
 
     def check_modify_slider(self, mode):
         model = RangeModel(value=0)

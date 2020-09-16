@@ -319,6 +319,22 @@ def key_sequence_text_ctrl(control, interaction, delay):
 
 
 def key_click_slider(control, interaction, delay):
+    """ Performs simulated typing of a key on the given wxSlider
+    after a delay. Only allowed keys are:
+    "Left", "Right", "Up", "Down", "Page Up", "Page Down"
+    Also, note that up related keys correspond to an increment on the slider,
+    and down a decrement.
+
+    Parameters
+    ----------
+    control : wxSlider
+        The wx Object to be acted on.
+    interaction : instance of command.KeyClick
+        The interaction object holding the key input
+        to be simulated being typed
+    delay : int
+        Time delay (in ms) in which the key click will be performed.
+    """
     valid_keys = {"Left", "Right", "Up", "Down", "Page Up", "Page Down"}
     if interaction.key not in valid_keys:
         raise ValueError(
@@ -334,7 +350,7 @@ def key_click_slider(control, interaction, delay):
         position = min(control.GetMax(), value + control.GetPageSize())
     elif interaction.key == "Page Down":
         position = max(control.GetMin(), value - control.GetPageSize())
-    elif key in {"Down", "Left"}:
+    elif interaction.key in {"Down", "Left"}:
         position = max(control.GetMin(), value - control.GetLineSize())
     else:
         raise ValueError(

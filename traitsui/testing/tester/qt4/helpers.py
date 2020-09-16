@@ -276,6 +276,10 @@ def key_click_qwidget(control, interaction, delay):
 
 def key_click_qslider(control, interaction, delay):
     """ Performs simulated typing of a key on the given slider after a delay.
+    Only allowed keys are:
+    "Left", "Right", "Up", "Down", "Page Up", "Page Down"
+    Also, note that up related keys correspond to an increment on the slider,
+    and down a decrement.
 
     Parameters
     ----------

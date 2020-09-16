@@ -16,6 +16,7 @@ from traitsui.wx.range_editor import (
 )
 
 from traitsui.testing.tester import locator
+from traitsui.testing.tester.wx import registry_helper
 from traitsui.testing.tester.wx.common_ui_targets import (
     LocatedSlider,
     LocatedTextbox
@@ -47,28 +48,6 @@ def resolve_location_slider(wrapper, location):
     )
 
 
-def resolve_location_range_text(wrapper, location):
-    """ Solver from a UIWrapper wrapped RangeTextEditor to a LocatedTextbox
-    containing the textbox of interest
-
-    If there are any conflicts, an error will occur.
-
-    Parameters
-    ----------
-    wrapper : UIWrapper
-        Wrapper containing the RangeTextEditor target.
-    location : locator.WidgetType
-        The location we are looking to resolve.
-    """
-
-    if location == locator.WidgetType.textbox:
-        return LocatedTextbox(textbox=wrapper.target.control)
-    raise ValueError(
-        f"Unable to resolve {location} on {wrapper.target}."
-        " Currently supported: {locator.WidgetType.textbox}"
-    )
-
-
 def register(registry):
     """ Register interactions for the given registry.
 
@@ -89,8 +68,8 @@ def register(registry):
             locator_class=locator.WidgetType,
             solver=resolve_location_slider,
         )
-    registry.register_solver(
+    registry_helper.register_editable_textbox_handlers(
+        registry=registry,
         target_class=RangeTextEditor,
-        locator_class=locator.WidgetType,
-        solver=resolve_location_range_text,
+        widget_getter=lambda wrapper: wrapper.target.control,
     )

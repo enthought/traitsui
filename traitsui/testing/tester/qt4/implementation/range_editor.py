@@ -18,6 +18,7 @@ from traitsui.qt4.range_editor import (
 )
 
 from traitsui.testing.tester import locator
+from traitsui.testing.tester.qt4 import registry_helper
 from traitsui.testing.tester.qt4.common_ui_targets import (
     LocatedSlider,
     LocatedTextbox
@@ -49,49 +50,24 @@ def resolve_location_slider(wrapper, location):
     )
 
 
-def resolve_location_spin(wrapper, location):
-    """ Solver from a UIWrapper wrapped Range Editor to a LocatedTextbox
-    containing the textbox of interest.
+def _register_simple_spin(registry):
+    """ Register interactions for the given registry for a SimpleSpinEditor.
 
     If there are any conflicts, an error will occur.
 
-    Parameters
-    ----------
-    wrapper : UIWrapper
-        Wrapper containing the SimpleSpin Range Editor target.
-    location : locator.WidgetType
-        The location we are looking to resolve.
-    """
-    if location == locator.WidgetType.textbox:
-        # FIX ME: THIS CODE DOESNT BELONG HERE
-        textbox = wrapper.target.control.lineEdit()
-        textbox.end(False)
-        return LocatedTextbox(textbox=textbox)
-    raise ValueError(
-        f"Unable to resolve {location} on {wrapper.target}."
-        " Currently supported: {locator.WidgetType.textbox}"
-    )
-
-
-def resolve_location_range_text(wrapper, location):
-    """ Solver from a UIWrapper wrapped RangeTextEditor to a LocatedTextbox
-    containing the textbox of interest
-
-    If there are any conflicts, an error will occur.
+    This is kept separate from the below register function because the
+    SimpleSpinEditor is not yet implemented on wx.  This function can be used
+    with a local reigstry for tests.
 
     Parameters
     ----------
-    wrapper : UIWrapper
-        Wrapper containing the RangeTextEditor target.
-    location : locator.WidgetType
-        The location we are looking to resolve.
+    registry : TargetRegistry
+        The registry being registered to.
     """
-
-    if location == locator.WidgetType.textbox:
-        return LocatedTextbox(textbox=wrapper.target.control)
-    raise ValueError(
-        f"Unable to resolve {location} on {wrapper.target}."
-        " Currently supported: {locator.WidgetType.textbox}"
+    registry_helper.register_editable_textbox_handlers(
+        registry=registry,
+        target_class=SimpleSpinEditor,
+        widget_getter=lambda wrapper: wrapper.target.control.lineEdit(),
     )
 
 
@@ -115,14 +91,8 @@ def register(registry):
             locator_class=locator.WidgetType,
             solver=resolve_location_slider,
         )
-
-    registry.register_solver(
+    registry_helper.register_editable_textbox_handlers(
+        registry=registry,
         target_class=RangeTextEditor,
-        locator_class=locator.WidgetType,
-        solver=resolve_location_range_text,
-    )
-    registry.register_solver(
-        target_class=SimpleSpinEditor,
-        locator_class=locator.WidgetType,
-        solver=resolve_location_spin,
+        widget_getter=lambda wrapper: wrapper.target.control,
     )
