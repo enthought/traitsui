@@ -6,7 +6,6 @@ from traits.api import Enum, HasTraits, Int, List
 from traitsui.api import EnumEditor, UItem, View
 from traitsui.tests._tools import (
     create_ui,
-    get_all_button_status,
     is_qt,
     is_wx,
     process_cascade_events,
@@ -324,24 +323,21 @@ class TestRadioEnumEditor(unittest.TestCase):
             editor = ui.get_editors("value")[0]
             yield editor
 
-    def test_radio_enum_editor_button_update(self):
+    def test_radio_enum_editor_update(self):
         enum_edit = EnumModel()
+        tester = UITester()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, get_view("custom")) as editor:
-
-            # The layout is: one, three, four \n two
+        with tester.create_ui(enum_edit, dict(view=get_view("custom"))) as ui:
+            radio_editor = tester.find_by_name(ui, "value")
             self.assertEqual(
-                get_all_button_status(editor.control),
-                [True, False, False, False]
+                radio_editor.inspect(query.SelectedText()),
+                "One",
             )
 
             enum_edit.value = "two"
-            process_cascade_events()
-
             self.assertEqual(
-                get_all_button_status(editor.control),
-                [False, False, False, True]
+                radio_editor.inspect(query.SelectedText()),
+                "Two",
             )
 
     def test_radio_enum_editor_pick(self):
