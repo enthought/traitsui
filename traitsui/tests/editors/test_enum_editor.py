@@ -316,18 +316,13 @@ class TestSimpleEnumEditor(unittest.TestCase):
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestRadioEnumEditor(unittest.TestCase):
 
-    @contextlib.contextmanager
-    def setup_gui(self, model, view):
-        with create_ui(model, dict(view=view)) as ui:
-            process_cascade_events()
-            editor = ui.get_editors("value")[0]
-            yield editor
-
     def test_radio_enum_editor_update(self):
         enum_edit = EnumModel()
         tester = UITester()
 
         with tester.create_ui(enum_edit, dict(view=get_view("custom"))) as ui:
+            # sanity check
+            self.assertEqual(enum_edit.value, "one")
             radio_editor = tester.find_by_name(ui, "value")
             self.assertEqual(
                 radio_editor.inspect(query.SelectedText()),
@@ -335,6 +330,7 @@ class TestRadioEnumEditor(unittest.TestCase):
             )
 
             enum_edit.value = "two"
+
             self.assertEqual(
                 radio_editor.inspect(query.SelectedText()),
                 "Two",
@@ -356,20 +352,6 @@ class TestRadioEnumEditor(unittest.TestCase):
                     item = radio_editor.locate(locator.Index(3))
                     item.perform(command.MouseClick())
                     self.assertEqual(enum_edit.value, "four")
-
-    def test_radio_enum_displayed_selected_text(self):
-        enum_edit = EnumModel()
-        tester = UITester()
-        with tester.create_ui(enum_edit, dict(view=get_radio_view())) as ui:
-            # sanity check
-            self.assertEqual(enum_edit.value, "one")
-            radio_editor = tester.find_by_name(ui, "value")
-            displayed = radio_editor.inspect(query.SelectedText())
-            # Radio Editor capitalizes
-            self.assertEqual(displayed, "One")
-            radio_editor.locate(locator.Index(3)).perform(command.MouseClick())
-            displayed = radio_editor.inspect(query.SelectedText())
-            self.assertEqual(displayed, "Four")
 
     # it appears that on windows the behavior is different - it forces
     # enum_edit.value to be 'one'
