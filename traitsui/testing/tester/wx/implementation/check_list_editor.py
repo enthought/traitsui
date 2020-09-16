@@ -8,9 +8,11 @@
 #
 #  Thanks for using Enthought open source!
 #
+import wx
 
 from traitsui.wx.check_list_editor import CustomEditor
 from traitsui.testing.tester import command, locator
+from traitsui.testing.tester.editors.layout import column_major_to_row_major
 from traitsui.testing.tester.wx import helpers
 
 
@@ -70,9 +72,39 @@ class _IndexedCustomCheckListEditor:
             handler=lambda wrapper, _:
                 (helpers.mouse_click_checkbox_child_in_panel(
                     control=wrapper.target.target.control,
-                    index=wrapper.target.index,
+                    index=convert_index(
+                        wrapper.target.target,
+                        wrapper.target.index,
+                    ),
                     delay=wrapper.delay))
         )
+
+
+def convert_index(source, index):
+    """ Helper function to convert an index for a GridSizer so that the
+    index counts over the grid in the correct direction.
+    The grid is always populated in row major order, however, the elements
+    are assigned to each entry in the grid so that when displayed they appear
+    in column major order.
+    Sizers are indexed in the order they are populated, so to access
+    the correct element we may need to convert a column-major based index
+    into a row-major one.
+
+    Parameters
+    ----------
+    control : CustomEditor
+        The Custom CheckList Editor of interest. Its control is the wx.Panel
+        containing child objects organized with a wx.GridSizer
+    index : int
+        the index of interest
+    """
+    sizer = source.control.GetSizer()
+    if isinstance(sizer, wx.BoxSizer):
+        return index
+    n = len(source.names)
+    num_cols = sizer.GetCols()
+    num_rows = sizer.GetEffectiveRowsCount()
+    return column_major_to_row_major(index, n, num_rows, num_cols)
 
 
 def register(registry):

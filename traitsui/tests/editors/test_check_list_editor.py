@@ -35,6 +35,20 @@ def get_view(style):
     )
 
 
+def get_view_custom_cols(cols):
+    return View(
+        UItem(
+            "value",
+            editor=CheckListEditor(
+                values=["one", "two", "three", "four", "five", "six", "seven"],
+                cols=cols,
+            ),
+            style="custom",
+        ),
+        resizable=True
+    )
+
+
 def get_mapped_view(style):
     return View(
         UItem(
@@ -463,6 +477,20 @@ class TestCustomCheckListEditor(unittest.TestCase):
             item_1.perform(command.MouseClick())
 
             self.assertEqual(str_edit.value, "three,one")
+
+    def test_custom_check_list_editor_grid_layout(self):
+        for cols in range(1, 8):
+            list_edit = ListModel()
+            tester = UITester()
+            view = get_view_custom_cols(cols=cols)
+            with tester.create_ui(list_edit, dict(view=view)) as ui:
+                self.assertEqual(list_edit.value, [])
+                check_list = tester.find_by_name(ui, "value")
+                item = check_list.locate(locator.Index(6))
+                item.perform(command.MouseClick())
+                self.assertEqual(list_edit.value, ["seven"])
+                item.perform(command.MouseClick())
+                self.assertEqual(list_edit.value, [])
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
