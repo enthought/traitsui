@@ -275,8 +275,22 @@ def key_click_qwidget(control, interaction, delay):
 
 
 def key_click_qslider(control, interaction, delay):
+    """ Performs simulated typing of a key on the given slider after a delay.
+
+    Parameters
+    ----------
+    control : QSlider
+        The Qt slider to be acted on.
+    interaction : instance of command.KeyClick
+        The interaction object holding the key input
+        to be simulated being typed
+    delay : int
+        Time delay (in ms) in which the key click will be performed.
+    """
     valid_keys = {"Left", "Right", "Up", "Down", "Page Up", "Page Down"}
     if interaction.key not in valid_keys:
-        raise ValueError("Unexpected Key.")
+        raise ValueError(
+            "Unexpected Key. Supported keys are: {}".format(sorted(valid_keys))
+        )
     else:
         key_click(control, interaction.key, delay)

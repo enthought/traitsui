@@ -321,7 +321,9 @@ def key_sequence_text_ctrl(control, interaction, delay):
 def key_click_slider(control, interaction, delay):
     valid_keys = {"Left", "Right", "Up", "Down", "Page Up", "Page Down"}
     if interaction.key not in valid_keys:
-        raise ValueError("Unexpected Key.")
+        raise ValueError(
+            "Unexpected Key. Supported keys are: {}".format(sorted(valid_keys))
+        )
     if not control.HasFocus():
         control.SetFocus()
     value = control.GetValue()
@@ -332,8 +334,12 @@ def key_click_slider(control, interaction, delay):
         position = min(control.GetMax(), value + control.GetPageSize())
     elif interaction.key == "Page Down":
         position = max(control.GetMin(), value - control.GetPageSize())
-    else:
+    elif key in {"Down", "Left"}:
         position = max(control.GetMin(), value - control.GetLineSize())
+    else:
+        raise ValueError(
+            "Unexpected Key. Supported keys are: {}".format(sorted(valid_keys))
+        )
     control.SetValue(position)
     event = wx.ScrollEvent(
         wx.wxEVT_SCROLL_CHANGED, control.GetId(), position
