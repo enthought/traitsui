@@ -282,6 +282,16 @@ def run_file(file_path):
 
 
 def load_demo(file_path, variable_name="demo"):
+    """ Loads a demo example from given file_path. Extracts the relevant
+    object via variable_name.
+    Parameters
+    ----------
+    file_path : str
+        The file_path of the file to be loaded
+    variable_name : str
+        The key in the global symbol state corresponding to the object of
+        interest for the demo.
+    """
     with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
     globals_ = globals().copy()
@@ -339,7 +349,7 @@ class TestInteractExample(unittest.TestCase):
             DEMO, "Applications", "converter.py"
         )
         demo = load_demo(filepath, "popup")
-        tester = UITester(delay=500)
+        tester = UITester()
         with tester.create_ui(demo) as ui:
             input_amount = tester.find_by_name(ui, "input_amount")
             output_amount = tester.find_by_name(ui, "output_amount")

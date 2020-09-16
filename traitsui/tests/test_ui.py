@@ -24,6 +24,8 @@ from traits.has_traits import HasTraits, HasStrictTraits
 from traits.trait_types import Str, Int
 import traitsui
 from traitsui.item import Item, spring
+from traitsui.testing.tester import command, query
+from traitsui.testing.tester.ui_tester import UITester
 from traitsui.view import View
 
 from traitsui.tests._tools import (
@@ -175,11 +177,9 @@ class TestUI(unittest.TestCase):
         # Behavior: after pressing 'OK' in a dialog, the method UI.finish is
         # called and the view control and its children are destroyed
 
-        import wx
-
         foo = FooDialog()
-        with create_ui(foo) as ui:
-
+        tester = UITester()
+        with tester.create_ui(foo) as ui:
             # keep reference to the control to check that it was destroyed
             control = ui.control
 
@@ -187,27 +187,22 @@ class TestUI(unittest.TestCase):
             control.Destroy = count_calls(control.Destroy)
 
             # press the OK button and close the dialog
-            okbutton = ui.control.FindWindowByName("button", ui.control)
-            self.assertEqual(okbutton.Label, 'OK')
-
-            click_event = wx.CommandEvent(
-                wx.wxEVT_COMMAND_BUTTON_CLICKED, okbutton.GetId()
-            )
-            okbutton.ProcessEvent(click_event)
+            ok_button = tester.find_by_id(ui, "OK")
+            self.assertEqual(ok_button.inspect(query.DisplayedText()), "OK")
+            ok_button.perform(command.MouseClick())
 
             self.assertIsNone(ui.control)
             self.assertEqual(control.Destroy._n_calls, 1)
+            
 
     @requires_toolkit([ToolkitName.qt])
     def test_destroy_after_ok_qt(self):
         # Behavior: after pressing 'OK' in a dialog, the method UI.finish is
         # called and the view control and its children are destroyed
 
-        from pyface import qt
-
         foo = FooDialog()
-        with create_ui(foo) as ui:
-
+        tester = UITester()
+        with tester.create_ui(foo) as ui:
             # keep reference to the control to check that it was deleted
             control = ui.control
 
@@ -216,11 +211,13 @@ class TestUI(unittest.TestCase):
             control.deleteLater = count_calls(control.deleteLater)
 
             # press the OK button and close the dialog
-            okb = control.findChild(qt.QtGui.QPushButton)
-            okb.click()
+            ok_button = tester.find_by_id(ui, "OK")
+            self.assertEqual(ok_button.inspect(query.DisplayedText()), "OK")
+            ok_button.perform(command.MouseClick())
 
             self.assertIsNone(ui.control)
             self.assertEqual(control.deleteLater._n_calls, 1)
+
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_no_spring_trait(self):
