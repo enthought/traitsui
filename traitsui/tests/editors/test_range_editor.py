@@ -209,6 +209,7 @@ class TestRangeEditor(unittest.TestCase):
         tester = UITester([LOCAL_REGISTRY])
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field_text = tester.find_by_name(ui, "value")
+            number_field_text.perform(command.KeyClick("Right"))
             # Delete all contents of textbox
             for _ in range(5):
                 number_field_text.perform(command.KeyClick("Backspace"))
