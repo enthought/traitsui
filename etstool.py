@@ -130,7 +130,6 @@ extra_dependencies = {
     },
     'null': set(),
     # Toolkit-independent dependencies for demo testing.
-    # This should correspond to "examples" option in extras_require
     'examples': {
         'apptools',
         'chaco',
