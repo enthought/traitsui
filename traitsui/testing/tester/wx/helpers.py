@@ -15,7 +15,25 @@ from traitsui.testing.tester.compat import check_key_compat
 from traitsui.testing.tester.exceptions import Disabled
 
 
-def mouse_click_button(control, delay):
+def _create_event(event_type, control):
+    click_event = wx.CommandEvent(
+        event_type, control.GetId()
+    )
+    click_event.SetEventObject(control)
+    return click_event
+
+
+def mouse_click(func):
+    def mouse_click_handler(control, delay, *args, **kwargs):
+        if not control.IsEnabled():
+            return
+        wx.MilliSleep(delay)
+        func(control, *args, **kwargs)
+    return mouse_click_handler
+
+
+@mouse_click
+def mouse_click_button(control):
     """ Performs a mouce click on a wx button.
 
     Parameters
@@ -25,16 +43,12 @@ def mouse_click_button(control, delay):
     delay: int
         Time delay (in ms) in which click will be performed.
     """
-    if not control.IsEnabled():
-        return
-    wx.MilliSleep(delay)
-    click_event = wx.CommandEvent(
-        wx.wxEVT_COMMAND_BUTTON_CLICKED, control.GetId()
-    )
-    control.ProcessEvent(click_event)
+    click_event = _create_event(wx.wxEVT_COMMAND_BUTTON_CLICKED, control)
+    control.ProcessWindowEvent(click_event)
 
 
-def mouse_click_checkbox(control, delay):
+@mouse_click
+def mouse_click_checkbox(control):
     """ Performs a mouce click on a wx check box.
 
     Parameters
@@ -44,18 +58,13 @@ def mouse_click_checkbox(control, delay):
     delay: int
         Time delay (in ms) in which click will be performed.
     """
-    if not control.IsEnabled():
-        return
-    wx.MilliSleep(delay)
-    click_event = wx.CommandEvent(
-        wx.wxEVT_COMMAND_CHECKBOX_CLICKED, control.GetId()
-    )
-    click_event.SetEventObject(control)
+    click_event = _create_event(wx.wxEVT_COMMAND_CHECKBOX_CLICKED, control)
     control.SetValue(not control.GetValue())
     control.ProcessWindowEvent(click_event)
 
 
-def mouse_click_combobox_or_choice(control, index, delay):
+@mouse_click
+def mouse_click_combobox_or_choice(control, index):
     """ Performs a mouce click on either a wx combo box or a wx choice on the
     entry at the given index.
 
@@ -68,26 +77,18 @@ def mouse_click_combobox_or_choice(control, index, delay):
     delay: int
         Time delay (in ms) in which click will be performed.
     """
-    if not control.IsEnabled():
-        return
-    wx.MilliSleep(delay)
     if isinstance(control, wx.ComboBox):
-        click_event = wx.CommandEvent(
-            wx.wxEVT_COMMAND_COMBOBOX_SELECTED, control.GetId()
-        )
+        click_event = _create_event(wx.wxEVT_COMMAND_COMBOBOX_SELECTED, control)
     elif isinstance(control, wx.Choice):
-        click_event = wx.CommandEvent(
-            wx.wxEVT_COMMAND_CHOICE_SELECTED, control.GetId()
-        )
+        click_event = _create_event(wx.wxEVT_COMMAND_CHOICE_SELECTED, control)
     else:
         raise TypeError("Only supported controls are wxComboBox or wxChoice")
-    click_event.SetEventObject(control)
     click_event.SetString(control.GetString(index))
     control.SetSelection(index)
     control.ProcessWindowEvent(click_event)
 
-
-def mouse_click_listbox(control, index, delay):
+@mouse_click
+def mouse_click_listbox(control, index):
     """Performs a mouce click on a wx list box on the entry at
     the given index.
 
@@ -100,18 +101,13 @@ def mouse_click_listbox(control, index, delay):
     delay: int
         Time delay (in ms) in which click will be performed.
     """
-    if not control.IsEnabled():
-        return
-    wx.MilliSleep(delay)
-    click_event = wx.CommandEvent(
-        wx.wxEVT_COMMAND_LISTBOX_SELECTED, control.GetId()
-    )
-    click_event.SetEventObject(control)
+    click_event = _create_event(wx.wxEVT_COMMAND_LISTBOX_SELECTED, control)
     control.SetSelection(index)
     control.ProcessWindowEvent(click_event)
 
 
-def mouse_click_radiobutton(control, delay):
+@mouse_click
+def mouse_click_radiobutton(control):
     """ Performs a mouce click on a wx radio button.
 
     Parameters
@@ -121,18 +117,13 @@ def mouse_click_radiobutton(control, delay):
     delay: int
         Time delay (in ms) in which click will be performed.
     """
-    if not control.IsEnabled():
-        return
-    wx.MilliSleep(delay)
-    click_event = wx.CommandEvent(
-        wx.wxEVT_COMMAND_RADIOBUTTON_SELECTED, control.GetId()
-    )
-    click_event.SetEventObject(control)
+    click_event = _create_event(wx.wxEVT_COMMAND_RADIOBUTTON_SELECTED, control)
     control.SetValue(not control.GetValue())
     control.ProcessWindowEvent(click_event)
 
 
-def mouse_click_object(control, delay):
+@mouse_click
+def mouse_click_object(control):
     """ Performs a mouce click on a wxTextCtrl.
 
     Parameters
@@ -142,15 +133,13 @@ def mouse_click_object(control, delay):
     delay: int
         Time delay (in ms) in which click will be performed.
     """
-    if not control.IsEnabled():
-        return
     if not control.HasFocus():
         control.SetFocus()
-    wx.MilliSleep(delay)
-    click_event = wx.CommandEvent(
-        wx.wxEVT_COMMAND_LEFT_CLICK, control.GetId()
-    )
-    control.ProcessEvent(click_event)
+    click_event = _create_event(wx.wxEVT_COMMAND_LEFT_CLICK, control)
+    control.ProcessWindowEvent(click_event)
+
+
+###############################################################################
 
 
 def mouse_click_notebook_tab_index(control, index, delay=0):
