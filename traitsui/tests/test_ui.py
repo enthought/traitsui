@@ -193,7 +193,6 @@ class TestUI(unittest.TestCase):
 
             self.assertIsNone(ui.control)
             self.assertEqual(control.Destroy._n_calls, 1)
-            
 
     @requires_toolkit([ToolkitName.qt])
     def test_destroy_after_ok_qt(self):
@@ -217,7 +216,6 @@ class TestUI(unittest.TestCase):
 
             self.assertIsNone(ui.control)
             self.assertEqual(control.deleteLater._n_calls, 1)
-
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_no_spring_trait(self):
