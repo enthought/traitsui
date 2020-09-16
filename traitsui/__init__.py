@@ -40,7 +40,17 @@ __extras_require__ = {
         "pandas",
         "tables",
     ],
-    "test": ["packaging"],
+    "editors": [
+        # Optional dependencies for certain editors which may not be needed by
+        # projects. If they are absent, ``traitsui.api``` should still be
+        # importable and the relevant tests should be skipped.
+        "numpy",   # For ArrayEditor and DataFrameEditor
+        "pandas",  # For DataFrameEditor
+    ],
+    "test": [
+        # Dependencies for running test suites.
+        "packaging",
+    ],
 }
 
 
