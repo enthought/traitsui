@@ -234,6 +234,8 @@ class TestRangeEditor(unittest.TestCase):
             # slider values are converted to a [0, 10000] scale.  A single
             # step is a change of 100 on that scale and a page step is 1000.
             # Our range in [0, 10] so these correspond to changes of .1 and 1.
+            # Note: when tested manually, the step size seen on OSX and Wx is
+            # different.
             for _ in range(10):
                 slider.perform(command.KeyClick("Right"))
             displayed = text.inspect(query.DisplayedText())
