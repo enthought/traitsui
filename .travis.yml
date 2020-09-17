@@ -48,6 +48,7 @@ install:
   # etsdemo
   - pushd ets-demo && for toolkit in ${TOOLKITS}; do edm run -- python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done && popd
 script:
+  - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py flake8 --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
   - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py test --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
   # etsdemo
   - pushd ets-demo && edm run -- python etstool.py flake8 --runtime=${RUNTIME} --toolkit=${toolkit} && popd
