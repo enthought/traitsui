@@ -27,7 +27,7 @@ env:
 
 matrix:
   include:
-    - env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5 pyside2"
+    - env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5 pyside2" FLAKE8="1"
     - env: RUNTIME=3.6 TOOLKITS="wx"
     - env: RUNTIME=3.6 TOOLKITS="pyqt5" TRAITS_REQUIRES="^=6.0"
   allow_failures:
@@ -48,7 +48,7 @@ install:
   # etsdemo
   - pushd ets-demo && for toolkit in ${TOOLKITS}; do edm run -- python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done && popd
 script:
-  - if [[ ${TOOLKITS} == 'null' ]]; then edm run -- python etstool.py flake8 --runtime=${RUNTIME} --toolkit=null; fi
+  - if [[ ${FLAKE8} == '1' ]]; then edm run -- python etstool.py flake8 --runtime=${RUNTIME} --toolkit=null; fi
   - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py test --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
   # etsdemo
   - pushd ets-demo && edm run -- python etstool.py flake8 --runtime=${RUNTIME} --toolkit=${toolkit} && popd
