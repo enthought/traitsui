@@ -282,6 +282,9 @@ def key_click_text_entry(
         wx.MilliSleep(delay)
         event = wx.CommandEvent(wx.EVT_TEXT_ENTER.typeId, control.GetId())
         control.ProcessEvent(event)
+    elif interaction.key == "End":
+        wx.MilliSleep(delay)
+        control.SetInsertionPointEnd()
     elif interaction.key == "Backspace":
         wx.MilliSleep(delay)
         start, end = get_selection(control)

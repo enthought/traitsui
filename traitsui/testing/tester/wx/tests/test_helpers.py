@@ -155,6 +155,19 @@ class TestInteractions(unittest.TestCase):
         self.assertEqual(textbox.Value, "E")
         self.assertEqual(handler.call_count, 1)
 
+    def test_key_click_end(self):
+        textbox = wx.TextCtrl(self.frame)
+        textbox.SetValue("ABCDE")
+        textbox.SetInsertionPoint(0)
+
+        # sanity check
+        self.assertEqual(textbox.GetInsertionPoint(), 0)
+
+        helpers.key_click_text_entry(textbox, command.KeyClick("End"), 0)
+        helpers.key_click_text_entry(textbox, command.KeyClick("F"), 0)
+
+        self.assertEqual(textbox.Value, "ABCDEF")
+
     def test_key_click_disabled(self):
         textbox = wx.TextCtrl(self.frame)
         textbox.SetEditable(False)
