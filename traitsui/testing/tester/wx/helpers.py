@@ -16,14 +16,14 @@ from traitsui.testing.tester.exceptions import Disabled
 
 
 def _create_event(event_type, control):
-    """ Creates a wxEvent of a given type 
+    """ Creates a wxEvent of a given type
 
     Parameters
     ----------
     event_type : wxEventType
-        The type of the event to be created 
+        The type of the event to be created
     control :
-        The wx control the event is occurring on. 
+        The wx control the event is occurring on.
 
     Returns
     -------
@@ -60,7 +60,7 @@ def mouse_click(func):
         ---------
         control : wxControl
             The wx Object to be clicked.
-        delay : int 
+        delay : int
             Time delay (in ms) in which click will be performed.
         """
         if not control.IsEnabled():
@@ -116,7 +116,9 @@ def mouse_click_combobox_or_choice(control, index, delay):
         Time delay (in ms) in which click will be performed.
     """
     if isinstance(control, wx.ComboBox):
-        click_event = _create_event(wx.wxEVT_COMMAND_COMBOBOX_SELECTED, control)
+        click_event = _create_event(
+            wx.wxEVT_COMMAND_COMBOBOX_SELECTED, control
+        )
     elif isinstance(control, wx.Choice):
         click_event = _create_event(wx.wxEVT_COMMAND_CHOICE_SELECTED, control)
     else:
@@ -124,6 +126,7 @@ def mouse_click_combobox_or_choice(control, index, delay):
     click_event.SetString(control.GetString(index))
     control.SetSelection(index)
     control.ProcessWindowEvent(click_event)
+
 
 @mouse_click
 def mouse_click_listbox(control, index, delay):
