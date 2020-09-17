@@ -124,6 +124,8 @@ def mouse_click_tab_index(tab_widget, index, delay):
     delay : int
         Time delay (in ms) in which click will be performed.
     """
+    if not 0 <= index < tab_widget.count():
+        raise IndexError(index)
     tabbar = tab_widget.tabBar()
     rect = tabbar.tabRect(index)
     QTest.mouseClick(

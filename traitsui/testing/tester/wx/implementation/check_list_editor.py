@@ -12,72 +12,26 @@ import wx
 
 from traitsui.wx.check_list_editor import CustomEditor
 from traitsui.testing.tester import command, locator
+from traitsui.testing.tester.common_ui_targets import _BaseSourceWithLocation
 from traitsui.testing.tester.editors.layout import column_major_to_row_major
 from traitsui.testing.tester.wx import helpers
 
 
-class _IndexedCustomCheckListEditor:
-    """ Wrapper for CheckListEditor + locator.Index """
-
-    def __init__(self, target, index):
-        """
-        Parameters
-        ----------
-        target : CustomCheckListEditor
-            The Custom Check List Editor
-        index : int
-            The index of interest.
-        """
-        self.target = target
-        self.index = index
-
-    @classmethod
-    def from_location_index(cls, wrapper, location):
-        """ Creates an instance of _IndexedCustomCheckListEditor from a
-        wrapper wrapping a Custom CheckListEditor, and a locator.Index
-        object.
-
-        Parameters
-        ----------
-        wrapper : UIWrapper
-            wrapper wrapping a Custom CheckListEditor
-        location : Instance of locator.Index
-        """
-        # Conform to the call signature specified in the register
-        return cls(
-            target=wrapper.target,
-            index=location.index,
-        )
-
-    @classmethod
-    def register(cls, registry):
-        """ Class method to register interactions on an
-        _IndexedCustomCheckListEditor for the given registry.
-
-        If there are any conflicts, an error will occur.
-
-        Parameters
-        ----------
-        registry : TargetRegistry
-            The registry being registered to.
-        """
-        registry.register_solver(
-            target_class=CustomEditor,
-            locator_class=locator.Index,
-            solver=cls.from_location_index,
-        )
-        registry.register_handler(
-            target_class=cls,
-            interaction_class=command.MouseClick,
-            handler=lambda wrapper, _:
-                (helpers.mouse_click_checkbox_child_in_panel(
-                    control=wrapper.target.target.control,
-                    index=convert_index(
-                        wrapper.target.target,
-                        wrapper.target.index,
-                    ),
-                    delay=wrapper.delay))
-        )
+class _IndexedCustomCheckListEditor(_BaseSourceWithLocation):
+    """ Wrapper for CheckListEditor + locator.Index
+    """
+    source_class = CustomEditor
+    locator_class = locator.Index
+    handlers = [
+        (command.MouseClick,
+            (lambda wrapper, _: helpers.mouse_click_checkbox_child_in_panel(
+                control=wrapper.target.source.control,
+                index=convert_index(
+                    source=wrapper.target.source,
+                    index=wrapper.target.location.index
+                ),
+                delay=wrapper.delay))),
+    ]
 
 
 def convert_index(source, index):
