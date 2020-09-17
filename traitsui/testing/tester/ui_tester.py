@@ -142,7 +142,7 @@ class UITester:
     delay : int
         Time delay (in ms) in which actions by the tester are performed. Note
         it is propagated through to created child wrappers. The delay allows
-        visual confirmation test code is working as desired. Defaults to 0.
+        visual confirmation test code is working as desired.
     """
 
     def __init__(self, registries=None, delay=0):
