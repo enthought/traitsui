@@ -116,7 +116,7 @@ class TargetRegistry:
 
         button_wrapper = container.locate(Button("OK"))
 
-    Where we want to ``button_wrapper`` to be an instance of``UIWrapper``
+    Where we want ``button_wrapper`` to be an instance of``UIWrapper``
     wrapping a button.
 
     The ``Button`` is a new locator type::
@@ -126,7 +126,7 @@ class TargetRegistry:
             def __init__(self, label):
                 self.label = label
 
-    Say ``MyUIContainer`` is keeping tracking of the buttons by name in an
+    Say ``MyUIContainer`` is keeping track of the buttons by names with a
     dictionary called ``_buttons``::
 
         def get_button(wrapper, location):
