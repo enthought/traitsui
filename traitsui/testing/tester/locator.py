@@ -34,14 +34,6 @@ class Index:
         self.index = index
 
 
-class NestedUI:
-    """ A locator for locating a nested ``traitsui.ui.UI`` object assuming
-    there is only one. If there are multiple, more location information
-    needs to have been provided already.
-    """
-    pass
-
-
 class TargetByName:
     """ A locator for locating the next UI target using a name.
 

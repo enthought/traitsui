@@ -107,54 +107,44 @@ class TargetRegistry:
     The locator type can be any subclass of ``type``. There are predefined
     locators in ``traitsui.testing.tester.locator``.
 
-    For example, suppose a UI target has a nested UI and a button. Both the
-    nested UI and the button are UI targets that can be located in the
-    container target.
+    For example, suppose a UI target called ``MyUIContainer`` has some buttons,
+    and the objective of a test is to click a specific button with a given
+    label. We will therefore need to locate the button with the given label
+    before a mouse click can be performed.
 
-    Suppose we have a locator type for the nested UI::
+    The test code we wanted to achieve looks like this::
 
-        class NestedUI:
-            pass
+        button_wrapper = container.locate(Button("OK"))
 
-    And there is an enum for the widget type::
+    Where we want to ``button_wrapper`` to be an instance of``UIWrapper``
+    wrapping a button.
 
-        class WidgetType(Enum):
-            button = "button"
+    The ``Button`` is a new locator type::
 
-    The solvers for these locators may look like this::
+        class Button:
+            ''' Locator for locating a push button by label.'''
+            def __init__(self, label):
+                self.label = label
 
-        def get_nested_ui(wrapper, _):
-            return wrapper.target._nested_ui
+    Say ``MyUIContainer`` is keeping tracking of the buttons by name in an
+    dictionary called ``_buttons``::
 
-        def get_widget_by_type(wrapper, location):
-            if location == WidgetType.button:
-                return wrapper.target._button
-            raise ValueError("Other widget type not supported")
-
-    The first argument is an instance of ``UIWrapper`` that wraps the container
-    UI target, in this case, the UI target that holds a nested UI and a button.
-
-    The second argument is an instance of the locator type.
+        def get_button(wrapper, location):
+            return wrapper.target._buttons[location.label]
 
     The solvers can then be registered for the container UI target::
 
         registry = TargetRegistry()
         registry.register_solver(
             target_class=MyUIContainer,
-            locator_class=NestedUI,
-            solver=get_nested_ui,
-        )
-        registry.register_solver(
-            target_class=MyUIContainer,
-            locator_class=WidgetType,
-            solver=get_widget_by_type,
+            locator_class=Button,
+            solver=get_button,
         )
 
-    Then this registry can be used with the ``UITester`` and ``UIWrapper`` to
-    support ``UIWrapper.locate``. If the nested UI has other locator solvers,
-    then it would be possible to do chain location resolutions, like this::
-
-        container.locate(NestedUI()).locate(NestedUI())
+    When the solver is registered this way, the ``wrapper`` argument will be
+    an instance of ``UIWrapper`` whose ``target`` attribute is an instance of
+    ``MyUIContainer``, and ``location`` will be an instance of ``Button``, as
+    is provided via ``UIWrapper.locate``.
     """
 
     def __init__(self):
