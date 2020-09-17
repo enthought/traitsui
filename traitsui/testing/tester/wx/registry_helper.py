@@ -39,7 +39,7 @@ def register_editable_textbox_handlers(registry, target_class, widget_getter):
                 widget_getter(wrapper), interaction, wrapper.delay))),
         (command.MouseClick,
             (lambda wrapper, _: helpers.mouse_click_object(
-                widget_getter(wrapper), wrapper.delay))),
+                control=widget_getter(wrapper), delay=wrapper.delay))),
         (query.DisplayedText,
             lambda wrapper, _: widget_getter(wrapper).GetValue()),
     ]
