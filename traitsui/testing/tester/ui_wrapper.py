@@ -42,29 +42,31 @@ class UIWrapper:
     For simulating user interactions such as a mouse click or visual
     inspection, the ``perform`` and ``inspect`` methods are provided.
 
+    Parameters
+    ----------
+    target : any
+        An object on which further UI target can be searched for, or can be
+        a leaf target that can be operated on.
+    registries : list of TargetRegistry
+        Registries of interaction for different target, in the order
+        of decreasing priority.
+    delay : int, optional
+        Time delay (in ms) in which actions by the wrapper are performed. Note
+        it is propagated through to created child wrappers. The delay allows
+        visual confirmation test code is working as desired. Defaults to 0.
+
     Attributes
     ----------
     target : any
         An object on which further UI target can be searched for, or can be
         a leaf target that can be operated on.
-    delay : int, optional
+    delay : int
         Time delay (in ms) in which actions by the wrapper are performed. Note
-        it is propogated through to created child wrappers. The delay allows
+        it is propagated through to created child wrappers. The delay allows
         visual confirmation test code is working as desired. Defaults to 0.
     """
 
     def __init__(self, target, registries, delay=0):
-        """ Initializer
-
-        Parameters
-        ----------
-        target : any
-            An object on which further UI target can be searched for, or can be
-            a leaf target that can be operated on.
-        registries : list of TargetRegistry
-            Registries of interaction for different target, in the order
-            of decreasing priority.
-        """
         self.target = target
         self._registries = registries
         self.delay = delay
