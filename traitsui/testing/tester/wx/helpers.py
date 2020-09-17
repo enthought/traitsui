@@ -343,7 +343,6 @@ def key_click_slider(control, interaction, delay):
     if not control.HasFocus():
         control.SetFocus()
     value = control.GetValue()
-    wx.MilliSleep(delay)
     if interaction.key in {"Up", "Right"}:
         position = min(control.GetMax(), value + control.GetLineSize())
     elif interaction.key == "Page Up":
@@ -356,6 +355,7 @@ def key_click_slider(control, interaction, delay):
         raise ValueError(
             "Unexpected Key. Supported keys are: {}".format(sorted(valid_keys))
         )
+    wx.MilliSleep(delay)
     control.SetValue(position)
     event = wx.ScrollEvent(
         wx.wxEVT_SCROLL_CHANGED, control.GetId(), position

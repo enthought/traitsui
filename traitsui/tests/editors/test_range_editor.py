@@ -4,6 +4,7 @@ import unittest
 from traits.api import HasTraits, Float, Int
 from traitsui.api import Item, RangeEditor, UItem, View
 from traitsui.testing.tester import command, locator, query
+from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.ui_tester import UITester
 from traitsui.tests._tools import (
     is_wx,
@@ -12,6 +13,30 @@ from traitsui.tests._tools import (
 )
 
 is_windows = platform.system() == "Windows"
+
+
+def _register_simple_spin(registry):
+    """ Register interactions for the given registry for a SimpleSpinEditor.
+
+    If there are any conflicts, an error will occur.
+
+    This is kept separate from the below register function because the
+    SimpleSpinEditor is not yet implemented on wx.  This function can be used
+    with a local reigstry for tests.
+
+    Parameters
+    ----------
+    registry : TargetRegistry
+        The registry being registered to.
+    """
+    from traitsui.testing.tester.qt4 import registry_helper
+    from traitsui.qt4.range_editor import SimpleSpinEditor
+
+    registry_helper.register_editable_textbox_handlers(
+        registry=registry,
+        target_class=SimpleSpinEditor,
+        widget_getter=lambda wrapper: wrapper.target.control.lineEdit(),
+    )
 
 
 class RangeModel(HasTraits):
@@ -108,13 +133,9 @@ class TestRangeEditor(unittest.TestCase):
             self.assertEqual(model.value, 10)
             self.assertEqual(displayed, str(model.value))
 
-    # SimpleSpinEditor not yet implemented on Wx.
+    # the tester support code is not yet implemented for Wx SimpleSpinEditor
     @requires_toolkit([ToolkitName.qt])
     def test_simple_spin_editor_set_with_text_valid(self):
-        from traitsui.testing.tester.registry import TargetRegistry
-        from traitsui.testing.tester.qt4.implementation.range_editor import (
-            _register_simple_spin
-        )
         model = RangeModel()
         view = View(
             Item(
@@ -190,13 +211,9 @@ class TestRangeEditor(unittest.TestCase):
             self.assertEqual(model.value, 11)
             self.assertEqual(displayed, str(model.value))
 
-    # SimpleSpinEditor not yet implemented on Wx.
+    # the tester support code is not yet implemented for Wx SimpleSpinEditor
     @requires_toolkit([ToolkitName.qt])
     def test_simple_spin_editor_set_with_text_after_empty(self):
-        from traitsui.testing.tester.registry import TargetRegistry
-        from traitsui.testing.tester.qt4.implementation.range_editor import (
-            _register_simple_spin
-        )
         model = RangeModel()
         view = View(
             Item(

@@ -50,27 +50,6 @@ def resolve_location_slider(wrapper, location):
     )
 
 
-def _register_simple_spin(registry):
-    """ Register interactions for the given registry for a SimpleSpinEditor.
-
-    If there are any conflicts, an error will occur.
-
-    This is kept separate from the below register function because the
-    SimpleSpinEditor is not yet implemented on wx.  This function can be used
-    with a local reigstry for tests.
-
-    Parameters
-    ----------
-    registry : TargetRegistry
-        The registry being registered to.
-    """
-    registry_helper.register_editable_textbox_handlers(
-        registry=registry,
-        target_class=SimpleSpinEditor,
-        widget_getter=lambda wrapper: wrapper.target.control.lineEdit(),
-    )
-
-
 def register(registry):
     """ Register interactions for the given registry.
 
