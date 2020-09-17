@@ -46,7 +46,7 @@ class TestInteractions(unittest.TestCase):
         button.Bind(wx.EVT_BUTTON, handler)
 
         # when
-        helpers.mouse_click_button(button, 0)
+        helpers.mouse_click_button(control=button, delay=0)
 
         # then
         self.assertEqual(handler.call_count, 1)
@@ -58,7 +58,7 @@ class TestInteractions(unittest.TestCase):
         button.Enable(False)
 
         # when
-        helpers.mouse_click_button(button, 0)
+        helpers.mouse_click_button(control=button, delay=0)
 
         # then
         self.assertEqual(handler.call_count, 0)

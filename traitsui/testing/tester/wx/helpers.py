@@ -16,24 +16,62 @@ from traitsui.testing.tester.exceptions import Disabled
 
 
 def _create_event(event_type, control):
-    click_event = wx.CommandEvent(
+    """ Creates a wxEvent of a given type 
+
+    Parameters
+    ----------
+    event_type : wxEventType
+        The type of the event to be created 
+    control :
+        The wx control the event is occurring on. 
+
+    Returns
+    -------
+    wxEvent
+        The created event, of the given type, with the given control set as
+        the event object.
+    """
+    event = wx.CommandEvent(
         event_type, control.GetId()
     )
-    click_event.SetEventObject(control)
-    return click_event
+    event.SetEventObject(control)
+    return event
 
 
 def mouse_click(func):
-    def mouse_click_handler(control, delay, *args, **kwargs):
+    """ Decorator function for mouse clicks. Decorated functions will return
+    if they are not enabled. Additionally, this handles the delay for the
+    click.
+
+    Parameters
+    ----------
+    func : callable
+        The mouse click function to be decorated.
+
+    Returns
+    -------
+    callable
+        The decorated function.
+    """
+    def mouse_click_handler(*, control, delay, **kwargs):
+        """ Defines the decorated function.
+
+        Paramters
+        ---------
+        control : wxControl
+            The wx Object to be clicked.
+        delay : int 
+            Time delay (in ms) in which click will be performed.
+        """
         if not control.IsEnabled():
             return
         wx.MilliSleep(delay)
-        func(control, *args, **kwargs)
+        func(control=control, delay=delay, **kwargs)
     return mouse_click_handler
 
 
 @mouse_click
-def mouse_click_button(control):
+def mouse_click_button(control, delay):
     """ Performs a mouce click on a wx button.
 
     Parameters
@@ -48,7 +86,7 @@ def mouse_click_button(control):
 
 
 @mouse_click
-def mouse_click_checkbox(control):
+def mouse_click_checkbox(control, delay):
     """ Performs a mouce click on a wx check box.
 
     Parameters
@@ -64,7 +102,7 @@ def mouse_click_checkbox(control):
 
 
 @mouse_click
-def mouse_click_combobox_or_choice(control, index):
+def mouse_click_combobox_or_choice(control, index, delay):
     """ Performs a mouce click on either a wx combo box or a wx choice on the
     entry at the given index.
 
@@ -88,7 +126,7 @@ def mouse_click_combobox_or_choice(control, index):
     control.ProcessWindowEvent(click_event)
 
 @mouse_click
-def mouse_click_listbox(control, index):
+def mouse_click_listbox(control, index, delay):
     """Performs a mouce click on a wx list box on the entry at
     the given index.
 
@@ -107,7 +145,7 @@ def mouse_click_listbox(control, index):
 
 
 @mouse_click
-def mouse_click_radiobutton(control):
+def mouse_click_radiobutton(control, delay):
     """ Performs a mouce click on a wx radio button.
 
     Parameters
@@ -123,7 +161,7 @@ def mouse_click_radiobutton(control):
 
 
 @mouse_click
-def mouse_click_object(control):
+def mouse_click_object(control, delay):
     """ Performs a mouce click on a wxTextCtrl.
 
     Parameters
@@ -139,10 +177,7 @@ def mouse_click_object(control):
     control.ProcessWindowEvent(click_event)
 
 
-###############################################################################
-
-
-def mouse_click_notebook_tab_index(control, index, delay=0):
+def mouse_click_notebook_tab_index(control, index, delay):
     """ Performs a mouseclick on a Noteboook List Editor on the tab specified
     by index.
 
@@ -191,7 +226,7 @@ def mouse_click_checkbox_child_in_panel(control, index, delay):
     if not 0 <= index <= len(children_list) - 1:
         raise IndexError(index)
     obj = children_list[index].GetWindow()
-    mouse_click_checkbox(obj, delay)
+    mouse_click_checkbox(control=obj, delay=delay)
 
 
 def mouse_click_radiobutton_child_in_panel(control, index, delay):
@@ -210,7 +245,7 @@ def mouse_click_radiobutton_child_in_panel(control, index, delay):
     if not 0 <= index <= len(children_list) - 1:
         raise IndexError(index)
     obj = children_list[index].GetWindow()
-    mouse_click_radiobutton(obj, delay)
+    mouse_click_radiobutton(control=obj, delay=delay)
 
 
 def key_click_text_entry(
