@@ -14,7 +14,6 @@ from traitsui.qt4.range_editor import (
     LogRangeSliderEditor,
     RangeTextEditor,
     SimpleSliderEditor,
-    SimpleSpinEditor,
 )
 
 from traitsui.testing.tester import locator

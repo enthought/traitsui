@@ -24,8 +24,8 @@ class _IndexedNotebookEditor(_BaseSourceWithLocation):
     source_class = NotebookEditor
     locator_class = locator.Index
     handlers = [
-        (command.MouseClick, (lambda wrapper, _:
-            helpers.mouse_click_tab_index(
+        (command.MouseClick,
+            (lambda wrapper, _: helpers.mouse_click_tab_index(
                 tab_widget=wrapper.target.source.control,
                 index=wrapper.target.location.index,
                 delay=wrapper.delay))),
