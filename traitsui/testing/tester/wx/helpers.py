@@ -45,7 +45,7 @@ def mouse_click(func):
 
     Parameters
     ----------
-    func : callable
+    func : callable(*, control, delay, **kwargs)
         The mouse click function to be decorated.
 
     Returns
