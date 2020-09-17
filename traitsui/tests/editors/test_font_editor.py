@@ -26,7 +26,7 @@ class ObjectWithFont(HasTraits):
     font_trait = Font()
 
 
-@requires_toolkit([ToolkitName.wx])
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestFontEditor(unittest.TestCase):
 
     def test_create_and_dispose_text_style(self):
