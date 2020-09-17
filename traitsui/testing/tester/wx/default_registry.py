@@ -15,6 +15,7 @@ from traitsui.testing.tester.wx.implementation import (
     button_editor,
     check_list_editor,
     enum_editor,
+    font_editor,
     instance_editor,
     list_editor,
     range_editor,
@@ -44,6 +45,9 @@ def get_default_registry():
 
     # EnumEditor
     enum_editor.register(registry)
+
+    # FontEditor
+    font_editor.register(registry)
 
     # TextEditor
     text_editor.register(registry)
