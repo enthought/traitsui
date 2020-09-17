@@ -347,6 +347,9 @@ class RadioEditor(BaseEditor):
         n = len(names)
         cols = self.factory.cols
         rows = (n + cols - 1) // cols
+        # incr will keep track of how to increment index so that as we traverse
+        # the grid in row major order, the elements are added to appear in
+        # the correct order
         if self.row_major:
             incr = [1] * cols
         else:
@@ -355,10 +358,15 @@ class RadioEditor(BaseEditor):
             for i in range(cols):
                 incr[i] += rem > i
             incr[-1] = -(reduce(lambda x, y: x + y, incr[:-1], 0) - 1)
+            # e.g for a gird:
+            # 0 2 4
+            # 1 3 5
+            # incr should be [2, 2, -3]
 
         # Add the set of all possible choices:
         layout = self.control.layout()
         index = 0
+        # populate the layout in row_major order
         for i in range(rows):
             for j in range(cols):
                 if n > 0:

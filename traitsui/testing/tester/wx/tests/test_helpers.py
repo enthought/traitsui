@@ -120,15 +120,44 @@ class TestInteractions(unittest.TestCase):
 
     def test_key_click(self):
         textbox = wx.TextCtrl(self.frame)
+        handler = mock.Mock()
+        textbox.Bind(wx.EVT_TEXT, handler)
 
-        helpers.key_click_text_ctrl(textbox, command.KeyClick("A"), 0)
+        helpers.key_click_text_entry(textbox, command.KeyClick("A"), 0)
+
         self.assertEqual(textbox.Value, "A")
-        helpers.key_click_text_ctrl(textbox, command.KeyClick("Backspace"), 0)
+        self.assertEqual(handler.call_count, 1)
+
+    def test_key_click_backspace(self):
+        textbox = wx.TextCtrl(self.frame)
+        textbox.SetValue("A")
+        handler = mock.Mock()
+        textbox.Bind(wx.EVT_TEXT, handler)
+
+        helpers.key_click_text_entry(textbox, command.KeyClick("Backspace"), 0)
+
         self.assertEqual(textbox.Value, "")
+        self.assertEqual(handler.call_count, 1)
+
+    def test_key_click_backspace_with_selection(self):
+        textbox = wx.TextCtrl(self.frame)
+        textbox.SetFocus()
+        textbox.SetValue("ABCDE")
+        textbox.SetSelection(0, 4)
+        # sanity check
+        self.assertEqual(textbox.GetStringSelection(), "ABCD")
+
+        handler = mock.Mock()
+        textbox.Bind(wx.EVT_TEXT, handler)
+
+        helpers.key_click_text_entry(textbox, command.KeyClick("Backspace"), 0)
+
+        self.assertEqual(textbox.Value, "E")
+        self.assertEqual(handler.call_count, 1)
 
     def test_key_click_disabled(self):
         textbox = wx.TextCtrl(self.frame)
         textbox.SetEditable(False)
 
         with self.assertRaises(Disabled):
-            helpers.key_click_text_ctrl(textbox, command.KeyClick("Enter"), 0)
+            helpers.key_click_text_entry(textbox, command.KeyClick("Enter"), 0)

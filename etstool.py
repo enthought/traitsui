@@ -98,16 +98,10 @@ DEFAULT_TOOLKIT = 'null'
 # The requirement is to be interpreted by EDM
 TRAITS_VERSION_REQUIRES = os.environ.get("TRAITS_REQUIRES", "")
 
+# Required runtime dependencies. Should match install_requires in setup.py
 dependencies = {
-    "numpy",
     "traits" + TRAITS_VERSION_REQUIRES,
-    "pandas",
-    "pygments",
-    "pip",
-    "nose",
-    "coverage",
-    "configobj",
-    "docutils",
+    # pyface is installed from source via ci-src-requirements.txt
 }
 
 # NOTE : pyface is always installed from source
@@ -115,29 +109,50 @@ source_dependencies = {
     "traits": "git+http://github.com/enthought/traits.git#egg=traits",
 }
 
-# Additional toolkit-independent dependencies for demo testing
-# This should correspond to the "examples" dependencies in extras_requires but
-# the following names are used by EDM.
-test_dependencies = {
-    "apptools",
-    "chaco",
-    "h5py",
-    "numpy",
-    "pandas",
-    "pytables",
-}
-
+# The following should match extras_require in setup.py but with package
+# names compatible with EDM
 extra_dependencies = {
     # XXX once pyside2 is available in EDM, we will want it here
-    'pyside2': set(),
-    'pyqt': {'pyqt<4.12'},  # FIXME: build 1 of 4.12.1 appears to be bad
-    'pyqt5': {'pyqt5'},
+    'pyside2': {
+        'pygments',
+    },
+    'pyqt': {
+        'pyqt<4.12',  # FIXME: build 1 of 4.12.1 appears to be bad
+        'pygments',
+    },
+    'pyqt5': {
+        'pyqt5',
+        'pygments',
+    },
     # XXX once wxPython 4 is available in EDM, we will want it here
-    'wx': set(),
-    'null': set()
+    'wx': {
+        'numpy',
+    },
+    'null': set(),
+    # Toolkit-independent dependencies for demo testing.
+    'examples': {
+        'apptools',
+        'chaco',
+        'h5py',
+        'numpy',
+        'pandas',
+        'pytables',
+    },
+    # Optional dependencies for some editors
+    'editors': {
+        'numpy',
+        'pandas',
+    },
+    # Test dependencies also applied to installation from PYPI
+    'test': {
+        'packaging',
+    }
 }
 
-runtime_dependencies = {}
+# Dependencies for CI jobs using this file.
+ci_dependencies = {
+    "coverage",
+}
 
 doc_dependencies = {
     "sphinx",
@@ -177,11 +192,13 @@ def install(runtime, toolkit, environment, editable, source):
 
     """
     parameters = get_parameters(runtime, toolkit, environment)
-    packages = ' '.join(
+    packages = (
         dependencies
         | extra_dependencies.get(toolkit, set())
-        | runtime_dependencies.get(runtime, set())
-        | test_dependencies
+        | extra_dependencies["test"]
+        | extra_dependencies["examples"]
+        | extra_dependencies["editors"]
+        | ci_dependencies
     )
 
     install_traitsui = "edm run -e {environment} -- pip install "
@@ -196,7 +213,7 @@ def install(runtime, toolkit, environment, editable, source):
         commands = ["edm environments create {environment} --force --version={runtime}"]
 
     commands.extend([
-        "edm install -y -e {environment} " + packages,
+        "edm install -y -e {environment} " + " ".join(packages),
         "edm run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
         "edm run -e {environment} -- python setup.py clean --all",
         install_traitsui,
@@ -215,7 +232,7 @@ def install(runtime, toolkit, environment, editable, source):
         else:
             # XXX this is mainly for TravisCI workers; need a generic solution
             commands.append(
-                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-14.04 wxPython"
+                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04/ wxPython"
             )
 
     click.echo("Creating environment '{environment}'".format(**parameters))

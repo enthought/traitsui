@@ -259,6 +259,7 @@ class Editor(UIEditor):
 
         if action.on_perform is not None:
             action.on_perform(selection)
+            return
 
         action.perform(selection)
 

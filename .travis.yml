@@ -18,7 +18,7 @@ addons:
     - pulseaudio
     - libpulse-mainloop-glib0
     # Wx dependencies
-    - libsdl1.2debian
+    - libsdl2-2.0-0
 
 env:
   global:

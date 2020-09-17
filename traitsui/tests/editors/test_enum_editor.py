@@ -6,7 +6,6 @@ from traits.api import Enum, HasTraits, Int, List
 from traitsui.api import EnumEditor, UItem, View
 from traitsui.tests._tools import (
     create_ui,
-    get_all_button_status,
     is_qt,
     is_wx,
     process_cascade_events,
@@ -14,7 +13,9 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
-
+from traitsui.testing.tester import command, locator, query
+from traitsui.testing.tester.exceptions import Disabled
+from traitsui.testing.tester.ui_tester import UITester
 
 is_windows = platform.system() == "Windows"
 
@@ -22,6 +23,11 @@ is_windows = platform.system() == "Windows"
 class EnumModel(HasTraits):
 
     value = Enum("one", "two", "three", "four")
+
+
+class EnumModelWithNone(HasTraits):
+
+    value = Enum(None, "one", "two", "three", "four")
 
 
 def get_view(style):
@@ -44,130 +50,19 @@ def get_evaluate_view(style, auto_set=True, mode="radio"):
     )
 
 
-def get_combobox_text(combobox):
-    """ Return the text given a combobox control """
-    if is_wx():
-        import wx
-
-        if isinstance(combobox, wx.Choice):
-            return combobox.GetString(combobox.GetSelection())
-        else:
-            return combobox.GetValue()
-
-    elif is_qt():
-        return combobox.currentText()
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
-def set_combobox_text(combobox, text):
-    """ Set the text given a combobox control """
-    if is_wx():
-        import wx
-
-        if isinstance(combobox, wx.Choice):
-            event_type = wx.EVT_CHOICE.typeId
-            event = wx.CommandEvent(event_type, combobox.GetId())
-            event.SetString(text)
-            wx.PostEvent(combobox, event)
-        else:
-            combobox.SetValue(text)
-            event_type = wx.EVT_COMBOBOX.typeId
-            event = wx.CommandEvent(event_type, combobox.GetId())
-            event.SetString(text)
-            wx.PostEvent(combobox, event)
-
-    elif is_qt():
-        combobox.setEditText(text)
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
-def set_combobox_index(combobox, idx):
-    """ Set the choice index given a combobox control and index number """
-    if is_wx():
-        import wx
-
-        if isinstance(combobox, wx.Choice):
-            event_type = wx.EVT_CHOICE.typeId
-        else:
-            event_type = wx.EVT_COMBOBOX.typeId
-        event = wx.CommandEvent(event_type, combobox.GetId())
-        text = combobox.GetString(idx)
-        event.SetString(text)
-        event.SetInt(idx)
-        wx.PostEvent(combobox, event)
-
-    elif is_qt():
-        combobox.setCurrentIndex(idx)
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
-def finish_combobox_text_entry(combobox):
-    """ Finish text entry given combobox. """
-    if is_wx():
-        import wx
-
-        event = wx.CommandEvent(wx.EVT_TEXT_ENTER.typeId, combobox.GetId())
-        wx.PostEvent(combobox, event)
-
-    elif is_qt():
-        combobox.lineEdit().editingFinished.emit()
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
-def click_radio_button(widget, button_idx):
-    """ Simulate a radio button click given widget and button number. Assumes
-    all sizer children (wx) or layout items (qt) are buttons."""
-    if is_wx():
-        import wx
-
-        sizer_items = widget.GetSizer().GetChildren()
-        button = sizer_items[button_idx].GetWindow()
-        event = wx.CommandEvent(wx.EVT_RADIOBUTTON.typeId, button.GetId())
-        event.SetEventObject(button)
-        wx.PostEvent(widget, event)
-
-    elif is_qt():
-        widget.layout().itemAt(button_idx).widget().click()
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
-def get_list_widget_text(list_widget):
-    """ Return the text of currently selected item in given list widget. """
-    if is_wx():
-        selected_item_idx = list_widget.GetSelection()
-        return list_widget.GetString(selected_item_idx)
-
-    elif is_qt():
-        return list_widget.currentItem().text()
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
-def set_list_widget_selected_index(list_widget, idx):
-    """ Set the choice index given a list widget control and index number. """
-    if is_wx():
-        import wx
-
-        list_widget.SetSelection(idx)
-        event = wx.CommandEvent(wx.EVT_LISTBOX.typeId, list_widget.GetId())
-        wx.PostEvent(list_widget, event)
-
-    elif is_qt():
-        list_widget.setCurrentRow(idx)
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
+def get_radio_view(cols=1):
+    return View(
+        UItem(
+            "value",
+            editor=EnumEditor(
+                values=["one", "two", "three", "four"],
+                cols=cols,
+                mode="radio",
+            ),
+            style="custom",
+        ),
+        resizable=True,
+    )
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -283,62 +178,60 @@ class TestEnumEditorMapping(unittest.TestCase):
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSimpleEnumEditor(unittest.TestCase):
 
-    @contextlib.contextmanager
-    def setup_gui(self, model, view):
-        with create_ui(model, dict(view=view)) as ui:
-            process_cascade_events()
-            editor = ui.get_editors("value")[0]
-            yield editor
-
     def check_enum_text_update(self, view):
         enum_edit = EnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view) as editor:
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
+            combobox = tester.find_by_name(ui, "value")
+            displayed = combobox.inspect(query.DisplayedText())
+            self.assertEqual(displayed, "one")
 
-            self.assertEqual(get_combobox_text(editor.control), "one")
-
-            enum_edit.value = "two"
-            process_cascade_events()
-
-            self.assertEqual(get_combobox_text(editor.control), "two")
+            combobox.locate(locator.Index(1)).perform(command.MouseClick())
+            displayed = combobox.inspect(query.DisplayedText())
+            self.assertEqual(displayed, "two")
 
     def check_enum_object_update(self, view):
         enum_edit = EnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view) as editor:
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
             self.assertEqual(enum_edit.value, "one")
 
-            set_combobox_text(editor.control, "two")
-            process_cascade_events()
+            combobox = tester.find_by_name(ui, "value")
+            for _ in range(3):
+                combobox.perform(command.KeyClick("Backspace"))
+            combobox.perform(command.KeySequence("two"))
+            combobox.perform(command.KeyClick("Enter"))
 
             self.assertEqual(enum_edit.value, "two")
 
     def check_enum_index_update(self, view):
         enum_edit = EnumModel()
-
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view) as editor:
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
             self.assertEqual(enum_edit.value, "one")
 
-            set_combobox_index(editor.control, 1)
-            process_cascade_events()
+            combobox = tester.find_by_name(ui, "value")
+            combobox.locate(locator.Index(1)).perform(command.MouseClick())
 
             self.assertEqual(enum_edit.value, "two")
 
     def check_enum_text_bad_update(self, view):
         enum_edit = EnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view) as editor:
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
             self.assertEqual(enum_edit.value, "one")
 
-            set_combobox_text(editor.control, "t")
-            process_cascade_events()
+            combobox = tester.find_by_name(ui, "value")
+            for _ in range(3):
+                combobox.perform(command.KeyClick("Backspace"))
+            combobox.perform(command.KeyClick("H"))
+            combobox.perform(command.KeyClick("Enter"))
 
             self.assertEqual(enum_edit.value, "one")
 
@@ -367,21 +260,17 @@ class TestSimpleEnumEditor(unittest.TestCase):
         view = get_evaluate_view("simple", auto_set=False)
         enum_edit = EnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view) as editor:
-
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
             self.assertEqual(enum_edit.value, "one")
 
-            set_combobox_text(editor.control, "two")
-            process_cascade_events()
+            combobox = tester.find_by_name(ui, "value")
+            for _ in range(3):
+                combobox.perform(command.KeyClick("Backspace"))
+            combobox.perform(command.KeySequence("two"))
 
-            # wx modifies the value without the need to finish entry
-            if is_qt():
-                self.assertEqual(enum_edit.value, "one")
-
-                finish_combobox_text_entry(editor.control)
-                process_cascade_events()
-
+            self.assertEqual(enum_edit.value, "one")
+            combobox.perform(command.KeyClick("Enter"))
             self.assertEqual(enum_edit.value, "two")
 
     def test_simple_editor_resizable(self):
@@ -389,8 +278,8 @@ class TestSimpleEnumEditor(unittest.TestCase):
         enum_edit = EnumModel()
         resizable_view = View(UItem("value", style="simple", resizable=True))
 
-        with reraise_exceptions(), \
-                create_ui(enum_edit, dict(view=resizable_view)):
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=resizable_view)):
             pass
 
     def test_simple_editor_rebuild_editor_evaluate(self):
@@ -401,90 +290,109 @@ class TestSimpleEnumEditor(unittest.TestCase):
         )
         view = View(UItem("value", editor=enum_editor_factory, style="simple"))
 
-        with reraise_exceptions(), \
-                create_ui(EnumModel(), dict(view=view)):
-
+        tester = UITester()
+        with tester.create_ui(EnumModel(), dict(view=view)):
             enum_editor_factory.values = ["one", "two", "three"]
+
+    def test_simple_editor_disabled(self):
+        enum_edit = EnumModel(value="two")
+        view = View(
+            UItem(
+                "value",
+                style="simple",
+                enabled_when="value == 'one'",
+                editor=EnumEditor(evaluate=True, values=["one", "two"]),
+            ),
+        )
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
+            combobox = tester.find_by_name(ui, "value")
+            with self.assertRaises(Disabled):
+                combobox.perform(command.KeyClick("Enter"))
+            with self.assertRaises(Disabled):
+                combobox.perform(command.KeySequence("two"))
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestRadioEnumEditor(unittest.TestCase):
 
-    @contextlib.contextmanager
-    def setup_gui(self, model, view):
-        with create_ui(model, dict(view=view)) as ui:
-            process_cascade_events()
-            editor = ui.get_editors("value")[0]
-            yield editor
-
-    def test_radio_enum_editor_button_update(self):
+    def test_radio_enum_editor_update(self):
         enum_edit = EnumModel()
+        tester = UITester()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, get_view("custom")) as editor:
-
-            # The layout is: one, three, four \n two
+        with tester.create_ui(enum_edit, dict(view=get_view("custom"))) as ui:
+            # sanity check
+            self.assertEqual(enum_edit.value, "one")
+            radio_editor = tester.find_by_name(ui, "value")
             self.assertEqual(
-                get_all_button_status(editor.control),
-                [True, False, False, False]
+                radio_editor.inspect(query.SelectedText()),
+                "One",
             )
 
             enum_edit.value = "two"
-            process_cascade_events()
 
             self.assertEqual(
-                get_all_button_status(editor.control),
-                [False, False, False, True]
+                radio_editor.inspect(query.SelectedText()),
+                "Two",
             )
 
     def test_radio_enum_editor_pick(self):
-        enum_edit = EnumModel()
+        for cols in range(1, 4):
+            for row_major in [True, False]:
+                enum_edit = EnumModel()
+                tester = UITester()
+                view = get_radio_view(cols=cols)
+                with tester.create_ui(enum_edit, dict(view=view)) as ui:
+                    # sanity check
+                    self.assertEqual(enum_edit.value, "one")
+                    radio_editor = tester.find_by_name(ui, "value")
+                    if is_qt():
+                        radio_editor.target.row_major = row_major
+                        radio_editor.target.rebuild_editor()
+                    item = radio_editor.locate(locator.Index(3))
+                    item.perform(command.MouseClick())
+                    self.assertEqual(enum_edit.value, "four")
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, get_view("custom")) as editor:
-
-            self.assertEqual(enum_edit.value, "one")
-
-            # The layout is: one, three, four \n two
-            click_radio_button(editor.control, 3)
-            process_cascade_events()
-
-            self.assertEqual(enum_edit.value, "two")
+    # it appears that on windows the behavior is different - it forces
+    # enum_edit.value to be 'one'
+    @unittest.skipIf(is_windows and is_wx, "windows/wx behavior is unique")
+    def test_radio_enum_none_selected(self):
+        enum_edit = EnumModelWithNone()
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=get_radio_view())) as ui:
+            self.assertEqual(enum_edit.value, None)
+            radio_editor = tester.find_by_name(ui, "value")
+            displayed = radio_editor.inspect(query.SelectedText())
+            self.assertEqual(displayed, None)
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestListEnumEditor(unittest.TestCase):
 
-    @contextlib.contextmanager
-    def setup_gui(self, model, view):
-        with create_ui(model, dict(view=view)) as ui:
-            process_cascade_events()
-            editor = ui.get_editors("value")[0]
-            yield editor
-
     def check_enum_text_update(self, view):
         enum_edit = EnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view) as editor:
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
-            self.assertEqual(get_list_widget_text(editor.control), "one")
+            list_editor = tester.find_by_name(ui, "value")
+            displayed = list_editor.inspect(query.SelectedText())
 
-            enum_edit.value = "two"
-            process_cascade_events()
+            self.assertEqual(displayed, "one")
 
-            self.assertEqual(get_list_widget_text(editor.control), "two")
+            list_editor.locate(locator.Index(1)).perform(command.MouseClick())
+            displayed = list_editor.inspect(query.SelectedText())
+            self.assertEqual(displayed, "two")
 
     def check_enum_index_update(self, view):
         enum_edit = EnumModel()
-
-        with reraise_exceptions(), \
-                self.setup_gui(enum_edit, view) as editor:
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
             self.assertEqual(enum_edit.value, "one")
 
-            set_list_widget_selected_index(editor.control, 1)
-            process_cascade_events()
+            list_editor = tester.find_by_name(ui, "value")
+            list_editor.locate(locator.Index(1)).perform(command.MouseClick())
 
             self.assertEqual(enum_edit.value, "two")
 
@@ -521,3 +429,26 @@ class TestListEnumEditor(unittest.TestCase):
 
     def test_list_evaluate_editor_index(self):
         self.check_enum_index_update(get_evaluate_view("custom", mode="list"))
+
+    def test_list_enum_none_selected(self):
+        enum_edit = EnumModelWithNone()
+        view = View(
+            UItem(
+                "value",
+                editor=EnumEditor(
+                    # Note that for the list style editor, in order to select
+                    # None, it must be one of the displayed options
+                    values=[None, "one", "two", "three", "four"],
+                    mode="list",
+                ),
+                style="custom",
+            ),
+            resizable=True,
+        )
+        tester = UITester()
+        with tester.create_ui(enum_edit, dict(view=view)) as ui:
+            self.assertEqual(enum_edit.value, None)
+            list_editor = tester.find_by_name(ui, "value")
+            # As a result the displayed text is actually the string 'None'
+            displayed = list_editor.inspect(query.SelectedText())
+            self.assertEqual(displayed, 'None')
