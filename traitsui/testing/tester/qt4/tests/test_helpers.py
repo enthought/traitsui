@@ -221,3 +221,12 @@ class TestInteractions(unittest.TestCase):
         helpers.check_q_model_index_valid(self.good_q_index)
         with self.assertRaises(LookupError):
             helpers.check_q_model_index_valid(self.bad_q_index)
+
+    def test_key_click_q_slider_helpful_err(self):
+        slider = QtGui.QSlider()
+        with self.assertRaises(ValueError) as exc:
+            helpers.key_click_qslider(slider, command.KeyClick("Enter"), 0)
+        self.assertIn(
+            "['Down', 'Left', 'Page Down', 'Page Up', 'Right', 'Up']",
+            str(exc.exception)
+        )

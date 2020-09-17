@@ -124,6 +124,8 @@ def mouse_click_tab_index(tab_widget, index, delay):
     delay : int
         Time delay (in ms) in which click will be performed.
     """
+    if not 0 <= index < tab_widget.count():
+        raise IndexError(index)
     tabbar = tab_widget.tabBar()
     rect = tabbar.tabRect(index)
     QTest.mouseClick(
@@ -272,3 +274,29 @@ def key_click_qwidget(control, interaction, delay):
     if not control.isEnabled():
         raise Disabled("{!r} is disabled.".format(control))
     key_click(control, interaction.key, delay=delay)
+
+
+def key_click_qslider(control, interaction, delay):
+    """ Performs simulated typing of a key on the given slider after a delay.
+    Only allowed keys are:
+    "Left", "Right", "Up", "Down", "Page Up", "Page Down"
+    Also, note that up related keys correspond to an increment on the slider,
+    and down a decrement.
+
+    Parameters
+    ----------
+    control : QSlider
+        The Qt slider to be acted on.
+    interaction : instance of command.KeyClick
+        The interaction object holding the key input
+        to be simulated being typed
+    delay : int
+        Time delay (in ms) in which the key click will be performed.
+    """
+    valid_keys = {"Left", "Right", "Up", "Down", "Page Up", "Page Down"}
+    if interaction.key not in valid_keys:
+        raise ValueError(
+            "Unexpected Key. Supported keys are: {}".format(sorted(valid_keys))
+        )
+    else:
+        key_click(control, interaction.key, delay)

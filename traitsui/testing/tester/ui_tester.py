@@ -125,21 +125,27 @@ class UITester:
 
     See documentation on ``TargetRegistry`` for details.
 
-    Attributes
+    Parameters
     ----------
     registries : list of TargetRegistry, optional
-        Registries of interaction for different target, in the order
-        of decreasing priority. A shallow copy will be made.
+        Registries of interaction for different targets, in the order
+        of decreasing priority. If provided, a shallow copy will be made.
+        Default registries are always appended to the list to provide
+        builtin support for TraitsUI UI and editors.
     delay : int, optional
         Time delay (in ms) in which actions by the tester are performed. Note
-        it is propogated through to created child wrappers. The delay allows
+        it is propagated through to created child wrappers. The delay allows
         visual confirmation test code is working as desired. Defaults to 0.
+
+    Attributes
+    ----------
+    delay : int
+        Time delay (in ms) in which actions by the tester are performed. Note
+        it is propagated through to created child wrappers. The delay allows
+        visual confirmation test code is working as desired.
     """
 
     def __init__(self, registries=None, delay=0):
-        """ Instantiate the UI tester.
-        """
-
         if registries is None:
             self._registries = []
         else:

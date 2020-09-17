@@ -16,8 +16,8 @@ logic in these objects, one simply needs to register a solver with their
 target_class of choice to one of these as the locator_class. For an example,
 see the implementation of range_editor.
 """
-
-from traitsui.testing.tester.qt4 import registry_helper
+from traitsui.testing.tester import command
+from traitsui.testing.tester.qt4 import helpers, registry_helper
 
 
 class LocatedTextbox:
@@ -47,4 +47,35 @@ class LocatedTextbox:
             registry=registry,
             target_class=cls,
             widget_getter=lambda wrapper: wrapper.target.textbox,
+        )
+
+
+class LocatedSlider:
+    """ Wrapper class for a located Slider in Qt.
+
+    Parameters
+    ----------
+    slider : Instance of QtGui.QSlider
+    """
+
+    def __init__(self, slider):
+        self.slider = slider
+
+    @classmethod
+    def register(cls, registry):
+        """ Class method to register interactions on a LocatedSlider for the
+        given registry.
+
+        If there are any conflicts, an error will occur.
+
+        Parameters
+        ----------
+        registry : TargetRegistry
+            The registry being registered to.
+        """
+        registry.register_handler(
+            target_class=cls,
+            interaction_class=command.KeyClick,
+            handler=lambda wrapper, interaction: helpers.key_click_qslider(
+                wrapper.target.slider, interaction, wrapper.delay)
         )
