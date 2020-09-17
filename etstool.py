@@ -152,6 +152,7 @@ extra_dependencies = {
 # Dependencies for CI jobs using this file.
 ci_dependencies = {
     "coverage",
+    "flake8",
 }
 
 doc_dependencies = {
@@ -388,6 +389,28 @@ def test_all():
                 failed_command = True
     if failed_command:
         sys.exit(1)
+
+
+@cli.command()
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
+@click.option(
+    "--environment", default=None, help="Name of EDM environment to check."
+)
+def flake8(runtime, toolkit, environment):
+    """ Run a flake8 check in a given environment.
+
+    """
+    parameters = get_parameters(runtime, toolkit, environment)
+    targets = [
+        "examples",
+        "integrationtests",
+        "traitsui",
+    ]
+    commands = [
+        "edm run -e {environment} -- python -m flake8 " + " ".join(targets)
+    ]
+    execute(commands, parameters)
 
 
 # ----------------------------------------------------------------------------
