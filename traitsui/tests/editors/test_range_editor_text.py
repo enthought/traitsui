@@ -74,7 +74,7 @@ class TestRangeEditorText(unittest.TestCase):
         with tester.create_ui(num) as ui:
             # the following is equivalent to setting the text in the text
             # control, then pressing OK
-            text = tester.find_by_name(ui, "number").locate(locator.WidgetType.textbox)
+            text = tester.find_by_name(ui, "number")
             text.perform(command.KeyClick("1"))
             text.perform(command.KeyClick("Enter"))
 
