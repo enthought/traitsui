@@ -316,3 +316,48 @@ def key_sequence_text_ctrl(control, interaction, delay):
     for char in interaction.sequence:
         wx.MilliSleep(delay)
         control.WriteText(char)
+
+
+def key_click_slider(control, interaction, delay):
+    """ Performs simulated typing of a key on the given wxSlider
+    after a delay. Only allowed keys are:
+    "Left", "Right", "Up", "Down", "Page Up", "Page Down"
+    Also, note that up related keys correspond to an increment on the slider,
+    and down a decrement.
+
+    Parameters
+    ----------
+    control : wxSlider
+        The wx Object to be acted on.
+    interaction : instance of command.KeyClick
+        The interaction object holding the key input
+        to be simulated being typed
+    delay : int
+        Time delay (in ms) in which the key click will be performed.
+    """
+    valid_keys = {"Left", "Right", "Up", "Down", "Page Up", "Page Down"}
+    if interaction.key not in valid_keys:
+        raise ValueError(
+            "Unexpected Key. Supported keys are: {}".format(sorted(valid_keys))
+        )
+    if not control.HasFocus():
+        control.SetFocus()
+    value = control.GetValue()
+    if interaction.key in {"Up", "Right"}:
+        position = min(control.GetMax(), value + control.GetLineSize())
+    elif interaction.key == "Page Up":
+        position = min(control.GetMax(), value + control.GetPageSize())
+    elif interaction.key == "Page Down":
+        position = max(control.GetMin(), value - control.GetPageSize())
+    elif interaction.key in {"Down", "Left"}:
+        position = max(control.GetMin(), value - control.GetLineSize())
+    else:
+        raise ValueError(
+            "Unexpected Key. Supported keys are: {}".format(sorted(valid_keys))
+        )
+    wx.MilliSleep(delay)
+    control.SetValue(position)
+    event = wx.ScrollEvent(
+        wx.wxEVT_SCROLL_CHANGED, control.GetId(), position
+    )
+    wx.PostEvent(control, event)

@@ -14,15 +14,21 @@ from traitsui.qt4.range_editor import (
     LogRangeSliderEditor,
     RangeTextEditor,
     SimpleSliderEditor,
+    SimpleSpinEditor,
 )
 
 from traitsui.testing.tester import locator
-from traitsui.testing.tester.qt4.common_ui_targets import LocatedTextbox
+from traitsui.testing.tester.qt4 import registry_helper
+from traitsui.testing.tester.qt4.common_ui_targets import (
+    LocatedSlider,
+    LocatedTextbox
+)
 
 
 def resolve_location_slider(wrapper, location):
     """ Solver from a UIWrapper wrapped Range Editor to a LocatedTextbox
-    containing the textbox of interest
+    containing the textbox of interest, or a LocatedSlider containing the
+    slider.
 
     If there are any conflicts, an error will occur.
 
@@ -36,35 +42,11 @@ def resolve_location_slider(wrapper, location):
     if location == locator.WidgetType.textbox:
         return LocatedTextbox(textbox=wrapper.target.control.text)
     if location in [locator.WidgetType.slider]:
-        raise NotImplementedError(
-            f"Logic for interacting with the {location}"
-            " has not been implemented."
-        )
+        return LocatedSlider(slider=wrapper.target.control.slider)
     raise ValueError(
         f"Unable to resolve {location} on {wrapper.target}."
-        " Currently supported: {locator.WidgetType.textbox}"
-    )
-
-
-def resolve_location_range_text(wrapper, location):
-    """ Solver from a UIWrapper wrapped RangeTextEditor to a LocatedTextbox
-    containing the textbox of interest
-
-    If there are any conflicts, an error will occur.
-
-    Parameters
-    ----------
-    wrapper : UIWrapper
-        Wrapper containing the RangeTextEditor target.
-    location : locator.WidgetType
-        The location we are looking to resolve.
-    """
-
-    if location == locator.WidgetType.textbox:
-        return LocatedTextbox(textbox=wrapper.target.control)
-    raise ValueError(
-        f"Unable to resolve {location} on {wrapper.target}."
-        " Currently supported: {locator.WidgetType.textbox}"
+        " Currently supported: {locator.WidgetType.textbox} and"
+        " {locator.WidgetType.slider}"
     )
 
 
@@ -88,9 +70,8 @@ def register(registry):
             locator_class=locator.WidgetType,
             solver=resolve_location_slider,
         )
-
-    registry.register_solver(
+    registry_helper.register_editable_textbox_handlers(
+        registry=registry,
         target_class=RangeTextEditor,
-        locator_class=locator.WidgetType,
-        solver=resolve_location_range_text,
+        widget_getter=lambda wrapper: wrapper.target.control,
     )

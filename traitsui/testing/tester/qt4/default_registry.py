@@ -36,6 +36,8 @@ def get_default_registry():
 
     common_ui_targets.LocatedTextbox.register(registry)
 
+    common_ui_targets.LocatedSlider.register(registry)
+
     # ButtonEditor
     button_editor.register(registry)
 

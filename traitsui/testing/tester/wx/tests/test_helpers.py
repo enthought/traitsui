@@ -161,3 +161,12 @@ class TestInteractions(unittest.TestCase):
 
         with self.assertRaises(Disabled):
             helpers.key_click_text_entry(textbox, command.KeyClick("Enter"), 0)
+
+    def test_key_click_slider_helpful_err(self):
+        slider = wx.Slider()
+        with self.assertRaises(ValueError) as exc:
+            helpers.key_click_slider(slider, command.KeyClick("Enter"), 0)
+        self.assertIn(
+            "['Down', 'Left', 'Page Down', 'Page Up', 'Right', 'Up']",
+            str(exc.exception)
+        )
