@@ -104,12 +104,12 @@ class TargetRegistry:
     information for navigating into a specific element from
     ``UIWrapper.target``. The ``location`` content varies from use case
     to use case and a target is typically a rich container of multiple GUI
-    elements. With that for a given target type, multiple location types may be
-    supported. For the given location type, the logic for resolving a location
-    also depends on the target type. In order to support these many different
-    behaviors, one needs to register a "location solver" to specify how to
-    interpret a location given its type and the type of the target it is used
-    with.
+    elements. With that, for a given target type, multiple location types may
+    be supported. For the given location type, the logic for resolving a
+    location also depends on the target type. In order to support these many
+    different behaviors, one needs to register a "location solver" to specify
+    how to interpret a location given its type and the type of the target it
+    is used with.
 
     For example, suppose we have a ``UIWrapper`` whose ``target`` is an
     instance of ``MyUIContainer``. This object has some buttons and the
