@@ -229,10 +229,10 @@ def create_ui(object, ui_kwargs=None):
     try:
         yield ui
     finally:
-        # At the end of a test, there may be events to be processed.
-        # If dispose happens first, those events will be processed after
-        # various editor states are removed, causing errors.
         with reraise_exceptions():
+            # At the end of a test, there may be events to be processed.
+            # If dispose happens first, those events will be processed after
+            # various editor states are removed, causing errors.
             process_cascade_events()
             try:
                 ui.dispose()
