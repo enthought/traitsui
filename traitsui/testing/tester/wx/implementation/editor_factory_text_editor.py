@@ -9,10 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-import wx
-
 from traitsui.wx.editor_factory import TextEditor
-from traitsui.testing.tester import query
 from traitsui.testing.tester.wx.registry_helper import (
     register_editable_textbox_handlers,
 )

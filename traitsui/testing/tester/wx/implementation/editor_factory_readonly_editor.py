@@ -13,9 +13,6 @@ import wx
 
 from traitsui.wx.editor_factory import ReadonlyEditor
 from traitsui.testing.tester import query
-from traitsui.testing.tester.wx.registry_helper import (
-    register_editable_textbox_handlers,
-)
 
 
 def readonly_displayed_text_handler(wrapper, interaction):

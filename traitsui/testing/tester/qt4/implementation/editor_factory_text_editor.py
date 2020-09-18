@@ -9,12 +9,11 @@
 #  Thanks for using Enthought open source!
 #
 
-from traitsui.testing.tester import query
-from traitsui.testing.tester.qt4 import helpers
 from traitsui.testing.tester.qt4.registry_helper import (
     register_editable_textbox_handlers,
 )
-from traitsui.qt4.editor_factory import TextEditor 
+from traitsui.qt4.editor_factory import TextEditor
+
 
 def register(registry):
     """ Register interactions for the given registry.
