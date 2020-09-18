@@ -98,17 +98,22 @@ class TargetRegistry:
 
     Registering location solver (register_solver)
     ---------------------------------------------
+    Location solvers are used to support ``UIWrapper.locate``.
 
-    Resolving a location on a UI target is logically similar to making a query
-    for a nested UI target. This query is separated out to support the
-    ``UIWrapper.locate`` method independently of the query method
-    ``UIWrapper.inspect``.
+    ``UIWrapper.locate`` accepts an object, ``location``, which provides
+    information for navigating into a specific element from
+    ``UIWrapper.target``. The ``location`` content varies from use case
+    to use case and a target is typically a rich container of multiple GUI
+    elements. With that for a given target type, multiple location types may be
+    supported. For the given location type, the logic for resolving a location
+    also depends on the target type. In order to support these many different
+    behaviors, one needs to register a "location solver" to specify how to
+    interpret a location given its type and the type of the target it is used
+    with.
 
-    The locator type can be any subclass of ``type``. There are predefined
-    locators in ``traitsui.testing.tester.locator``.
-
-    For example, suppose a UI target called ``MyUIContainer`` has some buttons,
-    and the objective of a test is to click a specific button with a given
+    For example, suppose we have a ``UIWrapper`` whose ``target`` is an
+    instance of ``MyUIContainer``. This object has some buttons and the
+    objective of a test is to click a specific button with a given
     label. We will therefore need to locate the button with the given label
     before a mouse click can be performed.
 
