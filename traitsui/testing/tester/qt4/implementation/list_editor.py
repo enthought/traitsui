@@ -10,7 +10,9 @@
 #
 from traitsui.testing.tester import command, locator
 from traitsui.testing.tester.common_ui_targets import _BaseSourceWithLocation
-from traitsui.testing.tester.registry_helper import register_nested_ui_solvers
+from traitsui.testing.tester.registry_helper import (
+    register_traitsui_ui_solvers,
+)
 from traitsui.testing.tester.qt4 import helpers
 from traitsui.qt4.list_editor import (
     CustomEditor,
@@ -44,10 +46,10 @@ class _IndexedNotebookEditor(_BaseSourceWithLocation):
             The registry being registered to.
         """
         super().register(registry)
-        register_nested_ui_solvers(
+        register_traitsui_ui_solvers(
             registry=registry,
             target_class=cls,
-            nested_ui_getter=lambda target: target._get_nested_ui()
+            traitsui_ui_getter=lambda target: target._get_nested_ui()
         )
 
     def _get_nested_ui(self):
@@ -76,10 +78,10 @@ class _IndexedCustomEditor(_BaseSourceWithLocation):
             The registry being registered to.
         """
         super().register(registry)
-        register_nested_ui_solvers(
+        register_traitsui_ui_solvers(
             registry=registry,
             target_class=cls,
-            nested_ui_getter=lambda target: target._get_nested_ui()
+            traitsui_ui_getter=lambda target: target._get_nested_ui()
         )
 
     def _get_nested_ui(self):
