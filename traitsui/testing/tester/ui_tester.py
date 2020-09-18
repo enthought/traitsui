@@ -12,7 +12,9 @@
 from traitsui.ui import UI
 from traitsui.testing.tester.default_registry import get_default_registry
 from traitsui.testing.tester.registry import TargetRegistry
-from traitsui.testing.tester.registry_helper import register_nested_ui_solvers
+from traitsui.testing.tester.registry_helper import (
+    register_traitsui_ui_solvers,
+)
 from traitsui.testing.tester.ui_wrapper import UIWrapper
 from traitsui.tests._tools import (
     create_ui as _create_ui,
@@ -226,9 +228,9 @@ def _get_ui_registry():
     """
 
     registry = TargetRegistry()
-    register_nested_ui_solvers(
+    register_traitsui_ui_solvers(
         registry=registry,
         target_class=UI,
-        nested_ui_getter=lambda target: target,
+        traitsui_ui_getter=lambda target: target,
     )
     return registry

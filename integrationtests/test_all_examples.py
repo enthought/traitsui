@@ -363,7 +363,7 @@ class TestInteractExample(unittest.TestCase):
 
         tester = UITester()
         with tester.create_ui(demo) as ui:
-            
+
             simple_button = tester.find_by_id(ui, "simple")
             custom_button = tester.find_by_id(ui, "custom")
 
@@ -382,6 +382,28 @@ class TestInteractExample(unittest.TestCase):
             mdtester_custom = ModalDialogTester(click_custom_button)
             mdtester_custom.open_and_run(lambda x: x.click_button(OK))
             self.assertTrue(mdtester_custom.dialog_was_opened)
+
+    def test_button_editor_simple_demo(self):
+        # Test ButtonEditor_simple_demo.py in examples/demo/Standard_Edtiors
+        filepath = os.path.join(
+            DEMO, "Standard_Editors", "ButtonEditor_simple_demo.py"
+        )
+        demo = load_demo(filepath, "demo")
+
+        tester = UITester()
+        with tester.create_ui(demo) as ui:
+            button = tester.find_by_name(ui, "my_button_trait")
+            for index in range(5):
+                button.perform(command.MouseClick())
+                self.assertEqual(demo.click_counter, index + 1)
+
+            click_counter = tester.find_by_name(ui, "click_counter")
+            displayed_count = click_counter.inspect(query.DisplayedText())
+            self.assertEqual(displayed_count, '5')
+
+            demo.click_counter = 10
+            displayed_count = click_counter.inspect(query.DisplayedText())
+            self.assertEqual(displayed_count, '10')
 
     def test_converter(self):
         # Test converter.py in examples/demo/Applications
