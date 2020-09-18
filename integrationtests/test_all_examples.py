@@ -293,7 +293,7 @@ def load_demo(file_path, variable_name="demo"):
     variable_name : str
         The key in the global symbol state corresponding to the object of
         interest for the demo.
-    
+
     Returns
     -------
     Instance of HasTraits
@@ -346,9 +346,44 @@ class TestExample(unittest.TestCase):
                     )
                 )
 
+
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestInteractExample(unittest.TestCase):
     """ Test examples with more interactions."""
+
+    @requires_toolkit([ToolkitName.qt])
+    def test_button_editor_demo(self):
+        from pyface.ui.qt4.util.modal_dialog_tester import ModalDialogTester
+        from pyface.constant import OK
+
+        # Test ButtonEditor_demo.py in examples/demo/Standard_Edtiors
+        filepath = os.path.join(
+            DEMO, "Standard_Editors", "ButtonEditor_demo.py"
+        )
+        demo = load_demo(filepath, "demo")
+
+        tester = UITester()
+        with tester.create_ui(demo) as ui:
+
+            simple_button = tester.find_by_id(ui, "simple")
+            custom_button = tester.find_by_id(ui, "custom")
+
+            # funcion object for instantiating ModalDialogTester should be a
+            # function that opens the dialog
+            # we want clicking the buttons to do that
+            def click_simple_button():
+                simple_button.perform(command.MouseClick())
+
+            def click_custom_button():
+                custom_button.perform(command.MouseClick())
+
+            mdtester_simple = ModalDialogTester(click_simple_button)
+            mdtester_simple.open_and_run(lambda x: x.click_button(OK))
+            self.assertTrue(mdtester_simple.dialog_was_opened)
+
+            mdtester_custom = ModalDialogTester(click_custom_button)
+            mdtester_custom.open_and_run(lambda x: x.click_button(OK))
+            self.assertTrue(mdtester_custom.dialog_was_opened)
 
     def test_button_editor_simple_demo(self):
         # Test ButtonEditor_simple_demo.py in examples/demo/Standard_Edtiors
@@ -371,7 +406,7 @@ class TestInteractExample(unittest.TestCase):
             demo.click_counter = 10
             displayed_count = click_counter.inspect(query.DisplayedText())
             self.assertEqual(displayed_count, '10')
-        
+
     def test_converter(self):
         # Test converter.py in examples/demo/Applications
         filepath = os.path.join(
