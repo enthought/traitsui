@@ -70,3 +70,15 @@ class WidgetType(enum.Enum):
 
     # A slider within a UI
     slider = "slider"
+
+
+class slider:
+    """ A locator for locating a nested slider widget within a UI.
+    """
+    pass
+
+
+class textbox:
+    """ A locator for locating amnested textbox widget within a UI.
+    """
+    pass

@@ -93,7 +93,7 @@ class TestRangeEditor(unittest.TestCase):
             # sanity check
             self.assertEqual(model.value, 1)
             number_field = tester.find_by_name(ui, "value")
-            text = number_field.locate(locator.WidgetType.textbox)
+            text = number_field.locate(locator.textbox())
             text.perform(command.KeyClick("0"))
             text.perform(command.KeyClick("Enter"))
             displayed = text.inspect(query.DisplayedText())
@@ -169,7 +169,7 @@ class TestRangeEditor(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field = tester.find_by_name(ui, "value")
-            text = number_field.locate(locator.WidgetType.textbox)
+            text = number_field.locate(locator.textbox())
             # Delete all contents of textbox
             for _ in range(5):
                 text.perform(command.KeyClick("Backspace"))
@@ -247,8 +247,8 @@ class TestRangeEditor(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field = tester.find_by_name(ui, "value")
-            slider = number_field.locate(locator.WidgetType.slider)
-            text = number_field.locate(locator.WidgetType.textbox)
+            slider = number_field.locate(locator.slider())
+            text = number_field.locate(locator.textbox())
             # slider values are converted to a [0, 10000] scale.  A single
             # step is a change of 100 on that scale and a page step is 1000.
             # Our range in [0, 10] so these correspond to changes of .1 and 1.
@@ -281,8 +281,8 @@ class TestRangeEditor(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field = tester.find_by_name(ui, "float_value")
-            slider = number_field.locate(locator.WidgetType.slider)
-            text = number_field.locate(locator.WidgetType.textbox)
+            slider = number_field.locate(locator.slider())
+            text = number_field.locate(locator.textbox())
             # 10 steps is equivalent to 1 page step
             # on this scale either of those is equivalent to increasing the
             # trait's value from 10^n to 10^(n+1)
