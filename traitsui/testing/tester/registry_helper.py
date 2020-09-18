@@ -69,14 +69,14 @@ def _get_editor_by_id(ui, id):
     return editor
 
 
-def register_nested_ui_solvers(registry, target_class, nested_ui_getter):
+def register_traitsui_ui_solvers(registry, target_class, traitsui_ui_getter):
     """ Function to register solvers for obtaining nested targets inside a
-    nested traitsui.ui.UI inside a (parent) target.
+    traitsui.ui.UI inside a (parent) target.
 
     For example, an instance of TreeEditor may contain a nested
     ``traitsui.ui.UI`` instance. In that case, the ``target_class`` will the
-    TreeEditor and the ``nested_ui_getter`` specifies how to obtain the nested
-    ``traitsui.ui.UI`` UI from it.
+    TreeEditor and the ``traitsui_ui_getter`` specifies how to obtain the
+    nested ``traitsui.ui.UI`` UI from it.
 
     Parameters
     ----------
@@ -85,7 +85,7 @@ def register_nested_ui_solvers(registry, target_class, nested_ui_getter):
     target_class : subclass of type
         The type of a UI target being used as the target_class for the
         solvers
-    nested_ui_getter : callable(target: target_class) -> traitsui.ui.UI
+    traitsui_ui_getter : callable(target: target_class) -> traitsui.ui.UI
         A callable specific to the particular target_class to obtain a nested
         UI.
     """
@@ -95,7 +95,7 @@ def register_nested_ui_solvers(registry, target_class, nested_ui_getter):
         locator_class=locator.TargetByName,
         solver=lambda wrapper, location: (
             _get_editor_by_name(
-                ui=nested_ui_getter(wrapper.target),
+                ui=traitsui_ui_getter(wrapper.target),
                 name=location.name,
             )
         ),
@@ -105,7 +105,7 @@ def register_nested_ui_solvers(registry, target_class, nested_ui_getter):
         locator_class=locator.TargetById,
         solver=lambda wrapper, location: (
             _get_editor_by_id(
-                ui=nested_ui_getter(wrapper.target),
+                ui=traitsui_ui_getter(wrapper.target),
                 id=location.id,
             )
         ),
