@@ -98,63 +98,58 @@ class TargetRegistry:
 
     Registering location solver (register_solver)
     ---------------------------------------------
+    Location solvers are used to support ``UIWrapper.locate``.
 
-    Resolving a location on a UI target is logically similar to making a query
-    for a nested UI target. This query is separated out to support the
-    ``UIWrapper.locate`` method independently of the query method
-    ``UIWrapper.inspect``.
+    ``UIWrapper.locate`` accepts an object, ``location``, which provides
+    information for navigating into a specific element from
+    ``UIWrapper.target``. The ``location`` content varies from use case
+    to use case and a target is typically a rich container of multiple GUI
+    elements. With that, for a given target type, multiple location types may
+    be supported. For the given location type, the logic for resolving a
+    location also depends on the target type. In order to support these many
+    different behaviors, one needs to register a "location solver" to specify
+    how to interpret a location given its type and the type of the target it
+    is used with.
 
-    The locator type can be any subclass of ``type``. There are predefined
-    locators in ``traitsui.testing.tester.locator``.
+    For example, suppose we have a ``UIWrapper`` whose ``target`` is an
+    instance of ``MyUIContainer``. This object has some buttons and the
+    objective of a test is to click a specific button with a given
+    label. We will therefore need to locate the button with the given label
+    before a mouse click can be performed.
 
-    For example, suppose a UI target has a nested UI and a button. Both the
-    nested UI and the button are UI targets that can be located in the
-    container target.
+    The test code we wanted to achieve looks like this::
 
-    Suppose we have a locator type for the nested UI::
+        button_wrapper = container.locate(Button("OK"))
 
-        class NestedUI:
-            pass
+    Where we want ``button_wrapper`` to be an instance of``UIWrapper``
+    wrapping a button.
 
-    And there is an enum for the widget type::
+    The ``Button`` is a new locator type::
 
-        class WidgetType(Enum):
-            button = "button"
+        class Button:
+            ''' Locator for locating a push button by label.'''
+            def __init__(self, label):
+                self.label = label
 
-    The solvers for these locators may look like this::
+    Say ``MyUIContainer`` is keeping track of the buttons by names with a
+    dictionary called ``_buttons``::
 
-        def get_nested_ui(wrapper, _):
-            return wrapper.target._nested_ui
-
-        def get_widget_by_type(wrapper, location):
-            if location == WidgetType.button:
-                return wrapper.target._button
-            raise ValueError("Other widget type not supported")
-
-    The first argument is an instance of ``UIWrapper`` that wraps the container
-    UI target, in this case, the UI target that holds a nested UI and a button.
-
-    The second argument is an instance of the locator type.
+        def get_button(wrapper, location):
+            return wrapper.target._buttons[location.label]
 
     The solvers can then be registered for the container UI target::
 
         registry = TargetRegistry()
         registry.register_solver(
             target_class=MyUIContainer,
-            locator_class=NestedUI,
-            solver=get_nested_ui,
-        )
-        registry.register_solver(
-            target_class=MyUIContainer,
-            locator_class=WidgetType,
-            solver=get_widget_by_type,
+            locator_class=Button,
+            solver=get_button,
         )
 
-    Then this registry can be used with the ``UITester`` and ``UIWrapper`` to
-    support ``UIWrapper.locate``. If the nested UI has other locator solvers,
-    then it would be possible to do chain location resolutions, like this::
-
-        container.locate(NestedUI()).locate(NestedUI())
+    When the solver is registered this way, the ``wrapper`` argument will be
+    an instance of ``UIWrapper`` whose ``target`` attribute is an instance of
+    ``MyUIContainer``, and ``location`` will be an instance of ``Button``, as
+    is provided via ``UIWrapper.locate``.
     """
 
     def __init__(self):

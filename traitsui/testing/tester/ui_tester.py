@@ -10,9 +10,9 @@
 #
 
 from traitsui.ui import UI
-from traitsui.testing.tester import locator
 from traitsui.testing.tester.default_registry import get_default_registry
 from traitsui.testing.tester.registry import TargetRegistry
+from traitsui.testing.tester.registry_helper import register_nested_ui_solvers
 from traitsui.testing.tester.ui_wrapper import UIWrapper
 from traitsui.tests._tools import (
     create_ui as _create_ui,
@@ -217,63 +217,6 @@ class UITester:
         ).find_by_id(id=id)
 
 
-def _get_editor_by_name(ui, name):
-    """ Return a single Editor from an instance of traitsui.ui.UI with
-    a given extended name. Raise if zero or many editors are found.
-
-    Parameters
-    ----------
-    ui : traitsui.ui.UI
-        The UI from which an editor will be retrieved.
-    name : str
-        A single name for retrieving an editor on a UI.
-
-    Returns
-    -------
-    editor : Editor
-        The single editor found.
-    """
-    editors = ui.get_editors(name)
-
-    all_names = [editor.name for editor in ui._editors]
-    if not editors:
-        raise ValueError(
-            "No editors can be found with name {!r}. "
-            "Found these: {!r}".format(name, all_names)
-        )
-    if len(editors) > 1:
-        raise ValueError(
-            "Found multiple editors with name {!r}.".format(name))
-    editor, = editors
-    return editor
-
-
-def _get_editor_by_id(ui, id):
-    """ Return single Editor from an instance of traitsui.ui.UI with
-    the given identifier.
-
-    Parameters
-    ----------
-    ui : traitsui.ui.UI
-        The UI from which an editor will be retrieved.
-    id : str
-        Id for finding an item in the UI.
-
-    Returns
-    -------
-    editor : Editor
-        The single editor found.
-    """
-    try:
-        editor = getattr(ui.info, id)
-    except AttributeError:
-        raise ValueError(
-            "No editors found with id {!r}. Got these: {!r}".format(
-                id, ui._names)
-            )
-    return editor
-
-
 def _get_ui_registry():
     """ Return a TargetRegistry with traitsui.ui.UI as the target.
 
@@ -281,19 +224,11 @@ def _get_ui_registry():
     ----------
     registry : TargetRegistry
     """
+
     registry = TargetRegistry()
-    registry.register_solver(
+    register_nested_ui_solvers(
+        registry=registry,
         target_class=UI,
-        locator_class=locator.TargetByName,
-        solver=lambda wrapper, location: (
-            _get_editor_by_name(wrapper.target, location.name)
-        ),
-    )
-    registry.register_solver(
-        target_class=UI,
-        locator_class=locator.TargetById,
-        solver=lambda wrapper, location: (
-            _get_editor_by_id(wrapper.target, location.id)
-        ),
+        nested_ui_getter=lambda target: target,
     )
     return registry

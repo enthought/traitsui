@@ -12,37 +12,71 @@
 from traitsui.testing.tester import locator
 
 
-def find_by_id_in_nested_ui(wrapper, location):
-    """ Helper function for resolving from a target to a TargetById. The
-    target must have a solver registered from it to an instance of
-    traitsui.ui.UI
+def _get_editor_by_name(ui, name):
+    """ Return a single Editor from an instance of traitsui.ui.UI with
+    a given extended name. Raise if zero or many editors are found.
 
     Parameters
     ----------
-    wrapper : UIWrapper
-    location : instance of locator.TargetById
+    ui : traitsui.ui.UI
+        The UI from which an editor will be retrieved.
+    name : str
+        A single name for retrieving an editor on a UI.
+
+    Returns
+    -------
+    editor : Editor
+        The single editor found.
     """
-    new_interactor = wrapper.locate(locator.NestedUI())
-    return new_interactor.find_by_id(location.id).target
+    editors = ui.get_editors(name)
+
+    all_names = [editor.name for editor in ui._editors]
+    if not editors:
+        raise ValueError(
+            "No editors can be found with name {!r}. "
+            "Found these: {!r}".format(name, all_names)
+        )
+    if len(editors) > 1:
+        raise ValueError(
+            "Found multiple editors with name {!r}.".format(name))
+    editor, = editors
+    return editor
 
 
-def find_by_name_in_nested_ui(wrapper, location):
-    """ Helper function for resolving from a target to a TargetByName. The
-    target must have a solver registered from it to an instance of
-    traitsui.ui.UI
+def _get_editor_by_id(ui, id):
+    """ Return single Editor from an instance of traitsui.ui.UI with
+    the given identifier.
 
     Parameters
     ----------
-    wrapper : UIWrapper
-    location : instance of locator.TargetByName
+    ui : traitsui.ui.UI
+        The UI from which an editor will be retrieved.
+    id : str
+        Id for finding an item in the UI.
+
+    Returns
+    -------
+    editor : Editor
+        The single editor found.
     """
-    new_interactor = wrapper.locate(locator.NestedUI())
-    return new_interactor.find_by_name(location.name).target
+    try:
+        editor = getattr(ui.info, id)
+    except AttributeError:
+        raise ValueError(
+            "No editors found with id {!r}. Got these: {!r}".format(
+                id, ui._names)
+            )
+    return editor
 
 
 def register_nested_ui_solvers(registry, target_class, nested_ui_getter):
-    """ Function to register solvers for a particular target type to
-    NestedUIs and TargetByNames within those NestedUIs.
+    """ Function to register solvers for obtaining nested targets inside a
+    nested traitsui.ui.UI inside a (parent) target.
+
+    For example, an instance of TreeEditor may contain a nested
+    ``traitsui.ui.UI`` instance. In that case, the ``target_class`` will the
+    TreeEditor and the ``nested_ui_getter`` specifies how to obtain the nested
+    ``traitsui.ui.UI`` UI from it.
 
     Parameters
     ----------
@@ -52,22 +86,27 @@ def register_nested_ui_solvers(registry, target_class, nested_ui_getter):
         The type of a UI target being used as the target_class for the
         solvers
     nested_ui_getter : callable(target: target_class) -> traitsui.ui.UI
-        A callable specific to the particular target_class that resolves a
-        NestedUI
+        A callable specific to the particular target_class to obtain a nested
+        UI.
     """
 
     registry.register_solver(
         target_class=target_class,
-        locator_class=locator.NestedUI,
-        solver=lambda wrapper, _: nested_ui_getter(wrapper.target),
-    )
-    registry.register_solver(
-        target_class=target_class,
         locator_class=locator.TargetByName,
-        solver=find_by_name_in_nested_ui,
+        solver=lambda wrapper, location: (
+            _get_editor_by_name(
+                ui=nested_ui_getter(wrapper.target),
+                name=location.name,
+            )
+        ),
     )
     registry.register_solver(
         target_class=target_class,
         locator_class=locator.TargetById,
-        solver=find_by_id_in_nested_ui,
+        solver=lambda wrapper, location: (
+            _get_editor_by_id(
+                ui=nested_ui_getter(wrapper.target),
+                id=location.id,
+            )
+        ),
     )
