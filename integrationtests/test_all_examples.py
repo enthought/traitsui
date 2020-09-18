@@ -293,7 +293,7 @@ def load_demo(file_path, variable_name="demo"):
     variable_name : str
         The key in the global symbol state corresponding to the object of
         interest for the demo.
-    
+
     Returns
     -------
     Instance of HasTraits
@@ -346,6 +346,7 @@ class TestExample(unittest.TestCase):
                     )
                 )
 
+
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestInteractExample(unittest.TestCase):
     """ Test examples with more interactions."""
@@ -372,6 +373,7 @@ class TestInteractExample(unittest.TestCase):
             # we want clicking the buttons to do that
             def click_simple_button():
                 simple_button.perform(command.MouseClick())
+
             def click_custom_button():
                 custom_button.perform(command.MouseClick())
 
