@@ -11,7 +11,9 @@
 
 from traitsui.testing.tester import command
 from traitsui.testing.tester.qt4.helpers import mouse_click_qwidget
-from traitsui.testing.tester.registry_helper import register_nested_ui_solvers
+from traitsui.testing.tester.registry_helper import (
+    register_traitsui_ui_solvers,
+)
 from traitsui.qt4.instance_editor import (
     CustomEditor,
     SimpleEditor
@@ -55,5 +57,5 @@ def register(registry):
             mouse_click_qwidget(wrapper.target._button, delay=wrapper.delay)
         )
     )
-    register_nested_ui_solvers(registry, SimpleEditor, _get_nested_ui_simple)
-    register_nested_ui_solvers(registry, CustomEditor, _get_nested_ui_custom)
+    register_traitsui_ui_solvers(registry, SimpleEditor, _get_nested_ui_simple)
+    register_traitsui_ui_solvers(registry, CustomEditor, _get_nested_ui_custom)
