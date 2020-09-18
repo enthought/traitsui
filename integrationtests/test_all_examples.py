@@ -346,11 +346,32 @@ class TestExample(unittest.TestCase):
                     )
                 )
 
-
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestInteractExample(unittest.TestCase):
     """ Test examples with more interactions."""
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+    def test_button_editor_simple_demo(self):
+        # Test ButtonEditor_simple_demo.py in examples/demo/Standard_Edtiors
+        filepath = os.path.join(
+            DEMO, "Standard_Editors", "ButtonEditor_simple_demo.py"
+        )
+        demo = load_demo(filepath, "demo")
+
+        tester = UITester()
+        with tester.create_ui(demo) as ui:
+            button = tester.find_by_name(ui, "my_button_trait")
+            for index in range(5):
+                button.perform(command.MouseClick())
+                self.assertEqual(demo.click_counter, index + 1)
+
+            click_counter = tester.find_by_name(ui, "click_counter")
+            displayed_count = click_counter.inspect(query.DisplayedText())
+            self.assertEqual(displayed_count, '5')
+
+            demo.click_counter = 10
+            displayed_count = click_counter.inspect(query.DisplayedText())
+            self.assertEqual(displayed_count, '10')
+        
     def test_converter(self):
         # Test converter.py in examples/demo/Applications
         filepath = os.path.join(
