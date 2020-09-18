@@ -304,7 +304,6 @@ def load_demo(file_path, variable_name="demo"):
         content = f.read()
     globals_ = globals().copy()
     exec(content, globals_)
-    #print(globals_)
     return globals_[variable_name]
 
 
