@@ -126,7 +126,7 @@ class TestRangeEditor(unittest.TestCase):
                 # For RangeTextEditor on wx and windows, the textbox
                 # automatically gets focus and the full content is selected.
                 # Insertion point is moved to keep the test consistent
-                number_field_text.target.textbox.SetInsertionPointEnd()
+                number_field_text.perform(command.KeyClick("End"))
             number_field_text.perform(command.KeyClick("0"))
             number_field_text.perform(command.KeyClick("Enter"))
             displayed = number_field_text.inspect(query.DisplayedText())
