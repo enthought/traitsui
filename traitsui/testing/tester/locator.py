@@ -17,8 +17,6 @@ a UI target where further location resolution or user interaction can be
 applied.
 """
 
-import enum
-
 
 class Index:
     """ A locator for locating a target that is uniquely specified by a single
