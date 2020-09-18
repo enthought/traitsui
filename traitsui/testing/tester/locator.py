@@ -56,22 +56,6 @@ class TargetById:
         self.id = id
 
 
-class WidgetType(enum.Enum):
-    """ A locator for locating nested widgets within a UI. Many editors will
-    contain many sub-widgets (e.g. a textbox, slider, tabs, buttons, etc.).
-
-    For example when working with a range editor, one could call
-    ``tester.find_by_name(ui, "number").locate(locator.WidgetType.textbox)``
-    where number utilizes a Range Editor.
-    """
-
-    # A textbox within a UI
-    textbox = "textbox"
-
-    # A slider within a UI
-    slider = "slider"
-
-
 class slider:
     """ A locator for locating a nested slider widget within a UI.
     """
