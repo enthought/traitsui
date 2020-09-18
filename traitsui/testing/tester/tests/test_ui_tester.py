@@ -11,6 +11,7 @@
 
 import unittest
 
+from pyface.api import GUI
 from traits.api import (
     Button, Instance, HasTraits, Str,
 )
@@ -56,6 +57,23 @@ class TestUITesterCreateUI(unittest.TestCase):
         with tester.create_ui(order, dict(view=view)) as ui:
             pass
         self.assertTrue(ui.destroyed)
+
+    def test_create_ui_reraise_exception(self):
+        tester = UITester()
+        order = Order()
+        view = View(Item("submit_button"))
+
+        with self.assertRaises(RuntimeError), \
+                self.assertLogs("traitsui", level="ERROR"):
+
+            with tester.create_ui(order, dict(view=view)) as ui:
+
+                def raise_error():
+                    raise ZeroDivisionError()
+
+                GUI().invoke_later(raise_error)
+
+        self.assertIsNone(ui.control)
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
