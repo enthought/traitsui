@@ -73,10 +73,10 @@ def register_nested_ui_solvers(registry, target_class, nested_ui_getter):
     """ Function to register solvers for obtaining nested targets inside a
     nested traitsui.ui.UI inside a (parent) target.
 
-    For example, a TreeEditor may contain a nested UI from which more nested
-    UI target may be required. In that case, the ``target_class`` will the
+    For example, an instance of TreeEditor may contain a nested
+    ``traitsui.ui.UI`` instance. In that case, the ``target_class`` will the
     TreeEditor and the ``nested_ui_getter`` specifies how to obtain the nested
-    UI from it.
+    ``traitsui.ui.UI`` UI from it.
 
     Parameters
     ----------
