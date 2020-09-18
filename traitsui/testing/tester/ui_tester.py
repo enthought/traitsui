@@ -8,6 +8,7 @@
 #
 #  Thanks for using Enthought open source!
 #
+import contextlib
 
 from traitsui.ui import UI
 from traitsui.testing.tester.default_registry import get_default_registry
@@ -16,9 +17,8 @@ from traitsui.testing.tester.registry_helper import (
     register_traitsui_ui_solvers,
 )
 from traitsui.testing.tester.ui_wrapper import UIWrapper
-from traitsui.tests._tools import (
-    create_ui as _create_ui,
-)
+from traitsui.testing.gui import process_cascade_events
+from traitsui.testing.exception_handling import reraise_exceptions
 
 
 class UITester:
@@ -158,6 +158,7 @@ class UITester:
         self._registries.append(get_default_registry())
         self.delay = delay
 
+    @contextlib.contextmanager
     def create_ui(self, object, ui_kwargs=None):
         """ Context manager to create a UI and dispose it upon exit.
 
@@ -174,7 +175,25 @@ class UITester:
         ------
         ui : traitsui.ui.UI
         """
-        return _create_ui(object, ui_kwargs)
+        # Nothing here uses UITester, but it is an instance method to preserve
+        # options to extend using instance states.
+
+        ui_kwargs = {} if ui_kwargs is None else ui_kwargs
+        ui = object.edit_traits(**ui_kwargs)
+        try:
+            yield ui
+        finally:
+            with reraise_exceptions():
+                # At the end of a test, there may be events to be processed.
+                # If dispose happens first, those events will be processed
+                # after various editor states are removed, causing errors.
+                process_cascade_events()
+                try:
+                    ui.dispose()
+                finally:
+                    # dispose is not atomic and may push more events to the
+                    # event queue. Flush those too.
+                    process_cascade_events()
 
     def find_by_name(self, ui, name):
         """ Find the TraitsUI editor with the given name and return a new
