@@ -117,6 +117,8 @@ class TextEditor(Editor):
         self.set_tooltip()
 
     def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
         if self.control is not None:   # just in-case
             parent = self.control.GetParent()
             parent.Unbind(
