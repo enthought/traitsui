@@ -56,13 +56,13 @@ class TargetById:
         self.id = id
 
 
-class slider:
+class Slider:
     """ A locator for locating a nested slider widget within a UI.
     """
     pass
 
 
-class textbox:
+class Textbox:
     """ A locator for locating amnested textbox widget within a UI.
     """
     pass

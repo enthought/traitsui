@@ -103,7 +103,7 @@ class TestCustomListEditor(unittest.TestCase):
         with tester.create_ui(obj) as ui:
             with self.assertRaises(LocationNotSupported) as exc:
                 people_list = tester.find_by_name(ui, "people")
-                people_list.locate(locator.textbox())
+                people_list.locate(locator.Textbox())
             self.assertIn(locator.Index, exc.exception.supported)
 
     def test_index_out_of_range(self):

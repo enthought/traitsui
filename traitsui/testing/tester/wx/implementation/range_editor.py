@@ -40,13 +40,13 @@ def register(registry):
     for target_class in targets:
         registry.register_solver(
             target_class=target_class,
-            locator_class=locator.textbox,
+            locator_class=locator.Textbox,
             solver=lambda wrapper, _: LocatedTextbox(
                 textbox=wrapper.target.control.text),
         )
         registry.register_solver(
             target_class=target_class,
-            locator_class=locator.slider,
+            locator_class=locator.Slider,
             solver=lambda wrapper, _: LocatedSlider(
                 slider=wrapper.target.control.slider),
         )
