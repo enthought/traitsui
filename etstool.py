@@ -258,6 +258,22 @@ def install(runtime, toolkit, environment, editable, source):
 @click.option('--runtime', default=DEFAULT_RUNTIME)
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
+def shell(runtime, toolkit, environment):
+    """ Create a shell into the EDM development environment
+    (aka 'activate' it).
+
+    """
+    parameters = get_parameters(runtime, toolkit, environment)
+    commands = [
+        "edm shell -e {environment}",
+    ]
+    execute(commands, parameters)
+
+
+@cli.command()
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
+@click.option('--environment', default=None)
 def test(runtime, toolkit, environment):
     """ Run the test suite in a given environment with the specified toolkit.
 
