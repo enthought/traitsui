@@ -8,7 +8,7 @@
 #
 #  Thanks for using Enthought open source!
 #
-import time 
+import time
 
 from pyface.qt import QtCore, QtGui
 from pyface.qt.QtTest import QTest

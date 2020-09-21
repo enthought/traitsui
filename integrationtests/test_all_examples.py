@@ -346,6 +346,7 @@ class TestExample(unittest.TestCase):
                     )
                 )
 
+
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestInteractExample(unittest.TestCase):
     """ Test examples with more interactions."""
