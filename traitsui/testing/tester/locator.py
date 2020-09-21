@@ -17,8 +17,6 @@ a UI target where further location resolution or user interaction can be
 applied.
 """
 
-import enum
-
 
 class Index:
     """ A locator for locating a target that is uniquely specified by a single
@@ -56,17 +54,13 @@ class TargetById:
         self.id = id
 
 
-class WidgetType(enum.Enum):
-    """ A locator for locating nested widgets within a UI. Many editors will
-    contain many sub-widgets (e.g. a textbox, slider, tabs, buttons, etc.).
-
-    For example when working with a range editor, one could call
-    ``tester.find_by_name(ui, "number").locate(locator.WidgetType.textbox)``
-    where number utilizes a Range Editor.
+class Slider:
+    """ A locator for locating a nested slider widget within a UI.
     """
+    pass
 
-    # A textbox within a UI
-    textbox = "textbox"
 
-    # A slider within a UI
-    slider = "slider"
+class Textbox:
+    """ A locator for locating a nested textbox widget within a UI.
+    """
+    pass
