@@ -265,12 +265,12 @@ class TestUIWrapperHelp(unittest.TestCase):
             solver=mock.Mock(),
         )
 
-        stream = io.StringIO()
         wrapper = example_ui_wrapper(
             target="dummy", registries=[registry1, registry2]
         )
 
         # when
+        stream = io.StringIO()
         with mock.patch("sys.stdout", stream):
             wrapper.help()
 
@@ -290,6 +290,77 @@ class TestUIWrapperHelp(unittest.TestCase):
                 {Locator!r}
                     Return anything you like.
                     Good day!
+
+            """)
+        )
+
+    def test_help_message_priority_interactions(self):
+        # The first registry in the list has the highest priority
+        # The last registry in the list has the least priority
+
+        class HighPriorityRegistry(TargetRegistry):
+            def get_interaction_doc(self, target_class, interaction_class):
+                return "Interaction: I get a higher priority."
+
+            def get_location_doc(self, target_class, interaction_class):
+                return "Location: I get a higher priority."
+
+        class LowPriorityRegistry(TargetRegistry):
+            def get_interaction_doc(self, target_class, interaction_class):
+                return "Interaction: I get a lower priority."
+
+            def get_location_doc(self, target_class, interaction_class):
+                return "Location: I get a lower priority."
+
+        high_priority_registry = HighPriorityRegistry()
+        high_priority_registry.register_handler(
+            target_class=str,
+            interaction_class=float,
+            handler=mock.Mock(),
+        )
+        high_priority_registry.register_solver(
+            target_class=str,
+            locator_class=str,
+            solver=mock.Mock(),
+        )
+
+        low_priority_registry = LowPriorityRegistry()
+        low_priority_registry.register_handler(
+            target_class=str,
+            interaction_class=float,
+            handler=mock.Mock(),
+        )
+        low_priority_registry.register_solver(
+            target_class=str,
+            locator_class=str,
+            solver=mock.Mock(),
+        )
+
+        # Put higher priority registry first.
+        wrapper = example_ui_wrapper(
+            target="dummy",
+            registries=[high_priority_registry, low_priority_registry],
+        )
+
+        # when
+        stream = io.StringIO()
+        with mock.patch("sys.stdout", stream):
+            wrapper.help()
+
+        # then
+        self.assertEqual(
+            stream.getvalue(),
+            textwrap.dedent(f"""\
+                Interactions
+                ------------
+                {float!r}
+                    Interaction: I get a higher priority.
+
+
+                Locations
+                ---------
+                {str!r}
+                    Location: I get a higher priority.
 
             """)
         )
