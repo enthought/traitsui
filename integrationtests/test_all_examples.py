@@ -467,3 +467,10 @@ class TestInteractExample(unittest.TestCase):
             name.perform(command.KeySequence("ABC"))
             name.perform(command.KeyClick("Enter"))
             self.assertEqual(demo.sample_instance.name, "ABC")
+
+            demo.sample_instance.name = "XYZ"
+            simple_displayed = name.inspect(query.DisplayedText())
+            custom_name = custom.find_by_name("name")
+            custom_displayed = custom_name.inspect(query.DisplayedText())
+            self.assertEqual(simple_displayed, "XYZ")
+            self.assertEqual(custom_displayed, "XYZ")
