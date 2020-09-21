@@ -8,6 +8,8 @@
 #
 #  Thanks for using Enthought open source!
 #
+import time 
+
 from pyface.qt import QtCore, QtGui
 from pyface.qt.QtTest import QTest
 
@@ -105,11 +107,15 @@ def mouse_click_qwidget(control, delay):
     delay : int
         Time delay (in ms) in which click will be performed.
     """
-    QTest.mouseClick(
-        control,
-        QtCore.Qt.LeftButton,
-        delay=delay,
-    )
+    if isinstance(control, QtGui.QAbstractButton):
+        time.sleep(delay/1000)
+        control.click()
+    else:
+        QTest.mouseClick(
+            control,
+            QtCore.Qt.LeftButton,
+            delay=delay,
+        )
 
 
 def mouse_click_tab_index(tab_widget, index, delay):
@@ -150,11 +156,7 @@ def mouse_click_qlayout(layout, index, delay):
     if not 0 <= index < layout.count():
         raise IndexError(index)
     widget = layout.itemAt(index).widget()
-    QTest.mouseClick(
-        widget,
-        QtCore.Qt.LeftButton,
-        delay=delay,
-    )
+    mouse_click_qwidget(widget, delay)
 
 
 def mouse_click_item_view(model, view, index, delay):
