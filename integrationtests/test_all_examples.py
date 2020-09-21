@@ -481,5 +481,5 @@ class TestInteractExample(unittest.TestCase):
                 displayed_simple, disp_simple_text, selected_radio,
                 selected_list, displayed_text, displayed_readonly
             ]
-            for _ in displayed_selected:
-                self.assertEqual(_, 'Foo')
+            for text in displayed_selected:
+                self.assertEqual(text, 'Foo')
