@@ -284,7 +284,6 @@ class TestUIWrapperHelp(unittest.TestCase):
                     Say hello.
                     Say bye.
 
-
                 Locations
                 ---------
                 {Locator!r}
@@ -356,7 +355,6 @@ class TestUIWrapperHelp(unittest.TestCase):
                 {float!r}
                     Interaction: I get a higher priority.
 
-
                 Locations
                 ---------
                 {str!r}
@@ -364,6 +362,31 @@ class TestUIWrapperHelp(unittest.TestCase):
 
             """)
         )
+
+    def test_help_message_nothing_is_supported(self):
+        registry = TargetRegistry()
+        wrapper = example_ui_wrapper(registries=[registry])
+
+        # when
+        stream = io.StringIO()
+        with mock.patch("sys.stdout", stream):
+            wrapper.help()
+
+        # then
+        self.assertEqual(
+            stream.getvalue(),
+            textwrap.dedent(f"""\
+                Interactions
+                ------------
+                No interactions are supported.
+
+                Locations
+                ---------
+                No locations are supported.
+
+            """)
+        )
+
 
 
 class NumberHasTraits(HasTraits):

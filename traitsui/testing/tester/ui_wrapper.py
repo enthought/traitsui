@@ -100,13 +100,20 @@ class UIWrapper:
             )
             print()
 
-        print()
+        if not interactions:
+            print("No interactions are supported.")
+            print()
+
         print("Locations")
         print("---------")
         pairs = sorted(locations.items(), key=lambda value: repr(value[0]))
         for interaction_class, doc in pairs:
             print(repr(interaction_class))
             print(textwrap.indent(doc, prefix="    "))
+            print()
+
+        if not locations:
+            print("No locations are supported.")
             print()
 
     def locate(self, location):
