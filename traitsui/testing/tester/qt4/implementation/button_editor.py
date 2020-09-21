@@ -27,7 +27,8 @@ def register(registry):
     handlers = [
         (command.MouseClick, (lambda wrapper, _:  helpers.mouse_click_qwidget(
                               wrapper._target.control, wrapper.delay))),
-        (query.DisplayedText, lambda wrapper, _: wrapper._target.control.text())
+        (query.DisplayedText,
+            lambda wrapper, _: wrapper._target.control.text())
     ]
 
     for target_class in [SimpleEditor, CustomEditor]:

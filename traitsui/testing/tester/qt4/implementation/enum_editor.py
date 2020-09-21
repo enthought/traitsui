@@ -155,5 +155,6 @@ def register(registry):
     registry.register_handler(
         target_class=ListEditor,
         interaction_class=query.SelectedText,
-        handler=lambda wrapper, _: wrapper._target.control.currentItem().text(),
+        handler=lambda wrapper, _:
+            wrapper._target.control.currentItem().text(),
     )
