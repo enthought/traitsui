@@ -11,14 +11,16 @@
 
 from contextlib import contextmanager
 
+from traitsui.testing.exception_handling import (
+    reraise_exceptions as _reraise_exceptions,
+)
+from traitsui.testing.gui import (
+    process_cascade_events as _process_cascade_events,
+)
+from traitsui.testing.tester import locator
 from traitsui.testing.tester.exceptions import (
     InteractionNotSupported,
     LocationNotSupported,
-)
-from traitsui.testing.tester import locator
-from traitsui.tests._tools import (
-    process_cascade_events as _process_cascade_events,
-    reraise_exceptions as _reraise_exceptions,
 )
 
 
