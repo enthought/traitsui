@@ -108,7 +108,7 @@ class TestInteractionRegistry(unittest.TestCase):
         with self.assertRaises(ValueError):
             registry.register_handler(SpecificEditor, UserAction, handler)
 
-    def test_error_get_interaction_coc(self):
+    def test_error_get_interaction_doc(self):
         # The registry is empty
         registry = TargetRegistry()
         with self.assertRaises(InteractionNotSupported):
@@ -192,7 +192,7 @@ class TestLocationRegistry(unittest.TestCase):
         )
         self.assertEqual(help_text, "Some default documentation.")
 
-    def test_error_get_interaction_coc(self):
+    def test_error_get_interaction_doc(self):
         # The registry is empty
         registry = TargetRegistry()
         with self.assertRaises(LocationNotSupported):
