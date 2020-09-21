@@ -10,6 +10,7 @@
 #
 
 from contextlib import contextmanager
+import textwrap
 
 from traitsui.testing.exception_handling import (
     reraise_exceptions as _reraise_exceptions,
@@ -72,6 +73,56 @@ class UIWrapper:
         self.target = target
         self._registries = registries
         self.delay = delay
+
+    def help(self):
+        """ Print help messages.
+        (This function is intended for interactive use.)
+        """
+        # mapping from interaction types to their documentation
+        interaction_to_doc = dict()
+
+        # mapping from location types to their documentation
+        location_to_doc = dict()
+
+        # Order registries by their priority (low to high)
+        for registry in self._registries[::-1]:
+            for type_ in registry.get_interactions(self.target.__class__):
+                interaction_to_doc[type_] = registry.get_interaction_doc(
+                    self.target.__class__, type_)
+
+            for type_ in registry.get_locations(self.target.__class__):
+                location_to_doc[type_] = registry.get_location_doc(
+                    self.target.__class__, type_)
+
+        print("Interactions")
+        print("------------")
+        for interaction_type in sorted(interaction_to_doc, key=repr):
+            print(repr(interaction_type))
+            print(
+                textwrap.indent(
+                    interaction_to_doc[interaction_type], prefix="    "
+                )
+            )
+            print()
+
+        if not interaction_to_doc:
+            print("No interactions are supported.")
+            print()
+
+        print("Locations")
+        print("---------")
+        for locator_type in sorted(location_to_doc, key=repr):
+            print(repr(locator_type))
+            print(
+                textwrap.indent(
+                    location_to_doc[locator_type], prefix="    "
+                )
+            )
+            print()
+
+        if not location_to_doc:
+            print("No locations are supported.")
+            print()
 
     def locate(self, location):
         """ Attempt to resolve the given location and return a new
