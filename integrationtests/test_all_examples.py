@@ -445,3 +445,25 @@ class TestInteractExample(unittest.TestCase):
             self.assertEqual(demo.checklist, ["three"])
             item3.perform(command.MouseClick())
             self.assertEqual(demo.checklist, [])
+
+    def test_instance_editor_demo(self):
+        # Test InstanceEditor_demo.py in examples/demo/Standard_Edtiors
+        filepath = os.path.join(
+            DEMO, "Standard_Editors", "InstanceEditor_demo.py"
+        )
+        demo = load_demo(filepath, "demo")
+
+        tester = UITester()
+        with tester.create_ui(demo) as ui:
+            simple = tester.find_by_id(ui, "simple")
+            custom = tester.find_by_id(ui, "custom")
+            occupation = custom.find_by_name("occupation")
+            occupation.perform(command.KeySequence("Job"))
+            occupation.perform(command.KeyClick("Enter"))
+            self.assertEqual(demo.sample_instance.occupation, "Job")
+
+            simple.perform(command.MouseClick())
+            name = simple.find_by_name("name")
+            name.perform(command.KeySequence("ABC"))
+            name.perform(command.KeyClick("Enter"))
+            self.assertEqual(demo.sample_instance.name, "ABC")
