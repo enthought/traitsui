@@ -105,11 +105,20 @@ def mouse_click_qwidget(control, delay):
     delay : int
         Time delay (in ms) in which click will be performed.
     """
-    QTest.mouseClick(
-        control,
-        QtCore.Qt.LeftButton,
-        delay=delay,
-    )
+
+    # for QAbstractButtons we do not use QTest.mouseClick as it assumes the
+    # center of the widget as the location to be clicked, which may be
+    # incorrect. For QAbstractButtons we can simply call their click method.
+    if isinstance(control, QtGui.QAbstractButton):
+        if delay > 0:
+            QTest.qSleep(delay)
+        control.click()
+    else:
+        QTest.mouseClick(
+            control,
+            QtCore.Qt.LeftButton,
+            delay=delay,
+        )
 
 
 def mouse_click_tab_index(tab_widget, index, delay):
@@ -150,11 +159,7 @@ def mouse_click_qlayout(layout, index, delay):
     if not 0 <= index < layout.count():
         raise IndexError(index)
     widget = layout.itemAt(index).widget()
-    QTest.mouseClick(
-        widget,
-        QtCore.Qt.LeftButton,
-        delay=delay,
-    )
+    mouse_click_qwidget(widget, delay)
 
 
 def mouse_click_item_view(model, view, index, delay):

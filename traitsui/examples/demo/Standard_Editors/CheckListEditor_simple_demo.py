@@ -37,11 +37,11 @@ class CheckListEditorDemo(HasTraits):
     checklist_group = Group(
         '10',  # insert vertical space (10 empty pixels)
         Label('The custom style lets you select items from a checklist:'),
-        UItem('checklist', style='custom'),
+        UItem('checklist', style='custom', id="custom"),
         '10', '_', '10',  # horizontal line with vertical space above and below
         Label('The readonly style shows you which items are selected, '
               'as a Python list:'),
-        UItem('checklist', style='readonly'),
+        UItem('checklist', style='readonly', id="readonly"),
     )
 
     traits_view = View(
