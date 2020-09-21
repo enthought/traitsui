@@ -108,6 +108,33 @@ class TestInteractionRegistry(unittest.TestCase):
         with self.assertRaises(ValueError):
             registry.register_handler(SpecificEditor, UserAction, handler)
 
+    def test_error_get_interaction_doc(self):
+        # The registry is empty
+        registry = TargetRegistry()
+        with self.assertRaises(InteractionNotSupported):
+            registry.get_interaction_doc(float, int)
+
+    def test_get_default_interaction_doc(self):
+
+        class Action:
+            """Some action."""
+            pass
+
+        def handler(wrapper, interaction):
+            pass
+
+        registry = TargetRegistry()
+        registry.register_handler(
+            target_class=float,
+            interaction_class=Action,
+            handler=handler,
+        )
+
+        actual = registry.get_interaction_doc(
+            target_class=float, interaction_class=Action,
+        )
+        self.assertEqual(actual, "Some action.")
+
 
 class TestLocationRegistry(unittest.TestCase):
 
@@ -146,3 +173,27 @@ class TestLocationRegistry(unittest.TestCase):
             registry.get_solver(float, None)
 
         self.assertEqual(exception_context.exception.supported, [str])
+
+    def test_get_location_help_default(self):
+
+        class Locator:
+            """ Some default documentation."""
+            pass
+
+        registry = TargetRegistry()
+        registry.register_solver(
+            target_class=float,
+            locator_class=Locator,
+            solver=lambda w, l: 1,
+        )
+
+        help_text = registry.get_location_doc(
+            target_class=float, locator_class=Locator,
+        )
+        self.assertEqual(help_text, "Some default documentation.")
+
+    def test_error_get_interaction_doc(self):
+        # The registry is empty
+        registry = TargetRegistry()
+        with self.assertRaises(LocationNotSupported):
+            registry.get_location_doc(float, int)
