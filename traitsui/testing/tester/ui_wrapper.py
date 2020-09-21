@@ -83,6 +83,9 @@ class UIWrapper:
 
         # mapping from location types to their documentation
         location_to_doc = dict()
+
+        # Let higher priority registry override the documentation from lower
+        # priority registry.
         for registry in self._registries[::-1]:
             for type_ in registry.get_interactions(self.target.__class__):
                 interaction_to_doc[type_] = registry.get_interaction_doc(
