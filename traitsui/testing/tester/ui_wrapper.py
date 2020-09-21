@@ -10,6 +10,7 @@
 #
 
 from contextlib import contextmanager
+import textwrap
 
 from traitsui.testing.exception_handling import (
     reraise_exceptions as _reraise_exceptions,
@@ -105,10 +106,7 @@ class UIWrapper:
         pairs = sorted(locations.items(), key=lambda value: repr(value[0]))
         for interaction_class, doc in pairs:
             print(repr(interaction_class))
-            print(
-                *("    " + line for line in doc.split("\n")),
-                sep="\n",
-            )
+            print(textwrap.indent(doc, prefix="    "))
             print()
 
     def locate(self, location):
