@@ -8,11 +8,13 @@
 #
 #  Thanks for using Enthought open source!
 #
-
 import wx
 
-from traitsui.wx.editor_factory import ReadonlyEditor
+from traitsui.wx.editor_factory import ReadonlyEditor, TextEditor
 from traitsui.testing.tester import query
+from traitsui.testing.tester.wx.registry_helper import (
+    register_editable_textbox_handlers,
+)
 
 
 def readonly_displayed_text_handler(wrapper, interaction):
@@ -52,8 +54,14 @@ def register(registry):
     registry : TargetRegistry
         The registry being registered to.
     """
+    register_editable_textbox_handlers(
+        registry=registry,
+        target_class=TextEditor,
+        widget_getter=lambda wrapper: wrapper.target.control,
+    )
     registry.register_handler(
         target_class=ReadonlyEditor,
         interaction_class=query.DisplayedText,
         handler=readonly_displayed_text_handler,
     )
+  
