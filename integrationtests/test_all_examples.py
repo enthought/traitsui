@@ -430,6 +430,22 @@ class TestInteractExample(unittest.TestCase):
                 "1.0",
             )
 
+    def test_checklist_editor_simple_demo(self):
+        # Test CheckListEditor_simple_demo.py in examples/demo/Standard_Edtiors
+        filepath = os.path.join(
+            DEMO, "Standard_Editors", "CheckListEditor_simple_demo.py"
+        )
+        demo = load_demo(filepath, "demo")
+
+        tester = UITester()
+        with tester.create_ui(demo) as ui:
+            checklist = tester.find_by_id(ui, "custom")
+            item3 = checklist.locate(locator.Index(2))
+            item3.perform(command.MouseClick())
+            self.assertEqual(demo.checklist, ["three"])
+            item3.perform(command.MouseClick())
+            self.assertEqual(demo.checklist, [])
+
     def test_enum_editor_demo(self):
         # Test EnumEditor_demo.py in examples/demo/Standard_Edtiors
         filepath = os.path.join(
