@@ -268,6 +268,10 @@ class TargetRegistry:
         interaction_class : subclass of type
             Any class.
 
+        Returns
+        -------
+        doc : str
+
         Raises
         ------
         InteractionNotSupported
@@ -321,6 +325,7 @@ class TargetRegistry:
         Raises
         ------
         LocationNotSupported
+            If the given locator and target types are not supported.
         """
         return self._location_registry.get_value(
             target_class=target_class,
@@ -352,9 +357,14 @@ class TargetRegistry:
         locator_class : subclass of type
             Any class.
 
+        Returns
+        -------
+        doc : str
+
         Raises
         ------
         LocationNotSupported
+            If the given locator and target types are not supported.
         """
         self._location_registry.get_value(
             target_class=target_class,
