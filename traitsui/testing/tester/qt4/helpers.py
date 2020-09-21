@@ -8,8 +8,6 @@
 #
 #  Thanks for using Enthought open source!
 #
-import time
-
 from pyface.qt import QtCore, QtGui
 from pyface.qt.QtTest import QTest
 
@@ -108,7 +106,8 @@ def mouse_click_qwidget(control, delay):
         Time delay (in ms) in which click will be performed.
     """
     if isinstance(control, QtGui.QAbstractButton):
-        time.sleep(delay/1000)
+        if delay > 0:
+            QTest.qSleep(delay)
         control.click()
     else:
         QTest.mouseClick(
