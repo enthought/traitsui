@@ -347,8 +347,8 @@ class TestRadioEnumEditor(unittest.TestCase):
                     self.assertEqual(enum_edit.value, "one")
                     radio_editor = tester.find_by_name(ui, "value")
                     if is_qt():
-                        radio_editor.target.row_major = row_major
-                        radio_editor.target.rebuild_editor()
+                        radio_editor._target.row_major = row_major
+                        radio_editor._target.rebuild_editor()
                     item = radio_editor.locate(locator.Index(3))
                     item.perform(command.MouseClick())
                     self.assertEqual(enum_edit.value, "four")
