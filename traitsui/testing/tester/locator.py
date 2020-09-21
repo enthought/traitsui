@@ -61,6 +61,6 @@ class Slider:
 
 
 class Textbox:
-    """ A locator for locating amnested textbox widget within a UI.
+    """ A locator for locating a nested textbox widget within a UI.
     """
     pass
