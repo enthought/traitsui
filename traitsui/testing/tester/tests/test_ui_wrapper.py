@@ -388,7 +388,6 @@ class TestUIWrapperHelp(unittest.TestCase):
         )
 
 
-
 class NumberHasTraits(HasTraits):
     number = Int()
 
