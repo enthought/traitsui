@@ -391,3 +391,30 @@ def key_click_slider(control, interaction, delay):
         wx.wxEVT_SCROLL_CHANGED, control.GetId(), position
     )
     wx.PostEvent(control, event)
+
+
+def readonly_displayed_text_handler(wrapper, interaction):
+    ''' Handler for ReadonlyEditor to handle query.DisplayedText interactions.
+
+    Parameters
+    ----------
+    wrapper : UIWrapper
+        the UIWrapper object wrapping the ReadonlyEditor
+    interaction : Instance of query.DisplayedText
+        This arguiment is not used by this function. It is included so that
+        the function matches the standard format for a handler.  The intended
+        interaction should always be query.DisplayedText
+
+    Notes
+    -----
+    wx Readonly Editors occassionally use wx.TextCtrl as their control, and
+    other times use wx.StaticText.
+    '''
+    if isinstance(wrapper.target.control, wx.TextCtrl):
+        return wrapper.target.control.GetValue()
+    elif isinstance(wrapper.target.control, wx.StaticText):
+        return wrapper.target.control.GetLabel()
+    raise TypeError("readonly_displayed_text_handler expected a UIWrapper with"
+                    " a ReadonlyEditor as a target. ReadonlyEditor control"
+                    " should always be either wx.TextCtrl, or wx.StaticText."
+                    " {} was found".format(wrapper.target.control))
