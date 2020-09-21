@@ -94,8 +94,7 @@ class UIWrapper:
 
         print("Interactions")
         print("------------")
-        interaction_types = sorted(interaction_to_doc, key=repr)
-        for interaction_type in interaction_types:
+        for interaction_type in sorted(interaction_to_doc, key=repr):
             print(repr(interaction_type))
             print(
                 textwrap.indent(
@@ -104,14 +103,13 @@ class UIWrapper:
             )
             print()
 
-        if not interaction_types:
+        if not interaction_to_doc:
             print("No interactions are supported.")
             print()
 
         print("Locations")
         print("---------")
-        location_types = sorted(location_to_doc, key=repr)
-        for locator_type in location_types:
+        for locator_type in sorted(location_to_doc, key=repr):
             print(repr(locator_type))
             print(
                 textwrap.indent(
@@ -120,7 +118,7 @@ class UIWrapper:
             )
             print()
 
-        if not location_types:
+        if not location_to_doc:
             print("No locations are supported.")
             print()
 
