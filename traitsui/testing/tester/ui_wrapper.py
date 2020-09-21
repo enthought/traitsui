@@ -107,8 +107,8 @@ class UIWrapper:
         print("Locations")
         print("---------")
         pairs = sorted(locations.items(), key=lambda value: repr(value[0]))
-        for interaction_class, doc in pairs:
-            print(repr(interaction_class))
+        for locator_class, doc in pairs:
+            print(repr(locator_class))
             print(textwrap.indent(doc, prefix="    "))
             print()
 
