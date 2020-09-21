@@ -105,6 +105,10 @@ def mouse_click_qwidget(control, delay):
     delay : int
         Time delay (in ms) in which click will be performed.
     """
+
+    # for QAbstractButtons we do not use QTest.mouseClick as it assumes the
+    # center of the widget as the location to be clicked, which may be
+    # incorrect. For QAbstractButtons we can simply call their click method.
     if isinstance(control, QtGui.QAbstractButton):
         if delay > 0:
             QTest.qSleep(delay)
