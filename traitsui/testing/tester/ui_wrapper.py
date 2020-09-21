@@ -78,38 +78,49 @@ class UIWrapper:
         """ Print help messages.
         (This function is intended for interactive use.)
         """
-        interactions = dict()
-        locations = dict()
+        # mapping from interaction types to their documentation
+        interaction_to_doc = dict()
+
+        # mapping from location types to their documentation
+        location_to_doc = dict()
         for registry in self._registries[::-1]:
             for type_ in registry.get_interactions(self.target.__class__):
-                interactions[type_] = registry.get_interaction_doc(
+                interaction_to_doc[type_] = registry.get_interaction_doc(
                     self.target.__class__, type_)
 
             for type_ in registry.get_locations(self.target.__class__):
-                locations[type_] = registry.get_location_doc(
+                location_to_doc[type_] = registry.get_location_doc(
                     self.target.__class__, type_)
 
         print("Interactions")
         print("------------")
-        pairs = sorted(interactions.items(), key=lambda value: repr(value[0]))
-        for interaction_class, doc in pairs:
-            print(repr(interaction_class))
-            print(textwrap.indent(doc, prefix="    "))
+        interaction_types = sorted(interaction_to_doc, key=repr)
+        for interaction_type in interaction_types:
+            print(repr(interaction_type))
+            print(
+                textwrap.indent(
+                    interaction_to_doc[interaction_type], prefix="    "
+                )
+            )
             print()
 
-        if not interactions:
+        if not interaction_types:
             print("No interactions are supported.")
             print()
 
         print("Locations")
         print("---------")
-        pairs = sorted(locations.items(), key=lambda value: repr(value[0]))
-        for locator_class, doc in pairs:
-            print(repr(locator_class))
-            print(textwrap.indent(doc, prefix="    "))
+        location_types = sorted(location_to_doc, key=repr)
+        for locator_type in location_types:
+            print(repr(locator_type))
+            print(
+                textwrap.indent(
+                    location_to_doc[locator_type], prefix="    "
+                )
+            )
             print()
 
-        if not locations:
+        if not location_types:
             print("No locations are supported.")
             print()
 
