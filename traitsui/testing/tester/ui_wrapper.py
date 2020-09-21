@@ -73,6 +73,44 @@ class UIWrapper:
         self._registries = registries
         self.delay = delay
 
+    def help(self):
+        """ Print help messages.
+        (This function is intended for interactive use.)
+        """
+        interactions = dict()
+        locations = dict()
+        for registry in self._registries[::-1]:
+            for type_ in registry.get_interactions(self.target.__class__):
+                interactions[type_] = registry.get_interaction_doc(
+                    self.target.__class__, type_)
+
+            for type_ in registry.get_locations(self.target.__class__):
+                locations[type_] = registry.get_location_doc(
+                    self.target.__class__, type_)
+
+        print("Interactions")
+        print("------------")
+        pairs = sorted(interactions.items(), key=lambda value: repr(value[0]))
+        for interaction_class, doc in pairs:
+            print(repr(interaction_class))
+            print(
+                *("    " + line for line in doc.split("\n")),
+                sep="\n",
+            )
+            print()
+
+        print()
+        print("Locations")
+        print("---------")
+        pairs = sorted(locations.items(), key=lambda value: repr(value[0]))
+        for interaction_class, doc in pairs:
+            print(repr(interaction_class))
+            print(
+                *("    " + line for line in doc.split("\n")),
+                sep="\n",
+            )
+            print()
+
     def locate(self, location):
         """ Attempt to resolve the given location and return a new
         UIWrapper.

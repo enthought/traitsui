@@ -9,6 +9,8 @@
 #  Thanks for using Enthought open source!
 #
 
+import inspect
+
 from traitsui.testing.tester.exceptions import (
     InteractionNotSupported,
     LocationNotSupported,
@@ -54,6 +56,20 @@ class _TargetToKeyRegistry:
                 available_keys=list(action_to_handler),
             )
         return action_to_handler[key]
+
+    def get_keys(self, target_class):
+        """ Return all the keys for the given target.
+
+        Parameters
+        ----------
+        target_class : subclass of type
+            The type of a UI target being operated on.
+
+        Returns
+        -------
+        keys : set
+        """
+        return set(self._target_to_key_to_value.get(target_class, []))
 
 
 class TargetRegistry:
@@ -215,11 +231,55 @@ class TargetRegistry:
         handler : callable(UIWrapper, interaction) -> any
             The function to handle the particular interaction on a target.
             ``interaction`` should be an instance of ``interaction_class``.
+
+        Raises
+        ------
+        InteractionNotSupported
+            If the given target and interaction types are not supported
+            by this registry.
         """
         return self._interaction_registry.get_value(
             target_class=target_class,
             key=interaction_class,
         )
+
+    def get_interactions(self, target_class):
+        """ Returns all the interactions supported for the given target type.
+
+        Parameters
+        ----------
+        target_class : subclass of type
+            The type of a UI target being operated on.
+
+        Returns
+        -------
+        interaction_classes : set
+            Supported interaction types for the given target type.
+        """
+        return self._interaction_registry.get_keys(target_class=target_class)
+
+    def get_interaction_doc(self, target_class, interaction_class):
+        """ Return the documentation for the given target and locator type.
+
+        Parameters
+        ----------
+        target_class : subclass of type
+            The type of a UI target being operated on.
+        interaction_class : subclass of type
+            Any class.
+
+        Raises
+        ------
+        InteractionNotSupported
+            If the given target and interaction types are not supported
+            by this registry.
+        """
+        self._interaction_registry.get_value(
+            target_class=target_class,
+            key=interaction_class,
+        )
+        # This maybe configurable in the future via register_handler
+        return inspect.getdoc(interaction_class)
 
     def register_solver(self, target_class, locator_class, solver):
         """ Register a solver for resolving the next UI target for the given
@@ -266,3 +326,39 @@ class TargetRegistry:
             target_class=target_class,
             key=locator_class,
         )
+
+    def get_locations(self, target_class):
+        """ Returns all the location types supported for the given target type.
+
+        Parameters
+        ----------
+        target_class : subclass of type
+            The type of a UI target being operated on.
+
+        Returns
+        -------
+        locators_classes : set
+            Supported locator types for the given target type.
+        """
+        return self._location_registry.get_keys(target_class=target_class)
+
+    def get_location_doc(self, target_class, locator_class):
+        """ Return the documentation for the given target and locator type.
+
+        Parameters
+        ----------
+        target_class : subclass of type
+            The type of a UI target being operated on.
+        locator_class : subclass of type
+            Any class.
+
+        Raises
+        ------
+        LocationNotSupported
+        """
+        self._location_registry.get_value(
+            target_class=target_class,
+            key=locator_class,
+        )
+        # This maybe configurable in the future via register_solver
+        return inspect.getdoc(locator_class)

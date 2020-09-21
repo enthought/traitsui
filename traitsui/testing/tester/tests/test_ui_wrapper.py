@@ -8,6 +8,8 @@
 #
 #  Thanks for using Enthought open source!
 #
+import io
+import textwrap
 import unittest
 from unittest import mock
 
@@ -22,6 +24,9 @@ from traitsui.tests._tools import (
 from traitsui.testing.tester.exceptions import (
     InteractionNotSupported,
     LocationNotSupported,
+)
+from traitsui.testing.tester.registry import (
+    TargetRegistry,
 )
 from traitsui.testing.tester.ui_wrapper import (
     UIWrapper,
@@ -228,6 +233,65 @@ class TestUIWrapperLocationRegistry(unittest.TestCase):
         self.assertCountEqual(
             exception_context.exception.supported,
             [int, float],
+        )
+
+
+class TestUIWrapperHelp(unittest.TestCase):
+
+    def test_help_message(self):
+
+        class Action:
+            """ Say hello.
+            Say bye.
+            """
+            pass
+
+        class Locator:
+            """ Return anything you like.
+            Good day!
+            """
+            pass
+
+        registry1 = TargetRegistry()
+        registry1.register_handler(
+            target_class=str,
+            interaction_class=Action,
+            handler=mock.Mock(),
+        )
+        registry2 = TargetRegistry()
+        registry2.register_solver(
+            target_class=str,
+            locator_class=Locator,
+            solver=mock.Mock(),
+        )
+
+        stream = io.StringIO()
+        wrapper = example_ui_wrapper(
+            target="dummy", registries=[registry1, registry2]
+        )
+
+        # when
+        with mock.patch("sys.stdout", stream):
+            wrapper.help()
+
+        # then
+        self.assertEqual(
+            stream.getvalue(),
+            textwrap.dedent(f"""\
+                Interactions
+                ------------
+                {Action!r}
+                    Say hello.
+                    Say bye.
+
+
+                Locations
+                ---------
+                {Locator!r}
+                    Return anything you like.
+                    Good day!
+
+            """)
         )
 
 
