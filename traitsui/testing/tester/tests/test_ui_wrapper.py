@@ -237,6 +237,7 @@ class TestUIWrapperLocationRegistry(unittest.TestCase):
 
 
 class TestUIWrapperHelp(unittest.TestCase):
+    """ Test calling UIWrapper.help """
 
     def test_help_message(self):
 
