@@ -95,7 +95,7 @@ def register_traitsui_ui_solvers(registry, target_class, traitsui_ui_getter):
         locator_class=locator.TargetByName,
         solver=lambda wrapper, location: (
             _get_editor_by_name(
-                ui=traitsui_ui_getter(wrapper.target),
+                ui=traitsui_ui_getter(wrapper._target),
                 name=location.name,
             )
         ),
@@ -105,7 +105,7 @@ def register_traitsui_ui_solvers(registry, target_class, traitsui_ui_getter):
         locator_class=locator.TargetById,
         solver=lambda wrapper, location: (
             _get_editor_by_id(
-                ui=traitsui_ui_getter(wrapper.target),
+                ui=traitsui_ui_getter(wrapper._target),
                 id=location.id,
             )
         ),

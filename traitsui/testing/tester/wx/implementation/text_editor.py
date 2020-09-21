@@ -35,14 +35,14 @@ def readonly_displayed_text_handler(wrapper, interaction):
     wx Readonly Editors occassionally use wx.TextCtrl as their control, and
     other times use wx.StaticText.
     '''
-    if isinstance(wrapper.target.control, wx.TextCtrl):
-        return wrapper.target.control.GetValue()
-    elif isinstance(wrapper.target.control, wx.StaticText):
-        return wrapper.target.control.GetLabel()
+    if isinstance(wrapper._target.control, wx.TextCtrl):
+        return wrapper._target.control.GetValue()
+    elif isinstance(wrapper._target.control, wx.StaticText):
+        return wrapper._target.control.GetLabel()
     raise TypeError("readonly_displayed_text_handler expected a UIWrapper with"
                     " a ReadonlyEditor as a target. ReadonlyEditor control"
                     " should always be either wx.TextCtrl, or wx.StaticText."
-                    " {} was found".format(wrapper.target.control))
+                    " {} was found".format(wrapper._target.control))
 
 
 def register(registry):
@@ -59,7 +59,7 @@ def register(registry):
         register_editable_textbox_handlers(
             registry=registry,
             target_class=target_class,
-            widget_getter=lambda wrapper: wrapper.target.control,
+            widget_getter=lambda wrapper: wrapper._target.control,
         )
 
     registry.register_handler(

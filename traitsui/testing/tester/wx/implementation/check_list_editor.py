@@ -25,10 +25,10 @@ class _IndexedCustomCheckListEditor(_BaseSourceWithLocation):
     handlers = [
         (command.MouseClick,
             (lambda wrapper, _: helpers.mouse_click_checkbox_child_in_panel(
-                control=wrapper.target.source.control,
+                control=wrapper._target.source.control,
                 index=convert_index(
-                    source=wrapper.target.source,
-                    index=wrapper.target.location.index
+                    source=wrapper._target.source,
+                    index=wrapper._target.location.index
                 ),
                 delay=wrapper.delay))),
     ]

@@ -28,8 +28,8 @@ class _IndexedListEditor(_BaseSourceWithLocation):
     locator_class = locator.Index
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_listbox(
-            control=wrapper.target.source.control,
-            index=wrapper.target.location.index,
+            control=wrapper._target.source.control,
+            index=wrapper._target.location.index,
             delay=wrapper.delay))),
     ]
 
@@ -42,10 +42,10 @@ class _IndexedRadioEditor(_BaseSourceWithLocation):
     handlers = [
         (command.MouseClick,
             (lambda wrapper, _: helpers.mouse_click_radiobutton_child_in_panel(
-                control=wrapper.target.source.control,
+                control=wrapper._target.source.control,
                 index=convert_index(
-                    source=wrapper.target.source,
-                    index=wrapper.target.location.index
+                    source=wrapper._target.source,
+                    index=wrapper._target.location.index
                 ),
                 delay=wrapper.delay))),
     ]
@@ -86,8 +86,8 @@ class _IndexedSimpleEditor(_BaseSourceWithLocation):
     handlers = [
         (command.MouseClick,
             (lambda wrapper, _: helpers.mouse_click_combobox_or_choice(
-                control=wrapper.target.source.control,
-                index=wrapper.target.location.index,
+                control=wrapper._target.source.control,
+                index=wrapper._target.location.index,
                 delay=wrapper.delay))),
     ]
 
@@ -105,7 +105,7 @@ def simple_displayed_selected_text_handler(wrapper, interaction):
         Unused in this function but included to match the expected format of a
         handler.  Should only be query.DisplayedText
     """
-    control = wrapper.target.control
+    control = wrapper._target.control
     if isinstance(control, wx.ComboBox):
         return control.GetValue()
     else:  # wx.Choice
@@ -123,7 +123,7 @@ def radio_selected_text_handler(wrapper, interaction):
         Unused in this function but included to match the expected format of a
         handler.  Should only be query.SelectedText
     """
-    children_list = wrapper.target.control.GetSizer().GetChildren()
+    children_list = wrapper._target.control.GetSizer().GetChildren()
     for child in children_list:
         if child.GetWindow().GetValue():
             return child.GetWindow().GetLabel()
@@ -144,12 +144,12 @@ def register(registry):
     simple_editor_text_handlers = [
         (command.KeyClick,
             (lambda wrapper, interaction: helpers.key_click_combobox(
-                control=wrapper.target.control,
+                control=wrapper._target.control,
                 interaction=interaction,
                 delay=wrapper.delay))),
         (command.KeySequence,
             (lambda wrapper, interaction: helpers.key_sequence_text_ctrl(
-                control=wrapper.target.control,
+                control=wrapper._target.control,
                 interaction=interaction,
                 delay=wrapper.delay))),
         (query.DisplayedText, simple_displayed_selected_text_handler),
@@ -171,6 +171,6 @@ def register(registry):
     registry.register_handler(
         target_class=ListEditor,
         interaction_class=query.SelectedText,
-        handler=lambda wrapper, _: wrapper.target.control.GetString(
-            wrapper.target.control.GetSelection()),
+        handler=lambda wrapper, _: wrapper._target.control.GetString(
+            wrapper._target.control.GetSelection()),
     )

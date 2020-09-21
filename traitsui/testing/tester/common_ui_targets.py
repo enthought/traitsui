@@ -69,7 +69,7 @@ class _BaseSourceWithLocation:
         registry.register_solver(
             target_class=cls.source_class,
             locator_class=cls.locator_class,
-            solver=lambda wrapper, location: cls(wrapper.target, location),
+            solver=lambda wrapper, location: cls(wrapper._target, location),
         )
         for interaction_class, handler in cls.handlers:
             registry.register_handler(

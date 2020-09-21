@@ -32,12 +32,12 @@ def register(registry):
         register_editable_textbox_handlers(
             registry=registry,
             target_class=target_class,
-            widget_getter=lambda wrapper: wrapper.target.control,
+            widget_getter=lambda wrapper: wrapper._target.control,
         )
 
     registry.register_handler(
         target_class=ReadonlyEditor,
         interaction_class=query.DisplayedText,
         handler=lambda wrapper, _: helpers.displayed_text_qobject(
-            wrapper.target.control),
+            wrapper._target.control),
     )

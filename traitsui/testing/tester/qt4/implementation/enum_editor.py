@@ -27,10 +27,10 @@ class _IndexedListEditor(_BaseSourceWithLocation):
     locator_class = locator.Index
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_item_view(
-            model=wrapper.target.source.control.model(),
-            view=wrapper.target.source.control,
-            index=wrapper.target.source.control.model().index(
-                wrapper.target.location.index, 0),
+            model=wrapper._target.source.control.model(),
+            view=wrapper._target.source.control,
+            index=wrapper._target.source.control.model().index(
+                wrapper._target.location.index, 0),
             delay=wrapper.delay))),
     ]
 
@@ -42,11 +42,11 @@ class _IndexedRadioEditor(_BaseSourceWithLocation):
     locator_class = locator.Index
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_qlayout(
-            layout=wrapper.target.source.control.layout(),
+            layout=wrapper._target.source.control.layout(),
             index=convert_index(
-                layout=wrapper.target.source.control.layout(),
-                index=wrapper.target.location.index,
-                row_major=wrapper.target.source.row_major
+                layout=wrapper._target.source.control.layout(),
+                index=wrapper._target.location.index,
+                row_major=wrapper._target.source.row_major
             ),
             delay=wrapper.delay))),
     ]
@@ -87,8 +87,8 @@ class _IndexedSimpleEditor(_BaseSourceWithLocation):
     locator_class = locator.Index
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_combobox(
-            combobox=wrapper.target.source.control,
-            index=wrapper.target.location.index,
+            combobox=wrapper._target.source.control,
+            index=wrapper._target.location.index,
             delay=wrapper.delay))),
     ]
 
@@ -104,7 +104,7 @@ def radio_selected_text_handler(wrapper, interaction):
         Unused in this function but included to match the expected format of a
         handler.  Should only be query.SelectedText
     """
-    control = wrapper.target.control
+    control = wrapper._target.control
     for index in range(control.layout().count()):
         if control.layout().itemAt(index).widget().isChecked():
             return control.layout().itemAt(index).widget().text()
@@ -125,18 +125,18 @@ def register(registry):
     simple_editor_text_handlers = [
         (command.KeyClick,
             (lambda wrapper, interaction: helpers.key_click_qwidget(
-                control=wrapper.target.control,
+                control=wrapper._target.control,
                 interaction=interaction,
                 delay=wrapper.delay))),
         (command.KeySequence,
             (lambda wrapper, interaction: helpers.key_sequence_qwidget(
-                control=wrapper.target.control,
+                control=wrapper._target.control,
                 interaction=interaction,
                 delay=wrapper.delay))),
         (query.DisplayedText,
-            lambda wrapper, _: wrapper.target.control.currentText()),
+            lambda wrapper, _: wrapper._target.control.currentText()),
         (query.SelectedText,
-            lambda wrapper, _: wrapper.target.control.currentText())
+            lambda wrapper, _: wrapper._target.control.currentText())
     ]
 
     for interaction_class, handler in simple_editor_text_handlers:
@@ -155,5 +155,5 @@ def register(registry):
     registry.register_handler(
         target_class=ListEditor,
         interaction_class=query.SelectedText,
-        handler=lambda wrapper, _: wrapper.target.control.currentItem().text(),
+        handler=lambda wrapper, _: wrapper._target.control.currentItem().text(),
     )

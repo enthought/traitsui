@@ -54,7 +54,7 @@ def register(registry):
         target_class=SimpleEditor,
         interaction_class=command.MouseClick,
         handler=lambda wrapper, _: mouse_click_button(
-            control=wrapper.target._button, delay=wrapper.delay,
+            control=wrapper._target._button, delay=wrapper.delay,
         )
     )
     register_traitsui_ui_solvers(registry, SimpleEditor, _get_nested_ui_simple)
