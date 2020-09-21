@@ -94,10 +94,7 @@ class UIWrapper:
         pairs = sorted(interactions.items(), key=lambda value: repr(value[0]))
         for interaction_class, doc in pairs:
             print(repr(interaction_class))
-            print(
-                *("    " + line for line in doc.split("\n")),
-                sep="\n",
-            )
+            print(textwrap.indent(doc, prefix="    "))
             print()
 
         if not interactions:
