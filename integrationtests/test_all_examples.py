@@ -471,14 +471,15 @@ class TestInteractExample(unittest.TestCase):
             demo.name_list = 'Foo'
 
             displayed_simple = simple_enum.inspect(query.DisplayedText())
-            displayed_simple_text = simple_text_enum.inspect(query.DisplayedText())
+            disp_simple_text = simple_text_enum.inspect(query.DisplayedText())
             selected_radio = radio_enum.inspect(query.SelectedText())
             selected_list = list_enum.inspect(query.SelectedText())
             displayed_text = text.inspect(query.DisplayedText())
             displayed_readonly = readonly.inspect(query.DisplayedText())
-            
+
             displayed_selected = [
-                displayed_simple, displayed_simple_text, selected_radio, selected_list, displayed_text, displayed_readonly
+                displayed_simple, disp_simple_text, selected_radio,
+                selected_list, displayed_text, displayed_readonly
             ]
             for _ in displayed_selected:
                 self.assertEqual(_, 'Foo')
