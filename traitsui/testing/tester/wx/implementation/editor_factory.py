@@ -64,4 +64,3 @@ def register(registry):
         interaction_class=query.DisplayedText,
         handler=readonly_displayed_text_handler,
     )
-  
