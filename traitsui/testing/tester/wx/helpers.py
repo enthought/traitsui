@@ -400,7 +400,7 @@ def readonly_textbox_displayed_text(control):
     Parameters
     ----------
     control : wx.TextCtrl or wx.StaticText
-        the textbox object from which the text if interest is displayed
+        the textbox object from which the text of interest is displayed
     '''
     if isinstance(control, wx.TextCtrl):
         return control.GetValue()
