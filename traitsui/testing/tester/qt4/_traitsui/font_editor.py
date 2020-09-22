@@ -8,31 +8,24 @@
 #
 #  Thanks for using Enthought open source!
 #
-from traitsui.testing.tester import query
-from traitsui.testing.tester.qt4.registry_helper import (
+
+from traitsui.testing.tester.qt4._registry_helper import (
     register_editable_textbox_handlers,
 )
-from traitsui.qt4.editor_factory import ReadonlyEditor, TextEditor
+from traitsui.qt4.font_editor import TextFontEditor
 
 
 def register(registry):
-    """ Register interactions for the given registry.
-
-    If there are any conflicts, an error will occur.
+    """ Register interactions pertaining to (Qt) FontEditor for the given
+    registry.
 
     Parameters
     ----------
     registry : TargetRegistry
         The registry being registered to.
     """
-
     register_editable_textbox_handlers(
         registry=registry,
-        target_class=TextEditor,
+        target_class=TextFontEditor,
         widget_getter=lambda wrapper: wrapper._target.control,
-    )
-    registry.register_handler(
-        target_class=ReadonlyEditor,
-        interaction_class=query.DisplayedText,
-        handler=lambda wrapper, _: wrapper._target.control.text()
     )

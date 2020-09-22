@@ -11,7 +11,7 @@
 from traitsui.wx.text_editor import CustomEditor, ReadonlyEditor, SimpleEditor
 from traitsui.testing.tester import query
 from traitsui.testing.tester.wx import _interaction_helpers
-from traitsui.testing.tester.wx.registry_helper import (
+from traitsui.testing.tester.wx._registry_helper import (
     register_editable_textbox_handlers,
 )
 

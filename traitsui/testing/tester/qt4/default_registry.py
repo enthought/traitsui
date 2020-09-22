@@ -10,7 +10,7 @@
 #
 
 from traitsui.testing.tester.registry import TargetRegistry
-from traitsui.testing.tester.qt4.implementation import (
+from traitsui.testing.tester.qt4._traitsui import (
     button_editor,
     check_list_editor,
     editor_factory,

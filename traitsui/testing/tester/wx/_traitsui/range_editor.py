@@ -16,7 +16,7 @@ from traitsui.wx.range_editor import (
 )
 
 from traitsui.testing.tester import command, locator
-from traitsui.testing.tester.wx import _interaction_helpers, registry_helper
+from traitsui.testing.tester.wx import _interaction_helpers, _registry_helper
 
 
 class LocatedTextbox:
@@ -108,7 +108,7 @@ def register(registry):
             solver=lambda wrapper, _: LocatedSlider(
                 slider=wrapper._target.control.slider),
         )
-    registry_helper.register_editable_textbox_handlers(
+    _registry_helper.register_editable_textbox_handlers(
         registry=registry,
         target_class=RangeTextEditor,
         widget_getter=lambda wrapper: wrapper._target.control,

@@ -10,7 +10,7 @@
 #
 
 from traitsui.testing.tester.registry import TargetRegistry
-from traitsui.testing.tester.wx.implementation import (
+from traitsui.testing.tester.wx._traitsui import (
     button_editor,
     check_list_editor,
     editor_factory,
