@@ -1,5 +1,5 @@
 """
-This example demonstrates how to test interacting with a textbox created
+This example demonstrates how to test interacting with a UI created
 using InstanceEditor.
 
 The GUI being tested is written in the demo under the same name (minus the
