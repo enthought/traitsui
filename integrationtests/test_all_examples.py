@@ -30,8 +30,6 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
-from traitsui.testing.tester import command, locator, query
-from traitsui.testing.tester.ui_tester import UITester
 
 # This test file is not distributed nor is it in a package.
 HERE = os.path.dirname(__file__)
