@@ -8,8 +8,7 @@
 #
 #  Thanks for using Enthought open source!
 #
-
-from traitsui.qt4.range_editor import (
+from traitsui.wx.range_editor import (
     LargeRangeSliderEditor,
     LogRangeSliderEditor,
     RangeTextEditor,
@@ -17,8 +16,8 @@ from traitsui.qt4.range_editor import (
 )
 
 from traitsui.testing.tester import locator
-from traitsui.testing.tester.qt4 import registry_helper
-from traitsui.testing.tester.qt4.common_ui_targets import (
+from traitsui.testing.tester.wx import _registry_helper
+from traitsui.testing.tester.wx.common_ui_targets import (
     LocatedSlider,
     LocatedTextbox
 )
@@ -51,7 +50,7 @@ def register(registry):
             solver=lambda wrapper, _: LocatedSlider(
                 slider=wrapper._target.control.slider),
         )
-    registry_helper.register_editable_textbox_handlers(
+    _registry_helper.register_editable_textbox_handlers(
         registry=registry,
         target_class=RangeTextEditor,
         widget_getter=lambda wrapper: wrapper._target.control,

@@ -8,16 +8,18 @@
 #
 #  Thanks for using Enthought open source!
 #
-
-from traitsui.testing.tester.wx.registry_helper import (
+from traitsui.wx.editor_factory import ReadonlyEditor, TextEditor
+from traitsui.testing.tester import query
+from traitsui.testing.tester.wx import _interaction_helpers
+from traitsui.testing.tester.wx._registry_helper import (
     register_editable_textbox_handlers,
 )
-from traitsui.wx.font_editor import TextFontEditor
 
 
 def register(registry):
-    """ Register interactions pertaining to (wx) FontEditor for the given
-    registry.
+    """ Register interactions for the given registry.
+
+    If there are any conflicts, an error will occur.
 
     Parameters
     ----------
@@ -26,6 +28,13 @@ def register(registry):
     """
     register_editable_textbox_handlers(
         registry=registry,
-        target_class=TextFontEditor,
+        target_class=TextEditor,
         widget_getter=lambda wrapper: wrapper._target.control,
+    )
+    registry.register_handler(
+        target_class=ReadonlyEditor,
+        interaction_class=query.DisplayedText,
+        handler=lambda wrapper, _:
+            _interaction_helpers.readonly_textbox_displayed_text(
+                wrapper._target.control),
     )
