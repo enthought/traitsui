@@ -96,12 +96,13 @@ class ExampleSearcher:
 
     @staticmethod
     def _is_python_file(path):
-        """ Return true if the given path is (public) Python file."""
+        """ Return true if the given path is (public) non-test Python file."""
         _, basename = os.path.split(path)
         _, ext = os.path.splitext(basename)
         return (
             ext == ".py"
             and not basename.startswith("_")
+            and not basename.startswith("test_")
         )
 
     def get_python_files(self):
@@ -305,6 +306,43 @@ def load_demo(file_path, variable_name="demo"):
     globals_ = globals().copy()
     exec(content, globals_)
     return globals_[variable_name]
+
+
+# =============================================================================
+# load_tests protocol for unittest discover
+# =============================================================================
+
+
+def load_tests(loader, tests, pattern):
+    """ Implement load_tests protocol so that when unittest discover is run
+    with this test module, the tests in the demo folder (not a package) are
+    also loaded.
+
+    See unittest documentation on load_tests
+    """
+    # Keep all the other loaded tests.
+    suite = unittest.TestSuite()
+    suite.addTests(tests)
+
+    # Expand the test suite with tests from the examples, assuming
+    # the test for ``group/script.py`` is placed in ``group/tests/`` directory.
+    accepted_files, _ = SEARCHER.get_python_files()
+    test_dirs = set(
+        os.path.join(os.path.dirname(path), "tests") for path in accepted_files
+    )
+    test_dirs = set(path for path in test_dirs if os.path.exists(path))
+    for dirpath in sorted(test_dirs):
+
+        # Test files are scripts too and they demonstrate running the
+        # tests. Mock the run side-effect when we load the test cases.
+        with mock.patch.object(unittest.TextTestRunner, "run"):
+            test_suite = unittest.TestLoader().discover(
+                dirpath, pattern=pattern
+            )
+        if is_qt() or is_wx():
+            suite.addTests(test_suite)
+
+    return suite
 
 
 # =============================================================================
