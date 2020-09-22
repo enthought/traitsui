@@ -88,7 +88,7 @@ class TestUITesterFindEditor(unittest.TestCase):
             self.assertIsInstance(wrapper, UIWrapper)
 
             expected, = ui.get_editors("submit_button")
-            self.assertEqual(wrapper.target, expected)
+            self.assertEqual(wrapper._target, expected)
             self.assertEqual(
                 wrapper._registries,
                 tester._registries,
@@ -133,7 +133,7 @@ class TestUITesterFindEditor(unittest.TestCase):
         view = View(item1, item2)
         with tester.create_ui(Order(), dict(view=view)) as ui:
             wrapper = tester.find_by_id(ui, "item2")
-            self.assertIs(wrapper.target.item, item2)
+            self.assertIs(wrapper._target.item, item2)
             self.assertEqual(wrapper._registries, tester._registries)
             self.assertEqual(wrapper.delay, tester.delay)
 
@@ -146,4 +146,4 @@ class TestUITesterFindEditor(unittest.TestCase):
         view = View(item1, item2, item3)
         with tester.create_ui(Order(), dict(view=view)) as ui:
             wrapper = tester.find_by_id(ui, "item2")
-            self.assertIs(wrapper.target.item, item2)
+            self.assertIs(wrapper._target.item, item2)

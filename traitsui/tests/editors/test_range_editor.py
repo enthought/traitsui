@@ -35,7 +35,7 @@ def _register_simple_spin(registry):
     registry_helper.register_editable_textbox_handlers(
         registry=registry,
         target_class=SimpleSpinEditor,
-        widget_getter=lambda wrapper: wrapper.target.control.lineEdit(),
+        widget_getter=lambda wrapper: wrapper._target.control.lineEdit(),
     )
 
 
