@@ -566,3 +566,21 @@ class TestInteractExample(unittest.TestCase):
             custom_displayed = custom_name.inspect(query.DisplayedText())
             self.assertEqual(simple_displayed, "XYZ")
             self.assertEqual(custom_displayed, "XYZ")
+
+    def test_list_editor_notebook_selection_demo(self):
+        # Test List_editor_notebook_selection_demo.py in examples/demo/Advanced
+        filepath = os.path.join(
+            DEMO, "Advanced", "List_editor_notebook_selection_demo.py"
+        )
+        demo = load_demo(filepath, "demo")
+
+        tester = UITester()
+        with tester.create_ui(demo) as ui:
+            people_list = tester.find_by_name(ui, "people")
+            person2 = people_list.locate(locator.Index(2))
+            person2.perform(command.MouseClick())
+            self.assertEqual(demo.index, 2)
+            age = person2.find_by_name("age")
+            age.perform(command.KeyClick("Backspace"))
+            age.perform(command.KeyClick("9"))
+            self.assertEqual(demo.people[2].age, 39)
