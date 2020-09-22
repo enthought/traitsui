@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-""" Tests for traitsui.testing.exception_handling """
+""" Tests for traitsui.testing._exception_handling """
 
 import unittest
 
@@ -20,7 +20,7 @@ from traitsui.tests._tools import (
     requires_toolkit,
     ToolkitName,
 )
-from traitsui.testing.exception_handling import reraise_exceptions
+from traitsui.testing._exception_handling import reraise_exceptions
 
 
 class TestExceptionHandling(unittest.TestCase):

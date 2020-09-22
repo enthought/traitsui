@@ -23,8 +23,8 @@ from traits.etsconfig.api import ETSConfig
 
 # These functions are imported by traitsui's own tests. They can be redirected
 # to traitsui.testing and then these aliases can be removed.
-from traitsui.testing.exception_handling import reraise_exceptions  # noqa
-from traitsui.testing.gui import process_cascade_events  # noqa: F401
+from traitsui.testing._exception_handling import reraise_exceptions  # noqa
+from traitsui.testing._gui import process_cascade_events  # noqa: F401
 from traitsui.testing.tester.ui_tester import UITester
 
 # ######### Testing tools

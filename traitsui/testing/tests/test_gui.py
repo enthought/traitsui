@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-""" Tests for traitsui.testing.gui """
+""" Tests for traitsui.testing._gui """
 
 import os
 import unittest
