@@ -14,6 +14,7 @@ from traitsui.testing.tester.wx import common_ui_targets
 from traitsui.testing.tester.wx.implementation import (
     button_editor,
     check_list_editor,
+    editor_factory,
     enum_editor,
     font_editor,
     instance_editor,
@@ -65,5 +66,8 @@ def get_default_registry():
 
     # InstanceEditor
     instance_editor.register(registry)
+
+    # Editor Factory
+    editor_factory.register(registry)
 
     return registry
