@@ -12,15 +12,17 @@ import os
 import runpy
 import unittest
 
+from pyface.toolkit import toolkit_object
+from pyface.constant import OK
 # FIXME: Import from api instead
 # enthought/traitsui#1173
 from traitsui.testing.tester import command
 from traitsui.testing.tester.ui_tester import UITester
 
-from traitsui.tests._tools import (
-    requires_toolkit,
-    ToolkitName,
+ModalDialogTester = toolkit_object(
+    "util.modal_dialog_tester:ModalDialogTester"
 )
+no_modal_dialog_tester = ModalDialogTester.__name__ == "Unimplemented"
 
 #: Filename of the demo script
 FILENAME = "ButtonEditor_demo.py"
@@ -28,14 +30,10 @@ FILENAME = "ButtonEditor_demo.py"
 #: Path of the demo script
 DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 
-
+@unittest.skipIf(no_modal_dialog_tester, "ModalDialogTester unavailable")
 class TestButtonEditorDemo(unittest.TestCase):
 
-    @requires_toolkit([ToolkitName.qt])
     def test_button_editor_demo(self):
-        from pyface.ui.qt4.util.modal_dialog_tester import ModalDialogTester
-        from pyface.constant import OK
-
         demo = runpy.run_path(DEMO_PATH)["demo"]
 
         tester = UITester()
