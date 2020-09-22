@@ -42,13 +42,15 @@ class TextEditorDemo(HasTraits):
 
     # TextEditor display without multi-line capability (for an integer):
     text_int_group = Group(
-        Item('int_trait', style='simple', label='Simple'),
+        Item('int_trait', style='simple', label='Simple', id="simple_int"),
         Item('_'),
-        Item('int_trait', style='custom', label='Custom'),
+        Item('int_trait', style='custom', label='Custom', id="custom_int"),
         Item('_'),
-        Item('int_trait', style='text', label='Text'),
+        Item('int_trait', style='text', label='Text', id="text_int"),
         Item('_'),
-        Item('int_trait', style='readonly', label='ReadOnly'),
+        Item(
+            'int_trait', style='readonly', label='ReadOnly', id="readonly_int",
+        ),
         label='Integer'
     )
 

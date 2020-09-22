@@ -96,12 +96,13 @@ class ExampleSearcher:
 
     @staticmethod
     def _is_python_file(path):
-        """ Return true if the given path is (public) Python file."""
+        """ Return true if the given path is (public) non-test Python file."""
         _, basename = os.path.split(path)
         _, ext = os.path.splitext(basename)
         return (
             ext == ".py"
             and not basename.startswith("_")
+            and not basename.startswith("test_")
         )
 
     def get_python_files(self):
