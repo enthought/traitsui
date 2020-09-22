@@ -12,7 +12,7 @@ import unittest
 
 # FIXME: Import from api instead
 # enthought/traitsui#1173
-from traitsui.testing.tester import command, locator, query
+from traitsui.testing.tester import command, locator
 from traitsui.testing.tester.ui_tester import UITester
 
 #: Filename of the demo script
@@ -21,14 +21,12 @@ FILENAME = "List_editor_notebook_selection_demo.py"
 #: Path of the demo script
 DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 
+
 class TestListEditorNotebookSelectionDemo(unittest.TestCase):
 
     def test_list_editor_notebook_selection_demo(self):
         # Test List_editor_notebook_selection_demo.py in examples/demo/Advanced
-        filepath = os.path.join(
-            DEMO, "Advanced", "List_editor_notebook_selection_demo.py"
-        )
-        demo = load_demo(filepath, "demo")
+        demo = runpy.run_path(DEMO_PATH)["demo"]
 
         tester = UITester()
         with tester.create_ui(demo) as ui:
@@ -44,5 +42,6 @@ class TestListEditorNotebookSelectionDemo(unittest.TestCase):
 
 # Run the test(s)
 unittest.TextTestRunner().run(
-    unittest.TestLoader().loadTestsFromTestCase(TestListEditorNotebookSelectionDemo)
+    unittest.TestLoader().loadTestsFromTestCase(
+        TestListEditorNotebookSelectionDemo)
 )

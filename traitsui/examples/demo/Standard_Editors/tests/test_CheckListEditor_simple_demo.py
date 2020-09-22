@@ -12,7 +12,7 @@ import unittest
 
 # FIXME: Import from api instead
 # enthought/traitsui#1173
-from traitsui.testing.tester import command, locator, query
+from traitsui.testing.tester import command, locator
 from traitsui.testing.tester.ui_tester import UITester
 
 #: Filename of the demo script

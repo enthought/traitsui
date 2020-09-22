@@ -11,7 +11,7 @@ import unittest
 
 # FIXME: Import from api instead
 # enthought/traitsui#1173
-from traitsui.testing.tester import command, locator, query
+from traitsui.testing.tester import command, query
 from traitsui.testing.tester.ui_tester import UITester
 
 #: Filename of the demo script
@@ -19,6 +19,7 @@ FILENAME = "converter.py"
 
 #: Path of the demo script
 DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
+
 
 class TestConverter(unittest.TestCase):
     def test_converter(self):
@@ -40,6 +41,7 @@ class TestConverter(unittest.TestCase):
                 output_amount.inspect(query.DisplayedText()),
                 "1.0",
             )
+
 
 # Run the test(s)
 unittest.TextTestRunner().run(

@@ -1,7 +1,7 @@
 """
 This example demonstrates how to test interacting with a button created
 using ButtonEditor.
-It also demonstarates the use of UI Tester, together with pyface's 
+It also demonstarates the use of UI Tester, together with pyface's
 ModalDialogTester.
 
 The GUI being tested is written in the demo under the same name (minus the
@@ -14,8 +14,13 @@ import unittest
 
 # FIXME: Import from api instead
 # enthought/traitsui#1173
-from traitsui.testing.tester import command, locator, query
+from traitsui.testing.tester import command
 from traitsui.testing.tester.ui_tester import UITester
+
+from traitsui.tests._tools import (
+    requires_toolkit,
+    ToolkitName,
+)
 
 #: Filename of the demo script
 FILENAME = "ButtonEditor_demo.py"
