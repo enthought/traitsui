@@ -13,7 +13,7 @@ from traitsui.testing.tester.common_ui_targets import _BaseSourceWithLocation
 from traitsui.testing.tester.registry_helper import (
     register_traitsui_ui_solvers,
 )
-from traitsui.testing.tester.qt4 import helpers
+from traitsui.testing.tester.qt4 import _interaction_helpers
 from traitsui.qt4.list_editor import (
     CustomEditor,
     NotebookEditor,
@@ -27,7 +27,7 @@ class _IndexedNotebookEditor(_BaseSourceWithLocation):
     locator_class = locator.Index
     handlers = [
         (command.MouseClick,
-            (lambda wrapper, _: helpers.mouse_click_tab_index(
+            (lambda wrapper, _: _interaction_helpers.mouse_click_tab_index(
                 tab_widget=wrapper._target.source.control,
                 index=wrapper._target.location.index,
                 delay=wrapper.delay))),

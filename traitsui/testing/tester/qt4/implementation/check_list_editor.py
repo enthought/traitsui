@@ -12,8 +12,8 @@
 from traitsui.qt4.check_list_editor import CustomEditor
 from traitsui.testing.tester import command, locator
 from traitsui.testing.tester.common_ui_targets import _BaseSourceWithLocation
-from traitsui.testing.tester.editors.layout import column_major_to_row_major
-from traitsui.testing.tester.qt4 import helpers
+from traitsui.testing.tester.editors._layout import column_major_to_row_major
+from traitsui.testing.tester.qt4 import _interaction_helpers
 
 
 class _IndexedCustomCheckListEditor(_BaseSourceWithLocation):
@@ -21,13 +21,14 @@ class _IndexedCustomCheckListEditor(_BaseSourceWithLocation):
     source_class = CustomEditor
     locator_class = locator.Index
     handlers = [
-        (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_qlayout(
-            layout=wrapper._target.source.control.layout(),
-            index=convert_index(
+        (command.MouseClick,
+            (lambda wrapper, _: _interaction_helpers.mouse_click_qlayout(
                 layout=wrapper._target.source.control.layout(),
-                index=wrapper._target.location.index,
-            ),
-            delay=wrapper.delay))),
+                index=convert_index(
+                    layout=wrapper._target.source.control.layout(),
+                    index=wrapper._target.location.index,
+                ),
+                delay=wrapper.delay))),
     ]
 
 

@@ -17,8 +17,8 @@ from traitsui.wx.enum_editor import (
 )
 from traitsui.testing.tester import command, locator, query
 from traitsui.testing.tester.common_ui_targets import _BaseSourceWithLocation
-from traitsui.testing.tester.wx import helpers
-from traitsui.testing.tester.editors.layout import column_major_to_row_major
+from traitsui.testing.tester.wx import _interaction_helpers
+from traitsui.testing.tester.editors._layout import column_major_to_row_major
 
 
 class _IndexedListEditor(_BaseSourceWithLocation):
@@ -27,10 +27,12 @@ class _IndexedListEditor(_BaseSourceWithLocation):
     source_class = ListEditor
     locator_class = locator.Index
     handlers = [
-        (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_listbox(
-            control=wrapper._target.source.control,
-            index=wrapper._target.location.index,
-            delay=wrapper.delay))),
+        (command.MouseClick,
+            (lambda wrapper, _:
+                _interaction_helpers.mouse_click_listbox(
+                    control=wrapper._target.source.control,
+                    index=wrapper._target.location.index,
+                    delay=wrapper.delay))),
     ]
 
 
@@ -41,13 +43,14 @@ class _IndexedRadioEditor(_BaseSourceWithLocation):
     locator_class = locator.Index
     handlers = [
         (command.MouseClick,
-            (lambda wrapper, _: helpers.mouse_click_radiobutton_child_in_panel(
-                control=wrapper._target.source.control,
-                index=convert_index(
-                    source=wrapper._target.source,
-                    index=wrapper._target.location.index
-                ),
-                delay=wrapper.delay))),
+            (lambda wrapper, _:
+                _interaction_helpers.mouse_click_radiobutton_child_in_panel(
+                    control=wrapper._target.source.control,
+                    index=convert_index(
+                        source=wrapper._target.source,
+                        index=wrapper._target.location.index
+                    ),
+                    delay=wrapper.delay))),
     ]
 
 
@@ -85,10 +88,11 @@ class _IndexedSimpleEditor(_BaseSourceWithLocation):
     locator_class = locator.Index
     handlers = [
         (command.MouseClick,
-            (lambda wrapper, _: helpers.mouse_click_combobox_or_choice(
-                control=wrapper._target.source.control,
-                index=wrapper._target.location.index,
-                delay=wrapper.delay))),
+            (lambda wrapper, _:
+                _interaction_helpers.mouse_click_combobox_or_choice(
+                    control=wrapper._target.source.control,
+                    index=wrapper._target.location.index,
+                    delay=wrapper.delay))),
     ]
 
 
@@ -143,15 +147,17 @@ def register(registry):
 
     simple_editor_text_handlers = [
         (command.KeyClick,
-            (lambda wrapper, interaction: helpers.key_click_combobox(
-                control=wrapper._target.control,
-                interaction=interaction,
-                delay=wrapper.delay))),
+            (lambda wrapper, interaction:
+                _interaction_helpers.key_click_combobox(
+                    control=wrapper._target.control,
+                    interaction=interaction,
+                    delay=wrapper.delay))),
         (command.KeySequence,
-            (lambda wrapper, interaction: helpers.key_sequence_text_ctrl(
-                control=wrapper._target.control,
-                interaction=interaction,
-                delay=wrapper.delay))),
+            (lambda wrapper, interaction:
+                _interaction_helpers.key_sequence_text_ctrl(
+                    control=wrapper._target.control,
+                    interaction=interaction,
+                    delay=wrapper.delay))),
         (query.DisplayedText, simple_displayed_selected_text_handler),
         (query.SelectedText, simple_displayed_selected_text_handler)
     ]

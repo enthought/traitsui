@@ -19,7 +19,7 @@ from traitsui.tests._tools import (
 )
 from traitsui.testing.tester import command
 from traitsui.testing.tester.exceptions import Disabled
-from traitsui.testing.tester.qt4 import helpers
+from traitsui.testing.tester.qt4 import _interaction_helpers
 
 try:
     from pyface.qt import QtGui
@@ -36,7 +36,7 @@ class TestInteractions(unittest.TestCase):
         click_slot = mock.Mock()
         button.clicked.connect(click_slot)
 
-        helpers.mouse_click_qwidget(button, 0)
+        _interaction_helpers.mouse_click_qwidget(button, 0)
 
         self.assertEqual(click_slot.call_count, 1)
 
@@ -50,7 +50,7 @@ class TestInteractions(unittest.TestCase):
         # when
         # clicking won't fail, it just does not do anything.
         # This is consistent with the actual UI.
-        helpers.mouse_click_qwidget(button, 0)
+        _interaction_helpers.mouse_click_qwidget(button, 0)
 
         # then
         self.assertEqual(click_slot.call_count, 0)
@@ -63,9 +63,8 @@ class TestInteractions(unittest.TestCase):
             textbox.textChanged.connect(change_slot)
 
             # when
-            helpers.key_sequence_qwidget(textbox,
-                                         command.KeySequence("abc"),
-                                         0)
+            _interaction_helpers.key_sequence_qwidget(
+                textbox, command.KeySequence("abc"), 0)
 
             # then
             if i == 0:
@@ -77,9 +76,8 @@ class TestInteractions(unittest.TestCase):
 
         # for a QLabel, one can try a key sequence and nothing will happen
         textbox = QtGui.QLabel()
-        helpers.key_sequence_qwidget(textbox,
-                                     command.KeySequence("abc"),
-                                     0)
+        _interaction_helpers.key_sequence_qwidget(
+            textbox, command.KeySequence("abc"), 0)
         self.assertEqual(textbox.text(), "")
 
     def test_key_sequence_textbox_with_unicode(self):
@@ -90,7 +88,7 @@ class TestInteractions(unittest.TestCase):
                 textbox.textChanged.connect(change_slot)
 
                 # when
-                helpers.key_sequence_textbox(
+                _interaction_helpers.key_sequence_textbox(
                     textbox,
                     command.KeySequence(chr(code) * 3),
                     delay=0,
@@ -105,7 +103,7 @@ class TestInteractions(unittest.TestCase):
 
         with self.assertRaises(ValueError) as exception_context:
             # QTest does not support this character.
-            helpers.key_sequence_textbox(
+            _interaction_helpers.key_sequence_textbox(
                 textbox,
                 command.KeySequence(chr(31)),
                 delay=0,
@@ -122,7 +120,7 @@ class TestInteractions(unittest.TestCase):
         textbox = QtGui.QLineEdit()
 
         with self.assertRaises(ValueError) as exception_context:
-            helpers.key_sequence_textbox(
+            _interaction_helpers.key_sequence_textbox(
                 textbox,
                 command.KeySequence("\b"),
                 delay=0,
@@ -138,7 +136,7 @@ class TestInteractions(unittest.TestCase):
         textbox.setText("123")
 
         # when
-        helpers.key_sequence_textbox(
+        _interaction_helpers.key_sequence_textbox(
             textbox,
             command.KeySequence("abc"),
             delay=0,
@@ -154,7 +152,7 @@ class TestInteractions(unittest.TestCase):
         textbox.setText("123")
 
         # when
-        helpers.key_sequence_textbox(
+        _interaction_helpers.key_sequence_textbox(
             textbox,
             command.KeySequence("abc"),
             delay=0,
@@ -170,9 +168,8 @@ class TestInteractions(unittest.TestCase):
         # this will fail, because one should not be allowed to set
         # cursor on the widget to type anything
         with self.assertRaises(Disabled):
-            helpers.key_sequence_qwidget(textbox,
-                                         command.KeySequence("abc"),
-                                         0)
+            _interaction_helpers.key_sequence_qwidget(
+                textbox, command.KeySequence("abc"), 0)
 
     def test_key_click(self):
         textbox = QtGui.QLineEdit()
@@ -180,10 +177,12 @@ class TestInteractions(unittest.TestCase):
         textbox.editingFinished.connect(change_slot)
 
         # sanity check on editingFinished signal
-        helpers.key_sequence_qwidget(textbox, command.KeySequence("abc"), 0)
+        _interaction_helpers.key_sequence_qwidget(
+            textbox, command.KeySequence("abc"), 0)
         self.assertEqual(change_slot.call_count, 0)
 
-        helpers.key_click_qwidget(textbox, command.KeyClick("Enter"), 0)
+        _interaction_helpers.key_click_qwidget(
+            textbox, command.KeyClick("Enter"), 0)
         self.assertEqual(change_slot.call_count, 1)
 
         # test on a different Qwidget object - QtGui.QTextEdit()
@@ -191,13 +190,15 @@ class TestInteractions(unittest.TestCase):
         change_slot = mock.Mock()
         # Now "Enter" should not finish editing, but instead go to next line
         textbox.textChanged.connect(change_slot)
-        helpers.key_click_qwidget(textbox, command.KeyClick("Enter"), 0)
+        _interaction_helpers.key_click_qwidget(
+            textbox, command.KeyClick("Enter"), 0)
         self.assertEqual(change_slot.call_count, 1)
         self.assertEqual(textbox.toPlainText(), "\n")
 
         # for a QLabel, one can try a key click and nothing will happen
         textbox = QtGui.QLabel()
-        helpers.key_click_qwidget(textbox, command.KeyClick("A"), 0)
+        _interaction_helpers.key_click_qwidget(
+            textbox, command.KeyClick("A"), 0)
         self.assertEqual(textbox.text(), "")
 
     def test_key_click_disabled(self):
@@ -207,7 +208,8 @@ class TestInteractions(unittest.TestCase):
         textbox.editingFinished.connect(change_slot)
 
         with self.assertRaises(Disabled):
-            helpers.key_click_qwidget(textbox, command.KeyClick("Enter"), 0)
+            _interaction_helpers.key_click_qwidget(
+                textbox, command.KeyClick("Enter"), 0)
         self.assertEqual(change_slot.call_count, 0)
 
     def test_check_q_model_index_valid(self):
@@ -218,14 +220,15 @@ class TestInteractions(unittest.TestCase):
         self.bad_q_index = self.widget.model().index(10, 0)
 
         self.model = self.widget.model()
-        helpers.check_q_model_index_valid(self.good_q_index)
+        _interaction_helpers.check_q_model_index_valid(self.good_q_index)
         with self.assertRaises(LookupError):
-            helpers.check_q_model_index_valid(self.bad_q_index)
+            _interaction_helpers.check_q_model_index_valid(self.bad_q_index)
 
     def test_key_click_q_slider_helpful_err(self):
         slider = QtGui.QSlider()
         with self.assertRaises(ValueError) as exc:
-            helpers.key_click_qslider(slider, command.KeyClick("Enter"), 0)
+            _interaction_helpers.key_click_qslider(
+                slider, command.KeyClick("Enter"), 0)
         self.assertIn(
             "['Down', 'Left', 'Page Down', 'Page Up', 'Right', 'Up']",
             str(exc.exception)

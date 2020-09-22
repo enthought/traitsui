@@ -10,7 +10,7 @@
 #
 from traitsui.wx.ui_base import ButtonEditor
 from traitsui.testing.tester import command, query
-from traitsui.testing.tester.wx import helpers
+from traitsui.testing.tester.wx import _interaction_helpers
 
 
 def register(registry):
@@ -27,7 +27,7 @@ def register(registry):
     registry.register_handler(
         target_class=ButtonEditor,
         interaction_class=command.MouseClick,
-        handler=(lambda wrapper, _: helpers.mouse_click_button(
+        handler=(lambda wrapper, _: _interaction_helpers.mouse_click_button(
                  control=wrapper._target.control, delay=wrapper.delay))
     )
 

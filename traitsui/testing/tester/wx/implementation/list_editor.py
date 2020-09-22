@@ -13,7 +13,7 @@ from traitsui.testing.tester.common_ui_targets import _BaseSourceWithLocation
 from traitsui.testing.tester.registry_helper import (
     register_traitsui_ui_solvers,
 )
-from traitsui.testing.tester.wx import helpers
+from traitsui.testing.tester.wx import _interaction_helpers
 from traitsui.wx.list_editor import (
     CustomEditor,
     NotebookEditor,
@@ -27,10 +27,11 @@ class _IndexedNotebookEditor(_BaseSourceWithLocation):
     locator_class = locator.Index
     handlers = [
         (command.MouseClick,
-            (lambda wrapper, _: helpers.mouse_click_notebook_tab_index(
-                control=wrapper._target.source.control,
-                index=wrapper._target.location.index,
-                delay=wrapper.delay))),
+            (lambda wrapper, _:
+                _interaction_helpers.mouse_click_notebook_tab_index(
+                    control=wrapper._target.source.control,
+                    index=wrapper._target.location.index,
+                    delay=wrapper.delay))),
     ]
 
     @classmethod

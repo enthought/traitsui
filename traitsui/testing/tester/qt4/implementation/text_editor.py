@@ -10,7 +10,7 @@
 #
 
 from traitsui.testing.tester import query
-from traitsui.testing.tester.qt4 import helpers
+from traitsui.testing.tester.qt4 import _interaction_helpers
 from traitsui.testing.tester.qt4.registry_helper import (
     register_editable_textbox_handlers,
 )
@@ -38,6 +38,6 @@ def register(registry):
     registry.register_handler(
         target_class=ReadonlyEditor,
         interaction_class=query.DisplayedText,
-        handler=lambda wrapper, _: helpers.displayed_text_qobject(
+        handler=lambda wrapper, _: _interaction_helpers.displayed_text_qobject(
             wrapper._target.control),
     )

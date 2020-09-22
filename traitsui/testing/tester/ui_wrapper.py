@@ -12,10 +12,10 @@
 from contextlib import contextmanager
 import textwrap
 
-from traitsui.testing.exception_handling import (
+from traitsui.testing._exception_handling import (
     reraise_exceptions as _reraise_exceptions,
 )
-from traitsui.testing.gui import (
+from traitsui.testing._gui import (
     process_cascade_events as _process_cascade_events,
 )
 from traitsui.testing.tester import locator

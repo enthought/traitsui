@@ -10,7 +10,7 @@
 #
 from traitsui.wx.editor_factory import ReadonlyEditor, TextEditor
 from traitsui.testing.tester import query
-from traitsui.testing.tester.wx import helpers
+from traitsui.testing.tester.wx import _interaction_helpers
 from traitsui.testing.tester.wx.registry_helper import (
     register_editable_textbox_handlers,
 )
@@ -35,5 +35,6 @@ def register(registry):
         target_class=ReadonlyEditor,
         interaction_class=query.DisplayedText,
         handler=lambda wrapper, _:
-            helpers.readonly_textbox_displayed_text(wrapper._target.control),
+            _interaction_helpers.readonly_textbox_displayed_text(
+                wrapper._target.control),
     )
