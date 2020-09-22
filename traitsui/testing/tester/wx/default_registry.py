@@ -10,7 +10,6 @@
 #
 
 from traitsui.testing.tester.registry import TargetRegistry
-from traitsui.testing.tester.wx import common_ui_targets
 from traitsui.testing.tester.wx.implementation import (
     button_editor,
     check_list_editor,
@@ -35,10 +34,6 @@ def get_default_registry():
         that is wx specific.
     """
     registry = TargetRegistry()
-
-    common_ui_targets.LocatedTextbox.register(registry)
-
-    common_ui_targets.LocatedSlider.register(registry)
 
     # ButtonEditor
     button_editor.register(registry)
