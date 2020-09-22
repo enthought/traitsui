@@ -13,7 +13,7 @@ from traitsui.testing.tester import command
 from traitsui.testing.tester.qt4._interaction_helpers import (
     mouse_click_qwidget
 )
-from traitsui.testing.tester.registry_helper import (
+from traitsui.testing.tester._traitsui_ui import (
     register_traitsui_ui_solvers,
 )
 from traitsui.qt4.instance_editor import (
