@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-from traitsui.testing.tester.qt4.registry_helper import (
+from traitsui.testing.tester.qt4._registry_helper import (
     register_editable_textbox_handlers,
 )
 from traitsui.qt4.font_editor import TextFontEditor

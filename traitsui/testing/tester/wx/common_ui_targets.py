@@ -17,7 +17,7 @@ target_class of choice to one of these as the locator_class. For an example,
 see the implementation of range_editor.
 """
 from traitsui.testing.tester import command
-from traitsui.testing.tester.wx import _interaction_helpers, registry_helper
+from traitsui.testing.tester.wx import _interaction_helpers, _registry_helper
 
 
 class LocatedTextbox:
@@ -43,7 +43,7 @@ class LocatedTextbox:
         registry : TargetRegistry
             The registry being registered to.
         """
-        registry_helper.register_editable_textbox_handlers(
+        _registry_helper.register_editable_textbox_handlers(
             registry=registry,
             target_class=cls,
             widget_getter=lambda wrapper: wrapper._target.textbox,
