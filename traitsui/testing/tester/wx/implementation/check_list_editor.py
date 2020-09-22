@@ -13,7 +13,7 @@ import wx
 from traitsui.wx.check_list_editor import CustomEditor
 from traitsui.testing.tester import command, locator
 from traitsui.testing.tester.common_ui_targets import _BaseSourceWithLocation
-from traitsui.testing.tester.editors.layout import column_major_to_row_major
+from traitsui.testing.tester.editors._layout import column_major_to_row_major
 from traitsui.testing.tester.wx import helpers
 
 
