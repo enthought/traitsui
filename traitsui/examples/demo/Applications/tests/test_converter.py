@@ -23,7 +23,6 @@ DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 
 class TestConverter(unittest.TestCase):
     def test_converter(self):
-        # Test converter.py in examples/demo/Applications
         demo = runpy.run_path(DEMO_PATH)["popup"]
         tester = UITester()
         with tester.create_ui(demo) as ui:

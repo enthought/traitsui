@@ -25,7 +25,6 @@ DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 class TestListEditorNotebookSelectionDemo(unittest.TestCase):
 
     def test_list_editor_notebook_selection_demo(self):
-        # Test List_editor_notebook_selection_demo.py in examples/demo/Advanced
         demo = runpy.run_path(DEMO_PATH)["demo"]
 
         tester = UITester()

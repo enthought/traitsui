@@ -36,7 +36,6 @@ class TestButtonEditorDemo(unittest.TestCase):
         from pyface.ui.qt4.util.modal_dialog_tester import ModalDialogTester
         from pyface.constant import OK
 
-        # Test ButtonEditor_demo.py in examples/demo/Standard_Edtiors
         demo = runpy.run_path(DEMO_PATH)["demo"]
 
         tester = UITester()

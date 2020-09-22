@@ -25,7 +25,6 @@ DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 class TestInstanceEditorDemo(unittest.TestCase):
 
     def test_instance_editor_demo(self):
-        # Test InstanceEditor_demo.py in examples/demo/Standard_Edtiors
         demo = runpy.run_path(DEMO_PATH)["demo"]
 
         tester = UITester()

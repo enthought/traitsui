@@ -25,7 +25,6 @@ DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 class TestEnumEditorDemo(unittest.TestCase):
 
     def test_enum_editor_demo(self):
-        # Test EnumEditor_demo.py in examples/demo/Standard_Edtiors
         demo = runpy.run_path(DEMO_PATH)["demo"]
 
         tester = UITester()
