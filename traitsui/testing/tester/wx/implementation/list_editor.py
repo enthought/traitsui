@@ -28,8 +28,8 @@ class _IndexedNotebookEditor(_BaseSourceWithLocation):
     handlers = [
         (command.MouseClick,
             (lambda wrapper, _: helpers.mouse_click_notebook_tab_index(
-                control=wrapper.target.source.control,
-                index=wrapper.target.location.index,
+                control=wrapper._target.source.control,
+                index=wrapper._target.location.index,
                 delay=wrapper.delay))),
     ]
 

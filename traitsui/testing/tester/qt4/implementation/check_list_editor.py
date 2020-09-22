@@ -22,10 +22,10 @@ class _IndexedCustomCheckListEditor(_BaseSourceWithLocation):
     locator_class = locator.Index
     handlers = [
         (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_qlayout(
-            layout=wrapper.target.source.control.layout(),
+            layout=wrapper._target.source.control.layout(),
             index=convert_index(
-                layout=wrapper.target.source.control.layout(),
-                index=wrapper.target.location.index,
+                layout=wrapper._target.source.control.layout(),
+                index=wrapper._target.location.index,
             ),
             delay=wrapper.delay))),
     ]

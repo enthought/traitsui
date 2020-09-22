@@ -446,6 +446,35 @@ class TestInteractExample(unittest.TestCase):
             item3.perform(command.MouseClick())
             self.assertEqual(demo.checklist, [])
 
+    def test_instance_editor_demo(self):
+        # Test InstanceEditor_demo.py in examples/demo/Standard_Edtiors
+        filepath = os.path.join(
+            DEMO, "Standard_Editors", "InstanceEditor_demo.py"
+        )
+        demo = load_demo(filepath, "demo")
+
+        tester = UITester()
+        with tester.create_ui(demo) as ui:
+            simple = tester.find_by_id(ui, "simple")
+            custom = tester.find_by_id(ui, "custom")
+            occupation = custom.find_by_name("occupation")
+            occupation.perform(command.KeySequence("Job"))
+            occupation.perform(command.KeyClick("Enter"))
+            self.assertEqual(demo.sample_instance.occupation, "Job")
+
+            simple.perform(command.MouseClick())
+            name = simple.find_by_name("name")
+            name.perform(command.KeySequence("ABC"))
+            name.perform(command.KeyClick("Enter"))
+            self.assertEqual(demo.sample_instance.name, "ABC")
+
+            demo.sample_instance.name = "XYZ"
+            simple_displayed = name.inspect(query.DisplayedText())
+            custom_name = custom.find_by_name("name")
+            custom_displayed = custom_name.inspect(query.DisplayedText())
+            self.assertEqual(simple_displayed, "XYZ")
+            self.assertEqual(custom_displayed, "XYZ")
+
     def test_list_editor_notebook_selection_demo(self):
         # Test List_editor_notebook_selection_demo.py in examples/demo/Advanced
         filepath = os.path.join(

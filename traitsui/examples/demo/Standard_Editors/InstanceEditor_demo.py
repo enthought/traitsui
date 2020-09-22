@@ -54,9 +54,9 @@ class InstanceEditorDemo(HasTraits):
 
     # Items are used to define the demo display, one item per editor style:
     inst_group = Group(
-        Item('sample_instance', style='simple', label='Simple'),
+        Item('sample_instance', style='simple', label='Simple', id="simple"),
         Item('_'),
-        Item('sample_instance', style='custom', label='Custom'),
+        Item('sample_instance', style='custom', label='Custom', id="custom"),
         Item('_'),
         Item('sample_instance', style='text', label='Text'),
         Item('_'),

@@ -29,7 +29,7 @@ def mouse_click_ImageButton(wrapper, interaction):
         intended to be used with an interaction_class of a MouseClick.
     """
 
-    control = wrapper.target.control
+    control = wrapper._target.control
     if not control.IsEnabled():
         return
     wx.MilliSleep(wrapper.delay)
@@ -59,13 +59,13 @@ def register(registry):
         target_class=SimpleEditor,
         interaction_class=command.MouseClick,
         handler=(lambda wrapper, _: helpers.mouse_click_button(
-                 control=wrapper.target.control, delay=wrapper.delay))
+                 control=wrapper._target.control, delay=wrapper.delay))
     )
 
     registry.register_handler(
         target_class=SimpleEditor,
         interaction_class=query.DisplayedText,
-        handler=lambda wrapper, _: wrapper.target.control.GetLabel()
+        handler=lambda wrapper, _: wrapper._target.control.GetLabel()
     )
 
     registry.register_handler(
@@ -77,5 +77,5 @@ def register(registry):
     registry.register_handler(
         target_class=CustomEditor,
         interaction_class=query.DisplayedText,
-        handler=lambda wrapper, _: wrapper.target.control.GetLabel()
+        handler=lambda wrapper, _: wrapper._target.control.GetLabel()
     )

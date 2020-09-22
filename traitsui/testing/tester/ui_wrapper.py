@@ -70,7 +70,7 @@ class UIWrapper:
     """
 
     def __init__(self, target, registries, delay=0):
-        self.target = target
+        self._target = target
         self._registries = registries
         self.delay = delay
 
@@ -86,13 +86,13 @@ class UIWrapper:
 
         # Order registries by their priority (low to high)
         for registry in self._registries[::-1]:
-            for type_ in registry.get_interactions(self.target.__class__):
+            for type_ in registry.get_interactions(self._target.__class__):
                 interaction_to_doc[type_] = registry.get_interaction_doc(
-                    self.target.__class__, type_)
+                    self._target.__class__, type_)
 
-            for type_ in registry.get_locations(self.target.__class__):
+            for type_ in registry.get_locations(self._target.__class__):
                 location_to_doc[type_] = registry.get_location_doc(
-                    self.target.__class__, type_)
+                    self._target.__class__, type_)
 
         print("Interactions")
         print("------------")
@@ -220,7 +220,7 @@ class UIWrapper:
         for registry in self._registries:
             try:
                 handler = registry.get_handler(
-                    target_class=self.target.__class__,
+                    target_class=self._target.__class__,
                     interaction_class=interaction_class,
                 )
             except InteractionNotSupported as e:
@@ -231,7 +231,7 @@ class UIWrapper:
                     return handler(self, interaction)
 
         raise InteractionNotSupported(
-            target_class=self.target.__class__,
+            target_class=self._target.__class__,
             interaction_class=interaction.__class__,
             supported=supported,
         )
@@ -258,7 +258,7 @@ class UIWrapper:
         for registry in self._registries:
             try:
                 handler = registry.get_solver(
-                    self.target.__class__,
+                    self._target.__class__,
                     location.__class__,
                 )
             except LocationNotSupported as e:
@@ -267,7 +267,7 @@ class UIWrapper:
                 return handler(self, location)
 
         raise LocationNotSupported(
-            target_class=self.target.__class__,
+            target_class=self._target.__class__,
             locator_class=location.__class__,
             supported=list(supported),
         )

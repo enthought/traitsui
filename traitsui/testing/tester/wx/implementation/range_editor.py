@@ -42,16 +42,16 @@ def register(registry):
             target_class=target_class,
             locator_class=locator.Textbox,
             solver=lambda wrapper, _: LocatedTextbox(
-                textbox=wrapper.target.control.text),
+                textbox=wrapper._target.control.text),
         )
         registry.register_solver(
             target_class=target_class,
             locator_class=locator.Slider,
             solver=lambda wrapper, _: LocatedSlider(
-                slider=wrapper.target.control.slider),
+                slider=wrapper._target.control.slider),
         )
     registry_helper.register_editable_textbox_handlers(
         registry=registry,
         target_class=RangeTextEditor,
-        widget_getter=lambda wrapper: wrapper.target.control,
+        widget_getter=lambda wrapper: wrapper._target.control,
     )

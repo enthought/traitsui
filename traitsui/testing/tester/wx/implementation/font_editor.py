@@ -27,5 +27,5 @@ def register(registry):
     register_editable_textbox_handlers(
         registry=registry,
         target_class=TextFontEditor,
-        widget_getter=lambda wrapper: wrapper.target.control,
+        widget_getter=lambda wrapper: wrapper._target.control,
     )

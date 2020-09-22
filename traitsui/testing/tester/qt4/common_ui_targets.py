@@ -46,7 +46,7 @@ class LocatedTextbox:
         registry_helper.register_editable_textbox_handlers(
             registry=registry,
             target_class=cls,
-            widget_getter=lambda wrapper: wrapper.target.textbox,
+            widget_getter=lambda wrapper: wrapper._target.textbox,
         )
 
 
@@ -77,5 +77,5 @@ class LocatedSlider:
             target_class=cls,
             interaction_class=command.KeyClick,
             handler=lambda wrapper, interaction: helpers.key_click_qslider(
-                wrapper.target.slider, interaction, wrapper.delay)
+                wrapper._target.slider, interaction, wrapper.delay)
         )
