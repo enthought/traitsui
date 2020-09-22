@@ -8,12 +8,11 @@
 #
 #  Thanks for using Enthought open source!
 #
-from traitsui.wx.text_editor import CustomEditor, ReadonlyEditor, SimpleEditor
 from traitsui.testing.tester import query
-from traitsui.testing.tester.wx import helpers
-from traitsui.testing.tester.wx.registry_helper import (
+from traitsui.testing.tester.qt4.registry_helper import (
     register_editable_textbox_handlers,
 )
+from traitsui.qt4.editor_factory import ReadonlyEditor, TextEditor
 
 
 def register(registry):
@@ -26,16 +25,14 @@ def register(registry):
     registry : TargetRegistry
         The registry being registered to.
     """
-    for target_class in [CustomEditor, SimpleEditor]:
-        register_editable_textbox_handlers(
-            registry=registry,
-            target_class=target_class,
-            widget_getter=lambda wrapper: wrapper._target.control,
-        )
 
+    register_editable_textbox_handlers(
+        registry=registry,
+        target_class=TextEditor,
+        widget_getter=lambda wrapper: wrapper._target.control,
+    )
     registry.register_handler(
         target_class=ReadonlyEditor,
         interaction_class=query.DisplayedText,
-        handler=lambda wrapper, _:
-            helpers.readonly_textbox_displayed_text(wrapper._target.control),
+        handler=lambda wrapper, _: wrapper._target.control.text()
     )

@@ -35,7 +35,7 @@ class EnumEditorDemo(HasTraits):
 
     # Items are used to define the display, one Item per editor style:
     enum_group = Group(
-        Item('name_list', style='simple', label='Simple'),
+        Item('name_list', style='simple', label='Simple', id="simple"),
         Item('_'),
 
         # The simple style also supports text entry:
@@ -48,11 +48,12 @@ class EnumEditorDemo(HasTraits):
                 completion_mode='popup',
                 evaluate=True
             ),
+            id="simple_text"
         ),
         Item('_'),
 
         # The custom style defaults to radio button mode:
-        Item('name_list', style='custom', label='Custom radio'),
+        Item('name_list', style='custom', label='Custom radio', id="radio"),
         Item('_'),
 
         # The custom style can also display in list mode, with extra work:
@@ -60,14 +61,15 @@ class EnumEditorDemo(HasTraits):
             'name_list',
             style='custom',
             label='Custom list',
-            editor=EnumEditor(values=name_list, mode='list')
+            editor=EnumEditor(values=name_list, mode='list'),
+            id="list"
         ),
         Item('_'),
 
-        Item('name_list', style='text', label='Text'),
+        Item('name_list', style='text', label='Text', id="text"),
         Item('_'),
 
-        Item('name_list', style='readonly', label='ReadOnly')
+        Item('name_list', style='readonly', label='ReadOnly', id="readonly")
     )
 
     # Demo view:

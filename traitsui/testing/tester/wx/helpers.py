@@ -391,3 +391,21 @@ def key_click_slider(control, interaction, delay):
         wx.wxEVT_SCROLL_CHANGED, control.GetId(), position
     )
     wx.PostEvent(control, event)
+
+
+def readonly_textbox_displayed_text(control):
+    ''' Extracts the displayed text in a wx textbox (either a wx.TextCtrl or
+    wx.StaticText).
+
+    Parameters
+    ----------
+    control : wx.TextCtrl or wx.StaticText
+        the textbox object from which the text of interest is displayed
+    '''
+    if isinstance(control, wx.TextCtrl):
+        return control.GetValue()
+    elif isinstance(control, wx.StaticText):
+        return control.GetLabel()
+    raise TypeError("readonly_textbox_displayed_text expected a control"
+                    " of either wx.TextCtrl, or wx.StaticText."
+                    " {} was found".format(control))

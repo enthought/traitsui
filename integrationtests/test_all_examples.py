@@ -446,6 +446,60 @@ class TestInteractExample(unittest.TestCase):
             item3.perform(command.MouseClick())
             self.assertEqual(demo.checklist, [])
 
+    def test_enum_editor_demo(self):
+        # Test EnumEditor_demo.py in examples/demo/Standard_Edtiors
+        filepath = os.path.join(
+            DEMO, "Standard_Editors", "EnumEditor_demo.py"
+        )
+        demo = load_demo(filepath, "demo")
+
+        tester = UITester()
+        with tester.create_ui(demo) as ui:
+            simple_enum = tester.find_by_id(ui, "simple")
+            simple_text_enum = tester.find_by_id(ui, "simple_text")
+            radio_enum = tester.find_by_id(ui, "radio")
+            list_enum = tester.find_by_id(ui, "list")
+            text = tester.find_by_id(ui, "text")
+            readonly = tester.find_by_id(ui, "readonly")
+
+            self.assertEqual(demo.name_list, 'A-495')
+            simple_enum.locate(locator.Index(1)).perform(command.MouseClick())
+            self.assertEqual(demo.name_list, 'A-498')
+
+            for _ in range(5):
+                simple_text_enum.perform(command.KeyClick("Backspace"))
+            simple_text_enum.perform(command.KeySequence("R-1226"))
+            simple_text_enum.perform(command.KeyClick("Enter"))
+            self.assertEqual(demo.name_list, 'R-1226')
+
+            radio_enum.locate(locator.Index(5)).perform(command.MouseClick())
+            self.assertEqual(demo.name_list, 'Foo')
+
+            list_enum.locate(locator.Index(3)).perform(command.MouseClick())
+            self.assertEqual(demo.name_list, 'TS-17')
+
+            for _ in range(5):
+                text.perform(command.KeyClick("Backspace"))
+            text.perform(command.KeySequence("A-498"))
+            text.perform(command.KeyClick("Enter"))
+            self.assertEqual(demo.name_list, 'A-498')
+
+            demo.name_list = 'Foo'
+
+            displayed_simple = simple_enum.inspect(query.DisplayedText())
+            disp_simple_text = simple_text_enum.inspect(query.DisplayedText())
+            selected_radio = radio_enum.inspect(query.SelectedText())
+            selected_list = list_enum.inspect(query.SelectedText())
+            displayed_text = text.inspect(query.DisplayedText())
+            displayed_readonly = readonly.inspect(query.DisplayedText())
+
+            displayed_selected = [
+                displayed_simple, disp_simple_text, selected_radio,
+                selected_list, displayed_text, displayed_readonly
+            ]
+            for text in displayed_selected:
+                self.assertEqual(text, 'Foo')
+
     def test_instance_editor_demo(self):
         # Test InstanceEditor_demo.py in examples/demo/Standard_Edtiors
         filepath = os.path.join(
