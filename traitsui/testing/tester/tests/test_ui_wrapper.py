@@ -164,7 +164,7 @@ class TestUIWrapperLocationRegistry(unittest.TestCase):
         )
         wrapper = wrapper.locate(None)
 
-        self.assertEqual(wrapper.target, 2)
+        self.assertEqual(wrapper._target, 2)
 
         # swap the order
         wrapper = example_ui_wrapper(
@@ -172,7 +172,7 @@ class TestUIWrapperLocationRegistry(unittest.TestCase):
         )
         wrapper = wrapper.locate(None)
 
-        self.assertEqual(wrapper.target, 1)
+        self.assertEqual(wrapper._target, 1)
 
     def test_location_registry_selection(self):
         # If the first registry says it can't handle the interaction, the next
@@ -197,7 +197,7 @@ class TestUIWrapperLocationRegistry(unittest.TestCase):
         )
         new_wrapper = wrapper.locate(None)
 
-        self.assertEqual(new_wrapper.target, 2)
+        self.assertEqual(new_wrapper._target, 2)
         self.assertEqual(
             new_wrapper._registries,
             wrapper._registries,

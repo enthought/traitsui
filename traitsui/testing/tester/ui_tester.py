@@ -112,7 +112,7 @@ class UITester:
         custom_registry.register_handler(
             target_class=MyEditor,
             interaction_class=ManyMouseClick,
-            handler=lambda wrapper, interaction: wrapper.target.do_something()
+            handler=lambda wrapper, interaction: wrapper._target.do_something()
         )
 
     Then the registry can be used in a UITester::

@@ -28,11 +28,11 @@ def register(registry):
         target_class=ButtonEditor,
         interaction_class=command.MouseClick,
         handler=(lambda wrapper, _: helpers.mouse_click_button(
-                 control=wrapper.target.control, delay=wrapper.delay))
+                 control=wrapper._target.control, delay=wrapper.delay))
     )
 
     registry.register_handler(
         target_class=ButtonEditor,
         interaction_class=query.DisplayedText,
-        handler=lambda wrapper, _: wrapper.target.control.GetLabel()
+        handler=lambda wrapper, _: wrapper._target.control.GetLabel()
     )

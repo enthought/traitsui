@@ -88,7 +88,7 @@ class TargetRegistry:
 
         def mouse_click_qt_button(wrapper, interaction):
             # wrapper is an instance of UIWrapper
-            wrapper.target.control.click()
+            wrapper._target.control.click()
 
     The function can then be registered with the target type and an interaction
     type::
@@ -118,7 +118,7 @@ class TargetRegistry:
 
     ``UIWrapper.locate`` accepts an object, ``location``, which provides
     information for navigating into a specific element from
-    ``UIWrapper.target``. The ``location`` content varies from use case
+    ``UIWrapper._target``. The ``location`` content varies from use case
     to use case and a target is typically a rich container of multiple GUI
     elements. With that, for a given target type, multiple location types may
     be supported. For the given location type, the logic for resolving a
@@ -127,7 +127,7 @@ class TargetRegistry:
     how to interpret a location given its type and the type of the target it
     is used with.
 
-    For example, suppose we have a ``UIWrapper`` whose ``target`` is an
+    For example, suppose we have a ``UIWrapper`` whose ``_target`` is an
     instance of ``MyUIContainer``. This object has some buttons and the
     objective of a test is to click a specific button with a given
     label. We will therefore need to locate the button with the given label
@@ -151,7 +151,7 @@ class TargetRegistry:
     dictionary called ``_buttons``::
 
         def get_button(wrapper, location):
-            return wrapper.target._buttons[location.label]
+            return wrapper._target._buttons[location.label]
 
     The solvers can then be registered for the container UI target::
 
@@ -163,7 +163,7 @@ class TargetRegistry:
         )
 
     When the solver is registered this way, the ``wrapper`` argument will be
-    an instance of ``UIWrapper`` whose ``target`` attribute is an instance of
+    an instance of ``UIWrapper`` whose ``_target`` attribute is an instance of
     ``MyUIContainer``, and ``location`` will be an instance of ``Button``, as
     is provided via ``UIWrapper.locate``.
     """
