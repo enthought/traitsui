@@ -393,28 +393,19 @@ def key_click_slider(control, interaction, delay):
     wx.PostEvent(control, event)
 
 
-def readonly_displayed_text_handler(wrapper, interaction):
-    ''' Handler for ReadonlyEditor to handle query.DisplayedText interactions.
+def readonly_textbox_displayed_text(control):
+    ''' Extracts the displayed text in a wx textbox (either a wx.TextCtrl or
+    wx.StaticText).
 
     Parameters
     ----------
-    wrapper : UIWrapper
-        the UIWrapper object wrapping the ReadonlyEditor
-    interaction : Instance of query.DisplayedText
-        This arguiment is not used by this function. It is included so that
-        the function matches the standard format for a handler.  The intended
-        interaction should always be query.DisplayedText
-
-    Notes
-    -----
-    wx Readonly Editors occassionally use wx.TextCtrl as their control, and
-    other times use wx.StaticText.
+    control : wx.TextCtrl or wx.StaticText
+        the textbox object from which the text if interest is displayed
     '''
-    if isinstance(wrapper.target.control, wx.TextCtrl):
-        return wrapper.target.control.GetValue()
-    elif isinstance(wrapper.target.control, wx.StaticText):
-        return wrapper.target.control.GetLabel()
-    raise TypeError("readonly_displayed_text_handler expected a UIWrapper with"
-                    " a ReadonlyEditor as a target. ReadonlyEditor control"
-                    " should always be either wx.TextCtrl, or wx.StaticText."
-                    " {} was found".format(wrapper.target.control))
+    if isinstance(control, wx.TextCtrl):
+        return control.GetValue()
+    elif isinstance(control, wx.StaticText):
+        return control.GetLabel()
+    raise TypeError("readonly_textbox_displayed_text expected a control"
+                    " of either wx.TextCtrl, or wx.StaticText."
+                    " {} was found".format(control))
