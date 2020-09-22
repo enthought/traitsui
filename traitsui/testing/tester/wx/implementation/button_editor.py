@@ -12,7 +12,7 @@ import wx
 
 from traitsui.wx.button_editor import SimpleEditor, CustomEditor
 from traitsui.testing.tester import command, query
-from traitsui.testing.tester.wx import helpers
+from traitsui.testing.tester.wx import _interaction_helpers
 
 
 def mouse_click_ImageButton(wrapper, interaction):
@@ -58,7 +58,7 @@ def register(registry):
     registry.register_handler(
         target_class=SimpleEditor,
         interaction_class=command.MouseClick,
-        handler=(lambda wrapper, _: helpers.mouse_click_button(
+        handler=(lambda wrapper, _: _interaction_helpers.mouse_click_button(
                  control=wrapper._target.control, delay=wrapper.delay))
     )
 

@@ -17,7 +17,7 @@ target_class of choice to one of these as the locator_class. For an example,
 see the implementation of range_editor.
 """
 from traitsui.testing.tester import command
-from traitsui.testing.tester.qt4 import helpers, registry_helper
+from traitsui.testing.tester.qt4 import _interaction_helpers, registry_helper
 
 
 class LocatedTextbox:
@@ -76,6 +76,7 @@ class LocatedSlider:
         registry.register_handler(
             target_class=cls,
             interaction_class=command.KeyClick,
-            handler=lambda wrapper, interaction: helpers.key_click_qslider(
-                wrapper._target.slider, interaction, wrapper.delay)
+            handler=lambda wrapper, interaction:
+                _interaction_helpers.key_click_qslider(
+                    wrapper._target.slider, interaction, wrapper.delay)
         )

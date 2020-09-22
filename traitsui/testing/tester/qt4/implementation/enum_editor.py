@@ -16,7 +16,7 @@ from traitsui.qt4.enum_editor import (
 )
 from traitsui.testing.tester import command, locator, query
 from traitsui.testing.tester.common_ui_targets import _BaseSourceWithLocation
-from traitsui.testing.tester.qt4 import helpers
+from traitsui.testing.tester.qt4 import _interaction_helpers
 from traitsui.testing.tester.editors._layout import column_major_to_row_major
 
 
@@ -26,12 +26,13 @@ class _IndexedListEditor(_BaseSourceWithLocation):
     source_class = ListEditor
     locator_class = locator.Index
     handlers = [
-        (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_item_view(
-            model=wrapper._target.source.control.model(),
-            view=wrapper._target.source.control,
-            index=wrapper._target.source.control.model().index(
-                wrapper._target.location.index, 0),
-            delay=wrapper.delay))),
+        (command.MouseClick,
+            (lambda wrapper, _: _interaction_helpers.mouse_click_item_view(
+                model=wrapper._target.source.control.model(),
+                view=wrapper._target.source.control,
+                index=wrapper._target.source.control.model().index(
+                    wrapper._target.location.index, 0),
+                delay=wrapper.delay))),
     ]
 
 
@@ -41,14 +42,15 @@ class _IndexedRadioEditor(_BaseSourceWithLocation):
     source_class = RadioEditor
     locator_class = locator.Index
     handlers = [
-        (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_qlayout(
-            layout=wrapper._target.source.control.layout(),
-            index=convert_index(
+        (command.MouseClick,
+            (lambda wrapper, _: _interaction_helpers.mouse_click_qlayout(
                 layout=wrapper._target.source.control.layout(),
-                index=wrapper._target.location.index,
-                row_major=wrapper._target.source.row_major
-            ),
-            delay=wrapper.delay))),
+                index=convert_index(
+                    layout=wrapper._target.source.control.layout(),
+                    index=wrapper._target.location.index,
+                    row_major=wrapper._target.source.row_major
+                ),
+                delay=wrapper.delay))),
     ]
 
 
@@ -86,10 +88,11 @@ class _IndexedSimpleEditor(_BaseSourceWithLocation):
     source_class = SimpleEditor
     locator_class = locator.Index
     handlers = [
-        (command.MouseClick, (lambda wrapper, _: helpers.mouse_click_combobox(
-            combobox=wrapper._target.source.control,
-            index=wrapper._target.location.index,
-            delay=wrapper.delay))),
+        (command.MouseClick,
+            (lambda wrapper, _: _interaction_helpers.mouse_click_combobox(
+                combobox=wrapper._target.source.control,
+                index=wrapper._target.location.index,
+                delay=wrapper.delay))),
     ]
 
 
@@ -124,15 +127,17 @@ def register(registry):
 
     simple_editor_text_handlers = [
         (command.KeyClick,
-            (lambda wrapper, interaction: helpers.key_click_qwidget(
-                control=wrapper._target.control,
-                interaction=interaction,
-                delay=wrapper.delay))),
+            (lambda wrapper, interaction:
+                _interaction_helpers.key_click_qwidget(
+                    control=wrapper._target.control,
+                    interaction=interaction,
+                    delay=wrapper.delay))),
         (command.KeySequence,
-            (lambda wrapper, interaction: helpers.key_sequence_qwidget(
-                control=wrapper._target.control,
-                interaction=interaction,
-                delay=wrapper.delay))),
+            (lambda wrapper, interaction:
+                _interaction_helpers.key_sequence_qwidget(
+                    control=wrapper._target.control,
+                    interaction=interaction,
+                    delay=wrapper.delay))),
         (query.DisplayedText,
             lambda wrapper, _: wrapper._target.control.currentText()),
         (query.SelectedText,

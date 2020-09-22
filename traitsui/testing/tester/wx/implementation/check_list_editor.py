@@ -14,7 +14,7 @@ from traitsui.wx.check_list_editor import CustomEditor
 from traitsui.testing.tester import command, locator
 from traitsui.testing.tester.common_ui_targets import _BaseSourceWithLocation
 from traitsui.testing.tester.editors._layout import column_major_to_row_major
-from traitsui.testing.tester.wx import helpers
+from traitsui.testing.tester.wx import _interaction_helpers
 
 
 class _IndexedCustomCheckListEditor(_BaseSourceWithLocation):
@@ -24,13 +24,14 @@ class _IndexedCustomCheckListEditor(_BaseSourceWithLocation):
     locator_class = locator.Index
     handlers = [
         (command.MouseClick,
-            (lambda wrapper, _: helpers.mouse_click_checkbox_child_in_panel(
-                control=wrapper._target.source.control,
-                index=convert_index(
-                    source=wrapper._target.source,
-                    index=wrapper._target.location.index
-                ),
-                delay=wrapper.delay))),
+            (lambda wrapper, _:
+                _interaction_helpers.mouse_click_checkbox_child_in_panel(
+                    control=wrapper._target.source.control,
+                    index=convert_index(
+                        source=wrapper._target.source,
+                        index=wrapper._target.location.index
+                    ),
+                    delay=wrapper.delay))),
     ]
 
 

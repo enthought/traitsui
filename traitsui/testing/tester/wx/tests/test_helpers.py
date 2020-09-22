@@ -14,7 +14,7 @@ from unittest import mock
 
 from traitsui.testing.tester import command
 from traitsui.testing.tester.exceptions import Disabled
-from traitsui.testing.tester.wx import helpers
+from traitsui.testing.tester.wx import _interaction_helpers
 
 from traitsui.tests._tools import (
     is_wx,
@@ -46,7 +46,7 @@ class TestInteractions(unittest.TestCase):
         button.Bind(wx.EVT_BUTTON, handler)
 
         # when
-        helpers.mouse_click_button(control=button, delay=0)
+        _interaction_helpers.mouse_click_button(control=button, delay=0)
 
         # then
         self.assertEqual(handler.call_count, 1)
@@ -58,7 +58,7 @@ class TestInteractions(unittest.TestCase):
         button.Enable(False)
 
         # when
-        helpers.mouse_click_button(control=button, delay=0)
+        _interaction_helpers.mouse_click_button(control=button, delay=0)
 
         # then
         self.assertEqual(handler.call_count, 0)
@@ -70,7 +70,8 @@ class TestInteractions(unittest.TestCase):
         handler = mock.Mock()
         textbox.Bind(wx.EVT_TEXT, handler)
 
-        helpers.key_sequence_text_ctrl(textbox, command.KeySequence("abc"), 0)
+        _interaction_helpers.key_sequence_text_ctrl(
+            textbox, command.KeySequence("abc"), 0)
 
         self.assertEqual(textbox.GetValue(), "123abc")
         self.assertEqual(handler.call_count, 3)
@@ -86,7 +87,7 @@ class TestInteractions(unittest.TestCase):
                 handler.reset_mock()
 
                 # when
-                helpers.key_sequence_text_ctrl(
+                _interaction_helpers.key_sequence_text_ctrl(
                     textbox,
                     command.KeySequence(chr(code) * 3),
                     delay=0,
@@ -100,7 +101,7 @@ class TestInteractions(unittest.TestCase):
         textbox = wx.TextCtrl(self.frame)
 
         with self.assertRaises(ValueError) as exception_context:
-            helpers.key_sequence_text_ctrl(
+            _interaction_helpers.key_sequence_text_ctrl(
                 textbox, command.KeySequence("\b"), 0
             )
 
@@ -114,16 +115,16 @@ class TestInteractions(unittest.TestCase):
         textbox.SetEditable(False)
 
         with self.assertRaises(Disabled):
-            helpers.key_sequence_text_ctrl(textbox,
-                                           command.KeySequence("abc"),
-                                           0)
+            _interaction_helpers.key_sequence_text_ctrl(
+                textbox, command.KeySequence("abc"), 0)
 
     def test_key_click(self):
         textbox = wx.TextCtrl(self.frame)
         handler = mock.Mock()
         textbox.Bind(wx.EVT_TEXT, handler)
 
-        helpers.key_click_text_entry(textbox, command.KeyClick("A"), 0)
+        _interaction_helpers.key_click_text_entry(
+            textbox, command.KeyClick("A"), 0)
 
         self.assertEqual(textbox.Value, "A")
         self.assertEqual(handler.call_count, 1)
@@ -134,7 +135,8 @@ class TestInteractions(unittest.TestCase):
         handler = mock.Mock()
         textbox.Bind(wx.EVT_TEXT, handler)
 
-        helpers.key_click_text_entry(textbox, command.KeyClick("Backspace"), 0)
+        _interaction_helpers.key_click_text_entry(
+            textbox, command.KeyClick("Backspace"), 0)
 
         self.assertEqual(textbox.Value, "")
         self.assertEqual(handler.call_count, 1)
@@ -150,7 +152,8 @@ class TestInteractions(unittest.TestCase):
         handler = mock.Mock()
         textbox.Bind(wx.EVT_TEXT, handler)
 
-        helpers.key_click_text_entry(textbox, command.KeyClick("Backspace"), 0)
+        _interaction_helpers.key_click_text_entry(
+            textbox, command.KeyClick("Backspace"), 0)
 
         self.assertEqual(textbox.Value, "E")
         self.assertEqual(handler.call_count, 1)
@@ -163,8 +166,10 @@ class TestInteractions(unittest.TestCase):
         # sanity check
         self.assertEqual(textbox.GetInsertionPoint(), 0)
 
-        helpers.key_click_text_entry(textbox, command.KeyClick("End"), 0)
-        helpers.key_click_text_entry(textbox, command.KeyClick("F"), 0)
+        _interaction_helpers.key_click_text_entry(
+            textbox, command.KeyClick("End"), 0)
+        _interaction_helpers.key_click_text_entry(
+            textbox, command.KeyClick("F"), 0)
 
         self.assertEqual(textbox.Value, "ABCDEF")
 
@@ -173,12 +178,14 @@ class TestInteractions(unittest.TestCase):
         textbox.SetEditable(False)
 
         with self.assertRaises(Disabled):
-            helpers.key_click_text_entry(textbox, command.KeyClick("Enter"), 0)
+            _interaction_helpers.key_click_text_entry(
+                textbox, command.KeyClick("Enter"), 0)
 
     def test_key_click_slider_helpful_err(self):
         slider = wx.Slider()
         with self.assertRaises(ValueError) as exc:
-            helpers.key_click_slider(slider, command.KeyClick("Enter"), 0)
+            _interaction_helpers.key_click_slider(
+                slider, command.KeyClick("Enter"), 0)
         self.assertIn(
             "['Down', 'Left', 'Page Down', 'Page Up', 'Right', 'Up']",
             str(exc.exception)
