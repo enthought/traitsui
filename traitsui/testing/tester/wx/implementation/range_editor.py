@@ -15,12 +15,70 @@ from traitsui.wx.range_editor import (
     SimpleSliderEditor,
 )
 
-from traitsui.testing.tester import locator
-from traitsui.testing.tester.wx import registry_helper
-from traitsui.testing.tester.wx.common_ui_targets import (
-    LocatedSlider,
-    LocatedTextbox
-)
+from traitsui.testing.tester import command, locator
+from traitsui.testing.tester.wx import _interaction_helpers, registry_helper
+
+
+class LocatedTextbox:
+    """ Wrapper class for a located Textbox in Wx.
+
+    Parameters
+    ----------
+    textbox : Instance of wx.TextCtrl
+    """
+
+    def __init__(self, textbox):
+        self.textbox = textbox
+
+    @classmethod
+    def register(cls, registry):
+        """ Class method to register interactions on a LocatedTextbox for the
+        given registry.
+
+        If there are any conflicts, an error will occur.
+
+        Parameters
+        ----------
+        registry : TargetRegistry
+            The registry being registered to.
+        """
+        registry_helper.register_editable_textbox_handlers(
+            registry=registry,
+            target_class=cls,
+            widget_getter=lambda wrapper: wrapper._target.textbox,
+        )
+
+
+class LocatedSlider:
+    """ Wrapper class for a located Textbox in Wx.
+
+    Parameters
+    ----------
+    slider : Instance of traitsui.wx.helper.Slider (wx.Slider)
+    """
+
+    def __init__(self, slider):
+        self.slider = slider
+
+    @classmethod
+    def register(cls, registry):
+        """ Class method to register interactions on a LocatedSlider for the
+        given registry.
+
+        If there are any conflicts, an error will occur.
+
+        Parameters
+        ----------
+        registry : TargetRegistry
+            The registry being registered to.
+        """
+        registry.register_handler(
+            target_class=cls,
+            interaction_class=command.KeyClick,
+            handler=lambda wrapper, interaction:
+                _interaction_helpers.key_click_slider(
+                    wrapper._target.slider, interaction, wrapper.delay)
+        )
 
 
 def register(registry):
@@ -55,3 +113,7 @@ def register(registry):
         target_class=RangeTextEditor,
         widget_getter=lambda wrapper: wrapper._target.control,
     )
+
+    LocatedTextbox.register(registry)
+
+    LocatedSlider.register(registry)
