@@ -339,10 +339,8 @@ def load_tests(loader, tests, pattern):
             test_suite = unittest.TestLoader().discover(
                 dirpath, pattern=pattern
             )
-
-        suite.addTests(
-            requires_toolkit([ToolkitName.qt, ToolkitName.wx])(test_suite)
-        )
+        if is_qt() or is_wx():
+            suite.addTests(test_suite)
 
     return suite
 
