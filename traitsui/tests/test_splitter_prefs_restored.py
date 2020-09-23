@@ -19,6 +19,7 @@ import unittest
 from traits.api import Int
 from traitsui.api import Action, Group, Handler, HSplit, Item, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     ToolkitName,
@@ -83,7 +84,13 @@ class TmpClass(Handler):
     )
 
 
-class TestSplitterPrefsRestored(unittest.TestCase):
+class TestSplitterPrefsRestored(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.qt])
     def test_splitter_prefs_are_restored(self):
