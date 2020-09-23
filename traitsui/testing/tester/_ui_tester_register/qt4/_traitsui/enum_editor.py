@@ -21,7 +21,7 @@ from traitsui.testing.tester._ui_tester_register._common_ui_targets import (
 from traitsui.testing.tester._ui_tester_register.qt4 import (
     _interaction_helpers
 )
-from traitsui.testing.tester.editors._layout import column_major_to_row_major
+from traitsui.testing.tester._ui_tester_register._layout import column_major_to_row_major
 
 
 class _IndexedListEditor(_BaseSourceWithLocation):
