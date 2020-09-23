@@ -4,6 +4,7 @@ import unittest
 from traits.api import HasTraits, List, Str
 from traitsui.api import CheckListEditor, UItem, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     get_all_button_status,
     is_qt,
@@ -114,7 +115,13 @@ def set_text_in_line_edit(line_edit, text):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestCheckListEditorMapping(unittest.TestCase):
+class TestCheckListEditorMapping(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_ui(self, model, view):
@@ -318,7 +325,13 @@ class TestCheckListEditorMapping(unittest.TestCase):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestSimpleCheckListEditor(unittest.TestCase):
+class TestSimpleCheckListEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_gui(self, model, view):
@@ -399,7 +412,13 @@ class TestSimpleCheckListEditor(unittest.TestCase):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestCustomCheckListEditor(unittest.TestCase):
+class TestCustomCheckListEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_gui(self, model, view):
@@ -494,7 +513,13 @@ class TestCustomCheckListEditor(unittest.TestCase):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestTextCheckListEditor(unittest.TestCase):
+class TestTextCheckListEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_gui(self, model, view):
