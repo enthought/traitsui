@@ -60,9 +60,6 @@ class UIWrapper:
 
     Attributes
     ----------
-    target : any
-        An object on which further UI target can be searched for, or can be
-        a leaf target that can be operated on.
     delay : int
         Time delay (in ms) in which actions by the wrapper are performed. Note
         it is propagated through to created child wrappers. The delay allows
@@ -130,12 +127,17 @@ class UIWrapper:
 
         Parameters
         ----------
-        location : Location
+        location : any
+            Any location type supported by the current target.
 
         Raises
         ------
         LocationNotSupported
             If the given location is not supported.
+
+        See also
+        --------
+        UIWrapper.help
         """
         return UIWrapper(
             target=self._get_next_target(location),
@@ -146,6 +148,8 @@ class UIWrapper:
     def find_by_name(self, name):
         """ Find a target inside the current target using a name.
 
+        This is equivalent to calling ``locate(TargetByName(name=name))``.
+
         Parameters
         ----------
         name : str
@@ -154,11 +158,23 @@ class UIWrapper:
         Returns
         -------
         wrapper : UIWrapper
+
+        Raises
+        ------
+        LocationNotSupported
+            If the current target does not support locating another target
+            by a name.
+
+        See also
+        --------
+        traitsui.testing.tester.locator.TargetByName
         """
         return self.locate(locator.TargetByName(name=name))
 
     def find_by_id(self, id):
         """ Find a target inside the current target using an id.
+
+        This is equivalent to calling ``locate(TargetById(id=id))``.
 
         Parameters
         ----------
@@ -168,6 +184,16 @@ class UIWrapper:
         Returns
         -------
         wrapper : UIWrapper
+
+        Raises
+        ------
+        LocationNotSupported
+            If the current target does not support locating another target
+            by a unique identifier.
+
+        See also
+        --------
+        traitsui.testing.tester.locator.TargetById
         """
         return self.locate(locator.TargetById(id=id))
 
@@ -181,6 +207,16 @@ class UIWrapper:
             See ``traitsui.testing.tester.command`` module for builtin
             query objects.
             e.g. ``traitsui.testing.tester.command.MouseClick``
+
+        Raises
+        ------
+        InteractionNotSupported
+            If the interaction given is not supported for the current UI
+            target.
+
+        See also
+        --------
+        UIWrapper.help
         """
         self._perform_or_inspect(interaction)
 
@@ -194,6 +230,16 @@ class UIWrapper:
             See ``traitsui.testing.tester.query`` module for builtin
             query objects.
             e.g. ``traitsui.testing.tester.query.DisplayedText``
+
+        Raises
+        ------
+        InteractionNotSupported
+            If the interaction given is not supported for the current UI
+            target.
+
+        See also
+        --------
+        UIWrapper.help
         """
         return self._perform_or_inspect(interaction)
 
