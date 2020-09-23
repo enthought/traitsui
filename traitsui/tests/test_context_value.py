@@ -16,6 +16,7 @@ import unittest
 from traits.testing.unittest_tools import UnittestTools
 from traits.api import HasTraits, Str
 
+from traitsui.tests._tools import BaseTestMixin
 from traitsui.context_value import ContextValue, CVFloat, CVInt, CVStr, CVType
 
 
@@ -30,7 +31,14 @@ class CVExample(HasTraits):
     cv_unicode = CVType(Str, something="meta", sync_value="both")
 
 
-class TestContextvalue(UnittestTools, unittest.TestCase):
+class TestContextvalue(BaseTestMixin, UnittestTools, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
     def test_context_value(self):
         cv = ContextValue("trait_name")
 
