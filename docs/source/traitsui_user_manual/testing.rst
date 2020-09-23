@@ -396,7 +396,7 @@ Before we start, we need to define some terminology:
 * Interaction
     is an object that wraps the information for performing an action
     or retrieving GUI state(s), but it does not necessarily contain information
-    of a Target. For example, both |MouseClick| and |DisplayedText| are
+    to a Target. For example, both |MouseClick| and |DisplayedText| are
     interactions that can be used against different targets. An interaction can
     also be specialized for a specific target if needed.
 
