@@ -46,8 +46,10 @@ class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
 
     def setUp(self):
         BaseTestMixin.setUp(self)
+        GuiTestAssistant.setUp(self)
 
     def tearDown(self):
+        GuiTestAssistant.tearDown(self)
         BaseTestMixin.tearDown(self)
 
     def test_datetime_editor_simple(self):
