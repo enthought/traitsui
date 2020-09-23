@@ -30,6 +30,7 @@ from traitsui.ui_editors.data_frame_editor import (
 from traitsui.view import View
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     reraise_exceptions,
@@ -96,7 +97,13 @@ def sample_text_data():
     return viewer
 
 
-class TestDataFrameEditor(unittest.TestCase):
+class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_get_item(self):
