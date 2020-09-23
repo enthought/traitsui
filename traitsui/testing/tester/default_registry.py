@@ -32,5 +32,5 @@ def get_default_registry():
     else:
         toolkit = {'wx': 'wx', 'qt4': 'qt4', 'qt': 'qt4'}[ETSConfig.toolkit]
         module = importlib.import_module(".default_registry",
-                                         "traitsui.testing.tester." + toolkit)
+                                         "traitsui.testing.tester._ui_tester_register." + toolkit)
         return module.get_default_registry()
