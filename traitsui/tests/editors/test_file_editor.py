@@ -13,6 +13,7 @@ import unittest
 from traits.api import Directory, Event, File, HasTraits
 from traitsui.api import FileEditor, Item, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     reraise_exceptions,
@@ -29,15 +30,20 @@ class FileModel(HasTraits):
 
 # Run this against wx too when enthought/traitsui#752 is also fixed.
 @requires_toolkit([ToolkitName.qt])
-class TestFileEditor(unittest.TestCase):
+class TestFileEditor(BaseTestMixin, unittest.TestCase):
     """ Test FileEditor. """
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def check_init_and_dispose(self, style):
         # Test init and dispose by opening and closing the UI
         view = View(Item("filepath", editor=FileEditor(), style=style))
         obj = FileModel()
-        with reraise_exceptions(), \
-                create_ui(obj, dict(view=view)):
+        with create_ui(obj, dict(view=view)):
             pass
 
     def test_simple_editor_init_and_dispose(self):
