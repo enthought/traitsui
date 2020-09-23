@@ -33,6 +33,7 @@ from traitsui.view import View
 from traitsui.editors.range_editor import RangeEditor
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     press_ok_button,
     requires_toolkit,
@@ -54,7 +55,13 @@ class NumberWithSpinnerEditor(HasTraits):
     )
 
 
-class TestRangeEditorSpinner(unittest.TestCase):
+class TestRangeEditorSpinner(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.wx])
     def test_wx_spin_control_editing_should_not_crash(self):
