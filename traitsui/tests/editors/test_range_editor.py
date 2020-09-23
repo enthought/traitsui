@@ -7,6 +7,7 @@ from traitsui.testing.tester import command, locator, query
 from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.ui_tester import UITester
 from traitsui.tests._tools import (
+    BaseTestMixin,
     is_wx,
     requires_toolkit,
     ToolkitName,
@@ -46,7 +47,13 @@ class RangeModel(HasTraits):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestRangeEditor(unittest.TestCase):
+class TestRangeEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def check_range_enum_editor_format_func(self, style):
         # RangeEditor with enum mode doesn't support format_func
