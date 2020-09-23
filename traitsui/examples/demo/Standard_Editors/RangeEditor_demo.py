@@ -30,49 +30,49 @@ class RangeEditorDemo(HasTraits):
 
     # RangeEditor display for narrow integer Range traits (< 17 wide):
     int_range_group1 = Group(
-        Item('small_int_range', style='simple', label='Simple'),
+        Item('small_int_range', style='simple', label='Simple', id='simple_small'),
         Item('_'),
-        Item('small_int_range', style='custom', label='Custom'),
+        Item('small_int_range', style='custom', label='Custom', id='custom_small'),
         Item('_'),
-        Item('small_int_range', style='text', label='Text'),
+        Item('small_int_range', style='text', label='Text', id='text_small'),
         Item('_'),
-        Item('small_int_range', style='readonly', label='ReadOnly'),
+        Item('small_int_range', style='readonly', label='ReadOnly', id='readonly_small'),
         label='Small Int'
     )
 
     # RangeEditor display for medium-width integer Range traits (17 to 100):
     int_range_group2 = Group(
-        Item('medium_int_range', style='simple', label='Simple'),
+        Item('medium_int_range', style='simple', label='Simple', id='simple_medium'),
         Item('_'),
-        Item('medium_int_range', style='custom', label='Custom'),
+        Item('medium_int_range', style='custom', label='Custom', id='custom_medium'),
         Item('_'),
-        Item('medium_int_range', style='text', label='Text'),
+        Item('medium_int_range', style='text', label='Text', id='text_medium'),
         Item('_'),
-        Item('medium_int_range', style='readonly', label='ReadOnly'),
+        Item('medium_int_range', style='readonly', label='ReadOnly', id='readonly_medium'),
         label='Medium Int'
     )
 
     # RangeEditor display for wide integer Range traits (> 100):
     int_range_group3 = Group(
-        Item('large_int_range', style='simple', label='Simple'),
+        Item('large_int_range', style='simple', label='Simple', id='simple_large'),
         Item('_'),
-        Item('large_int_range', style='custom', label='Custom'),
+        Item('large_int_range', style='custom', label='Custom', id='custom_large'),
         Item('_'),
-        Item('large_int_range', style='text', label='Text'),
+        Item('large_int_range', style='text', label='Text', id='text_large'),
         Item('_'),
-        Item('large_int_range', style='readonly', label='ReadOnly'),
+        Item('large_int_range', style='readonly', label='ReadOnly', id='readonly_large'),
         label='Large Int'
     )
 
     # RangeEditor display for float Range traits:
     float_range_group = Group(
-        Item('float_range', style='simple', label='Simple'),
+        Item('float_range', style='simple', label='Simple', id='simple_float'),
         Item('_'),
-        Item('float_range', style='custom', label='Custom'),
+        Item('float_range', style='custom', label='Custom', id='custom_float'),
         Item('_'),
-        Item('float_range', style='text', label='Text'),
+        Item('float_range', style='text', label='Text', id='text_float'),
         Item('_'),
-        Item('float_range', style='readonly', label='ReadOnly'),
+        Item('float_range', style='readonly', label='ReadOnly', id='readonly_float'),
         label='Float'
     )
 
