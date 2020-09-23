@@ -21,6 +21,7 @@ from traitsui.editors.code_editor import CodeEditor
 
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     reraise_exceptions,
@@ -48,7 +49,13 @@ class CodeView(ModelView):
         return traits_view
 
 
-class TestCodeEditor(unittest.TestCase):
+class TestCodeEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.qt])
     def test_code_editor_show_line_numbers(self):
