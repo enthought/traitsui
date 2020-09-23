@@ -380,9 +380,7 @@ The API allows extension such that
    Extending support for testing a UI editor often requires knowledge of the
    implementation details of the editor. If UI editor and the testing support
    code are not maintained together, tests may be subject to breakages caused
-   by internal changes of the UI editors. With that, projects are encouraged
-   to contribute testing support upstream for testing UI editors they do not
-   maintain.
+   by internal changes of the UI editors.
 
 Terminology
 -----------
@@ -562,9 +560,11 @@ The solvers can then be registered for the container UI target::
         solver=get_button,
     )
 
-Similar to |TargetRegistry.register_solver|, by setting the ``target_class``
-and ``locator_class``, we restrict the types of ``wrapper._target`` and
-``location`` received by ``get_button`` respectively.
+Similar to |TargetRegistry.register_handler|, the signature of
+``get_button`` is required by the |TargetRegistry.register_solver|
+method. By setting the ``target_class`` and ``locator_class``, we restrict the
+types of ``wrapper._target`` and ``location`` received by ``get_button``
+respectively.
 
 Then we can use this registry with |UITester|::
 
