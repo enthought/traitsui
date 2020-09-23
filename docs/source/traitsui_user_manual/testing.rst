@@ -118,7 +118,7 @@ The supported actions can be found via the |UIWrapper.help| method::
     with tester.create_ui(obj, dict(view=view)) as ui:
         title_field = tester.find_by_name(ui, "title")
 
-        # Print some help message
+        # Print information about the interactions and navigation possible on this object.
         title_field.help()
 
 The last line ``title_field.help()`` prints something like this (abbreviated
@@ -190,7 +190,7 @@ Modify trait and inspect GUI state
 To check the GUI state is what we expect, we use |UIWrapper.inspect|.
 
 In the above example, ``title_field`` wrapping a text box also supports a
-interaction type called ``DisplayedText``, so we can use that to check when the
+interaction type called ``DisplayedText``. We can use that to check that when the
 trait is updated, the text box is updated too::
 
     from traitsui.testing.api import UITester, DisplayedText
@@ -262,7 +262,7 @@ can also write::
     person_name_field = person_pane.find_by_name("name")
 
 The returned value is again an instance of |UIWrapper|, so we can repeat
-steps 2 oe 3.
+steps 2 or 3.
 
 In this example, ``person_name_field`` wraps a textbox, we can modify the
 value in the text box using |UIWrapper.perform| again::
@@ -404,8 +404,8 @@ Before we start, we need to define some terminology:
 
 * Location
     is an object that wraps the information for searching a target from a
-    container target, but it does not necessary contains information specific
-    of a Target. For example, both |TargetById| and |TargetByName| are
+    container target, but it does not necessarily contain information specific
+    to a Target. For example, both |TargetById| and |TargetByName| are
     locations for identifying a contained target via an id or a name, which can
     be used against different targets. A location can also be specialized for a
     specific target if needed.
@@ -450,7 +450,7 @@ wrapped::
 
 The target is an instance of a ``ShinyButton`` class (made up
 for this document). In this object, there is an instance of Qt QPushButton
-widget on which we want the mouse click to occur.
+widget which we want click with the mouse.
 
     >>> my_widget._target.control
     <PyQt5.QtWidgets.QPushButton object at 0x7fbcc3ac3558>
@@ -537,8 +537,9 @@ We can define the new ``NamedButton`` location type::
         def __init__(self, label):
             self.label = label
 
-Say ``ShinyPanel`` is keeping track of the buttons by names with a
-dictionary called ``_buttons``. Then the logic to retrieving a button from a
+Say ``ShinyPanel`` keeps track of the buttons with a dictionary called
+``_buttons`` where the names of the buttons are the keys of the dictionary.
+Then the logic to retrieving a button from a
 label can be written like this::
 
     def get_button(wrapper, location):
