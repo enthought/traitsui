@@ -34,8 +34,10 @@ class TestListEditorDemo(unittest.TestCase):
                 item1.perform(command.KeyClick("Backspace"))
             item1.perform(command.KeySequence("Othello"))
             item1.perform(command.KeyClick("Enter"))
-            self.assertEqual(demo.play_list,
-                ["The Merchant of Venice", "Othello", "MacBeth"])
+            self.assertEqual(
+                demo.play_list,
+                ["The Merchant of Venice", "Othello", "MacBeth"]
+            )
 
 
 # Run the test(s)

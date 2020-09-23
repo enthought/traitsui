@@ -70,7 +70,7 @@ def _get_next_target(list_editor, index):
     list_editor : CustomEditor
         The custom style list editor in which the target is contained.
     index : int
-        the index of the target of interest in the list 
+        the index of the target of interest in the list
 
     Returns
     -------

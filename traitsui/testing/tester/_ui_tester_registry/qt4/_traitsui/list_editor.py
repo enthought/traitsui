@@ -71,7 +71,7 @@ def _get_next_target(list_editor, index):
     list_editor : CustomEditor
         The custom style list editor in which the target is contained.
     index : int
-        the index of the target of interest in the list 
+        the index of the target of interest in the list
 
     Returns
     -------
@@ -88,6 +88,7 @@ def _get_next_target(list_editor, index):
     if list_editor.scrollable:
         list_editor.control.ensureWidgetVisible(item.widget())
     return item.widget()._editor
+
 
 def register(registry):
     """ Register interactions for the given registry.
