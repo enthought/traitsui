@@ -10,15 +10,11 @@
 #
 import contextlib
 
-from traitsui.ui import UI
 from traitsui.testing._gui import process_cascade_events
 from traitsui.testing._exception_handling import reraise_exceptions
 from traitsui.testing.tester._ui_tester_registry.default_registry import (
-    get_default_registry
-)
-from traitsui.testing.tester.registry import TargetRegistry
-from traitsui.testing.tester._ui_tester_registry._traitsui_ui import (
-    register_traitsui_ui_solvers,
+    get_default_registry,
+    _get_ui_registry
 )
 from traitsui.testing.tester.ui_wrapper import UIWrapper
 
@@ -238,20 +234,3 @@ class UITester:
             registries=self._registries,
             delay=self.delay,
         ).find_by_id(id=id)
-
-
-def _get_ui_registry():
-    """ Return a TargetRegistry with traitsui.ui.UI as the target.
-
-    Parameters
-    ----------
-    registry : TargetRegistry
-    """
-
-    registry = TargetRegistry()
-    register_traitsui_ui_solvers(
-        registry=registry,
-        target_class=UI,
-        traitsui_ui_getter=lambda target: target,
-    )
-    return registry

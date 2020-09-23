@@ -14,6 +14,10 @@ import importlib
 from traits.etsconfig.api import ETSConfig
 
 from traitsui.testing.tester.registry import TargetRegistry
+from traitsui.testing.tester._ui_tester_registry._traitsui_ui import (
+    register_traitsui_ui_solvers,
+)
+from traitsui.ui import UI
 
 
 def get_default_registry():
@@ -35,3 +39,20 @@ def get_default_registry():
             ".default_registry",
             "traitsui.testing.tester._ui_tester_registry." + toolkit)
         return module.get_default_registry()
+
+
+def _get_ui_registry():
+    """ Return a TargetRegistry with traitsui.ui.UI as the target.
+
+    Parameters
+    ----------
+    registry : TargetRegistry
+    """
+
+    registry = TargetRegistry()
+    register_traitsui_ui_solvers(
+        registry=registry,
+        target_class=UI,
+        traitsui_ui_getter=lambda target: target,
+    )
+    return registry
