@@ -7,8 +7,6 @@ from traits.api import (
     HasTraits,
     TraitError,
     Tuple,
-    pop_exception_handler,
-    push_exception_handler,
 )
 from traitsui.api import DateRangeEditor, View, Item
 
