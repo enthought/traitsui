@@ -21,7 +21,9 @@ from traitsui.editor import Editor
 from traitsui.editor_factory import EditorFactory
 from traitsui.handler import default_handler
 from traitsui.ui import UI
-from traitsui.tests._tools import GuiTestAssistant, no_gui_test_assistant
+from traitsui.tests._tools import (
+    BaseTestMixin, GuiTestAssistant, no_gui_test_assistant
+)
 
 
 class FakeControl(HasTraits):
@@ -182,7 +184,15 @@ def create_editor(
 
 
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
-class TestEditor(GuiTestAssistant, unittest.TestCase):
+class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+        GuiTestAssistant.setUp(self)
+
+    def tearDown(self):
+        GuiTestAssistant.tearDown(self)
+        BaseTestMixin.tearDown(self)
 
     def change_user_value(self, editor, object, name, value):
         if editor.is_event:
