@@ -12,6 +12,7 @@ import unittest
 
 from traits.api import HasStrictTraits
 from traitsui import ui_traits
+from traitsui.tests._tools import BaseTestMixin
 
 
 class ObjectWithUITraits(HasStrictTraits):
@@ -24,7 +25,13 @@ class ObjectWithUITraits(HasStrictTraits):
     view_status = ui_traits.ViewStatus()
 
 
-class TestUITraits(unittest.TestCase):
+class TestUITraits(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_orientation(self):
         obj = ObjectWithUITraits()
