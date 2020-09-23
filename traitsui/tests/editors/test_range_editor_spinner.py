@@ -35,7 +35,6 @@ from traitsui.editors.range_editor import RangeEditor
 from traitsui.tests._tools import (
     BaseTestMixin,
     create_ui,
-    press_ok_button,
     requires_toolkit,
     reraise_exceptions,
     ToolkitName,

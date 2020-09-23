@@ -10,7 +10,7 @@
 
 import unittest
 
-from traits.api import Directory, Event, File, HasTraits
+from traits.api import Event, File, HasTraits
 from traitsui.api import FileEditor, Item, View
 from traitsui.tests._tools import (
     BaseTestMixin,

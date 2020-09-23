@@ -9,7 +9,6 @@ from traitsui.tests._tools import (
     create_ui,
     is_qt,
     is_wx,
-    process_cascade_events,
     requires_toolkit,
     reraise_exceptions,
     ToolkitName,

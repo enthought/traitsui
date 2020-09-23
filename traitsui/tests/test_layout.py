@@ -85,8 +85,6 @@ class TestLayout(BaseTestMixin, unittest.TestCase):
         # along the non-layout axis of its group. In a VGroup, resizing should
         # work only in the horizontal direction.
 
-        from pyface import qt
-
         with reraise_exceptions(), \
                 create_ui(VResizeDialog()) as ui:
             editor, = ui.get_editors("txt")
@@ -103,8 +101,6 @@ class TestLayout(BaseTestMixin, unittest.TestCase):
         # Behavior: Item.resizable controls whether a component can resize
         # along the non-layout axis of its group. In a HGroup, resizing should
         # work only in the vertical direction.
-
-        from pyface import qt
 
         with reraise_exceptions(), \
                 create_ui(HResizeDialog()) as ui:

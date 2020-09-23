@@ -9,7 +9,7 @@
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 # ------------------------------------------------------------------------------
-import contextlib
+
 import unittest
 
 from packaging.version import Version
@@ -18,8 +18,6 @@ from traits import __version__ as TRAITS_VERSION
 from traits.api import (
     HasTraits,
     Str,
-    pop_exception_handler,
-    push_exception_handler,
 )
 from traits.testing.api import UnittestTools
 from traitsui.api import TextEditor, View, Item
@@ -60,7 +58,8 @@ def get_view(style, auto_set):
 # Skips tests if the backend is not either qt4 or qt5
 @requires_toolkit([ToolkitName.qt])
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
-class TestTextEditorQt(BaseTestMixin, GuiTestAssistant, UnittestTools, unittest.TestCase):
+class TestTextEditorQt(
+        BaseTestMixin, GuiTestAssistant, UnittestTools, unittest.TestCase):
     """ Test on TextEditor with Qt backend."""
 
     def setUp(self):
