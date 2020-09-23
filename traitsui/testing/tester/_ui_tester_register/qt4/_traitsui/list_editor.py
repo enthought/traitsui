@@ -9,11 +9,15 @@
 #  Thanks for using Enthought open source!
 #
 from traitsui.testing.tester import command, locator
-from traitsui.testing.tester._ui_tester_register._common_ui_targets import _BaseSourceWithLocation
+from traitsui.testing.tester._ui_tester_register._common_ui_targets import (
+    _BaseSourceWithLocation
+)
 from traitsui.testing.tester._traitsui_ui import (
     register_traitsui_ui_solvers,
 )
-from traitsui.testing.tester._ui_tester_register.qt4 import _interaction_helpers
+from traitsui.testing.tester._ui_tester_register.qt4 import (
+    _interaction_helpers
+)
 from traitsui.qt4.list_editor import (
     CustomEditor,
     NotebookEditor,

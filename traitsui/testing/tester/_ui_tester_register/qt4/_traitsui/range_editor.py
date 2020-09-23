@@ -17,7 +17,10 @@ from traitsui.qt4.range_editor import (
 )
 
 from traitsui.testing.tester import command, locator
-from traitsui.testing.tester._ui_tester_register.qt4 import _interaction_helpers, _registry_helper
+from traitsui.testing.tester._ui_tester_register.qt4 import (
+    _interaction_helpers,
+    _registry_helper
+)
 
 
 class LocatedTextbox:

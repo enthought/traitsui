@@ -10,7 +10,7 @@
 #
 
 from traitsui.testing.tester import command
-from traitsui.testing.tester._ui_tester_register.qt4._interaction_helpers import (
+from traitsui.testing.tester._ui_tester_register.qt4._interaction_helpers import (  # noqa
     mouse_click_qwidget
 )
 from traitsui.testing.tester._traitsui_ui import (

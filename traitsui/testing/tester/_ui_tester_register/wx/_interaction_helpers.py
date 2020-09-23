@@ -11,7 +11,9 @@
 
 import wx
 
-from traitsui.testing.tester._ui_tester_register._compat import check_key_compat
+from traitsui.testing.tester._ui_tester_register._compat import (
+    check_key_compat
+)
 from traitsui.testing.tester.exceptions import Disabled
 
 

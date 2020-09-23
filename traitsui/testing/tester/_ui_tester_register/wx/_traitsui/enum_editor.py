@@ -16,7 +16,9 @@ from traitsui.wx.enum_editor import (
     SimpleEditor,
 )
 from traitsui.testing.tester import command, locator, query
-from traitsui.testing.tester._ui_tester_register._common_ui_targets import _BaseSourceWithLocation
+from traitsui.testing.tester._ui_tester_register._common_ui_targets import (
+    _BaseSourceWithLocation
+)
 from traitsui.testing.tester._ui_tester_register.wx import _interaction_helpers
 from traitsui.testing.tester.editors._layout import column_major_to_row_major
 

@@ -19,7 +19,9 @@ from traitsui.tests._tools import (
 )
 from traitsui.testing.tester import command
 from traitsui.testing.tester.exceptions import Disabled
-from traitsui.testing.tester._ui_tester_register.qt4 import _interaction_helpers
+from traitsui.testing.tester._ui_tester_register.qt4 import (
+    _interaction_helpers
+)
 
 try:
     from pyface.qt import QtGui

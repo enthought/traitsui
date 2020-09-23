@@ -16,7 +16,10 @@ from traitsui.wx.range_editor import (
 )
 
 from traitsui.testing.tester import command, locator
-from traitsui.testing.tester._ui_tester_register.wx import _interaction_helpers, _registry_helper
+from traitsui.testing.tester._ui_tester_register.wx import (
+    _interaction_helpers,
+    _registry_helper
+)
 
 
 class LocatedTextbox:

@@ -9,7 +9,9 @@
 #  Thanks for using Enthought open source!
 #
 from traitsui.testing.tester import command, locator
-from traitsui.testing.tester._ui_tester_register._common_ui_targets import _BaseSourceWithLocation
+from traitsui.testing.tester._ui_tester_register._common_ui_targets import (
+    _BaseSourceWithLocation
+)
 from traitsui.testing.tester._traitsui_ui import (
     register_traitsui_ui_solvers,
 )

@@ -10,7 +10,9 @@
 #
 
 from traitsui.testing.tester import query
-from traitsui.testing.tester._ui_tester_register.qt4 import _interaction_helpers
+from traitsui.testing.tester._ui_tester_register.qt4 import (
+    _interaction_helpers
+)
 from traitsui.testing.tester._ui_tester_register.qt4._registry_helper import (
     register_editable_textbox_handlers,
 )
