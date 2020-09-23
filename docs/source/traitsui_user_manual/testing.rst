@@ -309,7 +309,7 @@ Example::
     from traitsui.testing.api import UITester, KeySequence
 
     obj = App()
-    tester = UITester(delay=50)    # delay is set
+    tester = UITester(delay=50)    # delay in milliseconds
     with tester.create_ui(obj, dict(view=view)) as ui:
         title_field = tester.find_by_name(ui, "title")
         title_field.perform(KeySequence("New Title"))
