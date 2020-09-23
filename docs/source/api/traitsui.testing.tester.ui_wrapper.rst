@@ -1,5 +1,5 @@
-traitsui.testing.tester.ui\_wrapper
-===================================
+traitsui\.testing\.tester\.ui\_wrapper module
+=============================================
 
 .. automodule:: traitsui.testing.tester.ui_wrapper
     :members:

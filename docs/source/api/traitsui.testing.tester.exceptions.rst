@@ -1,5 +1,5 @@
-traitsui.testing.tester.exceptions
-==================================
+traitsui\.testing\.tester\.exceptions module
+============================================
 
 .. automodule:: traitsui.testing.tester.exceptions
     :members:

@@ -1,5 +1,5 @@
-traitsui.testing.tester.locator
-===============================
+traitsui\.testing\.tester\.locator module
+=========================================
 
 .. automodule:: traitsui.testing.tester.locator
     :members:

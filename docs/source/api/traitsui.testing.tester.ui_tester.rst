@@ -1,5 +1,5 @@
-traitsui.testing.tester.ui\_tester
-==================================
+traitsui\.testing\.tester\.ui\_tester module
+============================================
 
 .. automodule:: traitsui.testing.tester.ui_tester
     :members:

@@ -1,5 +1,5 @@
-traitsui.testing.tester.registry
-================================
+traitsui\.testing\.tester\.registry module
+==========================================
 
 .. automodule:: traitsui.testing.tester.registry
     :members:
