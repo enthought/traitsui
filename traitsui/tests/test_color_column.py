@@ -5,6 +5,7 @@ from traitsui.api import View, Group, Item, TableEditor, ObjectColumn, RGBColor
 from traitsui.color_column import ColorColumn
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     reraise_exceptions,
@@ -38,7 +39,13 @@ class MyData(HasTraits):
     view = View(Item("data_list", editor=my_editor, show_label=False))
 
 
-class TestColorColumn(TestCase):
+class TestColorColumn(BaseTestMixin, TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_color_column(self):
