@@ -206,8 +206,8 @@ trait is updated, the text box is updated too::
         displayed = title_field.inspect(DisplayedText())
         assert displayed == "Shiny new title"
 
-Navigate into More Specific Location in the GUI
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Locate Specific Elements in the GUI
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Sometimes, a GUI application is complex and the GUI element we want to test is
 deeply nested in the application. Sometimes, given a GUI element, we still need
