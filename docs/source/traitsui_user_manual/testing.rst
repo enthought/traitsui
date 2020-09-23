@@ -346,7 +346,9 @@ Yes.
 events to be processed. Where they are used entirely for modifying GUI states,
 you may find uses of some of GuiTestAssistant features no longer necessary.
 
-.. rubric:: I use the delay parameter to play back my test but it does not look identical to when I test the GUI manually, why?
+.. rubric::
+   I use the delay parameter to play back my test but it does not look
+   identical to when I test the GUI manually, why?
 
 If the GUI / trait states being asserted in tests are not consistent compared
 to manually testing, then that is likely a bug. Please report it.
