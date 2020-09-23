@@ -8,3 +8,32 @@
 #
 #  Thanks for using Enthought open source!
 #
+from .tester.command import (
+    MouseClick,
+    KeyClick,
+    KeySequence
+)
+
+from .tester.exceptions import (
+    Disabled,
+    InteractionNotSupported,
+    LocationNotSupported,
+    TesterError
+)
+
+from .tester.locator import (
+    Index,
+    TargetById,
+    TargetByName,
+    Textbox,
+    Slider
+)
+
+from .tester.registry import TargetRegistry
+
+from .tester.query import (
+    DisplayedText,
+    SelectedText
+)
+
+from .tester.ui_tester import UITester
