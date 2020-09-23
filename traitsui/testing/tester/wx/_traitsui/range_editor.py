@@ -42,7 +42,7 @@ class LocatedTextbox:
         registry : TargetRegistry
             The registry being registered to.
         """
-        registry_helper.register_editable_textbox_handlers(
+        _registry_helper.register_editable_textbox_handlers(
             registry=registry,
             target_class=cls,
             widget_getter=lambda wrapper: wrapper._target.textbox,
