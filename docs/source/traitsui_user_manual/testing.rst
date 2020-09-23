@@ -5,7 +5,7 @@ Testing TraitsUI Applications
 =============================
 
 TraitsUI provides the ``traitsui.testing.api`` module which provides test
-functionality that help developers check the behavior of their application.
+functionality that helps developers check the behavior of their application.
 
 Most of the test functionality can be accessed via the |UITester| object.
 
@@ -20,7 +20,7 @@ Basic Testing
 Creating a GUI
 --------------
 
-In order to test an TraitsUI application with |UITester|, we need an
+In order to test a TraitsUI application with |UITester|, we need an
 instance of |UI|. Test code can create and dispose of a |UI| in any way, but
 since this is a common use case, |UITester| provides a convenient method
 |UITester.create_ui| for that::
@@ -95,8 +95,9 @@ The returned value ``wrapper`` will be used in the following steps.
 Perform a user interaction or continue navigation
 -------------------------------------------------
 The returned value of |UITester.find_by_name| and |UITester.find_by_id|
-is an instance of |UIWrapper| on which you may either navigate into more
-nested GUI elements, or perform a user interaction on the GUI element.
+is an instance of |UIWrapper| on which you may navigate into more
+nested GUI elements, perform a user interaction, or inspect states on the
+GUI element.
 
 The supported actions can be found via the |UIWrapper.help| method::
 
@@ -208,7 +209,7 @@ trait is updated, the text box is updated too::
 Navigate into more specific location in the GUI
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Sometimes, a GUI application is complex and the GUI element we want to test are
+Sometimes, a GUI application is complex and the GUI element we want to test is
 deeply nested in the application. Sometimes, given a GUI element, we still need
 to specify further where an interaction should occur (e.g. mouse clicking a
 particular item in a combo box). For that, |UIWrapper.locate| can be used
