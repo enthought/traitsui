@@ -79,21 +79,16 @@ add an unique identifier to the relevant view element::
         Item(
             name="person",
             editor=InstanceEditor(
-                view=View(
-                    Item(
-                        name="name",
-                        id="person_id",    # <--- add this
-                    ),
-                    style="custom",
-                ),
+                view=View(Item(name="name"), style="custom"),
             ),
+            id="person_item",    # <--- add this
         )
     )
 
     obj = App()
     tester = UITester()
     with tester.create_ui(obj, dict(view=view)) as ui:
-        wrapper = tester.find_by_id(ui, "person_id")
+        wrapper = tester.find_by_id(ui, "person_item")
 
 The returned value ``wrapper`` will be used in the following steps.
 
