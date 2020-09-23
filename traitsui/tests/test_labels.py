@@ -25,6 +25,7 @@ from traitsui.item import Item
 from traitsui.group import VGroup, HGroup
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     is_control_enabled,
     is_qt,
@@ -125,7 +126,13 @@ class EnableWhenDialog(HasTraits):
     )
 
 
-class TestLabels(unittest.TestCase):
+class TestLabels(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.qt])
     def test_qt_show_labels_right_without_colon(self):
