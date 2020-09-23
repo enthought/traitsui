@@ -18,6 +18,7 @@ from pyface.toolkit import toolkit_object
 
 from traitsui.tests.test_editor import create_editor
 from traitsui.undo import UndoHistory
+from traitsui.tests._tools import BaseTestMixin
 
 GuiTestAssistant = toolkit_object("util.gui_test_assistant:GuiTestAssistant")
 no_gui_test_assistant = GuiTestAssistant.__name__ == "Unimplemented"
@@ -28,7 +29,15 @@ if no_gui_test_assistant:
 
 
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
-class TestEditorUndo(GuiTestAssistant, unittest.TestCase):
+class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+        GuiTestAssistant.setUp(self)
+
+    def tearDown(self):
+        GuiTestAssistant.setUp(self)
+        BaseTestMixin.setUp(self)
 
     def check_history(self, editor, expected_history_now,
                       expected_history_length):
