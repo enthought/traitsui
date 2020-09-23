@@ -29,6 +29,7 @@ from traitsui.editors.range_editor import RangeEditor
 from traitsui.testing.tester import command, locator, query
 from traitsui.testing.tester.ui_tester import UITester
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     press_ok_button,
     requires_toolkit,
@@ -61,7 +62,13 @@ class FloatWithRangeEditor(HasTraits):
     )
 
 
-class TestRangeEditorText(unittest.TestCase):
+class TestRangeEditorText(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.wx])
     def test_wx_text_editing(self):
