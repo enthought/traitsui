@@ -21,6 +21,7 @@ from traitsui.tests._tools import (
     BaseTestMixin,
 )
 
+
 class Parent(HasTraits):
     button = Event()
 
