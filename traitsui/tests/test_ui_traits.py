@@ -59,7 +59,13 @@ class TestUITraits(BaseTestMixin, unittest.TestCase):
         self.assertEqual(actual, 1)
 
 
-class TestStatusItem(unittest.TestCase):
+class TestStatusItem(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_init(self):
         item = ui_traits.StatusItem(
@@ -78,7 +84,13 @@ class TestStatusItem(unittest.TestCase):
         self.assertEqual(item.name, "some_other_name")
 
 
-class TestViewStatus(unittest.TestCase):
+class TestViewStatus(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_init(self):
         obj = ObjectWithUITraits()
