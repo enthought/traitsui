@@ -11,7 +11,7 @@
 
 import unittest
 
-from traitsui.testing.tester._ui_tester_register.default_registry import (
+from traitsui.testing.tester._ui_tester_registry.default_registry import (
     get_default_registry
 )
 from traitsui.testing.tester.registry import TargetRegistry
