@@ -171,7 +171,7 @@ type is supported (as shown in the "Interactions" section from the help
 message).
 
 Say we want to modify the value in the text box as if the user has typed
-in it, we can use the ``KeySequence`` object together with
+in it, we can use the |KeySequence| object together with
 |UIWrapper.perform|::
 
     from traitsui.testing.api import UITester, KeySequence
@@ -193,7 +193,7 @@ Modify trait and inspect GUI state
 To check the GUI state is what we expect, we use |UIWrapper.inspect|.
 
 In the above example, ``title_field`` wrapping a text box also supports a
-interaction type called ``DisplayedText``. We can use that to check that when the
+interaction type called |DisplayedText|. We can use that to check that when the
 trait is updated, the text box is updated too::
 
     from traitsui.testing.api import UITester, DisplayedText
@@ -248,7 +248,7 @@ see the following::
 
 We can see that |TargetById| and |TargetByName| are available for
 locating the next GUI element. We can locate the text box for
-``person.name`` using ``TargetByName``::
+``person.name`` using |TargetByName|::
 
     from traitsui.testing.api import UITester, TargetByName
 
@@ -593,7 +593,7 @@ editors is added last, hence with the lowest priority.
 
 With that, one can override TraitsUI builtin testing support by redefining the
 interaction handler and/or location solver via an instance of
-``TargetRegistry``::
+|TargetRegistry|::
 
     from traitsui.qt4.button_editor import SimpleEditor
     from traitsui.testing.api import command
@@ -613,6 +613,7 @@ interaction handler and/or location solver via an instance of
 .. |UI| replace:: :class:`~traitsui.ui.UI`
 
 .. |MouseClick| replace:: :class:`~traitsui.testing.tester.command.MouseClick`
+.. |KeySequence| replace:: :class:`~traitsui.testing.tester.command.KeySequence`
 .. |DisplayedText| replace:: :class:`~traitsui.testing.tester.query.DisplayedText`
 .. |TargetById| replace:: :class:`~traitsui.testing.tester.locator.TargetById`
 .. |TargetByName| replace:: :class:`~traitsui.testing.tester.locator.TargetByName`
