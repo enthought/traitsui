@@ -33,5 +33,5 @@ def get_default_registry():
         toolkit = {'wx': 'wx', 'qt4': 'qt4', 'qt': 'qt4'}[ETSConfig.toolkit]
         module = importlib.import_module(
             ".default_registry",
-            ".".join([__name__, toolkit])
+            ".".join([__name__, toolkit]))
         return module.get_default_registry()
