@@ -13,6 +13,7 @@ from traits.api import (
 from traitsui.api import DateRangeEditor, View, Item
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     ToolkitName,
@@ -44,8 +45,14 @@ def custom_view_allow_no_range():
     return view
 
 
-class TestDateRangeEditorGeneric(unittest.TestCase):
+class TestDateRangeEditorGeneric(BaseTestMixin, unittest.TestCase):
     """ Tests that are not GUI backend specific."""
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_date_range_multi_select_is_constant(self):
         with self.assertRaises(TraitError):
@@ -53,10 +60,13 @@ class TestDateRangeEditorGeneric(unittest.TestCase):
 
 
 @requires_toolkit([ToolkitName.qt])
-class TestDateRangeEditorQt(unittest.TestCase):
+class TestDateRangeEditorQt(BaseTestMixin, unittest.TestCase):
+
     def setUp(self):
-        push_exception_handler(reraise_exceptions=True)
-        self.addCleanup(pop_exception_handler)
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_set_date_range_on_model(self):
         # Test when the date range is set on the model
