@@ -56,7 +56,8 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
         # Smoke test to check init and dispose do not fail.
         model = HTMLModel()
         view = get_view(base_url_name="")
-        with create_ui(model, dict(view=view)):
+        with reraise_exceptions(), \
+                create_ui(model, dict(view=view)):
             pass
 
     def test_base_url_changed(self):

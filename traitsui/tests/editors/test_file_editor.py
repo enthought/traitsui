@@ -43,7 +43,8 @@ class TestFileEditor(BaseTestMixin, unittest.TestCase):
         # Test init and dispose by opening and closing the UI
         view = View(Item("filepath", editor=FileEditor(), style=style))
         obj = FileModel()
-        with create_ui(obj, dict(view=view)):
+        with reraise_exceptions(), \
+                create_ui(obj, dict(view=view)):
             pass
 
     def test_simple_editor_init_and_dispose(self):

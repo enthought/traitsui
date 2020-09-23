@@ -18,6 +18,7 @@ from traitsui.tests._tools import (
     BaseTestMixin,
     create_ui,
     requires_toolkit,
+    reraise_exceptions,
     ToolkitName,
 )
 
@@ -42,5 +43,6 @@ class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
         # Test init and dispose of the editor.
         view = View(Item("true_or_false", editor=BooleanEditor()))
         obj = BoolModel()
-        with create_ui(obj, dict(view=view)):
+        with reraise_exceptions(), \
+                create_ui(obj, dict(view=view)):
             pass
