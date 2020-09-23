@@ -36,8 +36,8 @@ class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         GuiTestAssistant.setUp(self)
 
     def tearDown(self):
-        GuiTestAssistant.setUp(self)
-        BaseTestMixin.setUp(self)
+        GuiTestAssistant.tearDown(self)
+        BaseTestMixin.tearDown(self)
 
     def check_history(self, editor, expected_history_now,
                       expected_history_length):
