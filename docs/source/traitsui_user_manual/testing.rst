@@ -1,4 +1,4 @@
-.. _testing:
+.. _testing-traitsui-applications:
 
 =============================
 Testing TraitsUI Applications

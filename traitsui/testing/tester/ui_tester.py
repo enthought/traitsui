@@ -24,7 +24,8 @@ from traitsui.testing.tester.ui_wrapper import UIWrapper
 class UITester:
     """ UITester assists testing of GUI applications developed using TraitsUI.
 
-    See :ref:`testing` in the User Manual for further details.
+    See :ref:`testing-traitsui-applications` Section in the User Manual for
+    further details.
 
     Parameters
     ----------
