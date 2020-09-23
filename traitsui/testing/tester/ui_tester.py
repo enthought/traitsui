@@ -13,7 +13,7 @@ import contextlib
 from traitsui.ui import UI
 from traitsui.testing._gui import process_cascade_events
 from traitsui.testing._exception_handling import reraise_exceptions
-from traitsui.testing.tester.default_registry import get_default_registry
+from traitsui.testing.tester._ui_tester_register.default_registry import get_default_registry
 from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester._ui_tester_register._traitsui_ui import (
     register_traitsui_ui_solvers,
