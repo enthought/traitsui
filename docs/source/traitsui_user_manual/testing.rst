@@ -44,7 +44,7 @@ Locating a UI editor
 After creating a |UI| object, the first step is to navigate
 into the UI editor.
 
-Find by name
+Find by Name
 ^^^^^^^^^^^^^
 When defining a TraitsUI view, we will often define an instance of
 |Item| with a trait name. The name can be used with
@@ -92,7 +92,7 @@ add an unique identifier to the relevant view element::
 
 The returned value ``wrapper`` will be used in the following steps.
 
-Perform a user interaction or continue navigation
+Perform a User Interaction or Continue Navigation
 -------------------------------------------------
 The returned value of |UITester.find_by_name| and |UITester.find_by_id|
 is an instance of |UIWrapper| on which you may navigate into more
@@ -164,8 +164,8 @@ supported.
 Most of the time these objects can be imported from
 ``traitsui.testing.api``.
 
-Perform a user interaction to modify GUI state
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Perform a User Interaction to Modify GUI States
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 To modify the GUI state, we use |UIWrapper.perform| with an object whose
 type is supported (as shown in the "Interactions" section from the help
 message).
@@ -188,8 +188,8 @@ We can then check the trait being edited is updated.
 (In the test above, the trait is in fact updated many times because the default
 the text editor is set such that the trait is changed at every key press.)
 
-Modify trait and inspect GUI state
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Modify a Trait and Inspect GUI States
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 To check the GUI state is what we expect, we use |UIWrapper.inspect|.
 
 In the above example, ``title_field`` wrapping a text box also supports a
@@ -206,7 +206,7 @@ trait is updated, the text box is updated too::
         displayed = title_field.inspect(DisplayedText())
         assert displayed == "Shiny new title"
 
-Navigate into more specific location in the GUI
+Navigate into More Specific Location in the GUI
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Sometimes, a GUI application is complex and the GUI element we want to test is
@@ -415,7 +415,7 @@ Before we start, we need to define some terminology:
 
     |UIWrapper.locate| resolves a location.
 
-Add support for performing a user interaction
+Add Support for Performing a User Interaction
 ---------------------------------------------
 
 Support for |UIWrapper.perform| can be extended by registering additional
@@ -493,7 +493,7 @@ Finally, we can use this registry with the |UITester|::
 All the builtin testing support for TraitsUI editors are still present, but now
 this tester can perform the additional, custom user interaction.
 
-Add support for inspecting GUI states
+Add Support for Inspecting GUI States
 -------------------------------------
 
 The steps to extend |UIWrapper.inspect| is identical to those for extending
@@ -509,7 +509,7 @@ can also be called via |UIWrapper.inspect|::
 The returned value is the returned value from ``many_mouse_click``, which is
 ``None``.
 
-Add support for locating a nested GUI element
+Add Support for Locating a Nested GUI Element
 ---------------------------------------------
 
 Support for |UIWrapper.locate| can be extended by registering additional
@@ -579,7 +579,7 @@ above), we can write test code like this::
 
 where both ``NamedButton`` and ``ManyMouseClick`` are custom objects.
 
-Overriding TraitsUI builtin testing support
+Overriding TraitsUI Builtin Testing Support
 -------------------------------------------
 
 |UITester| maintains a list of registries ordered in decreasing priority.
