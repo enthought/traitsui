@@ -227,8 +227,14 @@ class TestLabels(BaseTestMixin, unittest.TestCase):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestAnyToolkit(unittest.TestCase):
+class TestAnyToolkit(BaseTestMixin, unittest.TestCase):
     """ Toolkit-agnostic tests for labels with different orientations."""
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_group_show_right_labels(self):
         with reraise_exceptions(), \
