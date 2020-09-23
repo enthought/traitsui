@@ -32,24 +32,13 @@ def get_default_registry():
     # side-effect to determine current toolkit
     from pyface.toolkit import toolkit_object  # noqa
     if ETSConfig.toolkit == "null":
-        return TargetRegistry()
+        registry = TargetRegistry()
     else:
         toolkit = {'wx': 'wx', 'qt4': 'qt4', 'qt': 'qt4'}[ETSConfig.toolkit]
         module = importlib.import_module(
             ".default_registry",
             "traitsui.testing.tester._ui_tester_registry." + toolkit)
-        return module.get_default_registry()
-
-
-def _get_ui_registry():
-    """ Return a TargetRegistry with traitsui.ui.UI as the target.
-
-    Parameters
-    ----------
-    registry : TargetRegistry
-    """
-
-    registry = TargetRegistry()
+        registry = module.get_default_registry()
     register_traitsui_ui_solvers(
         registry=registry,
         target_class=UI,

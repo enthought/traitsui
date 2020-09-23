@@ -13,8 +13,7 @@ import contextlib
 from traitsui.testing._gui import process_cascade_events
 from traitsui.testing._exception_handling import reraise_exceptions
 from traitsui.testing.tester._ui_tester_registry.default_registry import (
-    get_default_registry,
-    _get_ui_registry
+    get_default_registry
 )
 from traitsui.testing.tester.ui_wrapper import UIWrapper
 
@@ -152,7 +151,6 @@ class UITester:
             self._registries = registries.copy()
 
         # The find_by_name method in this class depends on this registry
-        self._registries.append(_get_ui_registry())
         self._registries.append(get_default_registry())
         self.delay = delay
 
