@@ -1,8 +1,8 @@
 .. _testing:
 
-============================
-Testing TraitsUI Application
-============================
+=============================
+Testing TraitsUI Applications
+=============================
 
 TraitsUI provides the ``traitsui.testing.api`` module which provides test
 functionality that help developers check the behavior of their application.
