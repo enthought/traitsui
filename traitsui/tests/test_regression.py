@@ -17,6 +17,9 @@ import unittest
 from traits.api import DelegatesTo, Event, HasTraits, Instance, Undefined
 from traitsui.api import Editor, TextEditor
 
+from traitsui.tests._tools import (
+    BaseTestMixin,
+)
 
 class Parent(HasTraits):
     button = Event()
@@ -27,7 +30,14 @@ class Child(HasTraits):
     button = DelegatesTo("parent")
 
 
-class TestRegression(unittest.TestCase):
+class TestRegression(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
     def test_editor_on_delegates_to_event(self):
         """ Make sure that DelegatesTo on Events passes Editor creation.
         """
