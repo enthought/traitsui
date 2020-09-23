@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 from traitsui.testing.tester import command, query
-from traitsui.testing.tester.qt4 import _interaction_helpers
+from traitsui.testing.tester._ui_tester_register.qt4 import _interaction_helpers
 from traitsui.qt4.button_editor import CustomEditor, SimpleEditor
 
 

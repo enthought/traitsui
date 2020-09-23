@@ -14,7 +14,7 @@ and location solvers for common Qt GUI components.
 """
 
 from traitsui.testing.tester import command, query
-from traitsui.testing.tester.qt4 import _interaction_helpers
+from traitsui.testing.tester._ui_tester_register.qt4 import _interaction_helpers
 
 
 def register_editable_textbox_handlers(registry, target_class, widget_getter):
