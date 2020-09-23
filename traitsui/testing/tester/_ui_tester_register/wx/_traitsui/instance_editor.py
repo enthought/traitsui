@@ -10,7 +10,7 @@
 #
 
 from traitsui.testing.tester import command
-from traitsui.testing.tester._traitsui_ui import (
+from traitsui.testing.tester._ui_tester_register._traitsui_ui import (
     register_traitsui_ui_solvers,
 )
 from traitsui.testing.tester._ui_tester_register.wx._interaction_helpers import mouse_click_button  # noqa

@@ -15,7 +15,7 @@ from traitsui.testing._gui import process_cascade_events
 from traitsui.testing._exception_handling import reraise_exceptions
 from traitsui.testing.tester.default_registry import get_default_registry
 from traitsui.testing.tester.registry import TargetRegistry
-from traitsui.testing.tester._traitsui_ui import (
+from traitsui.testing.tester._ui_tester_register._traitsui_ui import (
     register_traitsui_ui_solvers,
 )
 from traitsui.testing.tester.ui_wrapper import UIWrapper
