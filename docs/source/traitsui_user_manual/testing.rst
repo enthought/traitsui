@@ -182,8 +182,10 @@ in it, we can use the ``KeySequence`` object together with
         title_field.perform(KeySequence("New Title"))
         assert obj.title == "New Title"
 
-We can then check the trait being edited is updated (many times,
-once per keystroke).
+We can then check the trait being edited is updated.
+
+(In the test above, the trait is in fact updated many times because the default
+the text editor is set such that the trait is changed at every key press.)
 
 Modify trait and inspect GUI state
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
