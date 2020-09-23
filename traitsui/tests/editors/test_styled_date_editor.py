@@ -6,6 +6,7 @@ from traits.api import Dict, HasTraits, Instance, List, Str
 from traitsui.api import Item, StyledDateEditor, View
 from traitsui.editors.date_editor import CellFormat
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     reraise_exceptions,
@@ -35,7 +36,13 @@ def get_example_model():
 
 # StyledDateEditor is currently only implemented for Qt
 @requires_toolkit([ToolkitName.qt])
-class TestStyledDateEditor(unittest.TestCase):
+class TestStyledDateEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_init_and_dispose(self):
         # Smoke test to test init and dispose.
