@@ -10,7 +10,9 @@
 #
 import unittest
 
-from traitsui.testing.tester._ui_tester_register._layout import column_major_to_row_major
+from traitsui.testing.tester._ui_tester_register._layout import (
+    column_major_to_row_major
+)
 
 
 class TestLayout(unittest.TestCase):
