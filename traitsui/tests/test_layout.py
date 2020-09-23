@@ -27,6 +27,7 @@ from traitsui.view import View
 from traitsui.group import HGroup, VGroup
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     reraise_exceptions,
@@ -70,7 +71,13 @@ class HResizeDialog(HasTraits):
     )
 
 
-class TestLayout(unittest.TestCase):
+class TestLayout(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.qt])
     def test_qt_resizable_in_vgroup(self):
@@ -115,8 +122,14 @@ class TestLayout(unittest.TestCase):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestOrientation(unittest.TestCase):
+class TestOrientation(BaseTestMixin, unittest.TestCase):
     """ Toolkit-agnostic tests on the layout orientations."""
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_vertical_layout(self):
         view = View(
