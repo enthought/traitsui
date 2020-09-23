@@ -27,6 +27,7 @@ from traitsui.api import (
 )
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     press_ok_button,
     requires_toolkit,
@@ -123,7 +124,13 @@ class BogusTreeNodeObjectView(HasTraits):
         return traits_view
 
 
-class TestTreeView(unittest.TestCase):
+class TestTreeView(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     # test for wx is failing for other reasons.
     # It might pass once we receive fix for enthought/pyface#558
