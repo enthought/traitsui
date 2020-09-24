@@ -52,7 +52,7 @@ def register(registry):
     registry : TargetRegistry
         The registry being registered to.
     """
-    registry.register_handler(
+    registry.register_interaction(
         target_class=SimpleEditor,
         interaction_class=command.MouseClick,
         handler=lambda wrapper, _: (

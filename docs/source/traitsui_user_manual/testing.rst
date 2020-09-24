@@ -419,7 +419,7 @@ Add Support for Performing a User Interaction
 ---------------------------------------------
 
 Support for |UIWrapper.perform| can be extended by registering additional
-interaction type and handling logic via |TargetRegistry.register_handler| on
+interaction type and handling logic via |TargetRegistry.register_interaction| on
 a |TargetRegistry|.
 
 For the purpose of this document, suppose we want to perform many mouse clicks
@@ -475,13 +475,13 @@ Then we need to register this function with an instance of |TargetRegistry|::
     from package.ui.qt.shiny_button import ShinyButton
 
     custom_registry = TargetRegistry()
-    custom_registry.register_handler(
+    custom_registry.register_interaction(
         target_class=ShinyButton,
         interaction_class=ManyMouseClick,
         handler=many_mouse_click,
     )
 
-The signature of ``many_mouse_click`` is required by the |TargetRegistry.register_handler|
+The signature of ``many_mouse_click`` is required by the |TargetRegistry.register_interaction|
 method on |TargetRegistry|. By setting the ``target_class`` and
 ``interaction_class``, we restrict the types of ``wrapper._target`` and
 ``interaction`` received by ``many_mouse_click`` respectively.
@@ -513,7 +513,7 @@ Add Support for Locating a Nested GUI Element
 ---------------------------------------------
 
 Support for |UIWrapper.locate| can be extended by registering additional
-location type and resolution logic via |TargetRegistry.register_solver| on
+location type and resolution logic via |TargetRegistry.register_location| on
 a |TargetRegistry|.
 
 Suppose we have a custom UI editor that contains some buttons. The objective of
@@ -554,14 +554,14 @@ label can be written like this::
 The solvers can then be registered for the container UI target::
 
     registry = TargetRegistry()
-    registry.register_solver(
+    registry.register_location(
         target_class=ShinyPanel,
         locator_class=NamedButton,
         solver=get_button,
     )
 
-Similar to |TargetRegistry.register_handler|, the signature of
-``get_button`` is required by the |TargetRegistry.register_solver|
+Similar to |TargetRegistry.register_interaction|, the signature of
+``get_button`` is required by the |TargetRegistry.register_location|
 method. By setting the ``target_class`` and ``locator_class``, we restrict the
 types of ``wrapper._target`` and ``location`` received by ``get_button``
 respectively.
@@ -619,8 +619,8 @@ interaction handler and/or location solver via an instance of
 .. |TargetByName| replace:: :class:`~traitsui.testing.tester.locator.TargetByName`
 
 .. |TargetRegistry| replace:: :class:`~traitsui.testing.tester.registry.TargetRegistry`
-.. |TargetRegistry.register_handler| replace:: :func:`~traitsui.testing.tester.registry.TargetRegistry.register_handler`
-.. |TargetRegistry.register_solver| replace:: :class:`~traitsui.testing.tester.registry.TargetRegistry.register_solver`
+.. |TargetRegistry.register_interaction| replace:: :func:`~traitsui.testing.tester.registry.TargetRegistry.register_interaction`
+.. |TargetRegistry.register_location| replace:: :class:`~traitsui.testing.tester.registry.TargetRegistry.register_location`
 
 .. |UITester| replace:: :class:`~traitsui.testing.tester.ui_tester.UITester`
 .. |UITester.create_ui| replace:: :func:`~traitsui.testing.tester.ui_tester.UITester.create_ui`
