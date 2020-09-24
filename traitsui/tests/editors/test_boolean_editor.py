@@ -16,11 +16,11 @@ from traits.api import HasTraits, Bool
 from traitsui.api import BooleanEditor, Item, View
 from traitsui.tests._tools import (
     BaseTestMixin,
-    create_ui,
     requires_toolkit,
-    reraise_exceptions,
     ToolkitName,
 )
+
+from traitsui.testing.api import MouseClick, UITester
 
 
 class BoolModel(HasTraits):
@@ -43,6 +43,19 @@ class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
         # Test init and dispose of the editor.
         view = View(Item("true_or_false", editor=BooleanEditor()))
         obj = BoolModel()
-        with reraise_exceptions(), \
-                create_ui(obj, dict(view=view)):
+
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=view)):
             pass
+
+    def test_click_boolean(self):
+        view = View(Item("true_or_false", editor=BooleanEditor()))
+        obj = BoolModel()
+
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=view)) as ui:
+            # sanity check
+            self.assertEqual(obj.true_or_false, False)
+            checkbox = tester.find_by_name(ui, "true_or_false")
+            checkbox.perform(MouseClick())
+            self.assertEqual(obj.true_or_false, True)
