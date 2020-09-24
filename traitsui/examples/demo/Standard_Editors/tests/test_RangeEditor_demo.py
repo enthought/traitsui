@@ -10,10 +10,16 @@ import os
 import runpy
 import unittest
 
-# FIXME: Import from api instead
-# enthought/traitsui#1173
-from traitsui.testing.tester import command, locator, query
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import (
+    DisplayedText,
+    Index,
+    KeyClick,
+    KeySequence,
+    MouseClick,
+    Slider,
+    Textbox,
+    UITester
+)
 
 #: Filename of the demo script
 FILENAME = "RangeEditor_demo.py"
@@ -27,7 +33,7 @@ class TestRangeEditorDemo(unittest.TestCase):
     def test_run_demo(self):
         demo = runpy.run_path(DEMO_PATH)["demo"]
 
-        tester = UITester(delay=200)
+        tester = UITester()
         with tester.create_ui(demo) as ui:
             simple_small = tester.find_by_id(ui, 'simple_small')  # SimpleSliderEditor
             custom_small = tester.find_by_id(ui, 'custom_small')  # CustomEnumEditor
@@ -51,55 +57,99 @@ class TestRangeEditorDemo(unittest.TestCase):
 
 
             # Tests for the small_int_range 
-            simple_small_slider = simple_small.locate(locator.Slider())
-            simple_small_slider.perform(command.KeyClick("Page Up"))
+            simple_small_slider = simple_small.locate(Slider())
+            simple_small_slider.perform(KeyClick("Page Up"))
             self.assertEqual(demo.small_int_range, 2)
-            simple_small_text = simple_small.locate(locator.Textbox())
-            simple_small_text.perform(command.KeyClick("Backspace"))
-            simple_small_text.perform(command.KeyClick("3"))
-            simple_small_text.perform(command.KeyClick("Enter"))
+            simple_small_text = simple_small.locate(Textbox())
+            simple_small_text.perform(KeyClick("Backspace"))
+            simple_small_text.perform(KeyClick("3"))
+            simple_small_text.perform(KeyClick("Enter"))
             self.assertEqual(demo.small_int_range, 3)
 
-            custom_small.locate(locator.Index(0)).perform(command.MouseClick())
+            custom_small.locate(Index(0)).perform(MouseClick())
             self.assertEqual(demo.small_int_range, 1)
 
-            text_small.perform(command.KeyClick("0"))
-            text_small.perform(command.KeyClick("Enter"))
+            text_small.perform(KeyClick("0"))
+            text_small.perform(KeyClick("Enter"))
             self.assertEqual(demo.small_int_range, 10)
 
             demo.small_int_range = 7
-            displayed_small = readonly_small.inspect(query.DisplayedText())
+            displayed_small = readonly_small.inspect(DisplayedText())
             self.assertEqual(displayed_small, '7')
 
 
             # Tests for the medium_int_range 
-            simple_medium_slider = simple_medium.locate(locator.Slider())
-            simple_medium_slider.perform(command.KeyClick("Page Up"))
-            self.assertEqual(demo.medium_int_range, 2)
-            simple_medium_text = simple_medium.locate(locator.Textbox())
-            simple_medium_text.perform(command.KeyClick("Backspace"))
-            simple_medium_text.perform(command.KeyClick("3"))
-            simple_medium_text.perform(command.KeyClick("Enter"))
+            simple_medium_slider = simple_medium.locate(Slider())
+            # on this range, page up/down corresponds to a change of 2.
+            simple_medium_slider.perform(KeyClick("Page Up"))
             self.assertEqual(demo.medium_int_range, 3)
+            simple_medium_text = simple_medium.locate(Textbox())
+            simple_medium_text.perform(KeyClick("Backspace"))
+            simple_medium_text.perform(KeyClick("4"))
+            simple_medium_text.perform(KeyClick("Enter"))
+            self.assertEqual(demo.medium_int_range, 4)
 
-            custom_medium_slider = custom_medium.locate(locator.Slider())
-            custom_medium_slider.perform(command.KeyClick("Page Down"))
+            custom_medium_slider = custom_medium.locate(Slider())
+            custom_medium_slider.perform(KeyClick("Page Down"))
             self.assertEqual(demo.medium_int_range, 2)
-            custom_medium_text = custom_medium.locate(locator.Textbox())
-            custom_medium_text.perform(command.KeyClick("Backspace"))
-            custom_medium_text.perform(command.KeyClick("1"))
-            custom_medium_text.perform(command.KeyClick("Enter"))
+            custom_medium_text = custom_medium.locate(Textbox())
+            custom_medium_text.perform(KeyClick("Backspace"))
+            custom_medium_text.perform(KeyClick("1"))
+            custom_medium_text.perform(KeyClick("Enter"))
             self.assertEqual(demo.medium_int_range, 1)
 
-            text_medium.perform(command.KeyClick("0"))
-            text_medium.perform(command.KeyClick("Enter"))
+            text_medium.perform(KeyClick("0"))
+            text_medium.perform(KeyClick("Enter"))
             self.assertEqual(demo.medium_int_range, 10)
 
             demo.medium_int_range = 7
-            displayed_medium = readonly_medium.inspect(query.DisplayedText())
+            displayed_medium = readonly_medium.inspect(DisplayedText())
             self.assertEqual(displayed_medium, '7')
 
-            
+
+            # Tests for the large_int_range 
+            # Testing for SimpleSpinEditor is not supported yet
+            text_large.perform(KeySequence("00"))
+            text_large.perform(KeyClick("Enter"))
+            self.assertEqual(demo.large_int_range, 100)
+
+            demo.large_int_range = 77
+            displayed_large = readonly_large.inspect(DisplayedText())
+            self.assertEqual(displayed_large, '77')
+
+
+            # Tests for the float_range 
+            simple_float_slider = simple_float.locate(Slider())
+            # on this range, page up/down corresponds to a change of 1.000.
+            simple_float_slider.perform(KeyClick("Page Up"))
+            self.assertEqual(demo.float_range, 1.000)
+            simple_float_text = simple_float.locate(Textbox())
+            for _ in range(3):
+                simple_float_text.perform(KeyClick("Backspace"))
+            simple_float_text.perform(KeyClick("5"))
+            simple_float_text.perform(KeyClick("Enter"))
+            self.assertEqual(demo.float_range, 1.5)
+
+            custom_float_slider = custom_float.locate(Slider())
+            # after the trait is set to 1.5 above, the active range shown by
+            # the LargeRangeSliderEditor for the custom style is [0,11.500]
+            # so a page down is now a decrement of 1.15
+            custom_float_slider.perform(KeyClick("Page Down"))
+            self.assertEqual(round(demo.float_range,2), 0.35)
+            custom_float_text = custom_float.locate(Textbox())
+            for _ in range(5):
+                custom_float_text.perform(KeyClick("Backspace"))
+            custom_float_text.perform(KeySequence("50.0"))
+            custom_float_text.perform(KeyClick("Enter"))
+            self.assertEqual(demo.float_range, 50.0)
+
+            text_float.perform(KeyClick("5"))
+            text_float.perform(KeyClick("Enter"))
+            self.assertEqual(demo.float_range, 50.05)
+
+            demo.float_range = 72.0
+            displayed_float = readonly_float.inspect(DisplayedText())
+            self.assertEqual(displayed_float, '72.0')
 
 
 # Run the test(s)
