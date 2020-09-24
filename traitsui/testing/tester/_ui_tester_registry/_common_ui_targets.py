@@ -66,7 +66,7 @@ class _BaseSourceWithLocation:
         registry : TargetRegistry
             The registry being registered to.
         """
-        registry.register_solver(
+        registry.register_location(
             target_class=cls.source_class,
             locator_class=cls.locator_class,
             solver=lambda wrapper, location: cls(wrapper._target, location),

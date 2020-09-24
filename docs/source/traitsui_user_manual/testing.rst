@@ -513,7 +513,7 @@ Add Support for Locating a Nested GUI Element
 ---------------------------------------------
 
 Support for |UIWrapper.locate| can be extended by registering additional
-location type and resolution logic via |TargetRegistry.register_solver| on
+location type and resolution logic via |TargetRegistry.register_location| on
 a |TargetRegistry|.
 
 Suppose we have a custom UI editor that contains some buttons. The objective of
@@ -554,14 +554,14 @@ label can be written like this::
 The solvers can then be registered for the container UI target::
 
     registry = TargetRegistry()
-    registry.register_solver(
+    registry.register_location(
         target_class=ShinyPanel,
         locator_class=NamedButton,
         solver=get_button,
     )
 
 Similar to |TargetRegistry.register_handler|, the signature of
-``get_button`` is required by the |TargetRegistry.register_solver|
+``get_button`` is required by the |TargetRegistry.register_location|
 method. By setting the ``target_class`` and ``locator_class``, we restrict the
 types of ``wrapper._target`` and ``location`` received by ``get_button``
 respectively.
@@ -620,7 +620,7 @@ interaction handler and/or location solver via an instance of
 
 .. |TargetRegistry| replace:: :class:`~traitsui.testing.tester.registry.TargetRegistry`
 .. |TargetRegistry.register_handler| replace:: :func:`~traitsui.testing.tester.registry.TargetRegistry.register_handler`
-.. |TargetRegistry.register_solver| replace:: :class:`~traitsui.testing.tester.registry.TargetRegistry.register_solver`
+.. |TargetRegistry.register_location| replace:: :class:`~traitsui.testing.tester.registry.TargetRegistry.register_location`
 
 .. |UITester| replace:: :class:`~traitsui.testing.tester.ui_tester.UITester`
 .. |UITester.create_ui| replace:: :func:`~traitsui.testing.tester.ui_tester.UITester.create_ui`

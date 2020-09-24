@@ -155,7 +155,7 @@ class TestLocationRegistry(unittest.TestCase):
             return 1
 
         registry = TargetRegistry()
-        registry.register_solver(
+        registry.register_location(
             target_class=float, locator_class=str, solver=solver)
 
         self.assertIs(registry.get_solver(float, str), solver)
@@ -166,7 +166,7 @@ class TestLocationRegistry(unittest.TestCase):
             return 1
 
         registry = TargetRegistry()
-        registry.register_solver(
+        registry.register_location(
             target_class=float, locator_class=str, solver=solver)
 
         with self.assertRaises(LocationNotSupported) as exception_context:
@@ -181,7 +181,7 @@ class TestLocationRegistry(unittest.TestCase):
             pass
 
         registry = TargetRegistry()
-        registry.register_solver(
+        registry.register_location(
             target_class=float,
             locator_class=Locator,
             solver=lambda w, l: 1,

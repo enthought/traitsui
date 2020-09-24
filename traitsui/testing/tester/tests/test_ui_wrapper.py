@@ -260,7 +260,7 @@ class TestUIWrapperHelp(unittest.TestCase):
             handler=mock.Mock(),
         )
         registry2 = TargetRegistry()
-        registry2.register_solver(
+        registry2.register_location(
             target_class=str,
             locator_class=Locator,
             solver=mock.Mock(),
@@ -318,7 +318,7 @@ class TestUIWrapperHelp(unittest.TestCase):
             interaction_class=float,
             handler=mock.Mock(),
         )
-        high_priority_registry.register_solver(
+        high_priority_registry.register_location(
             target_class=str,
             locator_class=str,
             solver=mock.Mock(),
@@ -330,7 +330,7 @@ class TestUIWrapperHelp(unittest.TestCase):
             interaction_class=float,
             handler=mock.Mock(),
         )
-        low_priority_registry.register_solver(
+        low_priority_registry.register_location(
             target_class=str,
             locator_class=str,
             solver=mock.Mock(),
