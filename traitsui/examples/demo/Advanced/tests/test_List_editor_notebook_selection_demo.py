@@ -10,10 +10,7 @@ import os
 import runpy
 import unittest
 
-# FIXME: Import from api instead
-# enthought/traitsui#1173
-from traitsui.testing.tester import command, locator
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import Index, KeyClick, MouseClick, UITester
 
 #: Filename of the demo script
 FILENAME = "List_editor_notebook_selection_demo.py"
@@ -30,12 +27,12 @@ class TestListEditorNotebookSelectionDemo(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(demo) as ui:
             people_list = tester.find_by_name(ui, "people")
-            person2 = people_list.locate(locator.Index(2))
-            person2.perform(command.MouseClick())
+            person2 = people_list.locate(Index(2))
+            person2.perform(MouseClick())
             self.assertEqual(demo.index, 2)
             age = person2.find_by_name("age")
-            age.perform(command.KeyClick("Backspace"))
-            age.perform(command.KeyClick("9"))
+            age.perform(KeyClick("Backspace"))
+            age.perform(KeyClick("9"))
             self.assertEqual(demo.people[2].age, 39)
 
 
