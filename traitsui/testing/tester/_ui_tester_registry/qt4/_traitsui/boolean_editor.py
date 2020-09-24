@@ -36,5 +36,7 @@ def register(registry):
     registry.register_interaction(
         target_class=ReadonlyEditor,
         interaction_class=DisplayedText,
-        handler=lambda wrapper, _: wrapper._target.control.text()
+        handler=lambda wrapper, _: _interaction_helpers.displayed_text_qobject(
+            widget=wrapper._target.control
+        )
     )
