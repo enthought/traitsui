@@ -53,22 +53,3 @@ class TestExceptionHandling(unittest.TestCase):
         log_content1, log_content2 = watcher.output
         self.assertIn("ZeroDivisionError", log_content1)
         self.assertIn("IndexError", log_content2)
-
-    def test_error_from_trait_change_captured(self):
-
-        class Foo(HasTraits):
-            value = Int()
-
-            def _value_changed(self):
-                raise ZeroDivisionError()
-
-        obj = Foo()
-        with self.assertRaises(RuntimeError) as exception_context, \
-                self.assertLogs("traitsui") as watcher:
-            with reraise_exceptions():
-                obj.value = 2
-
-        error_msg = str(exception_context.exception)
-        self.assertIn("ZeroDivisionError", error_msg)
-        log_content, = watcher.output
-        self.assertIn("ZeroDivisionError", log_content)

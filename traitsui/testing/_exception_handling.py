@@ -14,11 +14,6 @@ import logging
 import sys
 import traceback
 
-from traits.api import (
-    pop_exception_handler,
-    push_exception_handler,
-)
-
 _TRAITSUI_LOGGER = logging.getLogger("traitsui")
 
 
@@ -62,22 +57,11 @@ def reraise_exceptions(logger=_TRAITSUI_LOGGER):
             serialized[-1]
         )
 
-    def handler(object, name, old, new):
-        type, value, tb = sys.exc_info()
-        serialized_exceptions.append(_serialize_exception(type, value, tb))
-        logger.exception(
-            "Unexpected error occurred from change handler "
-            "(object: %r, name: %r, old: %r, new: %r).",
-            object, name, old, new,
-        )
-
-    push_exception_handler(handler=handler)
     sys.excepthook = excepthook
     try:
         yield
     finally:
         sys.excepthook = sys.__excepthook__
-        pop_exception_handler()
         if serialized_exceptions:
             msg = "Uncaught exceptions found.\n"
             msg += "\n".join(
