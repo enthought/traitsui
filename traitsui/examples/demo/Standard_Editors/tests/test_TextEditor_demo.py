@@ -10,11 +10,9 @@ import os
 import runpy
 import unittest
 
-# FIXME: Import from api instead
-# enthought/traitsui#1173
-from traitsui.testing.tester.command import KeyClick, KeySequence
-from traitsui.testing.tester.query import DisplayedText
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import (
+    DisplayedText, KeyClick, KeySequence,  UITester
+)
 
 #: Filename of the demo script
 FILENAME = "TextEditor_demo.py"
