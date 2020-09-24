@@ -76,96 +76,13 @@ class TargetRegistry:
     """ An object for registering interaction and location resolution logic
     for different UI target types.
 
-    Registering interaction handler (register_handler)
-    --------------------------------------------------
-    The interaction type can be a subclass of any type. There are a few
-    pre-defined interaction types in
-    - ``traitsui.testing.tester.command``
-    - ``traitsui.testing.tester.query``
+    ``register_handler`` supports extending ``UIWrapper.perform`` and
+    ``UIWrapper.inspect`` for a given UI target type and interaction type.
 
-    For example, to simulate clicking a button in TraitsUI's ButtonEditor, the
-    implementation for Qt may look like this::
+    ``register_solver`` supports extending ``UIWrapper.locate`` for a given
+    UI target type and location type.
 
-        def mouse_click_qt_button(wrapper, interaction):
-            # wrapper is an instance of UIWrapper
-            wrapper._target.control.click()
-
-    The function can then be registered with the target type and an interaction
-    type::
-
-        registry = TargetRegistry()
-        registry.register_handler(
-            target_class=traitsui.qt4.button_editor.SimpleEditor,
-            interaction_class=traitsui.testing.tester.command.MouseClick,
-            handler=mouse_click_qt_button,
-        )
-
-    Similarly, a wx implementation of clicking a button can be registered
-    to the registry (the content of ``mouse_click_wx_button`` is not shown)::
-
-        registry.register_handler(
-            target_class=traitsui.wx.button_editor.SimpleEditor,
-            interaction_class=traitsui.testing.tester.command.MouseClick,
-            handler=mouse_click_wx_button,
-        )
-
-    Then this registry can be used with the ``UITester`` and ``UIWrapper`` to
-    support ``UIWrapper.perform`` and ``UIWrapper.inspect``.
-
-    Registering location solver (register_solver)
-    ---------------------------------------------
-    Location solvers are used to support ``UIWrapper.locate``.
-
-    ``UIWrapper.locate`` accepts an object, ``location``, which provides
-    information for navigating into a specific element from
-    ``UIWrapper._target``. The ``location`` content varies from use case
-    to use case and a target is typically a rich container of multiple GUI
-    elements. With that, for a given target type, multiple location types may
-    be supported. For the given location type, the logic for resolving a
-    location also depends on the target type. In order to support these many
-    different behaviors, one needs to register a "location solver" to specify
-    how to interpret a location given its type and the type of the target it
-    is used with.
-
-    For example, suppose we have a ``UIWrapper`` whose ``_target`` is an
-    instance of ``MyUIContainer``. This object has some buttons and the
-    objective of a test is to click a specific button with a given
-    label. We will therefore need to locate the button with the given label
-    before a mouse click can be performed.
-
-    The test code we wanted to achieve looks like this::
-
-        button_wrapper = container.locate(Button("OK"))
-
-    Where we want ``button_wrapper`` to be an instance of``UIWrapper``
-    wrapping a button.
-
-    The ``Button`` is a new locator type::
-
-        class Button:
-            ''' Locator for locating a push button by label.'''
-            def __init__(self, label):
-                self.label = label
-
-    Say ``MyUIContainer`` is keeping track of the buttons by names with a
-    dictionary called ``_buttons``::
-
-        def get_button(wrapper, location):
-            return wrapper._target._buttons[location.label]
-
-    The solvers can then be registered for the container UI target::
-
-        registry = TargetRegistry()
-        registry.register_solver(
-            target_class=MyUIContainer,
-            locator_class=Button,
-            solver=get_button,
-        )
-
-    When the solver is registered this way, the ``wrapper`` argument will be
-    an instance of ``UIWrapper`` whose ``_target`` attribute is an instance of
-    ``MyUIContainer``, and ``location`` will be an instance of ``Button``, as
-    is provided via ``UIWrapper.locate``.
+    See :ref:`advanced-testing` Section in the User Manual for further details.
     """
 
     def __init__(self):
