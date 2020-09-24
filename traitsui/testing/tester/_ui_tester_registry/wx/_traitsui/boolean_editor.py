@@ -8,8 +8,6 @@
 #
 #  Thanks for using Enthought open source!
 #
-import wx
-
 from traitsui.wx.boolean_editor import ReadonlyEditor, SimpleEditor
 from traitsui.testing.api import DisplayedText, MouseClick
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
@@ -35,9 +33,8 @@ def register(registry):
     registry.register_interaction(
         target_class=ReadonlyEditor,
         interaction_class=DisplayedText,
-        handler=
-            lambda wrapper, _:
-                _interaction_helpers.readonly_textbox_displayed_text(
-                    control=wrapper._target.control
-                )
+        handler=lambda wrapper, _:
+            _interaction_helpers.readonly_textbox_displayed_text(
+                control=wrapper._target.control
+            )
     )
