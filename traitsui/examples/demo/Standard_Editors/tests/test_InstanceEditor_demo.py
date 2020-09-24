@@ -12,8 +12,9 @@ import unittest
 
 # FIXME: Import from api instead
 # enthought/traitsui#1173
-from traitsui.testing.tester import command, query
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import (
+    DisplayedText, KeyClick, KeySequence, MouseClick, UITester
+)
 
 #: Filename of the demo script
 FILENAME = "InstanceEditor_demo.py"
@@ -32,20 +33,20 @@ class TestInstanceEditorDemo(unittest.TestCase):
             simple = tester.find_by_id(ui, "simple")
             custom = tester.find_by_id(ui, "custom")
             occupation = custom.find_by_name("occupation")
-            occupation.perform(command.KeySequence("Job"))
-            occupation.perform(command.KeyClick("Enter"))
+            occupation.perform(KeySequence("Job"))
+            occupation.perform(KeyClick("Enter"))
             self.assertEqual(demo.sample_instance.occupation, "Job")
 
-            simple.perform(command.MouseClick())
+            simple.perform(MouseClick())
             name = simple.find_by_name("name")
-            name.perform(command.KeySequence("ABC"))
-            name.perform(command.KeyClick("Enter"))
+            name.perform(KeySequence("ABC"))
+            name.perform(KeyClick("Enter"))
             self.assertEqual(demo.sample_instance.name, "ABC")
 
             demo.sample_instance.name = "XYZ"
-            simple_displayed = name.inspect(query.DisplayedText())
+            simple_displayed = name.inspect(DisplayedText())
             custom_name = custom.find_by_name("name")
-            custom_displayed = custom_name.inspect(query.DisplayedText())
+            custom_displayed = custom_name.inspect(DisplayedText())
             self.assertEqual(simple_displayed, "XYZ")
             self.assertEqual(custom_displayed, "XYZ")
 
