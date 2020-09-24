@@ -14,10 +14,8 @@ import unittest
 
 from pyface.toolkit import toolkit_object
 from pyface.constant import OK
-# FIXME: Import from api instead
-# enthought/traitsui#1173
-from traitsui.testing.tester import command
-from traitsui.testing.tester.ui_tester import UITester
+
+from traitsui.testing.api import MouseClick, UITester
 
 ModalDialogTester = toolkit_object(
     "util.modal_dialog_tester:ModalDialogTester"
@@ -47,10 +45,10 @@ class TestButtonEditorDemo(unittest.TestCase):
             # function that opens the dialog
             # we want clicking the buttons to do that
             def click_simple_button():
-                simple_button.perform(command.MouseClick())
+                simple_button.perform(MouseClick())
 
             def click_custom_button():
-                custom_button.perform(command.MouseClick())
+                custom_button.perform(MouseClick())
 
             mdtester_simple = ModalDialogTester(click_simple_button)
             mdtester_simple.open_and_run(lambda x: x.click_button(OK))

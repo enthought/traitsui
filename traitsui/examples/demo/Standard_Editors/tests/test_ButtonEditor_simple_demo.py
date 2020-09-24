@@ -10,10 +10,7 @@ import os
 import runpy
 import unittest
 
-# FIXME: Import from api instead
-# enthought/traitsui#1173
-from traitsui.testing.tester import command, query
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import DisplayedText, MouseClick, UITester
 
 #: Filename of the demo script
 FILENAME = "ButtonEditor_simple_demo.py"
@@ -31,15 +28,15 @@ class TestButtonEditorSimpleDemo(unittest.TestCase):
         with tester.create_ui(demo) as ui:
             button = tester.find_by_name(ui, "my_button_trait")
             for index in range(5):
-                button.perform(command.MouseClick())
+                button.perform(MouseClick())
                 self.assertEqual(demo.click_counter, index + 1)
 
             click_counter = tester.find_by_name(ui, "click_counter")
-            displayed_count = click_counter.inspect(query.DisplayedText())
+            displayed_count = click_counter.inspect(DisplayedText())
             self.assertEqual(displayed_count, '5')
 
             demo.click_counter = 10
-            displayed_count = click_counter.inspect(query.DisplayedText())
+            displayed_count = click_counter.inspect(DisplayedText())
             self.assertEqual(displayed_count, '10')
 
 
