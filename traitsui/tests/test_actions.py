@@ -28,6 +28,7 @@ from traitsui.item import Item
 from traitsui.view import View
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     is_mac_os,
     is_null,
@@ -85,7 +86,13 @@ def _qt_click_button(ui):
     button.click()
 
 
-class TestActions(unittest.TestCase):
+class TestActions(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def _test_actions(self, trigger_action_func):
         """Template test for wx, qt4, menu, and toolbar testing.

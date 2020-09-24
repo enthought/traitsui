@@ -14,11 +14,6 @@ import logging
 import sys
 import traceback
 
-from traits.api import (
-    pop_exception_handler,
-    push_exception_handler,
-)
-
 _TRAITSUI_LOGGER = logging.getLogger("traitsui")
 
 
@@ -38,8 +33,6 @@ def _serialize_exception(exc_type, value, tb):
 def reraise_exceptions(logger=_TRAITSUI_LOGGER):
     """ Context manager to capture all exceptions occurred in the context and
     then reraise a RuntimeError if there are any exceptions captured.
-
-    Exceptions from traits change notifications are also captured and reraised.
 
     Depending on the GUI toolkit backend, unexpected exceptions occurred in the
     GUI event loop may (1) cause fatal early exit of the test suite or (2) be
@@ -62,22 +55,11 @@ def reraise_exceptions(logger=_TRAITSUI_LOGGER):
             serialized[-1]
         )
 
-    def handler(object, name, old, new):
-        type, value, tb = sys.exc_info()
-        serialized_exceptions.append(_serialize_exception(type, value, tb))
-        logger.exception(
-            "Unexpected error occurred from change handler "
-            "(object: %r, name: %r, old: %r, new: %r).",
-            object, name, old, new,
-        )
-
-    push_exception_handler(handler=handler)
     sys.excepthook = excepthook
     try:
         yield
     finally:
         sys.excepthook = sys.__excepthook__
-        pop_exception_handler()
         if serialized_exceptions:
             msg = "Uncaught exceptions found.\n"
             msg += "\n".join(

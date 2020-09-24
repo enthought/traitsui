@@ -19,6 +19,10 @@ import sys
 from unittest import skipIf, TestSuite
 
 from pyface.toolkit import toolkit_object
+from traits.api import (
+    pop_exception_handler,
+    push_exception_handler,
+)
 from traits.etsconfig.api import ETSConfig
 
 # These functions are imported by traitsui's own tests. They can be redirected
@@ -315,3 +319,17 @@ if no_gui_test_assistant:
     # ensure null toolkit has an inheritable GuiTestAssistant
     class GuiTestAssistant(object):
         pass
+
+
+class BaseTestMixin:
+    """ This is a mixin class for all test cases in TraitsUI, regardless of
+    whether GUI is involved.
+
+    Not to be used externally.
+    """
+
+    def setUp(self):
+        push_exception_handler(reraise_exceptions=True)
+
+    def tearDown(self):
+        pop_exception_handler()

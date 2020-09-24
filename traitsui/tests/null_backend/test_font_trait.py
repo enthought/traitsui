@@ -3,10 +3,16 @@ import unittest
 from traits.api import HasTraits
 
 from traitsui.toolkit_traits import Font
-from traitsui.tests._tools import requires_toolkit, ToolkitName
+from traitsui.tests._tools import BaseTestMixin, requires_toolkit, ToolkitName
 
 
-class TestFontTrait(unittest.TestCase):
+class TestFontTrait(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.null])
     def test_font_trait_default(self):

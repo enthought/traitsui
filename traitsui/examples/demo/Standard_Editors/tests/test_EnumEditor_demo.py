@@ -10,10 +10,15 @@ import os
 import runpy
 import unittest
 
-# FIXME: Import from api instead
-# enthought/traitsui#1173
-from traitsui.testing.tester import command, locator, query
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import (
+    DisplayedText,
+    Index,
+    KeyClick,
+    KeySequence,
+    MouseClick,
+    SelectedText,
+    UITester
+)
 
 #: Filename of the demo script
 FILENAME = "EnumEditor_demo.py"
@@ -37,35 +42,35 @@ class TestEnumEditorDemo(unittest.TestCase):
             readonly = tester.find_by_id(ui, "readonly")
 
             self.assertEqual(demo.name_list, 'A-495')
-            simple_enum.locate(locator.Index(1)).perform(command.MouseClick())
+            simple_enum.locate(Index(1)).perform(MouseClick())
             self.assertEqual(demo.name_list, 'A-498')
 
             for _ in range(5):
-                simple_text_enum.perform(command.KeyClick("Backspace"))
-            simple_text_enum.perform(command.KeySequence("R-1226"))
-            simple_text_enum.perform(command.KeyClick("Enter"))
+                simple_text_enum.perform(KeyClick("Backspace"))
+            simple_text_enum.perform(KeySequence("R-1226"))
+            simple_text_enum.perform(KeyClick("Enter"))
             self.assertEqual(demo.name_list, 'R-1226')
 
-            radio_enum.locate(locator.Index(5)).perform(command.MouseClick())
+            radio_enum.locate(Index(5)).perform(MouseClick())
             self.assertEqual(demo.name_list, 'Foo')
 
-            list_enum.locate(locator.Index(3)).perform(command.MouseClick())
+            list_enum.locate(Index(3)).perform(MouseClick())
             self.assertEqual(demo.name_list, 'TS-17')
 
             for _ in range(5):
-                text.perform(command.KeyClick("Backspace"))
-            text.perform(command.KeySequence("A-498"))
-            text.perform(command.KeyClick("Enter"))
+                text.perform(KeyClick("Backspace"))
+            text.perform(KeySequence("A-498"))
+            text.perform(KeyClick("Enter"))
             self.assertEqual(demo.name_list, 'A-498')
 
             demo.name_list = 'Foo'
 
-            displayed_simple = simple_enum.inspect(query.DisplayedText())
-            disp_simple_text = simple_text_enum.inspect(query.DisplayedText())
-            selected_radio = radio_enum.inspect(query.SelectedText())
-            selected_list = list_enum.inspect(query.SelectedText())
-            displayed_text = text.inspect(query.DisplayedText())
-            displayed_readonly = readonly.inspect(query.DisplayedText())
+            displayed_simple = simple_enum.inspect(DisplayedText())
+            disp_simple_text = simple_text_enum.inspect(DisplayedText())
+            selected_radio = radio_enum.inspect(SelectedText())
+            selected_list = list_enum.inspect(SelectedText())
+            displayed_text = text.inspect(DisplayedText())
+            displayed_readonly = readonly.inspect(DisplayedText())
 
             displayed_selected = [
                 displayed_simple, disp_simple_text, selected_radio,

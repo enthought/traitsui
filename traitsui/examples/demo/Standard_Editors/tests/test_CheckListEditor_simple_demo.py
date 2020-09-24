@@ -10,10 +10,7 @@ import os
 import runpy
 import unittest
 
-# FIXME: Import from api instead
-# enthought/traitsui#1173
-from traitsui.testing.tester import command, locator
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import Index, MouseClick, UITester
 
 #: Filename of the demo script
 FILENAME = "CheckListEditor_simple_demo.py"
@@ -30,10 +27,10 @@ class TestCheckListEditorSimpleDemo(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(demo) as ui:
             checklist = tester.find_by_id(ui, "custom")
-            item3 = checklist.locate(locator.Index(2))
-            item3.perform(command.MouseClick())
+            item3 = checklist.locate(Index(2))
+            item3.perform(MouseClick())
             self.assertEqual(demo.checklist, ["three"])
-            item3.perform(command.MouseClick())
+            item3.perform(MouseClick())
             self.assertEqual(demo.checklist, [])
 
 

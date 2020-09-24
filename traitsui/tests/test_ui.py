@@ -29,6 +29,7 @@ from traitsui.testing.tester.ui_tester import UITester
 from traitsui.view import View
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     count_calls,
     create_ui,
     requires_toolkit,
@@ -68,7 +69,13 @@ class MaybeInvalidTrait(HasTraits):
         return len(self.name) < 10
 
 
-class TestUI(unittest.TestCase):
+class TestUI(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.wx])
     def test_reset_with_destroy_wx(self):

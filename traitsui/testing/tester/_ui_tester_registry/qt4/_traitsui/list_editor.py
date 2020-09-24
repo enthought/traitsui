@@ -63,47 +63,32 @@ class _IndexedNotebookEditor(_BaseSourceWithLocation):
         return self.source._uis[self.location.index][1]
 
 
-class _IndexedCustomEditor(_BaseSourceWithLocation):
-    """ Wrapper for a ListEditor (custom) with an index.
+def _get_next_target(list_editor, index):
+    """ Gets the target at a given index from a Custom List Editor.
+
+    Parameters
+    ----------
+    list_editor : CustomEditor
+        The custom style list editor in which the target is contained.
+    index : int
+        the index of the target of interest in the list
+
+    Returns
+    -------
+    traitsui.editor.Editor
+        The obtained target.
     """
-    source_class = CustomEditor
-    locator_class = locator.Index
-
-    @classmethod
-    def register(cls, registry):
-        """ Class method to register interactions on a _IndexedCustomEditor
-        for the given registry.
-
-        If there are any conflicts, an error will occur.
-
-        Parameters
-        ----------
-        registry : TargetRegistry
-            The registry being registered to.
-        """
-        super().register(registry)
-        register_traitsui_ui_solvers(
-            registry=registry,
-            target_class=cls,
-            traitsui_ui_getter=lambda target: target._get_nested_ui()
-        )
-
-    def _get_nested_ui(self):
-        """ Method to get the nested ui corresponding to the List element at
-        the given index.
-        """
-        row, column = divmod(self.location.index, self.source.factory.columns)
-        # there are two columns for each list item (one for the item itself,
-        # and another for the list menu button)
-        column = 2*column
-        grid_layout = self.source._list_pane.layout()
-        item = grid_layout.itemAtPosition(row, column)
-        if item is None:
-            raise IndexError(self.location.index)
-        if self.source.scrollable:
-            self.source.control.ensureWidgetVisible(item.widget())
-
-        return item.widget()._editor._ui
+    row, column = divmod(index, list_editor.factory.columns)
+    # there are two columns for each list item (one for the item itself,
+    # and another for the list menu button)
+    column = 2*column
+    grid_layout = list_editor._list_pane.layout()
+    item = grid_layout.itemAtPosition(row, column)
+    if item is None:
+        raise IndexError(index)
+    if list_editor.scrollable:
+        list_editor.control.ensureWidgetVisible(item.widget())
+    return item.widget()._editor
 
 
 def register(registry):
@@ -119,4 +104,10 @@ def register(registry):
     # NotebookEditor
     _IndexedNotebookEditor.register(registry)
     # CustomEditor
-    _IndexedCustomEditor.register(registry)
+    registry.register_location(
+        target_class=CustomEditor,
+        locator_class=locator.Index,
+        solver=lambda wrapper, location: (
+            _get_next_target(wrapper._target, location.index)
+        )
+    )

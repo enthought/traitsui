@@ -16,6 +16,7 @@ import unittest
 from traits.api import HasTraits, Int
 from traitsui.api import HGroup, Item, spring, VGroup, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     ToolkitName,
@@ -29,7 +30,13 @@ class ObjectWithNumber(HasTraits):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestUIPanel(unittest.TestCase):
+class TestUIPanel(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_grouped_layout_with_springy(self):
         # Regression test for enthought/traitsui#1066

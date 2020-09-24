@@ -2,14 +2,18 @@ import pickle
 import unittest
 from unittest.mock import patch
 
-from traitsui.tests._tools import requires_toolkit, ToolkitName
+from traitsui.tests._tools import BaseTestMixin, requires_toolkit, ToolkitName
 from traitsui.theme import Theme
 
 
-class TestTheme(unittest.TestCase):
+class TestTheme(BaseTestMixin, unittest.TestCase):
 
     def setUp(self):
+        BaseTestMixin.setUp(self)
         self.theme = Theme()
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_theme_pickling(self):
         # A regression test for issue enthought/traitsui#825

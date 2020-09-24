@@ -33,7 +33,7 @@ def register(registry):
             lambda wrapper, _: wrapper._target.control.text())
     ]
     for interaction_class, handler in handlers:
-        registry.register_handler(
+        registry.register_interaction(
             target_class=ButtonEditor,
             interaction_class=interaction_class,
             handler=handler

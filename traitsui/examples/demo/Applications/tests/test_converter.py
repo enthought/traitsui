@@ -9,10 +9,9 @@ import os
 import runpy
 import unittest
 
-# FIXME: Import from api instead
-# enthought/traitsui#1173
-from traitsui.testing.tester import command, query
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import (
+    DisplayedText, KeyClick, KeySequence, MouseClick, UITester
+)
 
 #: Filename of the demo script
 FILENAME = "converter.py"
@@ -29,15 +28,15 @@ class TestConverter(unittest.TestCase):
             input_amount = tester.find_by_name(ui, "input_amount")
             output_amount = tester.find_by_name(ui, "output_amount")
             for _ in range(4):
-                input_amount.perform(command.KeyClick("Backspace"))
-            input_amount.perform(command.KeySequence("14.0"))
+                input_amount.perform(KeyClick("Backspace"))
+            input_amount.perform(KeySequence("14.0"))
             self.assertEqual(
-                output_amount.inspect(query.DisplayedText())[:4],
+                output_amount.inspect(DisplayedText())[:4],
                 "1.16",
             )
-            tester.find_by_id(ui, "Undo").perform(command.MouseClick())
+            tester.find_by_id(ui, "Undo").perform(MouseClick())
             self.assertEqual(
-                output_amount.inspect(query.DisplayedText()),
+                output_amount.inspect(DisplayedText()),
                 "1.0",
             )
 

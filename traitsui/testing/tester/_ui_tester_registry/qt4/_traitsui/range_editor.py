@@ -76,7 +76,7 @@ class LocatedSlider:
         registry : TargetRegistry
             The registry being registered to.
         """
-        registry.register_handler(
+        registry.register_interaction(
             target_class=cls,
             interaction_class=command.KeyClick,
             handler=lambda wrapper, interaction:
@@ -100,13 +100,13 @@ def register(registry):
                LogRangeSliderEditor,
                LargeRangeSliderEditor]
     for target_class in targets:
-        registry.register_solver(
+        registry.register_location(
             target_class=target_class,
             locator_class=locator.Textbox,
             solver=lambda wrapper, _: LocatedTextbox(
                 textbox=wrapper._target.control.text),
         )
-        registry.register_solver(
+        registry.register_location(
             target_class=target_class,
             locator_class=locator.Slider,
             solver=lambda wrapper, _: LocatedSlider(

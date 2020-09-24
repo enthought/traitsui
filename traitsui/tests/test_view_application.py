@@ -12,7 +12,9 @@ from pyface.timer.api import CallbackTimer
 from traits.api import HasTraits, Instance, Int
 from traitsui.api import Handler, Item, UIInfo, View, toolkit
 
-from ._tools import GuiTestAssistant, is_qt, no_gui_test_assistant
+from ._tools import (
+    BaseTestMixin, GuiTestAssistant, is_qt, no_gui_test_assistant
+)
 
 
 class SimpleModel(HasTraits):
@@ -37,8 +39,9 @@ simple_view = View(
 
 
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
-class TestViewApplication(GuiTestAssistant, unittest.TestCase):
+class TestViewApplication(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
     def setUp(self):
+        BaseTestMixin.setUp(self)
         GuiTestAssistant.setUp(self)
         self.model = SimpleModel()
         self.handler = ClosableHandler()
@@ -49,6 +52,10 @@ class TestViewApplication(GuiTestAssistant, unittest.TestCase):
             if len(self.qt_app.topLevelWidgets()) > 0:
                 with self.event_loop_with_timeout(repeat=5):
                     self.gui.invoke_later(self.qt_app.closeAllWindows)
+
+    def tearDown(self):
+        GuiTestAssistant.tearDown(self)
+        BaseTestMixin.tearDown(self)
 
     def view_application(self, kind, button=None):
         if button is None:

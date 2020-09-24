@@ -5,10 +5,10 @@ import unittest
 from traits.api import Enum, HasTraits, Int, List
 from traitsui.api import EnumEditor, UItem, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     is_qt,
     is_wx,
-    process_cascade_events,
     requires_toolkit,
     reraise_exceptions,
     ToolkitName,
@@ -66,7 +66,13 @@ def get_radio_view(cols=1):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestEnumEditorMapping(unittest.TestCase):
+class TestEnumEditorMapping(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_ui(self, model, view):
@@ -176,7 +182,13 @@ class TestEnumEditorMapping(unittest.TestCase):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestSimpleEnumEditor(unittest.TestCase):
+class TestSimpleEnumEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def check_enum_text_update(self, view):
         enum_edit = EnumModel()
@@ -314,7 +326,13 @@ class TestSimpleEnumEditor(unittest.TestCase):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestRadioEnumEditor(unittest.TestCase):
+class TestRadioEnumEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_radio_enum_editor_update(self):
         enum_edit = EnumModel()
@@ -367,7 +385,13 @@ class TestRadioEnumEditor(unittest.TestCase):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestListEnumEditor(unittest.TestCase):
+class TestListEnumEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def check_enum_text_update(self, view):
         enum_edit = EnumModel()

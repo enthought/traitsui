@@ -25,6 +25,7 @@ Contents
    factories_basic.rst
    factories_advanced_extra.rst
    adapters.rst
+   testing.rst
    tips.rst
    glossary.rst
    predefined_traits.rst

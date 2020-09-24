@@ -36,7 +36,7 @@ def register(registry):
 
     for target_class in [SimpleEditor, CustomEditor]:
         for interaction_class, handler in handlers:
-            registry.register_handler(
+            registry.register_interaction(
                 target_class=target_class,
                 interaction_class=interaction_class,
                 handler=handler
