@@ -11,7 +11,7 @@
 
 from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester._ui_tester_registry.wx._traitsui import (
-    boolean_editor
+    boolean_editor,
     button_editor,
     check_list_editor,
     editor_factory,
