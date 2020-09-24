@@ -34,8 +34,6 @@ def reraise_exceptions(logger=_TRAITSUI_LOGGER):
     """ Context manager to capture all exceptions occurred in the context and
     then reraise a RuntimeError if there are any exceptions captured.
 
-    Exceptions from traits change notifications are also captured and reraised.
-
     Depending on the GUI toolkit backend, unexpected exceptions occurred in the
     GUI event loop may (1) cause fatal early exit of the test suite or (2) be
     printed to the console without causing the test to error. This context
