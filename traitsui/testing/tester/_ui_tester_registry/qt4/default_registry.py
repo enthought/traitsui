@@ -11,6 +11,7 @@
 
 from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester._ui_tester_registry.qt4._traitsui import (
+    boolean_editor,
     button_editor,
     check_list_editor,
     editor_factory,
@@ -34,6 +35,9 @@ def get_default_registry():
         that is qt specific.
     """
     registry = TargetRegistry()
+
+    # BooleanEditor
+    boolean_editor.register(registry)
 
     # ButtonEditor
     button_editor.register(registry)
