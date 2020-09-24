@@ -1,5 +1,5 @@
 """
-This example demonstrates how to test interacting with the various styles of 
+This example demonstrates how to test interacting with the various styles of
 RangeEditor.
 
 The GUI being tested is written in the demo under the same name (minus the
@@ -35,28 +35,27 @@ class TestRangeEditorDemo(unittest.TestCase):
 
         tester = UITester()
         with tester.create_ui(demo) as ui:
-            simple_small = tester.find_by_id(ui, 'simple_small')  # SimpleSliderEditor
-            custom_small = tester.find_by_id(ui, 'custom_small')  # CustomEnumEditor
-            text_small = tester.find_by_id(ui, 'text_small')  # RangeTextEditor
+            simple_small = tester.find_by_id(ui, 'simple_small')
+            custom_small = tester.find_by_id(ui, 'custom_small')
+            text_small = tester.find_by_id(ui, 'text_small')
             readonly_small = tester.find_by_id(ui, 'readonly_small')
 
-            simple_medium = tester.find_by_id(ui, 'simple_medium')  # SimpleSliderEditor
-            custom_medium = tester.find_by_id(ui, 'custom_medium')  # SimpleSliderEditor
-            text_medium = tester.find_by_id(ui, 'text_medium')  # RangeTextEditor
+            simple_medium = tester.find_by_id(ui, 'simple_medium')
+            custom_medium = tester.find_by_id(ui, 'custom_medium')
+            text_medium = tester.find_by_id(ui, 'text_medium')
             readonly_medium = tester.find_by_id(ui, 'readonly_medium')
 
-            simple_large = tester.find_by_id(ui, 'simple_large')  # SimpleSpinEditor
-            custom_large = tester.find_by_id(ui, 'custom_large')  # SimpleSpinEditor
-            text_large = tester.find_by_id(ui, 'text_large')  # RangeTextEditor
+            # Testing for SimpleSpinEditor is not supported yet so the simple
+            # and custom styles for the large_range_int are not included here
+            text_large = tester.find_by_id(ui, 'text_large')
             readonly_large = tester.find_by_id(ui, 'readonly_large')
 
-            simple_float = tester.find_by_id(ui, 'simple_float')  # LargeRangeSliderEditor
-            custom_float = tester.find_by_id(ui, 'custom_float')  # LargeRangeSliderEditor
-            text_float = tester.find_by_id(ui, 'text_float')  # RangeTextEditor
+            simple_float = tester.find_by_id(ui, 'simple_float')
+            custom_float = tester.find_by_id(ui, 'custom_float')
+            text_float = tester.find_by_id(ui, 'text_float')
             readonly_float = tester.find_by_id(ui, 'readonly_float')
 
-
-            # Tests for the small_int_range 
+            # Tests for the small_int_range ##################################
             simple_small_slider = simple_small.locate(Slider())
             simple_small_slider.perform(KeyClick("Page Up"))
             self.assertEqual(demo.small_int_range, 2)
@@ -77,8 +76,7 @@ class TestRangeEditorDemo(unittest.TestCase):
             displayed_small = readonly_small.inspect(DisplayedText())
             self.assertEqual(displayed_small, '7')
 
-
-            # Tests for the medium_int_range 
+            # Tests for the medium_int_range #################################
             simple_medium_slider = simple_medium.locate(Slider())
             # on this range, page up/down corresponds to a change of 2.
             simple_medium_slider.perform(KeyClick("Page Up"))
@@ -106,8 +104,7 @@ class TestRangeEditorDemo(unittest.TestCase):
             displayed_medium = readonly_medium.inspect(DisplayedText())
             self.assertEqual(displayed_medium, '7')
 
-
-            # Tests for the large_int_range 
+            # Tests for the large_int_range ##################################
             # Testing for SimpleSpinEditor is not supported yet
             text_large.perform(KeySequence("00"))
             text_large.perform(KeyClick("Enter"))
@@ -117,8 +114,7 @@ class TestRangeEditorDemo(unittest.TestCase):
             displayed_large = readonly_large.inspect(DisplayedText())
             self.assertEqual(displayed_large, '77')
 
-
-            # Tests for the float_range 
+            # Tests for the float_range ######################################
             simple_float_slider = simple_float.locate(Slider())
             # on this range, page up/down corresponds to a change of 1.000.
             simple_float_slider.perform(KeyClick("Page Up"))
@@ -135,7 +131,7 @@ class TestRangeEditorDemo(unittest.TestCase):
             # the LargeRangeSliderEditor for the custom style is [0,11.500]
             # so a page down is now a decrement of 1.15
             custom_float_slider.perform(KeyClick("Page Down"))
-            self.assertEqual(round(demo.float_range,2), 0.35)
+            self.assertEqual(round(demo.float_range, 2), 0.35)
             custom_float_text = custom_float.locate(Textbox())
             for _ in range(5):
                 custom_float_text.perform(KeyClick("Backspace"))
