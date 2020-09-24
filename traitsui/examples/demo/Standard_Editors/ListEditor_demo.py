@@ -21,7 +21,9 @@ class ListEditorDemo(HasTraits):
 
     # Items are used to define display, one per editor style:
     list_group = Group(
-        Item('play_list', style='simple', label='Simple', height=75, id='simple'),
+        Item(
+            'play_list', style='simple', label='Simple', height=75, id='simple'
+        ),
         Item('_'),
         Item('play_list', style='custom', label='Custom', id='custom'),
         Item('_'),

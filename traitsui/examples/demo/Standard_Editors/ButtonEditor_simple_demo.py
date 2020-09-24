@@ -26,8 +26,8 @@ class ButtonEditorDemo(HasTraits):
         self.click_counter += 1
 
     # Currently there is some erroneous behavior with Qt5 and OSX causing
-    # the click_counter to not immediately increment when the button is 
-    # clicked. For more deailts, see enthought/traitsui #913.   
+    # the click_counter to not immediately increment when the button is
+    # clicked. For more deailts, see enthought/traitsui #913.
 
     # Demo view:
     traits_view = View(
