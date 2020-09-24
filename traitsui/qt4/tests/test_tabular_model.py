@@ -19,6 +19,7 @@ from traitsui.api import Item, TabularEditor, View
 from traitsui.tabular_adapter import TabularAdapter
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     is_qt,
     requires_toolkit,
@@ -50,7 +51,13 @@ def get_view(adapter):
 
 
 @requires_toolkit([ToolkitName.qt])
-class TestTabularModel(unittest.TestCase):
+class TestTabularModel(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_drop_mime_data_below_list(self):
         # Test dragging an item in the list and drop it below the last item
