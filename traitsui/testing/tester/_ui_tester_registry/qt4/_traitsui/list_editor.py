@@ -75,7 +75,8 @@ def _get_next_target(list_editor, index):
 
     Returns
     -------
-    The obtained target.
+    traitsui.editor.Editor
+        The obtained target.
     """
     row, column = divmod(index, list_editor.factory.columns)
     # there are two columns for each list item (one for the item itself,

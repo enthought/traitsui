@@ -74,7 +74,8 @@ def _get_next_target(list_editor, index):
 
     Returns
     -------
-    The obtained target.
+    traitsui.editor.Editor
+        The obtained target.
     """
     # each list item gets a corresponding ImageControl item (allows one to
     # add items to the list before, after, delete, etc.) along with the
