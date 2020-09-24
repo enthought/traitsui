@@ -23,7 +23,7 @@ DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 
 class TestBooleanEditorDemo(unittest.TestCase):
 
-    def test_boolean_editor_simple_demo(self):
+    def test_boolean_editor_demo(self):
         demo = runpy.run_path(DEMO_PATH)["demo"]
 
         tester = UITester()
