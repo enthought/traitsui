@@ -16,8 +16,7 @@ from pyface.toolkit import toolkit_object
 from pyface.constant import OK
 # FIXME: Import from api instead
 # enthought/traitsui#1173
-from traitsui.testing.api import MouseClick
-from traitsui.testing.api import UITester
+from traitsui.testing.api import MouseClick, UITester
 
 ModalDialogTester = toolkit_object(
     "util.modal_dialog_tester:ModalDialogTester"
