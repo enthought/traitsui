@@ -1,6 +1,6 @@
 import unittest
 
-from traits.api import Button, HasTraits, List, Str
+from traits.api import Bool, Button, HasTraits, List, Str
 from traits.testing.api import UnittestTools
 from traitsui.api import ButtonEditor, Item, UItem, View
 from traitsui.tests._tools import (
@@ -20,6 +20,8 @@ class ButtonTextEdit(HasTraits):
     play_button_label = Str("I'm a play button")
 
     values = List()
+
+    button_enabled = Bool(True)
 
     traits_view = View(
         Item("play_button", style="simple"),
@@ -94,6 +96,38 @@ class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
 
     def test_custom_button_editor_clicked(self):
         self.check_button_fired_event(custom_view)
+
+    def check_button_disabled(self, style):
+        button_text_edit = ButtonTextEdit(
+            button_enabled=False,
+        )
+
+        view = View(
+            Item(
+                "play_button",
+                editor=ButtonEditor(),
+                enabled_when="button_enabled",
+                style=style,
+            ),
+        )
+        tester = UITester()
+        with tester.create_ui(button_text_edit, dict(view=view)) as ui:
+            button = tester.find_by_name(ui, "play_button")
+
+            with self.assertTraitDoesNotChange(
+                    button_text_edit, "play_button"):
+                button.perform(command.MouseClick())
+
+            button_text_edit.button_enabled = True
+            with self.assertTraitChanges(
+                    button_text_edit, "play_button", count=1):
+                button.perform(command.MouseClick())
+
+    def test_simple_button_editor_disabled(self):
+        self.check_button_disabled("simple")
+
+    def test_custom_button_editor_disabled(self):
+        self.check_button_disabled("custom")
 
 
 @requires_toolkit([ToolkitName.qt])
