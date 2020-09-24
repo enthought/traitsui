@@ -15,7 +15,6 @@ import unittest
 
 from pyface.api import GUI
 
-from traits.api import HasTraits, Int
 from traitsui.tests._tools import (
     requires_toolkit,
     ToolkitName,
