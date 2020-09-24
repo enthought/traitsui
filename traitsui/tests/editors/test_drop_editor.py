@@ -13,6 +13,7 @@ import unittest
 from traits.api import HasTraits, Str
 from traitsui.api import DropEditor, Item, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     reraise_exceptions,
@@ -27,8 +28,14 @@ class Model(HasTraits):
 
 # Run this test against wx when enthought/traitsui#752 is fixed.
 @requires_toolkit([ToolkitName.qt])
-class TestDropEditor(unittest.TestCase):
+class TestDropEditor(BaseTestMixin, unittest.TestCase):
     """ Test DropEditor. """
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_init_dispose_editable(self):
 

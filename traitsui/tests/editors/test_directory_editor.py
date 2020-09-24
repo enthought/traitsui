@@ -13,6 +13,7 @@ import unittest
 from traits.api import Directory, Event, HasTraits
 from traitsui.api import DirectoryEditor, Item, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     reraise_exceptions,
@@ -29,8 +30,14 @@ class DirectoryModel(HasTraits):
 
 # Run this against wx too when enthought/traitsui#752 is also fixed.
 @requires_toolkit([ToolkitName.qt])
-class TestDirectoryEditor(unittest.TestCase):
+class TestDirectoryEditor(BaseTestMixin, unittest.TestCase):
     """ Test DirectoryEditor. """
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def check_init_and_dispose(self, style):
         # Test init and dispose by opening and closing the UI

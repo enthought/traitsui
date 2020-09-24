@@ -5,6 +5,7 @@ from traits.api import HasTraits, Instance, Int, List, Str, Tuple
 
 from traitsui.api import Action, EvalTableFilter, Item, ObjectColumn, TableEditor, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     is_qt,
     is_wx,
@@ -260,7 +261,13 @@ select_cell_indices_view = View(
 )
 
 
-class TestTableEditor(unittest.TestCase):
+class TestTableEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor(self):

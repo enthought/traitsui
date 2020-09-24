@@ -30,6 +30,7 @@ from traitsui.view import View
 from traitsui.editors.list_str_editor import ListStrEditor
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     is_wx,
     is_qt,
@@ -202,7 +203,13 @@ def right_click_item(control, index):
 
 @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestListStrEditor(unittest.TestCase):
+class TestListStrEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_gui(self, model, view):
@@ -628,7 +635,13 @@ class TestListStrEditor(unittest.TestCase):
             self.assertEqual(model.right_clicked_index, 1)
 
 
-class TestListStrEditorSelection(unittest.TestCase):
+class TestListStrEditorSelection(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.wx])
     def test_wx_list_str_selected_index(self):

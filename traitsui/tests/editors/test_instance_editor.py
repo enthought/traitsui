@@ -4,6 +4,7 @@ from traits.api import HasTraits, Instance, Str
 from traitsui.item import Item
 from traitsui.view import View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     requires_toolkit,
     ToolkitName,
 )
@@ -26,7 +27,13 @@ def get_view(style):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestInstanceEditor(unittest.TestCase):
+class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_simple_editor(self):
         obj = NonmodalInstanceEditor()

@@ -17,6 +17,7 @@ from traitsui.api import Item, View
 from traits.testing.api import UnittestTools
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     press_ok_button,
     requires_toolkit,
@@ -36,7 +37,13 @@ class TupleEditor(HasTraits):
     )
 
 
-class TestTupleEditor(unittest.TestCase, UnittestTools):
+class TestTupleEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_value_update(self):

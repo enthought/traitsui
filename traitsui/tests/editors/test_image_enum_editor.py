@@ -6,6 +6,7 @@ from unittest.mock import patch
 from traits.api import Enum, HasTraits, List
 from traitsui.api import ImageEnumEditor, UItem, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     is_qt,
     is_wx,
@@ -128,7 +129,13 @@ def get_button_control(control, button_idx):
 
 
 @requires_toolkit([ToolkitName.qt])
-class TestImageEnumEditorMapping(unittest.TestCase):
+class TestImageEnumEditorMapping(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_ui(self, model, view):
@@ -268,7 +275,13 @@ class TestImageEnumEditorMapping(unittest.TestCase):
             self.assertEqual(editor.str_value, "TOP LEFT")
 
 
-class TestSimpleImageEnumEditor(unittest.TestCase):
+class TestSimpleImageEnumEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_gui(self, model, view):
@@ -352,7 +365,13 @@ class TestSimpleImageEnumEditor(unittest.TestCase):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestCustomImageEnumEditor(unittest.TestCase):
+class TestCustomImageEnumEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_gui(self, model, view):
@@ -431,7 +450,13 @@ class TestCustomImageEnumEditor(unittest.TestCase):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestReadOnlyImageEnumEditor(unittest.TestCase):
+class TestReadOnlyImageEnumEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_readonly_editor_value_changed(self):
         enum_edit = EnumModel()

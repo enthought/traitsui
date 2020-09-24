@@ -4,6 +4,7 @@ from traits.api import Button, HasTraits, List, Str
 from traits.testing.api import UnittestTools
 from traitsui.api import ButtonEditor, Item, UItem, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     requires_toolkit,
     reraise_exceptions,
     ToolkitName,
@@ -44,7 +45,14 @@ custom_view = View(
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestButtonEditor(unittest.TestCase, UnittestTools):
+class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
     def check_button_text_update(self, view):
         button_text_edit = ButtonTextEdit()
 
@@ -89,11 +97,17 @@ class TestButtonEditor(unittest.TestCase, UnittestTools):
 
 
 @requires_toolkit([ToolkitName.qt])
-class TestButtonEditorValuesTrait(unittest.TestCase):
+class TestButtonEditorValuesTrait(BaseTestMixin, unittest.TestCase):
     """ The values_trait is only supported by Qt.
 
     See discussion enthought/traitsui#879
     """
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def get_view(self, style):
         return View(

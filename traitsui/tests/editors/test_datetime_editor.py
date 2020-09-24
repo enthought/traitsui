@@ -5,6 +5,7 @@ import unittest
 from traits.api import HasTraits, Datetime
 from traitsui.api import DatetimeEditor, Item, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     GuiTestAssistant,
     process_cascade_events,
@@ -40,8 +41,16 @@ def get_date_time_simple_view(editor_factory):
 
 @requires_toolkit([ToolkitName.qt])
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
-class TestDatetimeEditorQt(GuiTestAssistant, unittest.TestCase):
+class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
     """ Tests for DatetimeEditor using Qt. """
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+        GuiTestAssistant.setUp(self)
+
+    def tearDown(self):
+        GuiTestAssistant.tearDown(self)
+        BaseTestMixin.tearDown(self)
 
     def test_datetime_editor_simple(self):
         view = get_date_time_simple_view(DatetimeEditor())

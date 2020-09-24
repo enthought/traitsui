@@ -15,6 +15,7 @@ import unittest
 from traits.api import HasTraits, Bool
 from traitsui.api import BooleanEditor, Item, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     reraise_exceptions,
@@ -30,7 +31,13 @@ class BoolModel(HasTraits):
 # Run this against wx once enthought/traitsui#752 is also fixed for
 # BooleanEditor
 @requires_toolkit([ToolkitName.qt])
-class TestBooleanEditor(unittest.TestCase):
+class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_init_dispose(self):
         # Test init and dispose of the editor.

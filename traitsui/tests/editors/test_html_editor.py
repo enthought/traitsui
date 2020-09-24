@@ -13,6 +13,7 @@ import unittest
 from traits.api import HasTraits, Str
 from traitsui.api import HTMLEditor, Item, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     reraise_exceptions,
@@ -42,8 +43,14 @@ def get_view(base_url_name):
 
 # Run this against wx as well once enthought/traitsui#752 is fixed.
 @requires_toolkit([ToolkitName.qt])
-class TestHTMLEditor(unittest.TestCase):
+class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
     """ Test HTMLEditor """
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_init_and_dispose(self):
         # Smoke test to check init and dispose do not fail.

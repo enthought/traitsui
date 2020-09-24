@@ -23,6 +23,7 @@ import pkg_resources
 from traits.api import HasTraits
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     is_qt,
     is_wx,
     process_cascade_events,
@@ -323,7 +324,13 @@ def load_tests(loader, tests, pattern):
 # =============================================================================
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestExample(unittest.TestCase):
+class TestExample(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_run(self):
         accepted_files, skipped_files = SEARCHER.get_python_files()

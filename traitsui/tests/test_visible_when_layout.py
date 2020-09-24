@@ -28,6 +28,7 @@ from traitsui.item import Item
 from traitsui.view import View
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     get_dialog_size,
     requires_toolkit,
@@ -77,7 +78,13 @@ class VisibleWhenProblem(HasTraits):
 # there are no current plans to work on this.
 
 
-class TestVisibleWhenLayout(unittest.TestCase):
+class TestVisibleWhenLayout(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.qt])
     def test_visible_when_layout(self):

@@ -9,7 +9,7 @@
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 # ------------------------------------------------------------------------------
-import contextlib
+
 import unittest
 
 from packaging.version import Version
@@ -18,8 +18,6 @@ from traits import __version__ as TRAITS_VERSION
 from traits.api import (
     HasTraits,
     Str,
-    pop_exception_handler,
-    push_exception_handler,
 )
 from traits.testing.api import UnittestTools
 from traitsui.api import TextEditor, View, Item
@@ -27,6 +25,7 @@ from traitsui.testing.tester.ui_tester import UITester
 from traitsui.testing.tester import command, query
 from traitsui.testing.tester.exceptions import InteractionNotSupported
 from traitsui.tests._tools import (
+    BaseTestMixin,
     GuiTestAssistant,
     no_gui_test_assistant,
     requires_toolkit,
@@ -59,8 +58,17 @@ def get_view(style, auto_set):
 # Skips tests if the backend is not either qt4 or qt5
 @requires_toolkit([ToolkitName.qt])
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
-class TestTextEditorQt(GuiTestAssistant, UnittestTools, unittest.TestCase):
+class TestTextEditorQt(
+        BaseTestMixin, GuiTestAssistant, UnittestTools, unittest.TestCase):
     """ Test on TextEditor with Qt backend."""
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+        GuiTestAssistant.setUp(self)
+
+    def tearDown(self):
+        GuiTestAssistant.tearDown(self)
+        BaseTestMixin.tearDown(self)
 
     def test_text_editor_placeholder_text(self):
         foo = Foo()
@@ -126,14 +134,15 @@ class TestTextEditorQt(GuiTestAssistant, UnittestTools, unittest.TestCase):
 # We should be able to run this test case against wx.
 # Not running them now to avoid test interaction. See enthought/traitsui#752
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestTextEditor(unittest.TestCase, UnittestTools):
+class TestTextEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
     """ Tests that can be run with any toolkit as long as there is an
     implementation for simulating user interactions.
     """
-
     def setUp(self):
-        push_exception_handler(reraise_exceptions=True)
-        self.addCleanup(pop_exception_handler)
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def check_editor_init_and_dispose(self, style, auto_set):
         # Smoke test to test setup and tear down of an editor.

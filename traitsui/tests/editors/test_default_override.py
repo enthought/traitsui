@@ -2,6 +2,7 @@ import unittest
 
 from traitsui.api import DefaultOverride, EditorFactory
 from traits.api import HasTraits, Int
+from traitsui.tests._tools import BaseTestMixin
 
 
 class DummyEditor(EditorFactory):
@@ -35,7 +36,13 @@ dummy_object = Dummy()
 do = DefaultOverride(x=15, y=25, format_str="%r")
 
 
-class TestDefaultOverride(unittest.TestCase):
+class TestDefaultOverride(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_simple_override(self):
         editor_name, editor, ui, obj, name, description, parent = \

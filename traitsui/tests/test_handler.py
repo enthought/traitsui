@@ -25,6 +25,7 @@ from traitsui.api import (
     UI,
     UndoAction,
 )
+from traitsui.tests._tools import BaseTestMixin
 
 
 class PyfaceAction(Action):
@@ -125,7 +126,14 @@ class SampleObject(HasTraits):
         self.click_performed = True
 
 
-class TestHandler(TestCase):
+class TestHandler(BaseTestMixin, TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
     def test_perform_pyface_action(self):
         object = SampleObject()
         handler = SampleHandler()
