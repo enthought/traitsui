@@ -76,7 +76,7 @@ class TargetRegistry:
     """ An object for registering interaction and location resolution logic
     for different UI target types.
 
-    ``register_handler`` supports extending ``UIWrapper.perform`` and
+    ``register_interaction`` supports extending ``UIWrapper.perform`` and
     ``UIWrapper.inspect`` for a given UI target type and interaction type.
 
     ``register_location`` supports extending ``UIWrapper.locate`` for a given
@@ -107,7 +107,7 @@ class TargetRegistry:
             ),
         )
 
-    def register_handler(self, target_class, interaction_class, handler):
+    def register_interaction(self, target_class, interaction_class, handler):
         """ Register a handler for a given target type and interaction type.
 
         Parameters
@@ -199,7 +199,7 @@ class TargetRegistry:
             target_class=target_class,
             key=interaction_class,
         )
-        # This maybe configurable in the future via register_handler
+        # This maybe configurable in the future via register_interaction
         return inspect.getdoc(interaction_class)
 
     def register_location(self, target_class, locator_class, solver):

@@ -33,7 +33,7 @@ def register(registry):
             widget_getter=lambda wrapper: wrapper._target.control,
         )
 
-    registry.register_handler(
+    registry.register_interaction(
         target_class=ReadonlyEditor,
         interaction_class=query.DisplayedText,
         handler=lambda wrapper, _:
