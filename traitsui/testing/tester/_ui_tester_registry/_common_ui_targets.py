@@ -36,8 +36,9 @@ class _BaseSourceWithLocation:
     # the handlers we want to register for the given source_class
     # must be given as a list of tuples where the first element is the
     # interaction class (e.g. command.MouseClick) and the second is the
-    # actual handler function.  See registry.TargetRegistry.register_interaction
-    # for the signature of the callable.
+    # actual handler function.  See
+    # registry.TargetRegistry.register_interaction for the signature of the
+    # callable.
     handlers = []
 
     def __init__(self, source, location):
@@ -66,7 +67,7 @@ class _BaseSourceWithLocation:
         registry : TargetRegistry
             The registry being registered to.
         """
-        registry.register_solver(
+        registry.register_location(
             target_class=cls.source_class,
             locator_class=cls.locator_class,
             solver=lambda wrapper, location: cls(wrapper._target, location),

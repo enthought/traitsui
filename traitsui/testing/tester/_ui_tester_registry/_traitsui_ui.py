@@ -90,7 +90,7 @@ def register_traitsui_ui_solvers(registry, target_class, traitsui_ui_getter):
         UI.
     """
 
-    registry.register_solver(
+    registry.register_location(
         target_class=target_class,
         locator_class=locator.TargetByName,
         solver=lambda wrapper, location: (
@@ -100,7 +100,7 @@ def register_traitsui_ui_solvers(registry, target_class, traitsui_ui_getter):
             )
         ),
     )
-    registry.register_solver(
+    registry.register_location(
         target_class=target_class,
         locator_class=locator.TargetById,
         solver=lambda wrapper, location: (

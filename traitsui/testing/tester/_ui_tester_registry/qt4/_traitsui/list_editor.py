@@ -104,7 +104,7 @@ def register(registry):
     # NotebookEditor
     _IndexedNotebookEditor.register(registry)
     # CustomEditor
-    registry.register_solver(
+    registry.register_location(
         target_class=CustomEditor,
         locator_class=locator.Index,
         solver=lambda wrapper, location: (
