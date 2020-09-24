@@ -10,8 +10,6 @@ import os
 import runpy
 import unittest
 
-# FIXME: Import from api instead
-# enthought/traitsui#1173
 from traitsui.testing.api import (
     DisplayedText,
     Index,
