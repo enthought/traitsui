@@ -62,44 +62,30 @@ class _IndexedNotebookEditor(_BaseSourceWithLocation):
         return self.source._uis[self.location.index][0].dockable.ui
 
 
-class _IndexedCustomEditor(_BaseSourceWithLocation):
-    """ Wrapper for a ListEditor (custom) with an index.
+def _get_next_target(list_editor, index):
+    """ Gets the target at a given index from a Custom List Editor.
+
+    Parameters
+    ----------
+    list_editor : CustomEditor
+        The custom style list editor in which the target is contained.
+    index : int
+        the index of the target of interest in the list
+
+    Returns
+    -------
+    traitsui.editor.Editor
+        The obtained target.
     """
-    source_class = CustomEditor
-    locator_class = locator.Index
-
-    @classmethod
-    def register(cls, registry):
-        """ Class method to register interactions on a _IndexedCustomEditor
-        for the given registry.
-
-        If there are any conflicts, an error will occur.
-
-        Parameters
-        ----------
-        registry : TargetRegistry
-            The registry being registered to.
-        """
-        super().register(registry)
-        register_traitsui_ui_solvers(
-            registry=registry,
-            target_class=cls,
-            traitsui_ui_getter=lambda target: target._get_nested_ui()
-        )
-
-    def _get_nested_ui(self):
-        """ Method to get the nested ui corresponding to the List element at
-        the given index.
-        """
-        # each list item gets a corresponding ImageControl item (allows one to
-        # add items to the list before, after, delete, etc.) along with the
-        # item itself.  Thus, index is actually an index over the odd elements
-        # of the list of children corresponding to items in the list we would
-        # want to interact with
-        new_index = 2*self.location.index + 1
-        WindowList = self.source.control.GetChildren()
-        item = WindowList[new_index]
-        return item._editor._ui
+    # each list item gets a corresponding ImageControl item (allows one to
+    # add items to the list before, after, delete, etc.) along with the
+    # item itself.  Thus, index is actually an index over the odd elements
+    # of the list of children corresponding to items in the list we would
+    # want to interact with
+    new_index = 2*index + 1
+    WindowList = list_editor.control.GetChildren()
+    item = WindowList[new_index]
+    return item._editor
 
 
 def register(registry):
@@ -115,4 +101,10 @@ def register(registry):
     # NotebookEditor
     _IndexedNotebookEditor.register(registry)
     # CustomEditor
-    _IndexedCustomEditor.register(registry)
+    registry.register_solver(
+        target_class=CustomEditor,
+        locator_class=locator.Index,
+        solver=lambda wrapper, location: (
+            _get_next_target(wrapper._target, location.index)
+        )
+    )
