@@ -36,7 +36,8 @@ class _BaseSourceWithLocation:
     # the handlers we want to register for the given source_class
     # must be given as a list of tuples where the first element is the
     # interaction class (e.g. command.MouseClick) and the second is the
-    # actual handler function.  See registry.TargetRegistry.register_interaction
+    # actual handler function.
+    # See registry.TargetRegistry.register_interaction
     # for the signature of the callable.
     handlers = []
 
