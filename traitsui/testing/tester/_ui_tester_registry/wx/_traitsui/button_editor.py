@@ -55,26 +55,26 @@ def register(registry):
     registry : TargetRegistry
     """
 
-    registry.register_handler(
+    registry.register_interaction(
         target_class=SimpleEditor,
         interaction_class=command.MouseClick,
         handler=(lambda wrapper, _: _interaction_helpers.mouse_click_button(
                  control=wrapper._target.control, delay=wrapper.delay))
     )
 
-    registry.register_handler(
+    registry.register_interaction(
         target_class=SimpleEditor,
         interaction_class=query.DisplayedText,
         handler=lambda wrapper, _: wrapper._target.control.GetLabel()
     )
 
-    registry.register_handler(
+    registry.register_interaction(
         target_class=CustomEditor,
         interaction_class=command.MouseClick,
         handler=mouse_click_ImageButton
     )
 
-    registry.register_handler(
+    registry.register_interaction(
         target_class=CustomEditor,
         interaction_class=query.DisplayedText,
         handler=lambda wrapper, _: wrapper._target.control.GetLabel()

@@ -167,18 +167,18 @@ def register(registry):
     ]
 
     for interaction_class, handler in simple_editor_text_handlers:
-        registry.register_handler(
+        registry.register_interaction(
             target_class=SimpleEditor,
             interaction_class=interaction_class,
             handler=handler
         )
 
-    registry.register_handler(
+    registry.register_interaction(
         target_class=RadioEditor,
         interaction_class=query.SelectedText,
         handler=radio_selected_text_handler,
     )
-    registry.register_handler(
+    registry.register_interaction(
         target_class=ListEditor,
         interaction_class=query.SelectedText,
         handler=lambda wrapper, _: wrapper._target.control.GetString(

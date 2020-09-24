@@ -254,7 +254,7 @@ class TestUIWrapperHelp(unittest.TestCase):
             pass
 
         registry1 = TargetRegistry()
-        registry1.register_handler(
+        registry1.register_interaction(
             target_class=str,
             interaction_class=Action,
             handler=mock.Mock(),
@@ -313,7 +313,7 @@ class TestUIWrapperHelp(unittest.TestCase):
                 return "Location: I get a lower priority."
 
         high_priority_registry = HighPriorityRegistry()
-        high_priority_registry.register_handler(
+        high_priority_registry.register_interaction(
             target_class=str,
             interaction_class=float,
             handler=mock.Mock(),
@@ -325,7 +325,7 @@ class TestUIWrapperHelp(unittest.TestCase):
         )
 
         low_priority_registry = LowPriorityRegistry()
-        low_priority_registry.register_handler(
+        low_priority_registry.register_interaction(
             target_class=str,
             interaction_class=float,
             handler=mock.Mock(),

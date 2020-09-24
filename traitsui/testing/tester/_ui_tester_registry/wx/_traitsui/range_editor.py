@@ -75,7 +75,7 @@ class LocatedSlider:
         registry : TargetRegistry
             The registry being registered to.
         """
-        registry.register_handler(
+        registry.register_interaction(
             target_class=cls,
             interaction_class=command.KeyClick,
             handler=lambda wrapper, interaction:

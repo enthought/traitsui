@@ -46,7 +46,7 @@ def register_editable_textbox_handlers(registry, target_class, widget_getter):
             lambda wrapper, _: widget_getter(wrapper).GetValue()),
     ]
     for interaction_class, handler in handlers:
-        registry.register_handler(
+        registry.register_interaction(
             target_class=target_class,
             interaction_class=interaction_class,
             handler=handler,

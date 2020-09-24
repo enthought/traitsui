@@ -46,7 +46,7 @@ class TestInteractionRegistry(unittest.TestCase):
             pass
 
         # when
-        registry.register_handler(
+        registry.register_interaction(
             target_class=SpecificEditor,
             interaction_class=UserAction,
             handler=handler,
@@ -79,9 +79,9 @@ class TestInteractionRegistry(unittest.TestCase):
             pass
 
         registry = TargetRegistry()
-        registry.register_handler(SpecificEditor, UserAction, handler)
-        registry.register_handler(SpecificEditor2, UserAction2, handler)
-        registry.register_handler(SpecificEditor2, UserAction3, handler)
+        registry.register_interaction(SpecificEditor, UserAction, handler)
+        registry.register_interaction(SpecificEditor2, UserAction2, handler)
+        registry.register_interaction(SpecificEditor2, UserAction3, handler)
 
         with self.assertRaises(InteractionNotSupported) as exception_context:
             registry.get_handler(SpecificEditor2, None)
@@ -103,10 +103,10 @@ class TestInteractionRegistry(unittest.TestCase):
             pass
 
         registry = TargetRegistry()
-        registry.register_handler(SpecificEditor, UserAction, handler)
+        registry.register_interaction(SpecificEditor, UserAction, handler)
 
         with self.assertRaises(ValueError):
-            registry.register_handler(SpecificEditor, UserAction, handler)
+            registry.register_interaction(SpecificEditor, UserAction, handler)
 
     def test_error_get_interaction_doc(self):
         # The registry is empty
@@ -124,7 +124,7 @@ class TestInteractionRegistry(unittest.TestCase):
             pass
 
         registry = TargetRegistry()
-        registry.register_handler(
+        registry.register_interaction(
             target_class=float,
             interaction_class=Action,
             handler=handler,
