@@ -263,8 +263,7 @@ can also write::
 
     person_name_field = person_pane.find_by_name("name")
 
-The returned value is again an instance of |UIWrapper|, so we can repeat
-steps 2 or 3.
+The returned value is again an instance of |UIWrapper|.
 
 In this example, ``person_name_field`` wraps a textbox, we can modify the
 value in the text box using |UIWrapper.perform| again::
