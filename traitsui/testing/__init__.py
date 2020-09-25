@@ -9,11 +9,10 @@
 #  Thanks for using Enthought open source!
 #
 
-"""
-This package provide functionality to help testing GUI applications built
-using TraitsUI.
 
-The top-level ``api`` module exposes the public API for external projects.
+from os.path import join, dirname
 
-Private modules in this package serves TraitsUI only.
-"""
+with open(join(dirname(__file__), "README.rst"), encoding='utf-8') as f:
+    __doc__ = f.read()
+
+del join, dirname
