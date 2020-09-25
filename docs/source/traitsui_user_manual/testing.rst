@@ -494,7 +494,7 @@ this tester can perform the additional, custom user interaction.
 Add Support for Inspecting GUI States
 -------------------------------------
 
-The steps to extend |UIWrapper.inspect| is identical to those for extending
+The steps to extend |UIWrapper.inspect| are identical to those for extending
 |UIWrapper.perform| (see section above). The distinction between
 |UIWrapper.perform| and |UIWrapper.inspect| is merely in their returned
 values.
