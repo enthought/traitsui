@@ -154,7 +154,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
         )
         LOCAL_REGISTRY = TargetRegistry()
         _register_simple_spin(LOCAL_REGISTRY)
-        tester = UITester([LOCAL_REGISTRY])
+        tester = UITester(registries=[LOCAL_REGISTRY])
         with tester.create_ui(model, dict(view=view)) as ui:
             # sanity check
             self.assertEqual(model.value, 1)
@@ -232,7 +232,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
         )
         LOCAL_REGISTRY = TargetRegistry()
         _register_simple_spin(LOCAL_REGISTRY)
-        tester = UITester([LOCAL_REGISTRY])
+        tester = UITester(registries=[LOCAL_REGISTRY])
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field_text = tester.find_by_name(ui, "value")
             number_field_text.perform(command.KeyClick("Right"))
