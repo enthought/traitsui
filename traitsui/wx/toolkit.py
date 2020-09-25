@@ -430,7 +430,15 @@ class GUIToolkit(Toolkit):
         """ Destroys a specified GUI toolkit control.
         """
         _popEventHandlers(control)
-        wx.CallAfter(control.Destroy)
+
+        def _destroy_control(control):
+            try:
+                control.Destroy()
+            except Exception:
+                logger.exception(
+                    "Wx control %r not destroyed cleanly", control)
+
+        wx.CallAfter(_destroy_control, control)
 
     def destroy_children(self, control):
         """ Destroys all of the child controls of a specified GUI toolkit
