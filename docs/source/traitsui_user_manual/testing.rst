@@ -451,7 +451,7 @@ wrapped::
 
 The target is an instance of a ``ShinyButton`` class (made up
 for this document). In this object, there is an instance of Qt QPushButton
-widget which we want click with the mouse.
+widget which we want click with the mouse.::
 
     >>> my_widget._target.control
     <PyQt5.QtWidgets.QPushButton object at 0x7fbcc3ac3558>
