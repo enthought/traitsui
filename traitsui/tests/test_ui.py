@@ -257,6 +257,7 @@ class TestUI(BaseTestMixin, unittest.TestCase):
 # specific Editor
 ToolkitSpecificEditor = toolkit_object("editor:Editor")
 
+
 class DummyObject(HasTraits):
 
     number = Int()
