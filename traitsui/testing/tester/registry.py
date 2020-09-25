@@ -8,6 +8,9 @@
 #
 #  Thanks for using Enthought open source!
 #
+""" Define the registry object responsible for collecting and reporting
+implementations for testing various GUI elements.
+"""
 
 import inspect
 

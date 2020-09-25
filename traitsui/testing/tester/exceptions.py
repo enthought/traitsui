@@ -8,7 +8,8 @@
 #
 #  Thanks for using Enthought open source!
 #
-
+""" Custom exceptions for UITester and UIWrapper.
+"""
 
 class TesterError(Exception):
     """ Custom exception for UITester/UIWrapper. """
