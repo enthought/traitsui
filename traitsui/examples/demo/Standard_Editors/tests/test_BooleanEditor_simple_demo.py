@@ -11,7 +11,7 @@ import runpy
 import unittest
 
 from traitsui.testing.api import (
-    DisplayedText, KeyClick, KeySequence, MouseClick, UITester
+    DisplayedText, IsChecked, KeyClick, KeySequence, MouseClick, UITester
 )
 
 #: Filename of the demo script
@@ -50,9 +50,8 @@ class TestBooleanEditorSimpleDemo(unittest.TestCase):
             displayed = readonly.inspect(DisplayedText())
             self.assertEqual(displayed, "True")
 
-            displayed_count_changes = count_changes.inspect(DisplayedText())
-            self.assertEqual(displayed_count_changes, '3')
-            self.assertEqual(displayed_count_changes, str(demo.count_changes))
+            simple_is_checked = simple.inspect(IsChecked())
+            self.assertEqual(simple_is_checked, True)
 
 
 # Run the test(s)
