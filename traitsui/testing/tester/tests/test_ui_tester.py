@@ -20,6 +20,8 @@ from traitsui.tests._tools import (
     requires_toolkit,
     ToolkitName,
 )
+from traitsui.testing.tester.exceptions import InteractionNotSupported
+from traitsui.testing.tester.registry import TargetRegistry
 from traitsui.testing.tester.ui_tester import (
     UITester,
 )
@@ -74,6 +76,34 @@ class TestUITesterCreateUI(unittest.TestCase):
                 GUI().invoke_later(raise_error)
 
         self.assertIsNone(ui.control)
+
+
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+class TestUITesterRegistry(unittest.TestCase):
+    """ Test maintaining registries."""
+
+    def test_traitsui_registry_added(self):
+        # Even if we have a custom registry list, the builtin TraitsUI
+        # registry is always added.
+        custom_registry = TargetRegistry()
+        tester = UITester(registries=[custom_registry])
+
+        view = View(Item("submit_button"))
+        with tester.create_ui(Order(), dict(view=view)) as ui:
+            # this relies on TraitsUI builtin registry.
+            wrapper = tester.find_by_name(ui, "submit_button")
+
+            # custom registry is accessible
+            # sanity check
+            with self.assertRaises(InteractionNotSupported):
+                wrapper.perform(1)
+
+            custom_registry.register_interaction(
+                target_class=wrapper._target.__class__,
+                interaction_class=int,
+                handler=lambda wrapper, interaction: None,
+            )
+            wrapper.perform(1)
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])

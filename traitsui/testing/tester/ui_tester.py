@@ -44,7 +44,7 @@ class UITester:
         visual confirmation test code is working as desired.
     """
 
-    def __init__(self, registries=None, delay=0):
+    def __init__(self, *, registries=None, delay=0):
         if registries is None:
             self._registries = []
         else:
