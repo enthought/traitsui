@@ -11,6 +11,7 @@
 """ Custom exceptions for UITester and UIWrapper.
 """
 
+
 class TesterError(Exception):
     """ Custom exception for UITester/UIWrapper. """
     pass
