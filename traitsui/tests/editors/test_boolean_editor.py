@@ -20,7 +20,9 @@ from traitsui.tests._tools import (
     ToolkitName,
 )
 
-from traitsui.testing.api import MouseClick, UITester
+from traitsui.testing.api import (
+    DisplayedText, KeyClick, KeySequence, MouseClick, UITester
+)
 
 
 class BoolModel(HasTraits):
@@ -39,8 +41,8 @@ class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
     def tearDown(self):
         BaseTestMixin.tearDown(self)
 
-    def test_click_boolean(self):
-        view = View(Item("true_or_false", editor=BooleanEditor()))
+    def check_click_boolean_changes_trait(self, style):
+        view = View(Item("true_or_false", style=style, editor=BooleanEditor()))
         obj = BoolModel()
 
         tester = UITester()
@@ -50,3 +52,53 @@ class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
             checkbox = tester.find_by_name(ui, "true_or_false")
             checkbox.perform(MouseClick())
             self.assertEqual(obj.true_or_false, True)
+
+    def test_click_boolean_changes_trait_simple(self):
+        self.check_click_boolean_changes_trait('simple')
+
+    def test_click_boolean_changes_trait(self):
+        self.check_click_boolean_changes_trait('custom')
+
+    def test_change_text_boolean_changes_trait(self):
+        view = View(Item("true_or_false", style='text'))
+        obj = BoolModel()
+
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=view)) as ui:
+            self.assertEqual(obj.true_or_false, False)
+            text_field = tester.find_by_name(ui, 'true_or_false')
+            for _ in range(5):
+                text_field.perform(KeyClick("Backspace"))
+            text_field.perform(KeySequence("True"))
+            text_field.perform(KeyClick("Enter"))
+            self.assertEqual(obj.true_or_false, True)
+
+    def test_trait_change_shown_in_gui_readonly(self):
+        view = View(Item( "true_or_false", style='readonly'))
+        obj = BoolModel()
+
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=view)) as ui:
+            readonly = tester.find_by_name(ui, "true_or_false")
+            displayed = readonly.inspect(DisplayedText())
+            # sanity check
+            self.assertEqual(displayed, 'False')
+
+            obj.true_or_false = True
+            displayed = readonly.inspect(DisplayedText())
+            self.assertEqual(displayed, 'True')
+    
+    def test_trait_change_shown_in_gui_text(self):
+        view = View(Item( "true_or_false", style='text'))
+        obj = BoolModel()
+
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=view)) as ui:
+            readonly = tester.find_by_name(ui, "true_or_false")
+            displayed = readonly.inspect(DisplayedText())
+            # sanity check
+            self.assertEqual(displayed, 'False')
+
+            obj.true_or_false = True
+            displayed = readonly.inspect(DisplayedText())
+            self.assertEqual(displayed, 'True')

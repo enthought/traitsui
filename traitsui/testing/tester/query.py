@@ -39,3 +39,12 @@ class DisplayedText:
     Implementations should return a ``str``.
     """
     pass
+
+class IsChecked:
+    """ An object representing an interaction to obtain whether a checkbox
+    is checked or empty.
+
+    Implementations should return something which evaluates to True if checked
+    and False if not.
+    """
+    pass

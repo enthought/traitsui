@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 from traitsui.wx.boolean_editor import ReadonlyEditor, SimpleEditor
-from traitsui.testing.api import DisplayedText, MouseClick
+from traitsui.testing.api import DisplayedText, IsChecked, MouseClick
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 
@@ -28,6 +28,12 @@ def register(registry):
         interaction_class=MouseClick,
         handler=(lambda wrapper, _: _interaction_helpers.mouse_click_checkbox(
                  control=wrapper._target.control, delay=wrapper.delay))
+    )
+
+    registry.register_interaction(
+        target_class=SimpleEditor,
+        interaction_class=IsChecked,
+        handler=lambda wrapper, _: wrapper._target.control.GetValue()
     )
 
     registry.register_interaction(

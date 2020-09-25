@@ -8,7 +8,7 @@
 #
 #  Thanks for using Enthought open source!
 #
-from traitsui.testing.api import DisplayedText, MouseClick
+from traitsui.testing.api import DisplayedText, IsChecked, MouseClick
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
     _interaction_helpers
 )
@@ -31,6 +31,12 @@ def register(registry):
         handler=lambda wrapper, _: _interaction_helpers.mouse_click_qwidget(
             control=wrapper._target.control, delay=wrapper.delay
         )
+    )
+
+    registry.register_interaction(
+        target_class=SimpleEditor,
+        interaction_class=IsChecked,
+        handler=lambda wrapper, _: wrapper._target.control.isChecked()
     )
 
     registry.register_interaction(
