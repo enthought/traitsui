@@ -78,9 +78,8 @@ add an unique identifier to the relevant view element::
     view = View(
         Item(
             name="person",
-            editor=InstanceEditor(
-                view=View(Item(name="name"), style="custom"),
-            ),
+            editor=InstanceEditor(),
+            style="custom",
             id="person_item",    # <--- add this
         )
     )
