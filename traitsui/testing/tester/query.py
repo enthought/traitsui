@@ -40,6 +40,7 @@ class DisplayedText:
     """
     pass
 
+
 class IsChecked:
     """ An object representing an interaction to obtain whether a checkbox
     is checked or empty.

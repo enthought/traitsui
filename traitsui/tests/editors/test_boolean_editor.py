@@ -74,7 +74,7 @@ class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(obj.true_or_false, True)
 
     def check_trait_change_shown_in_gui(self, style):
-        view = View(Item( "true_or_false", style=style))
+        view = View(Item("true_or_false", style=style))
         obj = BoolModel()
 
         tester = UITester()
@@ -94,7 +94,7 @@ class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
         self.check_trait_change_shown_in_gui('custom')
 
     def test_trait_change_shown_in_gui_readonly(self):
-        view = View(Item( "true_or_false", style='readonly'))
+        view = View(Item("true_or_false", style='readonly'))
         obj = BoolModel()
 
         tester = UITester()
@@ -106,9 +106,9 @@ class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
             obj.true_or_false = True
             displayed = readonly.inspect(DisplayedText())
             self.assertEqual(displayed, 'True')
-    
+
     def test_trait_change_shown_in_gui_text(self):
-        view = View(Item( "true_or_false", style='text'))
+        view = View(Item("true_or_false", style='text'))
         obj = BoolModel()
 
         tester = UITester()
