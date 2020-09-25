@@ -30,7 +30,7 @@ class BoolModel(HasTraits):
 
 # Run this against wx once enthought/traitsui#752 is also fixed for
 # BooleanEditor
-@requires_toolkit([ToolkitName.qt])
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
 
     def setUp(self):
@@ -38,15 +38,6 @@ class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
 
     def tearDown(self):
         BaseTestMixin.tearDown(self)
-
-    def test_init_dispose(self):
-        # Test init and dispose of the editor.
-        view = View(Item("true_or_false", editor=BooleanEditor()))
-        obj = BoolModel()
-
-        tester = UITester()
-        with tester.create_ui(obj, dict(view=view)):
-            pass
 
     def test_click_boolean(self):
         view = View(Item("true_or_false", editor=BooleanEditor()))
