@@ -21,7 +21,7 @@ from traitsui.tests._tools import (
 )
 
 from traitsui.testing.api import (
-    DisplayedText, KeyClick, KeySequence, MouseClick, UITester
+    DisplayedText, IsChecked, KeyClick, KeySequence, MouseClick, UITester
 )
 
 
@@ -73,6 +73,26 @@ class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
             text_field.perform(KeyClick("Enter"))
             self.assertEqual(obj.true_or_false, True)
 
+    def check_trait_change_shown_in_gui(self, style):
+        view = View(Item( "true_or_false", style=style))
+        obj = BoolModel()
+
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=view)) as ui:
+            checkbox = tester.find_by_name(ui, "true_or_false")
+            checked = checkbox.inspect(IsChecked())
+            # sanity check
+            self.assertEqual(checked, False)
+            obj.true_or_false = True
+            checked = checkbox.inspect(IsChecked())
+            self.assertEqual(checked, True)
+
+    def test_trait_change_shown_in_gui_simple(self):
+        self.check_trait_change_shown_in_gui('simple')
+
+    def test_trait_change_shown_in_gui_custom(self):
+        self.check_trait_change_shown_in_gui('custom')
+
     def test_trait_change_shown_in_gui_readonly(self):
         view = View(Item( "true_or_false", style='readonly'))
         obj = BoolModel()
@@ -83,7 +103,6 @@ class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
             displayed = readonly.inspect(DisplayedText())
             # sanity check
             self.assertEqual(displayed, 'False')
-
             obj.true_or_false = True
             displayed = readonly.inspect(DisplayedText())
             self.assertEqual(displayed, 'True')
@@ -94,11 +113,10 @@ class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
 
         tester = UITester()
         with tester.create_ui(obj, dict(view=view)) as ui:
-            readonly = tester.find_by_name(ui, "true_or_false")
-            displayed = readonly.inspect(DisplayedText())
+            text_field = tester.find_by_name(ui, "true_or_false")
+            displayed = text_field.inspect(DisplayedText())
             # sanity check
             self.assertEqual(displayed, 'False')
-
             obj.true_or_false = True
-            displayed = readonly.inspect(DisplayedText())
+            displayed = text_field.inspect(DisplayedText())
             self.assertEqual(displayed, 'True')
