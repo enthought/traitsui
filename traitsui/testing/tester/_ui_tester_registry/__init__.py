@@ -12,6 +12,6 @@
 """ This package contains implementations for supporting testing with TraitsUI
 UI and editors.
 
-The top-level module ``default_registry`` serves external packages and hides
-implementation details internal to this package.
+The top-level module ``default_registry`` supplies the implementation to
+the ``UITester`` and hides implementation details internal to this package.
 """

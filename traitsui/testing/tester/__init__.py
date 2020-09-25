@@ -10,6 +10,16 @@
 #
 
 """
-This package contains library code for testing TraitsUI applications via a
-convenient top-level object ``UITester``.
+This package contains library code for testing TraitsUI applications via
+``UITester`` (in ``ui_tester`` module).
+
+Other public modules are also part of the public API.
+
+``_ui_tester_registry`` contains internal implementations to support testing
+TraitsUI UI and editors.
+
+The only modules/packages that are specific about TraitsUI UI and editors are
+``ui_tester`` and ``_ui_tester_registry``. The other modules are generic enough
+to be used with GUI components external to TraitsUI. This allows extensions
+beyond the scope of TraitsUI.
 """
