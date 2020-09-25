@@ -12,7 +12,6 @@
 """ This package contains implementations for testing TraitsUI UI editors
 with Qt.
 
-The top-level module ``default_registry`` exposes the Qt specific testing
-functionality
-to Qt and details internal to this package.
+The top-level module ``default_registry`` serves external packages and hides
+implementation details internal to this package.
 """
