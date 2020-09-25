@@ -310,8 +310,6 @@ class UIWrapper:
             except LocationNotSupported as e:
                 supported |= set(e.supported)
             else:
-                with _reraise_exceptions():
-                    _process_cascade_events()
                 return handler(self, location)
 
         raise LocationNotSupported(
