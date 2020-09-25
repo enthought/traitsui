@@ -8,6 +8,12 @@
 #
 #  Thanks for using Enthought open source!
 #
+""" Define UIWrapper which is responsible for dispatching testing
+functionality based on context.
+
+This object is NOT TraitsUI specific. See ``UITester`` for TraitsUI specific
+logic.
+"""
 
 from contextlib import contextmanager
 import textwrap

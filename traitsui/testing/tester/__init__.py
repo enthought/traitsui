@@ -9,6 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-""" This package is a library for testing TraitsUI applications via a
+"""
+This package contains library code for testing TraitsUI applications via a
 convenient top-level object ``UITester``.
 """
