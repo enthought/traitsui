@@ -151,6 +151,8 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
         )
 
 
+# Use of locate requires the GUI event loop
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUIWrapperLocationRegistry(unittest.TestCase):
     """ Test the use of registries with locate. """
 
