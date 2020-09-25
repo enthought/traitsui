@@ -42,10 +42,9 @@ class DisplayedText:
 
 
 class IsChecked:
-    """ An object representing an interaction to obtain whether a checkbox
-    is checked or empty.
+    """ An object representing an interaction to obtain whether a checkable
+    widget (e.g. checkbox) is checked or not.
 
-    Implementations should return something which evaluates to True if checked
-    and False if not.
+    Implementations should return True if checked and False if not.
     """
     pass
