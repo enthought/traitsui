@@ -33,7 +33,6 @@ class TestBooleanEditorDemo(unittest.TestCase):
             text = tester.find_by_id(ui, 'text')
             readonly = tester.find_by_id(ui, 'readonly')
 
-            self.assertEqual(demo.boolean_trait, False)
             simple.perform(MouseClick())
             self.assertEqual(demo.boolean_trait, True)
             custom.perform(MouseClick())
