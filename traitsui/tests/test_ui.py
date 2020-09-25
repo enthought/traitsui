@@ -94,6 +94,7 @@ class TestUI(BaseTestMixin, unittest.TestCase):
 
             ui.reset(destroy=True)
 
+            process_cascade_events()
             # the top control is still there
             self.assertIsNotNone(ui.control)
             # but its children are gone
@@ -306,17 +307,36 @@ if is_qt():
 
 if is_wx():
 
-    import wx
-
-
-if is_wx():
-
-    # The AttributeError is not seen on Wx. But for completeness, the test is
-    # mirrored here.
+    # The AttributeError is not seen on Wx. But Destroy needs to be made
+    # asynchronous.
 
     import wx
 
     from traitsui.wx.helper import TraitsUIPanel
+
+
+    class ThisDummyObject(HasStrictTraits):
+
+        name = Str()
+
+
+    class DummyButtonEditor(ToolkitSpecificEditor):
+
+        def init(self, parent):
+            self.control = wx.Button(parent, -1, "Dummy")
+            self.control.Bind(wx.EVT_BUTTON, self.update_object)
+
+        def dispose(self):
+            # If the object is deleted too soon, we run into a RuntimeError.
+            self.control.Unbind(wx.EVT_BUTTON)
+            super().dispose()
+
+        def update_object(self, event):
+            pass
+
+        def update_editor(self):
+            pass
+
 
     class EditorWithCustomWidget(ToolkitSpecificEditor):  # noqa: F811
 
@@ -324,20 +344,19 @@ if is_wx():
             self.control = TraitsUIPanel(parent, -1)
 
             sizer = wx.BoxSizer(wx.HORIZONTAL)
-            button = wx.Button(self.control, -1, "...", size=wx.Size(28, -1))
-            button.Bind(wx.EVT_SIZE, self._button_resize, id=button.GetId())
-            sizer.Add(button, 0, wx.LEFT | wx.ALIGN_CENTER)
-
-            self._ui = self.edit_traits(
+            self._dummy = ThisDummyObject()
+            self._ui = self._dummy.edit_traits(
                 parent=self.control,
                 kind="subpanel",
-                view=View(Item("_", label="DUMMY"), width=100, height=100),
+                view=View(
+                    Item(
+                        "name",
+                        editor=BasicEditorFactory(klass=DummyButtonEditor),
+                    ),
+                ),
             )
             sizer.Add(self._ui.control, 1, wx.EXPAND)
             self.control.SetSizerAndFit(sizer)
-
-        def _button_resize(self, event):
-            assert self.control is not None
 
         def update_editor(self):
             pass
