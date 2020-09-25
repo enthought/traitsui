@@ -3,6 +3,7 @@ traitsui\.testing package
 
 .. toctree::
 
+   traitsui.testing.api
    traitsui.testing.tester.command
    traitsui.testing.tester.exceptions
    traitsui.testing.tester.locator

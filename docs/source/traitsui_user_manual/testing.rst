@@ -4,8 +4,8 @@
 Testing TraitsUI Applications
 =============================
 
-TraitsUI provides the ``traitsui.testing.api`` module which provides test
-functionality that helps developers check the behavior of their application.
+TraitsUI provides an |testing.api| module which provides test
+functionality that helps developers check the behavior of their applications.
 
 Most of the test functionality can be accessed via the |UITester| object.
 
@@ -161,8 +161,7 @@ In this example, ``title_field`` is wrapping a textbox, no further
 nested GUI elements can be located and therefore there are no locations
 supported.
 
-Most of the time these objects can be imported from
-``traitsui.testing.api``.
+Most of the time these objects can be imported from |testing.api|.
 
 Perform a User Interaction to Modify GUI States
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -607,6 +606,8 @@ interaction handler and/or location solver via an instance of
 
 ..
    # substitutions
+
+.. |testing.api| replace:: :mod:`~traitsui.testing.api`
 
 .. |Group| replace:: :class:`~traitsui.group.Group`
 .. |Item| replace:: :class:`~traitsui.item.Item`
