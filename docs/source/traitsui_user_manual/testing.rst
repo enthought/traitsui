@@ -78,9 +78,8 @@ add an unique identifier to the relevant view element::
     view = View(
         Item(
             name="person",
-            editor=InstanceEditor(
-                view=View(Item(name="name"), style="custom"),
-            ),
+            editor=InstanceEditor(),
+            style="custom",
             id="person_item",    # <--- add this
         )
     )
@@ -264,8 +263,7 @@ can also write::
 
     person_name_field = person_pane.find_by_name("name")
 
-The returned value is again an instance of |UIWrapper|, so we can repeat
-steps 2 or 3.
+The returned value is again an instance of |UIWrapper|.
 
 In this example, ``person_name_field`` wraps a textbox, we can modify the
 value in the text box using |UIWrapper.perform| again::
@@ -453,7 +451,7 @@ wrapped::
 
 The target is an instance of a ``ShinyButton`` class (made up
 for this document). In this object, there is an instance of Qt QPushButton
-widget which we want click with the mouse.
+widget which we want click with the mouse::
 
     >>> my_widget._target.control
     <PyQt5.QtWidgets.QPushButton object at 0x7fbcc3ac3558>
@@ -496,7 +494,7 @@ this tester can perform the additional, custom user interaction.
 Add Support for Inspecting GUI States
 -------------------------------------
 
-The steps to extend |UIWrapper.inspect| is identical to those for extending
+The steps to extend |UIWrapper.inspect| are identical to those for extending
 |UIWrapper.perform| (see section above). The distinction between
 |UIWrapper.perform| and |UIWrapper.inspect| is merely in their returned
 values.
@@ -504,7 +502,7 @@ values.
 In fact, following the steps in the above section, the new ``ManyMouseClick``
 can also be called via |UIWrapper.inspect|::
 
-    value = tester.inspect(ManyMouseClick())
+    value = tester.inspect(ManyMouseClick(n_times=10))
 
 The returned value is the returned value from ``many_mouse_click``, which is
 ``None``.
