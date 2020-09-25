@@ -257,6 +257,10 @@ class TestUI(BaseTestMixin, unittest.TestCase):
 # specific Editor
 ToolkitSpecificEditor = toolkit_object("editor:Editor")
 
+class DummyObject(HasTraits):
+
+    number = Int()
+
 
 if is_qt():
 
@@ -309,10 +313,6 @@ if is_wx():
     import wx
     from traitsui.wx.helper import TraitsUIPanel
 
-    class ThisDummyObject(HasStrictTraits):
-
-        name = Str()
-
     class DummyButtonEditor(ToolkitSpecificEditor):
 
         def init(self, parent):
@@ -336,13 +336,13 @@ if is_wx():
             self.control = TraitsUIPanel(parent, -1)
 
             sizer = wx.BoxSizer(wx.HORIZONTAL)
-            self._dummy = ThisDummyObject()
+            self._dummy = DummyObject()
             self._ui = self._dummy.edit_traits(
                 parent=self.control,
                 kind="subpanel",
                 view=View(
                     Item(
-                        "name",
+                        "number",
                         editor=BasicEditorFactory(klass=DummyButtonEditor),
                     ),
                 ),
@@ -360,11 +360,6 @@ if is_wx():
             if self._ui is not None:
                 self._ui.dispose()
                 self._ui = None
-
-
-class DummyObject(HasTraits):
-
-    number = Int()
 
 
 class TestUIDispose(BaseTestMixin, unittest.TestCase):
