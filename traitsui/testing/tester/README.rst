@@ -1,1 +1,1 @@
-traitsui/testing/tester/__init__.py
+./__init__.py
