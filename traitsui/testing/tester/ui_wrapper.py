@@ -66,7 +66,7 @@ class UIWrapper:
         visual confirmation test code is working as desired.
     """
 
-    def __init__(self, target, registries, *, delay=0):
+    def __init__(self, target, *, registries, delay=0):
         self._target = target
         self._registries = registries
         self.delay = delay
