@@ -15,5 +15,5 @@ using TraitsUI.
 
 The top-level ``api`` module exposes the public API for external projects.
 
-Private modules in this package serves TraitsUI only.
+Private modules in this package serve TraitsUI only.
 """
