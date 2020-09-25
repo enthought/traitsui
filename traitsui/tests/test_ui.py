@@ -258,10 +258,6 @@ class TestUI(BaseTestMixin, unittest.TestCase):
 ToolkitSpecificEditor = toolkit_object("editor:Editor")
 
 
-def get_event_name(event):
-    from pyface.qt import QtCore
-
-
 if is_qt():
 
     from pyface.qt import QtGui, QtCore
@@ -311,14 +307,11 @@ if is_wx():
     # asynchronous.
 
     import wx
-
     from traitsui.wx.helper import TraitsUIPanel
-
 
     class ThisDummyObject(HasStrictTraits):
 
         name = Str()
-
 
     class DummyButtonEditor(ToolkitSpecificEditor):
 
@@ -336,7 +329,6 @@ if is_wx():
 
         def update_editor(self):
             pass
-
 
     class EditorWithCustomWidget(ToolkitSpecificEditor):  # noqa: F811
 
@@ -441,7 +433,7 @@ class TestUIDispose(BaseTestMixin, unittest.TestCase):
 
 @contextlib.contextmanager
 def ensure_destroyed(ui):
-    gui = GUI()
+    """ Ensure the widget is destroyed in the event when test fails."""
     try:
         yield
     finally:
@@ -452,6 +444,7 @@ def ensure_destroyed(ui):
 
 
 def close_control(control):
+    """ Close the widget."""
     if is_qt():
         control.close()
     elif is_wx():
