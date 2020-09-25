@@ -29,12 +29,10 @@ class TestBooleanEditorSimpleDemo(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(demo) as ui:
             simple = tester.find_by_id(ui, 'simple')
-
             readonly = tester.find_by_id(ui, 'readonly')
             text = tester.find_by_id(ui, 'text')
             count_changes = tester.find_by_name(ui, "count_changes")
 
-            self.assertEqual(demo.my_boolean_trait, False)
             simple.perform(MouseClick())
             self.assertEqual(demo.my_boolean_trait, True)
 
