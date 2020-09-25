@@ -56,7 +56,7 @@ class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
     def test_click_boolean_changes_trait_simple(self):
         self.check_click_boolean_changes_trait('simple')
 
-    def test_click_boolean_changes_trait(self):
+    def test_click_boolean_changes_trait_custom(self):
         self.check_click_boolean_changes_trait('custom')
 
     def test_change_text_boolean_changes_trait(self):
