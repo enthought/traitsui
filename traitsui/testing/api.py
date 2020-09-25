@@ -82,6 +82,7 @@ from .tester.registry import TargetRegistry
 
 from .tester.query import (
     DisplayedText,
+    IsChecked,
     SelectedText
 )
 

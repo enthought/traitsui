@@ -33,10 +33,7 @@ class BooleanEditorDemo(HasTraits):
     traits_view = View(
         '10',  # vertical space
 
-        # The trait to be displayed / edited, in default format.
-        # To edit a simple trait, this is the only line needed inside the View.
-        # This is shorthand for Item('my_boolean_trait', style = 'simple')
-        'my_boolean_trait',
+        Item('my_boolean_trait', style='simple', id='simple'),
 
         '10',  # vertical space
 
@@ -49,8 +46,13 @@ class BooleanEditorDemo(HasTraits):
 
         '10',  # vertical space
 
-        Item('my_boolean_trait', style='readonly', label='Read-only style'),
-        Item('my_boolean_trait', style='text', label='Text style'),
+        Item(
+            'my_boolean_trait',
+            style='readonly',
+            label='Read-only style',
+            id='readonly'
+        ),
+        Item('my_boolean_trait', style='text', label='Text style', id='text'),
 
         '10',
         'count_changes',
