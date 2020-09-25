@@ -304,6 +304,53 @@ if is_qt():
             pass
 
 
+if is_wx():
+
+    import wx
+
+
+if is_wx():
+
+    # The AttributeError is not seen on Wx. But for completeness, the test is
+    # mirrored here.
+
+    import wx
+
+    from traitsui.wx.helper import TraitsUIPanel
+
+    class EditorWithCustomWidget(ToolkitSpecificEditor):  # noqa: F811
+
+        def init(self, parent):
+            self.control = TraitsUIPanel(parent, -1)
+
+            sizer = wx.BoxSizer(wx.HORIZONTAL)
+            button = wx.Button(self.control, -1, "...", size=wx.Size(28, -1))
+            button.Bind(wx.EVT_SIZE, self._button_resize, id=button.GetId())
+            sizer.Add(button, 0, wx.LEFT | wx.ALIGN_CENTER)
+
+            self._ui = self.edit_traits(
+                parent=self.control,
+                kind="subpanel",
+                view=View(Item("_", label="DUMMY"), width=100, height=100),
+            )
+            sizer.Add(self._ui.control, 1, wx.EXPAND)
+            self.control.SetSizerAndFit(sizer)
+
+        def _button_resize(self, event):
+            assert self.control is not None
+
+        def update_editor(self):
+            pass
+
+        def dispose(self):
+            super().dispose()
+
+        def dispose_inner_ui(self):
+            if self._ui is not None:
+                self._ui.dispose()
+                self._ui = None
+
+
 class DummyObject(HasTraits):
 
     number = Int()
