@@ -502,7 +502,7 @@ values.
 In fact, following the steps in the above section, the new ``ManyMouseClick``
 can also be called via |UIWrapper.inspect|::
 
-    value = tester.inspect(ManyMouseClick())
+    value = tester.inspect(ManyMouseClick(n_times=10))
 
 The returned value is the returned value from ``many_mouse_click``, which is
 ``None``.
