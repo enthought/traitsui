@@ -28,7 +28,6 @@ from traitsui.tests._tools import (
     is_wx,
     process_cascade_events,
     requires_toolkit,
-    reraise_exceptions,
     ToolkitName,
 )
 from traitsui.testing.api import UITester
