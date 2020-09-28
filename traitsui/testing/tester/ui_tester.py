@@ -29,7 +29,7 @@ class UITester:
     registries : list of TargetRegistry, optional
         Registries of interaction for different targets, in the order
         of decreasing priority. If provided, a shallow copy will be made.
-        Default registries are always appended to the list to provide
+        A default registry is always appended to the list to provide
         builtin support for TraitsUI UI and editors.
     delay : int, optional
         Time delay (in ms) in which actions by the tester are performed. Note
@@ -50,7 +50,9 @@ class UITester:
         else:
             self._registries = registries.copy()
 
-        # The find_by_name method in this class depends on this registry
+        # This registry contributes the support for TraitsUI UI and editors.
+        # The find_by_name/find_by_id methods in this class also depend on
+        # this registry.
         self._registries.append(get_default_registry())
         self.delay = delay
 
