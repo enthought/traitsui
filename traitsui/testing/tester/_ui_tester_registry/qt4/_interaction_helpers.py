@@ -18,7 +18,7 @@ from traitsui.testing.tester.exceptions import Disabled
 from traitsui.qt4.key_event_to_name import key_map as _KEY_MAP
 
 
-def key_click(widget, key, delay=0):
+def key_click(widget, key, delay):
     """ Performs a key click of the given key on the given widget after
     a delay.
 
