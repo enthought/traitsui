@@ -11,4 +11,5 @@ class Polygon(HasTraits):
     line_color = Trait(Color((0, 0, 0)),
                        editor=ColorEditor())
 
+
 Polygon().configure_traits()

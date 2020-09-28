@@ -3,12 +3,11 @@
 
 # multiple_views.py -- Sample code to demonstrate the use of multiple views
 
-#--[Imports]--------------------------------------------------------------
+# --[Imports]--------------------------------------------------------------
 from traits.api import HasTraits, Str, Int
 from traitsui.api import View, Item, Group
-import traitsui
 
-#--[Code]-----------------------------------------------------------------
+# --[Code]-----------------------------------------------------------------
 
 
 class SimpleEmployee3(HasTraits):
@@ -33,6 +32,7 @@ class SimpleEmployee3(HasTraits):
                           label='Personnel database ' +
                           'entry',
                           show_border=True))
+
 
 sam = SimpleEmployee3()
 sam.configure_traits()

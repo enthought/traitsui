@@ -3,11 +3,11 @@
 
 # multi_object_view.py -- Sample code to show multi-object view with context
 
-#--[Imports]--------------------------------------------------------------
+# --[Imports]--------------------------------------------------------------
 from traits.api import HasTraits, Str, Int, Bool
 from traitsui.api import View, Group, Item
 
-#--[Code]-----------------------------------------------------------------
+# --[Code]-----------------------------------------------------------------
 
 # Sample class
 
@@ -17,6 +17,7 @@ class House(HasTraits):
     bedrooms = Int()
     pool = Bool()
     price = Int()
+
 
 # View object designed to display two objects of class 'House'
 comp_view = View(

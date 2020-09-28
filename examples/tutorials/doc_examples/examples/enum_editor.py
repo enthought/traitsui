@@ -3,11 +3,11 @@
 
 # enum_editor.py -- Example of using an enumeration editor
 
-#--[Imports]--------------------------------------------------------------
+# --[Imports]--------------------------------------------------------------
 from traits.api import HasTraits, Enum
 from traitsui.api import EnumEditor, View, Item
 
-#--[Code]-----------------------------------------------------------------
+# --[Code]-----------------------------------------------------------------
 
 
 class EnumExample(HasTraits):
