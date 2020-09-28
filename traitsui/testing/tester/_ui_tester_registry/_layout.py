@@ -10,7 +10,7 @@
 #
 """ This module contains helper functions for working with layouts inside an
 editor. For example, converting indices so they count through the layout
-appropraitely.
+appropriately.
 """
 
 
@@ -44,7 +44,7 @@ def column_major_to_row_major(index, n, num_rows, num_cols):
     up having at most its last row as incomplete. The general approach for the
     algorithm is to find the coordinates as if we had counted through the
     grid in column major order, and then convert that back to a row major
-    index. The complications come from hte fact that the last row may be
+    index. The complications come from the fact that the last row may be
     missing entries.
     Consider the example (n=17, num_row=4, num_cols=5)
     0  4  8  11  14
@@ -55,7 +55,7 @@ def column_major_to_row_major(index, n, num_rows, num_cols):
 
     If the given index is 7 then we are in a column of the matrix where
     all rows are full.  This corresponds to the else branch below. From here,
-    we simply find the (i,j) coordiantes of the entry 7 above, with the upper
+    we simply find the (i,j) coordinates of the entry 7 above, with the upper
     left corner representing (0,0).  Thus, (i,j) = (3,1).  Now, to convert
     this to a row major index, we can simply take i * num_cols + j.
 
@@ -68,7 +68,7 @@ def column_major_to_row_major(index, n, num_rows, num_cols):
     1  5            9  12  15
     2  6            10 13  16
     3  7
-    we find the (i2,j2) coordiantes of the entry 15 above in grid2, with the
+    we find the (i2,j2) coordinates of the entry 15 above in grid2, with the
     upper left corner of grid2 representing (0,0). Hence, (i2,j2) = (1,2).
     We then find that index if we had counted in row major order for grid2,
     which would be i2 * num_empty_entries_last_row + j2 = 5, and add that to
