@@ -428,7 +428,7 @@ def readonly_textbox_displayed_text(control):
     ----------
     control : wx.TextCtrl or wx.StaticText
         the textbox object from which the text of interest is displayed
-    
+
     Raises
     ------
     TypeError
