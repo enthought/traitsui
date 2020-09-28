@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-from traitsui.testing.tester import command
+from traitsui.testing.api import MouseClick
 from traitsui.testing.tester._ui_tester_registry._traitsui_ui import (
     register_traitsui_ui_solvers,
 )
@@ -52,7 +52,7 @@ def register(registry):
     """
     registry.register_interaction(
         target_class=SimpleEditor,
-        interaction_class=command.MouseClick,
+        interaction_class=MouseClick,
         handler=lambda wrapper, _: mouse_click_button(
             control=wrapper._target._button, delay=wrapper.delay,
         )

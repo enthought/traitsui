@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-from traitsui.testing.tester import query
+from traitsui.testing.api import DisplayedText
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
     _interaction_helpers
 )
@@ -39,7 +39,7 @@ def register(registry):
 
     registry.register_interaction(
         target_class=ReadonlyEditor,
-        interaction_class=query.DisplayedText,
+        interaction_class=DisplayedText,
         handler=lambda wrapper, _: _interaction_helpers.displayed_text_qobject(
             wrapper._target.control),
     )

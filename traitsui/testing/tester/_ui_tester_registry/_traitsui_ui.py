@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-from traitsui.testing.tester import locator
+from traitsui.testing.api import TargetById, TargetByName
 
 
 def _get_editor_by_name(ui, name):
@@ -92,7 +92,7 @@ def register_traitsui_ui_solvers(registry, target_class, traitsui_ui_getter):
 
     registry.register_location(
         target_class=target_class,
-        locator_class=locator.TargetByName,
+        locator_class=TargetByName,
         solver=lambda wrapper, location: (
             _get_editor_by_name(
                 ui=traitsui_ui_getter(wrapper._target),
@@ -102,7 +102,7 @@ def register_traitsui_ui_solvers(registry, target_class, traitsui_ui_getter):
     )
     registry.register_location(
         target_class=target_class,
-        locator_class=locator.TargetById,
+        locator_class=TargetById,
         solver=lambda wrapper, location: (
             _get_editor_by_id(
                 ui=traitsui_ui_getter(wrapper._target),

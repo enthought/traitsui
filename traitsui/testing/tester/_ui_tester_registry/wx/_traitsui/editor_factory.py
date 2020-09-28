@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 from traitsui.wx.editor_factory import ReadonlyEditor, TextEditor
-from traitsui.testing.tester import query
+from traitsui.testing.api import DisplayedText
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 from traitsui.testing.tester._ui_tester_registry.wx._registry_helper import (
     register_editable_textbox_handlers,
@@ -33,7 +33,7 @@ def register(registry):
     )
     registry.register_interaction(
         target_class=ReadonlyEditor,
-        interaction_class=query.DisplayedText,
+        interaction_class=DisplayedText,
         handler=lambda wrapper, _:
             _interaction_helpers.readonly_textbox_displayed_text(
                 wrapper._target.control),

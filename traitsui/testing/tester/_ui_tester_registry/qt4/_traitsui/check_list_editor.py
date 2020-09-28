@@ -10,7 +10,7 @@
 #
 
 from traitsui.qt4.check_list_editor import CustomEditor
-from traitsui.testing.tester import command, locator
+from traitsui.testing.api import Index, MouseClick
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
     _BaseSourceWithLocation
 )
@@ -25,9 +25,9 @@ from traitsui.testing.tester._ui_tester_registry.qt4 import (
 class _IndexedCustomCheckListEditor(_BaseSourceWithLocation):
     """ Wrapper for CheckListEditor + locator.Index """
     source_class = CustomEditor
-    locator_class = locator.Index
+    locator_class = Index
     handlers = [
-        (command.MouseClick,
+        (MouseClick,
             (lambda wrapper, _: _interaction_helpers.mouse_click_qlayout(
                 layout=wrapper._target.source.control.layout(),
                 index=convert_index(
