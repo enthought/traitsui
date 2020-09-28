@@ -21,9 +21,14 @@ from traits.api import (
 )
 from traits.testing.api import UnittestTools
 from traitsui.api import TextEditor, View, Item
-from traitsui.testing.tester.ui_tester import UITester
-from traitsui.testing.tester import command, query
-from traitsui.testing.tester.exceptions import InteractionNotSupported
+from traitsui.testing.api import (
+    DisplayedText,
+    KeyClick,
+    KeySequence,
+    MouseClick,
+    InteractionNotSupported,
+    UITester
+)
 from traitsui.tests._tools import (
     BaseTestMixin,
     GuiTestAssistant,
@@ -178,9 +183,9 @@ class TestTextEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
         with tester.create_ui(foo, dict(view=view)) as ui:
             with self.assertTraitChanges(foo, "name", count=3):
                 name_field = tester.find_by_name(ui, "name")
-                name_field.perform(command.KeySequence("NEW"))
+                name_field.perform(KeySequence("NEW"))
                 # with auto-set the displayed name should match the name trait
-            display_name = name_field.inspect(query.DisplayedText())
+            display_name = name_field.inspect(DisplayedText())
             self.assertEqual(foo.name, "NEW")
             self.assertEqual(display_name, foo.name)
 
@@ -194,15 +199,15 @@ class TestTextEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
             name_field = tester.find_by_name(ui, "name")
-            name_field.perform(command.KeySequence("NEW"))
+            name_field.perform(KeySequence("NEW"))
             # with auto-set as False the displayed name should match what has
             # been typed not the trait itself, After "Enter" is pressed it
             # should match the name trait
-            display_name = name_field.inspect(query.DisplayedText())
+            display_name = name_field.inspect(DisplayedText())
             self.assertEqual(foo.name, "")
             self.assertEqual(display_name, "NEW")
-            name_field.perform(command.KeyClick("Enter"))
-            display_name = name_field.inspect(query.DisplayedText())
+            name_field.perform(KeyClick("Enter"))
+            display_name = name_field.inspect(DisplayedText())
             self.assertEqual(foo.name, "NEW")
             self.assertEqual(display_name, foo.name)
 
@@ -222,15 +227,15 @@ class TestTextEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
             name_field = tester.find_by_name(ui, "name")
-            name_field.perform(command.KeySequence("NEW"))
+            name_field.perform(KeySequence("NEW"))
             # with auto-set as False the displayed name should match what has
             # been typed not the trait itself, After moving to another textbox
             # it should match the name trait
-            display_name = name_field.inspect(query.DisplayedText())
+            display_name = name_field.inspect(DisplayedText())
             self.assertEqual(foo.name, "")
             self.assertEqual(display_name, "NEW")
-            tester.find_by_name(ui, "nickname").perform(command.MouseClick())
-            display_name = name_field.inspect(query.DisplayedText())
+            tester.find_by_name(ui, "nickname").perform(MouseClick())
+            display_name = name_field.inspect(DisplayedText())
             self.assertEqual(foo.name, "NEW")
             self.assertEqual(display_name, foo.name)
 
@@ -242,9 +247,9 @@ class TestTextEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
         with tester.create_ui(foo, dict(view=view)) as ui:
             with self.assertTraitChanges(foo, "name", count=3):
                 name_field = tester.find_by_name(ui, "name")
-                name_field.perform(command.KeySequence("NEW"))
+                name_field.perform(KeySequence("NEW"))
             # with auto-set the displayed name should match the name trait
-            display_name = name_field.inspect(query.DisplayedText())
+            display_name = name_field.inspect(DisplayedText())
             self.assertEqual(foo.name, "NEW")
             self.assertEqual(display_name, foo.name)
 
@@ -256,9 +261,9 @@ class TestTextEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
             name_field = tester.find_by_name(ui, "name")
-            name_field.perform(command.KeySequence("NEW"))
-            name_field.perform(command.KeyClick("Enter"))
-            display_name = name_field.inspect(query.DisplayedText())
+            name_field.perform(KeySequence("NEW"))
+            name_field.perform(KeyClick("Enter"))
+            display_name = name_field.inspect(DisplayedText())
             self.assertEqual(foo.name, "NEW\n")
             self.assertEqual(display_name, foo.name)
 
@@ -278,15 +283,15 @@ class TestTextEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
             name_field = tester.find_by_name(ui, "name")
-            name_field.perform(command.KeySequence("NEW"))
+            name_field.perform(KeySequence("NEW"))
             # with auto-set as False the displayed name should match what has
             # been typed not the trait itself, After moving to another textbox
             # it should match the name trait
-            display_name = name_field.inspect(query.DisplayedText())
+            display_name = name_field.inspect(DisplayedText())
             self.assertEqual(foo.name, "")
             self.assertEqual(display_name, "NEW")
-            tester.find_by_name(ui, "nickname").perform(command.MouseClick())
-            display_name = name_field.inspect(query.DisplayedText())
+            tester.find_by_name(ui, "nickname").perform(MouseClick())
+            display_name = name_field.inspect(DisplayedText())
             self.assertEqual(foo.name, "NEW")
             self.assertEqual(display_name, foo.name)
 
@@ -297,11 +302,11 @@ class TestTextEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
         with tester.create_ui(foo, dict(view=view)) as ui:
             name_field = tester.find_by_name(ui, "name")
             with self.assertRaises(InteractionNotSupported):
-                name_field.perform(command.KeySequence("NEW"))
+                name_field.perform(KeySequence("NEW"))
             # Trying to type should do nothing
             with self.assertRaises(InteractionNotSupported):
-                name_field.perform(command.KeyClick("Space"))
-            display_name = name_field.inspect(query.DisplayedText())
+                name_field.perform(KeyClick("Space"))
+            display_name = name_field.inspect(DisplayedText())
             self.assertEqual(display_name, "A name")
 
     def check_format_func_used(self, style):
@@ -317,10 +322,10 @@ class TestTextEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
             display_name = (
-                tester.find_by_name(ui, "name").inspect(query.DisplayedText())
+                tester.find_by_name(ui, "name").inspect(DisplayedText())
             )
             display_nickname = (
-                tester.find_by_name(ui, "nickname").inspect(query.DisplayedText())  # noqa E501
+                tester.find_by_name(ui, "nickname").inspect(DisplayedText())  # noqa E501
             )
             self.assertEqual(display_name, "WILLIAM")
             self.assertEqual(display_nickname, "bill")

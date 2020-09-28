@@ -9,8 +9,12 @@ from traitsui.tests._tools import (
     ToolkitName,
 )
 
-from traitsui.testing.tester import command, query
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import (
+    DisplayedText,
+    KeySequence,
+    MouseClick,
+    UITester
+)
 
 
 class EditedInstance(HasTraits):
@@ -40,9 +44,9 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(obj, dict(view=get_view("simple"))) as ui:
             instance = tester.find_by_name(ui, "inst")
-            instance.perform(command.MouseClick())
+            instance.perform(MouseClick())
             value_txt = instance.find_by_name("value")
-            value_txt.perform(command.KeySequence("abc"))
+            value_txt.perform(KeySequence("abc"))
             self.assertEqual(obj.inst.value, "abc")
 
     def test_custom_editor(self):
@@ -50,7 +54,7 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(obj, dict(view=get_view("custom"))) as ui:
             value_txt = tester.find_by_name(ui, "inst").find_by_name("value")
-            value_txt.perform(command.KeySequence("abc"))
+            value_txt.perform(KeySequence("abc"))
             self.assertEqual(obj.inst.value, "abc")
 
     def test_custom_editor_resynch_editor(self):
@@ -59,10 +63,10 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(obj, dict(view=get_view("custom"))) as ui:
             value_txt = tester.find_by_name(ui, "inst").find_by_name("value")
-            displayed = value_txt.inspect(query.DisplayedText())
+            displayed = value_txt.inspect(DisplayedText())
             self.assertEqual(displayed, "hello")
             edited_inst.value = "bye"
-            displayed = value_txt.inspect(query.DisplayedText())
+            displayed = value_txt.inspect(DisplayedText())
             self.assertEqual(displayed, "bye")
 
     def test_simple_editor_resynch_editor(self):
@@ -71,13 +75,13 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(obj, dict(view=get_view("simple"))) as ui:
             instance = tester.find_by_name(ui, "inst")
-            instance.perform(command.MouseClick())
+            instance.perform(MouseClick())
 
             value_txt = instance.find_by_name("value")
-            displayed = value_txt.inspect(query.DisplayedText())
+            displayed = value_txt.inspect(DisplayedText())
             self.assertEqual(displayed, "hello")
             edited_inst.value = "bye"
-            displayed = value_txt.inspect(query.DisplayedText())
+            displayed = value_txt.inspect(DisplayedText())
             self.assertEqual(displayed, "bye")
 
     def test_simple_editor_parent_closed(self):
@@ -85,4 +89,4 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(obj, dict(view=get_view('simple'))) as ui:
             instance = tester.find_by_name(ui, "inst")
-            instance.perform(command.MouseClick())
+            instance.perform(MouseClick())
