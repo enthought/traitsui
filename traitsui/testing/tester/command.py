@@ -33,8 +33,8 @@ class KeySequence:
 
     Implementations should raise ``Disabled`` if the widget is disabled.
 
-    Attribute
-    ---------
+    Attributes
+    ----------
     sequence : str
         A string that represents a sequence of key inputs.
         e.g. "Hello World"
@@ -49,8 +49,8 @@ class KeyClick:
 
     Implementations should raise ``Disabled`` if the widget is disabled.
 
-    Attribute
-    ---------
+    Attributes
+    ----------
     key : str
         Standardized (pyface) name for a keyboard event.
         e.g. "Enter", "Tab", "Space", "0", "1", "A", ...
