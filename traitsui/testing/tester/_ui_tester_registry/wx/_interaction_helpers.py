@@ -116,6 +116,11 @@ def mouse_click_combobox_or_choice(control, index, delay):
         The index of the item in the combobox/choice to be clicked
     delay: int
         Time delay (in ms) in which click will be performed.
+
+    Raises
+    ------
+    TypeError
+        If the control is not a wxComboBox or wxChoice.
     """
     if isinstance(control, wx.ComboBox):
         click_event = _create_event(
@@ -226,6 +231,11 @@ def mouse_click_checkbox_child_in_panel(control, index, delay):
         The index of the child object in the Panel to be clicked
     delay : int
         Time delay (in ms) in which click will be performed.
+
+    Raises
+    ------
+    IndexError
+        If the index is out of range.
     """
     children_list = control.GetSizer().GetChildren()
     if not 0 <= index <= len(children_list) - 1:
@@ -245,6 +255,11 @@ def mouse_click_radiobutton_child_in_panel(control, index, delay):
         The index of the child object in the Panel to be clicked
     delay : int
         Time delay (in ms) in which click will be performed.
+
+    Raises
+    ------
+    IndexError
+        If the index is out of range.
     """
     children_list = control.GetSizer().GetChildren()
     if not 0 <= index <= len(children_list) - 1:
@@ -335,6 +350,11 @@ def key_sequence_text_ctrl(control, interaction, delay):
     delay : int
         Time delay (in ms) in which each key click in the sequence will be
         performed.
+
+    Raises
+    ------
+    Disabled
+        If the control is either not enabled or not editable.
     """
     # fail early
     for char in interaction.sequence:
@@ -366,6 +386,11 @@ def key_click_slider(control, interaction, delay):
         to be simulated being typed
     delay : int
         Time delay (in ms) in which the key click will be performed.
+
+    Raises
+    ------
+    ValueError
+        If the interaction.key is not one of the valid keys.
     """
     valid_keys = {"Left", "Right", "Up", "Down", "Page Up", "Page Down"}
     if interaction.key not in valid_keys:
@@ -403,6 +428,11 @@ def readonly_textbox_displayed_text(control):
     ----------
     control : wx.TextCtrl or wx.StaticText
         the textbox object from which the text of interest is displayed
+
+    Raises
+    ------
+    TypeError
+        If the control is not either a wx.TextCtrl or wx.StaticText.
     '''
     if isinstance(control, wx.TextCtrl):
         return control.GetValue()
