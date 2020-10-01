@@ -134,6 +134,7 @@ class TestSimpleListEditor(unittest.TestCase):
             self.assertEqual(obj.people[7].name, "Fields")
             people_list = tester.find_by_name(ui, "people")
             item = people_list.locate(Index(7))
+            item.perform(MouseClick())
             name_field = item.find_by_name("name")
             for _ in range(6):
                 name_field.perform(KeyClick("Backspace"))

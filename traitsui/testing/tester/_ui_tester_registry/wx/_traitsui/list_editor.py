@@ -19,6 +19,7 @@ from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 from traitsui.wx.list_editor import (
     CustomEditor,
     NotebookEditor,
+    SimpleEditor
 )
 
 
@@ -103,6 +104,14 @@ def register(registry):
     # CustomEditor
     registry.register_location(
         target_class=CustomEditor,
+        locator_class=Index,
+        solver=lambda wrapper, location: (
+            _get_next_target(wrapper._target, location.index)
+        )
+    )
+    # SimpleEditor
+    registry.register_location(
+        target_class=SimpleEditor,
         locator_class=Index,
         solver=lambda wrapper, location: (
             _get_next_target(wrapper._target, location.index)
