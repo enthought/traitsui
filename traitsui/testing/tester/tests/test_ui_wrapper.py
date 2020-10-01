@@ -151,6 +151,8 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
         )
 
 
+# Use of locate requires the GUI event loop
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUIWrapperLocationRegistry(unittest.TestCase):
     """ Test the use of registries with locate. """
 
@@ -413,6 +415,22 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
 
         with self.assertTraitChanges(model, "number"):
             wrapper.perform(None)
+
+    def test_event_processed_prior_to_resolving_location(self):
+        # Test GUI events are processed prior to resolving location
+        gui = GUI()
+        model = NumberHasTraits()
+        gui.set_trait_later(model, "number", 2)
+
+        def solver(wrapper, action):
+            return model.number
+
+        wrapper = example_ui_wrapper(
+            registries=[StubRegistry(solver=solver)],
+        )
+
+        new_wrapper = wrapper.locate(None)
+        self.assertEqual(new_wrapper._target, 2)
 
     def test_event_processed_with_exception_captured(self):
         # Test exceptions in the GUI event loop are captured and then cause
