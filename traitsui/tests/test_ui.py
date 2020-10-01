@@ -17,24 +17,31 @@
 Test cases for the UI object.
 """
 
+import contextlib
 import unittest
 
+from pyface.api import GUI
 from traits.api import Property
 from traits.has_traits import HasTraits, HasStrictTraits
 from traits.trait_types import Str, Int
+
 import traitsui
-from traitsui.item import Item, spring
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.api import Group, Item, spring, View
 from traitsui.testing.tester import command, query
 from traitsui.testing.tester.ui_tester import UITester
-from traitsui.view import View
-
 from traitsui.tests._tools import (
     BaseTestMixin,
     count_calls,
     create_ui,
+    is_qt,
+    is_wx,
+    process_cascade_events,
     requires_toolkit,
+    reraise_exceptions,
     ToolkitName,
 )
+from traitsui.toolkit import toolkit, toolkit_object
 
 
 class FooDialog(HasTraits):
@@ -87,6 +94,7 @@ class TestUI(BaseTestMixin, unittest.TestCase):
 
             ui.reset(destroy=True)
 
+            process_cascade_events()
             # the top control is still there
             self.assertIsNotNone(ui.control)
             # but its children are gone
@@ -242,3 +250,205 @@ class TestUI(BaseTestMixin, unittest.TestCase):
 
             obj.name = "too short"
             self.assertTrue(editor.invalid)
+
+
+# Regression test on an AttributeError commonly seen (enthought/traitsui#1145)
+# Code in ui_panel makes use toolkit specific attributes on the toolkit
+# specific Editor
+ToolkitSpecificEditor = toolkit_object("editor:Editor")
+
+
+class DummyObject(HasTraits):
+
+    number = Int()
+
+
+if is_qt():
+
+    from pyface.qt import QtGui, QtCore
+
+    class CustomWidget(QtGui.QWidget):
+
+        def __init__(self, editor, parent=None):
+            super(CustomWidget, self).__init__()
+            self._some_editor = editor
+
+        def sizeHint(self):
+            # This is called if the sibling widget is destroyed (e.g. the
+            # nested UI in EditorWithCustomWidget) while the container
+            # (e.g. QSplitter in EditorWithCustomWidget) has not been
+            # destroyed. The container will want to ask this widget for its
+            # sizeHint in order to resize/repaint the layout.
+            assert self._some_editor.factory is not None
+            return super().sizeHint()
+
+    class EditorWithCustomWidget(ToolkitSpecificEditor):
+
+        def init(self, parent):
+            self.control = QtGui.QSplitter(QtCore.Qt.Horizontal)
+
+            widget = CustomWidget(editor=self)
+            self.control.addWidget(widget)
+            self.control.setStretchFactor(0, 2)
+
+            self._ui = self.edit_traits(
+                parent=self.control,
+                kind="subpanel",
+                view=View(Item("_", label="DUMMY"), width=100, height=100),
+            )
+            self.control.addWidget(self._ui.control)
+
+        def dispose(self):
+            self.dispose_inner_ui()
+            super().dispose()
+
+        def dispose_inner_ui(self):
+            if self._ui is not None:
+                self._ui.dispose()
+                self._ui = None
+
+        def update_editor(self):
+            pass
+
+
+if is_wx():
+
+    # The AttributeError is not seen on Wx. But Destroy needs to be made
+    # asynchronous.
+
+    import wx
+    from traitsui.wx.helper import TraitsUIPanel
+
+    class DummyButtonEditor(ToolkitSpecificEditor):
+
+        def init(self, parent):
+            self.control = wx.Button(parent, -1, "Dummy")
+            self.control.Bind(wx.EVT_BUTTON, self.update_object)
+
+        def dispose(self):
+            # If the object is deleted too soon, we run into a RuntimeError.
+            self.control.Unbind(wx.EVT_BUTTON)
+            super().dispose()
+
+        def update_object(self, event):
+            pass
+
+        def update_editor(self):
+            pass
+
+    class EditorWithCustomWidget(ToolkitSpecificEditor):  # noqa: F811
+
+        def init(self, parent):
+            self.control = TraitsUIPanel(parent, -1)
+
+            sizer = wx.BoxSizer(wx.HORIZONTAL)
+            self._dummy = DummyObject()
+            self._ui = self._dummy.edit_traits(
+                parent=self.control,
+                kind="subpanel",
+                view=View(
+                    Item(
+                        "number",
+                        editor=BasicEditorFactory(klass=DummyButtonEditor),
+                    ),
+                ),
+            )
+            sizer.Add(self._ui.control, 1, wx.EXPAND)
+            self.control.SetSizerAndFit(sizer)
+
+        def update_editor(self):
+            pass
+
+        def dispose(self):
+            super().dispose()
+
+        def dispose_inner_ui(self):
+            if self._ui is not None:
+                self._ui.dispose()
+                self._ui = None
+
+
+class TestUIDispose(BaseTestMixin, unittest.TestCase):
+    """ Test disposal of UI."""
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+    def test_close_ui(self):
+        # Test closing the main window normally.
+        obj = DummyObject()
+        view = View(
+            Group(
+                Item(
+                    "number",
+                    editor=BasicEditorFactory(klass=EditorWithCustomWidget),
+                ),
+            ),
+        )
+        ui = obj.edit_traits(view=view)
+        with ensure_destroyed(ui):
+            gui = GUI()
+            gui.invoke_later(close_control, ui.control)
+            with reraise_exceptions():
+                process_cascade_events()
+            self.assertIsNone(ui.control)
+
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+    def test_dispose_inner_ui(self):
+        obj = DummyObject()
+        view = View(
+            Group(
+                Item(
+                    "number",
+                    editor=BasicEditorFactory(klass=EditorWithCustomWidget),
+                ),
+            ),
+        )
+        ui = obj.edit_traits(view=view)
+        editor, = ui.get_editors("number")
+
+        gui = GUI()
+        with ensure_destroyed(ui):
+            # This represents an event handler that causes a nested UI to be
+            # disposed.
+            gui.invoke_later(editor.dispose_inner_ui)
+
+            # Allowing GUI to process the disposal requests is crucial.
+            # This requirement should be satisfied in production setting
+            # where the dispose method is part of an event handler.
+            # Not doing so before disposing the main UI would be a programming
+            # error in tests settings.
+            with reraise_exceptions():
+                process_cascade_events()
+
+            gui.invoke_later(close_control, ui.control)
+            with reraise_exceptions():
+                process_cascade_events()
+
+            self.assertIsNone(ui.control)
+
+
+@contextlib.contextmanager
+def ensure_destroyed(ui):
+    """ Ensure the widget is destroyed in the event when test fails."""
+    try:
+        yield
+    finally:
+        if ui.control is not None:
+            toolkit().destroy_control(ui.control)
+        with reraise_exceptions():
+            process_cascade_events()
+
+
+def close_control(control):
+    """ Close the widget."""
+    if is_qt():
+        control.close()
+    elif is_wx():
+        control.Close()
+    else:
+        raise NotImplementedError("Unexpected toolkit")

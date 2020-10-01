@@ -273,6 +273,9 @@ class UI(HasPrivateTraits):
     def finish(self):
         """ Finishes disposing of a user interface.
         """
+        # Destroy the control early to silence cascade events when the UI
+        # enters an inconsistent state.
+        toolkit().destroy_control(self.control)
 
         # Reset the contents of the user interface
         self.reset(destroy=False)
@@ -290,7 +293,6 @@ class UI(HasPrivateTraits):
 
         # Destroy the view control:
         self.control._object = None
-        toolkit().destroy_control(self.control)
         self.control = None
 
         # Dispose of any KeyBindings object we reference:

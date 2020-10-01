@@ -28,9 +28,9 @@ from traitsui.tests._tools import (
     is_wx,
     process_cascade_events,
     requires_toolkit,
-    reraise_exceptions,
     ToolkitName,
 )
+from traitsui.testing.api import UITester
 
 # This test file is not distributed nor is it in a package.
 HERE = os.path.dirname(__file__)
@@ -219,7 +219,7 @@ def replaced_configure_traits(
 ):
     """ Mocked configure_traits to launch then close the GUI.
     """
-    ui = instance.edit_traits(
+    ui_kwargs = dict(
         view=view,
         parent=None,
         kind="live",  # other options may block the test
@@ -229,17 +229,8 @@ def replaced_configure_traits(
         scrollable=scrollable,
         **args,
     )
-    with reraise_exceptions():
-        process_cascade_events()
-
-        # Temporary fix for enthought/traitsui#907
-        if is_qt():
-            ui.control.hide()
-        if is_wx():
-            ui.control.Hide()
-
-        ui.dispose()
-        process_cascade_events()
+    with UITester().create_ui(instance, ui_kwargs):
+        pass
 
 
 @contextlib.contextmanager
