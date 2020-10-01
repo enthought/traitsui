@@ -14,7 +14,14 @@ from traitsui.qt4.enum_editor import (
     RadioEditor,
     SimpleEditor,
 )
-from traitsui.testing.tester import command, locator, query
+from traitsui.testing.api import (
+    DisplayedText,
+    Index,
+    KeyClick,
+    KeySequence,
+    MouseClick,
+    SelectedText
+)
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
     _BaseSourceWithLocation
 )
@@ -30,9 +37,9 @@ class _IndexedListEditor(_BaseSourceWithLocation):
     """ Wrapper class for EnumListEditor and Index.
     """
     source_class = ListEditor
-    locator_class = locator.Index
+    locator_class = Index
     handlers = [
-        (command.MouseClick,
+        (MouseClick,
             (lambda wrapper, _: _interaction_helpers.mouse_click_item_view(
                 model=wrapper._target.source.control.model(),
                 view=wrapper._target.source.control,
@@ -46,9 +53,9 @@ class _IndexedRadioEditor(_BaseSourceWithLocation):
     """ Wrapper class for EnumRadioEditor and Index.
     """
     source_class = RadioEditor
-    locator_class = locator.Index
+    locator_class = Index
     handlers = [
-        (command.MouseClick,
+        (MouseClick,
             (lambda wrapper, _: _interaction_helpers.mouse_click_qlayout(
                 layout=wrapper._target.source.control.layout(),
                 index=convert_index(
@@ -92,9 +99,9 @@ class _IndexedSimpleEditor(_BaseSourceWithLocation):
     """ Wrapper class for Simple EnumEditor and Index.
     """
     source_class = SimpleEditor
-    locator_class = locator.Index
+    locator_class = Index
     handlers = [
-        (command.MouseClick,
+        (MouseClick,
             (lambda wrapper, _: _interaction_helpers.mouse_click_combobox(
                 combobox=wrapper._target.source.control,
                 index=wrapper._target.location.index,
@@ -109,9 +116,9 @@ def radio_selected_text_handler(wrapper, interaction):
     ----------
     wrapper : UIWrapper
         The UIWrapper containing that object with text to be displayed.
-    interaction : query.SelectedText
+    interaction : SelectedText
         Unused in this function but included to match the expected format of a
-        handler.  Should only be query.SelectedText
+        handler.  Should only be SelectedText
     """
     control = wrapper._target.control
     for index in range(control.layout().count()):
@@ -132,21 +139,21 @@ def register(registry):
     _IndexedSimpleEditor.register(registry)
 
     simple_editor_text_handlers = [
-        (command.KeyClick,
+        (KeyClick,
             (lambda wrapper, interaction:
                 _interaction_helpers.key_click_qwidget(
                     control=wrapper._target.control,
                     interaction=interaction,
                     delay=wrapper.delay))),
-        (command.KeySequence,
+        (KeySequence,
             (lambda wrapper, interaction:
                 _interaction_helpers.key_sequence_qwidget(
                     control=wrapper._target.control,
                     interaction=interaction,
                     delay=wrapper.delay))),
-        (query.DisplayedText,
+        (DisplayedText,
             lambda wrapper, _: wrapper._target.control.currentText()),
-        (query.SelectedText,
+        (SelectedText,
             lambda wrapper, _: wrapper._target.control.currentText())
     ]
 
@@ -159,13 +166,13 @@ def register(registry):
 
     registry.register_interaction(
         target_class=RadioEditor,
-        interaction_class=query.SelectedText,
+        interaction_class=SelectedText,
         handler=radio_selected_text_handler,
     )
 
     registry.register_interaction(
         target_class=ListEditor,
-        interaction_class=query.SelectedText,
+        interaction_class=SelectedText,
         handler=lambda wrapper, _:
             wrapper._target.control.currentItem().text(),
     )

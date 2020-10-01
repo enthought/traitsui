@@ -13,7 +13,12 @@
 and location solvers for common Wx GUI components.
 """
 
-from traitsui.testing.tester import command, query
+from traitsui.testing.api import (
+    DisplayedText,
+    KeyClick,
+    KeySequence,
+    MouseClick
+)
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 
@@ -31,18 +36,18 @@ def register_editable_textbox_handlers(registry, target_class, widget_getter):
         A callable to return a wx.TextCtrl
     """
     handlers = [
-        (command.KeySequence,
+        (KeySequence,
             (lambda wrapper, interaction:
                 _interaction_helpers.key_sequence_text_ctrl(
                     widget_getter(wrapper), interaction, wrapper.delay))),
-        (command.KeyClick,
+        (KeyClick,
             (lambda wrapper, interaction:
                 _interaction_helpers.key_click_text_entry(
                     widget_getter(wrapper), interaction, wrapper.delay))),
-        (command.MouseClick,
+        (MouseClick,
             (lambda wrapper, _: _interaction_helpers.mouse_click_object(
                 control=widget_getter(wrapper), delay=wrapper.delay))),
-        (query.DisplayedText,
+        (DisplayedText,
             lambda wrapper, _: widget_getter(wrapper).GetValue()),
     ]
     for interaction_class, handler in handlers:

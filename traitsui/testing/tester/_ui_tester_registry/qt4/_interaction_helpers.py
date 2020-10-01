@@ -14,7 +14,7 @@ from pyface.qt.QtTest import QTest
 from traitsui.testing.tester._ui_tester_registry._compat import (
     check_key_compat
 )
-from traitsui.testing.tester.exceptions import Disabled
+from traitsui.testing.api import Disabled
 from traitsui.qt4.key_event_to_name import key_map as _KEY_MAP
 
 

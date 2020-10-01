@@ -3,9 +3,15 @@ import unittest
 
 from traits.api import HasTraits, Float, Int
 from traitsui.api import Item, RangeEditor, UItem, View
-from traitsui.testing.tester import command, locator, query
-from traitsui.testing.tester.registry import TargetRegistry
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import (
+    DisplayedText,
+    KeyClick,
+    KeySequence,
+    Slider,
+    TargetRegistry,
+    Textbox,
+    UITester
+)
 from traitsui.tests._tools import (
     BaseTestMixin,
     is_wx,
@@ -102,10 +108,10 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             # sanity check
             self.assertEqual(model.value, 1)
             number_field = tester.find_by_name(ui, "value")
-            text = number_field.locate(locator.Textbox())
-            text.perform(command.KeyClick("0"))
-            text.perform(command.KeyClick("Enter"))
-            displayed = text.inspect(query.DisplayedText())
+            text = number_field.locate(Textbox())
+            text.perform(KeyClick("0"))
+            text.perform(KeyClick("Enter"))
+            displayed = text.inspect(DisplayedText())
             self.assertEqual(model.value, 10)
             self.assertEqual(displayed, str(model.value))
 
@@ -135,10 +141,10 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
                 # For RangeTextEditor on wx and windows, the textbox
                 # automatically gets focus and the full content is selected.
                 # Insertion point is moved to keep the test consistent
-                number_field_text.perform(command.KeyClick("End"))
-            number_field_text.perform(command.KeyClick("0"))
-            number_field_text.perform(command.KeyClick("Enter"))
-            displayed = number_field_text.inspect(query.DisplayedText())
+                number_field_text.perform(KeyClick("End"))
+            number_field_text.perform(KeyClick("0"))
+            number_field_text.perform(KeyClick("Enter"))
+            displayed = number_field_text.inspect(DisplayedText())
             self.assertEqual(model.value, 10)
             self.assertEqual(displayed, str(model.value))
 
@@ -160,10 +166,10 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(model.value, 1)
             number_field = tester.find_by_name(ui, "value")
             # For whatever reason, "End" was not working here
-            number_field.perform(command.KeyClick("Right"))
-            number_field.perform(command.KeyClick("0"))
-            number_field.perform(command.KeyClick("Enter"))
-            displayed = number_field.inspect(query.DisplayedText())
+            number_field.perform(KeyClick("Right"))
+            number_field.perform(KeyClick("0"))
+            number_field.perform(KeyClick("Enter"))
+            displayed = number_field.inspect(DisplayedText())
             self.assertEqual(model.value, 10)
             self.assertEqual(displayed, str(model.value))
 
@@ -178,13 +184,13 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field = tester.find_by_name(ui, "value")
-            text = number_field.locate(locator.Textbox())
+            text = number_field.locate(Textbox())
             # Delete all contents of textbox
             for _ in range(5):
-                text.perform(command.KeyClick("Backspace"))
-            text.perform(command.KeySequence("11"))
-            text.perform(command.KeyClick("Enter"))
-            displayed = text.inspect(query.DisplayedText())
+                text.perform(KeyClick("Backspace"))
+            text.perform(KeySequence("11"))
+            text.perform(KeyClick("Enter"))
+            displayed = text.inspect(DisplayedText())
             self.assertEqual(model.value, 11)
             self.assertEqual(displayed, str(model.value))
 
@@ -213,10 +219,10 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             number_field_text = tester.find_by_name(ui, "value")
             # Delete all contents of textbox
             for _ in range(5):
-                number_field_text.perform(command.KeyClick("Backspace"))
-            number_field_text.perform(command.KeySequence("11"))
-            number_field_text.perform(command.KeyClick("Enter"))
-            displayed = number_field_text.inspect(query.DisplayedText())
+                number_field_text.perform(KeyClick("Backspace"))
+            number_field_text.perform(KeySequence("11"))
+            number_field_text.perform(KeyClick("Enter"))
+            displayed = number_field_text.inspect(DisplayedText())
             self.assertEqual(model.value, 11)
             self.assertEqual(displayed, str(model.value))
 
@@ -235,13 +241,13 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester(registries=[LOCAL_REGISTRY])
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field_text = tester.find_by_name(ui, "value")
-            number_field_text.perform(command.KeyClick("Right"))
+            number_field_text.perform(KeyClick("Right"))
             # Delete all contents of textbox
             for _ in range(5):
-                number_field_text.perform(command.KeyClick("Backspace"))
-            number_field_text.perform(command.KeySequence("11"))
-            number_field_text.perform(command.KeyClick("Enter"))
-            displayed = number_field_text.inspect(query.DisplayedText())
+                number_field_text.perform(KeyClick("Backspace"))
+            number_field_text.perform(KeySequence("11"))
+            number_field_text.perform(KeyClick("Enter"))
+            displayed = number_field_text.inspect(DisplayedText())
             self.assertEqual(model.value, 11)
             self.assertEqual(displayed, str(model.value))
 
@@ -256,20 +262,20 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field = tester.find_by_name(ui, "value")
-            slider = number_field.locate(locator.Slider())
-            text = number_field.locate(locator.Textbox())
+            slider = number_field.locate(Slider())
+            text = number_field.locate(Textbox())
             # slider values are converted to a [0, 10000] scale.  A single
             # step is a change of 100 on that scale and a page step is 1000.
             # Our range in [0, 10] so these correspond to changes of .1 and 1.
             # Note: when tested manually, the step size seen on OSX and Wx is
             # different.
             for _ in range(10):
-                slider.perform(command.KeyClick("Right"))
-            displayed = text.inspect(query.DisplayedText())
+                slider.perform(KeyClick("Right"))
+            displayed = text.inspect(DisplayedText())
             self.assertEqual(model.value, 1)
             self.assertEqual(displayed, str(model.value))
-            slider.perform(command.KeyClick("Page Up"))
-            displayed = text.inspect(query.DisplayedText())
+            slider.perform(KeyClick("Page Up"))
+            displayed = text.inspect(DisplayedText())
             self.assertEqual(model.value, 2)
             self.assertEqual(displayed, str(model.value))
 
@@ -290,17 +296,17 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field = tester.find_by_name(ui, "float_value")
-            slider = number_field.locate(locator.Slider())
-            text = number_field.locate(locator.Textbox())
+            slider = number_field.locate(Slider())
+            text = number_field.locate(Textbox())
             # 10 steps is equivalent to 1 page step
             # on this scale either of those is equivalent to increasing the
             # trait's value from 10^n to 10^(n+1)
             for _ in range(10):
-                slider.perform(command.KeyClick("Right"))
-            displayed = text.inspect(query.DisplayedText())
+                slider.perform(KeyClick("Right"))
+            displayed = text.inspect(DisplayedText())
             self.assertEqual(model.float_value, 1.0)
             self.assertEqual(displayed, str(model.float_value))
-            slider.perform(command.KeyClick("Page Up"))
-            displayed = text.inspect(query.DisplayedText())
+            slider.perform(KeyClick("Page Up"))
+            displayed = text.inspect(DisplayedText())
             self.assertEqual(model.float_value, 10.0)
             self.assertEqual(displayed, str(model.float_value))

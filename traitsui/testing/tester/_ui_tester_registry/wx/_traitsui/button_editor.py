@@ -11,7 +11,7 @@
 import wx
 
 from traitsui.wx.button_editor import SimpleEditor, CustomEditor
-from traitsui.testing.tester import command, query
+from traitsui.testing.api import DisplayedText, MouseClick
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 
@@ -57,25 +57,25 @@ def register(registry):
 
     registry.register_interaction(
         target_class=SimpleEditor,
-        interaction_class=command.MouseClick,
+        interaction_class=MouseClick,
         handler=(lambda wrapper, _: _interaction_helpers.mouse_click_button(
                  control=wrapper._target.control, delay=wrapper.delay))
     )
 
     registry.register_interaction(
         target_class=SimpleEditor,
-        interaction_class=query.DisplayedText,
+        interaction_class=DisplayedText,
         handler=lambda wrapper, _: wrapper._target.control.GetLabel()
     )
 
     registry.register_interaction(
         target_class=CustomEditor,
-        interaction_class=command.MouseClick,
+        interaction_class=MouseClick,
         handler=mouse_click_ImageButton
     )
 
     registry.register_interaction(
         target_class=CustomEditor,
-        interaction_class=query.DisplayedText,
+        interaction_class=DisplayedText,
         handler=lambda wrapper, _: wrapper._target.control.GetLabel()
     )

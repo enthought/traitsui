@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 from traitsui.qt4.ui_base import ButtonEditor
-from traitsui.testing.tester import command, query
+from traitsui.testing.api import DisplayedText, MouseClick
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
     _interaction_helpers
 )
@@ -26,10 +26,10 @@ def register(registry):
     registry : TargetRegistry
     """
     handlers = [
-        (command.MouseClick,
+        (MouseClick,
             (lambda wrapper, _: _interaction_helpers.mouse_click_qwidget(
                 wrapper._target.control, wrapper.delay))),
-        (query.DisplayedText,
+        (DisplayedText,
             lambda wrapper, _: wrapper._target.control.text())
     ]
     for interaction_class, handler in handlers:

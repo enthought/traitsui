@@ -2,9 +2,16 @@ import unittest
 
 from traits.api import HasStrictTraits, Instance, Int, List, Str
 from traitsui.api import Item, ListEditor, View
-from traitsui.testing.tester import command, locator, query
-from traitsui.testing.tester.exceptions import LocationNotSupported
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import (
+    DisplayedText,
+    Index,
+    KeyClick,
+    KeySequence,
+    LocationNotSupported,
+    MouseClick,
+    Textbox,
+    UITester
+)
 from traitsui.tests._tools import (
     requires_toolkit,
     ToolkitName,
@@ -88,12 +95,12 @@ class TestCustomListEditor(unittest.TestCase):
                 # sanity check
                 self.assertEqual(obj.people[7].name, "Fields")
                 people_list = tester.find_by_name(ui, "people")
-                item = people_list.locate(locator.Index(7))
+                item = people_list.locate(Index(7))
                 name_field = item.find_by_name("name")
                 for _ in range(6):
-                    name_field.perform(command.KeyClick("Backspace"))
-                name_field.perform(command.KeySequence("David"))
-                displayed = name_field.inspect(query.DisplayedText())
+                    name_field.perform(KeyClick("Backspace"))
+                name_field.perform(KeySequence("David"))
+                displayed = name_field.inspect(DisplayedText())
                 self.assertEqual(obj.people[7].name, "David")
                 self.assertEqual(displayed, obj.people[7].name)
 
@@ -103,8 +110,8 @@ class TestCustomListEditor(unittest.TestCase):
         with tester.create_ui(obj) as ui:
             with self.assertRaises(LocationNotSupported) as exc:
                 people_list = tester.find_by_name(ui, "people")
-                people_list.locate(locator.Textbox())
-            self.assertIn(locator.Index, exc.exception.supported)
+                people_list.locate(Textbox())
+            self.assertIn(Index, exc.exception.supported)
 
     def test_index_out_of_range(self):
         obj = ListTraitTest(people=get_people())
@@ -112,7 +119,7 @@ class TestCustomListEditor(unittest.TestCase):
         with tester.create_ui(obj) as ui:
             people_list = tester.find_by_name(ui, "people")
             with self.assertRaises(IndexError):
-                people_list.locate(locator.Index(10))
+                people_list.locate(Index(10))
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -125,11 +132,11 @@ class TestNotebookListEditor(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(phonebook, dict(view=notebook_view)) as ui:
             list_ = tester.find_by_name(ui, "people")
-            list_.locate(locator.Index(1)).perform(command.MouseClick())
-            name_field = list_.locate(locator.Index(1)).find_by_name("name")
+            list_.locate(Index(1)).perform(MouseClick())
+            name_field = list_.locate(Index(1)).find_by_name("name")
             for _ in range(4):
-                name_field.perform(command.KeyClick("Backspace"))
-            name_field.perform(command.KeySequence("Pete"))
+                name_field.perform(KeyClick("Backspace"))
+            name_field.perform(KeySequence("Pete"))
 
             self.assertEqual(phonebook.people[1].name, "Pete")
 
@@ -142,9 +149,9 @@ class TestNotebookListEditor(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(phonebook, dict(view=notebook_view)) as ui:
             list_ = tester.find_by_name(ui, "people")
-            list_.locate(locator.Index(1)).perform(command.MouseClick())
-            name_field = list_.locate(locator.Index(1)).find_by_name("name")
-            actual = name_field.inspect(query.DisplayedText())
+            list_.locate(Index(1)).perform(MouseClick())
+            name_field = list_.locate(Index(1)).find_by_name("name")
+            actual = name_field.inspect(DisplayedText())
             self.assertEqual(actual, "Mary")
 
     def test_index_out_of_bound(self):
@@ -155,5 +162,5 @@ class TestNotebookListEditor(unittest.TestCase):
         with tester.create_ui(phonebook, dict(view=notebook_view)) as ui:
             with self.assertRaises(IndexError):
                 tester.find_by_name(ui, "people").\
-                    locate(locator.Index(0)).\
-                    perform(command.MouseClick())
+                    locate(Index(0)).\
+                    perform(MouseClick())

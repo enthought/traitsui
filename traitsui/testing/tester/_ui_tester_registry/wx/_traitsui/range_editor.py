@@ -15,7 +15,11 @@ from traitsui.wx.range_editor import (
     SimpleSliderEditor,
 )
 
-from traitsui.testing.tester import command, locator
+from traitsui.testing.api import (
+    KeyClick,
+    Slider,
+    Textbox
+)
 from traitsui.testing.tester._ui_tester_registry.wx import (
     _interaction_helpers,
     _registry_helper
@@ -77,7 +81,7 @@ class LocatedSlider:
         """
         registry.register_interaction(
             target_class=cls,
-            interaction_class=command.KeyClick,
+            interaction_class=KeyClick,
             handler=lambda wrapper, interaction:
                 _interaction_helpers.key_click_slider(
                     wrapper._target.slider, interaction, wrapper.delay)
@@ -101,13 +105,13 @@ def register(registry):
     for target_class in targets:
         registry.register_location(
             target_class=target_class,
-            locator_class=locator.Textbox,
+            locator_class=Textbox,
             solver=lambda wrapper, _: LocatedTextbox(
                 textbox=wrapper._target.control.text),
         )
         registry.register_location(
             target_class=target_class,
-            locator_class=locator.Slider,
+            locator_class=Slider,
             solver=lambda wrapper, _: LocatedSlider(
                 slider=wrapper._target.control.slider),
         )

@@ -8,7 +8,7 @@
 #
 #  Thanks for using Enthought open source!
 #
-from traitsui.testing.tester import command, locator
+from traitsui.testing.api import Index, MouseClick
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
     _BaseSourceWithLocation
 )
@@ -26,9 +26,9 @@ class _IndexedNotebookEditor(_BaseSourceWithLocation):
     """ Wrapper for a ListEditor (Notebook) with an index.
     """
     source_class = NotebookEditor
-    locator_class = locator.Index
+    locator_class = Index
     handlers = [
-        (command.MouseClick,
+        (MouseClick,
             (lambda wrapper, _:
                 _interaction_helpers.mouse_click_notebook_tab_index(
                     control=wrapper._target.source.control,
@@ -103,7 +103,7 @@ def register(registry):
     # CustomEditor
     registry.register_location(
         target_class=CustomEditor,
-        locator_class=locator.Index,
+        locator_class=Index,
         solver=lambda wrapper, location: (
             _get_next_target(wrapper._target, location.index)
         )
