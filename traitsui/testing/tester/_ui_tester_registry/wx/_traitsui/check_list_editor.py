@@ -13,7 +13,7 @@ import wx
 from traitsui.wx.check_list_editor import CustomEditor
 from traitsui.testing.api import Index, MouseClick
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
-    _BaseSourceWithLocation
+    BaseSourceWithLocation
 )
 from traitsui.testing.tester._ui_tester_registry._layout import (
     column_major_to_row_major
@@ -21,7 +21,7 @@ from traitsui.testing.tester._ui_tester_registry._layout import (
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 
-class _IndexedCustomCheckListEditor(_BaseSourceWithLocation):
+class _IndexedCustomCheckListEditor(BaseSourceWithLocation):
     """ Wrapper for CheckListEditor + Index
     """
     source_class = CustomEditor

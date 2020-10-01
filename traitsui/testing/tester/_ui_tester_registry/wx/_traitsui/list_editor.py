@@ -10,7 +10,7 @@
 #
 from traitsui.testing.api import Index, MouseClick
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
-    _BaseSourceWithLocation
+    BaseSourceWithLocation
 )
 from traitsui.testing.tester._ui_tester_registry._traitsui_ui import (
     register_traitsui_ui_solvers,
@@ -22,7 +22,7 @@ from traitsui.wx.list_editor import (
 )
 
 
-class _IndexedNotebookEditor(_BaseSourceWithLocation):
+class _IndexedNotebookEditor(BaseSourceWithLocation):
     """ Wrapper for a ListEditor (Notebook) with an index.
     """
     source_class = NotebookEditor

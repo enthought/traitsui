@@ -16,7 +16,7 @@ any necessary traits, and then call the register method.
 """
 
 
-class _BaseSourceWithLocation:
+class BaseSourceWithLocation:
     """ Wrapper base class to hold locator information together with a source
     (typically an editor).  This is useful for cases in which the location
     information is still necessary when performing actions such as a mouse
