@@ -40,10 +40,10 @@ class UITester:
         visual confirmation test code is working as desired. Defaults to 0.
     process_events : bool, optional
         Whether to process (cascade) GUI events automatically. Default is True.
-        For tests that run the GUI event loop separately with a polling model
-        (e.g. checking for a condition periodically), it may be necessary to
-        set this flag to false in order to avoid processing GUI events
-        indefinitely. This is propagated through to created child wrappers.
+        For tests that launch a modal dialog and rely on a timer that polls if
+        the dialog is closed, it may be necessary to set this flag to false in
+        order to avoid race conditions. Note that this is propagated through
+        to created child wrappers.
 
     Attributes
     ----------
