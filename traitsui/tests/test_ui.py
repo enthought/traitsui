@@ -274,6 +274,11 @@ if is_qt():
             self._some_editor = editor
 
         def sizeHint(self):
+            # This is called if the sibling widget is destroyed (e.g. the
+            # nested UI in EditorWithCustomWidget) while the container
+            # (e.g. QSplitter in EditorWithCustomWidget) has not been
+            # destroyed. The container will want to ask this widget for its
+            # sizeHint in order to resize/repaint the layout.
             assert self._some_editor.factory is not None
             return super().sizeHint()
 
