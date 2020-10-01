@@ -17,7 +17,7 @@ from traitsui.wx.enum_editor import (
 )
 from traitsui.testing.tester import command, locator, query
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
-    _BaseSourceWithLocation
+    BaseSourceWithLocation
 )
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 from traitsui.testing.tester._ui_tester_registry._layout import (
@@ -25,7 +25,7 @@ from traitsui.testing.tester._ui_tester_registry._layout import (
 )
 
 
-class _IndexedListEditor(_BaseSourceWithLocation):
+class _IndexedListEditor(BaseSourceWithLocation):
     """ Wrapper class for EnumListEditor and Index.
     """
     source_class = ListEditor
@@ -40,7 +40,7 @@ class _IndexedListEditor(_BaseSourceWithLocation):
     ]
 
 
-class _IndexedRadioEditor(_BaseSourceWithLocation):
+class _IndexedRadioEditor(BaseSourceWithLocation):
     """ Wrapper class for EnumRadioEditor and Index.
     """
     source_class = RadioEditor
@@ -85,7 +85,7 @@ def convert_index(source, index):
     return column_major_to_row_major(index, n, num_rows, num_cols)
 
 
-class _IndexedSimpleEditor(_BaseSourceWithLocation):
+class _IndexedSimpleEditor(BaseSourceWithLocation):
     """ Wrapper class for Simple EnumEditor and Index.
     """
     source_class = SimpleEditor
