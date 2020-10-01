@@ -8,6 +8,9 @@
 #
 #  Thanks for using Enthought open source!
 #
+""" Define top-level object(s) to support testing TraitsUI applications.
+"""
+
 import contextlib
 
 from traitsui.testing._gui import process_cascade_events

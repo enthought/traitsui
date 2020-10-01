@@ -8,6 +8,10 @@
 #
 #  Thanks for using Enthought open source!
 #
+""" Utility functions for handling exceptions from the GUI event loop.
+
+In the test context, uncaught exceptions should cause tests to error.
+"""
 
 from contextlib import contextmanager
 import logging
