@@ -4,9 +4,8 @@
 # view_multi_object.py --- Example of a view for
 #                          editing multiple objects
 import wx
-from traits.api import HasTraits, Int, Str, Trait
+from traits.api import HasTraits, Str
 from traitsui.api import View
-import traitsui
 
 
 class Person(HasTraits):
@@ -16,6 +15,7 @@ class Person(HasTraits):
 
 class Company(HasTraits):
     company_name = Str()
+
 
 # Standalone View object referencing objects in the UI context
 employee_view = View('e.first_name', 'e.last_name',

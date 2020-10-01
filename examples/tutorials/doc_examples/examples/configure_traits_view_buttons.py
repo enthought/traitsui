@@ -5,12 +5,12 @@
 # configure_traits_view_buttons.py -- Sample code to demonstrate
 #                                     configure_traits()
 
-#--[Imports]--------------------------------------------------------------
+# --[Imports]--------------------------------------------------------------
 from traits.api import HasTraits, Str, Int
 from traitsui.api import View, Item
 from traitsui.menu import OKButton, CancelButton
 
-#--[Code]-----------------------------------------------------------------
+# --[Code]-----------------------------------------------------------------
 
 
 class SimpleEmployee(HasTraits):
@@ -20,6 +20,7 @@ class SimpleEmployee(HasTraits):
 
     employee_number = Str()
     salary = Int()
+
 
 view1 = View(Item(name='first_name'),
              Item(name='last_name'),

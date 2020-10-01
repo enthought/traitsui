@@ -3,11 +3,11 @@
 
 # mixed_styles.py -- Example of using editor styles at various levels
 
-#--[Imports]--------------------------------------------------------------
+# --[Imports]--------------------------------------------------------------
 from traits.api import HasTraits, Str, Enum
 from traitsui.api import View, Group, Item
 
-#--[Code]-----------------------------------------------------------------
+# --[Code]-----------------------------------------------------------------
 
 
 class MixedStyles(HasTraits):
@@ -27,6 +27,7 @@ class MixedStyles(HasTraits):
                                    style='simple')),
                        title='Mixed Styles',
                        style='readonly')
+
 
 ms = MixedStyles(first_name='Sam', last_name='Smith')
 ms.configure_traits()
