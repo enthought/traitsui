@@ -325,7 +325,7 @@ class TestTextEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
                 tester.find_by_name(ui, "name").inspect(DisplayedText())
             )
             display_nickname = (
-                tester.find_by_name(ui, "nickname").inspect(DisplayedText())  # noqa E501
+                tester.find_by_name(ui, "nickname").inspect(DisplayedText())
             )
             self.assertEqual(display_name, "WILLIAM")
             self.assertEqual(display_nickname, "bill")
