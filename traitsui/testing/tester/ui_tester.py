@@ -38,6 +38,12 @@ class UITester:
         Time delay (in ms) in which actions by the tester are performed. Note
         it is propagated through to created child wrappers. The delay allows
         visual confirmation test code is working as desired. Defaults to 0.
+    process_events : bool, optional
+        Whether to process (cascade) GUI events automatically. Default is True.
+        For tests that run the GUI event loop separately with a polling model
+        (e.g. checking for a condition periodically), it may be necessary to
+        set this flag to false in order to avoid processing GUI events
+        indefinitely. This is propagated through to created child wrappers.
 
     Attributes
     ----------
@@ -47,7 +53,7 @@ class UITester:
         visual confirmation test code is working as desired.
     """
 
-    def __init__(self, *, registries=None, delay=0):
+    def __init__(self, *, registries=None, delay=0, process_events=True):
         if registries is None:
             self._registries = []
         else:
@@ -58,6 +64,7 @@ class UITester:
         # this registry.
         self._registries.append(get_default_registry())
         self.delay = delay
+        self._process_events = process_events
 
     @contextlib.contextmanager
     def create_ui(self, object, ui_kwargs=None):
@@ -111,11 +118,7 @@ class UITester:
         -------
         wrapper : UIWrapper
         """
-        return UIWrapper(
-            target=ui,
-            registries=self._registries,
-            delay=self.delay,
-        ).find_by_name(name=name)
+        return self._get_wrapper(ui).find_by_name(name=name)
 
     def find_by_id(self, ui, id):
         """ Find the TraitsUI editor with the given identifier and return a new
@@ -132,8 +135,23 @@ class UITester:
         -------
         wrapper : UIWrapper
         """
+        return self._get_wrapper(ui).find_by_id(id=id)
+
+    def _get_wrapper(self, ui):
+        """ Return a new UIWrapper wrapping the given traitsui.ui.UI.
+
+        Parameters
+        ----------
+        ui : traitsui.ui.UI
+            The UI created, e.g. by ``create_ui``.
+
+        Returns
+        -------
+        wrapper : UIWrapper
+        """
         return UIWrapper(
             target=ui,
             registries=self._registries,
             delay=self.delay,
-        ).find_by_id(id=id)
+            process_events=self._process_events,
+        )

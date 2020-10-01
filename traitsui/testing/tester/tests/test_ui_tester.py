@@ -10,6 +10,7 @@
 #
 
 import unittest
+from unittest import mock
 
 from pyface.api import GUI
 from traits.api import (
@@ -177,3 +178,15 @@ class TestUITesterFindEditor(unittest.TestCase):
         with tester.create_ui(Order(), dict(view=view)) as ui:
             wrapper = tester.find_by_id(ui, "item2")
             self.assertIs(wrapper._target.item, item2)
+
+    def test_process_events_skipped(self):
+        # Event processing can be skipped.
+        tester = UITester(process_events=False)
+        side_effect = mock.Mock()
+        gui = GUI()
+        gui.invoke_later(side_effect)
+
+        view = View(Item("submit_button", id="item"))
+        with tester.create_ui(Order(), dict(view=view)) as ui:
+            tester.find_by_id(ui, "item")
+            self.assertEqual(side_effect.call_count, 0)

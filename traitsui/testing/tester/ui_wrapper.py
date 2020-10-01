@@ -66,7 +66,7 @@ class UIWrapper:
         For tests that run the GUI event loop separately with a polling model
         (e.g. checking for a condition periodically), it may be necessary to
         set this flag to false in order to avoid processing GUI events
-        indefinitely.
+        indefinitely. This is propagated through to created child wrappers.
 
     Attributes
     ----------
@@ -154,6 +154,7 @@ class UIWrapper:
             target=self._get_next_target(location),
             registries=self._registries,
             delay=self.delay,
+            process_events=self._process_events,
         )
 
     def find_by_name(self, name):
@@ -347,6 +348,7 @@ def _event_processed():
             yield
         finally:
             _process_cascade_events()
+
 
 @contextmanager
 def _nullcontext():

@@ -18,7 +18,6 @@ from pyface.api import GUI
 from traits.api import HasTraits, Int
 from traits.testing.api import UnittestTools
 from traitsui.tests._tools import (
-    process_cascade_events,
     requires_toolkit,
     ToolkitName,
 )
@@ -468,10 +467,10 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
     def test_perform_event_processed_optional(self):
         # Allow event processing to be switched off.
         gui = GUI()
-        callable_ = mock.Mock()
+        side_effect = mock.Mock()
 
         def handler(wrapper, action):
-            gui.invoke_later(callable_)
+            gui.invoke_later(side_effect)
 
         wrapper = example_ui_wrapper(
             registries=[StubRegistry(handler=handler)],
@@ -481,16 +480,14 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
         # With process_events set to False, events are not automatically
         # processed.
         wrapper.perform(None)
-        # In case test fails, still flush the events.
-        self.addCleanup(process_cascade_events)
 
-        self.assertEqual(callable_.call_count, 0)
+        self.assertEqual(side_effect.call_count, 0)
 
     def test_locate_event_processed_optional(self):
         # Allow event processing to be switched off.
         gui = GUI()
-        callable_ = mock.Mock()
-        gui.invoke_later(callable_)
+        side_effect = mock.Mock()
+        gui.invoke_later(side_effect)
 
         def solver(wrapper, location):
             return 1
@@ -502,9 +499,7 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
 
         # With process_events set to False, events are not automatically
         # processed.
-        wrapper.locate(None)
+        new_wrapper = wrapper.locate(None)
 
-        # In case test fails, still flush the events.
-        self.addCleanup(process_cascade_events)
-
-        self.assertEqual(callable_.call_count, 0)
+        self.assertEqual(side_effect.call_count, 0)
+        self.assertFalse(new_wrapper._process_events)
