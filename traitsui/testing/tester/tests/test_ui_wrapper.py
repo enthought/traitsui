@@ -18,6 +18,7 @@ from pyface.api import GUI
 from traits.api import HasTraits, Int
 from traits.testing.api import UnittestTools
 from traitsui.tests._tools import (
+    process_cascade_events,
     requires_toolkit,
     ToolkitName,
 )
@@ -422,7 +423,7 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
         model = NumberHasTraits()
         gui.set_trait_later(model, "number", 2)
 
-        def solver(wrapper, action):
+        def solver(wrapper, location):
             return model.number
 
         wrapper = example_ui_wrapper(
@@ -463,3 +464,47 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
 
         with self.assertRaises(ZeroDivisionError):
             wrapper.perform(None)
+
+    def test_perform_event_processed_optional(self):
+        # Allow event processing to be switched off.
+        gui = GUI()
+        callable_ = mock.Mock()
+
+        def handler(wrapper, action):
+            gui.invoke_later(callable_)
+
+        wrapper = example_ui_wrapper(
+            registries=[StubRegistry(handler=handler)],
+            process_events=False,
+        )
+
+        # With process_events set to False, events are not automatically
+        # processed.
+        wrapper.perform(None)
+        # In case test fails, still flush the events.
+        self.addCleanup(process_cascade_events)
+
+        self.assertEqual(callable_.call_count, 0)
+
+    def test_locate_event_processed_optional(self):
+        # Allow event processing to be switched off.
+        gui = GUI()
+        callable_ = mock.Mock()
+        gui.invoke_later(callable_)
+
+        def solver(wrapper, location):
+            return 1
+
+        wrapper = example_ui_wrapper(
+            registries=[StubRegistry(solver=solver)],
+            process_events=False,
+        )
+
+        # With process_events set to False, events are not automatically
+        # processed.
+        wrapper.locate(None)
+
+        # In case test fails, still flush the events.
+        self.addCleanup(process_cascade_events)
+
+        self.assertEqual(callable_.call_count, 0)

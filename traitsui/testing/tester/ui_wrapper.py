@@ -61,6 +61,12 @@ class UIWrapper:
         Time delay (in ms) in which actions by the wrapper are performed. Note
         it is propagated through to created child wrappers. The delay allows
         visual confirmation test code is working as desired. Defaults to 0.
+    process_events : bool, optional
+        Whether to process (cascade) GUI events automatically. Default is True.
+        For tests that run the GUI event loop separately with a polling model
+        (e.g. checking for a condition periodically), it may be necessary to
+        set this flag to false in order to avoid processing GUI events
+        indefinitely.
 
     Attributes
     ----------
@@ -70,9 +76,10 @@ class UIWrapper:
         visual confirmation test code is working as desired.
     """
 
-    def __init__(self, target, *, registries, delay=0):
+    def __init__(self, target, *, registries, delay=0, process_events=True):
         self._target = target
         self._registries = registries
+        self._process_events = process_events
         self.delay = delay
 
     def help(self):
@@ -277,7 +284,10 @@ class UIWrapper:
                 supported.extend(e.supported)
                 continue
             else:
-                with _event_processed():
+                context = (
+                    _event_processed if self._process_events else _nullcontext
+                )
+                with context():
                     return handler(self, interaction)
 
         raise InteractionNotSupported(
@@ -314,8 +324,9 @@ class UIWrapper:
             except LocationNotSupported as e:
                 supported |= set(e.supported)
             else:
-                with _reraise_exceptions():
-                    _process_cascade_events()
+                if self._process_events:
+                    with _reraise_exceptions():
+                        _process_cascade_events()
                 return handler(self, location)
 
         raise LocationNotSupported(
@@ -336,3 +347,8 @@ def _event_processed():
             yield
         finally:
             _process_cascade_events()
+
+@contextmanager
+def _nullcontext():
+    """ Equivalent to contextlib.nullcontext() in Python >= 3.7"""
+    yield
