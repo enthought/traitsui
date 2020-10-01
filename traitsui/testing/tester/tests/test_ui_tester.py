@@ -18,6 +18,7 @@ from traits.api import (
 )
 from traitsui.api import Item, ModelView, View
 from traitsui.tests._tools import (
+    process_cascade_events,
     requires_toolkit,
     ToolkitName,
 )
@@ -77,6 +78,23 @@ class TestUITesterCreateUI(unittest.TestCase):
                 GUI().invoke_later(raise_error)
 
         self.assertIsNone(ui.control)
+
+    def test_create_ui_respect_process_events_flag(self):
+        tester = UITester(process_events=False)
+        order = Order()
+        view = View(Item("_"))
+        side_effect = mock.Mock()
+        gui = GUI()
+        gui.invoke_later(side_effect)
+        with tester.create_ui(order, dict(view=view)) as ui:
+            # We still want the events (if any) to be processed at the end of
+            # the test.
+            self.addCleanup(process_cascade_events)
+
+        # dispose is called.
+        self.assertIsNone(ui.control)
+        # But the GUI events are not processed.
+        self.assertEqual(side_effect.call_count, 0)
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])

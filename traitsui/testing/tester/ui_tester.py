@@ -83,8 +83,6 @@ class UITester:
         ------
         ui : traitsui.ui.UI
         """
-        # Nothing here uses UITester, but it is an instance method to preserve
-        # options to extend using instance states.
 
         ui_kwargs = {} if ui_kwargs is None else ui_kwargs
         ui = object.edit_traits(**ui_kwargs)
@@ -92,16 +90,20 @@ class UITester:
             yield ui
         finally:
             with reraise_exceptions():
-                # At the end of a test, there may be events to be processed.
-                # If dispose happens first, those events will be processed
-                # after various editor states are removed, causing errors.
-                process_cascade_events()
+                if self._process_events:
+                    # At the end of a test, there may be events to be
+                    # processed. If dispose happens first, those events will be
+                    # processed after various editor states are removed,
+                    # causing errors. But if we are asked not to process
+                    # events, then don't.
+                    process_cascade_events()
                 try:
                     ui.dispose()
                 finally:
                     # dispose is not atomic and may push more events to the
-                    # event queue. Flush those too.
-                    process_cascade_events()
+                    # event queue. Flush those too unless we are asked not to.
+                    if self._process_events:
+                        process_cascade_events()
 
     def find_by_name(self, ui, name):
         """ Find the TraitsUI editor with the given name and return a new
