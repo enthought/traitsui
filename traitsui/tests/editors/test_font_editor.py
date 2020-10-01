@@ -18,8 +18,10 @@ from traitsui.tests._tools import (
     requires_toolkit,
     ToolkitName,
 )
-from traitsui.testing.tester import command
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import (
+    MouseClick,
+    UITester
+)
 
 
 class ObjectWithFont(HasTraits):
@@ -36,4 +38,4 @@ class TestFontEditor(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(ObjectWithFont(), dict(view=view)) as ui:
             wrapper = tester.find_by_name(ui, "font_trait")
-            wrapper.perform(command.MouseClick())
+            wrapper.perform(MouseClick())

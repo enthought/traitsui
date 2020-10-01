@@ -18,8 +18,6 @@
 """ Defines the default DockWindow theme.
 """
 
-
-
 from .dock_window_theme import DockWindowTheme
 
 from .theme import Theme

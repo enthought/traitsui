@@ -26,12 +26,10 @@ from traits.api import (
     Callable,
     Str,
     Bool,
-    Event,
     Any,
     Property,
 )
 
-from .helper import enum_values_changed
 from .toolkit import toolkit_object
 
 
@@ -54,7 +52,7 @@ class EditorFactory(HasPrivateTraits):
     #: Function to use for string formatting
     format_func = Callable()
 
-    #: Format string to use for formatting (used if **format_func** is not set).
+    #: Format string to use for formatting (used if **format_func** not set).
     format_str = Str()
 
     #: Is the editor being used to create table grid cells?
@@ -68,7 +66,8 @@ class EditorFactory(HasPrivateTraits):
     invalid = Str()
 
     #: Text aligment to use in most readonly editors
-    #: Possible values: left, right, top, bottom, just, vcenter, hcenter, center
+    #: Possible values: left, right, top, bottom, just, vcenter, hcenter,
+    #: center
     #: Example: left,vcenter
     text_alignment = Str()
 
@@ -107,8 +106,8 @@ class EditorFactory(HasPrivateTraits):
             # factory is being used with does not use the default object='name'
             # value, and the specified 'name' does not contain a '.'. The
             # solution will probably involve providing the Item as an argument,
-            # but it is currently not available at the time this method needs to
-            # be called...
+            # but it is currently not available at the time this method needs
+            # to be called...
             names.insert(0, "object")
 
         value = ui.context[names[0]]
@@ -221,10 +220,10 @@ class EditorFactory(HasPrivateTraits):
 
     def _get_simple_editor_class(self):
         """ Returns the editor class to use for "simple" style views.
-        The default implementation tries to import the SimpleEditor class in the
-        editor file in the backend package, and if such a class is not to found
-        it returns the SimpleEditor class defined in editor_factory module in
-        the backend package.
+        The default implementation tries to import the SimpleEditor class in
+        the editor file in the backend package, and if such a class is not to
+        found it returns the SimpleEditor class defined in editor_factory
+        module in the backend package.
 
         """
         try:
@@ -237,9 +236,9 @@ class EditorFactory(HasPrivateTraits):
 
     def _get_custom_editor_class(self):
         """ Returns the editor class to use for "custom" style views.
-        The default implementation tries to import the CustomEditor class in the
-        editor file in the backend package, and if such a class is not to found
-        it returns simple_editor_class.
+        The default implementation tries to import the CustomEditor class in
+        the editor file in the backend package, and if such a class is not to
+        found it returns simple_editor_class.
 
         """
         try:
@@ -254,8 +253,8 @@ class EditorFactory(HasPrivateTraits):
         """ Returns the editor class to use for "text" style views.
         The default implementation tries to import the TextEditor class in the
         editor file in the backend package, and if such a class is not found
-        it returns the TextEditor class declared in the editor_factory module in
-        the backend package.
+        it returns the TextEditor class declared in the editor_factory module
+        in the backend package.
 
         """
         try:
@@ -269,9 +268,9 @@ class EditorFactory(HasPrivateTraits):
     def _get_readonly_editor_class(self):
         """ Returns the editor class to use for "readonly" style views.
         The default implementation tries to import the ReadonlyEditor class in
-        the editor file in the backend package, and if such a class is not found
-        it returns the ReadonlyEditor class declared in the editor_factory
-        module in the backend package.
+        the editor file in the backend package, and if such a class is not
+        found it returns the ReadonlyEditor class declared in the
+        editor_factory module in the backend package.
 
         """
         try:
@@ -300,7 +299,7 @@ class EditorWithListFactory(EditorFactory):
     #: TraitHandler that is "mapped"):
     values = Any()
 
-    #: Extended name of the trait on **object** containing the enumeration data:
+    #: Extended name of the trait on **object** containing the enumeration data
     object = Str("object")
 
     #: Name of the trait on 'object' containing the enumeration data

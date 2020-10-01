@@ -9,8 +9,11 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
-from traitsui.testing.tester import command, query
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import (
+    DisplayedText,
+    MouseClick,
+    UITester
+)
 
 
 class ButtonTextEdit(HasTraits):
@@ -61,11 +64,11 @@ class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
         tester = UITester()
         with tester.create_ui(button_text_edit, dict(view=view)) as ui:
             button = tester.find_by_name(ui, "play_button")
-            actual = button.inspect(query.DisplayedText())
+            actual = button.inspect(DisplayedText())
             self.assertEqual(actual, "I'm a play button")
 
             button_text_edit.play_button_label = "New Label"
-            actual = button.inspect(query.DisplayedText())
+            actual = button.inspect(DisplayedText())
             self.assertEqual(actual, "New Label")
 
     def test_styles(self):
@@ -89,7 +92,7 @@ class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
 
             with self.assertTraitChanges(
                     button_text_edit, "play_button", count=1):
-                button.perform(command.MouseClick())
+                button.perform(MouseClick())
 
     def test_simple_button_editor_clicked(self):
         self.check_button_fired_event(simple_view)
@@ -116,12 +119,12 @@ class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
 
             with self.assertTraitDoesNotChange(
                     button_text_edit, "play_button"):
-                button.perform(command.MouseClick())
+                button.perform(MouseClick())
 
             button_text_edit.button_enabled = True
             with self.assertTraitChanges(
                     button_text_edit, "play_button", count=1):
-                button.perform(command.MouseClick())
+                button.perform(MouseClick())
 
     def test_simple_button_editor_disabled(self):
         self.check_button_disabled("simple")

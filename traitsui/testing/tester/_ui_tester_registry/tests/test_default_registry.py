@@ -14,7 +14,7 @@ import unittest
 from traitsui.testing.tester._ui_tester_registry.default_registry import (
     get_default_registry
 )
-from traitsui.testing.tester.registry import TargetRegistry
+from traitsui.testing.api import TargetRegistry
 from traitsui.tests._tools import is_null
 
 

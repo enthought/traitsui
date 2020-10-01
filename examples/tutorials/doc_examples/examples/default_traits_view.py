@@ -3,12 +3,11 @@
 
 # default_traits_view.py -- Sample code to demonstrate the use of 'traits_view'
 
-#--[Imports]--------------------------------------------------------------
+# --[Imports]--------------------------------------------------------------
 from traits.api import HasTraits, Str, Int
 from traitsui.api import View, Item, Group
-import traitsui
 
-#--[Code]-----------------------------------------------------------------
+# --[Code]-----------------------------------------------------------------
 
 
 class SimpleEmployee2(HasTraits):
@@ -24,6 +23,7 @@ class SimpleEmployee2(HasTraits):
                              Item(name='department'),
                              label='Personnel profile',
                              show_border=True))
+
 
 sam = SimpleEmployee2()
 sam.configure_traits()

@@ -19,8 +19,6 @@
     Traits UI elements to be docked in external Pyface DockWindow windows.
 """
 
-
-
 from traits.api import HasPrivateTraits, Instance, Bool
 
 from .ui import UI
@@ -78,14 +76,14 @@ class DockableViewElement(HasPrivateTraits, IDockable):
 
         # FIXME: The following private traits are being set here to facilitate
         # rebuilding the ui (which will require the context and the handler).
-        # When a current dock control is closed (close_dock_control method), the
-        # contents of self.ui have been disposed of and self.ui is now None.
-        # Now if a new UI needs to be created by calling dockable_get_control
-        # (e.g., when doing an 'undock' action on a dock window), we need to
-        # pass on the context and handler to the UI. Therefore, we are setting
-        # these private traits here so dockable_get_control can access them.
-        # In future, we need to investigate if there is a better way to do
-        # this.
+        # When a current dock control is closed (close_dock_control method),
+        # the contents of self.ui have been disposed of and self.ui is now
+        # None. Now if a new UI needs to be created by calling
+        # dockable_get_control (e.g., when doing an 'undock' action on a dock
+        # window), we need to pass on the context and handler to the UI.
+        # Therefore, we are setting these private traits here so
+        # dockable_get_control can access them. In future, we need to
+        # investigate if there is a better way to do this.
 
         self._context = self.ui.context.copy()
         # Make copy since context will be emptied when calling

@@ -13,7 +13,12 @@
 and location solvers for common Qt GUI components.
 """
 
-from traitsui.testing.tester import command, query
+from traitsui.testing.api import (
+    KeyClick,
+    KeySequence,
+    MouseClick,
+    DisplayedText
+)
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
     _interaction_helpers
 )
@@ -34,18 +39,18 @@ def register_editable_textbox_handlers(registry, target_class, widget_getter):
         or QTextEdit.
     """
     handlers = [
-        (command.KeySequence,
+        (KeySequence,
             (lambda wrapper, interaction:
                 _interaction_helpers.key_sequence_textbox(
                     widget_getter(wrapper), interaction, wrapper.delay))),
-        (command.KeyClick,
+        (KeyClick,
             (lambda wrapper, interaction:
                 _interaction_helpers.key_click_qwidget(
                     widget_getter(wrapper), interaction, wrapper.delay))),
-        (command.MouseClick,
+        (MouseClick,
             (lambda wrapper, _: _interaction_helpers.mouse_click_qwidget(
                 widget_getter(wrapper), wrapper.delay))),
-        (query.DisplayedText,
+        (DisplayedText,
             lambda wrapper, _: _interaction_helpers.displayed_text_qobject(
                 widget_getter(wrapper))),
     ]

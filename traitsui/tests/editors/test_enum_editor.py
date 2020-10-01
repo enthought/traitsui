@@ -13,9 +13,16 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
-from traitsui.testing.tester import command, locator, query
-from traitsui.testing.tester.exceptions import Disabled
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import (
+    Disabled,
+    DisplayedText,
+    Index,
+    KeyClick,
+    KeySequence,
+    MouseClick,
+    SelectedText,
+    UITester
+)
 
 is_windows = platform.system() == "Windows"
 
@@ -196,11 +203,11 @@ class TestSimpleEnumEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(enum_edit, dict(view=view)) as ui:
             combobox = tester.find_by_name(ui, "value")
-            displayed = combobox.inspect(query.DisplayedText())
+            displayed = combobox.inspect(DisplayedText())
             self.assertEqual(displayed, "one")
 
-            combobox.locate(locator.Index(1)).perform(command.MouseClick())
-            displayed = combobox.inspect(query.DisplayedText())
+            combobox.locate(Index(1)).perform(MouseClick())
+            displayed = combobox.inspect(DisplayedText())
             self.assertEqual(displayed, "two")
 
     def check_enum_object_update(self, view):
@@ -213,9 +220,9 @@ class TestSimpleEnumEditor(BaseTestMixin, unittest.TestCase):
 
             combobox = tester.find_by_name(ui, "value")
             for _ in range(3):
-                combobox.perform(command.KeyClick("Backspace"))
-            combobox.perform(command.KeySequence("two"))
-            combobox.perform(command.KeyClick("Enter"))
+                combobox.perform(KeyClick("Backspace"))
+            combobox.perform(KeySequence("two"))
+            combobox.perform(KeyClick("Enter"))
 
             self.assertEqual(enum_edit.value, "two")
 
@@ -227,7 +234,7 @@ class TestSimpleEnumEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(enum_edit.value, "one")
 
             combobox = tester.find_by_name(ui, "value")
-            combobox.locate(locator.Index(1)).perform(command.MouseClick())
+            combobox.locate(Index(1)).perform(MouseClick())
 
             self.assertEqual(enum_edit.value, "two")
 
@@ -241,9 +248,9 @@ class TestSimpleEnumEditor(BaseTestMixin, unittest.TestCase):
 
             combobox = tester.find_by_name(ui, "value")
             for _ in range(3):
-                combobox.perform(command.KeyClick("Backspace"))
-            combobox.perform(command.KeyClick("H"))
-            combobox.perform(command.KeyClick("Enter"))
+                combobox.perform(KeyClick("Backspace"))
+            combobox.perform(KeyClick("H"))
+            combobox.perform(KeyClick("Enter"))
 
             self.assertEqual(enum_edit.value, "one")
 
@@ -278,11 +285,11 @@ class TestSimpleEnumEditor(BaseTestMixin, unittest.TestCase):
 
             combobox = tester.find_by_name(ui, "value")
             for _ in range(3):
-                combobox.perform(command.KeyClick("Backspace"))
-            combobox.perform(command.KeySequence("two"))
+                combobox.perform(KeyClick("Backspace"))
+            combobox.perform(KeySequence("two"))
 
             self.assertEqual(enum_edit.value, "one")
-            combobox.perform(command.KeyClick("Enter"))
+            combobox.perform(KeyClick("Enter"))
             self.assertEqual(enum_edit.value, "two")
 
     def test_simple_editor_resizable(self):
@@ -320,9 +327,9 @@ class TestSimpleEnumEditor(BaseTestMixin, unittest.TestCase):
         with tester.create_ui(enum_edit, dict(view=view)) as ui:
             combobox = tester.find_by_name(ui, "value")
             with self.assertRaises(Disabled):
-                combobox.perform(command.KeyClick("Enter"))
+                combobox.perform(KeyClick("Enter"))
             with self.assertRaises(Disabled):
-                combobox.perform(command.KeySequence("two"))
+                combobox.perform(KeySequence("two"))
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -343,14 +350,14 @@ class TestRadioEnumEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(enum_edit.value, "one")
             radio_editor = tester.find_by_name(ui, "value")
             self.assertEqual(
-                radio_editor.inspect(query.SelectedText()),
+                radio_editor.inspect(SelectedText()),
                 "One",
             )
 
             enum_edit.value = "two"
 
             self.assertEqual(
-                radio_editor.inspect(query.SelectedText()),
+                radio_editor.inspect(SelectedText()),
                 "Two",
             )
 
@@ -367,8 +374,8 @@ class TestRadioEnumEditor(BaseTestMixin, unittest.TestCase):
                     if is_qt():
                         radio_editor._target.row_major = row_major
                         radio_editor._target.rebuild_editor()
-                    item = radio_editor.locate(locator.Index(3))
-                    item.perform(command.MouseClick())
+                    item = radio_editor.locate(Index(3))
+                    item.perform(MouseClick())
                     self.assertEqual(enum_edit.value, "four")
 
     # it appears that on windows the behavior is different - it forces
@@ -380,7 +387,7 @@ class TestRadioEnumEditor(BaseTestMixin, unittest.TestCase):
         with tester.create_ui(enum_edit, dict(view=get_radio_view())) as ui:
             self.assertEqual(enum_edit.value, None)
             radio_editor = tester.find_by_name(ui, "value")
-            displayed = radio_editor.inspect(query.SelectedText())
+            displayed = radio_editor.inspect(SelectedText())
             self.assertEqual(displayed, None)
 
 
@@ -400,12 +407,12 @@ class TestListEnumEditor(BaseTestMixin, unittest.TestCase):
         with tester.create_ui(enum_edit, dict(view=view)) as ui:
 
             list_editor = tester.find_by_name(ui, "value")
-            displayed = list_editor.inspect(query.SelectedText())
+            displayed = list_editor.inspect(SelectedText())
 
             self.assertEqual(displayed, "one")
 
-            list_editor.locate(locator.Index(1)).perform(command.MouseClick())
-            displayed = list_editor.inspect(query.SelectedText())
+            list_editor.locate(Index(1)).perform(MouseClick())
+            displayed = list_editor.inspect(SelectedText())
             self.assertEqual(displayed, "two")
 
     def check_enum_index_update(self, view):
@@ -416,7 +423,7 @@ class TestListEnumEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(enum_edit.value, "one")
 
             list_editor = tester.find_by_name(ui, "value")
-            list_editor.locate(locator.Index(1)).perform(command.MouseClick())
+            list_editor.locate(Index(1)).perform(MouseClick())
 
             self.assertEqual(enum_edit.value, "two")
 
@@ -474,5 +481,5 @@ class TestListEnumEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(enum_edit.value, None)
             list_editor = tester.find_by_name(ui, "value")
             # As a result the displayed text is actually the string 'None'
-            displayed = list_editor.inspect(query.SelectedText())
+            displayed = list_editor.inspect(SelectedText())
             self.assertEqual(displayed, 'None')

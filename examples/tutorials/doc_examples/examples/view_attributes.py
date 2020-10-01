@@ -14,5 +14,6 @@ class Person(HasTraits):
     gender = Trait(None, 'M', 'F')
     name_view = View('first_name', 'last_name')
 
+
 bill = Person()
 bill.configure_traits()

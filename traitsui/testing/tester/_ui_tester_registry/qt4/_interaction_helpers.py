@@ -14,11 +14,11 @@ from pyface.qt.QtTest import QTest
 from traitsui.testing.tester._ui_tester_registry._compat import (
     check_key_compat
 )
-from traitsui.testing.tester.exceptions import Disabled
+from traitsui.testing.api import Disabled
 from traitsui.qt4.key_event_to_name import key_map as _KEY_MAP
 
 
-def key_click(widget, key, delay=0):
+def key_click(widget, key, delay):
     """ Performs a key click of the given key on the given widget after
     a delay.
 
@@ -134,6 +134,11 @@ def mouse_click_tab_index(tab_widget, index, delay):
         The index of the tab to be clicked.
     delay : int
         Time delay (in ms) in which click will be performed.
+
+    Raises
+    ------
+    IndexError
+        If the index is out of range.
     """
     if not 0 <= index < tab_widget.count():
         raise IndexError(index)
@@ -157,6 +162,11 @@ def mouse_click_qlayout(layout, index, delay):
         The layout containing the widget to be clicked
     index : int
         The index of the widget in the layout to be clicked
+
+    Raises
+    ------
+    IndexError
+        If the index is out of range.
     """
     if not 0 <= index < layout.count():
         raise IndexError(index)
@@ -217,7 +227,7 @@ def mouse_click_combobox(combobox, index, delay):
     )
     # Otherwise the click won't get registered.
     key_click(
-        combobox.view().viewport(), key="Enter",
+        combobox.view().viewport(), key="Enter", delay=delay
     )
 
 
@@ -235,6 +245,11 @@ def key_sequence_qwidget(control, interaction, delay):
     delay : int
         Time delay (in ms) in which each key click in the sequence will be
         performed.
+
+    Raises
+    ------
+    Disabled
+        If the widget is not enabled.
     """
     if not control.isEnabled():
         raise Disabled("{!r} is disabled.".format(control))
@@ -277,6 +292,11 @@ def key_click_qwidget(control, interaction, delay):
         to be simulated being typed
     delay : int
         Time delay (in ms) in which the key click will be performed.
+
+    Raises
+    ------
+    Disabled
+        If the widget is not enabled.
     """
     if not control.isEnabled():
         raise Disabled("{!r} is disabled.".format(control))
@@ -299,6 +319,11 @@ def key_click_qslider(control, interaction, delay):
         to be simulated being typed
     delay : int
         Time delay (in ms) in which the key click will be performed.
+
+    Raises
+    ------
+    ValueError
+        If the interaction.key is not one of the valid keys.
     """
     valid_keys = {"Left", "Right", "Up", "Down", "Page Up", "Page Down"}
     if interaction.key not in valid_keys:

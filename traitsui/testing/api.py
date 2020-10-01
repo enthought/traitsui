@@ -8,6 +8,55 @@
 #
 #  Thanks for using Enthought open source!
 #
+"""
+Core API for traitsui.testing
+
+Functionalities exposed via this package are intended to be used by external
+projects and stability is maintained as much as possible. Imports from other
+packages and subpackages do NOT receive the same stability guarantee.
+
+Tester
+------
+
+- :class:`~.UITester`
+
+Interactions (for changing GUI states)
+--------------------------------------
+
+- :class:`~.KeyClick`
+- :class:`~.KeySequence`
+- :class:`~.MouseClick`
+
+Interactions (for getting GUI states)
+-------------------------------------
+
+- :class:`~.DisplayedText`
+- :class:`~.IsChecked`
+- :class:`~.SelectedText`
+
+Locations (for locating GUI elements)
+-------------------------------------
+
+- :class:`~.Index`
+- :class:`~.Slider`
+- :class:`~.TargetById`
+- :class:`~.TargetByName`
+- :class:`~.Textbox`
+
+Advanced usage
+--------------
+
+- :class:`~.TargetRegistry`
+
+Exceptions
+----------
+
+- :class:`~.Disabled`
+- :class:`~.InteractionNotSupported`
+- :class:`~.LocationNotSupported`
+- :class:`~.TesterError`
+"""
+
 from .tester.command import (
     MouseClick,
     KeyClick,
