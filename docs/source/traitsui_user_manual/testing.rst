@@ -352,7 +352,9 @@ Example::
     modal_dialog_tester = ModalDialogTester(callable_to_open_dialog)
     modal_dialog_tester.open_and_run(when_opened)
 
-Note that you can instantiate as many |UITester| objects as you need.
+In the above example, ``ui`` is an instance of |UI| that has been obtained
+elsewhere in the test. Note that you can instantiate as many |UITester| objects
+as you need.
 
 .. rubric:: Is UITester compatible with PyFace GuiTestAssistant?
 
