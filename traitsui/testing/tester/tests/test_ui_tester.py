@@ -79,8 +79,8 @@ class TestUITesterCreateUI(unittest.TestCase):
 
         self.assertIsNone(ui.control)
 
-    def test_create_ui_respect_process_events_flag(self):
-        tester = UITester(process_events=False)
+    def test_create_ui_respect_auto_process_events_flag(self):
+        tester = UITester(auto_process_events=False)
         order = Order()
         view = View(Item("_"))
         side_effect = mock.Mock()
@@ -198,9 +198,9 @@ class TestUITesterFindEditor(unittest.TestCase):
             wrapper = tester.find_by_id(ui, "item2")
             self.assertIs(wrapper._target.item, item2)
 
-    def test_process_events_skipped(self):
+    def test_auto_process_events_skipped(self):
         # Event processing can be skipped.
-        tester = UITester(process_events=False)
+        tester = UITester(auto_process_events=False)
         side_effect = mock.Mock()
         gui = GUI()
         gui.invoke_later(side_effect)

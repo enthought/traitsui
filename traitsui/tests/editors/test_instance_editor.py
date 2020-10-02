@@ -114,10 +114,9 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
                 with tester.capture_error():
                     try:
                         dialog_ui = tester.get_dialog_widget()._ui
-                        # If process_events was not set to false, ``perform``
-                        # will block due to race condition with
-                        # ModalDialogTester.
-                        ui_tester = UITester(process_events=False)
+                        # If auto_process_events was not set to false, this
+                        # will block due to deadlocks with ModalDialogTester.
+                        ui_tester = UITester(auto_process_events=False)
                         value = ui_tester.find_by_name(dialog_ui, "value")
                         value.perform(KeySequence("Hello"))
                         self.assertEqual(obj.inst.value, "")

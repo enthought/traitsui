@@ -475,10 +475,10 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
 
         wrapper = example_ui_wrapper(
             registries=[StubRegistry(handler=handler)],
-            process_events=False,
+            auto_process_events=False,
         )
 
-        # With process_events set to False, events are not automatically
+        # With auto_process_events set to False, events are not automatically
         # processed.
         wrapper.perform(None)
         self.addCleanup(process_cascade_events)
@@ -497,12 +497,12 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
 
         wrapper = example_ui_wrapper(
             registries=[StubRegistry(solver=solver)],
-            process_events=False,
+            auto_process_events=False,
         )
 
-        # With process_events set to False, events are not automatically
+        # With auto_process_events set to False, events are not automatically
         # processed.
         new_wrapper = wrapper.locate(None)
 
         self.assertEqual(side_effect.call_count, 0)
-        self.assertFalse(new_wrapper._process_events)
+        self.assertFalse(new_wrapper._auto_process_events)

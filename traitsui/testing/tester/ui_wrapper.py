@@ -61,7 +61,7 @@ class UIWrapper:
         Time delay (in ms) in which actions by the wrapper are performed. Note
         it is propagated through to created child wrappers. The delay allows
         visual confirmation test code is working as desired. Defaults to 0.
-    process_events : bool, optional
+    auto_process_events : bool, optional
         Whether to process (cascade) GUI events automatically. Default is True.
         For tests that launch a modal dialog and rely on a recurring timer to
         poll if the dialog is closed, it may be necessary to set this flag to
@@ -76,10 +76,11 @@ class UIWrapper:
         visual confirmation test code is working as desired.
     """
 
-    def __init__(self, target, *, registries, delay=0, process_events=True):
+    def __init__(
+            self, target, *, registries, delay=0, auto_process_events=True):
         self._target = target
         self._registries = registries
-        self._process_events = process_events
+        self._auto_process_events = auto_process_events
         self.delay = delay
 
     def help(self):
@@ -154,7 +155,7 @@ class UIWrapper:
             target=self._get_next_target(location),
             registries=self._registries,
             delay=self.delay,
-            process_events=self._process_events,
+            auto_process_events=self._auto_process_events,
         )
 
     def find_by_name(self, name):
@@ -286,7 +287,8 @@ class UIWrapper:
                 continue
             else:
                 context = (
-                    _event_processed if self._process_events else _nullcontext
+                    _event_processed if self._auto_process_events
+                    else _nullcontext
                 )
                 with context():
                     return handler(self, interaction)
@@ -325,7 +327,7 @@ class UIWrapper:
             except LocationNotSupported as e:
                 supported |= set(e.supported)
             else:
-                if self._process_events:
+                if self._auto_process_events:
                     with _reraise_exceptions():
                         _process_cascade_events()
                 return handler(self, location)

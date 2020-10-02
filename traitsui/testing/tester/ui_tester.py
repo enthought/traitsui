@@ -38,7 +38,7 @@ class UITester:
         Time delay (in ms) in which actions by the tester are performed. Note
         it is propagated through to created child wrappers. The delay allows
         visual confirmation test code is working as desired. Defaults to 0.
-    process_events : bool, optional
+    auto_process_events : bool, optional
         Whether to process (cascade) GUI events automatically. Default is True.
         For tests that launch a modal dialog and rely on a recurring timer to
         poll if the dialog is closed, it may be necessary to set this flag to
@@ -53,7 +53,7 @@ class UITester:
         visual confirmation test code is working as desired.
     """
 
-    def __init__(self, *, registries=None, delay=0, process_events=True):
+    def __init__(self, *, registries=None, delay=0, auto_process_events=True):
         if registries is None:
             self._registries = []
         else:
@@ -64,7 +64,7 @@ class UITester:
         # this registry.
         self._registries.append(get_default_registry())
         self.delay = delay
-        self._process_events = process_events
+        self._auto_process_events = auto_process_events
 
     @contextlib.contextmanager
     def create_ui(self, object, ui_kwargs=None):
@@ -90,7 +90,7 @@ class UITester:
             yield ui
         finally:
             with reraise_exceptions():
-                if self._process_events:
+                if self._auto_process_events:
                     # At the end of a test, there may be events to be
                     # processed. If dispose happens first, those events will be
                     # processed after various editor states are removed,
@@ -102,7 +102,7 @@ class UITester:
                 finally:
                     # dispose is not atomic and may push more events to the
                     # event queue. Flush those too unless we are asked not to.
-                    if self._process_events:
+                    if self._auto_process_events:
                         process_cascade_events()
 
     def find_by_name(self, ui, name):
@@ -155,5 +155,5 @@ class UITester:
             target=ui,
             registries=self._registries,
             delay=self.delay,
-            process_events=self._process_events,
+            auto_process_events=self._auto_process_events,
         )
