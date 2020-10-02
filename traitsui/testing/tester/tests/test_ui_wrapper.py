@@ -18,6 +18,7 @@ from pyface.api import GUI
 from traits.api import HasTraits, Int
 from traits.testing.api import UnittestTools
 from traitsui.tests._tools import (
+    process_cascade_events,
     requires_toolkit,
     ToolkitName,
 )
@@ -480,6 +481,7 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
         # With process_events set to False, events are not automatically
         # processed.
         wrapper.perform(None)
+        self.addCleanup(process_cascade_events)
 
         self.assertEqual(side_effect.call_count, 0)
 
@@ -488,6 +490,7 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
         gui = GUI()
         side_effect = mock.Mock()
         gui.invoke_later(side_effect)
+        self.addCleanup(process_cascade_events)
 
         def solver(wrapper, location):
             return 1

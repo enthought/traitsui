@@ -86,10 +86,11 @@ class TestUITesterCreateUI(unittest.TestCase):
         side_effect = mock.Mock()
         gui = GUI()
         gui.invoke_later(side_effect)
+        # Make sure all pending events are processed at the end of the test.
+        self.addCleanup(process_cascade_events)
+
         with tester.create_ui(order, dict(view=view)) as ui:
-            # We still want the events (if any) to be processed at the end of
-            # the test.
-            self.addCleanup(process_cascade_events)
+            pass
 
         # dispose is called.
         self.assertIsNone(ui.control)
@@ -203,6 +204,8 @@ class TestUITesterFindEditor(unittest.TestCase):
         side_effect = mock.Mock()
         gui = GUI()
         gui.invoke_later(side_effect)
+        # Make sure all pending events are processed at the end of the test.
+        self.addCleanup(process_cascade_events)
 
         view = View(Item("submit_button", id="item"))
         with tester.create_ui(Order(), dict(view=view)) as ui:
