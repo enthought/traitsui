@@ -341,7 +341,7 @@ ModelDialogTester to close it.
 But if you are attempting to modify or inspect GUI states using |UITester|
 while the dialog is opened, you should set the ``process_events`` attribute to
 false for those operations. Otherwise the ModalDialogTester and UITester
-will enter a race condition that blocks forever.
+will enter a deadlock that blocks forever.
 
 Example::
 

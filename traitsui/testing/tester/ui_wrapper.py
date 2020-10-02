@@ -65,7 +65,7 @@ class UIWrapper:
         Whether to process (cascade) GUI events automatically. Default is True.
         For tests that launch a modal dialog and rely on a recurring timer to
         poll if the dialog is closed, it may be necessary to set this flag to
-        false in order to avoid race conditions. Note that this is propagated
+        false in order to avoid deadlocks. Note that this is propagated
         through to created child wrappers.
 
     Attributes
