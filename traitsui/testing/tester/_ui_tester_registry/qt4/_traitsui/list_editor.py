@@ -24,6 +24,7 @@ from traitsui.testing.tester._ui_tester_registry.qt4 import (
 from traitsui.qt4.list_editor import (
     CustomEditor,
     NotebookEditor,
+    SimpleEditor
 )
 
 
@@ -109,6 +110,14 @@ def register(registry):
     # CustomEditor
     registry.register_location(
         target_class=CustomEditor,
+        locator_class=Index,
+        solver=lambda wrapper, location: (
+            _get_next_target(wrapper._target, location.index)
+        )
+    )
+    # SimpleEditor
+    registry.register_location(
+        target_class=SimpleEditor,
         locator_class=Index,
         solver=lambda wrapper, location: (
             _get_next_target(wrapper._target, location.index)

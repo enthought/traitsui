@@ -53,6 +53,7 @@ class ListTraitTest(HasStrictTraits):
     # Trait definitions:
     people = List(Instance(Person, ()))
     num_columns = Int(1)
+    style = Str("custom")
 
     # Traits view definitions:
     def default_traits_view(self):
@@ -61,8 +62,8 @@ class ListTraitTest(HasStrictTraits):
                 'people',
                 label='List',
                 id='list',
-                style='custom',
-                editor=ListEditor(style='custom', columns=self.num_columns),
+                style=self.style,
+                editor=ListEditor(style=self.style, columns=self.num_columns),
             ),
             resizable=True
         )
@@ -115,6 +116,44 @@ class TestCustomListEditor(unittest.TestCase):
 
     def test_index_out_of_range(self):
         obj = ListTraitTest(people=get_people())
+        tester = UITester()
+        with tester.create_ui(obj) as ui:
+            people_list = tester.find_by_name(ui, "people")
+            with self.assertRaises(IndexError):
+                people_list.locate(Index(10))
+
+
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+class TestSimpleListEditor(unittest.TestCase):
+
+    def test_locate_element_and_edit(self):
+        obj = ListTraitTest(people=get_people(), style="simple")
+        tester = UITester()
+        with tester.create_ui(obj) as ui:
+            # sanity check
+            self.assertEqual(obj.people[7].name, "Fields")
+            people_list = tester.find_by_name(ui, "people")
+            item = people_list.locate(Index(7))
+            item.perform(MouseClick())
+            name_field = item.find_by_name("name")
+            for _ in range(6):
+                name_field.perform(KeyClick("Backspace"))
+            name_field.perform(KeySequence("David"))
+            displayed = name_field.inspect(DisplayedText())
+            self.assertEqual(obj.people[7].name, "David")
+            self.assertEqual(displayed, obj.people[7].name)
+
+    def test_useful_err_message(self):
+        obj = ListTraitTest(people=get_people(), style="simple")
+        tester = UITester()
+        with tester.create_ui(obj) as ui:
+            with self.assertRaises(LocationNotSupported) as exc:
+                people_list = tester.find_by_name(ui, "people")
+                people_list.locate(Textbox())
+            self.assertIn(Index, exc.exception.supported)
+
+    def test_index_out_of_range(self):
+        obj = ListTraitTest(people=get_people(), style="simple")
         tester = UITester()
         with tester.create_ui(obj) as ui:
             people_list = tester.find_by_name(ui, "people")
