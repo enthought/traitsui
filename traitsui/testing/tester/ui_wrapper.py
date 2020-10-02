@@ -61,6 +61,12 @@ class UIWrapper:
         Time delay (in ms) in which actions by the wrapper are performed. Note
         it is propagated through to created child wrappers. The delay allows
         visual confirmation test code is working as desired. Defaults to 0.
+    auto_process_events : bool, optional
+        Whether to process (cascade) GUI events automatically. Default is True.
+        For tests that launch a modal dialog and rely on a recurring timer to
+        poll if the dialog is closed, it may be necessary to set this flag to
+        false in order to avoid deadlocks. Note that this is propagated
+        through to created child wrappers.
 
     Attributes
     ----------
@@ -70,9 +76,11 @@ class UIWrapper:
         visual confirmation test code is working as desired.
     """
 
-    def __init__(self, target, *, registries, delay=0):
+    def __init__(
+            self, target, *, registries, delay=0, auto_process_events=True):
         self._target = target
         self._registries = registries
+        self._auto_process_events = auto_process_events
         self.delay = delay
 
     def help(self):
@@ -147,6 +155,7 @@ class UIWrapper:
             target=self._get_next_target(location),
             registries=self._registries,
             delay=self.delay,
+            auto_process_events=self._auto_process_events,
         )
 
     def find_by_name(self, name):
@@ -277,7 +286,11 @@ class UIWrapper:
                 supported.extend(e.supported)
                 continue
             else:
-                with _event_processed():
+                context = (
+                    _event_processed if self._auto_process_events
+                    else _nullcontext
+                )
+                with context():
                     return handler(self, interaction)
 
         raise InteractionNotSupported(
@@ -314,8 +327,9 @@ class UIWrapper:
             except LocationNotSupported as e:
                 supported |= set(e.supported)
             else:
-                with _reraise_exceptions():
-                    _process_cascade_events()
+                if self._auto_process_events:
+                    with _reraise_exceptions():
+                        _process_cascade_events()
                 return handler(self, location)
 
         raise LocationNotSupported(
@@ -336,3 +350,9 @@ def _event_processed():
             yield
         finally:
             _process_cascade_events()
+
+
+@contextmanager
+def _nullcontext():
+    """ Equivalent to contextlib.nullcontext() in Python >= 3.7"""
+    yield

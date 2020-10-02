@@ -333,8 +333,28 @@ it with any testing framework (e.g. unittest, pytest).
 
 .. rubric:: Is UITester compatible with PyFace ModalDialogTester?
 
-Yes. For example, you can use |UITester| to launch a modal dialog, and use
+Yes, with some care.
+
+For example, you can use |UITester| to launch a modal dialog, and use
 ModelDialogTester to close it.
+
+But if you are attempting to modify or inspect GUI states using |UITester|
+while the dialog is opened, you should set the ``auto_process_events``
+attribute to false for those operations. Otherwise the ModalDialogTester and
+UITester will enter a deadlock that blocks forever.
+
+Example::
+
+    def when_opened(modal_dialog_tester):
+        ui_tester = UITester(auto_process_events=False)
+        ui_tester.find_by_id(ui, "button").perform(MouseClick())
+
+    modal_dialog_tester = ModalDialogTester(callable_to_open_dialog)
+    modal_dialog_tester.open_and_run(when_opened)
+
+In the above example, ``ui`` is an instance of |UI| that has been obtained
+elsewhere in the test. Note that you can instantiate as many |UITester| objects
+as you need.
 
 .. rubric:: Is UITester compatible with PyFace GuiTestAssistant?
 

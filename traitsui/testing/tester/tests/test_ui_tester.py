@@ -10,6 +10,7 @@
 #
 
 import unittest
+from unittest import mock
 
 from pyface.api import GUI
 from traits.api import (
@@ -17,6 +18,7 @@ from traits.api import (
 )
 from traitsui.api import Item, ModelView, View
 from traitsui.tests._tools import (
+    process_cascade_events,
     requires_toolkit,
     ToolkitName,
 )
@@ -76,6 +78,24 @@ class TestUITesterCreateUI(unittest.TestCase):
                 GUI().invoke_later(raise_error)
 
         self.assertIsNone(ui.control)
+
+    def test_create_ui_respect_auto_process_events_flag(self):
+        tester = UITester(auto_process_events=False)
+        order = Order()
+        view = View(Item("_"))
+        side_effect = mock.Mock()
+        gui = GUI()
+        gui.invoke_later(side_effect)
+        # Make sure all pending events are processed at the end of the test.
+        self.addCleanup(process_cascade_events)
+
+        with tester.create_ui(order, dict(view=view)) as ui:
+            pass
+
+        # dispose is called.
+        self.assertIsNone(ui.control)
+        # But the GUI events are not processed.
+        self.assertEqual(side_effect.call_count, 0)
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -177,3 +197,17 @@ class TestUITesterFindEditor(unittest.TestCase):
         with tester.create_ui(Order(), dict(view=view)) as ui:
             wrapper = tester.find_by_id(ui, "item2")
             self.assertIs(wrapper._target.item, item2)
+
+    def test_auto_process_events_skipped(self):
+        # Event processing can be skipped.
+        tester = UITester(auto_process_events=False)
+        side_effect = mock.Mock()
+        gui = GUI()
+        gui.invoke_later(side_effect)
+        # Make sure all pending events are processed at the end of the test.
+        self.addCleanup(process_cascade_events)
+
+        view = View(Item("submit_button", id="item"))
+        with tester.create_ui(Order(), dict(view=view)) as ui:
+            tester.find_by_id(ui, "item")
+            self.assertEqual(side_effect.call_count, 0)

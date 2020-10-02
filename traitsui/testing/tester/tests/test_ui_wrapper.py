@@ -18,6 +18,7 @@ from pyface.api import GUI
 from traits.api import HasTraits, Int
 from traits.testing.api import UnittestTools
 from traitsui.tests._tools import (
+    process_cascade_events,
     requires_toolkit,
     ToolkitName,
 )
@@ -422,7 +423,7 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
         model = NumberHasTraits()
         gui.set_trait_later(model, "number", 2)
 
-        def solver(wrapper, action):
+        def solver(wrapper, location):
             return model.number
 
         wrapper = example_ui_wrapper(
@@ -463,3 +464,45 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
 
         with self.assertRaises(ZeroDivisionError):
             wrapper.perform(None)
+
+    def test_perform_event_processed_optional(self):
+        # Allow event processing to be switched off.
+        gui = GUI()
+        side_effect = mock.Mock()
+
+        def handler(wrapper, action):
+            gui.invoke_later(side_effect)
+
+        wrapper = example_ui_wrapper(
+            registries=[StubRegistry(handler=handler)],
+            auto_process_events=False,
+        )
+
+        # With auto_process_events set to False, events are not automatically
+        # processed.
+        wrapper.perform(None)
+        self.addCleanup(process_cascade_events)
+
+        self.assertEqual(side_effect.call_count, 0)
+
+    def test_locate_event_processed_optional(self):
+        # Allow event processing to be switched off.
+        gui = GUI()
+        side_effect = mock.Mock()
+        gui.invoke_later(side_effect)
+        self.addCleanup(process_cascade_events)
+
+        def solver(wrapper, location):
+            return 1
+
+        wrapper = example_ui_wrapper(
+            registries=[StubRegistry(solver=solver)],
+            auto_process_events=False,
+        )
+
+        # With auto_process_events set to False, events are not automatically
+        # processed.
+        new_wrapper = wrapper.locate(None)
+
+        self.assertEqual(side_effect.call_count, 0)
+        self.assertFalse(new_wrapper._auto_process_events)

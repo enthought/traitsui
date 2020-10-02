@@ -38,6 +38,12 @@ class UITester:
         Time delay (in ms) in which actions by the tester are performed. Note
         it is propagated through to created child wrappers. The delay allows
         visual confirmation test code is working as desired. Defaults to 0.
+    auto_process_events : bool, optional
+        Whether to process (cascade) GUI events automatically. Default is True.
+        For tests that launch a modal dialog and rely on a recurring timer to
+        poll if the dialog is closed, it may be necessary to set this flag to
+        false in order to avoid deadlocks. Note that this is propagated
+        through to created child wrappers.
 
     Attributes
     ----------
@@ -47,7 +53,7 @@ class UITester:
         visual confirmation test code is working as desired.
     """
 
-    def __init__(self, *, registries=None, delay=0):
+    def __init__(self, *, registries=None, delay=0, auto_process_events=True):
         if registries is None:
             self._registries = []
         else:
@@ -58,6 +64,7 @@ class UITester:
         # this registry.
         self._registries.append(get_default_registry())
         self.delay = delay
+        self._auto_process_events = auto_process_events
 
     @contextlib.contextmanager
     def create_ui(self, object, ui_kwargs=None):
@@ -76,8 +83,6 @@ class UITester:
         ------
         ui : traitsui.ui.UI
         """
-        # Nothing here uses UITester, but it is an instance method to preserve
-        # options to extend using instance states.
 
         ui_kwargs = {} if ui_kwargs is None else ui_kwargs
         ui = object.edit_traits(**ui_kwargs)
@@ -85,16 +90,20 @@ class UITester:
             yield ui
         finally:
             with reraise_exceptions():
-                # At the end of a test, there may be events to be processed.
-                # If dispose happens first, those events will be processed
-                # after various editor states are removed, causing errors.
-                process_cascade_events()
+                if self._auto_process_events:
+                    # At the end of a test, there may be events to be
+                    # processed. If dispose happens first, those events will be
+                    # processed after various editor states are removed,
+                    # causing errors. But if we are asked not to process
+                    # events, then don't.
+                    process_cascade_events()
                 try:
                     ui.dispose()
                 finally:
                     # dispose is not atomic and may push more events to the
-                    # event queue. Flush those too.
-                    process_cascade_events()
+                    # event queue. Flush those too unless we are asked not to.
+                    if self._auto_process_events:
+                        process_cascade_events()
 
     def find_by_name(self, ui, name):
         """ Find the TraitsUI editor with the given name and return a new
@@ -111,11 +120,7 @@ class UITester:
         -------
         wrapper : UIWrapper
         """
-        return UIWrapper(
-            target=ui,
-            registries=self._registries,
-            delay=self.delay,
-        ).find_by_name(name=name)
+        return self._get_wrapper(ui).find_by_name(name=name)
 
     def find_by_id(self, ui, id):
         """ Find the TraitsUI editor with the given identifier and return a new
@@ -132,8 +137,23 @@ class UITester:
         -------
         wrapper : UIWrapper
         """
+        return self._get_wrapper(ui).find_by_id(id=id)
+
+    def _get_wrapper(self, ui):
+        """ Return a new UIWrapper wrapping the given traitsui.ui.UI.
+
+        Parameters
+        ----------
+        ui : traitsui.ui.UI
+            The UI created, e.g. by ``create_ui``.
+
+        Returns
+        -------
+        wrapper : UIWrapper
+        """
         return UIWrapper(
             target=ui,
             registries=self._registries,
             delay=self.delay,
-        ).find_by_id(id=id)
+            auto_process_events=self._auto_process_events,
+        )
