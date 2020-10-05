@@ -251,8 +251,8 @@ class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
                 self.launch_editor(instance, view) as editor:
             # the user set the datetime on the Qt widget to a value
             # too large for Python
-            from pyface.qt.QtCore import QDateTime, QDate
-            q_datetime = QDateTime(QDate(datetime.MAXYEAR + 1, 1, 1))
+            from pyface.qt.QtCore import QDateTime, QDate, QTime
+            q_datetime = QDateTime(QDate(datetime.MAXYEAR + 1, 1, 1), QTime())
             editor.control.setDateTime(q_datetime)
 
             # Get the displayed value back.
