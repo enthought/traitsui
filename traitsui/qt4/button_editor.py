@@ -71,9 +71,9 @@ class SimpleEditor(Editor):
         self.sync_value(self.factory.label_value, "label", "from")
 
         # The connection type is set to workaround Qt5 + MacOSX issue with
-        # event dispatching. Without the type set to Queue, other widgets
-        # may not repaint properly in response to a button click.
-        # See for example enthought/traitsui#928
+        # event dispatching. Without the type set to QueuedConnection, other
+        # widgets may not repaint properly in response to a button click.
+        # See enthought/traitsui#1308
         self.control.clicked.connect(
             self.update_object, type=QtCore.Qt.QueuedConnection,
         )
