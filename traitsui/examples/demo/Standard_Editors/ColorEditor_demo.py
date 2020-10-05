@@ -13,7 +13,7 @@ Implementation of a ColorEditor demo plugin for Traits UI demo program.
 
 This demo shows each of the four styles of the ColorEditor
 """
-# Issues related to the demo warning: enthought/traitsui#913,
+# Issues related to the demo warning:
 # enthought/traitsui#946
 
 
