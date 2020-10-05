@@ -26,7 +26,7 @@ long lists are used, since enabling this feature adds and removed Traits
 listeners to each item in the list.
 
 """
-# Issues related to the demo warning: enthought/traitsui#913,
+# Issues related to the demo warning:
 # enthought/traitsui#960
 
 from traits.api import HasTraits, Str, Float, List, Instance, Button
