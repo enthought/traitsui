@@ -45,7 +45,7 @@ del _palette
 
 # Screen size values:
 
-_geom = QtGui.QApplication.desktop().availableGeometry()
+_geom = QtGui.QApplication.screens()[0].availableGeometry()
 
 screen_dx = _geom.width()
 screen_dy = _geom.height()
