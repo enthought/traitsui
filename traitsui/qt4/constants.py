@@ -45,6 +45,8 @@ del _palette
 
 # Screen size values:
 
+# QDesktopWidget.availableGeometry(int screen) is deprecated and Qt docs
+# suggest using screens() instead, but screens in not available in qt4
 if QtCore.__version_info__ >= (5, 0):
     _geom = QtGui.QApplication.screens()[0].availableGeometry()
 else:
