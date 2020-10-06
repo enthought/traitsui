@@ -15,7 +15,7 @@ editors and text editor factories.
 """
 
 
-from pyface.qt import QtGui
+from pyface.qt import QtCore, QtGui
 
 
 _palette = QtGui.QApplication.palette()
@@ -45,7 +45,10 @@ del _palette
 
 # Screen size values:
 
-_geom = QtGui.QApplication.screens()[0].availableGeometry()
+if QtCore.__version_info__ >= (5, 0):
+    _geom = QtGui.QApplication.screens()[0].availableGeometry()
+else:
+    _geom = QtGui.QApplication.desktop().availableGeometry()
 
 screen_dx = _geom.width()
 screen_dy = _geom.height()
