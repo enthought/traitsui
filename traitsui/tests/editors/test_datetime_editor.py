@@ -54,7 +54,8 @@ class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
 
     def test_datetime_editor_simple(self):
         view = get_date_time_simple_view(DatetimeEditor())
-        instance = InstanceWithDatetime(date_time=datetime.datetime.now())
+        date_time = datetime.datetime(2000, 1, 2, 1, 2, 3)
+        instance = InstanceWithDatetime(date_time=date_time)
         with reraise_exceptions(), \
                 self.launch_editor(instance, view):
             pass
