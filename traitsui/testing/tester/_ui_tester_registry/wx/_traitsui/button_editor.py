@@ -11,7 +11,7 @@
 import wx
 
 from traitsui.wx.button_editor import SimpleEditor, CustomEditor
-from traitsui.testing.api import DisplayedText, MouseClick
+from traitsui.testing.api import DisplayedText, IsEnabled, MouseClick
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 
@@ -69,6 +69,12 @@ def register(registry):
     )
 
     registry.register_interaction(
+        target_class=SimpleEditor,
+        interaction_class=IsEnabled,
+        handler=lambda wrapper, _: wrapper._target.control.isEnabled()
+    )
+
+    registry.register_interaction(
         target_class=CustomEditor,
         interaction_class=MouseClick,
         handler=mouse_click_ImageButton
@@ -78,4 +84,10 @@ def register(registry):
         target_class=CustomEditor,
         interaction_class=DisplayedText,
         handler=lambda wrapper, _: wrapper._target.control.GetLabel()
+    )
+
+    registry.register_interaction(
+        target_class=CustomEditor,
+        interaction_class=IsEnabled,
+        handler=lambda wrapper, _: wrapper._target.control.isEnabled()
     )

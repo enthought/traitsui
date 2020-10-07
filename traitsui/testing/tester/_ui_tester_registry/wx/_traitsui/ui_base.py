@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 from traitsui.wx.ui_base import ButtonEditor
-from traitsui.testing.api import DisplayedText, MouseClick
+from traitsui.testing.api import DisplayedText, IsEnabled, MouseClick
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 
@@ -35,4 +35,10 @@ def register(registry):
         target_class=ButtonEditor,
         interaction_class=DisplayedText,
         handler=lambda wrapper, _: wrapper._target.control.GetLabel()
+    )
+
+    registry.register_interaction(
+        target_class=ButtonEditor,
+        interaction_class=IsEnabled,
+        handler=lambda wrapper, _: wrapper._target.control.isEnabled()
     )
