@@ -181,7 +181,7 @@ and/or a location for a given GUI target. |UIWrapper| depends on one
 or many registries. If the |TargetRegistry| is empty, the |UIWrapper| would not
 be very useful at all. The |UITester| supports testing of TraitsUI objects by
 providing an instance of |TargetRegistry| that knows how to locate, inspect
-and perform actions TraitsUI objects in a GUI.
+and perform actions on TraitsUI objects.
 
 This abstraction covers the existing use cases and it also allows TraitsUI
 to extend the API in its internal GUI tests without necessarily exposing the
