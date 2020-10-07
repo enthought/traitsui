@@ -173,9 +173,8 @@ It puts together two other types of objects:
 - |UIWrapper|
 - |TargetRegistry|
 
-|UITester| is specific about TraitsUI. On the contrary, |UIWrapper| and
-|TargetRegistry| are more generic and can be used for testing any types of
-objects.
+|UITester| is specific to TraitsUI, whereas, |UIWrapper| and |TargetRegistry|
+are more generic and can be used for testing any types of objects.
 
 |TargetRegistry| is a collection of implementations required for testing GUI
 for a context not specified by the registry itself. |UIWrapper| depends on one
