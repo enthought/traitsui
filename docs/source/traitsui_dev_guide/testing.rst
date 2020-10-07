@@ -246,13 +246,13 @@ toolkit widget type::
 
 The design was rejected for two reasons:
 
-#. The control flow resulting from having to try resolving an interaction
+#. The control flow resulting from trying to resolve an interaction
    or location on the default target adds complexity to the code.
 #. The resulting code is obscure because it is hard to see which UI editors
-   are using the interaction handlers registered. This makes it difficult to
+   are using the registered interaction handlers. This makes it difficult to
    perform impact analysis when one needs to change the code.
 
-At the end we simple register the interaction types on those simple UI editors
+At the end we simply register the interaction types on those simple UI editors
 directly but we refactor the registration logic so that it is easy to reuse.
 
 Where are the tests?
@@ -265,10 +265,10 @@ ButtonEditor, in ``traitsui.editors.tests.test_button_editor``.
 
 By dog-fooding the implementations back to TraitsUI 's own tests with the goal
 of writing toolkit independent test code, this allows us to capture
-inconsistencies among different toolkit early and to make sure the new
+inconsistencies among different toolkits early and to make sure the new
 functionality is indeed useful.
 
-Tests for functionality regarding the tester API should be found in the
+Tests for functionality provided by the tester API can be found in the
 ``testing`` package (or subpackages). e.g. API of |UITester| is tested in
 ``traitsui.testing.tester.tests``.
 
