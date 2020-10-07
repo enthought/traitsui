@@ -1115,7 +1115,12 @@ class TableView(QtGui.QTableView):
 
             # Determine the width of the column label
             text = column.get_label()
-            width = QtGui.QFontMetrics(font).width(text)
+            # QFontMetrics.width() is deprecated and Qt docs suggest using
+            # horizontalAdvance() instead, but is only available since Qt 5.11
+            if QtCore.__version_info__ >= (5, 11):
+                width = QtGui.QFontMetrics(font).horizontalAdvance(text)
+            else:
+                width = QtGui.QFontMetrics(font).width(text)
 
             # Add margin to the calculated width as appropriate
             style = self.style()
