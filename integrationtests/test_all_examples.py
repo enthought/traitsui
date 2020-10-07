@@ -179,7 +179,7 @@ SEARCHER.skip_file_if(
     lambda: not is_wx(), "Only support wx",
 )
 SEARCHER.skip_file_if(
-    os.path.join(DEMO, "Useful", "demo_group_size.py"),
+    os.path.join(DEMO, "Misc", "demo_group_size.py"),
     is_wx,
     "enable tries to import a missing constant. See enthought/enable#307",
 )

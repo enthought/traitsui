@@ -1,2 +1,1 @@
-These demonstrations show off some of the more advanced features of and
-TraitsUI.
+These examples demonstrate advanced features of TraitsUI.
