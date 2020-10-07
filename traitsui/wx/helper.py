@@ -44,13 +44,20 @@ from traits.api import (
 
 from traitsui.ui_traits import convert_image, SequenceTypes
 
+from pyface.api import SystemMetrics
+
 from pyface.timer.api import do_later
 
-from .constants import standard_bitmap_width, screen_dx, screen_dy
+from .constants import standard_bitmap_width
 
 from .editor import Editor
 
 
+#: Screen width
+screen_dx = SystemMetrics()._get_screen_width()
+
+#: Screen height
+screen_dy = SystemMetrics()._get_screen_height()
 
 # -------------------------------------------------------------------------
 #  Trait definitions:

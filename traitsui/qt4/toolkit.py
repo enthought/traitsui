@@ -26,10 +26,17 @@ from pyface.toolkit import toolkit_object as pyface_toolkit
 _app = pyface_toolkit("init:_app")
 
 from traits.trait_notifiers import set_ui_handler
+from pyface.api import SystemMetrics
 from pyface.qt import QtCore, QtGui, qt_api
 
 from traitsui.toolkit import Toolkit
-from .constants import screen_dx, screen_dy
+
+
+#: Screen width
+screen_dx = SystemMetrics()._get_screen_width()
+
+#: Screen height
+screen_dy = SystemMetrics()._get_screen_height()
 
 # -------------------------------------------------------------------------
 #  Handles UI notification handler requests that occur on a thread other than

@@ -22,13 +22,15 @@
 
 import wx
 
+from pyface.api import SystemMetrics
+
 from .helper import save_window, TraitsUIScrolledPanel
 
 from .ui_base import BaseDialog
 
 from .ui_panel import panel
 
-from .constants import DefaultTitle, WindowColor, screen_dy, scrollbar_dx
+from .constants import DefaultTitle, WindowColor, scrollbar_dx
 from traitsui.undo import UndoHistory
 
 from traitsui.menu import (
@@ -38,6 +40,10 @@ from traitsui.menu import (
     CancelButton,
     HelpButton,
 )
+
+
+#: Screen height
+screen_dy = SystemMetrics()._get_screen_height()
 
 
 # -------------------------------------------------------------------------

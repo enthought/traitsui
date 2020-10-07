@@ -79,9 +79,3 @@ standard_bitmap_width = 120
 
 #: Width of a scrollbar
 scrollbar_dx = wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X)
-
-#: Screen width
-screen_dx = SystemMetrics()._get_screen_width()
-
-#: Screen height
-screen_dy = SystemMetrics()._get_screen_height()

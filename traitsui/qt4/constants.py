@@ -43,8 +43,3 @@ EditableColor = _palette.color(QtGui.QPalette.Base)
 WindowColor = _palette.color(QtGui.QPalette.Window)
 
 del _palette
-
-# Screen size values:
-
-screen_dx = SystemMetrics()._get_screen_width()
-screen_dy = SystemMetrics()._get_screen_height()

@@ -35,17 +35,23 @@ _app = pyface_toolkit("init:_app")
 
 from traits.api import HasPrivateTraits, Instance
 from traits.trait_notifiers import set_ui_handler
+from pyface.api import SystemMetrics
 from pyface.wx.drag_and_drop import PythonDropTarget
 
 from traitsui.theme import Theme
 from traitsui.ui import UI
 from traitsui.toolkit import Toolkit
-from .constants import WindowColor, screen_dx, screen_dy
+from .constants import WindowColor
 from .helper import position_window
 
 
-logger = logging.getLogger(__name__)
+#: Screen width
+screen_dx = SystemMetrics()._get_screen_width()
 
+#: Screen height
+screen_dy = SystemMetrics()._get_screen_height()
+
+logger = logging.getLogger(__name__)
 
 #: Mapping from wx events to method suffixes.
 EventSuffix = {
