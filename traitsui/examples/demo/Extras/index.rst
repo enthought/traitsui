@@ -1,2 +1,1 @@
-These demos showcase some extra, miscellaneous behaviors that are possible
-with TraitsUI
+These demos showcase some extra behaviors that are possible with TraitsUI
