@@ -16,8 +16,6 @@ editors and text editor factories.
 
 
 from pyface.qt import QtGui
-from pyface.api import SystemMetrics
-
 
 _palette = QtGui.QApplication.palette()
 

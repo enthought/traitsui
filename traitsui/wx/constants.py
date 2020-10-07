@@ -23,8 +23,6 @@ import sys
 
 import wx
 
-from pyface.api import SystemMetrics
-
 #: Define platform and wx version constants:
 is_mac = sys.platform == "darwin"
 
