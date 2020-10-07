@@ -221,14 +221,14 @@ The pseudo-code for this patterns looked like this::
 
   def perform(interaction, target):
       try:
-          perform(interaction, target):
+          _perform(interaction, target):
       except InteractionNotSupported:
           try:
               default_target = locate(DefaultTarget, target)
           except LocationNotSupported:
               raise InteractionNotSupported
           else:
-              perform(interaction, default_target)
+              _perform(interaction, default_target)
 
 The default target for a TextEditor can be resolved using this function::
 
