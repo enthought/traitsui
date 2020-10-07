@@ -176,8 +176,8 @@ It puts together two other types of objects:
 |UITester| is specific to TraitsUI, whereas, |UIWrapper| and |TargetRegistry|
 are more generic and can be used for testing any types of objects.
 
-|TargetRegistry| is a collection of implementations required for testing GUI
-for a context not specified by the registry itself. |UIWrapper| depends on one
+|TargetRegistry| collects the information required for resolving an interaction
+and/or a location for a given GUI target. |UIWrapper| depends on one
 or many registries. If the |TargetRegistry| is empty, the |UIWrapper| would not
 be very useful at all. The |UITester| supports testing of TraitsUI objects by
 providing an instance of |TargetRegistry| that contains implementations for
