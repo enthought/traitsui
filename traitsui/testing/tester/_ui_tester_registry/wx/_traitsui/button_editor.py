@@ -71,7 +71,7 @@ def register(registry):
     registry.register_interaction(
         target_class=SimpleEditor,
         interaction_class=IsEnabled,
-        handler=lambda wrapper, _: wrapper._target.control.isEnabled()
+        handler=lambda wrapper, _: wrapper._target.control.IsEnabled()
     )
 
     registry.register_interaction(
@@ -89,5 +89,5 @@ def register(registry):
     registry.register_interaction(
         target_class=CustomEditor,
         interaction_class=IsEnabled,
-        handler=lambda wrapper, _: wrapper._target.control.isEnabled()
+        handler=lambda wrapper, _: wrapper._target.control.IsEnabled()
     )

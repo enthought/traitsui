@@ -40,5 +40,5 @@ def register(registry):
     registry.register_interaction(
         target_class=ButtonEditor,
         interaction_class=IsEnabled,
-        handler=lambda wrapper, _: wrapper._target.control.isEnabled()
+        handler=lambda wrapper, _: wrapper._target.control.IsEnabled()
     )
