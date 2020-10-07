@@ -62,8 +62,8 @@ The last point is important for both TraitsUI and downstream projects. Strong
 coupling between the application code structure and test code means any small
 refactoring or internal changes could cause a lot of test code to fail. This
 would make changing TraitsUI more difficult. Downstream projects realizing the
-fragility of such tests may decide not to write the tests that should have been
-written.
+fragility of such tests may decide not to write the tests that would otherwise
+be written.
 
 In fact, TraitsUI 's test suite already makes use of a number of internal
 helper functions for testing its own UI editors. Therefore we noticed that
