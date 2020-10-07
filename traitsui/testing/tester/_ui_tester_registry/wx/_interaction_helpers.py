@@ -368,6 +368,7 @@ def key_sequence_text_ctrl(control, interaction, delay):
     for char in interaction.sequence:
         wx.MilliSleep(delay)
         control.WriteText(char)
+        wx.SafeYield()
 
 
 def key_click_slider(control, interaction, delay):
