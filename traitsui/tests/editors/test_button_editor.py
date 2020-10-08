@@ -11,6 +11,7 @@ from traitsui.tests._tools import (
 )
 from traitsui.testing.api import (
     DisplayedText,
+    IsEnabled,
     MouseClick,
     UITester
 )
@@ -116,12 +117,14 @@ class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
         tester = UITester()
         with tester.create_ui(button_text_edit, dict(view=view)) as ui:
             button = tester.find_by_name(ui, "play_button")
+            self.assertFalse(button.inspect(IsEnabled()))
 
             with self.assertTraitDoesNotChange(
                     button_text_edit, "play_button"):
                 button.perform(MouseClick())
 
             button_text_edit.button_enabled = True
+            self.assertTrue(button.inspect(IsEnabled()))
             with self.assertTraitChanges(
                     button_text_edit, "play_button", count=1):
                 button.perform(MouseClick())

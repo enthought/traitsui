@@ -28,8 +28,7 @@ from traits.trait_types import Str, Int
 import traitsui
 from traitsui.basic_editor_factory import BasicEditorFactory
 from traitsui.api import Group, Item, spring, View
-from traitsui.testing.tester import command, query
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import DisplayedText, IsEnabled, MouseClick, UITester
 from traitsui.tests._tools import (
     BaseTestMixin,
     count_calls,
@@ -203,8 +202,9 @@ class TestUI(BaseTestMixin, unittest.TestCase):
 
             # press the OK button and close the dialog
             ok_button = tester.find_by_id(ui, "OK")
-            self.assertEqual(ok_button.inspect(query.DisplayedText()), "OK")
-            ok_button.perform(command.MouseClick())
+            self.assertEqual(ok_button.inspect(DisplayedText()), "OK")
+            self.assertTrue(ok_button.inspect(IsEnabled()))
+            ok_button.perform(MouseClick())
 
             self.assertIsNone(ui.control)
             self.assertEqual(control.Destroy._n_calls, 1)
@@ -226,8 +226,9 @@ class TestUI(BaseTestMixin, unittest.TestCase):
 
             # press the OK button and close the dialog
             ok_button = tester.find_by_id(ui, "OK")
-            self.assertEqual(ok_button.inspect(query.DisplayedText()), "OK")
-            ok_button.perform(command.MouseClick())
+            self.assertEqual(ok_button.inspect(DisplayedText()), "OK")
+            self.assertTrue(ok_button.inspect(IsEnabled()))
+            ok_button.perform(MouseClick())
 
             self.assertIsNone(ui.control)
             self.assertEqual(control.deleteLater._n_calls, 1)

@@ -48,3 +48,12 @@ class IsChecked:
     Implementations should return True if checked and False if not.
     """
     pass
+
+
+class IsEnabled:
+    """ An object representing an interaction to obtain whether a widget is
+    enabled or not.
+
+    Implementations should return True if enabled and False if not.
+    """
+    pass
