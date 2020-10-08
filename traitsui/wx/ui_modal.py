@@ -40,7 +40,7 @@ from traitsui.menu import (
 )
 
 #: Screen height
-screen_dy = SystemMetrics()._get_screen_height()
+screen_dy = SystemMetrics().screen_height
 
 
 def ui_modal(ui, parent):

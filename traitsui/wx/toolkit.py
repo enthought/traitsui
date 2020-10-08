@@ -46,10 +46,10 @@ from .helper import position_window
 
 
 #: Screen width
-screen_dx = SystemMetrics()._get_screen_width()
+screen_dx = SystemMetrics().screen_width
 
 #: Screen height
-screen_dy = SystemMetrics()._get_screen_height()
+screen_dy = SystemMetrics().screen_height
 
 logger = logging.getLogger(__name__)
 

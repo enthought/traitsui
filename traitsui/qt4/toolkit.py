@@ -33,10 +33,10 @@ from traitsui.toolkit import Toolkit
 
 
 #: Screen width
-screen_dx = SystemMetrics()._get_screen_width()
+screen_dx = SystemMetrics().screen_width
 
 #: Screen height
-screen_dy = SystemMetrics()._get_screen_height()
+screen_dy = SystemMetrics().screen_height
 
 # -------------------------------------------------------------------------
 #  Handles UI notification handler requests that occur on a thread other than

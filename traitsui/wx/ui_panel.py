@@ -62,10 +62,10 @@ from .ui_base import BaseDialog
 
 
 #: Screen width
-screen_dx = SystemMetrics()._get_screen_width()
+screen_dx = SystemMetrics().screen_width
 
 #: Screen height
-screen_dy = SystemMetrics()._get_screen_height()
+screen_dy = SystemMetrics().screen_height
 
 # Pattern of all digits
 all_digits = re.compile(r"\d+")

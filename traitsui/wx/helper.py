@@ -54,10 +54,10 @@ from .editor import Editor
 
 
 #: Screen width
-screen_dx = SystemMetrics()._get_screen_width()
+screen_dx = SystemMetrics().screen_width
 
 #: Screen height
-screen_dy = SystemMetrics()._get_screen_height()
+screen_dy = SystemMetrics().screen_height
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
