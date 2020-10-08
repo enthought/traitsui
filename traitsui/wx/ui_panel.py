@@ -61,12 +61,6 @@ from .constants import WindowColor
 from .ui_base import BaseDialog
 
 
-#: Screen width
-screen_dx = SystemMetrics().screen_width
-
-#: Screen height
-screen_dy = SystemMetrics().screen_height
-
 # Pattern of all digits
 all_digits = re.compile(r"\d+")
 
@@ -1178,7 +1172,8 @@ class HTMLHelpWindow(wx.Frame):
         sizer.Add(b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
         self.SetSizer(sizer)
         self.SetSize(
-            wx.Size(int(scale_dx * screen_dx), int(scale_dy * screen_dy))
+            wx.Size(int(scale_dx * SystemMetrics().screen_width),
+            int(scale_dy * SystemMetrics().screen_height))
         )
 
         # Position and show the dialog:

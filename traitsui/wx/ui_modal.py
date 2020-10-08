@@ -39,9 +39,6 @@ from traitsui.menu import (
     HelpButton,
 )
 
-#: Screen height
-screen_dy = SystemMetrics().screen_height
-
 
 def ui_modal(ui, parent):
     """ Creates a modal wxPython user interface for a specified UI object.
@@ -131,7 +128,7 @@ class ModalDialog(BaseDialog):
             tsdx += 8
             tsdy += 8
             sw.SetScrollRate(16, 16)
-            max_dy = (2 * screen_dy) // 3
+            max_dy = (2 * SystemMetrics().screen_height) // 3
             sw.SetSizer(sizer)
             sw.SetSize(
                 wx.Size(

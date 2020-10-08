@@ -53,12 +53,6 @@ from .constants import standard_bitmap_width
 from .editor import Editor
 
 
-#: Screen width
-screen_dx = SystemMetrics().screen_width
-
-#: Screen height
-screen_dy = SystemMetrics().screen_height
-
 # -------------------------------------------------------------------------
 #  Trait definitions:
 # -------------------------------------------------------------------------
@@ -235,7 +229,10 @@ def position_window(window, width=None, height=None, parent=None):
     if parent is None:
         # Center the popup on the screen:
         window.SetSize(
-            (screen_dx - width) // 2, (screen_dy - height) // 2, width, height
+            (SystemMetrics().screen_width - width) // 2,
+            (SystemMetrics().screen_height - height) // 2,
+            width,
+            height
         )
         return
 
@@ -249,8 +246,8 @@ def position_window(window, width=None, height=None, parent=None):
         x, y, parent_dx, parent_dy = parent
 
     adjacent = getattr(window, "_kind", "popup") == "popup"
-    width = min(max(parent_dx, width), screen_dx)
-    height = min(height, screen_dy)
+    width = min(max(parent_dx, width), SystemMetrics().screen_width)
+    height = min(height, SystemMetrics().screen_height)
 
     closest = find_closest_display(x, y)
 
@@ -580,9 +577,9 @@ class PopupControl(HasPrivateTraits):
 
         # Calculate the best position and size for the pop-up:
         py = cy + cdy
-        if (py + pdy) > screen_dy:
+        if (py + pdy) > SystemMetrics().screen_height:
             if (cy - pdy) < 0:
-                bottom = screen_dy - py
+                bottom = SystemMetrics().screen_height - py
                 if cy > bottom:
                     py, pdy = 0, cy
                 else:

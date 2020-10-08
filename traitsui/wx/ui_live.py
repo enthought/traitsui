@@ -42,10 +42,6 @@ from traitsui.menu import (
 )
 
 
-#: Screen height
-screen_dy = SystemMetrics().screen_height
-
-
 # -------------------------------------------------------------------------
 #  Creates a 'live update' wxPython user interface for a specified UI object:
 # -------------------------------------------------------------------------
@@ -198,7 +194,7 @@ class LiveWindow(BaseDialog):
             sizer.Add(trait_sheet, 1, wx.EXPAND)
             tsdx, tsdy = trait_sheet.GetSize()
             sw.SetScrollRate(16, 16)
-            max_dy = (2 * screen_dy) // 3
+            max_dy = (2 * SystemMetrics().screen_height) // 3
             sw.SetSizer(sizer)
             sw.SetSize(
                 wx.Size(
