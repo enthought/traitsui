@@ -301,4 +301,4 @@ by ``traitsui.testing.api`` or anything outside of ``traitsui.testing.tester``.
 .. |UIWrapper.inspect| replace:: :func:`~traitsui.testing.tester.ui_wrapper.UIWrapper.inspect`
 .. |UIWrapper.locate| replace:: :func:`~traitsui.testing.tester.ui_wrapper.UIWrapper.locate`
 .. |UIWrapper.perform| replace:: :func:`~traitsui.testing.tester.ui_wrapper.UIWrapper.perform`
-.. |TargetRegistry| replace:: :class:`~traitsui.testing.tester.registry.TargetRegistry`
+.. |TargetRegistry| replace:: :class:`~traitsui.testing.tester.target_registry.TargetRegistry`

@@ -638,9 +638,9 @@ interaction handler and/or location solver via an instance of
 .. |TargetById| replace:: :class:`~traitsui.testing.tester.locator.TargetById`
 .. |TargetByName| replace:: :class:`~traitsui.testing.tester.locator.TargetByName`
 
-.. |TargetRegistry| replace:: :class:`~traitsui.testing.tester.registry.TargetRegistry`
-.. |TargetRegistry.register_interaction| replace:: :func:`~traitsui.testing.tester.registry.TargetRegistry.register_interaction`
-.. |TargetRegistry.register_location| replace:: :class:`~traitsui.testing.tester.registry.TargetRegistry.register_location`
+.. |TargetRegistry| replace:: :class:`~traitsui.testing.tester.target_registry.TargetRegistry`
+.. |TargetRegistry.register_interaction| replace:: :func:`~traitsui.testing.tester.target_registry.TargetRegistry.register_interaction`
+.. |TargetRegistry.register_location| replace:: :class:`~traitsui.testing.tester.target_registry.TargetRegistry.register_location`
 
 .. |UITester| replace:: :class:`~traitsui.testing.tester.ui_tester.UITester`
 .. |UITester.create_ui| replace:: :func:`~traitsui.testing.tester.ui_tester.UITester.create_ui`
