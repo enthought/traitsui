@@ -31,7 +31,7 @@ def register(registry):
                 wrapper._target.control, wrapper.delay))),
         (DisplayedText,
             lambda wrapper, _: wrapper._target.control.text()),
-        (IsEnabled, lambda wrapper, _: wrapper._target.control.isEnabled())
+        (IsEnabled, lambda wrapper, _: wrapper._target.control.isEnabled()),
     ]
     for interaction_class, handler in handlers:
         registry.register_interaction(
