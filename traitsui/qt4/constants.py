@@ -17,6 +17,8 @@ editors and text editor factories.
 
 from pyface.qt import QtGui
 
+from pyface.api import SystemMetrics
+
 _palette = QtGui.QApplication.palette()
 
 # Default dialog title
@@ -41,3 +43,9 @@ EditableColor = _palette.color(QtGui.QPalette.Base)
 WindowColor = _palette.color(QtGui.QPalette.Window)
 
 del _palette
+
+#: Screen width
+screen_dx = SystemMetrics().screen_width
+
+#: Screen height
+screen_dy = SystemMetrics().screen_height
