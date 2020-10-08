@@ -23,7 +23,7 @@ from traitsui.tests._tools import (
     ToolkitName,
 )
 from traitsui.testing.tester.exceptions import InteractionNotSupported
-from traitsui.testing.tester.registry import TargetRegistry
+from traitsui.testing.tester.target_registry import TargetRegistry
 from traitsui.testing.tester.ui_tester import (
     UITester,
 )
