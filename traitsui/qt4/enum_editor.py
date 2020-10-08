@@ -376,7 +376,11 @@ class RadioEditor(BaseEditor):
 
                     rb.setChecked(name == cur_name)
 
-                    rb.clicked.connect(self._mapper.map)
+                    # The connection type is set to workaround Qt5 + MacOSX
+                    # issue with event dispatching. See enthought/traitsui#1308
+                    rb.clicked.connect(
+                        self._mapper.map, type=QtCore.Qt.QueuedConnection
+                    )
                     self._mapper.setMapping(rb, index)
 
                     self.set_tooltip(rb)

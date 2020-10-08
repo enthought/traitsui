@@ -14,7 +14,7 @@ program.
 
 This demo shows each of the four styles of the ImageEnumEditor.
 """
-# Issues related to the demo warning: enthought/traitsui#913,
+# Issues related to the demo warning:
 # enthought/traitsui#947
 
 
