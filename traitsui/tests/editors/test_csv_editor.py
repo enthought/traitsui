@@ -25,6 +25,7 @@ from traitsui.editors.csv_list_editor import CSVListEditor
 import traitsui.editors.csv_list_editor as csv_list_editor
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     is_wx,
     is_qt,
@@ -49,7 +50,13 @@ class ListOfFloatsWithCSVEditor(ModelView):
     )
 
 
-class TestCSVEditor(unittest.TestCase):
+class TestCSVEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_csv_editor_disposal(self):

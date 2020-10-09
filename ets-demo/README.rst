@@ -8,6 +8,30 @@ packages can be used.
 
 The actual demonstration materials are not provided by this package.
 
+Installation
+------------
+
+The application requires a GUI backend to run, and a few options are supported.
+
+To install from PyPI with PySide2 dependencies::
+
+    $ pip install etsdemo[pyside2]
+
+Or with PyQt5 dependencies::
+
+    $ pip install etsdemo[pyqt5]
+
+Or with wxPython dependencies::
+
+    $ pip install etsdemo[wx]
+
+(Warning: The application currently suffers from a few major issues with the
+wxPython backend.)
+
+To install with additional test dependencies::
+
+    $ pip install etsdemo[test]
+
 How to run
 ----------
 
@@ -38,8 +62,8 @@ data files. For example::
             "root": pkg_resources.resource_filename("my_project", "data"),
         }
 
-Then add an entry point in ``setup.py`` that points to the newly created
-function. For example::
+Then in ``setup.py``, add an entry point under the ``etsdemo_data`` group to
+reference the newly created function. For example::
 
     from setuptools import setup
 
@@ -47,9 +71,12 @@ function. For example::
         name="my_project",
         ...
         entry_points={
-            "etsdemo_data": ["demo = my_project.info:info"],
+            "etsdemo_data": ["my_demo = my_project.info:info"],
         ...
     )
+
+Note that the entry point name (``"my_demo"`` in the above example) can be any
+value.
 
 Launch with specific data sources
 ---------------------------------

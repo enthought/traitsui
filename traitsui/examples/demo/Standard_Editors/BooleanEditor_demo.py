@@ -21,13 +21,15 @@ class BooleanEditorDemo(HasTraits):
 
     # Items are used to define the demo display - one Item per editor style
     bool_group = Group(
-        Item('boolean_trait', style='simple', label='Simple'),
+        Item('boolean_trait', style='simple', label='Simple', id='simple'),
         Item('_'),
-        Item('boolean_trait', style='custom', label='Custom'),
+        Item('boolean_trait', style='custom', label='Custom', id='custom'),
         Item('_'),
-        Item('boolean_trait', style='text', label='Text'),
+        Item('boolean_trait', style='text', label='Text', id='text'),
         Item('_'),
-        Item('boolean_trait', style='readonly', label='ReadOnly')
+        Item(
+            'boolean_trait', style='readonly', label='ReadOnly', id='readonly'
+        )
     )
 
     # Demo view

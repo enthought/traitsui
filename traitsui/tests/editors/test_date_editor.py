@@ -7,6 +7,7 @@ from traitsui.api import DateEditor, View, Item
 from traitsui.editors.date_editor import CellFormat
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     reraise_exceptions,
@@ -56,7 +57,14 @@ def multi_select_selected_color_view():
 
 
 @requires_toolkit([ToolkitName.qt])
-class TestDateEditorCustomQt(unittest.TestCase):
+class TestDateEditorCustomQt(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
     def test_single_select_qt4(self):
         with self.launch_editor(single_select_custom_view) as (foo, editor):
             date = datetime.date(2018, 2, 3)

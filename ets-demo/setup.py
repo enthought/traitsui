@@ -18,7 +18,7 @@ import subprocess
 # together with information from the version control system, and then injected
 # into the package source.
 MAJOR = 0
-MINOR = 1
+MINOR = 2
 MICRO = 0
 PRERELEASE = ""
 IS_RELEASED = False
@@ -250,7 +250,7 @@ if __name__ == "__main__":
     ]
     extras_require = {
         "wx": ["wxpython>=4", "numpy"],
-        "pyqt5": ["pyqt>=5", "pygments"],
+        "pyqt5": ["pyqt5", "pygments"],
         "pyside2": ["pyside2", "shiboken2", "pygments"],
         "test": ["eam"],
     }

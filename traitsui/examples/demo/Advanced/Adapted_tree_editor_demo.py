@@ -5,8 +5,8 @@
 Demonstrates an alternative method of defining a **TreeEditor** by creating
 **ITreeNodeAdapter** subclasses.
 
-To run this demonstration successfully, you must have the **AppTools** egg
-installed.
+To run this demonstration successfully, you must have **AppTools**
+(``apptools``) installed.
 
 Using **ITreeNodeAdapters** can be useful in cases where the kind of content
 of the tree is not always known ahead of time. For example, you might be

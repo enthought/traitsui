@@ -18,6 +18,7 @@ import pkg_resources
 from traits.api import Bool, File, HasTraits
 from traitsui.api import Item, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     ToolkitName,
@@ -31,7 +32,13 @@ class AnimatedGIF(HasTraits):
 
 
 @requires_toolkit([ToolkitName.wx])
-class TestAnimatedGIFEditor(unittest.TestCase):
+class TestAnimatedGIFEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_animated_gif_editor(self):
         from traitsui.wx.animated_gif_editor import AnimatedGIFEditor

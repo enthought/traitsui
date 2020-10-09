@@ -22,6 +22,7 @@ from traits.api import HasStrictTraits, List, Str, This
 from traits.testing.api import UnittestTools
 
 from traitsui.api import TreeNode
+from traitsui.tests._tools import BaseTestMixin
 
 
 class DummyModel(HasStrictTraits):
@@ -33,7 +34,14 @@ class DummyModel(HasStrictTraits):
     children = List(This)
 
 
-class TestTreeNode(UnittestTools, unittest.TestCase):
+class TestTreeNode(BaseTestMixin, UnittestTools, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
     def test_insert_child(self):
         # Regression test for #559
         model = DummyModel(

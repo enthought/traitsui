@@ -4,6 +4,7 @@ import unittest
 from traits.api import HasTraits, List, Str
 from traitsui.api import CheckListEditor, UItem, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     get_all_button_status,
     is_qt,
@@ -12,6 +13,11 @@ from traitsui.tests._tools import (
     requires_toolkit,
     reraise_exceptions,
     ToolkitName,
+)
+from traitsui.testing.api import (
+    Index,
+    MouseClick,
+    UITester
 )
 
 
@@ -28,6 +34,20 @@ def get_view(style):
                 values=["one", "two", "three", "four"],
             ),
             style=style,
+        ),
+        resizable=True
+    )
+
+
+def get_view_custom_cols(cols):
+    return View(
+        UItem(
+            "value",
+            editor=CheckListEditor(
+                values=["one", "two", "three", "four", "five", "six", "seven"],
+                cols=cols,
+            ),
+            style="custom",
         ),
         resizable=True
     )
@@ -80,27 +100,6 @@ def set_combobox_index(editor, idx):
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
-def click_checkbox_button(widget, button_idx):
-    """ Simulate a checkbox click given widget and button number. Assumes
-    all sizer children (wx) or layout items (qt) are buttons."""
-    if is_wx():
-        import wx
-
-        sizer_items = widget.GetSizer().GetChildren()
-        button = sizer_items[button_idx].GetWindow()
-        button.SetValue(not button.GetValue())
-        event = wx.CommandEvent(wx.EVT_CHECKBOX.typeId, button.GetId())
-        event.SetEventObject(button)
-        wx.PostEvent(widget, event)
-
-    elif is_qt():
-        layout = widget.layout()
-        layout.itemAt(button_idx).widget().click()
-
-    else:
-        raise unittest.SkipTest("Test not implemented for this toolkit")
-
-
 def set_text_in_line_edit(line_edit, text):
     """ Set text in text widget and complete editing. """
     if is_wx():
@@ -119,7 +118,13 @@ def set_text_in_line_edit(line_edit, text):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestCheckListEditorMapping(unittest.TestCase):
+class TestCheckListEditorMapping(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_ui(self, model, view):
@@ -323,7 +328,13 @@ class TestCheckListEditorMapping(unittest.TestCase):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestSimpleCheckListEditor(unittest.TestCase):
+class TestSimpleCheckListEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_gui(self, model, view):
@@ -404,7 +415,13 @@ class TestSimpleCheckListEditor(unittest.TestCase):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestCustomCheckListEditor(unittest.TestCase):
+class TestCustomCheckListEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_gui(self, model, view):
@@ -443,31 +460,26 @@ class TestCustomCheckListEditor(unittest.TestCase):
     def test_custom_check_list_editor_click(self):
         list_edit = ListModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(list_edit, get_view("custom")) as editor:
-
+        tester = UITester()
+        with tester.create_ui(list_edit, dict(view=get_view("custom"))) as ui:
             self.assertEqual(list_edit.value, [])
-
-            click_checkbox_button(editor.control, 1)
-            process_cascade_events()
-
+            check_list = tester.find_by_name(ui, "value")
+            item_1 = check_list.locate(Index(1))
+            item_1.perform(MouseClick())
             self.assertEqual(list_edit.value, ["two"])
-
-            click_checkbox_button(editor.control, 1)
-            process_cascade_events()
-
+            item_1.perform(MouseClick())
             self.assertEqual(list_edit.value, [])
 
     def test_custom_check_list_editor_click_initial_value(self):
         list_edit = ListModel(value=["two"])
 
-        with reraise_exceptions(), \
-                self.setup_gui(list_edit, get_view("custom")) as editor:
-
+        tester = UITester()
+        with tester.create_ui(list_edit, dict(view=get_view("custom"))) as ui:
             self.assertEqual(list_edit.value, ["two"])
 
-            click_checkbox_button(editor.control, 1)
-            process_cascade_events()
+            check_list = tester.find_by_name(ui, "value")
+            item_1 = check_list.locate(Index(1))
+            item_1.perform(MouseClick())
 
             self.assertEqual(list_edit.value, [])
 
@@ -477,19 +489,40 @@ class TestCustomCheckListEditor(unittest.TestCase):
 
         str_edit = StrModel(value="alpha, \ttwo, three,\n lambda, one")
 
-        with reraise_exceptions(), \
-                self.setup_gui(str_edit, get_view("custom")) as editor:
+        tester = UITester()
+        with tester.create_ui(str_edit, dict(view=get_view("custom"))) as ui:
 
             self.assertEqual(str_edit.value, "two,three,one")
 
-            click_checkbox_button(editor.control, 1)
-            process_cascade_events()
+            check_list = tester.find_by_name(ui, "value")
+            item_1 = check_list.locate(Index(1))
+            item_1.perform(MouseClick())
 
             self.assertEqual(str_edit.value, "three,one")
 
+    def test_custom_check_list_editor_grid_layout(self):
+        for cols in range(1, 8):
+            list_edit = ListModel()
+            tester = UITester()
+            view = get_view_custom_cols(cols=cols)
+            with tester.create_ui(list_edit, dict(view=view)) as ui:
+                self.assertEqual(list_edit.value, [])
+                check_list = tester.find_by_name(ui, "value")
+                item = check_list.locate(Index(6))
+                item.perform(MouseClick())
+                self.assertEqual(list_edit.value, ["seven"])
+                item.perform(MouseClick())
+                self.assertEqual(list_edit.value, [])
+
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestTextCheckListEditor(unittest.TestCase):
+class TestTextCheckListEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_gui(self, model, view):

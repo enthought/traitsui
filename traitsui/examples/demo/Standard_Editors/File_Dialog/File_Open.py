@@ -15,49 +15,49 @@ the standard OS file dialog is also available?
 And the answer is that you can use either, but the advantages of using the
 TraitsUI file dialog are:
 
- - It supports history. That is, each time the user selects a file for opening,
-   the file is added to a persistent history list, similar to many applications
-   *Open recent...* function, but built directly into the file dialog.
-   The amount of history remembered can be specified by the developer, with the
-   default being the last 10 files opened.
+- It supports history. That is, each time the user selects a file for opening,
+  the file is added to a persistent history list, similar to many applications
+  *Open recent...* function, but built directly into the file dialog.
+  The amount of history remembered can be specified by the developer, with the
+  default being the last 10 files opened.
 
- - It is resizable. Some standard OS file dialogs are not resizable, which can
-   be very annoying to the user trying to select a file through a tiny
-   peephole view of the file system. In addition, if the user resizes the
-   dialog, the new size and position will be persisted, so that the file dialog
-   will appear in the same location the next time the user wants to open a
-   file.
+- It is resizable. Some standard OS file dialogs are not resizable, which can
+  be very annoying to the user trying to select a file through a tiny
+  peephole view of the file system. In addition, if the user resizes the
+  dialog, the new size and position will be persisted, so that the file dialog
+  will appear in the same location the next time the user wants to open a
+  file.
 
- - There is a very nice synergy between the file system view and the history
-   list. Quite often users shuttle between several *favorite* locations in
-   the file system when opening files. The TraitsUI file dialog automatically
-   discovers these favorite locations just by the user opening files. When a
-   user opens the file dialog, they can select a previously opened file from
-   the history list, which then automatically causes the file system view to
-   expand the selected file's containing folder, thus allowing them to select a
-   different file in the same location. Since the history list is updated each
-   time a user selects a file, It tends to automatically discover a *working
-   set* of favorite directories just through simple use, without the user
-   having to explicitly designate them as such.
+- There is a very nice synergy between the file system view and the history
+  list. Quite often users shuttle between several *favorite* locations in
+  the file system when opening files. The TraitsUI file dialog automatically
+  discovers these favorite locations just by the user opening files. When a
+  user opens the file dialog, they can select a previously opened file from
+  the history list, which then automatically causes the file system view to
+  expand the selected file's containing folder, thus allowing them to select a
+  different file in the same location. Since the history list is updated each
+  time a user selects a file, It tends to automatically discover a *working
+  set* of favorite directories just through simple use, without the user
+  having to explicitly designate them as such.
 
- - It's customizable. The TraitsUI file dialog accepts extension objects which
-   can be used to display additional file information or even modify the
-   selection behavior of the dialog. Several extensions are provided with
-   TraitsUI (and are demonstrated in some of the other examples), and you are
-   free to write your own by implementing a very simple interface.
+- It's customizable. The TraitsUI file dialog accepts extension objects which
+  can be used to display additional file information or even modify the
+  selection behavior of the dialog. Several extensions are provided with
+  TraitsUI (and are demonstrated in some of the other examples), and you are
+  free to write your own by implementing a very simple interface.
 
- - The history and user settings are customizable per application. Just by
-   setting a unique id in the file dialog request, you can specify that the
-   history and window size and position information are specific to your
-   application. If you have file dialog extensions added, the user can
-   reorder, resize and reconfigure the overall file dialog layout, including
-   your extensions, and have their custom settings restored each time they use
-   the file dialog. If you do not specify a unique id, then the history and
-   user settings default to the system-wide settings for the file dialog. It's
-   your choice.
+- The history and user settings are customizable per application. Just by
+  setting a unique id in the file dialog request, you can specify that the
+  history and window size and position information are specific to your
+  application. If you have file dialog extensions added, the user can
+  reorder, resize and reconfigure the overall file dialog layout, including
+  your extensions, and have their custom settings restored each time they use
+  the file dialog. If you do not specify a unique id, then the history and
+  user settings default to the system-wide settings for the file dialog. It's
+  your choice.
 
- - It's easy to use. That's what this particular example is all about. So take
-   a look at the source code for this example to see how easy it is...
+- It's easy to use. That's what this particular example is all about. So take
+  a look at the source code for this example to see how easy it is...
 """
 # Issue related to the demo warning: enthought/traitsui#953
 

@@ -15,5 +15,6 @@ TraitsUI.  For user documentation, please read the
     traitsui.extras
     traitsui.image
     traitsui.null
+    traitsui.testing
     traitsui.tests
     traitsui.ui_editors

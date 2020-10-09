@@ -15,8 +15,6 @@
     an object trait in a Traits-based user interface.
 """
 
-
-
 from contextlib import contextmanager
 from functools import partial
 
@@ -48,8 +46,6 @@ from .context_value import ContextValue
 from .undo import UndoItem
 
 from .item import Item
-
-
 
 # Reference to an EditorFactory object
 factory_trait = Instance(EditorFactory)
@@ -514,7 +510,7 @@ class Editor(HasPrivateTraits):
             self.ui.modified = True
 
             if self.updating:
-                    self.log_change(
+                self.log_change(
                     self.get_undo_item, object, name, old_value, new_value
                 )
 
@@ -621,7 +617,7 @@ class Editor(HasPrivateTraits):
                     with self.no_trait_update(key), self.raise_to_debug():
                         n = event.index
                         getattr(self, editor_name)[
-                            n : n + len(event.removed)
+                            n:n + len(event.removed)
                         ] = event.added
 
             items = xuser_name + "_items"
@@ -663,7 +659,7 @@ class Editor(HasPrivateTraits):
                     with self.no_trait_update(key), self.raise_to_debug():
                         n = event.index
                         value = xgetattr(user_object, xuser_name)
-                        value[n : n + len(event.removed)] = event.added
+                        value[n:n + len(event.removed)] = event.added
 
             self.on_trait_change(editor_list_modified, editor_name + "_items")
             self._user_from.append(
@@ -690,26 +686,6 @@ class Editor(HasPrivateTraits):
             except TraitError as excp:
                 self.error(excp)
                 raise
-
-    def _str(self, value):
-        """ Returns the text representation of a specified value.
-
-        This is a convenience method to cover the differences between Python
-        2 and Python 3 strings.
-
-        Parameters
-        ----------
-        value : any
-            The value to be represented as a string.
-
-        Returns
-        -------
-        string : unicode
-            The string of the value, as an appropriate text type for Python 2
-            or 3.
-        """
-        # In Unicode!
-        return str(value)
 
     # -- Traits property getters and setters --------------------------------
 

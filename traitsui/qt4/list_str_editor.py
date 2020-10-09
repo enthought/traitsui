@@ -18,11 +18,11 @@
 """ Traits UI editor for editing lists of strings.
 """
 
-
-from pyface.qt import QtCore, QtGui, is_qt5
-import collections
+import collections.abc
 
 from pyface.image_resource import ImageResource
+from pyface.qt import QtCore, QtGui, is_qt5
+
 from traits.api import (
     Any,
     Bool,
@@ -437,7 +437,7 @@ class _ListStrEditor(Editor):
         if isinstance(menu, str):
             menu = getattr(self.object, menu, None)
 
-        if isinstance(menu, collections.Callable):
+        if isinstance(menu, collections.abc.Callable):
             menu = menu(index)
 
         if menu is not None:

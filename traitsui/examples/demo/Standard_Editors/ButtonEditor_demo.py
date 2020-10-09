@@ -26,9 +26,9 @@ class ButtonEditorDemo(HasTraits):
     # ButtonEditor display
     # (Note that Text and ReadOnly versions are not applicable)
     event_group = Group(
-        Item('fire_event', style='simple', label='Simple'),
+        Item('fire_event', style='simple', label='Simple', id="simple"),
         Item('_'),
-        Item('fire_event', style='custom', label='Custom'),
+        Item('fire_event', style='custom', label='Custom', id="custom"),
         Item('_'),
         Item(label='[text style unavailable]'),
         Item('_'),

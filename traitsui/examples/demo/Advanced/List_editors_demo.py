@@ -12,9 +12,9 @@
 This shows the three different types of editor that can be applied to a list
 of objects:
 
- - Table
- - List
- - Dockable notebook (a list variant)
+- Table
+- List
+- Dockable notebook (a list variant)
 
 Each editor style is editing the exact same list of objects. Note that any
 changes made in one editor are automatically reflected in the others.

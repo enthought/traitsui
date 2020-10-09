@@ -6,12 +6,10 @@ The TextEditor displays a Str, Password, or Int trait for the user to edit.
 The demo shows all styles of the editor for each of the traits, however certain
 styles are more useful than others:
 
-  - When editing a Str, consider styles 'simple' (one-line), 'custom'
-    (multi-line), or 'readonly' (multi-line).
-
-  - When editing a Password, style 'simple' is recommended (shows asterisks).
-
-  - When editing an Int, consider styles 'simple' and 'readonly'.
+- When editing a Str, consider styles 'simple' (one-line), 'custom'
+  (multi-line), or 'readonly' (multi-line).
+- When editing a Password, style 'simple' is recommended (shows asterisks).
+- When editing an Int, consider styles 'simple' and 'readonly'.
 
 """
 
@@ -44,13 +42,15 @@ class TextEditorDemo(HasTraits):
 
     # TextEditor display without multi-line capability (for an integer):
     text_int_group = Group(
-        Item('int_trait', style='simple', label='Simple'),
+        Item('int_trait', style='simple', label='Simple', id="simple_int"),
         Item('_'),
-        Item('int_trait', style='custom', label='Custom'),
+        Item('int_trait', style='custom', label='Custom', id="custom_int"),
         Item('_'),
-        Item('int_trait', style='text', label='Text'),
+        Item('int_trait', style='text', label='Text', id="text_int"),
         Item('_'),
-        Item('int_trait', style='readonly', label='ReadOnly'),
+        Item(
+            'int_trait', style='readonly', label='ReadOnly', id="readonly_int",
+        ),
         label='Integer'
     )
 

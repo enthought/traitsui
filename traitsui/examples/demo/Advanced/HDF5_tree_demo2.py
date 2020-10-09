@@ -5,6 +5,12 @@ In the demo, the path to the selected item is printed whenever the selection
 changes. An example HDF5 file is provided here, but you could easily change
 the path given at the bottom of this file to a path to your own HDF5 file.
 
+To run this demonstration successfully, you must have the following packages
+installed:
+
+- **PyTables** (``tables``)
+- **HDF5 for Python** (``h5py``)
+
 Note that PyTables can't read HDF5 files created with h5py,
 but h5py can read HDF5 files created with PyTables. See HDF5_tree_demo for
 an example using PyTables.

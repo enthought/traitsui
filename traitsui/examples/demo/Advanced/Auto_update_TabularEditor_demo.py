@@ -13,11 +13,12 @@ which allows the tabular editor to automatically update itself when the content
 of any object in the list associated with the editor is modified.
 
 To interact with the demo:
-  - Select an employee from the list.
-  - Adjust their salary increase.
-  - Click the **Give raise** button.
-  - Observe that the table automatically updates to reflect the employees new
-    salary.
+
+- Select an employee from the list.
+- Adjust their salary increase.
+- Click the **Give raise** button.
+- Observe that the table automatically updates to reflect the employees new
+salary.
 
 In order for auto-update to work correctly, the editor trait should be a list
 of objects derived from HasTraits. Also, performance can be affected when very
@@ -25,7 +26,7 @@ long lists are used, since enabling this feature adds and removed Traits
 listeners to each item in the list.
 
 """
-# Issues related to the demo warning: enthought/traitsui#913,
+# Issues related to the demo warning:
 # enthought/traitsui#960
 
 from traits.api import HasTraits, Str, Float, List, Instance, Button

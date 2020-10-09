@@ -19,6 +19,7 @@ import unittest
 
 from traits.api import HasTraits, Instance, Str
 from traitsui.api import Controller
+from traitsui.tests._tools import BaseTestMixin
 
 
 class FooModel(HasTraits):
@@ -34,7 +35,13 @@ class FooController(Controller):
         return FooModel(my_str="meh")
 
 
-class TestController(unittest.TestCase):
+class TestController(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_construction(self):
         # check default constructor.

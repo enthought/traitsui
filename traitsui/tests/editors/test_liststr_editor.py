@@ -20,13 +20,20 @@ import unittest
 from traits.has_traits import HasTraits
 from traits.trait_types import List, Str
 from traitsui.list_str_adapter import ListStrAdapter
+from traitsui.tests._tools import BaseTestMixin
 
 
 class TraitObject(HasTraits):
     list_str = List(Str)
 
 
-class TestListStrAdapter(unittest.TestCase):
+class TestListStrAdapter(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_list_str_adapter_length(self):
         """Test the ListStringAdapter len method"""

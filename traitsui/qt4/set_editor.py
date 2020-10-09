@@ -159,7 +159,9 @@ class SimpleEditor(Editor):
         """ Creates a button.
         """
         button = QtGui.QPushButton(label)
-        button.clicked.connect(handler)
+        # The connection type is set to workaround Qt5 + MacOSX issue with
+        # event dispatching. See enthought/traitsui#1308
+        button.clicked.connect(handler, type=QtCore.Qt.QueuedConnection)
         layout.addWidget(button)
         return button
 

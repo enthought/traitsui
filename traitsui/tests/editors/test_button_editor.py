@@ -1,17 +1,19 @@
 import unittest
 
-from pyface.gui import GUI
-
-from traits.api import Button, HasTraits, List, Str
+from traits.api import Bool, Button, HasTraits, List, Str
+from traits.testing.api import UnittestTools
 from traitsui.api import ButtonEditor, Item, UItem, View
 from traitsui.tests._tools import (
-    create_ui,
-    is_qt,
-    is_wx,
-    process_cascade_events,
+    BaseTestMixin,
     requires_toolkit,
     reraise_exceptions,
     ToolkitName,
+)
+from traitsui.testing.api import (
+    DisplayedText,
+    IsEnabled,
+    MouseClick,
+    UITester
 )
 
 
@@ -22,6 +24,8 @@ class ButtonTextEdit(HasTraits):
     play_button_label = Str("I'm a play button")
 
     values = List()
+
+    button_enabled = Bool(True)
 
     traits_view = View(
         Item("play_button", style="simple"),
@@ -46,36 +50,32 @@ custom_view = View(
 )
 
 
-def get_button_text(button):
-    """ Return the button text given a button control """
-    if is_wx():
-        return button.GetLabel()
-
-    elif is_qt():
-        return button.text()
-
-
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestButtonEditor(unittest.TestCase):
+class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
     def check_button_text_update(self, view):
         button_text_edit = ButtonTextEdit()
 
-        with reraise_exceptions(), \
-                create_ui(button_text_edit, dict(view=view)) as ui:
-
-            process_cascade_events()
-            editor, = ui.get_editors("play_button")
-            button = editor.control
-
-            self.assertEqual(get_button_text(button), "I'm a play button")
+        tester = UITester()
+        with tester.create_ui(button_text_edit, dict(view=view)) as ui:
+            button = tester.find_by_name(ui, "play_button")
+            actual = button.inspect(DisplayedText())
+            self.assertEqual(actual, "I'm a play button")
 
             button_text_edit.play_button_label = "New Label"
-            self.assertEqual(get_button_text(button), "New Label")
+            actual = button.inspect(DisplayedText())
+            self.assertEqual(actual, "New Label")
 
     def test_styles(self):
         # simple smoke test of buttons
         button_text_edit = ButtonTextEdit()
-        with reraise_exceptions(), create_ui(button_text_edit):
+        with UITester().create_ui(button_text_edit):
             pass
 
     def test_simple_button_editor(self):
@@ -84,13 +84,70 @@ class TestButtonEditor(unittest.TestCase):
     def test_custom_button_editor(self):
         self.check_button_text_update(custom_view)
 
+    def check_button_fired_event(self, view):
+        button_text_edit = ButtonTextEdit()
+
+        tester = UITester()
+        with tester.create_ui(button_text_edit, dict(view=view)) as ui:
+            button = tester.find_by_name(ui, "play_button")
+
+            with self.assertTraitChanges(
+                    button_text_edit, "play_button", count=1):
+                button.perform(MouseClick())
+
+    def test_simple_button_editor_clicked(self):
+        self.check_button_fired_event(simple_view)
+
+    def test_custom_button_editor_clicked(self):
+        self.check_button_fired_event(custom_view)
+
+    def check_button_disabled(self, style):
+        button_text_edit = ButtonTextEdit(
+            button_enabled=False,
+        )
+
+        view = View(
+            Item(
+                "play_button",
+                editor=ButtonEditor(),
+                enabled_when="button_enabled",
+                style=style,
+            ),
+        )
+        tester = UITester()
+        with tester.create_ui(button_text_edit, dict(view=view)) as ui:
+            button = tester.find_by_name(ui, "play_button")
+            self.assertFalse(button.inspect(IsEnabled()))
+
+            with self.assertTraitDoesNotChange(
+                    button_text_edit, "play_button"):
+                button.perform(MouseClick())
+
+            button_text_edit.button_enabled = True
+            self.assertTrue(button.inspect(IsEnabled()))
+            with self.assertTraitChanges(
+                    button_text_edit, "play_button", count=1):
+                button.perform(MouseClick())
+
+    def test_simple_button_editor_disabled(self):
+        self.check_button_disabled("simple")
+
+    def test_custom_button_editor_disabled(self):
+        self.check_button_disabled("custom")
+
 
 @requires_toolkit([ToolkitName.qt])
-class TestButtonEditorValuesTrait(unittest.TestCase):
+class TestButtonEditorValuesTrait(BaseTestMixin, unittest.TestCase):
     """ The values_trait is only supported by Qt.
 
     See discussion enthought/traitsui#879
     """
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def get_view(self, style):
         return View(
@@ -106,7 +163,7 @@ class TestButtonEditorValuesTrait(unittest.TestCase):
         instance = ButtonTextEdit(values=["Item1", "Item2"])
         view = self.get_view(style=style)
         with reraise_exceptions():
-            with create_ui(instance, dict(view=view)):
+            with UITester().create_ui(instance, dict(view=view)):
                 pass
 
             # It is okay to mutate trait after the GUI is disposed.

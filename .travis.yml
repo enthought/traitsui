@@ -6,7 +6,19 @@ services:
 addons:
   apt:
     packages:
+    # Qt dependencies
     - libglu1-mesa-dev
+    - libxkbcommon-x11-0
+    - libxcb-icccm4
+    - libxcb-image0
+    - libxcb-keysyms1
+    - libxcb-randr0
+    - libxcb-render-util0
+    - libxcb-xinerama0
+    - pulseaudio
+    - libpulse-mainloop-glib0
+    # Wx dependencies
+    - libsdl2-2.0-0
 
 env:
   global:
@@ -15,17 +27,12 @@ env:
 
 matrix:
   include:
-    - env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5 pyside2"
+    - env: RUNTIME=3.6 TOOLKITS="null"
+    - env: RUNTIME=3.6 TOOLKITS="pyqt pyqt5 pyside2"
     - env: RUNTIME=3.6 TOOLKITS="wx"
     - env: RUNTIME=3.6 TOOLKITS="pyqt5" TRAITS_REQUIRES="^=6.0"
-    - os: osx
-      env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5 pyside2"
-    - os: osx
-      env: RUNTIME=3.6 TOOLKITS="wx"
   allow_failures:
     - env: RUNTIME=3.6 TOOLKITS="wx"
-    - os: osx
-      env: RUNTIME=3.6 TOOLKITS="wx"
   fast_finish: true
 
 cache:
@@ -35,9 +42,6 @@ cache:
 before_install:
   - mkdir -p "${HOME}/.cache/download"
   - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then ./install-edm-linux.sh; export PATH="${HOME}/edm/bin:${PATH}"; fi
-  # libdbus and libxkb for Pyside2, libsdl for wxpython
-  - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then sudo apt-get install -y libdbus-1-3 libxkbcommon-x11-0 libsdl1.2debian; fi
-  - if [[ ${TRAVIS_OS_NAME} == 'osx' ]]; then ./install-edm-osx.sh; export PATH="${PATH}:/usr/local/bin"; fi
   - edm install -y wheel click coverage
 install:
   - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
@@ -45,15 +49,11 @@ install:
   # etsdemo
   - pushd ets-demo && for toolkit in ${TOOLKITS}; do edm run -- python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done && popd
 script:
+  - if [[ ${TOOLKITS} == 'null' ]]; then edm run -- python etstool.py flake8 --runtime=${RUNTIME} --toolkit=null; fi
   - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py test --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
   # etsdemo
   - pushd ets-demo && edm run -- python etstool.py flake8 --runtime=${RUNTIME} --toolkit=${toolkit} && popd
   - pushd ets-demo && for toolkit in ${TOOLKITS}; do edm run -- python etstool.py test --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done && popd
-
-after_success:
-  - edm run -- coverage combine
-  - edm run -- pip install codecov
-  - edm run -- codecov
 
 notifications:
   slack:

@@ -98,7 +98,7 @@ class SimpleEditor(EditorWithList):
                     del cur_value[i]
                     modified = True
                 except TypeError as e:
-                    logger.warn(
+                    logger.warning(
                         "Unable to remove non-current value [%s] from "
                         "values %s",
                         cur_value[i],
@@ -199,15 +199,23 @@ class CustomEditor(SimpleEditor):
         n = len(labels)
         cols = self.factory.cols
         rows = (n + cols - 1) // cols
+        # incr will keep track of how to increment index so that as we traverse
+        # the grid in row major order, the elements are added to appear in
+        # column major order
         incr = [n // cols] * cols
         rem = n % cols
         for i in range(cols):
             incr[i] += rem > i
         incr[-1] = -sum(incr[:-1]) + 1
+        # e.g for a gird:
+        # 0 2 4
+        # 1 3 5
+        # incr should be [2, 2, -3]
 
         # Add the set of all possible choices:
         layout = self.control.layout()
         index = 0
+        # populate the layout in row_major order
         for i in range(rows):
             for j in range(cols):
                 if n > 0:

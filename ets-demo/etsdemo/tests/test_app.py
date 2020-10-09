@@ -18,6 +18,7 @@ from traitsui.api import Handler, UI, UIInfo
 
 from etsdemo.app import (
     Demo,
+    DemoImageFile,
     DemoPath,
     DemoVirtualDirectory,
     extract_docstring_from_source,
@@ -104,6 +105,27 @@ class TestDemo(unittest.TestCase):
 
         # then
         self.assertIsNone(demo.selected_node)
+
+
+class TestDemoImageFile(unittest.TestCase):
+
+    def test_description_contains_file_uri(self):
+        with tempfile.NamedTemporaryFile() as file_obj:
+            dirname, basename = os.path.split(file_obj.name)
+            parent = DemoPath(name=dirname)
+            image_node = DemoImageFile(parent=parent, name=basename)
+
+            # when
+            image_node.init()
+            tree = ET.fromstring(image_node.description)
+
+        # then
+        # The image path should be either a fully specified absolute path
+        # following the file scheme, or a file name relative to the
+        # base_url given to the HTML editor.
+        img_xml = next(tree.iter(get_html_tag("img")))
+        self.assertEqual(img_xml.attrib["src"], basename)
+        self.assertEqual(image_node.base_url, dirname)
 
 
 class TestDemoPathDescription(unittest.TestCase):
@@ -250,13 +272,13 @@ class TestParseSource(unittest.TestCase):
         with self.assertRaises(TypeError):
             docstring, source = extract_docstring_from_source(source_code)
 
-        source_code = u""
+        source_code = ""
         docstring, source = extract_docstring_from_source(source_code)
-        self.assertEqual((u"", u""), (docstring, source))
+        self.assertEqual(("", ""), (docstring, source))
 
-        source_code = u'''""" Module description """\nx=1\ny=2'''
+        source_code = '''""" Module description """\nx=1\ny=2'''
         docstring, source = extract_docstring_from_source(source_code)
-        expected = (u" Module description ", "x=1\ny=2")
+        expected = (" Module description ", "x=1\ny=2")
         self.assertEqual(expected, (docstring, source))
 
     def test_parse_source(self):

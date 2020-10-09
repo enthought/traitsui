@@ -17,7 +17,7 @@
 
 
 import copy
-import collections
+import collections.abc
 from itertools import zip_longest
 import logging
 
@@ -203,7 +203,7 @@ class SimpleEditor(Editor):
         try:
             tree = self._tree
             if not isinstance(selection, str) and isinstance(
-                selection, collections.Iterable
+                selection, collections.abc.Iterable
             ):
 
                 item_selection = QtGui.QItemSelection()

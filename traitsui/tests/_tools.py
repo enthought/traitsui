@@ -14,14 +14,10 @@
 # ------------------------------------------------------------------------------
 
 import enum
-import logging
 import re
 import sys
-import traceback
-from contextlib import contextmanager
 from unittest import skipIf, TestSuite
 
-from pyface.api import GUI
 from pyface.toolkit import toolkit_object
 from traits.api import (
     pop_exception_handler,
@@ -29,79 +25,16 @@ from traits.api import (
 )
 from traits.etsconfig.api import ETSConfig
 
+# These functions are imported by traitsui's own tests. They can be redirected
+# to traitsui.testing and then these aliases can be removed.
+from traitsui.testing._exception_handling import reraise_exceptions  # noqa
+from traitsui.testing._gui import process_cascade_events  # noqa: F401
+from traitsui.testing.api import UITester
+
 # ######### Testing tools
 
-
-_TRAITSUI_LOGGER = logging.getLogger("traitsui")
-
-
-def _serialize_exception(exc_type, value, tb):
-    """ Serialize exception and traceback for reporting.
-    This is such that the stack frame is not prevented from being garbage
-    collected.
-    """
-    return (
-        str(exc_type),
-        str(value),
-        str("".join(traceback.format_exception(exc_type, value, tb)))
-    )
-
-
-@contextmanager
-def reraise_exceptions(logger=_TRAITSUI_LOGGER):
-    """ Context manager to capture all exceptions occurred in the context and
-    then reraise a RuntimeError if there are any exceptions captured.
-
-    Exceptions from traits change notifications are also captured and reraised.
-
-    Depending on the GUI toolkit backend, unexpected exceptions occurred in the
-    GUI event loop may (1) cause fatal early exit of the test suite or (2) be
-    printed to the console without causing the test to error. This context
-    manager is intended for testing purpose such that unexpected exceptions
-    will result in a test error.
-
-    Parameters
-    ----------
-    logger : logging.Logger
-        Logger to use for logging errors.
-    """
-    serialized_exceptions = []
-
-    def excepthook(type, value, tb):
-        serialized = _serialize_exception(type, value, tb)
-        serialized_exceptions.append(serialized)
-        logger.error(
-            "Unexpected error captured in sys excepthook. \n%s",
-            serialized[-1]
-        )
-
-    def handler(object, name, old, new):
-        type, value, tb = sys.exc_info()
-        serialized_exceptions.append(_serialize_exception(type, value, tb))
-        logger.exception(
-            "Unexpected error occurred from change handler "
-            "(object: %r, name: %r, old: %r, new: %r).",
-            object, name, old, new,
-        )
-
-    push_exception_handler(handler=handler)
-    sys.excepthook = excepthook
-    try:
-        yield
-    finally:
-        sys.excepthook = sys.__excepthook__
-        pop_exception_handler()
-        if serialized_exceptions:
-            msg = "Uncaught exceptions found.\n"
-            msg += "\n".join(
-                "=== Exception (type: {}, value: {}) ===\n"
-                "{}".format(*record)
-                for record in serialized_exceptions
-            )
-            raise RuntimeError(msg)
-
-
 # Toolkit constants
+
 
 class ToolkitName(enum.Enum):
     wx = "wx"
@@ -183,32 +116,6 @@ def filter_tests(test_suite, exclusion_pattern):
     return filtered_test_suite
 
 
-def process_cascade_events():
-    """ Process all posted events, and attempt to process new events posted by
-    the processed events.
-
-    Cautions:
-    - An infinite cascade of events will cause this function to enter an
-      infinite loop.
-    - There still exists technical difficulties with Qt. On Qt4 + OSX,
-      QEventLoop.processEvents may report false saying it had found no events
-      to process even though it actually had processed some.
-      Consequently the internal loop breaks too early such that there are
-      still cascaded events unprocessed. Problems are also observed on
-      Qt5 + Appveyor occasionally. At the very least, events that are already
-      posted prior to calling this function will be processed.
-      See enthought/traitsui#951
-    """
-    if is_qt():
-        from pyface.qt import QtCore
-        event_loop = QtCore.QEventLoop()
-        while event_loop.processEvents(QtCore.QEventLoop.AllEvents):
-            pass
-    else:
-        GUI.process_events()
-
-
-@contextmanager
 def create_ui(object, ui_kwargs=None):
     """ Context manager for creating a UI and then dispose it when exiting
     the context.
@@ -224,21 +131,7 @@ def create_ui(object, ui_kwargs=None):
     ------
     ui: UI
     """
-    ui_kwargs = {} if ui_kwargs is None else ui_kwargs
-    ui = object.edit_traits(**ui_kwargs)
-    try:
-        yield ui
-    finally:
-        # At the end of a test, there may be events to be processed.
-        # If dispose happens first, those events will be processed after
-        # various editor states are removed, causing errors.
-        process_cascade_events()
-        try:
-            ui.dispose()
-        finally:
-            # dispose is not atomic and may push more events to the event
-            # queue. Flush those too.
-            process_cascade_events()
+    return UITester().create_ui(object=object, ui_kwargs=ui_kwargs)
 
 
 # ######### Utility tools to test on both qt4 and wx
@@ -426,3 +319,17 @@ if no_gui_test_assistant:
     # ensure null toolkit has an inheritable GuiTestAssistant
     class GuiTestAssistant(object):
         pass
+
+
+class BaseTestMixin:
+    """ This is a mixin class for all test cases in TraitsUI, regardless of
+    whether GUI is involved.
+
+    Not to be used externally.
+    """
+
+    def setUp(self):
+        push_exception_handler(reraise_exceptions=True)
+
+    def tearDown(self):
+        pop_exception_handler()

@@ -4,6 +4,7 @@ import unittest
 from traits.api import HasTraits, List
 from traitsui.api import SetEditor, UItem, View
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     click_button,
     is_control_enabled,
@@ -146,7 +147,13 @@ def double_click_on_item(editor, item_idx, in_used=False):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestSetEditorMapping(unittest.TestCase):
+class TestSetEditorMapping(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_ui(self, model, view):
@@ -222,7 +229,13 @@ class TestSetEditorMapping(unittest.TestCase):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestSimpleSetEditor(unittest.TestCase):
+class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @contextlib.contextmanager
     def setup_gui(self, model, view):

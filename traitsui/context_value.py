@@ -55,7 +55,7 @@ instances of :class:`ContextValue` (abbreviated as ``CV``)::
                 'my_value',
                 editor=MyEditorFactory(
                     minimum=CV('my_minimum'),
-                    suffix=u'...',
+                    suffix='...',
                 ),
             )
         )

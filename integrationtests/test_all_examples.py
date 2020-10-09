@@ -23,13 +23,14 @@ import pkg_resources
 from traits.api import HasTraits
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     is_qt,
     is_wx,
     process_cascade_events,
     requires_toolkit,
-    reraise_exceptions,
     ToolkitName,
 )
+from traitsui.testing.api import UITester
 
 # This test file is not distributed nor is it in a package.
 HERE = os.path.dirname(__file__)
@@ -94,12 +95,13 @@ class ExampleSearcher:
 
     @staticmethod
     def _is_python_file(path):
-        """ Return true if the given path is (public) Python file."""
+        """ Return true if the given path is (public) non-test Python file."""
         _, basename = os.path.split(path)
         _, ext = os.path.splitext(basename)
         return (
             ext == ".py"
             and not basename.startswith("_")
+            and not basename.startswith("test_")
         )
 
     def get_python_files(self):
@@ -177,7 +179,7 @@ SEARCHER.skip_file_if(
     lambda: not is_wx(), "Only support wx",
 )
 SEARCHER.skip_file_if(
-    os.path.join(DEMO, "Useful", "demo_group_size.py"),
+    os.path.join(DEMO, "Misc", "demo_group_size.py"),
     is_wx,
     "enable tries to import a missing constant. See enthought/enable#307",
 )
@@ -217,7 +219,7 @@ def replaced_configure_traits(
 ):
     """ Mocked configure_traits to launch then close the GUI.
     """
-    ui = instance.edit_traits(
+    ui_kwargs = dict(
         view=view,
         parent=None,
         kind="live",  # other options may block the test
@@ -227,17 +229,8 @@ def replaced_configure_traits(
         scrollable=scrollable,
         **args,
     )
-    with reraise_exceptions():
-        process_cascade_events()
-
-        # Temporary fix for enthought/traitsui#907
-        if is_qt():
-            ui.control.hide()
-        if is_wx():
-            ui.control.Hide()
-
-        ui.dispose()
-        process_cascade_events()
+    with UITester().create_ui(instance, ui_kwargs):
+        pass
 
 
 @contextlib.contextmanager
@@ -256,6 +249,7 @@ def replace_configure_traits():
 
 def run_file(file_path):
     """ Execute a given Python file.
+
     Parameters
     ----------
     file_path : str
@@ -280,11 +274,54 @@ def run_file(file_path):
 
 
 # =============================================================================
+# load_tests protocol for unittest discover
+# =============================================================================
+
+
+def load_tests(loader, tests, pattern):
+    """ Implement load_tests protocol so that when unittest discover is run
+    with this test module, the tests in the demo folder (not a package) are
+    also loaded.
+
+    See unittest documentation on load_tests
+    """
+    # Keep all the other loaded tests.
+    suite = unittest.TestSuite()
+    suite.addTests(tests)
+
+    # Expand the test suite with tests from the examples, assuming
+    # the test for ``group/script.py`` is placed in ``group/tests/`` directory.
+    accepted_files, _ = SEARCHER.get_python_files()
+    test_dirs = set(
+        os.path.join(os.path.dirname(path), "tests") for path in accepted_files
+    )
+    test_dirs = set(path for path in test_dirs if os.path.exists(path))
+    for dirpath in sorted(test_dirs):
+
+        # Test files are scripts too and they demonstrate running the
+        # tests. Mock the run side-effect when we load the test cases.
+        with mock.patch.object(unittest.TextTestRunner, "run"):
+            test_suite = unittest.TestLoader().discover(
+                dirpath, pattern=pattern
+            )
+        if is_qt() or is_wx():
+            suite.addTests(test_suite)
+
+    return suite
+
+
+# =============================================================================
 # Test cases
 # =============================================================================
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestExample(unittest.TestCase):
+class TestExample(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_run(self):
         accepted_files, skipped_files = SEARCHER.get_python_files()

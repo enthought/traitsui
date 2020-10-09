@@ -7,9 +7,13 @@
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 
 import unittest
-import numpy as np
-from numpy.testing import assert_array_equal
 
+try:
+    import numpy as np
+except ImportError:
+    raise unittest.SkipTest("Can't import NumPy: skipping")
+else:
+    from numpy.testing import assert_array_equal
 
 try:
     from pandas import DataFrame
@@ -26,6 +30,7 @@ from traitsui.ui_editors.data_frame_editor import (
 from traitsui.view import View
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     requires_toolkit,
     reraise_exceptions,
@@ -92,7 +97,13 @@ def sample_text_data():
     return viewer
 
 
-class TestDataFrameEditor(unittest.TestCase):
+class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_get_item(self):

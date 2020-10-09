@@ -3,7 +3,7 @@
 
 # tree_editor.py -- Example of a tree editor
 
-#--[Imports]--------------------------------------------------------------
+# --[Imports]--------------------------------------------------------------
 
 from traits.api \
     import HasTraits, Str, Regex, List, Instance
@@ -20,7 +20,7 @@ except RuntimeError:
     from traitsui.qt4.tree_editor \
         import NewAction, CopyAction, CutAction, \
         PasteAction, DeleteAction, RenameAction
-#--[Code]-----------------------------------------------------------------
+# --[Code]-----------------------------------------------------------------
 
 # DATA CLASSES
 
@@ -50,6 +50,7 @@ class Owner(HasTraits):
     company = Instance(Company)
 
 # INSTANCES
+
 
 jason = Employee(
     name='Jason',
@@ -120,8 +121,8 @@ class TreeHandler(Handler):
 
     def employee_department(self, editor, object):
         dept = editor.get_parent(object)
-        print('%s works in the %s department.' %\
-            (object.name, dept.name))
+        print('%s works in the %s department.' % (object.name, dept.name))
+
 
 # Tree editor
 tree_editor = TreeEditor(

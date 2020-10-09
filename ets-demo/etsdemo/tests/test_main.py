@@ -47,7 +47,7 @@ class TestMain(unittest.TestCase):
     @require_gui
     def test_main(self):
         # Main function must be launchable even if there are no data available.
-        # In normal running situation, the console should be clean
+        # In normal running situation, no loggings should be emitted
         argv = ["etsdemo"]
         mocked_io = io.StringIO()
         with mock_iter_entry_points({}), \
@@ -59,7 +59,7 @@ class TestMain(unittest.TestCase):
             main_module.main()
             console_output = mocked_io.getvalue()
 
-        self.assertEqual(console_output, "")
+        self.assertNotIn("Found 0 resource(s).", console_output)
 
     @require_gui
     def test_main_with_log(self):

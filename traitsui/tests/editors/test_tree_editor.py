@@ -15,6 +15,7 @@
 
 import unittest
 
+from pyface.api import GUI
 from traits.api import Bool, HasTraits, Instance, List, Str
 from traitsui.api import (
     Item,
@@ -26,6 +27,7 @@ from traitsui.api import (
 )
 
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     press_ok_button,
     requires_toolkit,
@@ -122,7 +124,39 @@ class BogusTreeNodeObjectView(HasTraits):
         return traits_view
 
 
-class TestTreeView(unittest.TestCase):
+class TestTreeView(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
+    # test for wx is failing for other reasons.
+    # It might pass once we receive fix for enthought/pyface#558
+    @requires_toolkit([ToolkitName.qt])
+    def test_tree_editor_with_nested_ui(self):
+        tree_editor = TreeEditor(
+            nodes=[
+                TreeNode(
+                    node_for=[Bogus],
+                    auto_open=True,
+                    children="bogus_list",
+                    label="bogus",
+                    view=View(Item("name")),
+                ),
+            ],
+            hide_root=True,
+        )
+        bogus_list = [Bogus()]
+        object_view = BogusTreeView(bogus=Bogus(bogus_list=bogus_list))
+        view = View(Item("bogus", id="tree", editor=tree_editor))
+        with reraise_exceptions(), \
+                create_ui(object_view, dict(view=view)) as ui:
+            editor = ui.info.tree
+            editor.selected = bogus_list[0]
+            GUI.process_events()
+
     def _test_tree_editor_releases_listeners(
         self, hide_root, nodes=None, trait="bogus_list", expected_listeners=1
     ):

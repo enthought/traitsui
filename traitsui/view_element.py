@@ -21,7 +21,7 @@
 
 import re
 
-from traits.api import HasPrivateTraits, Instance, Bool
+from traits.api import AbstractViewElement, Bool, HasPrivateTraits, Instance
 
 from .ui_traits import (
     AnObject,
@@ -31,13 +31,6 @@ from .ui_traits import (
     HelpId,
     Image,
 )
-
-# Is the AbstractViewElement ABC available in traits.api?
-
-try:
-    from traits.api import AbstractViewElement
-except ImportError:
-    AbstractViewElement = None
 
 
 label_pat = re.compile(r"^(.*)\[(.*)\](.*)$", re.MULTILINE | re.DOTALL)
@@ -214,5 +207,4 @@ class ViewSubElement(ViewElement):
 
 # Register ViewElement as implementing AbstractViewElement
 # TODO: eventually have ViewElement inherit directly
-if AbstractViewElement is not None:
-    AbstractViewElement.register(ViewElement)
+AbstractViewElement.register(ViewElement)

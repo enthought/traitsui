@@ -21,13 +21,15 @@ class ListEditorDemo(HasTraits):
 
     # Items are used to define display, one per editor style:
     list_group = Group(
-        Item('play_list', style='simple', label='Simple', height=75),
+        Item(
+            'play_list', style='simple', label='Simple', height=75, id='simple'
+        ),
         Item('_'),
-        Item('play_list', style='custom', label='Custom'),
+        Item('play_list', style='custom', label='Custom', id='custom'),
         Item('_'),
-        Item('play_list', style='text', label='Text'),
+        Item('play_list', style='text', label='Text', id='text'),
         Item('_'),
-        Item('play_list', style='readonly', label='ReadOnly')
+        Item('play_list', style='readonly', label='ReadOnly', id='readonly')
     )
 
     # Demo view:

@@ -11,9 +11,16 @@
 from unittest import TestCase
 
 from traitsui.helper import compute_column_widths
+from traitsui.tests._tools import BaseTestMixin
 
 
-class TestComputeColumnWidths(TestCase):
+class TestComputeColumnWidths(BaseTestMixin, TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_all_default(self):
         available_space = 200

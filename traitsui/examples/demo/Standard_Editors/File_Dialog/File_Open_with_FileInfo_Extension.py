@@ -10,10 +10,10 @@ This demonstrates using the TraitsUI file dialog with a file dialog extension,
 in this case, the **FileInfo** extension, which displays information about
 the currently selected file, such as:
 
- - File size.
- - Date and time last accessed.
- - Date and time last modified.
- - Date and time last created.
+- File size.
+- Date and time last accessed.
+- Date and time last modified.
+- Date and time last created.
 
 For more information about why you would want to use the TraitsUI file dialog
 over the standard OS file dialog, select the **File Open** demo. For a

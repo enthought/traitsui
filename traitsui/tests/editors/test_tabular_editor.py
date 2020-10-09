@@ -19,6 +19,7 @@ from traits.testing.api import UnittestTools
 from traitsui.api import Item, TabularEditor, View
 from traitsui.tabular_adapter import TabularAdapter
 from traitsui.tests._tools import (
+    BaseTestMixin,
     create_ui,
     is_wx,
     is_qt,
@@ -180,7 +181,13 @@ def clear_selection(editor):
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
-class TestTabularEditor(UnittestTools, unittest.TestCase):
+class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_tabular_editor_single_selection(self):
