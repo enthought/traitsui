@@ -180,13 +180,14 @@ def clear_selection(editor):
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
 
-def right_click_item(control, index):
+def right_click_item(editor, index):
     """ Right clicks on the specified item.
     """
 
     if is_wx():
         import wx
 
+        control = editor.control
         event = wx.ListEvent(
             wx.EVT_LIST_ITEM_RIGHT_CLICK.typeId, control.GetId()
         )
@@ -194,9 +195,46 @@ def right_click_item(control, index):
         wx.PostEvent(control, event)
 
     elif is_qt():
-        # Couldn't figure out how to close the context menu programatically
+        from pyface.qt import QtCore
+        from pyface.qt.QtTest import QTest
+        view = editor.list_view
+        q_model_index = view.model().index(index, 0)
+        view.scrollTo(q_model_index)
+        rect = view.visualRect(q_model_index)
+        QTest.mouseClick(
+            view.viewport(),
+            QtCore.Qt.RightButton,
+            QtCore.Qt.NoModifier,
+            rect.center(),
+        )
+    else:
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
+
+def right_click_center(editor):
+    """ Right click the middle of the widget.
+    """
+
+    if is_wx():
+        import wx
+
+        control = editor.control
+        event = wx.ListEvent(
+            wx.EVT_LIST_ITEM_RIGHT_CLICK.typeId, control.GetId()
+        )
+        wx.PostEvent(control, event)
+
+    elif is_qt():
+        from pyface.qt import QtCore
+        from pyface.qt.QtTest import QTest
+        view = editor.list_view
+        rect = view.rect()
+        QTest.mouseClick(
+            view.viewport(),
+            QtCore.Qt.RightButton,
+            QtCore.Qt.NoModifier,
+            rect.center(),
+        )
     else:
         raise unittest.SkipTest("Test not implemented for this toolkit")
 
@@ -608,8 +646,6 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
                 self.setup_gui(ListStrModel(), get_view(title="testing")):
             pass
 
-    # see `right_click_item` and issue enthought/traitsui#868
-    @requires_toolkit([ToolkitName.wx])
     def test_list_str_editor_right_click(self):
         class ListStrModelRightClick(HasTraits):
             value = List(["one", "two", "three"])
@@ -628,11 +664,34 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(model.right_clicked, "")
             self.assertEqual(model.right_clicked_index, 0)
 
-            right_click_item(editor.control, 1)
+            right_click_item(editor, 1)
             process_cascade_events()
 
             self.assertEqual(model.right_clicked, "two")
             self.assertEqual(model.right_clicked_index, 1)
+
+    def test_list_str_editor_right_click_out_of_bound(self):
+        class ListStrModelRightClick(HasTraits):
+            value = List([])
+            right_clicked = Str()
+            right_clicked_index = Int()
+
+        model = ListStrModelRightClick()
+        view = get_view(
+            right_clicked="object.right_clicked",
+            right_clicked_index="object.right_clicked_index",
+        )
+        with reraise_exceptions(), \
+                self.setup_gui(model, view) as editor:
+
+            self.assertEqual(model.right_clicked, "")
+            self.assertEqual(model.right_clicked_index, 0)
+
+            right_click_center(editor)
+            process_cascade_events()
+
+            self.assertEqual(model.right_clicked, "")
+            self.assertEqual(model.right_clicked_index, 0)
 
 
 class TestListStrEditorSelection(BaseTestMixin, unittest.TestCase):
