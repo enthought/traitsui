@@ -35,17 +35,16 @@ _app = pyface_toolkit("init:_app")
 
 from traits.api import HasPrivateTraits, Instance
 from traits.trait_notifiers import set_ui_handler
+from pyface.api import SystemMetrics
 from pyface.wx.drag_and_drop import PythonDropTarget
 
 from traitsui.theme import Theme
 from traitsui.ui import UI
 from traitsui.toolkit import Toolkit
-from .constants import WindowColor, screen_dx, screen_dy
+from .constants import WindowColor
 from .helper import position_window
 
-
 logger = logging.getLogger(__name__)
-
 
 #: Mapping from wx events to method suffixes.
 EventSuffix = {
@@ -229,7 +228,8 @@ class GUIToolkit(Toolkit):
         parent = window.GetParent()
         if parent is None:
             px, py = 0, 0
-            pdx, pdy = screen_dx, screen_dy
+            pdx = SystemMetrics().screen_width
+            pdy = SystemMetrics().screen_height
         else:
             px, py = parent.GetPosition()
             pdx, pdy = parent.GetSize()
@@ -242,14 +242,14 @@ class GUIToolkit(Toolkit):
         if width < 0.0:
             width = cur_width
         elif width <= 1.0:
-            width = int(width * screen_dx)
+            width = int(width * SystemMetrics().screen_width)
         else:
             width = int(width)
 
         if height < 0.0:
             height = cur_height
         elif height <= 1.0:
-            height = int(height * screen_dy)
+            height = int(height * SystemMetrics().screen_height)
         else:
             height = int(height)
 

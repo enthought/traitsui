@@ -37,6 +37,8 @@ from traitsui.help_template import help_template
 
 from traitsui.menu import UndoButton, RevertButton, HelpButton
 
+from pyface.api import SystemMetrics
+
 from pyface.dock.api import (
     DockWindow,
     DockSizer,
@@ -54,7 +56,7 @@ from .helper import (
     GroupEditor,
 )
 
-from .constants import screen_dx, screen_dy, WindowColor
+from .constants import WindowColor
 
 from .ui_base import BaseDialog
 
@@ -1170,7 +1172,8 @@ class HTMLHelpWindow(wx.Frame):
         sizer.Add(b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
         self.SetSizer(sizer)
         self.SetSize(
-            wx.Size(int(scale_dx * screen_dx), int(scale_dy * screen_dy))
+            wx.Size(int(scale_dx * SystemMetrics().screen_width),
+            int(scale_dy * SystemMetrics().screen_height))
         )
 
         # Position and show the dialog:

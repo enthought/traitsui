@@ -22,13 +22,15 @@
 
 import wx
 
+from pyface.api import SystemMetrics
+
 from .helper import save_window, TraitsUIScrolledPanel
 
 from .ui_base import BaseDialog
 
 from .ui_panel import panel
 
-from .constants import DefaultTitle, WindowColor, screen_dy, scrollbar_dx
+from .constants import DefaultTitle, WindowColor, scrollbar_dx
 from traitsui.undo import UndoHistory
 
 from traitsui.menu import (
@@ -192,7 +194,7 @@ class LiveWindow(BaseDialog):
             sizer.Add(trait_sheet, 1, wx.EXPAND)
             tsdx, tsdy = trait_sheet.GetSize()
             sw.SetScrollRate(16, 16)
-            max_dy = (2 * screen_dy) // 3
+            max_dy = (2 * SystemMetrics().screen_height) // 3
             sw.SetSizer(sizer)
             sw.SetSize(
                 wx.Size(

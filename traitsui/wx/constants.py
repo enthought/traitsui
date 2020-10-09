@@ -23,6 +23,8 @@ import sys
 
 import wx
 
+from pyface.api import SystemMetrics
+
 #: Define platform and wx version constants:
 is_mac = sys.platform == "darwin"
 
@@ -79,7 +81,7 @@ standard_bitmap_width = 120
 scrollbar_dx = wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X)
 
 #: Screen width
-screen_dx = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_X)
+screen_dx = SystemMetrics().screen_width
 
 #: Screen height
-screen_dy = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
+screen_dy = SystemMetrics().screen_height

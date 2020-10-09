@@ -26,10 +26,11 @@ from pyface.toolkit import toolkit_object as pyface_toolkit
 _app = pyface_toolkit("init:_app")
 
 from traits.trait_notifiers import set_ui_handler
+from pyface.api import SystemMetrics
 from pyface.qt import QtCore, QtGui, qt_api
 
 from traitsui.toolkit import Toolkit
-from .constants import screen_dx, screen_dy
+
 
 # -------------------------------------------------------------------------
 #  Handles UI notification handler requests that occur on a thread other than
@@ -243,8 +244,8 @@ class GUIToolkit(Toolkit):
         if parent is None:
             px = 0
             py = 0
-            pdx = screen_dx
-            pdy = screen_dy
+            pdx = SystemMetrics().screen_width
+            pdy = SystemMetrics().screen_height
         else:
             pos = parent.pos()
             if int(parent.windowFlags()) & QtCore.Qt.Window == 0:
@@ -266,14 +267,14 @@ class GUIToolkit(Toolkit):
         if width < 0.0:
             width = cur_width
         elif width <= 1.0:
-            width = int(width * screen_dx)
+            width = int(width * SystemMetrics().screen_width)
         else:
             width = int(width)
 
         if height < 0.0:
             height = cur_height
         elif height <= 1.0:
-            height = int(height * screen_dy)
+            height = int(height * SystemMetrics().screen_height)
         else:
             height = int(height)
 
