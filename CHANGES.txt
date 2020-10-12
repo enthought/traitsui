@@ -1,6 +1,97 @@
 Traits UI Changelog
 ===================
 
+Release 7.1.0
+-------------
+
+TraitsUI is a minor feature release which introduces a new testing library
+and a number of significant fixes. Demo examples are also distributed as
+package data such that they are visible via the "etsdemo" GUI application (to
+be installed separately).
+
+Highlights of this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* A new :mod:`traitsui.testing.api` module has been introduced for testing
+  GUI applications built using TraitsUI. See
+  :ref:`testing-traitsui-applications` for an introduction. Builtin support
+  has been added for testing several TraitsUI editors. More support will be
+  added in the future.
+* On OSX and Qt, there have been reports of missing UI view updates after
+  a push button is clicked. While this is suspected to be a Qt issue, changes
+  have been made to ButtonEditor, SetEditor and ImageEnumEditor to mitigate the
+  situation.
+* The internal logic for disposing an instance of :class:`~traitsui.ui.UI` is
+  changed as an attempt to resolve AttributeError that occurs while a nested
+  UI is removed.
+
+Detailed changes
+~~~~~~~~~~~~~~~~
+
+More than 100 PRs went into this release. Thanks to:
+
+* Aaron Ayres
+* Ieva Cerny
+* Kit Yan Choi
+* Mark Dickinson
+* Eric Larson
+* Rahul Poruri
+* Jonathan Rocher
+* Kuya Takami
+* Ioannis Tziakos
+* Corran Webster
+
+Note that the following list is not exhaustive. Many more PRs references have
+been omitted.
+
+Features
+~~~~~~~~
+
+* Add :class:`~traitsui.testing.ui_tester.UITester` for testing TraitsUI
+  applications (#1107, #1157, #1171, #1175, #1179, #1201, #1207, #1269)
+
+Fixes
+~~~~~
+
+* Fix deprecation warnings from Traits 6.1 due to the use of PrefixList (#1053)
+* Fix deprecation warning about trait_get (#1062)
+* Fix wx error due to use of alignment flag wxEXPAND (#1095)
+* Fix ButtonEditor not causing other widgets to update on OSX and Qt (#1303)
+* Fix ImageEnumEditor button not causing other updates on OSX (#1326)
+* Fix SetEditor on Qt and OSX not updating view after button clicks (#1325)
+* Fix QDesktopWidget.availableGeometry deprecation warning (#1311)
+* Fix QDateTime deprecation warning (#1310)
+* Fix AttributeError when a nested UI is disposed (#1286)
+
+Documentation
+~~~~~~~~~~~~~
+
+* Make demo examples as package data (#1088)
+* Add UITester documentation in User Manual (#1263)
+* Add Developer Guide with internals on the testing package (#1314)
+
+Build and continuous integration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Add a CI job for testing against traits 6.0 (#1108)
+* Update appveyor config to also build on macos (#1160)
+* Add flake8 task to CI with excludes (#1222)
+* Add a new shell command to etstool.py (#1244)
+* Add unittest for ui_traits (#1057)
+* Mention additional dependencies for demo examples (#1147)
+
+Maintenance and code organization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Use collections.abc instead of collections (#1103, #1129)
+* Explicitly require a minimum version for Traits (#1323)
+* Relax constrain on PySide2 version (#1146)
+* Update edm version in travis and appveyor config files (#1049)
+* Resolve warnings in tests from QItemSelectionModel with Qt5 (#1041)
+* Improve how we capture and re-raise errors in GUI tests (#1099)
+* Replace logger.warn with logger.warning (#1165)
+* Replace screen metrics code with Pyface implementation (#1322)
+
 Release 7.0.1
 -------------
 
