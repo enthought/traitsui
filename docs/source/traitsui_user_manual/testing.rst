@@ -398,7 +398,11 @@ The API allows extension such that
    Extending support for testing a UI editor often requires knowledge of the
    implementation details of the editor. If UI editor and the testing support
    code are not maintained together, tests may be subject to breakages caused
-   by internal changes of the UI editors.
+   by internal changes of the UI editors. Certain attributes described in this
+   document are classified as protected, to be used for extending the testing
+   API. Developers should evaluate based on context whether they should be
+   used.
+
 
 Terminology
 -----------
@@ -411,7 +415,7 @@ Before we start, we need to define some terminology:
     search for other contained targets (e.g. a table widget that contains
     buttons and text).
 
-    An instance of |UIWrapper| wraps a target under the attribute
+    An instance of |UIWrapper| wraps a target under the protected attribute
     ``_target``.
 
 * Interaction

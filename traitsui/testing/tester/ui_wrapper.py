@@ -74,6 +74,12 @@ class UIWrapper:
         Time delay (in ms) in which actions by the wrapper are performed. Note
         it is propagated through to created child wrappers. The delay allows
         visual confirmation test code is working as desired.
+    _target : any
+        The UI target currently wrapped for interactions or locating nested
+        components. This is a protected attribute intended to be used for
+        extending the testing API. Usage of this attribute may expose the
+        software's internal structure to the tests, developers should use this
+        attribute with discretion based on context.
     """
 
     def __init__(
@@ -263,6 +269,8 @@ class UIWrapper:
         UIWrapper.help
         """
         return self._perform_or_inspect(interaction)
+
+    # Private methods #########################################################
 
     def _perform_or_inspect(self, interaction):
         """ Perform a user interaction or a user inspection.
