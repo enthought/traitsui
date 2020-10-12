@@ -69,11 +69,11 @@ class UIWrapper:
         it is propagated through to created child wrappers. The delay allows
         visual confirmation test code is working as desired.
     _target : any
-        An object on which further UI target can be searched for, or can be
-        a leaf target that can be operated on. Usage of this attribute may
-        require knowledge of the UI target's implementation details.
-        This attribute is expected to be used for implementing extensions to
-        the testing API.
+        The UI target currently wrapped for interactions or locating nested
+        components. This is a protected attribute intended to be used for
+        extending the testing API. Usage of this attribute may expose the
+        software's internal structure to the tests, developers should use this
+        attribute with discretion based on context.
     """
 
     def __init__(self, target, *, registries, delay=0):

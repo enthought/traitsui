@@ -380,8 +380,8 @@ The API allows extension such that
    code are not maintained together, tests may be subject to breakages caused
    by internal changes of the UI editors. Certain attributes described in this
    document are classified as protected, to be used for extending the testing
-   API. Developers should evaluate based on context whether using these
-   attributes will introduce unwanted external and/or volatile dependencies.
+   API. Developers should evaluate based on context whether they should be
+   used.
 
 
 Terminology
