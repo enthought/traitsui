@@ -140,14 +140,20 @@ class UIWrapper:
         Parameters
         ----------
         location : any
-            Any location type supported by the current target.
+            An instance of a location type supported by the current target.
+            e.g. ``traitsui.testing.api.Index(1)``
+
+        Returns
+        -------
+        wrapper : UIWrapper
+            A new UIWrapper for the given location.
 
         Raises
         ------
         LocationNotSupported
             If the given location is not supported.
 
-        See also
+        See Also
         --------
         UIWrapper.help
         """
@@ -178,7 +184,7 @@ class UIWrapper:
             If the current target does not support locating another target
             by a name.
 
-        See also
+        See Also
         --------
         traitsui.testing.tester.locator.TargetByName
         """
@@ -204,7 +210,7 @@ class UIWrapper:
             If the current target does not support locating another target
             by a unique identifier.
 
-        See also
+        See Also
         --------
         traitsui.testing.tester.locator.TargetById
         """
@@ -216,10 +222,8 @@ class UIWrapper:
         Parameters
         ----------
         interaction : object
-            An interaction instance that defines the user interaction.
-            See ``traitsui.testing.tester.command`` module for builtin
-            query objects.
-            e.g. ``traitsui.testing.tester.command.MouseClick``
+            An instance of an interaction type supported by the current target.
+            e.g. ``traitsui.testing.api.MouseClick()``
 
         Raises
         ------
@@ -227,7 +231,7 @@ class UIWrapper:
             If the interaction given is not supported for the current UI
             target.
 
-        See also
+        See Also
         --------
         UIWrapper.help
         """
@@ -239,10 +243,14 @@ class UIWrapper:
         Parameters
         ----------
         interaction : object
-            An interaction instance that defines the inspection.
-            See ``traitsui.testing.tester.query`` module for builtin
-            query objects.
-            e.g. ``traitsui.testing.tester.query.DisplayedText``
+            An instance of an interaction type supported by the current target.
+            e.g. ``traitsui.testing.api.DisplayedText()``
+
+        Returns
+        -------
+        values : any
+            Any values returned for the given inspection. The type should be
+            documented by the interaction type object.
 
         Raises
         ------
@@ -250,7 +258,7 @@ class UIWrapper:
             If the interaction given is not supported for the current UI
             target.
 
-        See also
+        See Also
         --------
         UIWrapper.help
         """
