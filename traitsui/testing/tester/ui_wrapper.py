@@ -133,6 +133,7 @@ class UIWrapper:
         ----------
         location : any
             An instance of a location type supported by the current target.
+            e.g. ``traitsui.testing.api.Index(1)``
 
         Returns
         -------
