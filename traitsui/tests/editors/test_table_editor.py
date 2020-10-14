@@ -94,6 +94,7 @@ select_row_view = View(
         "values",
         show_label=False,
         editor=TableEditor(
+            sortable=False,
             columns=[
                 ObjectColumn(name="value"),
                 ObjectColumn(name="other_value"),
@@ -110,6 +111,7 @@ select_rows_view = View(
         "values",
         show_label=False,
         editor=TableEditor(
+            sortable=False,
             columns=[ObjectColumn(name="value")],
             selection_mode="rows",
             selected="selections",
@@ -123,6 +125,7 @@ select_row_index_view = View(
         "values",
         show_label=False,
         editor=TableEditor(
+            sortable=False,
             columns=[
                 ObjectColumn(name="value"),
                 ObjectColumn(name="other_value"),
@@ -139,6 +142,7 @@ select_row_indices_view = View(
         "values",
         show_label=False,
         editor=TableEditor(
+            sortable=False,
             columns=[
                 ObjectColumn(name="value"),
                 ObjectColumn(name="other_value"),
@@ -155,6 +159,7 @@ select_column_view = View(
         "values",
         show_label=False,
         editor=TableEditor(
+            sortable=False,
             columns=[
                 ObjectColumn(name="value"),
                 ObjectColumn(name="other_value"),
@@ -171,6 +176,7 @@ select_columns_view = View(
         "values",
         show_label=False,
         editor=TableEditor(
+            sortable=False,
             columns=[
                 ObjectColumn(name="value"),
                 ObjectColumn(name="other_value"),
@@ -187,6 +193,7 @@ select_column_index_view = View(
         "values",
         show_label=False,
         editor=TableEditor(
+            sortable=False,
             columns=[
                 ObjectColumn(name="value"),
                 ObjectColumn(name="other_value"),
@@ -203,6 +210,7 @@ select_column_indices_view = View(
         "values",
         show_label=False,
         editor=TableEditor(
+            sortable=False,
             columns=[
                 ObjectColumn(name="value"),
                 ObjectColumn(name="other_value"),
@@ -219,6 +227,7 @@ select_cell_view = View(
         "values",
         show_label=False,
         editor=TableEditor(
+            sortable=False,
             columns=[
                 ObjectColumn(name="value"),
                 ObjectColumn(name="other_value"),
@@ -235,6 +244,7 @@ select_cells_view = View(
         "values",
         show_label=False,
         editor=TableEditor(
+            sortable=False,
             columns=[
                 ObjectColumn(name="value"),
                 ObjectColumn(name="other_value"),
@@ -251,6 +261,7 @@ select_cell_index_view = View(
         "values",
         show_label=False,
         editor=TableEditor(
+            sortable=False,
             columns=[
                 ObjectColumn(name="value"),
                 ObjectColumn(name="other_value"),
@@ -267,6 +278,7 @@ select_cell_indices_view = View(
         "values",
         show_label=False,
         editor=TableEditor(
+            sortable=False,
             columns=[
                 ObjectColumn(name="value"),
                 ObjectColumn(name="other_value"),
