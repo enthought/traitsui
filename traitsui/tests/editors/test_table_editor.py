@@ -315,10 +315,12 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
-        object_list.selected = object_list.values[5]
 
-        tester = UITester()
+        tester = UITester(delay=10000)
         with tester.create_ui(object_list, dict(view=select_row_view)) as ui:
+            # click the first cell in the 6th row to select the row
+            tester.find_by_name(ui, "values").locate(Cell(5,0)).perform(MouseClick())
+
             editor = ui.get_editors("values")[0]
             if is_qt():
                 selected = editor.selected
@@ -326,6 +328,7 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
                 selected = editor.selected_row
 
         self.assertIs(selected, object_list.values[5])
+        self.assertIs(object_list.selected, selected)
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_rows(self):
