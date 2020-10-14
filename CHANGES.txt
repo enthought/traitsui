@@ -25,6 +25,21 @@ Highlights of this release
   changed as an attempt to resolve AttributeError that occurs while a nested
   UI is removed.
 
+Notes on upgrading
+~~~~~~~~~~~~~~~~~~
+
+* On the issue about Qt button not causing views to update on OSX, projects
+  that have been working around the issue by adding ``GUI().process_events()``
+  (or similar) in their applications may now try to remove those workarounds.
+  However, the change that mitigates the issue in a production environment has
+  implications for tests: The button's click slot is no longer invoked
+  immediately but always invoked by the Qt GUI event loop. Tests that used to
+  call the Qt button ``click`` method directly and rely on the event to happen
+  immediately will now need to update their tests to ensure that the click slot
+  is processed by the Qt GUI event loop in the same order as before. Consider
+  using the new testing library which automatically runs the GUI event loop
+  after each interaction (e.g. mouse click).
+
 Detailed changes
 ~~~~~~~~~~~~~~~~
 
