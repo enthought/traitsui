@@ -63,6 +63,7 @@ from .tester.ui_tester import UITester
 # Interactions (for changing GUI states)
 from .tester.command import (
     MouseClick,
+    MouseDClick,
     KeyClick,
     KeySequence
 )
@@ -73,11 +74,13 @@ from .tester.query import (
     IsChecked,
     IsEnabled,
     IsVisible,
+    Selected,
     SelectedText
 )
 
 # Locations (for locating GUI elements)
 from .tester.locator import (
+    Cell,
     Index,
     TargetById,
     TargetByName,
