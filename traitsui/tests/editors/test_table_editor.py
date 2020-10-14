@@ -15,6 +15,15 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
+from traitsui.testing.api import (
+    Cell,
+    DisplayedText,
+    KeySequence,
+    KeyClick,
+    MouseClick,
+    Selected,
+    UITester,
+)
 
 
 class ListItem(HasTraits):
@@ -61,11 +70,12 @@ filtered_view = View(
         "values",
         show_label=False,
         editor=TableEditor(
+            sortable=False,
             columns=[
                 ObjectColumn(name="value"),
                 ObjectColumn(name="other_value"),
             ],
-            filter=EvalTableFilter(expression="other_value >= 2"),
+            filter=EvalTableFilter(expression="value > 4"),
         ),
     ),
     buttons=["OK"],
@@ -274,26 +284,20 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
-
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=simple_view)) as ui:
-            process_cascade_events()
+        tester = UITester()
+        with tester.create_ui(object_list, dict(view=simple_view)):
+            pass
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_filtered_table_editor(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
-
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=filtered_view)) as ui:
-            process_cascade_events()
-
+        object_list.configure_traits(view=filtered_view)
+        tester = UITester()
+        with tester.create_ui(object_list, dict(view=filtered_view)) as ui:
             filter = ui.get_editors("values")[0].filter
-
-            process_cascade_events()
-
-        self.assertIsNotNone(filter)
+            self.assertIsNotNone(filter)
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_row(self):
@@ -477,6 +481,108 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             process_cascade_events()
 
         self.assertEqual(selected, (object_list.values[5], "value"))
+
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+    def test_table_editor_select_row_index_with_tester(self):
+        object_list = ObjectListWithSelection(
+            values=[ListItem(value=str(i ** 2)) for i in range(10)]
+        )
+        view = View(
+            Item(
+                "values",
+                show_label=False,
+                editor=TableEditor(
+                    sortable=False,      # switch off sorting by first column
+                    columns=[
+                        ObjectColumn(name="value"),
+                        ObjectColumn(name="other_value"),
+                    ],
+                    selection_mode="row",
+                    selected="selected",
+                ),
+            ),
+        )
+        tester = UITester()
+        with tester.create_ui(object_list, dict(view=view)) as ui:
+            wrapper = tester.find_by_name(ui, "values")
+
+            wrapper.locate(Cell(5, 0)).perform(MouseClick())
+            self.assertEqual(object_list.selected.value, str(5 ** 2))
+
+            wrapper.locate(Cell(6, 0)).perform(MouseClick())
+            self.assertEqual(object_list.selected.value, str(6 ** 2))
+
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+    def test_table_editor_modify_cell_with_tester(self):
+        object_list = ObjectListWithSelection(
+            values=[ListItem(value=str(i ** 2)) for i in range(10)]
+        )
+        view = View(
+            Item(
+                "values",
+                show_label=False,
+                editor=TableEditor(
+                    sortable=False,      # switch off sorting by first column
+                    columns=[
+                        ObjectColumn(name="value"),
+                        ObjectColumn(name="other_value"),
+                    ],
+                    selection_mode="row",
+                    selected="selected",
+                ),
+            ),
+        )
+        tester = UITester()
+        with tester.create_ui(object_list, dict(view=view)) as ui:
+            wrapper = tester.find_by_name(ui, "values").locate(Cell(5, 0))
+            wrapper.perform(MouseClick())             # activate edit mode
+            wrapper.perform(KeySequence("abc"))
+            self.assertEqual(object_list.selected.value, "abc")
+
+            # second column refers to an Int type
+            original = object_list.selected.other_value
+            wrapper = tester.find_by_name(ui, "values").locate(Cell(5, 1))
+            wrapper.perform(MouseClick())
+            wrapper.perform(KeySequence("abc"))       # invalid
+            self.assertEqual(object_list.selected.other_value, original)
+
+            for _ in range(3):
+                wrapper.perform(KeyClick("Backspace"))
+            wrapper.perform(KeySequence("12"))  # now ok
+            self.assertEqual(object_list.selected.other_value, 12)
+
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+    def test_table_editor_check_display_with_tester(self):
+        object_list = ObjectListWithSelection(
+            values=[ListItem(other_value=0)]
+        )
+        tester = UITester()
+        with tester.create_ui(object_list, dict(view=select_row_view)) as ui:
+            wrapper = tester.find_by_name(ui, "values").locate(Cell(0, 1))
+
+            actual = wrapper.inspect(DisplayedText())
+            self.assertEqual(actual, "0")
+
+            object_list.values[0].other_value = 123
+
+            actual = wrapper.inspect(DisplayedText())
+            self.assertEqual(actual, "123")
+
+    @requires_toolkit([ToolkitName.qt])
+    def test_table_editor_escape_retain_edit(self):
+        object_list = ObjectListWithSelection(
+            values=[ListItem(other_value=0)]
+        )
+        tester = UITester()
+        with tester.create_ui(object_list, dict(view=select_row_view)) as ui:
+            cell = tester.find_by_name(ui, "values").locate(Cell(0, 1))
+
+            cell.perform(MouseClick())
+            cell.perform(KeySequence("123"))
+            #cell.perform(KeyClick("Esc"))  # exit edit mode, did not revert
+
+            self.assertEqual(object_list.values[0].other_value, 123)
+
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cells(self):

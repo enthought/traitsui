@@ -18,6 +18,23 @@ applied.
 """
 
 
+class Cell:
+    """ A locator for locating a target uniquely specified by a row index and a
+    column index.
+    
+    Attributes
+    ----------
+    row : int
+        0-based index
+    column : int
+        0-based index
+    """
+
+    def __init__(self, row, column):
+        self.row = row
+        self.column = column
+
+
 class Index:
     """ A locator for locating a target that is uniquely specified by a single
     0-based index.

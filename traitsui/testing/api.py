@@ -59,6 +59,7 @@ Exceptions
 
 from .tester.command import (
     MouseClick,
+    MouseDClick,
     KeyClick,
     KeySequence
 )
@@ -71,6 +72,7 @@ from .tester.exceptions import (
 )
 
 from .tester.locator import (
+    Cell,
     Index,
     TargetById,
     TargetByName,
@@ -84,6 +86,7 @@ from .tester.query import (
     DisplayedText,
     IsChecked,
     IsEnabled,
+    Selected,
     SelectedText
 )
 

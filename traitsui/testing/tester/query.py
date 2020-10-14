@@ -17,6 +17,16 @@ without incurring side-effects.
 """
 
 
+class Selected:
+    """ An object representing an interaction to obtain the object which is
+    currently selected.
+
+    Implementations should return the selected object, or None if nothing is
+    selected.
+    """
+    pass
+
+
 class SelectedText:
     """ An object representing an interaction to obtain the displayed (echoed)
     plain text which is currently selected.
