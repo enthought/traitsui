@@ -20,6 +20,7 @@ from traitsui.testing.tester._ui_tester_registry.wx._traitsui import (
     instance_editor,
     list_editor,
     range_editor,
+    table_editor,
     text_editor,
     ui_base,
 )
@@ -72,6 +73,9 @@ def get_default_registries():
 
     # Editor Factory
     editor_factory.register(registry)
+
+    # TableEditor
+    table_editor.register(registry)
 
     # More general registry follows more specific registry
     return [

@@ -40,6 +40,28 @@ def _create_event(event_type, control):
     return event
 
 
+def _create_grid_event(event_type, control, *args, **kwargs):
+    """ Creates a wxGridEvent of a given type.
+
+    Parameters
+    ----------
+    event_type : wxEventType
+        The type of the event to be created
+    control :
+        The wx control the event is occurring on.
+
+    Returns
+    -------
+    wxGridEvent
+        The created event, of the given type, with the given control set as
+        the event object.
+    """
+    event = wx.grid.GridEvent(
+        control.GetId(), event_type, control, *args, **kwargs
+    )
+    return event
+
+
 def mouse_click(func):
     """ Decorator function for mouse clicks. Decorated functions will return
     if they are not enabled. Additionally, this handles the delay for the
@@ -188,6 +210,14 @@ def mouse_click_object(control, delay):
     if not control.HasFocus():
         control.SetFocus()
     click_event = _create_event(wx.wxEVT_COMMAND_LEFT_CLICK, control)
+    control.ProcessWindowEvent(click_event)
+
+
+@mouse_click
+def mouse_click_cell_in_grid(control, cell, delay):
+    click_event = _create_grid_event(
+        wx.grid.wxEVT_GRID_CELL_LEFT_CLICK, control, row=cell.row, col=cell.column
+    )
     control.ProcessWindowEvent(click_event)
 
 
