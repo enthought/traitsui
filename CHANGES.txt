@@ -72,15 +72,16 @@ Features
 Fixes
 ~~~~~
 
-* Fix deprecation warnings from Traits 6.1 due to the use of PrefixList (#1053)
-* Fix deprecation warning about trait_get (#1062)
+* Fix AttributeError when a nested UI is disposed (#1286)
 * Fix wx error due to use of alignment flag wxEXPAND (#1095)
 * Fix ButtonEditor not causing other widgets to update on OSX and Qt (#1303)
 * Fix ImageEnumEditor button not causing other updates on OSX (#1326)
 * Fix SetEditor on Qt and OSX not updating view after button clicks (#1325)
+* Fix deprecation warnings from Traits 6.1 due to the use of PrefixList (#1053)
+* Fix deprecation warning about trait_get (#1062)
 * Fix QDesktopWidget.availableGeometry deprecation warning (#1311)
-* Fix QDateTime deprecation warning (#1310)
-* Fix AttributeError when a nested UI is disposed (#1286)
+* Replace logger.warn with logger.warning (#1165)
+* Use collections.abc instead of collections (#1103, #1129)
 
 Documentation
 ~~~~~~~~~~~~~
@@ -95,21 +96,20 @@ Build and continuous integration
 * Add a CI job for testing against traits 6.0 (#1108)
 * Update appveyor config to also build on macos (#1160)
 * Add flake8 task to CI with excludes (#1222)
-* Add a new shell command to etstool.py (#1244)
 * Add unittest for ui_traits (#1057)
 * Mention additional dependencies for demo examples (#1147)
+* Explicitly require a minimum version for Traits (#1323)
 
 Maintenance and code organization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* Use collections.abc instead of collections (#1103, #1129)
-* Explicitly require a minimum version for Traits (#1323)
 * Relax constrain on PySide2 version (#1146)
 * Update edm version in travis and appveyor config files (#1049)
 * Resolve warnings in tests from QItemSelectionModel with Qt5 (#1041)
 * Improve how we capture and re-raise errors in GUI tests (#1099)
-* Replace logger.warn with logger.warning (#1165)
 * Replace screen metrics code with Pyface implementation (#1322)
+* Fix QDateTime deprecation warning (#1310)
+* Add a new shell command to etstool.py (#1244)
 
 Release 7.0.1
 -------------
