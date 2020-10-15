@@ -9,6 +9,10 @@ and a number of significant fixes. Demo examples are also distributed as
 package data such that they are visible via the "etsdemo" GUI application (to
 be installed separately).
 
+This release should be compatible with Traits 6.0+. Users are encouraged to
+upgrade to Traits 6.1+ to stay current as future releases of TraitsUI will
+stop supporting Traits 6.0.
+
 Highlights of this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
