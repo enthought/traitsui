@@ -9,10 +9,7 @@ import os
 import runpy
 import unittest
 
-# FIXME: Import from api instead
-# enthought/traitsui#1173
-from traitsui.testing.tester import command, locator
-from traitsui.testing.tester.ui_tester import UITester
+from traitsui.testing.api import Index, KeyClick, KeySequence, UITester
 
 #: Filename of the demo script
 FILENAME = "ListEditor_demo.py"
@@ -29,11 +26,11 @@ class TestListEditorDemo(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(demo) as ui:
             custom_list = tester.find_by_id(ui, "custom")
-            item1 = custom_list.locate(locator.Index(1))
+            item1 = custom_list.locate(Index(1))
             for _ in range(6):
-                item1.perform(command.KeyClick("Backspace"))
-            item1.perform(command.KeySequence("Othello"))
-            item1.perform(command.KeyClick("Enter"))
+                item1.perform(KeyClick("Backspace"))
+            item1.perform(KeySequence("Othello"))
+            item1.perform(KeyClick("Enter"))
             self.assertEqual(
                 demo.play_list,
                 ["The Merchant of Venice", "Othello", "MacBeth"]
