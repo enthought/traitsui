@@ -376,12 +376,15 @@ def docs(runtime, toolkit, environment):
     click.echo('Done installing documentation tools')
 
     os.chdir('docs')
-    commands = [
-        "edm run -e {environment} -- make html",
-    ]
+    command = (
+        "edm run -e {environment} -- sphinx-build -b html "
+        "-d build/doctrees "
+        "source "
+        "build/html"
+    )
     click.echo("Building documentation in  '{environment}'".format(**parameters))
     try:
-        execute(commands, parameters)
+        execute([command], parameters)
     finally:
         os.chdir('..')
     click.echo('Done building documentation')
