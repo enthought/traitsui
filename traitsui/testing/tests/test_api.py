@@ -13,20 +13,21 @@
 
 import unittest
 
+
 class TestApi(unittest.TestCase):
 
     def test_tester_import(self):
-        from traitsui.testing.api import UITester
-    
+        from traitsui.testing.api import UITester  # noqa: F401
+
     def test_commands_imports(self):
-        from traitsui.testing.api import (
+        from traitsui.testing.api import (  # noqa: F401
             MouseClick,
             KeyClick,
             KeySequence,
         )
 
     def test_query_imports(self):
-        from traitsui.testing.api import (
+        from traitsui.testing.api import (  # noqa: F401
             DisplayedText,
             IsChecked,
             IsEnabled,
@@ -34,7 +35,7 @@ class TestApi(unittest.TestCase):
         )
 
     def test_locator_imports(self):
-        from traitsui.testing.api import (
+        from traitsui.testing.api import (  # noqa: F401
             Index,
             TargetById,
             TargetByName,
@@ -43,11 +44,10 @@ class TestApi(unittest.TestCase):
         )
 
     def test_advanced_usage_imports(self):
-        #from traitsui.testing.api import TargetRegistry
-        pass
+        from traitsui.testing.api import TargetRegistry  # noqa: F401
 
     def test_exceptions_imports(self):
-        from traitsui.testing.api import (
+        from traitsui.testing.api import (  # noqa: F401
             Disabled,
             InteractionNotSupported,
             LocationNotSupported,
