@@ -96,7 +96,6 @@ Build and continuous integration
 * Add a CI job for testing against traits 6.0 (#1108)
 * Update appveyor config to also build on macos (#1160)
 * Add flake8 task to CI with excludes (#1222)
-* Add unittest for ui_traits (#1057)
 * Mention additional dependencies for demo examples (#1147)
 * Explicitly require a minimum version for Traits (#1323)
 
