@@ -10,8 +10,8 @@
 #
 
 from traitsui.qt4.check_list_editor import CustomEditor
-from traitsui.testing.tester.locator import Index
 from traitsui.testing.tester.command import MouseClick
+from traitsui.testing.tester.locator import Index
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
     BaseSourceWithLocation
 )
