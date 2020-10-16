@@ -255,6 +255,21 @@ def install(runtime, toolkit, environment, editable, source):
 
 
 @cli.command()
+@click.option("--runtime", default="3.6", help="Python version to use")
+@click.option("--toolkit", default="pyqt", help="Toolkit and API to use")
+@click.option("--environment", default=None, help="EDM environment to use")
+def update(runtime, toolkit, environment):
+    """ Update/Reinstall package into environment.
+
+    """
+    parameters = get_parameters(runtime, toolkit, environment)
+    commands = ["{edm} run -e {environment} -- python setup.py install"]
+    click.echo("Re-installing in  '{environment}'".format(**parameters))
+    execute(commands, parameters)
+    click.echo("Done update")
+
+
+@cli.command()
 @click.option('--runtime', default=DEFAULT_RUNTIME)
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
