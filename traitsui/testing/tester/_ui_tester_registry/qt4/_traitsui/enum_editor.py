@@ -14,14 +14,13 @@ from traitsui.qt4.enum_editor import (
     RadioEditor,
     SimpleEditor,
 )
-from traitsui.testing.api import (
-    DisplayedText,
-    Index,
+from traitsui.testing.tester.command import (
     KeyClick,
     KeySequence,
     MouseClick,
-    SelectedText
 )
+from traitsui.testing.tester.locator import Index
+from traitsui.testing.tester.query import DisplayedText, SelectedText
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
     BaseSourceWithLocation
 )

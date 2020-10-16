@@ -8,7 +8,8 @@
 #
 #  Thanks for using Enthought open source!
 #
-from traitsui.testing.api import DisplayedText, IsChecked, MouseClick
+from traitsui.testing.tester.command import MouseClick
+from traitsui.testing.tester.query import DisplayedText, IsChecked
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
     _interaction_helpers
 )
