@@ -57,6 +57,9 @@ Exceptions
 - :class:`~.TesterError`
 """
 
+# Note: Imports are ordered to match the docstring, not in the typical
+# alphabetical order
+
 # Tester
 from .tester.ui_tester import UITester
 
