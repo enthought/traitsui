@@ -13,12 +13,12 @@
 and location solvers for common Wx GUI components.
 """
 
-from traitsui.testing.api import (
-    DisplayedText,
+from traitsui.testing.tester.command import (
     KeyClick,
     KeySequence,
     MouseClick
 )
+from traitsui.testing.tester.query import DisplayedText
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 

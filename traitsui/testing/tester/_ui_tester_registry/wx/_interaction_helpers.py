@@ -14,7 +14,7 @@ import wx
 from traitsui.testing.tester._ui_tester_registry._compat import (
     check_key_compat
 )
-from traitsui.testing.api import Disabled
+from traitsui.testing.tester.exceptions import Disabled
 
 
 def _create_event(event_type, control):

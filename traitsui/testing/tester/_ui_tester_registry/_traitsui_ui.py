@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-from traitsui.testing.api import TargetById, TargetByName
+from traitsui.testing.tester.locator import TargetById, TargetByName
 
 
 def _get_editor_by_name(ui, name):
