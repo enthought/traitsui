@@ -32,6 +32,7 @@ Interactions (for getting GUI states)
 
 - :class:`~.DisplayedText`
 - :class:`~.IsChecked`
+- :class:`~.IsEnabled`
 - :class:`~.SelectedText`
 
 Locations (for locating GUI elements)
