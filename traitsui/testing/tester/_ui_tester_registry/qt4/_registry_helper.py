@@ -13,12 +13,12 @@
 and location solvers for common Qt GUI components.
 """
 
-from traitsui.testing.api import (
+from traitsui.testing.tester.command import (
     KeyClick,
     KeySequence,
     MouseClick,
-    DisplayedText
 )
+from traitsui.testing.tester.query import DisplayedText
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
     _interaction_helpers
 )
