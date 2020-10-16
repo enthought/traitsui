@@ -16,7 +16,7 @@ from io import open
 MAJOR = 7
 MINOR = 1
 MICRO = 0
-PRERELEASE = ""
+PRERELEASE = "rc2"
 IS_RELEASED = False
 
 # If this file is part of a Git export (for example created with "git archive",
