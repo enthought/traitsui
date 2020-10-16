@@ -213,8 +213,13 @@ def install(runtime, toolkit, environment, editable, source):
     else:
         commands = ["edm environments create {environment} --force --version={runtime}"]
 
+    if toolkit == "pyside2":
+        additional_repositories = "--add-repository enthought/lgpl"
+    else:
+        additional_repositories = ""
+
     commands.extend([
-        "edm install -y -e {environment} " + " ".join(packages),
+        "edm install -y -e {environment} " + " ".join(packages) + " " + additional_repositories,
         "edm run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
         "edm run -e {environment} -- python setup.py clean --all",
         install_traitsui,
