@@ -112,8 +112,8 @@ source_dependencies = {
 # The following should match extras_require in setup.py but with package
 # names compatible with EDM
 extra_dependencies = {
-    # XXX once pyside2 is available in EDM, we will want it here
     'pyside2': {
+        'pyside2',
         'pygments',
     },
     'pyqt': {
@@ -220,12 +220,7 @@ def install(runtime, toolkit, environment, editable, source):
         install_traitsui,
     ])
 
-    # pip install pyqt5 and pyside2, because we don't have them in EDM yet
-    if toolkit == 'pyside2':
-        commands.append(
-            "edm run -e {environment} -- pip install pyside2"
-        )
-    elif toolkit == 'wx':
+    if toolkit == 'wx':
         if sys.platform != 'linux':
             commands.append(
                 "edm run -e {environment} -- pip install wxPython"
