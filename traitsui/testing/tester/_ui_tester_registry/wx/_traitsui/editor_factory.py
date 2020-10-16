@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 from traitsui.wx.editor_factory import ReadonlyEditor, TextEditor
-from traitsui.testing.api import DisplayedText
+from traitsui.testing.tester.query import DisplayedText
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 from traitsui.testing.tester._ui_tester_registry.wx._registry_helper import (
     register_editable_textbox_handlers,
