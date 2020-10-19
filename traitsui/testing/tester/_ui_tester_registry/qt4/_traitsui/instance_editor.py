@@ -9,7 +9,7 @@
 #  Thanks for using Enthought open source!
 #
 
-from traitsui.testing.api import MouseClick
+from traitsui.testing.tester.command import MouseClick
 from traitsui.testing.tester._ui_tester_registry.qt4._interaction_helpers import (  # noqa
     mouse_click_qwidget
 )

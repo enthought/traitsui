@@ -9,7 +9,8 @@
 #  Thanks for using Enthought open source!
 #
 from traitsui.qt4.ui_base import ButtonEditor
-from traitsui.testing.api import DisplayedText, IsEnabled, MouseClick
+from traitsui.testing.tester.command import MouseClick
+from traitsui.testing.tester.query import DisplayedText, IsEnabled
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
     _interaction_helpers
 )

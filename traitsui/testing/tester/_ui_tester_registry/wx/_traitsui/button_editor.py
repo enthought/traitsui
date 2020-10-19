@@ -11,7 +11,8 @@
 import wx
 
 from traitsui.wx.button_editor import SimpleEditor, CustomEditor
-from traitsui.testing.api import DisplayedText, IsEnabled, MouseClick
+from traitsui.testing.tester.command import MouseClick
+from traitsui.testing.tester.query import DisplayedText, IsEnabled
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 

@@ -9,7 +9,8 @@
 #  Thanks for using Enthought open source!
 #
 from traitsui.wx.boolean_editor import ReadonlyEditor, SimpleEditor
-from traitsui.testing.api import DisplayedText, IsChecked, MouseClick
+from traitsui.testing.tester.command import MouseClick
+from traitsui.testing.tester.query import DisplayedText, IsChecked
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 

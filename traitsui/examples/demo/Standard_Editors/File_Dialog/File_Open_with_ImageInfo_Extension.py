@@ -18,8 +18,8 @@ demonstration of writing a custom file dialog extension, select the
 **File Open with Custom Extension** demo.
 
 This example also shows setting a file name filter which only allows common
-image file formats (i.e. *.png, *.gif, *.jpg, *.jpeg) files to be viewed and
-selected.
+image file formats (i.e. ``*.png``, ``*.gif``, ``*.jpg``, ``*.jpeg``) files to
+be viewed and selected.
 """
 # Issue related to the demo warning: enthought/traitsui#953
 

@@ -23,26 +23,26 @@ drop-down is dynamically updated with the current list of available entrees.
 
 Notes:
 
- - The key point of the demo is the use of the 'name' trait in the EnumEditor
-   definition, which links the list of available entrees from the
-   KitchenCapabilities object to the OrderMenu object's entree EnumEditor.
+- The key point of the demo is the use of the 'name' trait in the EnumEditor
+  definition, which links the list of available entrees from the
+  KitchenCapabilities object to the OrderMenu object's entree EnumEditor.
 
- - The user can freely type any value they want, but only items in the
-   capabilities will be accepted, due to the use of the 'values' argument
-   to the Enum trait.  This will be updated as the capabilities change.
+- The user can freely type any value they want, but only items in the
+  capabilities will be accepted, due to the use of the 'values' argument
+  to the Enum trait.  This will be updated as the capabilities change.
 
- - With the Qt backend, the user can type text and it will be auto-completed
-   to valid values as a the user types. The Wx backend doesn't support this
-   capability in the underlying toolkit.
+- With the Qt backend, the user can type text and it will be auto-completed
+  to valid values as a the user types. The Wx backend doesn't support this
+  capability in the underlying toolkit.
 
- - The design will work with any number of active OrderMenu objects, since they
-   all share a common KitchenCapabilities object. As the KitchenCapabilities
-   object is updated, all OrderMenu UI's will automatically update their
-   associated Entree's drop-down list.
+- The design will work with any number of active OrderMenu objects, since they
+  all share a common KitchenCapabilities object. As the KitchenCapabilities
+  object is updated, all OrderMenu UI's will automatically update their
+  associated Entree's drop-down list.
 
- - A careful reader will also observe that this example contains only
-   declarative code. No imperative code is required to handle the automatic
-   updating of the Entree list.
+- A careful reader will also observe that this example contains only
+  declarative code. No imperative code is required to handle the automatic
+  updating of the Entree list.
 
 """
 

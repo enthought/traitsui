@@ -16,11 +16,8 @@ from traitsui.qt4.range_editor import (
     SimpleSliderEditor,
 )
 
-from traitsui.testing.api import (
-    KeyClick,
-    Slider,
-    Textbox
-)
+from traitsui.testing.tester.command import KeyClick
+from traitsui.testing.tester.locator import Slider, Textbox
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
     _interaction_helpers,
     _registry_helper

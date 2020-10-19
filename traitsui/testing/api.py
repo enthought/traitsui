@@ -32,6 +32,7 @@ Interactions (for getting GUI states)
 
 - :class:`~.DisplayedText`
 - :class:`~.IsChecked`
+- :class:`~.IsEnabled`
 - :class:`~.SelectedText`
 
 Locations (for locating GUI elements)
@@ -57,19 +58,28 @@ Exceptions
 - :class:`~.TesterError`
 """
 
+# Note: Imports are ordered to match the docstring, not in the typical
+# alphabetical order
+
+# Tester
+from .tester.ui_tester import UITester
+
+# Interactions (for changing GUI states)
 from .tester.command import (
     MouseClick,
     KeyClick,
     KeySequence
 )
 
-from .tester.exceptions import (
-    Disabled,
-    InteractionNotSupported,
-    LocationNotSupported,
-    TesterError
+# Interactions (for getting GUI states)
+from .tester.query import (
+    DisplayedText,
+    IsChecked,
+    IsEnabled,
+    SelectedText
 )
 
+# Locations (for locating GUI elements)
 from .tester.locator import (
     Index,
     TargetById,
@@ -78,13 +88,13 @@ from .tester.locator import (
     Slider
 )
 
+# Advanced usage
 from .tester.target_registry import TargetRegistry
 
-from .tester.query import (
-    DisplayedText,
-    IsChecked,
-    IsEnabled,
-    SelectedText
+# Exceptions
+from .tester.exceptions import (
+    Disabled,
+    InteractionNotSupported,
+    LocationNotSupported,
+    TesterError
 )
-
-from .tester.ui_tester import UITester

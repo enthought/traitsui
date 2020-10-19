@@ -44,6 +44,13 @@ Notes on upgrading
   using the new testing library which automatically runs the GUI event loop
   after each interaction (e.g. mouse click).
 
+Future removals
+~~~~~~~~~~~~~~~
+
+* :mod:`traitsui.image <traitsui.image>` has been moved to ``pyface.image`` more than 3 years
+  ago and has since been deprecated. Previously it was scheduled to be removed
+  in TraitsUI 6.0. This planned removal is now deferred to TraitsUI 7.2.
+
 Detailed changes
 ~~~~~~~~~~~~~~~~
 
@@ -53,6 +60,7 @@ More than 100 PRs went into this release. Thanks to:
 * Ieva Cerny
 * Kit Yan Choi
 * Mark Dickinson
+* James Johnson
 * Eric Larson
 * Rahul Poruri
 * Jonathan Rocher
@@ -77,6 +85,7 @@ Fixes
 * Fix ButtonEditor not causing other widgets to update on OSX and Qt (#1303)
 * Fix ImageEnumEditor button not causing other updates on OSX (#1326)
 * Fix SetEditor on Qt and OSX not updating view after button clicks (#1325)
+* Fix for menu actions with on_perform being performed twice (#1199)
 * Fix deprecation warnings from Traits 6.1 due to the use of PrefixList (#1053)
 * Fix deprecation warnings from using HasTraits.trait_get (#1062)
 * Fix deprecation warnings from using QDesktopWidget.availableGeometry (#1311)
@@ -89,6 +98,8 @@ Documentation
 * Make demo examples as package data (#1088)
 * Add UITester documentation in User Manual (#1263)
 * Add Developer Guide with internals on the testing package (#1314)
+* Fix warnings in demo examples documentation (#1378)
+* Generate API documentation automatically (#1368)
 
 Build and continuous integration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -189,7 +189,7 @@ except ImportError as exc:
 # #html_style = 'default.css'
 # #html_theme = 'classic'
 
-# Useful aliases to avoid repeating long URLs. 
+# Useful aliases to avoid repeating long URLs.
 extlinks = {'github-demo': (
     'https://github.com/enthought/traitsui/tree/master/traitsui/examples/demo/%s',
     'github-demo')
@@ -238,3 +238,13 @@ intersphinx_mapping = {
     'traits': ('http://docs.enthought.com/traits', None),
     'pyface': ('http://docs.enthought.com/pyface', None),
 }
+
+
+def autodoc_skip_member(app, what, name, obj, skip, options):
+    # Skip load_tests targeting unittest discover
+    is_load_tests = what == "module" and name == "load_tests"
+    return skip or is_load_tests
+
+
+def setup(app):
+    app.connect('autodoc-skip-member', autodoc_skip_member)

@@ -6,10 +6,10 @@ Implementation of a SetEditor demo plugin for the Traits UI demo program.
 
 The four tabs of this demo show variations on the interface as follows:
 
-   Unord I:  Creates an alphabetized subset, has no "move all" options
-   Unord II: Creates an alphabetized subset, has "move all" options
-   Ord I:    Creates a set whose order is specified by the user, no "move all"
-   Ord II:   Creates a set whose order is specifed by the user, has "move all"
+- Unord I:  Creates an alphabetized subset, has no "move all" options
+- Unord II: Creates an alphabetized subset, has "move all" options
+- Ord I:    Creates a set whose order is specified by the user, no "move all"
+- Ord II:   Creates a set whose order is specifed by the user, has "move all"
 """
 
 from traits.api import HasTraits, List
