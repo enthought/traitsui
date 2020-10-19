@@ -179,6 +179,13 @@ class IconButton(QtGui.QPushButton):
         self.clicked.connect(slot)
 
     def sizeHint(self):
+        """ Reimplement sizeHint to return a recommended button size based on
+        the size of the icon.
+
+        Returns
+        -------
+        size : QtCore.QSize
+        """
         # We want the button to have a size similar to the icon.
         # Using the size computed for a tool button gives a desirable size.
         option = QtGui.QStyleOptionButton()
