@@ -44,6 +44,13 @@ Notes on upgrading
   using the new testing library which automatically runs the GUI event loop
   after each interaction (e.g. mouse click).
 
+Future removals
+~~~~~~~~~~~~~~~
+
+* :mod:`traitsui.image <traitsui.image>` has been moved to ``pyface.image`` more than 3 years
+  ago and has since been deprecated. Previously it was scheduled to be removed
+  in TraitsUI 6.0. This planned removal is now deferred to TraitsUI 7.2.
+
 Detailed changes
 ~~~~~~~~~~~~~~~~
 
