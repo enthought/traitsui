@@ -173,12 +173,20 @@ class IconButton(QtGui.QPushButton):
 
         # Configure the button.
         self.setIcon(ico)
-        self.setMaximumSize(ico_sz, ico_sz)
         self.setFlat(True)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.clicked.connect(slot)
 
+    def sizeHint(self):
+        # We want the button to have a size similar to the icon.
+        # Using the size computed for a tool button gives a desirable size.
+        option = QtGui.QStyleOptionButton()
+        self.initStyleOption(option)
+        size = self.style().sizeFromContents(
+            QtGui.QStyle.CT_ToolButton, option, option.iconSize
+        )
+        return size
 
 # ------------------------------------------------------------------------
 # Text Rendering helpers
