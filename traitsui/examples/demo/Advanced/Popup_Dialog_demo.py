@@ -22,6 +22,7 @@ The main items of interest in this demo are:
   value specifies the control that the popup dialog should be positioned near.
 
 Notes:
+
 - This demo only works on the wx backend.
 - Traits UI will automatically position the popup dialog near the specified
   control in such a way that the pop-up dialog will not overlay the control
