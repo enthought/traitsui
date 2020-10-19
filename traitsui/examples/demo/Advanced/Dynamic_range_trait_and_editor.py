@@ -36,19 +36,20 @@ year and the current fuel cost. There is also a button to allow more guests to
 be added to the hotel.
 
 Notes:
-    - The dynamic range trait is the 'temperature' trait in the Guest class. It
-      depends upon traits defined both in the Guest instance as well as in the
-      containing Hotel object.
 
-    - As with most traits code and examples, observe how much of the code is
-      'declarative' versus 'imperative'. Note also the use of properties and
-      'depends_on' metadata, as well as 'cached_property' and 'on_trait_change'
-      method decorators.
+- The dynamic range trait is the 'temperature' trait in the Guest class. It
+  depends upon traits defined both in the Guest instance as well as in the
+  containing Hotel object.
 
-    - Try dragging the guest tabs around so that you can see multiple guests
-      simultaneously, and then watch the behavior of the guest's 'temperature'
-      slider as you adjust the hotel 'season', 'fuel cost' and each guest's
-      'plan'.
+- As with most traits code and examples, observe how much of the code is
+  'declarative' versus 'imperative'. Note also the use of properties and
+  'depends_on' metadata, as well as 'cached_property' and 'on_trait_change'
+  method decorators.
+
+- Try dragging the guest tabs around so that you can see multiple guests
+  simultaneously, and then watch the behavior of the guest's 'temperature'
+  slider as you adjust the hotel 'season', 'fuel cost' and each guest's
+  'plan'.
 """
 
 #-- Imports --------------------------------------------------------------

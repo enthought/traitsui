@@ -18,7 +18,7 @@ demonstration of writing a custom file dialog extension, select the
 **File Open with Custom Extension** demo.
 
 This example also shows setting a file name filter which only allows Python
-source (i.e. *.py) files to be viewed and selected.
+source (i.e. ``*.py``) files to be viewed and selected.
 """
 # Issue related to the demo warning: enthought/traitsui#953
 
