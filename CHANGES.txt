@@ -60,8 +60,8 @@ More than 100 PRs went into this release. Thanks to:
 * Ieva Cerny
 * Kit Yan Choi
 * Mark Dickinson
-* Eric Larson
 * James Johnson
+* Eric Larson
 * Rahul Poruri
 * Jonathan Rocher
 * Kuya Takami
