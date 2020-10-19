@@ -54,6 +54,7 @@ More than 100 PRs went into this release. Thanks to:
 * Kit Yan Choi
 * Mark Dickinson
 * Eric Larson
+* James Johnson
 * Rahul Poruri
 * Jonathan Rocher
 * Kuya Takami
@@ -77,6 +78,7 @@ Fixes
 * Fix ButtonEditor not causing other widgets to update on OSX and Qt (#1303)
 * Fix ImageEnumEditor button not causing other updates on OSX (#1326)
 * Fix SetEditor on Qt and OSX not updating view after button clicks (#1325)
+* Fix for menu actions with on_perform being performed twice (#1199)
 * Fix deprecation warnings from Traits 6.1 due to the use of PrefixList (#1053)
 * Fix deprecation warnings from using HasTraits.trait_get (#1062)
 * Fix deprecation warnings from using QDesktopWidget.availableGeometry (#1311)
@@ -89,6 +91,8 @@ Documentation
 * Make demo examples as package data (#1088)
 * Add UITester documentation in User Manual (#1263)
 * Add Developer Guide with internals on the testing package (#1314)
+* Fix warnings in demo examples documentation (#1378)
+* Generate API documentation automatically (#1368)
 
 Build and continuous integration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
