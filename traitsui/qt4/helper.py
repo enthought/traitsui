@@ -186,6 +186,8 @@ class IconButton(QtGui.QPushButton):
         -------
         size : QtCore.QSize
         """
+        self.ensurePolished()
+
         # We want the button to have a size similar to the icon.
         # Using the size computed for a tool button gives a desirable size.
         option = QtGui.QStyleOptionButton()
