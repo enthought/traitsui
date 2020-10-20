@@ -15,8 +15,8 @@ from io import open
 # into the package source.
 MAJOR = 7
 MINOR = 1
-MICRO = 0
-PRERELEASE = "rc2"
+MICRO = 1
+PRERELEASE = ""
 IS_RELEASED = False
 
 # If this file is part of a Git export (for example created with "git archive",
