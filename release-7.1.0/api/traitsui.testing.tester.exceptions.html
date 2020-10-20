@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.testing.tester.exceptions module &mdash; TraitsUI 7 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '7.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.testing.tester package" href="traitsui.testing.tester.html" >
+    <link rel="next" title="traitsui.testing.tester.locator module" href="traitsui.testing.tester.locator.html" >
+    <link rel="prev" title="traitsui.testing.tester.command module" href="traitsui.testing.tester.command.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 7.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.testing.html" >traitsui.testing package</a></li>
+          <li class="active"><a href="traitsui.testing.tester.html" accesskey="U">traitsui.testing.tester package</a></li>
+  
+    <li><a href="#">traitsui.testing.tester.exceptions module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.testing.tester.locator.html" title="traitsui.testing.tester.locator module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.testing.tester.command.html" title="traitsui.testing.tester.command module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <div class="section" id="module-traitsui.testing.tester.exceptions">
+<span id="traitsui-testing-tester-exceptions-module"></span><h1>traitsui.testing.tester.exceptions module<a class="headerlink" href="#module-traitsui.testing.tester.exceptions" title="Permalink to this headline">¶</a></h1>
+<p>Custom exceptions for UITester and UIWrapper.</p>
+<dl class="exception">
+<dt id="traitsui.testing.tester.exceptions.Disabled">
+<em class="property">exception </em><code class="sig-prename descclassname">traitsui.testing.tester.exceptions.</code><code class="sig-name descname">Disabled</code><a class="headerlink" href="#traitsui.testing.tester.exceptions.Disabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.testing.tester.exceptions.TesterError" title="traitsui.testing.tester.exceptions.TesterError"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.testing.tester.exceptions.TesterError</span></code></a></p>
+<p>Raised when a simulation fails because the widget is disabled.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="traitsui.testing.tester.exceptions.InteractionNotSupported">
+<em class="property">exception </em><code class="sig-prename descclassname">traitsui.testing.tester.exceptions.</code><code class="sig-name descname">InteractionNotSupported</code><span class="sig-paren">(</span><em class="sig-param">target_class</em>, <em class="sig-param">interaction_class</em>, <em class="sig-param">supported</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.testing.tester.exceptions.InteractionNotSupported" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.testing.tester.exceptions.TesterError" title="traitsui.testing.tester.exceptions.TesterError"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.testing.tester.exceptions.TesterError</span></code></a></p>
+<p>Raised when an interaction is not supported by a wrapper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_class</strong> (<em>subclass of type</em>) – The type of a UI target being operated on.</p></li>
+<li><p><strong>interaction_class</strong> (<em>subclass of type</em>) – Any class for the interaction.</p></li>
+<li><p><strong>supported</strong> (<em>list of types</em>) – List of supported interaction types.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="exception">
+<dt id="traitsui.testing.tester.exceptions.LocationNotSupported">
+<em class="property">exception </em><code class="sig-prename descclassname">traitsui.testing.tester.exceptions.</code><code class="sig-name descname">LocationNotSupported</code><span class="sig-paren">(</span><em class="sig-param">target_class</em>, <em class="sig-param">locator_class</em>, <em class="sig-param">supported</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.testing.tester.exceptions.LocationNotSupported" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.testing.tester.exceptions.TesterError" title="traitsui.testing.tester.exceptions.TesterError"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.testing.tester.exceptions.TesterError</span></code></a></p>
+<p>Raised when attempt to resolve a location on a UI fails
+because the location type is not supported.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="traitsui.testing.tester.exceptions.TesterError">
+<em class="property">exception </em><code class="sig-prename descclassname">traitsui.testing.tester.exceptions.</code><code class="sig-name descname">TesterError</code><a class="headerlink" href="#traitsui.testing.tester.exceptions.TesterError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Custom exception for UITester/UIWrapper.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.testing.tester.command.html"
+                        title="previous chapter">traitsui.testing.tester.command module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.testing.tester.locator.html"
+                        title="next chapter">traitsui.testing.tester.locator module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.testing.tester.exceptions.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on Oct 20, 2020.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

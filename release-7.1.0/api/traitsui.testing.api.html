@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.testing.api module &mdash; TraitsUI 7 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '7.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.testing package" href="traitsui.testing.html" >
+    <link rel="next" title="traitsui.ui_editors package" href="traitsui.ui_editors.html" >
+    <link rel="prev" title="traitsui.testing.tester.ui_wrapper module" href="traitsui.testing.tester.ui_wrapper.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 7.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.testing.html" accesskey="U">traitsui.testing package</a></li>
+  
+    <li><a href="#">traitsui.testing.api module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.ui_editors.html" title="traitsui.ui_editors package"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.testing.tester.ui_wrapper.html" title="traitsui.testing.tester.ui_wrapper module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <div class="section" id="module-traitsui.testing.api">
+<span id="traitsui-testing-api-module"></span><h1>traitsui.testing.api module<a class="headerlink" href="#module-traitsui.testing.api" title="Permalink to this headline">¶</a></h1>
+<p>Core API for traitsui.testing</p>
+<p>Functionalities exposed via this package are intended to be used by external
+projects and stability is maintained as much as possible. Imports from other
+packages and subpackages do NOT receive the same stability guarantee.</p>
+<div class="section" id="tester">
+<h2>Tester<a class="headerlink" href="#tester" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester" title="traitsui.testing.tester.ui_tester.UITester"><code class="xref py py-class docutils literal notranslate"><span class="pre">UITester</span></code></a></p></li>
+</ul>
+</div>
+<div class="section" id="interactions-for-changing-gui-states">
+<h2>Interactions (for changing GUI states)<a class="headerlink" href="#interactions-for-changing-gui-states" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="traitsui.testing.tester.command.html#traitsui.testing.tester.command.KeyClick" title="traitsui.testing.tester.command.KeyClick"><code class="xref py py-class docutils literal notranslate"><span class="pre">KeyClick</span></code></a></p></li>
+<li><p><a class="reference internal" href="traitsui.testing.tester.command.html#traitsui.testing.tester.command.KeySequence" title="traitsui.testing.tester.command.KeySequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">KeySequence</span></code></a></p></li>
+<li><p><a class="reference internal" href="traitsui.testing.tester.command.html#traitsui.testing.tester.command.MouseClick" title="traitsui.testing.tester.command.MouseClick"><code class="xref py py-class docutils literal notranslate"><span class="pre">MouseClick</span></code></a></p></li>
+</ul>
+</div>
+<div class="section" id="interactions-for-getting-gui-states">
+<h2>Interactions (for getting GUI states)<a class="headerlink" href="#interactions-for-getting-gui-states" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="traitsui.testing.tester.query.html#traitsui.testing.tester.query.DisplayedText" title="traitsui.testing.tester.query.DisplayedText"><code class="xref py py-class docutils literal notranslate"><span class="pre">DisplayedText</span></code></a></p></li>
+<li><p><a class="reference internal" href="traitsui.testing.tester.query.html#traitsui.testing.tester.query.IsChecked" title="traitsui.testing.tester.query.IsChecked"><code class="xref py py-class docutils literal notranslate"><span class="pre">IsChecked</span></code></a></p></li>
+<li><p><a class="reference internal" href="traitsui.testing.tester.query.html#traitsui.testing.tester.query.IsEnabled" title="traitsui.testing.tester.query.IsEnabled"><code class="xref py py-class docutils literal notranslate"><span class="pre">IsEnabled</span></code></a></p></li>
+<li><p><a class="reference internal" href="traitsui.testing.tester.query.html#traitsui.testing.tester.query.SelectedText" title="traitsui.testing.tester.query.SelectedText"><code class="xref py py-class docutils literal notranslate"><span class="pre">SelectedText</span></code></a></p></li>
+</ul>
+</div>
+<div class="section" id="locations-for-locating-gui-elements">
+<h2>Locations (for locating GUI elements)<a class="headerlink" href="#locations-for-locating-gui-elements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="traitsui.testing.tester.locator.html#traitsui.testing.tester.locator.Index" title="traitsui.testing.tester.locator.Index"><code class="xref py py-class docutils literal notranslate"><span class="pre">Index</span></code></a></p></li>
+<li><p><a class="reference internal" href="traitsui.testing.tester.locator.html#traitsui.testing.tester.locator.Slider" title="traitsui.testing.tester.locator.Slider"><code class="xref py py-class docutils literal notranslate"><span class="pre">Slider</span></code></a></p></li>
+<li><p><a class="reference internal" href="traitsui.testing.tester.locator.html#traitsui.testing.tester.locator.TargetById" title="traitsui.testing.tester.locator.TargetById"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetById</span></code></a></p></li>
+<li><p><a class="reference internal" href="traitsui.testing.tester.locator.html#traitsui.testing.tester.locator.TargetByName" title="traitsui.testing.tester.locator.TargetByName"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetByName</span></code></a></p></li>
+<li><p><a class="reference internal" href="traitsui.testing.tester.locator.html#traitsui.testing.tester.locator.Textbox" title="traitsui.testing.tester.locator.Textbox"><code class="xref py py-class docutils literal notranslate"><span class="pre">Textbox</span></code></a></p></li>
+</ul>
+</div>
+<div class="section" id="advanced-usage">
+<h2>Advanced usage<a class="headerlink" href="#advanced-usage" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="traitsui.testing.tester.target_registry.html#traitsui.testing.tester.target_registry.TargetRegistry" title="traitsui.testing.tester.target_registry.TargetRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetRegistry</span></code></a></p></li>
+</ul>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="traitsui.testing.tester.exceptions.html#traitsui.testing.tester.exceptions.Disabled" title="traitsui.testing.tester.exceptions.Disabled"><code class="xref py py-class docutils literal notranslate"><span class="pre">Disabled</span></code></a></p></li>
+<li><p><a class="reference internal" href="traitsui.testing.tester.exceptions.html#traitsui.testing.tester.exceptions.InteractionNotSupported" title="traitsui.testing.tester.exceptions.InteractionNotSupported"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractionNotSupported</span></code></a></p></li>
+<li><p><a class="reference internal" href="traitsui.testing.tester.exceptions.html#traitsui.testing.tester.exceptions.LocationNotSupported" title="traitsui.testing.tester.exceptions.LocationNotSupported"><code class="xref py py-class docutils literal notranslate"><span class="pre">LocationNotSupported</span></code></a></p></li>
+<li><p><a class="reference internal" href="traitsui.testing.tester.exceptions.html#traitsui.testing.tester.exceptions.TesterError" title="traitsui.testing.tester.exceptions.TesterError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TesterError</span></code></a></p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">traitsui.testing.api module</a><ul>
+<li><a class="reference internal" href="#tester">Tester</a></li>
+<li><a class="reference internal" href="#interactions-for-changing-gui-states">Interactions (for changing GUI states)</a></li>
+<li><a class="reference internal" href="#interactions-for-getting-gui-states">Interactions (for getting GUI states)</a></li>
+<li><a class="reference internal" href="#locations-for-locating-gui-elements">Locations (for locating GUI elements)</a></li>
+<li><a class="reference internal" href="#advanced-usage">Advanced usage</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.testing.tester.ui_wrapper.html"
+                        title="previous chapter">traitsui.testing.tester.ui_wrapper module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.ui_editors.html"
+                        title="next chapter">traitsui.ui_editors package</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.testing.api.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on Oct 20, 2020.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

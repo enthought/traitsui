@@ -1,0 +1,21 @@
+traitsui.testing package
+========================
+
+.. automodule:: traitsui.testing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   traitsui.testing.tester
+
+Submodules
+----------
+
+.. toctree::
+
+   traitsui.testing.api

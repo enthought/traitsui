@@ -1,0 +1,14 @@
+traitsui.image package
+======================
+
+.. automodule:: traitsui.image
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   traitsui.image.image

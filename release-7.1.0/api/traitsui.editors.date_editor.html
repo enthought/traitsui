@@ -1,0 +1,284 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editors.date_editor module &mdash; TraitsUI 7 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '7.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
+    <link rel="next" title="traitsui.editors.date_range_editor module" href="traitsui.editors.date_range_editor.html" >
+    <link rel="prev" title="traitsui.editors.custom_editor module" href="traitsui.editors.custom_editor.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 7.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
+  
+    <li><a href="#">traitsui.editors.date_editor module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editors.date_range_editor.html" title="traitsui.editors.date_range_editor module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editors.custom_editor.html" title="traitsui.editors.custom_editor module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <div class="section" id="module-traitsui.editors.date_editor">
+<span id="traitsui-editors-date-editor-module"></span><h1>traitsui.editors.date_editor module<a class="headerlink" href="#module-traitsui.editors.date_editor" title="Permalink to this headline">¶</a></h1>
+<p>A Traits UI editor that wraps a WX calendar panel.</p>
+<dl class="class">
+<dt id="traitsui.editors.date_editor.CellFormat">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.date_editor.</code><code class="sig-name descname">CellFormat</code><span class="sig-paren">(</span><em class="sig-param">**args</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.date_editor.CellFormat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Styling attributes for calendar widget cells.</p>
+<p>Encapsulates some common visual attributes to set on the cells of a
+calendar widget.  All attributes default to None, which means that they
+will not override the existing values of the calendar widget.</p>
+<p>The color attributes should be strings representing color names,
+from the list: red, green, blue, cyan, magenta, yellow, gray, white,
+darkRed, darkGreen, darkBlue, darkCyan, darkmagenta, darkYellow,
+darkGray, black, lightGray.</p>
+<p>Alternatively, they can be a tuple of (R,G,B) values from 0-255.</p>
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.CellFormat.bgcolor">
+<code class="sig-name descname">bgcolor</code><em class="property"> = None</em><a class="headerlink" href="#traitsui.editors.date_editor.CellFormat.bgcolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>The background color.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.CellFormat.bold">
+<code class="sig-name descname">bold</code><em class="property"> = None</em><a class="headerlink" href="#traitsui.editors.date_editor.CellFormat.bold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to use a bold weight.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.CellFormat.fgcolor">
+<code class="sig-name descname">fgcolor</code><em class="property"> = None</em><a class="headerlink" href="#traitsui.editors.date_editor.CellFormat.fgcolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>The text color.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.CellFormat.italics">
+<code class="sig-name descname">italics</code><em class="property"> = None</em><a class="headerlink" href="#traitsui.editors.date_editor.CellFormat.italics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to display in an italic style.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.CellFormat.underline">
+<code class="sig-name descname">underline</code><em class="property"> = None</em><a class="headerlink" href="#traitsui.editors.date_editor.CellFormat.underline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to underline the text.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.editors.date_editor.DateEditor">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.date_editor.</code><code class="sig-name descname">DateEditor</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.date_editor.DateEditor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory" title="traitsui.editor_factory.EditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editor_factory.EditorFactory</span></code></a></p>
+<p>Editor factory for date/time editors.</p>
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.DateEditor.allow_future">
+<code class="sig-name descname">allow_future</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.editors.date_editor.DateEditor.allow_future" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should users be able to pick future dates when using the CustomEditor?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.DateEditor.message">
+<code class="sig-name descname">message</code><em class="property"> = Str(&quot;Undefined&quot;)</em><a class="headerlink" href="#traitsui.editors.date_editor.DateEditor.message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Message to show when Date is None.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.DateEditor.months">
+<code class="sig-name descname">months</code><em class="property"> = Int(3)</em><a class="headerlink" href="#traitsui.editors.date_editor.DateEditor.months" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many months to show at a time.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.DateEditor.multi_select">
+<code class="sig-name descname">multi_select</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.date_editor.DateEditor.multi_select" title="Permalink to this definition">¶</a></dt>
+<dd><p>True: Must be a List of Dates.  False: Must be a Date instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.DateEditor.on_mixed_select">
+<code class="sig-name descname">on_mixed_select</code><em class="property"> = Enum(&quot;toggle&quot;, &quot;on&quot;, &quot;off&quot;, &quot;max_change&quot;, &quot;min_change&quot;)</em><a class="headerlink" href="#traitsui.editors.date_editor.DateEditor.on_mixed_select" title="Permalink to this definition">¶</a></dt>
+<dd><p>When a user multi-selects entries and some of those entries are already
+selected and some are not, what should be the behavior for the seletion?</p>
+<p>Options:</p>
+<ul class="simple">
+<li><p>‘toggle’: Toggle each day to the opposite of the current state.</p></li>
+<li><p>‘on’: Always turn them on.</p></li>
+<li><p>‘off’: Always turn them off.</p></li>
+<li><p>‘max_change’: Change all to same state, with most days changing.
+For example 1 selected and 9 not, then they would all get selected.</p></li>
+<li><p>‘min_change’: Change all to same state, with min days changing.
+For example 1 selected and 9 not, then they would all get unselected.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.DateEditor.padding">
+<code class="sig-name descname">padding</code><em class="property"> = Int(5)</em><a class="headerlink" href="#traitsui.editors.date_editor.DateEditor.padding" title="Permalink to this definition">¶</a></dt>
+<dd><p>How much space to put between the individual months.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.DateEditor.selected_style">
+<code class="sig-name descname">selected_style</code><em class="property"> = Instance( …</em><a class="headerlink" href="#traitsui.editors.date_editor.DateEditor.selected_style" title="Permalink to this definition">¶</a></dt>
+<dd><p>Style used when a date is selected.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.DateEditor.shift_to_select">
+<code class="sig-name descname">shift_to_select</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.editors.date_editor.DateEditor.shift_to_select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the user have to hold down Shift for the left-click multiselect?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.DateEditor.strftime">
+<code class="sig-name descname">strftime</code><em class="property"> = Str(&quot;%B %d %Y (%a)&quot;)</em><a class="headerlink" href="#traitsui.editors.date_editor.DateEditor.strftime" title="Permalink to this definition">¶</a></dt>
+<dd><p>The string representation of the date to show.  Uses time.strftime
+format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.date_editor.DateEditor.view">
+<code class="sig-name descname">view</code><em class="property"> = AView</em><a class="headerlink" href="#traitsui.editors.date_editor.DateEditor.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional view to display when a read-only text editor is clicked:</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.editors.custom_editor.html"
+                        title="previous chapter">traitsui.editors.custom_editor module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.editors.date_range_editor.html"
+                        title="next chapter">traitsui.editors.date_range_editor module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.editors.date_editor.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on Oct 20, 2020.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
