@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.testing.tester.query module &mdash; TraitsUI 7 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '7.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.testing.tester package" href="traitsui.testing.tester.html" >
+    <link rel="next" title="traitsui.testing.tester.target_registry module" href="traitsui.testing.tester.target_registry.html" >
+    <link rel="prev" title="traitsui.testing.tester.locator module" href="traitsui.testing.tester.locator.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 7.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.testing.html" >traitsui.testing package</a></li>
+          <li class="active"><a href="traitsui.testing.tester.html" accesskey="U">traitsui.testing.tester package</a></li>
+  
+    <li><a href="#">traitsui.testing.tester.query module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.testing.tester.target_registry.html" title="traitsui.testing.tester.target_registry module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.testing.tester.locator.html" title="traitsui.testing.tester.locator module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <div class="section" id="module-traitsui.testing.tester.query">
+<span id="traitsui-testing-tester-query-module"></span><h1>traitsui.testing.tester.query module<a class="headerlink" href="#module-traitsui.testing.tester.query" title="Permalink to this headline">¶</a></h1>
+<p>This module defines interaction objects that can be passed to
+<code class="docutils literal notranslate"><span class="pre">UIWrapper.inspect</span></code> where the actions represent ‘queries’.</p>
+<p>Implementations for these actions are expected to return value(s), ideally
+without incurring side-effects.</p>
+<dl class="class">
+<dt id="traitsui.testing.tester.query.DisplayedText">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.testing.tester.query.</code><code class="sig-name descname">DisplayedText</code><a class="headerlink" href="#traitsui.testing.tester.query.DisplayedText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An object representing an interaction to obtain the displayed (echoed)
+plain text.</p>
+<p>E.g. For a textbox using a password styling, the displayed text should
+be a string of platform-dependent password mask characters.</p>
+<p>Implementations should return a <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.testing.tester.query.IsChecked">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.testing.tester.query.</code><code class="sig-name descname">IsChecked</code><a class="headerlink" href="#traitsui.testing.tester.query.IsChecked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An object representing an interaction to obtain whether a checkable
+widget (e.g. checkbox) is checked or not.</p>
+<p>Implementations should return True if checked and False if not.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.testing.tester.query.IsEnabled">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.testing.tester.query.</code><code class="sig-name descname">IsEnabled</code><a class="headerlink" href="#traitsui.testing.tester.query.IsEnabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An object representing an interaction to obtain whether a widget is
+enabled or not.</p>
+<p>Implementations should return True if enabled and False if not.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.testing.tester.query.SelectedText">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.testing.tester.query.</code><code class="sig-name descname">SelectedText</code><a class="headerlink" href="#traitsui.testing.tester.query.SelectedText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An object representing an interaction to obtain the displayed (echoed)
+plain text which is currently selected.</p>
+<p>E.g. For a Enum List, with one entry currently selected, the displayed
+selected text would be the label of that entry.</p>
+<p>Implementations should return a <code class="docutils literal notranslate"><span class="pre">str</span></code>, or None if nothing is selected.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.testing.tester.locator.html"
+                        title="previous chapter">traitsui.testing.tester.locator module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.testing.tester.target_registry.html"
+                        title="next chapter">traitsui.testing.tester.target_registry module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.testing.tester.query.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on Oct 20, 2020.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

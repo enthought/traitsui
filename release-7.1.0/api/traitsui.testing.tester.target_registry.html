@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.testing.tester.target_registry module &mdash; TraitsUI 7 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '7.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.testing.tester package" href="traitsui.testing.tester.html" >
+    <link rel="next" title="traitsui.testing.tester.ui_tester module" href="traitsui.testing.tester.ui_tester.html" >
+    <link rel="prev" title="traitsui.testing.tester.query module" href="traitsui.testing.tester.query.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 7.1 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.testing.html" >traitsui.testing package</a></li>
+          <li class="active"><a href="traitsui.testing.tester.html" accesskey="U">traitsui.testing.tester package</a></li>
+  
+    <li><a href="#">traitsui.testing.tester.target_registry module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.testing.tester.ui_tester.html" title="traitsui.testing.tester.ui_tester module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.testing.tester.query.html" title="traitsui.testing.tester.query module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <div class="section" id="module-traitsui.testing.tester.target_registry">
+<span id="traitsui-testing-tester-target-registry-module"></span><h1>traitsui.testing.tester.target_registry module<a class="headerlink" href="#module-traitsui.testing.tester.target_registry" title="Permalink to this headline">¶</a></h1>
+<p>Define the registry object responsible for collecting and reporting
+implementations for testing various GUI elements.</p>
+<dl class="class">
+<dt id="traitsui.testing.tester.target_registry.TargetRegistry">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.testing.tester.target_registry.</code><code class="sig-name descname">TargetRegistry</code><a class="headerlink" href="#traitsui.testing.tester.target_registry.TargetRegistry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An object for registering interaction and location resolution logic
+for different UI target types.</p>
+<p><code class="docutils literal notranslate"><span class="pre">register_interaction</span></code> supports extending <code class="docutils literal notranslate"><span class="pre">UIWrapper.perform</span></code> and
+<code class="docutils literal notranslate"><span class="pre">UIWrapper.inspect</span></code> for a given UI target type and interaction type.</p>
+<p><code class="docutils literal notranslate"><span class="pre">register_location</span></code> supports extending <code class="docutils literal notranslate"><span class="pre">UIWrapper.locate</span></code> for a given
+UI target type and location type.</p>
+<p>See <a class="reference internal" href="../traitsui_user_manual/testing.html#advanced-testing"><span class="std std-ref">Advanced Testing</span></a> Section in the User Manual for further details.</p>
+<dl class="method">
+<dt id="traitsui.testing.tester.target_registry.TargetRegistry.get_handler">
+<code class="sig-name descname">get_handler</code><span class="sig-paren">(</span><em class="sig-param">target_class</em>, <em class="sig-param">interaction_class</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.testing.tester.target_registry.TargetRegistry.get_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a callable for handling an interaction for a given target
+type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_class</strong> (<em>subclass of type</em>) – The type of a UI target being operated on.</p></li>
+<li><p><strong>interaction_class</strong> (<em>subclass of type</em>) – Any class.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>handler</strong> – The function to handle the particular interaction on a target.
+<code class="docutils literal notranslate"><span class="pre">interaction</span></code> should be an instance of <code class="docutils literal notranslate"><span class="pre">interaction_class</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>callable(<a class="reference internal" href="traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper" title="traitsui.testing.tester.ui_wrapper.UIWrapper">UIWrapper</a>, interaction) -&gt; any</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="traitsui.testing.tester.exceptions.html#traitsui.testing.tester.exceptions.InteractionNotSupported" title="traitsui.testing.tester.exceptions.InteractionNotSupported"><strong>InteractionNotSupported</strong></a> – If the given target and interaction types are not supported
+    by this registry.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.testing.tester.target_registry.TargetRegistry.get_interaction_doc">
+<code class="sig-name descname">get_interaction_doc</code><span class="sig-paren">(</span><em class="sig-param">target_class</em>, <em class="sig-param">interaction_class</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.testing.tester.target_registry.TargetRegistry.get_interaction_doc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the documentation for the given target and locator type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_class</strong> (<em>subclass of type</em>) – The type of a UI target being operated on.</p></li>
+<li><p><strong>interaction_class</strong> (<em>subclass of type</em>) – Any class.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>doc</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="traitsui.testing.tester.exceptions.html#traitsui.testing.tester.exceptions.InteractionNotSupported" title="traitsui.testing.tester.exceptions.InteractionNotSupported"><strong>InteractionNotSupported</strong></a> – If the given target and interaction types are not supported
+    by this registry.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.testing.tester.target_registry.TargetRegistry.get_interactions">
+<code class="sig-name descname">get_interactions</code><span class="sig-paren">(</span><em class="sig-param">target_class</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.testing.tester.target_registry.TargetRegistry.get_interactions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all the interactions supported for the given target type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>target_class</strong> (<em>subclass of type</em>) – The type of a UI target being operated on.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>interaction_classes</strong> – Supported interaction types for the given target type.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.testing.tester.target_registry.TargetRegistry.get_location_doc">
+<code class="sig-name descname">get_location_doc</code><span class="sig-paren">(</span><em class="sig-param">target_class</em>, <em class="sig-param">locator_class</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.testing.tester.target_registry.TargetRegistry.get_location_doc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the documentation for the given target and locator type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_class</strong> (<em>subclass of type</em>) – The type of a UI target being operated on.</p></li>
+<li><p><strong>locator_class</strong> (<em>subclass of type</em>) – Any class.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>doc</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="traitsui.testing.tester.exceptions.html#traitsui.testing.tester.exceptions.LocationNotSupported" title="traitsui.testing.tester.exceptions.LocationNotSupported"><strong>LocationNotSupported</strong></a> – If the given locator and target types are not supported.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.testing.tester.target_registry.TargetRegistry.get_locations">
+<code class="sig-name descname">get_locations</code><span class="sig-paren">(</span><em class="sig-param">target_class</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.testing.tester.target_registry.TargetRegistry.get_locations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all the location types supported for the given target type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>target_class</strong> (<em>subclass of type</em>) – The type of a UI target being operated on.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>locators_classes</strong> – Supported locator types for the given target type.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.testing.tester.target_registry.TargetRegistry.get_solver">
+<code class="sig-name descname">get_solver</code><span class="sig-paren">(</span><em class="sig-param">target_class</em>, <em class="sig-param">locator_class</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.testing.tester.target_registry.TargetRegistry.get_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a callable registered for resolving a location for the
+given target type and locator type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_class</strong> (<em>subclass of type</em>) – The type of a UI target being operated on.</p></li>
+<li><p><strong>locator_class</strong> (<em>subclass of type</em>) – Any class.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="traitsui.testing.tester.exceptions.html#traitsui.testing.tester.exceptions.LocationNotSupported" title="traitsui.testing.tester.exceptions.LocationNotSupported"><strong>LocationNotSupported</strong></a> – If the given locator and target types are not supported.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.testing.tester.target_registry.TargetRegistry.register_interaction">
+<code class="sig-name descname">register_interaction</code><span class="sig-paren">(</span><em class="sig-param">target_class</em>, <em class="sig-param">interaction_class</em>, <em class="sig-param">handler</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.testing.tester.target_registry.TargetRegistry.register_interaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a handler for a given target type and interaction type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_class</strong> (<em>subclass of type</em>) – The type of a UI target being operated on.</p></li>
+<li><p><strong>interaction_class</strong> (<em>subclass of type</em>) – Any class.</p></li>
+<li><p><strong>handler</strong> (<em>callable</em><em>(</em><a class="reference internal" href="traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper" title="traitsui.testing.tester.ui_wrapper.UIWrapper"><em>UIWrapper</em></a><em>, </em><em>interaction</em><em>) </em><em>-&gt; any</em>) – The function to handle the particular interaction on a target.
+<code class="docutils literal notranslate"><span class="pre">interaction</span></code> should be an instance of <code class="docutils literal notranslate"><span class="pre">interaction_class</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If a handler has already be registered for the same target type
+    and interaction class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.testing.tester.target_registry.TargetRegistry.register_location">
+<code class="sig-name descname">register_location</code><span class="sig-paren">(</span><em class="sig-param">target_class</em>, <em class="sig-param">locator_class</em>, <em class="sig-param">solver</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.testing.tester.target_registry.TargetRegistry.register_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a solver for resolving the next UI target for the given
+target type and locator type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_class</strong> (<em>subclass of type</em>) – The type of a UI target being operated on.</p></li>
+<li><p><strong>locator_class</strong> (<em>subclass of type</em>) – Any class.</p></li>
+<li><p><strong>solver</strong> (<em>callable</em><em>(</em><a class="reference internal" href="traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper" title="traitsui.testing.tester.ui_wrapper.UIWrapper"><em>UIWrapper</em></a><em>, </em><em>location</em><em>) </em><em>-&gt; any</em>) – A callable for resolving a location into a new target.
+The location argument will be an instance of locator_class.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If a solver has already been registered for the given target
+    type and locator type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.testing.tester.query.html"
+                        title="previous chapter">traitsui.testing.tester.query module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.testing.tester.ui_tester.html"
+                        title="next chapter">traitsui.testing.tester.ui_tester module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.testing.tester.target_registry.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on Oct 20, 2020.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editors.scrubber_editor module &mdash; TraitsUI 7 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '7.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 7 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
+    <link rel="next" title="traitsui.editors.search_editor module" href="traitsui.editors.search_editor.html" >
+    <link rel="prev" title="traitsui.editors.rgb_color_editor module" href="traitsui.editors.rgb_color_editor.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 7 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 7.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
+  
+    <li><a href="#">traitsui.editors.scrubber_editor module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editors.search_editor.html" title="traitsui.editors.search_editor module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editors.rgb_color_editor.html" title="traitsui.editors.rgb_color_editor module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <div class="section" id="module-traitsui.editors.scrubber_editor">
+<span id="traitsui-editors-scrubber-editor-module"></span><h1>traitsui.editors.scrubber_editor module<a class="headerlink" href="#module-traitsui.editors.scrubber_editor" title="Permalink to this headline">¶</a></h1>
+<p>Editor factory for scrubber-based integer or float value editors.</p>
+<dl class="class">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor">
+<em class="property">class </em><code class="sig-prename descclassname">traitsui.editors.scrubber_editor.</code><code class="sig-name descname">ScrubberEditor</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.basic_editor_factory.html#traitsui.basic_editor_factory.BasicEditorFactory" title="traitsui.basic_editor_factory.BasicEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.basic_editor_factory.BasicEditorFactory</span></code></a></p>
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.active_color">
+<code class="sig-name descname">active_color</code><em class="property"> = Color(None)</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.active_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The active mode background color for the scrubber:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.alignment">
+<code class="sig-name descname">alignment</code><em class="property"> = Alignment(&quot;center&quot;)</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.alignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>The alignment of the text within the scrubber:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.border_color">
+<code class="sig-name descname">border_color</code><em class="property"> = Color(None)</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.border_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The scrubber border color:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.color">
+<code class="sig-name descname">color</code><em class="property"> = Color(None)</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The background color for the scrubber:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.high">
+<code class="sig-name descname">high</code><em class="property"> = Float()</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.high" title="Permalink to this definition">¶</a></dt>
+<dd><p>The high end of the scrubber range:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.hover_color">
+<code class="sig-name descname">hover_color</code><em class="property"> = Color(None)</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.hover_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The hover mode background color for the scrubber:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.increment">
+<code class="sig-name descname">increment</code><em class="property"> = Float()</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.increment" title="Permalink to this definition">¶</a></dt>
+<dd><p>The normal increment (default: auto-calculate):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.klass">
+<code class="sig-name descname">klass</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.klass" title="Permalink to this definition">¶</a></dt>
+<dd><p>The editor class to be instantiated:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.low">
+<code class="sig-name descname">low</code><em class="property"> = Float()</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.low" title="Permalink to this definition">¶</a></dt>
+<dd><p>The low end of the scrubber range:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.editors.scrubber_editor.ScrubberEditor.text_color">
+<code class="sig-name descname">text_color</code><em class="property"> = Color(&quot;black&quot;)</em><a class="headerlink" href="#traitsui.editors.scrubber_editor.ScrubberEditor.text_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The color to use for the value text:</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.editors.rgb_color_editor.html"
+                        title="previous chapter">traitsui.editors.rgb_color_editor module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.editors.search_editor.html"
+                        title="next chapter">traitsui.editors.search_editor module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.editors.scrubber_editor.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on Jul 15, 2020.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
