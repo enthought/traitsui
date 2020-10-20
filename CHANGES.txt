@@ -1,6 +1,126 @@
 Traits UI Changelog
 ===================
 
+Release 7.1.0
+-------------
+
+TraitsUI is a minor feature release which introduces a new testing library
+and a number of significant fixes. Demo examples are also distributed as
+package data such that they are visible via the "etsdemo" GUI application (to
+be installed separately).
+
+This release should be compatible with Traits 6.0+. Users are encouraged to
+upgrade to Traits 6.1+ to stay current as future releases of TraitsUI will
+stop supporting Traits 6.0.
+
+Highlights of this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* A new :mod:`traitsui.testing.api` module has been introduced for testing
+  GUI applications built using TraitsUI. See
+  :ref:`testing-traitsui-applications` for an introduction. Builtin support
+  has been added for testing several TraitsUI editors. More support will be
+  added in the future.
+* On OSX and Qt, there have been reports of missing UI view updates after
+  a push button is clicked. While this is suspected to be a Qt issue, changes
+  have been made to ButtonEditor, SetEditor and ImageEnumEditor to mitigate the
+  situation.
+* The internal logic for disposing an instance of :class:`~traitsui.ui.UI` is
+  changed as an attempt to resolve AttributeError that occurs while a nested
+  UI is removed.
+
+Notes on upgrading
+~~~~~~~~~~~~~~~~~~
+
+* On the issue about Qt button not causing views to update on OSX, projects
+  that have been working around the issue by adding ``GUI().process_events()``
+  (or similar) in their applications may now try to remove those workarounds.
+  However, the change that mitigates the issue in a production environment has
+  implications for tests: The button's click slot is no longer invoked
+  immediately but always invoked by the Qt GUI event loop. Tests that used to
+  call the Qt button ``click`` method directly and rely on the event to happen
+  immediately will now need to update their tests to ensure that the click slot
+  is processed by the Qt GUI event loop in the same order as before. Consider
+  using the new testing library which automatically runs the GUI event loop
+  after each interaction (e.g. mouse click).
+
+Future removals
+~~~~~~~~~~~~~~~
+
+* :mod:`traitsui.image <traitsui.image>` has been moved to ``pyface.image`` more than 3 years
+  ago and has since been deprecated. Previously it was scheduled to be removed
+  in TraitsUI 6.0. This planned removal is now deferred to TraitsUI 7.2.
+
+Detailed changes
+~~~~~~~~~~~~~~~~
+
+More than 100 PRs went into this release. Thanks to:
+
+* Aaron Ayres
+* Ieva Cerny
+* Kit Yan Choi
+* Mark Dickinson
+* James Johnson
+* Eric Larson
+* Rahul Poruri
+* Jonathan Rocher
+* Kuya Takami
+* Ioannis Tziakos
+* Corran Webster
+
+Note that the following list is not exhaustive. Many more PRs references have
+been omitted.
+
+Features
+~~~~~~~~
+
+* Add :class:`~traitsui.testing.ui_tester.UITester` for testing TraitsUI
+  applications (#1107, #1157, #1171, #1175, #1179, #1201, #1207, #1269)
+
+Fixes
+~~~~~
+
+* Fix AttributeError when a nested UI is disposed (#1286)
+* Fix wx error due to use of alignment flag wxEXPAND (#1095)
+* Fix ButtonEditor not causing other widgets to update on OSX and Qt (#1303)
+* Fix ImageEnumEditor button not causing other updates on OSX (#1326)
+* Fix SetEditor on Qt and OSX not updating view after button clicks (#1325)
+* Fix for menu actions with on_perform being performed twice (#1199)
+* Fix deprecation warnings from Traits 6.1 due to the use of PrefixList (#1053)
+* Fix deprecation warnings from using HasTraits.trait_get (#1062)
+* Fix deprecation warnings from using QDesktopWidget.availableGeometry (#1311)
+* Fix deprecation warnings from using logging.warn (#1165)
+* Fix deprecation warnings from using ABC in collections (#1103, #1129)
+
+Documentation
+~~~~~~~~~~~~~
+
+* Make demo examples as package data (#1088)
+* Add UITester documentation in User Manual (#1263)
+* Add Developer Guide with internals on the testing package (#1314)
+* Fix warnings in demo examples documentation (#1378)
+* Generate API documentation automatically (#1368)
+
+Build and continuous integration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Add a CI job for testing against traits 6.0 (#1108)
+* Move MacOS CI build from Travis to Appveyor (#1160)
+* Add flake8 task to CI with exclusions (#1222)
+* Explicitly declare additional dependencies for demo examples (#1147)
+* Explicitly require a minimum version for Traits (#1323)
+
+Maintenance and code organization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Relax constraint on PySide2 version (#1146)
+* Update edm version in travis and appveyor config files (#1049)
+* Resolve warnings in tests from QItemSelectionModel with Qt5 (#1041)
+* Improve how we capture and re-raise errors in GUI tests (#1099)
+* Replace screen metrics code with Pyface implementation (#1322)
+* Fix deprecation warnings from certain usage of QDateTime in tests (#1310)
+* Add a new shell command to etstool.py (#1244)
+
 Release 7.0.1
 -------------
 
