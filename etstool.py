@@ -111,8 +111,8 @@ TRAITS_VERSION_REQUIRES = os.environ.get("TRAITS_REQUIRES", "")
 
 # Required runtime dependencies. Should match install_requires in setup.py
 dependencies = {
+    "pyface",
     "traits" + TRAITS_VERSION_REQUIRES,
-    # pyface is installed from source via ci-src-requirements.txt
 }
 
 # NOTE : pyface is always installed from source
