@@ -379,7 +379,7 @@ class TestUIWrapperHelp(unittest.TestCase):
         # then
         self.assertEqual(
             stream.getvalue(),
-            textwrap.dedent(f"""\
+            textwrap.dedent("""\
                 Interactions
                 ------------
                 No interactions are supported.
