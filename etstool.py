@@ -117,6 +117,7 @@ dependencies = {
 
 # NOTE : pyface is always installed from source
 source_dependencies = {
+    "pyface": "git+http://github.com/enthought/pyface.git#egg=pyface",
     "traits": "git+http://github.com/enthought/traits.git#egg=traits",
 }
 
