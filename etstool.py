@@ -540,4 +540,4 @@ def execute(commands, parameters):
 
 
 if __name__ == '__main__':
-    cli()
+    cli(prog_name="python etstool.py")
