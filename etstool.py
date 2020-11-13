@@ -192,7 +192,14 @@ def normalize(name):
     return name.replace("_", "-")
 
 
-@click.group(context_settings={"token_normalize_func": normalize})
+# Ensure that "-h" is supported for getting help.
+CONTEXT_SETTINGS = dict(
+    help_option_names=["-h", "--help"],
+    token_normalize_func=normalize,
+)
+
+
+@click.group(context_settings=CONTEXT_SETTINGS)
 def cli():
     pass
 
