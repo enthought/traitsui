@@ -221,10 +221,13 @@ def install(runtime, toolkit, environment, editable, source):
         | ci_dependencies
     )
 
-    install_traitsui = "edm run -e {environment} -- pip install "
+    install_traitsui = (
+        "edm run -e {environment} -- "
+        "pip install --no-deps --force-reinstall "
+    )
     if editable:
         install_traitsui += "--editable "
-    install_traitsui += ". --no-deps"
+    install_traitsui += "."
 
     # edm commands to setup the development environment
     if sys.platform == 'linux':
