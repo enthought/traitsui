@@ -269,6 +269,18 @@ def install(runtime, toolkit, environment, editable, source):
         cmd_fmt = "edm plumbing remove-package --environment {environment} --force "
         commands = [cmd_fmt+dependency for dependency in source_dependencies.keys()]
         execute(commands, parameters)
+        # Install dependencies of pyface.
+        # This is needed until a new release of pyface is available. At the
+        # moment, installing the pyface egg does not bring in the new
+        # dependencies that the pyface master branch needs.
+        # NOTE : fetch-install expects exact version-build number.
+        install_pkgs = [
+            "edm plumbing fetch-install --environment {environment} importlib_resources==3.3.0-1",
+            # NOTE : --force is needed here because `importlib_metadata` already exists in the environment.
+            "edm plumbing fetch-install --environment {environment} importlib_metadata==2.0.0-1 --force",
+        ]
+        execute(install_pkgs, parameters)
+        # Install packages from source.
         source_pkgs = source_dependencies.values()
         commands = [
             "python -m pip install {pkg} --no-deps".format(pkg=pkg)
