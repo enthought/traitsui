@@ -187,6 +187,10 @@ environment_vars = {
     'null': {'ETS_TOOLKIT': 'null'},
 }
 
+CONSTRAINT_MODIFIERS = {
+    "--allow-newer pyface",
+}
+
 
 def normalize(name):
     return name.replace("_", "-")
@@ -235,8 +239,20 @@ def install(runtime, toolkit, environment, editable, source):
     else:
         commands = ["edm environments create {environment} --force --version={runtime}"]
 
+    # NOTE : Pinning traits to an older version e.g. 6.0 forces older versions
+    # of dependencies e.g. traitsui/pyface < 7.0, which is a problem for
+    # traitsui master because it requires pyface >= 7.0.
+    # So, for now, if an older version of traits is required, we explicitly
+    # allow newer versions of pyface.
+    # This constraint modifier can be removed when we stop supporting traits
+    # 6.0.
+    if TRAITS_VERSION_REQUIRES:
+        constraint_modifiers = CONSTRAINT_MODIFIERS
+    else:
+        constraint_modifiers = ""
+
     commands.extend([
-        "edm install -y -e {environment} " + " ".join(packages),
+        "edm install -y -e {environment} " + " ".join(packages) + " " + " ".join(constraint_modifiers),
         "edm run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
         "edm run -e {environment} -- python setup.py clean --all",
         install_traitsui,
