@@ -115,7 +115,9 @@ dependencies = {
     "traits" + TRAITS_VERSION_REQUIRES,
 }
 
-# NOTE : pyface is always installed from source
+# The order matters here, traits needs to be installed after pyface because
+# installing pyface from source will bring in traits as a dependency from
+# pypi.
 source_dependencies = {
     "pyface": "git+http://github.com/enthought/pyface.git#egg=pyface",
     "traits": "git+http://github.com/enthought/traits.git#egg=traits",
@@ -264,32 +266,55 @@ def install(runtime, toolkit, environment, editable, source):
 
     click.echo("Creating environment '{environment}'".format(**parameters))
     execute(commands, parameters)
-
-    if source:
-        cmd_fmt = "edm plumbing remove-package --environment {environment} --force "
-        commands = [cmd_fmt+dependency for dependency in source_dependencies.keys()]
-        execute(commands, parameters)
-        # Install dependencies of pyface.
-        # This is needed until a new release of pyface is available. At the
-        # moment, installing the pyface egg does not bring in the new
-        # dependencies that the pyface master branch needs.
-        # NOTE : fetch-install expects exact version-build number.
-        install_pkgs = [
-            "edm plumbing fetch-install --environment {environment} importlib_resources==3.3.0-1",
-            # NOTE : --force is needed here because `importlib_metadata` already exists in the environment.
-            "edm plumbing fetch-install --environment {environment} importlib_metadata==2.0.0-1 --force",
-        ]
-        execute(install_pkgs, parameters)
-        # Install packages from source.
-        source_pkgs = source_dependencies.values()
-        commands = [
-            "python -m pip install {pkg} --no-deps".format(pkg=pkg)
-            for pkg in source_pkgs
-        ]
-        commands = ["edm run -e {environment} -- " + command for command in commands]
-        execute(commands, parameters)
-
     click.echo('Done install')
+
+
+@cli.command()
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
+@click.option('--environment', default=None)
+def install_from_source(runtime, toolkit, environment):
+    """ Install dependencies from source. """
+    parameters = get_parameters(runtime, toolkit, environment)
+
+    # Create the empty devenv
+    commands = ["edm environments create {environment} --force --version={runtime}"]
+    execute(commands, parameters)
+
+    install_additional_dependencies = [
+        "edm run -e {environment} -- pip install {additional_dependencies}",
+    ]
+    parameters["additional_dependencies"] = " ".join(ci_dependencies | {"sphinx", "enthought-sphinx-theme"})
+    execute(install_additional_dependencies, parameters)
+
+    # Install the traitsui package and its dependencies
+    extras = {"editors", "test"}
+    if toolkit not in ["null", "wx"]:
+        extras.add(toolkit)
+    parameters["extras_flags"] = "[{}]".format(",".join(extras))
+    install_traitsui = [
+        "edm run -e {environment} -- pip install .{extras_flags}"
+    ]
+
+    if toolkit == "wx":
+        if sys.platform != 'linux':
+            install_traitsui.append(
+                "edm run -e {environment} -- pip install wxPython"
+            )
+        else:
+            # XXX this is mainly for TravisCI workers; need a generic solution
+            install_traitsui.append(
+                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04/ wxPython"
+            )
+    execute(install_traitsui, parameters)
+
+    # Install dependencies from source.
+    source_pkgs = source_dependencies.values()
+    commands = [
+        "python -m pip install --force-reinstall {pkg}".format(pkg=pkg) for pkg in source_pkgs
+    ]
+    commands = ["edm run -e {environment} -- " + command for command in commands]
+    execute(commands, parameters)
 
 
 @cli.command()
