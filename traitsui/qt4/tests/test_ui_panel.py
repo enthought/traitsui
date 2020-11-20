@@ -172,8 +172,8 @@ class TestPanelLayout(unittest.TestCase):
         example = ScrollableGroupExample()
 
         ui = example.edit_traits(view=scrollable_group_view)
-        mainwindow = ui.control.children()[1]
-        scroll_area = mainwindow.children()[1]
+        mainwindow = ui.control.layout().itemAt(0).widget()
+        scroll_area = mainwindow.centralWidget()
         self.assertIsInstance(scroll_area, QtGui.QScrollArea)
         content = scroll_area.widget()
         self.assertIsInstance(content, QtGui.QWidget)
@@ -184,8 +184,8 @@ class TestPanelLayout(unittest.TestCase):
         example = ScrollableGroupExample()
 
         ui = example.edit_traits(view=scrollable_group_box_view)
-        mainwindow = ui.control.children()[1]
-        scroll_area = mainwindow.children()[1]
+        mainwindow = ui.control.layout().itemAt(0).widget()
+        scroll_area = mainwindow.centralWidget()
         self.assertIsInstance(scroll_area, QtGui.QScrollArea)
         group_box = scroll_area.widget()
         self.assertIsInstance(group_box, QtGui.QGroupBox)
@@ -196,8 +196,8 @@ class TestPanelLayout(unittest.TestCase):
         example = ScrollableGroupExample()
 
         ui = example.edit_traits(view=scrollable_labelled_group_view)
-        mainwindow = ui.control.children()[1]
-        scroll_area = mainwindow.children()[1]
+        mainwindow = ui.control.layout().itemAt(0).widget()
+        scroll_area = mainwindow.centralWidget()
         self.assertIsInstance(scroll_area, QtGui.QScrollArea)
         group_box = scroll_area.widget()
         self.assertIsInstance(group_box, QtGui.QWidget)
@@ -208,6 +208,6 @@ class TestPanelLayout(unittest.TestCase):
         example = ScrollableGroupExample()
 
         ui = example.edit_traits(view=non_scrollable_group_view)
-        mainwindow = ui.control.children()[1]
-        content = mainwindow.children()[1]
+        mainwindow = ui.control.layout().itemAt(0).widget()
+        content = mainwindow.centralWidget()
         self.assertIsInstance(content, QtGui.QWidget)
