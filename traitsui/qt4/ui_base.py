@@ -128,7 +128,15 @@ class _StickyDialog(QtGui.QDialog):
         self.setLayout(layout)
 
         # Set the dialog's window flags and properties.
-        flags = QtCore.Qt.Dialog
+        # On some X11 window managers, using the Dialog flag instead of
+        # just the Window flag could cause the subsequent minimize and maximize
+        # button hint to be ignored such that those actions are not
+        # available (but the window can still be resize unless the size
+        # constraint is fixed). On some X11 window managers, having two
+        # _StickyDialog open where one has a Window flag and other has a Dialog
+        # flag results in the latter (Dialog) to be always placed on top of
+        # the former (Window).
+        flags = QtCore.Qt.Window
         if not ui.view.resizable:
             flags |= QtCore.Qt.WindowSystemMenuHint
             layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
