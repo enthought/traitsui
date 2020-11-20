@@ -51,12 +51,7 @@ copyright = '2008-2020, Enthought'
 # Pull from the actual release number without imports
 d = {}
 try:
-    version_path = os.path.join(base_path, '..', '..', 'traitsui', '_version.py')
-    with open(version_path, 'r', encoding='utf8') as fp:
-        exec(compile(fp.read(), version_path, 'exec'), d)
-    release = d['version']
-    version = '.'.join(d['version'].split('.', 2)[:2])
-
+    from traitsui import __version__ as version
 except IOError as ioe:
     import warnings
     msg = '''_version.py seems to be missing!
