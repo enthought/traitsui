@@ -26,5 +26,5 @@ jobs:
     - name: Build HTML documentation with Sphinx
       run: |
         cd docs
-        sphinx-build -b html -d doctrees source html
-        python -m sphinx -b html -W source build
+        sphinx-apidoc -e -M --no-toc -o source/api traitsui traitsui/qt4/* traitsui/wx/* */tests
+        sphinx-build -b html -d build/doctrees source build/html
