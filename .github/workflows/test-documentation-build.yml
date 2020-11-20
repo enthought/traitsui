@@ -26,4 +26,5 @@ jobs:
     - name: Build HTML documentation with Sphinx
       run: |
         cd docs
+        sphinx-build -b html -d doctrees source html
         python -m sphinx -b html -W source build
