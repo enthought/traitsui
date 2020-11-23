@@ -39,5 +39,6 @@ class TestStickyDialog(unittest.TestCase):
         with create_ui(obj, dict(view=parent_view)) as ui:
             with create_ui(obj2, dict(parent=ui.control, view=nested)) as ui2:
                 from pyface.qt import QtCore
-                self.assertTrue(
-                    ui2.control.windowFlags() & QtCore.Qt.WindowMaximized)
+                self.assertFalse(
+                    ui2.control.windowFlags() & QtCore.Qt.WindowMaximized
+                )
