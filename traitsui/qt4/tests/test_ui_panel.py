@@ -177,7 +177,7 @@ class TestPanelLayout(unittest.TestCase):
             scroll_area = mainwindow.centralWidget()
             self.assertIsInstance(scroll_area, QtGui.QScrollArea)
             content = scroll_area.widget()
-            self.assertIsInstance(content, QtGui.QWidget)
+            self.assertEqual(type(content), QtGui.QWidget)
         finally:
             ui.dispose()
 
@@ -193,6 +193,7 @@ class TestPanelLayout(unittest.TestCase):
             self.assertIsInstance(scroll_area, QtGui.QScrollArea)
             group_box = scroll_area.widget()
             self.assertIsInstance(group_box, QtGui.QGroupBox)
+            self.assertEqual(group_box.title(), "Scrollable View")
         finally:
             ui.dispose()
 
@@ -206,20 +207,20 @@ class TestPanelLayout(unittest.TestCase):
             mainwindow = ui.control.layout().itemAt(0).widget()
             scroll_area = mainwindow.centralWidget()
             self.assertIsInstance(scroll_area, QtGui.QScrollArea)
-            group_box = scroll_area.widget()
-            self.assertIsInstance(group_box, QtGui.QWidget)
+            content = scroll_area.widget()
+            self.assertEqual(type(content), QtGui.QWidget)
         finally:
             ui.dispose()
 
     def test_non_scrollable_group_typical(self):
         from pyface.qt import QtGui
 
-        example = ScrollableGroupExample()
+        example = ScrollableGroupExample(my_str="The group is not scrollable")
 
+        ui = example.edit_traits(view=non_scrollable_group_view)
         try:
-            ui = example.edit_traits(view=non_scrollable_group_view)
             mainwindow = ui.control.layout().itemAt(0).widget()
             content = mainwindow.centralWidget()
-            self.assertIsInstance(content, QtGui.QWidget)
+            self.assertEqual(type(content), QtGui.QWidget)
         finally:
             ui.dispose()

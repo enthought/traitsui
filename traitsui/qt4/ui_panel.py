@@ -597,7 +597,7 @@ class _GroupPanel(object):
                 self._setup_editor(group, GroupEditor(control=outer))
 
             if group.scrollable:
-                # ensure we have a widget rather than a layout for the scroll area
+                # ensure a widget rather than a layout for the scroll area
                 if outer is None:
                     outer = inner = QtGui.QBoxLayout(self.direction)
                 if isinstance(outer, QtGui.QLayout):
