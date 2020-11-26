@@ -5,8 +5,7 @@ name: Dependencies from source
 on: push
 
 jobs:
-  master-qt:
-    name: Test with latest Pyface and Traits
+  test:
     env:
       # Enforce selection of toolkit
       ETS_TOOLKIT: qt

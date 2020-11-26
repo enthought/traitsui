@@ -4,7 +4,6 @@ name: Style check
 
 on: push
 
-
 jobs:
   style:
     strategy:

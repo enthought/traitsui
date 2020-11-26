@@ -6,8 +6,8 @@ name: Test with PyPI
 on: push
 
 jobs:
+  # Tests against Qt/Python packages from PyPI
   pip-qt:
-    name: Tests against Qt/Python packages from PyPI
     env:
       # Enforce selection of toolkit
       ETS_TOOLKIT: qt
@@ -35,6 +35,7 @@ jobs:
           run: python -m unittest discover -v traitsui
           working-directory: ${{ runner.temp }}
 
+  # Tests against wxPython from PyPI
   # On OSX:
   #   - wxPython complains about 'This program needs access to the screen'.
   # On Ubuntu:
@@ -44,7 +45,6 @@ jobs:
   #   - For wxPython 4.0, we need libsdl-image1.2
   #   - For wxPython 4.1, we need libsdl2-2.0-0
   pip-wx:
-    name: Tests against wxPython from PyPI
     env:
       # Enforce selection of toolkit
       ETS_TOOLKIT: wx
@@ -80,8 +80,8 @@ jobs:
           run: python -m unittest discover -v traitsui
           working-directory: ${{ runner.temp }}
 
+  # Tests with minimal dependencies
   minimal:
-    name: Tests with minimal dependencies
     runs-on: ubuntu-latest
     steps:
       - name: Check out

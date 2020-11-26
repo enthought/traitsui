@@ -7,7 +7,7 @@ name: Integration tests
 on: push
 
 jobs:
-  integration-tests:
+  test:
     strategy:
       matrix:
         os: [ubuntu-latest]
