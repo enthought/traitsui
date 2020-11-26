@@ -308,13 +308,6 @@ def test(runtime, toolkit, environment):
     environ = environment_vars.get(toolkit, {}).copy()
     environ['PYTHONUNBUFFERED'] = "1"
 
-    if toolkit == "wx":
-        environ["EXCLUDE_TESTS"] = "qt"
-    elif toolkit in {"pyqt", "pyqt5", "pyside", "pyside2"}:
-        environ["EXCLUDE_TESTS"] = "wx"
-    else:
-        environ["EXCLUDE_TESTS"] = "(wx|qt)"
-
     parameters["integrationtests"] = os.path.abspath("integrationtests")
     commands = [
         "edm run -e {environment} -- python -W default -m coverage run -p -m unittest discover -v traitsui",
