@@ -18,6 +18,13 @@ Files and original authors:
 traitsui/examples/demo/Applications/images:
                       blue_ball.png | Nuvola
 
+traitsui/extras/images:
+                           next.png | Nuvola
+                         parent.png | Nuvola
+                       previous.png | Nuvola
+                         reload.png | Nuvola
+                            run.png | Nuvola
+
 traitsui/qt4/images:
                        closetab.png | Qt
                            next.png | Qt
