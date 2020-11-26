@@ -22,12 +22,6 @@ docs/source/tutorials/images:
               mpl_figure_editor.png | Enthought
                   traits_thread.png | Enthought
 
-integrationtests/ui/images:
-             bottom_left_origin.gif | Enthought
-            bottom_right_origin.gif | Enthought
-                top_left_origin.gif | Enthought
-               top_right_origin.gif | Enthought
-
 traitsui/image/library:
                             std.zip | Enthought
 
