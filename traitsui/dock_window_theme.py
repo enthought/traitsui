@@ -18,9 +18,6 @@
 """ Defines the theme style information for a DockWindow and its components.
 """
 
-
-from __future__ import absolute_import
-
 from pyface.ui_traits import Image
 from traits.api import HasPrivateTraits, Bool, Property, cached_property
 

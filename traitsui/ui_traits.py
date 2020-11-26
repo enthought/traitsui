@@ -18,9 +18,6 @@
 """ Defines common traits used within the traits.ui package.
 """
 
-
-from __future__ import absolute_import
-
 from pyface.ui_traits import (
     Alignment,
     Border,
@@ -42,29 +39,25 @@ from traits.api import (
     List,
     Range,
     Str,
-    Trait,
     TraitError,
-    TraitPrefixList,
     TraitType,
 )
-import six
+
+from .helper import PrefixList, SequenceTypes
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
 # -------------------------------------------------------------------------
 
 # Orientation trait:
-Orientation = Trait("vertical", TraitPrefixList("vertical", "horizontal"))
+Orientation = PrefixList(("vertical", "horizontal"))
 
 # Styles for user interface elements:
-EditorStyle = style_trait = Trait(
-    "simple", TraitPrefixList("simple", "custom", "text", "readonly"), cols=4
-)
+EditorStyle = style_trait = PrefixList(
+    ("simple", "custom", "text", "readonly"), cols=4)
 
 # Group layout trait:
-Layout = Trait(
-    "normal", TraitPrefixList("normal", "split", "tabbed", "flow", "fold")
-)
+Layout = PrefixList(("normal", "split", "tabbed", "flow", "fold"))
 
 # Trait for the default object being edited:
 AnObject = Expression("object")
@@ -90,7 +83,7 @@ ContainerDelegate = container_delegate = Delegate(
 HelpId = help_id_trait = Str(desc="the external help context identifier")
 
 # A button to add to a view:
-AButton = Any
+AButton = Any()
 # AButton = Trait( '', Str, Instance( 'traitsui.menu.Action' ) )
 
 # The set of buttons to add to the view:
@@ -99,15 +92,15 @@ Buttons = List(
 )
 
 # View trait specified by name or instance:
-AView = Any
+AView = Any()
 # AView = Trait( '', Str, Instance( 'traitsui.view.View' ) )
 
 # FIXME: on AButton and AView: TraitCompound handlers with deferred-import
 # Instance traits are just broken. The Instance trait tries to update the
 # top-level CTrait's fast_validate table when the import is resolved. However,
 # sometimes the CTrait gets copied for unknown reasons and the copy's
-# fast_validate table is not updated although the TraitCompound's slow_validates
-# table is modified.
+# fast_validate table is not updated although the TraitCompound's
+# slow_validates table is modified.
 
 # -------------------------------------------------------------------------
 #  'StatusItem' class:
@@ -157,7 +150,7 @@ class ViewStatus(TraitType):
     def validate(self, object, name, value):
         """ Validates that a specified value is valid for this trait.
         """
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             return [StatusItem(name=value)]
 
         if isinstance(value, StatusItem):
@@ -169,7 +162,7 @@ class ViewStatus(TraitType):
         result = []
         if isinstance(value, SequenceTypes):
             for item in value:
-                if isinstance(item, six.string_types):
+                if isinstance(item, str):
                     result.append(StatusItem(name=item))
                 elif isinstance(item, StatusItem):
                     result.append(item)
@@ -189,7 +182,7 @@ class ViewStatus(TraitType):
 def convert_theme(value, level=3):
     """ Converts a specified value to a Theme if possible.
     """
-    if not isinstance(value, six.string_types):
+    if not isinstance(value, str):
         return value
 
     if (value[:1] == "@") and (value.find(":") >= 2):
@@ -251,9 +244,3 @@ class ATheme(TraitType):
 
 # The spacing between two items:
 Spacing = Range(-32, 32, 3)
-
-# -------------------------------------------------------------------------
-#  Other definitions:
-# -------------------------------------------------------------------------
-
-SequenceTypes = (tuple, list)

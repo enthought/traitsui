@@ -1,15 +1,19 @@
-from __future__ import absolute_import
 import unittest
 
-from pyface.gui import GUI
-
-from traits.api import Button, HasTraits, Unicode
+from traits.api import Bool, Button, HasTraits, List, Str
+from traits.testing.api import UnittestTools
 from traitsui.api import ButtonEditor, Item, UItem, View
 from traitsui.tests._tools import (
-    is_current_backend_qt4,
-    is_current_backend_wx,
-    skip_if_null,
-    store_exceptions_on_all_threads,
+    BaseTestMixin,
+    requires_toolkit,
+    reraise_exceptions,
+    ToolkitName,
+)
+from traitsui.testing.api import (
+    DisplayedText,
+    IsEnabled,
+    MouseClick,
+    UITester
 )
 
 
@@ -17,7 +21,11 @@ class ButtonTextEdit(HasTraits):
 
     play_button = Button("Play")
 
-    play_button_label = Unicode("I'm a play button")
+    play_button_label = Str("I'm a play button")
+
+    values = List()
+
+    button_enabled = Bool(True)
 
     traits_view = View(
         Item("play_button", style="simple"),
@@ -42,47 +50,129 @@ custom_view = View(
 )
 
 
-def get_button_text(button):
-    """ Return the button text given a button control """
-    if is_current_backend_wx():
-        return button.GetLabel()
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
 
-    elif is_current_backend_qt4():
-        return button.text()
+    def setUp(self):
+        BaseTestMixin.setUp(self)
 
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
-class TestButtonEditor(unittest.TestCase):
     def check_button_text_update(self, view):
-        gui = GUI()
         button_text_edit = ButtonTextEdit()
 
-        with store_exceptions_on_all_threads():
-            ui = button_text_edit.edit_traits(view=view)
-            self.addCleanup(ui.dispose)
-
-            gui.process_events()
-            editor, = ui.get_editors("play_button")
-            button = editor.control
-
-            self.assertEqual(get_button_text(button), "I'm a play button")
+        tester = UITester()
+        with tester.create_ui(button_text_edit, dict(view=view)) as ui:
+            button = tester.find_by_name(ui, "play_button")
+            actual = button.inspect(DisplayedText())
+            self.assertEqual(actual, "I'm a play button")
 
             button_text_edit.play_button_label = "New Label"
-            self.assertEqual(get_button_text(button), "New Label")
+            actual = button.inspect(DisplayedText())
+            self.assertEqual(actual, "New Label")
 
-    @skip_if_null
     def test_styles(self):
         # simple smoke test of buttons
-        gui = GUI()
         button_text_edit = ButtonTextEdit()
-        with store_exceptions_on_all_threads():
-            ui = button_text_edit.edit_traits()
-            self.addCleanup(ui.dispose)
-            gui.process_events()
+        with UITester().create_ui(button_text_edit):
+            pass
 
-    @skip_if_null
     def test_simple_button_editor(self):
         self.check_button_text_update(simple_view)
 
-    @skip_if_null
     def test_custom_button_editor(self):
         self.check_button_text_update(custom_view)
+
+    def check_button_fired_event(self, view):
+        button_text_edit = ButtonTextEdit()
+
+        tester = UITester()
+        with tester.create_ui(button_text_edit, dict(view=view)) as ui:
+            button = tester.find_by_name(ui, "play_button")
+
+            with self.assertTraitChanges(
+                    button_text_edit, "play_button", count=1):
+                button.perform(MouseClick())
+
+    def test_simple_button_editor_clicked(self):
+        self.check_button_fired_event(simple_view)
+
+    def test_custom_button_editor_clicked(self):
+        self.check_button_fired_event(custom_view)
+
+    def check_button_disabled(self, style):
+        button_text_edit = ButtonTextEdit(
+            button_enabled=False,
+        )
+
+        view = View(
+            Item(
+                "play_button",
+                editor=ButtonEditor(),
+                enabled_when="button_enabled",
+                style=style,
+            ),
+        )
+        tester = UITester()
+        with tester.create_ui(button_text_edit, dict(view=view)) as ui:
+            button = tester.find_by_name(ui, "play_button")
+            self.assertFalse(button.inspect(IsEnabled()))
+
+            with self.assertTraitDoesNotChange(
+                    button_text_edit, "play_button"):
+                button.perform(MouseClick())
+
+            button_text_edit.button_enabled = True
+            self.assertTrue(button.inspect(IsEnabled()))
+            with self.assertTraitChanges(
+                    button_text_edit, "play_button", count=1):
+                button.perform(MouseClick())
+
+    def test_simple_button_editor_disabled(self):
+        self.check_button_disabled("simple")
+
+    def test_custom_button_editor_disabled(self):
+        self.check_button_disabled("custom")
+
+
+@requires_toolkit([ToolkitName.qt])
+class TestButtonEditorValuesTrait(BaseTestMixin, unittest.TestCase):
+    """ The values_trait is only supported by Qt.
+
+    See discussion enthought/traitsui#879
+    """
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
+    def get_view(self, style):
+        return View(
+            Item(
+                "play_button",
+                editor=ButtonEditor(values_trait="values"),
+                style=style,
+            ),
+        )
+
+    def check_editor_values_trait_init_and_dispose(self, style):
+        # Smoke test to check init and dispose when values_trait is used.
+        instance = ButtonTextEdit(values=["Item1", "Item2"])
+        view = self.get_view(style=style)
+        with reraise_exceptions():
+            with UITester().create_ui(instance, dict(view=view)):
+                pass
+
+            # It is okay to mutate trait after the GUI is disposed.
+            instance.values = ["Item3"]
+
+    def test_simple_editor_values_trait_init_and_dispose(self):
+        # Smoke test to check init and dispose when values_trait is used.
+        self.check_editor_values_trait_init_and_dispose(style="simple")
+
+    def test_custom_editor_values_trait_init_and_dispose(self):
+        # Smoke test to check init and dispose when values_trait is used.
+        self.check_editor_values_trait_init_and_dispose(style="custom")

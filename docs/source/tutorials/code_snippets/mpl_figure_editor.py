@@ -1,5 +1,5 @@
+# mpl_figure_editor.py
 
-from __future__ import absolute_import
 import wx
 
 import matplotlib

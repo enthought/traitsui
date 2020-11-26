@@ -19,24 +19,17 @@
     creating the Editor objects used in a Traits-based user interface.
 """
 
-
-from __future__ import absolute_import, print_function
-
 import logging
-
-import six
 
 from traits.api import (
     HasPrivateTraits,
     Callable,
     Str,
     Bool,
-    Event,
     Any,
     Property,
 )
 
-from .helper import enum_values_changed
 from .toolkit import toolkit_object
 
 
@@ -57,10 +50,10 @@ class EditorFactory(HasPrivateTraits):
     # -------------------------------------------------------------------------
 
     #: Function to use for string formatting
-    format_func = Callable
+    format_func = Callable()
 
-    #: Format string to use for formatting (used if **format_func** is not set).
-    format_str = Str
+    #: Format string to use for formatting (used if **format_func** not set).
+    format_str = Str()
 
     #: Is the editor being used to create table grid cells?
     is_grid_cell = Bool(False)
@@ -70,24 +63,25 @@ class EditorFactory(HasPrivateTraits):
 
     #: The extended trait name of the trait containing editor invalid state
     #: status:
-    invalid = Str
+    invalid = Str()
 
     #: Text aligment to use in most readonly editors
-    #: Possible values: left, right, top, bottom, just, vcenter, hcenter, center
+    #: Possible values: left, right, top, bottom, just, vcenter, hcenter,
+    #: center
     #: Example: left,vcenter
-    text_alignment = Str
+    text_alignment = Str()
 
     #: The editor class to use for 'simple' style views.
-    simple_editor_class = Property
+    simple_editor_class = Property()
 
     #: The editor class to use for 'custom' style views.
-    custom_editor_class = Property
+    custom_editor_class = Property()
 
     #: The editor class to use for 'text' style views.
-    text_editor_class = Property
+    text_editor_class = Property()
 
     #: The editor class to use for 'readonly' style views.
-    readonly_editor_class = Property
+    readonly_editor_class = Property()
 
     def __init__(self, *args, **traits):
         """ Initializes the factory object.
@@ -112,8 +106,8 @@ class EditorFactory(HasPrivateTraits):
             # factory is being used with does not use the default object='name'
             # value, and the specified 'name' does not contain a '.'. The
             # solution will probably involve providing the Item as an argument,
-            # but it is currently not available at the time this method needs to
-            # be called...
+            # but it is currently not available at the time this method needs
+            # to be called...
             names.insert(0, "object")
 
         value = ui.context[names[0]]
@@ -218,7 +212,7 @@ class EditorFactory(HasPrivateTraits):
         if format_func is not None:
             return format_func(value)
 
-        return six.text_type(value)
+        return str(value)
 
     # -------------------------------------------------------------------------
     #  Property getters
@@ -226,10 +220,10 @@ class EditorFactory(HasPrivateTraits):
 
     def _get_simple_editor_class(self):
         """ Returns the editor class to use for "simple" style views.
-        The default implementation tries to import the SimpleEditor class in the
-        editor file in the backend package, and if such a class is not to found
-        it returns the SimpleEditor class defined in editor_factory module in
-        the backend package.
+        The default implementation tries to import the SimpleEditor class in
+        the editor file in the backend package, and if such a class is not to
+        found it returns the SimpleEditor class defined in editor_factory
+        module in the backend package.
 
         """
         try:
@@ -242,9 +236,9 @@ class EditorFactory(HasPrivateTraits):
 
     def _get_custom_editor_class(self):
         """ Returns the editor class to use for "custom" style views.
-        The default implementation tries to import the CustomEditor class in the
-        editor file in the backend package, and if such a class is not to found
-        it returns simple_editor_class.
+        The default implementation tries to import the CustomEditor class in
+        the editor file in the backend package, and if such a class is not to
+        found it returns simple_editor_class.
 
         """
         try:
@@ -259,8 +253,8 @@ class EditorFactory(HasPrivateTraits):
         """ Returns the editor class to use for "text" style views.
         The default implementation tries to import the TextEditor class in the
         editor file in the backend package, and if such a class is not found
-        it returns the TextEditor class declared in the editor_factory module in
-        the backend package.
+        it returns the TextEditor class declared in the editor_factory module
+        in the backend package.
 
         """
         try:
@@ -274,9 +268,9 @@ class EditorFactory(HasPrivateTraits):
     def _get_readonly_editor_class(self):
         """ Returns the editor class to use for "readonly" style views.
         The default implementation tries to import the ReadonlyEditor class in
-        the editor file in the backend package, and if such a class is not found
-        it returns the ReadonlyEditor class declared in the editor_factory
-        module in the backend package.
+        the editor file in the backend package, and if such a class is not
+        found it returns the ReadonlyEditor class declared in the
+        editor_factory module in the backend package.
 
         """
         try:
@@ -303,22 +297,10 @@ class EditorWithListFactory(EditorFactory):
 
     #: Values to enumerate (can be a list, tuple, dict, or a CTrait or
     #: TraitHandler that is "mapped"):
-    values = Any
+    values = Any()
 
-    #: Extended name of the trait on **object** containing the enumeration data:
+    #: Extended name of the trait on **object** containing the enumeration data
     object = Str("object")
 
     #: Name of the trait on 'object' containing the enumeration data
-    name = Str
-
-    #: Fired when the **values** trait has been updated:
-    values_modified = Event
-
-    def _values_changed(self):
-        """ Recomputes the mappings whenever the **values** trait is changed.
-        """
-        self._names, self._mapping, self._inverse_mapping = enum_values_changed(
-            self.values, strfunc=self.string_value
-        )
-
-        self.values_modified = True
+    name = Str()

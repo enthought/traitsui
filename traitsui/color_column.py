@@ -17,9 +17,7 @@
 """ Table column object for RGBColor traits.
 """
 
-from __future__ import absolute_import
 from traitsui.table_column import ObjectColumn
-import six
 
 
 class ColorColumn(ObjectColumn):
@@ -49,7 +47,7 @@ class ColorColumn(ObjectColumn):
         value = getattr(self.get_object(object), self.name, "")
         if isinstance(value, tuple):
             value = self._float_rgb_tuple_to_str(value)
-        elif not isinstance(value, six.string_types):
+        elif not isinstance(value, str):
             value = ""
         return value
 

@@ -17,7 +17,6 @@
 """ Table column object for Color traits.
 """
 
-from __future__ import absolute_import
 import warnings
 
 warnings.warn(

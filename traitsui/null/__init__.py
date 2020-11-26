@@ -25,7 +25,6 @@
 #  Define the reference to the exported GUIToolkit object:
 # -------------------------------------------------------------------------
 
-from __future__ import absolute_import
 
 from . import toolkit
 

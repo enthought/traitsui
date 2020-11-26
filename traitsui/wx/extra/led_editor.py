@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 from wx.gizmos import (
     LEDNumberCtrl,
     LED_ALIGN_LEFT,

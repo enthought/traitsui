@@ -18,7 +18,6 @@
 """ Defines the table editor for the wxPython user interface toolkit.
 """
 
-from __future__ import absolute_import
 
 from operator import itemgetter
 
@@ -107,12 +106,12 @@ class TableEditor(Editor, BaseTableEditor):
     # -------------------------------------------------------------------------
 
     #: The set of columns currently defined on the editor:
-    columns = List(TableColumn)
+    columns = List(Instance(TableColumn))
 
     #: Index of currently edited (i.e., selected) table item(s):
     selected_row_index = Int(-1)
     selected_row_indices = List(Int)
-    selected_indices = Property
+    selected_indices = Property()
 
     selected_column_index = Int(-1)
     selected_column_indices = List(Int)
@@ -121,35 +120,35 @@ class TableEditor(Editor, BaseTableEditor):
     selected_cell_indices = List(Tuple(Int, Int))
 
     #: The currently selected table item(s):
-    selected_row = Any
-    selected_rows = List
-    selected_items = Property
+    selected_row = Any()
+    selected_rows = List()
+    selected_items = Property()
 
-    selected_column = Any
-    selected_columns = List
+    selected_column = Any()
+    selected_columns = List()
 
     selected_cell = Tuple(Any, Str)
     selected_cells = List(Tuple(Any, Str))
 
-    selected_values = Property
+    selected_values = Property()
 
     #: The indices of the table items currently passing the table filter:
     filtered_indices = List(Int)
 
     #: The event fired when a cell is clicked on:
-    click = Event
+    click = Event()
 
     #: The event fired when a cell is double-clicked on:
-    dclick = Event
+    dclick = Event()
 
     #: Is the editor in row mode (i.e. not column or cell mode)?
-    in_row_mode = Property
+    in_row_mode = Property()
 
     #: Is the editor in column mode (i.e. not row or cell mode)?
-    in_column_mode = Property
+    in_column_mode = Property()
 
     #: Current filter object (should be a TableFilter or callable or None):
-    filter = Any
+    filter = Any()
 
     #: The grid widget associated with the editor:
     grid = Instance(Grid)
@@ -158,7 +157,7 @@ class TableEditor(Editor, BaseTableEditor):
     model = Instance(TableModel)
 
     #: TableEditorToolbar associated with the editor:
-    toolbar = Any
+    toolbar = Any()
 
     #: The Traits UI associated with the table editor toolbar:
     toolbar_ui = Instance(UI)
@@ -454,7 +453,7 @@ class TableEditor(Editor, BaseTableEditor):
                 tb_sizer.Add((1, 1), 1, wx.EXPAND)
                 tb_sizer.Add(toolbar.control, 0)
 
-            sizer.Add(tb_sizer, 0, wx.ALIGN_RIGHT | wx.EXPAND)
+            sizer.Add(tb_sizer, 0, wx.EXPAND)
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -1282,16 +1281,16 @@ class TableFilterEditor(Handler):
     filter = Instance(TableFilter, allow_none=True)
 
     #: Edit the current filter
-    edit = Button
+    edit = Button()
 
     #: Create a new filter and edit it
-    new = Button
+    new = Button()
 
     #: Apply the current filter to the editor's table
-    apply = Button
+    apply = Button()
 
     #: Delete the current filter
-    delete = Button
+    delete = Button()
 
     # -------------------------------------------------------------------------
     #  'Handler' interface:
@@ -1511,7 +1510,7 @@ class TableEditorToolbar(HasPrivateTraits):
     editor = Instance(TableEditor)
 
     #: The toolbar control:
-    control = Any
+    control = Any()
 
     def __init__(self, parent=None, **traits):
         super(TableEditorToolbar, self).__init__(**traits)
@@ -1555,7 +1554,7 @@ class TableEditorToolbar(HasPrivateTraits):
             self.control.SetSize(wx.Size(23 * len(actions), 16))
 
     # -------------------------------------------------------------------------
-    #  PyFace/Traits menu/toolbar controller interface:
+    #  Pyface/Traits menu/toolbar controller interface:
     # -------------------------------------------------------------------------
 
     def add_to_menu(self, menu_item):
@@ -1603,13 +1602,13 @@ class TableSearchHandler(Handler):
     find_previous = Button("Find Previous")
 
     #: Select all matching items
-    select = Button
+    select = Button()
 
     #: The user is finished searching
     OK = Button("Close")
 
     #: Search status message:
-    status = Str
+    status = Str()
 
     def handler_find_next_changed(self, info):
         """ Handles the user clicking the **Find** button.

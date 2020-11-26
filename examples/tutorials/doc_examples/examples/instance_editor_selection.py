@@ -4,24 +4,24 @@
 # instance_editor_selection.py -- Example of an instance editor with
 #                                 instance selection
 
-#--[Imports]--------------------------------------------------------------
+# --[Imports]--------------------------------------------------------------
 
-from __future__ import absolute_import
 from traits.api    \
     import HasStrictTraits, Int, Instance, List, Regex, Str
 from traitsui.api \
     import View, Item, InstanceEditor
 
-#--[Code]-----------------------------------------------------------------
+# --[Code]-----------------------------------------------------------------
 
 
 class Person(HasStrictTraits):
-    name = Str
-    age = Int
+    name = Str()
+    age = Int()
     phone = Regex(value='000-0000',
-                  regex='\d\d\d[-]\d\d\d\d')
+                  regex=r'\d\d\d[-]\d\d\d\d')
 
     traits_view = View('name', 'age', 'phone')
+
 
 people = [
     Person(name='Dave', age=39, phone='555-1212'),
@@ -37,7 +37,7 @@ people = [
 
 class Team(HasStrictTraits):
 
-    name = Str
+    name = Str()
     captain = Instance(Person)
     roster = List(Person)
 
@@ -51,7 +51,8 @@ class Team(HasStrictTraits):
                             ),
                        buttons=['OK'])
 
-#--[Example*]-------------------------------------------------------------
+# --[Example*]-------------------------------------------------------------
+
 
 if __name__ == '__main__':
     Team(name='Vultures',

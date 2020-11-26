@@ -15,11 +15,11 @@
 Test cases for the Controller class.
 """
 
-from __future__ import absolute_import
-import nose
+import unittest
 
 from traits.api import HasTraits, Instance, Str
 from traitsui.api import Controller
+from traitsui.tests._tools import BaseTestMixin
 
 
 class FooModel(HasTraits):
@@ -35,13 +35,21 @@ class FooController(Controller):
         return FooModel(my_str="meh")
 
 
-def test_construction():
-    # check default constructor.
-    dialog = FooController()
-    nose.tools.assert_is_not_none(dialog.model)
-    nose.tools.assert_equal(dialog.model.my_str, "meh")
+class TestController(BaseTestMixin, unittest.TestCase):
 
-    # check initialization when `model` is explcitly passed in.
-    new_model = FooModel()
-    dialog = FooController(model=new_model)
-    nose.tools.assert_is(dialog.model, new_model)
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
+    def test_construction(self):
+        # check default constructor.
+        dialog = FooController()
+        self.assertIsNotNone(dialog.model)
+        self.assertEqual(dialog.model.my_str, "meh")
+
+        # check initialization when `model` is explcitly passed in.
+        new_model = FooModel()
+        dialog = FooController(model=new_model)
+        self.assertIs(dialog.model, new_model)

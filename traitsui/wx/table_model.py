@@ -15,12 +15,11 @@
 #
 # ------------------------------------------------------------------------------
 
-""" Defines the table grid model used by the table editor based on the PyFace
+""" Defines the table grid model used by the table editor based on the Pyface
     grid control.
 """
 
 
-from __future__ import absolute_import
 import logging
 
 import wx
@@ -60,10 +59,10 @@ class TraitGridSelection(HasPrivateTraits):
     """
 
     #: The selected object
-    obj = Any
+    obj = Any()
 
     #: The specific trait selected on the object
-    name = Str
+    name = Str()
 
 
 class TableModel(GridModel):
@@ -87,10 +86,10 @@ class TableModel(GridModel):
     reverse = Bool(False)
 
     #: Event fired when the table has been sorted
-    sorted = Event
+    sorted = Event()
 
     #: The current 'auto_add' row
-    auto_add_row = Any
+    auto_add_row = Any()
 
     def __init__(self, **traits):
         """ Initializes the object.
@@ -162,10 +161,10 @@ class TableModel(GridModel):
         """
         try:
             return self.__filtered_items()[index]
-        except:
-            logger.error(
-                "TableModel error: Request for invalid row %d out of "
-                "%d" % (index, len(self.__filtered_items()))
+        except Exception:
+            logger.exception(
+                "TableModel error: Request for invalid row %d out of %d",
+                index, len(self.__filtered_items())
             )
             return None
 
@@ -399,7 +398,6 @@ class TableModel(GridModel):
         editor._ui = self.editor.ui
 
         target, name = column.target_name(object)
-
         return TraitGridCellAdapter(
             editor,
             target,

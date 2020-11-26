@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 import warnings
 
 import wx
@@ -116,6 +115,19 @@ class TextEditor(Editor):
         self.control.Bind(wx.EVT_KILL_FOCUS, self.update_object)
         parent.Bind(wx.EVT_TEXT_ENTER, self.update_object, id=self.control.GetId())
         self.set_tooltip()
+
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None:   # just in-case
+            parent = self.control.GetParent()
+            parent.Unbind(
+                wx.EVT_TEXT_ENTER,
+                handler=self.update_object,
+                id=self.control.GetId(),
+            )
+            self.control.Unbind(wx.EVT_KILL_FOCUS, handler=self.update_object)
+        super().dispose()
 
     def update_object(self, event):
         """ Handles the user changing the contents of the edit control.

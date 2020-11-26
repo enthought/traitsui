@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import HasPrivateTraits, Instance, Str, List, Int, Bool
@@ -40,7 +39,7 @@ class HistoryControl(HasPrivateTraits):
     control = Instance(wx.Window)
 
     #: The current value of the control:
-    value = Str
+    value = Str()
 
     #: Should 'value' be updated on every keystroke?
     auto_set = Bool(False)
@@ -195,6 +194,6 @@ class HistoryControl(HasPrivateTraits):
                 control.SetValue(restore)
 
                 if select:
-                    control.SetMark(0, len(restore))
+                    control.SetTextSelection(0, len(restore))
 
             control.Thaw()

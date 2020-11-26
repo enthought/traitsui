@@ -19,9 +19,6 @@
     an active Traits-based user interface.
 """
 
-
-from __future__ import absolute_import
-
 from traits.api import HasPrivateTraits, Instance, Constant, Bool
 
 

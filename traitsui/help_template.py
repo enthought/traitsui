@@ -18,9 +18,6 @@
 """ Defines the HTML help templates used for formatting Traits UI help pages.
 """
 
-
-from __future__ import absolute_import
-
 from traits.api import HasStrictTraits, Str
 
 

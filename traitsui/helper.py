@@ -19,15 +19,9 @@
     user interfaces.
 """
 
-
-from __future__ import absolute_import
-
 from operator import itemgetter
 
 from traits.api import BaseTraitHandler, CTrait, Enum, TraitError
-
-from .ui_traits import SequenceTypes
-import six
 
 
 # -------------------------------------------------------------------------
@@ -62,14 +56,14 @@ def commatize(value):
     """
     s = str(abs(value))
     s = s.rjust(((len(s) + 2) / 3) * 3)
-    result = ",".join([s[i : i + 3] for i in range(0, len(s), 3)]).lstrip()
+    result = ",".join([s[i: i + 3] for i in range(0, len(s), 3)]).lstrip()
     if value >= 0:
         return result
 
     return "-" + result
 
 
-def enum_values_changed(values, strfunc=six.text_type):
+def enum_values_changed(values, strfunc=str):
     """ Recomputes the mappings for a new set of enumeration values.
     """
 
@@ -183,3 +177,24 @@ def compute_column_widths(available_space, requested, min_widths, user_widths):
             available_space -= widths[i]
 
     return widths
+
+
+# -------------------------------------------------------------------------
+#  Other definitions:
+# -------------------------------------------------------------------------
+
+SequenceTypes = (tuple, list)
+
+
+# -------------------------------------------------------------------------
+#  Wrapper for TraitPrefixList deprecation:
+# -------------------------------------------------------------------------
+
+try:
+    from traits.api import PrefixList
+except ImportError:
+    def PrefixList(list_, default_value=None, **kwargs):
+        from traits.api import Trait, TraitPrefixList
+        if default_value is None:
+            default_value = list_[0]
+        return Trait(default_value, TraitPrefixList(list_), **kwargs)

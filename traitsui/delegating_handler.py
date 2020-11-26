@@ -22,7 +22,6 @@ This is typically used as the handler for dynamic views.  See the
 """
 
 # Enthought library imports
-from __future__ import absolute_import
 from traits.api import HasTraits, List
 from .ui import Dispatcher
 
@@ -48,7 +47,7 @@ class DelegatingHandler(Handler):
     # -- Protected 'DelegatingHandler' Interface ------------------------------
 
     #: A list of dispatchable handler methods:
-    _dispatchers = List
+    _dispatchers = List()
 
     # -------------------------------------------------------------------------
     #  'Handler' interface:
@@ -110,7 +109,7 @@ class DelegatingHandler(Handler):
                                 "\tto method [%s] on handler[%s]", name, h
                             )
                             method = getattr(h, name)
-                            trait_name = prefix[col + 1 :]
+                            trait_name = prefix[col + 1:]
                             self._dispatchers.append(
                                 Dispatcher(method, info, object, trait_name)
                             )

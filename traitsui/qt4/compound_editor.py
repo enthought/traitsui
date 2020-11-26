@@ -15,7 +15,6 @@ PyQt user interface toolkit.
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtGui
 
 from traits.api import Str
@@ -38,7 +37,7 @@ class CompoundEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: The kind of editor to create for each list item
-    kind = Str
+    kind = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

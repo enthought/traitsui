@@ -19,12 +19,9 @@
     (i.e., View, Group, Item, Include) derive from.
 """
 
-
-from __future__ import absolute_import
-
 import re
 
-from traits.api import HasPrivateTraits, Instance, Bool
+from traits.api import AbstractViewElement, Bool, HasPrivateTraits, Instance
 
 from .ui_traits import (
     AnObject,
@@ -34,15 +31,6 @@ from .ui_traits import (
     HelpId,
     Image,
 )
-
-from .util import str_rfind
-
-# Is the AbstractViewElement ABC available in traits.api?
-
-try:
-    from traits.api import AbstractViewElement
-except ImportError:
-    AbstractViewElement = None
 
 
 label_pat = re.compile(r"^(.*)\[(.*)\](.*)$", re.MULTILINE | re.DOTALL)
@@ -137,7 +125,7 @@ class ViewSubElement(ViewElement):
         if col < 0:
             return value
 
-        items = (value[:col].strip(), value[col + 1 :].strip())
+        items = (value[:col].strip(), value[col + 1:].strip())
         if items[assign] != "":
             setattr(self, name, items[assign])
 
@@ -148,7 +136,7 @@ class ViewSubElement(ViewElement):
         """
         col = string.find(option)
         if col >= 0:
-            string = string[:col] + string[col + len(option) :]
+            string = string[:col] + string[col + len(option):]
             setattr(self, name, value)
 
         return string
@@ -160,7 +148,7 @@ class ViewSubElement(ViewElement):
         value = self._option(value, "@", "style", "custom")
         value = self._option(value, "*", "style", "text")
         value = self._option(value, "~", "style", "readonly")
-        value = self._split("style", value, ";", str_rfind, 1, 0)
+        value = self._split("style", value, ";", str.rfind, 1, 0)
 
         return value
 
@@ -219,5 +207,4 @@ class ViewSubElement(ViewElement):
 
 # Register ViewElement as implementing AbstractViewElement
 # TODO: eventually have ViewElement inherit directly
-if AbstractViewElement is not None:
-    AbstractViewElement.register(ViewElement)
+AbstractViewElement.register(ViewElement)

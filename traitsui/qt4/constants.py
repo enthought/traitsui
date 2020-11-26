@@ -15,9 +15,9 @@ editors and text editor factories.
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtGui
 
+from pyface.api import SystemMetrics
 
 _palette = QtGui.QApplication.palette()
 
@@ -44,11 +44,8 @@ WindowColor = _palette.color(QtGui.QPalette.Window)
 
 del _palette
 
-# Screen size values:
+#: Screen width
+screen_dx = SystemMetrics().screen_width
 
-_geom = QtGui.QApplication.desktop().availableGeometry()
-
-screen_dx = _geom.width()
-screen_dy = _geom.height()
-
-del _geom
+#: Screen height
+screen_dy = SystemMetrics().screen_height

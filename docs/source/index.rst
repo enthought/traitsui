@@ -6,6 +6,7 @@ TraitsUI Documentation
     :glob:
 
     traitsui_user_manual/index
+    traitsui_dev_guide/index
     api/index
     tutorials/index
     demos/index

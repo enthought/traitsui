@@ -84,7 +84,6 @@ model is set up.
 
 #--<Imports>--------------------------------------------------------------
 
-from __future__ import absolute_import
 from traits.api \
     import *
 
@@ -106,7 +105,7 @@ class Player(HasTraits):
     name = Str('<new player>')
 
     # The number of hits the player made this season:
-    hits = Int
+    hits = Int()
 
 #--[Team Class]-----------------------------------------------------------
 

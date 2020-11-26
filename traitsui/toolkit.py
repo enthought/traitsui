@@ -19,7 +19,6 @@ Most of the logic for determining which backend toolkit to use can now be
 found in :py:mod:`pyface.base_toolkit`.
 """
 
-from __future__ import absolute_import
 
 import logging
 
@@ -217,8 +216,8 @@ class Toolkit(Toolkit):
         ----------
         context : object or dictionary
             A single object or a dictionary of string/object pairs, whose trait
-            attributes are to be edited. If not specified, the current object is
-            used.
+            attributes are to be edited. If not specified, the current object
+            is used.
         view : view or string
             A View object that defines a user interface for editing trait
             attribute values.
@@ -236,8 +235,8 @@ class Toolkit(Toolkit):
             are saved.
         scrollable : Boolean
             Indicates whether the dialog box should be scrollable. When set to
-            True, scroll bars appear on the dialog box if it is not large enough
-            to display all of the items in the view at one time.
+            True, scroll bars appear on the dialog box if it is not large
+            enough to display all of the items in the view at one time.
 
         """
         raise NotImplementedError(
@@ -342,7 +341,8 @@ class Toolkit(Toolkit):
     def constants(self):
         """ Returns a dictionary of useful constants.
 
-            Currently, the dictionary should have the following key/value pairs:
+            Currently, the dictionary should have the following key/value
+            pairs:
 
             - WindowColor': the standard window background color in the toolkit
               specific color format.

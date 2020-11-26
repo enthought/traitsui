@@ -24,7 +24,7 @@ without de-focusing raises an AttributeError::
         self.value = self.control.GetValue()
     AttributeError: 'NoneType' object has no attribute 'GetValue'
 """
-from __future__ import absolute_import, print_function
+import unittest
 
 from traits.has_traits import HasTraits
 from traits.trait_types import Int
@@ -32,14 +32,20 @@ from traitsui.item import Item
 from traitsui.view import View
 from traitsui.editors.range_editor import RangeEditor
 
-from traitsui.tests._tools import *
+from traitsui.tests._tools import (
+    BaseTestMixin,
+    create_ui,
+    requires_toolkit,
+    reraise_exceptions,
+    ToolkitName,
+)
 
 
 class NumberWithSpinnerEditor(HasTraits):
     """Dialog containing a RangeEditor in 'spinner' mode for an Int.
     """
 
-    number = Int
+    number = Int()
 
     traits_view = View(
         Item(label="Enter 4, then press OK without defocusing"),
@@ -48,18 +54,62 @@ class NumberWithSpinnerEditor(HasTraits):
     )
 
 
-@skip_if_not_wx
-def test_wx_spin_control_editing_should_not_crash():
-    # Bug: when editing the text part of a spin control box, pressing
-    # the OK button raises an AttributeError on Mac OS X
+class TestRangeEditorSpinner(BaseTestMixin, unittest.TestCase):
 
-    try:
-        with store_exceptions_on_all_threads():
-            num = NumberWithSpinnerEditor()
-            ui = num.edit_traits()
+    def setUp(self):
+        BaseTestMixin.setUp(self)
 
-            # the following is equivalent to clicking in the text control of the
-            # range editor, enter a number, and clicking ok without defocusing
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
+    @requires_toolkit([ToolkitName.wx])
+    def test_wx_spin_control_editing_should_not_crash(self):
+        # Bug: when editing the text part of a spin control box, pressing
+        # the OK button raises an AttributeError on Mac OS X
+
+        num = NumberWithSpinnerEditor()
+        try:
+            with reraise_exceptions(), create_ui(num) as ui:
+
+                # the following is equivalent to clicking in the text control
+                # of the range editor, enter a number, and clicking ok without
+                # defocusing
+
+                # SpinCtrl object
+                spin = ui.control.FindWindowByName("wxSpinCtrl", ui.control)
+                spin.SetFocusFromKbd()
+
+                # on Windows, a wxSpinCtrl does not have children, and we
+                # cannot do the more fine-grained testing below
+                if len(spin.GetChildren()) == 0:
+                    spin.SetValue("4")
+                else:
+                    # TextCtrl object of the spin control
+                    spintxt = spin.FindWindowByName("text", spin)
+                    spintxt.SetValue("4")
+
+        except AttributeError:
+            # if all went well, we should not be here
+            self.fail("AttributeError raised")
+
+    @requires_toolkit([ToolkitName.wx])
+    def test_wx_spin_control_editing_does_not_update(self):
+        # Bug: when editing the text part of a spin control box, pressing
+        # the OK button does not update the value of the HasTraits class
+        # on Mac OS X
+
+        # But under wx >= 3.0 this has been resolved
+        import wx
+
+        if wx.VERSION >= (3, 0):
+            return
+
+        num = NumberWithSpinnerEditor()
+        with reraise_exceptions(), create_ui(num) as ui:
+
+            # the following is equivalent to clicking in the text control of
+            # the range editor, enter a number, and clicking ok without
+            # defocusing
 
             # SpinCtrl object
             spin = ui.control.FindWindowByName("wxSpinCtrl")
@@ -74,78 +124,32 @@ def test_wx_spin_control_editing_should_not_crash():
                 spintxt = spin.FindWindowByName("text")
                 spintxt.SetValue("4")
 
-            # press the OK button and close the dialog
-            press_ok_button(ui)
-    except AttributeError:
-        # if all went well, we should not be here
-        assert False, "AttributeError raised"
+            # if all went well, the number traits has been updated and its
+            # value is 4
+            self.assertEqual(num.number, 4)
 
+    @requires_toolkit([ToolkitName.qt])
+    def test_qt_spin_control_editing(self):
+        # Behavior: when editing the text part of a spin control box, pressing
+        # the OK button updates the value of the HasTraits class
 
-@skip_if_not_wx
-def test_wx_spin_control_editing_does_not_update():
-    # Bug: when editing the text part of a spin control box, pressing
-    # the OK button does not update the value of the HasTraits class
-    # on Mac OS X
+        from pyface import qt
 
-    # But under wx >= 3.0 this has been resolved
-    import wx
-
-    if wx.VERSION >= (3, 0):
-        return
-
-    with store_exceptions_on_all_threads():
         num = NumberWithSpinnerEditor()
-        ui = num.edit_traits()
+        with reraise_exceptions(), create_ui(num) as ui:
 
-        # the following is equivalent to clicking in the text control of the
-        # range editor, enter a number, and clicking ok without defocusing
+            # the following is equivalent to clicking in the text control of
+            # the range editor, enter a number, and clicking ok without
+            # defocusing
 
-        # SpinCtrl object
-        spin = ui.control.FindWindowByName("wxSpinCtrl")
-        spin.SetFocusFromKbd()
-
-        # on Windows, a wxSpinCtrl does not have children, and we cannot do
-        # the more fine-grained testing below
-        if len(spin.GetChildren()) == 0:
-            spin.SetValueString("4")
-        else:
-            # TextCtrl object of the spin control
-            spintxt = spin.FindWindowByName("text")
-            spintxt.SetValue("4")
-
-        # press the OK button and close the dialog
-        press_ok_button(ui)
+            # text element inside the spin control
+            lineedit = ui.control.findChild(qt.QtGui.QLineEdit)
+            lineedit.setFocus()
+            lineedit.setText("4")
 
         # if all went well, the number traits has been updated and its value is
         # 4
-        print(num.number)
-        assert num.number == 4
-
-
-@skip_if_not_qt4
-def test_qt_spin_control_editing():
-    # Behavior: when editing the text part of a spin control box, pressing
-    # the OK button updates the value of the HasTraits class
-
-    from pyface import qt
-
-    with store_exceptions_on_all_threads():
-        num = NumberWithSpinnerEditor()
-        ui = num.edit_traits()
-
-        # the following is equivalent to clicking in the text control of the
-        # range editor, enter a number, and clicking ok without defocusing
-
-        # text element inside the spin control
-        lineedit = ui.control.findChild(qt.QtGui.QLineEdit)
-        lineedit.setFocus()
-        lineedit.setText("4")
-
-        # press the OK button and close the dialog
-        press_ok_button(ui)
-
-    # if all went well, the number traits has been updated and its value is 4
-    assert num.number == 4
+        self.assertEqual(num.number, 4)
 
 
 if __name__ == "__main__":

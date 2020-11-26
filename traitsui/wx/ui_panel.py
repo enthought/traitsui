@@ -19,12 +19,11 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 import wx.html as wh
 import re
 
-from cgi import escape
+from html import escape
 
 from traits.api import Instance, Undefined
 
@@ -37,6 +36,8 @@ from traitsui.dockable_view_element import DockableViewElement
 from traitsui.help_template import help_template
 
 from traitsui.menu import UndoButton, RevertButton, HelpButton
+
+from pyface.api import SystemMetrics
 
 from pyface.dock.api import (
     DockWindow,
@@ -55,10 +56,9 @@ from .helper import (
     GroupEditor,
 )
 
-from .constants import screen_dx, screen_dy, WindowColor
+from .constants import WindowColor
 
 from .ui_base import BaseDialog
-from .constants import is_mac
 
 
 # Pattern of all digits
@@ -726,8 +726,6 @@ class FillPanel(object):
                 if self.is_horizontal:
                     if subgroup.springy:
                         growable = 1
-                    if subgroup.orientation == "horizontal":
-                        style |= wx.ALIGN_CENTER_VERTICAL
                 sizer.Add(sg_sizer, growable, style, 2)
 
     def add_items(self, content, panel, sizer):
@@ -1013,7 +1011,7 @@ class FillPanel(object):
             item_sizer.Add(
                 control,
                 growable,
-                flags | layout_style | wx.ALIGN_CENTER_VERTICAL,
+                flags | layout_style,
                 max(0, border_size + padding + item.padding),
             )
 
@@ -1174,7 +1172,8 @@ class HTMLHelpWindow(wx.Frame):
         sizer.Add(b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
         self.SetSizer(sizer)
         self.SetSize(
-            wx.Size(int(scale_dx * screen_dx), int(scale_dy * screen_dy))
+            wx.Size(int(scale_dx * SystemMetrics().screen_width),
+            int(scale_dy * SystemMetrics().screen_height))
         )
 
         # Position and show the dialog:
@@ -1184,18 +1183,19 @@ class HTMLHelpWindow(wx.Frame):
     def _on_ok(self, event):
         """ Handles the window being closed.
         """
+        self.Unbind(wx.EVT_BUTTON)
         self.Destroy()
 
 
 # -------------------------------------------------------------------------
-#  Creates a PyFace HeadingText control:
+#  Creates a Pyface HeadingText control:
 # -------------------------------------------------------------------------
 
 HeadingText = None
 
 
 def heading_text(*args, **kw):
-    """ Creates a PyFace HeadingText control.
+    """ Creates a Pyface HeadingText control.
     """
     global HeadingText
 

@@ -6,7 +6,13 @@ from traits.api import Date, HasTraits, List
 from traitsui.api import DateEditor, View, Item
 from traitsui.editors.date_editor import CellFormat
 
-from traitsui.tests._tools import skip_if_not_qt4
+from traitsui.tests._tools import (
+    BaseTestMixin,
+    create_ui,
+    requires_toolkit,
+    reraise_exceptions,
+    ToolkitName,
+)
 
 
 class Foo(HasTraits):
@@ -50,8 +56,15 @@ def multi_select_selected_color_view():
     return view
 
 
-@skip_if_not_qt4
-class TestDateEditorCustomQt(unittest.TestCase):
+@requires_toolkit([ToolkitName.qt])
+class TestDateEditorCustomQt(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
     def test_single_select_qt4(self):
         with self.launch_editor(single_select_custom_view) as (foo, editor):
             date = datetime.date(2018, 2, 3)
@@ -105,12 +118,9 @@ class TestDateEditorCustomQt(unittest.TestCase):
     @contextlib.contextmanager
     def launch_editor(self, view_factory):
         foo = Foo()
-        ui = foo.edit_traits(view=view_factory())
-        editor, = ui._editors
-        try:
+        with create_ui(foo, dict(view=view_factory())) as ui:
+            editor, = ui._editors
             yield foo, editor
-        finally:
-            ui.dispose()
 
     def check_select_status(self, editor, date, selected):
         from pyface.qt import QtCore, QtGui
@@ -158,3 +168,32 @@ class TestDateEditorCustomQt(unittest.TestCase):
             expected,
             "Expected color: {!r}. Got color: {!r}".format(expected, actual),
         )
+
+
+# Run this test case against wx too once enthought/traitsui#752 is fixed.
+@requires_toolkit([ToolkitName.qt])
+class TestDateEditorInitDispose(unittest.TestCase):
+    """ Test the init and dispose of date editor."""
+
+    def check_init_and_dispose(self, view):
+        with reraise_exceptions(), \
+                create_ui(Foo(), dict(view=view)):
+            pass
+
+    def test_simple_date_editor(self):
+        view = View(
+            Item(
+                name="single_date",
+                style="simple",
+            )
+        )
+        self.check_init_and_dispose(view)
+
+    def test_custom_date_editor(self):
+        view = View(
+            Item(
+                name="single_date",
+                style="custom",
+            )
+        )
+        self.check_init_and_dispose(view)

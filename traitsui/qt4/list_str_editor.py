@@ -18,12 +18,11 @@
 """ Traits UI editor for editing lists of strings.
 """
 
-
-from __future__ import absolute_import
-from pyface.qt import QtCore, QtGui, is_qt5
-import collections
+import collections.abc
 
 from pyface.image_resource import ImageResource
+from pyface.qt import QtCore, QtGui, is_qt5
+
 from traits.api import (
     Any,
     Bool,
@@ -52,18 +51,18 @@ class _ListStrEditor(Editor):
     # -------------------------------------------------------------------------
 
     # The list view control associated with the editor:
-    list_view = Any
+    list_view = Any()
 
     #: The list model associated the editor:
     model = Instance(ListStrModel)
 
     #: The title of the editor:
-    title = Str
+    title = Str()
 
     #: The current set of selected items (which one is used depends upon the
     #: initial state of the editor factory 'multi_select' trait):
-    selected = Any
-    multi_selected = List
+    selected = Any()
+    multi_selected = List()
 
     #: The current set of selected item indices (which one is used depends upon
     #: the initial state of the editor factory 'multi_select' trait):
@@ -76,8 +75,8 @@ class _ListStrEditor(Editor):
     activated_index = Int(comparison_mode=NO_COMPARE)
 
     #: The most recently right_clicked item and its index:
-    right_clicked = Event
-    right_clicked_index = Event
+    right_clicked = Event()
+    right_clicked_index = Event()
 
     #: Is the list editor scrollable? This value overrides the default.
     scrollable = True
@@ -95,10 +94,10 @@ class _ListStrEditor(Editor):
     image_resources = Any({})
 
     #: The current number of item currently in the list:
-    item_count = Property
+    item_count = Property()
 
     #: The current search string:
-    search = Str
+    search = Str()
 
     # -------------------------------------------------------------------------
     #  Editor interface:
@@ -124,6 +123,7 @@ class _ListStrEditor(Editor):
 
         if factory.title or factory.title_name:
             header_view = QtGui.QHeaderView(QtCore.Qt.Horizontal, self.control)
+            self._header_view = header_view
             header_view.setModel(self.model)
             header_view.setMaximumHeight(header_view.sizeHint().height())
             if is_qt5:
@@ -131,6 +131,8 @@ class _ListStrEditor(Editor):
             else:
                 header_view.setResizeMode(QtGui.QHeaderView.Stretch)
             layout.addWidget(header_view)
+        else:
+            self._header_view = None
 
         self.list_view = _ListView(self)
         layout.addWidget(self.list_view)
@@ -194,6 +196,9 @@ class _ListStrEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
+        self.model.beginResetModel()
+        self.model.endResetModel()
+
         self.context_object.on_trait_change(
             self.update_editor, self.extended_name + "_items", remove=True
         )
@@ -201,6 +206,11 @@ class _ListStrEditor(Editor):
         self.on_trait_change(
             self.refresh_editor, "adapter.+update", remove=True
         )
+        if self._header_view is not None:
+            self._header_view.setModel(None)
+            self._header_view = None
+
+        self.list_view._dispose()
 
         super(Editor, self).dispose()
 
@@ -333,7 +343,11 @@ class _ListStrEditor(Editor):
             except ValueError:
                 pass
             else:
-                event = TraitListEvent(0, added, removed)
+                event = TraitListEvent(
+                    index=0,
+                    added=added,
+                    removed=removed
+                )
                 self._multi_selected_indices_items_changed(event)
 
     def _multi_selected_indices_changed(self, selected_indices):
@@ -374,8 +388,8 @@ class _ListStrEditor(Editor):
         self.activated_index = index = mi.row()
         self.activated = self.adapter.get_item(self.object, self.name, index)
 
-    def _on_context_menu(self, point):
-        """ Handle a context menu request.
+    def _on_mouse_right_click(self, point):
+        """ Handle a mouse right click event
         """
         mi = self.list_view.indexAt(point)
         if mi.isValid():
@@ -423,7 +437,7 @@ class _ListStrEditor(Editor):
         if isinstance(menu, str):
             menu = getattr(self.object, menu, None)
 
-        if isinstance(menu, collections.Callable):
+        if isinstance(menu, collections.abc.Callable):
             menu = menu(index)
 
         if menu is not None:
@@ -508,6 +522,18 @@ class _ListView(QtGui.QListView):
 
         # Configure context menu behavior
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+
+    def _dispose(self):
+        """ Clean up states in this view.
+        """
+        self.setModel(None)
+
+    def mouseReleaseEvent(self, event):
+        """ Reimplemented to support listening to right clicked item."""
+        if event.button() == QtCore.Qt.RightButton:
+            event.accept()
+            self._editor._on_mouse_right_click(event.pos())
+        super(_ListView, self).mouseReleaseEvent(event)
 
     def keyPressEvent(self, event):
         """ Reimplemented to support edit, insert, and delete by keyboard.

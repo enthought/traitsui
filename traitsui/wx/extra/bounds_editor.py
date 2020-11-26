@@ -1,22 +1,21 @@
-from __future__ import absolute_import
 import wx
 
-from traits.api import Float, Any, Str, Trait
+from traits.api import Float, Any, Str, Either
 from traitsui.editors.api import RangeEditor
 from traitsui.wx.editor import Editor
 from traitsui.wx.helper import TraitsUIPanel, Slider
-import six
+
 
 
 class _BoundsEditor(Editor):
 
-    evaluate = Any
+    evaluate = Any()
 
-    min = Any
-    max = Any
-    low = Any
-    high = Any
-    format = Str
+    min = Any()
+    max = Any()
+    low = Any()
+    high = Any()
+    format = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -54,9 +53,7 @@ class _BoundsEditor(Editor):
             style=wx.TE_PROCESS_ENTER,
         )
         sizer.Add(self._label_lo, 0, wx.ALIGN_CENTER)
-        wx.EVT_TEXT_ENTER(
-            panel, self._label_lo.GetId(), self.update_low_on_enter
-        )
+        self._label_lo.Bind(wx.EVT_TEXT_ENTER, self.update_low_on_enter)
         self._label_lo.Bind(wx.EVT_KILL_FOCUS, self.update_low_on_enter)
 
         # low slider
@@ -103,9 +100,7 @@ class _BoundsEditor(Editor):
             style=wx.TE_PROCESS_ENTER,
         )
         sizer.Add(self._label_hi, 0, wx.ALIGN_CENTER)
-        wx.EVT_TEXT_ENTER(
-            panel, self._label_hi.GetId(), self.update_high_on_enter
-        )
+        self._label_hi.Bind(wx.EVT_TEXT_ENTER, self.update_high_on_enter)
         self._label_hi.Bind(wx.EVT_KILL_FOCUS, self.update_high_on_enter)
 
         self.set_tooltip(self.control.lslider)
@@ -116,12 +111,18 @@ class _BoundsEditor(Editor):
         # Set-up the layout:
         panel.SetSizerAndFit(sizer)
 
+    def dispose(self):
+        self._label_hi.Unbind(wx.EVT_TEXT_ENTER)
+        self._label_hi.Unbind(wx.EVT_KILL_FOCUS)
+        self._label_lo.Unbind(wx.EVT_TEXT_ENTER)
+        self._label_lo.Unbind(wx.EVT_KILL_FOCUS)
+
     def update_low_on_enter(self, event):
         if isinstance(event, wx.FocusEvent):
             event.Skip()
         try:
             try:
-                low = eval(six.text_type(self._label_lo.GetValue()).strip())
+                low = eval(str(self._label_lo.GetValue()).strip())
                 if self.evaluate is not None:
                     low = self.evaluate(low)
             except Exception as ex:
@@ -145,7 +146,7 @@ class _BoundsEditor(Editor):
             event.Skip()
         try:
             try:
-                high = eval(six.text_type(self._label_hi.GetValue()).strip())
+                high = eval(str(self._label_hi.GetValue()).strip())
                 if self.evaluate is not None:
                     high = self.evaluate(high)
             except:
@@ -234,8 +235,8 @@ class _BoundsEditor(Editor):
 
 class BoundsEditor(RangeEditor):
 
-    min = Trait(None, Float)
-    max = Trait(None, Float)
+    min = Either(None, Float)
+    max = Either(None, Float)
 
     def _get_simple_editor_class(self):
         return _BoundsEditor

@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.image_resource import ImageResource
 
 from traitsui.ui_traits import convert_bitmap

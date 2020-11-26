@@ -24,9 +24,6 @@
     of its associated class's parent classes.
 """
 
-
-from __future__ import absolute_import
-
 from traits.api import HasStrictTraits, List, Dict, Str, Int, Any, TraitError
 
 from .view_element import ViewElement
@@ -175,7 +172,7 @@ class SearchStackItem(HasStrictTraits):
     # -------------------------------------------------------------------------
 
     #: Name that was looked up
-    id = Str
+    id = Str()
 
     #: Index into the 'mro' list of ViewElements that the ID was found in
-    context = Int
+    context = Int()

@@ -1,7 +1,6 @@
 #  Copyright (c) 2007, Enthought, Inc.
 #  License: BSD Style.
 
-from __future__ import absolute_import
 from traits.api import *
 from traitsui.api import *
 from traitsui.instance_choice import InstanceChoice
@@ -17,8 +16,8 @@ class Person(HasStrictTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    name = Str
-    age = Int
+    name = Str()
+    age = Int()
     phone = Regex(value='000-0000', regex='\d\d\d[-]\d\d\d\d')
 
     #-------------------------------------------------------------------------
@@ -53,7 +52,7 @@ class Team(HasStrictTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    name = Str
+    name = Str()
     captain = Instance(Person)
     roster = List(Person)
 

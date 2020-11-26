@@ -7,13 +7,6 @@
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
 
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals,
-)
-
 from pyface.qt import QtCore, QtGui
 
 from pyface.ui_traits import HasBorder

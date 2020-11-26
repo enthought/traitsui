@@ -14,11 +14,10 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtGui
 
 from traits.api import Trait, TraitHandler, TraitError
-import six
+
 
 # -------------------------------------------------------------------------
 #  Convert a string into a valid QFont object (if possible):
@@ -62,7 +61,7 @@ def font_to_str(font):
         underline = " underline"
     return "%s point %s%s%s%s" % (
         font.pointSize(),
-        six.text_type(font.family()),
+        str(font.family()),
         style,
         weight,
         underline,

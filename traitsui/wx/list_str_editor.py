@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import (
@@ -46,7 +45,6 @@ from traitsui.wx.editor import Editor
 from pyface.image_resource import ImageResource
 
 from .helper import disconnect, disconnect_no_id
-from six.moves import range
 
 try:
     from pyface.wx.drag_and_drop import PythonDropSource, PythonDropTarget
@@ -123,31 +121,31 @@ class _ListStrEditor(Editor):
     # -- Trait Definitions ----------------------------------------------------
 
     #: The title of the editor:
-    title = Str
+    title = Str()
 
     #: The current set of selected items (which one is used depends upon the
     #: initial state of the editor factory 'multi_select' trait):
-    selected = Any
-    multi_selected = List
+    selected = Any()
+    multi_selected = List()
 
     #: The current set of selected item indices (which one is used depends upon
     #: the initial state of the editor factory 'multi_select' trait):
-    selected_index = Int
+    selected_index = Int()
     multi_selected_indices = List(Int)
 
     #: The most recently actived item and its index:
-    activated = Any
-    activated_index = Int
+    activated = Any()
+    activated_index = Int()
 
     #: The most recently right_clicked item and its index:
-    right_clicked = Event
-    right_clicked_index = Event
+    right_clicked = Event()
+    right_clicked_index = Event()
 
     #: Is the list editor scrollable? This value overrides the default.
     scrollable = True
 
     #: Index of item to select after rebuilding editor list:
-    index = Any
+    index = Any()
 
     #: Should the selected item be edited after rebuilding the editor list:
     edit = Bool(False)
@@ -162,10 +160,10 @@ class _ListStrEditor(Editor):
     image_resources = Any({})
 
     #: The current number of item currently in the list:
-    item_count = Property
+    item_count = Property()
 
     #: The current search string:
-    search = Str
+    search = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -200,14 +198,13 @@ class _ListStrEditor(Editor):
         control.InsertColumn(0, "")
 
         # Set up the list control's event handlers:
-        id = control.GetId()
-        parent.Bind(wx.EVT_LIST_BEGIN_DRAG, self._begin_drag, id=id)
-        parent.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self._begin_label_edit, id=id)
-        parent.Bind(wx.EVT_LIST_END_LABEL_EDIT, self._end_label_edit, id=id)
-        parent.Bind(wx.EVT_LIST_ITEM_SELECTED, self._item_selected, id=id)
-        parent.Bind(wx.EVT_LIST_ITEM_DESELECTED, self._item_selected, id=id)
-        parent.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self._right_clicked, id=id)
-        parent.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self._item_activated, id=id)
+        control.Bind(wx.EVT_LIST_BEGIN_DRAG, self._begin_drag)
+        control.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self._begin_label_edit)
+        control.Bind(wx.EVT_LIST_END_LABEL_EDIT, self._end_label_edit)
+        control.Bind(wx.EVT_LIST_ITEM_SELECTED, self._item_selected)
+        control.Bind(wx.EVT_LIST_ITEM_DESELECTED, self._item_selected)
+        control.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self._right_clicked)
+        control.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self._item_activated)
         control.Bind(wx.EVT_SIZE, self._size_modified)
 
         # Handle key events:
@@ -268,8 +265,11 @@ class _ListStrEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        disconnect(
+        disconnect_no_id(
             self.control,
+            wx.EVT_SIZE,
+            wx.EVT_CHAR,
+            wx.EVT_LEFT_DOWN,
             wx.EVT_LIST_BEGIN_DRAG,
             wx.EVT_LIST_BEGIN_LABEL_EDIT,
             wx.EVT_LIST_END_LABEL_EDIT,
@@ -277,10 +277,6 @@ class _ListStrEditor(Editor):
             wx.EVT_LIST_ITEM_DESELECTED,
             wx.EVT_LIST_ITEM_RIGHT_CLICK,
             wx.EVT_LIST_ITEM_ACTIVATED,
-        )
-
-        disconnect_no_id(
-            self.control, wx.EVT_SIZE, wx.EVT_CHAR, wx.EVT_LEFT_DOWN
         )
 
         self.context_object.on_trait_change(
@@ -338,9 +334,9 @@ class _ListStrEditor(Editor):
             return
 
         if 0 <= (index - top) < pn:
-            control.EnsureVisible(max(0, top + pn - 2))
+            control.EnsureVisible(min(top + pn - 2, control.GetItemCount() - 1))
         elif index < top:
-            control.EnsureVisible(min(n, index + pn - 1))
+            control.EnsureVisible(min(index + pn - 1, control.GetItemCount() - 1))
         else:
             control.EnsureVisible(index)
 
@@ -408,13 +404,13 @@ class _ListStrEditor(Editor):
     def _multi_selected_items_changed(self, event):
         """ Handles the editor's 'multi_selected' trait being modified.
         """
-        values = self.values
+        values = self.value
         try:
             self._multi_selected_indices_items_changed(
                 TraitListEvent(
-                    0,
-                    [values.index(item) for item in event.removed],
-                    [values.index(item) for item in event.added],
+                    index=0,
+                    removed=[values.index(item) for item in event.removed],
+                    added=[values.index(item) for item in event.added],
                 )
             )
         except Exception:
@@ -560,7 +556,10 @@ class _ListStrEditor(Editor):
     def _right_clicked(self, event):
         """ Handles an item being right clicked.
         """
-        self.right_clicked_index = index = event.GetIndex()
+        index = event.GetIndex()
+        if index == -1:
+            return
+        self.right_clicked_index = index
         self.right_clicked = self.adapter.get_item(
             self.object, self.name, index
         )

@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 
 import numpy
 
@@ -91,10 +90,10 @@ class ArrayStructure(HasTraits):
         object = editor.value
 
         # Determine the correct trait type to use for each element:
-        trait = Float
+        trait = Float()
 
         if object.dtype.type == "i":
-            trait = Int
+            trait = Int()
 
         if len(object.shape) == 1:
             self.view = self._one_dim_view(object, style, width, trait)

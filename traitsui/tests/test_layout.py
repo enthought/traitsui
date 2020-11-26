@@ -17,8 +17,7 @@
 Test the layout of elements is consistent with the layout parameters.
 """
 
-from __future__ import absolute_import
-import nose
+import unittest
 
 from traits.has_traits import HasTraits
 from traits.trait_types import Str
@@ -27,12 +26,25 @@ from traitsui.item import Item
 from traitsui.view import View
 from traitsui.group import HGroup, VGroup
 
-from traitsui.tests._tools import *
+from traitsui.tests._tools import (
+    BaseTestMixin,
+    create_ui,
+    requires_toolkit,
+    reraise_exceptions,
+    ToolkitName,
+)
 
 
 _DIALOG_WIDTH = 500
 _DIALOG_HEIGHT = 500
 _TXT_WIDTH = 100
+
+
+class MultipleTrait(HasTraits):
+    """ An object with multiple traits to test layout and alignments."""
+
+    txt1 = Str("text1")
+    txt2 = Str("text2")
 
 
 class VResizeDialog(HasTraits):
@@ -59,48 +71,84 @@ class HResizeDialog(HasTraits):
     )
 
 
-@skip_if_not_qt4
-def test_qt_resizable_in_vgroup():
-    # Behavior: Item.resizable controls whether a component can resize along
-    # the non-layout axis of its group. In a VGroup, resizing should work
-    # only in the horizontal direction.
+class TestLayout(BaseTestMixin, unittest.TestCase):
 
-    from pyface import qt
+    def setUp(self):
+        BaseTestMixin.setUp(self)
 
-    with store_exceptions_on_all_threads():
-        dialog = VResizeDialog()
-        ui = dialog.edit_traits()
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
-        text = ui.control.findChild(qt.QtGui.QLineEdit)
+    @requires_toolkit([ToolkitName.qt])
+    def test_qt_resizable_in_vgroup(self):
+        # Behavior: Item.resizable controls whether a component can resize
+        # along the non-layout axis of its group. In a VGroup, resizing should
+        # work only in the horizontal direction.
 
-        # horizontal size should be large
-        nose.tools.assert_greater(text.width(), _DIALOG_WIDTH - 100)
+        with reraise_exceptions(), \
+                create_ui(VResizeDialog()) as ui:
+            editor, = ui.get_editors("txt")
+            text = editor.control
 
-        # vertical size should be unchanged
-        nose.tools.assert_less(text.height(), 100)
+            # horizontal size should be large
+            self.assertGreater(text.width(), _DIALOG_WIDTH - 100)
+
+            # vertical size should be unchanged
+            self.assertLess(text.height(), 100)
+
+    @requires_toolkit([ToolkitName.qt])
+    def test_qt_resizable_in_hgroup(self):
+        # Behavior: Item.resizable controls whether a component can resize
+        # along the non-layout axis of its group. In a HGroup, resizing should
+        # work only in the vertical direction.
+
+        with reraise_exceptions(), \
+                create_ui(HResizeDialog()) as ui:
+
+            editor, = ui.get_editors("txt")
+            text = editor.control
+
+            # vertical size should be large
+            self.assertGreater(text.height(), _DIALOG_HEIGHT - 100)
+
+            # horizontal size should be unchanged
+            # ??? maybe not: some elements (e.g., the text field) have
+            # 'Expanding' as their default behavior
+            # self.assertLess(text.width(), _TXT_WIDTH+100)
 
 
-@skip_if_not_qt4
-def test_qt_resizable_in_hgroup():
-    # Behavior: Item.resizable controls whether a component can resize along
-    # the non-layout axis of its group. In a HGroup, resizing should work
-    # only in the vertical direction.
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+class TestOrientation(BaseTestMixin, unittest.TestCase):
+    """ Toolkit-agnostic tests on the layout orientations."""
 
-    from pyface import qt
+    def setUp(self):
+        BaseTestMixin.setUp(self)
 
-    with store_exceptions_on_all_threads():
-        dialog = HResizeDialog()
-        ui = dialog.edit_traits()
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
-        text = ui.control.findChild(qt.QtGui.QLineEdit)
+    def test_vertical_layout(self):
+        view = View(
+            VGroup(
+                Item("txt1"),
+                Item("txt2"),
+            )
+        )
+        with reraise_exceptions(), \
+                create_ui(MultipleTrait(), ui_kwargs=dict(view=view)):
+            pass
 
-        # vertical size should be large
-        nose.tools.assert_greater(text.height(), _DIALOG_HEIGHT - 100)
-
-        # horizontal size should be unchanged
-        # ??? maybe not: some elements (e.g., the text field) have
-        # 'Expanding' as their default behavior
-        # nose.tools.assert_less(text.width(), _TXT_WIDTH+100)
+    def test_horizontal_layout(self):
+        # layout
+        view = View(
+            HGroup(
+                Item("txt1"),
+                Item("txt2"),
+            )
+        )
+        with reraise_exceptions(), \
+                create_ui(MultipleTrait(), ui_kwargs=dict(view=view)):
+            pass
 
 
 if __name__ == "__main__":

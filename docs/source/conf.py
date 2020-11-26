@@ -11,7 +11,6 @@
 # All configuration values have a default value; values that are commented out
 # serve to show the default value.
 
-from __future__ import absolute_import
 
 from io import open
 import os
@@ -44,7 +43,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'traitsui'
-copyright = '2008-2018, Enthought'
+copyright = '2008-2020, Enthought'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
@@ -192,7 +191,7 @@ except ImportError as exc:
 
 # Useful aliases to avoid repeating long URLs.
 extlinks = {'github-demo': (
-    'https://github.com/enthought/traitsui/tree/master/examples/demo/%s',
+    'https://github.com/enthought/traitsui/tree/master/traitsui/examples/demo/%s',
     'github-demo')
 }
 
@@ -239,3 +238,13 @@ intersphinx_mapping = {
     'traits': ('http://docs.enthought.com/traits', None),
     'pyface': ('http://docs.enthought.com/pyface', None),
 }
+
+
+def autodoc_skip_member(app, what, name, obj, skip, options):
+    # Skip load_tests targeting unittest discover
+    is_load_tests = what == "module" and name == "load_tests"
+    return skip or is_load_tests
+
+
+def setup(app):
+    app.connect('autodoc-skip-member', autodoc_skip_member)

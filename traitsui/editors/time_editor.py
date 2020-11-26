@@ -15,10 +15,9 @@
 #
 # ------------------------------------------------------------------------------
 
-""" A Traits UI editor that wraps a WX timer control.
+""" A Traits UI editor that wraps a timer control.
 """
 
-from __future__ import absolute_import
 
 from traits.api import Str
 from ..editor_factory import EditorFactory
@@ -26,7 +25,7 @@ from ..ui_traits import AView
 
 
 class TimeEditor(EditorFactory):
-    """ Editor factory for time editors.  Generates _TimeEditor()s.
+    """ Editor factory for time editors.
     """
 
     # -------------------------------------------------------------------------

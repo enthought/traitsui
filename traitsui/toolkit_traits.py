@@ -1,10 +1,10 @@
-#  Copyright (c) 2005-20, Enthought, Inc.
-#  All rights reserved.
+# Copyright (c) 2005-20, Enthought, Inc.
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in enthought/LICENSE.txt and may be redistributed only
+# under the conditions described in the aforementioned license.  The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 
 
 # XXX eventually should replace with traits.api
@@ -14,60 +14,79 @@ from .toolkit import toolkit
 
 
 def ColorTrait(*args, **traits):
-    """ Returns a trait whose value must be a GUI toolkit-specific color.
+    """ Returns a trait whose value is a GUI toolkit-specific color.
 
-    Description
-    -----------
-    For wxPython, the returned trait accepts any of the following values:
+    A number of different values are accepted for setting the value, including:
 
-    * A wx.Colour instance
-    * A wx.ColourPtr instance
-    * an integer whose hexadecimal form is 0x*RRGGBB*, where *RR* is the red
-      value, *GG* is the green value, and *BB* is the blue value
+    * tuples of the form (r, g, b) and (r, g, b, a)
+    * strings which match standard color names
+    * strings of the form "(r, g, b)" and "(r, g, b, a)"
+    * integers whose hex value is of the form 0xRRGGBB
+    * toolkit-specific color classes
 
-    Default Value
-    -------------
-    For wxPython, 0xffffff (that is, white)
+    Tuple values are expected to be in the range 0 to 255.
+
+    Exact behaviour (eg. precisely what values are accepted, and what the
+    "standard" color names are) is toolkit-dependent.
+
+    The default value is white.  The default editor is a ColorEditor.
+
+    Parameters
+    ----------
+    default: color
+        The default color for the trait.
+    allow_none: bool
+        Whether to allow None as a value.
+    **metadata
+        Trait metadata to be passed through.
     """
     return toolkit().color_trait(*args, **traits)
 
 
 def RGBColorTrait(*args, **traits):
-    """ Returns a trait whose value must be a GUI toolkit-specific RGB-based
-        color.
+    """ Returns a trait whose value is a RGB tuple with values from 0 to 1.
 
-    Description
-    -----------
-    For wxPython, the returned trait accepts any of the following values:
+    A number of different values are accepted for setting the value, including:
 
-    * A tuple of the form (*r*, *g*, *b*), in which *r*, *g*, and *b* represent
-      red, green, and blue values, respectively, and are floats in the range
-      from 0.0 to 1.0
-    * An integer whose hexadecimal form is 0x*RRGGBB*, where *RR* is the red
-      value, *GG* is the green value, and *BB* is the blue value
+    * tuples of the form (r, g, b) with values from 0.0 to 1.0
+    * strings which match standard color names
+    * integers whose hex value is of the form 0xRRGGBB
 
-    Default Value
-    -------------
-    For wxPython, (1.0, 1.0, 1.0) (that is, white)
+    The default value is (1.0, 1.0, 1.0).  The default editor is a
+    RGBColorEditor.
+
+    Parameters
+    ----------
+    **metadata
+        Trait metadata to be passed through.
     """
     return toolkit().rgb_color_trait(*args, **traits)
 
 
 def FontTrait(*args, **traits):
-    """ Returns a trait whose value must be a GUI toolkit-specific font.
+    """ Returns a trait whose value is a GUI toolkit-specific font.
 
-    Description
-    -----------
-    For wxPython, the returned trait accepts any of the following:
+    This trait accepts either a toolkit-specific font object, or a string
+    containing a font description.  The string description can contain:
 
-    * a wx.Font instance
-    * a wx.FontPtr instance
-    * a string describing the font, including one or more of the font family,
-      size, weight, style, and typeface name.
+    * a font name or family.  The following generic names are understood:
+      "default", "decorative", "roman", "script", "swiss", and "modern".
+    * a size, in points.
+    * a style, which is one of: "slant" or "italic"
+    * a weight, which is one of: "light" or "bold"
+    * whether the font is underlined, indicated by the inclusion of
+      "underlined".
 
-    Default Value
-    -------------
-    For wxPython, 'Arial 10'
+    Where values aren't supplied, the application defaults will be used
+    instead.
+
+    The default value is the application default font, which is toolkit
+    and platform dependent.  The default editor is FontEditor.
+
+    Parameters
+    ----------
+    **metadata
+        Trait metadata to be passed through.
     """
     return toolkit().font_trait(*args, **traits)
 

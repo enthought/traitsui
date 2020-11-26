@@ -24,10 +24,9 @@ At the minimum, a spinner should be provided so the time can be changed
 without the need for a keyboard.  In addition we need to extend to provide
 all four of the basic editor types, Simple, Custom, Text, and Readonly.
 """
-from __future__ import absolute_import
 import datetime
 
-import wx.lib.masked as masked
+import wx.adv
 
 from traitsui.wx.editor import Editor
 from traitsui.wx.text_editor import ReadonlyEditor as TextReadonlyEditor
@@ -43,16 +42,16 @@ class SimpleEditor(Editor):
         Finishes initializing the editor by creating the underlying toolkit
         widget.
         """
-        tctl = masked.TimeCtrl(parent, -1, name="12 hour control")
+        tctl = wx.adv.TimePickerCtrl(parent, -1, name="12 hour control")
         self.control = tctl
-        self.control.Bind(masked.EVT_TIMEUPDATE, self.time_updated)
+        self.control.Bind(wx.adv.EVT_TIME_CHANGED, self.time_updated)
         return
 
     def time_updated(self, event):
         """
         Event for when the wx time control is updated.
         """
-        time = self.control.GetValue(as_wxDateTime=True)
+        time = self.control.GetValue()
         hour = time.GetHour()
         minute = time.GetMinute()
         second = time.GetSecond()
@@ -65,7 +64,7 @@ class SimpleEditor(Editor):
         editor.
         """
         if self.value:
-            time = self.control.GetValue(as_wxDateTime=True)
+            time = self.control.GetValue()
             time.SetHour(self.value.hour)
             time.SetMinute(self.value.minute)
             time.SetSecond(self.value.second)

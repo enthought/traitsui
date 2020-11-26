@@ -15,7 +15,6 @@ based custom control.
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward

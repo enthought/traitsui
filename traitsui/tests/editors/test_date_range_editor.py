@@ -7,12 +7,15 @@ from traits.api import (
     HasTraits,
     TraitError,
     Tuple,
-    pop_exception_handler,
-    push_exception_handler,
 )
 from traitsui.api import DateRangeEditor, View, Item
 
-from traitsui.tests._tools import skip_if_not_qt4
+from traitsui.tests._tools import (
+    BaseTestMixin,
+    create_ui,
+    requires_toolkit,
+    ToolkitName,
+)
 
 
 class Foo(HasTraits):
@@ -40,19 +43,28 @@ def custom_view_allow_no_range():
     return view
 
 
-class TestDateRangeEditorGeneric(unittest.TestCase):
+class TestDateRangeEditorGeneric(BaseTestMixin, unittest.TestCase):
     """ Tests that are not GUI backend specific."""
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_date_range_multi_select_is_constant(self):
         with self.assertRaises(TraitError):
             DateRangeEditor(multi_select=False)
 
 
-@skip_if_not_qt4
-class TestDateRangeEditorQt(unittest.TestCase):
+@requires_toolkit([ToolkitName.qt])
+class TestDateRangeEditorQt(BaseTestMixin, unittest.TestCase):
+
     def setUp(self):
-        push_exception_handler(reraise_exceptions=True)
-        self.addCleanup(pop_exception_handler)
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_set_date_range_on_model(self):
         # Test when the date range is set on the model
@@ -205,12 +217,9 @@ class TestDateRangeEditorQt(unittest.TestCase):
     @contextlib.contextmanager
     def launch_editor(self, view_factory):
         foo = Foo()
-        ui = foo.edit_traits(view=view_factory())
-        editor, = ui._editors
-        try:
+        with create_ui(foo, dict(view=view_factory())) as ui:
+            editor, = ui._editors
             yield foo, editor
-        finally:
-            ui.dispose()
 
     def check_select_status(self, editor, date, selected):
         from pyface.qt import QtCore, QtGui

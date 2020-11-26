@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 import wx
 
 from traits.api import Instance, Int, Str
@@ -22,13 +21,13 @@ class SimpleEditor(Editor):
     progress = Instance(ProgressDialog)
 
     # The message to be displayed along side the progress guage
-    message = Str
+    message = Str()
 
     # The starting value
-    min = Int
+    min = Int()
 
     # The ending value
-    max = Int
+    max = Int()
 
     # -- Editor interface ------------------------------------------------------
 

@@ -13,9 +13,7 @@
 """
 
 
-from __future__ import absolute_import, division
-
-import cgi
+import html
 import re
 
 from pyface.qt import QtCore, QtGui
@@ -337,10 +335,11 @@ def _size_hint_wrapper(f, ui):
 
     def sizeHint():
         size = f()
-        if ui.view.width > 0:
-            size.setWidth(ui.view.width)
-        if ui.view.height > 0:
-            size.setHeight(ui.view.height)
+        if ui.view is not None:
+            if ui.view.width > 0:
+                size.setWidth(ui.view.width)
+            if ui.view.height > 0:
+                size.setHeight(ui.view.height)
         return size
 
     return sizeHint
@@ -352,7 +351,7 @@ def show_help(ui, button):
     group = ui._groups[ui._active_group]
     template = help_template()
     if group.help != "":
-        header = template.group_help % cgi.escape(group.help)
+        header = template.group_help % html.escape(group.help)
     else:
         header = template.no_group_help
     fields = []
@@ -361,8 +360,8 @@ def show_help(ui, button):
             fields.append(
                 template.item_help
                 % (
-                    cgi.escape(item.get_label(ui)),
-                    cgi.escape(item.get_help(ui)),
+                    html.escape(item.get_label(ui)),
+                    html.escape(item.get_help(ui)),
                 )
             )
     html = template.group_html % (header, "\n".join(fields))
@@ -596,6 +595,21 @@ class _GroupPanel(object):
 
                 # Create an editor.
                 self._setup_editor(group, GroupEditor(control=outer))
+
+            if group.scrollable:
+                # ensure a widget rather than a layout for the scroll area
+                if outer is None:
+                    outer = inner = QtGui.QBoxLayout(self.direction)
+                if isinstance(outer, QtGui.QLayout):
+                    widget = QtGui.QWidget()
+                    widget.setLayout(outer)
+                    outer = widget
+
+                # now create a scroll area for the widget
+                scroll_area = QtGui.QScrollArea()
+                scroll_area.setWidget(outer)
+                scroll_area.setWidgetResizable(True)
+                outer = scroll_area
 
             if isinstance(content[0], Group):
                 layout = self._add_groups(content, inner)
@@ -1225,7 +1239,7 @@ class TabbedFoldGroupEditor(GroupEditor):
     """
 
     #: The QTabWidget or QToolBox for the group
-    container = Any
+    container = Any()
 
     # -- UI preference save/restore interface ---------------------------------
 
@@ -1286,14 +1300,14 @@ class HTMLHelpWindow(QtGui.QDialog):
 
 
 # -------------------------------------------------------------------------
-#  Creates a PyFace HeadingText control:
+#  Creates a Pyface HeadingText control:
 # -------------------------------------------------------------------------
 
 HeadingText = None
 
 
 def heading_text(*args, **kw):
-    """Create a PyFace HeadingText control.
+    """Create a Pyface HeadingText control.
     """
     global HeadingText
 

@@ -1,7 +1,6 @@
 #  Copyright (c) 2007, Enthought, Inc.
 #  License: BSD Style.
 
-from __future__ import absolute_import, print_function
 
 from traits.api import HasTraits, Str, List
 from traitsui.api import Group, Item, TableEditor, View
@@ -10,16 +9,16 @@ from traitsui.table_column \
 
 
 class Word(HasTraits):
-    word = Str
+    word = Str()
 
 
 class Foo(HasTraits):
 
     # arbitrary string containing spaces
-    input = Str
+    input = Str()
 
     # input split on space
-    parsed = List
+    parsed = List()
 
     def _input_changed(self):
         words = self.input.split()

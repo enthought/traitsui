@@ -15,7 +15,6 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traitsui.editors.font_editor import (
@@ -29,7 +28,7 @@ from .editor_factory import (
 )
 
 from .editor import Editor
-import six
+
 
 
 # Standard font point sizes
@@ -165,7 +164,7 @@ class CustomFontEditor(Editor):
     def update_object(self):
         """ Handles the user changing the contents of the font text control.
         """
-        self.value = six.text_type(self._font.text())
+        self.value = str(self._font.text())
         self._set_font(self.factory.to_qt4_font(self))
         self.update_editor()
 
@@ -231,7 +230,7 @@ class TextFontEditor(BaseTextEditor):
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
-        self.value = six.text_type(self.control.text())
+        self.value = str(self.control.text())
 
     def update_editor(self):
         """ Updates the editor when the object trait changes external to the

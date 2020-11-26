@@ -20,7 +20,6 @@ based custom control.
 """
 
 
-from __future__ import absolute_import
 import wx
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward

@@ -18,9 +18,6 @@
 """ Exports the symbols defined by the traits.ui package.
 """
 
-
-from __future__ import absolute_import
-
 from .basic_editor_factory import BasicEditorFactory
 
 from .context_value import CV, CVFloat, CVInt, CVStr, CVType, ContextValue

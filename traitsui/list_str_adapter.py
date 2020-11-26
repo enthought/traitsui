@@ -18,9 +18,6 @@
 """  Defines adapter interfaces for use with the ListStrEditor.
 """
 
-
-from __future__ import absolute_import
-
 from traits.api import (
     Any,
     Bool,
@@ -35,7 +32,7 @@ from traits.api import (
     provides,
 )
 from .toolkit_traits import Color
-import six
+
 
 # -------------------------------------------------------------------------
 #  'IListStrAdapter' interface:
@@ -45,19 +42,19 @@ import six
 class IListStrAdapter(Interface):
 
     #: The index of the current item being adapted.
-    index = Int
+    index = Int()
 
     #: Current item being adapted.
-    item = Any
+    item = Any()
 
     #: The current value (if any).
-    value = Any
+    value = Any()
 
     #: Does the adapter know how to handle the current *item* or not?
-    accepts = Bool
+    accepts = Bool()
 
     #: Does the value of *accepts* depend only upon the type of *item*?
-    is_cacheable = Bool
+    is_cacheable = Bool()
 
 
 # -------------------------------------------------------------------------
@@ -71,13 +68,13 @@ class AnIListStrAdapter(HasPrivateTraits):
     # Implementation of the IListStrAdapter Interface ------------------------
 
     #: The index of the current item being adapted.
-    index = Int
+    index = Int()
 
     #: Current item being adapted.
-    item = Any
+    item = Any()
 
     #: The current value (if any).
-    value = Any
+    value = Any()
 
     #: Does the adapter know how to handle the current *item* or not?
     accepts = Bool(True)
@@ -102,7 +99,7 @@ class ListStrAdapter(HasPrivateTraits):
     default_value = Any("")
 
     #: Specifies the default text for a new list item.
-    default_text = Str
+    default_text = Str()
 
     #: The default text color for even list items.
     even_text_color = Color(None, update=True)
@@ -133,13 +130,13 @@ class ListStrAdapter(HasPrivateTraits):
     dropped = Enum("after", "before")
 
     #: The index of the current item being adapter.
-    index = Int
+    index = Int()
 
     #: The current item being adapted.
-    item = Any
+    item = Any()
 
     #: The current value (if any).
-    value = Any
+    value = Any()
 
     #: List of optional delegated adapters.
     adapters = List(IListStrAdapter, update=True)
@@ -163,15 +160,16 @@ class ListStrAdapter(HasPrivateTraits):
 
     def get_drag(self, object, trait, index):
         """ Returns the 'drag' value for a specified *object.trait[index]*
-            list item. A result of *None* means that the item cannot be dragged.
+            list item. A result of *None* means that the item cannot be
+            dragged.
         """
         return self._result_for("get_drag", object, trait, index)
 
     def get_can_drop(self, object, trait, index, value):
         """ Returns whether the specified *value* can be dropped on the
-            specified *object.trait[index]* list item. A value of **True** means
-            the *value* can be dropped; and a value of **False** indicates that
-            it cannot be dropped.
+            specified *object.trait[index]* list item. A value of **True**
+            means the *value* can be dropped; and a value of **False**
+            indicates that it cannot be dropped.
         """
         return self._result_for("get_can_drop", object, trait, index, value)
 
@@ -280,10 +278,10 @@ class ListStrAdapter(HasPrivateTraits):
         return self.can_edit
 
     def _get_drag(self):
-        return six.text_type(self.item)
+        return str(self.item)
 
     def _get_can_drop(self):
-        return isinstance(self.value, six.string_types)
+        return isinstance(self.value, str)
 
     def _get_dropped(self):
         return self.dropped
@@ -307,7 +305,7 @@ class ListStrAdapter(HasPrivateTraits):
         return self.item
 
     def _get_text(self):
-        return six.text_type(self.item)
+        return str(self.item)
 
     # -- Private Methods ------------------------------------------------------
 

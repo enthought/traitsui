@@ -19,14 +19,14 @@
     editors and text editor factories.
 """
 
-from __future__ import absolute_import
 import sys
 
 import wx
 
+from pyface.api import SystemMetrics
+
 #: Define platform and wx version constants:
 is_mac = sys.platform == "darwin"
-is_wx26 = float(".".join(wx.__version__.split(".")[0:2])) < 2.8
 
 #: Default dialog title
 DefaultTitle = "Edit properties"
@@ -81,7 +81,7 @@ standard_bitmap_width = 120
 scrollbar_dx = wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X)
 
 #: Screen width
-screen_dx = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_X)
+screen_dx = SystemMetrics().screen_width
 
 #: Screen height
-screen_dy = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
+screen_dy = SystemMetrics().screen_height

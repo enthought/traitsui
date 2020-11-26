@@ -3,15 +3,14 @@
 
 # array_editor.py -- Example of using array editors
 
-#--[Imports]--------------------------------------------------------------
-from __future__ import absolute_import
+# --[Imports]--------------------------------------------------------------
 from numpy import int16, float32
 
 from traits.api import HasPrivateTraits, Array
 from traitsui.api import View, ArrayEditor, Item
 from traitsui.menu import NoButtons
 
-#--[Code]-----------------------------------------------------------------
+# --[Code]-----------------------------------------------------------------
 
 
 class ArrayEditorTest(HasPrivateTraits):

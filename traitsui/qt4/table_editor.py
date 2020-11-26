@@ -15,7 +15,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from pyface.qt import QtCore, QtGui, is_qt5
 from pyface.image_resource import ImageResource
@@ -59,7 +58,7 @@ from traitsui.ui_traits import SequenceTypes
 
 from .editor import Editor
 from .table_model import TableModel, SortFilterTableModel
-import six
+
 
 
 if is_qt5:
@@ -85,7 +84,7 @@ class TableEditor(Editor, BaseTableEditor):
     # -------------------------------------------------------------------------
 
     #: The table view control associated with the editor:
-    table_view = Any
+    table_view = Any()
 
     def _table_view_default(self):
         return TableView(editor=self)
@@ -106,7 +105,7 @@ class TableEditor(Editor, BaseTableEditor):
     columns = List(TableColumn)
 
     #: The currently selected row(s), column(s), or cell(s).
-    selected = Any
+    selected = Any()
 
     #: The current selected row
     selected_row = Property(Any, depends_on="selected")
@@ -114,7 +113,7 @@ class TableEditor(Editor, BaseTableEditor):
     selected_indices = Property(Any, depends_on="selected")
 
     #: Current filter object (should be a TableFilter or callable or None):
-    filter = Any
+    filter = Any()
 
     #: The indices of the table items currently passing the table filter:
     filtered_indices = List(Int)
@@ -126,10 +125,10 @@ class TableEditor(Editor, BaseTableEditor):
     update_filter = Event()
 
     #: The event fired when a cell is clicked on:
-    click = Event
+    click = Event()
 
     #: The event fired when a cell is double-clicked on:
-    dclick = Event
+    dclick = Event()
 
     #: The Traits UI associated with the table editor toolbar:
     toolbar_ui = Instance(UI)
@@ -145,7 +144,7 @@ class TableEditor(Editor, BaseTableEditor):
     header_menu_down = Instance(QtGui.QAction)
 
     #: The index of the row that was last right clicked on its vertical header
-    header_row = Int
+    header_row = Int()
 
     #: Whether to auto-size the columns or not.
     auto_size = Bool(False)
@@ -328,6 +327,8 @@ class TableEditor(Editor, BaseTableEditor):
 
     def dispose(self):
         """ Disposes of the contents of an editor."""
+        self.model.beginResetModel()
+        self.model.endResetModel()
 
         # Make sure that the auxiliary UIs are properly disposed
         if self.toolbar_ui is not None:
@@ -576,7 +577,7 @@ class TableEditor(Editor, BaseTableEditor):
     def _get_image(self, image):
         """ Converts a user specified image to a QIcon.
         """
-        if isinstance(image, six.string_types):
+        if isinstance(image, str):
             self.image = image
             image = self.image
 
@@ -1114,7 +1115,12 @@ class TableView(QtGui.QTableView):
 
             # Determine the width of the column label
             text = column.get_label()
-            width = QtGui.QFontMetrics(font).width(text)
+            # QFontMetrics.width() is deprecated and Qt docs suggest using
+            # horizontalAdvance() instead, but is only available since Qt 5.11
+            if QtCore.__version_info__ >= (5, 11):
+                width = QtGui.QFontMetrics(font).horizontalAdvance(text)
+            else:
+                width = QtGui.QFontMetrics(font).width(text)
 
             # Add margin to the calculated width as appropriate
             style = self.style()

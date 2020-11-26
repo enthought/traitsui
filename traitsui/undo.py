@@ -19,12 +19,7 @@
     support.
 """
 
-
-from __future__ import absolute_import
-
-import collections
-
-import six
+import collections.abc
 
 from traits.api import (
     Event,
@@ -40,8 +35,8 @@ from traits.api import (
 )
 
 
-NumericTypes = six.integer_types + (float, complex)
-SimpleTypes = (six.text_type, bytes) + NumericTypes
+NumericTypes = (int, float, complex)
+SimpleTypes = (str, bytes) + NumericTypes
 
 
 class AbstractUndoItem(HasPrivateTraits):
@@ -73,13 +68,16 @@ class UndoItem(AbstractUndoItem):
     # -------------------------------------------------------------------------
 
     #: Object the change occurred on
-    object = Trait(HasTraits)
+    object = Instance(HasTraits)
+
     #: Name of the trait that changed
-    name = Str
+    name = Str()
+
     #: Old value of the changed trait
-    old_value = Property
+    old_value = Property()
+
     #: New value of the changed trait
-    new_value = Property
+    new_value = Property()
 
     def _get_old_value(self):
         return self._old_value
@@ -132,7 +130,7 @@ class UndoItem(AbstractUndoItem):
             t1 = type(v1)
             if isinstance(v2, t1):
 
-                if isinstance(t1, six.string_types):
+                if isinstance(t1, str):
                     # Merge two undo items if they have new values which are
                     # strings which only differ by one character (corresponding
                     # to a single character insertion, deletion or replacement
@@ -145,16 +143,16 @@ class UndoItem(AbstractUndoItem):
                     i = 0
                     while (i < n) and (v1[i] == v2[i]):
                         i += 1
-                    if v1[i + (n2 <= n1) :] == v2[i + (n2 >= n1) :]:
+                    if v1[i + (n2 <= n1):] == v2[i + (n2 >= n1):]:
                         self.new_value = v2
                         return True
 
-                elif isinstance(v1, collections.Sequence):
+                elif isinstance(v1, collections.abc.Sequence):
                     # Merge sequence types only if a single element has changed
                     # from the 'original' value, and the element type is a
                     # simple Python type:
                     v1 = self.old_value
-                    if isinstance(v1, collections.Sequence):
+                    if isinstance(v1, collections.abc.Sequence):
                         # Note: wxColour says it's a sequence type, but it
                         # doesn't support 'len', so we handle the exception
                         # just in case other classes have similar behavior:
@@ -209,15 +207,19 @@ class ListUndoItem(AbstractUndoItem):
     # -------------------------------------------------------------------------
 
     #: Object that the change occurred on
-    object = Trait(HasTraits)
+    object = Instance(HasTraits)
+
     #: Name of the trait that changed
-    name = Str
+    name = Str()
+
     #: Starting index
-    index = Int
+    index = Int()
+
     #: Items added to the list
-    added = List
+    added = List()
+
     #: Items removed from the list
-    removed = List
+    removed = List()
 
     def undo(self):
         """ Undoes the change.
@@ -290,17 +292,17 @@ class UndoHistory(HasStrictTraits):
     # -------------------------------------------------------------------------
 
     #: List of accumulated undo changes
-    history = List
+    history = List()
     #: The current position in the list
-    now = Int
+    now = Int()
     #: Fired when state changes to undoable
     undoable = Event(False)
     #: Fired when state changes to redoable
     redoable = Event(False)
     #: Can an action be undone?
-    can_undo = Property
+    can_undo = Property()
     #: Can an action be redone?
-    can_redo = Property
+    can_redo = Property()
 
     def add(self, undo_item, extend=False):
         """ Adds an UndoItem to the history.

@@ -15,13 +15,11 @@
 """
 
 
-from __future__ import absolute_import
 
 import copy
-import collections
+import collections.abc
+from itertools import zip_longest
 import logging
-
-from six.moves import zip_longest
 
 from pyface.qt import QtCore, QtGui
 
@@ -51,7 +49,7 @@ from .clipboard import clipboard, PyMimeData
 from .editor import Editor
 from .helper import pixmap_cache
 from .tree_node_renderers import WordWrapRenderer
-import six
+
 
 
 logger = logging.getLogger(__name__)
@@ -73,26 +71,26 @@ class SimpleEditor(Editor):
     scrollable = True
 
     #: Allows an external agent to set the tree selection
-    selection = Event
+    selection = Event()
 
     #: The currently selected object
-    selected = Any
+    selected = Any()
 
     #: The event fired when a tree node is activated by double clicking or
     #: pressing the Enter key on a node.
-    activated = Event
+    activated = Event()
 
     #: The event fired when a tree node is clicked on:
-    click = Event
+    click = Event()
 
     #: The event fired when a tree node is double-clicked on:
-    dclick = Event
+    dclick = Event()
 
     #: The event fired when the application wants to veto an operation:
-    veto = Event
+    veto = Event()
 
     #: The vent fired when the application wants to refresh the viewport.
-    refresh = Event
+    refresh = Event()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -204,8 +202,8 @@ class SimpleEditor(Editor):
         """
         try:
             tree = self._tree
-            if not isinstance(selection, six.string_types) and isinstance(
-                selection, collections.Iterable
+            if not isinstance(selection, str) and isinstance(
+                selection, collections.abc.Iterable
             ):
 
                 item_selection = QtGui.QItemSelection()
@@ -521,7 +519,7 @@ class SimpleEditor(Editor):
             return QtGui.QIcon()
 
         icon_name = node.get_icon(object, is_expanded)
-        if isinstance(icon_name, six.string_types):
+        if isinstance(icon_name, str):
             if icon_name.startswith("@"):
                 image_resource = convert_image(icon_name, 4)
                 return image_resource.create_icon()
@@ -530,7 +528,7 @@ class SimpleEditor(Editor):
                 return self._tree.style().standardIcon(icon)
 
             path = node.get_icon_path(object)
-            if isinstance(path, six.string_types):
+            if isinstance(path, str):
                 path = [path, node]
             else:
                 path = path + [node]
@@ -1301,7 +1299,7 @@ class SimpleEditor(Editor):
         except:
             return
 
-        new_label = six.text_type(nid.text(col))
+        new_label = str(nid.text(col))
         old_label = node.get_label(object)
 
         if new_label != old_label:

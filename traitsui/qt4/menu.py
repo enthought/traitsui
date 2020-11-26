@@ -43,12 +43,11 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 """
 
 
-from __future__ import absolute_import, print_function
 
 import re
 
 from pyface.qt import QtGui
-import six
+
 
 
 help_pat = re.compile(r"(.*){(.*)}(.*)")
@@ -209,7 +208,7 @@ class MakeMenu:
     def get_action(self, name):
         """ Returns the QAction associated with a specified name.
         """
-        if isinstance(name, six.string_types):
+        if isinstance(name, str):
             return self.names[name]
 
         return name
@@ -240,7 +239,7 @@ class MakeMenu:
         act = self.get_action(name)
 
         if label is None:
-            return six.text_type(act.text())
+            return str(act.text())
 
         act.setText(label)
 

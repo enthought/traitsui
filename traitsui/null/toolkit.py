@@ -20,7 +20,6 @@
 """
 
 
-from __future__ import absolute_import
 
 from ..toolkit import Toolkit
 

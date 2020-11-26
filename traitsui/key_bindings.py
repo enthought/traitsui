@@ -20,9 +20,6 @@
     by the application.
 """
 
-
-from __future__ import absolute_import
-
 from traits.api import (
     Any,
     Event,
@@ -63,10 +60,10 @@ class KeyBinding(HasStrictTraits):
     binding2 = Binding
 
     #: Description of what application function the method performs
-    description = Str
+    description = Str()
 
     #: Name of controller method the key is bound to
-    method_name = Str
+    method_name = Str()
 
     #: KeyBindings object that "owns" the KeyBinding
     owner = Instance("KeyBindings")
@@ -101,10 +98,10 @@ class KeyBindings(HasPrivateTraits):
     bindings = List(KeyBinding)
 
     #: Optional prefix to add to each method name
-    prefix = Str
+    prefix = Str()
 
     #: Optional suffix to add to each method name
-    suffix = Str
+    suffix = Str()
 
     # -- Private Traits -------------------------------------------------------
 
@@ -195,7 +192,7 @@ class KeyBindings(HasPrivateTraits):
         """ Returns a clone of the KeyBindings object.
         """
         return self.__class__(*self.bindings, **traits).trait_set(
-            **self.get("prefix", "suffix")
+            **self.trait_get("prefix", "suffix")
         )
 
     def dispose(self):

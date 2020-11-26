@@ -18,7 +18,6 @@
 """
 
 
-from __future__ import absolute_import
 import webbrowser
 
 from pyface.qt import QtCore, QtGui, QtWebKit
@@ -44,7 +43,7 @@ class SimpleEditor(Editor):
     scrollable = True
 
     #: External objects referenced in the HTML are relative to this URL
-    base_url = Str
+    base_url = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -62,6 +61,14 @@ class SimpleEditor(Editor):
 
         self.base_url = self.factory.base_url
         self.sync_value(self.factory.base_url_name, "base_url", "from")
+
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None and self.factory.open_externally:
+            page = self.control.page()
+            page.linkClicked.disconnect(self._link_clicked)
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes external to the

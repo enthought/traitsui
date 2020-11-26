@@ -19,9 +19,6 @@
     factories that use the same class for creating all editor styles.
 """
 
-
-from __future__ import absolute_import
-
 from traits.api import Any
 
 from .editor_factory import EditorFactory
@@ -37,7 +34,7 @@ class BasicEditorFactory(EditorFactory):
     # -------------------------------------------------------------------------
 
     # Editor class to be instantiated
-    klass = Any
+    klass = Any()
 
     # -------------------------------------------------------------------------
     #  Property getters.

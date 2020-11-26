@@ -19,7 +19,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from math import log10, pow
@@ -57,19 +56,19 @@ class _ScrubberEditor(Editor):
     """
 
     #: The low end of the slider range:
-    low = Any
+    low = Any()
 
     #: The high end of the slider range:
-    high = Any
+    high = Any()
 
     #: The smallest allowed increment:
-    increment = Float
+    increment = Float()
 
     #: The current text being displayed:
-    text = Str
+    text = Str()
 
     #: The mapping to use (only for Enum's):
-    mapping = Any
+    mapping = Any()
 
     # -- Class Variables ------------------------------------------------------
 
@@ -234,7 +233,7 @@ class _ScrubberEditor(Editor):
             if (low is None) or (high is None) or isinstance(low, int):
                 increment = 1.0
             else:
-                increment = pow(10, round(log10((high - low) // 100.0)))
+                increment = pow(10, round(log10((high - low) / 100.0)))
 
         self.increment = increment
 
@@ -346,7 +345,6 @@ class _ScrubberEditor(Editor):
         text.SetSelection(-1, -1)
         text.SetFocus()
         control.Bind(wx.EVT_TEXT_ENTER, self._text_completed, id=text.GetId())
-        text.Bind(wx.EVT_KILL_FOCUS, self._text_completed)
         text.Bind(wx.EVT_ENTER_WINDOW, self._enter_text)
         text.Bind(wx.EVT_LEAVE_WINDOW, self._leave_text)
         text.Bind(wx.EVT_CHAR, self._key_entered)
@@ -453,7 +451,6 @@ class _ScrubberEditor(Editor):
             and (self._text is None)
         ):
             self._pop_up_editor()
-
         event.Skip()
 
     def _enter_window(self, event):
@@ -462,13 +459,12 @@ class _ScrubberEditor(Editor):
         self._hover = True
 
         self.control.SetCursor(wx.Cursor(wx.CURSOR_HAND))
-
+        
         if not self._ignore_focus:
             self._ignore_focus = True
             self.control.SetFocus()
-
         self._ignore_focus = False
-
+        
         if self._x is not None:
             if self.factory.active_color_ != self.factory.color_:
                 self.control.Refresh()

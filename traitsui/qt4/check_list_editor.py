@@ -15,13 +15,12 @@ user interface toolkit.
 """
 
 
-from __future__ import absolute_import, division
 
 import logging
 
 from pyface.qt import QtCore, QtGui
 
-from traits.api import List, Unicode, TraitError
+from traits.api import Any, Callable, List, Str, TraitError, Tuple
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -31,7 +30,7 @@ from traitsui.editors.check_list_editor import ToolkitEditorFactory
 from .editor_factory import TextEditor as BaseTextEditor
 
 from .editor import EditorWithList
-import six
+
 
 
 logger = logging.getLogger(__name__)
@@ -55,10 +54,10 @@ class SimpleEditor(EditorWithList):
     # -------------------------------------------------------------------------
 
     #: Checklist item names
-    names = List(Unicode)
+    names = List(Str)
 
     #: Checklist item values
-    values = List
+    values = List()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -73,11 +72,19 @@ class SimpleEditor(EditorWithList):
         self.control = QtGui.QComboBox()
         self.control.activated[int].connect(self.update_object)
 
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None:
+            self.control.activated[int].disconnect(self.update_object)
+
+        super().dispose()
+
     def list_updated(self, values):
         """ Handles updates to the list of legal checklist values.
         """
         sv = self.string_value
-        if (len(values) > 0) and isinstance(values[0], six.string_types):
+        if (len(values) > 0) and isinstance(values[0], str):
             values = [(x, sv(x, capitalize)) for x in values]
         self.values = valid_values = [x[0] for x in values]
         self.names = [x[1] for x in values]
@@ -91,14 +98,14 @@ class SimpleEditor(EditorWithList):
                     del cur_value[i]
                     modified = True
                 except TypeError as e:
-                    logger.warn(
+                    logger.warning(
                         "Unable to remove non-current value [%s] from "
                         "values %s",
                         cur_value[i],
                         values,
                     )
         if modified:
-            if isinstance(self.value, six.string_types):
+            if isinstance(self.value, str):
                 cur_value = ",".join(cur_value)
             self.value = cur_value
 
@@ -117,7 +124,7 @@ class SimpleEditor(EditorWithList):
         """ Handles the user selecting a new value from the combo box.
         """
         value = self.values[index]
-        if not isinstance(self.value, six.string_types):
+        if not isinstance(self.value, str):
             value = [value]
         self.value = value
 
@@ -138,6 +145,17 @@ class CustomEditor(SimpleEditor):
         boxes.
     """
 
+    #: List of tuple(signal, slot) to be disconnected while rebuilding the
+    #: editor.
+    _connections_to_rebuild = List(Tuple(Any, Callable))
+
+    def init(self, parent):
+        """ Finishes initializing the editor by creating the underlying toolkit
+            widget.
+        """
+        self.create_control(parent)
+        EditorWithList.init(self, parent)
+
     def create_control(self, parent):
         """ Creates the initial editor control.
         """
@@ -146,11 +164,30 @@ class CustomEditor(SimpleEditor):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
-        self._mapper.mapped[six.text_type].connect(self.update_object)
+        self._mapper.mapped[str].connect(self.update_object)
+
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        while self._connections_to_rebuild:
+            signal, handler = self._connections_to_rebuild.pop()
+            signal.disconnect(handler)
+
+        # signal from create_control
+        if self._mapper is not None:
+            self._mapper.mapped[str].disconnect(self.update_object)
+            self._mapper = None
+
+        # enthought/traitsui#884
+        EditorWithList.dispose(self)
 
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
         """
+        while self._connections_to_rebuild:
+            signal, handler = self._connections_to_rebuild.pop()
+            signal.disconnect(handler)
+
         # Clear any existing content:
         self.clear_layout()
 
@@ -162,15 +199,23 @@ class CustomEditor(SimpleEditor):
         n = len(labels)
         cols = self.factory.cols
         rows = (n + cols - 1) // cols
+        # incr will keep track of how to increment index so that as we traverse
+        # the grid in row major order, the elements are added to appear in
+        # column major order
         incr = [n // cols] * cols
         rem = n % cols
         for i in range(cols):
             incr[i] += rem > i
         incr[-1] = -sum(incr[:-1]) + 1
+        # e.g for a gird:
+        # 0 2 4
+        # 1 3 5
+        # incr should be [2, 2, -3]
 
         # Add the set of all possible choices:
         layout = self.control.layout()
         index = 0
+        # populate the layout in row_major order
         for i in range(rows):
             for j in range(cols):
                 if n > 0:
@@ -183,6 +228,9 @@ class CustomEditor(SimpleEditor):
                         cb.setCheckState(QtCore.Qt.Unchecked)
 
                     cb.clicked.connect(self._mapper.map)
+                    self._connections_to_rebuild.append(
+                        (cb.clicked, self._mapper.map)
+                    )
                     self._mapper.setMapping(cb, labels[index])
 
                     layout.addWidget(cb, i, j)
@@ -200,7 +248,7 @@ class CustomEditor(SimpleEditor):
         elif cb.value in cur_value:
             cur_value.remove(cb.value)
 
-        if isinstance(self.value, six.string_types):
+        if isinstance(self.value, str):
             cur_value = ",".join(cur_value)
 
         self.value = cur_value
@@ -225,7 +273,7 @@ class TextEditor(BaseTextEditor):
         """ Handles the user changing the contents of the edit control.
         """
         try:
-            value = six.text_type(self.control.text())
+            value = str(self.control.text())
             value = eval(value)
         except:
             pass
@@ -245,6 +293,6 @@ def parse_value(value):
     """
     if value is None:
         return []
-    if not isinstance(value, six.string_types):
+    if not isinstance(value, str):
         return value[:]
     return [x.strip() for x in value.split(",")]

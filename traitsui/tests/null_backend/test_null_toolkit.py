@@ -1,18 +1,25 @@
-from __future__ import absolute_import
-from nose.tools import assert_raises
+import unittest
 
 from traits.api import HasTraits, Int
-from traitsui.tests._tools import skip_if_not_null
+from traitsui.tests._tools import BaseTestMixin, requires_toolkit, ToolkitName
 
 
-@skip_if_not_null
-def test_configure_traits_error():
-    """ Verify that configure_traits fails with NotImplementedError. """
+class TestNullToolkit(BaseTestMixin, unittest.TestCase):
 
-    class Test(HasTraits):
-        x = Int
+    def setUp(self):
+        BaseTestMixin.setUp(self)
 
-    t = Test()
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
-    with assert_raises(NotImplementedError):
-        t.configure_traits()
+    @requires_toolkit([ToolkitName.null])
+    def test_configure_traits_error(self):
+        """ Verify that configure_traits fails with NotImplementedError. """
+
+        class Test(HasTraits):
+            x = Int()
+
+        t = Test()
+
+        with self.assertRaises(NotImplementedError):
+            t.configure_traits()
