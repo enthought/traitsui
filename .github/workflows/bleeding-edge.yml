@@ -1,6 +1,6 @@
 # This workflow installs dependencies from master
 
-name: Dependencies from source
+name: ETS from source
 
 on: push
 
