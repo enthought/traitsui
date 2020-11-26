@@ -6,6 +6,7 @@ Project                 License                   File
 Eclipse                 Eclipse Public License    image_LICENSE_Eclipse.txt
 Enthought               BSD 3-Clause              LICENSE.txt
 GV (Gael Varoquaux)     Public Domain             N/A
+Qt                      GNU LGPL 2.1
 Nuvola                  LGPL                      image_LICENSE_Nuvola.txt
 OOo                     LGPL                      image_LICENSE_OOo.txt
 
@@ -16,6 +17,11 @@ Files and original authors:
 ----------------------------------------------------------------------------
 traitsui/examples/demo/Applications/images:
                       blue_ball.png | Nuvola
+
+traitsui/qt4/images:
+                       closetab.png | Qt
+                           next.png | Qt
+                       previous.png | Qt
 
 traitsui/wx/images:
                           group.png | Nuvola
