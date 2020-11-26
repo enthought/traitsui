@@ -6,6 +6,7 @@ include README_example.png
 include image_LICENSE.txt
 include image_LICENSE_Eclipse.txt
 include image_LICENSE_Nuvola.txt
+include image_LICENSE_OOo.txt
 include TODO.txt
 graft docs
 prune docs/build
