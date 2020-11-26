@@ -44,6 +44,8 @@ jobs:
   #     it taking a long time to build.
   #   - For wxPython 4.0, we need libsdl-image1.2
   #   - For wxPython 4.1, we need libsdl2-2.0-0
+  #   - The Ubuntu build can be run but it fails and there are no equivalence
+  #     of allow-failure on GitHub Actions.
   pip-wx:
     env:
       # Enforce selection of toolkit
@@ -52,7 +54,7 @@ jobs:
       # Test failure is currently expected to fail on Ubuntu
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [windows-latest]
         python-version: [3.9]
     runs-on: ${{ matrix.os }}
     steps:
@@ -64,14 +66,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Update pip, setuptools and wheel
         run: python -m pip install --upgrade pip setuptools wheel
-      - name: Install Linux dependencies for wx
-        run: |
-          sudo apt-get update
-          sudo apt-get install libsdl2-2.0-0
-        if: startsWith(matrix.os, 'ubuntu')
-      - name: Install wxPython on Linux
-        uses: ./.github/actions/install-wxpython-linux
-        if: startsWith(matrix.os, 'ubuntu')
       - name: Install local packages
         run: python -m pip install .[wx,editors,test]
       - name: Run test suite
