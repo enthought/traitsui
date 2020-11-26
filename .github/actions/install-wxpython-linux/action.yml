@@ -1,0 +1,20 @@
+# This action install wxPython on Linux using prebuilt wheels.
+# Currently we assume Ubuntu machines
+
+# It is possible to build directly from PyPI, but compilation is time
+# consuming and may require setting up a cache.
+
+name: 'Install wxPython for Linux'
+description: 'This action currently can only be run on Ubuntu'
+inputs:
+  version-range:
+    description: 'Version range syntax for pip, e.g. ">4,<4.1"'
+    required: false
+    default: ''
+runs:
+  using: "composite"
+  steps:
+    - run: ${{ github.action_path }}/run.sh
+      shell: bash
+      env:
+        VERSION_RANGE: ${{ inputs.version-range }}
