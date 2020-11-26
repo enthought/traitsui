@@ -27,6 +27,8 @@ jobs:
       - name: Install Qt dependencies for Linux
         uses: ./.github/actions/apt-get-qt-deps
         if: startsWith(matrix.os, 'ubuntu')
+      - name: Update pip, setuptools and wheel
+        run: python -m pip install --upgrade pip setuptools wheel
       - name: Install local packages
         run: python -m pip install .[${{ matrix.toolkit }},editors,test]
       - name: Run test suite
