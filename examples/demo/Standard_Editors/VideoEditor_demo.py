@@ -153,6 +153,8 @@ demo = VideoEditorDemo(image_fun=test_image_fun)
 # demo = VideoEditorDemo()
 demo.video_url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"  # noqa: E501
 
+#demo.video_url = "/home/jvankerschaver/tmp/ForBiggerEscapes.mp4"
+
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
