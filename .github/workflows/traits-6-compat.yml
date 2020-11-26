@@ -1,0 +1,37 @@
+# This workflow is for running tests against Traits 6.0
+# The entire workflow can be removed when Traits 6.0 support is dropped.
+
+name: Test with Traits 6
+
+on: push
+
+jobs:
+  trait-6:
+    env:
+      # Enforce selection of toolkit
+      ETS_TOOLKIT: qt
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        toolkit: ['pyside2']
+        python-version: [3.6]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Qt dependencies for Linux
+        uses: ./.github/actions/apt-get-qt-deps
+        if: startsWith(matrix.os, 'ubuntu')
+      - name: Install Traits 6
+        run: python -m pip install "traits<6.1"
+      - name: Install local packages
+        run: python -m pip install .[${{ matrix.toolkit }},editors,test]
+      - name: Run test suite
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: python -m unittest discover -v traitsui
+          working-directory: ${{ runner.temp }}
