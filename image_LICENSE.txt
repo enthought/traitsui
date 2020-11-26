@@ -5,7 +5,9 @@ Project                 License                   File
 ----------------------------------------------------------------------------
 Eclipse                 Eclipse Public License    image_LICENSE_Eclipse.txt
 Enthought               BSD 3-Clause              LICENSE.txt
+GV (Gael Varoquaux)     Public Domain             N/A
 Nuvola                  LGPL                      image_LICENSE_Nuvola.txt
+OOo                     LGPL                      image_LICENSE_OOo.txt
 
 Unless stated in this file, icons are the work of Enthought, and are
 released under a 3 clause BSD license.
@@ -14,3 +16,20 @@ Files and original authors:
 ----------------------------------------------------------------------------
 traitsui/examples/demo/Applications/images:
                       blue_ball.png | Nuvola
+
+traitsui/wx/images:
+                          group.png | Nuvola
+                           item.png | Eclipse
+                           open.png | Nuvola
+                      table_add.png | OOo
+                   table_colors.png | GV
+                   table_delete.png | OOo
+         table_delete_synthetic.png | OOo
+                  table_display.png | OOo
+                table_move_down.png | GV
+                  table_move_up.png | GV
+                  table_no_sort.png | OOo
+                    table_prefs.png | OOo
+                   table_search.png | OOo
+                table_synthetic.png | OOo
+                 table_undelete.png | OOo
