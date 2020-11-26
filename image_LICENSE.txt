@@ -22,46 +22,22 @@ docs/source/tutorials/images:
               mpl_figure_editor.png | Enthought
                   traits_thread.png | Enthought
 
+integrationtests/ui/images:
+             bottom_left_origin.gif | Enthought
+            bottom_right_origin.gif | Enthought
+                top_left_origin.gif | Enthought
+               top_right_origin.gif | Enthought
+
 traitsui/image/library:
                             std.zip | Enthought
 
 traitsui/images:
-                     array_node.png | Enthought
-                      bool_node.png | Enthought
-                     class_node.png | Eclipse
-                   complex_node.png | Enthought
-                 dialog_warning.png | Nuvola
-                      dict_node.png | Enthought
-                     float_node.png | Enthought
-                     folder-new.png | Nuvola
-                  function_node.png | Eclipse
-                       int_node.png | Enthought
-                      list_node.png | Enthought
-                    method_node.png | Eclipse
-                      none_node.png | Nuvola
-                    object_node.png | Eclipse
-                     other_node.png | Enthought
-                       set_node.png | Enthought
-            std_horizontal_drag.png | Enthought
-        std_horizontal_splitter.png | Enthought
-                 std_tab_active.png | Enthought
-             std_tab_background.png | Enthought
-                  std_tab_hover.png | Enthought
-               std_tab_inactive.png | Enthought
-                        std_tab.png | Enthought
-              std_vertical_drag.png | Enthought
-          std_vertical_splitter.png | Enthought
-                    string_node.png | Enthought
-                    traits_node.png | Eclipse
-                     tuple_node.png | Enthought
+                          frame.png | Enthought
 
-examples/demo/:
+traitsui/examples/demo/:
                  traits_ui_demo.jpg | Enthought
 
-examples/demo/Advanced/images:
-                       red_flag.png | Nuvola
-
-examples/demo/Applications/images:
+traitsui/examples/demo/Applications/images:
                       blue_ball.png | Nuvola
                             GG5.png | Enthought
                          header.png | Enthought
@@ -70,27 +46,20 @@ examples/demo/Applications/images:
                        red_ball.png | Enthought
                             TFB.png | Enthought
 
-examples/demo/Extras/images:
+traitsui/examples/demo/Extras/images:
                            info.png | Enthought
                      logo_32x32.gif | Enthought
                      logo_48x48.gif | Enthought
                      logo_64x64.gif | Enthought
 
-examples/demo/Standard_Editors/images:
+traitsui/examples/demo/Standard_Editors/images:
              bottom_left_origin.gif | Enthought
             bottom_right_origin.gif | Enthought
                 top_left_origin.gif | Enthought
                top_right_origin.gif | Enthought
 
-examples/demo/Standard_Editors/Popup_versions/images:
+traitsui/examples/demo/Standard_Editors/Popup_versions/images:
              bottom_left_origin.gif | Enthought
             bottom_right_origin.gif | Enthought
                 top_left_origin.gif | Enthought
                top_right_origin.gif | Enthought
-
-examples/tutorials/images:
-                           next.png | Nuvola
-                         parent.png | Nuvola
-                       previous.png | Nuvola
-                         reload.png | Nuvola
-                            run.png | Nuvola
