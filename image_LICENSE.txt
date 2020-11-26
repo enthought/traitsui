@@ -12,48 +12,5 @@ released under a 3 clause BSD license.
 
 Files and original authors:
 ----------------------------------------------------------------------------
-docs/source/tutorials/images:
-                   application1.png | Enthought
-                   application2.png | Enthought
-                   application3.png | Enthought
-                    code_block1.png | Enthought
-                      container.png | Enthought
-                    interactive.png | Enthought
-              mpl_figure_editor.png | Enthought
-                  traits_thread.png | Enthought
-
-traitsui/image/library:
-                            std.zip | Enthought
-
-traitsui/images:
-                          frame.png | Enthought
-
-traitsui/examples/demo/:
-                 traits_ui_demo.jpg | Enthought
-
 traitsui/examples/demo/Applications/images:
                       blue_ball.png | Nuvola
-                            GG5.png | Enthought
-                         header.png | Enthought
-                 notebook_close.png | Enthought
-                  notebook_open.png | Enthought
-                       red_ball.png | Enthought
-                            TFB.png | Enthought
-
-traitsui/examples/demo/Extras/images:
-                           info.png | Enthought
-                     logo_32x32.gif | Enthought
-                     logo_48x48.gif | Enthought
-                     logo_64x64.gif | Enthought
-
-traitsui/examples/demo/Standard_Editors/images:
-             bottom_left_origin.gif | Enthought
-            bottom_right_origin.gif | Enthought
-                top_left_origin.gif | Enthought
-               top_right_origin.gif | Enthought
-
-traitsui/examples/demo/Standard_Editors/Popup_versions/images:
-             bottom_left_origin.gif | Enthought
-            bottom_right_origin.gif | Enthought
-                top_left_origin.gif | Enthought
-               top_right_origin.gif | Enthought
