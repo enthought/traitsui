@@ -17,12 +17,6 @@ environment:
       TOOLKIT: "pyqt"
     - RUNTIME: '3.6'
       TOOLKIT: "pyqt5"
-    - RUNTIME: '3.6'
-      TOOLKIT: "pyside2"
-    - RUNTIME: '3.6'
-      TOOLKIT: "wx"
-    - RUNTIME: '3.6'
-      TOOLKIT: "null"
 
 matrix:
   fast_finish: true
