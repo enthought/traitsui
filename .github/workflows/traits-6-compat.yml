@@ -3,7 +3,9 @@
 
 name: Test with Traits 6
 
-on: push
+on:
+  schedule:
+    - cron:  '0 0 * * 4'
 
 jobs:
   trait-6:

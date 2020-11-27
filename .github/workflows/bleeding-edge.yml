@@ -2,7 +2,9 @@
 
 name: ETS from source
 
-on: push
+on:
+  schedule:
+    - cron:  '0 0 * * 4'
 
 jobs:
   test:
