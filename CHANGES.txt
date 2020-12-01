@@ -1,8 +1,8 @@
 Traits UI Changelog
 ===================
 
-Bugfix release 7.1.1
---------------------
+Release 7.1.1
+-------------
 
 This is a bugfix release that fixes a number of issues since the 7.1.0 release.
 Thanks to Corran Webster and Kit Choi for the patches.
