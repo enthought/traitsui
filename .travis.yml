@@ -30,7 +30,6 @@ matrix:
     - env: RUNTIME=3.6 TOOLKITS="null"
     - env: RUNTIME=3.6 TOOLKITS="pyqt pyqt5 pyside2"
     - env: RUNTIME=3.6 TOOLKITS="wx"
-    - env: RUNTIME=3.6 TOOLKITS="pyqt5" TRAITS_REQUIRES="^=6.0"
   allow_failures:
     - env: RUNTIME=3.6 TOOLKITS="wx"
   fast_finish: true
