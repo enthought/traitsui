@@ -1,6 +1,20 @@
 Traits UI Changelog
 ===================
 
+Release 7.1.1
+-------------
+
+This is a bugfix release that fixes a number of issues since the 7.1.0 release.
+Thanks to Corran Webster and Kit Choi for the patches.
+
+Fixes
+~~~~~
+- Fix ``scrollable`` trait of a Group not being implemented on Qt (#1406)
+- Fix icon button's clickable area too small for FileEditor and RangeEditor on
+  Qt and OSX (#1383)
+- Fix missing minimize and maximize buttons for dialogs opened on certain
+  Linux platforms (#1409)
+
 Release 7.1.0
 -------------
 
