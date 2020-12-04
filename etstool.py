@@ -111,7 +111,9 @@ dependencies = {
     "traits",
 }
 
-# NOTE : pyface is always installed from source
+# Dependencies we install from source for cron tests
+# Order from packages with the most dependencies to one with the least
+# dependencies. Packages are forced re-installed in this order.
 source_dependencies = {
     "pyface": "git+http://github.com/enthought/pyface.git#egg=pyface",
     "traits": "git+http://github.com/enthought/traits.git#egg=traits",
@@ -224,10 +226,6 @@ def install(runtime, toolkit, environment, editable, source):
         | ci_dependencies
     )
 
-    install_traitsui = "edm run -e {environment} -- pip install "
-    if editable:
-        install_traitsui += "--editable "
-    install_traitsui += "."
 
     # edm commands to setup the development environment
     if sys.platform == 'linux':
@@ -239,7 +237,6 @@ def install(runtime, toolkit, environment, editable, source):
         "edm install -y -e {environment} " + " ".join(packages),
         "edm run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
         "edm run -e {environment} -- python setup.py clean --all",
-        install_traitsui,
     ])
 
     # pip install pyqt5 and pyside2, because we don't have them in EDM yet
@@ -266,12 +263,25 @@ def install(runtime, toolkit, environment, editable, source):
         commands = [cmd_fmt+dependency for dependency in source_dependencies.keys()]
         execute(commands, parameters)
         source_pkgs = source_dependencies.values()
+        # Without the --no-dependencies flag such that new dependencies on
+        # master are brought in.
         commands = [
-            "python -m pip install {pkg} --no-deps".format(pkg=pkg)
+            "python -m pip install --force-reinstall {pkg}".format(pkg=pkg)
             for pkg in source_pkgs
         ]
         commands = ["edm run -e {environment} -- " + command for command in commands]
         execute(commands, parameters)
+
+    # Always install local source again with no dependencies
+    # to mitigate risk of testing against a distributed release.
+    install_traitsui = (
+        "edm run -e {environment} -- "
+        "pip install --force-reinstall  --no-dependencies "
+    )
+    if editable:
+        install_traitsui += "--editable "
+    install_traitsui += "."
+    execute([install_traitsui], parameters)
 
     click.echo('Done install')
 
