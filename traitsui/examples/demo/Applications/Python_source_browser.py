@@ -46,9 +46,8 @@ from io import open
 
 #-- Constants ------------------------------------------------------------
 
-# Necessary because of the dynamic way in which the demos are loaded:
-search_path = [join(dirname(traitsui.api.__file__),
-                    '..', 'examples', 'demo', 'Applications')]
+# The images folder is in the same folder as this file:
+search_path = [dirname(__file__)]
 
 
 #-- FileInfo Class Definition --------------------------------------------

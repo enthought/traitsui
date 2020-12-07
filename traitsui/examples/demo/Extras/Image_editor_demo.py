@@ -25,8 +25,8 @@ from pyface.image_resource \
 
 # Constants:
 
-# Necessary because of the dynamic way in which the demos are loaded:
-search_path = [join(dirname(__file__))]
+# The images folder is in the same folder as this file:
+search_path = [dirname(__file__)]
 
 # Define the demo class:
 
