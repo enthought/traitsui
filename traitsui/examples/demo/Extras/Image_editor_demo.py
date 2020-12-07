@@ -15,11 +15,10 @@ from os.path \
 from traits.api \
     import HasTraits, Str
 
-from traitsui.api \
-    import View, VGroup, Item
+import traitsui.api
 
 from traitsui.api \
-    import ImageEditor
+    import View, VGroup, Item, ImageEditor
 
 from pyface.image_resource \
     import ImageResource
@@ -27,8 +26,8 @@ from pyface.image_resource \
 # Constants:
 
 # Necessary because of the dynamic way in which the demos are loaded:
-search_path = [join(dirname(traits.api.__file__),
-                    '..', '..', 'examples', 'demo', 'Extras')]
+search_path = [join(dirname(traitsui.api.__file__),
+                    '..', 'examples', 'demo', 'Extras')]
 
 # Define the demo class:
 
