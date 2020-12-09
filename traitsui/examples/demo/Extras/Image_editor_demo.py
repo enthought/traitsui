@@ -6,8 +6,6 @@ A simple demonstration of how to use the ImageEditor to add a graphic element
 to a Traits UI View.
 """
 
-import traits
-
 # Imports:
 from os.path \
     import join, dirname
@@ -16,19 +14,15 @@ from traits.api \
     import HasTraits, Str
 
 from traitsui.api \
-    import View, VGroup, Item
-
-from traitsui.api \
-    import ImageEditor
+    import View, VGroup, Item, ImageEditor
 
 from pyface.image_resource \
     import ImageResource
 
 # Constants:
 
-# Necessary because of the dynamic way in which the demos are loaded:
-search_path = [join(dirname(traits.api.__file__),
-                    '..', '..', 'examples', 'demo', 'Extras')]
+# The images folder is in the same folder as this file:
+search_path = [dirname(__file__)]
 
 # Define the demo class:
 
