@@ -6,16 +6,12 @@ A simple demonstration of how to use the ImageEditor to add a graphic element
 to a Traits UI View.
 """
 
-import traits
-
 # Imports:
 from os.path \
     import join, dirname
 
 from traits.api \
     import HasTraits, Str
-
-import traitsui.api
 
 from traitsui.api \
     import View, VGroup, Item, ImageEditor
