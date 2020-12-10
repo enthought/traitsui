@@ -271,7 +271,7 @@ if __name__ == "__main__":
             Operating System :: POSIX
             Operating System :: Unix
             Programming Language :: Python
-            Programming Language :: Python :: 3.5
+            Programming Language :: Python :: 3
             Programming Language :: Python :: 3.6
             Programming Language :: Python :: 3.7
             Programming Language :: Python :: 3.8
@@ -290,7 +290,7 @@ if __name__ == "__main__":
         install_requires=install_requires,
         extras_require=extras_require,
         license="BSD",
-        python_requires=">=3.5",
+        python_requires=">=3.6",
         entry_points={
             "console_scripts": [
                 "etsdemo = etsdemo.main:main",
