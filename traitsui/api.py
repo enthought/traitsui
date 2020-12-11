@@ -15,7 +15,228 @@
 #
 # ------------------------------------------------------------------------------
 
-""" Exports the symbols defined by the traits.ui package.
+""" API for the traitsui package.
+
+Editor factories
+----------------
+- :class:`~.BasicEditorFactory`
+- :class:`~.EditorFactory`
+
+Context Values
+--------------
+
+- :attr:`~.CV`
+- :attr:`~.CVFloat`
+- :attr:`~.CVInt`
+- :attr:`~.CVStr`
+- :func:`~.CVType`
+- :class:`~.ContextValue`
+
+Editors
+-------
+- :class:`~.Editor`
+- :attr:`~.ArrayEditor`
+- :attr:`~.BooleanEditor`
+- :attr:`~.ButtonEditor`
+- :attr:`~.CheckListEditor`
+- :attr:`~.CodeEditor`
+- :func:`~.ColorEditor`
+- :attr:`~.CompoundEditor`
+- :class:`~.CSVListEditor`
+- :attr:`~.CustomEditor`
+- :class:`~.DateEditor`
+- :class:`~.DatetimeEditor`
+- :attr:`~.DateRangeEditor`
+- :class:`~.DefaultOverride`
+- :attr:`~.DirectoryEditor`
+- :attr:`~.DNDEditor`
+- :attr:`~.DropEditor`
+- :attr:`~.EnumEditor`
+- :attr:`~.FileEditor`
+- :func:`~.FontEditor`
+- :attr:`~.HistoryEditor`
+- :attr:`~.HTMLEditor`
+- :attr:`~.KeyBindingEditor`
+- :class:`~.ImageEditor`
+- :attr:`~.ImageEnumEditor`
+- :attr:`~.InstanceEditor`
+- :attr:`~.ListEditor`
+- :class:`~.ListStrEditor`
+- :attr:`~.NullEditor`
+- :class:`~.PopupEditor`
+- :attr:`~.ProgressEditor`
+- :attr:`~.RangeEditor`
+- :func:`~.RGBColorEditor`
+- :class:`~.ScrubberEditor`
+- :class:`~.SearchEditor`
+- :attr:`~.SetEditor`
+- :attr:`~.ShellEditor`
+- :attr:`~.StyledDateEditor`
+- :attr:`~.TableEditor`
+- :class:`~.TabularEditor`
+- :attr:`~.TextEditor`
+- :class:`~.TimeEditor`
+- :attr:`~.TitleEditor`
+- :attr:`~.TreeEditor`
+- :attr:`~.TupleEditor`
+- :attr:`~.ValueEditor`
+
+Layout support
+--------------
+
+- :class:`~.Group`
+- :class:`~.HFlow`
+- :class:`~.HGroup`
+- :class:`~.HSplit`
+- :class:`~.Tabbed`
+- :class:`~.VFlow`
+- :class:`~.VFold`
+- :class:`~.VGrid`
+- :class:`~.VGroup`
+- :class:`~.VSplit`
+
+Handlers
+--------
+
+- :class:`~.Controller`
+- :class:`~.Handler`
+- :class:`~.ModelView`
+- :class:`~.ViewHandler`
+- :func:`~.default_handler`
+
+UI items
+--------
+
+- :class:`~.Custom`
+- :class:`~.Heading`
+- :class:`~.Item`
+- :class:`~.Label`
+- :class:`~.Readonly`
+- :class:`~.Spring`
+- :class:`~.UCustom`
+- :class:`~.UItem`
+- :class:`~.UReadonly`
+- :attr:`~.spring`
+
+Menus and Actions
+-----------------
+
+- :class:`~.Action`
+- :attr:`~.ActionGroup`
+- :attr:`~.ApplyButton`
+- :attr:`~.CancelButton`
+- :attr:`~.CloseAction`
+- :attr:`~.HelpAction`
+- :attr:`~.HelpButton`
+- :attr:`~.LiveButtons`
+- :attr:`~.Menu`
+- :attr:`~.MenuBar`
+- :attr:`~.ModalButtons`
+- :attr:`~.NoButton`
+- :attr:`~.NoButtons`
+- :attr:`~.OKButton`
+- :attr:`~.OKCancelButtons`
+- :attr:`~.PyFaceAction`
+- :attr:`~.RedoAction`
+- :attr:`~.RevertAction`
+- :attr:`~.RevertButton`
+- :attr:`~.Separator`
+- :attr:`~.StandardMenuBar`
+- :attr:`~.ToolBar`
+- :attr:`~.UndoAction`
+- :attr:`~.UndoButton`
+
+Table UI
+--------
+
+- :class:`~.TabularAdapter`
+
+Table column types:
+
+- :class:`~.ExpressionColumn`
+- :class:`~.ListColumn`
+- :class:`~.NumericColumn`
+- :class:`~.ObjectColumn`
+- :class:`~.TableColumn`
+
+Table filter types:
+
+- :class:`~.EvalTableFilter`
+- :class:`~.MenuTableFilter`
+- :class:`~.RuleTableFilter`
+- :class:`~.TableFilter`
+
+Toolkit object
+--------------
+
+- :func:`~.toolkit`
+
+Custom traits
+-------------
+
+- :attr:`~.Color`
+- :func:`~.ColorTrait`
+- :attr:`~.Font`
+- :func:`~.FontTrait`
+- :attr:`~.RGBColor`
+- :func:`~.RGBColorTrait`
+
+Custom UI traits
+----------------
+
+- :attr:`~.Border`
+- :attr:`~.HasBorder`
+- :attr:`~.HasMargin`
+- :attr:`~.Image`
+- :attr:`~.Margin`
+- :class:`~.StatusItem`
+
+Tree UI
+-------
+
+- :class:`~.ITreeNode`
+- :class:`~.ITreeNodeAdapter`
+- :class:`~.MultiTreeNode`
+- :class:`~.ObjectTreeNode`
+- :class:`~.TreeNode`
+- :class:`~.TreeNodeObject`
+
+UI and UI support
+-----------------
+
+- :class:`~.UI`
+- :class:`~.UIInfo`
+
+Undo support
+------------
+
+- :class:`~.AbstractUndoItem`
+- :class:`~.ListUndoItem`
+- :class:`~.UndoHistory`
+- :class:`~.UndoHistoryUndoItem`
+- :class:`~.UndoItem`
+
+View and View Elements
+----------------------
+
+- :class:`~.View`
+- :class:`~.ViewElement`
+- :class:`~.ViewSubElement`
+- :mod:`~.view_elements`
+
+Miscellaneous
+-------------
+
+- :func:`~.on_help_call`
+- :func:`~.help_template`
+- :class:`~.Include`
+- :func:`~.auto_close_message`
+- :func:`~.error`
+- :func:`~.message`
+- :attr:`~._constants`
+- :attr:`~.WindowColor`
+- :func:`~.raise_to_debug`
+
 """
 
 from .basic_editor_factory import BasicEditorFactory
