@@ -88,7 +88,6 @@ from tempfile import mkdtemp
 from contextlib import contextmanager
 
 import click
-import pkg_resources
 
 supported_combinations = {
     '3.6': {'pyside2', 'pyqt', 'pyqt5', 'wx', 'null'},
