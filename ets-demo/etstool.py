@@ -140,7 +140,7 @@ full_app_dependencies = [
     "h5py",
     "numpy",
     "pandas",
-    "pytables",  # same as tables from pypi?
+    "pytables",
 ]
 
 APP_BUNDLE_VERSION = "1.0-1"
