@@ -351,7 +351,7 @@ def generate_bundles():
             bundle_dir,
             f"etsdemo_{platform.replace('-', '_')}-{APP_BUNDLE_VERSION}.bundle"
         )
-    
+
         click.echo("Generating bundle {}".format(bundle_file))
 
         edm_command = [
@@ -374,7 +374,7 @@ def generate_bundles():
 
 @cli.command(name="upload-bundles")
 @click.option('--repository', default=DEFAULT_REPOSITORY)
-def upload_bundles():
+def upload_bundles(repository):
     """ Upload the generated bundles """
     BUNDLES = []
     for platform in PLATFORMS:
@@ -384,12 +384,14 @@ def upload_bundles():
             f"etsdemo_{platform.replace('-', '_')}-{APP_BUNDLE_VERSION}.bundle"
         )
         if os.path.exists(bundle_file):
-            print(bundle_file)
             BUNDLES.append((bundle_file, platform))
 
     for bundle, platform in BUNDLES:
-        cmd = "hatcher bundles upload enthought ets {platform} {bundle}"
-        execute(cmd, {"platform": platform, "bundle": bundle})
+        cmd = "hatcher bundles upload enthought {repository} {platform} {bundle}"
+        execute(
+            cmd,
+            {"repository": repository, "platform": platform, "bundle": bundle}
+        )
 
 
 # ----------------------------------------------------------------------------
