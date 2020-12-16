@@ -140,7 +140,9 @@ full_app_dependencies = [
     "h5py",
     "numpy",
     "pandas",
+    "pygments",
     "pytables",
+    "pyqt5"
 ]
 
 APP_BUNDLE_VERSION = "1.0-1"
