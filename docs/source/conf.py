@@ -28,8 +28,13 @@ base_path = os.path.dirname(__file__)
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
-    'sphinx.ext.extlinks', 'sphinx.ext.autodoc', 'sphinx.ext.napoleon',
-    'sphinx.ext.intersphinx', 'traits.util.trait_documenter'
+    'sphinx.ext.autodoc',
+    'sphinx.ext.extlinks',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.napoleon',
+    # Link to code in sphinx generated API docs
+    "sphinx.ext.viewcode",
+    'traits.util.trait_documenter',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
