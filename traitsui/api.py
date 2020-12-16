@@ -17,7 +17,7 @@
 
 """ API for the traitsui package.
 
-Editor factories
+Editor Factories
 ----------------
 - :class:`~.BasicEditorFactory`
 - :class:`~.EditorFactory`
@@ -81,7 +81,7 @@ Editors
 - :attr:`~.TupleEditor`
 - :attr:`~.ValueEditor`
 
-Layout support
+Layout Support
 --------------
 
 - :class:`~.Group`
@@ -104,7 +104,7 @@ Handlers
 - :class:`~.ViewHandler`
 - :func:`~.default_handler`
 
-UI items
+UI Items
 --------
 
 - :class:`~.Custom`
@@ -166,12 +166,12 @@ Table filter types:
 - :class:`~.RuleTableFilter`
 - :class:`~.TableFilter`
 
-Toolkit object
+Toolkit Object
 --------------
 
 - :func:`~.toolkit`
 
-Custom traits
+Custom Traits
 -------------
 
 - :attr:`~.Color`
@@ -181,7 +181,7 @@ Custom traits
 - :attr:`~.RGBColor`
 - :func:`~.RGBColorTrait`
 
-Custom UI traits
+Custom UI Traits
 ----------------
 
 - :attr:`~.Border`
@@ -201,13 +201,13 @@ Tree UI
 - :class:`~.TreeNode`
 - :class:`~.TreeNodeObject`
 
-UI and UI support
+UI and UI Support
 -----------------
 
 - :class:`~.UI`
 - :class:`~.UIInfo`
 
-Undo support
+Undo Support
 ------------
 
 - :class:`~.AbstractUndoItem`
