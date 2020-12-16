@@ -873,7 +873,6 @@ demo_file_view = View(
             editor=HTMLEditor(
                 format_text=True,
                 base_url_name='base_url',
-                open_externally=True,
             ),
         ),
         VSplit(
