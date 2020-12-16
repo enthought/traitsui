@@ -15,9 +15,12 @@ import unittest
 from xml.etree import ElementTree as ET
 
 from traitsui.api import Handler, UI, UIInfo
+from traitsui.testing.api import UITester
 
 from etsdemo.app import (
     Demo,
+    DemoFile,
+    demo_file_view,
     DemoImageFile,
     DemoPath,
     DemoVirtualDirectory,
@@ -27,6 +30,7 @@ from etsdemo.app import (
     previous_tool,
     parent_tool,
 )
+from etsdemo.tests.testing import require_gui
 
 HTML_NS_PREFIX = "{http://www.w3.org/1999/xhtml}"
 
@@ -105,6 +109,23 @@ class TestDemo(unittest.TestCase):
 
         # then
         self.assertIsNone(demo.selected_node)
+
+
+class TestDemoFile(unittest.TestCase):
+    """ Test DemoFile logic."""
+
+    @require_gui
+    def test_demo_file_view(self):
+        # Minimal test with a file to exercise a node with HTML view and
+        # code editor in order to ensure requirements are satisfied.
+        # The file cannot be read (as it actually does not exist), but DemoFile
+        # should handle it gracefully (with error message shown)
+        demo_path = DemoPath()
+        demo_file = DemoFile(parent=demo_path)
+        view = demo_file_view
+        tester = UITester()
+        with tester.create_ui(demo_file, dict(view=view)):
+            pass
 
 
 class TestDemoImageFile(unittest.TestCase):
