@@ -873,8 +873,6 @@ demo_file_view = View(
             editor=HTMLEditor(
                 format_text=True,
                 base_url_name='base_url',
-                # Open links externally, in the default browser, instead of
-                # in the editor.
                 open_externally=True,
             ),
         ),
