@@ -122,9 +122,8 @@ class TestDemoFile(unittest.TestCase):
         # should handle it gracefully (with error message shown)
         demo_path = DemoPath()
         demo_file = DemoFile(parent=demo_path)
-        view = demo_file_view
         tester = UITester()
-        with tester.create_ui(demo_file, dict(view=view)):
+        with tester.create_ui(demo_file, dict(view=demo_file_view)):
             pass
 
 
