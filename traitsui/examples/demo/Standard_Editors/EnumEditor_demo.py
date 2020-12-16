@@ -19,6 +19,9 @@ An Enum can be displayed / edited in one of five styles:
 * 'text' displays the current value as text. You can also edit this text,
   but your text must be in the list of allowed values.
 
+Please refer to the `EnumEditor API docs`_ for further information.
+
+.. _EnumEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.enum_editor.html#traitsui.editors.enum_editor.EnumEditor
 """
 
 from traits.api import HasTraits, Enum

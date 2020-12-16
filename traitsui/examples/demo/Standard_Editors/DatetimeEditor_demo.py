@@ -10,6 +10,10 @@
 -------------------------------------------------------------------------------
 
 A Traits UI editor that edits a datetime panel.
+
+Please refer to the `DatetimeEditor API docs`_ for further information.
+
+.. _DatetimeEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.datetime_editor.html#traitsui.editors.datetime_editor.DatetimeEditor
 """
 # Issue related to the demo warning: enthought/traitsui#943
 

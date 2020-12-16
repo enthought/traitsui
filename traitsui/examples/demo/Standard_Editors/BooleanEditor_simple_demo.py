@@ -10,6 +10,10 @@ action when its value changes.
 
 It also demonstrates how to add vertical space and a Label (plain text which is
 not editable.)
+
+Please refer to the `BooleanEditor API docs`_ for further information.
+
+.. _BooleanEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.boolean_editor.html#traitsui.editors.boolean_editor.BooleanEditor
 """
 
 from traits.api import HasTraits, Bool, Int

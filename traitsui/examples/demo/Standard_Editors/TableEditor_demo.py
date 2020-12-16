@@ -13,6 +13,10 @@ Implementation of a TableEditor demo plugin for Traits UI demo program
 
 This demo shows the full behavior of a straightforward TableEditor.  Only
 one style of TableEditor is implemented, so that is the one shown.
+
+Please refer to the `TableEditor API docs`_ for further information.
+
+.. _TableEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.TableEditor
 """
 # Issue related to the demo warning: enthought/traitsui#948
 

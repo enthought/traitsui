@@ -1,7 +1,11 @@
 """
 Implementation of a BooleanEditor demo plugin for Traits UI demo program.
 
-This demo shows each of the four styles of the BooleanEditor
+This demo shows each of the four styles of the BooleanEditor.
+
+Please refer to the `BooleanEditor API docs`_ for further information.
+
+.. _BooleanEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.boolean_editor.html#traitsui.editors.boolean_editor.BooleanEditor
 """
 
 from traits.api import HasTraits, Bool

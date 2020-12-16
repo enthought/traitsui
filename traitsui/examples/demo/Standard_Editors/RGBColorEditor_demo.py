@@ -11,7 +11,11 @@
 
 Implementation of a RGBColorEditor demo plugin for Traits UI demo program.
 
-This demo shows each of the four styles of the ColorEditor
+This demo shows each of the four styles of the ColorEditor.
+
+Please refer to the `RGBColorEditor API docs`_ for further information.
+
+.. _RGBColorEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.rgb_color_editor.html#traitsui.editors.rgb_color_editor.RGBColorEditor
 """
 # Issue related to the demo warning: enthought/traitsui#939
 

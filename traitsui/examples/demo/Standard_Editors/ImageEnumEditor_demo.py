@@ -13,6 +13,10 @@ Implementation of an ImageEnumEditor demo plugin for the Traits UI demo
 program.
 
 This demo shows each of the four styles of the ImageEnumEditor.
+
+Please refer to the `ImageEnumEditor API docs`_ for further information.
+
+.. _ImageEnumEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.image_enum_editor.html#traitsui.editors.image_enum_editor.ImageEnumEditor
 """
 # Issues related to the demo warning:
 # enthought/traitsui#947

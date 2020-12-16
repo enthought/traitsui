@@ -4,7 +4,11 @@
 """
 Implemention of a ListEditor demo plugin for Traits UI demo program
 
-This demo shows each of the four styles of ListEditor
+This demo shows each of the four styles of ListEditor.
+
+Please refer to the `ListEditor API docs`_ for further information.
+
+.. _ListEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.list_editor.html#traitsui.editors.list_editor.ListEditor
 """
 
 from traits.api import HasTraits, List, Str

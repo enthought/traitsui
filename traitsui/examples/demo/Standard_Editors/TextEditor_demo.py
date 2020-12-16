@@ -11,6 +11,9 @@ styles are more useful than others:
 - When editing a Password, style 'simple' is recommended (shows asterisks).
 - When editing an Int, consider styles 'simple' and 'readonly'.
 
+Please refer to the `TextEditor API docs`_ for further information.
+
+.. _TextEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.text_editor.html#traitsui.editors.text_editor.TextEditor
 """
 
 from traits.api import HasTraits, Str, Int, Password

@@ -11,7 +11,11 @@
 
 Implementation of a ColorEditor demo plugin for Traits UI demo program.
 
-This demo shows each of the four styles of the ColorEditor
+This demo shows each of the four styles of the ColorEditor.
+
+Please refer to the `ColorEditor API docs`_ for further information.
+
+.. _ColorEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.color_editor.html#traitsui.editors.color_editor.ColorEditor
 """
 # Issues related to the demo warning:
 # enthought/traitsui#946
