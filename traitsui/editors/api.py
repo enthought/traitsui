@@ -1,3 +1,52 @@
+""" API for traitsui.editors subpackage.
+
+- :attr:`~.ArrayEditor`
+- :attr:`~.BooleanEditor`
+- :attr:`~.ButtonEditor`
+- :attr:`~.CheckListEditor`
+- :attr:`~.CodeEditor`
+- :func:`~.ColorEditor`
+- :attr:`~.CompoundEditor`
+- :class:`~.CSVListEditor`
+- :attr:`~.CustomEditor`
+- :class:`~.DateEditor`
+- :class:`~.DatetimeEditor`
+- :attr:`~.DateRangeEditor`
+- :class:`~.DefaultOverride`
+- :attr:`~.DirectoryEditor`
+- :attr:`~.DNDEditor`
+- :attr:`~.DropEditor`
+- :attr:`~.EnumEditor`
+- :attr:`~.FileEditor`
+- :func:`~.FontEditor`
+- :attr:`~.HistoryEditor`
+- :attr:`~.HTMLEditor`
+- :attr:`~.KeyBindingEditor`
+- :class:`~.ImageEditor`
+- :attr:`~.ImageEnumEditor`
+- :attr:`~.InstanceEditor`
+- :attr:`~.ListEditor`
+- :class:`~.ListStrEditor`
+- :attr:`~.NullEditor`
+- :class:`~.PopupEditor`
+- :attr:`~.ProgressEditor`
+- :attr:`~.RangeEditor`
+- :func:`~.RGBColorEditor`
+- :class:`~.ScrubberEditor`
+- :class:`~.SearchEditor`
+- :attr:`~.SetEditor`
+- :attr:`~.ShellEditor`
+- :attr:`~.StyledDateEditor`
+- :attr:`~.TableEditor`
+- :class:`~.TabularEditor`
+- :attr:`~.TextEditor`
+- :class:`~.TimeEditor`
+- :attr:`~.TitleEditor`
+- :attr:`~.TreeEditor`
+- :attr:`~.TupleEditor`
+- :attr:`~.ValueEditor`
+
+"""
 
 from ..toolkit import toolkit
 
