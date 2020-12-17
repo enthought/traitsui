@@ -81,7 +81,9 @@ class SimpleEditor(Editor):
             page = self.control.page()
             if hasattr(page, 'setLinkDelegationPolicy'):
                 # QtWebKit
-                page.setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateAllLinks)
+                page.setLinkDelegationPolicy(
+                    QtWebKit.QWebPage.DelegateAllLinks
+                )
                 page.linkClicked.connect(self._link_clicked)
             else:
                 # QtWebEngine pretending to be QtWebKit
@@ -90,7 +92,6 @@ class SimpleEditor(Editor):
                 page = ExternallyOpeningWebPage()
                 self.control.setPage(page)
 
-
         self.base_url = self.factory.base_url
         self.sync_value(self.factory.base_url_name, "base_url", "from")
 
@@ -98,9 +99,9 @@ class SimpleEditor(Editor):
         """ Disposes of the contents of an editor.
         """
         if self.control is not None and self.factory.open_externally:
+            page = self.control.page()
             if hasattr(page, 'setLinkDelegationPolicy'):
-                # QtWebKit
-                page = self.control.page()
+                # QtWebKit-only cleanup
                 page.linkClicked.disconnect(self._link_clicked)
         super().dispose()
 
