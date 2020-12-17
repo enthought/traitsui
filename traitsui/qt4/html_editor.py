@@ -102,8 +102,6 @@ class SimpleEditor(Editor):
                 # QtWebKit
                 page = self.control.page()
                 page.linkClicked.disconnect(self._link_clicked)
-            else:
-                # QtWebEngine pretending to be QtWebKit
         super().dispose()
 
     def update_editor(self):
