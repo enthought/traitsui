@@ -115,9 +115,17 @@ dependencies = {
 
 extra_dependencies = {
     # XXX once pyside2 is available in EDM, we will want it here
-    'pyside2': set(),
-    'pyqt': {'pyqt<4.12'},  # FIXME: build 1 of 4.12.1 appears to be bad
-    'pyqt5': {'pyqt5'},
+    'pyside2': {
+        "pygments",
+    },
+    'pyqt': {
+        'pyqt<4.12',  # FIXME: build 1 of 4.12.1 appears to be bad
+        'pygments',
+    },
+    'pyqt5': {
+        'pyqt5',
+        'pygments',
+    },
     # XXX once wxPython 4 is available in EDM, we will want it here
     'wx': set(),
     'null': set(),
