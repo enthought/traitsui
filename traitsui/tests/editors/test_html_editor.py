@@ -91,7 +91,7 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
             with create_ui(model, dict(view=view)) as ui:
                 control = ui.info.content.control
                 page = control.page()
-                url = QtCore.QUrl('enthought.com')
+                url = QtCore.QUrl('http://example.com')
                 if hasattr(page, 'linkClicked'):
                     page.linkClicked.emit(url)
                 else:
@@ -102,4 +102,4 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
                     )
                     self.assertFalse(result)
 
-        open_new_mock.assert_called_once_with("enthought.com")
+        open_new_mock.assert_called_once_with("http://example.com")
