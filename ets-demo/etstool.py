@@ -134,7 +134,6 @@ full_app_dependencies = [
     'eam',
     'traitsui',
     'etsdemo',
-    'envisage',
     "apptools",
     "chaco",
     "h5py",
