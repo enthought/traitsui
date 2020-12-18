@@ -42,7 +42,7 @@ class ExternallyOpeningWebPage(QtWebKit.QWebPage):
     """
 
     def acceptNavigationRequest(self, url, type, isMainFrame):
-        if type == QtWebKit.QWebPage.NavigationType:
+        if type == QtWebKit.QWebPage.NavigationTypeLinkClicked:
             webbrowser.open_new(url.toString())
             return False
         else:
@@ -89,7 +89,7 @@ class SimpleEditor(Editor):
                 # QtWebEngine pretending to be QtWebKit
                 # We need the subclass defined above instead of the regular
                 # we page so that links are opened externally
-                page = ExternallyOpeningWebPage()
+                page = ExternallyOpeningWebPage(self.control)
                 self.control.setPage(page)
 
         self.base_url = self.factory.base_url
