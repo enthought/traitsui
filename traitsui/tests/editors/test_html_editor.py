@@ -81,7 +81,11 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
         model = HTMLModel(
             content="<a href='enthought.com'>Link to click</a>"
         )
-        view = get_view(base_url_name="", open_externally=True)
+        view = get_view(
+            base_url_name="",
+            open_externally=True,
+            format_text=False,
+        )
 
         with reraise_exceptions():
             with create_ui(model, dict(view=view)) as ui:
