@@ -390,11 +390,19 @@ def upload_bundles(repository):
             BUNDLES.append((bundle_file, platform))
 
     for bundle, platform in BUNDLES:
-        cmd = "hatcher bundles upload enthought {repository} {platform} {bundle}"
-        execute(
-            cmd,
-            {"repository": repository, "platform": platform, "bundle": bundle}
-        )
+        cmd = [
+            "hatcher",
+            "bundles",
+            "upload",
+            "enthought",
+            repository,
+            platform,
+            bundle
+        ]
+        try:
+            subprocess.check_call(cmd)
+        except subprocess.CalledProcessError:
+            click.echo("Failed to upload bundle {}".format(bundle))
 
 
 # ----------------------------------------------------------------------------
