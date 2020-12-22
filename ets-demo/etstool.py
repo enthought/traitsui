@@ -149,6 +149,8 @@ full_app_dependencies = {
 
 APP_BUNDLE_VERSION = "1.0.0-1"
 
+BUNDLE_NAME = f"etsdemo-{APP_BUNDLE_VERSION}.bundle"
+
 environment_vars = {
     'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
     "pyqt": {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyqt'},
@@ -351,7 +353,7 @@ def generate_bundles():
 
         bundle_file = os.path.join(
             bundle_dir,
-            f"etsdemo-{APP_BUNDLE_VERSION}.bundle"
+            BUNDLE_NAME
         )
 
         click.echo("Generating bundle {}".format(bundle_file))
@@ -384,7 +386,7 @@ def upload_bundles(repository):
         bundle_dir = os.path.join("bundle", platform)
         bundle_file = os.path.join(
             bundle_dir,
-            f"etsdemo_{platform.replace('-', '_')}-{APP_BUNDLE_VERSION}.bundle"
+            BUNDLE_NAME
         )
         if os.path.exists(bundle_file):
             BUNDLES.append((bundle_file, platform))
