@@ -154,7 +154,7 @@ environment_vars = {
     'null': {'ETS_TOOLKIT': 'null'},
 }
 
-# Platforms
+# Platforms supported for etsdemo EDM application.
 LINUX = "rh7-x86_64"
 MACOS = "osx-x86_64"
 WINDOWS = "win-x86_64"
@@ -338,8 +338,7 @@ def flake8(runtime, toolkit, environment):
 
 @cli.command(name="generate-bundles")
 def generate_bundles():
-    """ Generate application bundles for each platform to be uploaded to
-    enthought/free repository
+    """ Generate application bundles for each supported platform.
     """
 
     for platform in PLATFORMS:
