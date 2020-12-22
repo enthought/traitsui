@@ -130,10 +130,14 @@ runtime_dependencies = {}
 
 doc_dependencies = {}
 
-full_app_dependencies = [
+full_app_dependencies = {
+    # core app dependencies
     'eam',
-    'traitsui',
     'etsdemo',
+    "pyqt5",
+    # packages contributing examples
+    'traitsui',
+    # dependencies needed for examples
     "apptools",
     "chaco",
     "h5py",
@@ -141,10 +145,9 @@ full_app_dependencies = [
     "pandas",
     "pygments",
     "pytables",
-    "pyqt5"
-]
+}
 
-APP_BUNDLE_VERSION = "1.0-1"
+APP_BUNDLE_VERSION = "1.0.0"
 
 environment_vars = {
     'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
