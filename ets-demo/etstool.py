@@ -94,7 +94,7 @@ supported_combinations = {
 }
 
 # Default Python version to use in the comamnds below if none is specified.
-DEFAULT_RUNTIME = '3.6'
+DEFAULT_RUNTIME = '3.6.12'
 
 # Default toolkit to use if none specified.
 DEFAULT_TOOLKIT = 'null'
@@ -147,7 +147,7 @@ full_app_dependencies = {
     "pytables",
 }
 
-APP_BUNDLE_VERSION = "1.0.0"
+APP_BUNDLE_VERSION = "1.0.0-1"
 
 environment_vars = {
     'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
@@ -351,7 +351,7 @@ def generate_bundles():
 
         bundle_file = os.path.join(
             bundle_dir,
-            f"etsdemo_{platform.replace('-', '_')}-{APP_BUNDLE_VERSION}.bundle"
+            f"etsdemo-{APP_BUNDLE_VERSION}.bundle"
         )
 
         click.echo("Generating bundle {}".format(bundle_file))
@@ -364,7 +364,8 @@ def generate_bundles():
             "2.0",
             "--platform",
             platform,
-            "--version=3.6",
+            "--version",
+            DEFAULT_RUNTIME,
             "--output-file",
             bundle_file,
         ] + sorted(full_app_dependencies)
