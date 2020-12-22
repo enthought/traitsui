@@ -887,27 +887,49 @@ demo_file_view = View(
                     visible_when="source is not None",
                 ),
             ),
-            Tabbed(
-                UItem(
-                    "demo",
-                    style="custom",
-                    resizable=True,
-                ),
-                Item(
-                    "log",
-                    style="readonly",
-                    editor=CodeEditor(
-                        show_line_numbers=False,
-                        selected_color=0xFFFFFF
+            VGroup(
+                Tabbed(
+                    UItem(
+                        "demo",
+                        style="custom",
+                        resizable=True,
                     ),
-                    label="Output",
-                    show_label=False
+                    Item(
+                        "log",
+                        style="readonly",
+                        editor=CodeEditor(
+                            show_line_numbers=False,
+                            selected_color=0xFFFFFF
+                        ),
+                        label="Output",
+                        show_label=False
+                    ),
+                    Item(
+                        "locals",
+                        editor=ShellEditor(share=True),
+                        label="Shell",
+                        show_label=False
+                    ),
+                    visible_when='demo is not None',
                 ),
-                Item(
-                    "locals",
-                    editor=ShellEditor(share=True),
-                    label="Shell",
-                    show_label=False
+                Tabbed(
+                    Item(
+                        "log",
+                        style="readonly",
+                        editor=CodeEditor(
+                            show_line_numbers=False,
+                            selected_color=0xFFFFFF
+                        ),
+                        label="Output",
+                        show_label=False
+                    ),
+                    Item(
+                        "locals",
+                        editor=ShellEditor(share=True),
+                        label="Shell",
+                        show_label=False
+                    ),
+                    visible_when='demo is None',
                 ),
             ),
             dock="horizontal",
