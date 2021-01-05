@@ -44,14 +44,6 @@ def get_view(base_url_name):
     )
 
 
-class CurrentURL:
-    """ Represent a query to obtain the current URL displayed by the
-    web page.
-    Implementation should return a str.
-    """
-    pass
-
-
 class HTMLContent:
     """ Action to retrieve the HTML content currently displayed.
     Implementation should return a str, whose content conforms to HTML markup.
@@ -237,13 +229,6 @@ def qt_target_registry():
     )
     registry.register_interaction(
         target_class=SimpleEditor,
-        interaction_class=CurrentURL,
-        handler=lambda wrapper, _: (
-            qt_get_page_url(wrapper._target.control.page())
-        )
-    )
-    registry.register_interaction(
-        target_class=SimpleEditor,
         interaction_class=HTMLContent,
         handler=lambda wrapper, _: (
             qt_get_page_html_content(wrapper._target.control.page())
@@ -315,18 +300,11 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
 
         with self.tester.create_ui(model, dict(view=view)) as ui:
             html_view = self.tester.find_by_name(ui, "content")
-            self.assertFalse(
-                html_view.inspect(CurrentURL()).startswith("about:blank")
-            )
 
             # when
             with mock.patch("webbrowser.open_new") as mocked_browser:
                 html_view.perform(MouseClick())
 
-            # then
-            self.assertTrue(
-                html_view.inspect(CurrentURL()).startswith("about:blank")
-            )
         mocked_browser.assert_not_called()
 
     @requires_toolkit([ToolkitName.qt])
