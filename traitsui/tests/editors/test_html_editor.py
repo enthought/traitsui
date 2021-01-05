@@ -74,13 +74,13 @@ def qt_get_page_html_content(page):
     -------
     html : str
     """
-    qt_allow_page_to_load(page)
+    qt_allow_view_to_load(page)
     if _is_webkit_page(page):
         return page.mainFrame().toHtml()
 
     content = []
     page.toHtml(content.append)
-    qt_allow_page_to_load(page)
+    qt_allow_view_to_load(page)
     return "".join(content)
 
 
@@ -124,8 +124,9 @@ def wait_for_qt_signal(qt_signal, timeout):
         raise RuntimeError("Timeout waiting for signal.")
 
 
-def qt_allow_page_to_load(page, timeout=0.5):
-    """ Allow QWebPage/QWebEnginePage to finish loading.
+def qt_allow_view_to_load(loadable, timeout=0.5):
+    """ Allow QWebView/QWebPage/QWebEngineView/QWebEnginePage to finish
+    loading.
 
     Out of context, this function does not know if the page has started
     loading. Therefore no timeout error is raised.
@@ -136,15 +137,15 @@ def qt_allow_page_to_load(page, timeout=0.5):
 
     Parameters
     ----------
-    page : QWebPage or QWebEnginePage
-        The page to allow loading to finish.
+    loadable : QWebView or QWebPage or QWebEngineView or QWebEnginePage
+        The view / page to allow loading to finish. Any object with the
+        loadFinished signal can be used.
     timeout : float
         Timeout in seconds for each signal being observed.
     """
-
     timeout_ms = round(timeout * 1000)
     try:
-        wait_for_qt_signal(page.loadFinished, timeout=timeout_ms)
+        wait_for_qt_signal(loadable.loadFinished, timeout=timeout_ms)
     except RuntimeError:
         return
 
@@ -162,7 +163,7 @@ def qt_mouse_click_web_view(view, delay):
     from pyface.qt import QtCore
     from pyface.qt.QtTest import QTest
 
-    qt_allow_page_to_load(view.page())
+    qt_allow_view_to_load(view)
 
     if view.focusProxy() is not None:
         # QWebEngineView
@@ -179,7 +180,7 @@ def qt_mouse_click_web_view(view, delay):
             delay=delay,
         )
     finally:
-        qt_allow_page_to_load(view.page())
+        qt_allow_view_to_load(view)
 
 
 def qt_target_registry():
