@@ -101,12 +101,14 @@ def wait_for_qt_signal(qt_signal, timeout):
     ------
     RuntimeError
     """
-    from pyface.qt import QtCore, QtGui
+    from pyface.qt import QtCore
 
-    qt_app = QtGui.QApplication.instance()
+    # QEventLoop is used instead of QApplication due to observed
+    # hangs with Qt4.
+    event_loop = QtCore.QEventLoop()
 
     def exit(*args, **kwargs):
-        qt_app.quit()
+        event_loop.quit()
 
     timeout_timer = QtCore.QTimer()
     timeout_timer.setSingleShot(True)
@@ -115,7 +117,7 @@ def wait_for_qt_signal(qt_signal, timeout):
     qt_signal.connect(exit)
 
     timeout_timer.start()
-    qt_app.exec_()
+    event_loop.exec_()
 
     qt_signal.disconnect(exit)
     if timeout_timer.isActive():
