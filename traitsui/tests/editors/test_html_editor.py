@@ -59,8 +59,8 @@ class HTMLContent:
     pass
 
 
-def _is_web_engine_page(page):
-    """ Return true if the given page is a QWebEnginePage.
+def _is_webkit_page(page):
+    """ Return true if the given page is a QWebPage from QtWebKit.
 
     Intended for handling the compatibility between QtWebKit and QtWebEngine.
 
@@ -68,7 +68,7 @@ def _is_web_engine_page(page):
     ----------
     page : QWebEnginePage or QWebPage
     """
-    return not hasattr(page, "setLinkDelegationPolicy")
+    return hasattr(page, "setLinkDelegationPolicy")
 
 
 def qt_get_page_url(page):
@@ -83,9 +83,9 @@ def qt_get_page_url(page):
     html : str
     """
     qt_allow_page_to_load(page)
-    if _is_web_engine_page(page):
-        return page.url().toString()
-    return page.mainFrame().url().toString()
+    if _is_webkit_page(page):
+        return page.mainFrame().url().toString()
+    return page.url().toString()
 
 
 def qt_get_page_html_content(page):
@@ -99,12 +99,13 @@ def qt_get_page_html_content(page):
     -------
     html : str
     """
-    if _is_web_engine_page(page):
-        content = []
-        page.toHtml(content.append)
-        qt_allow_page_to_load(page)
-        return "".join(content)
-    return page.mainFrame().toHtml()
+    if _is_webkit_page(page):
+        return page.mainFrame().toHtml()
+
+    content = []
+    page.toHtml(content.append)
+    qt_allow_page_to_load(page)
+    return "".join(content)
 
 
 def wait_for_qt_signal(qt_signal, timeout):
@@ -417,15 +418,13 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
                 html_view.inspect(HTMLContent()),
             )
 
-            is_web_engine = _is_web_engine_page(
-                html_view._target.control.page()
-            )
+            is_webkit = _is_webkit_page(html_view._target.control.page())
 
-        if is_web_engine:
+        if is_webkit:
+            # This is the expected behavior.
+            mocked_browser.assert_called_once_with("test://testing")
+        else:
             # Expected failure:
             # See enthought/traitsui#1464
             # This is the current unexpected behavior if QtWebEngine is used.
             mocked_browser.assert_not_called()
-        else:
-            # This is the expected behavior.
-            mocked_browser.assert_called_once_with("test://testing")
