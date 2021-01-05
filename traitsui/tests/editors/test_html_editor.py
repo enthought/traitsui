@@ -63,23 +63,6 @@ def _is_webkit_page(page):
     return hasattr(page, "setLinkDelegationPolicy")
 
 
-def qt_get_page_url(page):
-    """ Return the URL (in string format) currently being viewed.
-
-    Parameters
-    ----------
-    page : QWebEnginePage or QWebPage
-
-    Returns
-    -------
-    html : str
-    """
-    qt_allow_page_to_load(page)
-    if _is_webkit_page(page):
-        return page.mainFrame().url().toString()
-    return page.url().toString()
-
-
 def qt_get_page_html_content(page):
     """ Return the HTML content currently being viewed.
 
