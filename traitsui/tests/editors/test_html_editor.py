@@ -356,7 +356,7 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
         mocked_browser.assert_called_once_with("test://testing")
 
     @requires_toolkit([ToolkitName.qt])
-    def test_open_externally_link_externally(self):
+    def test_open_external_link_externally(self):
         model = HTMLModel(content="""
         <html>
             <a
