@@ -124,7 +124,7 @@ def wait_for_qt_signal(qt_signal, timeout):
         raise RuntimeError("Timeout waiting for signal.")
 
 
-def qt_allow_page_to_load(page, step_timeout=0.1):
+def qt_allow_page_to_load(page, step_timeout=0.5):
     """ Allow QWebPage/QWebEnginePage to finish loading.
 
     Out of context, this function does not know if the page has started
