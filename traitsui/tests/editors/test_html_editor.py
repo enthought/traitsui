@@ -99,12 +99,12 @@ def qt_get_page_html_content(page):
     -------
     html : str
     """
+    qt_allow_page_to_load(page)
     if _is_webkit_page(page):
         return page.mainFrame().toHtml()
 
     content = []
     page.toHtml(content.append)
-    qt_allow_page_to_load(page)
     return "".join(content)
 
 
