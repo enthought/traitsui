@@ -80,6 +80,7 @@ def qt_get_page_html_content(page):
 
     content = []
     page.toHtml(content.append)
+    qt_allow_page_to_load(page)
     return "".join(content)
 
 
