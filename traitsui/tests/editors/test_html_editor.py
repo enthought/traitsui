@@ -124,17 +124,13 @@ def wait_for_qt_signal(qt_signal, timeout):
         raise RuntimeError("Timeout waiting for signal.")
 
 
-def qt_allow_page_to_load(page, step_timeout=0.5):
+def qt_allow_page_to_load(page, timeout=0.5):
     """ Allow QWebPage/QWebEnginePage to finish loading.
 
     Out of context, this function does not know if the page has started
-    loading. Therefore it tries to see if the page is busy by watching its
-    loadStarted or loadProgress signal. If the loadStarted signal has been
-    emitted before this function is called, and/or the loadProgress is taking
-    too long to be emitted, then it is possible that the page is not in a
-    loaded state when this function returns.
+    loading. Therefore no timeout error is raised.
 
-    However for most testing purposes, this function should be good enough to
+    For most testing purposes, this function should be good enough to
     avoid interacting with the Qt web page before it has finished loading, at
     a cost of a slower test.
 
@@ -142,23 +138,15 @@ def qt_allow_page_to_load(page, step_timeout=0.5):
     ----------
     page : QWebPage or QWebEnginePage
         The page to allow loading to finish.
-    step_timeout : float
+    timeout : float
         Timeout in seconds for each signal being observed.
     """
 
-    step_timeout_ms = round(step_timeout * 1000)
+    timeout_ms = round(timeout * 1000)
     try:
-        wait_for_qt_signal(page.loadStarted, timeout=step_timeout_ms)
+        wait_for_qt_signal(page.loadFinished, timeout=timeout_ms)
     except RuntimeError:
-        # It might have been started before this function is called.
-        # Check for progress too.
-        try:
-            wait_for_qt_signal(page.loadProgress, timeout=step_timeout_ms)
-        except RuntimeError:
-            # Probably haven't started.
-            return
-
-    wait_for_qt_signal(page.loadFinished, timeout=step_timeout_ms)
+        return
 
 
 def qt_mouse_click_web_view(view, delay):
