@@ -143,8 +143,12 @@ environment_vars = {
     'null': {'ETS_TOOLKIT': 'null'},
 }
 
+CONTEXT_SETTINGS = {
+    "help_option_names": ["-h", "--help"],
+}
 
-@click.group()
+
+@click.group(context_settings=CONTEXT_SETTINGS)
 def cli():
     pass
 
