@@ -8,7 +8,7 @@
 #
 # Thanks for using Enthought open source!
 
-""" Test using a KeyBindings object with the traits Codeditor."""
+""" Test using a KeyBindings object with the traits CodeEditor."""
 
 #-------------------------------------------------------------------------
 #  Imports:
