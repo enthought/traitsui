@@ -11,8 +11,10 @@
 """ A Traits UI demo that borrows heavily from the design of the wxPython demo.
 """
 
+import abc
 import contextlib
 import glob
+import io
 from io import StringIO
 import operator
 import os
@@ -29,10 +31,12 @@ from os.path import (
     splitext,
 )
 import sys
+import subprocess
+import tempfile
 import token
 import tokenize
 import traceback
-
+import types
 
 from configobj import ConfigObj
 
@@ -179,14 +183,349 @@ def _read_file(path, mode='r', encoding='utf8'):
 #  'DemoFileHandler' class:
 # -------------------------------------------------------------------------
 
-@contextlib.contextmanager
-def _set_stdout(std_out):
-    stdout, stderr = sys.stdout, sys.stderr
-    try:
-        sys.stdout = sys.stderr = std_out
-        yield std_out
-    finally:
-        sys.stdout, sys.stderr = stdout, stderr
+
+class _TempSysPath:
+    """ Temporarily prepend the directory containing the provided script
+    to sys.path.
+    """
+
+    def __init__(self, script_file_path):
+        self._path = os.path.dirname(os.fspath(script_file_path))
+
+    def __enter__(self):
+        sys.path.insert(0, self._path)
+        return self
+
+    def __exit__(self, *args):
+        try:
+            sys.path.remove(self._path)
+        except ValueError:
+            pass
+
+
+class _TempModule:
+    """Temporarily replace a module in sys.modules with an empty namespace.
+
+    Parameters
+    ----------
+    mod_name : str
+        Name of the module to be replaced (if exists) or created (if absent).
+    """
+    def __init__(self, mod_name):
+        self.mod_name = mod_name
+        self.module = types.ModuleType(mod_name)
+        self._saved_module = []
+
+    def __enter__(self):
+        try:
+            self._saved_module.append(sys.modules[self.mod_name])
+        except KeyError:
+            pass
+        sys.modules[self.mod_name] = self.module
+        return self
+
+    def __exit__(self, *args):
+        if self._saved_module:
+            sys.modules[self.mod_name] = self._saved_module[0]
+        else:
+            del sys.modules[self.mod_name]
+        self._saved_module = []
+
+
+class _CloseNewGui:
+    """ Context manager to close any top level windows that were absent
+    when the context was entered.
+
+    Strong references to the top-level windows are held upon entering the
+    context, and are released when the context is exited.
+    """
+
+    # FIXME: For other toolkit backend (i.e. wx), this context manager
+    # may have to do nothing. Note that the application currently does not
+    # run well on wx at all.
+
+    def __enter__(self):
+        from pyface.qt import QtGui
+        app = QtGui.QApplication.instance()
+        self.existing_windows = app.topLevelWidgets()
+        return self
+
+    def __exit__(self, *args):
+        try:
+            from pyface.qt import QtGui
+            app = QtGui.QApplication.instance()
+            for window in app.topLevelWidgets():
+                if window not in self.existing_windows:
+                    window.close()
+        finally:
+            self.existing_windows = []
+
+
+class CodeRunnerBase(abc.ABC):
+    """ Abstract base class to define an interface used for running local code.
+    """
+
+    @property
+    @abc.abstractmethod
+    def locals(self):
+        """ Namespace for the executed code.
+
+        Default implementation provides an empty namespace.
+        """
+        return {}
+
+    @abc.abstractmethod
+    def start(self, code, script_name, init_globals, stdout, stderr):
+        """ Start the runner to run the code as main.
+
+        Default implementation does nothing.
+
+        Parameters
+        ----------
+        code : str
+            Code to be executed as main. An empty module namespace will be
+            created to replace __main__ temporarily until the runner is
+            stopped.
+        script_name : str
+            Path to be set as __file__.
+        init_globals : dict
+            Initial namespace variables.
+        stdout : file-like
+            File-like object for redirecting STDOUT when the code is executed.
+        stderr : file-like
+            File-like object for redirecting STDERR when the code is executed.
+
+        Raises
+        ------
+        RuntimeError
+            If the runner has already started.
+        """
+        pass
+
+    @abc.abstractmethod
+    def stop(self):
+        """ Stop the runner and cleanup.
+        If the runner has not started, do nothing.
+
+        Default implementation does nothing.
+        """
+        pass
+
+
+class SubprocessCodeRunner(CodeRunnerBase):
+    """ A runner for running code in a subprocess.
+
+    Support:
+    - Relative import works as expected, with no risk of name shadowing.
+    - Discovery of resources using __file__ works as expected, but this
+      breaks __doc__, see limitations.
+    - Stopping the runner will close any new GUI window left open since the
+      runner starts, because the subprocess is forced killed.
+
+    Known limtations:
+    - STDOUT and STDERR are not redirected. Hence there are currently no
+      error feedback mechanism. i.e. The "Output" tab in the GUI is basically
+      non-functional.
+    - No initial global variables can be provided. i.e. The "Shell" tab in the
+      GUI is basically non-functional.
+      (Note this is an existing feature of the demo application to incorporate
+      variables defined in the __init__.py in the same folder, but this feature
+      may not be used by any examples. Running a script directly without the -m
+      switch does not execute __init__.py.)
+    - Access to interact with the namespace from the executed code is not
+      available (i.e. the Python shell feature is not supported).
+    - Attempt is made to patch __file__, but currently this breaks implicit
+      assignment of __doc__ using module level docstring.
+    - Risk of leaving orphant subprocess around if forcing killing them upon
+      stopping the runner was not successful?
+    """
+
+    def __init__(self):
+        self._started = False
+        self._exit_stack = contextlib.ExitStack()
+
+    @property
+    def locals(self):
+        """ Empty namespace.
+        """
+        return {}
+
+    def start(self, code, script_name, init_globals, stdout, stderr):
+        """ Reimplemented CodeRunnerBase.start
+
+        init_globals is not used. A warning is emitted if it is provided.
+
+        stdout and stderr are not used either.
+        """
+        self._started = True
+
+        # Write the modified code to a temporary script file.
+        # Patch __file__ in-place for resources management
+        # but this breaks __doc__ for the HTMLEditor example!
+        tmp_dir = self._exit_stack.enter_context(
+            tempfile.TemporaryDirectory()
+        )
+        tmp_script_name = os.path.join(tmp_dir, "tmp.py")
+        with open(tmp_script_name, "w", encoding="utf-8") as fp:
+            fp.write(f"__file__ = {script_name!r}\n")
+            fp.write(code)
+
+        # Set PYTHONPATH to support local import in the examples.
+        python_path = os.path.dirname(script_name)
+        existing_path = os.environ.get("PYTHONPATH")
+        if existing_path is not None:
+            python_path += os.pathsep + existing_path
+
+        # Run the script in a separate process...
+        # FIXME: STDOUT/STDERR needs to be consumed and be made visible
+        # in the application.
+        process = subprocess.Popen(
+            [sys.executable, tmp_script_name],
+            env=dict(os.environ, PYTHONPATH=python_path),
+            encoding="utf-8",
+        )
+
+        def kill_process(*args):
+            process.kill()
+
+        self._exit_stack.push(process.__exit__)
+        self._exit_stack.push(kill_process)
+
+    def stop(self):
+        """ Reimplemented CodeRunnerBase.stop
+        """
+        if not self._started:
+            return
+
+        self._exit_stack.close()
+        self._started = False
+
+
+class LocalCodeRunner(CodeRunnerBase):
+    """ Runner to execute arbitrary code as main.
+
+    Support:
+    - Relative import works as expected (except name shadowing may occur, see
+      limitations).
+    - Initial global variables can be provided.
+      (Note this is an existing feature of the demo application to incorporate
+      variables defined in the __init__.py in the same folder, but this feature
+      may not be used by any examples. Running a script directly without the -m
+      switch does not execute __init__.py.)
+    - STDOUT/STDERR are redirected to be visible in the demo application (but
+      only briefly, see limitations).
+    - Stopping the runner will close any new GUI window left open since the
+      runner starts.
+    - Namespace variables from the executed code can be interacted with
+      directly.
+
+    Known limitations:
+    - Redirection of STDOUT/STDERR are restored when the code executed returns.
+      This means any new content in STDOUT/STDERR triggered by deferred actions
+      (e.g. GUI interaction) are not redirected. This is an existing limitation
+      of the demo application.
+    - Fatal exception (e.g. qFatal from Qt) arising from the given code is not
+      isolated from the process running this runner, hence it could bring down
+      the demo application.
+    - Although the __main__ module is restored after the runner is stopped,
+      any import cache created upon executing the given code is not
+      invalidated. This could result in strange interaction if the runner
+      is run again with code refering to a module under the same name assuming
+      a different import finder path (i.e. name shadowing and double import).
+    """
+
+    def __init__(self):
+        self._started = False
+        self._exit_stack = contextlib.ExitStack()
+        self._locals = {}
+
+    @property
+    def locals(self):
+        """ Namespace for the executed code.
+        """
+        return self._locals
+
+    def start(self, code, script_name, init_globals, stdout, stderr):
+        """ Reimplemented CodeRunnerBase.start
+
+        The namespace created by executing the code can be retrieved via
+        the ``locals`` property.
+
+        After the runner has started, the sys.module['__main__'] is replaced
+        with the module created for the given code. The original __main__
+        module will be restored when the runner stops.
+        """
+        if self._started:
+            raise RuntimeError("The runner has already started.")
+
+        self._started = True
+
+        mod_name = "__main__"
+        temp_module_manager = _TempModule(mod_name)
+        run_globals = temp_module_manager.module.__dict__
+        run_globals.update(init_globals)
+        run_globals.update(
+            __name__=mod_name,
+            __file__=script_name,
+            __cached__=None,
+            __loader__=None,
+            __package__=None,
+            __spec__=None,
+        )
+        # These contexts span the runner's start-to-stop scope. They support
+        # deferred GUI interactions that trigger local imports or local
+        # discovery of files.
+        with contextlib.ExitStack() as stack:
+            stack.enter_context(temp_module_manager)
+            stack.enter_context(_TempSysPath(script_name))
+            stack.enter_context(_CloseNewGui())
+            self._exit_stack = stack.pop_all()
+
+        # limit the scope for redirecting stdout/stderr to just this
+        # initial execution, otherwise the redirection may intefere
+        # with the operation of the demo application.
+        # FIXME: sys.argv _may_ need modification too.
+        with contextlib.redirect_stdout(stdout), \
+                contextlib.redirect_stderr(stderr):
+            try:
+                exec(code, run_globals)
+            except Exception:
+                traceback.print_exc(file=stderr)
+            else:
+                self._locals = run_globals
+
+    def stop(self):
+        """ Stop the runner and cleanup.
+        If the runner has not started, do nothing.
+        """
+        if not self._started:
+            return
+
+        self._locals = {}
+        self._exit_stack.close()
+        self._started = False
+
+
+class _StreamMock(io.IOBase):
+    """ A file-like object that redirects write operation to a given callable.
+
+    Useful to redirecting content intended to be written to a io stream
+    (e.g. STDOUT and STDERR) to anything.
+
+    Parameters
+    ----------
+    writer : callable(str)
+        Callable to handle the given string.
+    """
+
+    def __init__(self, writer):
+        self.writer = writer
+
+    def write(self, text):
+        self.writer(text)
+
+    def flush(self):
+        pass
 
 
 class DemoFileHandler(Handler):
@@ -195,6 +534,9 @@ class DemoFileHandler(Handler):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
+    # Runner for executing code when the run button is pressed.
+    runner = Instance(CodeRunnerBase)
+
     #: Run the demo file
     run_button = Button(image=ImageResource("run"), label="Run")
 
@@ -202,38 +544,42 @@ class DemoFileHandler(Handler):
     info = Instance(UIInfo)
 
     def _run_button_changed(self):
+        """ Run button is pressed. Rerun the code.
+        """
+        self.runner.stop()
+
         demo_file = self.info.object
-        with _set_stdout(self):
-            demo_file.run_code()
+
+        def write_to_log(text):
+            demo_file.log += text
+
+        self.runner.start(
+            code=demo_file.source,
+            script_name=demo_file.path,
+            init_globals=demo_file.parent.init_dic,
+            stdout=_StreamMock(write_to_log),
+            stderr=_StreamMock(write_to_log),
+        )
+        self.info.object.locals = self.runner.locals
 
     def init(self, info):
         # Save the reference to the current 'info' object:
         self.info = info
         demo_file = info.object
-        with _set_stdout(self):
-            demo_file.init()
+        demo_file.init()
 
     def closed(self, info, is_ok):
         """ Closes the view.
         """
-        demo_file = info.object
-        if hasattr(demo_file, 'demo'):
-            demo_file.demo = None
-
-    # -------------------------------------------------------------------------
-    #  Handles 'print' output:
-    # -------------------------------------------------------------------------
-
-    def write(self, text):
-        demo_file = self.info.object
-        demo_file.log += text
-
-    def flush(self):
-        pass
+        self.runner.stop()
+        info.object.finish()
 
 
 # Create a singleton instance:
-demo_file_handler = DemoFileHandler()
+demo_file_handler = DemoFileHandler(
+    #runner=SubprocessCodeRunner(),
+    runner=LocalCodeRunner(),
+)
 
 
 class DemoError(HasPrivateTraits):
@@ -254,49 +600,6 @@ class DemoError(HasPrivateTraits):
             Heading("Error in source file"),
             Item("msg", style="custom", show_label=False),
         )
-    )
-
-
-class DemoButton(HasPrivateTraits):
-
-    # -------------------------------------------------------------------------
-    #  Trait definitions:
-    # -------------------------------------------------------------------------
-
-    #: The demo to be launched via a button:
-    demo = Instance(HasTraits)
-
-    #: The demo view item to use:
-    demo_item = Item(
-        "demo",
-        show_label=False,
-        editor=InstanceEditor(label="Run demo...", kind="live"),
-    )
-
-    # -------------------------------------------------------------------------
-    #  Traits view definitions:
-    # -------------------------------------------------------------------------
-
-    traits_view = View(
-        VGroup(
-            VGroup(Heading("Click the button to run the demo:"), "20"),
-            HGroup(spring, Include("demo_item"), spring),
-        ),
-        resizable=True,
-    )
-
-
-class ModalDemoButton(DemoButton):
-
-    # -------------------------------------------------------------------------
-    #  Trait definitions:
-    # -------------------------------------------------------------------------
-
-    #: The demo view item to use:
-    demo_item = Item(
-        "demo",
-        show_label=False,
-        editor=InstanceEditor(label="Run demo...", kind="modal"),
     )
 
 
@@ -389,13 +692,13 @@ class DemoFileBase(DemoTreeNodeObject):
     #: The css file for this node.
     css_filename = Str("default.css")
 
-    #: Log of all print messages displayed:
-    log = Code()
-
     _nice_name = Str()
 
     def init(self):
-        self.log = ""
+        pass
+
+    def finish(self):
+        pass
 
     # -------------------------------------------------------------------------
     #  Implementation of the 'path' property:
@@ -446,45 +749,21 @@ class DemoFile(DemoFileBase):
     #: Source code for the demo:
     source = Code()
 
-    #: Demo object whose traits UI is to be displayed:
-    demo = Instance(HasTraits)
-
     #: Local namespace for executed code:
     locals = Dict(Str, Any)
+
+    #: Content for STDOUT/STDERR to be displayed:
+    log = Str()
 
     def init(self):
         super().init()
         description, source = parse_source(self.path)
         self.description = publish_html_str(description, self.css_filename)
         self.source = source
-        self.run_code()
+        self.log = ""
 
-    def run_code(self):
-        """ Runs the code associated with this demo file.
-        """
-        try:
-            # Get the execution context dictionary:
-            locals = self.parent.init_dic
-            locals["__name__"] = "___main___"
-            locals["__file__"] = self.path
-            sys.modules["__main__"].__file__ = self.path
-
-            exec(self.source, locals, locals)
-
-            demo = self._get_object("modal_popup", locals)
-            if demo is not None:
-                demo = ModalDemoButton(demo=demo)
-            else:
-                demo = self._get_object("popup", locals)
-                if demo is not None:
-                    demo = DemoButton(demo=demo)
-                else:
-                    demo = self._get_object("demo", locals)
-        except Exception:
-            traceback.print_exc()
-        else:
-            self.demo = demo
-        self.locals = locals
+    def finish(self):
+        self.locals = {}
 
     # -------------------------------------------------------------------------
     #  Get a specified object from the execution dictionary:
@@ -889,11 +1168,6 @@ demo_file_view = View(
             ),
             VGroup(
                 Tabbed(
-                    UItem(
-                        "demo",
-                        style="custom",
-                        resizable=True,
-                    ),
                     Item(
                         "log",
                         style="readonly",
@@ -910,26 +1184,6 @@ demo_file_view = View(
                         label="Shell",
                         show_label=False
                     ),
-                    visible_when='demo is not None',
-                ),
-                Tabbed(
-                    Item(
-                        "log",
-                        style="readonly",
-                        editor=CodeEditor(
-                            show_line_numbers=False,
-                            selected_color=0xFFFFFF
-                        ),
-                        label="Output",
-                        show_label=False
-                    ),
-                    Item(
-                        "locals",
-                        editor=ShellEditor(share=True),
-                        label="Shell",
-                        show_label=False
-                    ),
-                    visible_when='demo is None',
                 ),
             ),
             dock="horizontal",
