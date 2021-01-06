@@ -18,7 +18,11 @@
 
 Implementation of a DirectoryEditor demo plugin for Traits UI demo program.
 
-This demo shows each of the four styles of the DirectoryEditor
+This demo shows each of the four styles of the DirectoryEditor.
+
+Please refer to the `DirectoryEditor API docs`_ for further information.
+
+.. _DirectoryEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.directory_editor.html#traitsui.editors.directory_editor.DirectoryEditor
 """
 # Issue related to the demo warning: enthought/traitsui#889
 

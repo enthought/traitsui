@@ -13,6 +13,10 @@ Implementation of a ButtonEditor demo plugin for Traits UI demo program.
 
 This demo shows each of the two styles of the ButtonEditor.
 (As of this writing, they are identical.)
+
+Please refer to the `ButtonEditor API docs`_ for further information.
+
+.. _ButtonEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.button_editor.html#traitsui.editors.button_editor.ButtonEditor
 """
 
 from traits.api import HasTraits, Button

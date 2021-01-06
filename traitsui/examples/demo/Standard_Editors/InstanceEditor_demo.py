@@ -22,6 +22,10 @@ This demo shows each of the four styles of the InstanceEditor
 
 Fixme: This version of the demo only shows the old-style InstanceEditor
 capabilities.
+
+Please refer to the `InstanceEditor API docs`_ for further information.
+
+.. _InstanceEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.instance_editor.html#traitsui.editors.instance_editor.InstanceEditor
 """
 # Issue related to the demo warning: enthought/traitsui#939
 

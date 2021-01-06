@@ -25,6 +25,10 @@ This demonstration shows three variations of using a TitleEditor:
 * In the third example, the TitleEditor values are supplied by a Property
   whose value is derived from a calculation on a Float trait. Type a number
   into the value field to cause the title to changed.
+
+Please refer to the `TitleEditor API docs`_ for further information.
+
+.. _TitleEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.title_editor.html#traitsui.editors.title_editor.TitleEditor
 """
 
 from traits.api import HasTraits, Enum, Str, Float, Property, cached_property

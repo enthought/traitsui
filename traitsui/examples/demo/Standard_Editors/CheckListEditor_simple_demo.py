@@ -26,6 +26,10 @@ We do *not* demonstrate two styles which are not as useful for this editor:
   data entry, but it ignores the editor's list of valid 'values'.
 * 'simple' (the default) only lets you select one item at a time, from a
   drop-down widget.
+
+Please refer to the `CheckListEditor API docs`_ for further information.
+
+.. _CheckListEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.check_list_editor.html#traitsui.editors.check_list_editor.CheckListEditor
 """
 
 from traits.api import HasTraits, List

@@ -18,7 +18,11 @@
 
 Implementation of a TupleEditor demo plugin for Traits UI demo program.
 
-This demo shows each of the four styles of the TupleEditor
+This demo shows each of the four styles of the TupleEditor.
+
+Please refer to the `TupleEditor API docs`_ for further information.
+
+.. _TupleEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.tuple_editor.html#traitsui.editors.tuple_editor.TupleEditor
 """
 # Issue related to the demo warning: enthought/traitsui#939
 

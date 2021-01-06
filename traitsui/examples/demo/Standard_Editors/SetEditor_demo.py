@@ -17,6 +17,10 @@ The four tabs of this demo show variations on the interface as follows:
 - Unord II: Creates an alphabetized subset, has "move all" options
 - Ord I:    Creates a set whose order is specified by the user, no "move all"
 - Ord II:   Creates a set whose order is specifed by the user, has "move all"
+
+Please refer to the `SetEditor API docs`_ for further information.
+
+.. _SetEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.set_editor.html#traitsui.editors.set_editor.SetEditor
 """
 
 from traits.api import HasTraits, List

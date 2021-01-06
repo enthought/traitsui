@@ -20,6 +20,10 @@
 -------------------------------------------------------------------------------
 
 To run this demonstration successfully, you must have **pandas** installed.
+
+Please refer to the `DataFrameEditor API docs`_ for further information.
+
+.. _DataFrameEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.ui_editors.data_frame_editor.html#traitsui.ui_editors.data_frame_editor.DataFrameEditor
 """
 # Issue related to the demo warning: enthought/traitsui#944
 

@@ -40,6 +40,10 @@ to a particular class; in this case, each object of that class is represented
 by multiple nodes, one for each applicable node type.
 
 See the Traits User Manual for more details.
+
+Please refer to the `TreeEditor API docs`_ for further information.
+
+.. _TreeEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.tree_editor.html#traitsui.editors.tree_editor.TreeEditor
 """
 
 from traits.api import HasTraits, Str, Regex, List, Instance

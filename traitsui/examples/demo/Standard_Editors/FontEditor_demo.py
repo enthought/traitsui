@@ -24,6 +24,10 @@ style - it pops up a font selection dialog which is specific to the OS and
 toolkit.
 
 This example also displays some other less common style choices.
+
+Please refer to the `FontEditor API docs`_ for further information.
+
+.. _FontEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.font_editor.html#traitsui.editors.font_editor.FontEditor
 """
 
 from traits.api import HasTraits

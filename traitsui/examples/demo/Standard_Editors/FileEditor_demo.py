@@ -18,7 +18,11 @@
 
 Implementation of a FileEditor demo plugin for Traits UI demo program.
 
-This demo shows each of the four styles of the FileEditor
+This demo shows each of the four styles of the FileEditor.
+
+Please refer to the `FileEditor API docs`_ for further information.
+
+.. _FileEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.file_editor.html#traitsui.editors.file_editor.FileEditor
 """
 # Issue related to the demo warning: enthought/traitsui#889
 

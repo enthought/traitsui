@@ -11,7 +11,11 @@
 """
 Implementation of a CodeEditor demo plugin for Traits UI demo program.
 
-This demo shows each of the four styles of the CodeEditor
+This demo shows each of the four styles of the CodeEditor.
+
+Please refer to the `CodeEditor API docs`_ for further information.
+
+.. _CodeEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.code_editor.html#traitsui.editors.code_editor.CodeEditor
 """
 
 from traits.api import HasTraits, Code

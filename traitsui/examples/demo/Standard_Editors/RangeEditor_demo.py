@@ -22,6 +22,10 @@ automatically placed into separate tabs.
 
 For an example of how to dynamically vary the bounds of a Range trait, see
 the *Dynamic Range Editor* example.
+
+Please refer to the `RangeEditor API docs`_ for further information.
+
+.. _RangeEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.range_editor.html#traitsui.editors.range_editor.RangeEditor
 """
 
 from traits.api import HasTraits, Range

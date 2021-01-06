@@ -18,7 +18,11 @@
 
 Implementation of a CompoundEditor demo plugin for Traits UI demo program.
 
-This demo shows each of the four styles of the CompoundEditor
+This demo shows each of the four styles of the CompoundEditor.
+
+Please refer to the `CompoundEditor API docs`_ for further information.
+
+.. _CompoundEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.compound_editor.html#traitsui.editors.compound_editor.CompoundEditor
 """
 # Issue related to the demo warning: enthought/traitsui#945
 
