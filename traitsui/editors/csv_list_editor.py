@@ -1,24 +1,19 @@
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 """This modules defines CSVListEditor.
 
 A CSVListEditor provides an editor for lists of simple data types.
 It allows the user to edit the list in a text field, using commas
 (or optionally some other character) to separate the elements.
 """
-
-# ------------------------------------------------------------------------------
-#
-#  Copyright (c) 2011, Enthought, Inc.
-#  All rights reserved.
-#
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Author: Warren Weckesser
-#  Date:   July 2011
-#
-# ------------------------------------------------------------------------------
 
 from traits.api import Str, Int, Float, Enum, Range, Bool, TraitError, Either
 from traits.trait_handlers import RangeTypes
