@@ -107,6 +107,7 @@ dependencies = {
     "docutils",
     "eam",
     "flake8",
+    "flake8_ets",
     "traits",
     "traitsui",
     "pyface",

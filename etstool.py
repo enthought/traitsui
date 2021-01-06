@@ -162,6 +162,7 @@ extra_dependencies = {
 ci_dependencies = {
     "coverage",
     "flake8",
+    "flake8_ets",
 }
 
 doc_dependencies = {
