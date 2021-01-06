@@ -1,14 +1,15 @@
-#  Copyright (c) 2005-2020, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
+# Thanks for using Enthought open source!
 
 import unittest
+from unittest import mock
 
 from traits.api import HasTraits, Str
 from traitsui.api import HTMLEditor, Item, View
@@ -29,13 +30,14 @@ class HTMLModel(HasTraits):
     model_base_url = Str()
 
 
-def get_view(base_url_name):
+def get_view(base_url_name, format_text=True, open_externally=False):
     return View(
         Item(
             "content",
             editor=HTMLEditor(
-                format_text=True,
+                format_text=format_text,
                 base_url_name=base_url_name,
+                open_externally=open_externally
             )
         )
     )
@@ -70,3 +72,34 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
                 pass
             # It is okay to modify base_url after the UI is closed
             model.model_base_url = "/new_dir"
+
+    @requires_toolkit([ToolkitName.qt])
+    @mock.patch('webbrowser.open_new')
+    def test_open_externally_qt(self, open_new_mock):
+        from pyface.qt import QtCore, QtWebKit
+
+        model = HTMLModel(
+            content="<a href='enthought.com'>Link to click</a>"
+        )
+        view = get_view(
+            base_url_name="",
+            open_externally=True,
+            format_text=False,
+        )
+
+        with reraise_exceptions():
+            with create_ui(model, dict(view=view)) as ui:
+                control = ui.info.content.control
+                page = control.page()
+                url = QtCore.QUrl('http://example.com')
+                if hasattr(page, 'linkClicked'):
+                    page.linkClicked.emit(url)
+                else:
+                    result = page.acceptNavigationRequest(
+                        url,
+                        QtWebKit.QWebPage.NavigationTypeLinkClicked,
+                        True,
+                    )
+                    self.assertFalse(result)
+
+        open_new_mock.assert_called_once_with("http://example.com")
