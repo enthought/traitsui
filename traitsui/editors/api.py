@@ -1,6 +1,6 @@
 """ API for traitsui.editors subpackage.
 
-Note that the followings are also available from :mod:`traitsui.api`, which
+Note that the following are also available from :mod:`traitsui.api`, which
 is the preferred module for imports.
 
 - :attr:`~.ArrayEditor`
