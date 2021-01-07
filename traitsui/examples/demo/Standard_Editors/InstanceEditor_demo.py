@@ -1,5 +1,12 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
 """
 **WARNING**
@@ -15,6 +22,10 @@ This demo shows each of the four styles of the InstanceEditor
 
 Fixme: This version of the demo only shows the old-style InstanceEditor
 capabilities.
+
+Please refer to the `InstanceEditor API docs`_ for further information.
+
+.. _InstanceEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.instance_editor.html#traitsui.editors.instance_editor.InstanceEditor
 """
 # Issue related to the demo warning: enthought/traitsui#939
 

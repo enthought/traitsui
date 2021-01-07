@@ -1,5 +1,12 @@
-#  Copyright (c) 2020, Enthought, Inc.
-#  License: BSD Style.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
 """
 **WARNING**
@@ -10,6 +17,10 @@
 -------------------------------------------------------------------------------
 
 A Traits UI editor that edits a datetime panel.
+
+Please refer to the `DatetimeEditor API docs`_ for further information.
+
+.. _DatetimeEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.datetime_editor.html#traitsui.editors.datetime_editor.DatetimeEditor
 """
 # Issue related to the demo warning: enthought/traitsui#943
 

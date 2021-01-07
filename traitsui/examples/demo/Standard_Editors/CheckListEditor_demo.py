@@ -1,11 +1,22 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
 """
 Implementation of a CheckListEditor demo plugin for the Traits UI demo program.
 
 For each of three CheckListEditor column formations, this demo shows
 each of the four styles of the CheckListEditor.
+
+Please refer to the `CheckListEditor API docs`_ for further information.
+
+.. _CheckListEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.check_list_editor.html#traitsui.editors.check_list_editor.CheckListEditor
 """
 
 from traits.api import HasTraits, List

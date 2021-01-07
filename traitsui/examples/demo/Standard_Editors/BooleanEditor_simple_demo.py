@@ -1,3 +1,13 @@
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 """
 Boolean editor (checkbox or text)
 
@@ -10,6 +20,10 @@ action when its value changes.
 
 It also demonstrates how to add vertical space and a Label (plain text which is
 not editable.)
+
+Please refer to the `BooleanEditor API docs`_ for further information.
+
+.. _BooleanEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.boolean_editor.html#traitsui.editors.boolean_editor.BooleanEditor
 """
 
 from traits.api import HasTraits, Bool, Int

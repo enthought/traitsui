@@ -1,3 +1,13 @@
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 """
 Tree editor for hierarchal data
 
@@ -30,6 +40,10 @@ to a particular class; in this case, each object of that class is represented
 by multiple nodes, one for each applicable node type.
 
 See the Traits User Manual for more details.
+
+Please refer to the `TreeEditor API docs`_ for further information.
+
+.. _TreeEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.tree_editor.html#traitsui.editors.tree_editor.TreeEditor
 """
 
 from traits.api import HasTraits, Str, Regex, List, Instance

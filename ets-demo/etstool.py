@@ -1,4 +1,4 @@
-# (C) Copyright 2020 Enthought, Inc., Austin, TX
+# (C) Copyright 2020-2021 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
@@ -110,6 +110,7 @@ dependencies = {
     "docutils",
     "eam",
     "flake8",
+    "flake8_ets",
     "traits",
     "traitsui",
     "pyface",
@@ -118,9 +119,17 @@ dependencies = {
 
 extra_dependencies = {
     # XXX once pyside2 is available in EDM, we will want it here
-    'pyside2': set(),
-    'pyqt': {'pyqt<4.12'},  # FIXME: build 1 of 4.12.1 appears to be bad
-    'pyqt5': {'pyqt5'},
+    'pyside2': {
+        "pygments",
+    },
+    'pyqt': {
+        'pyqt<4.12',  # FIXME: build 1 of 4.12.1 appears to be bad
+        'pygments',
+    },
+    'pyqt5': {
+        'pyqt5',
+        'pygments',
+    },
     # XXX once wxPython 4 is available in EDM, we will want it here
     'wx': set(),
     'null': set(),
@@ -159,6 +168,7 @@ environment_vars = {
     'null': {'ETS_TOOLKIT': 'null'},
 }
 
+
 # Platforms supported for etsdemo EDM application.
 LINUX = "rh7-x86_64"
 MACOS = "osx-x86_64"
@@ -166,7 +176,12 @@ WINDOWS = "win-x86_64"
 PLATFORMS = [LINUX, MACOS, WINDOWS]
 
 
-@click.group()
+CONTEXT_SETTINGS = {
+    "help_option_names": ["-h", "--help"],
+}
+
+
+@click.group(context_settings=CONTEXT_SETTINGS)
 def cli():
     pass
 

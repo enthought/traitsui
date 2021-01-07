@@ -1,13 +1,13 @@
-#  Copyright (c) 2005-2020, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
+# Thanks for using Enthought open source!
+
 """ Define the top-level object which is responsible for dispatching testing
 functionality for a given GUI object. The functionality is exposed via
 ``UITester``, which is a TraitsUI specific tester.

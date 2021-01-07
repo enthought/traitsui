@@ -1,5 +1,12 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
 """
 Implementation of a SetEditor demo plugin for the Traits UI demo program.
@@ -10,6 +17,10 @@ The four tabs of this demo show variations on the interface as follows:
 - Unord II: Creates an alphabetized subset, has "move all" options
 - Ord I:    Creates a set whose order is specified by the user, no "move all"
 - Ord II:   Creates a set whose order is specifed by the user, has "move all"
+
+Please refer to the `SetEditor API docs`_ for further information.
+
+.. _SetEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.set_editor.html#traitsui.editors.set_editor.SetEditor
 """
 
 from traits.api import HasTraits, List

@@ -1,3 +1,13 @@
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 """
 Checklist editor for a List of strings
 
@@ -16,6 +26,10 @@ We do *not* demonstrate two styles which are not as useful for this editor:
   data entry, but it ignores the editor's list of valid 'values'.
 * 'simple' (the default) only lets you select one item at a time, from a
   drop-down widget.
+
+Please refer to the `CheckListEditor API docs`_ for further information.
+
+.. _CheckListEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.check_list_editor.html#traitsui.editors.check_list_editor.CheckListEditor
 """
 
 from traits.api import HasTraits, List

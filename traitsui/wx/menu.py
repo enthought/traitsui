@@ -1,18 +1,12 @@
-# ------------------------------------------------------------------------------
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   01/24/2002
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Dynamically construct wxPython Menus or MenuBars from a supplied string
     description of the menu.

@@ -1,5 +1,12 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
 """
 **WARNING**
@@ -13,6 +20,10 @@ Implementation of a TableEditor demo plugin for Traits UI demo program
 
 This demo shows the full behavior of a straightforward TableEditor.  Only
 one style of TableEditor is implemented, so that is the one shown.
+
+Please refer to the `TableEditor API docs`_ for further information.
+
+.. _TableEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.TableEditor
 """
 # Issue related to the demo warning: enthought/traitsui#948
 

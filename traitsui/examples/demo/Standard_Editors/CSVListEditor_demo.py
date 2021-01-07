@@ -1,9 +1,23 @@
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 """
 Demonstrate the CSVListEditor class.
 
 This editor allows the user to enter a *single* line of input text, containing
 comma-separated values (or another separator may be specified). Your program
 specifies an element Trait type of Int, Float, Str, Enum, or Range.
+
+Please refer to the `CSVListEditor API docs`_ for further information.
+
+.. _CSVListEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.csv_list_editor.html#traitsui.editors.csv_list_editor.CSVListEditor
 """
 
 from traits.api import (

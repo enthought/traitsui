@@ -1,5 +1,12 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
 # DataFrameEditor_demo.py -- Example of using dataframe editors
 
@@ -13,6 +20,10 @@
 -------------------------------------------------------------------------------
 
 To run this demonstration successfully, you must have **pandas** installed.
+
+Please refer to the `DataFrameEditor API docs`_ for further information.
+
+.. _DataFrameEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.ui_editors.data_frame_editor.html#traitsui.ui_editors.data_frame_editor.DataFrameEditor
 """
 # Issue related to the demo warning: enthought/traitsui#944
 

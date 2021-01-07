@@ -1,16 +1,12 @@
-#-------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  TableEditor test case for Traits UI
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Written by: David C. Morrill
-#
-#  Date: 07/05/2005
-#
-#  (c) Copyright 2005 by Enthought, Inc.
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-#
-#-------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 #-------------------------------------------------------------------------
 #  Imports:

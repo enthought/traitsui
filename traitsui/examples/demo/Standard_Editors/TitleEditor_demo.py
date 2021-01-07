@@ -1,5 +1,12 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
 """
 Demonstrates the use of the TitleEditor.
@@ -18,6 +25,10 @@ This demonstration shows three variations of using a TitleEditor:
 * In the third example, the TitleEditor values are supplied by a Property
   whose value is derived from a calculation on a Float trait. Type a number
   into the value field to cause the title to changed.
+
+Please refer to the `TitleEditor API docs`_ for further information.
+
+.. _TitleEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.title_editor.html#traitsui.editors.title_editor.TitleEditor
 """
 
 from traits.api import HasTraits, Enum, Str, Float, Property, cached_property

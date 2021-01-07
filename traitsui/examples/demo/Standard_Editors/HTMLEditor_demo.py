@@ -1,3 +1,13 @@
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 """
 HTML editor
 
@@ -16,6 +26,9 @@ The HTML editor can optionally be configured to do simple formatting of lists
 and paragraphs without HTML tags, by setting the editor's 'format_text'
 parameter True.
 
+Please refer to the `HTMLEditor API docs`_ for further information.
+
+.. _HTMLEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.html_editor.html#traitsui.editors.html_editor.HTMLEditor
 """
 
 from traits.api import HasTraits, HTML

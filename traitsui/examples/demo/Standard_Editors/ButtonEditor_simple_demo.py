@@ -1,3 +1,13 @@
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 """
 Button editor
 
@@ -5,6 +15,10 @@ A Button trait is displayed as a button in a Traits UI view. When the button is
 clicked, Traits UI will execute a method of your choice (a 'listener').
 
 In this example, the listener just increments a click counter.
+
+Please refer to the `ButtonEditor API docs`_ for further information.
+
+.. _ButtonEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.button_editor.html#traitsui.editors.button_editor.ButtonEditor
 """
 
 from traits.api import HasTraits, Button, Int

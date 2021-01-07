@@ -1,5 +1,12 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
 """
 **WARNING**
@@ -13,6 +20,10 @@ Implementation of an ImageEnumEditor demo plugin for the Traits UI demo
 program.
 
 This demo shows each of the four styles of the ImageEnumEditor.
+
+Please refer to the `ImageEnumEditor API docs`_ for further information.
+
+.. _ImageEnumEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.image_enum_editor.html#traitsui.editors.image_enum_editor.ImageEnumEditor
 """
 # Issues related to the demo warning:
 # enthought/traitsui#947
