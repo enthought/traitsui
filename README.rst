@@ -8,6 +8,12 @@ TraitsUI: Traits-capable windowing framework
 .. image:: https://ci.appveyor.com/api/projects/status/n2qy8kcwh8ibi9g3/branch/master?svg=true
    :target: https://ci.appveyor.com/project/EnthoughtOSS/traitsui/branch/master
 
+.. image:: https://github.com/enthought/traitsui/workflows/ETS%20from%20source/badge.svg 
+.. image:: https://github.com/enthought/traitsui/workflows/Test%20with%20PyPI/badge.svg
+.. image:: https://github.com/enthought/traitsui/workflows/Test%20with%20EDM/badge.svg
+.. image:: https://github.com/enthought/traitsui/workflows/Integration%20tests/badge.svg
+
+
 The TraitsUI project contains a toolkit-independent GUI abstraction layer,
 which is used to support the "visualization" features of the
 `Traits <http://github.com/enthought/traits>`__ package.
