@@ -85,7 +85,8 @@ class TargetRegistry:
     ``register_location`` supports extending ``UIWrapper.locate`` for a given
     UI target type and location type.
 
-    See :ref:`advanced-testing` Section in the User Manual for further details.
+    See :ref:`testing-how-extension-works` in the User Manual for further
+    details.
     """
 
     def __init__(self):

@@ -70,6 +70,9 @@ class UITester:
     def create_ui(self, object, ui_kwargs=None):
         """ Context manager to create a UI and dispose it upon exit.
 
+        This method does not modify the states of the :class:`UITester` and is
+        not a requirement for using other methods on the tester.
+
         Parameters
         ----------
         object : HasTraits
@@ -109,6 +112,10 @@ class UITester:
         """ Find the TraitsUI editor with the given name and return a new
         ``UIWrapper`` object for further interactions with the editor.
 
+        ``name`` is typically a value defined on
+        :attr:`traitsui.item.Item.name`. This name is passed onto
+        :func:`traitsui.ui.UI.get_editors`.
+
         Parameters
         ----------
         ui : traitsui.ui.UI
@@ -125,6 +132,10 @@ class UITester:
     def find_by_id(self, ui, id):
         """ Find the TraitsUI editor with the given identifier and return a new
         ``UIWrapper`` object for further interactions with the editor.
+
+        ``id`` is typically a value defined on :attr:`traitsui.item.Item.id`
+        or :attr:`traitsui.group.Group.id`. This provides a shortcut to locate
+        a very nested editor in a view.
 
         Parameters
         ----------
