@@ -5,6 +5,8 @@ Compatibility with Pyface test utilities
 (for testing with modal dialogs) and |GuiTestAssistant| (for general
 GUI event loop handling in tests).
 
+.. _testing-with-modal-dialogs:
+
 Testing with modal dialogs
 --------------------------
 
