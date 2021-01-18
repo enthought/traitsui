@@ -4,7 +4,7 @@ First simple test
 
 Suppose we have a TraitsUI GUI application like this::
 
-    from traits.api import HasTraits, Str, Property
+    from traits.api import HasTraits, observe, Str
     from traitsui.api import TextEditor, Item, View
 
 
@@ -12,10 +12,12 @@ Suppose we have a TraitsUI GUI application like this::
 
         first_name = Str()
         last_name = Str()
-        full_name = Property(depends_on=['first_name', 'last_name'])
+        full_name = Str()
 
-        def _get_full_name(self):
-            return " ".join([self.first_name, self.last_name])
+        @observe("first_name")
+        @observe("last_name")
+        def _full_name_updated(self, event):
+            self.full_name = " ".join([self.first_name, self.last_name])
 
         view = View(
             Item(name="first_name"),
@@ -172,17 +174,19 @@ If the application is written correctly, the test should pass.
 See the test capturing a bug
 ----------------------------
 
-If we forgot to include ``depends_on`` in the :func:`~traits.traits.Property`
-definition::
+If we forgot to add the :func:`~traits.has_traits.observe` decorators::
 
     class Form(HasTraits):
 
         first_name = Str()
         last_name = Str()
-        full_name = Property()   # oops, 'depends_on' is carelessly omitted.
+        full_name = Str()
 
-        def _get_full_name(self):
-            return " ".join([self.first_name, self.last_name])
+        # Let's suppose we left these out:
+        # @observe("first_name")
+        # @observe("last_name")
+        def _full_name_updated(self, event):
+            self.full_name = " ".join([self.first_name, self.last_name])
 
         view = View(
             Item(name="first_name"),
