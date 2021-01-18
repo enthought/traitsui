@@ -8,8 +8,8 @@ be aware that the GUI can react to any additional events that may be caused by
 these debugging activities, and this may cause the test to behave differently
 compared to running it in normal conditions.
 
-For example, if a test relies on GUI widget having the keyboard input focus, a
-Python debugger may interfere with the test by stealing focus from the GUI when
-a break point occurs.
+For example, if a test relies on a GUI widget having the keyboard input focus,
+a Python debugger may interfere with the test by stealing focus from the GUI
+when a break point occurs.
 
 .. include:: ../substitutions.rst
