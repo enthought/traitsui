@@ -18,7 +18,7 @@ Motivation
 In production environments, the GUI event loop typically blocks as it waits
 and processes new GUI events continuously, until the last window is closed.
 In tests, the GUI event loop needs to be run programmatically for a limited
-scope of commands and yields to test instructions every now and then while the
+scope of commands and yield to test instructions every now and then while the
 GUI is still open.
 
 In production environments, some unhandled exceptions are tolerated and
