@@ -8,6 +8,6 @@ be aware that the GUI can react to any additional events that may be caused by
 these debugging activities, causing the test to behave differently when run in
 debugging mode.
 
-For example, if a test relies on focus staying in or moving out of a GUI
-widget, a Python debugger may interfere with the test by stealing focus from
-the GUI when a break point occurs.
+For example, if a test relies on focus staying in a GUI widget, a Python
+debugger may interfere with the test by stealing focus from the GUI when a
+break point occurs.
