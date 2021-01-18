@@ -42,11 +42,12 @@ Discussions
 
    testing/discussions/automated_vs_manual_test
    testing/discussions/compatibility_pyface_testing
+   testing/discussions/event_loop_and_exceptions
    testing/discussions/target_interaction_location
    testing/discussions/working_of_extensions
 
-Technical References
-====================
+Technical Reference
+===================
 
 .. toctree::
    :maxdepth: 1
