@@ -4,8 +4,8 @@ GUI event processing and exception handling
 The testing API is designed such that GUI event processing is requested
 automatically wherever there may be pending GUI events. While events are being
 processed, the global exception handling is overridden temporarily in order to
-capture any unhandled exceptions. A test error is resulted if any exceptions
-are caught.
+capture any unhandled exceptions. If any exceptions are caught, a test error
+is raised after all pending events are processed.
 
 For example, |UIWrapper.locate|, |UIWrapper.perform| and |UIWrapper.inspect|
 all request pending events to be processed before and/or after interacting
