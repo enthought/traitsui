@@ -33,7 +33,7 @@ Likewise, |UIWrapper.locate| follows the same rule for the given target and
 location. See :ref:`testing-target-interaction-location` for an explanation on
 these three types of objects.
 
-This is how |UITester| supports testing on TraitsUI editor: It always extends
+This is how |UITester| supports testing on TraitsUI editor: It extends
 the given list of registries with more built-in registries that know how to
 interact with TraitsUI editors, and let |UIWrapper| do most of the work.
 
