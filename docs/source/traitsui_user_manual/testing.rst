@@ -46,8 +46,8 @@ Discussions
    testing/discussions/target_interaction_location
    testing/discussions/working_of_extensions
 
-Technical References
-====================
+Technical Reference
+===================
 
 .. toctree::
    :maxdepth: 1
