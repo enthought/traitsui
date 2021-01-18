@@ -41,6 +41,7 @@ Discussions
    :maxdepth: 1
 
    testing/discussions/automated_vs_manual_test
+   testing/discussions/debugging-gui-tests-at-runtime
    testing/discussions/compatibility_pyface_testing
    testing/discussions/target_interaction_location
    testing/discussions/working_of_extensions
