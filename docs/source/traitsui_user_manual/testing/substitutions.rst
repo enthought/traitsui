@@ -20,6 +20,7 @@
 .. |TargetRegistry.register_location| replace:: :class:`~traitsui.testing.tester.target_registry.TargetRegistry.register_location`
 
 .. |UITester| replace:: :class:`~traitsui.testing.tester.ui_tester.UITester`
+.. |UITester.auto_process_events| replace:: :attr:`~traitsui.testing.tester.ui_tester.UITester.auto_process_events`
 .. |UITester.create_ui| replace:: :func:`~traitsui.testing.tester.ui_tester.UITester.create_ui`
 .. |UITester.delay| replace:: :attr:`~traitsui.testing.tester.ui_tester.UITester.delay`
 .. |UITester.find_by_id| replace:: :func:`~traitsui.testing.tester.ui_tester.UITester.find_by_id`
