@@ -60,7 +60,7 @@ components managed by TraitsUI. The two can be used together in tests.
 |GuiTestAssistant| has been around before |UITester| is introduced.
 
 Since various methods on |UIWrapper| (such as |UIWrapper.perform| and
-|UIWrapper.inspect|) automatically request GUI events to be processed. Where
+|UIWrapper.inspect|) automatically request GUI events to be processed, where
 they are used entirely for modifying and inspecting GUI states, some previous
 usage of |GuiTestAssistant| features may no longer be necessary.
 
