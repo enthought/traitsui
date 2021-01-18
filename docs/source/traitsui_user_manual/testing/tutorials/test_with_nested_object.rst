@@ -108,7 +108,7 @@ prints something like this (abbreviated for the purpose of this section)::
         A locator for locating a target that is uniquely specified by a single
         0-based index.
 
-The |Index| object allows us to locate the second item on the combo box.
+The |Index| object allows us to locate an indexed item on the combo box.
 Objects listed in the "Locations" section can be used with |UIWrapper.locate|.
 So we add this line::
 
@@ -224,8 +224,8 @@ Now this is how the test looks like so far::
 Step 5: Check the pay is updated to the expected value
 ------------------------------------------------------
 
-``pay_field`` wraps a text box. We will go a little quicker to inspect its
-displayed value::
+``pay_field`` wraps a text box. We have seen in
+:ref:`testing-tutorial-first-test` how to obtain the displayed text::
 
         from traitsui.testing.api import DisplayedText
         displayed_pay = pay_field.inspect(DisplayedText())

@@ -1,3 +1,4 @@
+.. _testing-tutorial-first-test:
 
 First simple test
 =================

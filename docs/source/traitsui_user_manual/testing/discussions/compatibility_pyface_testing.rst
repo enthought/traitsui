@@ -1,9 +1,9 @@
-Interoperability with Pyface test utilities
-===========================================
+Compatibility with Pyface test utilities
+========================================
 
-|UITester| is intended to be interoperable with Pyface's |ModalDialogTester|,
-for testing with modal dialogs and |GuiTestAssistant|, for general
-GUI event loop handling in tests.
+|UITester| is intended to be compatible with Pyface's |ModalDialogTester|,
+(for testing with modal dialogs) and |GuiTestAssistant| (for general
+GUI event loop handling in tests).
 
 Testing with modal dialogs
 --------------------------
@@ -33,8 +33,8 @@ which then gets closed by |ModalDialogTester|::
         modal_tester.open_and_run(lambda x: x.click_button(OK))
         assert modal_tester.dialog_was_opened
 
-But if you are attempting to modify or inspect GUI states using |UITester|
-while the dialog is opened, you should set the ``auto_process_events``
+But if you try to modify or inspect GUI states using |UITester| while the
+dialog is opened, you should set the |UITester.auto_process_events|
 attribute to false for those operations. Otherwise the ModalDialogTester and
 UITester will enter a deadlock that blocks forever.
 

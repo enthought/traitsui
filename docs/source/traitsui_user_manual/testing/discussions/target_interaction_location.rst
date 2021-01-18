@@ -13,7 +13,7 @@ involved.
     buttons and text).
 
     An instance of |UIWrapper| wraps a target under the protected attribute
-    ``_target``.
+    |UIWrapper._target|.
 
 * Interaction
     is an object that wraps the information for performing an action
@@ -40,11 +40,11 @@ involved.
 Why is Target protected?
 ------------------------
 
-The |UIWrapper._target| is a protected attribute because it often exposes
+The |UIWrapper._target| attribute is protected because it often exposes
 implementation details of the GUI component being tested (e.g. it may refer to
 the Qt specific implementation of a ButtonEditor). Since it is best for tests
-to avoid dependencies on implementation details, the attribute is named with a
-single preceding underscore to discourage usage in test code.
+to avoid dependencies on implementation details, its usage in test code is
+discouraged.
 
 However, this attribute is expected to be used while extending the testing API,
 which inevitably requires knowledge of the implementation details on the tested
