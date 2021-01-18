@@ -52,6 +52,6 @@ Technical References
    :maxdepth: 1
 
    testing/references/examples
-   API References <../api/traitsui.testing>
+   API Reference <../api/traitsui.testing>
 
 .. include:: testing/substitutions.rst
