@@ -16,14 +16,14 @@ performed.
 The test code we wanted to achieve looks like this::
 
     container = UITester().find_by_id(ui, "some_container")
-    button_wrapper = container.locate(NamedButton("OK"))
+    button_wrapper = container.locate(LabelledButton("OK"))
 
 Define the location type
 ------------------------
 
-We can define the new ``NamedButton`` location type::
+We can define the new ``LabelledButton`` location type::
 
-    class NamedButton:
+    class LabelledButton:
         ''' Locator for locating a push button by label.'''
         def __init__(self, label):
             self.label = label
@@ -51,7 +51,7 @@ label can be written like this::
     def get_button(wrapper, location):
         """ Returns a ShinyButton from a UIWrapper wrapping ShinyPanel."""
         # wrapper is an instance of UIWrapper
-        # location is an instance of NamedButton
+        # location is an instance of LabelledButton
         return wrapper.target._buttons[location.label]
 
 The solvers can then be registered for the container UI target::
@@ -59,7 +59,7 @@ The solvers can then be registered for the container UI target::
     registry = TargetRegistry()
     registry.register_location(
         target_class=ShinyPanel,
-        locator_class=NamedButton,
+        locator_class=LabelledButton,
         solver=get_button,
     )
 
@@ -80,9 +80,9 @@ If we have also added a custom ``ManyMouseClick`` interaction (see section
 :ref:`testing-add-new-interaction`), we can write test code like this::
 
     container = UITester().find_by_id(ui, "some_container")
-    button_wrapper = container.locate(NamedButton("OK"))
+    button_wrapper = container.locate(LabelledButton("OK"))
     button_wrapper.perform(ManyMouseClick(n_times=10))
 
-where both ``NamedButton`` and ``ManyMouseClick`` are custom objects.
+where both ``LabelledButton`` and ``ManyMouseClick`` are custom objects.
 
 .. include:: ../substitutions.rst
