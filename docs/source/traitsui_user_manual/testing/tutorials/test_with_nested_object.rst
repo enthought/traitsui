@@ -18,7 +18,10 @@ Suppose we have a GUI application like this::
 
         min_hourly_wage = Float(10.0)
         n_hours = Enum([25, 40, 45])
-        pay_check = Instance(PayCheck, ())
+        pay_check = Instance(PayCheck)
+
+        def _pay_check_default(self):
+            return PayCheck(pay=self.min_hourly_wage, n_hours=self.n_hours)
 
         @observe("min_hourly_wage")
         @observe("n_hours")
@@ -33,6 +36,9 @@ Suppose we have a GUI application like this::
 
     app = App()
     app.configure_traits()
+
+
+.. figure:: images/test_with_nested_object/init-app.png
 
 
 When the user selects a different number of work hours in the combo box, the

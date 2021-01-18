@@ -29,9 +29,9 @@ Suppose we have a TraitsUI GUI application like this::
         form = Form()
         form.configure_traits()    # GUI appears
 
-.. figure:: images/first-test-init-app.png
+.. figure:: images/first_test/init-app.png
 
-.. figure:: images/first-test-modified-fields.png
+.. figure:: images/first_test/modified-fields.png
 
 As a user types in the first two text boxes, the last read only text field will
 be updated. A test that demonstrates this behavior will need to do the
