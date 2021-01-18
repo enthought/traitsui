@@ -240,9 +240,8 @@ autodo_mock_imports = [
 
 # Intersphinx configuration
 intersphinx_mapping = {
-    'pyface': ('http://docs.enthought.com/pyface', None),
-    "python": ("https://docs.python.org/3", None),
     'traits': ('http://docs.enthought.com/traits', None),
+    'pyface': ('http://docs.enthought.com/pyface', None),
 }
 
 
