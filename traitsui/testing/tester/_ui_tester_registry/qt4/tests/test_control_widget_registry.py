@@ -6,9 +6,6 @@ from traitsui.testing.api import IsEnabled
 from traitsui.testing.tester.exceptions import (
     LocationNotSupported,
 )
-from traitsui.testing.tester._ui_tester_registry.qt4._control_widget_registry import (
-    QtControlWidgetRegistry,
-)
 from traitsui.testing.tester.ui_wrapper import UIWrapper
 from traitsui.tests._tools import (
     is_qt,
@@ -21,7 +18,10 @@ try:
 except ImportError:
     if is_qt():
         raise
-
+else:
+    from traitsui.testing.tester._ui_tester_registry.qt4._control_widget_registry import (
+        QtControlWidgetRegistry,
+    )
 
 class TargetWithControl:
     """ An object holding a control attribute."""
