@@ -22,6 +22,7 @@ from traitsui.testing.tester._ui_tester_registry.wx._traitsui import (
     text_editor,
     ui_base,
 )
+from ._control_widget_registry import get_widget_registry
 
 
 def get_default_registries():
@@ -68,4 +69,8 @@ def get_default_registries():
     # Editor Factory
     editor_factory.register(registry)
 
-    return [registry]
+    # More general registry follows more specific registry
+    return [
+        registry,
+        get_widget_registry(),
+    ]
