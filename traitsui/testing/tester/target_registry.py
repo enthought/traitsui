@@ -14,6 +14,10 @@ implementations for testing various GUI elements.
 
 import inspect
 
+
+from traitsui.testing.tester._abstract_target_registry import (
+    AbstractTargetRegistry,
+)
 from traitsui.testing.tester.exceptions import (
     InteractionNotSupported,
     LocationNotSupported,
@@ -75,7 +79,7 @@ class _TargetToKeyRegistry:
         return set(self._target_to_key_to_value.get(target_class, []))
 
 
-class TargetRegistry:
+class TargetRegistry(AbstractTargetRegistry):
     """ An object for registering interaction and location resolution logic
     for different UI target types.
 
@@ -137,8 +141,7 @@ class TargetRegistry:
         )
 
     def get_handler(self, target, interaction):
-        """ Return a callable for handling an interaction for a given target
-        type.
+        """ Return a callable for handling an interaction for a given target.
 
         Parameters
         ----------
@@ -164,7 +167,7 @@ class TargetRegistry:
         )
 
     def get_interactions(self, target):
-        """ Returns all the interactions supported for the given target type.
+        """ Returns all the interactions supported for the given target.
 
         Parameters
         ----------
@@ -255,7 +258,7 @@ class TargetRegistry:
         )
 
     def get_locations(self, target):
-        """ Returns all the location types supported for the given target type.
+        """ Returns all the location types supported for the given target.
 
         Parameters
         ----------
