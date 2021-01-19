@@ -20,7 +20,7 @@ class DynamicTargetRegistry(AbstractTargetRegistry):
     can_support : callable(target) -> bool
         A callable that return true if the given target is supported
         by the registry.
-    interaction_type_to_handler : dict(type, callable)
+    interaction_to_handler : dict(type, callable)
         A dictionary mapping from interaction type to handler callables
     """
 
