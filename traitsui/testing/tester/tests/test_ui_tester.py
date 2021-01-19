@@ -210,3 +210,15 @@ class TestUITesterFindEditor(unittest.TestCase):
         with tester.create_ui(Order(), dict(view=view)) as ui:
             tester.find_by_id(ui, "item")
             self.assertEqual(side_effect.call_count, 0)
+
+
+class TestUITesterGuiFree(unittest.TestCase):
+    """ Test GUI free interface on UITester."""
+
+    def test_auto_process_events_readonly(self):
+        # auto_process_events can be inspected, but it cannot be changed.
+        tester = UITester(auto_process_events=False)
+        self.assertIs(tester.auto_process_events, False)
+
+        with self.assertRaises(AttributeError):
+            tester.auto_process_events = True

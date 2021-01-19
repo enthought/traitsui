@@ -66,6 +66,22 @@ class UITester:
         self.delay = delay
         self._auto_process_events = auto_process_events
 
+    @property
+    def auto_process_events(self):
+        """ Flag to indicate whether to process (cascade) GUI events
+        automatically. This is propagated through to
+        :class:`~traitsui.testing.tester.ui_wrapper.UIWrapper` instances
+        created from this tester.
+
+        Although this value can only be set at instantiation, multiple
+        :class:`~traitsui.testing.tester.ui_tester.UITester` instances with
+        different settings can be used together.
+        """
+        # No mutations post-init are allowed because UIWrapper created prior to
+        # the mutation will not respect the new value, and so it would be
+        # confusing if this attribute was allowed to be mutated.
+        return self._auto_process_events
+
     @contextlib.contextmanager
     def create_ui(self, object, ui_kwargs=None):
         """ Context manager to create a UI and dispose it upon exit.
