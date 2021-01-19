@@ -1,16 +1,10 @@
 """ Implement the interface of AbstractTargetRegistry to support
 testing any target whose 'control' attribute refers to a QWidget.
 """
-import inspect
-
 from pyface.qt import QtGui
 
-from traitsui.testing.tester._abstract_target_registry import (
-    AbstractTargetRegistry,
-)
-from traitsui.testing.tester.exceptions import (
-    InteractionNotSupported,
-    LocationNotSupported,
+from traitsui.testing.tester._base_dynamic_registry import (
+    BaseDynamicRegistry,
 )
 from traitsui.testing.tester.query import IsEnabled
 
@@ -28,7 +22,7 @@ def _handle_is_enabled(wrapper, interaction):
     return wrapper._target.control.isEnabled()
 
 
-class QtControlWidgetRegistry(AbstractTargetRegistry):
+class QtControlWidgetRegistry(BaseDynamicRegistry):
     """ A registry to support any target with an attribute 'control' that is
     an instance of QWidget.
     """
@@ -53,50 +47,4 @@ class QtControlWidgetRegistry(AbstractTargetRegistry):
         return (
             hasattr(target, "control")
             and isinstance(target.control, QtGui.QWidget)
-        )
-
-    def get_handler(self, target, interaction):
-        """ Reimplemented AbstractTargetRegistry.get_handler """
-        if interaction.__class__ not in self.get_interactions(target):
-            raise InteractionNotSupported(
-                target_class=target.__class__,
-                interaction_class=interaction.__class__,
-                supported=list(self.get_interactions(target)),
-            )
-        return self._INTERACTION_TO_HANDLER[interaction.__class__]
-
-    def get_interactions(self, target):
-        """ Reimplemented AbstractTargetRegistry.get_interactions """
-        if self._is_target_accepted(target):
-            return set(self._INTERACTION_TO_HANDLER)
-        return set()
-
-    def get_interaction_doc(self, target, interaction_class):
-        """ Reimplemented AbstractTargetRegistry.get_interaction_doc """
-        if interaction_class not in self.get_interactions(target):
-            raise InteractionNotSupported(
-                target_class=target.__class__,
-                interaction_class=interaction_class,
-                supported=list(self.get_interactions(target)),
-            )
-        return inspect.getdoc(interaction_class)
-
-    def get_solver(self, target, location):
-        """ Reimplemented AbstractTargetRegistry.get_solver """
-        raise LocationNotSupported(
-            target_class=target.__class__,
-            locator_class=location.__class__,
-            supported=[],
-        )
-
-    def get_locations(self, target):
-        """ Reimplemented AbstractTargetRegistry.get_locations """
-        return set()
-
-    def get_location_doc(self, target, locator_class):
-        """ Reimplemented AbstractTargetRegistry.get_location_doc """
-        raise LocationNotSupported(
-            target_class=target.__class__,
-            locator_class=locator_class,
-            supported=[],
         )
