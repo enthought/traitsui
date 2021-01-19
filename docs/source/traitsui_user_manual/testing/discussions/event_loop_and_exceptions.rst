@@ -10,7 +10,7 @@ is raised after all pending events are processed.
 For example, |UIWrapper.locate|, |UIWrapper.perform| and |UIWrapper.inspect|
 all request pending events to be processed before and/or after interacting
 with GUI states. This automatic behavior is enabled by default, but it can be
-disabled via the |UITester.auto_process_events| flag (see
+disabled via the ``auto_process_events`` flag to |UITester| (see
 :ref:`testing-with-modal-dialogs` for example).
 
 Motivation
