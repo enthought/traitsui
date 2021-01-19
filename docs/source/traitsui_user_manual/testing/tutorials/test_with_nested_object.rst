@@ -21,7 +21,7 @@ Suppose we have a GUI application like this::
         pay_check = Instance(PayCheck)
 
         def _pay_check_default(self):
-            return PayCheck(pay=self.min_hourly_wage, n_hours=self.n_hours)
+            return PayCheck(pay=self.min_hourly_wage*self.n_hours)
 
         @observe("min_hourly_wage")
         @observe("n_hours")
