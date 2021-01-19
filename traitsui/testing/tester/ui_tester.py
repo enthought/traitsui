@@ -62,7 +62,7 @@ class UITester:
         # This registry contributes the support for TraitsUI UI and editors.
         # The find_by_name/find_by_id methods in this class also depend on
         # this registry.
-        self._registries.append(get_default_registries())
+        self._registries.extend(get_default_registries())
         self.delay = delay
         self._auto_process_events = auto_process_events
 
