@@ -1,4 +1,4 @@
-""" Tests for QtControlWidgetRegistry """
+""" Tests for QWidget's DynamicTargetRegistry """
 
 import unittest
 
@@ -32,8 +32,7 @@ class TargetWithControl:
 
 @requires_toolkit([ToolkitName.qt])
 class TestQtControlWidgetRegistry(unittest.TestCase):
-    """ Test the interface of AbstractTargetRegistry for
-    QtControlWidgetRegistry
+    """ Test the interface of AbstractTargetRegistry for QWidget's registry
     """
 
     def setUp(self):

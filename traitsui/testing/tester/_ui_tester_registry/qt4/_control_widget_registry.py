@@ -1,5 +1,5 @@
-""" Implement the interface of AbstractTargetRegistry to support
-testing any target whose 'control' attribute refers to a QWidget.
+""" This module provides a getter to obtain an AbstractTargetRegistry that can
+support testing any target whose 'control' attribute refers to a QWidget.
 """
 from pyface.qt import QtGui
 
