@@ -7,12 +7,6 @@ public when there is an external need.
 import abc
 
 
-from traitsui.testing.tester.exceptions import (
-    InteractionNotSupported,
-    LocationNotSupported,
-)
-
-
 class AbstractTargetRegistry(abc.ABC):
     """ Abstract base class which defines the registry interface expected
     by :class:`~traitsui.testing.tester.ui_wrapper.UIWrapper`.
