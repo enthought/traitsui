@@ -12,7 +12,7 @@
 This package provide functionality to help testing GUI applications built
 using TraitsUI.
 
-The top-level ``api`` module exposes the public API for external projects.
+The top-level ``api`` module re-exposes the public API for convenience.
 
 Private modules in this package serve TraitsUI only.
 """
