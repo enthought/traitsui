@@ -54,7 +54,7 @@ class UIWrapper:
     target : any
         An object on which further UI target can be searched for, or can be
         a leaf target that can be operated on.
-    registries : list of TargetRegistry
+    registries : list of AbstractTargetRegistry
         Registries of interaction for different target, in the order
         of decreasing priority.
     delay : int, optional
@@ -101,13 +101,17 @@ class UIWrapper:
 
         # Order registries by their priority (low to high)
         for registry in self._registries[::-1]:
-            for type_ in registry.get_interactions(self._target.__class__):
+            for type_ in registry.get_interactions(self._target):
                 interaction_to_doc[type_] = registry.get_interaction_doc(
-                    self._target.__class__, type_)
+                    target=self._target,
+                    interaction_class=type_,
+                )
 
-            for type_ in registry.get_locations(self._target.__class__):
+            for type_ in registry.get_locations(self._target):
                 location_to_doc[type_] = registry.get_location_doc(
-                    self._target.__class__, type_)
+                    target=self._target,
+                    locator_class=type_,
+                )
 
         print("Interactions")
         print("------------")
@@ -290,13 +294,12 @@ class UIWrapper:
             If the given interaction does not have a corresponding
             implementation for the wrapped UI target.
         """
-        interaction_class = interaction.__class__
         supported = []
         for registry in self._registries:
             try:
                 handler = registry.get_handler(
-                    target_class=self._target.__class__,
-                    interaction_class=interaction_class,
+                    target=self._target,
+                    interaction=interaction,
                 )
             except InteractionNotSupported as e:
                 supported.extend(e.supported)
@@ -337,8 +340,8 @@ class UIWrapper:
         for registry in self._registries:
             try:
                 handler = registry.get_solver(
-                    self._target.__class__,
-                    location.__class__,
+                    target=self._target,
+                    location=location,
                 )
             except LocationNotSupported as e:
                 supported |= set(e.supported)
