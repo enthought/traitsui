@@ -11,7 +11,7 @@
 import unittest
 
 from traitsui.testing.tester._ui_tester_registry.default_registry import (
-    get_default_registry
+    get_default_registries
 )
 from traitsui.testing.api import TargetRegistry
 from traitsui.tests._tools import is_null
@@ -20,7 +20,7 @@ from traitsui.tests._tools import is_null
 class TestDefaultRegistry(unittest.TestCase):
 
     def test_load_default_registries(self):
-        registry = get_default_registry()
+        registry = get_default_registries()
         self.assertIsInstance(registry, TargetRegistry)
         if not is_null():
             self.assertGreaterEqual(

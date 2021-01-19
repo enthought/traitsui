@@ -16,7 +16,7 @@ import contextlib
 from traitsui.testing._gui import process_cascade_events
 from traitsui.testing._exception_handling import reraise_exceptions
 from traitsui.testing.tester._ui_tester_registry.default_registry import (
-    get_default_registry
+    get_default_registries
 )
 from traitsui.testing.tester.ui_wrapper import UIWrapper
 
@@ -62,7 +62,7 @@ class UITester:
         # This registry contributes the support for TraitsUI UI and editors.
         # The find_by_name/find_by_id methods in this class also depend on
         # this registry.
-        self._registries.append(get_default_registry())
+        self._registries.append(get_default_registries())
         self.delay = delay
         self._auto_process_events = auto_process_events
 

@@ -24,7 +24,7 @@ from traitsui.testing.tester._ui_tester_registry.qt4._traitsui import (
 )
 
 
-def get_default_registry():
+def get_default_registries():
     """ Creates a default registry for UITester that is qt specific.
 
     Returns

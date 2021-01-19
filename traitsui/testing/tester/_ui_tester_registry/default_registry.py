@@ -19,7 +19,7 @@ from traitsui.testing.tester._ui_tester_registry._traitsui_ui import (
 from traitsui.ui import UI
 
 
-def get_default_registry():
+def get_default_registries():
     """ Creates a default registry for UITester that is toolkit specific.
 
     Returns
@@ -38,7 +38,7 @@ def get_default_registry():
         module = importlib.import_module(
             ".default_registry",
             this_package + '.' + toolkit)
-        registry = module.get_default_registry()
+        registry = module.get_default_registries()
     register_traitsui_ui_solvers(
         registry=registry,
         target_class=UI,
