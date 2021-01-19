@@ -12,31 +12,21 @@ from traitsui.testing.tester.exceptions import (
 )
 
 
-class BaseDynamicRegistry(AbstractTargetRegistry):
+class DynamicTargetRegistry(AbstractTargetRegistry):
     """ A registry to support targets with dynamic checks.
 
-    Subclass should populate the _INTERACTION_TO_HANDLER mapping
-    and implement _is_target_accepted method.
+    Parameters
+    ----------
+    can_support : callable(target) -> bool
+        A callable that return true if the given target is supported
+        by the registry.
+    interaction_type_to_handler : dict(type, callable)
+        A dictionary mapping from interaction type to handler callables
     """
 
-    #: A dictionary mapping from interaction type to handler callable
-    #: Subclass should propulate this mapping.
-    _INTERACTION_TO_HANDLER = {}
-
-    def _is_target_accepted(self, target):
-        """ Return true if the target is accepted by the registry.
-        Subclass must implement this method.
-
-        Parameters
-        ----------
-        target : any
-            Any UI target
-
-        Returns
-        -------
-        is_accepted : bool
-        """
-        raise NotImplementedError("_is_target_accepted must be implemented.")
+    def __init__(self, *, can_support, interaction_to_handler):
+        self.can_support = can_support
+        self.interaction_to_handler = interaction_to_handler
 
     def get_handler(self, target, interaction):
         """ Reimplemented AbstractTargetRegistry.get_handler """
@@ -46,12 +36,12 @@ class BaseDynamicRegistry(AbstractTargetRegistry):
                 interaction_class=interaction.__class__,
                 supported=list(self.get_interactions(target)),
             )
-        return self._INTERACTION_TO_HANDLER[interaction.__class__]
+        return self.interaction_to_handler[interaction.__class__]
 
     def get_interactions(self, target):
         """ Reimplemented AbstractTargetRegistry.get_interactions """
-        if self._is_target_accepted(target):
-            return set(self._INTERACTION_TO_HANDLER)
+        if self.can_support(target):
+            return set(self.interaction_to_handler)
         return set()
 
     def get_interaction_doc(self, target, interaction_class):

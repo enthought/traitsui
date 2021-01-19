@@ -22,7 +22,7 @@ from traitsui.testing.tester._ui_tester_registry.qt4._traitsui import (
     text_editor,
     ui_base,
 )
-from ._control_widget_registry import QtControlWidgetRegistry
+from ._control_widget_registry import get_widget_registry
 
 
 def get_default_registries():
@@ -69,9 +69,8 @@ def get_default_registries():
     # Editor Factory
     editor_factory.register(registry)
 
-    # The more general QtControlWidgetRegistry goes after the more specific
-    # editor registry.
+    # The more general registry goes after the more specific registry.
     return [
         registry,
-        QtControlWidgetRegistry(),
+        get_widget_registry(),
     ]

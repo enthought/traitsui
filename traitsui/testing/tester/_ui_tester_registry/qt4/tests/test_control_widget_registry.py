@@ -20,7 +20,7 @@ except ImportError:
         raise
 else:
     from traitsui.testing.tester._ui_tester_registry.qt4._control_widget_registry import (
-        QtControlWidgetRegistry,
+        get_widget_registry,
     )
 
 class TargetWithControl:
@@ -38,7 +38,7 @@ class TestQtControlWidgetRegistry(unittest.TestCase):
 
     def setUp(self):
         self.widget = QtGui.QWidget()
-        self.registry = QtControlWidgetRegistry()
+        self.registry = get_widget_registry()
         self.target = TargetWithControl(self.widget)
         self.good_wrapper = UIWrapper(
             target=self.target,
