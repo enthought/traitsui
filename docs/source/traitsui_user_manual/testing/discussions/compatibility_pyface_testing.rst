@@ -35,10 +35,10 @@ which then gets closed by |ModalDialogTester|::
         modal_tester.open_and_run(lambda x: x.click_button(OK))
         assert modal_tester.dialog_was_opened
 
-But if you intend to modify or inspect GUI states using |UITester| while the
-dialog is open, you should set ``auto_process_events`` to False when
-instantiating |UITester|. Otherwise the |ModalDialogTester| and |UITester|
-will enter a deadlock that blocks forever.
+But if you try to modify or inspect GUI states using |UITester| while the
+dialog is opened, you should set the |UITester.auto_process_events|
+attribute to false for those operations. Otherwise the ModalDialogTester and
+UITester will enter a deadlock that blocks forever.
 
 Example::
 
