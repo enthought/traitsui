@@ -27,6 +27,7 @@ from traitsui.testing.api import (
     Disabled,
     DisplayedText,
     Index,
+    IsEnabled,
     KeyClick,
     KeySequence,
     MouseClick,
@@ -340,6 +341,7 @@ class TestSimpleEnumEditor(BaseTestMixin, unittest.TestCase):
                 combobox.perform(KeyClick("Enter"))
             with self.assertRaises(Disabled):
                 combobox.perform(KeySequence("two"))
+            self.assertFalse(combobox.inspect(IsEnabled()))
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
