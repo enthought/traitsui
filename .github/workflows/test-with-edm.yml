@@ -50,6 +50,10 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest]
         toolkit: ['pyqt', 'pyqt5', 'pyside2', 'wx']
+        exclude:
+          # tests fail on wx/OSX, and no allow-failure options.
+          - os: macos-latest
+            toolkit: wx
     runs-on: ${{ matrix.os }}
     env:
       # Set root directory, mainly for Windows, so that the EDM Python
