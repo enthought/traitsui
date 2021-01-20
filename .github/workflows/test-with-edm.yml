@@ -49,7 +49,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
-        toolkit: ['pyqt5', 'pyside2', 'wx']
+        toolkit: ['pyqt', 'pyqt5', 'pyside2', 'wx']
         exclude:
           # tests fail on wx/OSX, and no allow-failure options.
           - os: macos-latest
