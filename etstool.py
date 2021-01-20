@@ -250,9 +250,13 @@ def install(runtime, toolkit, environment, editable, source):
                 "edm run -e {environment} -- pip install wxPython"
             )
         else:
-            # XXX this is mainly for TravisCI workers; need a generic solution
+            ubuntu_version = _get_ubuntu_version()
+            wx_prebuilt_url = (
+                f"https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-{ubuntu_version}/"  # noqa: E501
+            )
             commands.append(
-                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04/ wxPython"
+                "edm run -e {environment} -- "
+                "pip install -f " + wx_prebuilt_url + " wxPython"
             )
 
     click.echo("Creating environment '{environment}'".format(**parameters))
@@ -536,6 +540,29 @@ def execute(commands, parameters):
         except subprocess.CalledProcessError as exc:
             click.echo(str(exc))
             sys.exit(1)
+
+
+def _get_ubuntu_version():
+    """ Return the major.minor version of the Ubuntu distribution.
+    Will raise an error if this function is not called in an Ubuntu machine.
+    Returns
+    -------
+    dist_version : str
+        Ubuntu distribution version, e.g. "16.04
+    """
+    if sys.platform != "linux":
+        raise RuntimeError("This function cannot be run on Linux.")
+
+    # Confirm Linux distribution
+    result = subprocess.check_output(["lsb_release", "-i"], encoding="utf-8")
+    _, _, dist_name = result.split()   # e.g. ['Distributor', 'ID:', 'Ubuntu']
+    if dist_name != "Ubuntu":
+        raise RuntimeError(f"Not Ubuntu. lsb_release -i returns: {result!r}")
+
+    # Get version
+    result = subprocess.check_output(["lsb_release", "-r"], encoding="utf-8")
+    _, version = result.split()   # e.g. ['Release:', '16.04']
+    return version
 
 
 if __name__ == '__main__':
