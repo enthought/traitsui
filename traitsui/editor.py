@@ -173,8 +173,8 @@ class Editor(HasPrivateTraits):
         """
         raise NotImplementedError("This method must be overriden.")
 
-    def set_tooltip(self, control=None):
-        """ Sets the tooltip for a specified toolkit control.
+    def set_tooltip_text(self, control, text):
+        """ Sets the tooltip for a toolkit control to the provided text.
 
         This method must be overriden by subclasses.  The tooltip_text
         method can be used to get a suitable value for the tooltip
@@ -182,13 +182,10 @@ class Editor(HasPrivateTraits):
 
         Parameters
         ----------
+        text : str
+            The text to use for the tooltip.
         control : toolkit control
             The toolkit control that is having the tooltip set.
-
-        Returns
-        -------
-        tooltip_set : bool
-            Whether or not a tooltip value could be set.
         """
         raise NotImplementedError("This method must be overriden.")
 
@@ -424,6 +421,33 @@ class Editor(HasPrivateTraits):
             object = self.context_object
 
         return (object, name, partial(xgetattr, object, name))
+
+    def set_tooltip(self, control=None):
+        """ Sets the tooltip for a specified toolkit control.
+
+        This uses the tooltip_text method to get the text to use.
+
+        Parameters
+        ----------
+        control : optional toolkit control
+            The toolkit control that is having the tooltip set.  If None
+            then the editor's control is used.
+
+        Returns
+        -------
+        tooltip_set : bool
+            Whether or not a tooltip value could be set.
+        """
+        text = self.tooltip_text()
+        if text is None:
+            return False
+
+        if control is None:
+            control = self.control
+
+        self.set_tooltip_text(control, text)
+
+        return True
 
     def tooltip_text(self):
         """ Get the text for a tooltip, checking various sources.

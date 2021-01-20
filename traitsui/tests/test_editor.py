@@ -36,6 +36,9 @@ class FakeControl(HasTraits):
     #: An event which also can be fired.
     control_event = Event()
 
+    #: The tooltip text for the control.
+    tooltip = Any()
+
 
 class StubEditorFactory(EditorFactory):
     """ A minimal editor factory
@@ -97,6 +100,7 @@ class StubEditor(Editor):
             self.control.on_trait_change(self.update_object, "control_event")
         else:
             self.control.on_trait_change(self.update_object, "control_value")
+        self.set_tooltip()
 
     def dispose(self):
         if self.is_event:
@@ -124,8 +128,8 @@ class StubEditor(Editor):
                 finally:
                     self._no_update = False
 
-    def set_tooltip(self, control=None):
-        pass
+    def set_tooltip_text(self, control, text):
+        control.tooltip = text
 
     def set_focus(self, parent):
         pass
@@ -420,7 +424,7 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
 
         editor.dispose()
 
-    def test_tooltip_text_default(self):
+    def test_tooltip_default(self):
         context = {
             "object": UserObject(),
         }
@@ -429,13 +433,18 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
 
         # test tooltip text
         try:
+            self.assertIsNone(editor.control.tooltip)
+
             tooltip_text = editor.tooltip_text()
             self.assertIsNone(tooltip_text)
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertFalse(set_tooltip_result)
         except Exception:
             editor.dispose()
             raise
 
-    def test_tooltip_text_with_description(self):
+    def test_tooltip_from_description(self):
         context = {
             "object": UserObject(),
         }
@@ -444,8 +453,13 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
 
         # test tooltip text
         try:
+            self.assertEqual(editor.control.tooltip, "a tooltip")
+
             tooltip_text = editor.tooltip_text()
             self.assertEqual(tooltip_text, "a tooltip")
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertTrue(set_tooltip_result)
         except Exception:
             editor.dispose()
             raise
@@ -459,8 +473,13 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
 
         # test tooltip text
         try:
+            self.assertEqual(editor.control.tooltip, "a tooltip")
+
             tooltip_text = editor.tooltip_text()
             self.assertEqual(tooltip_text, "a tooltip")
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertTrue(set_tooltip_result)
         except Exception:
             editor.dispose()
             raise
@@ -474,8 +493,19 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
 
         # test tooltip text
         try:
+            self.assertEqual(
+                editor.control.tooltip,
+                "Specifies a trait with desc metadata",
+            )
+
             tooltip_text = editor.tooltip_text()
-            self.assertEqual(tooltip_text, "Specifies a trait with desc metadata")
+            self.assertEqual(
+                tooltip_text,
+                "Specifies a trait with desc metadata",
+            )
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertTrue(set_tooltip_result)
         except Exception:
             editor.dispose()
             raise
