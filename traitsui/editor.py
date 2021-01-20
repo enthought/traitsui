@@ -176,9 +176,7 @@ class Editor(HasPrivateTraits):
     def set_tooltip_text(self, control, text):
         """ Sets the tooltip for a toolkit control to the provided text.
 
-        This method must be overriden by subclasses.  The tooltip_text
-        method can be used to get a suitable value for the tooltip
-        text.
+        This method must be overriden by subclasses.
 
         Parameters
         ----------
