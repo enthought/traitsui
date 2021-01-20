@@ -22,11 +22,10 @@ jobs:
     runs-on: ubuntu-16.04
     steps:
       - uses: actions/checkout@v2
+
       - name: Install Qt dependencies for Linux
-        run: |
-          sudo apt-get update
-          sudo apt-get install libxkbcommon-x11-0
-        if: matrix.toolkit != 'wx'
+        uses: ./.github/actions/apt-get-qt-deps
+        if: matrix.toolkit != 'wx' && matrix.toolkit != 'null'
       - name: Install Wx dependencies for Linux
         run: |
           sudo apt-get update
