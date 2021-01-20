@@ -18,7 +18,7 @@ jobs:
   test-edm-linux:
     strategy:
       matrix:
-        toolkit: ['null', 'pyqt', 'pyqt5', 'pyside2', 'wx']
+        toolkit: ['null', 'pyqt', 'pyqt5', 'pyside2']
     runs-on: ubuntu-16.04
     steps:
       - uses: actions/checkout@v2
@@ -26,11 +26,6 @@ jobs:
       - name: Install Qt dependencies for Linux
         uses: ./.github/actions/apt-get-qt-deps
         if: matrix.toolkit != 'wx' && matrix.toolkit != 'null'
-      - name: Install Wx dependencies for Linux
-        run: |
-          sudo apt-get update
-          sudo apt-get install libsdl2-2.0-0
-        if: matrix.toolkit == 'wx'
       - name: Cache EDM packages
         uses: actions/cache@v2
         with:
