@@ -101,14 +101,14 @@ class UIWrapper:
 
         # Order registries by their priority (low to high)
         for registry in self._registries[::-1]:
-            for type_ in registry.get_interactions(self._target):
-                interaction_to_doc[type_] = registry.get_interaction_doc(
+            for type_ in registry._get_interactions(self._target):
+                interaction_to_doc[type_] = registry._get_interaction_doc(
                     target=self._target,
                     interaction_class=type_,
                 )
 
-            for type_ in registry.get_locations(self._target):
-                location_to_doc[type_] = registry.get_location_doc(
+            for type_ in registry._get_locations(self._target):
+                location_to_doc[type_] = registry._get_location_doc(
                     target=self._target,
                     locator_class=type_,
                 )
@@ -297,7 +297,7 @@ class UIWrapper:
         supported = []
         for registry in self._registries:
             try:
-                handler = registry.get_handler(
+                handler = registry._get_handler(
                     target=self._target,
                     interaction=interaction,
                 )
@@ -339,7 +339,7 @@ class UIWrapper:
         supported = set()
         for registry in self._registries:
             try:
-                handler = registry.get_solver(
+                handler = registry._get_solver(
                     target=self._target,
                     location=location,
                 )

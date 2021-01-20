@@ -60,26 +60,26 @@ class TestWxControlWidgetRegistry(unittest.TestCase):
 
     def test_get_interactions_good_target(self):
         self.assertEqual(
-            self.registry.get_interactions(self.target),
+            self.registry._get_interactions(self.target),
             set([IsEnabled])
         )
 
     def test_get_interactions_bad_target(self):
-        self.assertEqual(self.registry.get_interactions(None), set())
+        self.assertEqual(self.registry._get_interactions(None), set())
 
     def test_get_interaction_doc(self):
         self.assertGreater(
-            len(self.registry.get_interaction_doc(self.target, IsEnabled)), 0
+            len(self.registry._get_interaction_doc(self.target, IsEnabled)), 0
         )
 
     def test_get_location_solver(self):
         # There are currently no solvers
         with self.assertRaises(LocationNotSupported):
-            self.registry.get_solver(self.target, None)
+            self.registry._get_solver(self.target, None)
 
     def test_get_locations(self):
-        self.assertEqual(self.registry.get_locations(self.target), set())
+        self.assertEqual(self.registry._get_locations(self.target), set())
 
     def test_error_get_location_doc(self):
         with self.assertRaises(LocationNotSupported):
-            self.registry.get_location_doc(self.target, None)
+            self.registry._get_location_doc(self.target, None)

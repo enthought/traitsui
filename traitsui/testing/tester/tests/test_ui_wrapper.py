@@ -77,7 +77,7 @@ class StubRegistry(AbstractTargetRegistry):
         self.interaction_doc = interaction_doc
         self.location_doc = location_doc
 
-    def get_handler(self, target, interaction):
+    def _get_handler(self, target, interaction):
         if interaction.__class__ not in self.supported_interaction_classes:
             raise InteractionNotSupported(
                 target_class=target.__class__,
@@ -86,13 +86,13 @@ class StubRegistry(AbstractTargetRegistry):
             )
         return self.handler
 
-    def get_interactions(self, target):
+    def _get_interactions(self, target):
         return set(self.supported_interaction_classes)
 
-    def get_interaction_doc(self, target, interaction_class):
+    def _get_interaction_doc(self, target, interaction_class):
         return self.interaction_doc
 
-    def get_solver(self, target, location):
+    def _get_solver(self, target, location):
         if location.__class__ not in self.supported_locator_classes:
             raise LocationNotSupported(
                 target_class=target.__class__,
@@ -101,10 +101,10 @@ class StubRegistry(AbstractTargetRegistry):
             )
         return self.solver
 
-    def get_locations(self, target):
+    def _get_locations(self, target):
         return set(self.supported_locator_classes)
 
-    def get_location_doc(self, target, locator_class):
+    def _get_location_doc(self, target, locator_class):
         return self.location_doc
 
 

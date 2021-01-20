@@ -31,7 +31,7 @@ class TestInteractionRegistry(unittest.TestCase):
 
         registry = TargetRegistry()
         with self.assertRaises(InteractionNotSupported) as exception_context:
-            registry.get_handler(SpecificTarget(), Action())
+            registry._get_handler(SpecificTarget(), Action())
 
         self.assertEqual(
             str(exception_context.exception),
@@ -59,7 +59,7 @@ class TestInteractionRegistry(unittest.TestCase):
         )
 
         # then
-        actual = registry.get_handler(SpecificEditor(), UserAction())
+        actual = registry._get_handler(SpecificEditor(), UserAction())
         self.assertIs(actual, handler)
 
     def test_get_interactions_supported(self):
@@ -91,7 +91,7 @@ class TestInteractionRegistry(unittest.TestCase):
 
         # then
         self.assertEqual(
-            registry.get_interactions(SpecificEditor()),
+            registry._get_interactions(SpecificEditor()),
             set([UserAction, UserAction2])
         )
 
@@ -123,7 +123,7 @@ class TestInteractionRegistry(unittest.TestCase):
         registry.register_interaction(SpecificEditor2, UserAction3, handler)
 
         with self.assertRaises(InteractionNotSupported) as exception_context:
-            registry.get_handler(SpecificEditor2(), None)
+            registry._get_handler(SpecificEditor2(), None)
 
         self.assertIn(UserAction2, exception_context.exception.supported)
         self.assertIn(UserAction3, exception_context.exception.supported)
@@ -151,7 +151,7 @@ class TestInteractionRegistry(unittest.TestCase):
         # The registry is empty
         registry = TargetRegistry()
         with self.assertRaises(InteractionNotSupported):
-            registry.get_interaction_doc(2.1, int)
+            registry._get_interaction_doc(2.1, int)
 
     def test_get_default_interaction_doc(self):
 
@@ -169,7 +169,7 @@ class TestInteractionRegistry(unittest.TestCase):
             handler=handler,
         )
 
-        actual = registry.get_interaction_doc(
+        actual = registry._get_interaction_doc(
             target=21.2, interaction_class=Action,
         )
         self.assertEqual(actual, "Some action.")
@@ -187,7 +187,7 @@ class TestLocationRegistry(unittest.TestCase):
 
         registry = TargetRegistry()
         with self.assertRaises(LocationNotSupported) as exception_context:
-            registry.get_solver(SpecificTarget(), Locator())
+            registry._get_solver(SpecificTarget(), Locator())
 
         self.assertEqual(exception_context.exception.supported, [])
         self.assertEqual(
@@ -205,7 +205,7 @@ class TestLocationRegistry(unittest.TestCase):
         registry.register_location(
             target_class=float, locator_class=str, solver=solver)
 
-        self.assertIs(registry.get_solver(2.1, "dummy"), solver)
+        self.assertIs(registry._get_solver(2.1, "dummy"), solver)
 
     def test_register_location_report_existing(self):
 
@@ -217,12 +217,12 @@ class TestLocationRegistry(unittest.TestCase):
             target_class=float, locator_class=str, solver=solver)
 
         with self.assertRaises(LocationNotSupported) as exception_context:
-            registry.get_solver(3.4, None)
+            registry._get_solver(3.4, None)
 
         self.assertEqual(exception_context.exception.supported, [str])
 
     def test_get_locations_supported(self):
-        # Test get_locations return the supported location types.
+        # Test _get_locations return the supported location types.
         registry = TargetRegistry()
 
         class SpecificEditor:
@@ -251,7 +251,7 @@ class TestLocationRegistry(unittest.TestCase):
 
         # then
         self.assertEqual(
-            registry.get_locations(SpecificEditor()),
+            registry._get_locations(SpecificEditor()),
             set([Locator1, Locator2])
         )
 
@@ -268,7 +268,7 @@ class TestLocationRegistry(unittest.TestCase):
             solver=lambda w, l: 1,
         )
 
-        help_text = registry.get_location_doc(
+        help_text = registry._get_location_doc(
             target=2.345, locator_class=Locator,
         )
         self.assertEqual(help_text, "Some default documentation.")
@@ -277,4 +277,4 @@ class TestLocationRegistry(unittest.TestCase):
         # The registry is empty
         registry = TargetRegistry()
         with self.assertRaises(LocationNotSupported):
-            registry.get_location_doc(3.456, int)
+            registry._get_location_doc(3.456, int)

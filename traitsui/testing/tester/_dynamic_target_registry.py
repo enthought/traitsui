@@ -38,46 +38,46 @@ class DynamicTargetRegistry(AbstractTargetRegistry):
         self.can_support = can_support
         self.interaction_to_handler = interaction_to_handler
 
-    def get_handler(self, target, interaction):
-        """ Reimplemented AbstractTargetRegistry.get_handler """
-        if interaction.__class__ not in self.get_interactions(target):
+    def _get_handler(self, target, interaction):
+        """ Reimplemented AbstractTargetRegistry._get_handler """
+        if interaction.__class__ not in self._get_interactions(target):
             raise InteractionNotSupported(
                 target_class=target.__class__,
                 interaction_class=interaction.__class__,
-                supported=list(self.get_interactions(target)),
+                supported=list(self._get_interactions(target)),
             )
         return self.interaction_to_handler[interaction.__class__]
 
-    def get_interactions(self, target):
-        """ Reimplemented AbstractTargetRegistry.get_interactions """
+    def _get_interactions(self, target):
+        """ Reimplemented AbstractTargetRegistry._get_interactions """
         if self.can_support(target):
             return set(self.interaction_to_handler)
         return set()
 
-    def get_interaction_doc(self, target, interaction_class):
-        """ Reimplemented AbstractTargetRegistry.get_interaction_doc """
-        if interaction_class not in self.get_interactions(target):
+    def _get_interaction_doc(self, target, interaction_class):
+        """ Reimplemented AbstractTargetRegistry._get_interaction_doc """
+        if interaction_class not in self._get_interactions(target):
             raise InteractionNotSupported(
                 target_class=target.__class__,
                 interaction_class=interaction_class,
-                supported=list(self.get_interactions(target)),
+                supported=list(self._get_interactions(target)),
             )
         return inspect.getdoc(interaction_class)
 
-    def get_solver(self, target, location):
-        """ Reimplemented AbstractTargetRegistry.get_solver """
+    def _get_solver(self, target, location):
+        """ Reimplemented AbstractTargetRegistry._get_solver """
         raise LocationNotSupported(
             target_class=target.__class__,
             locator_class=location.__class__,
             supported=[],
         )
 
-    def get_locations(self, target):
-        """ Reimplemented AbstractTargetRegistry.get_locations """
+    def _get_locations(self, target):
+        """ Reimplemented AbstractTargetRegistry._get_locations """
         return set()
 
-    def get_location_doc(self, target, locator_class):
-        """ Reimplemented AbstractTargetRegistry.get_location_doc """
+    def _get_location_doc(self, target, locator_class):
+        """ Reimplemented AbstractTargetRegistry._get_location_doc """
         raise LocationNotSupported(
             target_class=target.__class__,
             locator_class=locator_class,

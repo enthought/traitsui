@@ -23,7 +23,7 @@ class AbstractTargetRegistry(abc.ABC):
     """
 
     @abc.abstractmethod
-    def get_handler(self, target, interaction):
+    def _get_handler(self, target, interaction):
         """ Return a callable for handling an interaction for a given target.
 
         Parameters
@@ -46,7 +46,7 @@ class AbstractTargetRegistry(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_interactions(self, target):
+    def _get_interactions(self, target):
         """ Returns all the interactions supported for the given target.
 
         Parameters
@@ -61,7 +61,7 @@ class AbstractTargetRegistry(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_interaction_doc(self, target, interaction_class):
+    def _get_interaction_doc(self, target, interaction_class):
         """ Return the documentation for the given target and interaction type.
 
         Parameters
@@ -83,7 +83,7 @@ class AbstractTargetRegistry(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_solver(self, target, location):
+    def _get_solver(self, target, location):
         """ Return a callable registered for resolving a location for the
         given target and location.
 
@@ -101,7 +101,7 @@ class AbstractTargetRegistry(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_locations(self, target):
+    def _get_locations(self, target):
         """ Returns all the location types supported for the given target.
 
         Parameters
@@ -116,7 +116,7 @@ class AbstractTargetRegistry(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_location_doc(self, target, locator_class):
+    def _get_location_doc(self, target, locator_class):
         """ Return the documentation for the given target and locator type.
 
         Parameters
