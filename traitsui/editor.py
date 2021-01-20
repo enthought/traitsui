@@ -453,7 +453,7 @@ class Editor(HasPrivateTraits):
         This checks for text from, in order:
 
         - the editor's description trait
-        - the base trait's 'tooltip' metdata
+        - the base trait's 'tooltip' metadata
         - the base trait's 'desc' metadata
 
         Returns
