@@ -173,6 +173,25 @@ class Editor(HasPrivateTraits):
         """
         raise NotImplementedError("This method must be overriden.")
 
+    def set_tooltip(self, control=None):
+        """ Sets the tooltip for a specified toolkit control.
+
+        This method must be overriden by subclasses.  The tooltip_text
+        method can be used to get a suitable value for the tooltip
+        text.
+
+        Parameters
+        ----------
+        control : toolkit control
+            The toolkit control that is having the tooltip set.
+
+        Returns
+        -------
+        tooltip_set : bool
+            Whether or not a tooltip value could be set.
+        """
+        raise NotImplementedError("This method must be overriden.")
+
     def string_value(self, value, format_func=None):
         """ Returns the text representation of a specified object trait value.
 
@@ -405,6 +424,31 @@ class Editor(HasPrivateTraits):
             object = self.context_object
 
         return (object, name, partial(xgetattr, object, name))
+
+    def tooltip_text(self):
+        """ Get the text for a tooltip, checking various sources.
+
+        This checks for text from, in order:
+
+        - the editor's description trait
+        - the base trait's 'tooltip' metdata
+        - the base trait's 'desc' metadata
+
+        Returns
+        -------
+        text : str or None
+            The text for the tooltip, or None if no suitable text can
+            be found.
+        """
+        text = self.description
+        if not text:
+            trait = self.object.base_trait(self.name)
+            text = trait.tooltip
+            if text is None:
+                text = trait.desc
+                if text is not None:
+                    text = "Specifies " + text
+        return text
 
     # -- Utility context managers --------------------------------------------
 

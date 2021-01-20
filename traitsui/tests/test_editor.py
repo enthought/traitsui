@@ -124,6 +124,9 @@ class StubEditor(Editor):
                 finally:
                     self._no_update = False
 
+    def set_tooltip(self, control=None):
+        pass
+
     def set_focus(self, parent):
         pass
 
@@ -137,8 +140,14 @@ class UserObject(HasTraits):
     #: An auxiliary user value
     user_auxiliary = Any(10)
 
-    #: An list user value
+    #: A list user value
     user_list = List(["one", "two", "three"])
+
+    #: A trait with desc metadata.
+    user_desc = Any("test", desc="a trait with desc metadata")
+
+    #: A trait with tooltip metadata.
+    user_tooltip = Any("test", tooltip="a tooltip")
 
     #: An event user value
     user_event = Event()
@@ -153,6 +162,7 @@ def create_editor(
         name="user_value",
         factory=None,
         is_event=False,
+        description="",
 ):
     if context is None:
         user_object = UserObject()
@@ -176,6 +186,7 @@ def create_editor(
         name=name,
         factory=factory,
         object=user_object,
+        description=description,
     )
     return editor
 
@@ -408,6 +419,66 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         self.assertEqual(value, "other_test")
 
         editor.dispose()
+
+    def test_tooltip_text_default(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context)
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            tooltip_text = editor.tooltip_text()
+            self.assertIsNone(tooltip_text)
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_text_with_description(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, description="a tooltip")
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            tooltip_text = editor.tooltip_text()
+            self.assertEqual(tooltip_text, "a tooltip")
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_text_with_tooltip(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, name='user_tooltip')
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            tooltip_text = editor.tooltip_text()
+            self.assertEqual(tooltip_text, "a tooltip")
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_text_with_desc(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, name='user_desc')
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            tooltip_text = editor.tooltip_text()
+            self.assertEqual(tooltip_text, "Specifies a trait with desc metadata")
+        except Exception:
+            editor.dispose()
+            raise
 
     # Test synchronizing built-in trait values between factory
     # and editor.

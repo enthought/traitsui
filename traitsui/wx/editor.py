@@ -79,20 +79,14 @@ class Editor(UIEditor):
     def set_tooltip(self, control=None):
         """ Sets the tooltip for a specified control.
         """
-        desc = self.description
-        if desc == "":
-            desc = self.object.base_trait(self.name).tooltip
-            if desc is None:
-                desc = self.object.base_trait(self.name).desc
-                if desc is None:
-                    return False
-
-                desc = "Specifies " + desc
+        text = self.tooltip_text()
+        if text is None:
+            return False
 
         if control is None:
             control = self.control
 
-        control.SetToolTip(desc)
+        control.SetToolTip(text)
 
         return True
 
