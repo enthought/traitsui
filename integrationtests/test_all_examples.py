@@ -180,8 +180,11 @@ SEARCHER.skip_file_if(
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Misc", "demo_group_size.py"),
-    is_wx,
-    "enable tries to import a missing constant. See enthought/enable#307",
+    lambda: is_wx() or sys.platform == "darwin",
+    "On Mac, its dependency on chaco/enable requires OpenGL, which may not "
+    "be available on Mac, see enthought/traitsui#1139 to make this example "
+    "have a lighter external dependency. "
+    "On wx, enable tries to import a missing constant (enthought/enable#307)",
 )
 SEARCHER.skip_file_if(
     os.path.join(TUTORIALS, "view_multi_object.py"),
