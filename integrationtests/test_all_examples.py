@@ -155,6 +155,12 @@ SOURCE_DIRS = [
 
 SEARCHER = ExampleSearcher(source_dirs=SOURCE_DIRS)
 SEARCHER.skip_file_if(
+    os.path.join(DEMO, "Advanced", "HDF5_tree_demo.py"),
+    lambda: sys.platform == "darwin",
+    "This example depends on PyTables which may be built to require CPUs with "
+    "a specific AVX version that is not supported on a paricular OSX host.",
+)
+SEARCHER.skip_file_if(
     os.path.join(DEMO, "Advanced", "Table_editor_with_progress_column.py"),
     is_wx, "ProgressRenderer is not implemented in wx.",
 )
@@ -180,11 +186,8 @@ SEARCHER.skip_file_if(
 )
 SEARCHER.skip_file_if(
     os.path.join(DEMO, "Misc", "demo_group_size.py"),
-    lambda: is_wx() or sys.platform == "darwin",
-    "On Mac, its dependency on chaco/enable requires OpenGL, which may not "
-    "be available on Mac, see enthought/traitsui#1139 to make this example "
-    "have a lighter external dependency. "
-    "On wx, enable tries to import a missing constant (enthought/enable#307)",
+    is_wx,
+    "enable tries to import a missing constant. See enthought/enable#307",
 )
 SEARCHER.skip_file_if(
     os.path.join(TUTORIALS, "view_multi_object.py"),
