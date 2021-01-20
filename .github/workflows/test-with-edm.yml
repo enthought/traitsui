@@ -32,8 +32,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install libsdl2-2.0-0
         if: matrix.toolkit == 'wx'
-      - name: Install GL dependencies for Linux
-        run: sudo apt-get install libglu1-mesa-dev
       - name: Cache EDM packages
         uses: actions/cache@v2
         with:
