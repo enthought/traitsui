@@ -45,8 +45,7 @@ __extras_require__ = {
         "packaging",
     ],
 }
-import logging
-logging.basicConfig(level=logging.DEBUG)
+
 
 # ============================= Test Loader ==================================
 def load_tests(loader, standard_tests, pattern):
