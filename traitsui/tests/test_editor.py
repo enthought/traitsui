@@ -510,6 +510,24 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
             editor.dispose()
             raise
 
+    def test_tooltip_other_control(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, description="a tooltip")
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            other_control = FakeControl()
+            set_tooltip_result = editor.set_tooltip(other_control)
+
+            self.assertTrue(set_tooltip_result)
+            self.assertEqual(other_control.tooltip, "a tooltip")
+        except Exception:
+            editor.dispose()
+            raise
+
     # Test synchronizing built-in trait values between factory
     # and editor.
 
