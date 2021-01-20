@@ -1,3 +1,13 @@
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 """ Tests for QWidget's DynamicTargetRegistry """
 
 import unittest
@@ -19,9 +29,10 @@ except ImportError:
     if is_qt():
         raise
 else:
-    from traitsui.testing.tester._ui_tester_registry.qt4._control_widget_registry import (
+    from traitsui.testing.tester._ui_tester_registry.qt4._control_widget_registry import (   # noqa: E501
         get_widget_registry,
     )
+
 
 class TargetWithControl:
     """ An object holding a control attribute."""

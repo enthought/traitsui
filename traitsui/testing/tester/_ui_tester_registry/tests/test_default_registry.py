@@ -16,8 +16,6 @@ from traitsui.testing.tester._abstract_target_registry import (
 from traitsui.testing.tester._ui_tester_registry.default_registry import (
     get_default_registries
 )
-from traitsui.testing.api import TargetRegistry
-from traitsui.tests._tools import is_null
 
 
 class TestDefaultRegistry(unittest.TestCase):

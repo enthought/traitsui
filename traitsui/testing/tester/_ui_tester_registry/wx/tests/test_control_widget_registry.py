@@ -12,7 +12,6 @@
 """
 
 import unittest
-from unittest import mock
 
 from traitsui.testing.api import IsEnabled
 from traitsui.testing.tester.exceptions import (
@@ -31,7 +30,7 @@ except ImportError:
     if is_wx():
         raise
 else:
-    from traitsui.testing.tester._ui_tester_registry.wx._control_widget_registry import (
+    from traitsui.testing.tester._ui_tester_registry.wx._control_widget_registry import (   # noqa: E501
         get_widget_registry,
     )
 

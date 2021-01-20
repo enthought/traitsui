@@ -10,7 +10,7 @@
 
 from traitsui.qt4.ui_base import ButtonEditor
 from traitsui.testing.tester.command import MouseClick
-from traitsui.testing.tester.query import DisplayedText, IsEnabled
+from traitsui.testing.tester.query import DisplayedText
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
     _interaction_helpers
 )
