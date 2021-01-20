@@ -26,6 +26,8 @@ class AbstractTargetRegistry(abc.ABC):
     def _get_handler(self, target, interaction):
         """ Return a callable for handling an interaction for a given target.
 
+        This is a protected method expected to be implemented by a subclass.
+
         Parameters
         ----------
         target : any
@@ -49,6 +51,8 @@ class AbstractTargetRegistry(abc.ABC):
     def _get_interactions(self, target):
         """ Returns all the interactions supported for the given target.
 
+        This is a protected method expected to be implemented by a subclass.
+
         Parameters
         ----------
         target : any
@@ -63,6 +67,8 @@ class AbstractTargetRegistry(abc.ABC):
     @abc.abstractmethod
     def _get_interaction_doc(self, target, interaction_class):
         """ Return the documentation for the given target and interaction type.
+
+        This is a protected method expected to be implemented by a subclass.
 
         Parameters
         ----------
@@ -87,6 +93,8 @@ class AbstractTargetRegistry(abc.ABC):
         """ Return a callable registered for resolving a location for the
         given target and location.
 
+        This is a protected method expected to be implemented by a subclass.
+
         Parameters
         ----------
         target : any
@@ -104,6 +112,8 @@ class AbstractTargetRegistry(abc.ABC):
     def _get_locations(self, target):
         """ Returns all the location types supported for the given target.
 
+        This is a protected method expected to be implemented by a subclass.
+
         Parameters
         ----------
         target : any
@@ -118,6 +128,8 @@ class AbstractTargetRegistry(abc.ABC):
     @abc.abstractmethod
     def _get_location_doc(self, target, locator_class):
         """ Return the documentation for the given target and locator type.
+
+        This is a protected method expected to be implemented by a subclass.
 
         Parameters
         ----------
