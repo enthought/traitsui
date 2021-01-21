@@ -159,6 +159,14 @@ Table filter types:
 - :class:`~.RuleTableFilter`
 - :class:`~.TableFilter`
 
+Instance UI
+-----------
+
+- :class:`~.InstanceChoice`
+- :class:`~.InstanceChoiceItem`
+- :class:`~.InstanceDropChoice`
+- :class:`~.InstanceFactoryChoice`
+
 Toolkit Object
 --------------
 
@@ -378,6 +386,13 @@ from .table_filter import (
 )
 
 from .tabular_adapter import TabularAdapter
+
+from .instance_choice import (
+    InstanceChoice,
+    InstanceChoiceItem,
+    InstanceDropChoice,
+    InstanceFactoryChoice,
+)
 
 from .toolkit import toolkit
 
