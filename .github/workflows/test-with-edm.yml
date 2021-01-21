@@ -8,10 +8,7 @@
 
 name: Test with EDM
 
-on:
-  pull_request:
-    paths-ignore:
-    - 'ets-demo/**'
+on: pull_request
 
 env:
   INSTALL_EDM_VERSION: 3.2.1

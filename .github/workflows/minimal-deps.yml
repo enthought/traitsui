@@ -4,10 +4,7 @@
 
 name: Minimal setup
 
-on:
-  pull_request:
-    paths-ignore:
-    - 'ets-demo/**'
+on: pull_request
 
 jobs:
   test:
