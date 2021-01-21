@@ -2,10 +2,10 @@
 
 name: Test etsdemo
 
-on: push
-  # push:
-  #   paths:
-  #   - 'ets-demo/**'
+on:
+  pull_request:
+    paths:
+    - 'ets-demo/**'
 
 env:
   INSTALL_EDM_VERSION: 3.2.1
