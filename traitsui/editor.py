@@ -462,15 +462,21 @@ class Editor(HasPrivateTraits):
             The text for the tooltip, or None if no suitable text can
             be found.
         """
-        text = self.description
-        if not text:
-            trait = self.object.base_trait(self.name)
-            text = trait.tooltip
-            if text is None:
-                text = trait.desc
-                if text is not None:
-                    text = "Specifies " + text
-        return text
+
+        if self.description:
+            return self.description
+
+        base_trait = self.object.base_trait(self.name)
+
+        text = base_trait.tooltip
+        if text is not None:
+            return text
+
+        text = base_trait.desc
+        if text is not None:
+            return "Specifies " + text
+
+        return None
 
     # -- Utility context managers --------------------------------------------
 
