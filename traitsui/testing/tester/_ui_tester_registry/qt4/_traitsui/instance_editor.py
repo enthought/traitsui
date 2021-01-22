@@ -10,6 +10,7 @@
 
 from traitsui.testing.tester.command import MouseClick
 from traitsui.testing.tester.locator import Index
+from traitsui.testing.tester.query import SelectedText
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
     BaseSourceWithLocation
 )
@@ -63,6 +64,10 @@ def _click_combobox_index(wrapper, _):
     )
 
 
+def _get_combobox_text(wrapper, _):
+    return _get_combobox(wrapper._target).currentText()
+
+
 class _IndexedCustomEditor(BaseSourceWithLocation):
     """ Wrapper class for CustomEditors with a selection.
     """
@@ -93,4 +98,10 @@ def register(registry):
         )
     )
     register_traitsui_ui_solvers(registry, SimpleEditor, _get_nested_ui_simple)
+
+    registry.register_interaction(
+        target_class=CustomEditor,
+        interaction_class=SelectedText,
+        handler=_get_combobox_text,
+    )
     register_traitsui_ui_solvers(registry, CustomEditor, _get_nested_ui_custom)

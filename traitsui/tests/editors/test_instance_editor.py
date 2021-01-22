@@ -24,6 +24,7 @@ from traitsui.testing.api import (
     Index,
     KeySequence,
     MouseClick,
+    SelectedText,
     UITester
 )
 
@@ -105,18 +106,40 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
         obj = ObjectWithList()
         tester = UITester()
         with tester.create_ui(obj, {'view': selection_view}) as ui:
-            # test that first item is edited
+            # test that the current object is None
             self.assertIsNone(obj.inst)
+
+            # test that the displayed text is correct
+            instance = tester.find_by_name(ui, "inst")
+            text = instance.inspect(SelectedText())
+            self.assertEqual(text, obj.inst_list[0].name)
 
             # test that changing selection works
             instance = tester.find_by_name(ui, "inst")
             instance.locate(Index(1)).perform(MouseClick())
             self.assertIs(obj.inst, obj.inst_list[1])
 
+            # test that the displayed text is correct
+            text = instance.inspect(SelectedText())
+            self.assertEqual(text, obj.inst_list[1].name)
+
             # test editing the view works
             value_txt = instance.find_by_name("value")
             value_txt.perform(KeySequence("abc"))
             self.assertEqual(obj.inst.value, "twoabc")
+
+    def test_custom_editor_with_selection_initialized(self):
+        obj = ObjectWithList()
+        obj.inst = obj.inst_list[1]
+        tester = UITester()
+        with tester.create_ui(obj, {'view': selection_view}) as ui:
+            # test that the current object is the correct one
+            self.assertIs(obj.inst, obj.inst_list[1])
+
+            # test that the displayed text is correct
+            instance = tester.find_by_name(ui, "inst")
+            text = instance.inspect(SelectedText())
+            self.assertEqual(text, obj.inst.name)
 
     def test_custom_editor_resynch_editor(self):
         edited_inst = EditedInstance(value='hello')
