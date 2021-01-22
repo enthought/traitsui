@@ -422,6 +422,7 @@ class SimpleEditor(CustomEditor):
         """ Creates the editor control (a button).
         """
         self._button = QtGui.QPushButton()
+        self._button.setAutoDefault(False)
         layout.addWidget(self._button)
         self._button.clicked.connect(self.edit_instance)
         # Make sure the editor is properly disposed if parent UI is closed
