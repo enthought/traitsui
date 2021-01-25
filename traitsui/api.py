@@ -143,6 +143,7 @@ Table UI
 --------
 
 - :class:`~.TabularAdapter`
+- :attr:`~.TableEditor`
 
 Table column types:
 
@@ -165,6 +166,7 @@ Instance UI
 - :class:`~.InstanceChoice`
 - :class:`~.InstanceChoiceItem`
 - :class:`~.InstanceDropChoice`
+- :attr:`~.InstanceEditor`
 - :class:`~.InstanceFactoryChoice`
 
 Toolkit Object
@@ -199,6 +201,7 @@ Tree UI
 - :class:`~.ITreeNodeAdapter`
 - :class:`~.MultiTreeNode`
 - :class:`~.ObjectTreeNode`
+- :attr:`~.TreeEditor`
 - :class:`~.TreeNode`
 - :class:`~.TreeNodeObject`
 
