@@ -860,6 +860,10 @@ class UI(HasPrivateTraits):
 
     # -- Traits Event Handlers ------------------------------------------------
 
+    def _errors_changed(self, name, old, new):
+        if self.parent:
+            self.parent.errors = self.parent.errors - old + new
+
     def _updated_changed(self):
         if self.rebuild is not None:
             toolkit().rebuild_ui(self)
