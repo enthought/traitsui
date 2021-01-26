@@ -171,7 +171,9 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
         ui_tester = UITester()
         with ui_tester.create_ui(obj) as ui:
             something_ui = ui_tester.find_by_name(ui, "something")
-            some_string_field = something_ui.locate(TargetByName('some_string'))
+            some_string_field = something_ui.locate(
+                TargetByName('some_string')
+            )
             some_string_field.perform(KeySequence("abcd"))
             some_string_field.perform(KeyClick("Enter"))
 
