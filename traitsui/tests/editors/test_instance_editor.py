@@ -11,7 +11,7 @@
 import unittest
 
 from pyface.toolkit import toolkit_object
-from traits.api import HasTraits, Instance, Str
+from traits.api import HasTraits, Instance, Str, String
 from traitsui.api import InstanceEditor, Item, View
 from traitsui.tests._tools import (
     BaseTestMixin,
@@ -21,8 +21,11 @@ from traitsui.tests._tools import (
 
 from traitsui.testing.api import (
     DisplayedText,
+    IsEnabled,
+    KeyClick,
     KeySequence,
     MouseClick,
+    TargetByName,
     UITester
 )
 
@@ -38,11 +41,30 @@ class EditedInstance(HasTraits):
 
 
 class ObjectWithInstance(HasTraits):
-    inst = Instance(EditedInstance, ())
+    inst = Instance(EditedInstance, args=())
 
 
 def get_view(style):
     return View(Item("inst", style=style), buttons=["OK"])
+
+
+class ValidatedEditedInstance(HasTraits):
+    some_string = String("A", maxlen=3)
+
+    traits_view = View(Item('some_string'))
+
+
+class ObjectWithValidatedInstance(HasTraits):
+    something = Instance(ValidatedEditedInstance, args=())
+
+    traits_view = View(
+        Item(
+            'something',
+            editor=InstanceEditor(),
+            style='custom'
+        ),
+        buttons=["OK", "Cancel"],
+    )
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -142,3 +164,29 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             mdtester.open_and_run(when_opened=when_opened)
             self.assertTrue(mdtester.dialog_was_opened)
             self.assertEqual(obj.inst.value, "Hello")
+
+    # A regression test for issue enthought/traitsui#1501
+    def test_propagate_errors(self):
+        obj = ObjectWithValidatedInstance()
+        ui_tester = UITester()
+        with ui_tester.create_ui(obj) as ui:
+            something_ui = ui_tester.find_by_name(ui, "something")
+            some_string_field = something_ui.locate(TargetByName('some_string'))
+            some_string_field.perform(KeySequence("abcd"))
+            some_string_field.perform(KeyClick("Enter"))
+
+            ok_button = ui_tester.find_by_id(ui, "OK")
+
+            instance_editor_ui = something_ui._target._ui
+            instance_editor_ui_parent = something_ui._target._ui.parent
+            self.assertNotEqual(
+                instance_editor_ui, ui
+            )
+            self.assertEqual(
+                instance_editor_ui_parent, ui
+            )
+
+            self.assertEqual(
+                instance_editor_ui.errors, ui.errors
+            )
+            self.assertFalse(ok_button.inspect(IsEnabled()))
