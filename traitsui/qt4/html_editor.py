@@ -16,33 +16,44 @@
 
 import webbrowser
 
-from pyface.qt import QtCore, QtGui, QtWebKit
+from pyface.qt import QtCore, QtGui
 
 from traits.api import Str
 
 from .editor import Editor
 
+try:
+    from pyface.qt import QtWebKit
 
-# Subclass of QWebPage for QtWebEngine support
 
-class ExternallyOpeningWebPage(QtWebKit.QWebPage):
-    """ QWebEnginePage subclass that opens links in system browser
+    # Subclass of QWebPage for QtWebEngine support
 
-    This subclass is only used when we are given a QWebEnginePage which is
-    pretending to be a QWebPage and we want the open_external feature
-    of the Editor.
+    class ExternallyOpeningWebPage(QtWebKit.QWebPage):
+        """ QWebEnginePage subclass that opens links in system browser
 
-    This overrides the acceptNavigationRequest method to open links
-    in an external browser.  All other navigation requests are handled
-    internally as per the base class.
-    """
+        This subclass is only used when we are given a QWebEnginePage which is
+        pretending to be a QWebPage and we want the open_external feature
+        of the Editor.
 
-    def acceptNavigationRequest(self, url, type, isMainFrame):
-        if type == QtWebKit.QWebPage.NavigationTypeLinkClicked:
-            webbrowser.open_new(url.toString())
-            return False
-        else:
-            return super().acceptNavigationRequest(url, type, isMainFrame)
+        This overrides the acceptNavigationRequest method to open links
+        in an external browser.  All other navigation requests are handled
+        internally as per the base class.
+        """
+
+        def acceptNavigationRequest(self, url, type, isMainFrame):
+            if type == QtWebKit.QWebPage.NavigationTypeLinkClicked:
+                webbrowser.open_new(url.toString())
+                return False
+            else:
+                return super().acceptNavigationRequest(url, type, isMainFrame)
+
+
+    WebView = QtWebKit.QWebView
+    HAS_WEB_VIEW = True
+
+except Exception:
+    WebView = QtGui.QTextBrowser
+    HAS_WEB_VIEW = False
 
 
 # -------------------------------------------------------------------------
@@ -68,25 +79,30 @@ class SimpleEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtWebKit.QWebView()
+        self.control = WebView()
         self.control.setSizePolicy(
             QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
         )
 
         if self.factory.open_externally:
-            page = self.control.page()
-            if hasattr(page, 'setLinkDelegationPolicy'):
-                # QtWebKit
-                page.setLinkDelegationPolicy(
-                    QtWebKit.QWebPage.DelegateAllLinks
-                )
-                page.linkClicked.connect(self._link_clicked)
+            if HAS_WEB_VIEW:
+                page = self.control.page()
+                if hasattr(page, 'setLinkDelegationPolicy'):
+                    # QtWebKit
+                    page.setLinkDelegationPolicy(
+                        QtWebKit.QWebPage.DelegateAllLinks
+                    )
+                    page.linkClicked.connect(self._link_clicked)
+                else:
+                    # QtWebEngine pretending to be QtWebKit
+                    # We need the subclass defined above instead of the regular
+                    # we page so that links are opened externally
+                    page = ExternallyOpeningWebPage(self.control)
+                    self.control.setPage(page)
             else:
-                # QtWebEngine pretending to be QtWebKit
-                # We need the subclass defined above instead of the regular
-                # we page so that links are opened externally
-                page = ExternallyOpeningWebPage(self.control)
-                self.control.setPage(page)
+                # take over handling clicks on links
+                self.control.setOpenLinks(False)
+                self.control.anchorClicked.connect(self._link_clicked)
 
         self.base_url = self.factory.base_url
         self.sync_value(self.factory.base_url_name, "base_url", "from")
@@ -95,10 +111,15 @@ class SimpleEditor(Editor):
         """ Disposes of the contents of an editor.
         """
         if self.control is not None and self.factory.open_externally:
-            page = self.control.page()
-            if hasattr(page, 'setLinkDelegationPolicy'):
-                # QtWebKit-only cleanup
-                page.linkClicked.disconnect(self._link_clicked)
+            if HAS_WEB_VIEW:
+                page = self.control.page()
+                if hasattr(page, 'setLinkDelegationPolicy'):
+                    # QtWebKit-only cleanup
+                    page.linkClicked.disconnect(self._link_clicked)
+            else:
+                # QTextBrowser clean-up
+                self.control.anchorClicked.connect(self._link_clicked)
+
         super().dispose()
 
     def update_editor(self):
