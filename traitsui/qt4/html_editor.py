@@ -25,7 +25,6 @@ from .editor import Editor
 try:
     from pyface.qt import QtWebKit
 
-
     # Subclass of QWebPage for QtWebEngine support
 
     class ExternallyOpeningWebPage(QtWebKit.QWebPage):
@@ -46,7 +45,6 @@ try:
                 return False
             else:
                 return super().acceptNavigationRequest(url, type, isMainFrame)
-
 
     WebView = QtWebKit.QWebView
     HAS_WEB_VIEW = True
@@ -95,8 +93,8 @@ class SimpleEditor(Editor):
                     page.linkClicked.connect(self._link_clicked)
                 else:
                     # QtWebEngine pretending to be QtWebKit
-                    # We need the subclass defined above instead of the regular
-                    # we page so that links are opened externally
+                    # We need the subclass defined above instead of the
+                    # regular web page so that links are opened externally
                     page = ExternallyOpeningWebPage(self.control)
                     self.control.setPage(page)
             else:
