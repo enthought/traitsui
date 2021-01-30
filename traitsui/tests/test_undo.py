@@ -12,9 +12,11 @@ import functools
 import unittest
 
 from pyface.toolkit import toolkit_object
+from traits.api import Any, HasTraits, Int, Str
+from traits.testing.api import UnittestTools
 
 from traitsui.tests.test_editor import create_editor
-from traitsui.undo import UndoHistory
+from traitsui.undo import ListUndoItem, UndoHistory, UndoItem
 from traitsui.tests._tools import BaseTestMixin
 
 GuiTestAssistant = toolkit_object("util.gui_test_assistant:GuiTestAssistant")
@@ -23,6 +25,256 @@ if no_gui_test_assistant:
     # ensure null toolkit has an inheritable GuiTestAssistant
     class GuiTestAssistant(object):
         pass
+
+
+class SimpleExample(HasTraits):
+
+    value = Int()
+
+    str_value = Str()
+
+    any_value = Any()
+
+
+class TestUndoItem(UnittestTools, unittest.TestCase):
+
+    def test_undo(self):
+        example = SimpleExample(value=11)
+
+        undo_item = UndoItem(
+            object=example,
+            name='value',
+            old_value=10,
+            new_value=11,
+        )
+
+        with self.assertTraitChanges(example, 'value', count=1):
+            undo_item.undo()
+
+        self.assertEqual(example.value, 10)
+
+    def test_redo(self):
+        example = SimpleExample(value=10)
+
+        undo_item = UndoItem(
+            object=example,
+            name='value',
+            old_value=10,
+            new_value=11,
+        )
+
+        with self.assertTraitChanges(example, 'value', count=1):
+            undo_item.redo()
+
+        self.assertEqual(example.value, 11)
+
+    def test_merge_different_undo_item_type(self):
+        example_1 = SimpleExample()
+        example_2 = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example_1,
+            name='any_value',
+        )
+        next_undo_item = ListUndoItem(
+            object=example_2,
+            name='any_value',
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertFalse(result)
+
+    def test_merge_different_objects(self):
+        example_1 = SimpleExample()
+        example_2 = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example_1,
+            name='value',
+            old_value=10,
+            new_value=11,
+        )
+        next_undo_item = UndoItem(
+            object=example_2,
+            name='value',
+            old_value=10,
+            new_value=11,
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertFalse(result)
+
+    def test_merge_different_traits(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='value',
+            old_value=10,
+            new_value=11,
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='foo',
+            new_value='bar',
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertFalse(result)
+
+    def test_merge_different_value_types(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='any_value',
+            old_value=10,
+            new_value=11,
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='any_value',
+            old_value=11,
+            new_value='foo',
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertFalse(result)
+
+    def test_merge_numbers(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='value',
+            old_value=10,
+            new_value=11,
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='value',
+            old_value=11,
+            new_value=12,
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertTrue(result)
+        self.assertEqual(undo_item.old_value, 10)
+        self.assertEqual(undo_item.new_value, 12)
+
+    def test_merge_str_insert(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='foo',
+            new_value='bar',
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='bar',
+            new_value='bear',
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertTrue(result)
+        self.assertEqual(undo_item.old_value, 'foo')
+        self.assertEqual(undo_item.new_value, 'bear')
+
+    def test_merge_str_delete(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='foo',
+            new_value='bear',
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='bear',
+            new_value='bar',
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertTrue(result)
+        self.assertEqual(undo_item.old_value, 'foo')
+        self.assertEqual(undo_item.new_value, 'bar')
+
+    def test_merge_str_change(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='foo',
+            new_value='bar',
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='bar',
+            new_value='baz',
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertTrue(result)
+        self.assertEqual(undo_item.old_value, 'foo')
+        self.assertEqual(undo_item.new_value, 'baz')
+
+    def test_merge_str_same(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='foo',
+            new_value='bar',
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='bar',
+            new_value='bar',
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertTrue(result)
+        self.assertEqual(undo_item.old_value, 'foo')
+        self.assertEqual(undo_item.new_value, 'bar')
+
+    def test_merge_str_different(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='foo',
+            new_value='bar',
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='bar',
+            new_value='wombat',
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertFalse(result)
 
 
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
@@ -64,10 +316,10 @@ class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
 
         self.assertEqual(editor.old_value, "test")
 
-        # Enter "ab"
+        # Enter 'one' followed by 'two'
         with editor.updating_value():
-            self.gui.set_trait_later(editor.control, "control_value", "a")
-            self.gui.set_trait_later(editor.control, "control_value", "ab")
+            self.gui.set_trait_later(editor.control, "control_value", "one")
+            self.gui.set_trait_later(editor.control, "control_value", "two")
 
         # Perform an UNDO
         self.undo(editor)
@@ -89,9 +341,9 @@ class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
                                                     expected_history_length=2),
                                   timeout=5.0)
 
-        # Enter a new character 'c' at the end
+        # Enter 'three'
         with editor.updating_value():
-            self.gui.set_trait_later(editor.control, "control_value", "abc")
+            self.gui.set_trait_later(editor.control, "control_value", "three")
 
         # Perform an UNDO
         self.undo(editor)
@@ -103,9 +355,9 @@ class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
                                                     expected_history_length=3),
                                   timeout=5.0)
 
-        # Enter a new character 'd' at the end
+        # Enter 'four'
         with editor.updating_value():
-            self.gui.set_trait_later(editor.control, "control_value", "abd")
+            self.gui.set_trait_later(editor.control, "control_value", "four")
         self.event_loop_helper.event_loop_with_timeout()
 
         # Expect 3 items in history and pointer at second item
