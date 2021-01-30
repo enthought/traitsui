@@ -12,7 +12,7 @@ import functools
 import unittest
 
 from pyface.toolkit import toolkit_object
-from traits.api import Any, HasTraits, Int, Str
+from traits.api import Any, HasTraits, Int, Str, Tuple
 from traits.testing.api import UnittestTools
 
 from traitsui.tests.test_editor import create_editor
@@ -32,6 +32,8 @@ class SimpleExample(HasTraits):
     value = Int()
 
     str_value = Str()
+
+    tuple_value = Tuple()
 
     any_value = Any()
 
@@ -270,6 +272,173 @@ class TestUndoItem(UnittestTools, unittest.TestCase):
             name='str_value',
             old_value='bar',
             new_value='wombat',
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertFalse(result)
+
+    def test_merge_sequence_change(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='tuple_value',
+            old_value=('foo', 'bar', 'baz'),
+            new_value=('foo', 'wombat', 'baz'),
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='tuple_value',
+            old_value=('foo', 'wombat', 'baz'),
+            new_value=('foo', 'fizz', 'baz'),
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertTrue(result)
+        self.assertEqual(undo_item.old_value, ('foo', 'bar', 'baz'))
+        self.assertEqual(undo_item.new_value, ('foo', 'fizz', 'baz'))
+
+    def test_merge_sequence_change_different_types(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='tuple_value',
+            old_value=('foo', 'bar', 'baz'),
+            new_value=('foo', 'wombat', 'baz'),
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='tuple_value',
+            old_value=('foo', 'wombat', 'baz'),
+            new_value=('foo', 12, 'baz'),
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertTrue(result)
+        self.assertEqual(undo_item.old_value, ('foo', 'bar', 'baz'))
+        self.assertEqual(undo_item.new_value, ('foo', 12, 'baz'))
+
+    def test_merge_sequence_change_not_simple_types(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='tuple_value',
+            old_value=('foo', ['bar'], 'baz'),
+            new_value=('foo', ['wombat'], 'baz'),
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='tuple_value',
+            old_value=('foo', ['wombat'], 'baz'),
+            new_value=('foo', ['fizz'], 'baz'),
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertTrue(result)
+        self.assertEqual(undo_item.old_value, ('foo', ['bar'], 'baz'))
+        self.assertEqual(undo_item.new_value, ('foo', ['fizz'], 'baz'))
+
+    def test_merge_sequence_change_multiple_not_simple_types(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='tuple_value',
+            old_value=(['foo'], 'bar', 'baz'),
+            new_value=(['foo'], 'wombat', 'baz'),
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='tuple_value',
+            old_value=(['foo'], 'wombat', 'baz'),
+            new_value=(['foo'], 'fizz', 'baz'),
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        # XXX This is perhaps unexpected. See GitHub issue #1507.
+        self.assertFalse(result)
+
+    def test_merge_sequence_change_back(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='tuple_value',
+            old_value=('foo', 'bar', 'baz'),
+            new_value=('foo', 'wombat', 'baz'),
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='tuple_value',
+            old_value=('foo', 'wombat', 'baz'),
+            new_value=('foo', 'bar', 'baz'),
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertFalse(result)
+
+    def test_merge_sequence_two_changes(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='tuple_value',
+            old_value=('foo', 'bar', 'baz'),
+            new_value=('foo', 'wombat', 'baz'),
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='tuple_value',
+            old_value=('foo', 'wombat', 'baz'),
+            new_value=('foo', 'wombat', 'fizz'),
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertFalse(result)
+
+    def test_merge_sequence_change_length(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='tuple_value',
+            old_value=('foo', 'bar', 'baz'),
+            new_value=('foo', 'wombat', 'baz'),
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='tuple_value',
+            old_value=('foo', 'wombat', 'baz'),
+            new_value=('foo', 'wombat', 'baz', 'fizz'),
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertFalse(result)
+
+    def test_merge_unhandled_type(self):
+        example = SimpleExample()
+
+        undo_item = UndoItem(
+            object=example,
+            name='any_value',
+            old_value={'foo', 'bar', 'baz'},
+            new_value={'foo', 'wombat', 'baz'},
+        )
+        next_undo_item = UndoItem(
+            object=example,
+            name='any_value',
+            old_value={'foo', 'wombat', 'baz'},
+            new_value={'foo', 'fizz', 'baz'},
         )
 
         result = undo_item.merge(next_undo_item)
