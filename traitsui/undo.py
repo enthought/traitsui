@@ -26,7 +26,7 @@ from traits.api import (
     Str,
     Trait,
 )
-from pyface.undo.api import AbstractCommand, ICommand
+from pyface.undo.api import AbstractCommand, CommandStack
 
 
 NumericTypes = (int, float, complex)
@@ -315,7 +315,9 @@ class UndoHistory(HasStrictTraits):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
-    #: List of accumulated undo changes
+    #: List of accumulated undo changes.  Each item is a list of
+    #: AbstractUndoItems that should be done or undone as a group.
+    #: This trait should be considered private.
     history = List()
 
     #: The current position in the list
@@ -342,13 +344,16 @@ class UndoHistory(HasStrictTraits):
 
         # Try to merge the new undo item with the previous item if allowed:
         now = self.now
+        old_len = len(self.history)
+
         if now > 0:
             previous = self.history[now - 1]
             if (len(previous) == 1) and previous[0].merge(undo_item):
                 self.history[now:] = []
+                if self.now < old_len:
+                    self.redoable = False
                 return
 
-        old_len = len(self.history)
         self.history[now:] = [[undo_item]]
         self.now += 1
         if self.now == 1:

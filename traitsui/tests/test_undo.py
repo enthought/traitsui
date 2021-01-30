@@ -626,6 +626,420 @@ class TestListUndoItem(UnittestTools, unittest.TestCase):
         self.assertFalse(result)
 
 
+class TestUndoHistory(UnittestTools, unittest.TestCase):
+
+    def _populate_history(self, history):
+        """ Add some simple hostory items. """
+        self._example = SimpleExample()
+        history.add(
+            UndoItem(
+                object=self._example,
+                name='str_value',
+                old_value='foo',
+                new_value='bar',
+            )
+        )
+        history.add(
+            UndoItem(
+                object=self._example,
+                name='str_value',
+                old_value='bar',
+                new_value='wombat',
+            ),
+        )
+        history.add(
+            UndoItem(
+                object=self._example,
+                name='str_value',
+                old_value='wombat',
+                new_value='baz',
+            ),
+        )
+
+    def test_defaults(self):
+        history = UndoHistory()
+
+        self.assertEqual(history.now, 0)
+        self.assertFalse(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+    def test_add_empty(self):
+        history = UndoHistory()
+        example = SimpleExample(str_value='foo')
+
+        undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='foo',
+            new_value='bar',
+        )
+
+        with self.assertTraitChanges(history, 'undoable', count=1):
+            with self.assertTraitDoesNotChange(history, 'redoable'):
+                history.add(undo_item)
+
+        self.assertEqual(history.now, 1)
+        self.assertTrue(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+    def test_add_end(self):
+        history = UndoHistory()
+        example = SimpleExample(str_value='foo', value=10)
+        undo_item = UndoItem(
+            object=example,
+            name='value',
+            old_value=0,
+            new_value=10,
+        )
+
+        history.add(
+            UndoItem(
+                object=example,
+                name='str_value',
+                old_value='foo',
+                new_value='bar',
+            )
+        )
+
+        with self.assertTraitDoesNotChange(history, 'undoable'):
+            with self.assertTraitDoesNotChange(history, 'redoable'):
+                history.add(undo_item)
+
+        self.assertEqual(history.now, 2)
+        self.assertTrue(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+    def test_add_merge(self):
+        history = UndoHistory()
+        example = SimpleExample(str_value='foo', value=10)
+        undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='foo',
+            new_value='baz',
+        )
+
+        history.add(
+            UndoItem(
+                object=example,
+                name='str_value',
+                old_value='foo',
+                new_value='bar',
+            )
+        )
+
+        with self.assertTraitDoesNotChange(history, 'undoable'):
+            with self.assertTraitDoesNotChange(history, 'redoable'):
+                history.add(undo_item)
+
+        self.assertEqual(history.now, 1)
+        self.assertTrue(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+    def test_add_end_extend(self):
+        history = UndoHistory()
+        example = SimpleExample(str_value='foo', value=10)
+        undo_item = UndoItem(
+            object=example,
+            name='value',
+            old_value=0,
+            new_value=10,
+        )
+
+        history.add(
+            UndoItem(
+                object=example,
+                name='str_value',
+                old_value='foo',
+                new_value='bar',
+            )
+        )
+
+        with self.assertTraitDoesNotChange(history, 'undoable'):
+            with self.assertTraitDoesNotChange(history, 'redoable'):
+                history.add(undo_item, extend=True)
+
+        self.assertEqual(history.now, 1)
+        self.assertTrue(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+    def test_add_end_extend_merge(self):
+        history = UndoHistory()
+        example = SimpleExample(str_value='foo', value=10)
+        undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='foo',
+            new_value='baz',
+        )
+
+        history.add(
+            UndoItem(
+                object=example,
+                name='str_value',
+                old_value='foo',
+                new_value='bar',
+            )
+        )
+
+        with self.assertTraitDoesNotChange(history, 'undoable'):
+            with self.assertTraitDoesNotChange(history, 'redoable'):
+                history.add(undo_item, extend=True)
+
+        self.assertEqual(history.now, 1)
+        self.assertTrue(history.can_undo)
+        self.assertFalse(history.can_redo)
+        # XXX this is testing private state to ensure merge happened
+        self.assertEqual(len(history.history[0]), 1)
+
+    def test_add_middle(self):
+        history = UndoHistory()
+        example = SimpleExample(str_value='foo', value=10)
+        undo_item = UndoItem(
+            object=example,
+            name='value',
+            old_value=0,
+            new_value=10,
+        )
+
+        history.add(
+            UndoItem(
+                object=example,
+                name='str_value',
+                old_value='foo',
+                new_value='bar',
+            )
+        )
+        history.add(
+            UndoItem(
+                object=example,
+                name='str_value',
+                old_value='bar',
+                new_value='wombat',
+            ),
+        )
+        history.undo()
+
+        with self.assertTraitDoesNotChange(history, 'undoable'):
+            with self.assertTraitChanges(history, 'redoable', count=1):
+                history.add(undo_item)
+
+        self.assertEqual(history.now, 2)
+        self.assertTrue(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+    def test_add_middle_mergeable(self):
+        history = UndoHistory()
+        example = SimpleExample(str_value='foo', value=10)
+        undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='bar',
+            new_value='baz',
+        )
+
+        history.add(
+            UndoItem(
+                object=example,
+                name='str_value',
+                old_value='foo',
+                new_value='bar',
+            )
+        )
+        history.add(
+            UndoItem(
+                object=example,
+                name='str_value',
+                old_value='bar',
+                new_value='wombat',
+            ),
+        )
+        history.undo()
+
+        with self.assertTraitDoesNotChange(history, 'undoable'):
+            with self.assertTraitChanges(history, 'redoable', count=1):
+                history.add(undo_item)
+
+        self.assertEqual(history.now, 1)
+        self.assertTrue(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+    def test_undo_last(self):
+        history = UndoHistory()
+        self._populate_history(history)
+
+        with self.assertTraitDoesNotChange(history, 'undoable'):
+            with self.assertTraitChanges(history, 'redoable', count=1):
+                with self.assertTraitChanges(self._example, 'anytrait', count=1):  # noqa: E501
+                    history.undo()
+
+        self.assertEqual(history.now, 2)
+        self.assertTrue(history.can_undo)
+        self.assertTrue(history.can_redo)
+
+    def test_undo_first(self):
+        history = UndoHistory()
+        self._populate_history(history)
+        history.undo()
+        history.undo()
+
+        with self.assertTraitDoesNotChange(history, 'redoable'):
+            with self.assertTraitChanges(history, 'undoable', count=1):
+                with self.assertTraitChanges(self._example, 'anytrait', count=1):  # noqa: E501
+                    history.undo()
+
+        self.assertEqual(history.now, 0)
+        self.assertFalse(history.can_undo)
+        self.assertTrue(history.can_redo)
+
+    def test_undo_middle(self):
+        history = UndoHistory()
+        self._populate_history(history)
+        history.undo()
+
+        with self.assertTraitDoesNotChange(history, 'redoable'):
+            with self.assertTraitDoesNotChange(history, 'undoable'):
+                with self.assertTraitChanges(self._example, 'anytrait', count=1):  # noqa: E501
+                    history.undo()
+
+        self.assertEqual(history.now, 1)
+        self.assertTrue(history.can_undo)
+        self.assertTrue(history.can_redo)
+
+    def test_redo_last(self):
+        history = UndoHistory()
+        self._populate_history(history)
+        history.undo()
+
+        with self.assertTraitChanges(history, 'redoable', count=1):
+            with self.assertTraitDoesNotChange(history, 'undoable'):
+                with self.assertTraitChanges(self._example, 'anytrait', count=1):  # noqa: E501
+                    history.redo()
+
+        self.assertEqual(history.now, 3)
+        self.assertTrue(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+    def test_redo_middle(self):
+        history = UndoHistory()
+        self._populate_history(history)
+        history.undo()
+        history.undo()
+
+        with self.assertTraitDoesNotChange(history, 'redoable'):
+            with self.assertTraitDoesNotChange(history, 'undoable'):
+                with self.assertTraitChanges(self._example, 'anytrait', count=1):  # noqa: E501
+                    history.redo()
+
+        self.assertEqual(history.now, 2)
+        self.assertTrue(history.can_undo)
+        self.assertTrue(history.can_redo)
+
+    def test_redo_first(self):
+        history = UndoHistory()
+        self._populate_history(history)
+        history.undo()
+        history.undo()
+        history.undo()
+
+        with self.assertTraitDoesNotChange(history, 'redoable'):
+            with self.assertTraitChanges(history, 'undoable', count=1):
+                with self.assertTraitChanges(self._example, 'anytrait', count=1):  # noqa: E501
+                    history.redo()
+
+        self.assertEqual(history.now, 1)
+        self.assertTrue(history.can_undo)
+        self.assertTrue(history.can_redo)
+
+    def test_revert_end(self):
+        history = UndoHistory()
+        self._populate_history(history)
+
+        with self.assertTraitDoesNotChange(history, 'redoable'):
+            with self.assertTraitChanges(history, 'undoable', count=1):
+                with self.assertTraitChanges(self._example, 'anytrait', count=3):  # noqa: E501
+                    history.revert()
+
+        self.assertEqual(history.now, 0)
+        self.assertFalse(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+    def test_revert_middle(self):
+        history = UndoHistory()
+        self._populate_history(history)
+        history.undo()
+        history.undo()
+
+        with self.assertTraitChanges(history, 'redoable', count=1):
+            with self.assertTraitChanges(history, 'undoable', count=1):
+                with self.assertTraitChanges(self._example, 'anytrait', count=1):  # noqa: E501
+                    history.revert()
+
+        self.assertEqual(history.now, 0)
+        self.assertFalse(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+    def test_revert_start(self):
+        history = UndoHistory()
+        self._populate_history(history)
+        history.undo()
+        history.undo()
+        history.undo()
+
+        with self.assertTraitDoesNotChange(history, 'undoable'):
+            with self.assertTraitChanges(history, 'redoable', count=1):
+                with self.assertTraitDoesNotChange(self._example, 'anytrait'):
+                    history.revert()
+
+        self.assertEqual(history.now, 0)
+        self.assertFalse(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+    def test_clear_end(self):
+        history = UndoHistory()
+        self._populate_history(history)
+
+        with self.assertTraitDoesNotChange(history, 'redoable'):
+            with self.assertTraitChanges(history, 'undoable', count=1):
+                with self.assertTraitDoesNotChange(self._example, 'anytrait'):
+                    history.clear()
+
+        self.assertEqual(history.now, 0)
+        self.assertFalse(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+    def test_clear_middle(self):
+        history = UndoHistory()
+        self._populate_history(history)
+        history.undo()
+        history.undo()
+
+        with self.assertTraitChanges(history, 'redoable', count=1):
+            with self.assertTraitChanges(history, 'undoable', count=1):
+                with self.assertTraitDoesNotChange(self._example, 'anytrait'):
+                    history.clear()
+
+        self.assertEqual(history.now, 0)
+        self.assertFalse(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+    def test_clear_start(self):
+        history = UndoHistory()
+        self._populate_history(history)
+        history.undo()
+        history.undo()
+        history.undo()
+
+        with self.assertTraitDoesNotChange(history, 'undoable'):
+            with self.assertTraitChanges(history, 'redoable', count=1):
+                with self.assertTraitDoesNotChange(self._example, 'anytrait'):
+                    history.clear()
+
+        self.assertEqual(history.now, 0)
+        self.assertFalse(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
 class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
 
@@ -639,6 +1053,7 @@ class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
 
     def check_history(self, editor, expected_history_now,
                       expected_history_length):
+        # XXX this is testing private state
         if (editor.ui.history.now == expected_history_now and
                 len(editor.ui.history.history) == expected_history_length):
 
