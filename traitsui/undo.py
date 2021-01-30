@@ -26,7 +26,7 @@ from traits.api import (
     Str,
     Trait,
 )
-from pyface.undo.api import AbstractCommand, CommandStack
+from pyface.undo.api import AbstractCommand
 
 
 NumericTypes = (int, float, complex)
