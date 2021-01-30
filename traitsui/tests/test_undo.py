@@ -1039,6 +1039,62 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
         self.assertFalse(history.can_undo)
         self.assertFalse(history.can_redo)
 
+    def test_extend(self):
+        history = UndoHistory()
+        example = SimpleExample(str_value='foo', value=10)
+        undo_item = UndoItem(
+            object=example,
+            name='value',
+            old_value=0,
+            new_value=10,
+        )
+
+        history.add(
+            UndoItem(
+                object=example,
+                name='str_value',
+                old_value='foo',
+                new_value='bar',
+            )
+        )
+
+        with self.assertTraitDoesNotChange(history, 'undoable'):
+            with self.assertTraitDoesNotChange(history, 'redoable'):
+                history.extend(undo_item)
+
+        self.assertEqual(history.now, 1)
+        self.assertTrue(history.can_undo)
+        self.assertFalse(history.can_redo)
+
+    def test_extend_merge(self):
+        history = UndoHistory()
+        example = SimpleExample(str_value='foo', value=10)
+        undo_item = UndoItem(
+            object=example,
+            name='str_value',
+            old_value='foo',
+            new_value='baz',
+        )
+
+        history.add(
+            UndoItem(
+                object=example,
+                name='str_value',
+                old_value='foo',
+                new_value='bar',
+            )
+        )
+
+        with self.assertTraitDoesNotChange(history, 'undoable'):
+            with self.assertTraitDoesNotChange(history, 'redoable'):
+                history.extend(undo_item)
+
+        self.assertEqual(history.now, 1)
+        self.assertTrue(history.can_undo)
+        self.assertFalse(history.can_redo)
+        # XXX this is testing private state to ensure merge happened
+        self.assertEqual(len(history.history[0]), 1)
+
 
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
 class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
