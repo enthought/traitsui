@@ -12,7 +12,7 @@ import functools
 import unittest
 
 from pyface.toolkit import toolkit_object
-from traits.api import Any, HasTraits, Int, Str, Tuple
+from traits.api import Any, HasTraits, Int, List, Str, Tuple
 from traits.testing.api import UnittestTools
 
 from traitsui.tests.test_editor import create_editor
@@ -34,6 +34,8 @@ class SimpleExample(HasTraits):
     str_value = Str()
 
     tuple_value = Tuple()
+
+    list_value = List()
 
     any_value = Any()
 
@@ -439,6 +441,184 @@ class TestUndoItem(UnittestTools, unittest.TestCase):
             name='any_value',
             old_value={'foo', 'wombat', 'baz'},
             new_value={'foo', 'fizz', 'baz'},
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertFalse(result)
+
+
+class TestListUndoItem(UnittestTools, unittest.TestCase):
+
+    def test_undo(self):
+        example = SimpleExample(list_value=['foo', 'wombat', 'baz'])
+
+        undo_item = ListUndoItem(
+            object=example,
+            name='list_value',
+            index=1,
+            added=['wombat', 'baz'],
+            removed=['bar'],
+        )
+
+        with self.assertTraitChanges(example, 'list_value_items', count=1):
+            undo_item.undo()
+
+        self.assertEqual(example.list_value, ['foo', 'bar'])
+
+    def test_redo(self):
+        example = SimpleExample(list_value=['foo', 'bar'])
+
+        undo_item = ListUndoItem(
+            object=example,
+            name='list_value',
+            index=1,
+            added=['wombat', 'baz'],
+            removed=['bar'],
+        )
+
+        with self.assertTraitChanges(example, 'list_value_items', count=1):
+            undo_item.redo()
+
+        self.assertEqual(example.list_value, ['foo', 'wombat', 'baz'])
+
+    def test_merge_identical(self):
+        example = SimpleExample(list_value=['foo', 'wombat', 'baz'])
+        added = [['wombat'], 'baz']
+        removed = [['bar']]
+
+        undo_item = ListUndoItem(
+            object=example,
+            name='list_value',
+            index=1,
+            added=added.copy(),
+            removed=removed.copy(),
+        )
+        next_undo_item = ListUndoItem(
+            object=example,
+            name='list_value',
+            index=1,
+            added=added.copy(),
+            removed=removed.copy(),
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertTrue(result)
+
+    def test_merge_equal(self):
+        example = SimpleExample(list_value=['foo', 'wombat', 'baz'])
+        removed = [['bar']]
+
+        undo_item = ListUndoItem(
+            object=example,
+            name='list_value',
+            index=1,
+            added=[['wombat'], 'baz'],
+            removed=removed.copy()
+        )
+        next_undo_item = ListUndoItem(
+            object=example,
+            name='list_value',
+            index=1,
+            added=[['wombat'], 'baz'],
+            removed=removed.copy(),
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertFalse(result)
+
+    def test_merge_equal_removed(self):
+        example = SimpleExample(list_value=['foo', 'wombat', 'baz'])
+        added = [['wombat'], 'baz']
+
+        undo_item = ListUndoItem(
+            object=example,
+            name='list_value',
+            index=1,
+            added=added.copy(),
+            removed=[['bar']],
+        )
+        next_undo_item = ListUndoItem(
+            object=example,
+            name='list_value',
+            index=1,
+            added=added.copy(),
+            removed=[['bar']],
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertFalse(result)
+
+    def test_merge_different_objects(self):
+        example_1 = SimpleExample()
+        example_2 = SimpleExample()
+        added = [['wombat'], 'baz']
+        removed = [['bar']]
+
+        undo_item = ListUndoItem(
+            object=example_1,
+            name='list_value',
+            index=1,
+            added=added.copy(),
+            removed=removed.copy(),
+        )
+        next_undo_item = ListUndoItem(
+            object=example_2,
+            name='list_value',
+            index=1,
+            added=added.copy(),
+            removed=removed.copy(),
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertFalse(result)
+
+    def test_merge_different_traits(self):
+        example = SimpleExample()
+        added = [['wombat'], 'baz']
+        removed = [['bar']]
+
+        undo_item = ListUndoItem(
+            object=example,
+            name='list_value',
+            index=1,
+            added=added.copy(),
+            removed=removed.copy(),
+        )
+        next_undo_item = ListUndoItem(
+            object=example,
+            name='any_value',
+            index=1,
+            added=added.copy(),
+            removed=removed.copy(),
+        )
+
+        result = undo_item.merge(next_undo_item)
+
+        self.assertFalse(result)
+
+    def test_merge_different_index(self):
+        example = SimpleExample()
+        added = [['wombat'], 'baz']
+        removed = [['bar']]
+
+        undo_item = ListUndoItem(
+            object=example,
+            name='list_value',
+            index=1,
+            added=added.copy(),
+            removed=removed.copy(),
+        )
+        next_undo_item = ListUndoItem(
+            object=example,
+            name='any_value',
+            index=0,
+            added=added.copy(),
+            removed=removed.copy(),
         )
 
         result = undo_item.merge(next_undo_item)
