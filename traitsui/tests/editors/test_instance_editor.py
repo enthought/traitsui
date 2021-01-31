@@ -11,11 +11,7 @@
 import unittest
 
 from pyface.toolkit import toolkit_object
-<<<<<<< HEAD
-from traits.api import HasTraits, Instance, Str, String
-=======
-from traits.api import HasTraits, Instance, List, Str
->>>>>>> tests/more-instance-editor-tests
+from traits.api import HasTraits, Instance, List, Str, String
 from traitsui.api import InstanceEditor, Item, View
 from traitsui.tests._tools import (
     BaseTestMixin,
@@ -25,18 +21,13 @@ from traitsui.tests._tools import (
 
 from traitsui.testing.api import (
     DisplayedText,
-<<<<<<< HEAD
+    Index,
     IsEnabled,
     KeyClick,
     KeySequence,
     MouseClick,
-    TargetByName,
-=======
-    Index,
-    KeySequence,
-    MouseClick,
     SelectedText,
->>>>>>> tests/more-instance-editor-tests
+    TargetByName,
     UITester
 )
 
