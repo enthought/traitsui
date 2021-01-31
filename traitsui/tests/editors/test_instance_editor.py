@@ -272,11 +272,10 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
 
     def test_propagate_errors_switch_selection(self):
         obj = ObjectWithValidatedList()
-        ui_tester = UITester(delay=1000)
+        ui_tester = UITester()
         with ui_tester.create_ui(obj, {'view': selection_view}) as ui:
             something_ui = ui_tester.find_by_name(ui, "inst")
 
-            something_ui.help()
             something_ui.locate(Index(0)).perform(MouseClick())
 
             some_string_field = something_ui.locate(
