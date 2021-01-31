@@ -97,6 +97,17 @@ class ObjectWithValidatedInstance(HasTraits):
     )
 
 
+class ObjectWithValidatedList(HasTraits):
+    inst_list = List(Instance(HasTraits))
+    inst = Instance(HasTraits, ())
+
+    def _inst_list_default(self):
+        return [
+            ValidatedEditedInstance(some_string=value)
+            for value in ['a', 'b', 'c']
+        ]
+
+
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
 
@@ -258,3 +269,43 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
                 instance_editor_ui.errors, ui.errors
             )
             self.assertFalse(ok_button.inspect(IsEnabled()))
+
+    def test_propagate_errors_switch_selection(self):
+        obj = ObjectWithValidatedList()
+        ui_tester = UITester(delay=1000)
+        with ui_tester.create_ui(obj, {'view': selection_view}) as ui:
+            something_ui = ui_tester.find_by_name(ui, "inst")
+
+            something_ui.help()
+            something_ui.locate(Index(0)).perform(MouseClick())
+
+            some_string_field = something_ui.locate(
+                TargetByName('some_string')
+            )
+            some_string_field.perform(KeySequence("bcde"))
+            some_string_field.perform(KeyClick("Enter"))
+
+            ok_button = ui_tester.find_by_id(ui, "OK")
+
+            instance_editor_ui = something_ui._target._ui
+            instance_editor_ui_parent = something_ui._target._ui.parent
+            self.assertNotEqual(
+                instance_editor_ui, ui
+            )
+            self.assertEqual(
+                instance_editor_ui_parent, ui
+            )
+
+            self.assertEqual(
+                instance_editor_ui.errors, ui.errors
+            )
+            self.assertFalse(ok_button.inspect(IsEnabled()))
+
+            # change to a different selected that is not in an error state
+            something_ui.locate(Index(1)).perform(MouseClick())
+
+            self.assertEqual(
+                instance_editor_ui.errors, ui.errors
+            )
+            self.assertTrue(ok_button.inspect(IsEnabled()))
+
