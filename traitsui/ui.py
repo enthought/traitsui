@@ -239,6 +239,9 @@ class UI(HasPrivateTraits):
     def dispose(self, result=None, abort=False):
         """ Disposes of the contents of a user interface.
         """
+        if self.parent:
+            self.parent.errors -= self.errors
+
         if result is not None:
             self.result = result
 
