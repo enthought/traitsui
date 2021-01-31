@@ -303,8 +303,4 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             # change to a different selected that is not in an error state
             something_ui.locate(Index(1)).perform(MouseClick())
 
-            self.assertEqual(
-                instance_editor_ui.errors, ui.errors
-            )
             self.assertTrue(ok_button.inspect(IsEnabled()))
-
