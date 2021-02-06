@@ -12,6 +12,7 @@ import functools
 import unittest
 from warnings import catch_warnings
 
+from pyface import __version__ as pyface_version
 from pyface.toolkit import toolkit_object
 from pyface.undo.api import AbstractCommand
 from traits.api import Any, HasTraits, Int, List, Str, Tuple
@@ -27,6 +28,9 @@ if no_gui_test_assistant:
     # ensure null toolkit has an inheritable GuiTestAssistant
     class GuiTestAssistant(object):
         pass
+
+
+pyface_version = tuple(int(x) for x in pyface_version.split('.')[:3])
 
 
 class SimpleExample(HasTraits):
@@ -828,7 +832,7 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
         self.assertTrue(history.can_undo)
         self.assertFalse(history.can_redo)
         # XXX this is testing private state to ensure merge happened
-        self.assertEqual(len(history.history[0]), 1)
+        self.assertEqual(len(history.stack._stack), 1)
 
     def test_add_middle(self):
         history = UndoHistory()
@@ -866,6 +870,10 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
         self.assertTrue(history.can_undo)
         self.assertFalse(history.can_redo)
 
+    @unittest.skipIf(
+        pyface_version <= (7, 2, 0),
+        "Merging doesn't clear subsequent items, see Pyface #883",
+    )
     def test_add_middle_mergeable(self):
         history = UndoHistory()
         example = SimpleExample(str_value='foo', value=10)
@@ -993,7 +1001,7 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
         history = UndoHistory()
         self._populate_history(history)
 
-        with self.assertTraitDoesNotChange(history, 'redoable'):
+        with self.assertTraitChanges(history, 'redoable', count=2):
             with self.assertTraitChanges(history, 'undoable', count=1):
                 with self.assertTraitChanges(self._example, 'anytrait', count=3):  # noqa: E501
                     history.revert()
@@ -1131,7 +1139,7 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
         self.assertTrue(history.can_undo)
         self.assertFalse(history.can_redo)
         # XXX this is testing private state to ensure merge happened
-        self.assertEqual(len(history.history[0]), 1)
+        self.assertEqual(len(history.stack._stack), 1)
 
     def test_general_command_do(self):
         history = UndoHistory()
@@ -1156,16 +1164,10 @@ class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
     def check_history(self, editor, expected_history_now,
                       expected_history_length):
         # XXX this is testing private state
-        if (editor.ui.history.now == expected_history_now and
-                len(editor.ui.history.history) == expected_history_length):
-
-            # Ensure that there is exactly 1 entry in each history item since
-            # no entries can be merged in this test.
-            for itm in editor.ui.history.history:
-                if len(itm) != 1:
-                    return False
-
-            return True
+        return (
+            editor.ui.history.now == expected_history_now
+            and len(editor.ui.history.stack._stack) == expected_history_length
+        )
 
     def undo(self, editor):
         self.gui.invoke_later(editor.ui.history.undo)
