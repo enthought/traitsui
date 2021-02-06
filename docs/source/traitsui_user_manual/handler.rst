@@ -585,31 +585,39 @@ created, as in the following code::
            toolbar = ToolBar(my_action))
 
 
-.. _undo_redo
+.. _undo_redo:
 
 Undo and Redo
 -------------
 
-TraitsUI provides basic undo/redo functionality via the UI object's history
-trait.  This is created automatically for Views other than subpanels whenever
-the View has a menubar or an "Undo" or "Revert" button.  This system is
-largely independent of the Pyface undo/redo functionality, although that may
-change in the future.
+TraitsUI provides basic undo/redo functionality via the |UI| object's history
+trait.  This is created automatically for |View| objects other than subpanels
+whenever the |View| has a menubar or an "Undo" or "Revert" button.  This
+system is largely independent of the
+`Pyface undo/redo functionality <https://docs.enthought.com/pyface/undo.html>`_,
+although that may change in the future.
 
-The primary hook into the undo/redo system is via the do_undoable method of
-the UI object, which calls a provided callable while capturing all changes to
-traits that are being viewed that occur as side-effects of the callable.
-Undo and redo actions then simply reset the values of all of those traits to
-the appropriate before and after values.  This works well for simple cases
-where traits are not heavily interdependent, but may break down in situations
-where there are complex dependencies.
+The primary hook into the undo/redo system is via the |do_undoable| method of
+the |UI| object, which calls the supplied callable while capturing all changes
+to traits that are being viewed while the callable is running.  Undo and redo
+actions then simply reset the values of all of those traits to the appropriate
+before or after values.  This works well for simple cases where traits are not
+heavily interdependent, but may break down in situations where there are
+complex dependencies.
 
-The do_undoable method used called when the value property of an Editor is
-set or when any Action is performed, including Actions associated with complex
-editors that provide context menus.
+The |do_undoable| method is called when the value property of an |Editor| is
+set or when any |Action| is performed, including actions associated with
+complex editors that provide context menus.
 
 
 .. rubric:: Footnotes
 
 .. [11] Except those implemented via the **enabled_when**, **visible_when**,
    and **defined_when** attributes of Items and Groups.
+
+
+.. |Action| replace:: :py:class:`~traitsui.menu.Action`
+.. |Editor| replace:: :py:class:`~traitsui.editor.Editor`
+.. |UI| replace:: :py:class:`~traitsui.ui.UI`
+.. |View| replace:: :py:class:`~traitsui.view.View`
+.. |do_undoable| replace:: :py:meth:`~traitsui.ui.UI.do_undoable`
