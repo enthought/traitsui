@@ -10,13 +10,15 @@
 
 import functools
 import unittest
+from warnings import catch_warnings
 
 from pyface.toolkit import toolkit_object
+from pyface.undo.api import AbstractCommand
 from traits.api import Any, HasTraits, Int, List, Str, Tuple
 from traits.testing.api import UnittestTools
 
 from traitsui.tests.test_editor import create_editor
-from traitsui.undo import ListUndoItem, UndoHistory, UndoItem
+from traitsui.undo import AbstractUndoItem, ListUndoItem, UndoHistory, UndoItem
 from traitsui.tests._tools import BaseTestMixin
 
 GuiTestAssistant = toolkit_object("util.gui_test_assistant:GuiTestAssistant")
@@ -38,6 +40,42 @@ class SimpleExample(HasTraits):
     list_value = List()
 
     any_value = Any()
+
+
+class DummyCommand(AbstractCommand):
+
+    def do(self):
+        self.data = "do"
+
+    def undo(self):
+        self.data = "undo"
+
+    def redo(self):
+        self.data = "redo"
+
+
+class LegacyUndoItem(AbstractUndoItem):
+
+    def undo(self):
+        pass
+
+    def redo(self):
+        pass
+
+
+class TestAbstractUndoItem(UnittestTools, unittest.TestCase):
+
+    def test_merge_undo_deprecated(self):
+        undo_item = LegacyUndoItem()
+        other_item = LegacyUndoItem()
+
+        with catch_warnings(record=True) as w:
+            result = undo_item.merge(other_item)
+            self.assertEqual(len(w), 1)
+            self.assertTrue(issubclass(w[0].category, DeprecationWarning))
+            self.assertIn("merge_undo", str(w[0].message))
+
+        self.assertFalse(result)
 
 
 class TestUndoItem(UnittestTools, unittest.TestCase):
@@ -1094,6 +1132,14 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
         self.assertFalse(history.can_redo)
         # XXX this is testing private state to ensure merge happened
         self.assertEqual(len(history.history[0]), 1)
+
+    def test_general_command_do(self):
+        history = UndoHistory()
+        command = DummyCommand()
+
+        history.add(command)
+
+        self.assertEqual(command.data, "do")
 
 
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")

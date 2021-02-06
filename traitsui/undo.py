@@ -41,10 +41,16 @@ class AbstractUndoItem(AbstractCommand):
     provide the ICommand interface.
     """
 
+    #: A simple default name.
+    name = "Edit"
+
     def do(self):
-        """ Do the change for the first time.
+        """ Does nothing.
+        
+        All undo items log events after they have happened, so by default
+        they do not do anything when added to the history.
         """
-        self.redo()
+        pass
 
     def undo(self):
         """ Undoes the change.
@@ -59,6 +65,12 @@ class AbstractUndoItem(AbstractCommand):
     def merge(self, other):
         """ Merges two undo items if possible.
         """
+        import warnings
+        warnings.warn(
+            "'merge_undo' is deprecated and will be removed in TraitsUI 8, "
+            "use 'merge' instead",
+            DeprecationWarning,
+        )
         return self.merge_undo(other)
 
     def merge_undo(self, undo_item):
@@ -354,6 +366,10 @@ class UndoHistory(HasStrictTraits):
                     self.redoable = False
                 return
 
+        # This does nothing for AbstractUndoItems, but is needed for generic
+        # ICommand instances.
+        undo_item.do()
+        
         self.history[now:] = [[undo_item]]
         self.now += 1
         if self.now == 1:
