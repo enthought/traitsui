@@ -1337,7 +1337,20 @@ class SimpleEditor(Editor):
         except TypeError:
             import inspect
             signature = inspect.signature(new_class.__init__)
-            print(signature)
+            arguments = {
+                param.name: param.default
+                for param in signature.parameters.values()
+                if param.name != 'self'
+            }
+            class_traits = new_class.class_traits()
+            for key in arguments:
+                if key in class_traits.keys():
+                    arguments[key] = class_traits[key].default
+                if arguments[key] == inspect._empty:
+                    # we don't know what to supply as a default
+                    raise 
+                    #arguments[key] = None
+            new_object = new_class(**arguments)
         if (not prompt) or new_object.edit_traits(
             parent=self.control, kind="livemodal"
         ).result:
