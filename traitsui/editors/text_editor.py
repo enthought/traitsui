@@ -97,6 +97,10 @@ class ToolkitEditorFactory(EditorFactory):
     #: Grayed-out placeholder text to be displayed when the editor is empty.
     placeholder = Str()
 
+    #: Whether or not to display a clear button for the text.  This only works
+    #: in the qt>=5.2 backend for simple/text styles of the editor.
+    clear_button = Bool(False)
+
     # -------------------------------------------------------------------------
     #  Traits view definition:
     # -------------------------------------------------------------------------
