@@ -35,7 +35,7 @@ from pyface.qt import QtCore, QtGui
 from pyface.api import ImageResource
 from pyface.ui_traits import convert_image
 from pyface.timer.api import do_later
-from traits.api import Any, Event, Int
+from traits.api import Any, Event, Int, TraitError
 from traitsui.editors.tree_editor import (
     CopyAction,
     CutAction,
@@ -1323,7 +1323,21 @@ class SimpleEditor(Editor):
         node, object, nid = self._data
         self._data = None
         new_node, new_class = self._node_for_class_name(class_name)
-        new_object = new_class()
+        try:
+            new_object = new_class()
+        except TraitError:
+            req_traits_dict = new_class.class_traits(required=True)
+            kwargs = {
+                trait_name: ctrait.default
+                for trait_name, ctrait in req_traits_dict.items()
+            }
+            new_object = new_class(**kwargs)
+
+            prompt = True
+        except TypeError:
+            import inspect
+            signature = inspect.signature(new_class.__init__)
+            print(signature)
         if (not prompt) or new_object.edit_traits(
             parent=self.control, kind="livemodal"
         ).result:
