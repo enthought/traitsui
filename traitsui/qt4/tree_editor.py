@@ -35,7 +35,7 @@ from pyface.qt import QtCore, QtGui
 from pyface.api import ImageResource
 from pyface.ui_traits import convert_image
 from pyface.timer.api import do_later
-from traits.api import Any, Event, Int, TraitError
+from traits.api import Any, Bool, Event, Int, TraitError
 from traitsui.editors.tree_editor import (
     CopyAction,
     CutAction,
@@ -44,6 +44,8 @@ from traitsui.editors.tree_editor import (
     PasteAction,
     RenameAction,
 )
+from traitsui.item import Item
+from traitsui.menu import OKCancelButtons
 from traitsui.tree_node import (
     ITreeNodeAdapterBridge,
     MultiTreeNode,
@@ -53,6 +55,7 @@ from traitsui.tree_node import (
 from traitsui.menu import Menu, Action, Separator
 from traitsui.ui_traits import SequenceTypes
 from traitsui.undo import ListUndoItem
+from traitsui.view import View
 
 from .clipboard import clipboard, PyMimeData
 from .editor import Editor
@@ -1333,7 +1336,52 @@ class SimpleEditor(Editor):
             }
             new_object = new_class(**kwargs)
 
-            prompt = True
+            added_traits_and_handlers = []
+            for trait_name, ctrait in req_traits_dict.items():
+                invalid_trait = Bool(True, visible=False)
+                new_object.add_trait(trait_name+"__invalid", invalid_trait)
+
+                def invalid_handler(event):
+                    obj = event.object
+                    setattr(obj, event.name+"__invalid", False)
+
+                new_object.observe(invalid_handler, trait_name)
+
+                added_traits_and_handlers.append(
+                    (trait_name, invalid_handler)
+                )
+
+            items = []
+            for trait_name in new_object.visible_traits():
+                if trait_name in req_traits_dict:
+                    items.append(
+                        Item(
+                            name=trait_name,
+                            invalid=trait_name+"__invalid",
+                            tooltip="This is a required trait")
+                    )
+                else:
+                    items.append(Item(trait_name))
+            modified_view = View(
+                *items,
+                buttons=OKCancelButtons
+            )
+            if new_object.edit_traits(
+                parent=self.control, kind="livemodal", view=modified_view
+            ).result:
+                for added_trait, handler in added_traits_and_handlers:
+                    new_object.observe(
+                        handler,
+                        added_trait,
+                        remove=True
+                    )
+                    new_object.remove_trait(added_trait+"__invalid")
+                self._undoable_append(node, object, new_object, False)
+
+                # Automatically select the new object if editing is being
+                # performed:
+                if self.factory.editable:
+                    self._tree.setCurrentItem(nid.child(nid.childCount() - 1))
         except TypeError:
             import inspect
             signature = inspect.signature(new_class.__init__)
@@ -1351,15 +1399,17 @@ class SimpleEditor(Editor):
                     raise 
                     #arguments[key] = None
             new_object = new_class(**arguments)
-        if (not prompt) or new_object.edit_traits(
-            parent=self.control, kind="livemodal"
-        ).result:
-            self._undoable_append(node, object, new_object, False)
+            prompt = True
+        else:
+            if (not prompt) or new_object.edit_traits(
+                parent=self.control, kind="livemodal"
+            ).result:
+                self._undoable_append(node, object, new_object, False)
 
-            # Automatically select the new object if editing is being
-            # performed:
-            if self.factory.editable:
-                self._tree.setCurrentItem(nid.child(nid.childCount() - 1))
+                # Automatically select the new object if editing is being
+                # performed:
+                if self.factory.editable:
+                    self._tree.setCurrentItem(nid.child(nid.childCount() - 1))
 
     # ----- Model event handlers: ---------------------------------------------
 
