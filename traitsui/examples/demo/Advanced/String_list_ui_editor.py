@@ -26,7 +26,7 @@ applications.
 """
 # Issue related to the demo warning: enthought/traitsui#960
 
-from traits.api import HasPrivateTraits, List, Str, Property, on_trait_change
+from traits.api import HasPrivateTraits, List, Str, Property, observe
 from traits.etsconfig.api import ETSConfig
 
 from traitsui.api import (
@@ -90,8 +90,8 @@ class _StringListEditor(UIEditor):
 
         return self.edit_traits(parent=parent, kind='subpanel')
 
-    @on_trait_change('selected')
-    def _selected_modified(self):
+    @observe('selected')
+    def _selected_modified(self, event):
         self.value = self.selected
 
 
