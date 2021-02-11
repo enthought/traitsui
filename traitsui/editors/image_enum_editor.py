@@ -20,7 +20,7 @@ from os import getcwd
 
 from os.path import join, dirname, exists
 
-from traits.api import Module, Type, Str, on_trait_change
+from traits.api import Module, Type, Str, observe
 
 from .enum_editor import ToolkitEditorFactory as EditorFactory
 
@@ -56,10 +56,10 @@ class ToolkitEditorFactory(EditorFactory):
             have been set.
         """
         super(ToolkitEditorFactory, self).init()
-        self._update_path()
+        self._update_path(event=None)
 
-    @on_trait_change("path, klass, module")
-    def _update_path(self):
+    @observe("path, klass, module")
+    def _update_path(self, event):
         """ Handles one of the items defining the path being updated.
         """
         if self.path != "":
