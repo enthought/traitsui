@@ -42,7 +42,7 @@ from traits.api import (
     Property,
     Str,
     cached_property,
-    on_trait_change,
+    observe,
 )
 
 from traitsui.api import (
@@ -1396,8 +1396,8 @@ class TableFilterEditor(HasTraits):
         else:
             self.selected_filter = None
 
-    @on_trait_change("selected_filter:name")
-    def _update_filter_list(self):
+    @observe("selected_filter:name")
+    def _update_filter_list(self, event):
         """ A hack to make the EnumEditor watching the list of filters refresh
             their text when the name of the selected filter changes.
         """
