@@ -23,7 +23,7 @@ from traits.api import (
     Property,
     Str,
     cached_property,
-    on_trait_change,
+    observe,
 )
 
 from .api import HGroup, Item, KeyBindingEditor, ListEditor, View, toolkit
@@ -254,12 +254,16 @@ class KeyBindings(HasPrivateTraits):
         if old is not None:
             old.border_size = 0
 
-    @on_trait_change("children[]")
-    def _children_modified(self, removed, added):
+    @observe("children.items")
+    def _children_modified(self, event):
         """ Handles child KeyBindings being added to the object.
         """
-        for item in added:
-            item.parent = self
+        if isinstance(event.object, KeyBinding):
+            for item in event.new:
+                item.parent = self
+        else:
+            for item in event.added:
+                item.parent = self
 
     # -- object Method Overrides ----------------------------------------------
 
