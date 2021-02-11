@@ -35,7 +35,7 @@ from traits.api import (
     Event,
     Bool,
     TraitError,
-    on_trait_change,
+    observe,
 )
 from traits.trait_base import SequenceTypes
 
@@ -320,8 +320,8 @@ class SourceEditor(Editor):
     def _squiggle_color_changed(self):
         pass
 
-    @on_trait_change("dim_lines, squiggle_lines")
-    def _style_document(self):
+    @observe("dim_lines, squiggle_lines")
+    def _style_document(self, event):
         self._widget.set_warn_lines(self.squiggle_lines)
 
 
