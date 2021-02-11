@@ -23,7 +23,7 @@ from traits.api import (
     Str,
     Float,
     TraitError,
-    on_trait_change,
+    observe,
 )
 
 from traitsui.api import View, Item, EnumEditor
@@ -134,7 +134,7 @@ class _ScrubberEditor(Editor):
 
         # Force a reset (in case low = high = None, which won't cause a
         # notification to fire):
-        self._reset_scrubber()
+        self._reset_scrubber(event=None)
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -199,8 +199,8 @@ class _ScrubberEditor(Editor):
 
     # -- Private Methods ------------------------------------------------------
 
-    @on_trait_change("low, high")
-    def _reset_scrubber(self):
+    @observe("low, high")
+    def _reset_scrubber(self, event):
         """ Sets the the current tooltip.
         """
         low, high = self.low, self.high
