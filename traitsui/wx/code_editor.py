@@ -16,7 +16,7 @@
 import wx
 import wx.stc as stc
 
-from traits.api import Str, List, Int, Event, Bool, TraitError, on_trait_change
+from traits.api import Str, List, Int, Event, Bool, TraitError, observe
 
 from traits.trait_base import SequenceTypes
 
@@ -239,7 +239,7 @@ class SourceEditor(Editor):
             control.SetReadOnly(readonly)
             self._mark_lines_changed()
             self._selected_line_changed()
-            self._style_document()
+            self._style_document(event=None)
 
         self._locked = False
 
@@ -317,8 +317,8 @@ class SourceEditor(Editor):
         self.control.IndicatorSetForeground(2, self.squiggle_color)
         self.control.Refresh()
 
-    @on_trait_change("dim_lines, squiggle_lines")
-    def _style_document(self):
+    @observe("dim_lines, squiggle_lines")
+    def _style_document(self, event):
         """ Force the STC to fire a STC_STYLENEEDED event for the entire
             document.
         """
