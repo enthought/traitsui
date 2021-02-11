@@ -40,8 +40,8 @@ class SimpleEditor(Editor):
 
         self.control = QtGui.QDateTimeEdit()
         self.control.dateTimeChanged.connect(self.update_object)
-        self.update_minimum_datetime()
-        self.update_maximum_datetime()
+        self.update_minimum_datetime(event=None)
+        self.update_maximum_datetime(event=None)
 
     def dispose(self):
         """ Disposes of the contents of an editor.
