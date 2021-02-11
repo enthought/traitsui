@@ -13,7 +13,7 @@
 """
 
 
-from traits.api import Any, on_trait_change
+from traits.api import Any, observe
 
 from pyface.timer.api import do_later
 
@@ -60,8 +60,8 @@ class _HistoryEditor(Editor):
 
         super(_HistoryEditor, self).dispose()
 
-    @on_trait_change("history:value")
-    def _value_changed(self, value):
+    @observe("history:value")
+    def _value_changed(self, event):
         """ Handles the history object's 'value' trait being changed.
         """
         if not self._dont_update:
