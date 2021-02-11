@@ -14,7 +14,7 @@
 
 from pyface.qt import QtGui, qt_api
 from pyface.qt.QtCore import QDateTime
-from traits.api import Datetime, on_trait_change
+from traits.api import Datetime, observe
 
 from .editor import Editor
 from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
@@ -78,8 +78,8 @@ class SimpleEditor(Editor):
         except ValueError:
             pass
 
-    @on_trait_change('minimum_datetime')
-    def update_minimum_datetime(self):
+    @observe('minimum_datetime')
+    def update_minimum_datetime(self, event):
         # sanity checking of values
         if (self.minimum_datetime is not None
                 and self.maximum_datetime is not None
@@ -94,8 +94,8 @@ class SimpleEditor(Editor):
             else:
                 self.control.clearMinimumDateTime()
 
-    @on_trait_change('maximum_datetime')
-    def update_maximum_datetime(self):
+    @observe('maximum_datetime')
+    def update_maximum_datetime(self, event):
         # sanity checking of values
         if (self.minimum_datetime is not None
                 and self.maximum_datetime is not None
