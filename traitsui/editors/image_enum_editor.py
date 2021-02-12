@@ -56,10 +56,10 @@ class ToolkitEditorFactory(EditorFactory):
             have been set.
         """
         super(ToolkitEditorFactory, self).init()
-        self._update_path(event=None)
+        self._update_path()
 
     @observe("path, klass, module")
-    def _update_path(self, event):
+    def _update_path(self, event=None):
         """ Handles one of the items defining the path being updated.
         """
         if self.path != "":

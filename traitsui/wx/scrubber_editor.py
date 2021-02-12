@@ -134,7 +134,7 @@ class _ScrubberEditor(Editor):
 
         # Force a reset (in case low = high = None, which won't cause a
         # notification to fire):
-        self._reset_scrubber(event=None)
+        self._reset_scrubber()
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -200,7 +200,7 @@ class _ScrubberEditor(Editor):
     # -- Private Methods ------------------------------------------------------
 
     @observe("low, high")
-    def _reset_scrubber(self, event):
+    def _reset_scrubber(self, event=None):
         """ Sets the the current tooltip.
         """
         low, high = self.low, self.high

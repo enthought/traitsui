@@ -40,8 +40,8 @@ class SimpleEditor(Editor):
 
         self.control = QtGui.QDateTimeEdit()
         self.control.dateTimeChanged.connect(self.update_object)
-        self.update_minimum_datetime(event=None)
-        self.update_maximum_datetime(event=None)
+        self.update_minimum_datetime()
+        self.update_maximum_datetime()
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -79,7 +79,7 @@ class SimpleEditor(Editor):
             pass
 
     @observe('minimum_datetime')
-    def update_minimum_datetime(self, event):
+    def update_minimum_datetime(self, event=None):
         # sanity checking of values
         if (self.minimum_datetime is not None
                 and self.maximum_datetime is not None
@@ -95,7 +95,7 @@ class SimpleEditor(Editor):
                 self.control.clearMinimumDateTime()
 
     @observe('maximum_datetime')
-    def update_maximum_datetime(self, event):
+    def update_maximum_datetime(self, event=None):
         # sanity checking of values
         if (self.minimum_datetime is not None
                 and self.maximum_datetime is not None

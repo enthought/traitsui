@@ -239,7 +239,7 @@ class SourceEditor(Editor):
             control.SetReadOnly(readonly)
             self._mark_lines_changed()
             self._selected_line_changed()
-            self._style_document(event=None)
+            self._style_document()
 
         self._locked = False
 
@@ -318,7 +318,7 @@ class SourceEditor(Editor):
         self.control.Refresh()
 
     @observe("dim_lines, squiggle_lines")
-    def _style_document(self, event):
+    def _style_document(self, event=None):
         """ Force the STC to fire a STC_STYLENEEDED event for the entire
             document.
         """
