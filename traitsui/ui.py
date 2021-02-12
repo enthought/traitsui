@@ -32,6 +32,7 @@ from traits.api import (
     on_trait_change,
     property_depends_on,
 )
+from traits.observation.api import trait
 
 from traits.trait_base import traits_home, is_str
 
@@ -93,7 +94,12 @@ class UI(HasPrivateTraits):
     history = Any()
 
     #: The KeyBindings object (if any) for this UI:
-    key_bindings = Property(observe=["view._key_bindings", "context"])
+    key_bindings = Property(
+        observe=[
+            trait("view._key_bindings", optional=True),
+            "context",
+        ]
+    )
 
     #: The unique ID for this UI for persistence
     id = Str()
