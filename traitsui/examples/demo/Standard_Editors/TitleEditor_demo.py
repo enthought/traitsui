@@ -50,7 +50,7 @@ class TitleEditorDemo(HasTraits):
     title_2 = Str('Type into the text field below to change this title')
 
     # A title driven by the result of a calculation:
-    title_3 = Property(depends_on='value')
+    title_3 = Property(observe='value')
 
     # The number used to drive the calculation:
     value = Float()

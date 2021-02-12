@@ -108,10 +108,10 @@ class TreeNode(HasPrivateTraits):
     node_for = List(Any)
 
     #: Tuple of object classes that the node applies to
-    node_for_class = Property(depends_on="node_for")
+    node_for_class = Property(observe="node_for")
 
     #: List of object interfaces that the node applies to
-    node_for_interface = Property(depends_on="node_for")
+    node_for_interface = Property(observe="node_for")
 
     #: Function for formatting the label
     formatter = Callable()

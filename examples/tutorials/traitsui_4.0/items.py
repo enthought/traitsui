@@ -121,7 +121,7 @@ class Team(HasTraits):
     players = List(Player)
 
     # The number of players on the team:
-    num_players = Property(depends_on='players')
+    num_players = Property(observe='players')
 
     def _get_num_players(self):
         """ Implementation of the 'num_players' property.
@@ -158,7 +158,7 @@ class LeagueModelView(ModelView):
     got_hit = Button('Got a Hit')
 
     # The total number of hits
-    total_hits = Property(depends_on='model.teams.players.hits')
+    total_hits = Property(observe='model.teams.players.hits')
 
     @cached_property
     def _get_total_hits(self):

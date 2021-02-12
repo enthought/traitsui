@@ -93,7 +93,7 @@ class UI(HasPrivateTraits):
     history = Any()
 
     #: The KeyBindings object (if any) for this UI:
-    key_bindings = Property(depends_on=["view._key_bindings", "context"])
+    key_bindings = Property(observe=["view._key_bindings", "context"])
 
     #: The unique ID for this UI for persistence
     id = Str()

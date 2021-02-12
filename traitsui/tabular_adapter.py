@@ -224,21 +224,21 @@ class TabularAdapter(HasPrivateTraits):
 
     #: The mapping from column indices to column identifiers (defined by the
     #: :py:attr:`columns` trait).
-    column_map = Property(depends_on="columns")
+    column_map = Property(observe="columns")
 
     #: The mapping from column indices to column labels (defined by the
     #: :py:attr:`columns` trait).
-    label_map = Property(depends_on="columns")
+    label_map = Property(observe="columns")
 
     #: The name of the trait on a row item containing the value to use
     #: as a row label. If ``None``, the label will be the empty string.
     row_label_name = Either(None, Str)
 
     #: For each adapter, specifies the column indices the adapter handles.
-    adapter_column_indices = Property(depends_on="adapters,columns")
+    adapter_column_indices = Property(observe="adapters,columns")
 
     #: For each adapter, specifies the mapping from column index to column id.
-    adapter_column_map = Property(depends_on="adapters,columns")
+    adapter_column_map = Property(observe="adapters,columns")
 
     # -------------------------------------------------------------------------
     # TabularAdapter interface

@@ -60,7 +60,7 @@ class MaybeInvalidTrait(HasTraits):
 
     name = Str()
 
-    name_is_invalid = Property(depends_on="name")
+    name_is_invalid = Property(observe="name")
 
     traits_view = View(
         Item("name", invalid="name_is_invalid")

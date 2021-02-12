@@ -50,7 +50,7 @@ Notes:
 
 - As with most traits code and examples, observe how much of the code is
   'declarative' versus 'imperative'. Note also the use of properties and
-  'depends_on' metadata, as well as 'cached_property' and 'on_trait_change'
+  'observe' metadata, as well as 'cached_property' and 'on_trait_change'
   method decorators.
 
 - Try dragging the guest tabs around so that you can see multiple guests
@@ -87,7 +87,7 @@ class Hotel(HasPrivateTraits):
     fuel_cost = Range(2.00, 10.00, 4.00)
 
     # The current minimum temparature allowed by the hotel:
-    min_temperature = Property(depends_on='season, fuel_cost')
+    min_temperature = Property(observe='season, fuel_cost')
 
     # The guests currently staying at the hotel:
     guests = List  # ( Instance( 'Guest' ) )
@@ -158,7 +158,7 @@ class Guest(HasPrivateTraits):
     plan = Enum('Flop house', 'Cheap', 'Cozy', 'Deluxe')
 
     # The maximum temperature allowed by the guest's plan:
-    max_temperature = Property(depends_on='plan')
+    max_temperature = Property(observe='plan')
 
     # The current room temperature as set by the guest:
     temperature = Range('hotel.min_temperature', 'max_temperature')
