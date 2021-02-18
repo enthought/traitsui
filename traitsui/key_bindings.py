@@ -258,9 +258,11 @@ class KeyBindings(HasPrivateTraits):
     def _children_modified(self, event):
         """ Handles child KeyBindings being added to the object.
         """
+        # the full children list is changed
         if isinstance(event.object, KeyBinding):
             for item in event.new:
                 item.parent = self
+        # the contents of the children list are changed
         else:
             for item in event.added:
                 item.parent = self
