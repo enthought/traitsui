@@ -137,15 +137,17 @@ class Hotel(HasPrivateTraits):
     # Event handlers:
     @observe('guests.items')
     def _guests_modified(self, event):
+        # The entire guests list changed
         if isinstance(event.object, Hotel):
             for guest in event.new:
                 guest.hotel = self
+        # the contents of the guests list changed
         else:
             for guest in event.added:
                 guest.hotel = self
 
     def _add_guest_changed(self):
-        self.guests.append(Guest())
+        self.guests.append(Guest(hotel=self))
 
 #-- The Guest class ------------------------------------------------------
 
