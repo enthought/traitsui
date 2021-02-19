@@ -148,7 +148,7 @@ class TestTextEditorQt(
             try:
                 clear_button = name_editor.control.isClearButtonEnabled()
             except AttributeError:
-                # placeholderText is introduced to QTextEdit since Qt 5.2
+                # isClearButtonEnabled is introduced to QLineEdit since Qt 5.2
                 pass
             else:
                 self.assertTrue(clear_button)
