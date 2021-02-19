@@ -868,7 +868,8 @@ class UI(HasPrivateTraits):
             self.parent.errors = self.parent.errors - old + new
 
     def _parent_changed(self, name, old, new):
-        old.errors -= self.errors
+        if old:
+            old.errors -= self.errors
         new.errors += self.errors
 
     def _updated_changed(self):
