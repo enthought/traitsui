@@ -867,6 +867,10 @@ class UI(HasPrivateTraits):
         if self.parent:
             self.parent.errors = self.parent.errors - old + new
 
+    def _parent_changed(self, name, old, new):
+        old.errors -= self.errors
+        new.errors += self.errors
+
     def _updated_changed(self):
         if self.rebuild is not None:
             toolkit().rebuild_ui(self)
