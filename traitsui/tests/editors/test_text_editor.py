@@ -146,7 +146,7 @@ class TestTextEditorQt(
         with tester.create_ui(foo, dict(view=view)) as ui:
             name_editor, = ui.get_editors("name")
             # isClearButtonEnabled is introduced to QLineEdit since Qt 5.2
-            if hasattr(name_editor.contorl, isClearButtonEnabled):
+            if hasattr(name_editor.control, 'isClearButtonEnabled'):
                 self.assertTrue(name_editor.control.isClearButtonEnabled())
 
 
