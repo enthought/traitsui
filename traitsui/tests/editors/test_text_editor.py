@@ -133,25 +133,21 @@ class TestTextEditorQt(
             else:
                 self.assertEqual(placeholder, "Enter name")
 
-    def test_clear_button(self):
+    def test_cancel_button(self):
         foo = Foo()
         view = View(
             Item(
                 name="name",
                 style="simple",
-                editor=TextEditor(clear_button=True),
+                editor=TextEditor(cancel_button=True),
             )
         )
         tester = UITester()
         with tester.create_ui(foo, dict(view=view)) as ui:
             name_editor, = ui.get_editors("name")
-            try:
-                clear_button = name_editor.control.isClearButtonEnabled()
-            except AttributeError:
-                # isClearButtonEnabled is introduced to QLineEdit since Qt 5.2
-                pass
-            else:
-                self.assertTrue(clear_button)
+            # isClearButtonEnabled is introduced to QLineEdit since Qt 5.2
+            if hasattr(name_editor.contorl, isClearButtonEnabled):
+                self.assertTrue(name_editor.control.isClearButtonEnabled())
 
 
 # We should be able to run this test case against wx.
