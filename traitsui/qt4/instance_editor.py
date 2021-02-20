@@ -111,7 +111,7 @@ class CustomEditor(Editor):
 
             if factory.name != "":
                 self._object.observe(
-                    self.rebuild_items, self._name + ".items", dispatch="ui"
+                    self.rebuild_items, self._name + ":items", dispatch="ui"
                 )
 
             factory.on_trait_change(
@@ -350,7 +350,7 @@ class CustomEditor(Editor):
         if self._choice is not None:
             if self._object is not None:
                 self._object.observe(
-                    self.rebuild_items, self._name + ".items", remove=True
+                    self.rebuild_items, self._name + ":items", remove=True
                 )
 
             self.factory.observe(
