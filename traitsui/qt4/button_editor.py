@@ -64,7 +64,7 @@ class SimpleEditor(Editor):
             self.control.toolButtonStyle = QtCore.Qt.ToolButtonTextOnly
             self.control.setText(self.string_value(label))
             self.object.observe(
-                self._update_menu, self.factory.values_trait + ":items"
+                self._update_menu, self.factory.values_trait + ".items"
             )
             self._menu = QtGui.QMenu()
             self._update_menu()
@@ -93,7 +93,7 @@ class SimpleEditor(Editor):
         if self.factory.values_trait:
             self.object.observe(
                 self._update_menu,
-                self.factory.values_trait + ":items",
+                self.factory.values_trait + ".items",
                 remove=True,
             )
 

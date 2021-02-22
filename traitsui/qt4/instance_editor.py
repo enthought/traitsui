@@ -111,7 +111,7 @@ class CustomEditor(Editor):
 
             if factory.name != "":
                 self._object.observe(
-                    self.rebuild_items, self._name + ":items", dispatch="ui"
+                    self.rebuild_items, self._name + ".items", dispatch="ui"
                 )
 
             factory.observe(
@@ -351,7 +351,7 @@ class CustomEditor(Editor):
             if self._object is not None:
                 self._object.observe(
                     self.rebuild_items,
-                    self._name + ":items",
+                    self._name + ".items",
                     remove=True,
                     dispatch="ui"
                 )
