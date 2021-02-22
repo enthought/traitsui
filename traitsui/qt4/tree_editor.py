@@ -692,15 +692,6 @@ class SimpleEditor(Editor):
                 return node
         return None
 
-    def _node_for_class_name(self, class_name):
-        """ Returns the node and class associated with a specified class name.
-        """
-        for node in self.factory.nodes:
-            for klass in node.node_for:
-                if class_name == klass.__name__:
-                    return (node, klass)
-        return (None, None)
-
     def _update_icon(self, nid):
         """ Updates the icon for a specified node.
         """
