@@ -1072,13 +1072,10 @@ class SimpleEditor(Editor):
                     name = add_node.get_name(object)
                     if name == "":
                         name = class_name
-                    items.append(
-                        Action(
-                            name=name,
-                            action="editor._menu_new_node('%s',%s)"
-                            % (class_name, prompt),
-                        )
-                    )
+                    factory = klass
+                    def perform_add(object):
+                        self._menu_new_node(factory, prompt)
+                    items.append(Action(name=name, on_perform=perform_add))
         return items
 
     # -------------------------------------------------------------------------
@@ -1317,13 +1314,12 @@ class SimpleEditor(Editor):
             else:
                 self._set_label(nid, col)
 
-    def _menu_new_node(self, class_name, prompt=False):
+    def _menu_new_node(self, factory, prompt=False):
         """ Adds a new object to the current node.
         """
         node, object, nid = self._data
         self._data = None
-        new_node, new_class = self._node_for_class_name(class_name)
-        new_object = new_class()
+        new_object = factory()
         if (not prompt) or new_object.edit_traits(
             parent=self.control, kind="livemodal"
         ).result:
