@@ -13,7 +13,7 @@ from datetime import date
 from traits.etsconfig.api import ETSConfig
 ETSConfig.toolkit = 'qt4'
 
-from traits.api import Date, Dict, HasTraits, List, on_trait_change
+from traits.api import Date, Dict, HasTraits, List, observe
 from traitsui.api import View, Item, StyledDateEditor
 from traitsui.editors.styled_date_editor import CellFormat
 
@@ -54,8 +54,8 @@ class Foo(HasTraits):
                 2010, 6, 27), date(
                 2010, 6, 24)]
 
-    @on_trait_change("fast_dates,slow_dates")
-    def _update_dates_dict(self):
+    @observe("fast_dates,slow_dates")
+    def _update_dates_dict(self, event):
         self.dates["fast"] = self.fast_dates
         self.dates["slow"] = self.slow_dates
 

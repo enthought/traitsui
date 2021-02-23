@@ -29,7 +29,7 @@ from traits.api import (
     Property,
     Str,
     TraitError,
-    on_trait_change,
+    observe,
     property_depends_on,
 )
 
@@ -872,8 +872,8 @@ class UI(HasPrivateTraits):
         if self.control is not None:
             toolkit().set_icon(self)
 
-    @on_trait_change("parent, view, context")
-    def _pvc_changed(self):
+    @observe("parent, view, context")
+    def _pvc_changed(self, event):
         parent = self.parent
         if (parent is not None) and (self.key_bindings is not None):
             # If we don't have our own history, use our parent's:

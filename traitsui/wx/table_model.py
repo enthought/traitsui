@@ -26,8 +26,9 @@ from traits.api import (
     Instance,
     Event,
     Bool,
-    on_trait_change,
+    observe,
 )
+from traits.observation.api import trait
 
 from traitsui.api import View, Item, Editor
 
@@ -216,8 +217,8 @@ class TableModel(GridModel):
 
     # -- Event Handlers -------------------------------------------------------
 
-    @on_trait_change("filter.+")
-    def _filter_modified(self):
+    @observe(trait("filter").match(lambda name, ctrait: True))
+    def _filter_modified(self, event):
         """ Handles the contents of the filter being changed.
         """
         self._filtered_cache = None

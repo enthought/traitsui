@@ -21,7 +21,7 @@ from traits.api import (
     Interface,
     List,
     Str,
-    on_trait_change,
+    observe,
     provides,
 )
 from .toolkit_traits import Color
@@ -350,8 +350,8 @@ class ListStrAdapter(HasPrivateTraits):
         self.cache[key] = handler
         return handler()
 
-    @on_trait_change("adapters.+update")
-    def _flush_cache(self):
+    @observe("adapters.items.+update")
+    def _flush_cache(self, event):
         """ Flushes the cache when any trait on any adapter changes.
         """
         self.cache = {}
