@@ -317,7 +317,7 @@ class UI(HasPrivateTraits):
 
         # Remove any statusbar listeners that have been set up:
         for object, handler, name in self._statusbar:
-            object.on_trait_change(handler, name, remove=True)
+            object.observe(handler, name, remove=True, dispatch="ui")
 
         del self._statusbar[:]
 
