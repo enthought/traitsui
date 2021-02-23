@@ -75,7 +75,7 @@ class ToolkitEditorFactory(EditorFactory):
     multi_line = Bool(True)
 
     #: Is editor readonly (will use custom / default editor appearance with
-    #: readonly flag set to true) in contrasrt with readonly style for item
+    #: readonly flag set to true) in contrast with readonly style for item
     #: when completely another editor is used
     read_only = Bool(False)
 
