@@ -132,7 +132,7 @@ class BaseDialog(_BasePanel):
                     object = name[:col]
                     name = name[col + 1 :]
                 object = context[object]
-                object.on_trait_change(set_text, name, dispatch="ui")
+                object.observe(set_text, name, dispatch="ui")
                 listeners.append((object, set_text, name))
 
             control.SetStatusWidths(widths)
@@ -140,7 +140,8 @@ class BaseDialog(_BasePanel):
             ui._statusbar = listeners
 
     def _set_status_text(self, control, i):
-        def set_status_text(text):
+        def set_status_text(event):
+            text = event.new
             control.SetStatusText(text, i)
 
         return set_status_text
