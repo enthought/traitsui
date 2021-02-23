@@ -171,7 +171,7 @@ class _ListStrEditor(Editor):
         # Make sure we listen for 'items' changes as well as complete list
         # replacements:
         self.context_object.observe(
-            self.update_editor, self.extended_name + ":items", dispatch="ui"
+            self.update_editor, self.extended_name + ".items", dispatch="ui"
         )
 
         # Create the mapping from user supplied images to QIcons:
@@ -193,7 +193,7 @@ class _ListStrEditor(Editor):
         self.model.endResetModel()
         self.context_object.observe(
             self.update_editor,
-            self.extended_name + ":items",
+            self.extended_name + ".items",
             remove=True,
             dispatch="ui"
         )
