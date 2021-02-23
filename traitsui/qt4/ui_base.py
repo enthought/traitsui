@@ -402,6 +402,7 @@ class BaseDialog(BasePanel):
 
         def set_status_text(event):
             text = event.new
-            control.setText(text)
+            if control:
+                control.setText(text)
 
         return set_status_text
