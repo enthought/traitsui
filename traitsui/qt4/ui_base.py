@@ -390,7 +390,7 @@ class BaseDialog(BasePanel):
                     name = name[col + 1 :]
                 obj = self.ui.context[obj]
                 set_text = self._set_status_text(item_control)
-                obj.on_trait_change(set_text, name, dispatch="ui")
+                obj.observe(set_text, name, dispatch="ui")
                 listeners.append((obj, set_text, name))
 
             self.control._mw.setStatusBar(control)
@@ -400,7 +400,8 @@ class BaseDialog(BasePanel):
         """ Helper function for _add_statusbar.
         """
 
-        def set_status_text(text):
+        def set_status_text(event):
+            text = event.new
             control.setText(text)
 
         return set_status_text
