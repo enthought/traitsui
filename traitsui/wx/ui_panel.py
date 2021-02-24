@@ -119,10 +119,14 @@ class Panel(BaseDialog):
         # Reset any existing history listeners:
         history = ui.history
         if history is not None:
-            history.on_trait_change(self._on_undoable, "undoable", remove=True)
-            history.on_trait_change(self._on_redoable, "redoable", remove=True)
-            history.on_trait_change(
-                self._on_revertable, "undoable", remove=True
+            history.observe(
+                self._on_undoable, "undoable", remove=True, dispatch="ui"
+            )
+            history.observe(
+                self._on_redoable, "redoable", remove=True, dispatch="ui"
+            )
+            history.observe(
+                self._on_revertable, "undoable", remove=True, dispatch="ui"
             )
 
         # Determine if we need any buttons or an 'undo' history:
@@ -191,17 +195,17 @@ class Panel(BaseDialog):
                     self.redo = self.add_button(
                         button, b_sizer, self._on_redo, False, "Redo"
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_undoable, "undoable", dispatch="ui"
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_redoable, "redoable", dispatch="ui"
                     )
                 elif self.is_button(button, "Revert"):
                     self.revert = self.add_button(
                         button, b_sizer, self._on_revert, False
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_revertable, "undoable", dispatch="ui"
                     )
                 elif self.is_button(button, "Help"):
@@ -213,19 +217,22 @@ class Panel(BaseDialog):
 
         cpanel.SetSizerAndFit(sw_sizer)
 
-    def _on_undoable(self, state):
+    def _on_undoable(self, event):
         """ Handles a change to the "undoable" state of the undo history.
         """
+        state = event.new
         self.undo.Enable(state)
 
-    def _on_redoable(self, state):
+    def _on_redoable(self, event):
         """ Handles a change to the "redoable" state of the undo history.
         """
+        state = event.new
         self.redo.Enable(state)
 
-    def _on_revertable(self, state):
+    def _on_revertable(self, event):
         """ Handles a change to the "revert" state.
         """
+        state = event.new
         self.revert.Enable(state)
 
     def add_toolbar(self, sizer):

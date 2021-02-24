@@ -163,7 +163,7 @@ class ModalDialog(BaseDialog):
                     self.apply = self.add_button(
                         button, b_sizer, self._on_apply, apply, default=default
                     )
-                    ui.on_trait_change(
+                    ui.observe(
                         self._on_applyable, "modified", dispatch="ui"
                     )
 
@@ -180,7 +180,7 @@ class ModalDialog(BaseDialog):
                     self.ok = self.add_button(
                         button, b_sizer, self._on_ok, default=default
                     )
-                    ui.on_trait_change(self._on_error, "errors", dispatch="ui")
+                    ui.observe(self._on_error, "errors", dispatch="ui")
 
                 elif self.is_button(button, "Cancel"):
                     self.add_button(
@@ -294,12 +294,14 @@ class ModalDialog(BaseDialog):
         ui.handler.revert(ui.info)
         ui.modified = False
 
-    def _on_applyable(self, state):
+    def _on_applyable(self, event):
         """ Handles a change to the "modified" state of the user interface .
         """
+        state = event.new
         self.apply.Enable(state)
 
-    def _on_error(self, errors):
+    def _on_error(self, event):
         """ Handles editing errors.
         """
+        errors = event.new
         self.ok.Enable(errors == 0)

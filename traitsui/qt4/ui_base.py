@@ -105,19 +105,22 @@ class BasePanel(_BasePanel):
 
         return button
 
-    def _on_undoable(self, state):
+    def _on_undoable(self, event):
         """Handles a change to the "undoable" state of the undo history
         """
+        state = event.new
         self.undo.setEnabled(state)
 
-    def _on_redoable(self, state):
+    def _on_redoable(self, event):
         """Handles a change to the "redoable" state of the undo history.
         """
+        state = event.new
         self.redo.setEnabled(state)
 
-    def _on_revertable(self, state):
+    def _on_revertable(self, event):
         """ Handles a change to the "revert" state.
         """
+        state = event.new
         self.revert.setEnabled(state)
 
 
@@ -330,9 +333,9 @@ class BaseDialog(BasePanel):
 
         self.control.setWindowIcon(icon.create_icon())
 
-    def _on_error(self, errors):
+    def _on_error(self, event):
         """Handles editing errors."""
-
+        errors = event.new
         self.ok.setEnabled(errors == 0)
 
     def _add_menubar(self):
@@ -387,7 +390,7 @@ class BaseDialog(BasePanel):
                     name = name[col + 1 :]
                 obj = self.ui.context[obj]
                 set_text = self._set_status_text(item_control)
-                obj.on_trait_change(set_text, name, dispatch="ui")
+                obj.observe(set_text, name, dispatch="ui")
                 listeners.append((obj, set_text, name))
 
             self.control._mw.setStatusBar(control)
@@ -397,7 +400,8 @@ class BaseDialog(BasePanel):
         """ Helper function for _add_statusbar.
         """
 
-        def set_status_text(text):
+        def set_status_text(event):
+            text = event.new
             control.setText(text)
 
         return set_status_text
