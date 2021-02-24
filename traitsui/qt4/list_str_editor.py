@@ -170,8 +170,8 @@ class _ListStrEditor(Editor):
 
         # Make sure we listen for 'items' changes as well as complete list
         # replacements:
-        self.context_object.on_trait_change(
-            self.update_editor, self.extended_name + "_items", dispatch="ui"
+        self.context_object.observe(
+            self.update_editor, self.extended_name + ".items", dispatch="ui"
         )
 
         # Create the mapping from user supplied images to QIcons:
@@ -179,7 +179,7 @@ class _ListStrEditor(Editor):
             self._add_image(image_resource)
 
         # Refresh the editor whenever the adapter changes:
-        self.on_trait_change(
+        self.observe(
             self.refresh_editor, "adapter.+update", dispatch="ui"
         )
 
@@ -191,13 +191,15 @@ class _ListStrEditor(Editor):
         """
         self.model.beginResetModel()
         self.model.endResetModel()
-
-        self.context_object.on_trait_change(
-            self.update_editor, self.extended_name + "_items", remove=True
+        self.context_object.observe(
+            self.update_editor,
+            self.extended_name + ".items",
+            remove=True,
+            dispatch="ui"
         )
 
-        self.on_trait_change(
-            self.refresh_editor, "adapter.+update", remove=True
+        self.observe(
+            self.refresh_editor, "adapter.+update", remove=True, dispatch="ui"
         )
         if self._header_view is not None:
             self._header_view.setModel(None)
@@ -207,7 +209,7 @@ class _ListStrEditor(Editor):
 
         super(Editor, self).dispose()
 
-    def update_editor(self):
+    def update_editor(self, event=None):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
@@ -224,7 +226,7 @@ class _ListStrEditor(Editor):
     #  ListStrEditor interface:
     # -------------------------------------------------------------------------
 
-    def refresh_editor(self):
+    def refresh_editor(self, event=None):
         """ Requests that the underlying list widget to redraw itself.
         """
         self.list_view.viewport().update()

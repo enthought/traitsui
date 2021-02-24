@@ -63,11 +63,8 @@ class SimpleEditor(Editor):
             self.control = QtGui.QToolButton()
             self.control.toolButtonStyle = QtCore.Qt.ToolButtonTextOnly
             self.control.setText(self.string_value(label))
-            self.object.on_trait_change(
-                self._update_menu, self.factory.values_trait
-            )
-            self.object.on_trait_change(
-                self._update_menu, self.factory.values_trait + "_items"
+            self.object.observe(
+                self._update_menu, self.factory.values_trait + ".items"
             )
             self._menu = QtGui.QMenu()
             self._update_menu()
@@ -94,14 +91,9 @@ class SimpleEditor(Editor):
         """
 
         if self.factory.values_trait:
-            self.object.on_trait_change(
+            self.object.observe(
                 self._update_menu,
-                self.factory.values_trait,
-                remove=True,
-            )
-            self.object.on_trait_change(
-                self._update_menu,
-                self.factory.values_trait + "_items",
+                self.factory.values_trait + ".items",
                 remove=True,
             )
 
@@ -112,7 +104,7 @@ class SimpleEditor(Editor):
     def _label_changed(self, label):
         self.control.setText(self.string_value(label))
 
-    def _update_menu(self):
+    def _update_menu(self, event=None):
         self._menu.blockSignals(True)
         self._menu.clear()
         for item in getattr(self.object, self.factory.values_trait):
