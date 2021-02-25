@@ -1059,7 +1059,9 @@ class SimpleEditor(Editor):
         for klass in add:
             prompt = False
             if isinstance(klass, tuple):
-                klass, prompt = klass
+                klass, prompt, *factory_list = klass
+                if factory_list:
+                    factory = factory_list[0]
             add_node = self._node_for_class(klass)
             if add_node is None:
                 continue
@@ -1067,7 +1069,8 @@ class SimpleEditor(Editor):
             name = add_node.get_name(object)
             if name == "":
                 name = class_name
-            factory = klass
+            if not factory:
+                factory = klass
             def perform_add(object):
                 self._menu_new_node(factory, prompt)
             items.append(Action(name=name, on_perform=perform_add))
