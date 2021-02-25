@@ -98,7 +98,10 @@ class TreeNode(HasPrivateTraits):
     #: Automatically close sibling tree nodes?
     auto_close = Bool(False)
 
-    #: List of object classes than can be added or copied
+    #: List of object classes than can be added or copied. Elements of the list
+    #: can be 2-tuples in which case the first item is the object class that
+    #: can be added and the second is a boolean indicating whether or not to
+    #: prompt the user for specific input of traits when adding the object.
     add = List(Any)
 
     #: List of object classes that can be moved
