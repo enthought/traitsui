@@ -1318,13 +1318,7 @@ class SimpleEditor(Editor):
         """
         node, object, nid = self._data
         self._data = None
-        try:
-            new_object = factory()
-        except:
-            from traitsui.api import raise_to_debug
-            raise_to_debug()
-            return
-
+        new_object = factory()
         if (not prompt) or new_object.edit_traits(
             parent=self.control, kind="livemodal"
         ).result:
