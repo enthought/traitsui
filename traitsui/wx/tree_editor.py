@@ -1245,6 +1245,7 @@ class SimpleEditor(Editor):
 
         for klass in add:
             prompt = False
+            factory = None
             if isinstance(klass, tuple):
                 klass, prompt, *factory_list = klass
                 if factory_list:
