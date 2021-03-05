@@ -11,6 +11,7 @@
 from traitsui.qt4.enum_editor import (
     ListEditor,
     RadioEditor,
+    ReadonlyEditor,
     SimpleEditor,
 )
 from traitsui.testing.tester.command import (
@@ -173,4 +174,10 @@ def register(registry):
         interaction_class=SelectedText,
         handler=lambda wrapper, _:
             wrapper._target.control.currentItem().text(),
+    )
+
+    registry.register_interaction(
+        target_class=ReadonlyEditor,
+        interaction_class=DisplayedText,
+        handler=lambda wrapper, _: wrapper._target.control.text()
     )
