@@ -39,6 +39,7 @@ from traitsui.editors.enum_editor import ToolkitEditorFactory
 from traitsui.helper import enum_values_changed
 from .constants import OKColor, ErrorColor
 from .editor import Editor
+from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
 
 # default formatting function (would import from string, but not in Python 3)
@@ -496,3 +497,19 @@ class ListEditor(BaseEditor):
             self.value = value
         except Exception:
             pass
+
+
+class ReadonlyEditor(BaseReadonlyEditor):
+    """ Readonly Traits UI Enum editor.
+    """
+    def set_size_policy(self, direction, resizable, springy, stretch):
+        super(ReadonlyEditor, self).set_size_policy(
+            direction, resizable, springy, stretch
+        )
+
+        if (direction == QtGui.QBoxLayout.LeftToRight and springy) or (
+            direction != QtGui.QBoxLayout.LeftToRight and resizable
+        ):
+            self.control.setSizePolicy(
+                QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed
+            )
