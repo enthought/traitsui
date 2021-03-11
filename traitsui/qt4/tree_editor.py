@@ -1060,9 +1060,10 @@ class SimpleEditor(Editor):
             prompt = False
             factory = None
             if isinstance(klass, tuple):
-                klass, prompt, *factory_list = klass
-                if factory_list:
-                    factory = factory_list[0]
+                if len(klass) == 2:
+                    klass, prompt = klass
+                elif len(klass) == 3:
+                    klass, prompt, factory = klass
             add_node = self._node_for_class(klass)
             if add_node is None:
                 continue
