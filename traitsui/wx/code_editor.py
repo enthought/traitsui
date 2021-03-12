@@ -355,17 +355,17 @@ class SourceEditor(Editor):
 
             if line + 1 in self.dim_lines:
                 # Set styling mask to only style text bits, not indicator bits
-                self.control.StartStyling(position, 0x1F)
+                self.control.StartStyling(position)
                 self.control.SetStyling(style_length, self._dim_style_number)
             elif self.lexer == stc.STC_LEX_NULL:
-                self.control.StartStyling(position, 0x1F)
+                self.control.StartStyling(position)
                 self.control.SetStyling(style_length, stc.STC_STYLE_DEFAULT)
 
             if line + 1 in self.squiggle_lines:
-                self.control.StartStyling(position, stc.STC_INDIC2_MASK)
+                self.control.StartStyling(position)
                 self.control.SetStyling(style_length, stc.STC_INDIC2_MASK)
             else:
-                self.control.StartStyling(position, stc.STC_INDIC2_MASK)
+                self.control.StartStyling(position)
                 self.control.SetStyling(style_length, stc.STC_STYLE_DEFAULT)
 
     def error(self, excp):
