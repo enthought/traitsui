@@ -244,7 +244,7 @@ Visibility and status
    :term:`Handler` (see :ref:`controlling-the-interface-the-handler`).
 
    enabled_when: str
-      Expression that determines whether of group can be edited.
+      Expression that determines whether the group can be edited.
    visible_when: str
       Expression that determines visibility of group.
    defined_when: str
@@ -482,7 +482,7 @@ Visibility and status
    These attributes work similarly to the attributes of the same names on the Item class.
 
    enabled_when: str
-      Expression that determines whether of group can be edited.
+      Expression that determines whether the group can be edited.
    visible_when: str
       Expression that determines visibility of group.
    defined_when: str

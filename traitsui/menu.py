@@ -38,15 +38,27 @@ class Action(PyFaceAction):
     #: False, the action is not visible (and disappears if it was previously
     #: visible). If the value evaluates to True, the action becomes visible.
     #: All **visible_when** conditions are checked each time that any trait
-    #: value is edited in the display. Therefore, you can use **visible_when**
-    #: conditions to hide or show actions in response to user input.
+    #: value on an object in the UI's context is changed. Therefore, you can
+    #: use **visible_when** conditions to hide or show actions in response to
+    #: user input. Be aware that this only applies to traits in the UI's
+    #: context. As a result, changes to nested traits may not trigger the
+    #: expression to be checked they don't also change a trait on some object
+    #: in the context. Additionally, the expression needs to be a valid python
+    #: expression given the context. i.e.
+    #: eval(visible_when, globals=globals(), locals=context) should succeed.
     visible_when = Str()
 
     #: Pre-condition for enabling the action. If the expression evaluates to
     #: False, the action is disabled, that is, it cannot be selected. All
     #: **enabled_when** conditions are checked each time that any trait value
-    #: is edited in the display. Therefore, you can use **enabled_when**
-    #: conditions to enable or disable actions in response to user input.
+    #: on an object in the UI's context is changed. Therefore, you can use
+    #: **enabled_when** conditions to enable or disable actions in response to
+    #: user input. Be aware that this only applies to traits in the UI's
+    #: context. As a result, changes to nested traits may not trigger the
+    #: expression to be checked they don't also change a trait on some object
+    #: in the context. Additionally, the expression needs to be a valid python
+    #: expression given the context. i.e.
+    #: eval(visible_when, globals=globals(), locals=context) should succeed.
     enabled_when = Str()
 
     #: Boolean expression indicating when the action is displayed with a check
