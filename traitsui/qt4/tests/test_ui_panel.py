@@ -11,9 +11,10 @@
 import unittest
 
 from traits.api import HasTraits, Int, Str, Instance
-from traitsui.api import View, Item, Group
+from traitsui.api import HelpButton, View, Item, Group
 from traitsui.menu import ToolBar, Action
 
+from traitsui.testing.api import MouseClick, UITester
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
@@ -40,6 +41,18 @@ class FooPanel(HasTraits):
 
     def _toolbar_default(self):
         return ToolBar(Action(name="Open file"))
+
+
+class HelpPanel(HasTraits):
+    my_int = Int(2, help='this is the help for my int')
+
+    def default_traits_view(self):
+        view = View(
+            Item(name="my_int"),
+            title="HelpPanel",
+            buttons=[HelpButton],
+        )
+        return view
 
 
 class FooDialog(HasTraits):
@@ -172,6 +185,14 @@ class TestUIPanel(unittest.TestCase):
             # No button
             self.assertIsNone(ui.control.findChild(QtGui.QPushButton))
 
+    def test_show_help(self):
+        panel = HelpPanel()
+
+        tester = UITester()
+
+        with tester.create_ui(panel) as ui:
+            help_button = tester.find_by_id(ui, 'Help')
+            help_button.perform(MouseClick())
 
 @requires_toolkit([ToolkitName.qt])
 class TestPanelLayout(unittest.TestCase):
