@@ -23,7 +23,7 @@
 """
 
 
-import html
+from html import escape
 import re
 
 from pyface.qt import QtCore, QtGui
@@ -365,7 +365,7 @@ def show_help(ui, button):
     group = ui._groups[ui._active_group]
     template = help_template()
     if group.help != "":
-        header = template.group_help % html.escape(group.help)
+        header = template.group_help % escape(group.help)
     else:
         header = template.no_group_help
     fields = []
@@ -374,8 +374,8 @@ def show_help(ui, button):
             fields.append(
                 template.item_help
                 % (
-                    html.escape(item.get_label(ui)),
-                    html.escape(item.get_help(ui)),
+                    escape(item.get_label(ui)),
+                    escape(item.get_help(ui)),
                 )
             )
     html_content = template.group_html % (header, "\n".join(fields))
