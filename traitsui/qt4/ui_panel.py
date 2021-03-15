@@ -378,8 +378,8 @@ def show_help(ui, button):
                     html.escape(item.get_help(ui)),
                 )
             )
-    html = template.group_html % (header, "\n".join(fields))
-    HTMLHelpWindow(button, html, 0.25, 0.33)
+    html_content = template.group_html % (header, "\n".join(fields))
+    HTMLHelpWindow(button, html_content, 0.25, 0.33)
 
 
 def show_help_popup(event):
