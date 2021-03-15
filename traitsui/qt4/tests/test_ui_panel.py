@@ -185,14 +185,14 @@ class TestUIPanel(unittest.TestCase):
             # No button
             self.assertIsNone(ui.control.findChild(QtGui.QPushButton))
 
+    # Regression test for enthought/traitsui#1538
     def test_show_help(self):
         panel = HelpPanel()
-
         tester = UITester()
-
         with tester.create_ui(panel) as ui:
             help_button = tester.find_by_id(ui, 'Help')
             help_button.perform(MouseClick())
+
 
 @requires_toolkit([ToolkitName.qt])
 class TestPanelLayout(unittest.TestCase):
