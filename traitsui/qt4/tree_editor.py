@@ -1071,7 +1071,7 @@ class SimpleEditor(Editor):
             name = add_node.get_name(object)
             if name == "":
                 name = class_name
-            if not factory:
+            if factory is None:
                 factory = klass
             def perform_add(object):
                 self._menu_new_node(factory, prompt)
