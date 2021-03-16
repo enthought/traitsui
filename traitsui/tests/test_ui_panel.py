@@ -13,8 +13,6 @@
 
 import unittest
 
-from pyface.toolkit import toolkit_object
-from pyface.constant import OK
 from traits.api import HasTraits, Int
 from traitsui.api import HelpButton, HGroup, Item, spring, VGroup, View
 from traitsui.testing.api import MouseClick, UITester
