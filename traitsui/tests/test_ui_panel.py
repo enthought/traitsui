@@ -80,7 +80,7 @@ class TestUIPanel(BaseTestMixin, unittest.TestCase):
     @unittest.skipIf(no_modal_dialog_tester, "ModalDialogTester unavailable")
     def test_show_help(self):
         panel = HelpPanel()
-        tester = UITester(delay=1000)
+        tester = UITester()
         with tester.create_ui(panel) as ui:
             help_button = tester.find_by_id(ui, 'Help')
 
