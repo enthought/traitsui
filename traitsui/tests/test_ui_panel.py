@@ -25,11 +25,6 @@ from traitsui.tests._tools import (
     ToolkitName,
 )
 
-ModalDialogTester = toolkit_object(
-    "util.modal_dialog_tester:ModalDialogTester"
-)
-no_modal_dialog_tester = ModalDialogTester.__name__ == "Unimplemented"
-
 
 class ObjectWithNumber(HasTraits):
     number1 = Int()
@@ -77,7 +72,6 @@ class TestUIPanel(BaseTestMixin, unittest.TestCase):
             pass
 
     # Regression test for enthought/traitsui#1538
-    @unittest.skipIf(no_modal_dialog_tester, "ModalDialogTester unavailable")
     def test_show_help(self):
         panel = HelpPanel()
         tester = UITester()
