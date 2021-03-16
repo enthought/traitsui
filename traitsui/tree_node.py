@@ -98,7 +98,17 @@ class TreeNode(HasPrivateTraits):
     #: Automatically close sibling tree nodes?
     auto_close = Bool(False)
 
-    #: List of object classes than can be added or copied
+    #: List of object classes than can be added or copied. Elements of the list
+    #: can be either:
+    #: - the klass itself that can be added or copied
+    #: - 2-tuples of the form (klass, prompt) in which case klass is as above
+    #:   and prompt is a boolean indicating whether or not to prompt the user
+    #:   to specify trait values after instantiation when adding the object.
+    #: - 3-tuples of the form (klass, prompt, factory) in which case klass and
+    #:   prompt are as above.  factory is a callable that is expected to return
+    #:   an instance of klass.  Useful if klass has required traits. Otherwise
+    #:   added object is created by simply instantiating klass()
+    #:   ref: enthought/traits#1502
     add = List(Any)
 
     #: List of object classes that can be moved

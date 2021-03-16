@@ -1245,8 +1245,12 @@ class SimpleEditor(Editor):
 
         for klass in add:
             prompt = False
+            factory = None
             if isinstance(klass, tuple):
-                klass, prompt = klass
+                if len(klass) == 2:
+                    klass, prompt = klass
+                elif len(klass) == 3:
+                    klass, prompt, factory = klass
             add_node = self._node_for_class(klass)
             if add_node is None:
                 continue
@@ -1254,7 +1258,8 @@ class SimpleEditor(Editor):
             name = add_node.get_name(object)
             if name == "":
                 name = class_name
-            factory = klass
+            if not factory:
+                factory = klass
             def perform_add(object):
                 self._menu_new_node(factory, prompt)
             items.append(Action(name=name, on_perform=perform_add))
@@ -1560,13 +1565,7 @@ class SimpleEditor(Editor):
         """
         node, object, nid = self._data
         self._data = None
-        try:
-            new_object = factory()
-        except:
-            from traitsui.api import raise_to_debug
-            raise_to_debug()
-            return
-
+        new_object = factory()
         if (not prompt) or new_object.edit_traits(
             parent=self.control, kind="livemodal"
         ).result:
