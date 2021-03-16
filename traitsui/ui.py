@@ -239,6 +239,9 @@ class UI(HasPrivateTraits):
     def dispose(self, result=None, abort=False):
         """ Disposes of the contents of a user interface.
         """
+        if self.parent is not None:
+            self.parent.errors -= self.errors
+
         if result is not None:
             self.result = result
 
@@ -859,6 +862,16 @@ class UI(HasPrivateTraits):
         return self._key_bindings
 
     # -- Traits Event Handlers ------------------------------------------------
+
+    def _errors_changed(self, name, old, new):
+        if self.parent:
+            self.parent.errors = self.parent.errors - old + new
+
+    def _parent_changed(self, name, old, new):
+        if old is not None:
+            old.errors -= self.errors
+        if new is not None:
+            new.errors += self.errors
 
     def _updated_changed(self):
         if self.rebuild is not None:

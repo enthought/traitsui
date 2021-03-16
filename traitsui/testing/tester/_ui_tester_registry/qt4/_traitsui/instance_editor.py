@@ -9,8 +9,13 @@
 # Thanks for using Enthought open source!
 
 from traitsui.testing.tester.command import MouseClick
+from traitsui.testing.tester.locator import Index
+from traitsui.testing.tester.query import SelectedText
+from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
+    BaseSourceWithLocation
+)
 from traitsui.testing.tester._ui_tester_registry.qt4._interaction_helpers import (  # noqa
-    mouse_click_qwidget
+    mouse_click_combobox, mouse_click_qwidget
 )
 from traitsui.testing.tester._ui_tester_registry._traitsui_ui import (
     register_traitsui_ui_solvers,
@@ -41,6 +46,38 @@ def _get_nested_ui_custom(target):
     return target._ui
 
 
+def _get_combobox(target):
+    """ Obtains a nested combobox within an Instance Editor.
+
+    Parameters
+    ----------
+    target : instance of CustomEditor
+    """
+    return target._choice
+
+
+def _click_combobox_index(wrapper, _):
+    return mouse_click_combobox(
+        combobox=_get_combobox(wrapper._target.source),
+        index=wrapper._target.location.index,
+        delay=wrapper.delay,
+    )
+
+
+def _get_combobox_text(wrapper, _):
+    return _get_combobox(wrapper._target).currentText()
+
+
+class _IndexedCustomEditor(BaseSourceWithLocation):
+    """ Wrapper class for CustomEditors with a selection.
+    """
+    source_class = CustomEditor
+    locator_class = Index
+    handlers = [
+        (MouseClick, _click_combobox_index),
+    ]
+
+
 def register(registry):
     """ Register interactions for the given registry.
 
@@ -51,6 +88,8 @@ def register(registry):
     registry : TargetRegistry
         The registry being registered to.
     """
+    _IndexedCustomEditor.register(registry)
+
     registry.register_interaction(
         target_class=SimpleEditor,
         interaction_class=MouseClick,
@@ -59,4 +98,10 @@ def register(registry):
         )
     )
     register_traitsui_ui_solvers(registry, SimpleEditor, _get_nested_ui_simple)
+
+    registry.register_interaction(
+        target_class=CustomEditor,
+        interaction_class=SelectedText,
+        handler=_get_combobox_text,
+    )
     register_traitsui_ui_solvers(registry, CustomEditor, _get_nested_ui_custom)
