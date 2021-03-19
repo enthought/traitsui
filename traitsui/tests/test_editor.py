@@ -917,3 +917,39 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
 
         with self.assertTraitDoesNotChange(user_object, "user_auxiliary"):
             editor.auxiliary_value = 14
+
+    def test_editor_error_msg(self):
+        from pyface.toolkit import toolkit_object
+        from pyface.constant import OK
+        from traits.api import HasTraits, Range
+
+        from traitsui.testing.api import (
+             KeyClick, KeySequence, MouseClick, Textbox, UITester
+        )
+
+        ModalDialogTester = toolkit_object(
+            "util.modal_dialog_tester:ModalDialogTester"
+        )
+
+        class Foo(HasTraits):
+            x = Range(low=0.0, high=1.0, value=0.5, exclude_low=True)
+
+        foo = Foo()
+        tester = UITester()
+        with tester.create_ui(foo) as ui:
+
+            x_range = tester.find_by_name(ui, "x")
+            x_range_textbox = x_range.locate(Textbox())
+
+            for _ in range(3):
+                x_range_textbox.perform(KeyClick('Backspace'))
+
+            x_range_textbox.perform(KeySequence('0.0'))
+
+            def trigger_error():
+                x_range_textbox.perform(KeyClick('Enter'))
+
+
+            mdtester = ModalDialogTester(trigger_error)
+            mdtester.open_and_run(lambda x: x.click_button(OK))
+            self.assertTrue(mdtester.dialog_was_opened)
