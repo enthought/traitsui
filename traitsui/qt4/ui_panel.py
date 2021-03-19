@@ -720,6 +720,43 @@ class _GroupPanel(object):
 
         return outer
 
+
+    def helper(self, item, label):
+        print('HEYYYYYYYYY')
+        print(item)
+        print(label)
+        print(item.visible_when)
+        context = self.ui._get_context(self.ui.context)
+
+        try:
+            cond_value = eval(item.visible_when, globals(), context)
+            print(cond_value)
+
+            # add to update lists only if at_init is True (called on
+            # initialization), or if the editor state has to change
+
+            label.setVisible(cond_value)
+
+        except Exception:
+            # catch errors in the validate_when expression
+            from traitsui.api import raise_to_debug
+
+            raise_to_debug()
+        
+        try:
+            cond_value = eval(item.enaled_when, globals(), context)
+
+            # add to update lists only if at_init is True (called on
+            # initialization), or if the editor state has to change
+
+            label.setEnabled(cond_value)
+
+        except Exception:
+            # catch errors in the validate_when expression
+            from traitsui.api import raise_to_debug
+
+            raise_to_debug()
+
     def _add_items(self, content, outer=None):
         """Adds a list of Item objects, creating a layout if needed.  Return
            the outermost layout.
@@ -792,6 +829,19 @@ class _GroupPanel(object):
 
                     if item.emphasized:
                         self._add_emphasis(label)
+
+                    print('AAAA')
+                    print(item)
+                    print(label)
+                    print(item.visible_when)
+
+                    this_item = item
+                    this_label = label
+                    #self._label_visible_whens = []
+                    #self._label-enabled_whens = []
+                    if item.visible_when or item.enabled_when:
+                        for object in ui.context.values():
+                            object.on_trait_change(lambda: self.helper(this_item, this_label), dispatch="ui")
 
                 # Continue on to the next Item in the list:
                 continue
