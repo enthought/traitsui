@@ -29,6 +29,7 @@ import re
 from pyface.qt import QtCore, QtGui
 
 from traits.api import Any, Instance, Undefined
+from traits.observation.api import match
 
 from traitsui.api import Group
 
@@ -720,42 +721,25 @@ class _GroupPanel(object):
 
         return outer
 
-
-    def helper(self, item, label):
-        print('HEYYYYYYYYY')
-        print(item)
-        print(label)
-        print(item.visible_when)
+    def _label_when(self):
+        self._evaluate_label_condition(self._label_enabled_whens, "enabled")
+        self._evaluate_label_condition(self._label_visible_whens, "visible")
+    
+    def _evaluate_label_condition(self, conditions, kind):
         context = self.ui._get_context(self.ui.context)
 
-        try:
-            cond_value = eval(item.visible_when, globals(), context)
-            print(cond_value)
+        method_dict = {"visible": "setVisible", "enabled": "setEnabled"}
 
-            # add to update lists only if at_init is True (called on
-            # initialization), or if the editor state has to change
+        for when, label in conditions:
+            method_to_call = getattr(label, method_dict[kind])
+            try:
+                cond_value = eval(when, globals(), context)
+                method_to_call(cond_value)
+            except Exception:
+                # catch errors in the validate_when expression
+                from traitsui.api import raise_to_debug
 
-            label.setVisible(cond_value)
-
-        except Exception:
-            # catch errors in the validate_when expression
-            from traitsui.api import raise_to_debug
-
-            raise_to_debug()
-        
-        try:
-            cond_value = eval(item.enaled_when, globals(), context)
-
-            # add to update lists only if at_init is True (called on
-            # initialization), or if the editor state has to change
-
-            label.setEnabled(cond_value)
-
-        except Exception:
-            # catch errors in the validate_when expression
-            from traitsui.api import raise_to_debug
-
-            raise_to_debug()
+                raise_to_debug()
 
     def _add_items(self, content, outer=None):
         """Adds a list of Item objects, creating a layout if needed.  Return
@@ -769,6 +753,9 @@ class _GroupPanel(object):
         group = self.group
         show_left = group.show_left
         columns = group.columns
+
+        self._label_enabled_whens = []
+        self._label_visible_whens = []
 
         # See if a label is needed.
         show_labels = False
@@ -830,18 +817,13 @@ class _GroupPanel(object):
                     if item.emphasized:
                         self._add_emphasis(label)
 
-                    print('AAAA')
-                    print(item)
-                    print(label)
-                    print(item.visible_when)
+                    if item.visible_when:
+                        self._label_visible_whens.append((item.visible_when, label))
+                    if item.enabled_when:
+                        self._label_enabled_whens.append((item.enabled_when, label))
 
-                    this_item = item
-                    this_label = label
-                    #self._label_visible_whens = []
-                    #self._label-enabled_whens = []
-                    if item.visible_when or item.enabled_when:
-                        for object in ui.context.values():
-                            object.on_trait_change(lambda: self.helper(this_item, this_label), dispatch="ui")
+                    for object in ui.context.values():
+                        object.on_trait_change(lambda: self._label_when(), dispatch="ui")
 
                 # Continue on to the next Item in the list:
                 continue
