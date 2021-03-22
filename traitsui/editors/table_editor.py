@@ -27,7 +27,7 @@ from traits.api import (
     Callable,
     Range,
     Trait,
-    on_trait_change,
+    observe,
 )
 
 from ..editor_factory import EditorFactory
@@ -400,8 +400,8 @@ class ToolkitEditorFactory(EditorFactory):
     #  Event handlers:
     # -------------------------------------------------------------------------
 
-    @on_trait_change("filters[]")
-    def _update_filter_editor(self, object, name, old, new):
+    @observe("filters.items")
+    def _update_filter_editor(self, event):
         """ Handles the set of filters associated with the editor's factory
             being changed.
         """

@@ -82,25 +82,10 @@ class Editor(UIEditor):
             control, self.description + " value error", str(excp)
         )
 
-    def set_tooltip(self, control=None):
+    def set_tooltip_text(self, control, text):
         """ Sets the tooltip for a specified control.
         """
-        desc = self.description
-        if desc == "":
-            desc = self.object.base_trait(self.name).tooltip
-            if desc is None:
-                desc = self.object.base_trait(self.name).desc
-                if desc is None:
-                    return False
-
-                desc = "Specifies " + desc
-
-        if control is None:
-            control = self.control
-
-        control.setToolTip(desc)
-
-        return True
+        control.setToolTip(text)
 
     def _enabled_changed(self, enabled):
         """Handles the **enabled** state of the editor being changed.

@@ -70,7 +70,7 @@ from random \
 
 from traits.api \
     import HasPrivateTraits, Str, Enum, Range, List, Button, Instance, \
-    Property, cached_property, on_trait_change
+    Property, cached_property, observe
 
 from traitsui.api \
     import View, VGroup, HGroup, Item, ListEditor, spring
@@ -135,13 +135,19 @@ class Hotel(HasPrivateTraits):
                 min(int(60.00 / self.fuel_cost), 15))
 
     # Event handlers:
-    @on_trait_change('guests[]')
-    def _guests_modified(self, removed, added):
-        for guest in added:
-            guest.hotel = self
+    @observe('guests.items')
+    def _guests_modified(self, event):
+        # The entire guests list changed
+        if isinstance(event.object, Hotel):
+            for guest in event.new:
+                guest.hotel = self
+        # the contents of the guests list changed
+        else:
+            for guest in event.added:
+                guest.hotel = self
 
     def _add_guest_changed(self):
-        self.guests.append(Guest())
+        self.guests.append(Guest(hotel=self))
 
 #-- The Guest class ------------------------------------------------------
 

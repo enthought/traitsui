@@ -155,6 +155,12 @@ SOURCE_DIRS = [
 
 SEARCHER = ExampleSearcher(source_dirs=SOURCE_DIRS)
 SEARCHER.skip_file_if(
+    os.path.join(DEMO, "Advanced", "HDF5_tree_demo.py"),
+    lambda: sys.platform == "darwin",
+    "This example depends on PyTables which may be built to require CPUs with "
+    "a specific AVX version that is not supported on a paricular OSX host.",
+)
+SEARCHER.skip_file_if(
     os.path.join(DEMO, "Advanced", "Table_editor_with_progress_column.py"),
     is_wx, "ProgressRenderer is not implemented in wx.",
 )

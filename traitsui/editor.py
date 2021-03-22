@@ -173,6 +173,20 @@ class Editor(HasPrivateTraits):
         """
         raise NotImplementedError("This method must be overriden.")
 
+    def set_tooltip_text(self, control, text):
+        """ Sets the tooltip for a toolkit control to the provided text.
+
+        This method must be overriden by subclasses.
+
+        Parameters
+        ----------
+        text : str
+            The text to use for the tooltip.
+        control : toolkit control
+            The toolkit control that is having the tooltip set.
+        """
+        raise NotImplementedError("This method must be overriden.")
+
     def string_value(self, value, format_func=None):
         """ Returns the text representation of a specified object trait value.
 
@@ -405,6 +419,64 @@ class Editor(HasPrivateTraits):
             object = self.context_object
 
         return (object, name, partial(xgetattr, object, name))
+
+    def set_tooltip(self, control=None):
+        """ Sets the tooltip for a specified toolkit control.
+
+        This uses the tooltip_text method to get the text to use.
+
+        Parameters
+        ----------
+        control : optional toolkit control
+            The toolkit control that is having the tooltip set.  If None
+            then the editor's control is used.
+
+        Returns
+        -------
+        tooltip_set : bool
+            Whether or not a tooltip value could be set.
+        """
+        text = self.tooltip_text()
+        if text is None:
+            return False
+
+        if control is None:
+            control = self.control
+
+        self.set_tooltip_text(control, text)
+
+        return True
+
+    def tooltip_text(self):
+        """ Get the text for a tooltip, checking various sources.
+
+        This checks for text from, in order:
+
+        - the editor's description trait
+        - the base trait's 'tooltip' metadata
+        - the base trait's 'desc' metadata
+
+        Returns
+        -------
+        text : str or None
+            The text for the tooltip, or None if no suitable text can
+            be found.
+        """
+
+        if self.description:
+            return self.description
+
+        base_trait = self.object.base_trait(self.name)
+
+        text = base_trait.tooltip
+        if text is not None:
+            return text
+
+        text = base_trait.desc
+        if text is not None:
+            return "Specifies " + text
+
+        return None
 
     # -- Utility context managers --------------------------------------------
 

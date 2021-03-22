@@ -124,7 +124,7 @@ speaking three types of actions when one manipulates a GUI in test:
 - Perform an action that mutates GUI state like a user would.
 - Inspect a GUI state like a user would.
 
-(Terminologies are defined in :ref:`advanced-testing`).
+(Terminologies are defined in :ref:`testing-target-interaction-location`).
 Each of these three types of actions should have a public method in the API.
 
 Technically speaking, the behavior of "inspect" is very similar to "perform",

@@ -107,10 +107,14 @@ class _Panel(BasePanel):
 
         # Reset any existing history listeners.
         if history is not None:
-            history.on_trait_change(self._on_undoable, "undoable", remove=True)
-            history.on_trait_change(self._on_redoable, "redoable", remove=True)
-            history.on_trait_change(
-                self._on_revertable, "undoable", remove=True
+            history.observe(
+                self._on_undoable, "undoable", remove=True, dispatch="ui"
+            )
+            history.observe(
+                self._on_redoable, "redoable", remove=True, dispatch="ui"
+            )
+            history.observe(
+                self._on_revertable, "undoable", remove=True, dispatch="ui"
             )
 
         # Determine if we need any buttons or an 'undo' history.
@@ -197,10 +201,10 @@ class _Panel(BasePanel):
                         self.redo = self.add_button(
                             button, bbox, role, self._on_redo, False, "Redo"
                         )
-                        history.on_trait_change(
+                        history.observe(
                             self._on_undoable, "undoable", dispatch="ui"
                         )
-                        history.on_trait_change(
+                        history.observe(
                             self._on_redoable, "redoable", dispatch="ui"
                         )
                     elif self.is_button(button, "Revert"):
@@ -208,7 +212,7 @@ class _Panel(BasePanel):
                         self.revert = self.add_button(
                             button, bbox, role, self._on_revert, False
                         )
-                        history.on_trait_change(
+                        history.observe(
                             self._on_revertable, "undoable", dispatch="ui"
                         )
                     elif self.is_button(button, "Help"):

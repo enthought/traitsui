@@ -36,6 +36,9 @@ class FakeControl(HasTraits):
     #: An event which also can be fired.
     control_event = Event()
 
+    #: The tooltip text for the control.
+    tooltip = Any()
+
 
 class StubEditorFactory(EditorFactory):
     """ A minimal editor factory
@@ -97,6 +100,7 @@ class StubEditor(Editor):
             self.control.on_trait_change(self.update_object, "control_event")
         else:
             self.control.on_trait_change(self.update_object, "control_value")
+        self.set_tooltip()
 
     def dispose(self):
         if self.is_event:
@@ -124,6 +128,9 @@ class StubEditor(Editor):
                 finally:
                     self._no_update = False
 
+    def set_tooltip_text(self, control, text):
+        control.tooltip = text
+
     def set_focus(self, parent):
         pass
 
@@ -137,8 +144,14 @@ class UserObject(HasTraits):
     #: An auxiliary user value
     user_auxiliary = Any(10)
 
-    #: An list user value
+    #: A list user value
     user_list = List(["one", "two", "three"])
+
+    #: A trait with desc metadata.
+    user_desc = Any("test", desc="a trait with desc metadata")
+
+    #: A trait with tooltip metadata.
+    user_tooltip = Any("test", tooltip="a tooltip")
 
     #: An event user value
     user_event = Event()
@@ -153,6 +166,7 @@ def create_editor(
         name="user_value",
         factory=None,
         is_event=False,
+        description="",
 ):
     if context is None:
         user_object = UserObject()
@@ -176,6 +190,7 @@ def create_editor(
         name=name,
         factory=factory,
         object=user_object,
+        description=description,
     )
     return editor
 
@@ -408,6 +423,110 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         self.assertEqual(value, "other_test")
 
         editor.dispose()
+
+    def test_tooltip_default(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context)
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            self.assertIsNone(editor.control.tooltip)
+
+            tooltip_text = editor.tooltip_text()
+            self.assertIsNone(tooltip_text)
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertFalse(set_tooltip_result)
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_from_description(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, description="a tooltip")
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            self.assertEqual(editor.control.tooltip, "a tooltip")
+
+            tooltip_text = editor.tooltip_text()
+            self.assertEqual(tooltip_text, "a tooltip")
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertTrue(set_tooltip_result)
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_text_with_tooltip(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, name='user_tooltip')
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            self.assertEqual(editor.control.tooltip, "a tooltip")
+
+            tooltip_text = editor.tooltip_text()
+            self.assertEqual(tooltip_text, "a tooltip")
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertTrue(set_tooltip_result)
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_text_with_desc(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, name='user_desc')
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            self.assertEqual(
+                editor.control.tooltip,
+                "Specifies a trait with desc metadata",
+            )
+
+            tooltip_text = editor.tooltip_text()
+            self.assertEqual(
+                tooltip_text,
+                "Specifies a trait with desc metadata",
+            )
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertTrue(set_tooltip_result)
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_other_control(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, description="a tooltip")
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            other_control = FakeControl()
+            set_tooltip_result = editor.set_tooltip(other_control)
+
+            self.assertTrue(set_tooltip_result)
+            self.assertEqual(other_control.tooltip, "a tooltip")
+        except Exception:
+            editor.dispose()
+            raise
 
     # Test synchronizing built-in trait values between factory
     # and editor.

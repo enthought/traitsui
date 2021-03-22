@@ -143,6 +143,7 @@ Table UI
 --------
 
 - :class:`~.TabularAdapter`
+- :attr:`~.TableEditor`
 
 Table column types:
 
@@ -158,6 +159,15 @@ Table filter types:
 - :class:`~.MenuTableFilter`
 - :class:`~.RuleTableFilter`
 - :class:`~.TableFilter`
+
+Instance UI
+-----------
+
+- :class:`~.InstanceChoice`
+- :class:`~.InstanceChoiceItem`
+- :class:`~.InstanceDropChoice`
+- :attr:`~.InstanceEditor`
+- :class:`~.InstanceFactoryChoice`
 
 Toolkit Object
 --------------
@@ -191,6 +201,7 @@ Tree UI
 - :class:`~.ITreeNodeAdapter`
 - :class:`~.MultiTreeNode`
 - :class:`~.ObjectTreeNode`
+- :attr:`~.TreeEditor`
 - :class:`~.TreeNode`
 - :class:`~.TreeNodeObject`
 
@@ -378,6 +389,13 @@ from .table_filter import (
 )
 
 from .tabular_adapter import TabularAdapter
+
+from .instance_choice import (
+    InstanceChoice,
+    InstanceChoiceItem,
+    InstanceDropChoice,
+    InstanceFactoryChoice,
+)
 
 from .toolkit import toolkit
 

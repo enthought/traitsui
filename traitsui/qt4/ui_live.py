@@ -92,14 +92,14 @@ class _LiveWindow(BaseDialog):
 
         if self.control is not None:
             if history is not None:
-                history.on_trait_change(
-                    self._on_undoable, "undoable", remove=True
+                history.observe(
+                    self._on_undoable, "undoable", remove=True, dispatch="ui"
                 )
-                history.on_trait_change(
-                    self._on_redoable, "redoable", remove=True
+                history.observe(
+                    self._on_redoable, "redoable", remove=True, dispatch="ui"
                 )
-                history.on_trait_change(
-                    self._on_revertable, "undoable", remove=True
+                history.observe(
+                    self._on_revertable, "undoable", remove=True, dispatch="ui"
                 )
 
             ui.reset()
@@ -158,7 +158,7 @@ class _LiveWindow(BaseDialog):
                         False,
                         default=default,
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_undoable, "undoable", dispatch="ui"
                     )
                     if history.can_undo:
@@ -172,7 +172,7 @@ class _LiveWindow(BaseDialog):
                         False,
                         "Redo",
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_redoable, "redoable", dispatch="ui"
                     )
                     if history.can_redo:
@@ -187,7 +187,7 @@ class _LiveWindow(BaseDialog):
                         False,
                         default=default,
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_revertable, "undoable", dispatch="ui"
                     )
                     if history.can_undo:
@@ -201,7 +201,7 @@ class _LiveWindow(BaseDialog):
                         self.control.accept,
                         default=default,
                     )
-                    ui.on_trait_change(self._on_error, "errors", dispatch="ui")
+                    ui.observe(self._on_error, "errors", dispatch="ui")
 
                 elif self.is_button(button, "Cancel"):
                     self.add_button(

@@ -24,7 +24,7 @@ from traits.api import (
     Any,
     Int,
     Instance,
-    on_trait_change,
+    observe,
 )
 from ..api import Handler
 
@@ -223,8 +223,8 @@ class SaveHandler(Handler):
             ):
                 self.saveObject.save()
 
-    @on_trait_change("autosave, autosaveInterval, saveObject")
-    def _configure_timer(self):
+    @observe("autosave, autosaveInterval, saveObject")
+    def _configure_timer(self, event):
         """ Creates, replaces, or destroys the autosave timer.
         """
         if self._timer:

@@ -31,7 +31,7 @@ from traits.api import (
     Str,
     Either,
     cached_property,
-    on_trait_change,
+    observe,
     provides,
 )
 
@@ -749,8 +749,8 @@ class TabularAdapter(HasPrivateTraits):
 
         return None
 
-    @on_trait_change("columns,adapters.+update")
-    def _flush_cache(self):
+    @observe("columns,adapters.items.+update")
+    def _flush_cache(self, event):
         """ Flushes the cache when the columns or any trait on any adapter
             changes.
         """

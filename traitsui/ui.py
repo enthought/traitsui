@@ -29,7 +29,7 @@ from traits.api import (
     Property,
     Str,
     TraitError,
-    on_trait_change,
+    observe,
     property_depends_on,
 )
 
@@ -239,6 +239,9 @@ class UI(HasPrivateTraits):
     def dispose(self, result=None, abort=False):
         """ Disposes of the contents of a user interface.
         """
+        if self.parent is not None:
+            self.parent.errors -= self.errors
+
         if result is not None:
             self.result = result
 
@@ -317,7 +320,7 @@ class UI(HasPrivateTraits):
 
         # Remove any statusbar listeners that have been set up:
         for object, handler, name in self._statusbar:
-            object.on_trait_change(handler, name, remove=True)
+            object.observe(handler, name, remove=True, dispatch="ui")
 
         del self._statusbar[:]
 
@@ -860,6 +863,16 @@ class UI(HasPrivateTraits):
 
     # -- Traits Event Handlers ------------------------------------------------
 
+    def _errors_changed(self, name, old, new):
+        if self.parent:
+            self.parent.errors = self.parent.errors - old + new
+
+    def _parent_changed(self, name, old, new):
+        if old is not None:
+            old.errors -= self.errors
+        if new is not None:
+            new.errors += self.errors
+
     def _updated_changed(self):
         if self.rebuild is not None:
             toolkit().rebuild_ui(self)
@@ -872,8 +885,8 @@ class UI(HasPrivateTraits):
         if self.control is not None:
             toolkit().set_icon(self)
 
-    @on_trait_change("parent, view, context")
-    def _pvc_changed(self):
+    @observe("parent, view, context")
+    def _pvc_changed(self, event):
         parent = self.parent
         if (parent is not None) and (self.key_bindings is not None):
             # If we don't have our own history, use our parent's:

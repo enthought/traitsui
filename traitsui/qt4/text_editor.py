@@ -108,6 +108,10 @@ class SimpleEditor(Editor):
             # setPlaceholderText is introduced to QTextEdit since Qt 5.2
             control.setPlaceholderText(placeholder)
 
+        if wtype is not QtGui.QTextEdit and QtCore.__version_info__ >= (5, 2):
+            # setClearButtonEnabled is introduced to QLineEdit since Qt 5.2
+            control.setClearButtonEnabled(self.factory.cancel_button)
+
         self.control = control
         # default horizontal policy is Expand, set this to Minimum
         if not (self.item.resizable) and not self.item.springy:
