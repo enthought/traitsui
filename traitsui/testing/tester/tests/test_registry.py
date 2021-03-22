@@ -92,7 +92,7 @@ class TestInteractionRegistry(unittest.TestCase):
         # then
         self.assertEqual(
             registry._get_interactions(SpecificEditor()),
-            set([UserAction, UserAction2])
+            {UserAction, UserAction2}
         )
 
     def test_action_not_supported_report_supported_action(self):
@@ -252,7 +252,7 @@ class TestLocationRegistry(unittest.TestCase):
         # then
         self.assertEqual(
             registry._get_locations(SpecificEditor()),
-            set([Locator1, Locator2])
+            {Locator1, Locator2}
         )
 
     def test_get_location_help_default(self):
