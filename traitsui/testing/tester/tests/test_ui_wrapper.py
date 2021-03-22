@@ -197,17 +197,17 @@ class TestUIWrapperLocationRegistry(unittest.TestCase):
         wrapper = example_ui_wrapper(
             registries=[registry2, registry1],
         )
-        wrapper = wrapper.locate("some string")
+        new_wrapper = wrapper.locate("some string")
 
-        self.assertEqual(wrapper._target, 2)
+        self.assertEqual(new_wrapper._target, 2)
 
         # swap the order
         wrapper = example_ui_wrapper(
             registries=[registry1, registry2],
         )
-        wrapper = wrapper.locate("some other string")
+        new_wrapper = wrapper.locate("some other string")
 
-        self.assertEqual(wrapper._target, 1)
+        self.assertEqual(new_wrapper._target, 1)
 
     def test_location_registry_selection(self):
         # If the first registry says it can't handle the interaction, the next
