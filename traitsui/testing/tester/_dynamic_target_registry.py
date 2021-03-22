@@ -23,7 +23,28 @@ from traitsui.testing.tester.exceptions import (
 
 
 class DynamicTargetRegistry(AbstractTargetRegistry):
-    """ A registry to support targets with dynamic checks.
+    """ Registry to support testing targets that satisfy a given criterion.
+
+    An instance of this registry can be used with ``UITester`` and
+    ``UIWrapper`` such that all given interactions and handlers will be
+    applicable to any target that deemed to be supported by ``can_support``.
+    The general priority rule applies. See :ref:`testing-how-extension-works`
+    in the User Manual for further details.
+
+    For stricter checks on the target type, use
+    :class:`~traitsui.testing.tester.target_registry.TargetRegistry`.
+
+    As an example, this registry::
+
+        registry = DynamicTargetRegistry(
+            can_support=lambda target: target.__class__ is MyEditorClass,
+            interaction_to_handler={MyAction: handler},
+        )
+
+    has equivalent behaviors compared to this registry::
+
+        registry = TargetRegistry()
+        registry.register_interaction(MyEditorClass, MyAction, handler)
 
     Parameters
     ----------
@@ -31,7 +52,10 @@ class DynamicTargetRegistry(AbstractTargetRegistry):
         A callable that return true if the given target is supported
         by the registry.
     interaction_to_handler : dict(type, callable)
-        A dictionary mapping from interaction type to handler callables
+        A dictionary mapping from interaction type to handler callables.
+        Each handler callable in the values should have the signature
+        ``callable(UIWrapper, interaction) -> any``, where ``instance`` should
+        have the type defined in the associated key.
     """
 
     def __init__(self, *, can_support, interaction_to_handler):
