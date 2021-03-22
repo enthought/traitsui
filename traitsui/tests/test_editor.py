@@ -921,6 +921,7 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
     def test_editor_error_msg(self):
         from pyface.toolkit import toolkit_object
         from pyface.constant import OK
+        from pyface.qt import QtGui
         from traits.api import HasTraits, Range
 
         from traitsui.testing.api import (
@@ -949,7 +950,25 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
             def trigger_error():
                 x_range_textbox.perform(KeyClick('Enter'))
 
+            def check_and_close(mdtester):
+                try:
+                    with mdtester.capture_error():
+                        print(mdtester.get_dialog_widget())
+                        self.assertTrue(
+                            mdtester.has_widget(
+                                text="The 'x' trait of a Foo instance must be "
+                                     "0.0 < a floating point number <= 1.0, "
+                                     "but a value of 0.0 <class 'float'> was "
+                                     "specified.",
+                                type_=QtGui.QMessageBox,
+                            )
+                        )
+
+                finally:
+                    mdtester.close(accept=True)
+                    self.assertTrue(mdtester.dialog_was_opened)
+
 
             mdtester = ModalDialogTester(trigger_error)
-            mdtester.open_and_run(lambda x: x.click_button(OK))
+            mdtester.open_and_run(check_and_close)
             self.assertTrue(mdtester.dialog_was_opened)
