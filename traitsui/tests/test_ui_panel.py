@@ -13,6 +13,8 @@
 
 import unittest
 
+from pyface.toolkit import toolkit_object
+from pyface.constant import OK
 from traits.api import HasTraits, Int
 from traitsui.api import HelpButton, HGroup, Item, spring, VGroup, View
 from traitsui.testing.api import MouseClick, UITester
@@ -22,6 +24,11 @@ from traitsui.tests._tools import (
     requires_toolkit,
     ToolkitName,
 )
+
+ModalDialogTester = toolkit_object(
+    "util.modal_dialog_tester:ModalDialogTester"
+)
+no_modal_dialog_tester = ModalDialogTester.__name__ == "Unimplemented"
 
 
 class ObjectWithNumber(HasTraits):
@@ -70,11 +77,16 @@ class TestUIPanel(BaseTestMixin, unittest.TestCase):
             pass
 
     # Regression test for enthought/traitsui#1538
+    @unittest.skipIf(no_modal_dialog_tester, "ModalDialogTester unavailable")
     def test_show_help(self):
         panel = HelpPanel()
         tester = UITester()
         with tester.create_ui(panel) as ui:
             help_button = tester.find_by_id(ui, 'Help')
 
-            # should not fail
-            help_button.perform(MouseClick())
+            def click_help():
+                # should not fail
+                help_button.perform(MouseClick())
+
+            mdtester = ModalDialogTester(click_help)
+            mdtester.open_and_run(lambda x: x.click_button(OK))

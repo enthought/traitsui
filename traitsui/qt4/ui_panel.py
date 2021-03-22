@@ -1310,7 +1310,7 @@ class HTMLHelpWindow(QtGui.QDialog):
 
         # Position and show the dialog
         position_window(self, parent=parent)
-        self.show()
+        self.exec_()
 
 
 # -------------------------------------------------------------------------
