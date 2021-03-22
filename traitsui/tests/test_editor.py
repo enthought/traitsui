@@ -920,12 +920,11 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
 
     def test_editor_error_msg(self):
         from pyface.toolkit import toolkit_object
-        from pyface.constant import OK
         from pyface.qt import QtGui
         from traits.api import HasTraits, Range
 
         from traitsui.testing.api import (
-             KeyClick, KeySequence, MouseClick, Textbox, UITester
+             KeyClick, KeySequence, Textbox, UITester
         )
 
         ModalDialogTester = toolkit_object(
@@ -953,7 +952,6 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
             def check_and_close(mdtester):
                 try:
                     with mdtester.capture_error():
-                        print(mdtester.get_dialog_widget())
                         self.assertTrue(
                             mdtester.has_widget(
                                 text="The 'x' trait of a Foo instance must be "
@@ -963,11 +961,9 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
                                 type_=QtGui.QMessageBox,
                             )
                         )
-
                 finally:
                     mdtester.close(accept=True)
                     self.assertTrue(mdtester.dialog_was_opened)
-
 
             mdtester = ModalDialogTester(trigger_error)
             mdtester.open_and_run(check_and_close)
