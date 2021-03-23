@@ -793,7 +793,7 @@ class _GroupPanel(object):
 
             # Check if it is a spacer:
             elif all_digits.match(name):
-                self._add_spacer_item(item, name, inner, spacer, row, col, show_labels)
+                self._add_spacer_item(item, name, inner, row, col, show_labels)
 
             else:
                 # Otherwise, it must be a trait Item:
@@ -1001,7 +1001,7 @@ class _GroupPanel(object):
 
             line.setFrameShadow(QtGui.QFrame.Sunken)
 
-    def _add_spacer_item(self, item, name, inner, spacer, row, col, show_labels):
+    def _add_spacer_item(self, item, name, inner, row, col, show_labels):
 
         # If so, add the appropriate amount of space to the layout:
         n = int(name)
