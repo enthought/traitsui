@@ -71,8 +71,9 @@ class ObjectWithResizeReadonlyItem(HasTraits):
     def default_traits_view(self):
         return View(
             VGroup(
-                UItem("resizable_readonly_item",
-                    resizable=True, 
+                UItem(
+                    "resizable_readonly_item",
+                    resizable=True,
                     style="readonly",
                 ),
             ),
