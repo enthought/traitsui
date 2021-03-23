@@ -146,10 +146,6 @@ class TestLayout(BaseTestMixin, unittest.TestCase):
             )
 
 
-            
-
-
-
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestOrientation(BaseTestMixin, unittest.TestCase):
     """ Toolkit-agnostic tests on the layout orientations."""
