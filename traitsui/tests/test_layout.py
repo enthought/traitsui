@@ -16,7 +16,7 @@ import unittest
 
 from traits.api import Enum, HasTraits, Str
 
-from traitsui.item import Item
+from traitsui.item import Item, UItem
 from traitsui.view import View
 from traitsui.group import HGroup, VGroup
 from traitsui.testing.api import UITester
@@ -71,7 +71,7 @@ class ObjectWithResizeReadonlyItem(HasTraits):
     def default_traits_view(self):
         return View(
             VGroup(
-                Item("resizable_readonly_item",
+                UItem("resizable_readonly_item",
                     resizable=True, 
                     style="readonly",
                 ),
@@ -134,9 +134,15 @@ class TestLayout(BaseTestMixin, unittest.TestCase):
             resizable_readonly_item = tester.find_by_name(
                 ui, "resizable_readonly_item"
             )
+            # for resizable item expansion should occur in horizontal but not
+            # vertical direction
             self.assertLess(
                 resizable_readonly_item._target.control.height(),
                 _DIALOG_HEIGHT
+            )
+            self.assertEqual(
+                resizable_readonly_item._target.control.width(),
+                _DIALOG_WIDTH
             )
 
 
