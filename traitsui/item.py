@@ -180,8 +180,8 @@ class Item(ViewSubElement):
     #: on an object in the UI's context is changed. Therefore, you can use
     #: **visible_when** conditions to hide or show widgets in response to user
     #: input. Be aware that this only applies to traits in the UI's context. As
-    #: a result, changes to nested traits may not trigger the expression to be
-    #: checked they don't also change a trait on some object in the context.
+    #: a result, changes to nested traits that don't also change a trait on
+    #: some object in the context may not trigger the expression to be checked.
     #: Additionally, the expression needs to be a valid python expression given
     #: the context. i.e. eval(visible_when, globals=globals(), locals=context)
     #: should succeed.
@@ -193,9 +193,9 @@ class Item(ViewSubElement):
     #: on an object in the UI's context is changed. Therefore, you can use
     #: **enabled_when** conditions to enable or disable widgets in response to
     #: user input. Be aware that this only applies to traits in the UI's
-    #: context. As a result, changes to nested traits may not trigger the
-    #: expression to be checked they don't also change a trait on some object
-    #: in the context. Additionally, the expression needs to be a valid python
+    #: context. As a result, changes to nested traits that don't also change a
+    #: trait on some object in the context may not trigger the expression to be
+    #: checked. Additionally, the expression needs to be a valid python
     #: expression given the context. i.e.
     #: eval(enabled_when, globals=globals(), locals=context) should succeed.
     enabled_when = Str()
