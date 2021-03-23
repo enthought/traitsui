@@ -14,13 +14,12 @@ Test the layout of elements is consistent with the layout parameters.
 
 import unittest
 
-from traits.has_traits import HasTraits
-from traits.trait_types import Str
+from traits.api import Enum, HasTraits, Str
 
 from traitsui.item import Item
 from traitsui.view import View
 from traitsui.group import HGroup, VGroup
-
+from traitsui.testing.api import UITester
 from traitsui.tests._tools import (
     BaseTestMixin,
     create_ui,
@@ -64,6 +63,22 @@ class HResizeDialog(HasTraits):
         height=_DIALOG_HEIGHT,
         resizable=True,
     )
+
+
+class ObjectWithResizeReadonlyItem(HasTraits):
+    resizable_readonly_item = Enum("first", "second")
+
+    def default_traits_view(self):
+        return View(
+            VGroup(
+                Item("resizable_readonly_item",
+                    resizable=True, 
+                    style="readonly",
+                ),
+            ),
+            height=_DIALOG_HEIGHT,
+            width=_DIALOG_WIDTH,
+        )
 
 
 class TestLayout(BaseTestMixin, unittest.TestCase):
@@ -110,6 +125,23 @@ class TestLayout(BaseTestMixin, unittest.TestCase):
             # ??? maybe not: some elements (e.g., the text field) have
             # 'Expanding' as their default behavior
             # self.assertLess(text.width(), _TXT_WIDTH+100)
+
+    # regression test for enthought/traitsui#1528
+    @requires_toolkit([ToolkitName.qt])
+    def test_qt_resizable_readonly_item(self):
+        tester = UITester()
+        with tester.create_ui(ObjectWithResizeReadonlyItem()) as ui:
+            resizable_readonly_item = tester.find_by_name(
+                ui, "resizable_readonly_item"
+            )
+            self.assertLess(
+                resizable_readonly_item._target.control.height(),
+                _DIALOG_HEIGHT
+            )
+
+
+            
+
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
