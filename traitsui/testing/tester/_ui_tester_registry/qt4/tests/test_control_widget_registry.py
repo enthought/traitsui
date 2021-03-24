@@ -66,7 +66,7 @@ class TestQtControlWidgetRegistry(unittest.TestCase):
         self.widget.setVisible(True)
         self.assertTrue(self.good_wrapper.inspect(IsVisible()))
 
-    def test_is_disabled(self):
+    def test_is_invisible(self):
         self.widget.setVisible(False)
         self.assertFalse(self.good_wrapper.inspect(IsVisible()))
 
