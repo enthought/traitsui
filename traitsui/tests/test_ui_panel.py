@@ -79,8 +79,15 @@ class TestUIPanel(BaseTestMixin, unittest.TestCase):
     # Regression test for enthought/traitsui#1538
     @unittest.skipIf(no_modal_dialog_tester, "ModalDialogTester unavailable")
     def test_show_help(self):
+
+        # This help window is not actually modal, when opened it will be the
+        # active window not active modal widget
+        class MyTester(ModalDialogTester):
+            def get_dialog_widget(self):
+                return self._qt_app.activeWindow()
+
         panel = HelpPanel()
-        tester = UITester()
+        tester = UITester(auto_process_events=False)
         with tester.create_ui(panel) as ui:
             help_button = tester.find_by_id(ui, 'Help')
 
@@ -88,5 +95,5 @@ class TestUIPanel(BaseTestMixin, unittest.TestCase):
                 # should not fail
                 help_button.perform(MouseClick())
 
-            mdtester = ModalDialogTester(click_help)
+            mdtester = MyTester(click_help)
             mdtester.open_and_run(lambda x: x.click_button(OK))
