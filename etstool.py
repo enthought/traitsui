@@ -316,7 +316,7 @@ def test(runtime, toolkit, environment):
 
     parameters["integrationtests"] = os.path.abspath("integrationtests")
     commands = [
-        "edm run -e {environment} -- python -W default -m coverage run -p -m unittest discover -v traitsui",
+        "edm run -e {environment} -- python -X faulthandler -W default -m coverage run -p -m unittest discover -v traitsui",
         # coverage run prevents local images to be loaded for demo examples
         # which are not defined in Python packages. Run with python directly
         # instead.
