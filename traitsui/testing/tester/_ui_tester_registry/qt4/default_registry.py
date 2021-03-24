@@ -22,16 +22,17 @@ from traitsui.testing.tester._ui_tester_registry.qt4._traitsui import (
     text_editor,
     ui_base,
 )
+from ._control_widget_registry import get_widget_registry
 
 
-def get_default_registry():
-    """ Creates a default registry for UITester that is qt specific.
+def get_default_registries():
+    """ Creates the default registries for UITester that are qt specific.
 
     Returns
     -------
-    registry : TargetRegistry
-        The default registry containing implementations for TraitsUI editors
-        that is qt specific.
+    registries : list of AbstractTargetRegistry
+        The default registries containing implementations for TraitsUI editors
+        that are qt specific.
     """
     registry = TargetRegistry()
 
@@ -68,4 +69,8 @@ def get_default_registry():
     # Editor Factory
     editor_factory.register(registry)
 
-    return registry
+    # The more general registry goes after the more specific registry.
+    return [
+        registry,
+        get_widget_registry(),
+    ]

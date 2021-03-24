@@ -22,16 +22,17 @@ from traitsui.testing.tester._ui_tester_registry.wx._traitsui import (
     text_editor,
     ui_base,
 )
+from ._control_widget_registry import get_widget_registry
 
 
-def get_default_registry():
-    """ Creates a default registry for UITester that is wx specific.
+def get_default_registries():
+    """ Creates the default registries for UITester that are wx specific.
 
     Returns
     -------
-    registry : TargetRegistry
-        The default registry containing implementations for TraitsUI editors
-        that is wx specific.
+    registries : list of AbstractTargetRegistry
+        The default registries containing implementations for TraitsUI editors
+        that are wx specific.
     """
     registry = TargetRegistry()
 
@@ -68,4 +69,8 @@ def get_default_registry():
     # Editor Factory
     editor_factory.register(registry)
 
-    return registry
+    # More general registry follows more specific registry
+    return [
+        registry,
+        get_widget_registry(),
+    ]
