@@ -10,7 +10,10 @@
 
 import unittest
 
-from traits.api import Any, Bool, Event, Float, HasTraits, Int, List, Undefined
+from pyface.toolkit import toolkit_object
+from traits.api import (
+    Any, Bool, Event, Float, HasTraits, Int, List, Range, Undefined
+)
 from traits.trait_base import xgetattr
 
 from traitsui.context_value import ContextValue, CVFloat, CVInt
@@ -18,9 +21,22 @@ from traitsui.editor import Editor
 from traitsui.editor_factory import EditorFactory
 from traitsui.handler import default_handler
 from traitsui.ui import UI
-from traitsui.tests._tools import (
-    BaseTestMixin, GuiTestAssistant, no_gui_test_assistant
+from traitsui.testing.api import (
+    KeyClick, KeySequence, Textbox, UITester
 )
+from traitsui.tests._tools import (
+    BaseTestMixin,
+    GuiTestAssistant,
+    is_mac_os,
+    no_gui_test_assistant,
+    requires_toolkit,
+    ToolkitName,
+)
+
+ModalDialogTester = toolkit_object(
+    "util.modal_dialog_tester:ModalDialogTester"
+)
+no_modal_dialog_tester = ModalDialogTester.__name__ == "Unimplemented"
 
 
 class FakeControl(HasTraits):
@@ -917,3 +933,51 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
 
         with self.assertTraitDoesNotChange(user_object, "user_auxiliary"):
             editor.auxiliary_value = 14
+
+    # regression test for enthought/traitsui#1543
+    @requires_toolkit([ToolkitName.qt])
+    @unittest.skipIf(no_modal_dialog_tester, "ModalDialogTester unavailable")
+    @unittest.skipIf(
+        is_mac_os,
+        "There is a separate issue on OSX. See enthought/traitsui#1550"
+    )
+    def test_editor_error_msg(self):
+        from pyface.qt import QtGui
+
+        class Foo(HasTraits):
+            x = Range(low=0.0, high=1.0, value=0.5, exclude_low=True)
+
+        foo = Foo()
+        tester = UITester()
+        with tester.create_ui(foo) as ui:
+
+            x_range = tester.find_by_name(ui, "x")
+            x_range_textbox = x_range.locate(Textbox())
+
+            for _ in range(3):
+                x_range_textbox.perform(KeyClick('Backspace'))
+
+            x_range_textbox.perform(KeySequence('0.0'))
+
+            def trigger_error():
+                x_range_textbox.perform(KeyClick('Enter'))
+
+            def check_and_close(mdtester):
+                try:
+                    with mdtester.capture_error():
+                        self.assertTrue(
+                            mdtester.has_widget(
+                                text="The 'x' trait of a Foo instance must be "
+                                     "0.0 < a floating point number <= 1.0, "
+                                     "but a value of 0.0 <class 'float'> was "
+                                     "specified.",
+                                type_=QtGui.QMessageBox,
+                            )
+                        )
+                finally:
+                    mdtester.close(accept=True)
+                    self.assertTrue(mdtester.dialog_was_opened)
+
+            mdtester = ModalDialogTester(trigger_error)
+            mdtester.open_and_run(check_and_close)
+            self.assertTrue(mdtester.dialog_was_opened)
