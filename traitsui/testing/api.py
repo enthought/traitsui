@@ -72,6 +72,7 @@ from .tester.query import (
     DisplayedText,
     IsChecked,
     IsEnabled,
+    IsVisible,
     SelectedText
 )
 
