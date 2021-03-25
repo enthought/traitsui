@@ -13,6 +13,7 @@ import unittest
 from traits.api import HasTraits, Int, Str, Instance
 from traitsui.api import View, Item, Group
 from traitsui.menu import ToolBar, Action
+
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
