@@ -12,7 +12,7 @@
 
 import unittest
 
-from traitsui.testing.api import IsEnabled
+from traitsui.testing.api import IsEnabled, IsVisible
 from traitsui.testing.tester.exceptions import (
     LocationNotSupported,
 )
@@ -62,10 +62,18 @@ class TestQtControlWidgetRegistry(unittest.TestCase):
         self.widget.setEnabled(False)
         self.assertFalse(self.good_wrapper.inspect(IsEnabled()))
 
+    def test_is_visible(self):
+        self.widget.setVisible(True)
+        self.assertTrue(self.good_wrapper.inspect(IsVisible()))
+
+    def test_is_invisible(self):
+        self.widget.setVisible(False)
+        self.assertFalse(self.good_wrapper.inspect(IsVisible()))
+
     def test_get_interactions_good_target(self):
         self.assertEqual(
             self.registry._get_interactions(self.target),
-            set([IsEnabled])
+            set([IsEnabled, IsVisible])
         )
 
     def test_get_interactions_bad_target(self):
@@ -74,6 +82,9 @@ class TestQtControlWidgetRegistry(unittest.TestCase):
     def test_get_interaction_doc(self):
         self.assertGreater(
             len(self.registry._get_interaction_doc(self.target, IsEnabled)), 0
+        )
+        self.assertGreater(
+            len(self.registry._get_interaction_doc(self.target, IsVisible)), 0
         )
 
     def test_get_location_solver(self):
