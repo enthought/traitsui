@@ -10,10 +10,10 @@
 
 import unittest
 
-from traits.api import HasTraits, Int, Str, Instance
-from traitsui.api import View, Item, Group
+from traits.api import Enum, HasTraits, Int, Str, Instance
+from traitsui.api import  HGroup, Item, Group, VGroup, View
 from traitsui.menu import ToolBar, Action
-
+from traitsui.testing.api import Index, IsVisible, MouseClick, UITester
 from traitsui.tests._tools import (
     create_ui,
     requires_toolkit,
@@ -109,6 +109,32 @@ scrollable_labelled_group_view = View(
 )
 
 
+class ScrollableGroupVisibleWhen(HasTraits):
+    bar = Str("bar!")
+    baz = Str("Baz?")
+    enabled = Enum("Yes", "No")
+
+    def default_traits_view(self):
+        view = View(
+            Item("enabled"),
+            HGroup(
+                VGroup(
+                    Item("bar"),
+                    scrollable=True,
+                    visible_when="enabled=='Yes'",
+                    id='bar_group'
+                ),
+                VGroup(
+                    Item("baz"),
+                    scrollable=True,
+                    visible_when="enabled=='No'",
+                    id='baz_group'
+                ),
+            ),
+        )
+        return view
+
+
 @requires_toolkit([ToolkitName.qt])
 class TestUIPanel(unittest.TestCase):
     def setup_qt4_dock_window(self):
@@ -171,6 +197,32 @@ class TestUIPanel(unittest.TestCase):
 
             # No button
             self.assertIsNone(ui.control.findChild(QtGui.QPushButton))
+
+    # regression test for enthought/traitsui#1512
+    def test_scrollable_group_visible_when(self):
+        from pyface.qt import QtGui
+
+        obj = ScrollableGroupVisibleWhen()
+        tester = UITester()
+        with tester.create_ui(obj) as ui:
+            bar_group = tester.find_by_id(ui, 'bar_group')
+            baz_group = tester.find_by_id(ui, 'baz_group')
+
+            # for a scrollable group the GroupEditors control should be a
+            # QScrollArea not just the QWidget.  We want the full area to be
+            # not visible, not just the text box widget.
+            self.assertIsInstance(bar_group._target.control, QtGui.QScrollArea)
+            self.assertIsInstance(baz_group._target.control, QtGui.QScrollArea)
+
+            self.assertTrue(bar_group.inspect(IsVisible()))
+            self.assertFalse(baz_group.inspect(IsVisible()))
+
+            enabled_box = tester.find_by_name(ui, 'enabled')
+            baz_item = enabled_box.locate(Index(1))
+            baz_item.perform(MouseClick())
+
+            self.assertTrue(baz_group.inspect(IsVisible()))
+            self.assertFalse(bar_group.inspect(IsVisible()))
 
 
 @requires_toolkit([ToolkitName.qt])
