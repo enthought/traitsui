@@ -942,13 +942,13 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         "There is a separate issue on OSX. See enthought/traitsui#1550"
     )
     def test_editor_error_msg(self):
-        from pyface.qt import QtGui
+        from pyface.qt import QtCore, QtGui
 
         class Foo(HasTraits):
             x = Range(low=0.0, high=1.0, value=0.5, exclude_low=True)
 
         foo = Foo()
-        tester = UITester()
+        tester = UITester(auto_process_events=False)
         with tester.create_ui(foo) as ui:
 
             x_range = tester.find_by_name(ui, "x")
@@ -973,6 +973,10 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
                                      "specified.",
                                 type_=QtGui.QMessageBox,
                             )
+                        )
+                        self.assertEqual(
+                            mdtester.get_dialog_widget().textFormat(),
+                            QtCore.Qt.PlainText
                         )
                 finally:
                     mdtester.close(accept=True)
