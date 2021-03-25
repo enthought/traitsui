@@ -11,7 +11,7 @@
 import unittest
 
 from traits.api import Enum, HasTraits, Int, Str, Instance
-from traitsui.api import  HGroup, Item, Group, VGroup, View
+from traitsui.api import HGroup, Item, Group, VGroup, View
 from traitsui.menu import ToolBar, Action
 from traitsui.testing.api import Index, IsVisible, MouseClick, UITester
 from traitsui.tests._tools import (
