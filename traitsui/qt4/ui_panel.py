@@ -594,6 +594,21 @@ class _GroupPanel(object):
             self._setup_editor(group, editor)
 
         else:
+            if group.scrollable:
+                # ensure a widget rather than a layout for the scroll area
+                if outer is None:
+                    outer = inner = QtGui.QBoxLayout(self.direction)
+                if isinstance(outer, QtGui.QLayout):
+                    widget = QtGui.QWidget()
+                    widget.setLayout(outer)
+                    outer = widget
+
+                # now create a scroll area for the widget
+                scroll_area = QtGui.QScrollArea()
+                scroll_area.setWidget(outer)
+                scroll_area.setWidgetResizable(True)
+                outer = scroll_area
+
             # See if we need to control the visual appearance of the group.
             if group.visible_when != "" or group.enabled_when != "":
                 # Make sure that outer is a widget and inner is a layout.
@@ -609,21 +624,6 @@ class _GroupPanel(object):
 
                 # Create an editor.
                 self._setup_editor(group, GroupEditor(control=outer))
-
-            if group.scrollable:
-                # ensure a widget rather than a layout for the scroll area
-                if outer is None:
-                    outer = inner = QtGui.QBoxLayout(self.direction)
-                if isinstance(outer, QtGui.QLayout):
-                    widget = QtGui.QWidget()
-                    widget.setLayout(outer)
-                    outer = widget
-
-                # now create a scroll area for the widget
-                scroll_area = QtGui.QScrollArea()
-                scroll_area.setWidget(outer)
-                scroll_area.setWidgetResizable(True)
-                outer = scroll_area
 
             if isinstance(content[0], Group):
                 layout = self._add_groups(content, inner)
