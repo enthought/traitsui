@@ -77,6 +77,7 @@ class TestUIPanel(BaseTestMixin, unittest.TestCase):
             pass
 
     # Regression test for enthought/traitsui#1538
+    @requires_toolkit([ToolkitName.qt])
     @unittest.skipIf(no_modal_dialog_tester, "ModalDialogTester unavailable")
     def test_show_help(self):
 
