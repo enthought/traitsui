@@ -49,7 +49,7 @@ def convert_to_color(object, name, value):
     if isinstance(value, int):
         return (
             (value / 0x10000) / 255.0,
-            ((value // 0x100) & 0xFF) / 255.0,
+            ((value //\ 0x100) & 0xFF) / 255.0,
             (value & 0xFF) / 255.0,
         )
     raise TraitError
