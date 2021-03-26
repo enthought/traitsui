@@ -103,8 +103,13 @@ class TabularEditor(BasicEditorFactory):
     #: trigger a scroll-to command. The data is an integer giving the column.
     scroll_to_column = Str()
 
-    #: Controls behavior of scroll to row
+    #: Deprecated: Controls behavior of scroll to row and scroll to column
     scroll_to_row_hint = Enum("visible", "center", "top", "bottom")
+
+    #: (effectively the same as scroll_to_row_hint, but more clearly named)
+    #: Controls behavior of scroll to row and scroll to column
+    #: defaults to None in which case scroll_to_row_hint is used
+    scroll_to_position_hint = Enum(None, "visible", "center", "top", "bottom")
 
     #: Can the user edit the values?
     editable = Bool(True)

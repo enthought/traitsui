@@ -348,8 +348,13 @@ class DataFrameEditor(BasicEditorFactory):
     #: trigger a scroll-to command. The data is an integer giving the row.
     scroll_to_row = Str()
 
-    #: Controls behavior of scroll to row
-    scroll_to_row_hint = Enum("center", "top", "bottom", "visible")
+    #: Deprecated: Controls behavior of scroll to row and scroll to column
+    scroll_to_row_hint = Enum("visible", "center", "top", "bottom")
+
+    #: (effectively the same as scroll_to_row_hint, but more clearly named)
+    #: Controls behavior of scroll to row and scroll to column
+    #: defaults to None in which case scroll_to_row_hint is used
+    scroll_to_position_hint = Enum(None, "visible", "center", "top", "bottom")
 
     #: The optional extended name of the Event trait that should be used to
     #: trigger a scroll-to command. The data is an integer giving the column.
