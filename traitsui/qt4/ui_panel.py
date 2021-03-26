@@ -1283,7 +1283,7 @@ class HTMLHelpWindow(QtGui.QDialog):
     """ Window for displaying Traits-based help text with HTML formatting.
     """
 
-    def __init__(self, parent, html, scale_dx, scale_dy):
+    def __init__(self, parent, html_content, scale_dx, scale_dy):
         """ Initializes the object.
         """
         # Local import to avoid a WebKit dependency when one isn't needed.
@@ -1298,7 +1298,7 @@ class HTMLHelpWindow(QtGui.QDialog):
         html_control.setSizePolicy(
             QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
         )
-        html_control.setHtml(html)
+        html_control.setHtml(html_content)
         layout.addWidget(html_control)
 
         # Create the OK button

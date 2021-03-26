@@ -1152,7 +1152,7 @@ class HTMLHelpWindow(wx.Frame):
     """ Window for displaying Traits-based help text with HTML formatting.
     """
 
-    def __init__(self, parent, html, scale_dx, scale_dy):
+    def __init__(self, parent, html_content, scale_dx, scale_dy):
         """ Initializes the object.
         """
         wx.Frame.__init__(self, parent, -1, "Help", style=wx.SIMPLE_BORDER)
@@ -1162,7 +1162,7 @@ class HTMLHelpWindow(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         html_control = wh.HtmlWindow(self)
         html_control.SetBorders(2)
-        html_control.SetPage(html)
+        html_control.SetPage(html_content)
         sizer.Add(html_control, 1, wx.EXPAND)
         sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
         b_sizer = wx.BoxSizer(wx.HORIZONTAL)
