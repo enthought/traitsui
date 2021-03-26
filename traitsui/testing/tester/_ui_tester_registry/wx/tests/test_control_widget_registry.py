@@ -13,7 +13,7 @@
 
 import unittest
 
-from traitsui.testing.api import IsEnabled
+from traitsui.testing.api import IsEnabled, IsVisible
 from traitsui.testing.tester.exceptions import (
     LocationNotSupported,
 )
@@ -58,10 +58,18 @@ class TestWxControlWidgetRegistry(unittest.TestCase):
         self.widget.Enable(True)
         self.assertTrue(self.good_wrapper.inspect(IsEnabled()))
 
+    def test_is_visible(self):
+        self.widget.Show(True)
+        self.assertTrue(self.good_wrapper.inspect(IsVisible()))
+
+    def test_is_invisible(self):
+        self.widget.Hide()
+        self.assertFalse(self.good_wrapper.inspect(IsVisible()))
+
     def test_get_interactions_good_target(self):
         self.assertEqual(
             self.registry._get_interactions(self.target),
-            set([IsEnabled])
+            set([IsEnabled, IsVisible])
         )
 
     def test_get_interactions_bad_target(self):
@@ -70,6 +78,9 @@ class TestWxControlWidgetRegistry(unittest.TestCase):
     def test_get_interaction_doc(self):
         self.assertGreater(
             len(self.registry._get_interaction_doc(self.target, IsEnabled)), 0
+        )
+        self.assertGreater(
+            len(self.registry._get_interaction_doc(self.target, IsVisible)), 0
         )
 
     def test_get_location_solver(self):
