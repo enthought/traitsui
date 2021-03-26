@@ -28,7 +28,7 @@ from pyface.qt import QtCore, QtGui
 
 from pyface.api import ImageResource
 
-from traits.api import Str, Any, Bool, Dict, Instance, List
+from traits.api import Str, Any, Bool, Dict, Instance, List, TraitError
 from traits.trait_base import user_name_for, xgetattr
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -311,7 +311,12 @@ class SimpleEditor(Editor):
         index += offset
         item_trait = self._trait_handler.item_trait
         value = item_trait.default_value_for(self.object, self.name)
-        self.value = list[:index] + [value] + list[index:]
+        try:
+            self.value = list[:index] + [value] + list[index:]
+        # if the default new item is invalid, we just don't add it to the list.
+        # traits will still give an error message, but we don't want to crash
+        except TraitError:
+            pass
         self.update_editor()
 
     def add_before(self):
