@@ -159,16 +159,27 @@ class Group(ViewSubElement):
     #: the group and its items are not visible (and they disappear if they were
     #: previously visible). If the value evaluates to True, the group and items
     #: become visible. All **visible_when** conditions are checked each time
-    #: that any trait value is edited in the display. Therefore, you can use
-    #: **visible_when** conditions to hide or show groups in response to user
-    #: input.
+    #: that any trait value on an object in the UI's context is changed.
+    #: Therefore, you can use **visible_when** conditions to hide or show
+    #: groups in response to user input. Be aware that this only applies to
+    #: traits in the UI's context. As a result, changes to nested traits that
+    #: don't also change a trait on some object in the context may not
+    #: trigger the expression to be checked. Additionally, the expression needs
+    #: to be a valid python expression given the context. i.e.
+    #: eval(visible_when, globals=globals(), locals=context) should succeed.
     visible_when = Str()
 
     #: Pre-condition for enabling the group. If the expression evaluates to False,
     #: the group is disabled, that is, none of the widgets accept input. All
     #: **enabled_when** conditions are checked each time that any trait value
-    #: is edited in the display. Therefore, you can use **enabled_when**
-    #: conditions to enable or disable groups in response to user input.
+    #: on an object in the UI's context is changed. Therefore, you can use
+    #: **enabled_when** conditions to enable or disable groups in response to
+    #: user input. Be aware that this only applies to traits in the UI's
+    #: context. As a result, changes to nested traits that don't also change a
+    #: trait on some object in the context may not trigger the expression to be
+    #: checked. Additionally, the expression needs to be a valid python
+    #: expression given the context. i.e.
+    #: eval(enabled_when, globals=globals(), locals=context) should succeed.
     enabled_when = Str()
 
     #: Amount of padding (in pixels) to add around each item in the group. The
