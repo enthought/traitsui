@@ -62,7 +62,7 @@ class TestWxControlWidgetRegistry(unittest.TestCase):
         self.widget.Show(True)
         self.assertTrue(self.good_wrapper.inspect(IsVisible()))
 
-    def test_is_visible(self):
+    def test_is_invisible(self):
         self.widget.Hide()
         self.assertFalse(self.good_wrapper.inspect(IsVisible()))
 
