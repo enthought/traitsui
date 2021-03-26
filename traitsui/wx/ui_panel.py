@@ -399,8 +399,8 @@ def show_help(ui, button):
                 template.item_help
                 % (escape(item.get_label(ui)), escape(item.get_help(ui)))
             )
-    html = template.group_html % (header, "\n".join(fields))
-    HTMLHelpWindow(button, html, 0.25, 0.33)
+    html_content = template.group_html % (header, "\n".join(fields))
+    HTMLHelpWindow(button, html_content, 0.25, 0.33)
 
 
 def show_help_popup(event):
@@ -414,8 +414,8 @@ def show_help_popup(event):
     # of the object with the 'help' trait):
     help = getattr(control, "help", None)
     if help is not None:
-        html = template.item_html % (control.GetLabel(), help)
-        HTMLHelpWindow(control, html, 0.25, 0.13)
+        html_content = template.item_html % (control.GetLabel(), help)
+        HTMLHelpWindow(control, html_content, 0.25, 0.13)
 
 
 def fill_panel_for_group(
@@ -1152,7 +1152,7 @@ class HTMLHelpWindow(wx.Frame):
     """ Window for displaying Traits-based help text with HTML formatting.
     """
 
-    def __init__(self, parent, html, scale_dx, scale_dy):
+    def __init__(self, parent, html_content, scale_dx, scale_dy):
         """ Initializes the object.
         """
         wx.Frame.__init__(self, parent, -1, "Help", style=wx.SIMPLE_BORDER)
@@ -1162,7 +1162,7 @@ class HTMLHelpWindow(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         html_control = wh.HtmlWindow(self)
         html_control.SetBorders(2)
-        html_control.SetPage(html)
+        html_control.SetPage(html_content)
         sizer.Add(html_control, 1, wx.EXPAND)
         sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
         b_sizer = wx.BoxSizer(wx.HORIZONTAL)

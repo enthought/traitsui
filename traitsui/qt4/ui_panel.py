@@ -23,7 +23,7 @@
 """
 
 
-import html
+from html import escape
 import re
 
 from pyface.qt import QtCore, QtGui
@@ -365,7 +365,7 @@ def show_help(ui, button):
     group = ui._groups[ui._active_group]
     template = help_template()
     if group.help != "":
-        header = template.group_help % html.escape(group.help)
+        header = template.group_help % escape(group.help)
     else:
         header = template.no_group_help
     fields = []
@@ -374,12 +374,12 @@ def show_help(ui, button):
             fields.append(
                 template.item_help
                 % (
-                    html.escape(item.get_label(ui)),
-                    html.escape(item.get_help(ui)),
+                    escape(item.get_label(ui)),
+                    escape(item.get_help(ui)),
                 )
             )
-    html = template.group_html % (header, "\n".join(fields))
-    HTMLHelpWindow(button, html, 0.25, 0.33)
+    html_content = template.group_html % (header, "\n".join(fields))
+    HTMLHelpWindow(button, html_content, 0.25, 0.33)
 
 
 def show_help_popup(event):
@@ -393,8 +393,8 @@ def show_help_popup(event):
     # of the object with the 'help' trait):
     help = getattr(control, "help", None)
     if help is not None:
-        html = template.item_html % (control.GetLabel(), help)
-        HTMLHelpWindow(control, html, 0.25, 0.13)
+        html_content = template.item_html % (control.GetLabel(), help)
+        HTMLHelpWindow(control, html_content, 0.25, 0.13)
 
 
 class _GroupSplitter(QtGui.QSplitter):
@@ -1283,7 +1283,7 @@ class HTMLHelpWindow(QtGui.QDialog):
     """ Window for displaying Traits-based help text with HTML formatting.
     """
 
-    def __init__(self, parent, html, scale_dx, scale_dy):
+    def __init__(self, parent, html_content, scale_dx, scale_dy):
         """ Initializes the object.
         """
         # Local import to avoid a WebKit dependency when one isn't needed.
@@ -1298,7 +1298,7 @@ class HTMLHelpWindow(QtGui.QDialog):
         html_control.setSizePolicy(
             QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
         )
-        html_control.setHtml(html)
+        html_control.setHtml(html_content)
         layout.addWidget(html_control)
 
         # Create the OK button
