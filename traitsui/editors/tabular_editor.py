@@ -104,7 +104,7 @@ class TabularEditor(BasicEditorFactory):
     scroll_to_column = Str()
 
     #: Controls behavior of scroll to row
-    scroll_to_row_hint = Enum("center", "top", "bottom", "visible")
+    scroll_to_row_hint = Enum("visible", "center", "top", "bottom")
 
     #: Can the user edit the values?
     editable = Bool(True)
