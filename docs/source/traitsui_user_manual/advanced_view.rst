@@ -349,7 +349,15 @@ instead of wrapping it in a dictionary.
 
 When the ui() method is called from configure_traits() or edit_traits() on a
 HasTraits object, the relevant object is the HasTraits object whose method was
-called. For this reason, you do not need to specify the *context* argument in
+called. 
+
+.. NOTE::
+
+   There are some situations in which you may want to override the default
+   context used for a particular HasTraits class. To do this, simpy override the
+   :py:meth:`~.traits.has_traits.HasTraits.trait_context` method on the object.
+
+For this reason, you do not need to specify the *context* argument in
 most calls to configure_traits() or edit_traits(). However, when you call the
 ui() method on a View object, you *must* specify the *context* parameter, so
 that the ui() method receives references to the objects whose trait attributes

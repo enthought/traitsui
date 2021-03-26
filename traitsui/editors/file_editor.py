@@ -65,7 +65,8 @@ class ToolkitEditorFactory(EditorFactory):
     enter_set = True
 
     #: The number of history entries to maintain:
-    #: FIXME: add support
+    #: FIXME: This is currently only supported on wx. Qt support needs to be
+    #: added
     entries = Int(10)
 
     #: The root path of the file tree view ('custom' style only, not supported
