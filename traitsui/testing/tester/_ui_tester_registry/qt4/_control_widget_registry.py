@@ -32,7 +32,7 @@ def _handle_is_enabled(wrapper, interaction):
     return wrapper._target.control.isEnabled()
 
 
-def _handler_is_visible(wrapper, interaction):
+def _handle_is_visible(wrapper, interaction):
     """ Return true if the target's control is visible.
 
     Parameters
@@ -76,6 +76,6 @@ def get_widget_registry():
         can_support=_is_target_control_a_qt_widget,
         interaction_to_handler={
             IsEnabled: _handle_is_enabled,
-            IsVisible: _handler_is_visible,
+            IsVisible: _handle_is_visible,
         }
     )
