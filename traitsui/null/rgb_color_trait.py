@@ -49,7 +49,7 @@ def convert_to_color(object, name, value):
         num = int(value)
         return (
             (num / 0x10000) / 255.0,
-            ((num / 0x100) & 0xFF) / 255.0,
+            ((num // 0x100) & 0xFF) / 255.0,
             (num & 0xFF) / 255.0,
         )
     raise TraitError
