@@ -11,8 +11,6 @@
 """ Defines the editor factory used to wrap a non-Traits based custom control.
 """
 
-
-
 from traits.api import Callable, Tuple, Property
 
 from ..basic_editor_factory import BasicEditorFactory

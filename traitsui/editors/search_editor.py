@@ -12,7 +12,6 @@
     search widgets.
 """
 
-
 from traits.api import Bool, Property, Str
 from ..toolkit import toolkit_object
 from ..basic_editor_factory import BasicEditorFactory

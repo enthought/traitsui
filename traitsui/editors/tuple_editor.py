@@ -11,8 +11,6 @@
 """ Defines the tuple editor factory for all traits user interface toolkits.
 """
 
-
-
 from traits.trait_base import SequenceTypes
 
 from traits.api import (

@@ -11,7 +11,6 @@
 """ A Traits UI editor that wraps a timer control.
 """
 
-
 from traits.api import Str
 from ..editor_factory import EditorFactory
 from ..ui_traits import AView

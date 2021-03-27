@@ -11,8 +11,6 @@
 """ Defines the color editor factory for the all traits toolkit backends.
 """
 
-
-
 from traits.api import Bool
 
 from ..toolkit import toolkit_object

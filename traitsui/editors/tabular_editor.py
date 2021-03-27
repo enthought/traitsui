@@ -12,8 +12,6 @@
     of objects, etc).
 """
 
-
-
 from pyface.ui_traits import Image
 from traits.api import Str, Bool, Property, List, Enum, Instance
 
@@ -46,25 +44,26 @@ class TabularEditor(BasicEditorFactory):
     refresh = Str()
 
     #: Should the table update automatically when the table item's contents
-    #: change? Note that in order for this feature to work correctly, the editor
-    #: trait should be a list of objects derived from HasTraits. Also,
-    #: performance can be affected when very long lists are used, since enabling
-    #: this feature adds and removed Traits listeners to each item in the list.
+    #: change? Note that in order for this feature to work correctly, the
+    #: editor trait should be a list of objects derived from HasTraits. Also,
+    #: performance can be affected when very long lists are used, since
+    #: enabling this feature adds and removed Traits listeners to each item in
+    #: the list.
     auto_update = Bool(False)
 
     #: The optional extended name of the trait to synchronize the selection
     #: values with:
     selected = Str()
 
-    #: The optional extended name of the trait to synchronize the selection rows
-    #: with:
+    #: The optional extended name of the trait to synchronize the selection
+    #: rows with:
     selected_row = Str()
 
     #: Whether or not to allow selection.
     selectable = Bool(True)
 
-    #: The optional extended name of the trait to synchronize the activated value
-    #: with:
+    #: The optional extended name of the trait to synchronize the activated
+    #: value with:
     activated = Str()
 
     #: The optional extended name of the trait to synchronize the activated
@@ -121,8 +120,8 @@ class TabularEditor(BasicEditorFactory):
     #: Should vertical lines be drawn between items?
     vertical_lines = Bool(True)
 
-    #: Should the columns automatically resize? Don't allow this when the amount
-    #: of data is large.
+    #: Should the columns automatically resize? Don't allow this when the
+    #: amount of data is large.
     auto_resize = Bool(False)
 
     #: Should the rows automatically resize (Qt4 only)? Don't allow

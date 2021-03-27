@@ -11,8 +11,6 @@
 """ Defines the progress editor factory for all traits toolkit backends,
 """
 
-
-
 from traits.api import Int, Bool, Str
 
 from ..editor_factory import EditorFactory

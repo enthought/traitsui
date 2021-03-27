@@ -11,8 +11,6 @@
 """ Defines the array editor factory for all traits toolkit backends.
 """
 
-
-
 import numpy
 
 from traits.api import Bool, HasTraits, Int, Float, Instance, TraitError
