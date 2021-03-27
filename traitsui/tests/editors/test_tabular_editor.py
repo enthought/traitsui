@@ -11,7 +11,6 @@
 import contextlib
 import unittest
 
-from pyface.gui import GUI
 from traits.api import Event, HasTraits, Instance, Int, List, Str
 from traits.testing.api import UnittestTools
 
@@ -417,8 +416,8 @@ class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
     @contextlib.contextmanager
     def report_and_editor(self, view):
         """
-        Context manager to temporarily create and clean up a Report model object
-        and the corresponding TabularEditor.
+        Context manager to temporarily create and clean up a Report model
+        object and the corresponding TabularEditor.
         """
         report = Report(
             people=[

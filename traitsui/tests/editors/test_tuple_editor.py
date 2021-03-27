@@ -17,7 +17,6 @@ from traits.testing.api import UnittestTools
 from traitsui.tests._tools import (
     BaseTestMixin,
     create_ui,
-    press_ok_button,
     requires_toolkit,
     reraise_exceptions,
     ToolkitName,
@@ -47,7 +46,7 @@ class TestTupleEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
     def test_value_update(self):
         # Regression test for #179
         model = TupleEditor()
-        with create_ui(model) as ui:
+        with create_ui(model):
             with self.assertTraitChanges(model, "tup", count=1):
                 model.tup = (3, 4, "nono")
 
