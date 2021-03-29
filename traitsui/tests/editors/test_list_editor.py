@@ -200,7 +200,7 @@ class TestSimpleListEditor(unittest.TestCase):
 
             mdtester = ModalDialogTester(trigger_error)
             mdtester.open_and_run(lambda x: x.close())
-            # we want an error dialog to open, but don't want to raise a 
+            # we want an error dialog to open, but don't want to raise a
             # TraitError and crash the full application
             self.assertTrue(mdtester.dialog_was_opened)
             self.assertTrue(mdtester.result)
