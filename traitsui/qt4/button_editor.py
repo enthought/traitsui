@@ -27,7 +27,7 @@
 from pyface.qt import QtCore, QtGui
 from pyface.ui_traits import Image
 
-from traits.api import Str, List, Str, obseve, on_trait_change
+from traits.api import Str, List, Str, observe, on_trait_change
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -58,6 +58,7 @@ class SimpleEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
+        print('AAAAAAAA')
         label = self.factory.label or self.item.get_label(self.ui)
 
         if self.factory.values_trait:
@@ -161,6 +162,7 @@ class CustomEditor(SimpleEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
+        print('YOOOOOOOO')
         # FIXME: We ignore orientation, width_padding and height_padding.
 
         factory = self.factory
@@ -182,7 +184,9 @@ class CustomEditor(SimpleEditor):
 
     @observe("image")
     def _image_updated(self, event):
+        print('HEY')
         image = event.new
+        print(image)
         self.control.setIcon(image.create_icon())
 
     def dispose(self):
