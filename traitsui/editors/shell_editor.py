@@ -11,7 +11,6 @@
 """ Editor that displays an interactive Python shell.
 """
 
-
 from traits.api import Bool, Str, Event, Property
 
 from ..editor import Editor

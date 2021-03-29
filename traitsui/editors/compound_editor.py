@@ -11,8 +11,6 @@
 """ Defines the compound editor factory for all traits toolkit backends.
 """
 
-
-
 from traits.api import Bool, List
 
 from ..editor_factory import EditorFactory

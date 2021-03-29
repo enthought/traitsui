@@ -11,8 +11,6 @@
 """ Defines the text editor factory for all traits toolkit backends.
 """
 
-
-
 from traits.api import Dict, Str, Any, Bool
 
 # CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
