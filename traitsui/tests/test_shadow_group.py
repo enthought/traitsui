@@ -33,7 +33,7 @@ class TestShadowGroup(BaseTestMixin, unittest.TestCase):
         # first.  Initialization order is dependent on dictionary order, which
         # we can't control, so we throw in a good number of other traits to
         # increase the chance that some other trait is set first.
-        shadow_group = ShadowGroup(
+        ShadowGroup(
             label="dummy",
             show_border=True,
             show_labels=True,

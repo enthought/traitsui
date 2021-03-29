@@ -15,7 +15,7 @@ import unittest
 
 import pkg_resources
 
-from traits.api import Bool, File, HasTraits
+from traits.api import File, HasTraits
 from traitsui.api import Item, View
 from traitsui.tests._tools import (
     BaseTestMixin,
@@ -24,7 +24,10 @@ from traitsui.tests._tools import (
     ToolkitName,
 )
 
-filename = pkg_resources.resource_filename("traitsui", "examples/demo/Extras/images/logo_32x32.gif")
+filename = pkg_resources.resource_filename(
+    "traitsui", "examples/demo/Extras/images/logo_32x32.gif"
+)
+
 
 class AnimatedGIF(HasTraits):
 

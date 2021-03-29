@@ -396,7 +396,7 @@ class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
             columns=["X", "Y", "Z"]
         )
         viewer = DataFrameViewer(data=df)
-        with reraise_exceptions(), create_ui(viewer) as ui:
+        with reraise_exceptions(), create_ui(viewer):
             viewer.df_updated = True
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -414,7 +414,7 @@ class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
             columns=["X", "Y", "Z"]
         )
         viewer = DataFrameViewer(data=df)
-        with reraise_exceptions(), create_ui(viewer) as ui:
+        with reraise_exceptions(), create_ui(viewer):
             viewer.df_refreshed = True
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
