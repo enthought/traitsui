@@ -58,7 +58,6 @@ class SimpleEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        print('AAAAAAAA')
         label = self.factory.label or self.item.get_label(self.ui)
 
         if self.factory.values_trait:
@@ -162,7 +161,6 @@ class CustomEditor(SimpleEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        print('YOOOOOOOO')
         # FIXME: We ignore orientation, width_padding and height_padding.
 
         factory = self.factory
@@ -184,9 +182,7 @@ class CustomEditor(SimpleEditor):
 
     @observe("image")
     def _image_updated(self, event):
-        print('HEY')
         image = event.new
-        print(image)
         self.control.setIcon(image.create_icon())
 
     def dispose(self):
