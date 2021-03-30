@@ -165,7 +165,8 @@ class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
         button_text_edit = ButtonTextEdit()
 
         tester = UITester()
-        with tester.create_ui(button_text_edit, dict(view=custom_image_view)) as ui:
+        with tester.create_ui(button_text_edit, dict(view=custom_image_view)) \
+                as ui:
             button = tester.find_by_name(ui, "play_button")
             default_image = button._target.image
             self.assertIsInstance(default_image, ImageResource)
