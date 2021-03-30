@@ -51,7 +51,8 @@ class ButtonEditorDemo(HasTraits):
             ImageResource("run"),
             ImageResource("previous"),
             ImageResource("next"),
-            ImageResource("parent")
+            ImageResource("parent"),
+            ImageResource("reload")
         ]
     )
 
