@@ -9,16 +9,33 @@
 # Thanks for using Enthought open source!
 
 """
-This demo shows how to dynamically change the label or image of a button.
+This demo shows how to dynamically change the label or image of a button. Note
+in this demo clicking the button itself does nothing.
 
 Please refer to the `ButtonEditor API docs`_ for further information.
 
 .. _ButtonEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.button_editor.html#traitsui.editors.button_editor.ButtonEditor
 """
 from pyface.api import ImageResource
-from traits.api import Button, Enum, HasTraits, List, Str
+from traits.api import Button, Enum, HasTraits, Instance, List, Str
 
-from traitsui.api import ButtonEditor, Group, message, UItem, View 
+from traitsui.api import (
+    ButtonEditor,
+    Group,
+    ImageEditor,
+    InstanceChoice,
+    InstanceEditor,
+    Item,
+    UItem,
+    View
+) 
+
+
+class ImageChoice(InstanceChoice):
+    def get_view(self):
+        return View(
+            UItem('name', editor=ImageEditor(image=self.object))
+        )
 
 
 class ButtonEditorDemo(HasTraits):
@@ -26,15 +43,23 @@ class ButtonEditorDemo(HasTraits):
 
     my_button_label = Str("Initial Label")
 
-    my_button_image = Enum(
-        ImageResource("run"),
-        ImageResource("previous"),
-        ImageResource("next"),
-        ImageResource("parent")
+    my_button_image = Instance(ImageResource)
+
+    my_button_image_options = List(
+        Instance(ImageResource),
+        value=[
+            ImageResource("run"),
+            ImageResource("previous"),
+            ImageResource("next"),
+            ImageResource("parent")
+        ]
     )
 
+    def _my_button_image_default(self):
+        return self.my_button_image_options[0]
+
     traits_view = View(
-        UItem(
+        Item(
             "my_button",
             style="custom",
             editor=ButtonEditor(
@@ -42,8 +67,15 @@ class ButtonEditorDemo(HasTraits):
                 image_value="my_button_image",
             )
         ),
-        UItem("my_button_label"),
-        UItem("my_button_image")
+        Item("my_button_label"),
+        Item(
+            "my_button_image",
+            editor=InstanceEditor(
+                name="my_button_image_options",
+                adapter=ImageChoice
+            ),
+            style="custom"
+        )
     )
 
 # Create the demo:
