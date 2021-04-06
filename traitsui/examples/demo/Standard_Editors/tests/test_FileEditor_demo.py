@@ -21,7 +21,7 @@ import runpy
 import unittest
 
 from traitsui.testing.api import (
-    DisplayedText, KeyClick, KeySequence,  UITester
+    DisplayedText, KeyClick, KeySequence, UITester
 )
 
 #: Filename of the demo script
