@@ -42,7 +42,7 @@ class TestFileEditorDemo(unittest.TestCase):
             simple_file_field = tester.find_by_id(ui, "simple_file")
 
             # Modify the value on the GUI
-            # The path does not exist, whic is allowed by the trait.
+            # The path does not exist, which is allowed by the trait.
             # The custom FileEditor will ignore nonexisting file path.
             simple_file_field.perform(KeySequence("some_path"))
             simple_file_field.perform(KeyClick("Enter"))
