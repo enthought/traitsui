@@ -194,7 +194,7 @@ def install(runtime, toolkit, environment, editable):
     # pip install pyside2, because we don't have it in EDM yet
     if toolkit == 'pyside2':
         commands.append(
-            "edm run -e {environment} -- pip install pyside2"
+            "edm run -e {environment} -- pip install pyside2==5.14"
         )
     elif toolkit == 'wx':
         if sys.platform != 'linux':
