@@ -39,6 +39,8 @@ class TestSimpleFileEditor(BaseTestMixin, unittest.TestCase):
     def tearDown(self):
         BaseTestMixin.tearDown(self)
 
+    # Behavior on wx may not be quite the same on other platforms.
+    @requires_toolkit([ToolkitName.qt])
     def test_simple_editor_set_text_to_nonexisting_path(self):
         # Test setting the editor to a nonexisting filepath
         # e.g. use case for creating a new file.
@@ -67,6 +69,8 @@ class TestSimpleFileEditor(BaseTestMixin, unittest.TestCase):
                 filepath_field.inspect(DisplayedText()), "some_file.txt"
             )
 
+    # Behavior on wx may not be quite the same on other platforms.
+    @requires_toolkit([ToolkitName.qt])
     def test_simple_editor_auto_set_text(self):
         # Test with auto_set set to True.
         view = View(Item("filepath", editor=FileEditor(auto_set=True)))
