@@ -29,6 +29,7 @@ class FileModel(HasTraits):
     existing_filepath = File(exists=True)
 
 
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSimpleFileEditor(BaseTestMixin, unittest.TestCase):
     """ Test FileEditor (simple style). """
 
