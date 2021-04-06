@@ -54,6 +54,10 @@ class TestFileEditorDemo(unittest.TestCase):
                 simple_file_field.inspect(DisplayedText()), FILENAME
             )
 
+            # On wx, an assertion error occurs upon disposing the UI.
+            # That error is linked to the custom FileEditor.
+            # See enthought/traitsui#752
+
 
 # Run the test(s)
 unittest.TextTestRunner().run(
