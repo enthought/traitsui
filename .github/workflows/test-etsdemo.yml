@@ -42,3 +42,4 @@ jobs:
         with:
           run: edm run -- python etstool.py test --toolkit=${{ matrix.toolkit }}
           working-directory: ets-demo
+          shell: bash
