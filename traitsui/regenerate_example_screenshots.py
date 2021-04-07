@@ -5,7 +5,7 @@ import sys
 import traceback
 import unittest
 from unittest import mock
-from functools import partial
+from functools import partialmethod
 
 import pkg_resources
 
@@ -16,7 +16,7 @@ from traitsui.testing.api import UITester
 
 # Demo files are part of the package data.
 DEMO = pkg_resources.resource_filename("traitsui", "examples/demo")
-screenshot_name = None
+
 
 def _is_python_file(path):
     """ Return true if the given path is (public) non-test Python file."""
@@ -67,6 +67,7 @@ def replaced_configure_traits(
     handler=None,
     id="",
     scrollable=None,
+    screenshot_name=None,
     **args,
 ):
     """ Mocked configure_traits to launch then close the GUI.
@@ -95,13 +96,15 @@ def replaced_configure_traits(
 
 
 @contextlib.contextmanager
-def replace_configure_traits():
+def replace_configure_traits(screenshot_name):
     """ Context manager to temporarily replace HasTraits.configure_traits
     with a mocked version such that GUI launched are closed soon after they
     are open.
     """
     original_func = HasTraits.configure_traits
-    HasTraits.configure_traits = replaced_configure_traits
+    HasTraits.configure_traits = partialmethod(
+        replaced_configure_traits, screenshot_name=screenshot_name
+    )
     try:
         yield
     finally:
@@ -116,7 +119,6 @@ def run_file(file_path):
         File path to be tested.
     """
     demo_name = os.path.basename(file_path)
-    global screenshot_name
     screenshot_name = demo_name.split('.')[0] + '.png'
     with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
@@ -125,7 +127,8 @@ def run_file(file_path):
         "__name__": "__main__",
         "__file__": file_path,
     }
-    with replace_configure_traits(), mock.patch("sys.argv", [file_path]):
+    with replace_configure_traits(screenshot_name), \
+            mock.patch("sys.argv", [file_path]):
         # Mock argv: Some example reads sys.argv to allow more arguments
         # But all examples should support being run without additional
         # arguments.
