@@ -1,22 +1,17 @@
-#------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
-# license included in /LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
 #
-# Author: David C. Morrill Date: 11/02/2004 Description: Test case for Traits
-# User Interface
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 #-------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import absolute_import
 import wx
 
 from traits.api \
@@ -83,8 +78,8 @@ class TraitsTest(HasTraits):
     list = List(Str, ['East of Eden', 'The Grapes of Wrath',
                       'Of Mice and Men'])
     button = Event(0, editor=ButtonEditor(label='Click'))
-    file = File
-    directory = Directory
+    file = File()
+    directory = Directory()
     image_enum = Trait(editor=ImageEnumEditor(values=origin_values,
                                               suffix='_origin',
                                               cols=4,

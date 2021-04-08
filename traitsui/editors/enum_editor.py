@@ -1,23 +1,16 @@
-# ------------------------------------------------------------------------------
-# Copyright (c) 2008, Enthought, Inc.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#
-# ------------------------------------------------------------------------------
-""" Defines the editor factory for single-selection enumerations, for all traits
-    user interface toolkits.
+# Thanks for using Enthought open source!
+
+""" Defines the editor factory for single-selection enumerations, for all
+traits user interface toolkits.
 """
-
-
-from __future__ import absolute_import
 
 import os
 import sys
@@ -52,7 +45,7 @@ class ToolkitEditorFactory(EditorWithListFactory):
     # -------------------------------------------------------------------------
 
     #: (Optional) Function used to evaluate text input:
-    evaluate = Any
+    evaluate = Any()
 
     #: Is user input set on every keystroke (when text input is allowed)?
     auto_set = Bool(True)

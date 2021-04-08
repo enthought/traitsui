@@ -1,19 +1,13 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005--2009, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: Judah De Paula <judah@enthought.com>
-#  Date:   2/26/2009
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
+
 """
 A Traits UI editor that wraps a WX calendar panel.
 
@@ -22,22 +16,19 @@ Future Work
 The class needs to be extend to provide the four basic editor types,
 Simple, Custom, Text, and ReadOnly.
 """
-from __future__ import absolute_import, print_function
 
 import datetime
+import logging
 
 import wx
 import wx.adv
 
-from traits.api import Bool
 from traitsui.wx.editor import Editor
 from traitsui.wx.constants import WindowColor
 from traitsui.wx.text_editor import ReadonlyEditor as TextReadonlyEditor
 
 
-# ------------------------------------------------------------------------------
-# --  Simple Editor
-# ------------------------------------------------------------------------------
+logger = logging.getLogger(__name__)
 
 
 class SimpleEditor(Editor):
@@ -54,9 +45,9 @@ class SimpleEditor(Editor):
         self.control = date_widget(
             parent,
             size=(120, -1),
-            style=wx.DP_DROPDOWN | wx.DP_SHOWCENTURY | wx.DP_ALLOWNONE,
+            style=wx.adv.DP_DROPDOWN | wx.adv.DP_SHOWCENTURY | wx.adv.DP_ALLOWNONE,
         )
-        self.control.Bind(wx.EVT_DATE_CHANGED, self.day_selected)
+        self.control.Bind(wx.adv.EVT_DATE_CHANGED, self.day_selected)
         return
 
     def day_selected(self, event):
@@ -73,7 +64,7 @@ class SimpleEditor(Editor):
             try:
                 self.value = datetime.date(year, month, day)
             except ValueError:
-                print("Invalid date:", year, month, day)
+                logger.exception("Invalid date: %d-%d-%d (y-m-d)", (year, month, day))
                 raise
         return
 
@@ -96,9 +87,6 @@ class SimpleEditor(Editor):
                 self.control.SetValue(date)
                 self.control.Refresh()
         return
-
-
-# -- end SimpleEditor definition -----------------------------------------------
 
 
 # ------------------------------------------------------------------------------
@@ -258,9 +246,6 @@ class wxMouseBoxCalendarCtrl(wx.adv.CalendarCtrl):
         gc.DrawRectangle(x, y, w, h)
 
 
-# -- end wxMouseBoxCalendarCtrl ------------------------------------------------
-
-
 class MultiCalendarCtrl(wx.Panel):
     """
     WX panel containing calendar widgets for use by the CustomEditor.
@@ -316,7 +301,7 @@ class MultiCalendarCtrl(wx.Panel):
             cal = self._make_calendar_widget(i)
             self.cal_ctrls.insert(0, cal)
             if i != 0:
-                self.sizer.AddSpacer(wx.Size(padding, padding))
+                self.sizer.AddSpacer(padding)
 
         # Initial painting
         self.selected_list_changed()
@@ -438,8 +423,8 @@ class MultiCalendarCtrl(wx.Panel):
         cal.highlight_changed()
 
         # Set up control to sync the other calendar widgets and coloring:
-        self.Bind(wx.adv.EVT_CALENDAR_MONTH, cal, id=self.month_changed)
-        self.Bind(wx.adv.EVT_CALENDAR_YEAR, cal, id=self.month_changed)
+        cal.Bind(wx.adv.EVT_CALENDAR_MONTH, self.month_changed)
+        cal.Bind(wx.adv.EVT_CALENDAR_YEAR, self.month_changed)
 
         cal.Bind(wx.EVT_LEFT_DOWN, self._left_down)
 
@@ -787,9 +772,6 @@ class MultiCalendarCtrl(wx.Panel):
         self.selected_list_changed()
 
 
-# -- end CalendarCtrl ----------------------------------------------------------
-
-
 class CustomEditor(Editor):
     """
     Show multiple months with MultiCalendarCtrl. Allow multi-select.
@@ -813,7 +795,7 @@ class CustomEditor(Editor):
     Example usage::
 
         class DateListPicker(HasTraits):
-            calendar = List
+            calendar = List()
             traits_view = View(Item('calendar', editor=DateEditor(),
                                     style='custom', show_label=False))
     """
@@ -852,24 +834,11 @@ class CustomEditor(Editor):
         return
 
 
-# -- end CustomEditor definition -----------------------------------------------
-
-
-# ------------------------------------------------------------------------------
-# --  Text Editor
-# ------------------------------------------------------------------------------
 # TODO: Write me.  Possibly use TextEditor as a model to show a string
 # representation of the date, and have enter-set do a date evaluation.
 class TextEditor(SimpleEditor):
     pass
 
-
-# -- end TextEditor definition -------------------------------------------------
-
-
-# ------------------------------------------------------------------------------
-# --  Readonly Editor
-# ------------------------------------------------------------------------------
 
 
 class ReadonlyEditor(TextReadonlyEditor):
@@ -881,8 +850,3 @@ class ReadonlyEditor(TextReadonlyEditor):
             return self.factory.message
         else:
             return self.value.strftime(self.factory.strftime)
-
-
-# -- end ReadonlyEditor definition ---------------------------------------------
-
-# -- eof -----------------------------------------------------------------------

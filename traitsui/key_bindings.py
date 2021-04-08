@@ -1,27 +1,17 @@
-# -------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   05/20/2005
-#
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines KeyBinding and KeyBindings classes, which manage the mapping of
     keystroke events into method calls on controller objects that are supplied
     by the application.
 """
-
-
-from __future__ import absolute_import
 
 from traits.api import (
     Any,
@@ -33,7 +23,7 @@ from traits.api import (
     Property,
     Str,
     cached_property,
-    on_trait_change,
+    observe,
 )
 
 from .api import HGroup, Item, KeyBindingEditor, ListEditor, View, toolkit
@@ -63,10 +53,10 @@ class KeyBinding(HasStrictTraits):
     binding2 = Binding
 
     #: Description of what application function the method performs
-    description = Str
+    description = Str()
 
     #: Name of controller method the key is bound to
-    method_name = Str
+    method_name = Str()
 
     #: KeyBindings object that "owns" the KeyBinding
     owner = Instance("KeyBindings")
@@ -101,10 +91,10 @@ class KeyBindings(HasPrivateTraits):
     bindings = List(KeyBinding)
 
     #: Optional prefix to add to each method name
-    prefix = Str
+    prefix = Str()
 
     #: Optional suffix to add to each method name
-    suffix = Str
+    suffix = Str()
 
     # -- Private Traits -------------------------------------------------------
 
@@ -195,7 +185,7 @@ class KeyBindings(HasPrivateTraits):
         """ Returns a clone of the KeyBindings object.
         """
         return self.__class__(*self.bindings, **traits).trait_set(
-            **self.get("prefix", "suffix")
+            **self.trait_get("prefix", "suffix")
         )
 
     def dispose(self):
@@ -264,12 +254,18 @@ class KeyBindings(HasPrivateTraits):
         if old is not None:
             old.border_size = 0
 
-    @on_trait_change("children[]")
-    def _children_modified(self, removed, added):
+    @observe("children.items")
+    def _children_modified(self, event):
         """ Handles child KeyBindings being added to the object.
         """
-        for item in added:
-            item.parent = self
+        # the full children list is changed
+        if isinstance(event.object, KeyBindings):
+            for item in event.new:
+                item.parent = self
+        # the contents of the children list are changed
+        else:
+            for item in event.added:
+                item.parent = self
 
     # -- object Method Overrides ----------------------------------------------
 

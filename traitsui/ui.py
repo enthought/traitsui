@@ -1,26 +1,16 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/07/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the UI class used to represent an active traits-based user
     interface.
 """
-
-
-from __future__ import absolute_import
 
 import shelve
 import os
@@ -39,7 +29,7 @@ from traits.api import (
     Property,
     Str,
     TraitError,
-    on_trait_change,
+    observe,
     property_depends_on,
 )
 
@@ -85,13 +75,13 @@ class UI(HasPrivateTraits):
     view = Instance("traitsui.view.View")
 
     #: Panel or dialog associated with the user interface
-    control = Any
+    control = Any()
 
     #: The parent UI (if any) of this UI
     parent = Instance("UI")
 
     #: Toolkit-specific object that "owns" **control**
-    owner = Any
+    owner = Any()
 
     #: UIInfo object containing context or editor objects
     info = Instance(UIInfo)
@@ -100,13 +90,13 @@ class UI(HasPrivateTraits):
     result = Bool(False)
 
     #: Undo and Redo history
-    history = Any
+    history = Any()
 
     #: The KeyBindings object (if any) for this UI:
     key_bindings = Property(depends_on=["view._key_bindings", "context"])
 
     #: The unique ID for this UI for persistence
-    id = Str
+    id = Str()
 
     #: Have any modifications been made to UI contents?
     modified = Bool(False)
@@ -115,7 +105,7 @@ class UI(HasPrivateTraits):
     updated = Event(Bool)
 
     #: Title of the dialog, if any
-    title = Str
+    title = Str()
 
     #: The ImageResource of the icon, if any
     icon = Image
@@ -124,10 +114,10 @@ class UI(HasPrivateTraits):
     scrollable = Bool(False)
 
     #: The number of currently pending editor error conditions
-    errors = Int
+    errors = Int()
 
     #: The code used to rebuild an updated user interface
-    rebuild = Callable
+    rebuild = Callable()
 
     #: Set to True when the UI has finished being destroyed.
     destroyed = Bool(False)
@@ -141,49 +131,49 @@ class UI(HasPrivateTraits):
     _revert = Dict(Str, Any)
 
     #: List of methods to call once the user interface is created
-    _defined = List
+    _defined = List()
 
     #: List of (visible_when,Editor) pairs
-    _visible = List
+    _visible = List()
 
     #: List of (enabled_when,Editor) pairs
-    _enabled = List
+    _enabled = List()
 
     #: List of (checked_when,Editor) pairs
-    _checked = List
+    _checked = List()
 
     #: Search stack used while building a user interface
-    _search = List
+    _search = List()
 
     #: List of dispatchable Handler methods
-    _dispatchers = List
+    _dispatchers = List()
 
     #: List of editors used to build the user interface
-    _editors = List
+    _editors = List()
 
     #: List of names bound to the **info** object
-    _names = List
+    _names = List()
 
     #: Index of currently the active group in the user interface
-    _active_group = Int
+    _active_group = Int()
 
     #: List of top-level groups used to build the user interface
-    _groups = Property
-    _groups_cache = Any
+    _groups = Property()
+    _groups_cache = Any()
 
     #: Count of levels of nesting for undoable actions
     _undoable = Int(-1)
 
     #: Code used to rebuild an updated user interface
-    _rebuild = Callable
+    _rebuild = Callable()
 
     #: The statusbar listeners that have been set up:
-    _statusbar = List
+    _statusbar = List()
 
     #: Control which gets focus after UI is created
     #: Note: this does not track focus after UI creation
     #: only used by Qt backend.
-    _focus_control = Any
+    _focus_control = Any()
 
     #: Does the UI contain any scrollable widgets?
     #:
@@ -249,6 +239,9 @@ class UI(HasPrivateTraits):
     def dispose(self, result=None, abort=False):
         """ Disposes of the contents of a user interface.
         """
+        if self.parent is not None:
+            self.parent.errors -= self.errors
+
         if result is not None:
             self.result = result
 
@@ -276,6 +269,9 @@ class UI(HasPrivateTraits):
     def finish(self):
         """ Finishes disposing of a user interface.
         """
+        # Destroy the control early to silence cascade events when the UI
+        # enters an inconsistent state.
+        toolkit().destroy_control(self.control)
 
         # Reset the contents of the user interface
         self.reset(destroy=False)
@@ -293,7 +289,6 @@ class UI(HasPrivateTraits):
 
         # Destroy the view control:
         self.control._object = None
-        toolkit().destroy_control(self.control)
         self.control = None
 
         # Dispose of any KeyBindings object we reference:
@@ -325,7 +320,7 @@ class UI(HasPrivateTraits):
 
         # Remove any statusbar listeners that have been set up:
         for object, handler, name in self._statusbar:
-            object.on_trait_change(handler, name, remove=True)
+            object.observe(handler, name, remove=True, dispatch="ui")
 
         del self._statusbar[:]
 
@@ -429,7 +424,7 @@ class UI(HasPrivateTraits):
                     object = context.get(prefix[:col])
                     if object is not None:
                         method = getattr(handler, name)
-                        trait_name = prefix[col + 1 :]
+                        trait_name = prefix[col + 1:]
                         self._dispatchers.append(
                             Dispatcher(method, info, object, trait_name)
                         )
@@ -439,10 +434,10 @@ class UI(HasPrivateTraits):
         # If there are any Editor object's whose 'visible', 'enabled' or
         # 'checked' state is controlled by a 'visible_when', 'enabled_when' or
         # 'checked_when' expression, set up an 'anytrait' changed notification
-        # handler on each object in the 'context' that will cause the 'visible',
-        # 'enabled' or 'checked' state of each affected Editor to be set. Also
-        # trigger the evaluation immediately, so the visible, enabled or checked
-        # state of each Editor can be correctly initialized:
+        # handler on each object in the 'context' that will cause the
+        # 'visible', 'enabled' or 'checked' state of each affected Editor to be
+        #  set. Also trigger the evaluation immediately, so the visible,
+        # enabled or checked state of each Editor can be correctly initialized:
         if (len(self._visible) + len(self._enabled) + len(self._checked)) > 0:
             for object in context.values():
                 object.on_trait_change(self._evaluate_when, dispatch="ui")
@@ -868,6 +863,16 @@ class UI(HasPrivateTraits):
 
     # -- Traits Event Handlers ------------------------------------------------
 
+    def _errors_changed(self, name, old, new):
+        if self.parent:
+            self.parent.errors = self.parent.errors - old + new
+
+    def _parent_changed(self, name, old, new):
+        if old is not None:
+            old.errors -= self.errors
+        if new is not None:
+            new.errors += self.errors
+
     def _updated_changed(self):
         if self.rebuild is not None:
             toolkit().rebuild_ui(self)
@@ -880,8 +885,8 @@ class UI(HasPrivateTraits):
         if self.control is not None:
             toolkit().set_icon(self)
 
-    @on_trait_change("parent, view, context")
-    def _pvc_changed(self):
+    @observe("parent, view, context")
+    def _pvc_changed(self, event):
         parent = self.parent
         if (parent is not None) and (self.key_bindings is not None):
             # If we don't have our own history, use our parent's:

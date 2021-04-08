@@ -1,3 +1,13 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
@@ -14,11 +24,10 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtGui
 
 from traits.api import Trait, TraitError
-import six
+
 
 
 def convert_to_color(object, name, value):
@@ -39,7 +48,7 @@ def convert_to_color(object, name, value):
         else:
             raise TraitError
     else:
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             # Allow for spaces in the string value.
             value = value.replace(" ", "")
 
@@ -94,6 +103,9 @@ def get_color_editor(*args, **traits):
 def PyQtColor(default="white", allow_none=False, **metadata):
     """ Defines PyQt-specific color traits.
     """
+    if default is None:
+        allow_none = True
+
     if allow_none:
         return Trait(
             default,

@@ -1,26 +1,18 @@
-# -------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2007, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   03/02/2007
-#
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines an editor for playing animated GIF files.
 """
 
 
-from __future__ import absolute_import
-from wx.adv import Animation, AnimationCtrl
+from wx.adv import Animation, GenericAnimationCtrl
 
 from traits.api import Bool, Str
 
@@ -45,7 +37,7 @@ class _AnimatedGIFEditor(Editor):
             widget.
         """
         self._animate = Animation(self.value)
-        self.control = AnimationCtrl(parent, -1, self._animate)
+        self.control = GenericAnimationCtrl(parent, -1, self._animate)
         self.control.SetUseWindowBackgroundColour()
         self.sync_value(self.factory.playing, "playing", "from")
         self.set_tooltip()
@@ -85,4 +77,4 @@ class AnimatedGIFEditor(BasicEditorFactory):
 
     #: The optional trait used to control whether the animated GIF file is
     #: playing or not:
-    playing = Str
+    playing = Str()

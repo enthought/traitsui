@@ -1,3 +1,13 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
@@ -14,7 +24,6 @@
 using pickle.
 """
 
-from __future__ import absolute_import
 from pyface.qt import QtGui
 from pyface.ui.qt4.mimedata import PyMimeData, str2bytes
 from traits.api import HasTraits, Instance, Property
@@ -34,13 +43,13 @@ class _Clipboard(HasTraits):
     # -------------------------------------------------------------------------
 
     #: The instance on the clipboard (if any).
-    instance = Property
+    instance = Property()
 
     #: Set if the clipboard contains an instance.
-    has_instance = Property
+    has_instance = Property()
 
     #: The type of the instance on the clipboard (if any).
-    instance_type = Property
+    instance_type = Property()
 
     #: The application clipboard.
     clipboard = Instance(QtGui.QClipboard)

@@ -1,3 +1,13 @@
+# (C) Copyright 2009-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2008, Riverbank Computing Limited
 # All rights reserved.
@@ -15,7 +25,6 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traits.api import HasTraits, Instance, Property
@@ -62,7 +71,7 @@ class CustomEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: List of InstanceChoiceItem objects used by the editor
-    items = Property
+    items = Property()
 
     #: The view to use for displaying the instance
     view = AView
@@ -101,18 +110,12 @@ class CustomEditor(Editor):
             self.set_tooltip(self._choice)
 
             if factory.name != "":
-                self._object.on_trait_change(
-                    self.rebuild_items, self._name, dispatch="ui"
-                )
-                self._object.on_trait_change(
-                    self.rebuild_items, self._name + "_items", dispatch="ui"
+                self._object.observe(
+                    self.rebuild_items, self._name + ".items", dispatch="ui"
                 )
 
-            factory.on_trait_change(
-                self.rebuild_items, "values", dispatch="ui"
-            )
-            factory.on_trait_change(
-                self.rebuild_items, "values_items", dispatch="ui"
+            factory.observe(
+                self.rebuild_items, "values.items", dispatch="ui"
             )
 
             self.rebuild_items()
@@ -190,7 +193,7 @@ class CustomEditor(Editor):
 
         return items
 
-    def rebuild_items(self):
+    def rebuild_items(self, event=None):
         """ Rebuilds the object selector list.
         """
         # Clear the current cached values:
@@ -346,18 +349,15 @@ class CustomEditor(Editor):
 
         if self._choice is not None:
             if self._object is not None:
-                self._object.on_trait_change(
-                    self.rebuild_items, self._name, remove=True
-                )
-                self._object.on_trait_change(
-                    self.rebuild_items, self._name + "_items", remove=True
+                self._object.observe(
+                    self.rebuild_items,
+                    self._name + ".items",
+                    remove=True,
+                    dispatch="ui"
                 )
 
-            self.factory.on_trait_change(
-                self.rebuild_items, "values", remove=True
-            )
-            self.factory.on_trait_change(
-                self.rebuild_items, "values_items", remove=True
+            self.factory.observe(
+                self.rebuild_items, "values.items", remove=True, dispatch="ui"
             )
 
         super(CustomEditor, self).dispose()
@@ -413,6 +413,7 @@ class SimpleEditor(CustomEditor):
         """ Creates the editor control (a button).
         """
         self._button = QtGui.QPushButton()
+        self._button.setAutoDefault(False)
         layout.addWidget(self._button)
         self._button.clicked.connect(self.edit_instance)
         # Make sure the editor is properly disposed if parent UI is closed

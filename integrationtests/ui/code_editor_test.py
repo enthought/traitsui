@@ -1,21 +1,19 @@
-#-------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Test using a KeyBindings object with the traits Codeditor
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Written by: David C. Morrill
-#
-#  Date: 09/22/2005
-#
-#  (c) Copyright 2005 by Enthought, Inc.
-#  License: BSD Style.
-#
-#-------------------------------------------------------------------------
+# Thanks for using Enthought open source!
+
+""" Test using a KeyBindings object with the traits CodeEditor."""
 
 #-------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import absolute_import
 from traits.api \
     import HasPrivateTraits, Code, Str
 
@@ -68,8 +66,8 @@ class CodeHandler(Handler):
 
 class TestCode(HasPrivateTraits):
 
-    code = Code
-    status = Str
+    code = Code()
+    status = Str()
 
     view = View(
         [Item('code',

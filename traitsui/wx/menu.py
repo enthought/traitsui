@@ -1,18 +1,12 @@
-# ------------------------------------------------------------------------------
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   01/24/2002
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Dynamically construct wxPython Menus or MenuBars from a supplied string
     description of the menu.
@@ -49,12 +43,16 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 #  Imports:
 # =========================================================================
 
-from __future__ import absolute_import, print_function
+
+import re
+import logging
+
 
 import wx
-import re
-import string
-import six
+
+
+logger = logging.getLogger(__name__)
+
 
 # =========================================================================
 #  Constants:
@@ -160,20 +158,33 @@ class MakeMenu:
                         handler = self.indirect
                     else:
                         try:
+                            _locl = dict(self=self)
                             exec(
-                                "def handler(event,self=self.owner):\n %s\n"
-                                % handler
+                                "def handler(event, self=self.owner):\n %s\n"
+                                % handler,
+                                globals(),
+                                _locl,
                             )
-                        except:
+                            handler = _locl["handler"]
+                        except Exception:
+                            logger.exception(
+                                "Invalid menu handler {:r}".format(handler)
+                            )
                             handler = null_handler
                 else:
                     try:
+                        _locl = dict(self=self)
                         exec(
-                            "def handler(event,self=self.owner):\n%s\n"
+                            "def handler(event, self=self.owner):\n%s\n"
                             % (self.get_body(indented),),
                             globals(),
+                            _locl,
                         )
-                    except:
+                        handler = _locl["handler"]
+                    except Exception:
+                        logger.exception(
+                            "Invalid menu handler {:r}".format(handler)
+                        )
                         handler = null_handler
                 self.window.Bind(wx.EVT_MENU, handler, id=cur_id)
                 not_checked = checked = disabled = False
@@ -251,7 +262,7 @@ class MakeMenu:
     def get_id(self, name):
         """ Returns the ID associated with a specified name.
         """
-        if isinstance(name, six.string_types):
+        if isinstance(name, str):
             return self.names[name]
         return name
 

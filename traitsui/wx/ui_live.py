@@ -1,35 +1,29 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   11/01/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Creates a wxPython user interface for a specified UI object, where the UI
     is "live", meaning that it immediately updates its underlying object(s).
 """
 
 
-from __future__ import absolute_import
 import wx
 
-from .helper import restore_window, save_window, TraitsUIScrolledPanel
+from pyface.api import SystemMetrics
+
+from .helper import save_window, TraitsUIScrolledPanel
 
 from .ui_base import BaseDialog
 
-from .ui_panel import panel, show_help
+from .ui_panel import panel
 
-from .constants import DefaultTitle, WindowColor, screen_dy, scrollbar_dx
+from .constants import DefaultTitle, WindowColor, scrollbar_dx
 from traitsui.undo import UndoHistory
 
 from traitsui.menu import (
@@ -41,16 +35,6 @@ from traitsui.menu import (
 )
 
 
-# Types of supported windows:
-NONMODAL = 0
-MODAL = 1
-POPUP = 2
-POPOVER = 3
-INFO = 4
-
-# Types of 'popup' dialogs:
-Popups = {POPUP, POPOVER, INFO}
-
 # -------------------------------------------------------------------------
 #  Creates a 'live update' wxPython user interface for a specified UI object:
 # -------------------------------------------------------------------------
@@ -60,70 +44,43 @@ def ui_live(ui, parent):
     """ Creates a live, non-modal wxPython user interface for a specified UI
     object.
     """
-    ui_dialog(ui, parent, NONMODAL)
+    _ui_dialog(ui, parent, BaseDialog.NONMODAL)
 
 
 def ui_livemodal(ui, parent):
     """ Creates a live, modal wxPython user interface for a specified UI object.
     """
-    ui_dialog(ui, parent, MODAL)
+    _ui_dialog(ui, parent, BaseDialog.MODAL)
 
 
 def ui_popup(ui, parent):
     """ Creates a live, temporary popup wxPython user interface for a specified
         UI object.
     """
-    ui_dialog(ui, parent, POPUP)
+    _ui_dialog(ui, parent, BaseDialog.POPUP)
 
 
 def ui_popover(ui, parent):
     """ Creates a live, temporary popup wxPython user interface for a specified
         UI object.
     """
-    ui_dialog(ui, parent, POPOVER)
+    _ui_dialog(ui, parent, BaseDialog.POPOVER)
 
 
 def ui_info(ui, parent):
     """ Creates a live, temporary popup wxPython user interface for a specified
         UI object.
     """
-    ui_dialog(ui, parent, INFO)
+    _ui_dialog(ui, parent, BaseDialog.INFO)
 
 
-def ui_dialog(ui, parent, style):
+def _ui_dialog(ui, parent, style):
     """ Creates a live wxPython user interface for a specified UI object.
     """
     if ui.owner is None:
         ui.owner = LiveWindow()
 
-    ui.owner.init(ui, parent, style)
-    ui.control = ui.owner.control
-    ui.control._parent = parent
-
-    try:
-        ui.prepare_ui()
-    except:
-        ui.control.Destroy()
-        ui.control.ui = None
-        ui.control = None
-        ui.owner = None
-        ui.result = False
-        raise
-
-    ui.handler.position(ui.info)
-    restore_window(ui, is_popup=(style in Popups))
-
-    ui.control.Layout()
-    # Check if the control is already being displayed modally. This would be
-    # the case if after the window was displayed, some event caused the ui to
-    # get rebuilt (typically when the user fires the 'updated' event on the ui
-    # ). In this case, calling ShowModal again leads to the parent window
-    # hanging even after the control has been closed by clicking OK or Cancel
-    # (maybe the modal mode isn't ending?)
-    if style == MODAL and not ui.control.IsModal():
-        ui.control.ShowModal()
-    else:
-        ui.control.Show()
+    BaseDialog.display_ui(ui, parent, style)
 
 
 class LiveWindow(BaseDialog):
@@ -131,7 +88,7 @@ class LiveWindow(BaseDialog):
     """
 
     def init(self, ui, parent, style):
-        self.is_modal = style == MODAL
+        self.is_modal = style == self.MODAL
         window_style = 0
         view = ui.view
         if view.resizable:
@@ -145,20 +102,20 @@ class LiveWindow(BaseDialog):
         window = ui.control
         if window is not None:
             if history is not None:
-                history.on_trait_change(
-                    self._on_undoable, "undoable", remove=True
+                history.observe(
+                    self._on_undoable, "undoable", remove=True, dispatch="ui"
                 )
-                history.on_trait_change(
-                    self._on_redoable, "redoable", remove=True
+                history.observe(
+                    self._on_redoable, "redoable", remove=True, dispatch="ui"
                 )
-                history.on_trait_change(
-                    self._on_revertable, "undoable", remove=True
+                history.observe(
+                    self._on_revertable, "undoable", remove=True, dispatch="ui"
                 )
             window.SetSizer(None)
             ui.reset()
         else:
             self.ui = ui
-            if style == MODAL:
+            if style == self.MODAL:
                 if view.resizable:
                     window_style |= wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX
                 window = wx.Dialog(
@@ -167,7 +124,7 @@ class LiveWindow(BaseDialog):
                     title,
                     style=window_style | wx.DEFAULT_DIALOG_STYLE,
                 )
-            elif style == NONMODAL:
+            elif style == self.NONMODAL:
                 if parent is not None:
                     window_style |= (
                         wx.FRAME_FLOAT_ON_PARENT | wx.FRAME_NO_TASKBAR
@@ -230,7 +187,7 @@ class LiveWindow(BaseDialog):
             sizer.Add(trait_sheet, 1, wx.EXPAND)
             tsdx, tsdy = trait_sheet.GetSize()
             sw.SetScrollRate(16, 16)
-            max_dy = (2 * screen_dy) // 3
+            max_dy = (2 * SystemMetrics().screen_height) // 3
             sw.SetSizer(sizer)
             sw.SetSize(
                 wx.Size(
@@ -278,10 +235,10 @@ class LiveWindow(BaseDialog):
                     self.redo = self.add_button(
                         button, b_sizer, self._on_redo, False, "Redo"
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_undoable, "undoable", dispatch="ui"
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_redoable, "redoable", dispatch="ui"
                     )
                     if history.can_undo:
@@ -298,7 +255,7 @@ class LiveWindow(BaseDialog):
                         False,
                         default=default,
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_revertable, "undoable", dispatch="ui"
                     )
                     if history.can_undo:
@@ -308,7 +265,7 @@ class LiveWindow(BaseDialog):
                     self.ok = self.add_button(
                         button, b_sizer, self._on_ok, default=default
                     )
-                    ui.on_trait_change(self._on_error, "errors", dispatch="ui")
+                    ui.observe(self._on_error, "errors", dispatch="ui")
 
                 elif self.is_button(button, "Cancel"):
                     self.add_button(
@@ -343,6 +300,9 @@ class LiveWindow(BaseDialog):
         if self.is_modal:
             self.control.EndModal(rc)
 
+        self.control.Unbind(wx.EVT_CLOSE)
+        self.control.Unbind(wx.EVT_CHAR)
+
         ui.finish()
         self.ui = self.undo = self.redo = self.revert = self.control = None
 
@@ -369,6 +329,9 @@ class LiveWindow(BaseDialog):
     def _on_ok(self, event=None):
         """ Handles the user clicking the **OK** button.
         """
+        if self.ui is None or self.control is None:
+            return True
+
         if self.ui.handler.close(self.ui.info, True):
             self.control.Unbind(wx.EVT_ACTIVATE)
             self.close(wx.ID_OK)
@@ -389,24 +352,28 @@ class LiveWindow(BaseDialog):
             self._on_revert(event)
             self.close(wx.ID_CANCEL)
 
-    def _on_error(self, errors):
+    def _on_error(self, event):
         """ Handles editing errors.
         """
+        errors = event.new
         self.ok.Enable(errors == 0)
 
-    def _on_undoable(self, state):
+    def _on_undoable(self, event):
         """ Handles a change to the "undoable" state of the undo history
         """
+        state = event.new
         self.undo.Enable(state)
 
-    def _on_redoable(self, state):
+    def _on_redoable(self, event):
         """ Handles a change to the "redoable state of the undo history.
         """
+        state = event.new
         self.redo.Enable(state)
 
-    def _on_revertable(self, state):
+    def _on_revertable(self, event):
         """ Handles a change to the "revert" state.
         """
+        state = event.new
         self.revert.Enable(state)
 
 

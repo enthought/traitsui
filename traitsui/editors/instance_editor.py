@@ -1,28 +1,18 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2008, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the instance editor factory for all traits user interface
 toolkits.
 """
 
-
-from __future__ import absolute_import
-
-from traits.api import Str, List, Enum, Unicode, Type, Bool
+from traits.api import Bool, Enum, List, Str, Type
 
 from ..view import View, AKind
 
@@ -48,9 +38,9 @@ class ToolkitEditorFactory(EditorFactory):
     #: List of items describing the types of selectable or editable instances
     values = List(InstanceChoiceItem)
 
-    #: Extended name of the context object trait containing the list of types of
-    #: selectable or editable instances
-    name = Str
+    #: Extended name of the context object trait containing the list of types
+    #: of selectable or editable instances
+    name = Str()
 
     #: Is the current value of the object trait editable (vs. merely
     #: selectable)?
@@ -62,27 +52,27 @@ class ToolkitEditorFactory(EditorFactory):
     #: of possible object values is selectable):
     selectable = Bool(False)
 
-    #: Should the editor support drag and drop of objects to set the trait value
-    #: (a value of True forces the editor to allow drag and drop, while a value
-    #: of False only supports drag and drop if at least one item in the list of
-    #: possible objects supports drag and drop):
+    #: Should the editor support drag and drop of objects to set the trait
+    #: value (a value of True forces the editor to allow drag and drop, while
+    #: a value of False only supports drag and drop if at least one item in the
+    #: list of possible objects supports drag and drop):
     droppable = Bool(False)
 
     #: Should factory-created objects be cached?
     cachable = Bool(True)
 
     #: Optional label for button
-    label = Unicode
+    label = Str()
 
     #: Optional instance view to use
     view = AView
 
-    #: Extended name of the context object trait containing the view, or name of
-    #: the view, to use
-    view_name = Str
+    #: Extended name of the context object trait containing the view, or name
+    #: of the view, to use
+    view_name = Str()
 
     #: The ID to use with the view
-    id = Str
+    id = Str()
 
     #: Kind of pop-up editor (live, modal, nonmodal, wizard)
     kind = AKind

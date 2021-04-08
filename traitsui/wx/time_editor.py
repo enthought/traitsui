@@ -1,19 +1,13 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2008, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: Judah De Paula
-#  Date:   10/7/2008
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
+
 """
 A Traits UI editor that wraps a WX timer control.
 
@@ -24,10 +18,9 @@ At the minimum, a spinner should be provided so the time can be changed
 without the need for a keyboard.  In addition we need to extend to provide
 all four of the basic editor types, Simple, Custom, Text, and Readonly.
 """
-from __future__ import absolute_import
 import datetime
 
-import wx.lib.masked as masked
+import wx.adv
 
 from traitsui.wx.editor import Editor
 from traitsui.wx.text_editor import ReadonlyEditor as TextReadonlyEditor
@@ -43,16 +36,16 @@ class SimpleEditor(Editor):
         Finishes initializing the editor by creating the underlying toolkit
         widget.
         """
-        tctl = masked.TimeCtrl(parent, -1, name="12 hour control")
+        tctl = wx.adv.TimePickerCtrl(parent, -1, name="12 hour control")
         self.control = tctl
-        self.control.Bind(masked.EVT_TIMEUPDATE, self.time_updated)
+        self.control.Bind(wx.adv.EVT_TIME_CHANGED, self.time_updated)
         return
 
     def time_updated(self, event):
         """
         Event for when the wx time control is updated.
         """
-        time = self.control.GetValue(as_wxDateTime=True)
+        time = self.control.GetValue()
         hour = time.GetHour()
         minute = time.GetMinute()
         second = time.GetSecond()
@@ -65,7 +58,7 @@ class SimpleEditor(Editor):
         editor.
         """
         if self.value:
-            time = self.control.GetValue(as_wxDateTime=True)
+            time = self.control.GetValue()
             time.SetHour(self.value.hour)
             time.SetMinute(self.value.minute)
             time.SetSecond(self.value.second)
@@ -73,35 +66,15 @@ class SimpleEditor(Editor):
         return
 
 
-# -- end SimpleEditor definition ------------------------------------------
-
-
-# ------------------------------------------------------------------------------
-# --  Text Editor
-# ------------------------------------------------------------------------------
 # TODO: Write me.  Possibly use TextEditor as a model to show a string
 # representation of the time, and have enter-set do a time evaluation.
 class TextEditor(SimpleEditor):
     pass
 
 
-# -- end TextEditor definition -------------------------------------------------
-
-
-# ------------------------------------------------------------------------------
-# --  Custom Editor
-# ------------------------------------------------------------------------------
 # TODO: Write me.
 class CustomEditor(SimpleEditor):
     pass
-
-
-# -- end TextEditor definition -------------------------------------------------
-
-
-# ------------------------------------------------------------------------------
-# --  Readonly Editor
-# ------------------------------------------------------------------------------
 
 
 class ReadonlyEditor(TextReadonlyEditor):
@@ -113,9 +86,3 @@ class ReadonlyEditor(TextReadonlyEditor):
             return self.factory.message
         else:
             return self.value.strftime(self.factory.strftime)
-
-
-# -- end ReadonlyEditor definition ---------------------------------------------
-
-
-# -- eof -----------------------------------------------------------------------

@@ -1,25 +1,16 @@
-# -------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2009, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: Evan Patterson
-#  Date:   06/25/09
-#
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ A single line text widget that supports functionality common to native
     search widgets.
 """
-
-from __future__ import absolute_import
 
 from traits.api import Bool, Property, Str
 from ..toolkit import toolkit_object
@@ -32,7 +23,7 @@ class SearchEditor(BasicEditorFactory):
     """
 
     #: The editor class to be created:
-    klass = Property
+    klass = Property()
 
     #: The descriptive text for the widget
     text = Str("Search")
@@ -51,7 +42,7 @@ class SearchEditor(BasicEditorFactory):
 
     #: Fire this event on the object whenever a search should be triggered,
     #: regardless of whether the search term changed
-    search_event_trait = Str
+    search_event_trait = Str()
 
     def _get_klass(self):
         """ Returns the toolkit-specific editor class to be instantiated.

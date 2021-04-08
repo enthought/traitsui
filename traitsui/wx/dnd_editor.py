@@ -1,19 +1,12 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2006, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   06/25/2006
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the various editors for a drag-and-drop editor,
     for the wxPython user interface toolkit. A drag-and-drop editor represents
@@ -23,11 +16,10 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 import numpy
 
-from six.moves.cPickle import load
+from pickle import load
 
 from traits.api import Bool
 
@@ -41,7 +33,7 @@ from pyface.wx.drag_and_drop import (
     PythonDropTarget,
     clipboard,
 )
-import six
+
 
 try:
     from apptools.io import File
@@ -68,7 +60,7 @@ object_image = ImageResource("object").create_image()
 inactive_image = ImageResource("inactive").create_image()
 
 # String types:
-string_type = (str, six.text_type)
+string_type = (str, str)
 
 # -------------------------------------------------------------------------
 #  'SimpleEditor' class:

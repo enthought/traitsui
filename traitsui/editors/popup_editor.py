@@ -1,4 +1,12 @@
-from __future__ import absolute_import
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
 from traits.api import Float, Enum, Any, Property
 
@@ -73,7 +81,7 @@ class _PopupEditor(UIEditor):
 class PopupEditor(BasicEditorFactory):
 
     #: The class used to construct editor objects:
-    klass = Property
+    klass = Property()
 
     #: The kind of popup to use:
     kind = Enum("popover", "popup", "info")
@@ -81,7 +89,7 @@ class PopupEditor(BasicEditorFactory):
     #: The editor to use for the pop-up view (can be None (use default editor),
     #: an EditorFactory instance, or a callable that returns an EditorFactory
     #: instance):
-    editor = Any
+    editor = Any()
 
     #: The style of editor to use for the popup editor (same as Item.style):
     style = EditorStyle

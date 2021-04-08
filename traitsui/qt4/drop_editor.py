@@ -1,3 +1,13 @@
+# (C) Copyright 2009-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2008, Riverbank Computing Limited
 # All rights reserved.
@@ -15,7 +25,6 @@ target editor handles drag and drop operations as a drop target.
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtGui, QtCore
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -23,6 +32,7 @@ from pyface.qt import QtGui, QtCore
 # traitsui.editors.drop_editor file.
 from traitsui.editors.drop_editor import ToolkitEditorFactory
 
+from .editor import Editor as _BaseEditor
 from .text_editor import SimpleEditor as Editor
 from .constants import DropColor
 from .clipboard import PyMimeData, clipboard
@@ -56,6 +66,15 @@ class SimpleEditor(Editor):
         self.control.installEventFilter(drop_event_filter)
 
         self.control._qt4_editor = self
+
+    def dispose(self):
+        """ Disposes of the content of an editor.
+        """
+        if self.factory.readonly:
+            # enthought/traitsui#884
+            _BaseEditor.dispose(self)
+        else:
+            super(SimpleEditor, self).dispose()
 
     def string_value(self, value):
         """ Returns the text representation of a specified object trait value.

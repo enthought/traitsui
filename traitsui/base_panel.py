@@ -1,22 +1,16 @@
-#  Copyright (c) 2017, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
-#  Author: Corran Webster
-#  Date:   Aug 2017
+# Thanks for using Enthought open source!
 
-from __future__ import absolute_import
 from pyface.action.api import ActionController
 from traits.api import Any, Instance
 from traitsui.menu import Action
-import six
-
 
 # Set of all predefined system button names:
 SystemButtons = {"Undo", "Redo", "Apply", "Revert", "OK", "Cancel", "Help"}
@@ -31,7 +25,7 @@ class BasePanel(ActionController):
     """
 
     #: The top-level toolkit control of the UI.
-    control = Any
+    control = Any()
 
     #: The UI instance for the view.
     ui = Instance("traitsui.ui.UI")
@@ -55,14 +49,14 @@ class BasePanel(ActionController):
     def is_button(self, action, name):
         """ Returns whether a specified action button is a system button.
         """
-        if isinstance(action, six.string_types):
+        if isinstance(action, str):
             return action == name
         return action.name == name
 
     def coerce_button(self, action):
         """ Coerces a string to an Action if necessary.
         """
-        if isinstance(action, six.string_types):
+        if isinstance(action, str):
             return Action(
                 name=action, action="" if action in SystemButtons else "?"
             )

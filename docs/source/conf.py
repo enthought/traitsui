@@ -11,7 +11,6 @@
 # All configuration values have a default value; values that are commented out
 # serve to show the default value.
 
-from __future__ import absolute_import
 
 from io import open
 import os
@@ -29,8 +28,13 @@ base_path = os.path.dirname(__file__)
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
-    'sphinx.ext.extlinks', 'sphinx.ext.autodoc', 'sphinx.ext.napoleon',
-    'sphinx.ext.intersphinx', 'traits.util.trait_documenter'
+    'sphinx.ext.autodoc',
+    'sphinx.ext.extlinks',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.napoleon',
+    # Link to code in sphinx generated API docs
+    "sphinx.ext.viewcode",
+    'traits.util.trait_documenter',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -44,7 +48,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'traitsui'
-copyright = '2008-2018, Enthought'
+copyright = '2008-2020, Enthought'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
@@ -107,7 +111,7 @@ pygments_style = 'sphinx'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "TraitsUI {} User Manual".format(version.split('.')[0])
+html_title = "TraitsUI {} Documentation".format(version.split('.')[0])
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -192,7 +196,7 @@ except ImportError as exc:
 
 # Useful aliases to avoid repeating long URLs.
 extlinks = {'github-demo': (
-    'https://github.com/enthought/traitsui/tree/master/examples/demo/%s',
+    'https://github.com/enthought/traitsui/tree/master/traitsui/examples/demo/%s',
     'github-demo')
 }
 
@@ -239,3 +243,13 @@ intersphinx_mapping = {
     'traits': ('http://docs.enthought.com/traits', None),
     'pyface': ('http://docs.enthought.com/pyface', None),
 }
+
+
+def autodoc_skip_member(app, what, name, obj, skip, options):
+    # Skip load_tests targeting unittest discover
+    is_load_tests = what == "module" and name == "load_tests"
+    return skip or is_load_tests
+
+
+def setup(app):
+    app.connect('autodoc-skip-member', autodoc_skip_member)

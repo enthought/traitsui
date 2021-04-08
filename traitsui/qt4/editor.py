@@ -1,3 +1,13 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
@@ -14,8 +24,7 @@
 """
 
 
-from __future__ import absolute_import
-from pyface.qt import QtGui
+from pyface.qt import QtCore, QtGui
 
 from traits.api import HasTraits, Instance, Str, Callable
 
@@ -69,29 +78,21 @@ class Editor(UIEditor):
         else:
             control = self.control
 
-        QtGui.QMessageBox.information(
-            control, self.description + " value error", str(excp)
+        message_box = QtGui.QMessageBox(
+            QtGui.QMessageBox.Information,
+            self.description + " value error",
+            str(excp),
+            buttons=QtGui.QMessageBox.Ok,
+            parent=control
         )
+        message_box.setTextFormat(QtCore.Qt.PlainText)
+        message_box.setEscapeButton(QtGui.QMessageBox.Ok)
+        message_box.exec_()
 
-    def set_tooltip(self, control=None):
+    def set_tooltip_text(self, control, text):
         """ Sets the tooltip for a specified control.
         """
-        desc = self.description
-        if desc == "":
-            desc = self.object.base_trait(self.name).tooltip
-            if desc is None:
-                desc = self.object.base_trait(self.name).desc
-                if desc is None:
-                    return False
-
-                desc = "Specifies " + desc
-
-        if control is None:
-            control = self.control
-
-        control.setToolTip(desc)
-
-        return True
+        control.setToolTip(text)
 
     def _enabled_changed(self, enabled):
         """Handles the **enabled** state of the editor being changed.
@@ -260,6 +261,7 @@ class Editor(UIEditor):
 
         if action.on_perform is not None:
             action.on_perform(selection)
+            return
 
         action.perform(selection)
 
@@ -326,7 +328,7 @@ class Editor(UIEditor):
         Parameters
         ----------
         direction : QtGui.QBoxLayout.Direction
-            Directionality of the group that contains this edito. Either
+            Directionality of the group that contains this editor. Either
             QtGui.QBoxLayout.LeftToRight or QtGui.QBoxLayout.TopToBottom
 
         resizable : bool
@@ -375,10 +377,10 @@ class EditorWithList(Editor):
     list_object = Instance(HasTraits)
 
     #: Name of the monitored trait
-    list_name = Str
+    list_name = Str()
 
     #: Function used to evaluate the current list object value:
-    list_value = Callable
+    list_value = Callable()
 
     def init(self, parent):
         """ Initializes the object.

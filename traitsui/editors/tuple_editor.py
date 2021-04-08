@@ -1,32 +1,24 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2008, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
+
 """ Defines the tuple editor factory for all traits user interface toolkits.
 """
-
-
-from __future__ import absolute_import
 
 from traits.trait_base import SequenceTypes
 
 from traits.api import (
+    BaseTuple,
     Bool,
     HasTraits,
     List,
-    Tuple,
-    Unicode,
+    Str,
     Int,
     Any,
     TraitType,
@@ -59,10 +51,10 @@ class ToolkitEditorFactory(EditorFactory):
     # -------------------------------------------------------------------------
 
     #: Trait definitions for each tuple field
-    types = Any
+    types = Any()
 
     #: Labels for each of the tuple fields
-    labels = List(Unicode)
+    labels = List(Str)
 
     #: Editors for each of the tuple fields:
     editors = List(EditorFactory)
@@ -122,13 +114,13 @@ class TupleStructure(HasTraits):
     # -------------------------------------------------------------------------
 
     #: Editor this structure is linked to
-    editor = Any
+    editor = Any()
 
     #: The constructed View for the tuple
-    view = Any
+    view = Any()
 
     #: Number of tuple fields
-    fields = Int
+    fields = Int()
 
     def __init__(self, editor):
         """ Initializes the object.
@@ -154,7 +146,7 @@ class TupleStructure(HasTraits):
 
         if types is None:
             type = editor.value_trait.handler
-            if isinstance(type, Tuple):
+            if isinstance(type, BaseTuple):
                 types = type.types
 
         if not isinstance(types, SequenceTypes):

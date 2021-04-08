@@ -1,5 +1,14 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # Copyright (c) 2007, Riverbank Computing Limited
-# Copyright (c) 2018, Enthought, Inc
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
@@ -11,7 +20,6 @@
 """ Defines various directory editor for the PyQt user interface toolkit.
 """
 
-from __future__ import absolute_import
 from pyface.qt import QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -23,7 +31,7 @@ from .file_editor import (
     SimpleEditor as SimpleFileEditor,
     CustomEditor as CustomFileEditor,
 )
-import six
+
 
 
 class SimpleEditor(SimpleFileEditor):
@@ -57,7 +65,7 @@ class CustomEditor(CustomFileEditor):
         """
         if self.control is not None:
             if self._model.isDir(idx):
-                self.value = six.text_type(self._model.filePath(idx))
+                self.value = str(self._model.filePath(idx))
 
     # Trait change handlers --------------------------------------------------
 

@@ -1,25 +1,15 @@
-# -------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2007, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   07/14/2008
-#
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Editor factory for scrubber-based integer or float value editors.
 """
-
-
-from __future__ import absolute_import
 
 from pyface.ui_traits import Alignment
 from traits.api import Float, Property
@@ -38,16 +28,16 @@ from ..toolkit_traits import Color
 class ScrubberEditor(BasicEditorFactory):
 
     #: The editor class to be instantiated:
-    klass = Property
+    klass = Property()
 
     #: The low end of the scrubber range:
-    low = Float
+    low = Float()
 
     #: The high end of the scrubber range:
-    high = Float
+    high = Float()
 
     #: The normal increment (default: auto-calculate):
-    increment = Float
+    increment = Float()
 
     #: The alignment of the text within the scrubber:
     alignment = Alignment("center")

@@ -1,137 +1,82 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2012, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Author: Pietro Berkes
-#  Date:   Jan 2012
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
-from __future__ import absolute_import, print_function
-
+import enum
+import re
 import sys
-import traceback
-import inspect
-from functools import partial, wraps
-from contextlib import contextmanager
-from unittest import skip
+from unittest import skipIf, TestSuite
 
-from nose import SkipTest
+from pyface.toolkit import toolkit_object
+from traits.api import (
+    pop_exception_handler,
+    push_exception_handler,
+)
 from traits.etsconfig.api import ETSConfig
-import traits.trait_notifiers
+
+# These functions are imported by traitsui's own tests. They can be redirected
+# to traitsui.testing and then these aliases can be removed.
+from traitsui.testing._exception_handling import reraise_exceptions  # noqa
+from traitsui.testing._gui import process_cascade_events  # noqa: F401
+from traitsui.testing.api import UITester
 
 # ######### Testing tools
 
+# Toolkit constants
 
-@contextmanager
-def store_exceptions_on_all_threads():
-    """Context manager that captures all exceptions, even those coming from
-    the UI thread. On exit, the first exception is raised (if any).
 
-    It also temporarily overwrites the global function
-    traits.trait_notifier.handle_exception , which logs exceptions to
-    console without re-raising them by default.
+class ToolkitName(enum.Enum):
+    wx = "wx"
+    qt = "qt"
+    null = "null"
+
+
+def is_wx():
+    """ Return true if the toolkit backend is wx. """
+    return ETSConfig.toolkit == ToolkitName.wx.name
+
+
+def is_qt():
+    """ Return true if the toolkit backend is Qt
+    (that includes Qt4 or Qt5, etc.)
     """
-
-    exceptions = []
-
-    def _print_uncaught_exception(type, value, tb):
-        message = "Uncaught exception:\n"
-        message += "".join(traceback.format_exception(type, value, tb))
-        print(message)
-
-    def excepthook(type, value, tb):
-        exceptions.append(value)
-        _print_uncaught_exception(type, value, tb)
-
-    def handle_exception(object, trait_name, old, new):
-        type, value, tb = sys.exc_info()
-        exceptions.append(value)
-        _print_uncaught_exception(type, value, tb)
-
-    _original_handle_exception = traits.trait_notifiers.handle_exception
-    try:
-        sys.excepthook = excepthook
-        traits.trait_notifiers.handle_exception = handle_exception
-        yield
-    finally:
-        if len(exceptions) > 0:
-            raise exceptions[0]
-        sys.excepthook = sys.__excepthook__
-        traits.trait_notifiers.handle_exception = _original_handle_exception
+    return ETSConfig.toolkit.startswith(ToolkitName.qt.name)
 
 
-def _is_current_backend(backend_name=""):
-    return ETSConfig.toolkit == backend_name
+def is_null():
+    """ Return true if the toolkit backend is null.
+    """
+    return ETSConfig.toolkit == ToolkitName.null.name
 
 
-def skip_if_not_backend(item, backend_name=""):
-    """Decorator that skip tests if the backend is not the desired one."""
+def requires_toolkit(toolkits):
+    """ Decorator factory for skipping tests if the current toolkit is not
+    one of the given values.
 
-    if inspect.isclass(item):
-        if not _is_current_backend(backend_name):
-            message = "" if backend_name != "" else "Test only for {}"
-            wrapper = skip(message)(item)
-        else:
-            wrapper = item
-    else:
-
-        @wraps(item)
-        def wrapper(*args, **kwargs):
-            if not _is_current_backend(backend_name):
-                message = "" if backend_name != "" else "Test only for {}"
-                raise SkipTest(message.format(backend_name))
-            else:
-                return item(*args, **kwargs)
-
-    return wrapper
-
-
-#: Return True if current backend is 'wx'
-is_current_backend_wx = partial(_is_current_backend, backend_name="wx")
-
-#: Return True if current backend is 'qt4'
-is_current_backend_qt4 = partial(_is_current_backend, backend_name="qt4")
-
-#: Return True if current backend is 'null'
-is_current_backend_null = partial(_is_current_backend, backend_name="null")
-
-
-#: Test decorator: Skip test if backend is not 'wx'
-skip_if_not_wx = partial(skip_if_not_backend, backend_name="wx")
-
-#: Test decorator: Skip test if backend is not 'qt4'
-skip_if_not_qt4 = partial(skip_if_not_backend, backend_name="qt4")
-
-#: Test decorator: Skip test if backend is not 'null'
-skip_if_not_null = partial(skip_if_not_backend, backend_name="null")
+    Parameters
+    ----------
+    toolkits : iterable of members of ToolkitName
+        e.g. ``list(ToolkitName)`` to include all toolkits.
+    """
+    mapping = {
+        ToolkitName.null: is_null,
+        ToolkitName.qt: is_qt,
+        ToolkitName.wx: is_wx,
+    }
+    return skipIf(
+        not any(mapping[toolkit]() for toolkit in toolkits),
+        "Test requires one of these toolkits: {}".format(toolkits)
+    )
 
 
 #: True if current platform is MacOS
-is_mac_os = sys.platform == "Darwin"
-
-
-def skip_if_null(test_func):
-    """Decorator that skip tests if the backend is set to 'null'.
-
-    Some tests handle both wx and Qt in one go, but many things are not
-    defined in the null backend. Use this decorator to skip the test.
-    """
-
-    @wraps(test_func)
-    def wrapper(*args, **kwargs):
-        if _is_current_backend("null"):
-            raise SkipTest("Test not working on the 'null' backend")
-        else:
-            return test_func(*args, **kwargs)
-
-    return wrapper
+is_mac_os = sys.platform.startswith("darwin")
 
 
 def count_calls(func):
@@ -149,11 +94,46 @@ def count_calls(func):
     return wrapped
 
 
+def filter_tests(test_suite, exclusion_pattern):
+    filtered_test_suite = TestSuite()
+    for item in test_suite:
+        if isinstance(item, TestSuite):
+            filtered = filter_tests(item, exclusion_pattern)
+            filtered_test_suite.addTest(filtered)
+        else:
+            match = re.search(exclusion_pattern, item.id())
+            if match is not None:
+                skip_msg = "Test excluded via pattern '{}'".format(
+                    exclusion_pattern
+                )
+                setattr(item, 'setUp', lambda: item.skipTest(skip_msg))
+            filtered_test_suite.addTest(item)
+    return filtered_test_suite
+
+
+def create_ui(object, ui_kwargs=None):
+    """ Context manager for creating a UI and then dispose it when exiting
+    the context.
+
+    Parameters
+    ----------
+    object : HasTraits
+        An object from which ``edit_traits`` can be called to create a UI
+    ui_kwargs : dict or None
+        Keyword arguments to be provided to ``edit_traits``.
+
+    Yields
+    ------
+    ui: UI
+    """
+    return UITester().create_ui(object=object, ui_kwargs=ui_kwargs)
+
+
 # ######### Utility tools to test on both qt4 and wx
 
 
 def get_children(node):
-    if ETSConfig.toolkit == "wx":
+    if is_wx():
         return node.GetChildren()
     else:
         return node.children()
@@ -162,21 +142,51 @@ def get_children(node):
 def press_ok_button(ui):
     """Press the OK button in a wx or qt dialog."""
 
-    if is_current_backend_wx():
+    if is_wx():
         import wx
 
-        ok_button = ui.control.FindWindowByName("button")
+        ok_button = ui.control.FindWindowByName("button", ui.control)
         click_event = wx.CommandEvent(
             wx.wxEVT_COMMAND_BUTTON_CLICKED, ok_button.GetId()
         )
         ok_button.ProcessEvent(click_event)
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         from pyface import qt
 
         # press the OK button and close the dialog
         ok_button = ui.control.findChild(qt.QtGui.QPushButton)
         ok_button.click()
+
+
+def click_button(button):
+    """Click the button given its control."""
+
+    if is_wx():
+        import wx
+
+        event = wx.CommandEvent(wx.EVT_BUTTON.typeId, button.GetId())
+        event.SetEventObject(button)
+        wx.PostEvent(button, event)
+
+    elif is_qt():
+        button.click()
+
+    else:
+        raise NotImplementedError()
+
+
+def is_control_enabled(control):
+    """Return if the given control is enabled or not."""
+
+    if is_wx():
+        return control.IsEnabled()
+
+    elif is_qt():
+        return control.isEnabled()
+
+    else:
+        raise NotImplementedError()
 
 
 def get_dialog_size(ui_control):
@@ -188,12 +198,38 @@ def get_dialog_size(ui_control):
         >>> get_dialog_size(ui.control)
     """
 
-    if is_current_backend_wx():
+    if is_wx():
         return ui_control.GetSize()
 
-    elif is_current_backend_qt4():
+    elif is_qt():
         return ui_control.size().width(), ui_control.size().height()
 
+
+def get_all_button_status(control):
+    """Get status of all 2-state (wx) or checkable (qt) buttons under given
+    control.
+
+    Assumes all sizer children (wx) or layout items (qt) are buttons.
+    """
+    button_status = []
+
+    if is_wx():
+        for item in control.GetSizer().GetChildren():
+            button = item.GetWindow()
+            # Ignore empty buttons (assumption that they are invisible)
+            if button.value != "":
+                button_status.append(button.GetValue())
+
+    elif is_qt():
+        layout = control.layout()
+        for i in range(layout.count()):
+            button = layout.itemAt(i).widget()
+            button_status.append(button.isChecked())
+
+    else:
+        raise NotImplementedError()
+
+    return button_status
 
 # ######### Debug tools
 
@@ -269,3 +305,26 @@ def wx_find_event_by_number(evt_num):
     ]
 
     return possible
+
+
+GuiTestAssistant = toolkit_object("util.gui_test_assistant:GuiTestAssistant")
+no_gui_test_assistant = GuiTestAssistant.__name__ == "Unimplemented"
+if no_gui_test_assistant:
+
+    # ensure null toolkit has an inheritable GuiTestAssistant
+    class GuiTestAssistant(object):
+        pass
+
+
+class BaseTestMixin:
+    """ This is a mixin class for all test cases in TraitsUI, regardless of
+    whether GUI is involved.
+
+    Not to be used externally.
+    """
+
+    def setUp(self):
+        push_exception_handler(reraise_exceptions=True)
+
+    def tearDown(self):
+        pop_exception_handler()

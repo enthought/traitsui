@@ -1,39 +1,27 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2008, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
+
 """ Defines the range editor factory for all traits user interface toolkits.
 """
 
-
-from __future__ import absolute_import
-
 from types import CodeType
 
-import six
-
 from traits.api import (
+    Any,
+    Bool,
     CTrait,
+    Enum,
+    Int,
     Property,
     Range,
-    Enum,
     Str,
-    Int,
-    Any,
-    Unicode,
-    Bool,
     Undefined,
 )
 
@@ -69,39 +57,39 @@ class ToolkitEditorFactory(EditorFactory):
     enter_set = Bool(False)
 
     #: Label for the low end of the range
-    low_label = Unicode
+    low_label = Str()
 
     #: Label for the high end of the range
-    high_label = Unicode
+    high_label = Str()
 
     #: FIXME: This is supported only in the wx backend so far.
     #: The width of the low and high labels
-    label_width = Int
+    label_width = Int()
 
     #: The name of an [object.]trait that defines the low value for the range
-    low_name = Str
+    low_name = Str()
 
     #: The name of an [object.]trait that defines the high value for the range
-    high_name = Str
+    high_name = Str()
 
     #: Formatting string used to format value and labels
-    format = Unicode("%s")
+    format = Str("%s")
 
     #: Is the range for floating pointer numbers (vs. integers)?
     is_float = Bool(Undefined)
 
     #: Function to evaluate floats/ints when they are assigned to an object
     #: trait
-    evaluate = Any
+    evaluate = Any()
 
     #: The object trait containing the function used to evaluate floats/ints
-    evaluate_name = Str
+    evaluate_name = Str()
 
     #: Low end of range
-    low = Property
+    low = Property()
 
     #: High end of range
-    high = Property
+    high = Property()
 
     #: Display mode to use
     mode = Enum(
@@ -162,9 +150,9 @@ class ToolkitEditorFactory(EditorFactory):
             self.is_float = isinstance(low, float)
 
         if (self.low_label == "") or (
-            self.low_label == six.text_type(old_low)
+            self.low_label == str(old_low)
         ):
-            self.low_label = six.text_type(low)
+            self.low_label = str(low)
 
     def _get_high(self):
         return self._high
@@ -176,12 +164,12 @@ class ToolkitEditorFactory(EditorFactory):
             self.is_float = isinstance(high, float)
 
         if (self.high_label == "") or (
-            self.high_label == six.text_type(old_high)
+            self.high_label == str(old_high)
         ):
-            self.high_label = six.text_type(high)
+            self.high_label = str(high)
 
     def _cast(self, value):
-        if not isinstance(value, six.string_types):
+        if not isinstance(value, str):
             return value
 
         try:
@@ -221,7 +209,8 @@ class ToolkitEditorFactory(EditorFactory):
         edited:
 
         * One end of range is unspecified: RangeTextEditor
-        * **mode** is specified and not 'auto': editor corresponding to **mode**
+        * **mode** is specified and not 'auto': editor corresponding to
+          **mode**
         * Floating point range with extent > 100: LargeRangeSliderEditor
         * Integer range or floating point range with extent <= 100:
           SimpleSliderEditor
@@ -253,7 +242,8 @@ class ToolkitEditorFactory(EditorFactory):
         edited:
 
         * One end of range is unspecified: RangeTextEditor
-        * **mode** is specified and not 'auto': editor corresponding to **mode**
+        * **mode** is specified and not 'auto': editor corresponding to
+          **mode**
         * Floating point range: Same as "simple" style
         * Integer range with extent > 15: Same as "simple" style
         * Integer range with extent <= 15: CustomEnumEditor

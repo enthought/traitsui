@@ -1,25 +1,247 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/07/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
-""" Exports the symbols defined by the traits.ui package.
+""" API for the traitsui package.
+
+Editor Factories
+----------------
+- :class:`~.BasicEditorFactory`
+- :class:`~.EditorFactory`
+
+Context Values
+--------------
+
+- :attr:`~.CV`
+- :attr:`~.CVFloat`
+- :attr:`~.CVInt`
+- :attr:`~.CVStr`
+- :func:`~.CVType`
+- :class:`~.ContextValue`
+
+Editors
+-------
+- :class:`~.Editor`
+- :attr:`~.ArrayEditor`
+- :attr:`~.BooleanEditor`
+- :attr:`~.ButtonEditor`
+- :attr:`~.CheckListEditor`
+- :attr:`~.CodeEditor`
+- :func:`~.ColorEditor`
+- :attr:`~.CompoundEditor`
+- :class:`~.CSVListEditor`
+- :attr:`~.CustomEditor`
+- :class:`~.DateEditor`
+- :class:`~.DatetimeEditor`
+- :attr:`~.DateRangeEditor`
+- :class:`~.DefaultOverride`
+- :attr:`~.DirectoryEditor`
+- :attr:`~.DNDEditor`
+- :attr:`~.DropEditor`
+- :attr:`~.EnumEditor`
+- :attr:`~.FileEditor`
+- :func:`~.FontEditor`
+- :attr:`~.HistoryEditor`
+- :attr:`~.HTMLEditor`
+- :attr:`~.KeyBindingEditor`
+- :class:`~.ImageEditor`
+- :attr:`~.ImageEnumEditor`
+- :attr:`~.InstanceEditor`
+- :attr:`~.ListEditor`
+- :class:`~.ListStrEditor`
+- :attr:`~.NullEditor`
+- :class:`~.PopupEditor`
+- :attr:`~.ProgressEditor`
+- :attr:`~.RangeEditor`
+- :func:`~.RGBColorEditor`
+- :class:`~.ScrubberEditor`
+- :class:`~.SearchEditor`
+- :attr:`~.SetEditor`
+- :attr:`~.ShellEditor`
+- :attr:`~.StyledDateEditor`
+- :attr:`~.TableEditor`
+- :class:`~.TabularEditor`
+- :attr:`~.TextEditor`
+- :class:`~.TimeEditor`
+- :attr:`~.TitleEditor`
+- :attr:`~.TreeEditor`
+- :attr:`~.TupleEditor`
+- :attr:`~.ValueEditor`
+
+Layout Support
+--------------
+
+- :class:`~.Group`
+- :class:`~.HFlow`
+- :class:`~.HGroup`
+- :class:`~.HSplit`
+- :class:`~.Tabbed`
+- :class:`~.VFlow`
+- :class:`~.VFold`
+- :class:`~.VGrid`
+- :class:`~.VGroup`
+- :class:`~.VSplit`
+
+Handlers
+--------
+
+- :class:`~.Controller`
+- :class:`~.Handler`
+- :class:`~.ModelView`
+- :class:`~.ViewHandler`
+- :func:`~.default_handler`
+
+UI Items
+--------
+
+- :class:`~.Custom`
+- :class:`~.Heading`
+- :class:`~.Item`
+- :class:`~.Label`
+- :class:`~.Readonly`
+- :class:`~.Spring`
+- :class:`~.UCustom`
+- :class:`~.UItem`
+- :class:`~.UReadonly`
+- :attr:`~.spring`
+
+Menus and Actions
+-----------------
+
+- :class:`~.Action`
+- :attr:`~.ActionGroup`
+- :attr:`~.ApplyButton`
+- :attr:`~.CancelButton`
+- :attr:`~.CloseAction`
+- :attr:`~.HelpAction`
+- :attr:`~.HelpButton`
+- :attr:`~.LiveButtons`
+- :attr:`~.Menu`
+- :attr:`~.MenuBar`
+- :attr:`~.ModalButtons`
+- :attr:`~.NoButton`
+- :attr:`~.NoButtons`
+- :attr:`~.OKButton`
+- :attr:`~.OKCancelButtons`
+- :attr:`~.PyFaceAction`
+- :attr:`~.RedoAction`
+- :attr:`~.RevertAction`
+- :attr:`~.RevertButton`
+- :attr:`~.Separator`
+- :attr:`~.StandardMenuBar`
+- :attr:`~.ToolBar`
+- :attr:`~.UndoAction`
+- :attr:`~.UndoButton`
+
+Table UI
+--------
+
+- :class:`~.TabularAdapter`
+- :attr:`~.TableEditor`
+
+Table column types:
+
+- :class:`~.ExpressionColumn`
+- :class:`~.ListColumn`
+- :class:`~.NumericColumn`
+- :class:`~.ObjectColumn`
+- :class:`~.TableColumn`
+
+Table filter types:
+
+- :class:`~.EvalTableFilter`
+- :class:`~.MenuTableFilter`
+- :class:`~.RuleTableFilter`
+- :class:`~.TableFilter`
+
+Instance UI
+-----------
+
+- :class:`~.InstanceChoice`
+- :class:`~.InstanceChoiceItem`
+- :class:`~.InstanceDropChoice`
+- :attr:`~.InstanceEditor`
+- :class:`~.InstanceFactoryChoice`
+
+Toolkit Object
+--------------
+
+- :func:`~.toolkit`
+
+Custom Traits
+-------------
+
+- :attr:`~.Color`
+- :func:`~.ColorTrait`
+- :attr:`~.Font`
+- :func:`~.FontTrait`
+- :attr:`~.RGBColor`
+- :func:`~.RGBColorTrait`
+
+Custom UI Traits
+----------------
+
+- :attr:`~.Border`
+- :attr:`~.HasBorder`
+- :attr:`~.HasMargin`
+- :attr:`~.Image`
+- :attr:`~.Margin`
+- :class:`~.StatusItem`
+
+Tree UI
+-------
+
+- :class:`~.ITreeNode`
+- :class:`~.ITreeNodeAdapter`
+- :class:`~.MultiTreeNode`
+- :class:`~.ObjectTreeNode`
+- :attr:`~.TreeEditor`
+- :class:`~.TreeNode`
+- :class:`~.TreeNodeObject`
+
+UI and UI Support
+-----------------
+
+- :class:`~.UI`
+- :class:`~.UIInfo`
+
+Undo Support
+------------
+
+- :class:`~.AbstractUndoItem`
+- :class:`~.ListUndoItem`
+- :class:`~.UndoHistory`
+- :class:`~.UndoHistoryUndoItem`
+- :class:`~.UndoItem`
+
+View and View Elements
+----------------------
+
+- :class:`~.View`
+- :class:`~.ViewElement`
+- :class:`~.ViewSubElement`
+- :mod:`~.view_elements`
+
+Miscellaneous
+-------------
+
+- :func:`~.on_help_call`
+- :func:`~.help_template`
+- :class:`~.Include`
+- :func:`~.auto_close_message`
+- :func:`~.error`
+- :func:`~.message`
+- :attr:`~._constants`
+- :attr:`~.WindowColor`
+- :func:`~.raise_to_debug`
+
 """
-
-
-from __future__ import absolute_import
 
 from .basic_editor_factory import BasicEditorFactory
 
@@ -167,6 +389,13 @@ from .table_filter import (
 )
 
 from .tabular_adapter import TabularAdapter
+
+from .instance_choice import (
+    InstanceChoice,
+    InstanceChoiceItem,
+    InstanceDropChoice,
+    InstanceFactoryChoice,
+)
 
 from .toolkit import toolkit
 

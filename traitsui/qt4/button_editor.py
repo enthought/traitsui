@@ -1,3 +1,13 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
@@ -14,10 +24,9 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
-from traits.api import Unicode, List, Str, on_trait_change
+from traits.api import Str, List, Str, on_trait_change
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -36,13 +45,13 @@ class SimpleEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: The button label
-    label = Unicode
+    label = Str()
 
     #: The list of items in a drop-down menu, if any
-    # menu_items = List
+    # menu_items = List()
 
     #: The selected item in the drop-down menu.
-    selected_item = Str
+    selected_item = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -54,11 +63,8 @@ class SimpleEditor(Editor):
             self.control = QtGui.QToolButton()
             self.control.toolButtonStyle = QtCore.Qt.ToolButtonTextOnly
             self.control.setText(self.string_value(label))
-            self.object.on_trait_change(
-                self._update_menu, self.factory.values_trait
-            )
-            self.object.on_trait_change(
-                self._update_menu, self.factory.values_trait + "_items"
+            self.object.observe(
+                self._update_menu, self.factory.values_trait + ".items"
             )
             self._menu = QtGui.QMenu()
             self._update_menu()
@@ -70,12 +76,27 @@ class SimpleEditor(Editor):
             self.control.setAutoDefault(False)
 
         self.sync_value(self.factory.label_value, "label", "from")
-        self.control.clicked.connect(self.update_object)
+
+        # The connection type is set to workaround Qt5 + MacOSX issue with
+        # event dispatching. Without the type set to QueuedConnection, other
+        # widgets may not repaint properly in response to a button click.
+        # See enthought/traitsui#1308
+        self.control.clicked.connect(
+            self.update_object, type=QtCore.Qt.QueuedConnection,
+        )
         self.set_tooltip()
 
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
+
+        if self.factory.values_trait:
+            self.object.observe(
+                self._update_menu,
+                self.factory.values_trait + ".items",
+                remove=True,
+            )
+
         if self.control is not None:
             self.control.clicked.disconnect(self.update_object)
         super(SimpleEditor, self).dispose()
@@ -83,7 +104,7 @@ class SimpleEditor(Editor):
     def _label_changed(self, label):
         self.control.setText(self.string_value(label))
 
-    def _update_menu(self):
+    def _update_menu(self, event=None):
         self._menu.blockSignals(True)
         self._menu.clear()
         for item in getattr(self.object, self.factory.values_trait):
@@ -154,3 +175,13 @@ class CustomEditor(SimpleEditor):
         self.sync_value(self.factory.label_value, "label", "from")
         self.control.clicked.connect(self.update_object)
         self.set_tooltip()
+
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None:
+            self.control.clicked.disconnect(self.update_object)
+
+        # FIXME: Maybe better to let this class subclass Editor directly
+        # enthought/traitsui#884
+        Editor.dispose(self)

@@ -1,30 +1,20 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/18/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the abstract ViewElement class that all trait view template items
     (i.e., View, Group, Item, Include) derive from.
 """
 
-
-from __future__ import absolute_import
-
 import re
 
-from traits.api import HasPrivateTraits, Instance, Bool
+from traits.api import AbstractViewElement, Bool, HasPrivateTraits, Instance
 
 from .ui_traits import (
     AnObject,
@@ -34,15 +24,6 @@ from .ui_traits import (
     HelpId,
     Image,
 )
-
-from .util import str_rfind
-
-# Is the AbstractViewElement ABC available in traits.api?
-
-try:
-    from traits.api import AbstractViewElement
-except ImportError:
-    AbstractViewElement = None
 
 
 label_pat = re.compile(r"^(.*)\[(.*)\](.*)$", re.MULTILINE | re.DOTALL)
@@ -137,7 +118,7 @@ class ViewSubElement(ViewElement):
         if col < 0:
             return value
 
-        items = (value[:col].strip(), value[col + 1 :].strip())
+        items = (value[:col].strip(), value[col + 1:].strip())
         if items[assign] != "":
             setattr(self, name, items[assign])
 
@@ -148,7 +129,7 @@ class ViewSubElement(ViewElement):
         """
         col = string.find(option)
         if col >= 0:
-            string = string[:col] + string[col + len(option) :]
+            string = string[:col] + string[col + len(option):]
             setattr(self, name, value)
 
         return string
@@ -160,7 +141,7 @@ class ViewSubElement(ViewElement):
         value = self._option(value, "@", "style", "custom")
         value = self._option(value, "*", "style", "text")
         value = self._option(value, "~", "style", "readonly")
-        value = self._split("style", value, ";", str_rfind, 1, 0)
+        value = self._split("style", value, ";", str.rfind, 1, 0)
 
         return value
 
@@ -219,5 +200,4 @@ class ViewSubElement(ViewElement):
 
 # Register ViewElement as implementing AbstractViewElement
 # TODO: eventually have ViewElement inherit directly
-if AbstractViewElement is not None:
-    AbstractViewElement.register(ViewElement)
+AbstractViewElement.register(ViewElement)

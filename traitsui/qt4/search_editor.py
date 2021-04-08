@@ -1,24 +1,19 @@
-# -------------------------------------------------------------------------
-#  Copyright (c) 20011, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
-#  Author: Evan Patterson
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 # System library imports
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 # ETS imports
 from .editor import Editor
-import six
+
 
 
 class SearchWidget(QtGui.QLineEdit):
@@ -30,7 +25,7 @@ class SearchWidget(QtGui.QLineEdit):
         """ Store the descriptive text for the widget.
         """
         super(SearchWidget, self).__init__()
-        self._desc = six.text_type(desc)
+        self._desc = str(desc)
         self._set_descriptive_text()
 
     def focusInEvent(self, event):

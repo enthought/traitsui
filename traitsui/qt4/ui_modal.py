@@ -1,3 +1,13 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
@@ -14,7 +24,6 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traitsui.menu import (
@@ -124,7 +133,7 @@ class _ModalDialog(BaseDialog):
                         enabled=apply,
                         default=default,
                     )
-                    ui.on_trait_change(
+                    ui.observe(
                         self._on_applyable, "modified", dispatch="ui"
                     )
 
@@ -146,7 +155,7 @@ class _ModalDialog(BaseDialog):
                         self.control.accept,
                         default=default,
                     )
-                    ui.on_trait_change(self._on_error, "errors", dispatch="ui")
+                    ui.observe(self._on_error, "errors", dispatch="ui")
 
                 elif self.is_button(button, "Cancel"):
                     self.add_button(
@@ -233,9 +242,10 @@ class _ModalDialog(BaseDialog):
         ui.handler.apply(ui.info)
         ui.modified = False
 
-    def _on_applyable(self, state):
+    def _on_applyable(self, event):
         """Handles a change to the "modified" state of the user interface .
         """
+        state = event.new
         self.apply.setEnabled(state)
 
     def _on_revert(self):

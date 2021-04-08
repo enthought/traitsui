@@ -1,28 +1,19 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005-19, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   12/03/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the tree node descriptor used by the tree editor and tree editor
     factory classes.
 """
 
+from itertools import zip_longest
 
-from __future__ import absolute_import
-
-import six
 
 from traits.api import (
     Adapter,
@@ -30,7 +21,6 @@ from traits.api import (
     Bool,
     Callable,
     Dict,
-    Either,
     HasPrivateTraits,
     Instance,
     Interface,
@@ -39,6 +29,7 @@ from traits.api import (
     Property,
     Str,
     Supports,
+    Either,
     cached_property,
 )
 
@@ -67,21 +58,21 @@ class TreeNode(HasPrivateTraits):
 
     #: Name of trait containing children (if '', the node is a leaf). Nested
     #: attributes are allowed, e.g., 'library.books'
-    children = Str
+    children = Str()
 
     #: Either the name of a trait containing a label, or a constant label, if
     #: the string starts with '='.
-    label = Str
+    label = Str()
 
     #: The name of a trait containing a list of labels for any columns.
-    column_labels = Str
+    column_labels = Str()
 
     #: Either the name of a trait containing a tooltip, or constant tooltip, if
     #: the string starts with '='.
-    tooltip = Str
+    tooltip = Str()
 
     #: Name to use for a new instance
-    name = Str
+    name = Str()
 
     #: Can the object's children be renamed?
     rename = Bool(True)
@@ -107,7 +98,17 @@ class TreeNode(HasPrivateTraits):
     #: Automatically close sibling tree nodes?
     auto_close = Bool(False)
 
-    #: List of object classes than can be added or copied
+    #: List of object classes than can be added or copied. Elements of the list
+    #: can be either:
+    #: - the klass itself that can be added or copied
+    #: - 2-tuples of the form (klass, prompt) in which case klass is as above
+    #:   and prompt is a boolean indicating whether or not to prompt the user
+    #:   to specify trait values after instantiation when adding the object.
+    #: - 3-tuples of the form (klass, prompt, factory) in which case klass and
+    #:   prompt are as above.  factory is a callable that is expected to return
+    #:   an instance of klass.  Useful if klass has required traits. Otherwise
+    #:   added object is created by simply instantiating klass()
+    #:   ref: enthought/traits#1502
     add = List(Any)
 
     #: List of object classes that can be moved
@@ -123,26 +124,26 @@ class TreeNode(HasPrivateTraits):
     node_for_interface = Property(depends_on="node_for")
 
     #: Function for formatting the label
-    formatter = Callable
+    formatter = Callable()
 
     #: Functions for formatting the other columns.
     column_formatters = List(Either(None, Callable))
 
     #: Function for formatting the tooltip
-    tooltip_formatter = Callable
+    tooltip_formatter = Callable()
 
     #: Function for handling selecting an object
-    on_select = Callable
+    on_select = Callable()
 
     #: Function for handling clicking an object
-    on_click = Callable
+    on_click = Callable()
 
     #: Function for handling double-clicking an object
-    on_dclick = Callable
+    on_dclick = Callable()
 
     #: Function for handling activation of an object
     #: (double-click or Enter key press when node is in focus)
-    on_activated = Callable
+    on_activated = Callable()
 
     #: View to use for editing the object
     view = AView
@@ -152,7 +153,7 @@ class TreeNode(HasPrivateTraits):
     #: - Instance( Menu ): Use this menu as the context menu
     #: - None: Use the default context menu
     #: - False: Do not display a context menu
-    menu = Any
+    menu = Any()
 
     #: Name of leaf item icon
     icon_item = Str("<item>")
@@ -164,23 +165,23 @@ class TreeNode(HasPrivateTraits):
     icon_open = Str("<open>")
 
     #: Resource path used to locate the node icon
-    icon_path = Str
+    icon_path = Str()
 
     #: Selector or name for background color
-    background = Any
+    background = Any()
 
     #: Selector or name for foreground color
-    foreground = Any
+    foreground = Any()
 
     # fixme: The 'menu' trait should really be defined as:
     #        Instance( 'traitsui.menu.MenuBar' ), but it doesn't work
     #        right currently.
 
     #: A toolkit-appropriate cell renderer (currently Qt only)
-    renderer = Any
+    renderer = Any()
 
     #: A cache for listeners that need to keep state.
-    _listener_cache = Dict
+    _listener_cache = Dict()
 
     def __init__(self, **traits):
         super(TreeNode, self).__init__(**traits)
@@ -319,7 +320,7 @@ class TreeNode(HasPrivateTraits):
         trait = self.column_labels
         labels = xgetattr(object, trait, [])
         formatted = []
-        for formatter, label in six.moves.zip_longest(
+        for formatter, label in zip_longest(
             self.column_formatters, labels
         ):
             # If the list of column formatters is shorter than the list of
@@ -417,13 +418,13 @@ class TreeNode(HasPrivateTraits):
 
     def get_background(self, object):
         background = self.background
-        if isinstance(background, six.string_types):
+        if isinstance(background, str):
             background = xgetattr(object, background, default=background)
         return background
 
     def get_foreground(self, object):
         foreground = self.foreground
-        if isinstance(foreground, six.string_types):
+        if isinstance(foreground, str):
             foreground = xgetattr(object, foreground, default=foreground)
         return foreground
 
@@ -652,13 +653,13 @@ class ITreeNode(Interface):
         """
 
     def when_column_labels_change(self, object, listener, remove):
-        """ Sets up or removes a listener for the column labels being changed on
-        a specified object.
+        """ Sets up or removes a listener for the column labels being changed
+        on a specified object.
 
         This will fire when either the list is reassigned or when it is
         modified. I.e., it listens both to the trait change event and the
-        trait_items change event. Implement the listener appropriately to handle
-        either case.
+        trait_items change event. Implement the listener appropriately to
+        handle either case.
         """
 
     def get_tooltip(self):
@@ -862,13 +863,13 @@ class ITreeNodeAdapter(Adapter):
         return []
 
     def when_column_labels_change(self, listener, remove):
-        """ Sets up or removes a listener for the column labels being changed on
-        a specified object.
+        """ Sets up or removes a listener for the column labels being changed
+        on a specified object.
 
         This will fire when either the list is reassigned or when it is
         modified. I.e., it listens both to the trait change event and the
-        trait_items change event. Implement the listener appropriately to handle
-        either case.
+        trait_items change event. Implement the listener appropriately to
+        handle either case.
         """
         pass
 
@@ -1102,13 +1103,13 @@ class ITreeNodeAdapterBridge(HasPrivateTraits):
         return self.adapter.get_column_labels()
 
     def when_column_labels_change(self, object, listener, remove):
-        """ Sets up or removes a listener for the column labels being changed on
-        a specified object.
+        """ Sets up or removes a listener for the column labels being changed
+        on a specified object.
 
         This will fire when either the list is reassigned or when it is
         modified. I.e., it listens both to the trait change event and the
-        trait_items change event. Implement the listener appropriately to handle
-        either case.
+        trait_items change event. Implement the listener appropriately to
+        handle either case.
         """
         return self.adapter.when_column_labels_change(listener, remove)
 
@@ -1455,7 +1456,7 @@ class TreeNodeObject(HasPrivateTraits):
     """
 
     #: A cache for listeners that need to keep state.
-    _listener_cache = Dict
+    _listener_cache = Dict()
 
     def tno_allows_children(self, node):
         """ Returns whether this object allows children.

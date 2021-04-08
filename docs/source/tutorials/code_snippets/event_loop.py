@@ -1,10 +1,10 @@
-from __future__ import absolute_import
+# event_loop.py
+
 from traits.api import *
-import wx
+from pyface.api import GUI
 
 class Counter(HasTraits):
     value =  Int()
 
 Counter().edit_traits()
-wx.App().MainLoop()
-
+GUI().start_event_loop()

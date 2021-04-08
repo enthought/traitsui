@@ -1,33 +1,22 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   08/25/2005
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the various instance descriptors used by the instance editor and
     instance editor factory classes.
 """
-
-
-from __future__ import absolute_import
 
 from traits.api import HasPrivateTraits, Str, Any, Dict, Tuple, Callable, Bool
 
 from .ui_traits import AView
 
 from .helper import user_name_for
-import six
 
 
 class InstanceChoiceItem(HasPrivateTraits):
@@ -37,7 +26,7 @@ class InstanceChoiceItem(HasPrivateTraits):
     # -------------------------------------------------------------------------
 
     #: User interface name for the item
-    name = Str
+    name = Str()
 
     #: View associated with this item
     view = AView
@@ -83,7 +72,7 @@ class InstanceChoice(InstanceChoiceItem):
     # -------------------------------------------------------------------------
 
     #: Object associated with the item
-    object = Any
+    object = Any()
 
     #: The name of the object trait containing its user interface name:
     name_trait = Str("name")
@@ -95,7 +84,7 @@ class InstanceChoice(InstanceChoiceItem):
             return self.name
 
         name = getattr(self.object, self.name_trait, None)
-        if isinstance(name, six.string_types):
+        if isinstance(name, str):
             return name
 
         return user_name_for(self.object.__class__.__name__)
@@ -117,19 +106,19 @@ class InstanceFactoryChoice(InstanceChoiceItem):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
-    #: Indicates whether an instance compatible with this item can be dragged and
-    #: dropped rather than created
+    #: Indicates whether an instance compatible with this item can be dragged
+    #: and dropped rather than created
     droppable = Bool(False)
 
     #: Indicates whether the item can be selected by the user
     selectable = Bool(True)
 
-    #: A class (or other callable) that can be used to create an item compatible
-    #: with this item
-    klass = Callable
+    #: A class (or other callable) that can be used to create an item
+    #: compatible with this item
+    klass = Callable()
 
     #: Tuple of arguments to pass to **klass** to create an instance
-    args = Tuple
+    args = Tuple()
 
     #: Dictionary of arguments to pass to **klass** to create an instance
     kw_args = Dict(Str, Any)
@@ -144,7 +133,7 @@ class InstanceFactoryChoice(InstanceChoiceItem):
             return self.name
 
         name = getattr(object, "name", None)
-        if isinstance(name, six.string_types):
+        if isinstance(name, str):
             return name
 
         if issubclass(type(self.klass), type):
@@ -183,8 +172,8 @@ class InstanceDropChoice(InstanceFactoryChoice):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
-    #: Indicates whether an instance compatible with this item can be dragged and
-    #: dropped rather than created . This value overrides the default.
+    #: Indicates whether an instance compatible with this item can be dragged
+    #: and dropped rather than created . This value overrides the default.
     droppable = True
 
     #: Indicates whether the item can be selected by the user. This value

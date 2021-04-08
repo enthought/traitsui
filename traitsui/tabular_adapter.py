@@ -1,32 +1,23 @@
-# -------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2008, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   02/29/2008
-#
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the adapter classes associated with the Traits UI TabularEditor.
 """
 
 
-from __future__ import absolute_import
 
-import six
+
 
 from traits.api import (
     Any,
     Bool,
-    Either,
     Enum,
     Event,
     Float,
@@ -38,8 +29,9 @@ from traits.api import (
     List,
     Property,
     Str,
+    Either,
     cached_property,
-    on_trait_change,
+    observe,
     provides,
 )
 
@@ -49,16 +41,16 @@ from .toolkit_traits import Color, Font
 class ITabularAdapter(Interface):
 
     #: The row index of the current item being adapted:
-    row = Int
+    row = Int()
 
     #: The current column id being adapted (if any):
-    column = Any
+    column = Any()
 
     #: Current item being adapted:
-    item = Any
+    item = Any()
 
     #: The current value (if any):
-    value = Any
+    value = Any()
 
     #: The list of columns the adapter supports. The items in the list have the
     #: same format as the :py:attr:`columns` trait in the
@@ -68,10 +60,10 @@ class ITabularAdapter(Interface):
     columns = List(Str)
 
     #: Does the adapter know how to handle the current *item* or not:
-    accepts = Bool
+    accepts = Bool()
 
     #: Does the value of *accepts* depend only upon the type of *item*?
-    is_cacheable = Bool
+    is_cacheable = Bool()
 
 
 @provides(ITabularAdapter)
@@ -80,16 +72,16 @@ class AnITabularAdapter(HasPrivateTraits):
     # Implementation of the ITabularAdapter Interface ------------------------
 
     #: The row index of the current item being adapted:
-    row = Int
+    row = Int()
 
     #: The current column id being adapted (if any):
-    column = Any
+    column = Any()
 
     #: Current item being adapted:
-    item = Any
+    item = Any()
 
     #: The current value (if any):
-    value = Any
+    value = Any()
 
     #: The list of columns the adapter supports. The items in the list have the
     #: same format as the :py:attr:`columns` trait in the
@@ -160,7 +152,7 @@ class TabularAdapter(HasPrivateTraits):
     can_edit = Bool(True)
 
     #: The value to be dragged for a specified row item.
-    drag = Property
+    drag = Property()
 
     #: Can any arbitrary value be dropped onto the tabular view.
     can_drop = Bool(False)
@@ -173,28 +165,28 @@ class TabularAdapter(HasPrivateTraits):
     font = Font(None)
 
     #: The text color for a row item.
-    text_color = Property
+    text_color = Property()
 
     #: The background color for a row item.
-    bg_color = Property
+    bg_color = Property()
 
     #: The name of the default image to use for column items.
     image = Str(None, update=True)
 
     #: The text of a row/column item.
-    text = Property
+    text = Property()
 
     #: The content of a row/column item (may be any Python value).
-    content = Property
+    content = Property()
 
     #: The tooltip information for a row/column item.
-    tooltip = Str
+    tooltip = Str()
 
     #: The context menu for a row/column item.
-    menu = Any
+    menu = Any()
 
     #: The context menu for column header.
-    column_menu = Any
+    column_menu = Any()
 
     #: List of optional delegated adapters.
     adapters = List(ITabularAdapter, update=True)
@@ -205,22 +197,22 @@ class TabularAdapter(HasPrivateTraits):
     object = Instance(HasTraits)
 
     #: The name of the trait being edited.
-    name = Str
+    name = Str()
 
     #: The row index of the current item being adapted.
-    row = Int
+    row = Int()
 
     #: The column index of the current item being adapted.
-    column = Int
+    column = Int()
 
     #: The current column id being adapted (if any).
-    column_id = Any
+    column_id = Any()
 
     #: Current item being adapted.
-    item = Any
+    item = Any()
 
     #: The current value (if any).
-    value = Any
+    value = Any()
 
     # -- Private Trait Definitions --------------------------------------------
 
@@ -594,7 +586,7 @@ class TabularAdapter(HasPrivateTraits):
     def _get_column_dict(self):
         cols = {}
         for i, value in enumerate(self.columns):
-            if isinstance(value, six.string_types):
+            if isinstance(value, str):
                 cols.update({value: value})
             else:
                 cols.update({value[0]: value[1]})
@@ -604,7 +596,7 @@ class TabularAdapter(HasPrivateTraits):
     def _get_column_map(self):
         map = []
         for i, value in enumerate(self.columns):
-            if isinstance(value, six.string_types):
+            if isinstance(value, str):
                 map.append(i)
             else:
                 map.append(value[1])
@@ -628,7 +620,7 @@ class TabularAdapter(HasPrivateTraits):
     def _get_label_map(self):
         map = []
         for i, value in enumerate(self.columns):
-            if isinstance(value, six.string_types):
+            if isinstance(value, str):
                 map.append(value)
             else:
                 map.append(value[0])
@@ -642,7 +634,7 @@ class TabularAdapter(HasPrivateTraits):
         for adapter in self.adapters:
             indices = []
             for label in adapter.columns:
-                if not isinstance(label, six.string_types):
+                if not isinstance(label, str):
                     label = label[0]
 
                 indices.append(labels.index(label))
@@ -657,7 +649,7 @@ class TabularAdapter(HasPrivateTraits):
             mapping = {}
             for label in adapter.columns:
                 id = None
-                if not isinstance(label, six.string_types):
+                if not isinstance(label, str):
                     label, id = label
 
                 key = labels.index(label)
@@ -757,8 +749,8 @@ class TabularAdapter(HasPrivateTraits):
 
         return None
 
-    @on_trait_change("columns,adapters.+update")
-    def _flush_cache(self):
+    @observe("columns,adapters.items.+update")
+    def _flush_cache(self, event):
         """ Flushes the cache when the columns or any trait on any adapter
             changes.
         """

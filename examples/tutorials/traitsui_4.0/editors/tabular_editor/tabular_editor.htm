@@ -9,37 +9,37 @@
 
 body { background-color: #FFFFFF; }
 
-h1 { font-family: Arial; 
+h1 { font-family: Arial;
      font-size: 14pt;
      color: #303030;
      background-color: #FCD062;
-     padding-top: 3px; 
+     padding-top: 3px;
      padding-left:8px;
-     padding-bottom: 3px; 
+     padding-bottom: 3px;
      padding-right: 8px; }
 
 h2 { font-family: Arial;
      font-size: 12pt;
      color: #303030;
      background-color: #FCD062;
-     padding-top: 3px; 
+     padding-top: 3px;
      padding-left:8px;
-     padding-bottom: 3px; 
+     padding-bottom: 3px;
      padding-right: 8px; }
 
-pre { border: 1px solid #A0A0A0; 
-      background-color: #FDF7E7; 
+pre { border: 1px solid #A0A0A0;
+      background-color: #FDF7E7;
       padding: 4px; }
-      
+
 dl { border: 1px solid #A0A0A0;
      background-color: #FDF7E7;
      padding-top: 4px;
      padding-bottom: 6px;
      padding-left: 8px;
      padding-right: 8px; }
-      
+
 dl dl { border: 0px solid #A0A0A0; }
-     
+
 dt { font-family: Arial;
      font-weight: bold;
 
@@ -777,9 +777,9 @@ combination.</p>
 <pre class="literal-block">
 class Person( HasTraits ):
 
-    name    = Str
-    age     = Int
-    address = Str
+    name = Str()
+    age = Int()
+    address = Str()
 
 class MarriedPerson( Person ):
 
@@ -824,9 +824,9 @@ class ReportAdapter( TabularAdapter ):
 
     font                      = 'Courier 10'
     age_alignment             = Constant( 'right' )
-    MarriedPerson_age_image   = Property
+    MarriedPerson_age_image = Property()
     MarriedPerson_bg_color    = Color( 0xE0E0FF )
-    MarriedPerson_spouse_text = Property
+    MarriedPerson_spouse_text = Property()
     Person_spouse_text        = Constant( '' )
 
     def _get_MarriedPerson_age_image ( self ):

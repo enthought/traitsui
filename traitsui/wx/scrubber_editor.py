@@ -1,25 +1,17 @@
-# -------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2007, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   07/14/2008
-#
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Traits UI simple, scrubber-based integer or float value editor.
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from math import log10, pow
@@ -31,7 +23,7 @@ from traits.api import (
     Str,
     Float,
     TraitError,
-    on_trait_change,
+    observe,
 )
 
 from traitsui.api import View, Item, EnumEditor
@@ -57,19 +49,19 @@ class _ScrubberEditor(Editor):
     """
 
     #: The low end of the slider range:
-    low = Any
+    low = Any()
 
     #: The high end of the slider range:
-    high = Any
+    high = Any()
 
     #: The smallest allowed increment:
-    increment = Float
+    increment = Float()
 
     #: The current text being displayed:
-    text = Str
+    text = Str()
 
     #: The mapping to use (only for Enum's):
-    mapping = Any
+    mapping = Any()
 
     # -- Class Variables ------------------------------------------------------
 
@@ -207,8 +199,8 @@ class _ScrubberEditor(Editor):
 
     # -- Private Methods ------------------------------------------------------
 
-    @on_trait_change("low, high")
-    def _reset_scrubber(self):
+    @observe("low, high")
+    def _reset_scrubber(self, event=None):
         """ Sets the the current tooltip.
         """
         low, high = self.low, self.high
@@ -234,7 +226,7 @@ class _ScrubberEditor(Editor):
             if (low is None) or (high is None) or isinstance(low, int):
                 increment = 1.0
             else:
-                increment = pow(10, round(log10((high - low) // 100.0)))
+                increment = pow(10, round(log10((high - low) / 100.0)))
 
         self.increment = increment
 
@@ -346,7 +338,6 @@ class _ScrubberEditor(Editor):
         text.SetSelection(-1, -1)
         text.SetFocus()
         control.Bind(wx.EVT_TEXT_ENTER, self._text_completed, id=text.GetId())
-        text.Bind(wx.EVT_KILL_FOCUS, self._text_completed)
         text.Bind(wx.EVT_ENTER_WINDOW, self._enter_text)
         text.Bind(wx.EVT_LEAVE_WINDOW, self._leave_text)
         text.Bind(wx.EVT_CHAR, self._key_entered)
@@ -453,7 +444,6 @@ class _ScrubberEditor(Editor):
             and (self._text is None)
         ):
             self._pop_up_editor()
-
         event.Skip()
 
     def _enter_window(self, event):
@@ -462,13 +452,12 @@ class _ScrubberEditor(Editor):
         self._hover = True
 
         self.control.SetCursor(wx.Cursor(wx.CURSOR_HAND))
-
+        
         if not self._ignore_focus:
             self._ignore_focus = True
             self.control.SetFocus()
-
         self._ignore_focus = False
-
+        
         if self._x is not None:
             if self.factory.active_color_ != self.factory.color_:
                 self.control.Refresh()

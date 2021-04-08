@@ -1,27 +1,20 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005-19, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/13/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the concrete implementations of the traits Toolkit interface for
     the wxPython user interface toolkit.
 """
 
-
 # Make sure that importimg from this backend is OK:
-from __future__ import absolute_import
+import logging
+
 from traitsui.toolkit import assert_toolkit_import
 
 assert_toolkit_import(["wx"])
@@ -35,14 +28,16 @@ _app = pyface_toolkit("init:_app")
 
 from traits.api import HasPrivateTraits, Instance
 from traits.trait_notifiers import set_ui_handler
+from pyface.api import SystemMetrics
 from pyface.wx.drag_and_drop import PythonDropTarget
 
 from traitsui.theme import Theme
 from traitsui.ui import UI
 from traitsui.toolkit import Toolkit
-from .constants import WindowColor, screen_dx, screen_dy
+from .constants import WindowColor
 from .helper import position_window
 
+logger = logging.getLogger(__name__)
 
 #: Mapping from wx events to method suffixes.
 EventSuffix = {
@@ -226,7 +221,8 @@ class GUIToolkit(Toolkit):
         parent = window.GetParent()
         if parent is None:
             px, py = 0, 0
-            pdx, pdy = screen_dx, screen_dy
+            pdx = SystemMetrics().screen_width
+            pdy = SystemMetrics().screen_height
         else:
             px, py = parent.GetPosition()
             pdx, pdy = parent.GetSize()
@@ -239,14 +235,14 @@ class GUIToolkit(Toolkit):
         if width < 0.0:
             width = cur_width
         elif width <= 1.0:
-            width = int(width * screen_dx)
+            width = int(width * SystemMetrics().screen_width)
         else:
             width = int(width)
 
         if height < 0.0:
             height = cur_height
         elif height <= 1.0:
-            height = int(height * screen_dy)
+            height = int(height * SystemMetrics().screen_height)
         else:
             height = int(height)
 
@@ -427,7 +423,15 @@ class GUIToolkit(Toolkit):
         """ Destroys a specified GUI toolkit control.
         """
         _popEventHandlers(control)
-        control.Destroy()
+
+        def _destroy_control(control):
+            try:
+                control.Destroy()
+            except Exception:
+                logger.exception(
+                    "Wx control %r not destroyed cleanly", control)
+
+        wx.CallAfter(_destroy_control, control)
 
     def destroy_children(self, control):
         """ Destroys all of the child controls of a specified GUI toolkit
@@ -435,7 +439,7 @@ class GUIToolkit(Toolkit):
         """
         for child in control.GetChildren():
             _popEventHandlers(child)
-        control.DestroyChildren()
+        wx.CallAfter(control.DestroyChildren)
 
     def image_size(self, image):
         """ Returns a ( width, height ) tuple containing the size of a
@@ -558,6 +562,10 @@ def _popEventHandlers(ctrl, handler_type=EventHandlerWrapper):
     """ Pop any event handlers that have been pushed on to a window and its
         children.
     """
+    # FIXME: have to special case URLResolvingHtmlWindow because it doesn't
+    # want its EvtHandler cleaned up.  See issue #752.
+    from .html_editor import URLResolvingHtmlWindow
+
     handler = ctrl.GetEventHandler()
     while ctrl is not handler:
         next_handler = handler.GetNextHandler()
@@ -565,4 +573,4 @@ def _popEventHandlers(ctrl, handler_type=EventHandlerWrapper):
             ctrl.PopEventHandler(True)
         handler = next_handler
     for child in ctrl.GetChildren():
-        _popEventHandlers(child)
+        _popEventHandlers(child, handler_type)

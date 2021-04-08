@@ -1,30 +1,22 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   11/01/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Creates a panel-based wxPython user interface for a specified UI object.
 """
 
 
-from __future__ import absolute_import
 import wx
 import wx.html as wh
 import re
 
-from cgi import escape
+from html import escape
 
 from traits.api import Instance, Undefined
 
@@ -37,6 +29,8 @@ from traitsui.dockable_view_element import DockableViewElement
 from traitsui.help_template import help_template
 
 from traitsui.menu import UndoButton, RevertButton, HelpButton
+
+from pyface.api import SystemMetrics
 
 from pyface.dock.api import (
     DockWindow,
@@ -55,10 +49,9 @@ from .helper import (
     GroupEditor,
 )
 
-from .constants import screen_dx, screen_dy, WindowColor
+from .constants import WindowColor
 
 from .ui_base import BaseDialog
-from .constants import is_mac
 
 
 # Pattern of all digits
@@ -126,10 +119,14 @@ class Panel(BaseDialog):
         # Reset any existing history listeners:
         history = ui.history
         if history is not None:
-            history.on_trait_change(self._on_undoable, "undoable", remove=True)
-            history.on_trait_change(self._on_redoable, "redoable", remove=True)
-            history.on_trait_change(
-                self._on_revertable, "undoable", remove=True
+            history.observe(
+                self._on_undoable, "undoable", remove=True, dispatch="ui"
+            )
+            history.observe(
+                self._on_redoable, "redoable", remove=True, dispatch="ui"
+            )
+            history.observe(
+                self._on_revertable, "undoable", remove=True, dispatch="ui"
             )
 
         # Determine if we need any buttons or an 'undo' history:
@@ -198,17 +195,17 @@ class Panel(BaseDialog):
                     self.redo = self.add_button(
                         button, b_sizer, self._on_redo, False, "Redo"
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_undoable, "undoable", dispatch="ui"
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_redoable, "redoable", dispatch="ui"
                     )
                 elif self.is_button(button, "Revert"):
                     self.revert = self.add_button(
                         button, b_sizer, self._on_revert, False
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_revertable, "undoable", dispatch="ui"
                     )
                 elif self.is_button(button, "Help"):
@@ -220,19 +217,22 @@ class Panel(BaseDialog):
 
         cpanel.SetSizerAndFit(sw_sizer)
 
-    def _on_undoable(self, state):
+    def _on_undoable(self, event):
         """ Handles a change to the "undoable" state of the undo history.
         """
+        state = event.new
         self.undo.Enable(state)
 
-    def _on_redoable(self, state):
+    def _on_redoable(self, event):
         """ Handles a change to the "redoable" state of the undo history.
         """
+        state = event.new
         self.redo.Enable(state)
 
-    def _on_revertable(self, state):
+    def _on_revertable(self, event):
         """ Handles a change to the "revert" state.
         """
+        state = event.new
         self.revert.Enable(state)
 
     def add_toolbar(self, sizer):
@@ -399,8 +399,8 @@ def show_help(ui, button):
                 template.item_help
                 % (escape(item.get_label(ui)), escape(item.get_help(ui)))
             )
-    html = template.group_html % (header, "\n".join(fields))
-    HTMLHelpWindow(button, html, 0.25, 0.33)
+    html_content = template.group_html % (header, "\n".join(fields))
+    HTMLHelpWindow(button, html_content, 0.25, 0.33)
 
 
 def show_help_popup(event):
@@ -414,8 +414,8 @@ def show_help_popup(event):
     # of the object with the 'help' trait):
     help = getattr(control, "help", None)
     if help is not None:
-        html = template.item_html % (control.GetLabel(), help)
-        HTMLHelpWindow(control, html, 0.25, 0.13)
+        html_content = template.item_html % (control.GetLabel(), help)
+        HTMLHelpWindow(control, html_content, 0.25, 0.13)
 
 
 def fill_panel_for_group(
@@ -726,8 +726,6 @@ class FillPanel(object):
                 if self.is_horizontal:
                     if subgroup.springy:
                         growable = 1
-                    if subgroup.orientation == "horizontal":
-                        style |= wx.ALIGN_CENTER_VERTICAL
                 sizer.Add(sg_sizer, growable, style, 2)
 
     def add_items(self, content, panel, sizer):
@@ -1013,7 +1011,7 @@ class FillPanel(object):
             item_sizer.Add(
                 control,
                 growable,
-                flags | layout_style | wx.ALIGN_CENTER_VERTICAL,
+                flags | layout_style,
                 max(0, border_size + padding + item.padding),
             )
 
@@ -1154,7 +1152,7 @@ class HTMLHelpWindow(wx.Frame):
     """ Window for displaying Traits-based help text with HTML formatting.
     """
 
-    def __init__(self, parent, html, scale_dx, scale_dy):
+    def __init__(self, parent, html_content, scale_dx, scale_dy):
         """ Initializes the object.
         """
         wx.Frame.__init__(self, parent, -1, "Help", style=wx.SIMPLE_BORDER)
@@ -1164,7 +1162,7 @@ class HTMLHelpWindow(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         html_control = wh.HtmlWindow(self)
         html_control.SetBorders(2)
-        html_control.SetPage(html)
+        html_control.SetPage(html_content)
         sizer.Add(html_control, 1, wx.EXPAND)
         sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
         b_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -1174,7 +1172,8 @@ class HTMLHelpWindow(wx.Frame):
         sizer.Add(b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
         self.SetSizer(sizer)
         self.SetSize(
-            wx.Size(int(scale_dx * screen_dx), int(scale_dy * screen_dy))
+            wx.Size(int(scale_dx * SystemMetrics().screen_width),
+            int(scale_dy * SystemMetrics().screen_height))
         )
 
         # Position and show the dialog:
@@ -1184,18 +1183,19 @@ class HTMLHelpWindow(wx.Frame):
     def _on_ok(self, event):
         """ Handles the window being closed.
         """
+        self.Unbind(wx.EVT_BUTTON)
         self.Destroy()
 
 
 # -------------------------------------------------------------------------
-#  Creates a PyFace HeadingText control:
+#  Creates a Pyface HeadingText control:
 # -------------------------------------------------------------------------
 
 HeadingText = None
 
 
 def heading_text(*args, **kw):
-    """ Creates a PyFace HeadingText control.
+    """ Creates a Pyface HeadingText control.
     """
     global HeadingText
 

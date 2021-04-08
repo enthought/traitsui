@@ -1,25 +1,17 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the base class for wxPython editors.
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import HasTraits, Int, Instance, Str, Callable
@@ -84,25 +76,10 @@ class Editor(UIEditor):
         dlg.ShowModal()
         dlg.Destroy()
 
-    def set_tooltip(self, control=None):
+    def set_tooltip_text(self, control, text):
         """ Sets the tooltip for a specified control.
         """
-        desc = self.description
-        if desc == "":
-            desc = self.object.base_trait(self.name).tooltip
-            if desc is None:
-                desc = self.object.base_trait(self.name).desc
-                if desc is None:
-                    return False
-
-                desc = "Specifies " + desc
-
-        if control is None:
-            control = self.control
-
-        control.SetToolTip(desc)
-
-        return True
+        control.SetToolTip(text)
 
     def _enabled_changed(self, enabled):
         """ Handles the **enabled** state of the editor being changed.
@@ -201,10 +178,10 @@ class EditorWithList(Editor):
     list_object = Instance(HasTraits)
 
     #: Name of the monitored trait
-    list_name = Str
+    list_name = Str()
 
     #: Function used to evaluate the current list object value:
-    list_value = Callable
+    list_value = Callable()
 
     def init(self, parent):
         """ Initializes the object.

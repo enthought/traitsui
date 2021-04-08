@@ -1,20 +1,19 @@
-#  Copyright (c) 2008-19, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
-#  Author: Corran Webster
-#  Date:   August 12, 2019
+# Thanks for using Enthought open source!
 
 import unittest
 
 from pyface.toolkit import toolkit_object
-from traits.api import Any, Bool, Event, Float, HasTraits, Int, List, Undefined
+from traits.api import (
+    Any, Bool, Event, Float, HasTraits, Int, List, Range, Undefined
+)
 from traits.trait_base import xgetattr
 
 from traitsui.context_value import ContextValue, CVFloat, CVInt
@@ -22,15 +21,22 @@ from traitsui.editor import Editor
 from traitsui.editor_factory import EditorFactory
 from traitsui.handler import default_handler
 from traitsui.ui import UI
+from traitsui.testing.api import (
+    KeyClick, KeySequence, Textbox, UITester
+)
+from traitsui.tests._tools import (
+    BaseTestMixin,
+    GuiTestAssistant,
+    is_mac_os,
+    no_gui_test_assistant,
+    requires_toolkit,
+    ToolkitName,
+)
 
-
-GuiTestAssistant = toolkit_object("util.gui_test_assistant:GuiTestAssistant")
-no_gui_test_assistant = GuiTestAssistant.__name__ == "Unimplemented"
-if no_gui_test_assistant:
-
-    # ensure null toolkit has an inheritable GuiTestAssistant
-    class GuiTestAssistant(object):
-        pass
+ModalDialogTester = toolkit_object(
+    "util.modal_dialog_tester:ModalDialogTester"
+)
+no_modal_dialog_tester = ModalDialogTester.__name__ == "Unimplemented"
 
 
 class FakeControl(HasTraits):
@@ -41,10 +47,13 @@ class FakeControl(HasTraits):
     """
 
     #: The value stored in the control.
-    control_value = Any
+    control_value = Any()
 
     #: An event which also can be fired.
-    control_event = Event
+    control_event = Event()
+
+    #: The tooltip text for the control.
+    tooltip = Any()
 
 
 class StubEditorFactory(EditorFactory):
@@ -83,22 +92,22 @@ class StubEditor(Editor):
     """
 
     #: Whether or not the traits are events.
-    is_event = Bool
+    is_event = Bool()
 
     #: An auxiliary value we want to synchronize.
-    auxiliary_value = Any
+    auxiliary_value = Any()
 
     #: An auxiliary list we want to synchronize.
-    auxiliary_list = List
+    auxiliary_list = List()
 
     #: An auxiliary event we want to synchronize.
-    auxiliary_event = Event
+    auxiliary_event = Event()
 
     #: An auxiliary int we want to synchronize with a context value.
     auxiliary_cv_int = Int(sync_value="from")
 
     #: An auxiliary float we want to synchronize with a context value.
-    auxiliary_cv_float = Float
+    auxiliary_cv_float = Float()
 
     def init(self, parent):
         self.control = FakeControl()
@@ -107,6 +116,7 @@ class StubEditor(Editor):
             self.control.on_trait_change(self.update_object, "control_event")
         else:
             self.control.on_trait_change(self.update_object, "control_value")
+        self.set_tooltip()
 
     def dispose(self):
         if self.is_event:
@@ -134,6 +144,9 @@ class StubEditor(Editor):
                 finally:
                     self._no_update = False
 
+    def set_tooltip_text(self, control, text):
+        control.tooltip = text
+
     def set_focus(self, parent):
         pass
 
@@ -147,47 +160,67 @@ class UserObject(HasTraits):
     #: An auxiliary user value
     user_auxiliary = Any(10)
 
-    #: An list user value
+    #: A list user value
     user_list = List(["one", "two", "three"])
 
+    #: A trait with desc metadata.
+    user_desc = Any("test", desc="a trait with desc metadata")
+
+    #: A trait with tooltip metadata.
+    user_tooltip = Any("test", tooltip="a tooltip")
+
     #: An event user value
-    user_event = Event
+    user_event = Event()
+
+    #: A state that is to be synchronized with the editor.
+    invalid_state = Bool()
 
 
-@unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
-class TestEditor(GuiTestAssistant, unittest.TestCase):
-    def create_editor(
-        self,
+def create_editor(
         context=None,
         object_name="object",
         name="user_value",
         factory=None,
         is_event=False,
-    ):
-        if context is None:
-            user_object = UserObject()
-            context = {"object": user_object}
-        elif "." in object_name:
-            context_name, xname = object_name.split(".", 1)
-            context_object = context[context_name]
-            user_object = xgetattr(context_object, xname)
-        else:
-            user_object = context[object_name]
-        ui = UI(context=context, handler=default_handler())
+        description="",
+):
+    if context is None:
+        user_object = UserObject()
+        context = {"object": user_object}
+    elif "." in object_name:
+        context_name, xname = object_name.split(".", 1)
+        context_object = context[context_name]
+        user_object = xgetattr(context_object, xname)
+    else:
+        user_object = context[object_name]
+    ui = UI(context=context, handler=default_handler())
 
-        if factory is None:
-            factory = StubEditorFactory()
-        factory.is_event = is_event
+    if factory is None:
+        factory = StubEditorFactory()
+    factory.is_event = is_event
 
-        editor = StubEditor(
-            parent=None,
-            ui=ui,
-            object_name=object_name,
-            name=name,
-            factory=factory,
-            object=user_object,
-        )
-        return editor
+    editor = StubEditor(
+        parent=None,
+        ui=ui,
+        object_name=object_name,
+        name=name,
+        factory=factory,
+        object=user_object,
+        description=description,
+    )
+    return editor
+
+
+@unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
+class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+        GuiTestAssistant.setUp(self)
+
+    def tearDown(self):
+        GuiTestAssistant.tearDown(self)
+        BaseTestMixin.tearDown(self)
 
     def change_user_value(self, editor, object, name, value):
         if editor.is_event:
@@ -212,7 +245,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             self.event_loop_helper.event_loop_with_timeout(repeat=6)
 
     def test_lifecycle(self):
-        editor = self.create_editor()
+        editor = create_editor()
 
         self.assertEqual(editor.old_value, "test")
         self.assertEqual(editor.name, "user_value")
@@ -253,7 +286,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
     def test_context_object(self):
         user_object = UserObject(user_value="other_test")
         context = {"object": UserObject(), "other_object": user_object}
-        editor = self.create_editor(
+        editor = create_editor(
             context=context, object_name="other_object"
         )
 
@@ -283,7 +316,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         editor.dispose()
 
     def test_event_trait(self):
-        editor = self.create_editor(name="user_event", is_event=True)
+        editor = create_editor(name="user_event", is_event=True)
         user_object = editor.object
 
         self.assertEqual(editor.name, "user_event")
@@ -307,7 +340,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             )
         }
         user_object = context["object"].user_auxiliary
-        editor = self.create_editor(
+        editor = create_editor(
             context=context, object_name="object.user_auxiliary"
         )
 
@@ -349,7 +382,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
     def test_factory_sync_simple(self):
         factory = StubEditorFactory(auxiliary_value="test")
-        editor = self.create_editor(factory=factory)
+        editor = create_editor(factory=factory)
         editor.prepare(None)
 
         # preparation copies the auxiliary value from the factory
@@ -359,7 +392,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
     def test_factory_sync_cv_simple(self):
         factory = StubEditorFactory()
-        editor = self.create_editor(factory=factory)
+        editor = create_editor(factory=factory)
         editor.prepare(None)
 
         # preparation copies the auxiliary CV int value from the factory
@@ -374,7 +407,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             ),
             "other_object": UserObject(user_value="another_test"),
         }
-        editor = self.create_editor(context=context)
+        editor = create_editor(context=context)
         editor.prepare(None)
 
         # test simple name
@@ -407,10 +440,139 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         editor.dispose()
 
+    def test_tooltip_default(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context)
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            self.assertIsNone(editor.control.tooltip)
+
+            tooltip_text = editor.tooltip_text()
+            self.assertIsNone(tooltip_text)
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertFalse(set_tooltip_result)
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_from_description(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, description="a tooltip")
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            self.assertEqual(editor.control.tooltip, "a tooltip")
+
+            tooltip_text = editor.tooltip_text()
+            self.assertEqual(tooltip_text, "a tooltip")
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertTrue(set_tooltip_result)
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_text_with_tooltip(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, name='user_tooltip')
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            self.assertEqual(editor.control.tooltip, "a tooltip")
+
+            tooltip_text = editor.tooltip_text()
+            self.assertEqual(tooltip_text, "a tooltip")
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertTrue(set_tooltip_result)
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_text_with_desc(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, name='user_desc')
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            self.assertEqual(
+                editor.control.tooltip,
+                "Specifies a trait with desc metadata",
+            )
+
+            tooltip_text = editor.tooltip_text()
+            self.assertEqual(
+                tooltip_text,
+                "Specifies a trait with desc metadata",
+            )
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertTrue(set_tooltip_result)
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_other_control(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, description="a tooltip")
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            other_control = FakeControl()
+            set_tooltip_result = editor.set_tooltip(other_control)
+
+            self.assertTrue(set_tooltip_result)
+            self.assertEqual(other_control.tooltip, "a tooltip")
+        except Exception:
+            editor.dispose()
+            raise
+
+    # Test synchronizing built-in trait values between factory
+    # and editor.
+
+    def test_factory_sync_invalid_state(self):
+        # Test when object's trait that sets the invalid state changes,
+        # the invalid state on the editor changes
+        factory = StubEditorFactory(invalid="invalid_state")
+        user_object = UserObject(invalid_state=False)
+        context = {
+            "object": user_object,
+        }
+        editor = create_editor(context=context, factory=factory)
+        editor.prepare(None)
+        self.addCleanup(editor.dispose)
+
+        with self.assertTraitChanges(editor, "invalid", count=1):
+            user_object.invalid_state = True
+
+        self.assertTrue(editor.invalid)
+
+        with self.assertTraitChanges(editor, "invalid", count=1):
+            user_object.invalid_state = False
+
+        self.assertFalse(editor.invalid)
+
     # Testing sync_value "from" ---------------------------------------------
 
     def test_sync_value_from(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
 
@@ -432,7 +594,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             user_object.user_auxiliary = 12
 
     def test_sync_value_from_object(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
 
@@ -456,7 +618,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         user_object = UserObject()
         other_object = UserObject(user_auxiliary=20)
         context = {"object": user_object, "other_object": other_object}
-        editor = self.create_editor(context=context)
+        editor = create_editor(context=context)
         editor.prepare(None)
 
         with self.assertTraitChanges(editor, "auxiliary_value", count=1):
@@ -480,7 +642,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         # set up the editor
         user_object = UserObject(user_auxiliary=UserObject(user_value=20))
         context = {"object": user_object}
-        editor = self.create_editor(context=context)
+        editor = create_editor(context=context)
         editor.prepare(None)
 
         with self.assertTraitChanges(editor, "auxiliary_value", count=1):
@@ -506,7 +668,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             user_object.user_auxiliary.user_value = 13
 
     def test_sync_value_from_list(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
 
@@ -533,7 +695,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             user_object.user_list = ["one", "two", "three"]
 
     def test_sync_value_from_event(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
 
@@ -554,7 +716,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         factory = StubEditorFactory(
             auxiliary_cv_int=ContextValue("object.user_auxiliary")
         )
-        editor = self.create_editor(factory=factory)
+        editor = create_editor(factory=factory)
         user_object = editor.object
 
         with self.assertTraitChanges(editor, "auxiliary_cv_int", count=1):
@@ -575,7 +737,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
     # Testing sync_value "to" -----------------------------------------------
 
     def test_sync_value_to(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
         editor.auxiliary_value = 20
@@ -596,7 +758,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             editor.auxiliary_value = 12
 
     def test_sync_value_to_object(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
         editor.auxiliary_value = 20
@@ -621,7 +783,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         user_object = UserObject()
         other_object = UserObject()
         context = {"object": user_object, "other_object": other_object}
-        editor = self.create_editor(context=context)
+        editor = create_editor(context=context)
         editor.prepare(None)
         editor.auxiliary_value = 20
 
@@ -645,12 +807,12 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
     def test_sync_value_to_chained(self):
         user_object = UserObject(user_auxiliary=UserObject())
         context = {"object": user_object}
-        editor = self.create_editor(context=context)
+        editor = create_editor(context=context)
         editor.prepare(None)
         editor.auxiliary_value = 20
 
         with self.assertTraitChanges(
-            user_object.user_auxiliary, "user_value", count=1
+                user_object.user_auxiliary, "user_value", count=1
         ):
             editor.sync_value(
                 "object.user_auxiliary.user_value", "auxiliary_value", "to"
@@ -659,7 +821,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         self.assertEqual(user_object.user_auxiliary.user_value, 20)
 
         with self.assertTraitChanges(
-            user_object.user_auxiliary, "user_value", count=1
+                user_object.user_auxiliary, "user_value", count=1
         ):
             editor.auxiliary_value = 11
 
@@ -668,12 +830,12 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         editor.dispose()
 
         with self.assertTraitDoesNotChange(
-            user_object.user_auxiliary, "user_value"
+                user_object.user_auxiliary, "user_value"
         ):
             editor.auxiliary_value = 12
 
     def test_sync_value_to_list(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
 
@@ -700,7 +862,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
             editor.auxiliary_list = ["one", "two", "three"]
 
     def test_sync_value_to_event(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
 
@@ -721,7 +883,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
         factory = StubEditorFactory(
             auxiliary_cv_float=ContextValue("object.user_auxiliary")
         )
-        editor = self.create_editor(factory=factory)
+        editor = create_editor(factory=factory)
         user_object = editor.object
         editor.auxiliary_cv_float = 20.0
 
@@ -743,7 +905,7 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
     # Testing sync_value "both" -----------------------------------------------
 
     def test_sync_value_both(self):
-        editor = self.create_editor()
+        editor = create_editor()
         user_object = editor.object
         editor.prepare(None)
 
@@ -771,3 +933,55 @@ class TestEditor(GuiTestAssistant, unittest.TestCase):
 
         with self.assertTraitDoesNotChange(user_object, "user_auxiliary"):
             editor.auxiliary_value = 14
+
+    # regression test for enthought/traitsui#1543
+    @requires_toolkit([ToolkitName.qt])
+    @unittest.skipIf(no_modal_dialog_tester, "ModalDialogTester unavailable")
+    @unittest.skipIf(
+        is_mac_os,
+        "There is a separate issue on OSX. See enthought/traitsui#1550"
+    )
+    def test_editor_error_msg(self):
+        from pyface.qt import QtCore, QtGui
+
+        class Foo(HasTraits):
+            x = Range(low=0.0, high=1.0, value=0.5, exclude_low=True)
+
+        foo = Foo()
+        tester = UITester(auto_process_events=False)
+        with tester.create_ui(foo) as ui:
+
+            x_range = tester.find_by_name(ui, "x")
+            x_range_textbox = x_range.locate(Textbox())
+
+            for _ in range(3):
+                x_range_textbox.perform(KeyClick('Backspace'))
+
+            x_range_textbox.perform(KeySequence('0.0'))
+
+            def trigger_error():
+                x_range_textbox.perform(KeyClick('Enter'))
+
+            def check_and_close(mdtester):
+                try:
+                    with mdtester.capture_error():
+                        self.assertTrue(
+                            mdtester.has_widget(
+                                text="The 'x' trait of a Foo instance must be "
+                                     "0.0 < a floating point number <= 1.0, "
+                                     "but a value of 0.0 <class 'float'> was "
+                                     "specified.",
+                                type_=QtGui.QMessageBox,
+                            )
+                        )
+                        self.assertEqual(
+                            mdtester.get_dialog_widget().textFormat(),
+                            QtCore.Qt.PlainText
+                        )
+                finally:
+                    mdtester.close(accept=True)
+                    self.assertTrue(mdtester.dialog_was_opened)
+
+            mdtester = ModalDialogTester(trigger_error)
+            mdtester.open_and_run(check_and_close)
+            self.assertTrue(mdtester.dialog_was_opened)

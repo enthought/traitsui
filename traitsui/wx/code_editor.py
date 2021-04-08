@@ -1,30 +1,22 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2006, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   01/27/2006
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines a source code editor for the wxPython user interface toolkit,
     useful for tools such as debuggers.
 """
 
 
-from __future__ import absolute_import
 import wx
 import wx.stc as stc
 
-from traits.api import Str, List, Int, Event, Bool, TraitError, on_trait_change
+from traits.api import Str, List, Int, Event, Bool, TraitError, observe
 
 from traits.trait_base import SequenceTypes
 
@@ -59,7 +51,7 @@ SELECTED_MARKER = 2
 
 
 class SourceEditor(Editor):
-    """ Editor for source code, which displays a PyFace PythonEditor.
+    """ Editor for source code, which displays a Pyface PythonEditor.
     """
 
     # -------------------------------------------------------------------------
@@ -73,34 +65,34 @@ class SourceEditor(Editor):
     readonly = Bool(False)
 
     #: The currently selected line
-    selected_line = Int
+    selected_line = Int()
 
     #: The currently selected text
-    selected_text = Str
+    selected_text = Str()
 
     #: The list of line numbers to mark
     mark_lines = List(Int)
 
     #: The current line number
-    line = Event
+    line = Event()
 
     #: The current column
-    column = Event
+    column = Event()
 
     #: calltip clicked event
-    calltip_clicked = Event
+    calltip_clicked = Event()
 
     #: The STC lexer use
-    lexer = Int
+    lexer = Int()
 
     #: The lines to be dimmed
     dim_lines = List(Int)
-    dim_color = Str
+    dim_color = Str()
     _dim_style_number = Int(16)  # 0-15 are reserved for the python lexer
 
     #: The lines to have squiggles drawn under them
     squiggle_lines = List(Int)
-    squiggle_color = Str
+    squiggle_color = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -129,10 +121,7 @@ class SourceEditor(Editor):
 
         # Set up the events
         control.Bind(wx.EVT_KILL_FOCUS, self.wx_update_object)
-        control.Bind(
-            stc.EVT_STC_CALLTIP_CLICK, self._calltip_clicked,
-            id=control.GetId(),
-        )
+        control.Bind(stc.EVT_STC_CALLTIP_CLICK, self._calltip_clicked)
 
         if factory.auto_scroll and (factory.selected_line != ""):
             control.Bind(wx.EVT_SIZE, self._update_selected_line)
@@ -207,9 +196,7 @@ class SourceEditor(Editor):
             or (factory.column != "")
             or (factory.selected_text != "")
         ):
-            stc.EVT_STC_UPDATEUI(
-                control, control.GetId(), self._position_changed
-            )
+            control.Bind(stc.EVT_STC_UPDATEUI, self._position_changed)
         self.set_tooltip()
 
     def wx_update_object(self, event):
@@ -330,8 +317,8 @@ class SourceEditor(Editor):
         self.control.IndicatorSetForeground(2, self.squiggle_color)
         self.control.Refresh()
 
-    @on_trait_change("dim_lines, squiggle_lines")
-    def _style_document(self):
+    @observe("dim_lines, squiggle_lines")
+    def _style_document(self, event=None):
         """ Force the STC to fire a STC_STYLENEEDED event for the entire
             document.
         """
@@ -368,17 +355,17 @@ class SourceEditor(Editor):
 
             if line + 1 in self.dim_lines:
                 # Set styling mask to only style text bits, not indicator bits
-                self.control.StartStyling(position, 0x1F)
+                self.control.StartStyling(position)
                 self.control.SetStyling(style_length, self._dim_style_number)
             elif self.lexer == stc.STC_LEX_NULL:
-                self.control.StartStyling(position, 0x1F)
+                self.control.StartStyling(position)
                 self.control.SetStyling(style_length, stc.STC_STYLE_DEFAULT)
 
             if line + 1 in self.squiggle_lines:
-                self.control.StartStyling(position, stc.STC_INDIC2_MASK)
+                self.control.StartStyling(position)
                 self.control.SetStyling(style_length, stc.STC_INDIC2_MASK)
             else:
-                self.control.StartStyling(position, stc.STC_INDIC2_MASK)
+                self.control.StartStyling(position)
                 self.control.SetStyling(style_length, stc.STC_STYLE_DEFAULT)
 
     def error(self, excp):
@@ -390,18 +377,27 @@ class SourceEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        if self.factory.auto_set:
-            self._editor.on_trait_change(
-                self.update_object, "changed", remove=True
-            )
-        if self.factory.key_bindings is not None:
-            self._editor.on_trait_change(
-                self.key_pressed, "key_pressed", remove=True
-            )
+        if self.control is not None:
+            if self.factory.auto_set:
+                self._editor.on_trait_change(
+                    self.update_object, "changed", remove=True
+                )
+            if self.factory.key_bindings is not None:
+                self._editor.on_trait_change(
+                    self.key_pressed, "key_pressed", remove=True
+                )
 
-        self.control.Unbind(wx.EVT_KILL_FOCUS)
+            self.control.Unbind(wx.EVT_KILL_FOCUS)
+            self.control.Unbind(stc.EVT_STC_CALLTIP_CLICK)
+            self.control.Unbind(stc.EVT_STC_STYLENEEDED)
+            if (
+                (self.factory.line != "")
+                or (self.factory.column != "")
+                or (self.factory.selected_text != "")
+            ):
+                self.control.Unbind(stc.EVT_STC_UPDATEUI)
 
-        super(SourceEditor, self).dispose()
+        super().dispose()
 
     # -- UI preference save/restore interface ---------------------------------
 

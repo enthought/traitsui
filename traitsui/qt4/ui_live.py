@@ -1,3 +1,13 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
@@ -15,7 +25,6 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traitsui.undo import UndoHistory
@@ -83,14 +92,14 @@ class _LiveWindow(BaseDialog):
 
         if self.control is not None:
             if history is not None:
-                history.on_trait_change(
-                    self._on_undoable, "undoable", remove=True
+                history.observe(
+                    self._on_undoable, "undoable", remove=True, dispatch="ui"
                 )
-                history.on_trait_change(
-                    self._on_redoable, "redoable", remove=True
+                history.observe(
+                    self._on_redoable, "redoable", remove=True, dispatch="ui"
                 )
-                history.on_trait_change(
-                    self._on_revertable, "undoable", remove=True
+                history.observe(
+                    self._on_revertable, "undoable", remove=True, dispatch="ui"
                 )
 
             ui.reset()
@@ -149,7 +158,7 @@ class _LiveWindow(BaseDialog):
                         False,
                         default=default,
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_undoable, "undoable", dispatch="ui"
                     )
                     if history.can_undo:
@@ -163,7 +172,7 @@ class _LiveWindow(BaseDialog):
                         False,
                         "Redo",
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_redoable, "redoable", dispatch="ui"
                     )
                     if history.can_redo:
@@ -178,7 +187,7 @@ class _LiveWindow(BaseDialog):
                         False,
                         default=default,
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_revertable, "undoable", dispatch="ui"
                     )
                     if history.can_undo:
@@ -192,7 +201,7 @@ class _LiveWindow(BaseDialog):
                         self.control.accept,
                         default=default,
                     )
-                    ui.on_trait_change(self._on_error, "errors", dispatch="ui")
+                    ui.observe(self._on_error, "errors", dispatch="ui")
 
                 elif self.is_button(button, "Cancel"):
                     self.add_button(

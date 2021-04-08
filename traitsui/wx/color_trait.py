@@ -1,25 +1,17 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   12/22/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Trait definition for a wxPython-based color.
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import Trait, TraitError
@@ -263,6 +255,8 @@ def get_color_editor(*args, **traits):
 def WxColor(default="white", allow_none=False, **metadata):
     """ Defines wxPython-specific color traits.
     """
+    if default is None:
+        allow_none = True
 
     if allow_none:
         return Trait(

@@ -1,4 +1,5 @@
-from __future__ import absolute_import
+# echo_box.py
+
 from traits.api import *
 
 class EchoBox(HasTraits):

@@ -1,23 +1,17 @@
-#------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
-# license included in /LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
 #
-# Author: David C. Morrill
-# Date: 11/02/2004
-# Description: Test case for Traits User Interface
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 #-------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import Trait, HasTraits, Str, Int
@@ -29,8 +23,8 @@ from traitsui.api import Color, View, Group
 
 
 class Employer(HasTraits):
-    company = Str
-    boss = Str
+    company = Str()
+    boss = Str()
 
     view = View('company', 'boss')
 
@@ -50,9 +44,9 @@ class ExtraPerson(Person):
 
 
 class LocatedPerson(Person):
-    street = Str
-    city = Str
-    state = Str
+    street = Str()
+    city = Str()
+    state = Str()
     zip = Int(78663)
 
     extra = Group('street', 'city', 'state', 'zip')

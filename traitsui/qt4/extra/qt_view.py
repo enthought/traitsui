@@ -1,22 +1,18 @@
-# ------------------------------------------------------------------------------
-# Copyright (c) 2011, Enthought, Inc.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
-# license included in LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
 #
-# Author: Evan Patterson
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines a Traits UI View that allows for the customization of Qt-specific
     widget properties.
 """
 
 # Standard library imports.
-from __future__ import absolute_import
 import logging
 
 # System library imports.
@@ -36,10 +32,10 @@ class QtView(View):
     """
 
     #: An optional string containing a Qt style sheet.
-    style_sheet = Str
+    style_sheet = Str()
 
     #: An optional file path for a Qt style sheet.
-    style_sheet_path = File
+    style_sheet_path = File()
 
     #: A list of trait names that defines the order for focus switching via
     #: Tab/Shift+Tab. If the view contains multiple items for a specified trait

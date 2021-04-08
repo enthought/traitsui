@@ -1,26 +1,18 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the a text entry field (actually a combo-box) with a drop-down list
     of values previously entered into the control.
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import HasPrivateTraits, Instance, Str, List, Int, Bool
@@ -40,7 +32,7 @@ class HistoryControl(HasPrivateTraits):
     control = Instance(wx.Window)
 
     #: The current value of the control:
-    value = Str
+    value = Str()
 
     #: Should 'value' be updated on every keystroke?
     auto_set = Bool(False)
@@ -195,6 +187,6 @@ class HistoryControl(HasPrivateTraits):
                 control.SetValue(restore)
 
                 if select:
-                    control.SetMark(0, len(restore))
+                    control.SetTextSelection(0, len(restore))
 
             control.Thaw()

@@ -1,4 +1,13 @@
-from __future__ import absolute_import
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 import wx
 
 from traits.api import Instance, Int, Str
@@ -22,13 +31,13 @@ class SimpleEditor(Editor):
     progress = Instance(ProgressDialog)
 
     # The message to be displayed along side the progress guage
-    message = Str
+    message = Str()
 
     # The starting value
-    min = Int
+    min = Int()
 
     # The ending value
-    max = Int
+    max = Int()
 
     # -- Editor interface ------------------------------------------------------
 

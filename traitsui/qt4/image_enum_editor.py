@@ -1,26 +1,18 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2009, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: Evan Patterson
-#  Date:   08/11/2009
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the various image enumeration editors for the PyQt user interface
     toolkit.
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui, is_qt5
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -58,6 +50,8 @@ class ReadonlyEditor(BaseEditor, BaseEnumEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
+        super(ReadonlyEditor, self).init(parent)
+
         self.control = QtGui.QLabel()
         self.control.setPixmap(self.get_pixmap(self.str_value))
         self.set_tooltip()
@@ -67,6 +61,12 @@ class ReadonlyEditor(BaseEditor, BaseEnumEditor):
             editor.
         """
         self.control.setPixmap(self.get_pixmap(self.str_value))
+
+    def rebuild_editor(self):
+        """ Rebuilds the contents of the editor whenever the original factory
+            object's **values** trait changes.
+        """
+        pass
 
 
 class SimpleEditor(BaseEditor, SimpleEnumEditor):
@@ -81,6 +81,10 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
             QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum
         )
         return control
+
+    def dispose(self):
+        self.control._dispose()
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -162,6 +166,18 @@ class ImageEnumComboBox(QtGui.QComboBox):
             view.setMinimumWidth(width)
         else:
             self.setItemDelegate(delegate)
+
+    def _dispose(self):
+        """ Dispose objects on this widget. To be called by editors.
+        """
+        # Replace the model with the standard one.
+        # After the editor has disposed itself, the widget may not have been
+        # garbage collected and the model still reacts to events fired
+        # afterwards (e.g. rowCount will be called) and runs into exceptions.
+        # QComboBox requires that the model must not be None.
+        # QStandardItemModel is the default model type when a QComboxBox is
+        # created.
+        self.setModel(QtGui.QStandardItemModel())
 
     def paintEvent(self, event):
         """ Reimplemented to draw the ComboBox frame and paint the image

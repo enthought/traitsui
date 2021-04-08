@@ -1,37 +1,26 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the various list editors for the wxPython user interface toolkit.
 """
 
 
-from __future__ import absolute_import
 import wx
 
 import wx.lib.scrolledpanel as wxsp
 
 from traits.api import Str, Any, Instance, Property, Bool, cached_property
-
 from traits.trait_base import user_name_for, xgetattr
 
 from traitsui.ui_traits import Image, convert_bitmap
-
 from traitsui.editors.list_editor import ListItemProxy, ToolkitEditorFactory
-
 from traitsui.dockable_view_element import DockableViewElement
 
 from pyface.dock.api import (
@@ -42,14 +31,12 @@ from pyface.dock.api import (
     DockControl,
 )
 
+from . import toolkit
 from .constants import scrollbar_dx
-
 from .editor import Editor
-
 from .menu import MakeMenu
-
 from .image_control import ImageControl
-import six
+
 
 
 # -------------------------------------------------------------------------
@@ -68,16 +55,16 @@ class SimpleEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: The kind of editor to create for each list item
-    kind = Str
+    kind = Str()
 
     #: Is the list of items being edited mutable?
-    mutable = Bool
+    mutable = Bool()
 
     #: The image used by the editor:
     image = Image("list_editor")
 
     #: The bitmap used by the editor:
-    bitmap = Property
+    bitmap = Property()
 
     # -------------------------------------------------------------------------
     #  Class constants:
@@ -165,7 +152,7 @@ class SimpleEditor(Editor):
         list_pane = self.control
         list_pane.SetSizer(None)
         for child in list_pane.GetChildren():
-            child.Destroy()
+            toolkit.destroy_control(child)
 
         # Create all of the list item trait editors:
         trait_handler = self._trait_handler
@@ -431,7 +418,10 @@ class SimpleEditor(Editor):
         for control in self.control.GetChildren():
             editor = getattr(control, "_editor", None)
             if editor is not None:
-                editor.dispose()
+                try:
+                    editor.dispose()
+                except Exception:
+                    pass
                 editor.control = None
 
     # -- Trait initializers ----------------------------------------------------
@@ -500,7 +490,7 @@ class NotebookEditor(Editor):
     scrollable = True
 
     #: The currently selected notebook page object:
-    selected = Any
+    selected = Any()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -653,9 +643,9 @@ class NotebookEditor(Editor):
                     name = handler(self.ui.info, user_object)
 
                 if name is None:
-                    name = six.text_type(
+                    name = str(
                         xgetattr(
-                            view_object, self.factory.page_name[1:], u"???"
+                            view_object, self.factory.page_name[1:], "???"
                         )
                     )
 
@@ -694,7 +684,7 @@ class NotebookEditor(Editor):
                 if handler_name is not None:
                     name = handler_name
                 else:
-                    name = six.text_type(name) or u"???"
+                    name = str(name) or "???"
                 view_object.on_trait_change(
                     self.update_page_name, page_name[1:], dispatch="ui"
                 )

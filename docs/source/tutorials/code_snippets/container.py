@@ -1,4 +1,5 @@
-from __future__ import absolute_import
+# container.py
+
 from traits.api import *
 from traitsui.api import *
 

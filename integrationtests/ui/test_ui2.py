@@ -1,21 +1,16 @@
-#------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
-# license included in /LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
 #
-# Author: David C. Morrill Date: 11/02/2004 Description: Test case for Traits
-# User Interface
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 #-------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------
-from __future__ import absolute_import, print_function
 
 import wx
 
@@ -89,8 +84,8 @@ class Employer(HasTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    company = Str
-    boss = Str
+    company = Str()
+    boss = Str()
 
     view = View('company', 'boss')
 
@@ -118,11 +113,11 @@ class Person(HasTraits):
         values=['one', 'two', 'three', 'four'],
         cols=4))
     font = KivaFont
-    street = Str
-    city = Str
-    state = Str
+    street = Str()
+    city = Str()
+    state = Str()
     zip = Int(78663)
-    password = Str
+    password = Str()
     books = List(Str, ['East of Eden', 'The Grapes of Wrath',
                        'Of Mice and Men'])
     call = Event(0, editor=ButtonEditor(label='Click to call'))

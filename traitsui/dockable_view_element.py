@@ -1,26 +1,16 @@
-# -------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   12/14/2005
-#
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the DockableViewElement class, which allows Traits UIs and
-    Traits UI elements to be docked in external PyFace DockWindow windows.
+    Traits UI elements to be docked in external Pyface DockWindow windows.
 """
-
-
-from __future__ import absolute_import
 
 from traits.api import HasPrivateTraits, Instance, Bool
 
@@ -41,7 +31,7 @@ from pyface.dock.idockable import IDockable
 
 class DockableViewElement(HasPrivateTraits, IDockable):
     """ Allows Traits UIs and Traits UI elements to be docked in external
-        PyFace DockWindow windows.
+        Pyface DockWindow windows.
     """
 
     # -------------------------------------------------------------------------
@@ -79,14 +69,14 @@ class DockableViewElement(HasPrivateTraits, IDockable):
 
         # FIXME: The following private traits are being set here to facilitate
         # rebuilding the ui (which will require the context and the handler).
-        # When a current dock control is closed (close_dock_control method), the
-        # contents of self.ui have been disposed of and self.ui is now None.
-        # Now if a new UI needs to be created by calling dockable_get_control
-        # (e.g., when doing an 'undock' action on a dock window), we need to
-        # pass on the context and handler to the UI. Therefore, we are setting
-        # these private traits here so dockable_get_control can access them.
-        # In future, we need to investigate if there is a better way to do
-        # this.
+        # When a current dock control is closed (close_dock_control method),
+        # the contents of self.ui have been disposed of and self.ui is now
+        # None. Now if a new UI needs to be created by calling
+        # dockable_get_control (e.g., when doing an 'undock' action on a dock
+        # window), we need to pass on the context and handler to the UI.
+        # Therefore, we are setting these private traits here so
+        # dockable_get_control can access them. In future, we need to
+        # investigate if there is a better way to do this.
 
         self._context = self.ui.context.copy()
         # Make copy since context will be emptied when calling

@@ -1,25 +1,17 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2009, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: Evan Patterson
-#  Date:   08/03/2009
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ A Traits UI editor for datetime.date objects.
 """
 
 
-from __future__ import absolute_import, print_function
 
 import datetime
 
@@ -30,7 +22,7 @@ from .editor import Editor
 from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 from traitsui.editors.date_editor import CellFormat
 
-import six
+
 
 
 class SimpleEditor(Editor):
@@ -78,6 +70,12 @@ class SimpleEditor(Editor):
 
         self.control.dateChanged.connect(self.update_object)
 
+    def dispose(self):
+        """ Disposes of the contents of an editor."""
+        if self.control is not None:
+            self.control.dateChanged.disconnect(self.update_object)
+        super().dispose()
+
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -114,6 +112,12 @@ class CustomEditor(Editor):
             self.control.setMaximumDate(QtCore.QDate.currentDate())
 
         self.control.clicked.connect(self.update_object)
+
+    def dispose(self):
+        """ Disposes of the contents of an editor."""
+        if self.control is not None:
+            self.control.clicked.disconnect(self.update_object)
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -248,7 +252,7 @@ def _textformat_to_cellformat(textformat):
 def _color_to_brush(color):
     """ Returns a QBrush with the color specified in **color** """
     brush = QtGui.QBrush()
-    if isinstance(color, six.string_types) and hasattr(QtCore.Qt, color):
+    if isinstance(color, str) and hasattr(QtCore.Qt, color):
         col = getattr(QtCore.Qt, color)
     elif isinstance(color, tuple):
         col = QtGui.QColor()

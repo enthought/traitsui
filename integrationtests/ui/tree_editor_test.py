@@ -1,23 +1,19 @@
-#------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
-# license included in /LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
 #
-# Author: David C. Morrill
-# Date: 12/04/2004
-# Description: Test case for the traits tree editor.
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
+
+""" Test case for the traits tree editor."""
 
 #-------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import absolute_import, print_function
 
 from traits.api import HasTraits, Str, Regex, List, Instance
 from traitsui.api import TreeEditor, TreeNode, View, Item, VSplit, \
@@ -33,7 +29,7 @@ from traitsui.editors.tree_editor import NewAction, CopyAction, \
 
 class Employee(HasTraits):
     name = Str('<unknown>')
-    title = Str
+    title = Str()
     phone = Regex(regex=r'\d\d\d-\d\d\d\d')
 
     def default_title(self):

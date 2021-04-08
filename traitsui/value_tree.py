@@ -1,25 +1,15 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2006, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   01/05/2006
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines tree node classes and editors for various types of values.
 """
-
-
-from __future__ import absolute_import
 
 import inspect
 from operator import itemgetter
@@ -39,7 +29,6 @@ from traits.api import (
 from .tree_node import ObjectTreeNode, TreeNode, TreeNodeObject
 
 from .editors.tree_editor import TreeEditor
-import six
 
 
 class SingleValueTreeNodeObject(TreeNodeObject):
@@ -54,13 +43,13 @@ class SingleValueTreeNodeObject(TreeNodeObject):
     parent = Instance(TreeNodeObject)
 
     #: Name of the value
-    name = Str
+    name = Str()
 
     #: User-specified override of the default label
-    label = Str
+    label = Str()
 
     #: The value itself
-    value = Any
+    value = Any()
 
     #: Is the value readonly?
     readonly = Bool(False)
@@ -484,7 +473,7 @@ def basic_types():
         _basic_types = [
             (type(None), NoneNode),
             (str, StringNode),
-            (six.text_type, StringNode),
+            (str, StringNode),
             (bool, BoolNode),
             (int, IntNode),
             (float, FloatNode),

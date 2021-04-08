@@ -1,26 +1,18 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the various editors for single-selection enumerations, for the
 wxPython user interface toolkit.
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import Property
@@ -30,12 +22,13 @@ from traits.api import Property
 # traitsui.editors.drop_editor file.
 from traitsui.editors.enum_editor import ToolkitEditorFactory
 
+from traitsui.helper import enum_values_changed
+
 from .editor import Editor
 
 from .constants import OKColor, ErrorColor
 
 from .helper import (
-    enum_values_changed,
     TraitsUIPanel,
     disconnect,
     disconnect_no_id,
@@ -61,13 +54,13 @@ class BaseEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: Current set of enumeration names:
-    names = Property
+    names = Property()
 
     #: Current mapping from names to values:
-    mapping = Property
+    mapping = Property()
 
     #: Current inverse mapping from values to names:
-    inverse_mapping = Property
+    inverse_mapping = Property()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -83,32 +76,25 @@ class BaseEditor(Editor):
                 self._values_changed, " " + self._name, dispatch="ui"
             )
         else:
+            self._value = lambda: self.factory.values
+            self.values_changed()
             factory.on_trait_change(
-                self.rebuild_editor, "values_modified", dispatch="ui"
+                self._values_changed, "values", dispatch="ui"
             )
 
     def _get_names(self):
         """ Gets the current set of enumeration names.
         """
-        if self._object is None:
-            return self.factory._names
-
         return self._names
 
     def _get_mapping(self):
         """ Gets the current mapping.
         """
-        if self._object is None:
-            return self.factory._mapping
-
         return self._mapping
 
     def _get_inverse_mapping(self):
         """ Gets the current inverse mapping.
         """
-        if self._object is None:
-            return self.factory._inverse_mapping
-
         return self._inverse_mapping
 
     def rebuild_editor(self):
@@ -118,14 +104,16 @@ class BaseEditor(Editor):
         raise NotImplementedError
 
     def values_changed(self):
-        """ Recomputes the cached data based on the underlying enumeration model.
+        """ Recomputes the cached data based on the underlying enumeration model
+            or the values of the factory.
         """
         self._names, self._mapping, self._inverse_mapping = enum_values_changed(
-            self._value()
+            self._value(), self.string_value
         )
 
     def _values_changed(self):
-        """ Handles the underlying object model's enumeration set being changed.
+        """ Handles the underlying object model's enumeration set or factory's
+            values being changed.
         """
         self.values_changed()
         self.rebuild_editor()
@@ -139,7 +127,7 @@ class BaseEditor(Editor):
             )
         else:
             self.factory.on_trait_change(
-                self.rebuild_editor, "values_modified", remove=True
+                self._values_changed, "values", remove=True
             )
 
         super(BaseEditor, self).dispose()
@@ -377,11 +365,18 @@ class RadioEditor(BaseEditor):
         n = len(names)
         cols = self.factory.cols
         rows = (n + cols - 1) // cols
+        # incr will keep track of how to increment index so that as we traverse
+        # the grid in row major order, the elements are added to appear in
+        # column major order
         incr = [n // cols] * cols
         rem = n % cols
         for i in range(cols):
             incr[i] += rem > i
         incr[-1] = -(reduce(lambda x, y: x + y, incr[:-1], 0) - 1)
+        # e.g for a gird:
+        # 0 2 4
+        # 1 3 5
+        # incr should be [2, 2, -3]
         if cols > 1:
             sizer = wx.GridSizer(0, cols, 2, 4)
         else:
@@ -390,6 +385,7 @@ class RadioEditor(BaseEditor):
         # Add the set of all possible choices:
         style = wx.RB_GROUP
         index = 0
+        # populate the layout in row_major order
         for i in range(rows):
             for j in range(cols):
                 if n > 0:

@@ -1,16 +1,12 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2009, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the HTML "editor" for the QT4 user interface toolkit.
     HTML editors interpret and display HTML-formatted text, but do not
@@ -18,7 +14,6 @@
 """
 
 
-from __future__ import absolute_import
 import webbrowser
 
 from pyface.qt import QtCore, QtGui, QtWebKit
@@ -26,6 +21,29 @@ from pyface.qt import QtCore, QtGui, QtWebKit
 from traits.api import Str
 
 from .editor import Editor
+
+
+# Subclass of QWebPage for QtWebEngine support
+
+class ExternallyOpeningWebPage(QtWebKit.QWebPage):
+    """ QWebEnginePage subclass that opens links in system browser
+
+    This subclass is only used when we are given a QWebEnginePage which is
+    pretending to be a QWebPage and we want the open_external feature
+    of the Editor.
+
+    This overrides the acceptNavigationRequest method to open links
+    in an external browser.  All other navigation requests are handled
+    internally as per the base class.
+    """
+
+    def acceptNavigationRequest(self, url, type, isMainFrame):
+        if type == QtWebKit.QWebPage.NavigationTypeLinkClicked:
+            webbrowser.open_new(url.toString())
+            return False
+        else:
+            return super().acceptNavigationRequest(url, type, isMainFrame)
+
 
 # -------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -44,7 +62,7 @@ class SimpleEditor(Editor):
     scrollable = True
 
     #: External objects referenced in the HTML are relative to this URL
-    base_url = Str
+    base_url = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -57,11 +75,31 @@ class SimpleEditor(Editor):
 
         if self.factory.open_externally:
             page = self.control.page()
-            page.setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateAllLinks)
-            page.linkClicked.connect(self._link_clicked)
+            if hasattr(page, 'setLinkDelegationPolicy'):
+                # QtWebKit
+                page.setLinkDelegationPolicy(
+                    QtWebKit.QWebPage.DelegateAllLinks
+                )
+                page.linkClicked.connect(self._link_clicked)
+            else:
+                # QtWebEngine pretending to be QtWebKit
+                # We need the subclass defined above instead of the regular
+                # we page so that links are opened externally
+                page = ExternallyOpeningWebPage(self.control)
+                self.control.setPage(page)
 
         self.base_url = self.factory.base_url
         self.sync_value(self.factory.base_url_name, "base_url", "from")
+
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None and self.factory.open_externally:
+            page = self.control.page()
+            if hasattr(page, 'setLinkDelegationPolicy'):
+                # QtWebKit-only cleanup
+                page.linkClicked.disconnect(self._link_clicked)
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes external to the

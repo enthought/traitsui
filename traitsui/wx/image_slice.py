@@ -1,19 +1,12 @@
-# -------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2007, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   06/06/2007
-#
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Class to aid in automatically computing the 'slice' points for a specified
     ImageResource and then drawing it that it can be 'stretched' to fit a larger
@@ -21,7 +14,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from colorsys import rgb_to_hls
@@ -89,16 +81,16 @@ class ImageSlice(HasPrivateTraits):
     stretch_columns = Enum(1, 2)
 
     #: Width/height of the image borders:
-    top = Int
-    bottom = Int
-    left = Int
-    right = Int
+    top = Int()
+    bottom = Int()
+    left = Int()
+    right = Int()
 
     #: Width/height of the extended image borders:
-    xtop = Int
-    xbottom = Int
-    xleft = Int
-    xright = Int
+    xtop = Int()
+    xbottom = Int()
+    xleft = Int()
+    xright = Int()
 
     #: The color to use for content text:
     content_color = Instance(wx.Colour)
@@ -121,16 +113,16 @@ class ImageSlice(HasPrivateTraits):
     transparent_bitmap = Instance(wx.Bitmap)
 
     #: Size of the current image:
-    dx = Int
-    dy = Int
+    dx = Int()
+    dy = Int()
 
     #: Size of the current image's slices:
-    dxs = List
-    dys = List
+    dxs = List()
+    dys = List()
 
     #: Fixed minimum size of current image:
-    fdx = Int
-    fdy = Int
+    fdx = Int()
+    fdy = Int()
 
     # -- Public Methods -------------------------------------------------------
 

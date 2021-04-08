@@ -1,25 +1,15 @@
-# -------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2007-19, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   07/14/2007
-#
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the theme style information for a DockWindow and its components.
 """
-
-
-from __future__ import absolute_import
 
 from pyface.ui_traits import Image
 from traits.api import HasPrivateTraits, Bool, Property, cached_property

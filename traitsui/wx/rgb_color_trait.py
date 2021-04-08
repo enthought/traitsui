@@ -1,19 +1,12 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   12/22/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Trait definition for an RGB-based color, which is a tuple of the form
     (*red*, *green*, *blue*), where *red*, *green* and *blue* are floats in the
@@ -21,7 +14,6 @@
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import Trait, TraitError
@@ -65,7 +57,7 @@ def convert_to_color(object, name, value):
     if isinstance(value, int):
         num = int(value)
         return (
-            (num // 0x10000) / 255.0, (num // 0x100) & 0xFF) / 255.0,
+            (num // 0x10000) / 255.0, ((num // 0x100) & 0xFF) / 255.0,
             (num & 0xFF) / 255.0,
         )
     if isinstance(value, wx.Colour):

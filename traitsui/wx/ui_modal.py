@@ -1,34 +1,28 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   11/01/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Creates a wxPython user interface for a specified UI object.
 """
 
 
-from __future__ import absolute_import
 import wx
 
-from .helper import restore_window, save_window, TraitsUIScrolledPanel
+from pyface.api import SystemMetrics
+
+from .helper import save_window, TraitsUIScrolledPanel
 
 from .ui_base import BaseDialog
 
-from .ui_panel import panel, show_help
+from .ui_panel import panel
 
-from .constants import DefaultTitle, WindowColor, screen_dy, scrollbar_dx
+from .constants import DefaultTitle, WindowColor, scrollbar_dx
 
 from traitsui.menu import (
     ApplyButton,
@@ -42,16 +36,16 @@ from traitsui.menu import (
 def ui_modal(ui, parent):
     """ Creates a modal wxPython user interface for a specified UI object.
     """
-    ui_dialog(ui, parent, True)
+    _ui_dialog(ui, parent, BaseDialog.MODAL)
 
 
 def ui_nonmodal(ui, parent):
     """ Creates a non-modal wxPython user interface for a specified UI object.
     """
-    ui_dialog(ui, parent, False)
+    _ui_dialog(ui, parent, BaseDialog.NONMODAL)
 
 
-def ui_dialog(ui, parent, is_modal):
+def _ui_dialog(ui, parent, style):
     """ Creates a wxPython dialog box for a specified UI object.
 
     Changes are not immediately applied to the underlying object. The user must
@@ -61,34 +55,15 @@ def ui_dialog(ui, parent, is_modal):
     if ui.owner is None:
         ui.owner = ModalDialog()
 
-    ui.owner.init(ui, parent, is_modal)
-    ui.control = ui.owner.control
-    ui.control._parent = parent
-    try:
-        ui.prepare_ui()
-    except:
-        ui.control.Destroy()
-        ui.control.ui = None
-        ui.control = None
-        ui.owner = None
-        ui.result = False
-        raise
-
-    ui.handler.position(ui.info)
-    restore_window(ui)
-
-    if is_modal:
-        ui.control.ShowModal()
-    else:
-        ui.control.Show()
+    BaseDialog.display_ui(ui, parent, style)
 
 
 class ModalDialog(BaseDialog):
     """ Modal dialog box for Traits-based user interfaces.
     """
 
-    def init(self, ui, parent, is_modal):
-        self.is_modal = is_modal
+    def init(self, ui, parent, style):
+        self.is_modal = style == self.MODAL
         style = 0
         view = ui.view
         if view.resizable:
@@ -109,7 +84,7 @@ class ModalDialog(BaseDialog):
                 apply = self.apply.IsEnabled()
         else:
             self.ui = ui
-            if is_modal:
+            if self.is_modal:
                 window = wx.Dialog(
                     parent, -1, title, style=style | wx.DEFAULT_DIALOG_STYLE
                 )
@@ -146,7 +121,7 @@ class ModalDialog(BaseDialog):
             tsdx += 8
             tsdy += 8
             sw.SetScrollRate(16, 16)
-            max_dy = (2 * screen_dy) // 3
+            max_dy = (2 * SystemMetrics().screen_height) // 3
             sw.SetSizer(sizer)
             sw.SetSize(
                 wx.Size(
@@ -188,7 +163,7 @@ class ModalDialog(BaseDialog):
                     self.apply = self.add_button(
                         button, b_sizer, self._on_apply, apply, default=default
                     )
-                    ui.on_trait_change(
+                    ui.observe(
                         self._on_applyable, "modified", dispatch="ui"
                     )
 
@@ -205,7 +180,7 @@ class ModalDialog(BaseDialog):
                     self.ok = self.add_button(
                         button, b_sizer, self._on_ok, default=default
                     )
-                    ui.on_trait_change(self._on_error, "errors", dispatch="ui")
+                    ui.observe(self._on_error, "errors", dispatch="ui")
 
                 elif self.is_button(button, "Cancel"):
                     self.add_button(
@@ -238,6 +213,9 @@ class ModalDialog(BaseDialog):
         save_window(ui)
         if self.is_modal:
             self.control.EndModal(rc)
+
+        self.control.Unbind(wx.EVT_CLOSE)
+        self.control.Unbind(wx.EVT_CHAR)
 
         ui.finish()
         self.ui = self.apply = self.revert = self.help = self.control = None
@@ -316,12 +294,14 @@ class ModalDialog(BaseDialog):
         ui.handler.revert(ui.info)
         ui.modified = False
 
-    def _on_applyable(self, state):
+    def _on_applyable(self, event):
         """ Handles a change to the "modified" state of the user interface .
         """
+        state = event.new
         self.apply.Enable(state)
 
-    def _on_error(self, errors):
+    def _on_error(self, event):
         """ Handles editing errors.
         """
+        errors = event.new
         self.ok.Enable(errors == 0)

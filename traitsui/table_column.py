@@ -1,26 +1,16 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   07/01/2005
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the table column descriptor used by the editor and editor factory
     classes for numeric and table editors.
 """
-
-
-from __future__ import absolute_import, print_function
 
 import os
 
@@ -29,7 +19,6 @@ from traits.api import (
     Bool,
     Callable,
     Constant,
-    Either,
     Enum,
     Expression,
     Float,
@@ -38,6 +27,7 @@ from traits.api import (
     Int,
     Property,
     Str,
+    Either,
 )
 
 from traits.trait_base import user_name_for, xgetattr
@@ -50,7 +40,7 @@ from .view import View
 
 # Set up a logger:
 import logging
-import six
+
 
 logger = logging.getLogger(__name__)
 
@@ -81,10 +71,10 @@ class TableColumn(HasPrivateTraits):
     text_font = Either(None, Font)
 
     #: Cell background color for this column:
-    cell_color = Either(Color("white"), None)
+    cell_color = Color("white", allow_none=True)
 
     #: Cell background color for non-editable columns:
-    read_only_cell_color = Either(Color(0xF4F3EE), None)
+    read_only_cell_color = Color(0xF4F3EE, allow_none=True)
 
     #: Cell graph color:
     graph_color = Color(0xDDD9CC)
@@ -127,10 +117,10 @@ class TableColumn(HasPrivateTraits):
     menu = Instance(Menu)
 
     #: The tooltip to display when the mouse is over the column:
-    tooltip = Str
+    tooltip = Str()
 
-    #: The width of the column (< 0.0: Default, 0.0..1.0: fraction of total table
-    #: width, > 1.0: absolute width in pixels):
+    #: The width of the column (< 0.0: Default, 0.0..1.0: fraction of total
+    #: table width, > 1.0: absolute width in pixels):
     width = Float(-1.0)
 
     #: The width of the column while it is being edited (< 0.0: Default,
@@ -143,12 +133,12 @@ class TableColumn(HasPrivateTraits):
     #: > 1.0: absolute height in pixels):
     edit_height = Float(-1.0)
 
-    #: The resize mode for this column.  This takes precedence over other settings
-    #: (like **width**, above).
-    #:   "interactive": column can be resized by users or programmatically
-    #:   "fixed": users cannot resize the column, but it can be set programmatically
-    #:   "stretch": the column will be resized to fill the available space
-    #:   "resize_to_contents": column will be sized to fit the contents, but then cannot be resized
+    #: The resize mode for this column.  This takes precedence over other
+    #: settings (like **width**, above).
+    #: - "interactive": column can be resized by users or programmatically
+    #: - "fixed": users cannot resize the column, but it can be set programmatically
+    #: - "stretch": the column will be resized to fill the available space
+    #: - "resize_to_contents": column will be sized to fit the contents, but then cannot be resized
     resize_mode = Enum("interactive", "fixed", "stretch", "resize_to_contents")
 
     #: The view (if any) to display when clicking a non-editable cell:
@@ -311,10 +301,10 @@ class ObjectColumn(TableColumn):
     # -------------------------------------------------------------------------
 
     #: Name of the object trait associated with this column:
-    name = Str
+    name = Str()
 
     #: Column label to use for this column:
-    label = Property
+    label = Property()
 
     #: Trait editor used to edit the contents of this column:
     editor = Instance(EditorFactory)
@@ -326,7 +316,7 @@ class ObjectColumn(TableColumn):
     format = Str("%s")
 
     #: Format function to apply to column values:
-    format_func = Callable
+    format_func = Callable()
 
     # -------------------------------------------------------------------------
     #  Trait view definitions:
@@ -492,7 +482,7 @@ class NumericColumn(ObjectColumn):
     # -------------------------------------------------------------------------
 
     #: Column label to use for this column
-    label = Property
+    label = Property()
 
     #: Text color this column when selected
     selected_text_color = Color("black")
@@ -628,10 +618,10 @@ class ListColumn(TableColumn):
     # -------------------------------------------------------------------------
 
     # Label to use for this column
-    label = Property
+    label = Property()
 
     #: Index of the list element associated with this column
-    index = Int
+    index = Int()
 
     # Is this column editable? This value overrides the base class default.
     editable = False
@@ -662,7 +652,7 @@ class ListColumn(TableColumn):
     def get_value(self, object):
         """ Gets the value of the column for a specified object.
         """
-        return six.text_type(object[self.index])
+        return str(object[self.index])
 
     def set_value(self, object, value):
         """ Sets the value of the column for a specified object.

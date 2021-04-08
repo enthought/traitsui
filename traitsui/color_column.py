@@ -1,25 +1,17 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Table column object for RGBColor traits.
 """
 
-from __future__ import absolute_import
 from traitsui.table_column import ObjectColumn
-import six
 
 
 class ColorColumn(ObjectColumn):
@@ -49,7 +41,7 @@ class ColorColumn(ObjectColumn):
         value = getattr(self.get_object(object), self.name, "")
         if isinstance(value, tuple):
             value = self._float_rgb_tuple_to_str(value)
-        elif not isinstance(value, six.string_types):
+        elif not isinstance(value, str):
             value = ""
         return value
 

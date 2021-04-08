@@ -1,26 +1,18 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   07/01/2005
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
-""" Defines the table grid model used by the table editor based on the PyFace
+""" Defines the table grid model used by the table editor based on the Pyface
     grid control.
 """
 
 
-from __future__ import absolute_import
 import logging
 
 import wx
@@ -34,8 +26,9 @@ from traits.api import (
     Instance,
     Event,
     Bool,
-    on_trait_change,
+    observe,
 )
+from traits.observation.api import trait
 
 from traitsui.api import View, Item, Editor
 
@@ -60,10 +53,10 @@ class TraitGridSelection(HasPrivateTraits):
     """
 
     #: The selected object
-    obj = Any
+    obj = Any()
 
     #: The specific trait selected on the object
-    name = Str
+    name = Str()
 
 
 class TableModel(GridModel):
@@ -87,10 +80,10 @@ class TableModel(GridModel):
     reverse = Bool(False)
 
     #: Event fired when the table has been sorted
-    sorted = Event
+    sorted = Event()
 
     #: The current 'auto_add' row
-    auto_add_row = Any
+    auto_add_row = Any()
 
     def __init__(self, **traits):
         """ Initializes the object.
@@ -162,10 +155,10 @@ class TableModel(GridModel):
         """
         try:
             return self.__filtered_items()[index]
-        except:
-            logger.error(
-                "TableModel error: Request for invalid row %d out of "
-                "%d" % (index, len(self.__filtered_items()))
+        except Exception:
+            logger.exception(
+                "TableModel error: Request for invalid row %d out of %d",
+                index, len(self.__filtered_items())
             )
             return None
 
@@ -224,8 +217,8 @@ class TableModel(GridModel):
 
     # -- Event Handlers -------------------------------------------------------
 
-    @on_trait_change("filter.+")
-    def _filter_modified(self):
+    @observe(trait("filter").match(lambda name, ctrait: True))
+    def _filter_modified(self, event):
         """ Handles the contents of the filter being changed.
         """
         self._filtered_cache = None
@@ -399,7 +392,6 @@ class TableModel(GridModel):
         editor._ui = self.editor.ui
 
         target, name = column.target_name(object)
-
         return TraitGridCellAdapter(
             editor,
             target,

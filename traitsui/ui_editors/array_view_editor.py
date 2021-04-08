@@ -1,26 +1,18 @@
-# -------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2007, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   08/29/2007
-
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines an ArrayViewEditor for displaying 1-d or 2-d arrays of values.
 """
 
 # -- Imports --------------------------------------------------------------
 
-from __future__ import absolute_import
 
 from traits.api import Instance, Property, List, Str, Bool
 
@@ -42,7 +34,7 @@ class ArrayViewAdapter(TabularAdapter):
     transpose = Bool(False)
 
     alignment = "right"
-    index_text = Property
+    index_text = Property()
 
     def _get_index_text(self):
         return str(self.row)
@@ -170,7 +162,7 @@ class _ArrayViewEditor(UIEditor):
 class ArrayViewEditor(BasicEditorFactory):
 
     #: The editor implementation class:
-    klass = Property
+    klass = Property()
 
     #: Should an index column be displayed:
     show_index = Bool(True)

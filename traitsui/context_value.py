@@ -1,15 +1,12 @@
-#  Copyright (c) 2008-19, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   08/18/2008
+# Thanks for using Enthought open source!
 
 """
 Defines some helper classes and traits used to define 'bindable' editor
@@ -26,7 +23,7 @@ The factory should look something like this::
         minimum = CVInt
 
         #: The suffix for the data.
-        suffix = CVType(Unicode)
+        suffix = CVType(Str)
 
 The editor class needs to have traits which correspond to the context value
 traits, and should be able to react to changes to them::
@@ -34,10 +31,10 @@ traits, and should be able to react to changes to them::
     class MyEditor(Editor):
 
         #: The minimum value.
-        minimum = Int
+        minimum = Int()
 
         #: The suffix for the data.
-        suffix = Unicode
+        suffix = Str()
 
 This can then be used in views, with values either as constants or as
 instances of :class:`ContextValue` (abbreviated as ``CV``)::
@@ -45,7 +42,7 @@ instances of :class:`ContextValue` (abbreviated as ``CV``)::
     class MyObject(HasTraits):
 
         #: An important value.
-        my_value = Unicode
+        my_value = Str()
 
         #: The minimum value.
         my_minimum = Int(10)
@@ -55,13 +52,12 @@ instances of :class:`ContextValue` (abbreviated as ``CV``)::
                 'my_value',
                 editor=MyEditorFactory(
                     minimum=CV('my_minimum'),
-                    suffix=u'...',
+                    suffix='...',
                 ),
             )
         )
 """
 
-from __future__ import absolute_import
 
 from traits.api import HasStrictTraits, Instance, Str, Int, Float, Either
 
@@ -70,7 +66,7 @@ class ContextValue(HasStrictTraits):
     """ Defines the name of a context value that can be bound to an editor
 
     Resolution of the name follows the same rules as for context values in
-    :class:`.Item`s: if there is no dot in it then it is treated as an
+    Item objects: if there is no dot in it then it is treated as an
     attribute of the 'object' context value, other wise the first part
     specifies the object in the context and the rest are dotted attribute
     look-ups.
@@ -78,7 +74,7 @@ class ContextValue(HasStrictTraits):
 
     #: The extended trait name of the value that can be bound to the editor
     #: (e.g. 'selection' or 'handler.selection'):
-    name = Str
+    name = Str()
 
     # ------------------------------------------------------------------------
     # object Interface
@@ -96,7 +92,7 @@ CV = ContextValue
 
 
 def CVType(type, **metadata):
-    """ Factory that creates an Either type or ContextValue trait.
+    """ Factory that creates a union of a trait type and a ContextValue trait.
 
     This also sets up one-way synchronization to the editor if no
     other synchronization is specified.

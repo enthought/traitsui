@@ -1,33 +1,20 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005-19, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/25/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines various helper functions that are useful for creating Traits-based
     user interfaces.
 """
 
-
-from __future__ import absolute_import
-
 from operator import itemgetter
 
 from traits.api import BaseTraitHandler, CTrait, Enum, TraitError
-
-from .ui_traits import SequenceTypes
-import six
 
 
 # -------------------------------------------------------------------------
@@ -62,14 +49,14 @@ def commatize(value):
     """
     s = str(abs(value))
     s = s.rjust(((len(s) + 2) / 3) * 3)
-    result = ",".join([s[i : i + 3] for i in range(0, len(s), 3)]).lstrip()
+    result = ",".join([s[i: i + 3] for i in range(0, len(s), 3)]).lstrip()
     if value >= 0:
         return result
 
     return "-" + result
 
 
-def enum_values_changed(values, strfunc=six.text_type):
+def enum_values_changed(values, strfunc=str):
     """ Recomputes the mappings for a new set of enumeration values.
     """
 
@@ -183,3 +170,24 @@ def compute_column_widths(available_space, requested, min_widths, user_widths):
             available_space -= widths[i]
 
     return widths
+
+
+# -------------------------------------------------------------------------
+#  Other definitions:
+# -------------------------------------------------------------------------
+
+SequenceTypes = (tuple, list)
+
+
+# -------------------------------------------------------------------------
+#  Wrapper for TraitPrefixList deprecation:
+# -------------------------------------------------------------------------
+
+try:
+    from traits.api import PrefixList
+except ImportError:
+    def PrefixList(list_, default_value=None, **kwargs):
+        from traits.api import Trait, TraitPrefixList
+        if default_value is None:
+            default_value = list_[0]
+        return Trait(default_value, TraitPrefixList(list_), **kwargs)

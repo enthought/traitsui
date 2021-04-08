@@ -1,25 +1,17 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   12/18/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the base class for the wxPython-based Traits UI modal and non-modal
     dialogs.
 """
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import HasPrivateTraits, Instance
@@ -27,6 +19,7 @@ from traits.api import HasPrivateTraits, Instance
 from traitsui.base_panel import BasePanel as _BasePanel
 from traitsui.menu import Action
 from .editor import Editor
+from .helper import restore_window
 
 
 class ButtonEditor(Editor):
@@ -50,6 +43,52 @@ class ButtonEditor(Editor):
 class BaseDialog(_BasePanel):
     """ Base class for Traits UI dialog boxes.
     """
+
+    # The different dialog styles.
+    NONMODAL = 0
+    MODAL = 1
+    POPUP = 2
+    POPOVER = 3
+    INFO = 4
+
+    # Types of 'popup' dialogs:
+    POPUP_TYPES = {POPUP, POPOVER, INFO}
+
+    def init(self, ui, parent, style):
+        """Initialise the dialog by creating the controls."""
+
+        raise NotImplementedError
+
+    @staticmethod
+    def display_ui(ui, parent, style):
+        ui.owner.init(ui, parent, style)
+        ui.control = ui.owner.control
+        ui.control._parent = parent
+
+        try:
+            ui.prepare_ui()
+        except:
+            ui.control.Destroy()
+            ui.control.ui = None
+            ui.control = None
+            ui.owner = None
+            ui.result = False
+            raise
+
+        ui.handler.position(ui.info)
+        restore_window(ui, is_popup=(style in BaseDialog.POPUP_TYPES))
+
+        ui.control.Layout()
+        # Check if the control is already being displayed modally. This would be
+        # the case if after the window was displayed, some event caused the ui to
+        # get rebuilt (typically when the user fires the 'updated' event on the ui
+        # ). In this case, calling ShowModal again leads to the parent window
+        # hanging even after the control has been closed by clicking OK or Cancel
+        # (maybe the modal mode isn't ending?)
+        if style == BaseDialog.MODAL and not ui.control.IsModal():
+            ui.control.ShowModal()
+        else:
+            ui.control.Show()
 
     def default_icon(self):
         """ Return a default icon for a TraitsUI dialog. """
@@ -93,7 +132,7 @@ class BaseDialog(_BasePanel):
                     object = name[:col]
                     name = name[col + 1 :]
                 object = context[object]
-                object.on_trait_change(set_text, name, dispatch="ui")
+                object.observe(set_text, name, dispatch="ui")
                 listeners.append((object, set_text, name))
 
             control.SetStatusWidths(widths)
@@ -101,7 +140,8 @@ class BaseDialog(_BasePanel):
             ui._statusbar = listeners
 
     def _set_status_text(self, control, i):
-        def set_status_text(text):
+        def set_status_text(event):
+            text = event.new
             control.SetStatusText(text, i)
 
         return set_status_text

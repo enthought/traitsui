@@ -1,5 +1,14 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # Copyright (c) 2007, Riverbank Computing Limited
-# Copyright (c) 2018, Enthought, Inc
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
@@ -11,23 +20,23 @@
 """ Defines file editors for the PyQt user interface toolkit.
 """
 
-from __future__ import absolute_import
 from os.path import abspath, splitext, isfile, exists
 
 from pyface.qt import QtCore, QtGui, is_qt5
-from traits.api import List, Event, File, Unicode, TraitError
+from traits.api import Any, Callable, List, Event, File, Str, TraitError, Tuple
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.file_editor file.
 from traitsui.editors.file_editor import ToolkitEditorFactory
+from .editor import Editor
 from .text_editor import SimpleEditor as SimpleTextEditor
 from .helper import IconButton
-import six
+
 
 
 # Wildcard filter:
-filter_trait = List(Unicode)
+filter_trait = List(Str)
 
 
 class SimpleEditor(SimpleTextEditor):
@@ -35,6 +44,11 @@ class SimpleEditor(SimpleTextEditor):
         button that opens a file-selection dialog box. The user can also drag
         and drop a file onto this control.
     """
+
+    #: List of tuple(signal, slot) to be removed in dispose.
+    #: First item in the tuple is the Qt signal, the second item is the event
+    #: handler.
+    _connections_to_remove = List(Tuple(Any(), Callable()))
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -49,21 +63,40 @@ class SimpleEditor(SimpleTextEditor):
 
         if self.factory.auto_set:
             control.textEdited.connect(self.update_object)
+            self._connections_to_remove.append(
+                (control.textEdited, self.update_object)
+            )
         else:
             # Assume enter_set is set, or else the value will never get
             # updated.
             control.editingFinished.connect(self.update_object)
+            self._connections_to_remove.append(
+                (control.editingFinished, self.update_object)
+            )
 
         button = IconButton(QtGui.QStyle.SP_DirIcon, self.show_file_dialog)
         layout.addWidget(button)
 
         self.set_tooltip(control)
 
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        while self._connections_to_remove:
+            signal, handler = self._connections_to_remove.pop()
+            signal.disconnect(handler)
+
+        # IconButton.clicked signal should be disconnected here.
+        # (enthought/traitsui#888)
+
+        # skip the dispose from TextEditor (enthought/traitsui#884)
+        Editor.dispose(self)
+
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
         if self.control is not None:
-            file_name = six.text_type(self._file_name.text())
+            file_name = str(self._file_name.text())
             try:
                 if self.factory.truncate_ext:
                     file_name = splitext(file_name)[0]
@@ -90,7 +123,7 @@ class SimpleEditor(SimpleTextEditor):
             files = dlg.selectedFiles()
 
             if len(files) > 0:
-                file_name = six.text_type(files[0])
+                file_name = str(files[0])
 
                 if self.factory.truncate_ext:
                     file_name = splitext(file_name)[0]
@@ -133,19 +166,21 @@ class CustomEditor(SimpleTextEditor):
     filter = filter_trait
 
     #: The root path of the file tree view.
-    root_path = File
+    root_path = File()
 
     #: Event fired when the file system view should be rebuilt:
-    reload = Event
+    reload = Event()
 
     #: Event fired when the user double-clicks a file:
-    dclick = Event
+    dclick = Event()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         control = _TreeView(self)
+        control.doubleClicked.connect(self._on_dclick)
+
         self._model = model = QtGui.QFileSystemModel()
 
         current_path = abspath(self.str_value)
@@ -198,11 +233,23 @@ class CustomEditor(SimpleTextEditor):
             header.setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
         header.setStretchLastSection(False)
 
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        self._model.beginResetModel()
+        self._model.endResetModel()
+
+        if self.control is not None:
+            self.control.doubleClicked.disconnect(self._on_dclick)
+
+        # Skip dispose from simple text editor (enthought/traitsui#884)
+        Editor.dispose(self)
+
     def update_object(self, idx):
         """ Handles the user changing the contents of the edit control.
         """
         if self.control is not None:
-            path = six.text_type(self._model.filePath(idx))
+            path = str(self._model.filePath(idx))
 
             if self.factory.allow_dir or isfile(path):
                 if self.factory.truncate_ext:
@@ -224,7 +271,7 @@ class CustomEditor(SimpleTextEditor):
     def _on_dclick(self, idx):
         """ Handles the user double-clicking on a file name.
         """
-        self.dclick = six.text_type(self._model.filePath(idx))
+        self.dclick = str(self._model.filePath(idx))
 
     # Trait change handlers --------------------------------------------------
 
@@ -255,7 +302,6 @@ class _TreeView(QtGui.QTreeView):
 
     def __init__(self, editor):
         super(_TreeView, self).__init__()
-        self.doubleClicked.connect(editor._on_dclick)
         self._editor = editor
 
     def event(self, event):

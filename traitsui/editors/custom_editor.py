@@ -1,25 +1,15 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2008, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   07/19/2005
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the editor factory used to wrap a non-Traits based custom control.
 """
-
-
-from __future__ import absolute_import
 
 from traits.api import Callable, Tuple, Property
 
@@ -37,13 +27,13 @@ class ToolkitEditorFactory(BasicEditorFactory):
     """
 
     #: Editor class to be instantiated.
-    klass = Property
+    klass = Property()
 
     #: Factory function used to create the custom control
-    factory = Callable
+    factory = Callable()
 
     #: Arguments to be passed to the user's custom editor factory
-    args = Tuple
+    args = Tuple()
 
     def __init__(self, *args, **traits):
         if len(args) >= 1:

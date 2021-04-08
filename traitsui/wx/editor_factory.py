@@ -1,26 +1,18 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the base wxPython EditorFactory class and classes the various
     styles of editors used in a Traits-based user interface.
 """
 
 
-from __future__ import absolute_import
 import warnings
 
 import wx
@@ -116,6 +108,19 @@ class TextEditor(Editor):
         self.control.Bind(wx.EVT_KILL_FOCUS, self.update_object)
         parent.Bind(wx.EVT_TEXT_ENTER, self.update_object, id=self.control.GetId())
         self.set_tooltip()
+
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None:   # just in-case
+            parent = self.control.GetParent()
+            parent.Unbind(
+                wx.EVT_TEXT_ENTER,
+                handler=self.update_object,
+                id=self.control.GetId(),
+            )
+            self.control.Unbind(wx.EVT_KILL_FOCUS, handler=self.update_object)
+        super().dispose()
 
     def update_object(self, event):
         """ Handles the user changing the contents of the edit control.

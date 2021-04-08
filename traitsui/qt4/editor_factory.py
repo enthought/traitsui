@@ -1,3 +1,13 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
@@ -15,7 +25,6 @@ Traits-based user interface.
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traits.api import TraitError
@@ -23,7 +32,7 @@ from traits.api import TraitError
 from traitsui.editor_factory import EditorFactory as BaseEditorFactory
 
 from .editor import Editor
-import six
+
 
 # -------------------------------------------------------------------------
 #  'EditorFactory' class
@@ -96,7 +105,7 @@ class TextEditor(Editor):
         if self.control is None:
             return
         try:
-            self.value = six.text_type(self.control.text())
+            self.value = str(self.control.text())
         except TraitError as excp:
             pass
 
@@ -129,9 +138,6 @@ class ReadonlyEditor(Editor):
         self.control = QtGui.QLabel(self.str_value)
 
         if self.item.resizable is True or self.item.height != -1.0:
-            self.control.setSizePolicy(
-                QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
-            )
             self.control.setWordWrap(True)
 
         alignment = None

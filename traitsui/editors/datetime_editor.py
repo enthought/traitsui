@@ -1,27 +1,19 @@
-# -----------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2019-2020, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: Midhun P M
-#  Date:   01/13/2020
-#
-# -----------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ A Traits UI editor
 """
 
-from __future__ import absolute_import
 import datetime
 
-from traits.api import Instance, Str
+from traits.api import Datetime, Str
 
 from ..editor_factory import EditorFactory
 
@@ -34,10 +26,10 @@ class DatetimeEditor(EditorFactory):
     # -------------------------------------------------------------------------
 
     #: The earliest datetime allowed by the editor
-    minimum_datetime = Instance(datetime.datetime)
+    minimum_datetime = Datetime(datetime.datetime(100, 1, 1))
 
     #: The latest datetime allowed by the editor
-    maximum_datetime = Instance(datetime.datetime)
+    maximum_datetime = Datetime(datetime.datetime.max)
 
     # -- ReadonlyEditor traits ------------------------------------------------
 

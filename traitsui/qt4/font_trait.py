@@ -1,3 +1,13 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
@@ -14,11 +24,10 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtGui
 
 from traits.api import Trait, TraitHandler, TraitError
-import six
+
 
 # -------------------------------------------------------------------------
 #  Convert a string into a valid QFont object (if possible):
@@ -62,7 +71,7 @@ def font_to_str(font):
         underline = " underline"
     return "%s point %s%s%s%s" % (
         font.pointSize(),
-        six.text_type(font.family()),
+        str(font.family()),
         style,
         weight,
         underline,

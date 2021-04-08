@@ -1,21 +1,19 @@
-#  Copyright (c) 2008-19, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
-#  Author: Corran Webster
-#  Date:   August 12, 2019
+# Thanks for using Enthought open source!
 
 import unittest
 
 from traits.testing.unittest_tools import UnittestTools
-from traits.api import HasTraits, Unicode
+from traits.api import HasTraits, Str
 
+from traitsui.tests._tools import BaseTestMixin
 from traitsui.context_value import ContextValue, CVFloat, CVInt, CVStr, CVType
 
 
@@ -27,10 +25,17 @@ class CVExample(HasTraits):
 
     cv_str = CVStr
 
-    cv_unicode = CVType(Unicode, something="meta", sync_value="both")
+    cv_unicode = CVType(Str, something="meta", sync_value="both")
 
 
-class TestContextvalue(UnittestTools, unittest.TestCase):
+class TestContextvalue(BaseTestMixin, UnittestTools, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
     def test_context_value(self):
         cv = ContextValue("trait_name")
 
@@ -70,9 +75,9 @@ class TestContextvalue(UnittestTools, unittest.TestCase):
         self.assertIs(cve.cv_str, cv)
 
     def test_cv_unicode_constant(self):
-        cve = CVExample(cv_unicode=u"test")
+        cve = CVExample(cv_unicode="test")
 
-        self.assertEqual(cve.cv_unicode, u"test")
+        self.assertEqual(cve.cv_unicode, "test")
 
     def test_cv_unicode_context_value(self):
         cv = ContextValue("trait_name")

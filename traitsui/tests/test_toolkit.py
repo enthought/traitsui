@@ -1,10 +1,20 @@
-from __future__ import absolute_import
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 from contextlib import contextmanager
-import warnings
+
 import unittest
 
 from traits.trait_base import ETSConfig
 import traitsui.toolkit
+from traitsui.tests._tools import BaseTestMixin
 
 
 @contextmanager
@@ -21,7 +31,14 @@ def clear_toolkit():
         traitsui.toolkit._toolkit = old_traitsui_toolkit
 
 
-class TestToolkit(unittest.TestCase):
+class TestToolkit(BaseTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
     def test_default_toolkit(self):
         with clear_toolkit():
             # try to import default toolkit - this is just a smoke test

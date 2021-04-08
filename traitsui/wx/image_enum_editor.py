@@ -1,25 +1,17 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the various image enumeration editors for the wxPython user interface toolkit.
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import Any
@@ -31,11 +23,15 @@ from traitsui.editors.image_enum_editor import ToolkitEditorFactory
 
 from .editor import Editor
 
+from .enum_editor import BaseEditor as BaseEnumEditor
+
 from .helper import bitmap_cache, position_window, TraitsUIPanel
 
 from .constants import WindowColor
 
 from .image_control import ImageControl
+
+from traitsui.wx import toolkit
 
 # -------------------------------------------------------------------------
 #  'ReadonlyEditor' class:
@@ -98,7 +94,7 @@ class SimpleEditor(ReadonlyEditor):
         ImageEnumDialog(self)
 
 
-class CustomEditor(Editor):
+class CustomEditor(BaseEnumEditor):
     """ Custom style of image enumeration editor, which displays a grid of
     ImageControls. The user can click an image to select the corresponding
     value.
@@ -114,13 +110,23 @@ class CustomEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self._create_image_grid(parent)
+        super(CustomEditor, self).init(parent)
 
-    def _create_image_grid(self, parent):
+        # Create the panel to hold the ImageControl buttons:
+        self.control = TraitsUIPanel(parent, -1)
+        self._create_image_grid()
+
+    def rebuild_editor(self):
+        # Clear any existing content:
+        self.control.SetSizer(None)
+        toolkit.destroy_children(self.control)
+
+        self._create_image_grid()
+
+    def _create_image_grid(self):
         """ Populates a specified window with a grid of image buttons.
         """
-        # Create the panel to hold the ImageControl buttons:
-        self.control = panel = TraitsUIPanel(parent, -1)
+        panel = self.control
 
         # Create the main sizer:
         if self.factory.cols > 1:
@@ -130,10 +136,9 @@ class CustomEditor(Editor):
 
         # Add the set of all possible choices:
         factory = self.factory
-        mapping = factory._mapping
         cur_value = self.value
-        for name in self.factory._names:
-            value = mapping[name]
+        for name in self.names:
+            value = self.mapping[name]
             control = ImageControl(
                 panel,
                 bitmap_cache(

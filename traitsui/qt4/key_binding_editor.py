@@ -1,3 +1,13 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
@@ -16,7 +26,6 @@ key binding editor).
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traits.api import Bool, Event
@@ -45,10 +54,10 @@ class KeyBindingEditor(Editor):
     has_focus = Bool(False)
 
     #: Keyboard event
-    key = Event
+    key = Event()
 
     #: Clear field event
-    clear = Event
+    clear = Event()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

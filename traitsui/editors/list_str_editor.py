@@ -1,25 +1,15 @@
-# -------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2007, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   05/08/2007
-#
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Traits UI editor factory for editing lists of strings.
 """
-
-
-from __future__ import absolute_import
 
 from traits.api import Any, Str, Enum, List, Bool, Instance, Property
 
@@ -41,31 +31,31 @@ class ListStrEditor(BasicEditorFactory):
     # -- Trait Definitions ----------------------------------------------------
 
     #: The editor class to be created:
-    klass = Property
+    klass = Property()
 
     #: The optional extended name of the trait to synchronize the selection
     #: values with:
-    selected = Str
+    selected = Str()
 
     #: The optional extended name of the trait to synchronize the selection
     #: indices with:
-    selected_index = Str
+    selected_index = Str()
 
-    #: The optional extended name of the trait to synchronize the activated value
-    #: with:
-    activated = Str
+    #: The optional extended name of the trait to synchronize the activated
+    #: value with:
+    activated = Str()
 
     #: The optional extended name of the trait to synchronize the activated
     #: value's index with:
-    activated_index = Str
+    activated_index = Str()
 
     #: The optional extended name of the trait to synchronize the right clicked
     #: value with:
-    right_clicked = Str
+    right_clicked = Str()
 
     #: The optional extended name of the trait to synchronize the right clicked
     #: value's index with:
-    right_clicked_index = Str
+    right_clicked_index = Str()
 
     #: Can the user edit the values?
     editable = Bool(True)
@@ -77,10 +67,10 @@ class ListStrEditor(BasicEditorFactory):
     horizontal_lines = Bool(False)
 
     #: The title for the editor:
-    title = Str
+    title = Str()
 
     #: The optional extended name of the trait containing the editor title:
-    title_name = Str
+    title_name = Str()
 
     #: Should a new item automatically be added to the end of the list to allow
     #: the user to create new entries?
@@ -90,7 +80,7 @@ class ListStrEditor(BasicEditorFactory):
     adapter = Instance("traitsui.list_str_adapter.ListStrAdapter", ())
 
     #: The optional extended name of the trait containing the adapter:
-    adapter_name = Str
+    adapter_name = Str()
 
     #: What type of operations are allowed on the list:
     operations = List(
@@ -111,7 +101,7 @@ class ListStrEditor(BasicEditorFactory):
     #: - string: Name of traits that will provide menu
     #: - None: Use the default context menu
     #: - False: Do not display a context menu
-    menu = Any
+    menu = Any()
 
     def _get_klass(self):
         """ Returns the editor class to be created.

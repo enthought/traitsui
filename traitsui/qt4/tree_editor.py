@@ -1,6 +1,15 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
-# Copyright (c) 2019, Enthought Inc.
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
@@ -15,13 +24,11 @@
 """
 
 
-from __future__ import absolute_import
 
 import copy
-import collections
+import collections.abc
+from itertools import zip_longest
 import logging
-
-from six.moves import zip_longest
 
 from pyface.qt import QtCore, QtGui
 
@@ -51,7 +58,7 @@ from .clipboard import clipboard, PyMimeData
 from .editor import Editor
 from .helper import pixmap_cache
 from .tree_node_renderers import WordWrapRenderer
-import six
+
 
 
 logger = logging.getLogger(__name__)
@@ -73,26 +80,26 @@ class SimpleEditor(Editor):
     scrollable = True
 
     #: Allows an external agent to set the tree selection
-    selection = Event
+    selection = Event()
 
     #: The currently selected object
-    selected = Any
+    selected = Any()
 
     #: The event fired when a tree node is activated by double clicking or
     #: pressing the Enter key on a node.
-    activated = Event
+    activated = Event()
 
     #: The event fired when a tree node is clicked on:
-    click = Event
+    click = Event()
 
     #: The event fired when a tree node is double-clicked on:
-    dclick = Event
+    dclick = Event()
 
     #: The event fired when the application wants to veto an operation:
-    veto = Event
+    veto = Event()
 
     #: The vent fired when the application wants to refresh the viewport.
-    refresh = Event
+    refresh = Event()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -204,8 +211,8 @@ class SimpleEditor(Editor):
         """
         try:
             tree = self._tree
-            if not isinstance(selection, six.string_types) and isinstance(
-                selection, collections.Iterable
+            if not isinstance(selection, str) and isinstance(
+                selection, collections.abc.Iterable
             ):
 
                 item_selection = QtGui.QItemSelection()
@@ -521,7 +528,7 @@ class SimpleEditor(Editor):
             return QtGui.QIcon()
 
         icon_name = node.get_icon(object, is_expanded)
-        if isinstance(icon_name, six.string_types):
+        if isinstance(icon_name, str):
             if icon_name.startswith("@"):
                 image_resource = convert_image(icon_name, 4)
                 return image_resource.create_icon()
@@ -530,7 +537,7 @@ class SimpleEditor(Editor):
                 return self._tree.style().standardIcon(icon)
 
             path = node.get_icon_path(object)
-            if isinstance(path, six.string_types):
+            if isinstance(path, str):
                 path = [path, node]
             else:
                 path = path + [node]
@@ -684,15 +691,6 @@ class SimpleEditor(Editor):
             if issubclass(klass, tuple(node.node_for)):
                 return node
         return None
-
-    def _node_for_class_name(self, class_name):
-        """ Returns the node and class associated with a specified class name.
-        """
-        for node in self.factory.nodes:
-            for klass in node.node_for:
-                if class_name == klass.__name__:
-                    return (node, klass)
-        return (None, None)
 
     def _update_icon(self, nid):
         """ Updates the icon for a specified node.
@@ -1054,24 +1052,30 @@ class SimpleEditor(Editor):
         object = self._data[1]
         items = []
         add = node.get_add(object)
-        if len(add) > 0:
-            for klass in add:
-                prompt = False
-                if isinstance(klass, tuple):
+        # return early if there are no items to be added in the tree
+        if len(add) == 0:
+            return items
+
+        for klass in add:
+            prompt = False
+            factory = None
+            if isinstance(klass, tuple):
+                if len(klass) == 2:
                     klass, prompt = klass
-                add_node = self._node_for_class(klass)
-                if add_node is not None:
-                    class_name = klass.__name__
-                    name = add_node.get_name(object)
-                    if name == "":
-                        name = class_name
-                    items.append(
-                        Action(
-                            name=name,
-                            action="editor._menu_new_node('%s',%s)"
-                            % (class_name, prompt),
-                        )
-                    )
+                elif len(klass) == 3:
+                    klass, prompt, factory = klass
+            add_node = self._node_for_class(klass)
+            if add_node is None:
+                continue
+            class_name = klass.__name__
+            name = add_node.get_name(object)
+            if name == "":
+                name = class_name
+            if factory is None:
+                factory = klass
+            def perform_add(object):
+                self._menu_new_node(factory, prompt)
+            items.append(Action(name=name, on_perform=perform_add))
         return items
 
     # -------------------------------------------------------------------------
@@ -1301,7 +1305,7 @@ class SimpleEditor(Editor):
         except:
             return
 
-        new_label = six.text_type(nid.text(col))
+        new_label = str(nid.text(col))
         old_label = node.get_label(object)
 
         if new_label != old_label:
@@ -1310,13 +1314,12 @@ class SimpleEditor(Editor):
             else:
                 self._set_label(nid, col)
 
-    def _menu_new_node(self, class_name, prompt=False):
+    def _menu_new_node(self, factory, prompt=False):
         """ Adds a new object to the current node.
         """
         node, object, nid = self._data
         self._data = None
-        new_node, new_class = self._node_for_class_name(class_name)
-        new_object = new_class()
+        new_object = factory()
         if (not prompt) or new_object.edit_traits(
             parent=self.control, kind="livemodal"
         ).result:

@@ -1,7 +1,12 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-
-from __future__ import absolute_import, print_function
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
 from traits.api import HasTraits, Str, List
 from traitsui.api import Group, Item, TableEditor, View
@@ -10,16 +15,16 @@ from traitsui.table_column \
 
 
 class Word(HasTraits):
-    word = Str
+    word = Str()
 
 
 class Foo(HasTraits):
 
     # arbitrary string containing spaces
-    input = Str
+    input = Str()
 
     # input split on space
-    parsed = List
+    parsed = List()
 
     def _input_changed(self):
         words = self.input.split()

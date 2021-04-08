@@ -1,3 +1,13 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
@@ -15,7 +25,6 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traitsui.editors.font_editor import (
@@ -29,7 +38,7 @@ from .editor_factory import (
 )
 
 from .editor import Editor
-import six
+
 
 
 # Standard font point sizes
@@ -165,7 +174,7 @@ class CustomFontEditor(Editor):
     def update_object(self):
         """ Handles the user changing the contents of the font text control.
         """
-        self.value = six.text_type(self._font.text())
+        self.value = str(self._font.text())
         self._set_font(self.factory.to_qt4_font(self))
         self.update_editor()
 
@@ -231,7 +240,7 @@ class TextFontEditor(BaseTextEditor):
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
-        self.value = six.text_type(self.control.text())
+        self.value = str(self.control.text())
 
     def update_editor(self):
         """ Updates the editor when the object trait changes external to the

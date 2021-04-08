@@ -1,40 +1,43 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2014, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Author: Matt Reay
-#  Date:   Jun 2019
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
+
 """
 Test cases for the TreeNode object.
 """
 
-from __future__ import absolute_import
 import unittest
 
 from traits.api import HasStrictTraits, List, Str, This
 from traits.testing.api import UnittestTools
 
 from traitsui.api import TreeNode
+from traitsui.tests._tools import BaseTestMixin
 
 
 class DummyModel(HasStrictTraits):
     """ Dummy model with children.
     """
 
-    name = Str
+    name = Str()
 
     children = List(This)
 
 
-class TestTreeNode(UnittestTools, unittest.TestCase):
+class TestTreeNode(BaseTestMixin, UnittestTools, unittest.TestCase):
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
     def test_insert_child(self):
         # Regression test for #559
         model = DummyModel(

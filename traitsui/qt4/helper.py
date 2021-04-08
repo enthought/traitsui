@@ -1,3 +1,13 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
@@ -14,7 +24,6 @@
     editors and trait editor factories.
 """
 
-from __future__ import absolute_import
 import os.path
 
 from pyface.qt import QtCore, QtGui, is_qt5, qt_api
@@ -22,7 +31,7 @@ from pyface.ui_traits import convert_image
 from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 
 from traitsui.ui_traits import SequenceTypes
-import six
+
 
 
 is_pyqt = qt_api in {"pyqt", "pyqt5"}
@@ -155,7 +164,7 @@ class IconButton(QtGui.QPushButton):
         # Get the minimum icon size to use.
         ico_sz = sty.pixelMetric(QtGui.QStyle.PM_ButtonIconSize)
 
-        if isinstance(icon, six.string_types):
+        if isinstance(icon, str):
             pm = pixmap_cache(icon)
 
             # Increase the icon size to accomodate the image if needed.
@@ -174,12 +183,29 @@ class IconButton(QtGui.QPushButton):
 
         # Configure the button.
         self.setIcon(ico)
-        self.setMaximumSize(ico_sz, ico_sz)
         self.setFlat(True)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.clicked.connect(slot)
 
+    def sizeHint(self):
+        """ Reimplement sizeHint to return a recommended button size based on
+        the size of the icon.
+
+        Returns
+        -------
+        size : QtCore.QSize
+        """
+        self.ensurePolished()
+
+        # We want the button to have a size similar to the icon.
+        # Using the size computed for a tool button gives a desirable size.
+        option = QtGui.QStyleOptionButton()
+        self.initStyleOption(option)
+        size = self.style().sizeFromContents(
+            QtGui.QStyle.CT_ToolButton, option, option.iconSize
+        )
+        return size
 
 # ------------------------------------------------------------------------
 # Text Rendering helpers

@@ -1,30 +1,22 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines file editors for the wxPython user interface toolkit.
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from os.path import abspath, split, splitext, isfile, exists
 
-from traits.api import List, Str, Event, Any, on_trait_change, TraitError
+from traits.api import List, Str, Event, Any, observe, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -54,10 +46,10 @@ class SimpleEditor(SimpleTextEditor):
     """
 
     #: The history control (used if the factory 'entries' > 0):
-    history = Any
+    history = Any()
 
     #: The popup file control (an Instance( PopupFile )):
-    popup = Any
+    popup = Any()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -94,7 +86,7 @@ class SimpleEditor(SimpleTextEditor):
             pad = 8
 
         self._file_name = control
-        sizer.Add(control, 1, wx.EXPAND | wx.ALIGN_CENTER)
+        sizer.Add(control, 1, wx.EXPAND)
         sizer.Add(button, 0, wx.LEFT | wx.ALIGN_CENTER, pad)
         panel.Bind(wx.EVT_BUTTON, self.show_file_dialog, id=button.GetId())
         panel.SetDropTarget(FileDropTarget(self))
@@ -121,10 +113,11 @@ class SimpleEditor(SimpleTextEditor):
 
         super(SimpleEditor, self).dispose()
 
-    @on_trait_change("history:value")
-    def _history_value_changed(self, value):
+    @observe("history:value")
+    def _history_value_changed(self, event):
         """ Handles the history 'value' trait being changed.
         """
+        value = event.new
         if not self._no_update:
             self._update(value)
 
@@ -170,10 +163,11 @@ class SimpleEditor(SimpleTextEditor):
 
     # -- Traits Event Handlers ------------------------------------------------
 
-    @on_trait_change("popup:value")
-    def _popup_value_changed(self, file_name):
+    @observe("popup:value")
+    def _popup_value_changed(self, event):
         """ Handles the popup value being changed.
         """
+        file_name = event.new
         if self.factory.truncate_ext:
             file_name = splitext(file_name)[0]
 
@@ -182,8 +176,8 @@ class SimpleEditor(SimpleTextEditor):
         self.history.set_value(self.str_value)
         self._no_update = False
 
-    @on_trait_change("popup:closed")
-    def _popup_closed_changed(self):
+    @observe("popup:closed")
+    def _popup_closed_changed(self, event):
         """ Handles the popup control being closed.
         """
         self.popup = None
@@ -278,10 +272,10 @@ class CustomEditor(SimpleTextEditor):
     filter = filter_trait
 
     #: Event fired when the file system view should be rebuilt:
-    reload = Event
+    reload = Event()
 
     #: Event fired when the user double-clicks a file:
-    dclick = Event
+    dclick = Event()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -369,7 +363,7 @@ class CustomEditor(SimpleTextEditor):
 class PopupFile(PopupControl):
 
     #: The initially specified file name:
-    file_name = Str
+    file_name = Str()
 
     #: The file name filter to support:
     filter = filter_trait

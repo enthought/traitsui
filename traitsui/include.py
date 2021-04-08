@@ -1,26 +1,18 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/18/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the Include class, which is used to represent a substitutable
     element within a user interface View.
 """
 
 
-from __future__ import absolute_import
 
 from traits.api import Str
 
@@ -43,8 +35,8 @@ class Include(ViewSubElement):
     "extra" attributes in the middle of the view::
 
         class Person(HasTraits):
-            name = Str
-            age = Int
+            name = Str()
+            age = Int()
             person_view = View('name', Include('extra'), 'age', kind='modal')
 
     If you directly create an instance of Person, and edit its attributes,
@@ -54,10 +46,10 @@ class Include(ViewSubElement):
     attributes to add to the view defined on Person::
 
         class LocatedPerson(Person):
-            street = Str
-            city = Str
-            state = Str
-            zip = Int
+            street = Str()
+            city = Str()
+            state = Str()
+            zip = Int()
             extra = Group('street', 'city', 'state', 'zip')
 
     The attribute-editing window for an instance of LocatedPerson displays
@@ -69,7 +61,7 @@ class Include(ViewSubElement):
     # -------------------------------------------------------------------------
 
     #: The name of the substitutable content
-    id = Str
+    id = Str()
 
     def __init__(self, id, **traits):
         """ Initializes the Include object.

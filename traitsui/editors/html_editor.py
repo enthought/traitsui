@@ -1,26 +1,16 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the HTML editor factory. HTML editors interpret and display
     HTML-formatted text, but do not modify it.
 """
-
-
-from __future__ import absolute_import
 
 from traits.api import Bool, Str
 
@@ -61,10 +51,10 @@ class ToolkitEditorFactory(BasicEditorFactory):
     format_text = Bool(False)
 
     #: External objects referenced in the HTML are relative to this url
-    base_url = Str
+    base_url = Str()
 
     #: The object trait containing the base URL
-    base_url_name = Str
+    base_url_name = Str()
 
     #: Should links be opened in an external browser?
     open_externally = Bool(False)
@@ -136,7 +126,7 @@ class ToolkitEditorFactory(BasicEditorFactory):
         line = lines[i]
         m = self.indent(line)
         kind = line[m]
-        result = ["<li>" + line[m + 1 :].strip()]
+        result = ["<li>" + line[m + 1:].strip()]
         n = len(lines)
         j = i + 1
         while j < n:
@@ -147,7 +137,7 @@ class ToolkitEditorFactory(BasicEditorFactory):
             if k == m:
                 if line[k] != kind:
                     break
-                result.append("<li>" + line[k + 1 :].strip())
+                result.append("<li>" + line[k + 1:].strip())
                 j += 1
             elif line[k] in "-*":
                 j, line = self.parse_list(lines, j)

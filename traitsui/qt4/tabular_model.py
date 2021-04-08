@@ -1,27 +1,19 @@
-# -------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2009, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: Evan Patterson
-#  Date:   06/22/2009
-#
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the table model used by the tabular editor.
 """
 
 
-from __future__ import absolute_import, unicode_literals
 
-import six
+import logging
 
 from pyface.qt import QtCore, QtGui
 
@@ -39,6 +31,8 @@ alignment_map = {
 
 # MIME type for internal table drag/drop operations
 tabular_mime_type = "traits-ui-tabular-editor"
+
+logger = logging.getLogger(__name__)
 
 
 class TabularModel(QtCore.QAbstractTableModel):
@@ -264,7 +258,7 @@ class TabularModel(QtCore.QAbstractTableModel):
             for row in rows
         ]
         mime_data = PyMimeData.coerce(items)
-        data = QtCore.QByteArray(six.text_type(id(self)).encode("utf8"))
+        data = QtCore.QByteArray(str(id(self)).encode("utf8"))
         for row in rows:
             data.append((" %i" % row).encode("utf8"))
         mime_data.setData(tabular_mime_type, data)
@@ -276,6 +270,15 @@ class TabularModel(QtCore.QAbstractTableModel):
         if action == QtCore.Qt.IgnoreAction:
             return False
 
+        # If dropped directly onto the parent, both row and column are -1.
+        # See https://doc.qt.io/qt-5/qabstractitemmodel.html#dropMimeData
+        # When dropped below the list, the "parent" is invalid.
+        if row == -1:
+            if parent.isValid():
+                row = parent.row()
+            else:
+                row = max(0, self.rowCount(None) - 1)
+
         # this is a drag from a tabular model
         data = mime_data.data(tabular_mime_type)
         if not data.isNull() and action == QtCore.Qt.MoveAction:
@@ -286,7 +289,7 @@ class TabularModel(QtCore.QAbstractTableModel):
             # is it from ourself?
             if table_id == id(self):
                 current_rows = id_and_rows[1:]
-                self.moveRows(current_rows, parent.row())
+                self.moveRows(current_rows, row)
                 return True
 
         # this is an external drag
@@ -298,12 +301,6 @@ class TabularModel(QtCore.QAbstractTableModel):
             object = editor.object
             name = editor.name
             adapter = editor.adapter
-            if row == -1 and parent.isValid():
-                # find correct row number
-                row = parent.row()
-            if row == -1 and adapter.len(object, name) == 0:
-                # if empty list, target is after end of list
-                row = 0
             if all(
                 adapter.get_can_drop(object, name, row, item) for item in data
             ):
@@ -344,6 +341,14 @@ class TabularModel(QtCore.QAbstractTableModel):
             new row.
         """
         editor = self._editor
+
+        if new_row == -1:
+            # row should be nonnegative and less than the row count for this
+            # model. See ``QAbstractItemModel.checkIndex``` for Qt 5.11+
+            # This is a last resort to prevent segmentation faults.
+            logger.debug(
+                "Received invalid row %d. Adjusting to the last row.", new_row)
+            new_row = max(0, self.rowCount(None) - 1)
 
         # Sort rows in descending order so they can be removed without
         # invalidating the indices.

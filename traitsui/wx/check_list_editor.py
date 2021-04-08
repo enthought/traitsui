@@ -1,26 +1,18 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the various editors for multi-selection enumerations, for the
 wxPython user interface toolkit.
 """
 
 
-from __future__ import absolute_import
 import logging
 
 import wx
@@ -38,7 +30,7 @@ from .editor import EditorWithList
 
 from .helper import TraitsUIPanel
 from functools import reduce
-import six
+
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +56,7 @@ class SimpleEditor(EditorWithList):
     names = List(Str)
 
     #: Checklist item values
-    values = List
+    values = List()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -74,19 +66,23 @@ class SimpleEditor(EditorWithList):
         super(SimpleEditor, self).init(parent)
         self.set_tooltip()
 
+    def dispose(self):
+        self.control.Unbind(wx.EVT_CHOICE)
+        super().dispose()
+
     def create_control(self, parent):
         """ Creates the initial editor control.
         """
         self.control = wx.Choice(
             parent, -1, wx.Point(0, 0), wx.Size(100, 20), []
         )
-        parent.Bind(wx.EVT_CHOICE, self.update_object, id=self.control.GetId())
+        self.control.Bind(wx.EVT_CHOICE, self.update_object)
 
     def list_updated(self, values):
         """ Handles updates to the list of legal checklist values.
         """
         sv = self.string_value
-        if (len(values) > 0) and isinstance(values[0], six.string_types):
+        if (len(values) > 0) and isinstance(values[0], str):
             values = [(x, sv(x, capitalize)) for x in values]
         self.values = valid_values = [x[0] for x in values]
         self.names = [x[1] for x in values]
@@ -100,14 +96,14 @@ class SimpleEditor(EditorWithList):
                     del cur_value[i]
                     modified = True
                 except TypeError as e:
-                    logger.warn(
+                    logger.warning(
                         "Unable to remove non-current value [%s] from "
                         "values %s",
                         cur_value[i],
                         values,
                     )
         if modified:
-            if isinstance(self.value, six.string_types):
+            if isinstance(self.value, str):
                 cur_value = ",".join(cur_value)
             self.value = cur_value
 
@@ -140,7 +136,7 @@ class SimpleEditor(EditorWithList):
             self.control.SetSelection(
                 self.values.index(parse_value(self.value)[0])
             )
-        except:
+        except Exception:
             pass
 
 
@@ -175,12 +171,19 @@ class CustomEditor(SimpleEditor):
         n = len(labels)
         cols = self.factory.cols
         rows = (n + cols - 1) // cols
+        # incr will keep track of how to increment index so that as we traverse
+        # the grid in row major order, the elements are added to appear in
+        # column major order
         incr = [n // cols] * cols
         rem = n % cols
 
         for i in range(cols):
             incr[i] += rem > i
         incr[-1] = -(reduce(lambda x, y: x + y, incr[:-1], 0) - 1)
+        # e.g for a gird:
+        # 0 2 4
+        # 1 3 5
+        # incr should be [2, 2, -3]
 
         if cols > 1:
             sizer = wx.GridSizer(0, cols, 2, 4)
@@ -189,6 +192,7 @@ class CustomEditor(SimpleEditor):
 
         # Add the set of all possible choices:
         index = 0
+        # populate the layout in row_major order
         for i in range(rows):
             for j in range(cols):
                 if n > 0:
@@ -231,7 +235,7 @@ class CustomEditor(SimpleEditor):
             cur_value.append(control.value)
         else:
             cur_value.remove(control.value)
-        if isinstance(self.value, six.string_types):
+        if isinstance(self.value, str):
             cur_value = ",".join(cur_value)
         self.value = cur_value
 

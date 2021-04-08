@@ -1,27 +1,19 @@
-# -------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines a text editor which displays a text field and maintains a history
     of previously entered values.
 """
 
 
-from __future__ import absolute_import
-from traits.api import Any, on_trait_change
+from traits.api import Any, observe
 
 from pyface.timer.api import do_later
 
@@ -45,7 +37,7 @@ class _HistoryEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: The history control:
-    history = Any
+    history = Any()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -68,8 +60,8 @@ class _HistoryEditor(Editor):
 
         super(_HistoryEditor, self).dispose()
 
-    @on_trait_change("history:value")
-    def _value_changed(self, value):
+    @observe("history:value")
+    def _value_changed(self, event):
         """ Handles the history object's 'value' trait being changed.
         """
         if not self._dont_update:

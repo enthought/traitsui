@@ -1,26 +1,18 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/07/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines functions and classes used to create pop-up file dialogs for
     opening and saving files.
 """
 
 
-from __future__ import absolute_import, print_function
 
 from os import R_OK, W_OK, access, mkdir
 
@@ -100,7 +92,7 @@ class IFileDialogModel(Interface):
     """
 
     #: The name of the currently selected file:
-    file_name = File
+    file_name = File()
 
 
 # -------------------------------------------------------------------------
@@ -116,7 +108,7 @@ class IFileDialogView(Interface):
     view = AView
 
     #: Is the view fixed or variable width?
-    is_fixed = Bool
+    is_fixed = Bool()
 
 
 # -------------------------------------------------------------------------
@@ -139,7 +131,7 @@ class IFileDialogExtension(IFileDialogModel, IFileDialogView):
 class MFileDialogModel(HasPrivateTraits):
 
     #: The name of the currently selected file:
-    file_name = File
+    file_name = File()
 
 
 # -------------------------------------------------------------------------
@@ -331,10 +323,10 @@ class CreateDirHandler(Handler):
     """
 
     #: The name for the new directory to be created:
-    dir_name = Str
+    dir_name = Str()
 
     #: The current status message:
-    message = Str
+    message = Str()
 
     #: The OK and Cancel buttons:
     ok = Button("OK")
@@ -404,7 +396,7 @@ class FileExistsHandler(Handler):
     """
 
     #: The current status message:
-    message = Str
+    message = Str()
 
     #: The OK and Cancel buttons:
     ok = Button("OK")
@@ -452,7 +444,7 @@ class OpenFileDialog(Handler):
     """
 
     #: The starting and current file path:
-    file_name = File
+    file_name = File()
 
     #: The list of file filters to apply:
     filter = CList(Str)
@@ -475,10 +467,10 @@ class OpenFileDialog(Handler):
     info = Instance(UIInfo)
 
     #: Event fired when the file tree view should be reloaded:
-    reload = Event
+    reload = Event()
 
     #: Event fired when the user double-clicks on a file name:
-    dclick = Event
+    dclick = Event()
 
     #: Allow extension models to be added dynamically:
     extension__ = Instance(IFileDialogModel)

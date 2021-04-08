@@ -1,22 +1,16 @@
-#  Copyright (c) 2005-19, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/07/2004
+# Thanks for using Enthought open source!
 
 """ Defines the abstract Editor class, which represents an editing control for
     an object trait in a Traits-based user interface.
 """
-
-
-from __future__ import absolute_import
 
 from contextlib import contextmanager
 from functools import partial
@@ -49,8 +43,6 @@ from .context_value import ContextValue
 from .undo import UndoItem
 
 from .item import Item
-import six
-
 
 # Reference to an EditorFactory object
 factory_trait = Instance(EditorFactory)
@@ -72,21 +64,21 @@ class Editor(HasPrivateTraits):
     object = Instance(HasTraits, clean_up=True)
 
     #: The name of the trait this editor is editing (e.g. 'value'):
-    name = ReadOnly
+    name = ReadOnly()
 
     #: The context object the editor is editing (e.g. object):
-    context_object = Property
+    context_object = Property()
 
     #: The extended name of the object trait being edited. That is,
     #: 'object_name.name' minus the context object name at the beginning. For
     #: example: 'link1.link2.value':
-    extended_name = Property
+    extended_name = Property()
 
     #: Original value of object.name (e.g. object.link1.link2.value):
     old_value = Any(clean_up=True)
 
     #: Text description of the object trait being edited:
-    description = ReadOnly
+    description = ReadOnly()
 
     #: The Item object used to create this editor:
     item = Instance(Item, (), clean_up=True)
@@ -113,13 +105,13 @@ class Editor(HasPrivateTraits):
     updating = Bool(False)
 
     #: Current value for object.name:
-    value = Property
+    value = Property()
 
     #: Current value of object trait as a string:
-    str_value = Property
+    str_value = Property()
 
     #: The trait the editor is editing (not its value, but the trait itself):
-    value_trait = Property
+    value_trait = Property()
 
     #: The current editor invalid state status:
     invalid = Bool(False)
@@ -178,6 +170,20 @@ class Editor(HasPrivateTraits):
         """ Assigns focus to the editor's underlying toolkit widget.
 
         This method must be overriden by subclasses.
+        """
+        raise NotImplementedError("This method must be overriden.")
+
+    def set_tooltip_text(self, control, text):
+        """ Sets the tooltip for a toolkit control to the provided text.
+
+        This method must be overriden by subclasses.
+
+        Parameters
+        ----------
+        text : str
+            The text to use for the tooltip.
+        control : toolkit control
+            The toolkit control that is having the tooltip set.
         """
         raise NotImplementedError("This method must be overriden.")
 
@@ -282,9 +288,7 @@ class Editor(HasPrivateTraits):
         *undo_args
             Any arguments to pass to the undo factory.
         """
-        # Indicate that the contents of the user interface have been changed:
         ui = self.ui
-        ui.modified = True
 
         # Create an undo history entry if we are maintaining a history:
         undoable = ui._undoable
@@ -416,6 +420,64 @@ class Editor(HasPrivateTraits):
 
         return (object, name, partial(xgetattr, object, name))
 
+    def set_tooltip(self, control=None):
+        """ Sets the tooltip for a specified toolkit control.
+
+        This uses the tooltip_text method to get the text to use.
+
+        Parameters
+        ----------
+        control : optional toolkit control
+            The toolkit control that is having the tooltip set.  If None
+            then the editor's control is used.
+
+        Returns
+        -------
+        tooltip_set : bool
+            Whether or not a tooltip value could be set.
+        """
+        text = self.tooltip_text()
+        if text is None:
+            return False
+
+        if control is None:
+            control = self.control
+
+        self.set_tooltip_text(control, text)
+
+        return True
+
+    def tooltip_text(self):
+        """ Get the text for a tooltip, checking various sources.
+
+        This checks for text from, in order:
+
+        - the editor's description trait
+        - the base trait's 'tooltip' metadata
+        - the base trait's 'desc' metadata
+
+        Returns
+        -------
+        text : str or None
+            The text for the tooltip, or None if no suitable text can
+            be found.
+        """
+
+        if self.description:
+            return self.description
+
+        base_trait = self.object.base_trait(self.name)
+
+        text = base_trait.tooltip
+        if text is not None:
+            return text
+
+        text = base_trait.desc
+        if text is not None:
+            return "Specifies " + text
+
+        return None
+
     # -- Utility context managers --------------------------------------------
 
     @contextmanager
@@ -513,9 +575,13 @@ class Editor(HasPrivateTraits):
             self.item.style != "readonly"
             and object.base_trait(name).type != "event"
         ):
-            self.log_change(
-                self.get_undo_item, object, name, old_value, new_value
-            )
+            # Indicate that the contents of the UI have been changed:
+            self.ui.modified = True
+
+            if self.updating:
+                self.log_change(
+                    self.get_undo_item, object, name, old_value, new_value
+                )
 
         # If the change was not caused by the editor itself:
         if not self.updating:
@@ -620,7 +686,7 @@ class Editor(HasPrivateTraits):
                     with self.no_trait_update(key), self.raise_to_debug():
                         n = event.index
                         getattr(self, editor_name)[
-                            n : n + len(event.removed)
+                            n:n + len(event.removed)
                         ] = event.added
 
             items = xuser_name + "_items"
@@ -662,7 +728,7 @@ class Editor(HasPrivateTraits):
                     with self.no_trait_update(key), self.raise_to_debug():
                         n = event.index
                         value = xgetattr(user_object, xuser_name)
-                        value[n : n + len(event.removed)] = event.added
+                        value[n:n + len(event.removed)] = event.added
 
             self.on_trait_change(editor_list_modified, editor_name + "_items")
             self._user_from.append(
@@ -689,26 +755,6 @@ class Editor(HasPrivateTraits):
             except TraitError as excp:
                 self.error(excp)
                 raise
-
-    def _str(self, value):
-        """ Returns the text representation of a specified value.
-
-        This is a convenience method to cover the differences between Python
-        2 and Python 3 strings.
-
-        Parameters
-        ----------
-        value : any
-            The value to be represented as a string.
-
-        Returns
-        -------
-        string : unicode
-            The string of the value, as an appropriate text type for Python 2
-            or 3.
-        """
-        # In Unicode!
-        return six.text_type(value)
 
     # -- Traits property getters and setters --------------------------------
 

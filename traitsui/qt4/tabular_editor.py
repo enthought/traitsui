@@ -1,26 +1,18 @@
-# -------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2009, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: Evan Patterson
-#  Date:   06/22/2009
-#
-# -------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ A traits UI editor for editing tabular data (arrays, list of tuples, lists
     of objects, etc).
 """
 
 
-from __future__ import absolute_import
 
 from contextlib import contextmanager
 
@@ -46,7 +38,7 @@ from traitsui.tabular_adapter import TabularAdapter
 from traitsui.helper import compute_column_widths
 from .editor import Editor
 from .tabular_model import TabularModel
-import six
+
 
 
 class HeaderEventFilter(QtCore.QObject):
@@ -69,15 +61,15 @@ class TabularEditor(Editor):
     # -- Trait Definitions ----------------------------------------------------
 
     #: The event fired when a table update is needed:
-    update = Event
+    update = Event()
 
     #: The event fired when a simple repaint is needed:
-    refresh = Event
+    refresh = Event()
 
     #: The current set of selected items (which one is used depends upon the
     #: initial state of the editor factory 'multi_select' trait):
-    selected = Any
-    multi_selected = List
+    selected = Any()
+    multi_selected = List()
 
     #: The current set of selected item indices (which one is used depends upon
     #: the initial state of the editor factory 'multi_select' trait):
@@ -121,7 +113,7 @@ class TabularEditor(Editor):
 
     #: NIT: This doesn't seem to be used anywhere...can I delete?
     #: # Row index of item to select after rebuilding editor list:
-    #: row = Any
+    #: row = Any()
 
     #: Should the selected item be edited after rebuilding the editor list:
     edit = Bool(False)
@@ -248,12 +240,15 @@ class TabularEditor(Editor):
         # Rebuild the editor columns and headers whenever the adapter's
         # 'columns' changes:
         self.on_trait_change(
-            self.update_editor, "adapter.columns", dispatch="ui"
+            self._adapter_columns_updated, "adapter.columns", dispatch="ui"
         )
 
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
+        self.model.beginResetModel()
+        self.model.endResetModel()
+
         self.context_object.on_trait_change(
             self.update_editor, self.extended_name + "_items", remove=True
         )
@@ -267,7 +262,7 @@ class TabularEditor(Editor):
             self.refresh_editor, "adapter.+update", remove=True
         )
         self.on_trait_change(
-            self.update_editor, "adapter.columns", remove=True
+            self._adapter_columns_updated, "adapter.columns", remove=True
         )
 
         self.adapter.cleanup()
@@ -356,7 +351,7 @@ class TabularEditor(Editor):
     def _get_image(self, image):
         """ Converts a user specified image to a QIcon.
         """
-        if isinstance(image, six.string_types):
+        if isinstance(image, str):
             self.image = image
             image = self.image
 
@@ -392,6 +387,19 @@ class TabularEditor(Editor):
         """
         if not self.factory.multi_select:
             self.selected_column = self.column_clicked.column
+
+    def _adapter_columns_updated(self):
+        """ Update the view when the adapter columns trait changes.
+        Note that this change handler is added after the UI is instantiated,
+        and removed when the UI is disposed.
+        """
+        # Invalidate internal state of the view related to the columns
+        n_columns = len(self.adapter.columns)
+        if (self.control is not None
+                and self.control._user_widths is not None
+                and len(self.control._user_widths) != n_columns):
+            self.control._user_widths = None
+        self.update_editor()
 
     def _update_changed(self):
         self.update_editor()
@@ -447,7 +455,11 @@ class TabularEditor(Editor):
         except:
             pass
         else:
-            list_event = TraitListEvent(0, added, removed)
+            list_event = TraitListEvent(
+                index=0,
+                added=added,
+                removed=removed
+            )
             self._multi_selected_rows_items_changed(list_event)
 
     def _multi_selected_rows_changed(self, selected_rows):
@@ -632,13 +644,13 @@ class TabularEditor(Editor):
 class TabularEditorEvent(HasStrictTraits):
 
     # The index of the row:
-    row = Int
+    row = Int()
 
     # The id of the column (either a string or an integer):
-    column = Any
+    column = Any()
 
     # The row item:
-    item = Property
+    item = Property()
 
     # -- Private Traits -------------------------------------------------------
 
@@ -910,7 +922,8 @@ class _TableView(QtGui.QTableView):
             if self._user_widths is None:
                 self._user_widths = [None] * len(self._editor.adapter.columns)
             self._user_widths[index] = new
-            if not self._editor.factory.auto_resize:
+            if (self._editor.factory is not None
+                    and not self._editor.factory.auto_resize):
                 self.resizeColumnsToContents()
 
     @contextmanager

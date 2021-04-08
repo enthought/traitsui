@@ -1,29 +1,21 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   12/03/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the tree editor for the wxPython user interface toolkit.
 """
 
 
-from __future__ import absolute_import
 import os
 import wx
 import copy
-import six
+
 
 try:
     from pyface.wx.drag_and_drop import PythonDropSource, PythonDropTarget
@@ -89,23 +81,23 @@ class SimpleEditor(Editor):
     scrollable = True
 
     #: Allows an external agent to set the tree selection
-    selection = Event
+    selection = Event()
 
     #: The currently selected object
-    selected = Any
+    selected = Any()
 
     #: The event fired when a tree node is activated by double clicking or
     #: pressing the enter key on a node.
-    activated = Event
+    activated = Event()
 
     #: The event fired when a tree node is clicked on:
-    click = Event
+    click = Event()
 
     #: The event fired when a tree node is double-clicked on:
-    dclick = Event
+    dclick = Event()
 
     #: The event fired when the application wants to veto an operation:
-    veto = Event
+    veto = Event()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -235,25 +227,22 @@ class SimpleEditor(Editor):
         # Initialize the 'undo state' stack:
         self._undoable = []
 
-        # Get the tree control id:
-        tid = tree.GetId()
-
         # Set up the mouse event handlers:
         tree.Bind(wx.EVT_LEFT_DOWN, self._on_left_down)
         tree.Bind(wx.EVT_RIGHT_DOWN, self._on_right_down)
         tree.Bind(wx.EVT_LEFT_DCLICK, self._on_left_dclick)
 
         # Set up the tree event handlers:
-        tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self._on_tree_item_expanding, id=tid)
-        tree.Bind(wx.EVT_TREE_ITEM_EXPANDED, self._on_tree_item_expanded, id=tid)
-        tree.Bind(wx.EVT_TREE_ITEM_COLLAPSING, self._on_tree_item_collapsing, id=tid)
-        tree.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self._on_tree_item_collapsed, id=tid)
-        tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self._on_tree_item_activated, id=tid)
-        tree.Bind(wx.EVT_TREE_SEL_CHANGED, self._on_tree_sel_changed, id=tid)
-        tree.Bind(wx.EVT_TREE_BEGIN_DRAG, self._on_tree_begin_drag, id=tid)
-        tree.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self._on_tree_begin_label_edit, id=tid)
-        tree.Bind(wx.EVT_TREE_END_LABEL_EDIT, self._on_tree_end_label_edit, id=tid)
-        tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self._on_tree_item_gettooltip, id=tid)
+        tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self._on_tree_item_expanding)
+        tree.Bind(wx.EVT_TREE_ITEM_EXPANDED, self._on_tree_item_expanded)
+        tree.Bind(wx.EVT_TREE_ITEM_COLLAPSING, self._on_tree_item_collapsing)
+        tree.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self._on_tree_item_collapse)
+        tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self._on_tree_item_activated)
+        tree.Bind(wx.EVT_TREE_SEL_CHANGED, self._on_tree_sel_changed)
+        tree.Bind(wx.EVT_TREE_BEGIN_DRAG, self._on_tree_begin_drag)
+        tree.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self._on_tree_begin_label_edit)
+        tree.Bind(wx.EVT_TREE_END_LABEL_EDIT, self._on_tree_end_label_edit)
+        tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self._on_tree_item_gettooltip)
 
         # Set up general mouse events
         tree.Bind(wx.EVT_MOTION, self._on_hover)
@@ -274,32 +263,36 @@ class SimpleEditor(Editor):
         """
         tree = self._tree
         if tree is not None:
-            id = tree.GetId()
             tree.Unbind(wx.EVT_LEFT_DOWN)
             tree.Unbind(wx.EVT_RIGHT_DOWN)
-            tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, None, id=id)
-            tree.Bind(wx.EVT_TREE_ITEM_EXPANDED, None, id=id)
-            tree.Bind(wx.EVT_TREE_ITEM_COLLAPSING, None, id=id)
-            tree.Bind(wx.EVT_TREE_ITEM_COLLAPSED, None, id=id)
-            tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, None, id=id)
-            tree.Bind(wx.EVT_TREE_SEL_CHANGED, None, id=id)
-            tree.Bind(wx.EVT_TREE_BEGIN_DRAG, None, id=id)
-            tree.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, None, id=id)
-            tree.Bind(wx.EVT_TREE_END_LABEL_EDIT, None, id=id)
-            tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, None, id=id)
+            tree.Unbind(wx.EVT_LEFT_DCLICK)
+
+            tree.Unbind(wx.EVT_TREE_ITEM_EXPANDING)
+            tree.Unbind(wx.EVT_TREE_ITEM_EXPANDED)
+            tree.Unbind(wx.EVT_TREE_ITEM_COLLAPSING)
+            tree.Unbind(wx.EVT_TREE_ITEM_COLLAPSED)
+            tree.Unbind(wx.EVT_TREE_ITEM_ACTIVATED)
+            tree.Unbind(wx.EVT_TREE_SEL_CHANGED)
+            tree.Unbind(wx.EVT_TREE_BEGIN_DRAG)
+            tree.Unbind(wx.EVT_TREE_BEGIN_LABEL_EDIT)
+            tree.Unbind(wx.EVT_TREE_END_LABEL_EDIT)
+            tree.Unbind(wx.EVT_TREE_ITEM_GETTOOLTIP)
+
+            tree.Unbind(wx.EVT_MOTION)
 
             nid = self._tree.GetRootItem()
             if nid.IsOk():
                 self._delete_node(nid)
 
-        super(SimpleEditor, self).dispose()
+        self._tree = None
+        super().dispose()
 
     def _selection_changed(self, selection):
         """ Handles the **selection** event.
         """
         try:
             self._tree.SelectItem(self._object_info(selection)[2])
-        except:
+        except Exception:
             pass
 
     def _selected_changed(self, selected):
@@ -471,7 +464,7 @@ class SimpleEditor(Editor):
         if index is None:
             cnid = tree.AppendItem(nid, label, icon, icon)
         else:
-            cnid = tree.InsertItemBefore(nid, index, label, icon, icon)
+            cnid = tree.InsertItem(nid, index, label, icon, icon)
         has_children = self._has_children(node, object)
         tree.SetItemHasChildren(cnid, has_children)
         self._set_node_data(cnid, (False, node, object))
@@ -586,7 +579,7 @@ class SimpleEditor(Editor):
             return -1
 
         icon_name = node.get_icon(object, is_expanded)
-        if isinstance(icon_name, six.string_types):
+        if isinstance(icon_name, str):
             if icon_name.startswith("@"):
                 image = convert_image(icon_name, 3)
                 if image is None:
@@ -597,7 +590,7 @@ class SimpleEditor(Editor):
                     path = self
                 else:
                     path = node.get_icon_path(object)
-                    if isinstance(path, six.string_types):
+                    if isinstance(path, str):
                         path = [path, node]
                     else:
                         path.append(node)
@@ -724,15 +717,6 @@ class SimpleEditor(Editor):
             if issubclass(klass, tuple(node.node_for)):
                 return node
         return None
-
-    def _node_for_class_name(self, class_name):
-        """ Returns the node and class associated with a specified class name.
-        """
-        for node in self.factory.nodes:
-            for klass in node.node_for:
-                if class_name == klass.__name__:
-                    return (node, klass)
-        return (None, None)
 
     def _update_icon(self, event, is_expanded):
         """ Updates the icon for a specified node.
@@ -1255,24 +1239,30 @@ class SimpleEditor(Editor):
         object = self._data[1]
         items = []
         add = node.get_add(object)
-        if len(add) > 0:
-            for klass in add:
-                prompt = False
-                if isinstance(klass, tuple):
+        # return early if there are no items to be added in the tree
+        if len(add) == 0:
+            return items
+
+        for klass in add:
+            prompt = False
+            factory = None
+            if isinstance(klass, tuple):
+                if len(klass) == 2:
                     klass, prompt = klass
-                add_node = self._node_for_class(klass)
-                if add_node is not None:
-                    class_name = klass.__name__
-                    name = add_node.get_name(object)
-                    if name == "":
-                        name = class_name
-                    items.append(
-                        Action(
-                            name=name,
-                            action="editor._menu_new_node('%s',%s)"
-                            % (class_name, prompt),
-                        )
-                    )
+                elif len(klass) == 3:
+                    klass, prompt, factory = klass
+            add_node = self._node_for_class(klass)
+            if add_node is None:
+                continue
+            class_name = klass.__name__
+            name = add_node.get_name(object)
+            if name == "":
+                name = class_name
+            if not factory:
+                factory = klass
+            def perform_add(object):
+                self._menu_new_node(factory, prompt)
+            items.append(Action(name=name, on_perform=perform_add))
         return items
 
     def _is_copyable(self, object):
@@ -1570,13 +1560,12 @@ class SimpleEditor(Editor):
             if label != "":
                 node.set_label(object, label)
 
-    def _menu_new_node(self, class_name, prompt=False):
+    def _menu_new_node(self, factory, prompt=False):
         """ Adds a new object to the current node.
         """
         node, object, nid = self._data
         self._data = None
-        new_node, new_class = self._node_for_class_name(class_name)
-        new_object = new_class()
+        new_object = factory()
         if (not prompt) or new_object.edit_traits(
             parent=self.control, kind="livemodal"
         ).result:
@@ -1706,7 +1695,7 @@ class ObjectLabel(HasStrictTraits):
     # -------------------------------------------------------------------------
 
     #: Label to be edited
-    label = Str
+    label = Str()
 
     # -------------------------------------------------------------------------
     #  Traits view definition:

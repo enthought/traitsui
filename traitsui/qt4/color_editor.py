@@ -1,3 +1,13 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
@@ -13,7 +23,6 @@
 """ Defines the various color editors for the PyQt user interface toolkit.
 """
 
-from __future__ import absolute_import, division
 
 
 from pyface.qt import QtCore, QtGui
@@ -29,7 +38,7 @@ from .editor_factory import (
 )
 
 from .editor import Editor
-import six
+
 
 
 # Standard color samples:
@@ -98,7 +107,7 @@ class SimpleColorEditor(BaseSimpleEditor):
         if not self.factory.use_native_dialog:
             options |= QtGui.QColorDialog.DontUseNativeDialog
         color = QtGui.QColorDialog.getColor(
-            color, self.control, u"Select Color", options
+            color, self.control, "Select Color", options
         )
 
         if color.isValid():
@@ -163,7 +172,7 @@ class TextColorEditor(BaseTextEditor):
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
-        self.value = six.text_type(self.control.text())
+        self.value = str(self.control.text())
         set_color(self)
 
     def update_editor(self):
@@ -297,7 +306,7 @@ def color_editor_for(editor, parent):
 
             i += 1
 
-    mapper.mapped[six.text_type].connect(editor.update_object_from_swatch)
+    mapper.mapped[str].connect(editor.update_object_from_swatch)
 
     panel.addLayout(grid)
 

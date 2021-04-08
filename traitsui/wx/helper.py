@@ -1,26 +1,18 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/25/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines helper functions and classes used to define wxPython-based trait
     editors and trait editor factories.
 """
 
 
-from __future__ import absolute_import
 from operator import itemgetter
 
 import wx
@@ -45,12 +37,13 @@ from traits.api import (
 
 from traitsui.ui_traits import convert_image, SequenceTypes
 
+from pyface.api import SystemMetrics
+
 from pyface.timer.api import do_later
 
-from .constants import standard_bitmap_width, screen_dx, screen_dy
+from .constants import standard_bitmap_width
 
 from .editor import Editor
-import six
 
 
 # -------------------------------------------------------------------------
@@ -99,7 +92,7 @@ def bitmap_cache(name, standard_size, path=None):
     if bitmap is not None:
         return bitmap
 
-    std_bitmap = bitmap = wx.BitmapFromImage(wx.Image(filename))
+    std_bitmap = bitmap = wx.Bitmap(wx.Image(filename))
     _bitmap_cache[filename] = bitmap
 
     dx = bitmap.GetWidth()
@@ -229,7 +222,10 @@ def position_window(window, width=None, height=None, parent=None):
     if parent is None:
         # Center the popup on the screen:
         window.SetSize(
-            (screen_dx - width) // 2, (screen_dy - height) // 2, width, height
+            (SystemMetrics().screen_width - width) // 2,
+            (SystemMetrics().screen_height - height) // 2,
+            width,
+            height
         )
         return
 
@@ -243,8 +239,8 @@ def position_window(window, width=None, height=None, parent=None):
         x, y, parent_dx, parent_dy = parent
 
     adjacent = getattr(window, "_kind", "popup") == "popup"
-    width = min(max(parent_dx, width), screen_dx)
-    height = min(height, screen_dy)
+    width = min(max(parent_dx, width), SystemMetrics().screen_width)
+    height = min(height, SystemMetrics().screen_height)
 
     closest = find_closest_display(x, y)
 
@@ -265,41 +261,6 @@ def top_level_window_for(control):
         parent = control.GetParent()
 
     return control
-
-
-def enum_values_changed(values):
-    """ Recomputes the mappings for a new set of enumeration values.
-    """
-
-    if isinstance(values, dict):
-        data = [(six.text_type(v), n) for n, v in values.items()]
-        if len(data) > 0:
-            data.sort(key=itemgetter(0))
-            col = data[0][0].find(":") + 1
-            if col > 0:
-                data = [(n[col:], v) for n, v in data]
-    elif not isinstance(values, SequenceTypes):
-        handler = values
-        if isinstance(handler, CTrait):
-            handler = handler.handler
-        if not isinstance(handler, BaseTraitHandler):
-            raise TraitError("Invalid value for 'values' specified")
-        if handler.is_mapped:
-            data = [(six.text_type(n), n) for n in handler.map.keys()]
-            data.sort(key=itemgetter(0))
-        else:
-            data = [(six.text_type(v), v) for v in handler.values]
-    else:
-        data = [(six.text_type(v), v) for v in values]
-
-    names = [x[0] for x in data]
-    mapping = {}
-    inverse_mapping = {}
-    for name, value in data:
-        mapping[name] = value
-        inverse_mapping[value] = name
-
-    return (names, mapping, inverse_mapping)
 
 
 def disconnect(control, *events):
@@ -353,6 +314,10 @@ class TraitsUIPanel(wx.Panel):
         """
         if event.GetWindow() in self.GetChildren():
             event.Skip()
+
+    def Destroy(self):
+        self.Unbind(wx.EVT_CHILD_FOCUS)
+        super().Destroy()
 
 
 # -------------------------------------------------------------------------
@@ -533,10 +498,10 @@ class PopupControl(HasPrivateTraits):
     control = Instance(wx.Window)
 
     #: The minimum width of the popup:
-    width = Int
+    width = Int()
 
     #: The minimum height of the popup:
-    height = Int
+    height = Int()
 
     #: Should the popup be resizable?
     resizable = Bool(False)
@@ -544,10 +509,10 @@ class PopupControl(HasPrivateTraits):
     # -- Public Traits --------------------------------------------------------
 
     #: The value (if any) set by the popup control:
-    value = Any
+    value = Any()
 
     #: Event fired when the popup control is closed:
-    closed = Event
+    closed = Event()
 
     # -- Private Traits -------------------------------------------------------
 
@@ -605,9 +570,9 @@ class PopupControl(HasPrivateTraits):
 
         # Calculate the best position and size for the pop-up:
         py = cy + cdy
-        if (py + pdy) > screen_dy:
+        if (py + pdy) > SystemMetrics().screen_height:
             if (cy - pdy) < 0:
-                bottom = screen_dy - py
+                bottom = SystemMetrics().screen_height - py
                 if cy > bottom:
                     py, pdy = 0, cy
                 else:
@@ -681,3 +646,7 @@ class Slider(wx.Slider):
 
     def _erase_background(self, event):
         pass
+
+    def Destroy(self):
+        self.Unbind(wx.EVT_ERASE_BACKGROUND)
+        super().Destroy()

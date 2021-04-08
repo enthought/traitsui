@@ -4,13 +4,12 @@
 # handler_override.py -- Example of a Handler that overrides setattr(), and
 #                        that has a user interface notification method
 
-#--[Imports]--------------------------------------------------------------
+# --[Imports]--------------------------------------------------------------
 
-from __future__ import absolute_import
 from traits.api import HasTraits, Bool
 from traitsui.api import View, Handler
 
-#--[Code]-----------------------------------------------------------------
+# --[Code]-----------------------------------------------------------------
 
 
 class TC_Handler(Handler):
@@ -25,10 +24,11 @@ class TC_Handler(Handler):
 
 
 class TestClass(HasTraits):
-    b1 = Bool
-    b2 = Bool
-    b3 = Bool
+    b1 = Bool()
+    b2 = Bool()
+    b3 = Bool()
     _updated = Bool(False)
+
 
 view1 = View('b1', 'b2', 'b3',
              title="Alter Title",

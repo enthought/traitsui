@@ -3,18 +3,17 @@
 
 # key_bindings.py -- Example of a code editor with a key bindings editor
 
-#--[Imports]--------------------------------------------------------------
-from __future__ import absolute_import
+# --[Imports]--------------------------------------------------------------
 from traits.api \
     import Button, Code, HasPrivateTraits, Str
 
 from traitsui.api \
-    import View, Item, Group, Handler, CodeEditor
+    import View, Item, Group, Handler
 
 from traitsui.key_bindings \
     import KeyBinding, KeyBindings
 
-#--[Code]-----------------------------------------------------------------
+# --[Code]-----------------------------------------------------------------
 
 key_bindings = KeyBindings(
     KeyBinding(binding1='Ctrl-s',
@@ -46,8 +45,8 @@ class CodeHandler(Handler):
 
 class KBCodeExample(HasPrivateTraits):
 
-    code = Code
-    status = Str
+    code = Code()
+    status = Str()
     kb = Button(label='Edit Key Bindings')
 
     view = View(Group(

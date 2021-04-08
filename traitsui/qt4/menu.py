@@ -1,3 +1,13 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
@@ -43,12 +53,11 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 """
 
 
-from __future__ import absolute_import, print_function
 
 import re
 
 from pyface.qt import QtGui
-import six
+
 
 
 help_pat = re.compile(r"(.*){(.*)}(.*)")
@@ -209,7 +218,7 @@ class MakeMenu:
     def get_action(self, name):
         """ Returns the QAction associated with a specified name.
         """
-        if isinstance(name, six.string_types):
+        if isinstance(name, str):
             return self.names[name]
 
         return name
@@ -240,7 +249,7 @@ class MakeMenu:
         act = self.get_action(name)
 
         if label is None:
-            return six.text_type(act.text())
+            return str(act.text())
 
         act.setText(label)
 

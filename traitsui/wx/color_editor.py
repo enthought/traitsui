@@ -1,21 +1,20 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the various color editors for the Wx user interface toolkit.
 """
 
 
-from __future__ import absolute_import
+
+import sys
+
 import wx
 import wx.adv
 
@@ -31,11 +30,8 @@ from .editor_factory import TextEditor as BaseTextEditor
 from .color_trait import w3c_color_database
 from .helper import TraitsUIPanel
 
-# Version dependent imports (ColourPtr not defined in wxPython 2.5):
-try:
-    ColorTypes = (wx.Colour, wx.ColourPtr)
-except:
-    ColorTypes = wx.Colour
+
+ColorTypes = (wx.Colour,)
 
 
 # ---------------------------------------------------------------------------
@@ -93,6 +89,7 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
 
 
 class ColorComboBox(wx.adv.OwnerDrawnComboBox):
+
     def OnDrawItem(self, dc, rect, item, flags):
 
         r = wx.Rect(rect.x, rect.y, rect.width, rect.height)
@@ -180,7 +177,11 @@ class SimpleColorEditor(BaseSimpleEditor):
         )
 
         self.control.Bind(wx.EVT_COMBOBOX, self.color_selected)
-        return
+
+    def dispose(self):
+        if self.control is not None:
+            self.control.Unbind(wx.EVT_COMBOBOX, handler=self.color_selected)
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

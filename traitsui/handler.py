@@ -1,34 +1,19 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/07/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the Handler class used to manage and control the editing process in
     a Traits-based user interface.
 """
 
-
-from __future__ import absolute_import
-
-import six
-
-if six.PY2:
-    from inspect import getargspec
-else:
-    # avoid deprecation warning
-    from inspect import getfullargspec as getargspec
+# avoid deprecation warning
+from inspect import getfullargspec
 
 from traits.api import HasPrivateTraits, HasTraits, Instance
 
@@ -142,7 +127,8 @@ class Handler(HasPrivateTraits):
         Returns
         -------
         allow_close : bool
-            A Boolean, indicating whether the window should be allowed to close.
+            A Boolean, indicating whether the window should be allowed to
+            close.
         """
         return True
 
@@ -224,7 +210,7 @@ class Handler(HasPrivateTraits):
             method = getattr(object, method_name, None)
             if method is not None:
                 # call the action method
-                specification = getargspec(method)
+                specification = getfullargspec(method)
                 if len(specification.args) == 1:
                     method()
                 else:
@@ -233,7 +219,7 @@ class Handler(HasPrivateTraits):
                 return
 
         # otherwise, call the perform method of the action
-        specification = getargspec(action.perform)
+        specification = getfullargspec(action.perform)
         if len(specification.args) == 1:
             action.perform()
         else:
@@ -603,8 +589,8 @@ class ModelView(Controller):
         wrapped around the original model). Because of this, the ModelView
         context dictionary specifies the ModelView instance itself as the
         special *object* value, and assigns the original model object as the
-        *model* value. Thus, the traits of the ModelView object can be referenced
-        in its View definition using unadorned trait names.
+        *model* value. Thus, the traits of the ModelView object can be
+        referenced in its View definition using unadorned trait names.
     """
 
     # -- HasTraits Method Overrides -------------------------------------------

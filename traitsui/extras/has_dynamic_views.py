@@ -1,18 +1,12 @@
-# -----------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2006, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: Dave Peterson <dpeterson@enthought.com>
-#
-# -----------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """
 Provides a framework that assembles Traits UI Views at run time,
@@ -83,7 +77,6 @@ _<dynamic_name>_handler : A HasTraits instance.
 
 """
 
-from __future__ import absolute_import
 
 from traits.api import Any, Bool, Dict, HasTraits, Instance, Str
 
@@ -113,15 +106,15 @@ class DynamicViewSubElement(ViewSubElement):
 
     #: Keyword arguments passed in during construction of the actual
     #: ViewSubElement instance.
-    keywords = Dict
+    keywords = Dict()
 
     # FIXME: Should be the 'Class' trait but I couldn't get that to work.
     #: The class of the actual ViewSubElement we are dynamically creating.
-    klass = Any
+    klass = Any()
 
     #: The name of this dynamic sub-element.  This controls the metadata
     #: names identifying the sub-elements that compose this element.
-    name = Str
+    name = Str()
 
 
 # -------------------------------------------------------------------------------
@@ -142,15 +135,15 @@ class DynamicView(HasTraits):
 
     #: The ID of the view.  This is the ID that the view's preferences will be
     #: saved under.
-    id = Str
+    id = Str()
 
     #: The name of the view.  This is the name that should be requested when
     #: calling edit_traits() or configure_traits().
-    name = Str
+    name = Str()
 
     #: Keyword arguments passed in during construction of the actual view
     #: instance.
-    keywords = Dict
+    keywords = Dict()
 
     #: Indicates whether this view should be the default traits view for objects
     #: it is contributed to.

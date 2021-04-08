@@ -1,25 +1,17 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2008, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   08/23/2008
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ A base class for creating custom Traits UI windows.
 """
 
 
-from __future__ import absolute_import
 import wx
 
 from traits.api import HasPrivateTraits, Instance, Property
@@ -42,10 +34,10 @@ class UIWindow(HasPrivateTraits):
     size = Instance(wx.Size, (-1, -1))
 
     #: The current width of the window:
-    width = Property
+    width = Property()
 
     #: The current height of the window:
-    height = Property
+    height = Property()
 
     # -- Public Methods -------------------------------------------------------
 

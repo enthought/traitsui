@@ -1,50 +1,36 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the various instance editors for the wxPython user interface
 toolkit.
 """
 
 
-from __future__ import absolute_import
 import wx
 
-from traits.api import HasTraits, Property
+from pyface.wx.drag_and_drop import PythonDropTarget
+from traits.api import HasTraits, Instance, Property
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.instance_editor file.
 from traitsui.editors.instance_editor import ToolkitEditorFactory
-
 from traitsui.ui_traits import AView
-
 from traitsui.helper import user_name_for
-
 from traitsui.handler import Handler
-
 from traitsui.instance_choice import InstanceChoiceItem
 
+from . import toolkit
 from .editor import Editor
-
-from .constants import DropColor, is_wx26
-
+from .constants import DropColor
 from .helper import TraitsUIPanel, position_window
-
-from pyface.wx.drag_and_drop import PythonDropTarget
 
 
 OrientationMap = {
@@ -79,7 +65,7 @@ class CustomEditor(Editor):
     # -------------------------------------------------------------------------
 
     #: List of InstanceChoiceItem objects used by the editor
-    items = Property
+    items = Property()
 
     #: The maximum extra padding that should be allowed around the editor:
     #: (Override of the Editor base class trait)
@@ -367,9 +353,7 @@ class CustomEditor(Editor):
                 self._ui = None
             else:
                 for child in panel.GetChildren():
-                    while child.GetEventHandler() is not child:
-                        child.PopEventHandler(True)
-                    child.Destroy()
+                    toolkit.destroy_control(child)
 
             # Create the new content for the panel:
             sizer = wx.BoxSizer(wx.VERTICAL)
@@ -422,16 +406,13 @@ class CustomEditor(Editor):
             # It is possible that this instance editor is embedded at some level
             # in a ScrolledWindow. If so, we need to inform the window that the
             # size of the editor's contents have (potentially) changed:
-            # NB: There is a typo in the wxPython 2.6 code that prevents the
-            # 'SendSizeEvent' from working correctly, so we just skip it.
-            if not is_wx26:
-                while (parent is not None) and (
-                    not isinstance(parent, wx.ScrolledWindow)
-                ):
-                    parent = parent.GetParent()
+            while (parent is not None) and (
+                not isinstance(parent, wx.ScrolledWindow)
+            ):
+                parent = parent.GetParent()
 
-                if parent is not None:
-                    parent.SendSizeEvent()
+            if parent is not None:
+                parent.SendSizeEvent()
 
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
@@ -500,6 +481,9 @@ class SimpleEditor(CustomEditor):
     orientation = wx.HORIZONTAL
     extra = 2
 
+    #: The ui instance for the currently open editor dialog
+    _dialog_ui = Instance("traitsui.ui.UI")
+
     def create_editor(self, parent, sizer):
         """ Creates the editor control (a button).
         """
@@ -513,6 +497,10 @@ class SimpleEditor(CustomEditor):
         button = self._button
         if button is not None:
             button.Bind(wx.EVT_BUTTON, None, id=button.GetId())
+
+        if self._dialog_ui is not None:
+            self._dialog_ui.dispose()
+            self._dialog_ui = None
 
         super(SimpleEditor, self).dispose()
 
@@ -539,6 +527,7 @@ class SimpleEditor(CustomEditor):
             # have its own:
             if ui.history is None:
                 ui.history = self.ui.history
+        self._dialog_ui = ui
 
     def resynch_editor(self):
         """ Resynchronizes the contents of the editor when the object trait

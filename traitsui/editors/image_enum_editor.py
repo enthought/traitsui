@@ -1,26 +1,16 @@
-# ------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2008, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-# ------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the image enumeration editor factory for all traits user interface
 toolkits.
 """
-
-
-from __future__ import absolute_import
 
 import sys
 
@@ -28,7 +18,7 @@ from os import getcwd
 
 from os.path import join, dirname, exists
 
-from traits.api import Module, Type, Unicode, on_trait_change
+from traits.api import Module, Type, Str, observe
 
 from .enum_editor import ToolkitEditorFactory as EditorFactory
 
@@ -45,16 +35,16 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     # -------------------------------------------------------------------------
     #: Prefix to add to values to form image names:
-    prefix = Unicode
+    prefix = Str()
 
     #: Suffix to add to values to form image names:
-    suffix = Unicode
+    suffix = Str()
 
     #: Path to use to locate image files:
-    path = Unicode
+    path = Str()
 
     #: Class used to derive the path to the image files:
-    klass = Type
+    klass = Type()
 
     #: Module used to derive the path to the image files:
     module = Module
@@ -66,8 +56,8 @@ class ToolkitEditorFactory(EditorFactory):
         super(ToolkitEditorFactory, self).init()
         self._update_path()
 
-    @on_trait_change("path, klass, module")
-    def _update_path(self):
+    @observe("path, klass, module")
+    def _update_path(self, event=None):
         """ Handles one of the items defining the path being updated.
         """
         if self.path != "":

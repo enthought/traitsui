@@ -1,3 +1,13 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
@@ -14,7 +24,6 @@
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -43,6 +52,11 @@ class SimpleEditor(Editor):
         self.control = QtGui.QCheckBox()
         self.control.stateChanged.connect(self.update_object)
         self.set_tooltip()
+
+    def dispose(self):
+        if self.control is not None:
+            self.control.stateChanged.disconnect(self.update_object)
+        super().dispose()
 
     def update_object(self, state):
         """ Handles the user clicking the checkbox.

@@ -1,15 +1,12 @@
-#  Copyright (c) 2005-18, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/07/2004
+# Thanks for using Enthought open source!
 
 """
 Defines the stub functions used for creating concrete implementations of
@@ -19,7 +16,6 @@ Most of the logic for determining which backend toolkit to use can now be
 found in :py:mod:`pyface.base_toolkit`.
 """
 
-from __future__ import absolute_import
 
 import logging
 
@@ -217,8 +213,8 @@ class Toolkit(Toolkit):
         ----------
         context : object or dictionary
             A single object or a dictionary of string/object pairs, whose trait
-            attributes are to be edited. If not specified, the current object is
-            used.
+            attributes are to be edited. If not specified, the current object
+            is used.
         view : view or string
             A View object that defines a user interface for editing trait
             attribute values.
@@ -236,8 +232,8 @@ class Toolkit(Toolkit):
             are saved.
         scrollable : Boolean
             Indicates whether the dialog box should be scrollable. When set to
-            True, scroll bars appear on the dialog box if it is not large enough
-            to display all of the items in the view at one time.
+            True, scroll bars appear on the dialog box if it is not large
+            enough to display all of the items in the view at one time.
 
         """
         raise NotImplementedError(
@@ -342,7 +338,8 @@ class Toolkit(Toolkit):
     def constants(self):
         """ Returns a dictionary of useful constants.
 
-            Currently, the dictionary should have the following key/value pairs:
+            Currently, the dictionary should have the following key/value
+            pairs:
 
             - WindowColor': the standard window background color in the toolkit
               specific color format.
