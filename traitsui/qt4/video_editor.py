@@ -291,7 +291,9 @@ class VideoEditor(Editor):
         self.state = reversed_state_map[state]
 
     def _position_changed_emitted(self, position):
-        self.position = position / 1000.0
+        # Avoid telling Qt about the new position in `_position_changed`
+        with self.updating_value():
+            self.position = position / 1000.0
 
     def _duration_changed_emitted(self, duration):
         self.duration = duration / 1000.0
@@ -338,7 +340,7 @@ class VideoEditor(Editor):
                 self.media_player.pause()
 
     def _position_changed(self):
-        if self.media_player is not None:
+        if self.media_player is not None and not self.updating:
             # position is given in ms
             self.media_player.setPosition(int(self.position * 1000))
 

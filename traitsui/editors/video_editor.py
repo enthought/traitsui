@@ -37,7 +37,7 @@ class VideoEditor(BasicEditorFactory):
 
     #: The behaviour of the video display when the widget aspect ratio
     #: doesn't match the aspect ratio of the video stream.
-    aspect_ratio = AspectRatio
+    aspect_ratio = AspectRatio()
 
     #: The name of a trait to synchronise with the audio muted state of
     #: the video.  The referenced trait should be a Bool.
@@ -83,4 +83,4 @@ class VideoEditor(BasicEditorFactory):
     def _get_klass(self):
         """ Returns the editor class to be instantiated.
         """
-        return toolkit_object("video_editor:VideoEditor")
+        return toolkit_object('video_editor:VideoEditor')
