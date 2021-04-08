@@ -242,7 +242,7 @@ def install(runtime, toolkit, environment, editable, source):
     # pip install pyqt5 and pyside2, because we don't have them in EDM yet
     if toolkit == 'pyside2':
         commands.append(
-            "edm run -e {environment} -- pip install pyside2"
+            "edm install -y -e {environment} pyside2 --add-repository enthought/lgpl"
         )
     elif toolkit == 'wx':
         if sys.platform != 'linux':
