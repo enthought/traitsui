@@ -16,17 +16,17 @@ from traitsui.api import Item, View
 from traitsui.editors.video_editor import MediaStatus, PlayerState, VideoEditor
 from traitsui.tests._tools import BaseTestMixin, create_ui, is_qt5
 
-filename = pkg_resources.resource_filename("traitsui.testing", "data/test.mp4")
+filename = pkg_resources.resource_filename('traitsui.testing', 'data/test.mp4')
 
 
 class MovieTheater(HasTraits):
     url = File(filename)
 
-    state = PlayerState
-    duration = Float
+    state = PlayerState()
+    duration = Float()
     position = Range(low=0.0, high='duration')
-    error = Str
-    status = MediaStatus
+    error = Str()
+    status = MediaStatus()
     buffer = Range(0, 100)
     muted = Bool(True)
     volume = Range(0.0, 100.0, value=100.0)
@@ -34,7 +34,7 @@ class MovieTheater(HasTraits):
     image_fun = Callable()
 
 
-@unittest.skipIf(not is_qt5(), "Requires Qt5")
+@unittest.skipIf(not is_qt5(), 'Requires Qt5')
 class TestVideoEditor(BaseTestMixin, unittest.TestCase):
 
     def setUp(self):
