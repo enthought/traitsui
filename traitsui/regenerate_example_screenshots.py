@@ -1,15 +1,9 @@
 import contextlib
-import io
 import os
-import sys
-import traceback
-import unittest
 from unittest import mock
 from functools import partialmethod
 
 import pkg_resources
-
-from pyface.qt import QtGui
 
 from traits.api import HasTraits
 from traitsui.testing.api import UITester
@@ -109,6 +103,7 @@ def replace_configure_traits(screenshot_name):
         yield
     finally:
         HasTraits.configure_traits = original_func
+
 
 def run_file(file_path):
     """ Execute a given Python file.
