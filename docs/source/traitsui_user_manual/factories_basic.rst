@@ -706,7 +706,7 @@ same type of editor, regardless of the style specified. Figure 34 shows an HTML
 editor in the upper pane, with a code editor in the lower pane, displaying the
 uninterpreted text.
 
-.. figure:: images/HTMLEditor_demo.png
+.. figure:: images/html_code_editor.png
    :alt: formatted and unformatted HTML text
 
    Figure 34: Example HTML editor, with code editor showing original text
