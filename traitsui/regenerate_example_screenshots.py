@@ -83,7 +83,7 @@ def replaced_configure_traits(
         **args,
     )
     with UITester().create_ui(instance, ui_kwargs) as ui:
-        ui_pixmap = QtGui.QPixmap.grabWidget(ui.control)
+        ui_pixmap = ui.control.grab()
         ui_pixmap.save(
             os.path.join(
                 "docs",

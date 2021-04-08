@@ -238,12 +238,10 @@ CodeEditor()
     *auto_set*
 
 The purpose of a code editor is to display and edit Code traits, though it can
-be used with the Str and String trait types as well. In the simple and custom
-styles (which are identical for this editor), the text is displayed in numbered,
-non-wrapping lines with a horizontal scrollbar. The text style displays the
-trait value using a single scrolling line with special characters to represent
-line breaks. The read-only style is similar to the simple and custom styles
-except that the text is not editable.
+be used with the Str and String trait types as well. In the simple, text, and
+custom styles (which are identical for this editor), the text is displayed in
+numbered, non-wrapping lines with a horizontal scrollbar. The read-only style
+is similar to the other styles except that the text is not editable.
 
 .. figure:: images/CodeEditor_demo.png
    :alt: simple, custom, and read-only: multi-line, numbered, text field; text: single line text field
@@ -277,13 +275,13 @@ Figure 26.
 
    Figure 26: Color editor styles
 
-In the simple style, the editor appears as a text box whose background is a
-sample of the currently selected color. The text in the box is either a color
-name or a tuple of the form (*r*, *g*, *b*) where *r*, *g*, and *b* are the
-numeric values of the red, green and blue color components respectively. (Which
-representation is used depends on how the value was entered.) The text value is
-not directly editable in this style of editor; instead, clicking on the text box
-displays a pop-up panel similar in appearance and function to the custom style.
+In the simple style, the editor appears as a text box. The text in the box is
+either a color name or a tuple of the form (*r*, *g*, *b*) where *r*, *g*, and
+*b* are the numeric values of the red, green and blue color components
+respectively. (Which representation is used depends on how the value was
+entered.) The text value is not directly editable in this style of editor;
+instead, clicking on the text box displays a pop-up panel similar in appearance
+and function to the custom style.
 
 The custom style includes a labeled color swatch on the left, representing the
 current value of the Color trait, and a palette of common color choices on the
@@ -590,7 +588,8 @@ FileEditor()
     *entries*, *filter*, *filter_name*, *reload_name*, *truncate_ext*, *dclick_name*, *dialog_style*
 
 A file editor enables the user to display a File trait or set it to some file in
-the local system hierarchy. The styles of this editor are shown in Figure 31.
+the local system hierarchy. The styles of this editor are shown in the
+following Figure.
 
 .. figure:: images/FileEditor_demo.png
    :alt: simple: text box with 'Browse' or '...' button; custom: file tree; text: text box; read-only: read-only
@@ -615,11 +614,11 @@ The custom style displays a file system browser panel, in which the user can
 expand or collapse directory structures, and click an icon to select a file.
 
 You can specify a list of filters to apply to the file names displayed, using
-the *filter* keyword parameter of the factory function. In Figure 31, the
-"Custom with Filter" editor uses a *filter* value of ``['*.py']`` to display only
-Python source files. You can also specify this parameter for the simple style,
-and it will be used in the file selection dialog box or pop-up file system
-browser panel. Alternatively, you can specify *filter_name*, whose value is an
+the *filter* keyword parameter of the factory function. For example, you could
+use a *filter* value of ``['*.py']`` to display only Python source files.
+You can also specify this parameter for the simple style, and it will be used
+in the file selection dialog box or pop-up file system browser panel.
+Alternatively, you can specify *filter_name*, whose value is an
 extended trait name of a trait attribute that contains the list of filters.
 
 The *reload_name* parameter is an extended trait name of a trait attribute that
