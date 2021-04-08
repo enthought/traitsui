@@ -8,10 +8,8 @@
 
 """Traits UI 'display only' video editor."""
 
-from __future__ import absolute_import
-
 import numpy as np
-from PIL import Image
+
 from pyface.qt.QtCore import QPoint, Qt, QUrl, Signal
 from pyface.qt.QtGui import QImage, QPainter, QPalette, QSizePolicy
 from pyface.qt.QtMultimedia import (QAbstractVideoBuffer,

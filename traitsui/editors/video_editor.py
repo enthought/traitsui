@@ -8,10 +8,7 @@
 
 """Traits UI 'display only' video editor."""
 
-
-from __future__ import absolute_import
-
-from traits.api import Callable, Enum, Property, Str
+from traits.api import Enum, Property, Str
 
 from ..basic_editor_factory import BasicEditorFactory
 from ..toolkit import toolkit_object
