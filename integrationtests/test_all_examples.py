@@ -25,6 +25,7 @@ from traits.api import HasTraits
 from traitsui.tests._tools import (
     BaseTestMixin,
     is_qt,
+    is_qt5,
     is_wx,
     process_cascade_events,
     requires_toolkit,
@@ -188,6 +189,11 @@ SEARCHER.skip_file_if(
     os.path.join(DEMO, "Misc", "demo_group_size.py"),
     is_wx,
     "enable tries to import a missing constant. See enthought/enable#307",
+)
+SEARCHER.skip_file_if(
+    os.path.join(DEMO, "Standard_Editors", "VideoEditor_demo.py"),
+    lambda: not is_qt5(),
+    "Only supported on Qt5"
 )
 SEARCHER.skip_file_if(
     os.path.join(TUTORIALS, "view_multi_object.py"),

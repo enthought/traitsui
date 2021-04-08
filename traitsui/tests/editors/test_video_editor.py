@@ -11,14 +11,10 @@ import unittest
 
 import pkg_resources
 
-try:
-    from pyface.qt import is_qt5
-except ImportError:
-    is_qt5 = False
 from traits.api import Bool, Callable, File, Float, HasTraits, Range, Str
 from traitsui.api import Item, View
 from traitsui.editors.video_editor import MediaStatus, PlayerState, VideoEditor
-from traitsui.tests._tools import BaseTestMixin, create_ui
+from traitsui.tests._tools import BaseTestMixin, create_ui, is_qt5
 
 filename = pkg_resources.resource_filename("traitsui.testing", "data/test.mp4")
 
@@ -38,7 +34,7 @@ class MovieTheater(HasTraits):
     image_fun = Callable()
 
 
-@unittest.skipIf(not is_qt5, "Requires Qt5")
+@unittest.skipIf(not is_qt5(), "Requires Qt5")
 class TestVideoEditor(BaseTestMixin, unittest.TestCase):
 
     def setUp(self):
