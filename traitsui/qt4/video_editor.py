@@ -18,8 +18,7 @@ from pyface.qt.QtMultimedia import (QAbstractVideoBuffer,
                                     QAbstractVideoSurface, QAudio,
                                     QMediaContent, QMediaPlayer, QVideoFrame)
 from pyface.qt.QtMultimediaWidgets import QVideoWidget
-from traits.api import (Array, Bool, Callable, Float, Instance, Property,
-                        Range, Str)
+from traits.api import Bool, Callable, Float, Instance, Range, Str
 from traitsui.editors.video_editor import AspectRatio, MediaStatus, PlayerState
 
 from .editor import Editor
@@ -96,8 +95,8 @@ class VideoSurface(QAbstractVideoSurface):
 
     frameAvailable = Signal(['QImage'])
 
-    def __init__(self, *args, widget=None, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, widget=None):
+        super().__init__()
         self.widget = widget
 
     def supportedPixelFormats(self, handleType):
@@ -125,12 +124,6 @@ class VideoEditor(Editor):
     itself with displaying the video, and provides traits that control
     behaviour and provide internal state of the control during playback.
     """
-
-    #: function to apply to the image. Takes frame to new frame
-    image_fun = Callable()
-
-    #: current held frame of the video viewer
-    frame = Property(Array(shape=(None, None, 3), dtype='u1'))
 
     #: does the drawing onto the image plane
     control = Instance(QVideoWidget)
@@ -177,10 +170,14 @@ class VideoEditor(Editor):
     #: The playback rate.  Negative values rewind the video.
     playback_rate = Float(1.0)
 
-    def _get_frame(self):
-        return self.control._np_image
+    #: Function to apply to the image. Takes ref to new frame and a size tuple
+    image_fun = Callable()
 
     def update_to_regular(self):
+        if self.surface is not None:
+            self.surface.frameAvailable.disconnect(self.control.setImage)
+            self.surface = None
+
         self.control = QVideoWidget()
         self.control.setSizePolicy(
             QSizePolicy.Expanding, QSizePolicy.Expanding
@@ -240,6 +237,7 @@ class VideoEditor(Editor):
 
     def dispose(self):
         self._disconnect_signals()
+        super().dispose()
 
     def update_editor(self):
         """Update the editor when the object trait changes externally."""

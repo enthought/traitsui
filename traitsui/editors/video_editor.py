@@ -65,7 +65,7 @@ class VideoEditor(BasicEditorFactory):
     duration = Str(sync_value='to', sync_name='duration')
 
     #: The name of a trait to synchronise with the player's media status.
-    #: The referenced trait should be a Str.
+    #: The referenced trait should be a MediaStatus.
     media_status = Str(sync_value='to', sync_name='media_status')
 
     #: The name of a trait to synchronise with the player's buffer status.
