@@ -64,8 +64,9 @@ class ImageWidget(QVideoWidget):
         self.painter = None
         self.resizeEvent(None)
         if image_fun is None:
-            def I_fun(image):
-                return image
+            def I_fun(image, bbox):
+                # Don't bother with creating an ndarray version
+                return image, self._np_image
             self.image_fun = I_fun
         else:
             self.image_fun = image_fun
@@ -237,6 +238,10 @@ class VideoEditor(Editor):
 
     def dispose(self):
         self._disconnect_signals()
+        if self.media_player is not None:
+            # Avoid a segfault if the media player is currently playing
+            self.media_player.setVideoOutput(None)
+
         super().dispose()
 
     def update_editor(self):
