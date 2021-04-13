@@ -57,19 +57,19 @@ media_status_map = {
 class ImageWidget(QVideoWidget):
     """ Paints a QImage to the window body. """
 
-    def __init__(self, parent=None, image_fun=None):
+    def __init__(self, parent=None, image_func=None):
         super().__init__(parent)
         self.image = QImage()
         self._np_image = np.zeros(shape=(0, 0, 4))
         self.painter = None
         self.resizeEvent(None)
-        if image_fun is None:
+        if image_func is None:
             def I_fun(image, bbox):
                 # Don't bother with creating an ndarray version
                 return image, self._np_image
-            self.image_fun = I_fun
+            self.image_func = I_fun
         else:
-            self.image_fun = image_fun
+            self.image_func = image_func
 
     def resizeEvent(self, event):
         s = self.size()
@@ -77,7 +77,7 @@ class ImageWidget(QVideoWidget):
         self.height = s.height()
 
     def setImage(self, image):
-        self.image, self._np_image = self.image_fun(
+        self.image, self._np_image = self.image_func(
             image, (self.width, self.height)
         )
         self.update()
@@ -126,10 +126,10 @@ class VideoEditor(Editor):
     behaviour and provide internal state of the control during playback.
     """
 
-    #: does the drawing onto the image plane
+    #: Does the drawing onto the image plane
     control = Instance(QVideoWidget)
 
-    #: handels the image pulling so the frames can be processed.
+    #: Handles the image pulling so the frames can be processed.
     surface = Instance(QAbstractVideoSurface)
 
     #: The QMediaObject that holds the connection to the video stream.
@@ -153,26 +153,33 @@ class VideoEditor(Editor):
     #: named by factory.duration.
     duration = Float()
 
-    #: The media player playback status (loading, buffering, etc.).
+    #: The media player playback status (loading, buffering, etc.),
+    #: synchronized to the trait named by factory.media_status.
     media_status = MediaStatus()
 
-    #: The percentage of the buffer currently filled.
+    #: The percentage of the buffer currently filled, synchronized to the trait
+    #: named by factory.buffer.
     buffer = Range(0, 100)
 
-    #: A string holding the video error state, or "" if no error.
+    #: A string holding the video error state, or "" if no error. Synchronized
+    #: to the trait named by factory.video_error.
     video_error = Str()
 
-    #: Whether the audio is muted or not.
+    #: Whether the audio is muted or not, synchronized to the trait named by
+    #: factory.muted.
     muted = Bool(False)
 
-    #: The playback volume on a logarithmic scale (perceptually linear).
+    #: The playback volume on a logarithmic scale (perceptually linear),
+    #: synchronized to the trait named by factory.volume.
     volume = Range(0.0, 100.0)
 
     #: The playback rate.  Negative values rewind the video.
+    #: Synchronized to the trait named by factory.playback_rate.
     playback_rate = Float(1.0)
 
-    #: Function to apply to the image. Takes ref to new frame and a size tuple
-    image_fun = Callable()
+    #: Function to apply to the image. Takes ref to new frame and a size tuple.
+    #: Synchronized to the trait named by factory.image_func.
+    image_func = Callable()
 
     def update_to_regular(self):
         if self.surface is not None:
@@ -187,7 +194,7 @@ class VideoEditor(Editor):
         self.media_player.setVideoOutput(self.control)
 
     def update_to_functional(self):
-        self.control = ImageWidget(image_fun=self.image_fun)
+        self.control = ImageWidget(image_func=self.image_func)
         self.control.setSizePolicy(
             QSizePolicy.Expanding, QSizePolicy.Expanding
         )
@@ -198,8 +205,8 @@ class VideoEditor(Editor):
 
         self.media_player.setVideoOutput(self.surface)
 
-    def _image_fun_changed(self):
-        if self.image_fun is None:
+    def _image_func_changed(self):
+        if self.image_func is None:
             self.update_to_regular()
         else:
             self.update_to_functional()

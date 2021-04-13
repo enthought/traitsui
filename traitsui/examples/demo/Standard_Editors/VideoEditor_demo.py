@@ -43,13 +43,13 @@ def np_from_QImage(qimage):
 
 
 def qimage_function(antialiasing=True):
-    def antialis_fun(image_fun):
+    def antialias_func(image_func):
         """
-        Turns a image funciton into a QImage function,
+        Turns an image function into a QImage function,
         bound within the viewing frames box.
         """
-        def qimage_conv_fun(image, box_dims):
-            _np_image = image_fun(np_from_QImage(image))
+        def qimage_conv_func(image, box_dims):
+            _np_image = image_func(np_from_QImage(image))
             pil_image = Image.fromarray(_np_image)
             if antialiasing:
                 pil_image.thumbnail(box_dims, Image.ANTIALIAS)
@@ -58,12 +58,12 @@ def qimage_function(antialiasing=True):
             _np_image = np.array(pil_image)
             image = QImage_from_np(_np_image)
             return image, _np_image
-        return qimage_conv_fun
-    return antialis_fun
+        return qimage_conv_func
+    return antialias_func
 
 
 @qimage_function(antialiasing=False)
-def test_image_fun(image):
+def test_image_func(image):
     return image.transpose(1, 0, 2)
 
 
@@ -73,7 +73,7 @@ class VideoEditorDemo(HasTraits):
     #: The URL that holds the video data.
     video_url = Str()
 
-    #: A button that
+    #: A button that plays/pauses
     play_pause_button = Button()
 
     button_label = Str('Play')
@@ -96,7 +96,7 @@ class VideoEditorDemo(HasTraits):
 
     playback_rate = Float(1.0)
 
-    image_fun = Callable()
+    image_func = Callable()
 
     def _state_changed(self, new):
         if new == 'stopped' or new == 'paused':
@@ -125,7 +125,7 @@ class VideoEditorDemo(HasTraits):
                 muted='muted',
                 volume='volume',
                 playback_rate='playback_rate',
-                image_fun='image_fun'
+                image_func='image_func'
             ),
         ),
         HGroup(
@@ -156,10 +156,10 @@ class VideoEditorDemo(HasTraits):
     )
 
 
+url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"  # noqa: E501
 # Create the demo:
-demo = VideoEditorDemo(image_fun=test_image_fun)
-# demo = VideoEditorDemo()
-demo.video_url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"  # noqa: E501
+demo = VideoEditorDemo(image_func=test_image_func, video_url=url)
+# demo = VideoEditorDemo(video_url=url)
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':

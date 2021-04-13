@@ -48,7 +48,7 @@ class VideoEditor(BasicEditorFactory):
     #: Values are on a logarithmic scale.
     volume = Str(sync_value='from', sync_name='volume')
 
-    #: The name of a trait to synchronise with the audio muted state of
+    #: The name of a trait to synchronise with the playback rate of
     #: the video.  The referenced trait should be a Float.
     playback_rate = Str(sync_value='from', sync_name='playback_rate')
 
@@ -78,7 +78,7 @@ class VideoEditor(BasicEditorFactory):
 
     #: The name of a trait to synchronise with the player's image function.
     #: The referenced trait should be a Str.
-    image_fun = Str(sync_value='both', sync_name='image_fun')
+    image_func = Str(sync_value='both', sync_name='image_func')
 
     def _get_klass(self):
         """ Returns the editor class to be instantiated.
