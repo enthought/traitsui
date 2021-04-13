@@ -18,7 +18,7 @@ from pyface.qt.QtMultimedia import (QAbstractVideoBuffer,
                                     QAbstractVideoSurface, QAudio,
                                     QMediaContent, QMediaPlayer, QVideoFrame)
 from pyface.qt.QtMultimediaWidgets import QVideoWidget
-from traits.api import Bool, Callable, Float, Instance, Range, Str
+from traits.api import Bool, Callable, Float, Instance, Range, Str, observe
 from traitsui.editors.video_editor import AspectRatio, MediaStatus, PlayerState
 
 from .editor import Editor
@@ -205,12 +205,6 @@ class VideoEditor(Editor):
 
         self.media_player.setVideoOutput(self.surface)
 
-    def _image_func_changed(self):
-        if self.image_func is None:
-            self.update_to_regular()
-        else:
-            self.update_to_functional()
-
     # ------------------------------------------------------------------------
     # Editor interface
     # ------------------------------------------------------------------------
@@ -233,11 +227,11 @@ class VideoEditor(Editor):
         self._set_video_url()
         self.media_player.setVideoOutput(self.control)
         self.media_player.setMuted(self.muted)
-        self._state_changed()
-        self._aspect_ratio_changed()
-        self._muted_changed()
-        self._volume_changed()
-        self._playback_rate_changed()
+        self._update_state()
+        self._update_aspect_ratio()
+        self._update_muted()
+        self._update_volume()
+        self._update_playback_rate()
 
         self._connect_signals()
 
@@ -322,51 +316,80 @@ class VideoEditor(Editor):
 
     # Trait change handlers -------------------------------------------------
 
-    def _media_content_changed(self):
+    @observe('aspect_ratio')
+    def _aspect_ratio_observer(self, event):
+        if self.control is not None:
+            self._update_aspect_ratio()
+
+    @observe('image_func')
+    def _image_func_observer(self, event):
+        if self.image_func is None:
+            self.update_to_regular()
+        else:
+            self.update_to_functional()
+
+    @observe('media_content')
+    def _media_content_observer(self, event):
         self.video_error = ''
         if self.media_player is not None:
             self.media_player.setMedia(self.media_content)
 
-    def _aspect_ratio_changed(self):
-        if self.control is not None:
-            self.control.setAspectRatioMode(
-                aspect_ratio_map[self.aspect_ratio]
-            )
-
-    def _state_changed(self):
+    @observe('muted')
+    def _muted_observer(self, event):
         if self.media_player is not None:
-            if self.state == 'stopped':
-                self.media_player.stop()
-                self.control.repaint()
-            elif self.state == 'playing':
-                # XXX forcing a resize so video is scaled correctly on MacOS
-                s = self.control.size()
-                w = s.width()
-                h = s.height()
-                self.media_player.play()
-                self.control.resize(w+1, h+1)
-                self.control.resize(w, h)
-            elif self.state == 'paused':
-                self.media_player.pause()
+            self._update_muted()
 
-    def _position_changed(self):
+    @observe('playback_rate')
+    def _playback_rate_observer(self, event):
+        if self.media_player is not None:
+            self._update_playback_rate()
+
+    @observe('position')
+    def _position_observer(self, event):
         if self.media_player is not None and not self.updating:
             # position is given in ms
             self.media_player.setPosition(int(self.position * 1000))
 
-    def _muted_changed(self):
+    @observe('state')
+    def _state_observer(self, event):
         if self.media_player is not None:
-            self.media_player.setMuted(self.muted)
+            self._update_state()
 
-    def _volume_changed(self):
+    @observe('volume')
+    def _volume_observer(self, event):
         if self.media_player is not None:
-            linear_volume = QAudio.convertVolume(
-                self.volume/100.0,
-                QAudio.LogarithmicVolumeScale,
-                QAudio.LinearVolumeScale,
-            )
-            self.media_player.setVolume(int(linear_volume * 100))
+            self._update_volume()
 
-    def _playback_rate_changed(self):
-        if self.media_player is not None:
-            self.media_player.setPlaybackRate(self.playback_rate)
+    # MediaPlayer management ------------------------------------------------
+
+    def _update_aspect_ratio(self):
+        self.control.setAspectRatioMode(aspect_ratio_map[self.aspect_ratio])
+
+    def _update_muted(self):
+        self.media_player.setMuted(self.muted)
+
+    def _update_playback_rate(self):
+        self.media_player.setPlaybackRate(self.playback_rate)
+
+    def _update_state(self):
+        if self.state == 'stopped':
+            self.media_player.stop()
+            self.control.repaint()
+        elif self.state == 'playing':
+            # XXX forcing a resize so video is scaled correctly on MacOS
+            s = self.control.size()
+            w = s.width()
+            h = s.height()
+            self.media_player.play()
+            self.control.resize(w+1, h+1)
+            self.control.resize(w, h)
+        elif self.state == 'paused':
+            self.media_player.pause()
+
+    def _update_volume(self):
+        linear_volume = QAudio.convertVolume(
+            self.volume/100.0,
+            QAudio.LogarithmicVolumeScale,
+            QAudio.LinearVolumeScale,
+        )
+        self.media_player.setVolume(int(linear_volume * 100))
