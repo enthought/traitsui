@@ -347,6 +347,7 @@ if __name__ == "__main__":
                 'images/*',
                 'wx/images/*',
                 'qt4/images/*',
+                'testing/data/*',
             ]),
         packages=find_packages(),
         entry_points={
