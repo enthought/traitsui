@@ -17,7 +17,9 @@ Demonstrates a 'display only' video editor for Qt5+
 import numpy as np
 from PIL import Image
 from pyface.qt.QtGui import QImage
-from traits.api import Bool, Button, Callable, Float, HasTraits, Range, Str
+from traits.api import (
+    Bool, Button, Callable, Float, HasTraits, Range, Str, observe
+)
 from traitsui.api import ButtonEditor, HGroup, Item, UItem, View
 from traitsui.editors.video_editor import MediaStatus, PlayerState, VideoEditor
 
@@ -98,13 +100,15 @@ class VideoEditorDemo(HasTraits):
 
     image_func = Callable()
 
-    def _state_changed(self, new):
-        if new == 'stopped' or new == 'paused':
+    @observe('state')
+    def _state_update(self, event):
+        if event.new == 'stopped' or event.new == 'paused':
             self.button_label = 'Play'
-        elif new == 'playing':
+        elif event.new == 'playing':
             self.button_label = 'Pause'
 
-    def _play_pause_button_changed(self):
+    @observe('play_pause_button')
+    def _play_pause_button_click(self, event):
         if self.state == 'stopped' or self.state == 'paused':
             self.state = 'playing'
         else:
