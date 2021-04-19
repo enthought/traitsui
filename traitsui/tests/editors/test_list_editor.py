@@ -11,7 +11,9 @@
 import unittest
 
 from pyface.toolkit import toolkit_object
-from traits.api import Directory, HasStrictTraits, Instance, Int, List, Str
+from traits.api import (
+    Directory, HasStrictTraits, Instance, Int, List, Str, TraitError
+)
 
 from traitsui.api import Item, ListEditor, View
 from traitsui.testing.api import (
@@ -181,7 +183,6 @@ class TestSimpleListEditor(unittest.TestCase):
     @requires_toolkit([ToolkitName.qt])
     @unittest.skipIf(no_modal_dialog_tester, "ModalDialogTester unavailable")
     def test_add_item_fails(self):
-        from traits.api import TraitError
 
         class Foo(HasStrictTraits):
             dirs = List(Directory(exists=True))
