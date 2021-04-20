@@ -37,9 +37,7 @@ class ButtonTextEdit(HasTraits):
     play_button_label = Str("I'm a play button")
 
     play_button_image = Image(
-        ImageResource(
-            name="run", search_path='traitsui/examples/demos/Advanced/images'
-        )
+        ImageResource(name="run")
     )
 
     values = List()
