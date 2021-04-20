@@ -158,7 +158,7 @@ class LeagueModelView(ModelView):
     got_hit = Button('Got a Hit')
 
     # The total number of hits
-    total_hits = Property(observe='model.teams.players.hits')
+    total_hits = Property(depends_on='model.teams.players.hits')
 
     @cached_property
     def _get_total_hits(self):
