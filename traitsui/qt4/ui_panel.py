@@ -993,7 +993,7 @@ class _GroupPanel(object):
         if item.enabled_when:
             self._label_enabled_whens.append((item.enabled_when, label))
 
-        for object in ui.context.values():
+        for object in self.ui.context.values():
             object.on_trait_change(lambda: self._label_when(), dispatch="ui")
 
     def _add_separator_item(self, item, columns, inner, row, col, show_labels):
