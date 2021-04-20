@@ -61,8 +61,8 @@ class Converter(HasStrictTraits):
     # Trait definitions:
     input_amount = CFloat(12.0, desc="the input quantity")
     input_units = Units('inches', desc="the input quantity's units")
-    output_amount = Property(depends_on=['input_amount', 'input_units',
-                                         'output_units'],
+    output_amount = Property(observe=['input_amount', 'input_units',
+                                      'output_units'],
                              desc="the output quantity")
     output_units = Units('feet', desc="the output quantity's units")
 
