@@ -112,6 +112,9 @@ class CustomEditor(SimpleEditor):
         self.sync_value(self.factory.image_value, "image", "from")
         self.set_tooltip()
 
+    def _label_changed(self, label):
+        self._control.label = self.string_value(label)
+
     @observe("image")
     def _image_updated(self, event):
         image = event.new

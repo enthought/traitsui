@@ -66,6 +66,7 @@ class ButtonEditorDemo(HasTraits):
             editor=ButtonEditor(
                 label_value="my_button_label",
                 image_value="my_button_image",
+                orientation="horizontal"
             )
         ),
         Item("my_button_label"),
