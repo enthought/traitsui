@@ -11,8 +11,6 @@
 """ Defines the tree-based Python value editor and the value editor factory.
 """
 
-
-
 from traits.api import Bool, Instance, Int
 
 from .tree_editor import TreeEditor

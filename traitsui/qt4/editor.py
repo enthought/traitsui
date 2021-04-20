@@ -24,7 +24,7 @@
 """
 
 
-from pyface.qt import QtGui
+from pyface.qt import QtCore, QtGui
 
 from traits.api import HasTraits, Instance, Str, Callable
 
@@ -78,9 +78,16 @@ class Editor(UIEditor):
         else:
             control = self.control
 
-        QtGui.QMessageBox.information(
-            control, self.description + " value error", str(excp)
+        message_box = QtGui.QMessageBox(
+            QtGui.QMessageBox.Information,
+            self.description + " value error",
+            str(excp),
+            buttons=QtGui.QMessageBox.Ok,
+            parent=control
         )
+        message_box.setTextFormat(QtCore.Qt.PlainText)
+        message_box.setEscapeButton(QtGui.QMessageBox.Ok)
+        message_box.exec_()
 
     def set_tooltip_text(self, control, text):
         """ Sets the tooltip for a specified control.

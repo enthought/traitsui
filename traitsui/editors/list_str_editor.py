@@ -11,8 +11,6 @@
 """ Traits UI editor factory for editing lists of strings.
 """
 
-
-
 from traits.api import Any, Str, Enum, List, Bool, Instance, Property
 
 from ..basic_editor_factory import BasicEditorFactory
@@ -43,8 +41,8 @@ class ListStrEditor(BasicEditorFactory):
     #: indices with:
     selected_index = Str()
 
-    #: The optional extended name of the trait to synchronize the activated value
-    #: with:
+    #: The optional extended name of the trait to synchronize the activated
+    #: value with:
     activated = Str()
 
     #: The optional extended name of the trait to synchronize the activated

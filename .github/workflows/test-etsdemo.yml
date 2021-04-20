@@ -8,14 +8,14 @@ on:
     - 'ets-demo/**'
 
 env:
-  INSTALL_EDM_VERSION: 3.2.1
+  INSTALL_EDM_VERSION: 3.2.3
 
 jobs:
 
   test-etsdemo:
     strategy:
       matrix:
-        os: [ubuntu-16.04]
+        os: [ubuntu-latest]
         toolkit: ['pyqt5', 'pyside2']
     runs-on: ${{ matrix.os }}
     steps:

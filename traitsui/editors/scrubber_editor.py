@@ -11,8 +11,6 @@
 """ Editor factory for scrubber-based integer or float value editors.
 """
 
-
-
 from pyface.ui_traits import Alignment
 from traits.api import Float, Property
 

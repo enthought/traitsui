@@ -24,7 +24,6 @@ from traitsui.api import (
 from traitsui.tests._tools import (
     BaseTestMixin,
     create_ui,
-    press_ok_button,
     requires_toolkit,
     reraise_exceptions,
     ToolkitName,
@@ -163,8 +162,7 @@ class TestTreeView(BaseTestMixin, unittest.TestCase):
         tree_editor_view = BogusTreeView(
             bogus=bogus, hide_root=hide_root, nodes=nodes
         )
-        with reraise_exceptions(), \
-                create_ui(tree_editor_view) as ui:
+        with reraise_exceptions(), create_ui(tree_editor_view):
 
             # The TreeEditor sets a listener on the bogus object's
             # children list
@@ -186,8 +184,7 @@ class TestTreeView(BaseTestMixin, unittest.TestCase):
         tree_editor_view = BogusTreeNodeObjectView(
             bogus=bogus, hide_root=hide_root, nodes=nodes
         )
-        with reraise_exceptions(), \
-                create_ui(tree_editor_view) as ui:
+        with reraise_exceptions(), create_ui(tree_editor_view):
 
             # The TreeEditor sets a listener on the bogus object's
             # children list

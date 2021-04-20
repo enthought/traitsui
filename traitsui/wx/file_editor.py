@@ -86,7 +86,7 @@ class SimpleEditor(SimpleTextEditor):
             pad = 8
 
         self._file_name = control
-        sizer.Add(control, 1, wx.EXPAND | wx.ALIGN_CENTER)
+        sizer.Add(control, 1, wx.EXPAND)
         sizer.Add(button, 0, wx.LEFT | wx.ALIGN_CENTER, pad)
         panel.Bind(wx.EVT_BUTTON, self.show_file_dialog, id=button.GetId())
         panel.SetDropTarget(FileDropTarget(self))

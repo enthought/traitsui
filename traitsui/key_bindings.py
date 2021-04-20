@@ -106,7 +106,7 @@ class KeyBindings(HasPrivateTraits):
     parent = Instance("KeyBindings", transient=True)
 
     #: The root of the KeyBindings tree this object is part of:
-    root = Property(depends_on="parent")
+    root = Property(observe="parent")
 
     #: The child KeyBindings of this object (if any):
     children = List(transient=True)
@@ -259,7 +259,7 @@ class KeyBindings(HasPrivateTraits):
         """ Handles child KeyBindings being added to the object.
         """
         # the full children list is changed
-        if isinstance(event.object, KeyBinding):
+        if isinstance(event.object, KeyBindings):
             for item in event.new:
                 item.parent = self
         # the contents of the children list are changed

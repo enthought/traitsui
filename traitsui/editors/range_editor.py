@@ -11,22 +11,17 @@
 """ Defines the range editor factory for all traits user interface toolkits.
 """
 
-
-
 from types import CodeType
 
-
-
 from traits.api import (
+    Any,
+    Bool,
     CTrait,
+    Enum,
+    Int,
     Property,
     Range,
-    Enum,
     Str,
-    Int,
-    Any,
-    Str,
-    Bool,
     Undefined,
 )
 
@@ -214,7 +209,8 @@ class ToolkitEditorFactory(EditorFactory):
         edited:
 
         * One end of range is unspecified: RangeTextEditor
-        * **mode** is specified and not 'auto': editor corresponding to **mode**
+        * **mode** is specified and not 'auto': editor corresponding to
+          **mode**
         * Floating point range with extent > 100: LargeRangeSliderEditor
         * Integer range or floating point range with extent <= 100:
           SimpleSliderEditor
@@ -246,7 +242,8 @@ class ToolkitEditorFactory(EditorFactory):
         edited:
 
         * One end of range is unspecified: RangeTextEditor
-        * **mode** is specified and not 'auto': editor corresponding to **mode**
+        * **mode** is specified and not 'auto': editor corresponding to
+          **mode**
         * Floating point range: Same as "simple" style
         * Integer range with extent > 15: Same as "simple" style
         * Integer range with extent <= 15: CustomEnumEditor

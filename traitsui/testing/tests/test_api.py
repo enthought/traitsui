@@ -30,6 +30,7 @@ class TestApi(unittest.TestCase):
             DisplayedText,
             IsChecked,
             IsEnabled,
+            IsVisible,
             SelectedText,
         )
 

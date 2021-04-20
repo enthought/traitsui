@@ -54,7 +54,7 @@ class CSVListEditorDemo(HasTraits):
     sort1 = Button("Sort first list")
 
     # This will be str(self.list1).
-    list1str = Property(Str, depends_on='list1')
+    list1str = Property(Str, observe='list1')
 
     traits_view = View(
         HGroup(
