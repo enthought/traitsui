@@ -10,7 +10,7 @@
 
 from pyface.qt import QtGui, QtCore
 
-from traits.api import Float, Any, Str, Either
+from traits.api import Float, Any, Str, Union
 
 from traitsui.editors.api import RangeEditor
 from traitsui.qt4.editor import Editor
@@ -196,8 +196,8 @@ class _BoundsEditor(Editor):
 
 class BoundsEditor(RangeEditor):
 
-    min = Either(None, Float)
-    max = Either(None, Float)
+    min = Union(None, Float)
+    max = Union(None, Float)
 
     def _get_simple_editor_class(self):
         return _BoundsEditor
