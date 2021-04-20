@@ -16,7 +16,7 @@ Please refer to the `ButtonEditor API docs`_ for further information.
 
 .. _ButtonEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.button_editor.html#traitsui.editors.button_editor.ButtonEditor
 """
-from pyface.api import ImageResource
+from pyface.api import Image, ImageResource
 from traits.api import Button, Enum, HasTraits, Instance, List, Str
 
 from traitsui.api import (
@@ -43,10 +43,10 @@ class ButtonEditorDemo(HasTraits):
 
     my_button_label = Str("Initial Label")
 
-    my_button_image = Instance(ImageResource)
+    my_button_image = Image()
 
     my_button_image_options = List(
-        Instance(ImageResource),
+        Image(),
         value=[
             ImageResource("run"),
             ImageResource("previous"),
