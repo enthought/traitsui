@@ -279,9 +279,7 @@ class ToolkitEditorFactory(EditorFactory):
         self._low_value, self._high_value, self.is_float = self._get_low_high(
             ui
         )
-        return super(ToolkitEditorFactory, self).simple_editor(
-            ui, object, name, description, parent
-        )
+        return super().simple_editor(ui, object, name, description, parent)
 
     def custom_editor(self, ui, object, name, description, parent):
         """ Generates an editor using the "custom" style.
@@ -292,9 +290,7 @@ class ToolkitEditorFactory(EditorFactory):
         self._low_value, self._high_value, self.is_float = self._get_low_high(
             ui
         )
-        return super(ToolkitEditorFactory, self).custom_editor(
-            ui, object, name, description, parent
-        )
+        return super().custom_editor(ui, object, name, description, parent)
 
 
 # Define the RangeEditor class

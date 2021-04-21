@@ -66,7 +66,7 @@ class Include(ViewSubElement):
     def __init__(self, id, **traits):
         """ Initializes the Include object.
         """
-        super(Include, self).__init__(**traits)
+        super().__init__(**traits)
         self.id = id
 
     def __repr__(self):

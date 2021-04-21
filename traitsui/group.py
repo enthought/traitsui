@@ -198,7 +198,7 @@ class Group(ViewSubElement):
     def __init__(self, *values, **traits):
         """ Initializes the group object.
         """
-        super(Group, self).__init__(**traits)
+        super().__init__(**traits)
 
         content = self.content
 

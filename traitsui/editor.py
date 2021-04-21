@@ -523,7 +523,7 @@ class Editor(HasPrivateTraits):
     def __init__(self, parent, **traits):
         """ Initializes the editor object.
         """
-        super(Editor, self).__init__(**traits)
+        super().__init__(**traits)
         try:
             self.old_value = getattr(self.object, self.name)
         except AttributeError:
