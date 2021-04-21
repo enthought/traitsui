@@ -723,7 +723,7 @@ class _GroupPanel(object):
 
     def _label_when(self):
         """Set the visible and enabled states of all labels as controlled by
-           a 'visible_when' or 'enabled_when' expression. 
+           a 'visible_when' or 'enabled_when' expression.
         """
         self._evaluate_label_condition(self._label_enabled_whens, "enabled")
         self._evaluate_label_condition(self._label_visible_whens, "visible")
@@ -731,7 +731,7 @@ class _GroupPanel(object):
     def _evaluate_label_condition(self, conditions, kind):
         """Evaluates a list of (eval, widget) pairs and calls the appropriate
            method on the label widget to toggle whether it is visible/enabled
-           as needed. 
+           as needed.
         """
         context = self.ui._get_context(self.ui.context)
 
