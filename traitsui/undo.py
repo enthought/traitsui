@@ -394,10 +394,8 @@ class UndoHistory(HasStrictTraits):
     #: Can an action be redone?
     can_redo = Property(Bool, observe='_can_redo')
 
-    #: Can an action be undone?
     _can_undo = Bool()
 
-    #: Can an action be redone?
     _can_redo = Bool()
 
     def add(self, undo_item, extend=False):
