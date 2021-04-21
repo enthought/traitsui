@@ -12,7 +12,6 @@ import functools
 import unittest
 from warnings import catch_warnings
 
-from pyface import __version__ as pyface_version
 from pyface.toolkit import toolkit_object
 from pyface.undo.api import AbstractCommand
 from traits.api import Any, HasTraits, Int, List, Str, Tuple
@@ -28,9 +27,6 @@ if no_gui_test_assistant:
     # ensure null toolkit has an inheritable GuiTestAssistant
     class GuiTestAssistant(object):
         pass
-
-
-pyface_version = tuple(int(x) for x in pyface_version.split('.')[:3])
 
 
 class SimpleExample(HasTraits):
@@ -870,10 +866,6 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
         self.assertTrue(history.can_undo)
         self.assertFalse(history.can_redo)
 
-    @unittest.skipIf(
-        pyface_version <= (7, 2, 0),
-        "Merging doesn't clear subsequent items, see Pyface #883",
-    )
     def test_add_middle_mergeable(self):
         history = UndoHistory()
         example = SimpleExample(str_value='foo', value=10)
