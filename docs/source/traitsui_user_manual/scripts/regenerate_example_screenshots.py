@@ -7,6 +7,15 @@
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 # Thanks for using Enthought open source!
+
+""" Run this script to regenerate the screenshots for the various editors used
+on the "The Predefined Trait Editor Factories" and "Advanced Trait Editors"
+pages of the documentation.
+
+Note: This script assumes it is being run from the traitsui root directory.
+ie. one should run 
+`python docs/source/traitsui_user_manual/scripts/regenerate_example_screenshots.py`
+"""
 import contextlib
 import os
 from unittest import mock
@@ -33,12 +42,12 @@ def _is_python_file(path):
 
 
 def get_python_files(directory):
-    """ Report Python files to be tested or to be skipped.
+    """ Report Python files to be run or to be skipped.
 
     Returns
     -------
     accepted_files : list of str
-        Python file paths to be tested.
+        Python file paths to be run and screenshotted.
     """
     accepted_files = []
     for root, _, files in os.walk(directory):
@@ -78,7 +87,7 @@ def replaced_configure_traits(
     ui_kwargs = dict(
         view=view,
         parent=None,
-        kind="live",  # other options may block the test
+        kind="live",
         context=context,
         handler=handler,
         id=id,
@@ -120,7 +129,7 @@ def run_file(file_path):
     Parameters
     ----------
     file_path : str
-        File path to be tested.
+        File path to be run to retrieve screenshot.
     """
     demo_name = os.path.basename(file_path)
     screenshot_name = demo_name.split('.')[0] + '.png'
