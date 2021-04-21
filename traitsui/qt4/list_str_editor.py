@@ -207,7 +207,7 @@ class _ListStrEditor(Editor):
 
         self.list_view._dispose()
 
-        super(Editor, self).dispose()
+        super(_ListStrEditor, self).dispose()
 
     def update_editor(self, event=None):
         """ Updates the editor when the object trait changes externally to the
