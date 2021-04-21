@@ -64,7 +64,7 @@ def mouse_click(func):
         delay : int
             Time delay (in ms) in which click will be performed.
         """
-        if not control.IsEnabled():
+        if (not control) or (not control.IsEnabled()):
             return
         wx.MilliSleep(delay)
         func(control=control, delay=delay, **kwargs)
