@@ -217,18 +217,19 @@ def mouse_click_combobox(combobox, index, delay):
         Time delay (in ms) in which each key click in the sequence will be
         performed.
     """
-    q_model_index = combobox.model().index(index, 0)
-    check_q_model_index_valid(q_model_index)
-    mouse_click_item_view(
-        model=combobox.model(),
-        view=combobox.view(),
-        index=q_model_index,
-        delay=delay,
-    )
-    # Otherwise the click won't get registered.
-    key_click(
-        combobox.view().viewport(), key="Enter", delay=delay
-    )
+    if combobox:
+        q_model_index = combobox.model().index(index, 0)
+        check_q_model_index_valid(q_model_index)
+        mouse_click_item_view(
+            model=combobox.model(),
+            view=combobox.view(),
+            index=q_model_index,
+            delay=delay,
+        )
+        # Otherwise the click won't get registered.
+        key_click(
+            combobox.view().viewport(), key="Enter", delay=delay
+        )
 
 
 def key_sequence_qwidget(control, interaction, delay):
