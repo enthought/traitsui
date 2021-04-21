@@ -102,14 +102,14 @@ class LiveWindow(BaseDialog):
         window = ui.control
         if window is not None:
             if history is not None:
-                history.on_trait_change(
-                    self._on_undoable, "undoable", remove=True
+                history.observe(
+                    self._on_undoable, "undoable", remove=True, dispatch="ui"
                 )
-                history.on_trait_change(
-                    self._on_redoable, "redoable", remove=True
+                history.observe(
+                    self._on_redoable, "redoable", remove=True, dispatch="ui"
                 )
-                history.on_trait_change(
-                    self._on_revertable, "undoable", remove=True
+                history.observe(
+                    self._on_revertable, "undoable", remove=True, dispatch="ui"
                 )
             window.SetSizer(None)
             ui.reset()
@@ -235,10 +235,10 @@ class LiveWindow(BaseDialog):
                     self.redo = self.add_button(
                         button, b_sizer, self._on_redo, False, "Redo"
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_undoable, "undoable", dispatch="ui"
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_redoable, "redoable", dispatch="ui"
                     )
                     if history.can_undo:
@@ -255,7 +255,7 @@ class LiveWindow(BaseDialog):
                         False,
                         default=default,
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_revertable, "undoable", dispatch="ui"
                     )
                     if history.can_undo:
@@ -265,7 +265,7 @@ class LiveWindow(BaseDialog):
                     self.ok = self.add_button(
                         button, b_sizer, self._on_ok, default=default
                     )
-                    ui.on_trait_change(self._on_error, "errors", dispatch="ui")
+                    ui.observe(self._on_error, "errors", dispatch="ui")
 
                 elif self.is_button(button, "Cancel"):
                     self.add_button(
@@ -352,24 +352,28 @@ class LiveWindow(BaseDialog):
             self._on_revert(event)
             self.close(wx.ID_CANCEL)
 
-    def _on_error(self, errors):
+    def _on_error(self, event):
         """ Handles editing errors.
         """
+        errors = event.new
         self.ok.Enable(errors == 0)
 
-    def _on_undoable(self, state):
+    def _on_undoable(self, event):
         """ Handles a change to the "undoable" state of the undo history
         """
+        state = event.new
         self.undo.Enable(state)
 
-    def _on_redoable(self, state):
+    def _on_redoable(self, event):
         """ Handles a change to the "redoable state of the undo history.
         """
+        state = event.new
         self.redo.Enable(state)
 
-    def _on_revertable(self, state):
+    def _on_revertable(self, event):
         """ Handles a change to the "revert" state.
         """
+        state = event.new
         self.revert.Enable(state)
 
 

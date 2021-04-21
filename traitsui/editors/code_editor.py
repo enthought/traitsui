@@ -12,8 +12,6 @@
 useful for tools such as debuggers.
 """
 
-
-
 from traits.api import Instance, Str, Enum, Bool
 
 from ..editor_factory import EditorFactory

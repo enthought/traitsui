@@ -119,10 +119,14 @@ class Panel(BaseDialog):
         # Reset any existing history listeners:
         history = ui.history
         if history is not None:
-            history.on_trait_change(self._on_undoable, "undoable", remove=True)
-            history.on_trait_change(self._on_redoable, "redoable", remove=True)
-            history.on_trait_change(
-                self._on_revertable, "undoable", remove=True
+            history.observe(
+                self._on_undoable, "undoable", remove=True, dispatch="ui"
+            )
+            history.observe(
+                self._on_redoable, "redoable", remove=True, dispatch="ui"
+            )
+            history.observe(
+                self._on_revertable, "undoable", remove=True, dispatch="ui"
             )
 
         # Determine if we need any buttons or an 'undo' history:
@@ -191,17 +195,17 @@ class Panel(BaseDialog):
                     self.redo = self.add_button(
                         button, b_sizer, self._on_redo, False, "Redo"
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_undoable, "undoable", dispatch="ui"
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_redoable, "redoable", dispatch="ui"
                     )
                 elif self.is_button(button, "Revert"):
                     self.revert = self.add_button(
                         button, b_sizer, self._on_revert, False
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_revertable, "undoable", dispatch="ui"
                     )
                 elif self.is_button(button, "Help"):
@@ -213,19 +217,22 @@ class Panel(BaseDialog):
 
         cpanel.SetSizerAndFit(sw_sizer)
 
-    def _on_undoable(self, state):
+    def _on_undoable(self, event):
         """ Handles a change to the "undoable" state of the undo history.
         """
+        state = event.new
         self.undo.Enable(state)
 
-    def _on_redoable(self, state):
+    def _on_redoable(self, event):
         """ Handles a change to the "redoable" state of the undo history.
         """
+        state = event.new
         self.redo.Enable(state)
 
-    def _on_revertable(self, state):
+    def _on_revertable(self, event):
         """ Handles a change to the "revert" state.
         """
+        state = event.new
         self.revert.Enable(state)
 
     def add_toolbar(self, sizer):
@@ -392,8 +399,8 @@ def show_help(ui, button):
                 template.item_help
                 % (escape(item.get_label(ui)), escape(item.get_help(ui)))
             )
-    html = template.group_html % (header, "\n".join(fields))
-    HTMLHelpWindow(button, html, 0.25, 0.33)
+    html_content = template.group_html % (header, "\n".join(fields))
+    HTMLHelpWindow(button, html_content, 0.25, 0.33)
 
 
 def show_help_popup(event):
@@ -407,8 +414,8 @@ def show_help_popup(event):
     # of the object with the 'help' trait):
     help = getattr(control, "help", None)
     if help is not None:
-        html = template.item_html % (control.GetLabel(), help)
-        HTMLHelpWindow(control, html, 0.25, 0.13)
+        html_content = template.item_html % (control.GetLabel(), help)
+        HTMLHelpWindow(control, html_content, 0.25, 0.13)
 
 
 def fill_panel_for_group(
@@ -1145,7 +1152,7 @@ class HTMLHelpWindow(wx.Frame):
     """ Window for displaying Traits-based help text with HTML formatting.
     """
 
-    def __init__(self, parent, html, scale_dx, scale_dy):
+    def __init__(self, parent, html_content, scale_dx, scale_dy):
         """ Initializes the object.
         """
         wx.Frame.__init__(self, parent, -1, "Help", style=wx.SIMPLE_BORDER)
@@ -1155,7 +1162,7 @@ class HTMLHelpWindow(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         html_control = wh.HtmlWindow(self)
         html_control.SetBorders(2)
-        html_control.SetPage(html)
+        html_control.SetPage(html_content)
         sizer.Add(html_control, 1, wx.EXPAND)
         sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
         b_sizer = wx.BoxSizer(wx.HORIZONTAL)

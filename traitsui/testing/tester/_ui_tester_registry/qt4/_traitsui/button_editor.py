@@ -9,7 +9,7 @@
 # Thanks for using Enthought open source!
 
 from traitsui.testing.tester.command import MouseClick
-from traitsui.testing.tester.query import DisplayedText, IsEnabled
+from traitsui.testing.tester.query import DisplayedText
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
     _interaction_helpers
 )
@@ -33,7 +33,6 @@ def register(registry):
                 wrapper._target.control, wrapper.delay)),
         (DisplayedText,
             lambda wrapper, _: wrapper._target.control.text()),
-        (IsEnabled, lambda wrapper, _: wrapper._target.control.isEnabled()),
     ]
 
     for target_class in [SimpleEditor, CustomEditor]:

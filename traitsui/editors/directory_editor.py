@@ -11,8 +11,6 @@
 """ Defines the directory editor factory for all traits toolkit backends.
 """
 
-
-
 from .file_editor import ToolkitEditorFactory as EditorFactory
 
 # -------------------------------------------------------------------------

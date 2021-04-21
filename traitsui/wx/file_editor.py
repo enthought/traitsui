@@ -16,7 +16,7 @@ import wx
 
 from os.path import abspath, split, splitext, isfile, exists
 
-from traits.api import List, Str, Event, Any, on_trait_change, TraitError
+from traits.api import List, Str, Event, Any, observe, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -86,7 +86,7 @@ class SimpleEditor(SimpleTextEditor):
             pad = 8
 
         self._file_name = control
-        sizer.Add(control, 1, wx.EXPAND | wx.ALIGN_CENTER)
+        sizer.Add(control, 1, wx.EXPAND)
         sizer.Add(button, 0, wx.LEFT | wx.ALIGN_CENTER, pad)
         panel.Bind(wx.EVT_BUTTON, self.show_file_dialog, id=button.GetId())
         panel.SetDropTarget(FileDropTarget(self))
@@ -113,10 +113,11 @@ class SimpleEditor(SimpleTextEditor):
 
         super(SimpleEditor, self).dispose()
 
-    @on_trait_change("history:value")
-    def _history_value_changed(self, value):
+    @observe("history:value")
+    def _history_value_changed(self, event):
         """ Handles the history 'value' trait being changed.
         """
+        value = event.new
         if not self._no_update:
             self._update(value)
 
@@ -162,10 +163,11 @@ class SimpleEditor(SimpleTextEditor):
 
     # -- Traits Event Handlers ------------------------------------------------
 
-    @on_trait_change("popup:value")
-    def _popup_value_changed(self, file_name):
+    @observe("popup:value")
+    def _popup_value_changed(self, event):
         """ Handles the popup value being changed.
         """
+        file_name = event.new
         if self.factory.truncate_ext:
             file_name = splitext(file_name)[0]
 
@@ -174,8 +176,8 @@ class SimpleEditor(SimpleTextEditor):
         self.history.set_value(self.str_value)
         self._no_update = False
 
-    @on_trait_change("popup:closed")
-    def _popup_closed_changed(self):
+    @observe("popup:closed")
+    def _popup_closed_changed(self, event):
         """ Handles the popup control being closed.
         """
         self.popup = None

@@ -98,13 +98,13 @@ class BaseEditor(Editor):
                 factory.name
             )
             self.values_changed()
-            self._object.on_trait_change(
+            self._object.observe(
                 self._values_changed, " " + self._name, dispatch="ui"
             )
         else:
             self._value = lambda: self.factory.values
             self.values_changed()
-            factory.on_trait_change(
+            factory.observe(
                 self._values_changed, "values", dispatch="ui"
             )
 
@@ -112,12 +112,15 @@ class BaseEditor(Editor):
         """ Disposes of the contents of an editor.
         """
         if self._object is not None:
-            self._object.on_trait_change(
-                self._values_changed, " " + self._name, remove=True
+            self._object.observe(
+                self._values_changed,
+                " " + self._name,
+                remove=True,
+                dispatch="ui"
             )
         else:
-            self.factory.on_trait_change(
-                self._values_changed, "values", remove=True
+            self.factory.observe(
+                self._values_changed, "values", remove=True, dispatch="ui"
             )
 
         super(BaseEditor, self).dispose()
@@ -145,7 +148,7 @@ class BaseEditor(Editor):
 
     # Trait change handlers --------------------------------------------------
 
-    def _values_changed(self):
+    def _values_changed(self, event=None):
         """ Handles the underlying object model's enumeration set or factory's
             values being changed.
         """
