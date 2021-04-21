@@ -718,15 +718,6 @@ class SimpleEditor(Editor):
                 return node
         return None
 
-    def _node_for_class_name(self, class_name):
-        """ Returns the node and class associated with a specified class name.
-        """
-        for node in self.factory.nodes:
-            for klass in node.node_for:
-                if class_name == klass.__name__:
-                    return (node, klass)
-        return (None, None)
-
     def _update_icon(self, event, is_expanded):
         """ Updates the icon for a specified node.
         """
@@ -1248,24 +1239,30 @@ class SimpleEditor(Editor):
         object = self._data[1]
         items = []
         add = node.get_add(object)
-        if len(add) > 0:
-            for klass in add:
-                prompt = False
-                if isinstance(klass, tuple):
+        # return early if there are no items to be added in the tree
+        if len(add) == 0:
+            return items
+
+        for klass in add:
+            prompt = False
+            factory = None
+            if isinstance(klass, tuple):
+                if len(klass) == 2:
                     klass, prompt = klass
-                add_node = self._node_for_class(klass)
-                if add_node is not None:
-                    class_name = klass.__name__
-                    name = add_node.get_name(object)
-                    if name == "":
-                        name = class_name
-                    items.append(
-                        Action(
-                            name=name,
-                            action="editor._menu_new_node('%s',%s)"
-                            % (class_name, prompt),
-                        )
-                    )
+                elif len(klass) == 3:
+                    klass, prompt, factory = klass
+            add_node = self._node_for_class(klass)
+            if add_node is None:
+                continue
+            class_name = klass.__name__
+            name = add_node.get_name(object)
+            if name == "":
+                name = class_name
+            if not factory:
+                factory = klass
+            def perform_add(object):
+                self._menu_new_node(factory, prompt)
+            items.append(Action(name=name, on_perform=perform_add))
         return items
 
     def _is_copyable(self, object):
@@ -1563,13 +1560,12 @@ class SimpleEditor(Editor):
             if label != "":
                 node.set_label(object, label)
 
-    def _menu_new_node(self, class_name, prompt=False):
+    def _menu_new_node(self, factory, prompt=False):
         """ Adds a new object to the current node.
         """
         node, object, nid = self._data
         self._data = None
-        new_node, new_class = self._node_for_class_name(class_name)
-        new_object = new_class()
+        new_object = factory()
         if (not prompt) or new_object.edit_traits(
             parent=self.control, kind="livemodal"
         ).result:

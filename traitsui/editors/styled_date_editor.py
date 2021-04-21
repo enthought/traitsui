@@ -9,7 +9,7 @@
 # Thanks for using Enthought open source!
 
 from traits.api import Bool, List, Str
-from .date_editor import CellFormat, DateEditor
+from .date_editor import DateEditor
 
 
 class ToolkitEditorFactory(DateEditor):

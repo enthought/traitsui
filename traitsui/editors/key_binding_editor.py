@@ -13,8 +13,6 @@ specialized editor used to associate a particular key with a control (i.e., the
 key binding editor).
 """
 
-
-
 # FIXME: Import from the api.py file when it has been added.
 from ..basic_editor_factory import BasicEditorFactory
 

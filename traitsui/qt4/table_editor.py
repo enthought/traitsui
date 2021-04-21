@@ -42,7 +42,7 @@ from traits.api import (
     Property,
     Str,
     cached_property,
-    on_trait_change,
+    observe,
 )
 
 from traitsui.api import (
@@ -118,9 +118,9 @@ class TableEditor(Editor, BaseTableEditor):
     selected = Any()
 
     #: The current selected row
-    selected_row = Property(Any, depends_on="selected")
+    selected_row = Property(Any, observe="selected")
 
-    selected_indices = Property(Any, depends_on="selected")
+    selected_indices = Property(Any, observe="selected")
 
     #: Current filter object (should be a TableFilter or callable or None):
     filter = Any()
@@ -1281,7 +1281,7 @@ class TableFilterEditor(HasTraits):
     filters = List(TableFilter)
 
     #: The list of available templates from which filters can be created
-    templates = Property(List(TableFilter), depends_on="filters")
+    templates = Property(List(TableFilter), observe="filters")
 
     #: The currently selected filter template
     selected_template = Instance(TableFilter)
@@ -1290,7 +1290,7 @@ class TableFilterEditor(HasTraits):
     selected_filter = Instance(TableFilter, allow_none=True)
 
     #: The view to use for the current filter
-    selected_filter_view = Property(depends_on="selected_filter")
+    selected_filter_view = Property(observe="selected_filter")
 
     #: Buttons for add/removing filters
     add_button = Button("New")
@@ -1396,8 +1396,8 @@ class TableFilterEditor(HasTraits):
         else:
             self.selected_filter = None
 
-    @on_trait_change("selected_filter:name")
-    def _update_filter_list(self):
+    @observe("selected_filter:name")
+    def _update_filter_list(self, event):
         """ A hack to make the EnumEditor watching the list of filters refresh
             their text when the name of the selected filter changes.
         """

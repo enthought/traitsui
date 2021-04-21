@@ -11,8 +11,6 @@
 """ Defines the text editor factory for all traits toolkit backends.
 """
 
-
-
 from traits.api import Dict, Str, Any, Bool
 
 # CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
@@ -74,9 +72,9 @@ class ToolkitEditorFactory(EditorFactory):
     #: Is multi-line text allowed?
     multi_line = Bool(True)
 
-    #: Is editor readonly (will use custom / default editor appearance with readonly flag set to true)
-    #: in contrasrt with readonly style for item when completely another edito
-    #: is used
+    #: Is editor readonly (will use custom / default editor appearance with
+    #: readonly flag set to true) in contrast with readonly style for item
+    #: when completely another editor is used
     read_only = Bool(False)
 
     #: Is user input unreadable? (e.g., for a password)
@@ -96,6 +94,12 @@ class ToolkitEditorFactory(EditorFactory):
 
     #: Grayed-out placeholder text to be displayed when the editor is empty.
     placeholder = Str()
+
+    #: Whether or not to display a clear button for the text.  This only works
+    #: in the qt>=5.2 backend for simple/text styles of the editor.  Note this
+    #: trait is currently provisional and may be replaced in the future by a
+    #: more general feature.
+    cancel_button = Bool(False)
 
     # -------------------------------------------------------------------------
     #  Traits view definition:

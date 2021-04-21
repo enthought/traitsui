@@ -1,0 +1,44 @@
+# This workflow runs tests from the ets-demo distribution.
+
+name: Test etsdemo
+
+on:
+  pull_request:
+    paths:
+    - 'ets-demo/**'
+
+env:
+  INSTALL_EDM_VERSION: 3.2.3
+
+jobs:
+
+  test-etsdemo:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        toolkit: ['pyqt5', 'pyside2']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Qt dependencies for Linux
+        uses: ./.github/actions/apt-get-qt-deps
+        if: startsWith(matrix.os, 'ubuntu')
+      - name: Cache EDM packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache
+          key: ${{ runner.os }}-${{ matrix.toolkit }}-${{ hashFiles('ets-demo/etstool.py') }}
+      - name: Setup EDM
+        uses: enthought/setup-edm-action@v1
+        with:
+          edm-version: ${{ env.INSTALL_EDM_VERSION }}
+      - name: Install click to the default EDM environment
+        run: edm install -y wheel click
+      - name: Install test environment
+        run: edm run -- python etstool.py install --toolkit=${{ matrix.toolkit }}
+        working-directory: ets-demo
+      - name: Run tests
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: edm run -- python etstool.py test --toolkit=${{ matrix.toolkit }}
+          working-directory: ets-demo

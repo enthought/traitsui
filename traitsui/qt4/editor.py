@@ -24,7 +24,7 @@
 """
 
 
-from pyface.qt import QtGui
+from pyface.qt import QtCore, QtGui
 
 from traits.api import HasTraits, Instance, Str, Callable
 
@@ -78,29 +78,21 @@ class Editor(UIEditor):
         else:
             control = self.control
 
-        QtGui.QMessageBox.information(
-            control, self.description + " value error", str(excp)
+        message_box = QtGui.QMessageBox(
+            QtGui.QMessageBox.Information,
+            self.description + " value error",
+            str(excp),
+            buttons=QtGui.QMessageBox.Ok,
+            parent=control
         )
+        message_box.setTextFormat(QtCore.Qt.PlainText)
+        message_box.setEscapeButton(QtGui.QMessageBox.Ok)
+        message_box.exec_()
 
-    def set_tooltip(self, control=None):
+    def set_tooltip_text(self, control, text):
         """ Sets the tooltip for a specified control.
         """
-        desc = self.description
-        if desc == "":
-            desc = self.object.base_trait(self.name).tooltip
-            if desc is None:
-                desc = self.object.base_trait(self.name).desc
-                if desc is None:
-                    return False
-
-                desc = "Specifies " + desc
-
-        if control is None:
-            control = self.control
-
-        control.setToolTip(desc)
-
-        return True
+        control.setToolTip(text)
 
     def _enabled_changed(self, enabled):
         """Handles the **enabled** state of the editor being changed.

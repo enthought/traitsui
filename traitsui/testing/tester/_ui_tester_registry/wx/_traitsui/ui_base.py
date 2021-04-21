@@ -10,7 +10,7 @@
 
 from traitsui.wx.ui_base import ButtonEditor
 from traitsui.testing.tester.command import MouseClick
-from traitsui.testing.tester.query import DisplayedText, IsEnabled
+from traitsui.testing.tester.query import DisplayedText
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 
@@ -36,10 +36,4 @@ def register(registry):
         target_class=ButtonEditor,
         interaction_class=DisplayedText,
         handler=lambda wrapper, _: wrapper._target.control.GetLabel()
-    )
-
-    registry.register_interaction(
-        target_class=ButtonEditor,
-        interaction_class=IsEnabled,
-        handler=lambda wrapper, _: wrapper._target.control.IsEnabled()
     )

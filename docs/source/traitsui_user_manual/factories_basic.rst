@@ -591,10 +591,11 @@ the local system hierarchy. The styles of this editor are shown in Figure 31.
 
 The default version of the simply style displays a text box and a :guilabel:`Browse`
 button. Clicking :guilabel:`Browse` opens a platform-specific file selection dialog box.
-If you specify the *entries* keyword parameter with an integer value to the
+On the wx backend, if you specify the *entries* keyword parameter with an integer value to the
 factory function, the simple style is a combo box and a button labeled :guilabel:`...`.
 The user can type a file path in the combo box, or select one of *entries*
-previous values. Clicking the :guilabel:`...` button opens a browser panel similar to the
+previous values. Support for the *entries* parameter is yet to be implemented on
+the qt backend. Clicking the :guilabel:`...` button opens a browser panel similar to the
 custom style of editor. When the user selects a file in this browser, the panel
 collapses, and control is returned to the original editor widget, which is
 automatically populated with the new path string.

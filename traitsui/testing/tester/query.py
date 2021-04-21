@@ -56,3 +56,12 @@ class IsEnabled:
     Implementations should return True if enabled and False if not.
     """
     pass
+
+
+class IsVisible:
+    """ An object representing an interaction to obtain whether a widget is
+    visible or not.
+
+    Implementations should return True if visible and False if not.
+    """
+    pass

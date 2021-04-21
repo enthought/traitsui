@@ -43,7 +43,7 @@ class Theme(HasPrivateTraits):
     label_color = Property()
 
     #: The image slice used to draw the theme (Wx only)
-    image_slice = Property(depends_on="image")
+    image_slice = Property(observe="image")
 
     # -- Constructor ----------------------------------------------------------
 

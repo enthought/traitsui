@@ -11,7 +11,7 @@
 import unittest
 
 from pyface.toolkit import toolkit_object
-from traits.api import HasTraits, Instance, List, Str
+from traits.api import HasTraits, Instance, List, Str, String
 from traitsui.api import InstanceEditor, Item, View
 from traitsui.tests._tools import (
     BaseTestMixin,
@@ -22,9 +22,12 @@ from traitsui.tests._tools import (
 from traitsui.testing.api import (
     DisplayedText,
     Index,
+    IsEnabled,
+    KeyClick,
     KeySequence,
     MouseClick,
     SelectedText,
+    TargetByName,
     UITester
 )
 
@@ -73,6 +76,36 @@ selection_view = View(
 modal_view = View(
     Item("inst", style="simple", editor=InstanceEditor(kind="modal"))
 )
+
+
+class ValidatedEditedInstance(HasTraits):
+    some_string = String("A", maxlen=3)
+
+    traits_view = View(Item('some_string'))
+
+
+class ObjectWithValidatedInstance(HasTraits):
+    something = Instance(ValidatedEditedInstance, args=())
+
+    traits_view = View(
+        Item(
+            'something',
+            editor=InstanceEditor(),
+            style='custom'
+        ),
+        buttons=["OK", "Cancel"],
+    )
+
+
+class ObjectWithValidatedList(HasTraits):
+    inst_list = List(Instance(HasTraits))
+    inst = Instance(HasTraits, ())
+
+    def _inst_list_default(self):
+        return [
+            ValidatedEditedInstance(some_string=value)
+            for value in ['a', 'b', 'c']
+        ]
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -207,3 +240,66 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             mdtester.open_and_run(when_opened=when_opened)
             self.assertTrue(mdtester.dialog_was_opened)
             self.assertEqual(obj.inst.value, "Hello")
+
+    # A regression test for issue enthought/traitsui#1501
+    def test_propagate_errors(self):
+        obj = ObjectWithValidatedInstance()
+        ui_tester = UITester()
+        with ui_tester.create_ui(obj) as ui:
+            something_ui = ui_tester.find_by_name(ui, "something")
+            some_string_field = something_ui.locate(
+                TargetByName('some_string')
+            )
+            some_string_field.perform(KeySequence("abcd"))
+            some_string_field.perform(KeyClick("Enter"))
+
+            ok_button = ui_tester.find_by_id(ui, "OK")
+
+            instance_editor_ui = something_ui._target._ui
+            instance_editor_ui_parent = something_ui._target._ui.parent
+            self.assertNotEqual(
+                instance_editor_ui, ui
+            )
+            self.assertEqual(
+                instance_editor_ui_parent, ui
+            )
+
+            self.assertEqual(
+                instance_editor_ui.errors, ui.errors
+            )
+            self.assertFalse(ok_button.inspect(IsEnabled()))
+
+    def test_propagate_errors_switch_selection(self):
+        obj = ObjectWithValidatedList()
+        ui_tester = UITester()
+        with ui_tester.create_ui(obj, {'view': selection_view}) as ui:
+            something_ui = ui_tester.find_by_name(ui, "inst")
+
+            something_ui.locate(Index(0)).perform(MouseClick())
+
+            some_string_field = something_ui.locate(
+                TargetByName('some_string')
+            )
+            some_string_field.perform(KeySequence("bcde"))
+            some_string_field.perform(KeyClick("Enter"))
+
+            ok_button = ui_tester.find_by_id(ui, "OK")
+
+            instance_editor_ui = something_ui._target._ui
+            instance_editor_ui_parent = something_ui._target._ui.parent
+            self.assertNotEqual(
+                instance_editor_ui, ui
+            )
+            self.assertEqual(
+                instance_editor_ui_parent, ui
+            )
+
+            self.assertEqual(
+                instance_editor_ui.errors, ui.errors
+            )
+            self.assertFalse(ok_button.inspect(IsEnabled()))
+
+            # change to a different selected that is not in an error state
+            something_ui.locate(Index(1)).perform(MouseClick())
+
+            self.assertTrue(ok_button.inspect(IsEnabled()))

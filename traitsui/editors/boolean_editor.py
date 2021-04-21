@@ -10,9 +10,6 @@
 
 """ Defines the Boolean editor factory for all traits toolkit backends.
 """
-
-
-
 from traits.api import Dict, Str, Any
 
 # CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api

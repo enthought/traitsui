@@ -14,8 +14,6 @@
     drag source and a drop target.
 """
 
-
-
 from pyface.ui_traits import Image
 
 from ..editor_factory import EditorFactory

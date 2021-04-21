@@ -110,18 +110,12 @@ class CustomEditor(Editor):
             self.set_tooltip(self._choice)
 
             if factory.name != "":
-                self._object.on_trait_change(
-                    self.rebuild_items, self._name, dispatch="ui"
-                )
-                self._object.on_trait_change(
-                    self.rebuild_items, self._name + "_items", dispatch="ui"
+                self._object.observe(
+                    self.rebuild_items, self._name + ".items", dispatch="ui"
                 )
 
-            factory.on_trait_change(
-                self.rebuild_items, "values", dispatch="ui"
-            )
-            factory.on_trait_change(
-                self.rebuild_items, "values_items", dispatch="ui"
+            factory.observe(
+                self.rebuild_items, "values.items", dispatch="ui"
             )
 
             self.rebuild_items()
@@ -199,7 +193,7 @@ class CustomEditor(Editor):
 
         return items
 
-    def rebuild_items(self):
+    def rebuild_items(self, event=None):
         """ Rebuilds the object selector list.
         """
         # Clear the current cached values:
@@ -355,18 +349,15 @@ class CustomEditor(Editor):
 
         if self._choice is not None:
             if self._object is not None:
-                self._object.on_trait_change(
-                    self.rebuild_items, self._name, remove=True
-                )
-                self._object.on_trait_change(
-                    self.rebuild_items, self._name + "_items", remove=True
+                self._object.observe(
+                    self.rebuild_items,
+                    self._name + ".items",
+                    remove=True,
+                    dispatch="ui"
                 )
 
-            self.factory.on_trait_change(
-                self.rebuild_items, "values", remove=True
-            )
-            self.factory.on_trait_change(
-                self.rebuild_items, "values_items", remove=True
+            self.factory.observe(
+                self.rebuild_items, "values.items", remove=True, dispatch="ui"
             )
 
         super(CustomEditor, self).dispose()
@@ -422,6 +413,7 @@ class SimpleEditor(CustomEditor):
         """ Creates the editor control (a button).
         """
         self._button = QtGui.QPushButton()
+        self._button.setAutoDefault(False)
         layout.addWidget(self._button)
         self._button.clicked.connect(self.edit_instance)
         # Make sure the editor is properly disposed if parent UI is closed
