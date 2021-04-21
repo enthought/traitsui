@@ -728,7 +728,7 @@ class FillPanel(object):
                         growable = 1
                 sizer.Add(sg_sizer, growable, style, 2)
 
-    def _label_when(self, at_init=False):
+    def _label_when(self):
         """Set the visible and enabled states of all labels as controlled by
            a 'visible_when' or 'enabled_when' expression.
         """
