@@ -46,12 +46,12 @@ class NamedInstance(HasTraits):
 
 
 class ObjectWithInstance(HasTraits):
-    inst = Instance(EditedInstance, ())
+    inst = Instance(EditedInstance, args=())
 
 
 class ObjectWithList(HasTraits):
     inst_list = List(Instance(NamedInstance))
-    inst = Instance(NamedInstance, ())
+    inst = Instance(NamedInstance, args=())
 
     def _inst_list_default(self):
         return [
