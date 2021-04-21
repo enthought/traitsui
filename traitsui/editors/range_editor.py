@@ -279,7 +279,7 @@ class ToolkitEditorFactory(EditorFactory):
         self._low_value, self._high_value, self.is_float = self._get_low_high(
             ui
         )
-        return super(RangeEditor, self).simple_editor(
+        return super(ToolkitEditorFactory, self).simple_editor(
             ui, object, name, description, parent
         )
 
@@ -292,7 +292,7 @@ class ToolkitEditorFactory(EditorFactory):
         self._low_value, self._high_value, self.is_float = self._get_low_high(
             ui
         )
-        return super(RangeEditor, self).custom_editor(
+        return super(ToolkitEditorFactory, self).custom_editor(
             ui, object, name, description, parent
         )
 
