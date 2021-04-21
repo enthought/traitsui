@@ -115,7 +115,6 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(text, obj.inst_list[0].name)
 
             # test that changing selection works
-            instance = tester.find_by_name(ui, "inst")
             instance.locate(Index(1)).perform(MouseClick())
             self.assertIs(obj.inst, obj.inst_list[1])
 
