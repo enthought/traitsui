@@ -215,7 +215,7 @@ the columns in the table. Optionally, you can provide filters for filtering the
 set of displayed items, and you can specify a wide variety of options for
 interacting with and formatting the table.
 
-.. figure:: images/table_editor.jpg
+.. figure:: images/TableEditor_demo.png
    :alt: Table editor with toolbar and instance editor
 
    Figure 51: Table editor
@@ -729,7 +729,7 @@ You must specify the types of nodes that can appear in the tree using the
 *nodes* parameter, which must be a list of instances of TreeNode (or of
 subclasses of TreeNode).
 
-.. figure:: images/tree_editor.png
+.. figure:: images/TreeEditor_demo.png
    :alt: Tree control with instance editor pane
 
    Figure 54: Tree editor
