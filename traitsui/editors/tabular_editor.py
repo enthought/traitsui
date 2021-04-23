@@ -164,7 +164,7 @@ class TabularEditor(BasicEditorFactory):
             DeprecationWarning,
         )
         return self.scroll_to_position_hint
-    
+
     def _set_scroll_to_row_hint(self, hint):
         warnings.warn(
             "Use of scroll_to_row_hint trait is deprecated. "
