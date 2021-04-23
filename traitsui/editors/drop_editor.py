@@ -13,8 +13,6 @@
     target.
 """
 
-
-
 from traits.api import Any, Bool
 
 from .text_editor import ToolkitEditorFactory as EditorFactory

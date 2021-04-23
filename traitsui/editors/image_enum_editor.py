@@ -12,8 +12,6 @@
 toolkits.
 """
 
-
-
 import sys
 
 from os import getcwd

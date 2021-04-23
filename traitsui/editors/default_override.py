@@ -23,7 +23,6 @@ View(Item('my_range', editor=DefaultOverride(high_label='Max'))
 
 """
 
-
 from traits.api import Dict
 from ..editor_factory import EditorFactory
 

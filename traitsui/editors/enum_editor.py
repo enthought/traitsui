@@ -8,11 +8,9 @@
 #
 # Thanks for using Enthought open source!
 
-""" Defines the editor factory for single-selection enumerations, for all traits
-    user interface toolkits.
+""" Defines the editor factory for single-selection enumerations, for all
+traits user interface toolkits.
 """
-
-
 
 import os
 import sys

@@ -23,11 +23,9 @@
 #
 # ------------------------------------------------------------------------------
 
-""" Defines the editor factory for multi-selection enumerations, for all traits toolkit
-backends.
+""" Defines the editor factory for multi-selection enumerations, for all traits
+toolkit backends.
 """
-
-
 
 from traits.api import Range
 

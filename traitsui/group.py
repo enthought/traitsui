@@ -190,15 +190,15 @@ class Group(ViewSubElement):
     padding = Padding
 
     #: Requested width of the group (calculated from widths of contents)
-    width = Property(Float, depends_on="content")
+    width = Property(Float, observe="content")
 
     #: Requested height of the group (calculated from heights of contents)
-    height = Property(Float, depends_on="content")
+    height = Property(Float, observe="content")
 
     def __init__(self, *values, **traits):
         """ Initializes the group object.
         """
-        super(ViewSubElement, self).__init__(**traits)
+        super().__init__(**traits)
 
         content = self.content
 

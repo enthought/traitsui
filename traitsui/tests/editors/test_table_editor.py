@@ -13,14 +13,15 @@ from unittest.mock import Mock
 
 from traits.api import HasTraits, Instance, Int, List, Str, Tuple
 
-from traitsui.api import Action, EvalTableFilter, Item, ObjectColumn, TableEditor, View
+from traitsui.api import (
+    Action, EvalTableFilter, Item, ObjectColumn, TableEditor, View,
+)
 from traitsui.tests._tools import (
     BaseTestMixin,
     create_ui,
     is_qt,
     is_wx,
     process_cascade_events,
-    press_ok_button,
     requires_toolkit,
     reraise_exceptions,
     ToolkitName,
@@ -286,7 +287,7 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         )
 
         with reraise_exceptions(), \
-                create_ui(object_list, dict(view=simple_view)) as ui:
+                create_ui(object_list, dict(view=simple_view)):
             process_cascade_events()
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -580,7 +581,7 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         )
 
         with reraise_exceptions(), \
-                create_ui(object_list, dict(view=progress_view)) as ui:
+                create_ui(object_list, dict(view=progress_view)):
             process_cascade_events()
 
     @requires_toolkit([ToolkitName.qt])

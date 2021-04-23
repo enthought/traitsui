@@ -118,9 +118,9 @@ class TableEditor(Editor, BaseTableEditor):
     selected = Any()
 
     #: The current selected row
-    selected_row = Property(Any, depends_on="selected")
+    selected_row = Property(Any, observe="selected")
 
-    selected_indices = Property(Any, depends_on="selected")
+    selected_indices = Property(Any, observe="selected")
 
     #: Current filter object (should be a TableFilter or callable or None):
     filter = Any()
@@ -1281,7 +1281,7 @@ class TableFilterEditor(HasTraits):
     filters = List(TableFilter)
 
     #: The list of available templates from which filters can be created
-    templates = Property(List(TableFilter), depends_on="filters")
+    templates = Property(List(TableFilter), observe="filters")
 
     #: The currently selected filter template
     selected_template = Instance(TableFilter)
@@ -1290,7 +1290,7 @@ class TableFilterEditor(HasTraits):
     selected_filter = Instance(TableFilter, allow_none=True)
 
     #: The view to use for the current filter
-    selected_filter_view = Property(depends_on="selected_filter")
+    selected_filter_view = Property(observe="selected_filter")
 
     #: Buttons for add/removing filters
     add_button = Button("New")
