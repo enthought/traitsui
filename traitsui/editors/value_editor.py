@@ -76,7 +76,7 @@ class _ValueEditor(Editor):
         """
         self._ui.dispose()
 
-        super(_ValueEditor, self).dispose()
+        super().dispose()
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.

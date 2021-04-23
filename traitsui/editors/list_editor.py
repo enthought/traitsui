@@ -190,7 +190,7 @@ class ListItemProxy(HasTraits):
     _zzz_name = Any()
 
     def __init__(self, object, name, index, trait, value):
-        super(ListItemProxy, self).__init__()
+        super().__init__()
 
         self._zzz_inited = False
         self._zzz_object = object
