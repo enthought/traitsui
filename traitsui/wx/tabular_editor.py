@@ -427,7 +427,7 @@ class TabularEditor(Editor):
         self.on_trait_change(self._refresh, "adapter.+update", remove=True)
         self.on_trait_change(self._rebuild_all, "adapter.columns", remove=True)
 
-        super(TabularEditor, self).dispose()
+        super().dispose()
 
     def _update_changed(self, event):
         """ Handles the 'update' event being fired.
@@ -470,9 +470,7 @@ class TabularEditor(Editor):
         """
         self._update_visible = True
 
-        super(TabularEditor, self)._update_editor(
-            object, name, old_value, new_value
-        )
+        super()._update_editor(object, name, old_value, new_value)
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

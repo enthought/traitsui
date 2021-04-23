@@ -63,7 +63,7 @@ class SimpleEditor(EditorWithList):
             widget.
         """
         self.create_control(parent)
-        super(SimpleEditor, self).init(parent)
+        super().init(parent)
         self.set_tooltip()
 
     def dispose(self):

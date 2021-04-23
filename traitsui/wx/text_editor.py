@@ -178,7 +178,7 @@ class ReadonlyEditor(BaseReadonlyEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(ReadonlyEditor, self).init(parent)
+        super().init(parent)
 
         if self.factory.view is not None:
             control = self.control
@@ -215,7 +215,7 @@ class ReadonlyEditor(BaseReadonlyEditor):
             control.Unbind(wx.EVT_LEFT_DOWN)
             control.Unbind(wx.EVT_LEFT_UP)
 
-        super(ReadonlyEditor, self).dispose()
+        super().dispose()
 
     # -- Private Methods ------------------------------------------------------
 

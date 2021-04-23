@@ -49,7 +49,7 @@ class SimpleEditor(Editor):
             )
             self.set_tooltip()
         else:
-            super(SimpleEditor, self).init(parent)
+            super().init(parent)
         self.control.SetBackgroundColour(self.ok_color)
         self.control.SetDropTarget(PythonDropTarget(self))
 
