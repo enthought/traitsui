@@ -29,28 +29,7 @@ from pyface.qt import QtCore, QtGui
 
 from traits.api import TraitError
 
-from traitsui.editor_factory import EditorFactory as BaseEditorFactory
-
 from .editor import Editor
-
-
-# -------------------------------------------------------------------------
-#  'EditorFactory' class
-#   Deprecated alias for traitsui.editor_factory.EditorFactory
-# -------------------------------------------------------------------------
-
-
-class EditorFactory(BaseEditorFactory):
-    """ Deprecated alias for traitsui.editor_factory.EditorFactory.
-    """
-
-    def __init__(self, *args, **kwds):
-        super(EditorFactory, self).__init__(*args, **kwds)
-        warnings.warn(
-            "DEPRECATED: Use traitsui.editor_factory."
-            ".EditorFactory instead.",
-            DeprecationWarning,
-        )
 
 
 class SimpleEditor(Editor):
