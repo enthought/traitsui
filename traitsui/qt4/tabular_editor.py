@@ -517,15 +517,10 @@ class TabularEditor(Editor):
     def _scroll_to_row_changed(self, row):
         """ Scroll to the given row.
         """
-        if self.factory.scroll_to_position_hint:
-            scroll_hint = self.scroll_to_position_hint_map.get(
-                self.factory.scroll_to_position_hint,
-                self.control.EnsureVisible
-            )
-        else:
-            scroll_hint = self.scroll_to_position_hint_map.get(
-                self.factory.scroll_to_row_hint, self.control.EnsureVisible
-            )
+        scroll_hint = self.scroll_to_position_hint_map.get(
+            self.factory.scroll_to_position_hint,
+            self.control.EnsureVisible
+        )
         self.control.scrollTo(
             self.model.index(row, max(self.selected_column, 0)), scroll_hint
         )
@@ -533,15 +528,10 @@ class TabularEditor(Editor):
     def _scroll_to_column_changed(self, column):
         """ Scroll to the given column.
         """
-        if self.factory.scroll_to_position_hint:
-            scroll_hint = self.scroll_to_position_hint_map.get(
-                self.factory.scroll_to_position_hint,
-                self.control.EnsureVisible
-            )
-        else:
-            scroll_hint = self.scroll_to_position_hint_map.get(
-                self.factory.scroll_to_row_hint, self.control.EnsureVisible
-            )
+        scroll_hint = self.scroll_to_position_hint_map.get(
+            self.factory.scroll_to_position_hint,
+            self.control.EnsureVisible
+        )
         self.control.scrollTo(
             self.model.index(max(self.selected_row, 0), column), scroll_hint
         )
