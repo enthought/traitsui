@@ -11,8 +11,6 @@
 """ Defines the button editor factory for all traits toolkit backends.
 """
 
-
-
 from pyface.ui_traits import Image
 from traits.api import Str, Range, Enum, Property, Either
 
@@ -81,10 +79,10 @@ class ToolkitEditorFactory(EditorFactory):
         if isinstance(value, str):
             try:
                 self._value = int(value)
-            except:
+            except ValueError:
                 try:
                     self._value = float(value)
-                except:
+                except ValueError:
                     pass
 
     def __init__(self, **traits):

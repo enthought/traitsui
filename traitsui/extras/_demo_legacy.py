@@ -373,7 +373,7 @@ class DemoFileBase(DemoTreeNodeObject):
     parent = Any()
 
     #: Name of file system path to this file:
-    path = Property(depends_on='parent.path,name')
+    path = Property(observe='parent.path,name')
 
     #: Name of the file:
     name = Str()
@@ -388,7 +388,7 @@ class DemoFileBase(DemoTreeNodeObject):
     description = HTML()
 
     #: The base URL for links:
-    base_url = Property(depends_on='path')
+    base_url = Property(observe='path')
 
     #: The css file for this node.
     css_filename = Str("default.css")
@@ -548,13 +548,13 @@ class DemoPath(DemoTreeNodeObject):
     parent = Any()
 
     #: Name of file system path to this package:
-    path = Property(depends_on='parent.path,name')
+    path = Property(observe='parent.path,name')
 
     #: Description of what the demo does:
-    description = Property(HTML, depends_on="path,css_filename")
+    description = Property(HTML, observe="path,css_filename")
 
     #: The base URL for links:
-    base_url = Property(depends_on='path')
+    base_url = Property(observe='path')
 
     #: The css file for this node.
     css_filename = Str("default.css")

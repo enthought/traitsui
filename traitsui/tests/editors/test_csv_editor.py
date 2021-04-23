@@ -23,7 +23,6 @@ from traitsui.tests._tools import (
     create_ui,
     is_wx,
     is_qt,
-    press_ok_button,
     requires_toolkit,
     reraise_exceptions,
     ToolkitName,
@@ -62,7 +61,7 @@ class TestCSVEditor(BaseTestMixin, unittest.TestCase):
         csv_view = ListOfFloatsWithCSVEditor(model=list_of_floats)
         try:
             with reraise_exceptions():
-                with create_ui(csv_view) as ui:
+                with create_ui(csv_view):
                     pass
                 # raise an exception if still hooked
                 list_of_floats.data.append(2)

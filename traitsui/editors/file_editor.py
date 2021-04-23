@@ -11,9 +11,7 @@
 """ Defines the file editor factory for all traits toolkit backends.
 """
 
-
-
-from traits.api import List, Str, Bool, Int, Str, File
+from traits.api import Bool, File, Int, List, Str
 
 # CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
 # to avoid circular imports, as this EditorFactory will be part of
@@ -47,7 +45,8 @@ class ToolkitEditorFactory(EditorFactory):
     #: Wildcard filter to apply to the file dialog:
     filter = filter_trait
 
-    #: Optional extended trait name of the trait containing the list of filters:
+    #: Optional extended trait name of the trait containing the list of
+    #: filters:
     filter_name = Str()
 
     #: Should file extension be truncated?

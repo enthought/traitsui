@@ -11,8 +11,6 @@
 """ Traits UI 'display only' image editor.
 """
 
-
-
 from pyface.ui_traits import Image
 from traits.api import Bool, Property
 

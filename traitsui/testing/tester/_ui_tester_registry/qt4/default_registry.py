@@ -15,6 +15,7 @@ from traitsui.testing.tester._ui_tester_registry.qt4._traitsui import (
     check_list_editor,
     editor_factory,
     enum_editor,
+    file_editor,
     font_editor,
     instance_editor,
     list_editor,
@@ -47,6 +48,9 @@ def get_default_registries():
 
     # EnumEditor
     enum_editor.register(registry)
+
+    # FileEditor
+    file_editor.register(registry)
 
     # FontEditor
     font_editor.register(registry)

@@ -458,7 +458,7 @@ class Handler(HasPrivateTraits):
     ):
         """ Configures the object's traits.
         """
-        return super(HasPrivateTraits, self).configure_traits(
+        return super().configure_traits(
             filename,
             view,
             kind,

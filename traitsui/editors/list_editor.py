@@ -11,8 +11,6 @@
 """ Defines the list editor factory for the traits user interface toolkits..
 """
 
-
-
 from traits.api import (
     HasTraits,
     BaseTraitHandler,
