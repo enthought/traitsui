@@ -29,6 +29,7 @@ import re
 from pyface.qt import QtCore, QtGui
 
 from traits.api import Any, Instance, Undefined
+from traits.observation.api import match
 
 from traitsui.api import Group
 
@@ -720,6 +721,33 @@ class _GroupPanel(object):
 
         return outer
 
+    def _label_when(self):
+        """Set the visible and enabled states of all labels as controlled by
+           a 'visible_when' or 'enabled_when' expression.
+        """
+        self._evaluate_label_condition(self._label_enabled_whens, "enabled")
+        self._evaluate_label_condition(self._label_visible_whens, "visible")
+    
+    def _evaluate_label_condition(self, conditions, kind):
+        """Evaluates a list of (eval, widget) pairs and calls the appropriate
+           method on the label widget to toggle whether it is visible/enabled
+           as needed.
+        """
+        context = self.ui._get_context(self.ui.context)
+
+        method_dict = {"visible": "setVisible", "enabled": "setEnabled"}
+
+        for when, label in conditions:
+            method_to_call = getattr(label, method_dict[kind])
+            try:
+                cond_value = eval(when, globals(), context)
+                method_to_call(cond_value)
+            except Exception:
+                # catch errors in the validate_when expression
+                from traitsui.api import raise_to_debug
+
+                raise_to_debug()
+
     def _add_items(self, content, outer=None):
         """Adds a list of Item objects, creating a layout if needed.  Return
            the outermost layout.
@@ -732,6 +760,9 @@ class _GroupPanel(object):
         group = self.group
         show_left = group.show_left
         columns = group.columns
+
+        self._label_enabled_whens = []
+        self._label_visible_whens = []
 
         # See if a label is needed.
         show_labels = False
@@ -949,6 +980,11 @@ class _GroupPanel(object):
                 if item.enabled_when != "":
                     ui.add_enabled(item.enabled_when, editor)
 
+        if (len(self._label_enabled_whens) + len(self._label_visible_whens)) > 0:
+            for object in self.ui.context.values():
+                object.on_trait_change(lambda: self._label_when(), dispatch="ui")
+            self._label_when()
+
         return outer
 
     def _add_label_item(self, item, inner, row, col, show_labels):
@@ -963,6 +999,11 @@ class _GroupPanel(object):
 
         if item.emphasized:
             self._add_emphasis(label)
+
+        if item.visible_when:
+            self._label_visible_whens.append((item.visible_when, label))
+        if item.enabled_when:
+            self._label_enabled_whens.append((item.enabled_when, label))
 
     def _add_separator_item(self, item, columns, inner, row, col, show_labels):
         cols = columns
