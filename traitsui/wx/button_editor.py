@@ -73,7 +73,7 @@ class SimpleEditor(Editor):
         """ Disposes of the contents of an editor.
         """
         self.control.Unbind(wx.EVT_BUTTON)
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
 
 class CustomEditor(SimpleEditor):
@@ -116,4 +116,4 @@ class CustomEditor(SimpleEditor):
             self.update_object, "clicked", remove=True
         )
 
-        super(CustomEditor, self).dispose()
+        super().dispose()

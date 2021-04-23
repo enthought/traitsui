@@ -121,7 +121,7 @@ class KeyBindingCtrl(wx.Window):
         size=wx.DefaultSize,
     ):
 
-        super(KeyBindingCtrl, self).__init__(
+        super().__init__(
             parent, wid, pos, size, style=wx.CLIP_CHILDREN | wx.WANTS_CHARS
         )
         # Save the reference to the controlling editor object:

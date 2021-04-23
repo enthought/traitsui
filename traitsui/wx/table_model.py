@@ -88,7 +88,7 @@ class TableModel(GridModel):
     def __init__(self, **traits):
         """ Initializes the object.
         """
-        super(TableModel, self).__init__(**traits)
+        super().__init__(**traits)
 
         # Attach trait handlers to the list object:
         editor = self.editor

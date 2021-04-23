@@ -44,7 +44,7 @@ class UIWindow(HasPrivateTraits):
     def __init__(self, parent, **traits):
         """ Creates and initializes the window.
         """
-        super(UIWindow, self).__init__(**traits)
+        super().__init__(**traits)
         self.control = wx.Window(
             parent, -1, size=self.size, style=wx.FULL_REPAINT_ON_RESIZE
         )

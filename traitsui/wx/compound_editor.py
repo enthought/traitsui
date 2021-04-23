@@ -80,7 +80,7 @@ class CompoundEditor(Editor):
         for editor in self._editors:
             editor.dispose()
 
-        super(CompoundEditor, self).dispose()
+        super().dispose()
 
 
 class SimpleEditor(CompoundEditor):
