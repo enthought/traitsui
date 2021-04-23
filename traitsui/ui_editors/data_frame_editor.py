@@ -226,7 +226,7 @@ class _DataFrameEditor(UIEditor):
                     scroll_to_row=self._target_name(
                         self.factory.scroll_to_row
                     ),  # noqa
-                    scroll_to_position_hint= (
+                    scroll_to_position_hint=(
                         self.factory.scroll_to_position_hint
                     ),
                     scroll_to_column=self._target_name(
