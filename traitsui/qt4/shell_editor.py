@@ -29,4 +29,4 @@ class _ShellEditor(BaseShellEditor, Editor):
     """
 
     def init(self, parent):
-        super(_ShellEditor, self).init(None)
+        super().init(None)

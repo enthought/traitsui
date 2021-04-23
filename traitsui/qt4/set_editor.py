@@ -274,7 +274,7 @@ class SimpleEditor(Editor):
             self.update_editor, self.extended_name + "_items?", remove=True
         )
 
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.

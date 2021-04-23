@@ -123,7 +123,7 @@ class BaseEditor(Editor):
                 self._values_changed, "values", remove=True, dispatch="ui"
             )
 
-        super(BaseEditor, self).dispose()
+        super().dispose()
 
     # -------------------------------------------------------------------------
     #  Private interface
@@ -168,7 +168,7 @@ class SimpleEditor(BaseEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(SimpleEditor, self).init(parent)
+        super().init(parent)
 
         self.control = control = self.create_combo_box()
         control.addItems(self.names)
@@ -229,9 +229,7 @@ class SimpleEditor(BaseEditor):
         self.update_editor()
 
     def set_size_policy(self, direction, resizable, springy, stretch):
-        super(SimpleEditor, self).set_size_policy(
-            direction, resizable, springy, stretch
-        )
+        super().set_size_policy(direction, resizable, springy, stretch)
 
         if (direction == QtGui.QBoxLayout.LeftToRight and springy) or (
             direction != QtGui.QBoxLayout.LeftToRight and resizable
@@ -323,7 +321,7 @@ class RadioEditor(BaseEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(RadioEditor, self).init(parent)
+        super().init(parent)
 
         self.control = QtGui.QWidget()
         layout = QtGui.QGridLayout(self.control)
@@ -436,7 +434,7 @@ class ListEditor(BaseEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(ListEditor, self).init(parent)
+        super().init(parent)
 
         self.control = QtGui.QListWidget()
         self.control.currentTextChanged.connect(self.update_object)

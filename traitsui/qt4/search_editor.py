@@ -24,7 +24,7 @@ class SearchWidget(QtGui.QLineEdit):
     def __init__(self, desc):
         """ Store the descriptive text for the widget.
         """
-        super(SearchWidget, self).__init__()
+        super().__init__()
         self._desc = str(desc)
         self._set_descriptive_text()
 
@@ -41,7 +41,7 @@ class SearchWidget(QtGui.QLineEdit):
             self.setText("")
             self.update()
 
-        super(SearchWidget, self).focusInEvent(event)
+        super().focusInEvent(event)
 
     def focusOutEvent(self, event):
         """ Handles losing focus.
@@ -52,7 +52,7 @@ class SearchWidget(QtGui.QLineEdit):
         if len(self.text()) == 0:
             self._set_descriptive_text()
 
-        super(SearchWidget, self).focusOutEvent(event)
+        super().focusOutEvent(event)
 
     def _set_descriptive_text(self):
         """ Sets the greyed-out descriptive text.

@@ -24,7 +24,7 @@ class CustomEditor(DateCustomEditor):
         if not self.factory.multi_select:
             raise ValueError("multi_select must be true.")
 
-        super(CustomEditor, self).init(parent)
+        super().init(parent)
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

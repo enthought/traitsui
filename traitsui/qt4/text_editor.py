@@ -219,7 +219,7 @@ class ReadonlyEditor(BaseReadonlyEditor):
     """
 
     def init(self, parent):
-        super(ReadonlyEditor, self).init(parent)
+        super().init(parent)
 
         if self.factory.readonly_allow_selection:
             flags = (

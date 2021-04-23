@@ -50,7 +50,7 @@ class ReadonlyEditor(BaseEditor, BaseEnumEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(ReadonlyEditor, self).init(parent)
+        super().init(parent)
 
         self.control = QtGui.QLabel()
         self.control.setPixmap(self.get_pixmap(self.str_value))
@@ -296,7 +296,7 @@ class ImageEnumModel(QtCore.QAbstractTableModel):
     def __init__(self, editor, parent):
         """ Reimplemented to store the editor.
         """
-        super(ImageEnumModel, self).__init__(parent)
+        super().__init__(parent)
         self._editor = editor
 
     def rowCount(self, mi):
