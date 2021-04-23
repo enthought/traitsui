@@ -32,37 +32,37 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
-    # Value to set when the button is clicked
+    #: Value to set when the button is clicked
     value = Property()
 
-    # Optional label for the button
+    #: Optional label for the button
     label = Str()
 
-    # The name of the external object trait that the button label is synced to
+    #: The name of the external object trait that the button label is synced to
     label_value = Str()
 
-    # The name of the trait on the object that contains the list of possible
-    # values.  If this is set, then the value, label, and label_value traits
-    # are ignored; instead, they will be set from this list.  When this button
-    # is clicked, the value set will be the one selected from the drop-down.
+    #: The name of the trait on the object that contains the list of possible
+    #: values.  If this is set, then the value, label, and label_value traits
+    #: are ignored; instead, they will be set from this list.  When this button
+    #: is clicked, the value set will be the one selected from the drop-down.
     values_trait = Either(None, Str)
 
-    # (Optional) Image to display on the button
+    #: (Optional) Image to display on the button
     image = Image
 
-    # Extra padding to add to both the left and the right sides
+    #: Extra padding to add to both the left and the right sides
     width_padding = Range(0, 31, 7)
 
-    # Extra padding to add to both the top and the bottom sides
+    #: Extra padding to add to both the top and the bottom sides
     height_padding = Range(0, 31, 5)
 
-    # Presentation style
+    #: Presentation style
     style = Enum("button", "radio", "toolbar", "checkbox")
 
-    # Orientation of the text relative to the image
+    #: Orientation of the text relative to the image
     orientation = Enum("vertical", "horizontal")
 
-    # The optional view to display when the button is clicked:
+    #: The optional view to display when the button is clicked:
     view = AView
 
     # -------------------------------------------------------------------------
