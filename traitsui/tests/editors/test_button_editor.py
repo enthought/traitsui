@@ -16,6 +16,7 @@ from traits.api import Bool, Button, HasTraits, List, Str
 from traits.testing.api import UnittestTools
 
 from traitsui.api import ButtonEditor, Item, UItem, View
+import traitsui.extras
 from traitsui.tests._tools import (
     BaseTestMixin,
     requires_toolkit,
@@ -37,7 +38,7 @@ class ButtonTextEdit(HasTraits):
     play_button_label = Str("I'm a play button")
 
     play_button_image = Image(
-        ImageResource(name="run")
+        ImageResource("run", [traitsui.extras])
     )
 
     values = List()
@@ -170,8 +171,7 @@ class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
             self.assertIsInstance(default_image, ImageResource)
 
             button_text_edit.play_button_image = ImageResource(
-                name='next',
-                search_path='traitsui/examples/demos/Advanced/images'
+                'next', [traitsui.extras]
             )
             self.assertIsInstance(button._target.image, ImageResource)
             self.assertIsNot(button._target.image, default_image)

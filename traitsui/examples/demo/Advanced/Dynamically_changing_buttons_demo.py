@@ -28,7 +28,8 @@ from traitsui.api import (
     Item,
     UItem,
     View
-) 
+)
+import traitsui.extras
 
 
 class ImageChoice(InstanceChoice):
@@ -48,11 +49,11 @@ class ButtonEditorDemo(HasTraits):
     my_button_image_options = List(
         Image(),
         value=[
-            ImageResource("run"),
-            ImageResource("previous"),
-            ImageResource("next"),
-            ImageResource("parent"),
-            ImageResource("reload")
+            ImageResource("run", [traitsui.extras]),
+            ImageResource("previous", [traitsui.extras]),
+            ImageResource("next", [traitsui.extras]),
+            ImageResource("parent", [traitsui.extras]),
+            ImageResource("reload", [traitsui.extras])
         ]
     )
 
