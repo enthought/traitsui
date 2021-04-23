@@ -26,7 +26,7 @@ from .text_editor import ToolkitEditorFactory as EditorFactory
 #  Trait definitions:
 # -------------------------------------------------------------------------
 
-# Wildcard filter:
+#: Wildcard filter:
 filter_trait = List(Str)
 
 # -------------------------------------------------------------------------

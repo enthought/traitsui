@@ -204,7 +204,7 @@ class SimpleEditor(Editor):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
-    # Is the editor read-only?
+    #: Is the editor read-only?
     readonly = Bool(False)
 
     def init(self, parent):
