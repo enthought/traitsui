@@ -548,7 +548,7 @@ class ShadowGroup(Group):
         # Set the 'shadow' trait before all others, to avoid exceptions
         # when setting those other traits.
         self.shadow = shadow
-        super(ShadowGroup, self).__init__(**traits)
+        super().__init__(**traits)
 
     # -------------------------------------------------------------------------
     # Trait definitions:

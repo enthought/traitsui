@@ -53,7 +53,7 @@ class Theme(HasPrivateTraits):
         if image is not None:
             self.image = image
 
-        super(Theme, self).__init__(**traits)
+        super().__init__(**traits)
 
     # -- Property Implementations ---------------------------------------------
 

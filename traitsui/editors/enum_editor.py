@@ -82,7 +82,7 @@ class ToolkitEditorFactory(EditorWithListFactory):
                     raise_exceptions=True,
                 )
         except:
-            return super(ToolkitEditorFactory, self)._get_custom_editor_class()
+            return super()._get_custom_editor_class()
 
 
 # Define the EnumEditor class.

@@ -87,7 +87,7 @@ class ToolkitEditorFactory(EditorFactory):
 
     def __init__(self, **traits):
         self._value = 0
-        super(ToolkitEditorFactory, self).__init__(**traits)
+        super().__init__(**traits)
 
 
 # Define the ButtonEditor class

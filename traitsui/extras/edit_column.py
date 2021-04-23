@@ -21,7 +21,7 @@ class EditColumn(ObjectColumn):
     def __init__(self, **traits):
         """ Initializes the object.
         """
-        super(EditColumn, self).__init__(**traits)
+        super().__init__(**traits)
 
         from traitsui.toolkit import toolkit_object
         EditRenderer = toolkit_object(

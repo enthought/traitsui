@@ -140,7 +140,7 @@ class KeyBindings(HasPrivateTraits):
     )
 
     def __init__(self, *bindings, **traits):
-        super(KeyBindings, self).__init__(**traits)
+        super().__init__(**traits)
 
         if (len(bindings) == 1) and isinstance(bindings[0], SequenceTypes):
             bindings = bindings[0]

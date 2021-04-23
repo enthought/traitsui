@@ -254,7 +254,7 @@ class GenericTableFilterRule(HasPrivateTraits):
     ignored_traits = ["filter", "name_editor", "value_editor"]
 
     def __init__(self, **traits):
-        super(GenericTableFilterRule, self).__init__(**traits)
+        super().__init__(**traits)
         if self.name == "":
             names = list(self.filter._name_to_value.keys())
             if len(names) > 0:
@@ -284,7 +284,7 @@ class GenericTableFilterRule(HasPrivateTraits):
         """ Clones a new object from this one, optionally copying only a
         specified set of traits."""
         return (
-            super(GenericTableFilterRule, self)
+            super()
             .clone_traits(traits, memo, copy, **metadata)
             .trait_set(enabled=self.enabled, name=self.name)
         )
@@ -477,7 +477,7 @@ class RuleTableFilter(TableFilter):
         if len(ors) > 1:
             return " or ".join(["(%s)" % t for t in ors])
 
-        return super(RuleTableFilter, self).description()
+        return super().description()
 
     def edit_view(self, object):
         """ Return a view to use for editing the filter.

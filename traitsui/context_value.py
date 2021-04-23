@@ -81,7 +81,7 @@ class ContextValue(HasStrictTraits):
     # ------------------------------------------------------------------------
 
     def __init__(self, name):
-        super(ContextValue, self).__init__(name=name)
+        super().__init__(name=name)
 
 
 #: Define a shorthand name for a ContextValue:

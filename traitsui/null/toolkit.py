@@ -69,4 +69,4 @@ class GUIToolkit(Toolkit):
         if attr.endswith("_editor"):
             return lambda *args, **kwds: null_editor_factory
         else:
-            return super(GUIToolkit, self).__getattribute__(attr)
+            return super().__getattribute__(attr)

@@ -392,9 +392,7 @@ class ToolkitEditorFactory(EditorFactory):
 
         """
         self.editable = False
-        return super(ToolkitEditorFactory, self).readonly_editor(
-            ui, object, name, description, parent
-        )
+        return super().readonly_editor(ui, object, name, description, parent)
 
     # -------------------------------------------------------------------------
     #  Event handlers:
