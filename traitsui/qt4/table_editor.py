@@ -362,7 +362,7 @@ class TableEditor(Editor, BaseTableEditor):
             self._update_columns, "columns_items", remove=True
         )
 
-        super(TableEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         """Updates the editor when the object trait changes externally to the
@@ -992,7 +992,7 @@ class TableView(QtGui.QTableView):
         self.resizeColumnsToContents()
 
     def setModel(self, model):
-        super(TableView, self).setModel(model)
+        super().setModel(model)
         self._update_header_sizing()
 
     def contextMenuEvent(self, event):
@@ -1208,7 +1208,7 @@ class TableView(QtGui.QTableView):
             editor.dispose()
             delattr(control, "_editor")
 
-        return super(TableView, self).closeEditor(control, hint)
+        return super().closeEditor(control, hint)
 
     def _update_header_sizing(self):
         """ Header section sizing can be done only after a valid model is set.

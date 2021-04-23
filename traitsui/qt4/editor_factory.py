@@ -97,7 +97,7 @@ class TextEditor(Editor):
         """
         if self.control is not None:
             self.control.editingFinished.disconnect(self.update_object)
-        super(TextEditor, self).dispose()
+        super().dispose()
 
     def update_object(self):
         """ Handles the user changing the contents of the edit control.

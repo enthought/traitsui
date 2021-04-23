@@ -528,7 +528,7 @@ class _ListView(QtGui.QListView):
         if event.button() == QtCore.Qt.RightButton:
             event.accept()
             self._editor._on_mouse_right_click(event.pos())
-        super(_ListView, self).mouseReleaseEvent(event)
+        super().mouseReleaseEvent(event)
 
     def keyPressEvent(self, event):
         """ Reimplemented to support edit, insert, and delete by keyboard.

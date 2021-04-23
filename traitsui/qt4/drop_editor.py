@@ -55,7 +55,7 @@ class SimpleEditor(Editor):
             self.control.setReadOnly(True)
             self.set_tooltip()
         else:
-            super(SimpleEditor, self).init(parent)
+            super().init(parent)
 
         pal = QtGui.QPalette(self.control.palette())
         pal.setColor(QtGui.QPalette.Base, self.ok_color)
@@ -74,7 +74,7 @@ class SimpleEditor(Editor):
             # enthought/traitsui#884
             _BaseEditor.dispose(self)
         else:
-            super(SimpleEditor, self).dispose()
+            super().dispose()
 
     def string_value(self, value):
         """ Returns the text representation of a specified object trait value.
@@ -96,7 +96,7 @@ class _DropEventFilter(QtCore.QObject):
             self.dropEvent(event)
         elif typ == QtCore.QEvent.DragEnter:
             self.dragEnterEvent(event)
-        return super(_DropEventFilter, self).eventFilter(source, event)
+        return super().eventFilter(source, event)
 
     def dropEvent(self, e):
         """ Handles a Python object being dropped on the tree.
