@@ -17,11 +17,6 @@ import wx
 from pyface.ui_traits import Image
 from traits.api import Str, observe
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.button_editor file.
-from traitsui.editors.button_editor import ToolkitEditorFactory
-
 from .editor import Editor
 
 # -------------------------------------------------------------------------

@@ -18,11 +18,6 @@ from os.path import abspath, split, splitext, isfile, exists
 
 from traits.api import List, Str, Event, Any, observe, TraitError
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.file_editor file.
-from traitsui.editors.file_editor import ToolkitEditorFactory
-
 from .text_editor import SimpleEditor as SimpleTextEditor
 
 from .helper import TraitsUIPanel, PopupControl

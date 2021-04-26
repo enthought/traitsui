@@ -32,10 +32,6 @@ from pyface.qt import QtCore, QtGui
 
 from traits.api import Bool, Property
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.enum_editor file.
-from traitsui.editors.enum_editor import ToolkitEditorFactory
 from traitsui.helper import enum_values_changed
 from .constants import OKColor, ErrorColor
 from .editor import Editor

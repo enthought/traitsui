@@ -31,11 +31,6 @@ from pyface.qt import QtCore, QtGui
 
 from traits.api import TraitError, Str, Float, Any, Bool
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.range_editor file.
-from traitsui.editors.range_editor import ToolkitEditorFactory
-
 from .editor_factory import TextEditor
 
 from .editor import Editor

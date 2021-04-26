@@ -12,13 +12,7 @@
 """
 
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.tuple_editor file.
-from traitsui.editors.tuple_editor import (
-    SimpleEditor as BaseSimpleEditor,
-    ToolkitEditorFactory,
-)
+from traitsui.editors.tuple_editor import SimpleEditor as BaseSimpleEditor
 
 from .editor import Editor
 

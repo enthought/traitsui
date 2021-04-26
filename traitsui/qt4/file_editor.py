@@ -25,10 +25,6 @@ from os.path import abspath, splitext, isfile, exists
 from pyface.qt import QtCore, QtGui, is_qt5
 from traits.api import Any, Callable, List, Event, File, Str, TraitError, Tuple
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.file_editor file.
-from traitsui.editors.file_editor import ToolkitEditorFactory
 from .editor import Editor
 from .text_editor import SimpleEditor as SimpleTextEditor
 from .helper import IconButton

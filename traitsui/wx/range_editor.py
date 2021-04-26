@@ -19,11 +19,6 @@ from math import log10
 
 from traits.api import TraitError, Str, Float, Any, Bool
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.range_editor file.
-from traitsui.editors.range_editor import ToolkitEditorFactory
-
 from .editor_factory import TextEditor
 
 from .editor import Editor
@@ -928,7 +923,7 @@ def CustomEnumEditor(
     if factory._enum is None:
         import traitsui.editors.enum_editor as enum_editor
 
-        factory._enum = enum_editor.ToolkitEditorFactory(
+        factory._enum = enum_editor.EnumEditor(
             values=list(range(factory.low, factory.high + 1)),
             cols=factory.cols,
         )

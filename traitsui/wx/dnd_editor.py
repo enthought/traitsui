@@ -23,11 +23,6 @@ from pickle import load
 
 from traits.api import Bool
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.dnd_editor file.
-from traitsui.editors.dnd_editor import ToolkitEditorFactory
-
 from pyface.wx.drag_and_drop import (
     PythonDropSource,
     PythonDropTarget,

@@ -30,13 +30,6 @@ from pyface.qt import QtCore, QtGui
 
 from traits.api import Bool, Event
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.key_binding_editor file.
-from traitsui.editors.key_binding_editor import (
-    KeyBindingEditor as ToolkitEditorFactory,
-)
-
 from .editor import Editor
 
 from .key_event_to_name import key_event_to_name
