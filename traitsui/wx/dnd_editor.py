@@ -144,7 +144,7 @@ class SimpleEditor(Editor):
         control.Unbind(wx.EVT_MOTION)
         control.Unbind(wx.EVT_PAINT)
 
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -318,7 +318,7 @@ class FileDropSource(wx.DropSource):
             data_object.AddFile(file)
 
         # Create the drop source and begin the drag and drop operation:
-        super(FileDropSource, self).__init__(source)
+        super().__init__(source)
         self.SetData(data_object)
         self.result = self.DoDragDrop(True)
 

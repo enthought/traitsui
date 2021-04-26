@@ -126,7 +126,7 @@ class _KeyEventHook(QtCore.QObject):
     """
 
     def __init__(self, handler):
-        super(_KeyEventHook, self).__init__()
+        super().__init__()
         self._handler = handler
 
     def eventFilter(self, object, event):

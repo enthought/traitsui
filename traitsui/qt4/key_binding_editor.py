@@ -121,7 +121,7 @@ class KeyBindingCtrl(QtGui.QLabel):
     """
 
     def __init__(self, editor, parent=None):
-        super(KeyBindingCtrl, self).__init__(parent)
+        super().__init__(parent)
 
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.setIndent(4)

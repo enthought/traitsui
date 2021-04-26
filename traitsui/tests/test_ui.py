@@ -266,7 +266,7 @@ if is_qt():
     class CustomWidget(QtGui.QWidget):
 
         def __init__(self, editor, parent=None):
-            super(CustomWidget, self).__init__()
+            super().__init__()
             self._some_editor = editor
 
         def sizeHint(self):

@@ -383,7 +383,7 @@ class MouseMonitor(wx.Timer):
     """
 
     def __init__(self, ui):
-        super(MouseMonitor, self).__init__()
+        super().__init__()
         self.ui = ui
         kind = ui.view.kind
         self.is_activated = self.is_info = kind == "info"

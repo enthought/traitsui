@@ -157,7 +157,7 @@ class _ScrubberEditor(Editor):
         # Disconnect the pop-up text event handlers:
         self._disconnect_text()
 
-        super(_ScrubberEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

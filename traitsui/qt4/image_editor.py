@@ -48,7 +48,7 @@ class QImageView(QFrame):
             The parent widget of this image viewer.
 
         """
-        super(QImageView, self).__init__(parent)
+        super().__init__(parent)
         self._pixmap = None
         self._scaled_contents = False
         self._allow_upscaling = False
@@ -131,7 +131,7 @@ class QImageView(QFrame):
         pixmap = self._pixmap
         if pixmap is not None:
             return pixmap.size()
-        return super(QImageView, self).sizeHint()
+        return super().sizeHint()
 
     def minimumSizeHint(self):
         """ Returns a appropriate minimum size hint for the image based on the
@@ -145,7 +145,7 @@ class QImageView(QFrame):
             and not self._scaled_contents
         ):
             return pixmap.size()
-        return super(QImageView, self).sizeHint()
+        return super().sizeHint()
 
     def pixmap(self):
         """ Returns the underlying pixmap for the image view.

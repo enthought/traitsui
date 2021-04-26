@@ -39,7 +39,7 @@ class ToolkitEditorFactory(BasicEditorFactory):
         if len(args) >= 1:
             self.factory = args[0]
             self.args = args[1:]
-        super(ToolkitEditorFactory, self).__init__(**traits)
+        super().__init__(**traits)
 
     # -------------------------------------------------------------------------
     #  Property getters

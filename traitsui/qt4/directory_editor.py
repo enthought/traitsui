@@ -56,7 +56,7 @@ class CustomEditor(CustomFileEditor):
     """
 
     def init(self, parent):
-        super(CustomEditor, self).init(parent)
+        super().init(parent)
         self._model.setNameFilterDisables(True)
         self._model.setNameFilters([""])
 

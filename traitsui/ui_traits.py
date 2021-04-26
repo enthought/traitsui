@@ -115,7 +115,7 @@ class StatusItem(HasStrictTraits):
     def __init__(self, value=None, **traits):
         """ Initializes the item object.
         """
-        super(StatusItem, self).__init__(**traits)
+        super().__init__(**traits)
 
         if value is not None:
             self.name = value
@@ -214,7 +214,7 @@ class ATheme(TraitType):
             The default value for the ATheme, either a Theme object, or a
             string from which a Theme object can be derived.
         """
-        super(ATheme, self).__init__(convert_theme(value), **metadata)
+        super().__init__(convert_theme(value), **metadata)
 
     def validate(self, object, name, value):
         """ Validates that a specified value is valid for this trait.

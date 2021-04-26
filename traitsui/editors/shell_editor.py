@@ -138,7 +138,7 @@ class _ShellEditor(Editor):
         if self._base_locals is None:
             self.object.observe(self.update_any, remove=True, dispatch="ui")
 
-        super(_ShellEditor, self).dispose()
+        super().dispose()
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the

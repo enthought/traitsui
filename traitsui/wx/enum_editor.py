@@ -130,7 +130,7 @@ class BaseEditor(Editor):
                 self._values_changed, "values", remove=True
             )
 
-        super(BaseEditor, self).dispose()
+        super().dispose()
 
 
 # -------------------------------------------------------------------------
@@ -146,7 +146,7 @@ class SimpleEditor(BaseEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(SimpleEditor, self).init(parent)
+        super().init(parent)
 
         factory = self.factory
 
@@ -184,7 +184,7 @@ class SimpleEditor(BaseEditor):
 
         disconnect_no_id(self.control, wx.EVT_KILL_FOCUS)
 
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def update_object(self, event):
         """ Handles the user selecting a new value from the combo box.
@@ -322,7 +322,7 @@ class RadioEditor(BaseEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(RadioEditor, self).init(parent)
+        super().init(parent)
 
         # Create a panel to hold all of the radio buttons:
         self.control = TraitsUIPanel(parent, -1)
@@ -418,7 +418,7 @@ class ListEditor(BaseEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(ListEditor, self).init(parent)
+        super().init(parent)
 
         # Create a panel to hold all of the radio buttons:
         self.control = wx.ListBox(
@@ -437,7 +437,7 @@ class ListEditor(BaseEditor):
         """
         disconnect(self.control, wx.EVT_LISTBOX)
 
-        super(ListEditor, self).dispose()
+        super().dispose()
 
     def update_object(self, event):
         """ Handles the user selecting a list box item.

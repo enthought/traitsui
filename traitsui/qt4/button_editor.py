@@ -99,7 +99,7 @@ class SimpleEditor(Editor):
 
         if self.control is not None:
             self.control.clicked.disconnect(self.update_object)
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def _label_changed(self, label):
         self.control.setText(self.string_value(label))

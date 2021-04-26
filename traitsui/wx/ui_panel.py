@@ -728,6 +728,33 @@ class FillPanel(object):
                         growable = 1
                 sizer.Add(sg_sizer, growable, style, 2)
 
+    def _label_when(self):
+        """Set the visible and enabled states of all labels as controlled by
+           a 'visible_when' or 'enabled_when' expression.
+        """
+        self._evaluate_label_condition(self._label_enabled_whens, "enabled")
+        self._evaluate_label_condition(self._label_visible_whens, "visible")
+
+    def _evaluate_label_condition(self, conditions, kind):
+        """Evaluates a list of (eval, widget) pairs and calls the appropriate
+           method on the label widget to toggle whether it is visible/enabled
+           as needed.
+        """
+        context = self.ui._get_context(self.ui.context)
+
+        method_dict = {"visible": "Show", "enabled": "Enable"}
+
+        for when, label in conditions:
+            method_to_call = getattr(label, method_dict[kind])
+            try:
+                cond_value = eval(when, globals(), context)
+                method_to_call(cond_value)
+            except Exception:
+                # catch errors in the validate_when expression
+                from traitsui.api import raise_to_debug
+
+                raise_to_debug()
+
     def add_items(self, content, panel, sizer):
         """ Adds a list of Item objects to the panel.
         """
@@ -742,6 +769,10 @@ class FillPanel(object):
         col = -1
         col_incr = 1
         self.label_flags = 0
+
+        self._label_enabled_whens = []
+        self._label_visible_whens = []
+
         show_labels = False
         for item in content:
             show_labels |= item.show_label
@@ -802,6 +833,11 @@ class FillPanel(object):
 
                     if item.emphasized:
                         self._add_emphasis(label)
+
+                    if item.visible_when:
+                        self._label_visible_whens.append((item.visible_when, label))
+                    if item.enabled_when:
+                        self._label_enabled_whens.append((item.enabled_when, label))
 
                 # Continue on to the next Item in the list:
                 continue
@@ -1032,6 +1068,10 @@ class FillPanel(object):
 
             # Save the reference to the label control (if any) in the editor:
             editor.label_control = label
+
+        if (len(self._label_enabled_whens) + len(self._label_visible_whens)) > 0:
+            for object in self.ui.context.values():
+                object.on_trait_change(lambda: self._label_when(), dispatch="ui")
 
         # If we created a grid sizer, add it to the original sizer:
         if item_sizer is not sizer:

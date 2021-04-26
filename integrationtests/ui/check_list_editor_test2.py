@@ -46,7 +46,7 @@ class CheckListTest(Handler):
     #-------------------------------------------------------------------------
 
     def __init__(self, **traits):
-        super(CheckListTest, self).__init__(**traits)
+        super().__init__(**traits)
         self._values_text_changed()
 
     #-------------------------------------------------------------------------

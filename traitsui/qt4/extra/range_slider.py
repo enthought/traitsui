@@ -23,7 +23,7 @@ class RangeSlider(QtGui.QSlider):
     """
 
     def __init__(self, *args):
-        super(RangeSlider, self).__init__(*args)
+        super().__init__(*args)
 
         self._low = self.minimum()
         self._high = self.maximum()

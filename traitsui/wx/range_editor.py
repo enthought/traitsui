@@ -249,7 +249,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         if self._error is None:
             self._error = True
             self.ui.errors += 1
-            super(SimpleSliderEditor, self).error(excp)
+            super().error(excp)
         self.set_error_state(True)
 
     def update_editor(self):
@@ -561,7 +561,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         if self._error is None:
             self._error = True
             self.ui.errors += 1
-            super(LargeRangeSliderEditor, self).error(excp)
+            super().error(excp)
         self.set_error_state(True)
 
     def update_editor(self):
@@ -889,7 +889,7 @@ class RangeTextEditor(TextEditor):
         if self._error is None:
             self._error = True
             self.ui.errors += 1
-            super(RangeTextEditor, self).error(excp)
+            super().error(excp)
         self.set_error_state(True)
 
     def _low_changed(self, low):

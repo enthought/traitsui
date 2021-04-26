@@ -301,7 +301,7 @@ class _TreeView(QtGui.QTreeView):
     """
 
     def __init__(self, editor):
-        super(_TreeView, self).__init__()
+        super().__init__()
         self._editor = editor
 
     def event(self, event):
@@ -315,7 +315,7 @@ class _TreeView(QtGui.QTreeView):
 
             return True
 
-        return super(_TreeView, self).event(event)
+        return super().event(event)
 
     def keyPressEvent(self, keyevent):
         key = keyevent.key()
@@ -327,5 +327,5 @@ class _TreeView(QtGui.QTreeView):
     def currentChanged(self, current, previous):
         """ Reimplemented to tell the editor when the current index has changed.
         """
-        super(_TreeView, self).currentChanged(current, previous)
+        super().currentChanged(current, previous)
         self._editor.update_object(current)

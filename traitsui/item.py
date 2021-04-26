@@ -268,7 +268,7 @@ class Item(ViewSubElement):
     def __init__(self, value=None, **traits):
         """ Initializes the item object.
         """
-        super(Item, self).__init__(**traits)
+        super().__init__(**traits)
 
         if value is None:
             return
@@ -496,7 +496,7 @@ class Label(Item):
     """
 
     def __init__(self, label, **traits):
-        super(Label, self).__init__(label=label, **traits)
+        super().__init__(label=label, **traits)
 
 
 # -------------------------------------------------------------------------

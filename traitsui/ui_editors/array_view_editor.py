@@ -52,7 +52,7 @@ class ArrayViewAdapter(TabularAdapter):
             if self.transpose:
                 return getattr(object, trait)[:, row]
 
-            return super(ArrayViewAdapter, self).get_item(object, trait, row)
+            return super().get_item(object, trait, row)
 
         return getattr(object, trait)[row]
 
@@ -62,7 +62,7 @@ class ArrayViewAdapter(TabularAdapter):
         if self.transpose:
             return getattr(object, trait).shape[1]
 
-        return super(ArrayViewAdapter, self).len(object, trait)
+        return super().len(object, trait)
 
 
 # Define the actual abstract Traits UI array view editor (each backend should

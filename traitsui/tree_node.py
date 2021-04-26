@@ -184,7 +184,7 @@ class TreeNode(HasPrivateTraits):
     _listener_cache = Dict()
 
     def __init__(self, **traits):
-        super(TreeNode, self).__init__(**traits)
+        super().__init__(**traits)
         if self.icon_path == "":
             self.icon_path = get_resource_path()
 

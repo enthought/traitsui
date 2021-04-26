@@ -82,7 +82,7 @@ class SimpleEditor(ReadonlyEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(SimpleEditor, self).init(parent)
+        super().init(parent)
         self.control.Selected(True)
         self.control.Handler(self.popup_editor)
         self.set_tooltip()
@@ -110,7 +110,7 @@ class CustomEditor(BaseEnumEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(CustomEditor, self).init(parent)
+        super().init(parent)
 
         # Create the panel to hold the ImageControl buttons:
         self.control = TraitsUIPanel(parent, -1)

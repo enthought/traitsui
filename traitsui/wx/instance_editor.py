@@ -199,7 +199,7 @@ class CustomEditor(Editor):
                 self.rebuild_items, "values_items", remove=True
             )
 
-        super(CustomEditor, self).dispose()
+        super().dispose()
 
     def create_editor(self, parent, sizer):
         """ Creates the editor control.
@@ -502,7 +502,7 @@ class SimpleEditor(CustomEditor):
             self._dialog_ui.dispose()
             self._dialog_ui = None
 
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def edit_instance(self, event):
         """ Edit the contents of the object trait when the user clicks the

@@ -43,7 +43,7 @@ from .tabular_model import TabularModel
 
 class HeaderEventFilter(QtCore.QObject):
     def __init__(self, editor):
-        super(HeaderEventFilter, self).__init__()
+        super().__init__()
         self.editor = editor
 
     def eventFilter(self, obj, event):
@@ -267,7 +267,7 @@ class TabularEditor(Editor):
 
         self.adapter.cleanup()
 
-        super(TabularEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -858,7 +858,7 @@ class _TableView(QtGui.QTableView):
             space be known, we have to wait until the UI that contains this
             table gives it its initial size.
         """
-        super(_TableView, self).resizeEvent(event)
+        super().resizeEvent(event)
 
         parent = self.parent()
         if (
@@ -876,7 +876,7 @@ class _TableView(QtGui.QTableView):
         editor = self._editor
         if editor.factory.auto_resize:
             # Use the default implementation.
-            return super(_TableView, self).sizeHintForColumn(column)
+            return super().sizeHintForColumn(column)
 
         width = editor.adapter.get_width(editor.object, editor.name, column)
         if width > 1:
@@ -894,7 +894,7 @@ class _TableView(QtGui.QTableView):
         adapter = editor.adapter
         if editor.factory.auto_resize:
             # Use the default implementation.
-            return super(_TableView, self).resizeColumnsToContents()
+            return super().resizeColumnsToContents()
 
         available_space = self.viewport().width()
         requested = []

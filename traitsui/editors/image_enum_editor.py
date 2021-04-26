@@ -53,7 +53,7 @@ class ToolkitEditorFactory(EditorFactory):
         """ Performs any initialization needed after all constructor traits
             have been set.
         """
-        super(ToolkitEditorFactory, self).init()
+        super().init()
         self._update_path()
 
     @observe("path, klass, module")
