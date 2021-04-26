@@ -16,12 +16,6 @@
 
 from ..toolkit import Toolkit
 
-from ..editor_factory import EditorFactory
-
-
-# Create a dummy singleton editor factory:
-null_editor_factory = EditorFactory()
-
 
 class GUIToolkit(Toolkit):
 
@@ -54,19 +48,3 @@ class GUIToolkit(Toolkit):
             "WindowColor": (236 / 255.0, 233 / 255.0, 216 / 255.0, 1.0)
         }
         return constants
-
-    # -------------------------------------------------------------------------
-    #  'EditorFactory' factory methods:
-    # -------------------------------------------------------------------------
-
-    def __getattribute__(self, attr):
-        """ Return a method that returns null_editor_factory for any request to
-        an unimplemented ``*_editor()`` method.
-
-        This must be __getattribute__ to make sure that we override the
-        definitions in the superclass which raise NotImplementedError.
-        """
-        if attr.endswith("_editor"):
-            return lambda *args, **kwds: null_editor_factory
-        else:
-            return super().__getattribute__(attr)

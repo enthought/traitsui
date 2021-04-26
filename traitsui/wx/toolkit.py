@@ -476,21 +476,6 @@ class GUIToolkit(Toolkit):
 
         return ft.WxFont(*args, **traits)
 
-    # -------------------------------------------------------------------------
-    #  'Editor' class methods:
-    # -------------------------------------------------------------------------
-
-    def ui_editor(self):
-        """ Generic base UI editor. """
-        from . import ui_editor
-
-        return ui_editor.UIEditor
-
-    def shell_editor(self, *args, **traits):
-        from . import shell_editor as se
-
-        return se.ToolkitEditorFactory(*args, **traits)
-
 
 class DragHandler(HasPrivateTraits):
     """ Handler for drag events.
