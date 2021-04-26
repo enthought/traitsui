@@ -398,14 +398,6 @@ class GUIToolkit(Toolkit):
         control.hide()
         control.deleteLater()
 
-        # PyQt v4.3.1 and earlier deleteLater() didn't transfer ownership to
-        # C++, which is necessary for the QObject system to garbage collect it.
-        if qt_api == "pyqt":
-            if QtCore.PYQT_VERSION < 0x040302:
-                import sip
-
-                sip.transferto(control, None)
-
     def destroy_children(self, control):
         """ Destroys all of the child controls of a specified GUI toolkit
             control.
