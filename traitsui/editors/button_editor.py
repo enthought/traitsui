@@ -50,7 +50,11 @@ class ToolkitEditorFactory(EditorFactory):
     #: (Optional) Image to display on the button
     image = Image
 
+    #: The name of the external object trait that the button image is synced to
+    image_value = Str()
+
     #: Extra padding to add to both the left and the right sides
+
     width_padding = Range(0, 31, 7)
 
     #: Extra padding to add to both the top and the bottom sides

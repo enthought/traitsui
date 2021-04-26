@@ -14,7 +14,8 @@
 
 import wx
 
-from traits.api import Str
+from pyface.ui_traits import Image
+from traits.api import Str, observe
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -79,6 +80,8 @@ class SimpleEditor(Editor):
 class CustomEditor(SimpleEditor):
     """ Custom style editor for a button, which can contain an image.
     """
+    #: The button image
+    image = Image()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -106,8 +109,16 @@ class CustomEditor(SimpleEditor):
             self.update_object, "clicked", dispatch="ui"
         )
         self.sync_value(self.factory.label_value, "label", "from")
-
+        self.sync_value(self.factory.image_value, "image", "from")
         self.set_tooltip()
+
+    def _label_changed(self, label):
+        self._control.label = self.string_value(label)
+
+    @observe("image")
+    def _image_updated(self, event):
+        image = event.new
+        self._control.image = image
 
     def dispose(self):
         """ Disposes of the contents of an editor.
