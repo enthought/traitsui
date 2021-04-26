@@ -1,6 +1,153 @@
 Traits UI Changelog
 ===================
 
+Release 7.2.0
+-------------
+TraitsUI 7.1.0 is a minor release which 
+
+This release is compatible with Traits 6.1+.
+
+Highlights of this release
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* 
+
+Notes on upgrading
+~~~~~~~~~~~~~~~~~~
+
+* 
+
+
+Detailed changes
+~~~~~~~~~~~~~~~~
+
+More than 100 PRs went into this release. Thanks to:
+
+* Aaron Ayres
+* Ieva Cerny
+* Kit Yan Choi
+* Mark Dickinson
+* James Johnson
+* Eric Larson
+* Rahul Poruri
+* Jonathan Rocher
+* Kuya Takami
+* Ioannis Tziakos
+* Corran Webster
+
+Note that the following list is not exhaustive. Many more PRs references have
+been omitted.
+
+Enhancements
+~~~~~~~~~~~~
+
+* Open links externally instead of in the html editor in etsdemo application #1446
+* Hide demo tab when the demo is None #1456
+* Extract an interface from TargetRegistry to allow wider testing support for IsEnabled #1490
+* Expose clearButtonEnabled for Qt TextEditor #1516
+* Extend / document secret TreeNode api for passing tuples into add list trait #1527
+* Add 'IsVisible` query class for UI Tester #1552
+* Extend button editor to allow dynamically changing button image #1566
+* Support testing with simple FileEditor (without dialog) #1571
+
+Fixes
+~~~~~
+
+* Support HTMLEditor.open_externally on QtWebEngine #1451
+* Qt InstanceEditor button should never be the default #1498
+* Propagate UI errors to the UI's parent #1503
+* Fix resizable readonly enum editor #1532
+* StartStyling API changed for new Wx version #1536
+* Don't use html for a variable name when using html module from standard library #1540
+* Label {visible/enabled}_when #1544
+* manually set the text format to plain text in error #1546
+* Fix RGBColor hex int to tuple color conversion #1554
+* Make Scrollable group respect visible_when #1555
+* Use correct source_path in example #1433
+
+Documentation
+~~~~~~~~~~~~~
+
+* Add a module docstring to the api modules #1441
+* Use viewcode sphinx extension #1443
+* Add links to API docs in a etsdemo examples for traitsui standard editors #1445
+* Clarify which of traitsui.api and traitsui.editors.api is recommended #1471
+* Refactor traitsui.testing documentation #1482
+* Expand documentation for GUI event processing and exception handling in the testing API #1483
+* Add a section in the documentation about debugging GUI tests #1485
+* Fix minor errors in testing docs #1486
+* Better document auto_process_events #1487
+* Fix a cross reference to a section in documentation after refactoring #1488
+* Fix link label to the documentation home page #1489
+* Document enabled_when / visible_when better #1537
+* Document entries parameter not supported qt for FileEditor/DirectoryEditor #1557
+* Add script to regenerate screenshots of editors for documentation #1574
+* Remove unused images in docs #1584
+* replace # with #: to document traits in traitsui.editors.* #1596
+
+Build and continuous integration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Fix cron job not installing additional dependencies (#1427)
+* Remove job on Travis for testing against Traits 6.0 (#1430)
+* Drop Python 3.5 support in TraitsUI (#1436)
+* Declare Python 3.5 not supported for ets-demo (#1437)
+* Fix link for installing wxPython on CI (for etsdemo) #1491
+* Add GitHub Actions to test against EDM #1492
+* Add GitHub Actions workflow for testing ets-demo #1496
+* Use EDM 3.2.3 instead of EDM 3.2.1 #1548
+* Drop support for PyQt < 4.3.2 #1607
+
+Test suite
+~~~~~~~~~~
+
+* Refactor and extend tests for Qt HTMLEditor handling of opening links #1465
+8 Update new test_editor_error_msg #1553
+
+Maintenance and code organization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Add pygments to etsdemo's etstool.py #1453
+* Add help aliases to etsdemo etstool module #1457
+* Fix/Update copyright headers in traitsui #1467
+* Update copyright headers in etsdemo #1468
+* Include flake8_ets plugin when running flake8 on codebase. #1469
+* Remove meaningless comments from an outdated coding style. #1472
+* Remove clause that deviates from PEP8 backward compatibility convention in the testing package #1481
+* Formal editor interface for tooltips #1493
+* Add instance choice classes to traitsui.api #1495
+* Undo/Redo cleanup #1510
+* Convert on_trait_change decorators to observe #1519
+* Replace use of depends_on in Traits Properties with observe #1520
+* Dynamic otc to observe1 #1523
+* Dynamic otc to observe 2 #1525
+* Refactor TreeEditor _new_actions and _menu_new_node to avoid hacky eval #1524
+* fix a typo from on_trait_change to observe migration #1545
+* Refactor _add_items method of _GroupPanel object #1549
+* Add new trait to eventually replace scroll_to_row_hint #1560
+* Fix flake8 errors in most traitsui.editors #1562
+* Fix flake8 errors in traitsui.tests #1563
+* Add 'default': True to the etsdemo eam metadata #1568
+* Fix "super" calls in potentially buggy cases #1583
+* Update "super" usage in "traitsui.qt4" #1587
+* Update "super" usage in "traitsui.wx" #1588
+* Update "super" usage in misc traitsui code #1589
+* Use "str.capitalize" directly instead of an alias #1598
+* Use "PrefixList" from traits >= 6.1 #1599
+* Update use of deprecated "Thread.setDaemon" #1601
+* Replace deprecated "wx.ListItemAttr" with "wx.ItemAttr" #1602
+* Adds "traitsui.toolkit.toolkit_object" to "traitsui.api" #1603
+* Call super without any arguments #1604
+* Import "TraitFactory" from "traits.api" #1606
+
+Removals
+~~~~~~~~
+
+* Remove deprecated classes/modules #1594
+* remove traitsui.image submodule #1595
+* Remove Editor and EditorFactory factory methods on Toolkit objects #1600
+* Remove backwards compatibility toolkit factory imports #1608
+
 Release 7.1.1
 -------------
 
@@ -18,7 +165,7 @@ Fixes
 Release 7.1.0
 -------------
 
-TraitsUI is a minor feature release which introduces a new testing library
+TraitsUI 7.1.0 is a minor feature release which introduces a new testing library
 and a number of significant fixes. Demo examples are also distributed as
 package data such that they are visible via the "etsdemo" GUI application (to
 be installed separately).
