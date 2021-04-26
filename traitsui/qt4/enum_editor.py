@@ -40,11 +40,6 @@ from traitsui.helper import enum_values_changed
 from .constants import OKColor, ErrorColor
 from .editor import Editor
 
-
-# default formatting function (would import from string, but not in Python 3)
-capitalize = lambda s: s.capitalize()
-
-
 completion_mode_map = {
     "popup": QtGui.QCompleter.PopupCompletion,
     "inline": QtGui.QCompleter.InlineCompletion,
@@ -409,7 +404,7 @@ class RadioEditor(BaseEditor):
     def create_button(self, name):
         """ Returns the QAbstractButton used for the radio button.
         """
-        label = self.string_value(name, capitalize)
+        label = self.string_value(name, str.capitalize)
         return QtGui.QRadioButton(label)
 
     #  Signal handlers -------------------------------------------------------
