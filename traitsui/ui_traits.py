@@ -30,13 +30,14 @@ from traits.api import (
     Float,
     HasStrictTraits,
     List,
+    PrefixList,
     Range,
     Str,
     TraitError,
     TraitType,
 )
 
-from .helper import PrefixList, SequenceTypes
+from .helper import SequenceTypes
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
