@@ -145,7 +145,7 @@ class wxListCtrl(wx.ListCtrl, TextEditMixin):
         # manage the reference count for the returned object, and it seems to be
         # gc'ed before they finish using it. So we store an object reference to
         # it to prevent it from going away too soon...
-        self._attr = attr = wx.ListItemAttr()
+        self._attr = attr = wx.ItemAttr()
         editor = self._editor
         object, name = editor.object, editor.name
 
