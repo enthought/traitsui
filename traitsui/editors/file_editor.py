@@ -20,7 +20,7 @@ from ..view import View
 
 from ..group import Group
 
-from .text_editor import ToolkitEditorFactory as EditorFactory
+from .text_editor import TextEditor as EditorFactory
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
@@ -29,12 +29,8 @@ from .text_editor import ToolkitEditorFactory as EditorFactory
 #: Wildcard filter:
 filter_trait = List(Str)
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorFactory):
+class FileEditor(EditorFactory):
     """ Editor factory for file editors.
     """
 
@@ -105,5 +101,5 @@ class ToolkitEditorFactory(EditorFactory):
     extras = Group()
 
 
-# Define the FileEditor class.
-FileEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = FileEditor

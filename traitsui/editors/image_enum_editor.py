@@ -20,14 +20,10 @@ from os.path import join, dirname, exists
 
 from traits.api import Module, Type, Str, observe
 
-from .enum_editor import ToolkitEditorFactory as EditorFactory
-
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
+from .enum_editor import EnumEditor as EditorFactory
 
 
-class ToolkitEditorFactory(EditorFactory):
+class ImageEnumEditor(EditorFactory):
     """ Editor factory for image enumeration editors.
     """
 
@@ -84,5 +80,5 @@ class ToolkitEditorFactory(EditorFactory):
             self._image_path = join(dirname(self.module.__file__), "images")
 
 
-# Define the ImageEnumEditor class.
-ImageEnumEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = ImageEnumEditor

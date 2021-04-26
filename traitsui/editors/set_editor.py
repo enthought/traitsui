@@ -15,12 +15,8 @@ from ..editor_factory import EditorWithListFactory
 
 from traits.api import Bool, Str
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorWithListFactory):
+class SetEditor(EditorWithListFactory):
     """ Editor factory for editors for sets.
     """
 
@@ -41,5 +37,5 @@ class ToolkitEditorFactory(EditorWithListFactory):
     right_column_title = Str()
 
 
-# Define the SetEditor class
-SetEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = SetEditor

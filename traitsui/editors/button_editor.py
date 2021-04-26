@@ -19,12 +19,7 @@ from ..ui_traits import AView
 from ..view import View
 
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
-
-
-class ToolkitEditorFactory(EditorFactory):
+class ButtonEditor(EditorFactory):
     """ Editor factory for buttons.
     """
 
@@ -94,5 +89,5 @@ class ToolkitEditorFactory(EditorFactory):
         super().__init__(**traits)
 
 
-# Define the ButtonEditor class
-ButtonEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = ButtonEditor

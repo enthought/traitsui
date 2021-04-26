@@ -22,12 +22,8 @@ from ..instance_choice import InstanceChoice, InstanceChoiceItem
 
 from ..editor_factory import EditorFactory
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorFactory):
+class InstanceEditor(EditorFactory):
     """ Editor factory for instance editors.
     """
 
@@ -96,5 +92,5 @@ class ToolkitEditorFactory(EditorFactory):
     )
 
 
-# Define the InstanceEditor class.
-InstanceEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = InstanceEditor

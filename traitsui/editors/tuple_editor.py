@@ -37,12 +37,8 @@ from ..editor_factory import EditorFactory
 
 from ..editor import Editor
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorFactory):
+class TupleEditor(EditorFactory):
     """ Editor factory for tuple editors.
     """
 
@@ -210,5 +206,5 @@ class TupleStructure(HasTraits):
             )
 
 
-# Define the TupleEditor class.
-TupleEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = TupleEditor

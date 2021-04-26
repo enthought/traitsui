@@ -47,12 +47,8 @@ mapping_trait = Dict(Str, Any)
 #: Function used to evaluate textual user input
 evaluate_trait = Any(_Identity())
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorFactory):
+class TextEditor(EditorFactory):
     """ Editor factory for text editors.
     """
 
@@ -118,5 +114,5 @@ class ToolkitEditorFactory(EditorFactory):
     extras = Group("password{Is this a password field?}")
 
 
-# Define the TextEditor class.
-TextEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = TextEditor

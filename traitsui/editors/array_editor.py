@@ -28,12 +28,8 @@ from ..group import Group
 
 from ..item import Item
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorFactory):
+class ArrayEditor(EditorFactory):
     """ Editor factory for array editors.
     """
 
@@ -247,5 +243,5 @@ class SimpleEditor(Editor):
         self._busy = False
 
 
-# Define the ArrayEditor class
-ArrayEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = ArrayEditor

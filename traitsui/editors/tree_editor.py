@@ -60,12 +60,7 @@ RenameAction = Action(
 )
 
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
-
-
-class ToolkitEditorFactory(EditorFactory):
+class TreeEditor(EditorFactory):
     """ Editor factory for tree editors.
     """
 
@@ -189,5 +184,5 @@ class ToolkitEditorFactory(EditorFactory):
     word_wrap = Bool(False)
 
 
-#: Define the TreeEditor class.
-TreeEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = TreeEditor

@@ -31,12 +31,8 @@ Mode = Enum("radio", "list")
 #: Supported display modes for a custom style editor
 CompletionMode = Enum("inline", "popup")
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorWithListFactory):
+class EnumEditor(EditorWithListFactory):
     """ Editor factory for enumeration editors.
     """
 
@@ -85,5 +81,5 @@ class ToolkitEditorFactory(EditorWithListFactory):
             return super()._get_custom_editor_class()
 
 
-# Define the EnumEditor class.
-EnumEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = EnumEditor

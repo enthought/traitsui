@@ -84,7 +84,7 @@ class _ValueEditor(Editor):
         return self._ui.get_error_controls()
 
 
-class ToolkitEditorFactory(EditorFactory):
+class ValueEditor(EditorFactory):
     """ Editor factory for tree-based value editors.
     """
 
@@ -96,5 +96,5 @@ class ToolkitEditorFactory(EditorFactory):
     auto_open = Int(2)
 
 
-# Define the ValueEditor class.
-ValueEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = ValueEditor

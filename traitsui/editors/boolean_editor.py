@@ -18,7 +18,7 @@ from traits.api import Dict, Str, Any
 
 from ..view import View
 
-from .text_editor import ToolkitEditorFactory as EditorFactory
+from .text_editor import TextEditor as EditorFactory
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
@@ -42,12 +42,8 @@ mapping_trait = Dict(
     },
 )
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorFactory):
+class BooleanEditor(EditorFactory):
     """ Editor factory for Boolean editors.
     """
 
@@ -79,5 +75,5 @@ class ToolkitEditorFactory(EditorFactory):
         return self.simple_editor_class
 
 
-# Define the BooleanEditor class
-BooleanEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = BooleanEditor

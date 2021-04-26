@@ -57,12 +57,8 @@ columns_trait = Range(1, 10, 1, desc="the number of list columns to display")
 
 editor_trait = Instance(EditorFactory)
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorFactory):
+class ListEditor(EditorFactory):
     """ Editor factory for list editors.
     """
 
@@ -211,5 +207,5 @@ class ListItemProxy(HasTraits):
             self.list[self.index] = new_value
 
 
-# Define the ListEditor class
-ListEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = ListEditor

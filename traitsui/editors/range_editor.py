@@ -34,12 +34,8 @@ from ..editor_factory import EditorFactory
 
 from ..toolkit import toolkit_object
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorFactory):
+class RangeEditor(EditorFactory):
     """ Editor factory for range editors.
     """
 
@@ -293,5 +289,5 @@ class ToolkitEditorFactory(EditorFactory):
         return super().custom_editor(ui, object, name, description, parent)
 
 
-# Define the RangeEditor class
-RangeEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = RangeEditor
