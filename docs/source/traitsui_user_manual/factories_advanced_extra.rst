@@ -553,7 +553,8 @@ TabularEditor()
 :Optional parameters:
     *activated, clicked, column_clicked, dclicked, drag_move, editable,*
     *horizontal_lines, images, multi_select, operations, right_clicked,*
-    *right_dclicked, selected, selected_row, show_titles, vertical_lines*
+    *right_dclicked, scroll_to_position_hint, selected, selected_row,
+    *show_titles, vertical_lines*
 
 The TabularEditor() factory can be used for many of the same purposes as the
 TableEditor() factory, that is, for displaying a table of attributes of lists or

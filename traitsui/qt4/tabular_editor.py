@@ -39,6 +39,12 @@ from traitsui.helper import compute_column_widths
 from .editor import Editor
 from .tabular_model import TabularModel
 
+SCROLL_TO_POSITION_HINT_MAP = {
+    "center": QtGui.QTableView.PositionAtCenter,
+    "top": QtGui.QTableView.PositionAtTop,
+    "bottom": QtGui.QTableView.PositionAtBottom,
+    "visible": QtGui.QTableView.EnsureVisible,
+}
 
 
 class HeaderEventFilter(QtCore.QObject):
@@ -507,18 +513,12 @@ class TabularEditor(Editor):
                 # Once selected, scroll to the column
                 self.scroll_to_column = selected_column
 
-    scroll_to_row_hint_map = {
-        "center": QtGui.QTableView.PositionAtCenter,
-        "top": QtGui.QTableView.PositionAtTop,
-        "bottom": QtGui.QTableView.PositionAtBottom,
-        "visible": QtGui.QTableView.EnsureVisible,
-    }
-
     def _scroll_to_row_changed(self, row):
         """ Scroll to the given row.
         """
-        scroll_hint = self.scroll_to_row_hint_map.get(
-            self.factory.scroll_to_row_hint, self.control.PositionAtCenter
+        scroll_hint = SCROLL_TO_POSITION_HINT_MAP.get(
+            self.factory.scroll_to_position_hint,
+            self.control.EnsureVisible
         )
         self.control.scrollTo(
             self.model.index(row, max(self.selected_column, 0)), scroll_hint
@@ -527,8 +527,9 @@ class TabularEditor(Editor):
     def _scroll_to_column_changed(self, column):
         """ Scroll to the given column.
         """
-        scroll_hint = self.scroll_to_row_hint_map.get(
-            self.factory.scroll_to_row_hint, self.control.PositionAtCenter
+        scroll_hint = SCROLL_TO_POSITION_HINT_MAP.get(
+            self.factory.scroll_to_position_hint,
+            self.control.EnsureVisible
         )
         self.control.scrollTo(
             self.model.index(max(self.selected_row, 0), column), scroll_hint
