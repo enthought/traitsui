@@ -3,9 +3,11 @@ Traits UI Changelog
 
 Release 7.2.0
 -------------
-TraitsUI 7.1.0 is a minor release which 
-
-This release is compatible with Traits 6.1+.
+TraitsUI 7.2.0 is a minor release which includes numerous bug fixes,
+documentation imporvements, code maintenance changes, and enhancements.
+Of particular note is the start of the migration process from using
+``on_trait_change`` to using the new Traits ``observe`` framework. As a result,
+TraitsUI now requires Traits >= 6.1.
 
 Highlights of this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -15,24 +17,18 @@ Highlights of this release
 Notes on upgrading
 ~~~~~~~~~~~~~~~~~~
 
-* 
+*  
 
 
 Detailed changes
 ~~~~~~~~~~~~~~~~
 
-More than 100 PRs went into this release. Thanks to:
+Thanks to:
 
 * Aaron Ayres
-* Ieva Cerny
 * Kit Yan Choi
 * Mark Dickinson
-* James Johnson
-* Eric Larson
 * Rahul Poruri
-* Jonathan Rocher
-* Kuya Takami
-* Ioannis Tziakos
 * Corran Webster
 
 Note that the following list is not exhaustive. Many more PRs references have
@@ -72,12 +68,7 @@ Documentation
 * Use viewcode sphinx extension #1443
 * Add links to API docs in a etsdemo examples for traitsui standard editors #1445
 * Clarify which of traitsui.api and traitsui.editors.api is recommended #1471
-* Refactor traitsui.testing documentation #1482
-* Expand documentation for GUI event processing and exception handling in the testing API #1483
-* Add a section in the documentation about debugging GUI tests #1485
-* Fix minor errors in testing docs #1486
-* Better document auto_process_events #1487
-* Fix a cross reference to a section in documentation after refactoring #1488
+* traitsui.testing documentation updates (#1482, #1483, #1485, #1486, #1487, #1488)
 * Fix link label to the documentation home page #1489
 * Document enabled_when / visible_when better #1537
 * Document entries parameter not supported qt for FileEditor/DirectoryEditor #1557
@@ -109,35 +100,24 @@ Maintenance and code organization
 
 * Add pygments to etsdemo's etstool.py #1453
 * Add help aliases to etsdemo etstool module #1457
-* Fix/Update copyright headers in traitsui #1467
-* Update copyright headers in etsdemo #1468
-* Include flake8_ets plugin when running flake8 on codebase. #1469
+* Fix/Update copyright headers (#1467, #1486)
+* work towards flake8 clean codebase (#1469, #1562, #1563)
 * Remove meaningless comments from an outdated coding style. #1472
 * Remove clause that deviates from PEP8 backward compatibility convention in the testing package #1481
 * Formal editor interface for tooltips #1493
 * Add instance choice classes to traitsui.api #1495
 * Undo/Redo cleanup #1510
-* Convert on_trait_change decorators to observe #1519
-* Replace use of depends_on in Traits Properties with observe #1520
-* Dynamic otc to observe1 #1523
-* Dynamic otc to observe 2 #1525
+* start on_trait_change to observe migration (#1519, #1520, #1523, #1525, #1545)
 * Refactor TreeEditor _new_actions and _menu_new_node to avoid hacky eval #1524
-* fix a typo from on_trait_change to observe migration #1545
 * Refactor _add_items method of _GroupPanel object #1549
 * Add new trait to eventually replace scroll_to_row_hint #1560
-* Fix flake8 errors in most traitsui.editors #1562
-* Fix flake8 errors in traitsui.tests #1563
 * Add 'default': True to the etsdemo eam metadata #1568
-* Fix "super" calls in potentially buggy cases #1583
-* Update "super" usage in "traitsui.qt4" #1587
-* Update "super" usage in "traitsui.wx" #1588
-* Update "super" usage in misc traitsui code #1589
+* update "super" usage (#1583, #1587, #1588, #1589, #1604)
 * Use "str.capitalize" directly instead of an alias #1598
 * Use "PrefixList" from traits >= 6.1 #1599
 * Update use of deprecated "Thread.setDaemon" #1601
 * Replace deprecated "wx.ListItemAttr" with "wx.ItemAttr" #1602
 * Adds "traitsui.toolkit.toolkit_object" to "traitsui.api" #1603
-* Call super without any arguments #1604
 * Import "TraitFactory" from "traits.api" #1606
 
 Removals
