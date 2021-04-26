@@ -80,6 +80,10 @@ class VideoEditor(BasicEditorFactory):
     #: The referenced trait should be a Str.
     image_func = Str(sync_value='both', sync_name='image_func')
 
+    #: The name of a trait to synchronise with the player's notify interval.
+    #: The referenced trait should be a Float representing time in seconds.
+    notify_interval = Str(sync_value='from', sync_name='notify_interval')
+
     def _get_klass(self):
         """ Returns the editor class to be instantiated.
         """

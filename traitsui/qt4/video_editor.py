@@ -181,6 +181,10 @@ class VideoEditor(Editor):
     #: Synchronized to the trait named by factory.image_func.
     image_func = Callable()
 
+    #: The change in position required for an update to be emitted.
+    #: Synchronized to the trait named by factory.notify_interval.
+    notify_interval = Float(1.0)
+
     def update_to_regular(self):
         if self.surface is not None:
             self.surface.frameAvailable.disconnect(self.control.setImage)
@@ -232,6 +236,7 @@ class VideoEditor(Editor):
         self._update_muted()
         self._update_volume()
         self._update_playback_rate()
+        self._update_notify_interval()
 
         self._connect_signals()
 
@@ -265,6 +270,8 @@ class VideoEditor(Editor):
                 self._media_status_changed_emitted)
             self.media_player.bufferStatusChanged.connect(
                 self._buffer_status_changed_emitted)
+            self.media_player.notifyIntervalChanged.connect(
+                self._notify_interval_changed_emitted)
 
     def _disconnect_signals(self):
         if self.media_player is not None:
@@ -279,6 +286,8 @@ class VideoEditor(Editor):
                 self._media_status_changed_emitted)
             self.media_player.bufferStatusChanged.disconnect(
                 self._buffer_status_changed_emitted)
+            self.media_player.notifyIntervalChanged.disconnect(
+                self._notify_interval_changed_emitted)
 
     def _set_video_url(self):
         qurl = QUrl.fromUserInput(self.value)
@@ -313,6 +322,9 @@ class VideoEditor(Editor):
 
     def _buffer_status_changed_emitted(self, error):
         self.buffer = self.media_player.bufferStatus()
+
+    def _notify_interval_changed_emitted(self, interval):
+        self.notify_interval = interval / 1000.0
 
     # Trait change handlers -------------------------------------------------
 
@@ -360,6 +372,11 @@ class VideoEditor(Editor):
         if self.media_player is not None:
             self._update_volume()
 
+    @observe('notify_interval')
+    def _notify_interval_observer(self, event):
+        if self.media_player is not None:
+            self._update_notify_interval()
+
     # MediaPlayer management ------------------------------------------------
 
     def _update_aspect_ratio(self):
@@ -393,3 +410,8 @@ class VideoEditor(Editor):
             QAudio.LinearVolumeScale,
         )
         self.media_player.setVolume(int(linear_volume * 100))
+
+    def _update_notify_interval(self):
+        # interval is given in ms
+        interval = int(self.notify_interval * 1000)
+        self.media_player.setNotifyInterval(interval)
