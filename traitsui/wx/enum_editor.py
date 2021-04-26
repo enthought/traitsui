@@ -35,11 +35,6 @@ from .helper import (
 )
 from functools import reduce
 
-
-# default formatting function (would import from string, but not in Python 3)
-capitalize = lambda s: s.capitalize()
-
-
 # -------------------------------------------------------------------------
 #  'BaseEditor' class:
 # -------------------------------------------------------------------------
@@ -390,7 +385,7 @@ class RadioEditor(BaseEditor):
             for j in range(cols):
                 if n > 0:
                     name = label = names[index]
-                    label = self.string_value(label, capitalize)
+                    label = self.string_value(label, str.capitalize)
                     control = wx.RadioButton(panel, -1, label, style=style)
                     control.value = mapping[name]
                     style = 0

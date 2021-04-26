@@ -34,11 +34,6 @@ from functools import reduce
 
 logger = logging.getLogger(__name__)
 
-
-# default formatting function (would import from string, but not in Python 3)
-capitalize = lambda s: s.capitalize()
-
-
 # -------------------------------------------------------------------------
 #  'SimpleEditor' class:
 # -------------------------------------------------------------------------
@@ -83,7 +78,7 @@ class SimpleEditor(EditorWithList):
         """
         sv = self.string_value
         if (len(values) > 0) and isinstance(values[0], str):
-            values = [(x, sv(x, capitalize)) for x in values]
+            values = [(x, sv(x, str.capitalize)) for x in values]
         self.values = valid_values = [x[0] for x in values]
         self.names = [x[1] for x in values]
 
