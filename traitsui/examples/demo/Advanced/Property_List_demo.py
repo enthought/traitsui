@@ -119,7 +119,7 @@ class PropertyListDemo(HasPrivateTraits):
         """ Starts the background thread running.
         """
         thread = Thread(target=self._timer)
-        thread.setDaemon(True)
+        thread.daemon = True
         thread.start()
 
         return 0
