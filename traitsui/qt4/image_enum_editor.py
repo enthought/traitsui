@@ -15,11 +15,6 @@
 
 from pyface.qt import QtCore, QtGui, is_qt5
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.image_enum_editor file.
-from traitsui.editors.image_enum_editor import ToolkitEditorFactory
-
 from .editor import Editor
 from .enum_editor import BaseEditor as BaseEnumEditor
 from .enum_editor import SimpleEditor as SimpleEnumEditor

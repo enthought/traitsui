@@ -26,9 +26,6 @@ from pyface.ui.wx.image_list import ImageList
 from traits.api import HasStrictTraits, Any, Str, Event, TraitError
 from traitsui.api import View, TreeNode, ObjectTreeNode, MultiTreeNode
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.tree_editor file.
 from traitsui.editors.tree_editor import (
     CopyAction,
     CutAction,
@@ -36,7 +33,6 @@ from traitsui.editors.tree_editor import (
     NewAction,
     PasteAction,
     RenameAction,
-    ToolkitEditorFactory,
 )
 from traitsui.undo import ListUndoItem
 from traitsui.tree_node import ITreeNodeAdapterBridge

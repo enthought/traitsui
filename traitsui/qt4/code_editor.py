@@ -39,11 +39,6 @@ from traits.api import (
 )
 from traits.trait_base import SequenceTypes
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.code_editor file.
-from traitsui.editors.code_editor import ToolkitEditorFactory
-
 from pyface.key_pressed_event import KeyPressedEvent
 
 from .constants import OKColor, ErrorColor

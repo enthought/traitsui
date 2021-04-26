@@ -16,10 +16,7 @@ import wx
 
 from traits.api import TraitError
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.text_editor file.
-from traitsui.editors.text_editor import ToolkitEditorFactory, evaluate_trait
+from traitsui.editors.text_editor import evaluate_trait
 
 from .editor import Editor
 

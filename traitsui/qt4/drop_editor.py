@@ -27,11 +27,6 @@ target editor handles drag and drop operations as a drop target.
 
 from pyface.qt import QtGui, QtCore
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.drop_editor file.
-from traitsui.editors.drop_editor import ToolkitEditorFactory
-
 from .editor import Editor as _BaseEditor
 from .text_editor import SimpleEditor as Editor
 from .constants import DropColor

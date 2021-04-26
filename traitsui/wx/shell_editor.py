@@ -12,13 +12,7 @@
 """
 
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.shell_editor file.
-from traitsui.editors.shell_editor import (
-    _ShellEditor as BaseShellEditor,
-    ToolkitEditorFactory,
-)
+from traitsui.editors.shell_editor import _ShellEditor as BaseShellEditor
 
 from .editor import Editor
 

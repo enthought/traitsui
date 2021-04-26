@@ -17,11 +17,6 @@ import wx
 
 from traits.api import Str
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.compound_editor file.
-from traitsui.editors.compound_editor import ToolkitEditorFactory
-
 from .editor import Editor
 
 from .helper import TraitsUIPanel

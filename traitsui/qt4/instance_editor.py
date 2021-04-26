@@ -29,10 +29,6 @@ from pyface.qt import QtCore, QtGui
 
 from traits.api import HasTraits, Instance, Property
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.instance_editor file.
-from traitsui.editors.instance_editor import ToolkitEditorFactory
 from traitsui.ui_traits import AView
 from traitsui.helper import user_name_for
 from traitsui.handler import Handler
