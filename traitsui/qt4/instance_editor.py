@@ -360,7 +360,7 @@ class CustomEditor(Editor):
                 self.rebuild_items, "values.items", remove=True, dispatch="ui"
             )
 
-        super(CustomEditor, self).dispose()
+        super().dispose()
 
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.

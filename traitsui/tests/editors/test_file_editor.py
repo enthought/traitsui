@@ -14,11 +14,10 @@ from traits.api import Event, File, HasTraits
 from traitsui.api import FileEditor, Item, View
 from traitsui.tests._tools import (
     BaseTestMixin,
-    create_ui,
     requires_toolkit,
-    reraise_exceptions,
     ToolkitName,
 )
+from traitsui.testing.api import DisplayedText, KeyClick, KeySequence, UITester
 
 
 class FileModel(HasTraits):
@@ -27,11 +26,12 @@ class FileModel(HasTraits):
 
     reload_event = Event()
 
+    existing_filepath = File(exists=True)
 
-# Run this against wx too when enthought/traitsui#752 is also fixed.
-@requires_toolkit([ToolkitName.qt])
-class TestFileEditor(BaseTestMixin, unittest.TestCase):
-    """ Test FileEditor. """
+
+@requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+class TestSimpleFileEditor(BaseTestMixin, unittest.TestCase):
+    """ Test FileEditor (simple style). """
 
     def setUp(self):
         BaseTestMixin.setUp(self)
@@ -39,20 +39,85 @@ class TestFileEditor(BaseTestMixin, unittest.TestCase):
     def tearDown(self):
         BaseTestMixin.tearDown(self)
 
-    def check_init_and_dispose(self, style):
-        # Test init and dispose by opening and closing the UI
-        view = View(Item("filepath", editor=FileEditor(), style=style))
+    # Behavior on wx may not be quite the same on other platforms.
+    @requires_toolkit([ToolkitName.qt])
+    def test_simple_editor_set_text_to_nonexisting_path(self):
+        # Test setting the editor to a nonexisting filepath
+        # e.g. use case for creating a new file.
+        view = View(Item("filepath", editor=FileEditor()))
         obj = FileModel()
-        with reraise_exceptions(), \
-                create_ui(obj, dict(view=view)):
-            pass
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=view)) as ui:
+            filepath_field = tester.find_by_name(ui, "filepath")
 
-    def test_simple_editor_init_and_dispose(self):
-        # This may fail if run against wx, see enthought/traitsui#889
-        self.check_init_and_dispose("simple")
+            filepath_field.perform(KeySequence("some_file.txt"))
+            filepath_field.perform(KeyClick("Enter"))
+
+            self.assertEqual(obj.filepath, "some_file.txt")
+
+    def test_simple_editor_display_path(self):
+        # Test the filepath widget is updated to show path
+        view = View(Item("filepath", editor=FileEditor()))
+        obj = FileModel()
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=view)) as ui:
+            filepath_field = tester.find_by_name(ui, "filepath")
+            self.assertEqual(filepath_field.inspect(DisplayedText()), "")
+
+            obj.filepath = "some_file.txt"
+            self.assertEqual(
+                filepath_field.inspect(DisplayedText()), "some_file.txt"
+            )
+
+    # Behavior on wx may not be quite the same on other platforms.
+    @requires_toolkit([ToolkitName.qt])
+    def test_simple_editor_auto_set_text(self):
+        # Test with auto_set set to True.
+        view = View(Item("filepath", editor=FileEditor(auto_set=True)))
+        obj = FileModel()
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=view)) as ui:
+            filepath_field = tester.find_by_name(ui, "filepath")
+            filepath_field.perform(KeySequence("some_file.txt"))
+            self.assertEqual(obj.filepath, "some_file.txt")
+
+    def test_simple_editor_reset_text_if_validation_error(self):
+        # Test when the trait validates file existence.
+        view = View(Item("existing_filepath", editor=FileEditor()))
+        obj = FileModel()
+        tester = UITester()
+        with tester.create_ui(obj, dict(view=view)) as ui:
+            filepath_field = tester.find_by_name(ui, "existing_filepath")
+
+            # when
+            filepath_field.perform(KeySequence("some_file.txt"))
+            filepath_field.perform(KeyClick("Enter"))
+
+            # then
+            # the file does not exist, the trait is not set.
+            self.assertEqual(obj.existing_filepath, "")
+
+            # the widget is synchronized to the trait value.
+            self.assertEqual(filepath_field.inspect(DisplayedText()), "")
+
+
+# Run this against wx too when enthought/traitsui#752 is also fixed.
+@requires_toolkit([ToolkitName.qt])
+class TestCustomFileEditor(BaseTestMixin, unittest.TestCase):
+    """ Test FileEditor (custom style). """
+
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
     def test_custom_editor_init_and_dispose(self):
-        self.check_init_and_dispose("custom")
+        # Test init and dispose by opening and closing the UI
+        view = View(Item("filepath", editor=FileEditor(), style="custom"))
+        obj = FileModel()
+        with UITester().create_ui(obj, dict(view=view)):
+            pass
 
     def test_custom_editor_reload_changed_after_dispose(self):
         # Test firing reload event on the model after the UI is disposed.
@@ -64,8 +129,7 @@ class TestFileEditor(BaseTestMixin, unittest.TestCase):
             ),
         )
         obj = FileModel()
-        with reraise_exceptions():
-            with create_ui(obj, dict(view=view)):
-                pass
-            # should not fail.
-            obj.reload_event = True
+        with UITester().create_ui(obj, dict(view=view)):
+            pass
+        # should not fail.
+        obj.reload_event = True

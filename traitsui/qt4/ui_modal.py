@@ -191,7 +191,7 @@ class _ModalDialog(BaseDialog):
     def close(self, rc=True):
         """Close the dialog and set the given return code.
         """
-        super(_ModalDialog, self).close(rc)
+        super().close(rc)
 
         self.apply = self.revert = self.help = None
 

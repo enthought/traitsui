@@ -127,7 +127,7 @@ class StubEditor(Editor):
             self.control.on_trait_change(
                 self.update_object, "control_value", remove=True
             )
-        super(StubEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         if self.is_event:

@@ -25,10 +25,10 @@ from ..toolkit import toolkit_object
 #  Trait definitions:
 # -------------------------------------------------------------------------
 
-# Supported display modes for a custom style editor
+#: Supported display modes for a custom style editor
 Mode = Enum("radio", "list")
 
-# Supported display modes for a custom style editor
+#: Supported display modes for a custom style editor
 CompletionMode = Enum("inline", "popup")
 
 # -------------------------------------------------------------------------
@@ -82,7 +82,7 @@ class ToolkitEditorFactory(EditorWithListFactory):
                     raise_exceptions=True,
                 )
         except:
-            return super(ToolkitEditorFactory, self)._get_custom_editor_class()
+            return super()._get_custom_editor_class()
 
 
 # Define the EnumEditor class.

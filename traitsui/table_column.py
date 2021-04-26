@@ -591,7 +591,7 @@ class NumericColumn(ObjectColumn):
     def get_editor(self, object):
         """ Gets the editor for the column of a specified object row.
         """
-        return super(NumericColumn, self).get_editor(object)
+        return super().get_editor(object)
 
     def get_data_column(self, object):
         """ Gets the entire contents of the specified object column.

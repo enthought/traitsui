@@ -277,7 +277,7 @@ class _ListStrEditor(Editor):
         )
         self.on_trait_change(self._refresh, "adapter.+update", remove=True)
 
-        super(_ListStrEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

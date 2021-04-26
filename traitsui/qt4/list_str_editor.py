@@ -207,7 +207,7 @@ class _ListStrEditor(Editor):
 
         self.list_view._dispose()
 
-        super(Editor, self).dispose()
+        super().dispose()
 
     def update_editor(self, event=None):
         """ Updates the editor when the object trait changes externally to the
@@ -528,7 +528,7 @@ class _ListView(QtGui.QListView):
         if event.button() == QtCore.Qt.RightButton:
             event.accept()
             self._editor._on_mouse_right_click(event.pos())
-        super(_ListView, self).mouseReleaseEvent(event)
+        super().mouseReleaseEvent(event)
 
     def keyPressEvent(self, event):
         """ Reimplemented to support edit, insert, and delete by keyboard.

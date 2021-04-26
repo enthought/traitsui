@@ -191,7 +191,7 @@ class SourceEditor(Editor):
         if not self.factory.auto_set:
             self._widget.code.focus_lost.disconnect(self.update_object)
 
-        super(SourceEditor, self).dispose()
+        super().dispose()
 
     def update_object(self):
         """ Handles the user entering input data in the edit control.

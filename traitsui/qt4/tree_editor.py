@@ -258,7 +258,7 @@ class SimpleEditor(Editor):
 
             self._tree = None
 
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def expand_levels(self, nid, levels, expand=True):
         """ Expands from the specified node the specified number of sub-levels.
@@ -1769,7 +1769,7 @@ class TreeItemDelegate(QtGui.QStyledItemDelegate):
 
         renderer = node.get_renderer(object, column=column)
         if renderer is None:
-            return super(TreeItemDelegate, self).sizeHint(option, index)
+            return super().sizeHint(option, index)
 
         size_context = (option, index)
         size = renderer.size(self.editor, node, column, instance, size_context)
@@ -1793,12 +1793,12 @@ class TreeItemDelegate(QtGui.QStyledItemDelegate):
         if renderer is None and self.editor.factory.word_wrap:
             renderer = DEFAULT_WRAP_RENDERER
         if renderer is None:
-            super(TreeItemDelegate, self).paint(painter, option, index)
+            super().paint(painter, option, index)
         else:
             if not renderer.handles_all:
                 # renderers background and selection highlights
                 # will also render icon and text if flags are set
-                super(TreeItemDelegate, self).paint(painter, option, index)
+                super().paint(painter, option, index)
             paint_context = (painter, option, index)
             size = renderer.paint(
                 self.editor, node, column, instance, paint_context

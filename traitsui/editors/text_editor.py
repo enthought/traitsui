@@ -41,10 +41,10 @@ class _Identity(object):
 #  Trait definitions:
 # -------------------------------------------------------------------------
 
-# Mapping from user input text to other value
+#: Mapping from user input text to other value
 mapping_trait = Dict(Str, Any)
 
-# Function used to evaluate textual user input
+#: Function used to evaluate textual user input
 evaluate_trait = Any(_Identity())
 
 # -------------------------------------------------------------------------

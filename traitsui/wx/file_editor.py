@@ -111,7 +111,7 @@ class SimpleEditor(SimpleTextEditor):
             panel.Unbind(wx.EVT_TEXT_ENTER, id=control.GetId())
             panel.Unbind(wx.EVT_TEXT, id=control.GetId())
 
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     @observe("history:value")
     def _history_value_changed(self, event):
@@ -308,7 +308,7 @@ class CustomEditor(SimpleTextEditor):
         tree.Unbind(wx.EVT_TREE_SEL_CHANGED)
         tree.Unbind(wx.EVT_TREE_ITEM_ACTIVATED)
 
-        super(CustomEditor, self).dispose()
+        super().dispose()
 
     def update_object(self, event):
         """ Handles the user changing the contents of the edit control.

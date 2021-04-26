@@ -74,7 +74,7 @@ class SimpleEditor(EditorWithList):
             widget.
         """
         self.create_control(parent)
-        super(SimpleEditor, self).init(parent)
+        super().init(parent)
 
     def create_control(self, parent):
         """ Creates the initial editor control.

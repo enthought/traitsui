@@ -41,7 +41,7 @@ class LineCountInfo(MFileDialogModel):
     """
 
     # The number of text lines in the currently selected file:
-    lines = Property(depends_on='file_name')
+    lines = Property(observe='file_name')
 
     # -- Traits View Definitions ----------------------------------------------
 

@@ -208,9 +208,7 @@ class HasDynamicViews(HasTraits):
         # If we haven't created a dynamic view so far, then do the standard
         # traits thing to retrieve the UI element:
         if result is None:
-            result = super(HasDynamicViews, self).trait_view(
-                name, view_element
-            )
+            result = super().trait_view(name, view_element)
 
         return result
 

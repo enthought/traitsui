@@ -12,6 +12,8 @@
     of objects, etc).
 """
 
+import warnings
+
 from pyface.ui_traits import Image
 from traits.api import Str, Bool, Property, List, Enum, Instance
 
@@ -102,8 +104,12 @@ class TabularEditor(BasicEditorFactory):
     #: trigger a scroll-to command. The data is an integer giving the column.
     scroll_to_column = Str()
 
-    #: Controls behavior of scroll to row
-    scroll_to_row_hint = Enum("center", "top", "bottom", "visible")
+    #: Deprecated: Controls behavior of scroll to row and scroll to column
+    scroll_to_row_hint = Property(Str, observe="scroll_to_position_hint")
+
+    #: (replacement of scroll_to_row_hint, but more clearly named)
+    #: Controls behavior of scroll to row and scroll to column
+    scroll_to_position_hint = Enum("visible", "center", "top", "bottom")
 
     #: Can the user edit the values?
     editable = Bool(True)
@@ -151,3 +157,19 @@ class TabularEditor(BasicEditorFactory):
         """ Returns the toolkit-specific editor class to be instantiated.
         """
         return toolkit_object("tabular_editor:TabularEditor")
+
+    def _get_scroll_to_row_hint(self):
+        warnings.warn(
+            "Use of scroll_to_row_hint trait is deprecated. "
+            "Use scroll_to_position_hint instead.",
+            DeprecationWarning,
+        )
+        return self.scroll_to_position_hint
+
+    def _set_scroll_to_row_hint(self, hint):
+        warnings.warn(
+            "Use of scroll_to_row_hint trait is deprecated. "
+            "Use scroll_to_position_hint instead.",
+            DeprecationWarning,
+        )
+        self.scroll_to_position_hint = hint

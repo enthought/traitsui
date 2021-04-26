@@ -65,16 +65,14 @@ class PlayerAdapter(TabularAdapter):
             )
             return menu
         else:
-            return super(PlayerAdapter, self).get_menu(
-                object, trait, row, column)
+            return super().get_menu(object, trait, row, column)
 
     def get_format(self, object, trait, row, column):
         column_name = self.column_map[column]
         if column_name == 'average':
             return '%0.3f'
         else:
-            return super(PlayerAdapter, self).get_format(
-                object, trait, row, column)
+            return super().get_format(object, trait, row, column)
 
     def add(self, object, column):
         """ Increment the affected player statistic.

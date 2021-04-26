@@ -215,7 +215,7 @@ the columns in the table. Optionally, you can provide filters for filtering the
 set of displayed items, and you can specify a wide variety of options for
 interacting with and formatting the table.
 
-.. figure:: images/table_editor.jpg
+.. figure:: images/TableEditor_demo.png
    :alt: Table editor with toolbar and instance editor
 
    Figure 51: Table editor
@@ -553,7 +553,8 @@ TabularEditor()
 :Optional parameters:
     *activated, clicked, column_clicked, dclicked, drag_move, editable,*
     *horizontal_lines, images, multi_select, operations, right_clicked,*
-    *right_dclicked, selected, selected_row, show_titles, vertical_lines*
+    *right_dclicked, scroll_to_position_hint, selected, selected_row,
+    *show_titles, vertical_lines*
 
 The TabularEditor() factory can be used for many of the same purposes as the
 TableEditor() factory, that is, for displaying a table of attributes of lists or
@@ -729,7 +730,7 @@ You must specify the types of nodes that can appear in the tree using the
 *nodes* parameter, which must be a list of instances of TreeNode (or of
 subclasses of TreeNode).
 
-.. figure:: images/tree_editor.png
+.. figure:: images/TreeEditor_demo.png
    :alt: Tree control with instance editor pane
 
    Figure 54: Tree editor

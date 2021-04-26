@@ -46,13 +46,13 @@ from ..helper import DockStyle
 #  Trait definitions:
 # -------------------------------------------------------------------------
 
-# Trait whose value is a BaseTraitHandler object
+#: Trait whose value is a BaseTraitHandler object
 handler_trait = Instance(BaseTraitHandler)
 
-# The visible number of rows displayed
+#: The visible number of rows displayed
 rows_trait = Range(1, 50, 5, desc="the number of list rows to display")
 
-# The visible number of columns displayed
+#: The visible number of columns displayed
 columns_trait = Range(1, 10, 1, desc="the number of list columns to display")
 
 editor_trait = Instance(EditorFactory)
@@ -190,7 +190,7 @@ class ListItemProxy(HasTraits):
     _zzz_name = Any()
 
     def __init__(self, object, name, index, trait, value):
-        super(ListItemProxy, self).__init__()
+        super().__init__()
 
         self._zzz_inited = False
         self._zzz_object = object

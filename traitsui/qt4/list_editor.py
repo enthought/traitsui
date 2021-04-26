@@ -160,7 +160,7 @@ class SimpleEditor(Editor):
             self.update_editor_item, extended_name + "_items?", remove=True
         )
 
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -622,7 +622,7 @@ class NotebookEditor(Editor):
         )
         self.close_all()
 
-        super(NotebookEditor, self).dispose()
+        super().dispose()
 
     def update_page_name(self, object, name, old, new):
         """ Handles the trait defining a particular page's name being changed.

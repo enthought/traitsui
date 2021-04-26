@@ -23,7 +23,7 @@ from ..helper import Orientation
 #  Trait definitions:
 # -------------------------------------------------------------------------
 
-# Size of each tree node icon
+#: Size of each tree node icon
 IconSize = Tuple((16, 16), Int, Int)
 
 
