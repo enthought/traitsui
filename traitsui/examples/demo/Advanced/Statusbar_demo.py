@@ -69,7 +69,7 @@ class TextEditor(HasPrivateTraits):
 
     def _time_default(self):
         thread = Thread(target=self._clock)
-        thread.setDaemon(True)
+        thread.daemon = True
         thread.start()
 
         return ''
