@@ -50,8 +50,9 @@ class _ShellEditor(Editor):
         value = self.value
         if self.factory.share and isinstance(value, dict):
             locals = value
-        self._shell = shell = PythonShell(parent, locals=locals)
+        self._shell = shell = PythonShell(parent)
         self.control = shell.control
+        shell.interpreter().locals = locals
         if locals is None:
             object = self.object
             shell.bind("self", object)
@@ -59,7 +60,11 @@ class _ShellEditor(Editor):
                 self.update_object, "command_executed", dispatch="ui"
             )
             if not isinstance(value, dict):
-                object.observe(self.update_any, dispatch="ui")
+                object.observe(
+                    self.update_any,
+                    match(lambda name, ctrait: True),
+                    dispatch="ui"
+                )
             else:
                 self._base_locals = locals = {}
                 for name in self._shell.interpreter().locals.keys():
@@ -132,11 +137,17 @@ class _ShellEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        self._shell.observe(
-            self.update_object, "command_executed", remove=True, dispatch="ui"
-        )
-        if self._base_locals is None:
-            self.object.observe(self.update_any, remove=True, dispatch="ui")
+        if self._shell.interpreter().locals is None:
+            self._shell.observe(
+                self.update_object, "command_executed", remove=True, dispatch="ui"
+            )
+            if self._base_locals is None:
+                self.object.observe(
+                    self.update_any,
+                    match(lambda name, ctrait: True),
+                    remove=True,
+                    dispatch="ui"
+                )
 
         super().dispose()
 
