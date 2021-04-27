@@ -137,7 +137,7 @@ class _ShellEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        if self._shell.interpreter().locals is None:
+        if not (self.factory.share and isinstance(self.value, dict)):
             self._shell.observe(
                 self.update_object, "command_executed", remove=True, dispatch="ui"
             )
