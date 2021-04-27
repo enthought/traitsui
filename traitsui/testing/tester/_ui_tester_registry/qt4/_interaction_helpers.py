@@ -7,6 +7,7 @@
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 # Thanks for using Enthought open source!
+import warnings
 
 from pyface.qt import QtCore, QtGui
 from pyface.qt.QtTest import QTest
@@ -230,7 +231,11 @@ def mouse_click_combobox(combobox, index, delay):
         key_click(
             combobox.view().viewport(), key="Enter", delay=delay
         )
-
+    else:
+        warnings.warn(
+            "Attempted to click on a non-existant combobox. Nothing was "
+            "performed."
+        )
 
 def key_sequence_qwidget(control, interaction, delay):
     """ Performs simulated typing of a sequence of keys on the given widget

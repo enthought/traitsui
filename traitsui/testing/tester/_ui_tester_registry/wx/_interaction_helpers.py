@@ -65,7 +65,10 @@ def mouse_click(func):
             Time delay (in ms) in which click will be performed.
         """
         if (not control) or (not control.IsEnabled()):
-            return
+            warnings.warn(
+                "Attempted to click on a non-existant or non-enabled control. "
+                "Nothing was performed."
+            )
         wx.MilliSleep(delay)
         func(control=control, delay=delay, **kwargs)
     return mouse_click_handler
