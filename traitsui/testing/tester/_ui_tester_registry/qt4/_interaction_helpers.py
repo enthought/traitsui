@@ -237,6 +237,7 @@ def mouse_click_combobox(combobox, index, delay):
             "performed."
         )
 
+
 def key_sequence_qwidget(control, interaction, delay):
     """ Performs simulated typing of a sequence of keys on the given widget
     after a delay.
