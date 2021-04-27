@@ -9,7 +9,6 @@
 # Thanks for using Enthought open source!
 
 import contextlib
-import platform
 import unittest
 
 from traits.api import Enum, HasTraits, Int, List
@@ -34,8 +33,6 @@ from traitsui.testing.api import (
     SelectedText,
     UITester
 )
-
-is_windows = platform.system() == "Windows"
 
 
 class EnumModel(HasTraits):
@@ -271,18 +268,15 @@ class TestSimpleEnumEditor(BaseTestMixin, unittest.TestCase):
     def test_simple_enum_editor_index(self):
         self.check_enum_index_update(get_view("simple"))
 
-    @unittest.skipIf(is_windows, "Test needs fixing on windows")
     def test_simple_evaluate_editor_text(self):
         self.check_enum_text_update(get_evaluate_view("simple"))
 
-    @unittest.skipIf(is_windows, "Test needs fixing on windows")
     def test_simple_evaluate_editor_index(self):
         self.check_enum_index_update(get_evaluate_view("simple"))
 
     def test_simple_evaluate_editor_bad_text(self):
         self.check_enum_text_bad_update(get_evaluate_view("simple"))
 
-    @unittest.skipIf(is_windows, "Test needs fixing on windows")
     def test_simple_evaluate_editor_object(self):
         self.check_enum_object_update(get_evaluate_view("simple"))
 
@@ -390,9 +384,6 @@ class TestRadioEnumEditor(BaseTestMixin, unittest.TestCase):
                     item.perform(MouseClick())
                     self.assertEqual(enum_edit.value, "four")
 
-    # it appears that on windows the behavior is different - it forces
-    # enum_edit.value to be 'one'
-    @unittest.skipIf(is_windows and is_wx, "windows/wx behavior is unique")
     def test_radio_enum_none_selected(self):
         enum_edit = EnumModelWithNone()
         tester = UITester()
