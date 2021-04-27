@@ -737,8 +737,6 @@ class SimpleSpinEditor(BaseRangeEditor):
             parent, -1, self.str_value, min=low, max=high, initial=self.value
         )
         parent.Bind(wx.EVT_SPINCTRL, self.update_object, id=self.control.GetId())
-        if wx.VERSION < (3, 0):
-            parent.Bind(wx.EVT_TEXT, self.update_object, id=self.control.GetId())
         self.set_tooltip()
 
     def update_object(self, event):
