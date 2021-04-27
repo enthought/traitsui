@@ -14,9 +14,9 @@
 from pyface.ui_traits import Image
 from traits.api import Str, Range, Enum, Property, Either
 
-from ..editor_factory import EditorFactory
-from ..ui_traits import AView
-from ..view import View
+from traitsui.editor_factory import EditorFactory
+from traitsui.ui_traits import AView
+from traitsui.view import View
 
 
 class ButtonEditor(EditorFactory):

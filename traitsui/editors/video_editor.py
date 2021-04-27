@@ -12,8 +12,8 @@
 
 from traits.api import Enum, Property, Str
 
-from ..basic_editor_factory import BasicEditorFactory
-from ..toolkit import toolkit_object
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.toolkit import toolkit_object
 
 AspectRatio = Enum('keep', 'ignore', 'expand')
 PlayerState = Enum('stopped', 'playing', 'paused')

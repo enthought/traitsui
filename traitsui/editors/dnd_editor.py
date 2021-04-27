@@ -16,7 +16,7 @@
 
 from pyface.ui_traits import Image
 
-from ..editor_factory import EditorFactory
+from traitsui.editor_factory import EditorFactory
 
 
 class DNDEditor(EditorFactory):

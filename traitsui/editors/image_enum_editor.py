@@ -12,15 +12,13 @@
 toolkits.
 """
 
-import sys
-
 from os import getcwd
-
 from os.path import join, dirname, exists
+import sys
 
 from traits.api import Module, Type, Str, observe
 
-from .enum_editor import EnumEditor
+from traitsui.editors.enum_editor import EnumEditor
 
 
 class ImageEnumEditor(EnumEditor):

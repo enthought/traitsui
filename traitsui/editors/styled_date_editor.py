@@ -9,7 +9,8 @@
 # Thanks for using Enthought open source!
 
 from traits.api import Bool, List, Str
-from .date_editor import DateEditor
+
+from traitsui.editors.date_editor import DateEditor
 
 
 class StyledDateEditor(DateEditor):

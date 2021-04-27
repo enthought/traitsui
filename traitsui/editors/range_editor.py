@@ -25,14 +25,10 @@ from traits.api import (
     Undefined,
 )
 
-# CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
-# to avoid circular imports, as this EditorFactory will be part of
-# traits.ui.api as well.
-from ..view import View
 
-from ..editor_factory import EditorFactory
-
-from ..toolkit import toolkit_object
+from traitsui.editor_factory import EditorFactory
+from traitsui.toolkit import toolkit_object
+from traitsui.view import View
 
 
 class RangeEditor(EditorFactory):

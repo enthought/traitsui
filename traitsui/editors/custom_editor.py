@@ -13,9 +13,8 @@
 
 from traits.api import Callable, Tuple, Property
 
-from ..basic_editor_factory import BasicEditorFactory
-
-from ..toolkit import toolkit_object
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.toolkit import toolkit_object
 
 
 class CustomEditor(BasicEditorFactory):

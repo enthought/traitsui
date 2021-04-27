@@ -13,11 +13,9 @@
 
 from traits.api import Bool, Str, Event, Property
 
-from ..editor import Editor
-
-from ..basic_editor_factory import BasicEditorFactory
-
-from ..toolkit import toolkit_object
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.editor import Editor
+from traitsui.toolkit import toolkit_object
 
 
 class _ShellEditor(Editor):

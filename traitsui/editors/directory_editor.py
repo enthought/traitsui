@@ -11,7 +11,7 @@
 """ Defines the directory editor factory for all traits toolkit backends.
 """
 
-from .file_editor import FileEditor
+from traitsui.editors.file_editor import FileEditor
 
 
 class DirectoryEditor(FileEditor):

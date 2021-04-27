@@ -13,11 +13,11 @@
 
 from traits.api import Any, Dict, Bool, Tuple, Int, List, Instance, Str, Enum
 
-from ..menu import Action
-from ..tree_node import TreeNode
-from ..dock_window_theme import DockWindowTheme
-from ..editor_factory import EditorFactory
-from ..helper import Orientation
+from traitsui.dock_window_theme import DockWindowTheme
+from traitsui.editor_factory import EditorFactory
+from traitsui.helper import Orientation
+from traitsui.menu import Action
+from traitsui.tree_node import TreeNode
 
 # -------------------------------------------------------------------------
 #  Trait definitions:

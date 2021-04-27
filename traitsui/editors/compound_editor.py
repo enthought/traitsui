@@ -13,7 +13,7 @@
 
 from traits.api import Bool, List
 
-from ..editor_factory import EditorFactory
+from traitsui.editor_factory import EditorFactory
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
