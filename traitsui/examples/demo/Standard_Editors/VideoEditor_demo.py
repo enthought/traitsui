@@ -100,6 +100,8 @@ class VideoEditorDemo(HasTraits):
 
     image_func = Callable()
 
+    notify_interval = Float(0.5)
+
     @observe('state')
     def _state_update(self, event):
         if event.new == 'stopped' or event.new == 'paused':
@@ -129,7 +131,8 @@ class VideoEditorDemo(HasTraits):
                 muted='muted',
                 volume='volume',
                 playback_rate='playback_rate',
-                image_func='image_func'
+                image_func='image_func',
+                notify_interval='notify_interval',
             ),
         ),
         HGroup(
