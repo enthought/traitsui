@@ -8,12 +8,6 @@ TraitsUI.  For user documentation, please read the
 :doc:`TraitsUI User Manual <../traitsui_user_manual/index>`
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 3
 
     traitsui
-    traitsui.editors
-    traitsui.extras
-    traitsui.image
-    traitsui.null
-    traitsui.tests
-    traitsui.ui_editors

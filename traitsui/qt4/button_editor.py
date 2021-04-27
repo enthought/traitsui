@@ -1,4 +1,14 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,54 +18,36 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various button editors for the PyQt user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
+from pyface.api import Image
 
-from traits.api import Unicode, List, Str, on_trait_change
-
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.button_editor file.
-from traitsui.editors.button_editor \
-    import ToolkitEditorFactory
+from traits.api import Str, List, Str, observe, on_trait_change
 
 from .editor import Editor
-
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
 
 
 class SimpleEditor(Editor):
     """ Simple style editor for a button.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # The button label
-    label = Unicode
+    #: The button label
+    label = Str()
 
-    # The list of items in a drop-down menu, if any
-    #menu_items = List
+    #: The list of items in a drop-down menu, if any
+    # menu_items = List()
 
-    # The selected item in the drop-down menu.
-    selected_item = Str
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
+    #: The selected item in the drop-down menu.
+    selected_item = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -67,11 +59,9 @@ class SimpleEditor(Editor):
             self.control = QtGui.QToolButton()
             self.control.toolButtonStyle = QtCore.Qt.ToolButtonTextOnly
             self.control.setText(self.string_value(label))
-            self.object.on_trait_change(
-                self._update_menu, self.factory.values_trait)
-            self.object.on_trait_change(
-                self._update_menu,
-                self.factory.values_trait + "_items")
+            self.object.observe(
+                self._update_menu, self.factory.values_trait + ".items"
+            )
             self._menu = QtGui.QMenu()
             self._update_menu()
             self.control.setMenu(self._menu)
@@ -81,27 +71,43 @@ class SimpleEditor(Editor):
             self._menu = None
             self.control.setAutoDefault(False)
 
-        self.sync_value(self.factory.label_value, 'label', 'from')
-        self.control.clicked.connect(self.update_object)
+        self.sync_value(self.factory.label_value, "label", "from")
+
+        # The connection type is set to workaround Qt5 + MacOSX issue with
+        # event dispatching. Without the type set to QueuedConnection, other
+        # widgets may not repaint properly in response to a button click.
+        # See enthought/traitsui#1308
+        self.control.clicked.connect(
+            self.update_object, type=QtCore.Qt.QueuedConnection,
+        )
         self.set_tooltip()
 
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
+
+        if self.factory.values_trait:
+            self.object.observe(
+                self._update_menu,
+                self.factory.values_trait + ".items",
+                remove=True,
+            )
+
         if self.control is not None:
             self.control.clicked.disconnect(self.update_object)
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def _label_changed(self, label):
         self.control.setText(self.string_value(label))
 
-    def _update_menu(self):
+    def _update_menu(self, event=None):
         self._menu.blockSignals(True)
         self._menu.clear()
         for item in getattr(self.object, self.factory.values_trait):
             action = self._menu.addAction(item)
             action.triggered.connect(
-                lambda event, name=item: self._menu_selected(name))
+                lambda event, name=item: self._menu_selected(name)
+            )
         self.selected_item = ""
         self._menu.blockSignals(False)
 
@@ -122,8 +128,9 @@ class SimpleEditor(Editor):
 
         # If there is an associated view, then display it:
         if (self.factory is not None) and (self.factory.view is not None):
-            self.object.edit_traits(view=self.factory.view,
-                                    parent=self.control)
+            self.object.edit_traits(
+                view=self.factory.view, parent=self.control
+            )
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -131,26 +138,19 @@ class SimpleEditor(Editor):
         """
         pass
 
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomEditor(SimpleEditor):
     """ Custom style editor for a button, which can contain an image.
     """
+    #: The button image
+    image = Image()
 
-    # The mapping of button styles to Qt classes.
+    #: The mapping of button styles to Qt classes.
     _STYLE_MAP = {
-        'checkbox': QtGui.QCheckBox,
-        'radio': QtGui.QRadioButton,
-        'toolbar': QtGui.QToolButton
+        "checkbox": QtGui.QCheckBox,
+        "radio": QtGui.QRadioButton,
+        "toolbar": QtGui.QToolButton,
     }
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -170,6 +170,22 @@ class CustomEditor(SimpleEditor):
         if factory.image is not None:
             self.control.setIcon(factory.image.create_icon())
 
-        self.sync_value(self.factory.label_value, 'label', 'from')
+        self.sync_value(self.factory.label_value, "label", "from")
+        self.sync_value(self.factory.image_value, "image", "from")
         self.control.clicked.connect(self.update_object)
         self.set_tooltip()
+
+    @observe("image")
+    def _image_updated(self, event):
+        image = event.new
+        self.control.setIcon(image.create_icon())
+
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None:
+            self.control.clicked.disconnect(self.update_object)
+
+        # FIXME: Maybe better to let this class subclass Editor directly
+        # enthought/traitsui#884
+        Editor.dispose(self)

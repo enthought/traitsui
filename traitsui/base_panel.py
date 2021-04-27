@@ -1,26 +1,19 @@
-#  Copyright (c) 2017, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
-#  Author: Corran Webster
-#  Date:   Aug 2017
-
-from __future__ import absolute_import
+# Thanks for using Enthought open source!
 
 from pyface.action.api import ActionController
 from traits.api import Any, Instance
 from traitsui.menu import Action
-import six
-
 
 # Set of all predefined system button names:
-SystemButtons = {'Undo', 'Redo', 'Apply', 'Revert', 'OK', 'Cancel', 'Help'}
+SystemButtons = {"Undo", "Redo", "Apply", "Revert", "OK", "Cancel", "Help"}
 
 
 class BasePanel(ActionController):
@@ -32,15 +25,16 @@ class BasePanel(ActionController):
     """
 
     #: The top-level toolkit control of the UI.
-    control = Any
+    control = Any()
 
     #: The UI instance for the view.
-    ui = Instance('traitsui.ui.UI')
+    ui = Instance("traitsui.ui.UI")
 
     def default_icon(self):
         """ Return a default icon for a TraitsUI dialog. """
         from pyface.image_resource import ImageResource
-        return ImageResource('frame.png')
+
+        return ImageResource("frame.png")
 
     def check_button(self, buttons, action):
         """ Adds *action* to the system buttons list for this dialog, if it is
@@ -55,18 +49,16 @@ class BasePanel(ActionController):
     def is_button(self, action, name):
         """ Returns whether a specified action button is a system button.
         """
-        if isinstance(action, six.string_types):
-            return (action == name)
-        return (action.name == name)
+        if isinstance(action, str):
+            return action == name
+        return action.name == name
 
     def coerce_button(self, action):
         """ Coerces a string to an Action if necessary.
         """
-
-        if isinstance(action, six.string_types):
+        if isinstance(action, str):
             return Action(
-                name=action,
-                action='' if action in SystemButtons else '?'
+                name=action, action="" if action in SystemButtons else "?"
             )
         return action
 
@@ -136,16 +128,16 @@ class BasePanel(ActionController):
         item = menu_item.item
         action = item.action
 
-        if action.id != '':
+        if action.id != "":
             self.ui.info.bind(action.id, menu_item)
 
-        if action.enabled_when != '':
+        if action.enabled_when != "":
             self.ui.add_enabled(action.enabled_when, menu_item)
 
-        if action.visible_when != '':
+        if action.visible_when != "":
             self.ui.add_visible(action.visible_when, menu_item)
 
-        if action.checked_when != '':
+        if action.checked_when != "":
             self.ui.add_checked(action.checked_when, menu_item)
 
     def add_to_toolbar(self, toolbar_item):
@@ -181,7 +173,7 @@ class BasePanel(ActionController):
         defined : bool
             Whether or not the action should be added to the menu.
         """
-        if action.defined_when == '':
+        if action.defined_when == "":
             return True
 
         return self.ui.eval_when(action.defined_when)

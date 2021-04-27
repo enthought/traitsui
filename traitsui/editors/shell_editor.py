@@ -1,20 +1,15 @@
-#  Copyright (c) 2005-18, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   09/27/2005
+# Thanks for using Enthought open source!
 
 """ Editor that displays an interactive Python shell.
 """
-
-from __future__ import absolute_import
 
 from traits.api import Bool, Str, Event, Property
 
@@ -38,9 +33,9 @@ class _ShellEditor(Editor):
     #: Is the shell editor is scrollable? This value overrides the default.
     scrollable = True
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # 'Editor' Interface
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -59,21 +54,24 @@ class _ShellEditor(Editor):
         self.control = shell.control
         if locals is None:
             object = self.object
-            shell.bind('self', object)
-            shell.on_trait_change(self.update_object, 'command_executed',
-                                  dispatch='ui')
+            shell.bind("self", object)
+            shell.observe(
+                self.update_object, "command_executed", dispatch="ui"
+            )
             if not isinstance(value, dict):
-                object.on_trait_change(self.update_any, dispatch='ui')
+                object.observe(self.update_any, dispatch="ui")
             else:
                 self._base_locals = locals = {}
                 for name in self._shell.interpreter().locals.keys():
                     locals[name] = None
 
         # Synchronize any editor events:
-        self.sync_value(self.factory.command_to_execute,
-                        'command_to_execute', 'from')
-        self.sync_value(self.factory.command_executed,
-                        'command_executed', 'to')
+        self.sync_value(
+            self.factory.command_to_execute, "command_to_execute", "from"
+        )
+        self.sync_value(
+            self.factory.command_executed, "command_executed", "to"
+        )
 
         self.set_tooltip()
 
@@ -121,25 +119,26 @@ class _ShellEditor(Editor):
                 for name, value in dic.items():
                     locals[name] = value
 
-    def update_any(self, object, name, old, new):
+    def update_any(self, event):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         locals = self._shell.interpreter().locals
         if self._base_locals is None:
-            locals[name] = new
+            locals[event.name] = event.new
         else:
-            self.value[name] = new
+            self.value[event.name] = event.new
 
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        self._shell.on_trait_change(self.update_object, 'command_executed',
-                                    remove=True)
+        self._shell.observe(
+            self.update_object, "command_executed", remove=True, dispatch="ui"
+        )
         if self._base_locals is None:
-            self.object.on_trait_change(self.update_any, remove=True)
+            self.object.observe(self.update_any, remove=True, dispatch="ui")
 
-        super(_ShellEditor, self).dispose()
+        super().dispose()
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
@@ -147,8 +146,8 @@ class _ShellEditor(Editor):
         """
         shell = self._shell
         try:
-            history = prefs.get('history', [])
-            history_index = prefs.get('history_index', -1)
+            history = prefs.get("history", [])
+            history_index = prefs.get("history_index", -1)
             shell.set_history(history, history_index)
         except:
             pass
@@ -157,11 +156,11 @@ class _ShellEditor(Editor):
         """ Returns any user preference information associated with the editor.
         """
         history, history_index = self._shell.get_history()
-        return {'history': history, 'history_index': history_index}
+        return {"history": history, "history_index": history_index}
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Private Interface
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     # Trait change handlers --------------------------------------------------
 
@@ -175,26 +174,28 @@ class _ShellEditor(Editor):
 
 # Editor factory for shell editors.
 
+
 class ToolkitEditorFactory(BasicEditorFactory):
 
     #: The editor class to be instantiated.
-    klass = Property
+    klass = Property()
 
     #: Should the shell interpreter use the object value's dictionary?
     share = Bool(False)
 
     #: Extended trait name of the object event trait which triggers a command
     #: execution in the shell when fired.
-    command_to_execute = Str
+    command_to_execute = Str()
 
     #: Extended trait name of the object event trait which is fired when a
     #: command is executed.
-    command_executed = Str
+    command_executed = Str()
 
     def _get_klass(self):
         """ Returns the toolkit-specific editor class to be used in the UI.
         """
-        return toolkit_object('shell_editor:_ShellEditor')
+        return toolkit_object("shell_editor:_ShellEditor")
+
 
 # Define the ShellEditor
 ShellEditor = ToolkitEditorFactory

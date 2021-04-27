@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from traits import *
-from pyface.api import GUI
-from traitsui import View, Item, ButtonEditor
+# interactive.py
+
+from traits.api import HasTraits, Int, Button
+from traitsui.api import View, Item, ButtonEditor
 
 class Counter(HasTraits):
     value =  Int()
@@ -12,6 +12,4 @@ class Counter(HasTraits):
 
     view = View('value', Item('add_one', show_label=False ))
 
-Counter().edit_traits()
-GUI().start_event_loop()
-
+Counter().configure_traits()

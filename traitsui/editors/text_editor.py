@@ -1,28 +1,15 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2008, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/07/2004
-#
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the text editor factory for all traits toolkit backends.
 """
-
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
-
-from __future__ import absolute_import
 
 from traits.api import Dict, Str, Any, Bool
 
@@ -37,9 +24,9 @@ from ..ui_traits import AView
 
 from ..editor_factory import EditorFactory
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Define a simple identity mapping:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class _Identity(object):
@@ -49,74 +36,87 @@ class _Identity(object):
     def __call__(self, value):
         return value
 
-#-------------------------------------------------------------------------
-#  Trait definitions:
-#-------------------------------------------------------------------------
 
-# Mapping from user input text to other value
+# -------------------------------------------------------------------------
+#  Trait definitions:
+# -------------------------------------------------------------------------
+
+#: Mapping from user input text to other value
 mapping_trait = Dict(Str, Any)
 
-# Function used to evaluate textual user input
+#: Function used to evaluate textual user input
 evaluate_trait = Any(_Identity())
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for text editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # Dictionary that maps user input to other values
+    #: Dictionary that maps user input to other values
     mapping = mapping_trait
 
-    # Is user input set on every keystroke?
+    #: Is user input set on every keystroke?
     auto_set = Bool(True)
 
-    # Is user input set when the Enter key is pressed?
+    #: Is user input set when the Enter key is pressed?
     enter_set = Bool(False)
 
-    # Is multi-line text allowed?
+    #: Is multi-line text allowed?
     multi_line = Bool(True)
 
-    # Is editor readonly (will use custom / default editor appearance with readonly flag set to true)
-    # in contrasrt with readonly style for item when completely another edito
-    # is used
+    #: Is editor readonly (will use custom / default editor appearance with
+    #: readonly flag set to true) in contrast with readonly style for item
+    #: when completely another editor is used
     read_only = Bool(False)
 
-    # Is user input unreadable? (e.g., for a password)
+    #: Is user input unreadable? (e.g., for a password)
     password = Bool(False)
 
-    # Function to evaluate textual user input
+    #: Function to evaluate textual user input
     evaluate = evaluate_trait
 
-    # The object trait containing the function used to evaluate user input
-    evaluate_name = Str
+    #: The object trait containing the function used to evaluate user input
+    evaluate_name = Str()
 
-    # The optional view to display when a read-only text editor is clicked:
+    #: The optional view to display when a read-only text editor is clicked:
     view = AView
 
-    # In a read-only text editor, allow selection and copying of the text.
+    #: In a read-only text editor, allow selection and copying of the text.
     readonly_allow_selection = Bool(False)
 
-    #-------------------------------------------------------------------------
+    #: Grayed-out placeholder text to be displayed when the editor is empty.
+    placeholder = Str()
+
+    #: Whether or not to display a clear button for the text.  This only works
+    #: in the qt>=5.2 backend for simple/text styles of the editor.  Note this
+    #: trait is currently provisional and may be replaced in the future by a
+    #: more general feature.
+    cancel_button = Bool(False)
+
+    # -------------------------------------------------------------------------
     #  Traits view definition:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    traits_view = View(['auto_set{Set value when text is typed}',
-                        'enter_set{Set value when enter is pressed}',
-                        'multi_line{Allow multiple lines of text}',
-                        '<extras>',
-                        '|options:[Options]>'])
+    traits_view = View(
+        [
+            "auto_set{Set value when text is typed}",
+            "enter_set{Set value when enter is pressed}",
+            "multi_line{Allow multiple lines of text}",
+            "<extras>",
+            "|options:[Options]>",
+        ]
+    )
 
-    extras = Group('password{Is this a password field?}')
+    extras = Group("password{Is this a password field?}")
+
 
 # Define the TextEditor class.
 TextEditor = ToolkitEditorFactory
-
-### EOF #######################################################################

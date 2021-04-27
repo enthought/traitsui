@@ -1,34 +1,18 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/25/2004
-#
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the HTML help templates used for formatting Traits UI help pages.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
-
-from __future__ import absolute_import
-
 from traits.api import HasStrictTraits, Str
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
 
 # Default HTML for a single Item's help window
 ItemHTML = """
@@ -84,23 +68,25 @@ GroupHelp = """
   </TR>
 </TABLE>"""
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'HelpTemplate' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class HelpTemplate(HasStrictTraits):
     """ Contains HTML templates for displaying help.
     """
+
     item_html = Str(ItemHTML)  # Item popup help window HTML document
     group_html = Str(GroupHTML)  # Group help window HTML document
     item_help = Str(ItemHelp)  # Single group item HTML
     group_help = Str(GroupHelp)  # Group level help HTML
-    no_group_help = Str('')        # Missing group level help HTML
+    no_group_help = Str("")  # Missing group level help HTML
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Gets/Sets the current HelpTemplate in use:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 _help_template = HelpTemplate()
 

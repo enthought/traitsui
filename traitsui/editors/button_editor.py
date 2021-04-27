@@ -1,117 +1,98 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2008, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the button editor factory for all traits toolkit backends.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
-
-from __future__ import absolute_import
-
 from pyface.ui_traits import Image
-from traits.api import Str, Range, Enum, Property, Trait
+from traits.api import Str, Range, Enum, Property, Either
 
 from ..editor_factory import EditorFactory
 from ..ui_traits import AView
 from ..view import View
-import six
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for buttons.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # Value to set when the button is clicked
-    value = Property
+    #: Value to set when the button is clicked
+    value = Property()
 
-    # Optional label for the button
-    label = Str
+    #: Optional label for the button
+    label = Str()
 
-    # The name of the external object trait that the button label is synced to
-    label_value = Str
+    #: The name of the external object trait that the button label is synced to
+    label_value = Str()
 
-    # The name of the trait on the object that contains the list of possible
-    # values.  If this is set, then the value, label, and label_value traits
-    # are ignored; instead, they will be set from this list.  When this button
-    # is clicked, the value set will be the one selected from the drop-down.
-    values_trait = Trait(None, None, Str)
+    #: The name of the trait on the object that contains the list of possible
+    #: values.  If this is set, then the value, label, and label_value traits
+    #: are ignored; instead, they will be set from this list.  When this button
+    #: is clicked, the value set will be the one selected from the drop-down.
+    values_trait = Either(None, Str)
 
-    # (Optional) Image to display on the button
+    #: (Optional) Image to display on the button
     image = Image
 
-    # Extra padding to add to both the left and the right sides
+    #: The name of the external object trait that the button image is synced to
+    image_value = Str()
+
+    #: Extra padding to add to both the left and the right sides
+
     width_padding = Range(0, 31, 7)
 
-    # Extra padding to add to both the top and the bottom sides
+    #: Extra padding to add to both the top and the bottom sides
     height_padding = Range(0, 31, 5)
 
-    # Presentation style
-    style = Enum('button', 'radio', 'toolbar', 'checkbox')
+    #: Presentation style
+    style = Enum("button", "radio", "toolbar", "checkbox")
 
-    # Orientation of the text relative to the image
-    orientation = Enum('vertical', 'horizontal')
+    #: Orientation of the text relative to the image
+    orientation = Enum("vertical", "horizontal")
 
-    # The optional view to display when the button is clicked:
+    #: The optional view to display when the button is clicked:
     view = AView
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Traits view definition:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    traits_view = View(['label', 'value', '|[]'])
-
-    #-------------------------------------------------------------------------
-    #  Implementation of the 'value' property:
-    #-------------------------------------------------------------------------
+    traits_view = View(["label", "value", "|[]"])
 
     def _get_value(self):
         return self._value
 
     def _set_value(self, value):
         self._value = value
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             try:
                 self._value = int(value)
-            except:
+            except ValueError:
                 try:
                     self._value = float(value)
-                except:
+                except ValueError:
                     pass
-
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
 
     def __init__(self, **traits):
         self._value = 0
-        super(ToolkitEditorFactory, self).__init__(**traits)
+        super().__init__(**traits)
 
 
 # Define the ButtonEditor class
 ButtonEditor = ToolkitEditorFactory
-
-### EOF ---------------------------------------------------------------------

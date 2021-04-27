@@ -1,23 +1,18 @@
-#------------------------------------------------------------------------------
-# Copyright (c) 2009, Enthought, Inc.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
 #
-# Author: Evan Patterson
-# Date: 06/25/09
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ A renderer which will display a cell-specific image in addition to some
     text displayed in the same way the default renderer would.
 """
 
 # System library imports
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 # ETS imports
@@ -30,12 +25,12 @@ class TableImageRenderer(TableDelegate):
         text displayed in the same way the default renderer would.
     """
 
-    # Should the image be scaled to the size of the cell
+    #: Should the image be scaled to the size of the cell
     scale_to_cell = Bool(True)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  TableImageRenderer interface
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def get_image_for_obj(self, value, row, col):
         """ Return the image for the cell given the raw cell value and the row
@@ -43,9 +38,9 @@ class TableImageRenderer(TableDelegate):
         """
         return None
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  QAbstractItemDelegate interface
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def paint(self, painter, option, index):
         """ Overriden to draw images.

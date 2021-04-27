@@ -1,4 +1,14 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,79 +18,53 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various editors for multi-selection enumerations, for the PyQt
 user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
-from __future__ import absolute_import, division
 
 import logging
 
 from pyface.qt import QtCore, QtGui
 
-from traits.api \
-    import List, Unicode, TraitError
+from traits.api import Any, Callable, List, Str, TraitError, Tuple
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.check_list_editor file.
-from traitsui.editors.check_list_editor \
-    import ToolkitEditorFactory
+from .editor_factory import TextEditor as BaseTextEditor
 
-from .editor_factory \
-    import TextEditor as BaseTextEditor
+from .editor import EditorWithList
 
-from .editor \
-    import EditorWithList
-import six
 
 
 logger = logging.getLogger(__name__)
 
-
-# default formatting function (would import from string, but not in Python 3)
-capitalize = lambda s: s.capitalize()
-
-
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
 
 class SimpleEditor(EditorWithList):
     """ Simple style of editor for checklists, which displays a combo box.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # Checklist item names
-    names = List(Unicode)
+    #: Checklist item names
+    names = List(Str)
 
-    # Checklist item values
-    values = List
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
+    #: Checklist item values
+    values = List()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         self.create_control(parent)
-        super(SimpleEditor, self).init(parent)
-
-    #-------------------------------------------------------------------------
-    #  Creates the initial editor control:
-    #-------------------------------------------------------------------------
+        super().init(parent)
 
     def create_control(self, parent):
         """ Creates the initial editor control.
@@ -88,19 +72,22 @@ class SimpleEditor(EditorWithList):
         self.control = QtGui.QComboBox()
         self.control.activated[int].connect(self.update_object)
 
-    #-------------------------------------------------------------------------
-    #  Handles the list of legal check list values being updated:
-    #-------------------------------------------------------------------------
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None:
+            self.control.activated[int].disconnect(self.update_object)
+
+        super().dispose()
 
     def list_updated(self, values):
         """ Handles updates to the list of legal checklist values.
         """
         sv = self.string_value
-        if (len(values) > 0) and isinstance(values[0], six.string_types):
-            values = [(x, sv(x, capitalize)) for x in values]
+        if (len(values) > 0) and isinstance(values[0], str):
+            values = [(x, sv(x, str.capitalize)) for x in values]
         self.values = valid_values = [x[0] for x in values]
         self.names = [x[1] for x in values]
-
 
         # Make sure the current value is still legal:
         modified = False
@@ -111,18 +98,18 @@ class SimpleEditor(EditorWithList):
                     del cur_value[i]
                     modified = True
                 except TypeError as e:
-                    logger.warn('Unable to remove non-current value [%s] from '
-                                'values %s', cur_value[i], values)
+                    logger.warning(
+                        "Unable to remove non-current value [%s] from "
+                        "values %s",
+                        cur_value[i],
+                        values,
+                    )
         if modified:
-            if isinstance(self.value, six.string_types):
-                cur_value = ','.join(cur_value)
+            if isinstance(self.value, str):
+                cur_value = ",".join(cur_value)
             self.value = cur_value
 
         self.rebuild_editor()
-
-    #-------------------------------------------------------------------------
-    #  Rebuilds the editor after its definition is modified:
-    #-------------------------------------------------------------------------
 
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
@@ -133,21 +120,13 @@ class SimpleEditor(EditorWithList):
             control.addItem(name)
         self.update_editor()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user selecting a new value from the combo box:
-    #-------------------------------------------------------------------------
-
     def update_object(self, index):
         """ Handles the user selecting a new value from the combo box.
         """
         value = self.values[index]
-        if not isinstance(self.value, six.string_types):
+        if not isinstance(self.value, str):
             value = [value]
         self.value = value
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -155,13 +134,10 @@ class SimpleEditor(EditorWithList):
         """
         try:
             self.control.setCurrentIndex(
-                self.values.index(parse_value(self.value)[0]))
+                self.values.index(parse_value(self.value)[0])
+            )
         except:
             pass
-
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
 
 
 class CustomEditor(SimpleEditor):
@@ -169,9 +145,16 @@ class CustomEditor(SimpleEditor):
         boxes.
     """
 
-    #-------------------------------------------------------------------------
-    #  Creates the initial editor control:
-    #-------------------------------------------------------------------------
+    #: List of tuple(signal, slot) to be disconnected while rebuilding the
+    #: editor.
+    _connections_to_rebuild = List(Tuple(Any, Callable))
+
+    def init(self, parent):
+        """ Finishes initializing the editor by creating the underlying toolkit
+            widget.
+        """
+        self.create_control(parent)
+        EditorWithList.init(self, parent)
 
     def create_control(self, parent):
         """ Creates the initial editor control.
@@ -181,15 +164,30 @@ class CustomEditor(SimpleEditor):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
-        self._mapper.mapped[six.text_type].connect(self.update_object)
+        self._mapper.mapped[str].connect(self.update_object)
 
-    #-------------------------------------------------------------------------
-    #  Rebuilds the editor after its definition is modified:
-    #-------------------------------------------------------------------------
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        while self._connections_to_rebuild:
+            signal, handler = self._connections_to_rebuild.pop()
+            signal.disconnect(handler)
+
+        # signal from create_control
+        if self._mapper is not None:
+            self._mapper.mapped[str].disconnect(self.update_object)
+            self._mapper = None
+
+        # enthought/traitsui#884
+        EditorWithList.dispose(self)
 
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
         """
+        while self._connections_to_rebuild:
+            signal, handler = self._connections_to_rebuild.pop()
+            signal.disconnect(handler)
+
         # Clear any existing content:
         self.clear_layout()
 
@@ -201,15 +199,23 @@ class CustomEditor(SimpleEditor):
         n = len(labels)
         cols = self.factory.cols
         rows = (n + cols - 1) // cols
+        # incr will keep track of how to increment index so that as we traverse
+        # the grid in row major order, the elements are added to appear in
+        # column major order
         incr = [n // cols] * cols
         rem = n % cols
         for i in range(cols):
-            incr[i] += (rem > i)
+            incr[i] += rem > i
         incr[-1] = -sum(incr[:-1]) + 1
+        # e.g for a gird:
+        # 0 2 4
+        # 1 3 5
+        # incr should be [2, 2, -3]
 
         # Add the set of all possible choices:
         layout = self.control.layout()
         index = 0
+        # populate the layout in row_major order
         for i in range(rows):
             for j in range(cols):
                 if n > 0:
@@ -222,16 +228,15 @@ class CustomEditor(SimpleEditor):
                         cb.setCheckState(QtCore.Qt.Unchecked)
 
                     cb.clicked.connect(self._mapper.map)
+                    self._connections_to_rebuild.append(
+                        (cb.clicked, self._mapper.map)
+                    )
                     self._mapper.setMapping(cb, labels[index])
 
                     layout.addWidget(cb, i, j)
 
                     index += incr[j]
                     n -= 1
-
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking one of the 'custom' check boxes:
-    #-------------------------------------------------------------------------
 
     def update_object(self, label):
         """ Handles the user clicking one of the custom check boxes.
@@ -243,14 +248,10 @@ class CustomEditor(SimpleEditor):
         elif cb.value in cur_value:
             cur_value.remove(cb.value)
 
-        if isinstance(self.value, six.string_types):
-            cur_value = ','.join(cur_value)
+        if isinstance(self.value, str):
+            cur_value = ",".join(cur_value)
 
         self.value = cur_value
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -263,24 +264,16 @@ class CustomEditor(SimpleEditor):
             else:
                 cb.setCheckState(QtCore.Qt.Unchecked)
 
-#-------------------------------------------------------------------------
-#  'TextEditor' class:
-#-------------------------------------------------------------------------
-
 
 class TextEditor(BaseTextEditor):
     """ Text style of editor for checklists, which displays a text field.
     """
 
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #-------------------------------------------------------------------------
-
     def update_object(self, event=None):
         """ Handles the user changing the contents of the edit control.
         """
         try:
-            value = six.text_type(self.control.text())
+            value = str(self.control.text())
             value = eval(value)
         except:
             pass
@@ -289,9 +282,10 @@ class TextEditor(BaseTextEditor):
         except TraitError as excp:
             pass
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Parse a value into a list:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def parse_value(value):
@@ -299,6 +293,6 @@ def parse_value(value):
     """
     if value is None:
         return []
-    if not isinstance(value, six.string_types):
+    if not isinstance(value, str):
         return value[:]
-    return [x.strip() for x in value.split(',')]
+    return [x.strip() for x in value.split(",")]

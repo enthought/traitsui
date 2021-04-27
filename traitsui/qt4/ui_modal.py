@@ -1,4 +1,14 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,28 +18,31 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """Creates a PyQt user interface for a specified UI object.
 """
 
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
-from traitsui.menu \
-    import ApplyButton, RevertButton, OKButton, CancelButton, HelpButton
+from traitsui.menu import (
+    ApplyButton,
+    RevertButton,
+    OKButton,
+    CancelButton,
+    HelpButton,
+)
 
-from .ui_base \
-    import BaseDialog
+from .ui_base import BaseDialog
 
-from .ui_panel \
-    import panel
+from .ui_panel import panel
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Create the different modal PyQt user interfaces.
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
 
 def ui_modal(ui, parent):
     """Creates a modal PyQt user interface for a specified UI object.
@@ -70,10 +83,10 @@ class _ModalDialog(BaseDialog):
         revert = apply = False
 
         if self.control is not None:
-            if hasattr(self, 'revert'):
+            if hasattr(self, "revert"):
                 revert = self.revert.isEnabled()
 
-            if hasattr(self, 'apply'):
+            if hasattr(self, "apply"):
                 apply = self.apply.isEnabled()
 
             ui.reset()
@@ -92,7 +105,7 @@ class _ModalDialog(BaseDialog):
         buttons = [self.coerce_button(button) for button in view.buttons]
         nr_buttons = len(buttons)
 
-        if (nr_buttons != 1) or (not self.is_button(buttons[0], '')):
+        if (nr_buttons != 1) or (not self.is_button(buttons[0], "")):
             bbox = QtGui.QDialogButtonBox()
 
             # Create the necessary special function buttons.
@@ -111,54 +124,64 @@ class _ModalDialog(BaseDialog):
             for raw_button, button in zip(view.buttons, buttons):
                 default = raw_button == view.default_button
 
-                if self.is_button(button, 'Apply'):
+                if self.is_button(button, "Apply"):
                     self.apply = self.add_button(
                         button,
                         bbox,
                         QtGui.QDialogButtonBox.ApplyRole,
                         self._on_apply,
                         enabled=apply,
-                        default=default)
-                    ui.on_trait_change(self._on_applyable, 'modified',
-                                       dispatch='ui')
+                        default=default,
+                    )
+                    ui.observe(
+                        self._on_applyable, "modified", dispatch="ui"
+                    )
 
-                elif self.is_button(button, 'Revert'):
+                elif self.is_button(button, "Revert"):
                     self.revert = self.add_button(
                         button,
                         bbox,
                         QtGui.QDialogButtonBox.ResetRole,
                         self._on_revert,
                         enabled=revert,
-                        default=default)
+                        default=default,
+                    )
 
-                elif self.is_button(button, 'OK'):
+                elif self.is_button(button, "OK"):
                     self.ok = self.add_button(
                         button,
                         bbox,
                         QtGui.QDialogButtonBox.AcceptRole,
                         self.control.accept,
-                        default=default)
-                    ui.on_trait_change(self._on_error, 'errors', dispatch='ui')
+                        default=default,
+                    )
+                    ui.observe(self._on_error, "errors", dispatch="ui")
 
-                elif self.is_button(button, 'Cancel'):
-                    self.add_button(button, bbox,
-                                    QtGui.QDialogButtonBox.RejectRole,
-                                    self.control.reject, default=default)
+                elif self.is_button(button, "Cancel"):
+                    self.add_button(
+                        button,
+                        bbox,
+                        QtGui.QDialogButtonBox.RejectRole,
+                        self.control.reject,
+                        default=default,
+                    )
 
-                elif self.is_button(button, 'Help'):
+                elif self.is_button(button, "Help"):
                     self.add_button(
                         button,
                         bbox,
                         QtGui.QDialogButtonBox.HelpRole,
                         self._on_help,
-                        default=default)
+                        default=default,
+                    )
 
-                elif not self.is_button(button, ''):
+                elif not self.is_button(button, ""):
                     self.add_button(
                         button,
                         bbox,
                         QtGui.QDialogButtonBox.ActionRole,
-                        default=default)
+                        default=default,
+                    )
 
         else:
             bbox = None
@@ -168,7 +191,7 @@ class _ModalDialog(BaseDialog):
     def close(self, rc=True):
         """Close the dialog and set the given return code.
         """
-        super(_ModalDialog, self).close(rc)
+        super().close(rc)
 
         self.apply = self.revert = self.help = None
 
@@ -219,9 +242,10 @@ class _ModalDialog(BaseDialog):
         ui.handler.apply(ui.info)
         ui.modified = False
 
-    def _on_applyable(self, state):
+    def _on_applyable(self, event):
         """Handles a change to the "modified" state of the user interface .
         """
+        state = event.new
         self.apply.setEnabled(state)
 
     def _on_revert(self):

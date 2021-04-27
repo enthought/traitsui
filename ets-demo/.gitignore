@@ -1,0 +1,14 @@
+# file types to ignore
+*.pyc
+*.pyd
+*~
+.DS_Store
+
+# ignore the build directories
+*.egg-info/
+build/
+dist/
+docs/build/
+
+# Ignore the auto-generated version file
+etsdemo/version.py

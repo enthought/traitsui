@@ -1,35 +1,18 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/13/2004
-#
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the UIInfo class used to represent the object and editor content of
     an active Traits-based user interface.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
-
-from __future__ import absolute_import
-
 from traits.api import HasPrivateTraits, Instance, Constant, Bool
-
-#-------------------------------------------------------------------------
-#  'UIInfo' class:
-#-------------------------------------------------------------------------
 
 
 class UIInfo(HasPrivateTraits):
@@ -37,19 +20,15 @@ class UIInfo(HasPrivateTraits):
     user interface
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # Bound to a UI object at UIInfo construction time
-    ui = Instance('traitsui.ui.UI', allow_none=True)
+    #: Bound to a UI object at UIInfo construction time
+    ui = Instance("traitsui.ui.UI", allow_none=True)
 
-    # Indicates whether the UI has finished initialization
+    #: Indicates whether the UI has finished initialization
     initialized = Bool(False)
-
-    #-------------------------------------------------------------------------
-    #  Bind's all of the associated context objects as traits of the object:
-    #-------------------------------------------------------------------------
 
     def bind_context(self):
         """ Binds all of the associated context objects as traits of the
@@ -57,10 +36,6 @@ class UIInfo(HasPrivateTraits):
         """
         for name, value in self.ui.context.items():
             self.bind(name, value)
-
-    #-------------------------------------------------------------------------
-    #  Binds a name to a value if it is not already bound:
-    #-------------------------------------------------------------------------
 
     def bind(self, name, value, id=None):
         """ Binds a name to a value if it is not already bound.
@@ -70,5 +45,5 @@ class UIInfo(HasPrivateTraits):
 
         if not hasattr(self, name):
             self.add_trait(name, Constant(value))
-            if id != '':
+            if id != "":
                 self.ui._names.append(id)

@@ -1,0 +1,5 @@
+include CHANGES.txt
+include LICENSE.txt
+include MANIFEST.in
+include README.rst
+include image_LICENSE_Nuvola.txt

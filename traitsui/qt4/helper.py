@@ -1,4 +1,14 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,56 +18,51 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines helper functions and classes used to define PyQt-based trait
     editors and trait editor factories.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
-
-from __future__ import absolute_import
 import os.path
 
-from pyface.qt import QtCore, QtGui, is_qt5
+from pyface.qt import QtCore, QtGui, is_qt5, qt_api
 from pyface.ui_traits import convert_image
 from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 
 from traitsui.ui_traits import SequenceTypes
-import six
 
 
-#-------------------------------------------------------------------------
-#  Trait definitions:
-#-------------------------------------------------------------------------
 
-# Layout orientation for a control and its associated editor
-Orientation = Enum('horizontal', 'vertical')
+is_pyqt = qt_api in {"pyqt", "pyqt5"}
 
-#-------------------------------------------------------------------------
-#  Convert an image file name to a cached QPixmap:
-#-------------------------------------------------------------------------
+
+#: Layout orientation for a control and its associated editor
+Orientation = Enum("horizontal", "vertical")
+
+#: Dock-related stubs.
+DockStyle = Enum("horizontal", "vertical", "tab", "fixed")
 
 
 def pixmap_cache(name, path=None):
-    """ Return the QPixmap corresponding to a filename. If the filename does not
-        contain a path component, 'path' is used (or if 'path' is not specified,
-        the local 'images' directory is used).
+    """ Convert an image file name to a cached QPixmap
+
+    Returns the QPixmap corresponding to a filename. If the filename does not
+    contain a path component, 'path' is used (or if 'path' is not specified,
+    the local 'images' directory is used).
     """
-    if name[:1] == '@':
-        image = convert_image(name.replace(' ', '_').lower())
+    if name[:1] == "@":
+        image = convert_image(name.replace(" ", "_").lower())
         if image is not None:
             return image.create_image()
 
     name_path, name = os.path.split(name)
-    name = name.replace(' ', '_').lower()
+    name = name.replace(" ", "_").lower()
     if name_path:
         filename = os.path.join(name_path, name)
     else:
         if path is None:
-            filename = os.path.join(os.path.dirname(__file__), 'images', name)
+            filename = os.path.join(os.path.dirname(__file__), "images", name)
         else:
             filename = os.path.join(path, name)
     filename = os.path.abspath(filename)
@@ -73,11 +78,6 @@ def pixmap_cache(name, path=None):
             pm.load(filename)
             QtGui.QPixmapCache.insert(filename, pm)
     return pm
-
-#-------------------------------------------------------------------------
-#  Positions a window on the screen with a specified width and height so that
-#  the window completely fits on the screen if possible:
-#-------------------------------------------------------------------------
 
 
 def position_window(window, width=None, height=None, parent=None):
@@ -127,12 +127,9 @@ def position_window(window, width=None, height=None, parent=None):
     y += cdy + fheight
 
     # Position the window (making sure it will fit on the screen).
-    window.move(max(0, min(x, screen_dx - width)),
-                max(0, min(y, screen_dy - height)))
-
-#-------------------------------------------------------------------------
-#  Restores the user preference items for a specified UI:
-#-------------------------------------------------------------------------
+    window.move(
+        max(0, min(x, screen_dx - width)), max(0, min(y, screen_dy - height))
+    )
 
 
 def restore_window(ui):
@@ -142,21 +139,12 @@ def restore_window(ui):
     if prefs is not None:
         ui.control.setGeometry(*prefs)
 
-#-------------------------------------------------------------------------
-#  Saves the user preference items for a specified UI:
-#-------------------------------------------------------------------------
-
 
 def save_window(ui):
     """ Saves the user preference items for a specified UI.
     """
     geom = ui.control.geometry()
     ui.save_prefs((geom.x(), geom.y(), geom.width(), geom.height()))
-
-
-#-------------------------------------------------------------------------
-#  'IconButton' class:
-#-------------------------------------------------------------------------
 
 
 class IconButton(QtGui.QPushButton):
@@ -176,7 +164,7 @@ class IconButton(QtGui.QPushButton):
         # Get the minimum icon size to use.
         ico_sz = sty.pixelMetric(QtGui.QStyle.PM_ButtonIconSize)
 
-        if isinstance(icon, six.string_types):
+        if isinstance(icon, str):
             pm = pixmap_cache(icon)
 
             # Increase the icon size to accomodate the image if needed.
@@ -195,21 +183,34 @@ class IconButton(QtGui.QPushButton):
 
         # Configure the button.
         self.setIcon(ico)
-        self.setMaximumSize(ico_sz, ico_sz)
         self.setFlat(True)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.clicked.connect(slot)
 
-#-------------------------------------------------------------------------
-#  Dock-related stubs.
-#-------------------------------------------------------------------------
+    def sizeHint(self):
+        """ Reimplement sizeHint to return a recommended button size based on
+        the size of the icon.
 
-DockStyle = Enum('horizontal', 'vertical', 'tab', 'fixed')
+        Returns
+        -------
+        size : QtCore.QSize
+        """
+        self.ensurePolished()
 
-#-------------------------------------------------------------------------
-#  Text Rendering helpers
-#-------------------------------------------------------------------------
+        # We want the button to have a size similar to the icon.
+        # Using the size computed for a tool button gives a desirable size.
+        option = QtGui.QStyleOptionButton()
+        self.initStyleOption(option)
+        size = self.style().sizeFromContents(
+            QtGui.QStyle.CT_ToolButton, option, option.iconSize
+        )
+        return size
+
+# ------------------------------------------------------------------------
+# Text Rendering helpers
+# ------------------------------------------------------------------------
+
 
 def wrap_text_with_elision(text, font, width, height):
     """ Wrap paragraphs to fit inside a given size, eliding if too long.

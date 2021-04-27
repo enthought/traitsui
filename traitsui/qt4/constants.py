@@ -1,4 +1,14 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,27 +18,21 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines constants used by the PyQt implementation of the various text
 editors and text editor factories.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
-from __future__ import absolute_import
 from pyface.qt import QtGui
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+from pyface.api import SystemMetrics
 
 _palette = QtGui.QApplication.palette()
 
 # Default dialog title
-DefaultTitle = 'Edit properties'
+DefaultTitle = "Edit properties"
 
 # Color of valid input
 OKColor = _palette.color(QtGui.QPalette.Base)
@@ -50,11 +54,8 @@ WindowColor = _palette.color(QtGui.QPalette.Window)
 
 del _palette
 
-# Screen size values:
+#: Screen width
+screen_dx = SystemMetrics().screen_width
 
-_geom = QtGui.QApplication.desktop().availableGeometry()
-
-screen_dx = _geom.width()
-screen_dy = _geom.height()
-
-del _geom
+#: Screen height
+screen_dy = SystemMetrics().screen_height

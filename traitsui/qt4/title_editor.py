@@ -1,4 +1,14 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2009-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
+# ------------------------------------------------------------------------------
 # Copyright (c) 2008, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,13 +18,9 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
-from __future__ import absolute_import
 
 from pyface.qt import QtCore
 
@@ -22,19 +28,8 @@ from .editor import Editor
 
 from pyface.heading_text import HeadingText
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.title_editor file.
-from ..editors.title_editor import TitleEditor
-
 
 class SimpleEditor(Editor):
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -42,20 +37,19 @@ class SimpleEditor(Editor):
         self._control = HeadingText(None)
         self.control = self._control.control
         if self.factory.allow_selection:
-            flags = (self.control.textInteractionFlags() |
-                     QtCore.Qt.TextSelectableByMouse)
+            flags = (
+                self.control.textInteractionFlags()
+                | QtCore.Qt.TextSelectableByMouse
+            )
             self.control.setTextInteractionFlags(flags)
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes external to the
             editor.
         """
         self._control.text = self.str_value
+
 
 CustomEditor = SimpleEditor
 ReadonlyEditor = SimpleEditor

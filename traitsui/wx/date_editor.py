@@ -1,19 +1,13 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005--2009, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: Judah De Paula <judah@enthought.com>
-#  Date:   2/26/2009
-#
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
+
 """
 A Traits UI editor that wraps a WX calendar panel.
 
@@ -22,23 +16,20 @@ Future Work
 The class needs to be extend to provide the four basic editor types,
 Simple, Custom, Text, and ReadOnly.
 """
-from __future__ import absolute_import, print_function
 
 import datetime
+import logging
 
 import wx
-import wx.calendar
+import wx.adv
 
-from traits.api import Bool
 from traitsui.wx.editor import Editor
 from traitsui.wx.constants import WindowColor
-from traitsui.wx.text_editor \
-    import ReadonlyEditor as TextReadonlyEditor
+from traitsui.wx.text_editor import ReadonlyEditor as TextReadonlyEditor
 
 
-#------------------------------------------------------------------------------
-#--  Simple Editor
-#------------------------------------------------------------------------------
+logger = logging.getLogger(__name__)
+
 
 class SimpleEditor(Editor):
     """
@@ -49,20 +40,14 @@ class SimpleEditor(Editor):
         """
         Finishes initializing the editor by creating the underlying widget.
         """
-        # MS-Win's DatePickerCtrl comes with a check-box we don't want.
-        # GenericDatePickerCtrl was exposed in wxPython version 2.8.8 only.
-        if 'wxMSW' in wx.PlatformInfo and wx.VERSION > (2, 8, 8):
-            date_widget = wx.GenericDatePickerCtrl
-        else:
-            # Linux / OS-X / windows
-            date_widget = wx.DatePickerCtrl
+        date_widget = wx.adv.DatePickerCtrl
 
-        self.control = date_widget(parent,
-                                   size=(120, -1),
-                                   style=wx.DP_DROPDOWN
-                                   | wx.DP_SHOWCENTURY
-                                   | wx.DP_ALLOWNONE)
-        self.control.Bind(wx.EVT_DATE_CHANGED, self.day_selected)
+        self.control = date_widget(
+            parent,
+            size=(120, -1),
+            style=wx.adv.DP_DROPDOWN | wx.adv.DP_SHOWCENTURY | wx.adv.DP_ALLOWNONE,
+        )
+        self.control.Bind(wx.adv.EVT_DATE_CHANGED, self.day_selected)
         return
 
     def day_selected(self, event):
@@ -79,7 +64,7 @@ class SimpleEditor(Editor):
             try:
                 self.value = datetime.date(year, month, day)
             except ValueError:
-                print('Invalid date:', year, month, day)
+                logger.exception("Invalid date: %d-%d-%d (y-m-d)", (year, month, day))
                 raise
         return
 
@@ -102,12 +87,11 @@ class SimpleEditor(Editor):
                 self.control.SetValue(date)
                 self.control.Refresh()
         return
-#-- end SimpleEditor definition -----------------------------------------------
 
 
-#------------------------------------------------------------------------------
-#--  Custom Editor
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# --  Custom Editor
+# ------------------------------------------------------------------------------
 
 SELECTED_FG = wx.Colour(255, 0, 0)
 UNAVAILABLE_FG = wx.Colour(192, 192, 192)
@@ -124,7 +108,7 @@ except TypeError:
     NORMAL_HIGHLIGHT_BG = wx.Colour(255, 255, 255)
 
 
-class wxMouseBoxCalendarCtrl(wx.calendar.CalendarCtrl):
+class wxMouseBoxCalendarCtrl(wx.adv.CalendarCtrl):
     """
     Subclass to add a mouse-over box-selection tool.
 
@@ -137,7 +121,7 @@ class wxMouseBoxCalendarCtrl(wx.calendar.CalendarCtrl):
     """
 
     def __init__(self, *args, **kwargs):
-        super(wxMouseBoxCalendarCtrl, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.selecting = False
         self.box_selected = []
@@ -148,7 +132,7 @@ class wxMouseBoxCalendarCtrl(wx.calendar.CalendarCtrl):
         self.Bind(wx.EVT_LEAVE_WINDOW, self.end_select)
         self.Bind(wx.EVT_MOTION, self.on_select)
         self.Bind(wx.EVT_PAINT, self.on_paint)
-        self.Bind(wx.calendar.EVT_CALENDAR_SEL_CHANGED, self.highlight_changed)
+        self.Bind(wx.adv.EVT_CALENDAR_SEL_CHANGED, self.highlight_changed)
 
     def boxed_days(self):
         """
@@ -178,7 +162,7 @@ class wxMouseBoxCalendarCtrl(wx.calendar.CalendarCtrl):
         selected_days = []
         for point in grid:
             (result, date, weekday) = self.HitTest(point)
-            if result == wx.calendar.CAL_HITTEST_DAY:
+            if result == wx.adv.CAL_HITTEST_DAY:
                 if date not in selected_days:
                     selected_days.append(date)
 
@@ -215,7 +199,7 @@ class wxMouseBoxCalendarCtrl(wx.calendar.CalendarCtrl):
         self.Refresh()
         return
 
-    #-- event handlers --------------------------------------------------------
+    # -- event handlers --------------------------------------------------------
     def start_select(self, event):
         event.Skip()
         self.selecting = True
@@ -260,7 +244,6 @@ class wxMouseBoxCalendarCtrl(wx.calendar.CalendarCtrl):
         brush = gc.CreateBrush(wx.Brush(MOUSE_BOX_FILL))
         gc.SetBrush(brush)
         gc.DrawRectangle(x, y, w, h)
-#-- end wxMouseBoxCalendarCtrl ------------------------------------------------
 
 
 class MultiCalendarCtrl(wx.Panel):
@@ -275,15 +258,26 @@ class MultiCalendarCtrl(wx.Panel):
     functionality is then unused.
     """
 
-    def __init__(self, parent, ID, editor, multi_select, shift_to_select,
-                 on_mixed_select, allow_future, months, padding,
-                 *args, **kwargs):
-        super(MultiCalendarCtrl, self).__init__(parent, ID, *args, **kwargs)
+    def __init__(
+        self,
+        parent,
+        ID,
+        editor,
+        multi_select,
+        shift_to_select,
+        on_mixed_select,
+        allow_future,
+        months,
+        padding,
+        *args,
+        **kwargs
+    ):
+        super().__init__(parent, ID, *args, **kwargs)
 
         self.sizer = wx.BoxSizer()
         self.SetSizer(self.sizer)
         self.SetBackgroundColour(WindowColor)
-        self.date = wx.DateTime_Now()
+        self.date = wx.DateTime.Now()
         self.today = self.date_from_datetime(self.date)
 
         # Object attributes
@@ -307,7 +301,7 @@ class MultiCalendarCtrl(wx.Panel):
             cal = self._make_calendar_widget(i)
             self.cal_ctrls.insert(0, cal)
             if i != 0:
-                self.sizer.AddSpacer(wx.Size(padding, padding))
+                self.sizer.AddSpacer(padding)
 
         # Initial painting
         self.selected_list_changed()
@@ -387,12 +381,14 @@ class MultiCalendarCtrl(wx.Panel):
                 try:
                     paint_day = datetime.date(cur_year, cur_month, day)
                     if not self.allow_future and paint_day > self.today:
-                        attr = wx.calendar.CalendarDateAttr(
-                            colText=UNAVAILABLE_FG)
+                        attr = wx.adv.CalendarDateAttr(
+                            colText=UNAVAILABLE_FG
+                        )
                         cal.SetAttr(day, attr)
                     elif paint_day in selected_days:
-                        attr = wx.calendar.CalendarDateAttr(
-                            colText=SELECTED_FG)
+                        attr = wx.adv.CalendarDateAttr(
+                            colText=SELECTED_FG
+                        )
                         cal.SetAttr(day, attr)
                     else:
                         cal.ResetAttr(day)
@@ -415,29 +411,33 @@ class MultiCalendarCtrl(wx.Panel):
         """
         date = self.shift_datetime(self.date, month_offset)
         panel = wx.Panel(self, -1)
-        cal = wxMouseBoxCalendarCtrl(panel,
-                                     -1,
-                                     date,
-                                     style=wx.calendar.CAL_SUNDAY_FIRST
-                                     | wx.calendar.CAL_SEQUENTIAL_MONTH_SELECTION
-                                     #| wx.calendar.CAL_SHOW_HOLIDAYS
-                                     )
+        cal = wxMouseBoxCalendarCtrl(
+            panel,
+            -1,
+            date,
+            style=wx.adv.CAL_SUNDAY_FIRST
+            | wx.adv.CAL_SEQUENTIAL_MONTH_SELECTION
+            # | wx.adv.CAL_SHOW_HOLIDAYS
+        )
         self.sizer.Add(panel)
         cal.highlight_changed()
 
         # Set up control to sync the other calendar widgets and coloring:
-        self.Bind(wx.calendar.EVT_CALENDAR_MONTH, self.month_changed, cal)
-        self.Bind(wx.calendar.EVT_CALENDAR_YEAR, self.month_changed, cal)
+        cal.Bind(wx.adv.EVT_CALENDAR_MONTH, self.month_changed)
+        cal.Bind(wx.adv.EVT_CALENDAR_YEAR, self.month_changed)
 
-        wx.EVT_LEFT_DOWN(cal, self._left_down)
+        cal.Bind(wx.EVT_LEFT_DOWN, self._left_down)
 
         if self.multi_select:
-            wx.EVT_LEFT_UP(cal, self._left_up)
-            wx.EVT_RIGHT_UP(cal, self._process_box_select)
-            wx.EVT_LEAVE_WINDOW(cal, self._process_box_select)
-            wx.EVT_MOTION(cal, self._mouse_drag)
-            self.Bind(wx.calendar.EVT_CALENDAR_WEEKDAY_CLICKED,
-                      self._weekday_clicked, cal)
+            cal.Bind(wx.EVT_LEFT_UP, self._left_up)
+            cal.Bind(wx.EVT_RIGHT_UP, self._process_box_select)
+            cal.Bind(wx.EVT_LEAVE_WINDOW, self._process_box_select)
+            cal.Bind(wx.EVT_MOTION, self._mouse_drag)
+            self.Bind(
+                wx.adv.EVT_CALENDAR_WEEKDAY_CLICKED,
+                self._weekday_clicked,
+                cal,
+            )
         return cal
 
     def unhighlight_days(self, days):
@@ -456,15 +456,18 @@ class MultiCalendarCtrl(wx.Panel):
 
                     # Unselected days either need to revert to the
                     # unavailable color, or the default attribute color.
-                    if (not self.allow_future and
-                        ((date.year, date.month, date.day) >
-                         (self.today.year, self.today.month, self.today.day))):
-                        attr = wx.calendar.CalendarDateAttr(
-                            colText=UNAVAILABLE_FG)
+                    if not self.allow_future and (
+                        (date.year, date.month, date.day)
+                        > (self.today.year, self.today.month, self.today.day)
+                    ):
+                        attr = wx.adv.CalendarDateAttr(
+                            colText=UNAVAILABLE_FG
+                        )
                     else:
-                        attr = wx.calendar.CalendarDateAttr(
+                        attr = wx.adv.CalendarDateAttr(
                             colText=NORMAL_HIGHLIGHT_FG,
-                            colBack=NORMAL_HIGHLIGHT_BG)
+                            colBack=NORMAL_HIGHLIGHT_BG,
+                        )
                     if date in self.selected_days:
                         attr.SetTextColour(SELECTED_FG)
                     cal.SetAttr(date.day, attr)
@@ -484,9 +487,8 @@ class MultiCalendarCtrl(wx.Panel):
             c = cal.GetDate()
             for date in days:
                 if date.year == c.GetYear() and date.month == c.GetMonth() + 1:
-                    attr = wx.calendar.CalendarDateAttr(
-                        colText=DRAG_HIGHLIGHT_FG,
-                        colBack=DRAG_HIGHLIGHT_BG
+                    attr = wx.adv.CalendarDateAttr(
+                        colText=DRAG_HIGHLIGHT_FG, colBack=DRAG_HIGHLIGHT_BG
                     )
                     cal.SetAttr(date.day, attr)
             cal.highlight_changed()
@@ -522,7 +524,7 @@ class MultiCalendarCtrl(wx.Panel):
         style = self.on_mixed_select
         new_list = list(self.selected_days)
 
-        if style == 'toggle':
+        if style == "toggle":
             for day in days:
                 if self.allow_future or day <= self.today:
                     if day in new_list:
@@ -531,21 +533,22 @@ class MultiCalendarCtrl(wx.Panel):
                         new_list.append(day)
 
         else:
-            already_selected = len([day for day in days
-                                    if day in new_list])
+            already_selected = len([day for day in days if day in new_list])
 
-            if style == 'on' or already_selected == 0:
+            if style == "on" or already_selected == 0:
                 add_items = True
 
-            elif style == 'off' or already_selected == len(days):
+            elif style == "off" or already_selected == len(days):
                 add_items = False
 
-            elif (self.on_mixed_select == 'max_change' and
-                  already_selected <= (len(days) / 2.0)):
+            elif self.on_mixed_select == "max_change" and already_selected <= (
+                len(days) / 2.0
+            ):
                 add_items = True
 
-            elif (self.on_mixed_select == 'min_change' and
-                  already_selected > (len(days) / 2.0)):
+            elif self.on_mixed_select == "min_change" and already_selected > (
+                len(days) / 2.0
+            ):
                 add_items = True
 
             else:
@@ -599,8 +602,9 @@ class MultiCalendarCtrl(wx.Panel):
         self._drag_select = []
 
         # Prepare for an abort, don't highlight new selections.
-        if ((self.shift_to_select and not event.ShiftDown())
-                or result != wx.calendar.CAL_HITTEST_DAY):
+        if (
+            self.shift_to_select and not event.ShiftDown()
+        ) or result != wx.adv.CAL_HITTEST_DAY:
 
             cal.highlight_changed()
             for cal in self.cal_ctrls:
@@ -621,9 +625,9 @@ class MultiCalendarCtrl(wx.Panel):
         self.highlight_days(self._drag_select)
         return
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     # Event handlers
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
     def _process_box_select(self, event):
         """
@@ -669,15 +673,17 @@ class MultiCalendarCtrl(wx.Panel):
         cal = event.GetEventObject()
         result, dt, weekday = cal.HitTest(event.GetPosition())
 
-        if result == wx.calendar.CAL_HITTEST_DAY and not self.multi_select:
+        if result == wx.adv.CAL_HITTEST_DAY and not self.multi_select:
             self.single_select_day(dt)
             return
 
         # Inter-month-drag selection.  A quick no-movement mouse-click is
         # equivalent to a multi-select of a single day.
-        if (result == wx.calendar.CAL_HITTEST_DAY
+        if (
+            result == wx.adv.CAL_HITTEST_DAY
             and (not self.shift_to_select or event.ShiftDown())
-                and not cal.selecting):
+            and not cal.selecting
+        ):
 
             self._first_date = self.date_from_datetime(dt)
             self._drag_select = [self._first_date]
@@ -693,9 +699,11 @@ class MultiCalendarCtrl(wx.Panel):
         result, dt, weekday = cal.HitTest(event.GetPosition())
 
         # Complete a drag-select operation.
-        if (result == wx.calendar.CAL_HITTEST_DAY
+        if (
+            result == wx.adv.CAL_HITTEST_DAY
             and (not self.shift_to_select or event.ShiftDown())
-                and self._first_date):
+            and self._first_date
+        ):
 
             last_date = self.date_from_datetime(dt)
             if last_date <= self._first_date:
@@ -726,8 +734,9 @@ class MultiCalendarCtrl(wx.Panel):
             self._shift_drag_update(event)
         if cal.selecting:
             self.unhighlight_days(self._box_select)
-            self._box_select = [self.date_from_datetime(dt)
-                                for dt in cal.boxed_days()]
+            self._box_select = [
+                self.date_from_datetime(dt) for dt in cal.boxed_days()
+            ]
             self.highlight_days(self._box_select)
         return
 
@@ -735,7 +744,7 @@ class MultiCalendarCtrl(wx.Panel):
         """
         Link the calendars together so if one changes, they all change.
 
-        TODO: Maybe wx.calendar.CAL_HITTEST_INCMONTH could be checked and
+        TODO: Maybe wx.adv.CAL_HITTEST_INCMONTH could be checked and
         the event skipped, rather than now where we undo the update after
         the event has gone through.
         """
@@ -755,15 +764,12 @@ class MultiCalendarCtrl(wx.Panel):
             year = self.cal_ctrls[0].GetDate().GetYear()
             if (year, month) > (self.today.year, self.today.month):
                 for i, cal in enumerate(self.cal_ctrls):
-                    new_date = self.shift_datetime(wx.DateTime_Now(), -i)
+                    new_date = self.shift_datetime(wx.DateTime.Now(), -i)
                     cal.SetDate(new_date)
                     cal.highlight_changed()
 
         # Redraw the selected days.
         self.selected_list_changed()
-
-
-#-- end CalendarCtrl ----------------------------------------------------------
 
 
 class CustomEditor(Editor):
@@ -789,31 +795,33 @@ class CustomEditor(Editor):
     Example usage::
 
         class DateListPicker(HasTraits):
-            calendar = List
+            calendar = List()
             traits_view = View(Item('calendar', editor=DateEditor(),
                                     style='custom', show_label=False))
     """
 
-    #-- Editor interface ------------------------------------------------------
+    # -- Editor interface ------------------------------------------------------
 
     def init(self, parent):
         """
         Finishes initializing the editor by creating the underlying widget.
         """
         if self.factory.multi_select and not isinstance(self.value, list):
-            raise ValueError('Multi-select is True, but editing a non-list.')
+            raise ValueError("Multi-select is True, but editing a non-list.")
         elif not self.factory.multi_select and isinstance(self.value, list):
-            raise ValueError('Multi-select is False, but editing a list.')
+            raise ValueError("Multi-select is False, but editing a list.")
 
-        calendar_ctrl = MultiCalendarCtrl(parent,
-                                          -1,
-                                          self,
-                                          self.factory.multi_select,
-                                          self.factory.shift_to_select,
-                                          self.factory.on_mixed_select,
-                                          self.factory.allow_future,
-                                          self.factory.months,
-                                          self.factory.padding)
+        calendar_ctrl = MultiCalendarCtrl(
+            parent,
+            -1,
+            self,
+            self.factory.multi_select,
+            self.factory.shift_to_select,
+            self.factory.on_mixed_select,
+            self.factory.allow_future,
+            self.factory.months,
+            self.factory.padding,
+        )
         self.control = calendar_ctrl
         return
 
@@ -824,22 +832,14 @@ class CustomEditor(Editor):
         """
         self.control.selected_list_changed()
         return
-#-- end CustomEditor definition -----------------------------------------------
 
 
-#------------------------------------------------------------------------------
-#--  Text Editor
-#------------------------------------------------------------------------------
 # TODO: Write me.  Possibly use TextEditor as a model to show a string
 # representation of the date, and have enter-set do a date evaluation.
 class TextEditor(SimpleEditor):
     pass
-#-- end TextEditor definition -------------------------------------------------
 
 
-#------------------------------------------------------------------------------
-#--  Readonly Editor
-#------------------------------------------------------------------------------
 
 class ReadonlyEditor(TextReadonlyEditor):
     """ Use a TextEditor for the view. """
@@ -850,7 +850,3 @@ class ReadonlyEditor(TextReadonlyEditor):
             return self.factory.message
         else:
             return self.value.strftime(self.factory.strftime)
-
-#-- end ReadonlyEditor definition ---------------------------------------------
-
-#-- eof -----------------------------------------------------------------------

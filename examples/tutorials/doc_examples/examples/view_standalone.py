@@ -3,18 +3,18 @@
 
 # view_standalone.py --- Example of a view as a
 #                        standalone object
-from __future__ import absolute_import
 import wx
 from traits.api import HasTraits, Int, Str, Trait
 from traitsui.api import View
 
 
 class Person(HasTraits):
-    first_name = Str
-    last_name = Str
-    age = Int
+    first_name = Str()
+    last_name = Str()
+    age = Int()
     gender = Trait(None, 'M', 'F')
     name_view = View('first_name', 'last_name')
+
 
 # Note that person_view is a standalone object.
 person_view = View('first_name', 'last_name', 'age', 'gender')

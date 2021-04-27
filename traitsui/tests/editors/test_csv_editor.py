@@ -1,21 +1,14 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2012, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Author: Pietro Berkes
-#  Date:   Jan 2012
-#
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
-from __future__ import absolute_import, print_function
-
-import nose
+import unittest
 
 from traits.has_traits import HasTraits
 from traits.trait_types import Float, List, Instance
@@ -25,7 +18,15 @@ from traitsui.item import Item
 from traitsui.editors.csv_list_editor import CSVListEditor
 import traitsui.editors.csv_list_editor as csv_list_editor
 
-from traitsui.tests._tools import *
+from traitsui.tests._tools import (
+    BaseTestMixin,
+    create_ui,
+    is_wx,
+    is_qt,
+    requires_toolkit,
+    reraise_exceptions,
+    ToolkitName,
+)
 
 
 class ListOfFloats(HasTraits):
@@ -37,67 +38,71 @@ class ListOfFloatsWithCSVEditor(ModelView):
 
     traits_view = View(
         Item(label="Close the window to append data"),
-        Item('model.data', editor=CSVListEditor()),
-        buttons=['OK']
+        Item("model.data", editor=CSVListEditor()),
+        buttons=["OK"],
     )
 
 
-@skip_if_null
-def test_csv_editor_disposal():
-    # Bug: CSVListEditor does not un-hook the traits notifications after its
-    # disposal, causing errors when the hooked data is accessed after
-    # the window is closed (Issue #48)
+class TestCSVEditor(BaseTestMixin, unittest.TestCase):
 
-    try:
-        with store_exceptions_on_all_threads():
-            list_of_floats = ListOfFloats(data=[1, 2, 3])
-            csv_view = ListOfFloatsWithCSVEditor(model=list_of_floats)
-            ui = csv_view.edit_traits()
-            press_ok_button(ui)
+    def setUp(self):
+        BaseTestMixin.setUp(self)
 
-            # raise an exception if still hooked
-            list_of_floats.data.append(2)
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
-    except AttributeError:
-        # if all went well, we should not be here
-        assert False, "AttributeError raised"
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+    def test_csv_editor_disposal(self):
+        # Bug: CSVListEditor does not un-hook the traits notifications after
+        # its disposal, causing errors when the hooked data is accessed after
+        # the window is closed (Issue #48)
 
+        list_of_floats = ListOfFloats(data=[1, 2, 3])
+        csv_view = ListOfFloatsWithCSVEditor(model=list_of_floats)
+        try:
+            with reraise_exceptions():
+                with create_ui(csv_view):
+                    pass
+                # raise an exception if still hooked
+                list_of_floats.data.append(2)
 
-@skip_if_null
-def test_csv_editor_external_append():
-    # Behavior: CSV editor is notified when an element is appended to the
-    # list externally
+        except AttributeError:
+            # if all went well, we should not be here
+            self.fail("AttributeError raised")
 
-    def _wx_get_text_value(ui):
-        txt_ctrl = ui.control.FindWindowByName('text')
-        return txt_ctrl.GetValue()
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
+    def test_csv_editor_external_append(self):
+        # Behavior: CSV editor is notified when an element is appended to the
+        # list externally
 
-    def _qt_get_text_value(ui):
-        from pyface import qt
-        txt_ctrl = ui.control.findChild(qt.QtGui.QLineEdit)
-        return txt_ctrl.text()
+        def _wx_get_text_value(ui):
+            txt_ctrl = ui.control.FindWindowByName("text", ui.control)
+            return txt_ctrl.GetValue()
 
-    with store_exceptions_on_all_threads():
+        def _qt_get_text_value(ui):
+            from pyface import qt
+
+            txt_ctrl = ui.control.findChild(qt.QtGui.QLineEdit)
+            return txt_ctrl.text()
+
         list_of_floats = ListOfFloats(data=[1.0])
         csv_view = ListOfFloatsWithCSVEditor(model=list_of_floats)
-        ui = csv_view.edit_traits()
+        with reraise_exceptions(), create_ui(csv_view) as ui:
 
-        # add element to list, make sure that editor knows about it
-        list_of_floats.data.append(3.14)
+            # add element to list, make sure that editor knows about it
+            list_of_floats.data.append(3.14)
 
-        # get current value from editor
-        if is_current_backend_wx():
-            value_str = _wx_get_text_value(ui)
-        elif is_current_backend_qt4():
-            value_str = _qt_get_text_value(ui)
+            # get current value from editor
+            if is_wx():
+                value_str = _wx_get_text_value(ui)
+            elif is_qt():
+                value_str = _qt_get_text_value(ui)
 
-        expected = csv_list_editor._format_list_str([1.0, 3.14])
-        nose.tools.assert_equal(value_str, expected)
-
-        press_ok_button(ui)
+            expected = csv_list_editor._format_list_str([1.0, 3.14])
+            self.assertEqual(value_str, expected)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Executing the file opens the dialog for manual testing
     list_of_floats = ListOfFloats(data=[1, 2, 3])
     csv_view = ListOfFloatsWithCSVEditor(model=list_of_floats)

@@ -1,19 +1,12 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   11/01/2004
-#
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Creates a wizard-based wxPython user interface for a specified UI object.
 
@@ -21,36 +14,22 @@
     can navigate with forward and back buttons.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
-from __future__ import absolute_import
 import wx
-import wx.wizard as wz
+import wx.adv as wz
 
-from .constants \
-    import DefaultTitle
+from traits.api import Str, Either
 
-from .helper \
-    import restore_window, save_window, GroupEditor
+from .constants import DefaultTitle
+from .helper import restore_window, save_window, GroupEditor
+from .ui_panel import fill_panel_for_group
 
-from .ui_panel \
-    import fill_panel_for_group
-
-from traits.api \
-    import Trait, Str
-
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Trait that allows only None or a string value
-none_str_trait = Trait('', None, str)
-
-#-------------------------------------------------------------------------
-#  Creates a wizard-based wxPython user interface for a specified UI object:
-#-------------------------------------------------------------------------
+none_str_trait = Either(None, Str, default="")
 
 
 def ui_wizard(ui, parent):
@@ -58,15 +37,9 @@ def ui_wizard(ui, parent):
     object.
     """
     # Create the copy of the 'context' we will need while editing:
-    context = ui.context
-    ui._context = context
-    new_context = {}
-    for name, value in context.items():
-        if value is not None:
-            new_context[name] = value.clone_traits()
-        else:
-            new_context[name] = None
-
+    ui._context = context = ui.context
+    new_context = {name: None if value is None else value.clone_traits()
+                   for name, value in context.items()}
     ui.context = new_context
 
     # Now bind the context values to the 'info' object:
@@ -74,7 +47,7 @@ def ui_wizard(ui, parent):
 
     # Create the wxPython wizard window:
     title = ui.view.title
-    if title == '':
+    if title == "":
         title = DefaultTitle
     ui.control = wizard = wz.Wizard(parent, -1, title)
 
@@ -100,7 +73,7 @@ def ui_wizard(ui, parent):
         # A simple solution is to clear out these fields before calling
         # "fill_panel_for_group", and then reset these traits.
         group_fields_mapping[group] = (group.id, group.enabled_when)
-        (group.id, group.enabled_when) = ('', '')
+        (group.id, group.enabled_when) = ("", "")
         page = UIWizardPage(wizard, editor_pages)
         pages.append(page)
         fill_panel_for_group(page, group, ui)
@@ -128,7 +101,7 @@ def ui_wizard(ui, parent):
     wizard.SetPageSize(wx.Size(min_dx, min_dy))
 
     # Set up the wizard 'page changing' event handler:
-    wz.EVT_WIZARD_PAGE_CHANGING(wizard, wizard.GetId(), page_changing)
+    wizard.Bind(wz.EVT_WIZARD_PAGE_CHANGING, page_changing)
 
     # Size the wizard and the individual pages appropriately:
     prev_page = pages[0]
@@ -170,14 +143,11 @@ def ui_wizard(ui, parent):
         ui.result = False
 
     # Clean up loose ends, like restoring the original context:
+    wizard.Unbind(wz.EVT_WIZARD_PAGE_CHANGING, handler=page_changing)
     save_window(ui)
     ui.finish()
     ui.context = ui._context
     ui._context = {}
-
-#-------------------------------------------------------------------------
-#  Handles the user attempting to change the current wizard page:
-#-------------------------------------------------------------------------
 
 
 def page_changing(event):
@@ -191,77 +161,54 @@ def page_changing(event):
         new_page = page.GetPrev()
 
     # If the page has a disabled PageGroupEditor object, veto the page change:
-    if ((new_page is not None) and
-        (new_page.editor is not None) and
-            (not new_page.editor.enabled)):
+    if ((new_page is not None)
+            and (new_page.editor is not None)
+            and (not new_page.editor.enabled)):
         event.Veto()
 
         # If their is a message associated with the editor, display it:
         msg = new_page.editor.msg
-        if msg != '':
+        if msg != "":
             wx.MessageBox(msg)
 
-#-------------------------------------------------------------------------
-#  'UIWizardPage' class:
-#-------------------------------------------------------------------------
 
-
-class UIWizardPage(wz.PyWizardPage):
+class UIWizardPage(wz.WizardPage):
     """ A page within a wizard interface.
     """
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
 
     def __init__(self, wizard, pages):
-        wz.PyWizardPage.__init__(self, wizard)
+        super().__init__(wizard)
         self.next = self.previous = self.editor = None
         self.pages = pages
-
-    #-------------------------------------------------------------------------
-    #  Sets the next page after this one:
-    #-------------------------------------------------------------------------
 
     def SetNext(self, page):
         """ Sets the next page after this one.
         """
         self.next = page
 
-    #-------------------------------------------------------------------------
-    #  Sets the previous page before this one:
-    #-------------------------------------------------------------------------
-
     def SetPrev(self, page):
         """ Sets the previous page to this one.
         """
         self.previous = page
 
-    #-------------------------------------------------------------------------
-    #  Returns the next page after this one:
-    #-------------------------------------------------------------------------
-
     def GetNext(self):
         """ Returns the next page after this one.
         """
         editor = self.editor
-        if (editor is not None) and (editor.next != ''):
-            next = editor.next
-            if next is None:
+        if (editor is not None) and (editor.next != ""):
+            next_ = editor.next
+            if next_ is None:
                 return None
             for page in self.pages:
-                if page.id == next:
+                if page.id == next_:
                     return page
         return self.next
-
-    #-------------------------------------------------------------------------
-    #  Returns the previous page before this one:
-    #-------------------------------------------------------------------------
 
     def GetPrev(self):
         """ Returns the previous page to this one.
         """
         editor = self.editor
-        if (editor is not None) and (editor.previous != ''):
+        if (editor is not None) and (editor.previous != ""):
             previous = editor.previous
             if previous is None:
                 return None
@@ -270,21 +217,18 @@ class UIWizardPage(wz.PyWizardPage):
                     return page
         return self.previous
 
-#-------------------------------------------------------------------------
-#  'PageGroupEditor' class:
-#-------------------------------------------------------------------------
-
 
 class PageGroupEditor(GroupEditor):
     """ Editor for a group, which displays a page.
     """
-    #-------------------------------------------------------------------------
-    #  Trait definitions:
-    #-------------------------------------------------------------------------
 
-    # ID of next page to display
+    # -------------------------------------------------------------------------
+    #  Trait definitions:
+    # -------------------------------------------------------------------------
+
+    #: ID of next page to display
     next = none_str_trait
-    # ID of previous page to display
+    #: ID of previous page to display
     previous = none_str_trait
-    # Message to display if user can't link to page
-    msg = Str
+    #: Message to display if user can't link to page
+    msg = Str()

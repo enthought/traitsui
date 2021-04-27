@@ -1,4 +1,14 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,63 +18,46 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various text editors for the PyQt user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
-
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
-from traits.api \
-    import TraitError
+from traits.api import Any, Callable, List, TraitError, Tuple
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.text_editor file.
-from traitsui.editors.text_editor \
-    import evaluate_trait, ToolkitEditorFactory
+from traitsui.editors.text_editor import evaluate_trait
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .editor_factory \
-    import ReadonlyEditor as BaseReadonlyEditor
+from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
-from .constants \
-    import OKColor
-import six
-
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+from .constants import OKColor
 
 
 class SimpleEditor(Editor):
     """ Simple style text editor, which displays a text field.
     """
 
-    # Flag for window styles:
+    #: Flag for window styles:
     base_style = QtGui.QLineEdit
 
-    # Background color when input is OK:
+    #: Background color when input is OK:
     ok_color = OKColor
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # Function used to evaluate textual user input:
+    #: Function used to evaluate textual user input:
     evaluate = evaluate_trait
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
+    # -- private trait definitions ------------------------------------------
+
+    #: A list of tuple(Qt signal, slot) connected which need to be disconnected
+    #: in dispose.
+    _connections_to_remove = List(Tuple(Any, Callable))
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -73,12 +66,12 @@ class SimpleEditor(Editor):
         factory = self.factory
         wtype = self.base_style
         self.evaluate = factory.evaluate
-        self.sync_value(factory.evaluate_name, 'evaluate', 'from')
+        self.sync_value(factory.evaluate_name, "evaluate", "from")
 
         if not factory.multi_line or factory.is_grid_cell or factory.password:
             wtype = QtGui.QLineEdit
 
-        multi_line = (wtype is not QtGui.QLineEdit)
+        multi_line = wtype is not QtGui.QLineEdit
         if multi_line:
             self.scrollable = True
 
@@ -90,16 +83,31 @@ class SimpleEditor(Editor):
         if factory.password:
             control.setEchoMode(QtGui.QLineEdit.Password)
 
-        if factory.auto_set and not factory.is_grid_cell:
-            if wtype == QtGui.QTextEdit:
-                control.textChanged.connect(self.update_object)
-            else:
-                control.textEdited.connect(self.update_object)
-
+        if wtype == QtGui.QTextEdit:
+            control.textChanged.connect(self.update_object)
+            self._connections_to_remove.append(
+                (control.textChanged, self.update_object))
         else:
-            # Assume enter_set is set, otherwise the value will never get
-            # updated.
-            control.editingFinished.connect(self.update_object)
+            # QLineEdit
+            if factory.auto_set and not factory.is_grid_cell:
+                control.textEdited.connect(self.update_object)
+                self._connections_to_remove.append(
+                    (control.textEdited, self.update_object))
+            else:
+                control.editingFinished.connect(self.update_object)
+                self._connections_to_remove.append(
+                    (control.editingFinished, self.update_object)
+                )
+
+        placeholder = self.factory.placeholder
+
+        if wtype is not QtGui.QTextEdit or QtCore.__version_info__ >= (5, 2):
+            # setPlaceholderText is introduced to QTextEdit since Qt 5.2
+            control.setPlaceholderText(placeholder)
+
+        if wtype is not QtGui.QTextEdit and QtCore.__version_info__ >= (5, 2):
+            # setClearButtonEnabled is introduced to QLineEdit since Qt 5.2
+            control.setClearButtonEnabled(self.factory.cancel_button)
 
         self.control = control
         # default horizontal policy is Expand, set this to Minimum
@@ -110,9 +118,14 @@ class SimpleEditor(Editor):
         self.set_error_state(False)
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        while self._connections_to_remove:
+            signal, handler = self._connections_to_remove.pop()
+            signal.disconnect(handler)
+
+        super().dispose()
 
     def update_object(self):
         """ Handles the user entering input data in the edit control.
@@ -129,10 +142,6 @@ class SimpleEditor(Editor):
 
             except TraitError as excp:
                 pass
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -155,10 +164,6 @@ class SimpleEditor(Editor):
             self.ui.errors -= 1
             self.set_error_state(False)
 
-    #-------------------------------------------------------------------------
-    #  Gets the actual value corresponding to what the user typed:
-    #-------------------------------------------------------------------------
-
     def _get_user_value(self):
         """ Gets the actual value corresponding to what the user typed.
         """
@@ -167,7 +172,7 @@ class SimpleEditor(Editor):
         except AttributeError:
             value = self.control.toPlainText()
 
-        value = six.text_type(value)
+        value = str(value)
 
         try:
             value = self.evaluate(value)
@@ -182,10 +187,6 @@ class SimpleEditor(Editor):
 
         return ret
 
-    #-------------------------------------------------------------------------
-    #  Handles an error that occurs while setting the object's trait value:
-    #-------------------------------------------------------------------------
-
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
@@ -195,31 +196,19 @@ class SimpleEditor(Editor):
 
         self.set_error_state(True)
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the editor is in an error state:
-    #-------------------------------------------------------------------------
-
     def in_error_state(self):
         """ Returns whether or not the editor is in an error state.
         """
-        return (self.invalid or self._error)
-
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
+        return self.invalid or self._error
 
 
 class CustomEditor(SimpleEditor):
     """ Custom style of text editor, which displays a multi-line text field.
     """
 
-    # FIXME: The wx version exposes a wx constant.
-    # Flag for window style. This value overrides the default.
+    #: FIXME: The wx version exposes a wx constant.
+    #: Flag for window style. This value overrides the default.
     base_style = QtGui.QTextEdit
-
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
 
 
 class ReadonlyEditor(BaseReadonlyEditor):
@@ -227,16 +216,14 @@ class ReadonlyEditor(BaseReadonlyEditor):
     """
 
     def init(self, parent):
-        super(ReadonlyEditor, self).init(parent)
+        super().init(parent)
 
         if self.factory.readonly_allow_selection:
-            flags = (self.control.textInteractionFlags() |
-                     QtCore.Qt.TextSelectableByMouse)
+            flags = (
+                self.control.textInteractionFlags()
+                | QtCore.Qt.TextSelectableByMouse
+            )
             self.control.setTextInteractionFlags(flags)
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -245,14 +232,14 @@ class ReadonlyEditor(BaseReadonlyEditor):
         new_value = self.str_value
 
         if self.factory.password:
-            new_value = '*' * len(new_value)
+            new_value = "*" * len(new_value)
 
         self.control.setText(new_value)
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'TextEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Same as SimpleEditor for a text editor.
 TextEditor = SimpleEditor

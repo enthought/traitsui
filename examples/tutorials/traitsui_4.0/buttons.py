@@ -47,7 +47,6 @@ removed from the **View** class.
 
 #--<Imports>--------------------------------------------------------------
 
-from __future__ import absolute_import
 from traits.api import *
 from traitsui.api import *
 
@@ -58,9 +57,9 @@ from traitsui.api import *
 
 class Adder(HasTraits):
 
-    value_1 = Float
-    value_2 = Float
-    sum = Property(depends_on=['value_1', 'value_2'])
+    value_1 = Float()
+    value_2 = Float()
+    sum = Property(observe=['value_1', 'value_2'])
 
     view = View(
         Item('value_1'),

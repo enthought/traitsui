@@ -1,5 +1,12 @@
-
-from __future__ import absolute_import
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
 import datetime
 
@@ -9,17 +16,15 @@ from pyface.qt.QtGui import QFont
 from traits.api import Dict
 
 from .date_editor import CustomEditor as DateCustomEditor
-import six
-from six.moves import map
+
 
 
 class CustomEditor(DateCustomEditor):
-
     def init(self, parent):
         if not self.factory.multi_select:
             raise ValueError("multi_select must be true.")
 
-        super(CustomEditor, self).init(parent)
+        super().init(parent)
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -42,10 +47,12 @@ class CustomEditor(DateCustomEditor):
         value = datetime.date(q_date.year(), q_date.month(), q_date.day())
         start_date, end_date = self.value
 
-        if (self.factory.allow_no_selection and
-                start_date is not None and
-                end_date is not None and
-                start_date < end_date):
+        if (
+            self.factory.allow_no_selection
+            and start_date is not None
+            and end_date is not None
+            and start_date < end_date
+        ):
             self.value = (None, None)
             self.apply_unselected_style_to_all()
             return
@@ -73,8 +80,7 @@ class CustomEditor(DateCustomEditor):
         num_days = (end_date - start_date).days + 1
 
         selected_dates = (
-            start_date + datetime.timedelta(days=i)
-            for i in range(num_days)
+            start_date + datetime.timedelta(days=i) for i in range(num_days)
         )
         self.apply_unselected_style_to_all()
         for dt in selected_dates:

@@ -1,5 +1,65 @@
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
-from __future__ import absolute_import
+""" API for traitsui.editors subpackage.
+
+Note that the following are also available from :mod:`traitsui.api`, which
+is the preferred module for imports.
+
+- :attr:`~.ArrayEditor`
+- :attr:`~.BooleanEditor`
+- :attr:`~.ButtonEditor`
+- :attr:`~.CheckListEditor`
+- :attr:`~.CodeEditor`
+- :func:`~.ColorEditor`
+- :attr:`~.CompoundEditor`
+- :class:`~.CSVListEditor`
+- :attr:`~.CustomEditor`
+- :class:`~.DateEditor`
+- :class:`~.DatetimeEditor`
+- :attr:`~.DateRangeEditor`
+- :class:`~.DefaultOverride`
+- :attr:`~.DirectoryEditor`
+- :attr:`~.DNDEditor`
+- :attr:`~.DropEditor`
+- :attr:`~.EnumEditor`
+- :attr:`~.FileEditor`
+- :func:`~.FontEditor`
+- :attr:`~.HistoryEditor`
+- :attr:`~.HTMLEditor`
+- :attr:`~.KeyBindingEditor`
+- :class:`~.ImageEditor`
+- :attr:`~.ImageEnumEditor`
+- :attr:`~.InstanceEditor`
+- :attr:`~.ListEditor`
+- :class:`~.ListStrEditor`
+- :attr:`~.NullEditor`
+- :class:`~.PopupEditor`
+- :attr:`~.ProgressEditor`
+- :attr:`~.RangeEditor`
+- :func:`~.RGBColorEditor`
+- :class:`~.ScrubberEditor`
+- :class:`~.SearchEditor`
+- :attr:`~.SetEditor`
+- :attr:`~.ShellEditor`
+- :attr:`~.StyledDateEditor`
+- :attr:`~.TableEditor`
+- :class:`~.TabularEditor`
+- :attr:`~.TextEditor`
+- :class:`~.TimeEditor`
+- :attr:`~.TitleEditor`
+- :attr:`~.TreeEditor`
+- :attr:`~.TupleEditor`
+- :attr:`~.ValueEditor`
+
+"""
 
 from ..toolkit import toolkit
 
@@ -12,8 +72,10 @@ except ImportError:
         import numpy
     except ImportError:
         import warnings
-        warnings.warn('ArrayEditor is not available due to missing numpy',
-                      ImportWarning)
+
+        warnings.warn(
+            "ArrayEditor is not available due to missing numpy", ImportWarning
+        )
     else:
         del numpy
         raise
@@ -27,6 +89,7 @@ from .compound_editor import CompoundEditor
 from .csv_list_editor import CSVListEditor
 from .custom_editor import CustomEditor
 from .date_editor import DateEditor
+from .datetime_editor import DatetimeEditor
 from .date_range_editor import DateRangeEditor
 from .styled_date_editor import StyledDateEditor
 from .default_override import DefaultOverride

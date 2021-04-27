@@ -1,4 +1,4 @@
-from __future__ import absolute_import, print_function
+# thread_example.py
 
 from threading import Thread
 from time import sleep

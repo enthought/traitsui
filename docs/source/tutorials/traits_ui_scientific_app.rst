@@ -6,12 +6,8 @@ Writing a graphical application for scientific programming using TraitsUI |versi
 
 **A step by step guide for a non-programmer**
 
-.. |date| date::
-
 :Author:
-    Gael Varoquaux
-:Date:
-    |date|
+    Gael Varoquaux    
 :License:
     BSD
 
@@ -21,10 +17,10 @@ python module that provides a great answer to this problem. I have found
 that I am incredibly productive when creating graphical application using
 traitsUI. However I had to learn a few new concepts and would like to
 lay them down together in order to make it easier for others to follow my
-footsteps. 
+footsteps.
 
 This document is intended to help a non-programmer to use traits and
-traitsUI to write an interactive graphical application. 
+traitsUI to write an interactive graphical application.
 The reader is assumed to have some basic python scripting knowledge (see
 ref [#]_ for a basic introduction).
 Knowledge of numpy/scipy [#]_ helps understanding the
@@ -65,14 +61,14 @@ scientific-computing work-flow, as, during the elaboration of algorithms
 and data-flow, the objects that are represented in the GUI are likely to
 change often.
 
-Visual computing, where the programmer creates first a graphical 
+Visual computing, where the programmer creates first a graphical
 interface and then writes the callbacks of the graphical objects, gives
 rise to a slow development cycle, as the work-flow is centered on the
 GUI, and not on the code.
 
 TraitsUI provides a beautiful answer to this problem by building
 graphical representations of an object. Traits and TraitsUI have their
-own manuals (`http://code.enthought.com/traits/ <http://code.enthought.com/traits/>`_) and the reader is encouraged to
+own manuals (`http://docs.enthought.com/traits/ <http://docs.enthought.com/traits/>`_) and the reader is encouraged to
 refer to these for more information.
 
 We will use TraitsUI for *all* our GUIs. This forces us to store all the
@@ -86,7 +82,7 @@ input parameters graphically in the program.
 Object-oriented programming
 ```````````````````````````
 
-Software engineering is a difficult field. As programs, grow they become
+Software engineering is a difficult field. As programs grow they become
 harder and harder to grasp for the developer. This problem is not new and
 has sometimes been know as the "tar pit". Many attempts have been made to
 mitigate the difficulties. Most often they consist in finding useful
@@ -123,24 +119,8 @@ to be rotated.
 
 A point object could be implemented in python with:
 
-    `code snippet #0 <../_static/code_block0.py>`_
-
-    .. code-block:: python
-
-        from numpy import cos, sin
-
-        class Point(object):
-            """ 3D Point objects """
-            x = 0.
-            y = 0.
-            z = 0.
-            
-            def rotate_z(self, theta):
-                """ rotate the point around the Z axis """
-                xtemp =  cos(theta) * self.x + sin(theta) * self.y
-                ytemp = -sin(theta) * self.x + cos(theta) * self.y
-                self.x = xtemp
-                self.y = ytemp
+    .. literalinclude:: code_snippets/code_block0.py
+        :language: python
 
 This code creates a *Point* class. Points objects can be created as
 `instances` of the Point class:
@@ -166,7 +146,7 @@ internal details of their procedures. As long as the object has a
     structures that know how to modify themselves. Part of the point of
     object-oriented programming is that the object is responsible for
     modifying itself through its methods. The object therefore takes care
-    of its internal logic and the consistency between its attributes. 
+    of its internal logic and the consistency between its attributes.
 
     In python, dictionaries make great structures and are more suited
     for such a use than objects.
@@ -220,33 +200,8 @@ Here we define a camera object (which, in our real world example, is a
 camera interfaced to python through the ctypes [#]_ module), and show how
 to open a dialog to edit its properties :
 
-    `code snippet #1 <../_static/code_block1.py>`_
-
-    .. code-block:: python
-
-        from traits.api import *
-        from traitsui.api import *
-
-        class Camera(HasTraits):
-            """ Camera object """
-
-            gain = Enum(1, 2, 3,
-                desc="the gain index of the camera",
-                label="gain", )
-
-            exposure = CInt(10,
-                desc="the exposure time, in ms",
-                label="Exposure", )
-
-            def capture(self):
-                """ Captures an image on the camera and returns it """
-                print "capturing an image at %i ms exposure, gain: %i" % (
-                        self.exposure, self.gain )
-
-        if __name__ == "__main__":
-            camera = Camera()
-            camera.configure_traits()
-            camera.capture()
+    .. literalinclude:: code_snippets/code_block1.py
+        :language: python
 
 The *camera.configure_traits()* call in the above example opens a dialog
 that allows the user to modify the camera object's attributes:
@@ -278,33 +233,8 @@ objects we want to represent. Playing with the `View` attribute of the
 object, we can control how the representation generated by Traits looks
 like (see the TraitsUI manual):
 
-    `code snippet #2 <../_static/container.py>`_
-
-    .. code-block:: python
-
-        from traits.api import *
-        from traitsui.api import *
-
-        class Camera(HasTraits):
-            gain = Enum(1, 2, 3, )
-            exposure = CInt(10, label="Exposure", )
-
-        class TextDisplay(HasTraits):
-            string = String()
-
-            view= View( Item('string', show_label=False, springy=True, style='custom' ))
-
-        class Container(HasTraits):
-            camera = Instance(Camera)
-            display = Instance(TextDisplay)
-
-            view = View( 
-                        Item('camera', style='custom', show_label=False, ),
-                        Item('display', style='custom', show_label=False, ),
-                    )
-
-        container = Container(camera=Camera(), display=TextDisplay())
-        container.configure_traits()
+    .. literalinclude:: code_snippets/container.py
+        :language: python
 
 The call to *configure_traits()* creates the following dialog, with the
 representation of the *Camera* object created is the last example on top,
@@ -357,49 +287,41 @@ execution of his program. An event loop allows the programmer to develop
 an application in which each user action triggers an event, by stacking
 the user created events on a queue, and processing them in the order in
 which the appeared.
- 
+
 A complex GUI is made of a large numbers of graphical elements, called
 widgets (e.g., text boxes, check boxes, buttons, menus). Each of these
 widgets has specific behaviors associated with user interaction
 (modifying the content of a text box, clicking on a button, opening a
 menu). It is natural to use objects to represent the widgets, with their
 behavior being set in the object's methods.
- 
+
 Dialogs populated with widgets are automatically created by `traitsUI` in
 the *configure_traits()* call. `traitsUI` allow the developer to not
 worry about widgets, but to deal only with objects and their attributes.
 This is a fabulous gain as the widgets no longer appear in the code, but
-only the attributes they are associated to. 
+only the attributes they are associated to.
 
 A *HasTraits* object has an *edit_traits()* method that creates a
 graphical panel to edit its attributes. This method creates and returns
 the panel, but does not start its event loop. The panel is not yet
 "alive", unlike with the *configure_traits()* method. Traits uses the
-wxWidget toolkit by default to create its widget. They can be turned live
-and displayed by starting a wx application, and its main loop (ie event
-loop in wx speech).
+Qt toolkit by default to create its widget. They can be turned live
+and displayed by starting a Qt application, and its main loop (ie event
+loop in Qt speech).
 
+    .. literalinclude:: code_snippets/event_loop_qt.py
+        :language: python
 
-    `code snippet #3 <../_static/event_loop.py>`_
-
-    .. code-block:: python
-
-        from traits.api import *
-        import wx
-
-        class Counter(HasTraits):
-            value =  Int()
-
-        Counter().edit_traits()
-        wx.PySimpleApp().MainLoop()
-
+There is a `similar example for wxPython <../_static/event_loop_wx.py>`_
+and a `toolkit-independent example that uses Pyface <../_static/event_loop.py>`_
+as well.
 
 The *Counter().edit_traits()* line creates a counter object and its
 representation, a dialog with one integer represented. However it does
-not display it until a wx application is created, and its main loop is
+not display it until a Qt application is created, and its main loop is
 started.
 
-Usually it is not necessary to create the wx application yourself, and to
+Usually it is not necessary to create the Qt application yourself, and to
 start its main loop, traits will do all this for you when the
 *.configure_traits()* method is called.
 
@@ -422,49 +344,20 @@ but the execution order is chosen by the user, and not by the developer.
 Defining callbacks for the modification of an attribute `foo` of a
 `HasTraits` object can be done be creating a method called
 `_foo_changed()`. Here is an example of a dialog with two textboxes,
-`input` and `output`. Each time `input` is modified, is content is
+`input` and `output`. Each time `input` is modified, its content is
 duplicated to output.
 
-    `code snippet #4 <../_static/echo_box.py>`_
-
-    .. code-block:: python
-
-        from traits.api import *
-
-        class EchoBox(HasTraits):
-            input =  Str()
-            output = Str()
-
-            def _input_changed(self):
-                self.output = self.input
-
-        EchoBox().configure_traits()
-
+    .. literalinclude:: code_snippets/echo_box.py
+        :language: python
 
 Events that do not correspond to a modification of an attribute can be
-generated with a *Button* traits. The callback is then called
+generated with a *Button* trait. The callback is then called
 *_foo_fired()*.
 Here is an example of an interactive `traitsUI` application using a
 button:
 
-    `code snippet #5 <../_static/interactive.py>`_
-
-    .. code-block:: python
-
-        from traits.api import *
-        from traitsui.api import View, Item, ButtonEditor
-
-        class Counter(HasTraits):
-            value =  Int()
-            add_one = Button()
-
-            def _add_one_fired(self):
-                self.value +=1
-
-            view = View('value', Item('add_one', show_label=False ))
-
-        Counter().configure_traits()
-
+    .. literalinclude:: code_snippets/interactive.py
+        :language: python
 
 Clicking on the button adds the *_add_one_fired()* method to the event
 queue, and this method gets executed as soon as the GUI is ready to
@@ -500,7 +393,7 @@ A standard python program executes in a sequential way. Consider the
 following code snippet :
 
     .. code-block:: python
-        
+
         do_a()
         do_b()
         do_c()
@@ -533,28 +426,14 @@ threading [#]_ module. To create your own execution thread, subclass the
 thread in its *run* method. You can start your thread using its *start*
 method:
 
-    `code snippet #6 <../_static/thread_example.py>`_
-
-    .. code-block:: python
-
-        from threading import Thread
-        from time import sleep
-
-        class MyThread(Thread):
-            def run(self):
-                sleep(2)
-                print "MyThread done"
-
-        my_thread = MyThread()
-
-        my_thread.start()
-        print "Main thread done"
+    .. literalinclude:: code_snippets/thread_example.py
+        :language: python
 
 The above code yields the following output::
 
     Main thread done
     MyThread done
- 
+
 Getting threads and the GUI event loop to play nice
 ```````````````````````````````````````````````````
 
@@ -572,7 +451,7 @@ thread will lead to race conditions, and unpredictable crash: suppose the
 GUI was repainting itself (due to a window move, for instance) when you
 modify it.
 
-In a wxPython application, if you start a thread, GUI event will still be
+In an application, if you start a thread, GUI event will still be
 processed by the GUI event loop. To avoid collisions between your thread
 and the event loop, the proper way of modifying a GUI object is to insert
 the modifications in the event loop, using the *GUI.invoke_later()* call.
@@ -586,62 +465,8 @@ race-conditions as it might be modified by the graphical toolkit while
 you are accessing it. Here is an example of code inserting the
 modification to traits objects by hand in the event loop:
 
-    `code snippet #7 <../_static/traits_thread.py>`_
-
-    .. code-block:: python
-
-        from threading import Thread
-        from time import sleep
-        from traits.api import *
-        from traitsui.api import View, Item, ButtonEditor
-
-        class TextDisplay(HasTraits):
-            string =  String()
-
-            view= View( Item('string',show_label=False, springy=True, style='custom' ))
-
-
-        class CaptureThread(Thread):
-            def run(self):
-                self.display.string = 'Camera started\n' + self.display.string
-                n_img = 0
-                while not self.wants_abort:
-                    sleep(.5)
-                    n_img += 1
-                    self.display.string = '%d image captured\n' % n_img \
-                                                            + self.display.string
-                self.display.string = 'Camera stopped\n' + self.display.string
-
-        class Camera(HasTraits):
-            start_stop_capture = Button()
-            display = Instance(TextDisplay)
-            capture_thread = Instance(CaptureThread)
-
-            view = View( Item('start_stop_capture', show_label=False ))
-
-            def _start_stop_capture_fired(self):
-                if self.capture_thread and self.capture_thread.isAlive():
-                    self.capture_thread.wants_abort = True
-                else:
-                    self.capture_thread = CaptureThread()
-                    self.capture_thread.wants_abort = False
-                    self.capture_thread.display = self.display
-                    self.capture_thread.start()
-
-        class MainWindow(HasTraits):
-            display = Instance(TextDisplay, ())
-
-            camera = Instance(Camera)
-
-            def _camera_default(self):
-                return Camera(display=self.display)
-
-            view = View('display', 'camera', style="custom", resizable=True)
-
-
-        if __name__ == '__main__':
-            MainWindow().configure_traits()
-
+    .. literalinclude:: code_snippets/traits_thread.py
+        :language: python
 
 This creates an application with a button that starts or stop a
 continuous camera acquisition loop.
@@ -709,8 +534,8 @@ powerful tool for plotting we have to get our hands a bit dirty and
 create our own traits editor.
 
 This involves some `wxPython` coding, as we need to translate a
-`wxPython` object to a traits editor by providing the corresponding API 
-(i.e. the standard way of building a `traits` editor), so that the `traits` 
+`wxPython` object to a traits editor by providing the corresponding API
+(i.e. the standard way of building a `traits` editor), so that the `traits`
 framework will know how to create the editor.
 
 Traits editor are created by an editor factory that instantiates an
@@ -721,78 +546,8 @@ the matplotlib wx backend. Instead of displaying this widget, we set its
 control as the *control* attribute of the editor. TraitsUI takes care of
 displaying and positioning the editor.
 
-    `code snippet #8 <../_static/mpl_figure_editor.py>`_
-
-    .. code-block:: python
-
-        import wx
-
-        import matplotlib
-        # We want matplotlib to use a wxPython backend
-        matplotlib.use('WXAgg')
-        from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
-        from matplotlib.figure import Figure
-        from matplotlib.backends.backend_wx import NavigationToolbar2Wx
-
-        from traits.api import Any, Instance
-        from traitsui.wx.editor import Editor
-        from traitsui.wx.basic_editor_factory import BasicEditorFactory
-
-        class _MPLFigureEditor(Editor):
-
-            scrollable  = True
-
-            def init(self, parent):
-                self.control = self._create_canvas(parent)
-                self.set_tooltip()
-                
-            def update_editor(self):
-                pass
-
-            def _create_canvas(self, parent):
-                """ Create the MPL canvas. """
-                # The panel lets us add additional controls.
-                panel = wx.Panel(parent, -1, style=wx.CLIP_CHILDREN)
-                sizer = wx.BoxSizer(wx.VERTICAL)
-                panel.SetSizer(sizer)
-                # matplotlib commands to create a canvas
-                mpl_control = FigureCanvas(panel, -1, self.value)
-                sizer.Add(mpl_control, 1, wx.LEFT | wx.TOP | wx.GROW)
-                toolbar = NavigationToolbar2Wx(mpl_control)
-                sizer.Add(toolbar, 0, wx.EXPAND)
-                self.value.canvas.SetMinSize((10,10))
-                return panel
-
-        class MPLFigureEditor(BasicEditorFactory):
-
-            klass = _MPLFigureEditor
-
-
-        if __name__ == "__main__":
-            # Create a window to demo the editor
-            from traits.api import HasTraits
-            from traitsui.api import View, Item
-            from numpy import sin, cos, linspace, pi
-
-            class Test(HasTraits):
-
-                figure = Instance(Figure, ())
-
-                view = View(Item('figure', editor=MPLFigureEditor(),
-                                        show_label=False),
-                                width=400,
-                                height=300,
-                                resizable=True)
-
-                def __init__(self):
-                    super(Test, self).__init__()
-                    axes = self.figure.add_subplot(111)
-                    t = linspace(0, 2*pi, 200)
-                    axes.plot(sin(t)*(1+0.5*cos(11*t)), cos(t)*(1+0.5*cos(11*t)))
-
-            Test().configure_traits()
-
-
+    .. literalinclude:: code_snippets/mpl_figure_editor.py
+        :language: python
 
 This code first creates a traitsUI editor for a matplotlib figure,
 and then a small dialog to illustrate how it works:
@@ -801,7 +556,7 @@ and then a small dialog to illustrate how it works:
 
 The matplotlib figure traits editor created in the above example can be
 imported in a traitsUI application and combined with the power of traits.
-This editor allows to insert a matplotlib figure in a traitsUI dialog. It
+This editor allows you to insert a matplotlib figure in a traitsUI dialog. It
 can be modified using reactive programming, as demonstrated in section 3
 of this tutorial. However, once the dialog is up and running, you have to
 call *self.figure.canvas.draw()* to update the canvas if you made
@@ -820,9 +575,8 @@ physics experiment (Bose-Einstein condensation), at the university of
 Toronto.
 
 The reason I am providing this code is to give an example to study of how
-a full-blown application can be built. This code can be found in the
-`tutorial's zip file <http://gael-varoquaux.info/computers/traits_tutorial/traits_tutorial.zip>`_ 
-(it is the file `application.py`).
+a full-blown application can be built.  For more information on the 
+example, see the `archived page <https://web.archive.org/web/20151208222136/http://www.gael-varoquaux.info/computers/traits_tutorial>`_.
 
 * The camera will be built as an object. Its real attributes (exposure
   time, gain...) will be represented as the object's attributes, and
@@ -845,7 +599,7 @@ The MPLFigureEditor is imported from the last example.
         from traits.api import *
         from traitsui.api import View, Item, Group, HSplit, Handler
         from traitsui.menu import NoButtons
-        from mpl_figure_editor import MPLFigureEditor 
+        from mpl_figure_editor import MPLFigureEditor
         from matplotlib.figure import Figure
         from scipy import *
         import wx
@@ -875,7 +629,7 @@ via traitsUI.
 
             view = View( Item('width', style='readonly'),
                          Item('x', style='readonly'),
-                         Item('y', style='readonly'), 
+                         Item('y', style='readonly'),
                        )
 
 The camera object also is a real object, and not only a data structure:
@@ -1080,7 +834,7 @@ produces noisy gaussian images, and the processing code estimates the
 parameters of the gaussian.
 
 Here are screenshots of the three different tabs of the application:
-    
+
     .. image:: images/application1.png
 
     .. image:: images/application2.png
@@ -1123,15 +877,15 @@ ____
 .. [#] The scipy website: `http://www.scipy.org <http://www.scipy.org>`_
 
 .. [#] The matplotlib website:
-   `http://matplotlib.sourceforge.net <http://matplotlib.sourceforge.net>`_
+   `https://matplotlib.org <https://matplotlib.org>`_
 
 .. [#] The traits and traitsUI user guide:
-   `http://code.enthought.com/traits <http://code.enthought.com/traits>`_
+   `http://docs.enthought.com/traits <http://docs.enthought.com/traits>`_
 
-.. [#] ctypes: `http://starship.python.net/crew/theller/ctypes/ <http://starship.python.net/crew/theller/ctypes/>`_
+.. [#] ctypes: `https://docs.python.org/3/library/ctypes.html <https://docs.python.org/3/library/ctypes.html>`_
 
 .. [#] threading: `http://docs.python.org/lib/module-threading.html <http://docs.python.org/lib/module-threading.html>`_
 
-.. [#] chaco: `http://code.enthought.com/chaco/ <http://code.enthought.com/chaco/>`_
+.. [#] chaco: `http://docs.enthought.com/chaco/ <http://docs.enthought.com/chaco/>`_
 
 .. vim:spell:spelllang=en_us

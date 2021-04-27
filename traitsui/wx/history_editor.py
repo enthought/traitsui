@@ -1,44 +1,29 @@
-#-------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-#-------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines a text editor which displays a text field and maintains a history
     of previously entered values.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
-from __future__ import absolute_import
-from traits.api \
-    import Any, on_trait_change
+from traits.api import Any, observe
 
-from pyface.timer.api \
-    import do_later
+from pyface.timer.api import do_later
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .history_control \
-    import HistoryControl
+from .history_control import HistoryControl
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  '_HistoryEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class _HistoryEditor(Editor):
@@ -47,17 +32,12 @@ class _HistoryEditor(Editor):
         specified by the 'entries' trait of the HistoryEditor factory.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # The history control:
-    history = Any
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
+    #: The history control:
+    history = Any()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -66,7 +46,8 @@ class _HistoryEditor(Editor):
         self.history = history = HistoryControl(
             value=self.value,
             entries=self.factory.entries,
-            auto_set=self.factory.auto_set)
+            auto_set=self.factory.auto_set,
+        )
         self.control = history.create_control(parent)
 
         self.set_tooltip()
@@ -77,14 +58,10 @@ class _HistoryEditor(Editor):
         self.history.dispose()
         self.history = None
 
-        super(_HistoryEditor, self).dispose()
+        super().dispose()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
-
-    @on_trait_change('history:value')
-    def _value_changed(self, value):
+    @observe("history:value")
+    def _value_changed(self, event):
         """ Handles the history object's 'value' trait being changed.
         """
         if not self._dont_update:
@@ -98,10 +75,6 @@ class _HistoryEditor(Editor):
 
             do_later(self.trait_set, _dont_update=False)
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -112,32 +85,18 @@ class _HistoryEditor(Editor):
             self.history.error = False
             self._dont_update = False
 
-    #-------------------------------------------------------------------------
-    #  Handles an error that occurs while setting the object's trait value:
-    #-------------------------------------------------------------------------
-
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
         pass
 
-    #-- UI preference save/restore interface ---------------------------------
-
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the
-    #  editor:
-    #-------------------------------------------------------------------------
+    # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
         """
-        self.history.history = \
-            prefs.get('history', [])[: self.factory.entries]
-
-    #-------------------------------------------------------------------------
-    #  Returns any user preference information associated with the editor:
-    #-------------------------------------------------------------------------
+        self.history.history = prefs.get("history", [])[: self.factory.entries]
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
@@ -149,6 +108,4 @@ class _HistoryEditor(Editor):
             self.history.set_value(self.value)
             self._dont_update = False
 
-        return {'history': self.history.history[:]}
-
-# EOF #########################################################################
+        return {"history": self.history.history[:]}

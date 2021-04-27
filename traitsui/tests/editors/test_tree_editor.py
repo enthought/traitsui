@@ -1,29 +1,32 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2012, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Author: Pietro Berkes
-#  Date:   Dec 2012
-#
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
-from __future__ import absolute_import
 import unittest
 
+from pyface.api import GUI
 from traits.api import Bool, HasTraits, Instance, List, Str
 from traitsui.api import (
-    Item, ObjectTreeNode, TreeEditor, TreeNode, TreeNodeObject, View
+    Item,
+    ObjectTreeNode,
+    TreeEditor,
+    TreeNode,
+    TreeNodeObject,
+    View,
 )
 
 from traitsui.tests._tools import (
-    press_ok_button, skip_if_null, skip_if_not_qt4,
-    store_exceptions_on_all_threads
+    BaseTestMixin,
+    create_ui,
+    requires_toolkit,
+    reraise_exceptions,
+    ToolkitName,
 )
 
 
@@ -38,7 +41,7 @@ class Bogus(HasTraits):
 
     name = Str("Bogus")
 
-    bogus_list = List
+    bogus_list = List()
 
     wrapped_bogus = Instance(BogusWrap)
 
@@ -51,19 +54,15 @@ class BogusTreeView(HasTraits):
 
     bogus = Instance(Bogus)
 
-    hide_root = Bool
+    hide_root = Bool()
 
-    word_wrap = Bool
+    word_wrap = Bool()
 
     nodes = List(TreeNode)
 
     def _nodes_default(self):
         return [
-            TreeNode(
-                node_for=[Bogus],
-                children='bogus_list',
-                label='=Bogus'
-            )
+            TreeNode(node_for=[Bogus], children="bogus_list", label="=Bogus")
         ]
 
     def default_traits_view(self):
@@ -75,8 +74,7 @@ class BogusTreeView(HasTraits):
         )
 
         traits_view = View(
-            Item(name='bogus', id='engine', editor=tree_editor),
-            buttons=['OK'],
+            Item(name="bogus", id="engine", editor=tree_editor), buttons=["OK"]
         )
 
         return traits_view
@@ -87,7 +85,7 @@ class BogusTreeNodeObject(TreeNodeObject):
 
     name = Str("Bogus")
 
-    bogus_list = List
+    bogus_list = List()
 
 
 class BogusTreeNodeObjectView(HasTraits):
@@ -95,7 +93,7 @@ class BogusTreeNodeObjectView(HasTraits):
 
     bogus = Instance(BogusTreeNodeObject)
 
-    hide_root = Bool
+    hide_root = Bool()
 
     nodes = List(TreeNode)
 
@@ -103,181 +101,196 @@ class BogusTreeNodeObjectView(HasTraits):
         return [
             TreeNode(
                 node_for=[BogusTreeNodeObject],
-                children='bogus_list',
-                label='=Bogus'
+                children="bogus_list",
+                label="=Bogus",
             )
         ]
 
     def default_traits_view(self):
         tree_editor = TreeEditor(
-            nodes=self.nodes,
-            hide_root=self.hide_root,
-            editable=False,
+            nodes=self.nodes, hide_root=self.hide_root, editable=False
         )
 
         traits_view = View(
-            Item(name='bogus', id='engine', editor=tree_editor),
-            buttons=['OK'],
+            Item(name="bogus", id="engine", editor=tree_editor), buttons=["OK"]
         )
 
         return traits_view
 
 
-class TestTreeView(unittest.TestCase):
+class TestTreeView(BaseTestMixin, unittest.TestCase):
 
-    def _test_tree_editor_releases_listeners(self, hide_root, nodes=None,
-                                             trait='bogus_list',
-                                             expected_listeners=1):
+    def setUp(self):
+        BaseTestMixin.setUp(self)
+
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
+
+    # test for wx is failing for other reasons.
+    # It might pass once we receive fix for enthought/pyface#558
+    @requires_toolkit([ToolkitName.qt])
+    def test_tree_editor_with_nested_ui(self):
+        tree_editor = TreeEditor(
+            nodes=[
+                TreeNode(
+                    node_for=[Bogus],
+                    auto_open=True,
+                    children="bogus_list",
+                    label="bogus",
+                    view=View(Item("name")),
+                ),
+            ],
+            hide_root=True,
+        )
+        bogus_list = [Bogus()]
+        object_view = BogusTreeView(bogus=Bogus(bogus_list=bogus_list))
+        view = View(Item("bogus", id="tree", editor=tree_editor))
+        with reraise_exceptions(), \
+                create_ui(object_view, dict(view=view)) as ui:
+            editor = ui.info.tree
+            editor.selected = bogus_list[0]
+            GUI.process_events()
+
+    def _test_tree_editor_releases_listeners(
+        self, hide_root, nodes=None, trait="bogus_list", expected_listeners=1
+    ):
         """ The TreeEditor should release the listener to the root node's children
         when it's disposed of.
         """
 
-        with store_exceptions_on_all_threads():
-            bogus = Bogus(bogus_list=[Bogus()])
-            tree_editor_view = BogusTreeView(
-                bogus=bogus,
-                hide_root=hide_root,
-                nodes=nodes,
-            )
-            ui = tree_editor_view.edit_traits()
+        bogus = Bogus(bogus_list=[Bogus()])
+        tree_editor_view = BogusTreeView(
+            bogus=bogus, hide_root=hide_root, nodes=nodes
+        )
+        with reraise_exceptions(), create_ui(tree_editor_view):
 
             # The TreeEditor sets a listener on the bogus object's
             # children list
             notifiers_list = bogus.trait(trait)._notifiers(False)
             self.assertEqual(expected_listeners, len(notifiers_list))
 
-            # Manually close the UI
-            press_ok_button(ui)
+        # The listener should be removed after the UI has been closed
+        notifiers_list = bogus.trait(trait)._notifiers(False)
+        self.assertEqual(0, len(notifiers_list))
 
-            # The listener should be removed after the UI has been closed
-            notifiers_list = bogus.trait(trait)._notifiers(False)
-            self.assertEqual(0, len(notifiers_list))
-
-    def _test_tree_node_object_releases_listeners(self, hide_root, nodes=None,
-                                                  trait='bogus_list',
-                                                  expected_listeners=1):
+    def _test_tree_node_object_releases_listeners(
+        self, hide_root, nodes=None, trait="bogus_list", expected_listeners=1
+    ):
         """ The TreeEditor should release the listener to the root node's children
         when it's disposed of.
         """
 
-        with store_exceptions_on_all_threads():
-            bogus = BogusTreeNodeObject(bogus_list=[BogusTreeNodeObject()])
-            tree_editor_view = BogusTreeNodeObjectView(
-                bogus=bogus,
-                hide_root=hide_root,
-                nodes=nodes,
-            )
-            ui = tree_editor_view.edit_traits()
+        bogus = BogusTreeNodeObject(bogus_list=[BogusTreeNodeObject()])
+        tree_editor_view = BogusTreeNodeObjectView(
+            bogus=bogus, hide_root=hide_root, nodes=nodes
+        )
+        with reraise_exceptions(), create_ui(tree_editor_view):
 
             # The TreeEditor sets a listener on the bogus object's
             # children list
             notifiers_list = bogus.trait(trait)._notifiers(False)
             self.assertEqual(expected_listeners, len(notifiers_list))
 
-            # Manually close the UI
-            press_ok_button(ui)
+            if trait == "name":
+                # fire a label change
+                bogus.name = "Something else"
+            else:
+                # change the children
+                bogus.bogus_list.append(BogusTreeNodeObject())
 
-            # The listener should be removed after the UI has been closed
-            notifiers_list = bogus.trait(trait)._notifiers(False)
-            self.assertEqual(0, len(notifiers_list))
+        # The listener should be removed after the UI has been closed
+        notifiers_list = bogus.trait(trait)._notifiers(False)
+        self.assertEqual(0, len(notifiers_list))
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_editor_listeners_with_shown_root(self):
         nodes = [
-            TreeNode(
-                node_for=[Bogus],
-                children='bogus_list',
-                label='=Bogus'
-            )
+            TreeNode(node_for=[Bogus], children="bogus_list", label="=Bogus")
         ]
         self._test_tree_editor_releases_listeners(hide_root=False, nodes=nodes)
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_editor_listeners_with_hidden_root(self):
         nodes = [
-            TreeNode(
-                node_for=[Bogus],
-                children='bogus_list',
-                label='=Bogus'
-            )
+            TreeNode(node_for=[Bogus], children="bogus_list", label="=Bogus")
         ]
         self._test_tree_editor_releases_listeners(hide_root=True, nodes=nodes)
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_editor_label_listener(self):
         nodes = [
-            TreeNode(
-                node_for=[Bogus],
-                children='bogus_list',
-                label='name'
-            )
+            TreeNode(node_for=[Bogus], children="bogus_list", label="name")
         ]
-        self._test_tree_editor_releases_listeners(hide_root=False, nodes=nodes,
-                                                  trait='name')
+        self._test_tree_editor_releases_listeners(
+            hide_root=False, nodes=nodes, trait="name"
+        )
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_editor_xgetattr_label_listener(self):
         nodes = [
             TreeNode(
                 node_for=[Bogus],
-                children='bogus_list',
-                label='wrapped_bogus.name'
+                children="bogus_list",
+                label="wrapped_bogus.name",
             )
         ]
         self._test_tree_editor_releases_listeners(
             hide_root=False,
             nodes=nodes,
-            trait='wrapped_bogus',
+            trait="wrapped_bogus",
             expected_listeners=2,
         )
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_node_object_listeners_with_shown_root(self):
         nodes = [
             ObjectTreeNode(
                 node_for=[BogusTreeNodeObject],
-                children='bogus_list',
-                label='=Bogus'
+                children="bogus_list",
+                label="=Bogus",
             )
         ]
         self._test_tree_node_object_releases_listeners(
-            nodes=nodes, hide_root=False)
+            nodes=nodes, hide_root=False
+        )
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_node_object_listeners_with_hidden_root(self):
         nodes = [
             ObjectTreeNode(
                 node_for=[BogusTreeNodeObject],
-                children='bogus_list',
-                label='=Bogus'
+                children="bogus_list",
+                label="=Bogus",
             )
         ]
         self._test_tree_node_object_releases_listeners(
-            nodes=nodes, hide_root=True)
+            nodes=nodes, hide_root=True
+        )
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt])
     def test_tree_node_object_label_listener(self):
         nodes = [
             ObjectTreeNode(
                 node_for=[BogusTreeNodeObject],
-                children='bogus_list',
-                label='name'
+                children="bogus_list",
+                label="name",
             )
         ]
         self._test_tree_node_object_releases_listeners(
-            nodes=nodes, hide_root=False, trait='name')
+            nodes=nodes, hide_root=False, trait="name"
+        )
 
-    @skip_if_null
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_smoke_save_restore_prefs(self):
         bogus = Bogus(bogus_list=[Bogus()])
         tree_editor_view = BogusTreeView(bogus=bogus)
-        ui = tree_editor_view.edit_traits()
-        prefs = ui.get_prefs()
-        ui.set_prefs(prefs)
+        with create_ui(tree_editor_view) as ui:
+            prefs = ui.get_prefs()
+            ui.set_prefs(prefs)
 
-    @skip_if_not_qt4
+    @requires_toolkit([ToolkitName.qt])
     def test_smoke_word_wrap(self):
         bogus = Bogus(bogus_list=[Bogus()])
         tree_editor_view = BogusTreeView(bogus=bogus, word_wrap=True)
-        ui = tree_editor_view.edit_traits()
-        ui.dispose()
+        with create_ui(tree_editor_view):
+            pass

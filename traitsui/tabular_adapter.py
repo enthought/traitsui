@@ -1,38 +1,26 @@
-#-------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2008, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   02/29/2008
-#
-#-------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the adapter classes associated with the Traits UI TabularEditor.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
-from __future__ import absolute_import
+
+
 
 from traits.api import (
     Any,
     Bool,
-    Color,
-    Either,
     Enum,
     Event,
     Float,
-    Font,
     HasPrivateTraits,
     HasTraits,
     Instance,
@@ -41,29 +29,28 @@ from traits.api import (
     List,
     Property,
     Str,
+    Either,
     cached_property,
-    on_trait_change,
-    provides)
-import six
+    observe,
+    provides,
+)
 
-#-------------------------------------------------------------------------
-#  'ITabularAdapter' interface:
-#-------------------------------------------------------------------------
+from .toolkit_traits import Color, Font
 
 
 class ITabularAdapter(Interface):
 
     #: The row index of the current item being adapted:
-    row = Int
+    row = Int()
 
     #: The current column id being adapted (if any):
-    column = Any
+    column = Any()
 
     #: Current item being adapted:
-    item = Any
+    item = Any()
 
     #: The current value (if any):
-    value = Any
+    value = Any()
 
     #: The list of columns the adapter supports. The items in the list have the
     #: same format as the :py:attr:`columns` trait in the
@@ -73,14 +60,10 @@ class ITabularAdapter(Interface):
     columns = List(Str)
 
     #: Does the adapter know how to handle the current *item* or not:
-    accepts = Bool
+    accepts = Bool()
 
     #: Does the value of *accepts* depend only upon the type of *item*?
-    is_cacheable = Bool
-
-#-------------------------------------------------------------------------
-#  'AnITabularAdapter' class:
-#-------------------------------------------------------------------------
+    is_cacheable = Bool()
 
 
 @provides(ITabularAdapter)
@@ -89,16 +72,16 @@ class AnITabularAdapter(HasPrivateTraits):
     # Implementation of the ITabularAdapter Interface ------------------------
 
     #: The row index of the current item being adapted:
-    row = Int
+    row = Int()
 
     #: The current column id being adapted (if any):
-    column = Any
+    column = Any()
 
     #: Current item being adapted:
-    item = Any
+    item = Any()
 
     #: The current value (if any):
-    value = Any
+    value = Any()
 
     #: The list of columns the adapter supports. The items in the list have the
     #: same format as the :py:attr:`columns` trait in the
@@ -114,16 +97,12 @@ class AnITabularAdapter(HasPrivateTraits):
     is_cacheable = Bool(True)
 
 
-#-------------------------------------------------------------------------
-#  'TabularAdapter' class:
-#-------------------------------------------------------------------------
-
 class TabularAdapter(HasPrivateTraits):
     """ The base class for adapting list items to values that can be edited
         by a TabularEditor.
     """
 
-    #-- Public Trait Definitions ---------------------------------------------
+    # -- Public Trait Definitions ---------------------------------------------
 
     #: A list of columns that should appear in the table. Each entry can have
     #: one of two forms: ``string`` or ``(string, id)``, where ``string`` is
@@ -140,7 +119,7 @@ class TabularAdapter(HasPrivateTraits):
 
     #: Specifies the default value for a new row.  This will usually need to be
     #: overridden.
-    default_value = Any('')
+    default_value = Any("")
 
     #: The default text color for odd table rows.
     odd_text_color = Color(None, update=True)
@@ -161,10 +140,10 @@ class TabularAdapter(HasPrivateTraits):
     default_bg_color = Color(None, update=True)
 
     #: Horizontal alignment to use for a specified column.
-    alignment = Enum('left', 'center', 'right')
+    alignment = Enum("left", "center", "right")
 
     #: The Python format string to use for a specified column.
-    format = Str('%s')
+    format = Str("%s")
 
     #: Width of a specified column.
     width = Float(-1)
@@ -173,69 +152,69 @@ class TabularAdapter(HasPrivateTraits):
     can_edit = Bool(True)
 
     #: The value to be dragged for a specified row item.
-    drag = Property
+    drag = Property()
 
     #: Can any arbitrary value be dropped onto the tabular view.
     can_drop = Bool(False)
 
     #: Specifies where a dropped item should be placed in the table relative to
     #: the item it is dropped on.
-    dropped = Enum('after', 'before')
+    dropped = Enum("after", "before")
 
     #: The font for a row item.
     font = Font(None)
 
     #: The text color for a row item.
-    text_color = Property
+    text_color = Property()
 
     #: The background color for a row item.
-    bg_color = Property
+    bg_color = Property()
 
     #: The name of the default image to use for column items.
     image = Str(None, update=True)
 
     #: The text of a row/column item.
-    text = Property
+    text = Property()
 
     #: The content of a row/column item (may be any Python value).
-    content = Property
+    content = Property()
 
     #: The tooltip information for a row/column item.
-    tooltip = Str
+    tooltip = Str()
 
     #: The context menu for a row/column item.
-    menu = Any
+    menu = Any()
 
     #: The context menu for column header.
-    column_menu = Any
+    column_menu = Any()
 
     #: List of optional delegated adapters.
     adapters = List(ITabularAdapter, update=True)
 
-    #-- Traits Set by the Editor ---------------------------------------------
+    # -- Traits Set by the Editor ---------------------------------------------
 
     #: The object whose trait is being edited.
     object = Instance(HasTraits)
 
     #: The name of the trait being edited.
-    name = Str
+    name = Str()
 
     #: The row index of the current item being adapted.
-    row = Int
+    row = Int()
 
     #: The column index of the current item being adapted.
-    column = Int
+    column = Int()
 
     #: The current column id being adapted (if any).
-    column_id = Any
+    column_id = Any()
 
     #: Current item being adapted.
-    item = Any
+    item = Any()
 
     #: The current value (if any).
-    value = Any
+    value = Any()
 
-    #-- Private Trait Definitions --------------------------------------------
+    # -- Private Trait Definitions --------------------------------------------
 
     #: Cache of attribute handlers.
     cache = Any({})
@@ -245,36 +224,32 @@ class TabularAdapter(HasPrivateTraits):
 
     #: The mapping from column indices to column identifiers (defined by the
     #: :py:attr:`columns` trait).
-    column_map = Property(depends_on='columns')
+    column_map = Property(observe="columns")
 
     #: The mapping from column indices to column labels (defined by the
     #: :py:attr:`columns` trait).
-    label_map = Property(depends_on='columns')
+    label_map = Property(observe="columns")
 
     #: The name of the trait on a row item containing the value to use
     #: as a row label. If ``None``, the label will be the empty string.
     row_label_name = Either(None, Str)
 
     #: For each adapter, specifies the column indices the adapter handles.
-    adapter_column_indices = Property(depends_on='adapters,columns')
+    adapter_column_indices = Property(observe="adapters,columns")
 
     #: For each adapter, specifies the mapping from column index to column id.
-    adapter_column_map = Property(depends_on='adapters,columns')
+    adapter_column_map = Property(observe="adapters,columns")
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # TabularAdapter interface
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def cleanup(self):
         """ Clean up the adapter to remove references to objects.
         """
-        self.trait_setq(
-            object=None,
-            item=None,
-            value=None,
-        )
+        self.trait_setq(object=None, item=None, value=None)
 
-    #-- Adapter methods that are sensitive to item type ----------------------
+    # -- Adapter methods that are sensitive to item type ----------------------
 
     def get_alignment(self, object, trait, column):
         """ Returns the alignment style to use for a specified column.
@@ -283,7 +258,7 @@ class TabularAdapter(HasPrivateTraits):
         or ``'right'``. All table items share the same alignment for a
         specified column.
         """
-        return self._result_for('get_alignment', object, trait, 0, column)
+        return self._result_for("get_alignment", object, trait, 0, column)
 
     def get_width(self, object, trait, column):
         """ Returns the width to use for a specified column.
@@ -312,7 +287,7 @@ class TabularAdapter(HasPrivateTraits):
         increase or decrease their width dynamically, while leaving *fixed
         width* columns unchanged.
         """
-        return self._result_for('get_width', object, trait, 0, column)
+        return self._result_for("get_width", object, trait, 0, column)
 
     def get_can_edit(self, object, trait, row):
         """ Returns whether the user can edit a specified row.
@@ -320,7 +295,7 @@ class TabularAdapter(HasPrivateTraits):
         A ``True`` result indicates that the value can be edited, while a
         ``False`` result indicates that it cannot.
         """
-        return self._result_for('get_can_edit', object, trait, row, 0)
+        return self._result_for("get_can_edit", object, trait, row, 0)
 
     def get_drag(self, object, trait, row):
         """ Returns the value to be *dragged* for a specified row.
@@ -335,7 +310,7 @@ class TabularAdapter(HasPrivateTraits):
         returns ``None`` for any item in the set, no drag operation is
         performed.
         """
-        return self._result_for('get_drag', object, trait, row, 0)
+        return self._result_for("get_drag", object, trait, row, 0)
 
     def get_can_drop(self, object, trait, row, value):
         """ Returns whether the specified ``value`` can be dropped on the specified row.
@@ -349,7 +324,7 @@ class TabularAdapter(HasPrivateTraits):
         handles multiple drag items by making a separate call to
         :py:meth:`get_can_drop` for each item being dragged.
         """
-        return self._result_for('get_can_drop', object, trait, row, 0, value)
+        return self._result_for("get_can_drop", object, trait, row, 0, value)
 
     def get_dropped(self, object, trait, row, value):
         """ Returns how to handle a specified ``value`` being dropped on a specified row.
@@ -363,7 +338,7 @@ class TabularAdapter(HasPrivateTraits):
         already indicated that the ``object`` can be dropped by the result
         returned from a previous call to :py:meth:`get_can_drop`.
         """
-        return self._result_for('get_dropped', object, trait, row, 0, value)
+        return self._result_for("get_dropped", object, trait, row, 0, value)
 
     def get_font(self, object, trait, row, column=0):
         """ Returns the font to use for displaying a specified row or cell.
@@ -372,7 +347,7 @@ class TabularAdapter(HasPrivateTraits):
         font object should be returned. Note that all columns for the specified
         table row will use the font value returned.
         """
-        return self._result_for('get_font', object, trait, row, column)
+        return self._result_for("get_font", object, trait, row, column)
 
     def get_text_color(self, object, trait, row, column=0):
         """ Returns the text color to use for a specified row or cell.
@@ -381,7 +356,7 @@ class TabularAdapter(HasPrivateTraits):
         toolkit-compatible color should be returned. Note that all columns for
         the specified table row will use the text color value returned.
         """
-        return self._result_for('get_text_color', object, trait, row, column)
+        return self._result_for("get_text_color", object, trait, row, column)
 
     def get_bg_color(self, object, trait, row, column=0):
         """ Returns the background color to use for a specified row or cell.
@@ -391,7 +366,7 @@ class TabularAdapter(HasPrivateTraits):
         for the specified table row will use the background color value
         returned.
         """
-        return self._result_for('get_bg_color', object, trait, row, column)
+        return self._result_for("get_bg_color", object, trait, row, column)
 
     def get_image(self, object, trait, row, column):
         """ Returns the image to display for a specified cell.
@@ -407,7 +382,7 @@ class TabularAdapter(HasPrivateTraits):
         In that case, the name should be the same as the string specified in
         the :py:class:`~pyface.image_resource.ImageResource` constructor.
         """
-        return self._result_for('get_image', object, trait, row, column)
+        return self._result_for("get_image", object, trait, row, column)
 
     def get_format(self, object, trait, row, column):
         """ Returns the Python formatting string to apply to the specified cell.
@@ -418,7 +393,7 @@ class TabularAdapter(HasPrivateTraits):
         The return can be any Python string containing exactly one old-style
         Python formatting sequence, such as ``'%.4f'`` or ``'(%5.2f)'``.
         """
-        return self._result_for('get_format', object, trait, row, column)
+        return self._result_for("get_format", object, trait, row, column)
 
     def get_text(self, object, trait, row, column):
         """ Returns a string containing the text to display for a specified cell.
@@ -427,12 +402,12 @@ class TabularAdapter(HasPrivateTraits):
         string, then it is your responsibility to convert it to one before
         returning it as the result.
         """
-        return self._result_for('get_text', object, trait, row, column)
+        return self._result_for("get_text", object, trait, row, column)
 
     def get_content(self, object, trait, row, column):
         """ Returns the content to display for a specified cell.
         """
-        return self._result_for('get_content', object, trait, row, column)
+        return self._result_for("get_content", object, trait, row, column)
 
     def set_text(self, object, trait, row, column, text):
         """ Sets the value for the specified cell.
@@ -445,7 +420,7 @@ class TabularAdapter(HasPrivateTraits):
         value as text, it is your responsibility to convert ``text`` to the
         correct representation used.
         """
-        self._result_for('set_text', object, trait, row, column, text)
+        self._result_for("set_text", object, trait, row, column, text)
 
     def get_tooltip(self, object, trait, row, column):
         """ Returns a string containing the tooltip to display for a specified cell.
@@ -453,19 +428,19 @@ class TabularAdapter(HasPrivateTraits):
         You should return the empty string if you do not wish to display a
         tooltip.
         """
-        return self._result_for('get_tooltip', object, trait, row, column)
+        return self._result_for("get_tooltip", object, trait, row, column)
 
     def get_menu(self, object, trait, row, column):
         """ Returns the context menu for a specified cell.
         """
-        return self._result_for('get_menu', object, trait, row, column)
+        return self._result_for("get_menu", object, trait, row, column)
 
     def get_column_menu(self, object, trait, row, column):
         """ Returns the context menu for a specified column.
         """
-        return self._result_for('get_column_menu', object, trait, row, column)
+        return self._result_for("get_column_menu", object, trait, row, column)
 
-    #-- Adapter methods that are not sensitive to item type ------------------
+    # -- Adapter methods that are not sensitive to item type ------------------
 
     def get_item(self, object, trait, row):
         """ Returns the specified row item.
@@ -554,7 +529,7 @@ class TabularAdapter(HasPrivateTraits):
         ``object.trait`` is a mutable sequence and attempts to perform an
         ``object.trait[row:row] = [value]`` operation.
         """
-        getattr(object, trait)[row: row] = [value]
+        getattr(object, trait)[row:row] = [value]
 
     def get_column(self, object, trait, index):
         """ Returns the column id corresponding to a specified column index.
@@ -562,7 +537,7 @@ class TabularAdapter(HasPrivateTraits):
         self.object, self.name = object, trait
         return self.column_map[index]
 
-    #-- Property Implementations ---------------------------------------------
+    # -- Property Implementations ---------------------------------------------
 
     def _get_drag(self):
         return self.item
@@ -581,8 +556,8 @@ class TabularAdapter(HasPrivateTraits):
 
     def _get_text(self):
         return self.get_format(
-            self.object, self.name, self.row, self.column) % self.get_content(
-            self.object, self.name, self.row, self.column)
+            self.object, self.name, self.row, self.column
+        ) % self.get_content(self.object, self.name, self.row, self.column)
 
     def _set_text(self, value):
         if isinstance(self.column_id, int):
@@ -591,8 +566,11 @@ class TabularAdapter(HasPrivateTraits):
             # Convert value to the correct trait type.
             try:
                 trait_handler = self.item.trait(self.column_id).handler
-                setattr(self.item, self.column_id,
-                        trait_handler.evaluate(self.value))
+                setattr(
+                    self.item,
+                    self.column_id,
+                    trait_handler.evaluate(self.value),
+                )
             except:
                 setattr(self.item, self.column_id, value)
 
@@ -602,13 +580,13 @@ class TabularAdapter(HasPrivateTraits):
 
         return getattr(self.item, self.column_id)
 
-    #-- Property Implementations ---------------------------------------------
+    # -- Property Implementations ---------------------------------------------
 
     @cached_property
     def _get_column_dict(self):
         cols = {}
         for i, value in enumerate(self.columns):
-            if isinstance(value, six.string_types):
+            if isinstance(value, str):
                 cols.update({value: value})
             else:
                 cols.update({value[0]: value[1]})
@@ -618,7 +596,7 @@ class TabularAdapter(HasPrivateTraits):
     def _get_column_map(self):
         map = []
         for i, value in enumerate(self.columns):
-            if isinstance(value, six.string_types):
+            if isinstance(value, str):
                 map.append(i)
             else:
                 map.append(value[1])
@@ -642,7 +620,7 @@ class TabularAdapter(HasPrivateTraits):
     def _get_label_map(self):
         map = []
         for i, value in enumerate(self.columns):
-            if isinstance(value, six.string_types):
+            if isinstance(value, str):
                 map.append(value)
             else:
                 map.append(value[0])
@@ -656,7 +634,7 @@ class TabularAdapter(HasPrivateTraits):
         for adapter in self.adapters:
             indices = []
             for label in adapter.columns:
-                if not isinstance(label, six.string_types):
+                if not isinstance(label, str):
                     label = label[0]
 
                 indices.append(labels.index(label))
@@ -671,7 +649,7 @@ class TabularAdapter(HasPrivateTraits):
             mapping = {}
             for label in adapter.columns:
                 id = None
-                if not isinstance(label, six.string_types):
+                if not isinstance(label, str):
                     label, id = label
 
                 key = labels.index(label)
@@ -684,7 +662,7 @@ class TabularAdapter(HasPrivateTraits):
 
         return map
 
-    #-- Private Methods ------------------------------------------------------
+    # -- Private Methods ------------------------------------------------------
 
     def _result_for(self, name, object, trait, row, column, value=None):
         """ Returns/Sets the value of the specified *name* attribute for the
@@ -698,7 +676,7 @@ class TabularAdapter(HasPrivateTraits):
         self.value = value
         self.item = item = self.get_item(object, trait, row)
         item_class = item.__class__
-        key = '%s:%s:%d' % (item_class.__name__, name, column)
+        key = "%s:%s:%d" % (item_class.__name__, name, column)
         handler = self.cache.get(key)
         if handler is not None:
             return handler()
@@ -713,39 +691,48 @@ class TabularAdapter(HasPrivateTraits):
                 adapter.value = value
                 adapter.column = column_id = self.adapter_column_map[i][column]
                 if adapter.accepts:
-                    get_name = '%s_%s' % (column_id, trait_name)
+                    get_name = "%s_%s" % (column_id, trait_name)
                     if adapter.trait(get_name) is not None:
-                        if prefix == 'get_':
-                            handler = lambda: getattr(adapter.trait_set(
-                                row=self.row, column=column_id,
-                                item=self.item), get_name)
+                        if prefix == "get_":
+                            handler = lambda: getattr(
+                                adapter.trait_set(
+                                    row=self.row,
+                                    column=column_id,
+                                    item=self.item,
+                                ),
+                                get_name,
+                            )
                         else:
-                            handler = lambda: setattr(adapter.trait_set(
-                                row=self.row, column=column_id,
-                                item=self.item), get_name, self.value)
+                            handler = lambda: setattr(
+                                adapter.trait_set(
+                                    row=self.row,
+                                    column=column_id,
+                                    item=self.item,
+                                ),
+                                get_name,
+                                self.value,
+                            )
 
                         if adapter.is_cacheable:
                             break
 
                         return handler()
         else:
-            if item is not None and hasattr(item_class, '__mro__'):
+            if item is not None and hasattr(item_class, "__mro__"):
                 for klass in item_class.__mro__:
-                    handler = (
-                        self._get_handler_for(
-                            '%s_%s_%s' %
-                            (klass.__name__, column_id, trait_name), prefix) or self._get_handler_for(
-                            '%s_%s' %
-                            (klass.__name__, trait_name), prefix))
+                    handler = self._get_handler_for(
+                        "%s_%s_%s" % (klass.__name__, column_id, trait_name),
+                        prefix,
+                    ) or self._get_handler_for(
+                        "%s_%s" % (klass.__name__, trait_name), prefix
+                    )
                     if handler is not None:
                         break
 
             if handler is None:
-                handler = (
-                    self._get_handler_for(
-                        '%s_%s' %
-                        (column_id, trait_name), prefix) or self._get_handler_for(
-                        trait_name, prefix))
+                handler = self._get_handler_for(
+                    "%s_%s" % (column_id, trait_name), prefix
+                ) or self._get_handler_for(trait_name, prefix)
 
         self.cache[key] = handler
         return handler()
@@ -755,15 +742,15 @@ class TabularAdapter(HasPrivateTraits):
             found).
         """
         if self.trait(name) is not None:
-            if prefix == 'get_':
+            if prefix == "get_":
                 return lambda: getattr(self, name)
 
             return lambda: setattr(self, name, self.value)
 
         return None
 
-    @on_trait_change('columns,adapters.+update')
-    def _flush_cache(self):
+    @observe("columns,adapters.items.+update")
+    def _flush_cache(self, event):
         """ Flushes the cache when the columns or any trait on any adapter
             changes.
         """

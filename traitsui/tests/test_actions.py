@@ -1,24 +1,18 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2012, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Author: Pietro Berkes
-#  Date:   Feb 2012
-#
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """
 Test that menu and toolbar actions are triggered.
 """
-from __future__ import absolute_import, print_function
 
-import nose
+from functools import partial
 import pyface
 import unittest
 
@@ -28,17 +22,22 @@ from traitsui.menu import Action, ActionGroup, Menu, MenuBar, ToolBar
 from traitsui.item import Item
 from traitsui.view import View
 
-from traitsui.tests._tools import *
-from traitsui.tests._tools import _is_current_backend
+from traitsui.tests._tools import (
+    BaseTestMixin,
+    create_ui,
+    is_mac_os,
+    is_null,
+    requires_toolkit,
+    reraise_exceptions,
+    ToolkitName,
+)
 
-if _is_current_backend('null'):
-    raise nose.SkipTest("Not supported using the null backend")
+if is_null():
+    raise unittest.SkipTest("Not supported using the null backend")
 
 
 TestAction = Action(
-    name='Test',
-    action='test_clicked',
-    tooltip='Click to test'
+    name="Test", action="test_clicked", tooltip="Click to test"
 )
 
 
@@ -48,49 +47,25 @@ class DialogWithToolbar(HasTraits):
     action_successful = Bool(False)
 
     def test_clicked(self):
-        print('perform action')
         self.action_successful = True
 
-    menubar = MenuBar(
-        Menu(
-            ActionGroup(TestAction),
-            name='&Test menu'
-        ),
-    )
+    menubar = MenuBar(Menu(ActionGroup(TestAction), name="&Test menu"))
 
-    toolbar = ToolBar(
-        ActionGroup(TestAction),
-    )
+    toolbar = ToolBar(ActionGroup(TestAction))
 
     traits_view = View(
-        Item(label="Click the button on the toolbar or the menu item.\n"
-                   "The 'Action successful' element should turn to True."),
-        Item('action_successful', style='readonly'),
+        Item(
+            label="Click the button on the toolbar or the menu item.\n"
+            "The 'Action successful' element should turn to True."
+        ),
+        Item("action_successful", style="readonly"),
         menubar=menubar,
         toolbar=toolbar,
-        buttons=[TestAction, 'OK']
+        buttons=[TestAction, "OK"],
     )
 
 
-def _test_actions(trigger_action_func):
-    """Template test for wx, qt4, menu, and toolbar testing.
-    """
-    # Behavior: when clicking on a menu or toolbar action,
-    # the corresponding function should be executed
-
-    with store_exceptions_on_all_threads():
-        # create dialog with toolbar adn menu
-        dialog = DialogWithToolbar()
-        ui = dialog.edit_traits()
-
-        # press toolbar or menu button
-        trigger_action_func(ui)
-
-        # verify that the action was triggered
-        nose.tools.assert_true(dialog.action_successful)
-
-
-# ----- Qt4 tests
+# ----- qt4 helper functions
 
 def _qt_trigger_action(container_class, ui):
     toolbar = ui.control.findChild(container_class)
@@ -100,110 +75,137 @@ def _qt_trigger_action(container_class, ui):
 
 def _qt_click_button(ui):
     from pyface.qt.QtGui import QDialogButtonBox
+
     bbox = ui.control.findChild(QDialogButtonBox)
     button = bbox.buttons()[1]
-    print((button.text()))
     button.click()
 
 
-@skip_if_not_qt4
-def test_qt_toolbar_action():
-    # Behavior: when clicking on a toolbar action, the corresponding function
-    # should be executed
+class TestActions(BaseTestMixin, unittest.TestCase):
 
-    # Bug: in the Qt4 backend, a
-    # TypeError: perform() takes exactly 2 arguments (1 given) was raised
-    # instead
+    def setUp(self):
+        BaseTestMixin.setUp(self)
 
-    qt_trigger_toolbar_action = partial(
-        _qt_trigger_action, pyface.ui.qt4.action.tool_bar_manager._ToolBar)
+    def tearDown(self):
+        BaseTestMixin.tearDown(self)
 
-    _test_actions(qt_trigger_toolbar_action)
+    def _test_actions(self, trigger_action_func):
+        """Template test for wx, qt4, menu, and toolbar testing.
+        """
+        # Behavior: when clicking on a menu or toolbar action,
+        # the corresponding function should be executed
+
+        # create dialog with toolbar adn menu
+        dialog = DialogWithToolbar()
+        with reraise_exceptions(), create_ui(dialog) as ui:
+
+            # press toolbar or menu button
+            trigger_action_func(ui)
+
+            # verify that the action was triggered
+            self.assertTrue(dialog.action_successful)
+
+    # ----- Qt tests
+
+    @requires_toolkit([ToolkitName.qt])
+    def test_qt_toolbar_action(self):
+        # Behavior: when clicking on a toolbar action, the corresponding
+        # function should be executed
+
+        # Bug: in the Qt4 backend, a
+        # TypeError: perform() takes exactly 2 arguments (1 given) was raised
+        # instead
+
+        qt_trigger_toolbar_action = partial(
+            _qt_trigger_action, pyface.ui.qt4.action.tool_bar_manager._ToolBar
+        )
+
+        self._test_actions(qt_trigger_toolbar_action)
+
+    @requires_toolkit([ToolkitName.qt])
+    def test_qt_menu_action(self):
+        # Behavior: when clicking on a menu action, the corresponding function
+        # should be executed
+
+        # Bug: in the Qt4 backend, a
+        # TypeError: perform() takes exactly 2 arguments (1 given) was raised
+        # instead
+
+        qt_trigger_menu_action = partial(
+            _qt_trigger_action, pyface.ui.qt4.action.menu_manager._Menu
+        )
+
+        self._test_actions(qt_trigger_menu_action)
+
+    @requires_toolkit([ToolkitName.qt])
+    def test_qt_button_action(self):
+        # Behavior: when clicking on a button action, the corresponding
+        # function should be executed
+
+        # Bug: in the Qt4 backend, a
+        # TypeError: perform() takes exactly 2 arguments (1 given) was raised
+        # instead
+
+        self._test_actions(_qt_click_button)
+
+    # ----- wx tests
+
+    @unittest.skipIf(
+        not is_mac_os,
+        "Problem with triggering toolbar actions on Linux and Windows. Issue #428.",  # noqa: E501
+    )
+    @requires_toolkit([ToolkitName.wx])
+    def test_wx_toolbar_action(self):
+        # Behavior: when clicking on a toolbar action, the corresponding
+        # function should be executed
+
+        import wx
+
+        def _wx_trigger_toolbar_action(ui):
+            # long road to get at the Id of the toolbar button
+            toolbar_item = ui.view.toolbar.groups[0].items[0]
+            toolbar_item_wrapper = toolbar_item._wrappers[0]
+            control_id = toolbar_item_wrapper.control_id
+
+            # build event that clicks the button
+            click_event = wx.CommandEvent(
+                wx.wxEVT_COMMAND_TOOL_CLICKED, control_id
+            )
+
+            # send the event to the toolbar
+            toolbar = ui.control.FindWindowByName("toolbar")
+            toolbar.ProcessEvent(click_event)
+
+        self._test_actions(_wx_trigger_toolbar_action)
+
+    @requires_toolkit([ToolkitName.wx])
+    def test_wx_button_action(self):
+        # Behavior: when clicking on a button action, the corresponding
+        # function should be executed
+
+        import wx
+
+        def _wx_trigger_button_action(ui):
+            # long road to get at the Id of the toolbar button
+            button_sizer = ui.control.GetSizer().GetChildren()[2].GetSizer()
+            button = button_sizer.GetChildren()[0].GetWindow()
+
+            control_id = button.GetId()
+
+            # build event that clicks the button
+            click_event = wx.CommandEvent(
+                wx.wxEVT_COMMAND_BUTTON_CLICKED, control_id
+            )
+
+            # send the event to the toolbar
+            ui.control.ProcessEvent(click_event)
+
+        self._test_actions(_wx_trigger_button_action)
+
+    # TODO: I couldn't find a way to press menu items programmatically for wx
 
 
-@skip_if_not_qt4
-def test_qt_menu_action():
-    # Behavior: when clicking on a menu action, the corresponding function
-    # should be executed
-
-    # Bug: in the Qt4 backend, a
-    # TypeError: perform() takes exactly 2 arguments (1 given) was raised
-    # instead
-
-    qt_trigger_menu_action = partial(
-        _qt_trigger_action, pyface.ui.qt4.action.menu_manager._Menu)
-
-    _test_actions(qt_trigger_menu_action)
-
-
-@skip_if_not_qt4
-def test_qt_button_action():
-    # Behavior: when clicking on a button action, the corresponding function
-    # should be executed
-
-    # Bug: in the Qt4 backend, a
-    # TypeError: perform() takes exactly 2 arguments (1 given) was raised
-    # instead
-
-    _test_actions(_qt_click_button)
-
-
-# ----- wx tests
-
-@unittest.skipIf(
-    not is_mac_os,
-    "Problem with triggering toolbar actions on Linux and Windows. Issue #428."
-)
-@skip_if_not_wx
-def test_wx_toolbar_action():
-    # Behavior: when clicking on a toolbar action, the corresponding function
-    # should be executed
-
-    import wx
-
-    def _wx_trigger_toolbar_action(ui):
-        # long road to get at the Id of the toolbar button
-        toolbar_item = ui.view.toolbar.groups[0].items[0]
-        toolbar_item_wrapper = toolbar_item._wrappers[0]
-        control_id = toolbar_item_wrapper.control_id
-
-        # build event that clicks the button
-        click_event = wx.CommandEvent(wx.wxEVT_COMMAND_TOOL_CLICKED,
-                                      control_id)
-
-        # send the event to the toolbar
-        toolbar = ui.control.FindWindowByName('toolbar')
-        toolbar.ProcessEvent(click_event)
-
-    _test_actions(_wx_trigger_toolbar_action)
-
-@skip_if_not_wx
-def test_wx_button_action():
-    # Behavior: when clicking on a button action, the corresponding function
-    # should be executed
-
-    import wx
-
-    def _wx_trigger_button_action(ui):
-        # long road to get at the Id of the toolbar button
-        button_sizer = ui.control.GetSizer().GetChildren()[2].GetSizer()
-        button = button_sizer.GetChildren()[0].GetWindow()
-
-        control_id = button.GetId()
-
-        # build event that clicks the button
-        click_event = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED, control_id)
-
-        # send the event to the toolbar
-        ui.control.ProcessEvent(click_event)
-
-    _test_actions(_wx_trigger_button_action)
-
-
-# TODO: I couldn't find a way to press menu items programmatically for wx
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Execute from command line for manual testing
     vw = DialogWithToolbar()
     vw.configure_traits()

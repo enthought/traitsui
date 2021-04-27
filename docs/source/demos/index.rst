@@ -1,3 +1,5 @@
+.. _traitsui-demo:
+
 TraitsUI |version| Demos
 ==========================
 

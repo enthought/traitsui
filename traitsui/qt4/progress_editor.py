@@ -1,4 +1,13 @@
-from __future__ import absolute_import
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 import time
 
 from pyface.qt import QtGui, QtCore
@@ -9,7 +18,6 @@ from pyface.ui.qt4.progress_dialog import ProgressDialog
 
 
 class _ProgressDialog(ProgressDialog):
-
     def close(self):
         """ Overwritten to disable closing.
         """
@@ -21,18 +29,19 @@ class SimpleEditor(Editor):
     Show a progress bar with all the optional goodies
 
     """
+
     progress = Instance(_ProgressDialog)
 
-    # The message to be displayed along side the progress guage
-    message = Str
+    #: The message to be displayed along side the progress guage
+    message = Str()
 
-    # The starting value
-    min = Int
+    #: The starting value
+    min = Int()
 
-    # The ending value
-    max = Int
+    #: The ending value
+    max = Int()
 
-    #-- Editor interface ------------------------------------------------------
+    # -- Editor interface ------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -43,9 +52,9 @@ class SimpleEditor(Editor):
         self.min = factory.min
         self.max = factory.max
         self.message = factory.message
-        self.sync_value(factory.min_name, 'min', 'from')
-        self.sync_value(factory.max_name, 'max', 'from')
-        self.sync_value(factory.message_name, 'message', 'from')
+        self.sync_value(factory.min_name, "min", "from")
+        self.sync_value(factory.max_name, "max", "from")
+        self.sync_value(factory.message_name, "message", "from")
 
         self.set_tooltip()
 
@@ -54,13 +63,15 @@ class SimpleEditor(Editor):
         Finishes initializing the editor by creating the underlying widget.
         """
 
-        self.progress = _ProgressDialog(title=self.factory.title,
-                                        message=self.factory.message,
-                                        min=self.factory.min,
-                                        max=self.factory.max,
-                                        can_cancel=self.factory.can_cancel,
-                                        show_time=self.factory.show_time,
-                                        show_percent=self.factory.show_percent)
+        self.progress = _ProgressDialog(
+            title=self.factory.title,
+            message=self.factory.message,
+            min=self.factory.min,
+            max=self.factory.max,
+            can_cancel=self.factory.can_cancel,
+            show_time=self.factory.show_time,
+            show_percent=self.factory.show_percent,
+        )
 
         control = QtGui.QWidget()
         self.control = control

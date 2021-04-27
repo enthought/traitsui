@@ -1,5 +1,13 @@
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 from pyface.qt.QtGui import QFont
 
@@ -9,8 +17,6 @@ from traits.api import Dict
 # as in the default date_editor.
 from .date_editor import SimpleEditor
 from .date_editor import CustomEditor as DateCustomEditor
-import six
-from six.moves import map
 
 
 class CustomEditor(DateCustomEditor):
@@ -20,10 +26,7 @@ class CustomEditor(DateCustomEditor):
     styles = Dict()
 
     def init(self, parent):
-        self.control = QtGui.QCalendarWidget()
-
-        if not self.factory.allow_future:
-            self.control.setMaximumDate(QtCore.QDate.currentDate())
+        super().init(parent)
 
         if not self.factory.allow_past:
             self.control.setMinimumDate(QtCore.QDate.currentDate())
@@ -32,16 +35,15 @@ class CustomEditor(DateCustomEditor):
             self.sync_value(self.factory.dates_trait, "dates", "from")
             self.sync_value(self.factory.styles_trait, "styles", "from")
 
-        self.control.clicked.connect(self.update_object)
-
-        return
-
     def _dates_changed(self, old, new):
         # Someone changed out the entire dict.  The easiest, most robust
         # way to handle this is to reset the text formats of all the dates
         # in the old dict, and then set the dates in the new dict.
         if old:
-            [list(map(self._reset_formatting, dates)) for dates in old.values()]
+            [
+                list(map(self._reset_formatting, dates))
+                for dates in old.values()
+            ]
         if new:
             styles = getattr(self.object, self.factory.styles_trait, None)
             self._apply_styles(styles, new)
@@ -54,14 +56,19 @@ class CustomEditor(DateCustomEditor):
         self._apply_styles(styles, groups_to_set)
 
         # Handle the removed items by resetting them
-        [list(map(self._reset_formatting, dates))
-         for dates in event.removed.values()]
+        [
+            list(map(self._reset_formatting, dates))
+            for dates in event.removed.values()
+        ]
 
     def _styles_changed(self, old, new):
         groups = getattr(self.object, self.factory.dates_trait, {})
         if not new:
             # If no new styles, then reset all the dates to a default style
-            [list(map(self._reset_formatting, dates)) for dates in groups.values()]
+            [
+                list(map(self._reset_formatting, dates))
+                for dates in groups.values()
+            ]
         else:
             self._apply_styles(new, groups)
         return
@@ -71,8 +78,9 @@ class CustomEditor(DateCustomEditor):
         styles = getattr(self.object, self.factory.styles_trait)
 
         names_to_update = list(event.added.keys()) + list(event.changed.keys())
-        modified_groups = dict((name, groups[name])
-                               for name in names_to_update)
+        modified_groups = dict(
+            (name, groups[name]) for name in names_to_update
+        )
         self._apply_styles(styles, modified_groups)
 
         names_to_reset = list(event.removed.keys())
@@ -80,9 +88,9 @@ class CustomEditor(DateCustomEditor):
             self._reset_formatting(groups[name])
         return
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     # Helper functions
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
     def _apply_style(self, style, dates):
         """ **style** is a CellFormat, **dates** is a list of datetime.date """

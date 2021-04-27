@@ -1,63 +1,39 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   10/21/2004
-#
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Defines the various button editors for the wxPython user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
-
-from __future__ import absolute_import
 import wx
 
-from traits.api \
-    import Str
+from pyface.ui_traits import Image
+from traits.api import Str, observe
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.button_editor file.
-from traitsui.editors.button_editor \
-    import ToolkitEditorFactory
+from .editor import Editor
 
-from .editor \
-    import Editor
-
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class SimpleEditor(Editor):
     """ Simple style editor for a button.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    # The button label
-    label = Str
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
+    #: The button label
+    label = Str()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -65,20 +41,12 @@ class SimpleEditor(Editor):
         """
         label = self.factory.label or self.item.get_label(self.ui)
         self.control = wx.Button(parent, -1, self.string_value(label))
-        self.sync_value(self.factory.label_value, 'label', 'from')
-        wx.EVT_BUTTON(parent, self.control.GetId(), self.update_object)
+        self.sync_value(self.factory.label_value, "label", "from")
+        self.control.Bind(wx.EVT_BUTTON, self.update_object)
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Handles the 'label' trait being changed:
-    #-------------------------------------------------------------------------
 
     def _label_changed(self, label):
         self.control.SetLabel(self.string_value(label))
-
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking the button by setting the value on the object:
-    #-------------------------------------------------------------------------
 
     def update_object(self, event):
         """ Handles the user clicking the button by setting the factory value
@@ -89,12 +57,7 @@ class SimpleEditor(Editor):
 
         # If there is an associated view, then display it:
         if factory.view is not None:
-            self.object.edit_traits(view=factory.view,
-                                    parent=self.control)
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
+            self.object.edit_traits(view=factory.view, parent=self.control)
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -102,36 +65,24 @@ class SimpleEditor(Editor):
         """
         pass
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        wx.EVT_BUTTON(self.control.GetParent(), self.control.GetId(), None)
-
-        super(SimpleEditor, self).dispose()
-
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
+        self.control.Unbind(wx.EVT_BUTTON)
+        super().dispose()
 
 
 class CustomEditor(SimpleEditor):
     """ Custom style editor for a button, which can contain an image.
     """
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
+    #: The button image
+    image = Image()
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        from pyface.image_button import ImageButton
+        from pyface.ui.wx.image_button import ImageButton
 
         factory = self.factory
         if self.factory.label:
@@ -146,25 +97,29 @@ class CustomEditor(SimpleEditor):
             style=factory.style,
             orientation=factory.orientation,
             width_padding=factory.width_padding,
-            height_padding=factory.height_padding
+            height_padding=factory.height_padding,
         )
         self.control = self._control.control
-        self._control.on_trait_change(self.update_object, 'clicked',
-                                      dispatch='ui')
-        self.sync_value(self.factory.label_value, 'label', 'from')
-
+        self._control.on_trait_change(
+            self.update_object, "clicked", dispatch="ui"
+        )
+        self.sync_value(self.factory.label_value, "label", "from")
+        self.sync_value(self.factory.image_value, "image", "from")
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
+    def _label_changed(self, label):
+        self._control.label = self.string_value(label)
+
+    @observe("image")
+    def _image_updated(self, event):
+        image = event.new
+        self._control.image = image
 
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        self._control.on_trait_change(self.update_object, 'clicked',
-                                      remove=True)
+        self._control.on_trait_change(
+            self.update_object, "clicked", remove=True
+        )
 
-        super(CustomEditor, self).dispose()
-
-### EOF #######################################################################
+        super().dispose()

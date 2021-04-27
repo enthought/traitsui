@@ -5,22 +5,21 @@
 # configure_traits_view_group.py -- Sample code to demonstrate
 # configure_traits()
 
-#--[Imports]--------------------------------------------------------------
-from __future__ import absolute_import
+# --[Imports]--------------------------------------------------------------
 from traits.api import HasTraits, Str, Int
 from traitsui.api import View, Item, Group
-import traitsui
 
-#--[Code]-----------------------------------------------------------------
+# --[Code]-----------------------------------------------------------------
 
 
 class SimpleEmployee(HasTraits):
-    first_name = Str
-    last_name = Str
-    department = Str
+    first_name = Str()
+    last_name = Str()
+    department = Str()
 
-    employee_number = Str
-    salary = Int
+    employee_number = Str()
+    salary = Int()
+
 
 view1 = View(Group(Item(name='first_name'),
                    Item(name='last_name'),

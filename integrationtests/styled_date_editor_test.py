@@ -1,11 +1,19 @@
-from __future__ import absolute_import, print_function
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
 from datetime import date
 
 from traits.etsconfig.api import ETSConfig
 ETSConfig.toolkit = 'qt4'
 
-from traits.api import Date, Dict, HasTraits, List, on_trait_change
+from traits.api import Date, Dict, HasTraits, List, observe
 from traitsui.api import View, Item, StyledDateEditor
 from traitsui.editors.styled_date_editor import CellFormat
 
@@ -14,8 +22,8 @@ class Foo(HasTraits):
     dates = Dict()
     styles = Dict()
 
-    fast_dates = List
-    slow_dates = List
+    fast_dates = List()
+    slow_dates = List()
 
     current_date = Date()
 
@@ -46,8 +54,8 @@ class Foo(HasTraits):
                 2010, 6, 27), date(
                 2010, 6, 24)]
 
-    @on_trait_change("fast_dates,slow_dates")
-    def _update_dates_dict(self):
+    @observe("fast_dates,slow_dates")
+    def _update_dates_dict(self, event):
         self.dates["fast"] = self.fast_dates
         self.dates["slow"] = self.slow_dates
 

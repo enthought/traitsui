@@ -1,31 +1,31 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2009, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: Evan Patterson
-#  Date:   06/18/2009
-#
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Provides a lightweight framework that removes some of the drudge work
     involved with implementing user-friendly saving behavior in a Traits
     UI application.
 """
 
-from __future__ import absolute_import
 
 # ETS imports
 from pyface.api import FileDialog, confirm, error, YES, CANCEL
 from pyface.timer.api import Timer
-from traits.api import HasTraits, Str, Bool, Any, Int, Instance, on_trait_change
+from traits.api import (
+    HasTraits,
+    Str,
+    Bool,
+    Any,
+    Int,
+    Instance,
+    observe,
+)
 from ..api import Handler
 
 
@@ -36,25 +36,25 @@ class CanSaveMixin(HasTraits):
         since its last save.
     """
 
-    filepath = Str
+    filepath = Str()
     dirty = Bool(False)
 
-    #-----------------------------------------------------------------
+    # -----------------------------------------------------------------
     #  object interface
-    #-----------------------------------------------------------------
+    # -----------------------------------------------------------------
 
     def __getstate__(self):
         """ We don't want to pickle the filepath because this can change,
             obviously, if the user moves around the pickled file.
         """
-        state = super(CanSaveMixin, self).__getstate__()
-        del state['filepath']
-        del state['dirty']
+        state = super().__getstate__()
+        del state["filepath"]
+        del state["dirty"]
         return state
 
-    #-----------------------------------------------------------------
+    # -----------------------------------------------------------------
     #  CanSaveMixin interface
-    #-----------------------------------------------------------------
+    # -----------------------------------------------------------------
 
     def validate(self):
         """ Returns whether the information in the object is valid to be saved
@@ -64,7 +64,7 @@ class CanSaveMixin(HasTraits):
 
             By default, an object always validates.
         """
-        return (True, '')
+        return (True, "")
 
     def save(self):
         """ Saves the object to the path specified by its 'filepath' trait. This
@@ -77,46 +77,46 @@ class SaveHandler(Handler):
     """ A Handler that facilates adding saving to a Traits UI application.
     """
 
-    # The object which is to be saved (subclass of CanSaveMixin). It is assigned
-    # to info.object in the 'init' method, which in many cases is what you want.
-    # If not, override that method to set it to something else.
-    saveObject = Any
+    #: The object which is to be saved (subclass of CanSaveMixin). It is assigned
+    #: to info.object in the 'init' method, which in many cases is what you want.
+    #: If not, override that method to set it to something else.
+    saveObject = Any()
 
-    # The type of files to show in the save dialogs
-    wildcard = Str('All files (*.*)|*.*')
+    #: The type of files to show in the save dialogs
+    wildcard = Str("All files (*.*)|*.*")
 
-    # The option extension which should appear at the end of all filenames. If
-    # the user does not explicitly specifiy it, it is appended to the filename.
-    extension = Str
+    #: The option extension which should appear at the end of all filenames. If
+    #: the user does not explicitly specifiy it, it is appended to the filename.
+    extension = Str()
 
-    # This message to display when the Handler requests a save
-    savePromptMessage = Str('Would you like to save?')
+    #: This message to display when the Handler requests a save
+    savePromptMessage = Str("Would you like to save?")
 
-    # Whether to prompt for a save on exit if the save object is dirty
+    #: Whether to prompt for a save on exit if the save object is dirty
     promptOnExit = Bool(True)
 
-    # Whether to allow the user to override a validation failure through a
-    # confirmation dialog. By default, validation errors cannot be overriden.
+    #: Whether to allow the user to override a validation failure through a
+    #: confirmation dialog. By default, validation errors cannot be overriden.
     allowValidationBypass = Bool(False)
 
-    # Whether to automatically save after a certain amount of time has passed
-    # since the last save
+    #: Whether to automatically save after a certain amount of time has passed
+    #: since the last save
     autosave = Bool(False)
 
-    # Number of seconds between each autosave. Default is 5 minutes.
+    #: Number of seconds between each autosave. Default is 5 minutes.
     autosaveInterval = Int(300)
 
-    # If it is possible to override validation failures, this specifies whether
-    # autosave will do so. If False and a validation errors occurs, no save
-    # will occur.
+    #: If it is possible to override validation failures, this specifies whether
+    #: autosave will do so. If False and a validation errors occurs, no save
+    #: will occur.
     autosaveValidationBypass = Bool(True)
 
-    # Protected traits
+    #: Protected traits
     _timer = Instance(Timer)
 
-    #-----------------------------------------------------------------
+    # -----------------------------------------------------------------
     #  Handler interface
-    #-----------------------------------------------------------------
+    # -----------------------------------------------------------------
 
     def init(self, info):
         """ Set the default save object (the object being handled). Also,
@@ -151,9 +151,9 @@ class SaveHandler(Handler):
         if self._timer:
             self._timer.Stop()
 
-    #-----------------------------------------------------------------
+    # -----------------------------------------------------------------
     #  SaveHandler interface
-    #-----------------------------------------------------------------
+    # -----------------------------------------------------------------
 
     def exit(self, info):
         """ Closes the UI unless a save prompt is cancelled. Provided for
@@ -167,7 +167,7 @@ class SaveHandler(Handler):
             opens a dialog to select this path. Returns whether the save
             actually occurred.
         """
-        if self.saveObject.filepath == '':
+        if self.saveObject.filepath == "":
             return self.saveAs(info)
         else:
             return self._validateAndSave()
@@ -176,17 +176,22 @@ class SaveHandler(Handler):
         """ Saves the object to a new path, and sets this as the 'filepath' on
             the object. Returns whether the save actually occurred.
         """
-        fileDialog = FileDialog(action='save as', title='Save As',
-                                wildcard=self.wildcard,
-                                parent=info.ui.control)
+        fileDialog = FileDialog(
+            action="save as",
+            title="Save As",
+            wildcard=self.wildcard,
+            parent=info.ui.control,
+        )
         fileDialog.open()
-        if fileDialog.path == '' or fileDialog.return_code == CANCEL:
+        if fileDialog.path == "" or fileDialog.return_code == CANCEL:
             return False
         else:
             extLen = len(self.extension)
-            if extLen and fileDialog.path[-extLen -
-                                          1:] != '.' + self.extension:
-                fileDialog.path += '.' + self.extension
+            if (
+                extLen
+                and fileDialog.path[-extLen - 1 :] != "." + self.extension
+            ):
+                fileDialog.path += "." + self.extension
             self.saveObject.filepath = fileDialog.path
             return self._validateAndSave()
 
@@ -195,8 +200,12 @@ class SaveHandler(Handler):
             the user canceled the action that invoked this prompt.
         """
         if self.saveObject.dirty:
-            code = confirm(info.ui.control, self.savePromptMessage,
-                           title="Save now?", cancel=cancel)
+            code = confirm(
+                info.ui.control,
+                self.savePromptMessage,
+                title="Save now?",
+                cancel=cancel,
+            )
             if code == CANCEL:
                 return False
             elif code == YES:
@@ -207,14 +216,15 @@ class SaveHandler(Handler):
     def _autosave(self):
         """ Called by the timer when an autosave should take place.
         """
-        if self.saveObject.dirty and self.saveObject.filepath != '':
+        if self.saveObject.dirty and self.saveObject.filepath != "":
             success, message = self.saveObject.validate()
-            if success or (self.allowValidationBypass and
-                           self.autosaveValidationBypass):
+            if success or (
+                self.allowValidationBypass and self.autosaveValidationBypass
+            ):
                 self.saveObject.save()
 
-    @on_trait_change('autosave, autosaveInterval, saveObject')
-    def _configure_timer(self):
+    @observe("autosave, autosaveInterval, saveObject")
+    def _configure_timer(self, event):
         """ Creates, replaces, or destroys the autosave timer.
         """
         if self._timer:
@@ -233,8 +243,10 @@ class SaveHandler(Handler):
             self.saveObject.save()
         else:
             title = "Validation error"
-            if (self.allowValidationBypass and
-                    confirm(None, message, title=title) == YES):
+            if (
+                self.allowValidationBypass
+                and confirm(None, message, title=title) == YES
+            ):
                 self.saveObject.save()
                 success = True
             else:

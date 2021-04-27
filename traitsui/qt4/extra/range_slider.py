@@ -1,4 +1,12 @@
-from __future__ import absolute_import, print_function
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
 
 from pyface.qt import QtGui, QtCore
 
@@ -15,7 +23,7 @@ class RangeSlider(QtGui.QSlider):
     """
 
     def __init__(self, *args):
-        super(RangeSlider, self).__init__(*args)
+        super().__init__(*args)
 
         self._low = self.minimum()
         self._high = self.maximum()
@@ -55,7 +63,9 @@ class RangeSlider(QtGui.QSlider):
             # Only draw the groove for the first slider so it doesn't get drawn
             # on top of the existing ones every time
             if i == 0:
-                opt.subControls = QtGui.QStyle.SC_SliderGroove | QtGui.QStyle.SC_SliderHandle
+                opt.subControls = (
+                    QtGui.QStyle.SC_SliderGroove | QtGui.QStyle.SC_SliderHandle
+                )
             else:
                 opt.subControls = QtGui.QStyle.SC_SliderHandle
 
@@ -71,7 +81,8 @@ class RangeSlider(QtGui.QSlider):
             opt.sliderPosition = value
             opt.sliderValue = value
             style.drawComplexControl(
-                QtGui.QStyle.CC_Slider, opt, painter, self)
+                QtGui.QStyle.CC_Slider, opt, painter, self
+            )
 
     def mousePressEvent(self, event):
         event.accept()
@@ -94,7 +105,8 @@ class RangeSlider(QtGui.QSlider):
             for i, value in enumerate([self._low, self._high]):
                 opt.sliderPosition = value
                 hit = style.hitTestComplexControl(
-                    style.CC_Slider, opt, event.pos(), self)
+                    style.CC_Slider, opt, event.pos(), self
+                )
                 if hit == style.SC_SliderHandle:
                     self.active_slider = i
                     self.pressed_control = hit
@@ -107,7 +119,8 @@ class RangeSlider(QtGui.QSlider):
             if self.active_slider < 0:
                 self.pressed_control = QtGui.QStyle.SC_SliderHandle
                 self.click_offset = self.__pixelPosToRangeValue(
-                    self.__pick(event.pos()))
+                    self.__pick(event.pos())
+                )
                 self.triggerAction(self.SliderMove)
                 self.setRepeatAction(self.SliderNoAction)
         else:
@@ -162,9 +175,11 @@ class RangeSlider(QtGui.QSlider):
         style = QtGui.QApplication.style()
 
         gr = style.subControlRect(
-            style.CC_Slider, opt, style.SC_SliderGroove, self)
+            style.CC_Slider, opt, style.SC_SliderGroove, self
+        )
         sr = style.subControlRect(
-            style.CC_Slider, opt, style.SC_SliderHandle, self)
+            style.CC_Slider, opt, style.SC_SliderHandle, self
+        )
 
         if self.orientation() == QtCore.Qt.Horizontal:
             slider_length = sr.width()
@@ -180,13 +195,16 @@ class RangeSlider(QtGui.QSlider):
             self.maximum(),
             pos - slider_min,
             slider_max - slider_min,
-            opt.upsideDown)
+            opt.upsideDown,
+        )
+
 
 if __name__ == "__main__":
     import sys
 
     def echo(value):
         print(value)
+
     app = QtGui.QApplication(sys.argv)
     slider = RangeSlider()
     slider.setMinimum(0)

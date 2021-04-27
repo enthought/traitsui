@@ -1,4 +1,5 @@
-from __future__ import absolute_import
+# code_block0.py
+
 from numpy import cos, sin
 
 class Point(object):

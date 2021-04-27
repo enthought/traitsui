@@ -1,4 +1,4 @@
-from __future__ import absolute_import, print_function
+# code_block1.py
 
 from traits.api import *
 from traitsui.api import *

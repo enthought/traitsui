@@ -8,9 +8,6 @@ TraitsUI: Traits-capable windowing framework
 .. image:: https://ci.appveyor.com/api/projects/status/n2qy8kcwh8ibi9g3/branch/master?svg=true
    :target: https://ci.appveyor.com/project/EnthoughtOSS/traitsui/branch/master
 
-.. image:: https://codecov.io/github/enthought/traitsui/coverage.svg?branch=master
-   :target: https://codecov.io/github/enthought/traitsui?branch=master
-
 The TraitsUI project contains a toolkit-independent GUI abstraction layer,
 which is used to support the "visualization" features of the
 `Traits <http://github.com/enthought/traits>`__ package.
@@ -56,8 +53,8 @@ Important Links
 
 - Website and Documentation: `<http://docs.enthought.com/traitsui>`__
 
-  * User Manual `<http://docs.enthought.com/traitsui/traitsui_user_maunal>`__
-  * Tutorial `<http://docs.enthought.com/traitsui/tutorial>`__
+  * User Manual `<http://docs.enthought.com/traitsui/traitsui_user_manual>`__
+  * Tutorial `<http://docs.enthought.com/traitsui/tutorials>`__
   * API Documentation `<http://docs.enthought.com/traitsui/api>`__
 
 - Source code repository: `<https://github.com/enthought/traitsui>`__
@@ -89,6 +86,8 @@ NumPy and Pandas for some editors.
 TraitsUI along with all dependencies can be installed in a straightforward way
 using the `Enthought Deployment Manager <http://docs.enthought.com/edm/>`__,
 ``pip`` or other .
+
+.. end_of_long_description
 
 Running the Test Suite
 ----------------------

@@ -43,7 +43,6 @@ Additional notes:
 
 #--<Imports>--------------------------------------------------------------
 
-from __future__ import absolute_import
 from os.path \
     import join, dirname
 
@@ -51,10 +50,10 @@ from random \
     import randint, choice, shuffle
 
 from traits.api \
-    import HasTraits, Str, Int, List, Instance, Property, Constant, Color
+    import HasTraits, Str, Int, List, Instance, Property, Constant
 
 from traitsui.api \
-    import View, Group, Item, Margin, TabularEditor
+    import View, Group, Item, Margin, TabularEditor, Color
 
 from traitsui.tabular_adapter \
     import TabularAdapter
@@ -79,9 +78,9 @@ search_path = [join(dirname(traitsui.api.__file__),
 
 class Person(HasTraits):
 
-    name = Str
-    address = Str
-    age = Int
+    name = Str()
+    address = Str()
+    age = Int()
 
 #--[MarriedPerson Class]--------------------------------------------------
 
@@ -102,9 +101,9 @@ class ReportAdapter(TabularAdapter):
 
     font = 'Courier 10'
     age_alignment = Constant('right')
-    MarriedPerson_age_image = Property
+    MarriedPerson_age_image = Property()
     MarriedPerson_bg_color = Color(0xE0E0FF)
-    MarriedPerson_spouse_text = Property
+    MarriedPerson_spouse_text = Property()
     Person_spouse_text = Constant('')
 
     def _get_MarriedPerson_age_image(self):

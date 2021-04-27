@@ -1,71 +1,51 @@
-#------------------------------------------------------------------------------
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2005, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
-#  Author: David C. Morrill
-#  Date:   11/01/2004
-#
-#------------------------------------------------------------------------------
+# Thanks for using Enthought open source!
 
 """ Creates a wxPython user interface for a specified UI object.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
-from __future__ import absolute_import
 import wx
 
-from .helper \
-    import restore_window, save_window, TraitsUIScrolledPanel
+from pyface.api import SystemMetrics
 
-from .ui_base \
-    import BaseDialog
+from .helper import save_window, TraitsUIScrolledPanel
 
-from .ui_panel \
-    import panel, show_help
+from .ui_base import BaseDialog
 
-from .constants \
-    import DefaultTitle, WindowColor, screen_dy, scrollbar_dx
+from .ui_panel import panel
 
-from traitsui.menu \
-    import ApplyButton, RevertButton, OKButton, CancelButton, HelpButton
+from .constants import DefaultTitle, WindowColor, scrollbar_dx
 
-#-------------------------------------------------------------------------
-#  Creates a modal wxPython user interface for a specified UI object:
-#-------------------------------------------------------------------------
+from traitsui.menu import (
+    ApplyButton,
+    RevertButton,
+    OKButton,
+    CancelButton,
+    HelpButton,
+)
 
 
 def ui_modal(ui, parent):
     """ Creates a modal wxPython user interface for a specified UI object.
     """
-    ui_dialog(ui, parent, True)
-
-#-------------------------------------------------------------------------
-#  Creates a non-modal wxPython user interface for a specified UI object:
-#-------------------------------------------------------------------------
+    _ui_dialog(ui, parent, BaseDialog.MODAL)
 
 
 def ui_nonmodal(ui, parent):
     """ Creates a non-modal wxPython user interface for a specified UI object.
     """
-    ui_dialog(ui, parent, False)
-
-#-------------------------------------------------------------------------
-#  Creates a wxPython dialog-based user interface for a specified UI object:
-#-------------------------------------------------------------------------
+    _ui_dialog(ui, parent, BaseDialog.NONMODAL)
 
 
-def ui_dialog(ui, parent, is_modal):
+def _ui_dialog(ui, parent, style):
     """ Creates a wxPython dialog box for a specified UI object.
 
     Changes are not immediately applied to the underlying object. The user must
@@ -75,48 +55,22 @@ def ui_dialog(ui, parent, is_modal):
     if ui.owner is None:
         ui.owner = ModalDialog()
 
-    ui.owner.init(ui, parent, is_modal)
-    ui.control = ui.owner.control
-    ui.control._parent = parent
-    try:
-        ui.prepare_ui()
-    except:
-        ui.control.Destroy()
-        ui.control.ui = None
-        ui.control = None
-        ui.owner = None
-        ui.result = False
-        raise
-
-    ui.handler.position(ui.info)
-    restore_window(ui)
-
-    if is_modal:
-        ui.control.ShowModal()
-    else:
-        ui.control.Show()
-
-#-------------------------------------------------------------------------
-#  'ModalDialog' class:
-#-------------------------------------------------------------------------
+    BaseDialog.display_ui(ui, parent, style)
 
 
 class ModalDialog(BaseDialog):
     """ Modal dialog box for Traits-based user interfaces.
     """
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
 
-    def init(self, ui, parent, is_modal):
-        self.is_modal = is_modal
+    def init(self, ui, parent, style):
+        self.is_modal = style == self.MODAL
         style = 0
         view = ui.view
         if view.resizable:
             style |= wx.RESIZE_BORDER
 
         title = view.title
-        if title == '':
+        if title == "":
             title = DefaultTitle
 
         revert = apply = False
@@ -124,24 +78,30 @@ class ModalDialog(BaseDialog):
         if window is not None:
             window.SetSizer(None)
             ui.reset()
-            if hasattr(self, 'revert'):
+            if hasattr(self, "revert"):
                 revert = self.revert.IsEnabled()
-            if hasattr(self, 'apply'):
+            if hasattr(self, "apply"):
                 apply = self.apply.IsEnabled()
         else:
             self.ui = ui
-            if is_modal:
-                window = wx.Dialog(parent, -1, title,
-                                   style=style | wx.DEFAULT_DIALOG_STYLE)
+            if self.is_modal:
+                window = wx.Dialog(
+                    parent, -1, title, style=style | wx.DEFAULT_DIALOG_STYLE
+                )
             else:
-                window = wx.Frame(parent, -1, title, style=style |
-                                  (wx.DEFAULT_FRAME_STYLE & (~wx.RESIZE_BORDER)))
+                window = wx.Frame(
+                    parent,
+                    -1,
+                    title,
+                    style=style
+                    | (wx.DEFAULT_FRAME_STYLE & (~wx.RESIZE_BORDER)),
+                )
 
             window.SetBackgroundColour(WindowColor)
             self.control = window
             self.set_icon(view.icon)
-            wx.EVT_CLOSE(window, self._on_close_page)
-            wx.EVT_CHAR(window, self._on_key)
+            window.Bind(wx.EVT_CLOSE, self._on_close_page)
+            window.Bind(wx.EVT_CHAR, self._on_key)
 
             # Create the 'context' copies we will need while editing:
             context = ui.context
@@ -157,14 +117,17 @@ class ModalDialog(BaseDialog):
             sw = TraitsUIScrolledPanel(window)
             trait_sheet = panel(ui, sw)
             sizer.Add(trait_sheet, 1, wx.EXPAND | wx.ALL, 4)
-            tsdx, tsdy = trait_sheet.GetSizeTuple()
+            tsdx, tsdy = trait_sheet.GetSize()
             tsdx += 8
             tsdy += 8
             sw.SetScrollRate(16, 16)
-            max_dy = (2 * screen_dy) / 3
+            max_dy = (2 * SystemMetrics().screen_height) // 3
             sw.SetSizer(sizer)
-            sw.SetSize(wx.Size(tsdx + ((tsdy > max_dy) * scrollbar_dx),
-                               min(tsdy, max_dy)))
+            sw.SetSize(
+                wx.Size(
+                    tsdx + ((tsdy > max_dy) * scrollbar_dx), min(tsdy, max_dy)
+                )
+            )
         else:
             sw = panel(ui, window)
 
@@ -172,7 +135,7 @@ class ModalDialog(BaseDialog):
 
         buttons = [self.coerce_button(button) for button in view.buttons]
         nbuttons = len(buttons)
-        if (nbuttons != 1) or (not self.is_button(buttons[0], '')):
+        if (nbuttons != 1) or (not self.is_button(buttons[0], "")):
 
             # Create the necessary special function buttons:
             sw_sizer.Add(wx.StaticLine(window, -1), 0, wx.EXPAND)
@@ -196,31 +159,40 @@ class ModalDialog(BaseDialog):
             for raw_button, button in zip(view.buttons, buttons):
                 default = raw_button == view.default_button
 
-                if self.is_button(button, 'Apply'):
+                if self.is_button(button, "Apply"):
                     self.apply = self.add_button(
-                        button, b_sizer, self._on_apply, apply, default=default)
-                    ui.on_trait_change(self._on_applyable, 'modified',
-                                       dispatch='ui')
+                        button, b_sizer, self._on_apply, apply, default=default
+                    )
+                    ui.observe(
+                        self._on_applyable, "modified", dispatch="ui"
+                    )
 
-                elif self.is_button(button, 'Revert'):
+                elif self.is_button(button, "Revert"):
                     self.revert = self.add_button(
-                        button, b_sizer, self._on_revert, revert, default=default)
+                        button,
+                        b_sizer,
+                        self._on_revert,
+                        revert,
+                        default=default,
+                    )
 
-                elif self.is_button(button, 'OK'):
-                    self.ok = self.add_button(button, b_sizer, self._on_ok,
-                                              default=default)
-                    ui.on_trait_change(self._on_error, 'errors',
-                                       dispatch='ui')
+                elif self.is_button(button, "OK"):
+                    self.ok = self.add_button(
+                        button, b_sizer, self._on_ok, default=default
+                    )
+                    ui.observe(self._on_error, "errors", dispatch="ui")
 
-                elif self.is_button(button, 'Cancel'):
-                    self.add_button(button, b_sizer, self._on_cancel,
-                                    default=default)
+                elif self.is_button(button, "Cancel"):
+                    self.add_button(
+                        button, b_sizer, self._on_cancel, default=default
+                    )
 
-                elif self.is_button(button, 'Help'):
-                    self.add_button(button, b_sizer, self._on_help,
-                                    default=default)
+                elif self.is_button(button, "Help"):
+                    self.add_button(
+                        button, b_sizer, self._on_help, default=default
+                    )
 
-                elif not self.is_button(button, ''):
+                elif not self.is_button(button, ""):
                     self.add_button(button, b_sizer, default=default)
 
             sw_sizer.Add(b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
@@ -233,25 +205,20 @@ class ModalDialog(BaseDialog):
         # Lay all of the dialog contents out:
         window.SetSizerAndFit(sw_sizer)
 
-    #-------------------------------------------------------------------------
-    #  Closes the dialog window:
-    #-------------------------------------------------------------------------
-
     def close(self, rc=wx.ID_OK):
         """ Closes the dialog window.
         """
         ui = self.ui
-        ui.result = (rc == wx.ID_OK)
+        ui.result = rc == wx.ID_OK
         save_window(ui)
         if self.is_modal:
             self.control.EndModal(rc)
 
+        self.control.Unbind(wx.EVT_CLOSE)
+        self.control.Unbind(wx.EVT_CHAR)
+
         ui.finish()
         self.ui = self.apply = self.revert = self.help = self.control = None
-
-    #-------------------------------------------------------------------------
-    #  Creates a copy of a 'context' dictionary:
-    #-------------------------------------------------------------------------
 
     def _copy_context(self, context):
         """ Creates a copy of a *context* dictionary.
@@ -264,10 +231,6 @@ class ModalDialog(BaseDialog):
                 result[name] = None
 
         return result
-
-    #-------------------------------------------------------------------------
-    #  Applies the traits in the 'from' context to the 'to' context:
-    #-------------------------------------------------------------------------
 
     def _apply_context(self, from_context, to_context):
         """ Applies the traits in the *from_context* to the *to_context*.
@@ -283,10 +246,6 @@ class ModalDialog(BaseDialog):
             if on_apply is not None:
                 on_apply()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking the window/dialog 'close' button/icon:
-    #-------------------------------------------------------------------------
-
     def _on_close_page(self, event):
         """ Handles the user clicking the window/dialog "close" button/icon.
         """
@@ -295,20 +254,12 @@ class ModalDialog(BaseDialog):
         else:
             self._on_cancel(event)
 
-    #-------------------------------------------------------------------------
-    #  Closes the window and saves changes (if allowed by the handler):
-    #-------------------------------------------------------------------------
-
     def _on_ok(self, event=None):
         """ Closes the window and saves changes (if allowed by the handler).
         """
         if self.ui.handler.close(self.ui.info, True):
             self._apply_context(self.ui.context, self.ui._context)
             self.close(wx.ID_OK)
-
-    #-------------------------------------------------------------------------
-    #  Closes the window and discards changes (if allowed by the handler):
-    #-------------------------------------------------------------------------
 
     def _on_cancel(self, event=None):
         """ Closes the window and discards changes (if allowed by the handler).
@@ -317,34 +268,21 @@ class ModalDialog(BaseDialog):
             self._apply_context(self.ui._revert, self.ui._context)
             self.close(wx.ID_CANCEL)
 
-
-    #-------------------------------------------------------------------------
-    #  Handles the user hitting the 'Esc'ape key:
-    #-------------------------------------------------------------------------
-
     def _on_key(self, event):
         """ Handles the user pressing the Escape key.
         """
         if event.GetKeyCode() == 0x1B:
             self._on_close_page(event)
 
-    #-------------------------------------------------------------------------
-    #  Handles an 'Apply' all changes request:
-    #-------------------------------------------------------------------------
-
     def _on_apply(self, event):
         """ Handles a request to apply changes.
         """
         ui = self.ui
         self._apply_context(ui.context, ui._context)
-        if hasattr(self, 'revert'):
+        if hasattr(self, "revert"):
             self.revert.Enable(True)
         ui.handler.apply(ui.info)
         ui.modified = False
-
-    #-------------------------------------------------------------------------
-    #  Handles a 'Revert' all changes request:
-    #-------------------------------------------------------------------------
 
     def _on_revert(self, event):
         """ Handles a request to revert changes.
@@ -356,20 +294,14 @@ class ModalDialog(BaseDialog):
         ui.handler.revert(ui.info)
         ui.modified = False
 
-    #-------------------------------------------------------------------------
-    #  Handles the user interface 'modified' state changing:
-    #-------------------------------------------------------------------------
-
-    def _on_applyable(self, state):
+    def _on_applyable(self, event):
         """ Handles a change to the "modified" state of the user interface .
         """
+        state = event.new
         self.apply.Enable(state)
 
-    #-------------------------------------------------------------------------
-    #  Handles editing errors:
-    #-------------------------------------------------------------------------
-
-    def _on_error(self, errors):
+    def _on_error(self, event):
         """ Handles editing errors.
         """
+        errors = event.new
         self.ok.Enable(errors == 0)

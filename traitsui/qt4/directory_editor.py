@@ -1,5 +1,14 @@
+# (C) Copyright 2008-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
+#
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+# Thanks for using Enthought open source!
+
 # Copyright (c) 2007, Riverbank Computing Limited
-# Copyright (c) 2018, Enthought, Inc
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
@@ -11,18 +20,13 @@
 """ Defines various directory editor for the PyQt user interface toolkit.
 """
 
-from __future__ import absolute_import
 from pyface.qt import QtGui
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.custom_editor file.
-from traitsui.editors.directory_editor import ToolkitEditorFactory
-
 from .file_editor import (
-    SimpleEditor as SimpleFileEditor, CustomEditor as CustomFileEditor
+    SimpleEditor as SimpleFileEditor,
+    CustomEditor as CustomFileEditor,
 )
-import six
+
 
 
 class SimpleEditor(SimpleFileEditor):
@@ -47,16 +51,16 @@ class CustomEditor(CustomFileEditor):
     """
 
     def init(self, parent):
-        super(CustomEditor, self).init(parent)
+        super().init(parent)
         self._model.setNameFilterDisables(True)
-        self._model.setNameFilters([''])
+        self._model.setNameFilters([""])
 
     def update_object(self, idx):
         """ Handles the user changing the contents of the edit control.
         """
         if self.control is not None:
             if self._model.isDir(idx):
-                self.value = six.text_type(self._model.filePath(idx))
+                self.value = str(self._model.filePath(idx))
 
     # Trait change handlers --------------------------------------------------
 
