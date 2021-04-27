@@ -87,42 +87,6 @@ class TestRangeEditorSpinner(BaseTestMixin, unittest.TestCase):
             # if all went well, we should not be here
             self.fail("AttributeError raised")
 
-    @requires_toolkit([ToolkitName.wx])
-    def test_wx_spin_control_editing_does_not_update(self):
-        # Bug: when editing the text part of a spin control box, pressing
-        # the OK button does not update the value of the HasTraits class
-        # on Mac OS X
-
-        # But under wx >= 3.0 this has been resolved
-        import wx
-
-        if wx.VERSION >= (3, 0):
-            return
-
-        num = NumberWithSpinnerEditor()
-        with reraise_exceptions(), create_ui(num) as ui:
-
-            # the following is equivalent to clicking in the text control of
-            # the range editor, enter a number, and clicking ok without
-            # defocusing
-
-            # SpinCtrl object
-            spin = ui.control.FindWindowByName("wxSpinCtrl")
-            spin.SetFocusFromKbd()
-
-            # on Windows, a wxSpinCtrl does not have children, and we cannot do
-            # the more fine-grained testing below
-            if len(spin.GetChildren()) == 0:
-                spin.SetValueString("4")
-            else:
-                # TextCtrl object of the spin control
-                spintxt = spin.FindWindowByName("text")
-                spintxt.SetValue("4")
-
-            # if all went well, the number traits has been updated and its
-            # value is 4
-            self.assertEqual(num.number, 4)
-
     @requires_toolkit([ToolkitName.qt])
     def test_qt_spin_control_editing(self):
         # Behavior: when editing the text part of a spin control box, pressing
