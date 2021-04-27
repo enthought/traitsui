@@ -34,7 +34,6 @@ from traitsui.tests._tools import (
 ModalDialogTester = toolkit_object(
     "util.modal_dialog_tester:ModalDialogTester"
 )
-no_modal_dialog_tester = ModalDialogTester.__name__ == "Unimplemented"
 
 
 # 'Person' class:
@@ -181,7 +180,6 @@ class TestSimpleListEditor(unittest.TestCase):
 
     # regression test for enthought/traitsui#1154
     @requires_toolkit([ToolkitName.qt])
-    @unittest.skipIf(no_modal_dialog_tester, "ModalDialogTester unavailable")
     def test_add_item_fails(self):
 
         class Foo(HasStrictTraits):
