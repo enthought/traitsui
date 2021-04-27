@@ -316,7 +316,8 @@ class SimpleEditor(Editor):
         # if the default new item is invalid, we just don't add it to the list.
         # traits will still give an error message, but we don't want to crash
         except TraitError:
-            pass
+            from traitsui.api import raise_to_debug
+            raise_to_debug()
         self.update_editor()
 
     def add_before(self):
