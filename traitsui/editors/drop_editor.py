@@ -15,10 +15,10 @@
 
 from traits.api import Any, Bool
 
-from .text_editor import TextEditor as EditorFactory
+from .text_editor import TextEditor
 
 
-class DropEditor(EditorFactory):
+class DropEditor(TextEditor):
     """ Editor factory for drop editors.
     """
 

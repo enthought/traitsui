@@ -18,7 +18,7 @@ from traits.api import Dict, Str, Any
 
 from ..view import View
 
-from .text_editor import TextEditor as EditorFactory
+from .text_editor import TextEditor
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
@@ -43,7 +43,7 @@ mapping_trait = Dict(
 )
 
 
-class BooleanEditor(EditorFactory):
+class BooleanEditor(TextEditor):
     """ Editor factory for Boolean editors.
     """
 

@@ -20,10 +20,10 @@ from os.path import join, dirname, exists
 
 from traits.api import Module, Type, Str, observe
 
-from .enum_editor import EnumEditor as EditorFactory
+from .enum_editor import EnumEditor
 
 
-class ImageEnumEditor(EditorFactory):
+class ImageEnumEditor(EnumEditor):
     """ Editor factory for image enumeration editors.
     """
 

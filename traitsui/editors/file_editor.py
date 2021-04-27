@@ -20,7 +20,7 @@ from ..view import View
 
 from ..group import Group
 
-from .text_editor import TextEditor as EditorFactory
+from .text_editor import TextEditor
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
@@ -30,7 +30,7 @@ from .text_editor import TextEditor as EditorFactory
 filter_trait = List(Str)
 
 
-class FileEditor(EditorFactory):
+class FileEditor(TextEditor):
     """ Editor factory for file editors.
     """
 

@@ -11,10 +11,10 @@
 """ Defines the directory editor factory for all traits toolkit backends.
 """
 
-from .file_editor import FileEditor as EditorFactory
+from .file_editor import FileEditor
 
 
-class DirectoryEditor(EditorFactory):
+class DirectoryEditor(FileEditor):
     """ Editor factory for directory editors.
     """
 
