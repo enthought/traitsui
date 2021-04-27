@@ -151,12 +151,6 @@ class Item(ViewSubElement):
     #: any extra space available in the group?
     springy = Bool(False)
 
-    #: Should the item use any extra space along its Group's non-layout
-    #: orientation? For example, in a vertical group, should an item expand
-    #: horizontally to the full width of the group? If left to the default value
-    #: of Undefined, the decision will be left up to the associated item editor.
-    full_size = Bool(Undefined)
-
     #: Should the item's label use emphasized text? If the label is not shown,
     #: this attribute is ignored.
     emphasized = Bool(False)
