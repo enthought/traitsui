@@ -55,11 +55,11 @@ class _ShellEditor(Editor):
         if locals is None:
             object = self.object
             shell.bind("self", object)
-            shell.observe(
+            shell.on_trait_change(
                 self.update_object, "command_executed", dispatch="ui"
             )
             if not isinstance(value, dict):
-                object.observe(self.update_any, dispatch="ui")
+                object.on_trait_change(self.update_any, dispatch="ui")
             else:
                 self._base_locals = locals = {}
                 for name in self._shell.interpreter().locals.keys():
@@ -119,24 +119,24 @@ class _ShellEditor(Editor):
                 for name, value in dic.items():
                     locals[name] = value
 
-    def update_any(self, event):
+    def update_any(self, object, name, old, new):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         locals = self._shell.interpreter().locals
         if self._base_locals is None:
-            locals[event.name] = event.new
+            locals[name] = new
         else:
-            self.value[event.name] = event.new
+            self.value[name] = new
 
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        self._shell.observe(
-            self.update_object, "command_executed", remove=True, dispatch="ui"
+        self._shell.on_trait_change(
+            self.update_object, "command_executed", remove=True
         )
         if self._base_locals is None:
-            self.object.observe(self.update_any, remove=True, dispatch="ui")
+            self.object.on_trait_change(self.update_any, remove=True)
 
         super().dispose()
 
