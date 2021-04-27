@@ -172,10 +172,8 @@ class _ShellEditor(Editor):
         self._shell.execute_command(command, hidden=False)
 
 
-# Editor factory for shell editors.
-
-
-class ToolkitEditorFactory(BasicEditorFactory):
+class ShellEditor(BasicEditorFactory):
+    """ Editor factory for shell editors. """
 
     #: The editor class to be instantiated.
     klass = Property()
@@ -197,5 +195,5 @@ class ToolkitEditorFactory(BasicEditorFactory):
         return toolkit_object("shell_editor:_ShellEditor")
 
 
-# Define the ShellEditor
-ShellEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = ShellEditor

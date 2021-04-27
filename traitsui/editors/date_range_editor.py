@@ -12,7 +12,7 @@ from traits.api import Bool, Constant
 from .date_editor import DateEditor
 
 
-class ToolkitEditorFactory(DateEditor):
+class DateRangeEditor(DateEditor):
     """ Editor for a date range. The target value should be a tuple
     containing two dates (start date, end date)
     """
@@ -26,4 +26,5 @@ class ToolkitEditorFactory(DateEditor):
     allow_no_selection = Bool(False)
 
 
-DateRangeEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = DateRangeEditor

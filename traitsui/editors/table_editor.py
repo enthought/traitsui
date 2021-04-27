@@ -51,7 +51,7 @@ customize_filter = TableFilter(name="Customize...")
 BoolOrCallable = Trait(False, Bool, Callable)
 
 
-class ToolkitEditorFactory(EditorFactory):
+class TableEditor(EditorFactory):
     """ Editor factory for table editors.
     """
 
@@ -416,8 +416,8 @@ class ToolkitEditorFactory(EditorFactory):
             self._filter_editor.values = values
 
 
-# Define the TableEditor class
-TableEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = TableEditor
 
 # -------------------------------------------------------------------------
 #  Base class for toolkit-specific editors

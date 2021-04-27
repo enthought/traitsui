@@ -17,12 +17,8 @@ from traits.api import Instance, Str, Enum, Bool
 from ..editor_factory import EditorFactory
 from ..toolkit_traits import Color
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorFactory):
+class CodeEditor(EditorFactory):
     """ Editor factory for code editors.
     """
 
@@ -101,5 +97,5 @@ class ToolkitEditorFactory(EditorFactory):
     squiggle_color = Str()
 
 
-# Define the Code Editor class.
-CodeEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = CodeEditor

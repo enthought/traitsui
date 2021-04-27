@@ -31,12 +31,8 @@ from traits.api import Range
 
 from ..editor_factory import EditorWithListFactory
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorWithListFactory):
+class CheckListEditor(EditorWithListFactory):
     """ Editor factory for checklists.
     """
 
@@ -48,5 +44,5 @@ class ToolkitEditorFactory(EditorWithListFactory):
     cols = Range(1, 20)
 
 
-# Define the CheckListEditor class
-CheckListEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = CheckListEditor

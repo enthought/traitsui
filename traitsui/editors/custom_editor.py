@@ -17,12 +17,8 @@ from ..basic_editor_factory import BasicEditorFactory
 
 from ..toolkit import toolkit_object
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(BasicEditorFactory):
+class CustomEditor(BasicEditorFactory):
     """ Editor factory for custom editors.
     """
 
@@ -50,5 +46,5 @@ class ToolkitEditorFactory(BasicEditorFactory):
         return toolkit_object("custom_editor:CustomEditor")
 
 
-# Define the CustomEditor class.
-CustomEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = CustomEditor

@@ -15,14 +15,10 @@
 
 from traits.api import Any, Bool
 
-from .text_editor import ToolkitEditorFactory as EditorFactory
-
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
+from .text_editor import TextEditor
 
 
-class ToolkitEditorFactory(EditorFactory):
+class DropEditor(TextEditor):
     """ Editor factory for drop editors.
     """
 
@@ -40,5 +36,5 @@ class ToolkitEditorFactory(EditorFactory):
     readonly = Bool(True)
 
 
-# Define the DropEditor class.
-DropEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = DropEditor

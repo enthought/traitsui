@@ -22,12 +22,8 @@ from ..editor_factory import EditorFactory
 # List of component editor factories used to build a compound editor
 editors_trait = List(EditorFactory)
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorFactory):
+class CompoundEditor(EditorFactory):
     """ Editor factory for compound editors.
     """
 
@@ -42,5 +38,5 @@ class ToolkitEditorFactory(EditorFactory):
     auto_set = Bool(True)
 
 
-# Define the CompoundEditor class
-CompoundEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = CompoundEditor

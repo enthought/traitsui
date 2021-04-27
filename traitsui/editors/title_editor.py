@@ -16,7 +16,7 @@ from ..editor_factory import EditorFactory
 from ..toolkit import toolkit_object
 
 
-class ToolkitEditorFactory(EditorFactory):
+class TitleEditor(EditorFactory):
     """ Editor factory for Title editors.
     """
 
@@ -34,7 +34,5 @@ class ToolkitEditorFactory(EditorFactory):
         return SimpleEditor
 
 
-# -------------------------------------------------------------------------
-#  Create the editor factory object:
-# -------------------------------------------------------------------------
-TitleEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = TitleEditor

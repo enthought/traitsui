@@ -12,7 +12,7 @@ from traits.api import Bool, List, Str
 from .date_editor import DateEditor
 
 
-class ToolkitEditorFactory(DateEditor):
+class StyledDateEditor(DateEditor):
     """ A DateEditor that can show sets of dates in different styles.
     """
 
@@ -37,4 +37,5 @@ class ToolkitEditorFactory(DateEditor):
     relative_dates = List()
 
 
-StyledDateEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = StyledDateEditor
