@@ -10,21 +10,14 @@
 
 from traits.api import Float, Enum, Any, Property
 
-from ..view import View
-
-from ..item import Item
-
-from ..editor_factory import EditorFactory
-
-from ..basic_editor_factory import BasicEditorFactory
-
-from .text_editor import TextEditor
-
-from ..ui_traits import EditorStyle
-
-from ..ui_editor import UIEditor
-
-from ..toolkit import toolkit_object
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.editor_factory import EditorFactory
+from traitsui.editors.text_editor import TextEditor
+from traitsui.item import Item
+from traitsui.toolkit import toolkit_object
+from traitsui.ui_editor import UIEditor
+from traitsui.ui_traits import EditorStyle
+from traitsui.view import View
 
 # -------------------------------------------------------------------------
 #  '_PopupEditor' class:

@@ -13,15 +13,12 @@
 
 from traits.api import Bool, Instance, Int
 
-from .tree_editor import TreeEditor
-from ..view import View
-from ..item import Item
-
-from ..value_tree import RootNode, value_tree_nodes
-
-from ..editor_factory import EditorFactory
-
-from ..editor import Editor
+from traitsui.editor import Editor
+from traitsui.editor_factory import EditorFactory
+from traitsui.editors.tree_editor import TreeEditor
+from traitsui.item import Item
+from traitsui.value_tree import RootNode, value_tree_nodes
+from traitsui.view import View
 
 # -------------------------------------------------------------------------
 #  'SimpleEditor' class:

@@ -26,21 +26,12 @@ from traits.api import (
     PrototypedFrom,
 )
 
-# CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
-# to avoid circular imports, as this EditorFactory will be part of
-# traits.ui.api as well.
-from ..view import View
-
-from ..item import Item
-
-from ..ui_traits import style_trait, AView
-
-from ..editor_factory import EditorFactory
-
-from ..toolkit import toolkit_object
-
-# Currently, this traits is used only for the wx backend.
-from ..helper import DockStyle
+from traitsui.editor_factory import EditorFactory
+from traitsui.helper import DockStyle
+from traitsui.item import Item
+from traitsui.toolkit import toolkit_object
+from traitsui.ui_traits import style_trait, AView
+from traitsui.view import View
 
 # -------------------------------------------------------------------------
 #  Trait definitions:

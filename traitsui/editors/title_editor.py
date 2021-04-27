@@ -12,8 +12,9 @@
 """
 
 from traits.api import Bool
-from ..editor_factory import EditorFactory
-from ..toolkit import toolkit_object
+
+from traitsui.editor_factory import EditorFactory
+from traitsui.toolkit import toolkit_object
 
 
 class TitleEditor(EditorFactory):

@@ -14,13 +14,10 @@ toolkits.
 
 from traits.api import Bool, Enum, List, Str, Type
 
-from ..view import View, AKind
-
-from ..ui_traits import AView
-
-from ..instance_choice import InstanceChoice, InstanceChoiceItem
-
-from ..editor_factory import EditorFactory
+from traitsui.editor_factory import EditorFactory
+from traitsui.instance_choice import InstanceChoice, InstanceChoiceItem
+from traitsui.ui_traits import AView
+from traitsui.view import View, AKind
 
 
 class InstanceEditor(EditorFactory):

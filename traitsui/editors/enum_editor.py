@@ -15,11 +15,10 @@ traits user interface toolkits.
 import os
 import sys
 
-from ..editor_factory import EditorWithListFactory
-
 from traits.api import Any, Range, Enum, Bool
 
-from ..toolkit import toolkit_object
+from traitsui.editor_factory import EditorWithListFactory
+from traitsui.toolkit import toolkit_object
 
 # -------------------------------------------------------------------------
 #  Trait definitions:

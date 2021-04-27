@@ -29,7 +29,7 @@ toolkit backends.
 
 from traits.api import Range
 
-from ..editor_factory import EditorWithListFactory
+from traitsui.editor_factory import EditorWithListFactory
 
 
 class CheckListEditor(EditorWithListFactory):

@@ -13,14 +13,9 @@
 
 from traits.api import Bool, File, Int, List, Str
 
-# CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
-# to avoid circular imports, as this EditorFactory will be part of
-# traits.ui.api as well.
-from ..view import View
-
-from ..group import Group
-
-from .text_editor import TextEditor
+from traitsui.editors.text_editor import TextEditor
+from traitsui.group import Group
+from traitsui.view import View
 
 # -------------------------------------------------------------------------
 #  Trait definitions:

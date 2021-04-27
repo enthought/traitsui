@@ -14,8 +14,8 @@ useful for tools such as debuggers.
 
 from traits.api import Instance, Str, Enum, Bool
 
-from ..editor_factory import EditorFactory
-from ..toolkit_traits import Color
+from traitsui.editor_factory import EditorFactory
+from traitsui.toolkit_traits import Color
 
 
 class CodeEditor(EditorFactory):

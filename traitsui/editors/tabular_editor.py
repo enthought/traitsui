@@ -17,9 +17,8 @@ import warnings
 from pyface.ui_traits import Image
 from traits.api import Str, Bool, Property, List, Enum, Instance
 
-from ..basic_editor_factory import BasicEditorFactory
-
-from ..toolkit import toolkit_object
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.toolkit import toolkit_object
 
 
 class TabularEditor(BasicEditorFactory):

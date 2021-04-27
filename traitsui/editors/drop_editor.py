@@ -15,7 +15,7 @@
 
 from traits.api import Any, Bool
 
-from .text_editor import TextEditor
+from traitsui.editors.text_editor import TextEditor
 
 
 class DropEditor(TextEditor):
