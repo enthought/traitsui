@@ -10,7 +10,7 @@
 
 """Traits UI 'display only' video editor."""
 
-from traits.api import Enum, Property, Str
+from traits.api import Bool, Callable, Enum, Float, Property, Range, Str
 
 from traitsui.basic_editor_factory import BasicEditorFactory
 from traitsui.toolkit import toolkit_object
@@ -40,45 +40,61 @@ class VideoEditor(BasicEditorFactory):
     aspect_ratio = AspectRatio()
 
     #: The name of a trait to synchronise with the audio muted state of
-    #: the video.  The referenced trait should be a Bool.
-    muted = Str(sync_value='from', sync_name='muted')
+    #: the video.
+    muted_name = Str()
+    #: True if the audio is muted, False otherwise
+    muted = Bool(sync_value='from', sync_name='muted_name')
 
     #: The name of a trait to synchronise with the audio volume of
-    #: the video player.  The referenced trait should be a Range(0.0, 100.0).
-    #: Values are on a logarithmic scale.
-    volume = Str(sync_value='from', sync_name='volume')
+    #: the video player.
+    volume_name = Str()
+    #: Audio volume on a logarithmic scale
+    volume = Range(0.0, 100.0, 50.0,
+                   sync_value='from', sync_name='volume_name')
 
     #: The name of a trait to synchronise with the playback rate of
-    #: the video.  The referenced trait should be a Float.
-    playback_rate = Str(sync_value='from', sync_name='playback_rate')
+    #: the video.
+    playback_rate_name = Str()
+    #: The playback speed of the video. Negative values are allowed but may not
+    #: be supported by the underlying implementation.
+    playback_rate = Float(sync_value='from', sync_name='playback_rate_name')
 
     #: The name of a trait to synchronise with the player's state.
-    #: The referenced trait should be a PlayerState.
-    state = Str(sync_value='both', sync_name='state')
+    state_name = Str()
+    #: The state (stopped, playing, paused) of the player
+    state = PlayerState(sync_value='both', sync_name='state_name')
 
     #: The name of a trait to synchronise with the player's position.
-    #: The referenced trait should be a Float representing time in seconds.
-    position = Str(sync_value='both', sync_name='position')
+    position_name = Str()
+    #: The current position, in seconds, in the video.
+    position = Float(sync_value='both', sync_name='position_name')
 
     #: The name of a trait to synchronise with the player's duration.
-    #: The referenced trait should be a Float representing time in seconds.
-    duration = Str(sync_value='to', sync_name='duration')
+    duration_name = Str()
+    #: Duration of the loaded video in seconds
+    duration = Float(sync_value='to', sync_name='duration_name')
 
     #: The name of a trait to synchronise with the player's media status.
-    #: The referenced trait should be a MediaStatus.
-    media_status = Str(sync_value='to', sync_name='media_status')
+    media_status_name = Str()
+    #: The status of the loaded video (see ``MediaStatus``)
+    media_status = MediaStatus(sync_value='to', sync_name='media_status_name')
 
     #: The name of a trait to synchronise with the player's buffer status.
-    #: The referenced trait should be an Range(0, 100).
-    buffer = Str(sync_value='to', sync_name='buffer')
+    buffer_name = Str()
+    #: An integer percentage representing how much of the player's buffer
+    #: is filled.
+    buffer = Range(0, 100, sync_value='to', sync_name='buffer_name')
 
     #: The name of a trait to synchronise with the player's error state.
-    #: The referenced trait should be a Str.
-    video_error = Str(sync_value='to', sync_name='video_error')
+    video_error_name = Str()
+    #: A string describing an error encountered by the player
+    video_error = Str(sync_value='to', sync_name='video_error_name')
 
     #: The name of a trait to synchronise with the player's image function.
-    #: The referenced trait should be a Str.
-    image_func = Str(sync_value='both', sync_name='image_func')
+    image_func_name = Str()
+    #: Callable to apply to video frames. Takes ref to new frame and a size
+    #: tuple. Must return a QImage and a numpy array.
+    image_func = Callable(sync_value='both', sync_name='image_func_name')
 
     #: The name of a trait to synchronise with the player's notify interval.
     #: The referenced trait should be a Float representing time in seconds.

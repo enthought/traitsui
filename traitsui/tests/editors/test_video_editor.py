@@ -46,25 +46,30 @@ class TestVideoEditor(BaseTestMixin, unittest.TestCase):
 
     def test_video_editor_basics(self):
         obj = MovieTheater()
+
+        # Test an editor with trait syncronizations
         view = View(
             Item(
                 'url',
                 editor=VideoEditor(
-                    state='state',
-                    position='position',
-                    duration='duration',
-                    video_error='error',
-                    media_status='status',
-                    buffer='buffer',
-                    muted='muted',
-                    volume='volume',
-                    playback_rate='playback_rate',
-                    image_func='image_func',
+                    state_name='state',
+                    position_name='position',
+                    duration_name='duration',
+                    video_error_name='error',
+                    media_status_name='status',
+                    buffer_name='buffer',
+                    muted_name='muted',
+                    volume_name='volume',
+                    playback_rate_name='playback_rate',
+                    image_func_name='image_func',
                     notify_interval='notify_interval',
                 ),
             ),
         )
+        with create_ui(obj, {'view': view}):
+            pass
 
-        # This should not fail.
+        # And an editor with no synced traits
+        view = View(Item('url', editor=VideoEditor()))
         with create_ui(obj, {'view': view}):
             pass
