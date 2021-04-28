@@ -21,6 +21,7 @@ from traits.api import (
     Bool, Button, Callable, Float, HasTraits, Range, Str, observe
 )
 from traitsui.api import ButtonEditor, HGroup, Item, UItem, View
+from traitsui.context_value import ContextValue
 from traitsui.editors.video_editor import MediaStatus, PlayerState, VideoEditor
 
 
@@ -122,17 +123,17 @@ class VideoEditorDemo(HasTraits):
         UItem(
             'video_url',
             editor=VideoEditor(
-                state='state',
-                position='position',
-                duration='duration',
-                video_error='error',
-                media_status='status',
-                buffer='buffer',
-                muted='muted',
-                volume='volume',
-                playback_rate='playback_rate',
-                image_func='image_func',
-                notify_interval='notify_interval',
+                state=ContextValue('state'),
+                position=ContextValue('position'),
+                duration=ContextValue('duration'),
+                video_error=ContextValue('error'),
+                media_status=ContextValue('status'),
+                buffer=ContextValue('buffer'),
+                muted=ContextValue('muted'),
+                volume=ContextValue('volume'),
+                playback_rate=ContextValue('playback_rate'),
+                image_func=ContextValue('image_func'),
+                notify_interval=0.5,
             ),
         ),
         HGroup(

@@ -10,9 +10,10 @@
 
 """Traits UI 'display only' video editor."""
 
-from traits.api import Enum, Property, Str
+from traits.api import Bool, Callable, Enum, Float, Instance, Property, Range
 
 from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.context_value import CVType, ContextValue
 from traitsui.toolkit import toolkit_object
 
 AspectRatio = Enum('keep', 'ignore', 'expand')
@@ -39,50 +40,58 @@ class VideoEditor(BasicEditorFactory):
     #: doesn't match the aspect ratio of the video stream.
     aspect_ratio = AspectRatio()
 
-    #: The name of a trait to synchronise with the audio muted state of
-    #: the video.  The referenced trait should be a Bool.
-    muted = Str(sync_value='from', sync_name='muted')
+    #: The default audio muted state of the video player or a ContextValue
+    #: reference to a trait that will synchronize to the muted state.
+    muted = CVType(Bool, sync_value='from')
 
-    #: The name of a trait to synchronise with the audio volume of
-    #: the video player.  The referenced trait should be a Range(0.0, 100.0).
+    #: The default audio volume of the video player or a ContextValue
+    #: reference to a trait that will synchronize to the volume.
     #: Values are on a logarithmic scale.
-    volume = Str(sync_value='from', sync_name='volume')
+    volume = CVType(Range(0.0, 100.0), sync_value='from')
 
-    #: The name of a trait to synchronise with the playback rate of
-    #: the video.  The referenced trait should be a Float.
-    playback_rate = Str(sync_value='from', sync_name='playback_rate')
+    #: The default playback rate of the video player or a ContextValue
+    #: reference to a trait that will synchronize to the playback rate.
+    playback_rate = CVType(Float, sync_value='from')
 
-    #: The name of a trait to synchronise with the player's state.
-    #: The referenced trait should be a PlayerState.
-    state = Str(sync_value='both', sync_name='state')
+    #: The initial player state of the video player or a ContextValue
+    #: reference to a trait that will synchronize to the player state.
+    state = CVType(PlayerState, sync_value='both')
 
-    #: The name of a trait to synchronise with the player's position.
-    #: The referenced trait should be a Float representing time in seconds.
-    position = Str(sync_value='both', sync_name='position')
+    #: The initial playback position of the video player or a ContextValue
+    #: reference to a trait that will synchronize to the playback position.
+    #: The value is a floating point time in seconds.
+    position = CVType(Float, sync_value='both')
 
-    #: The name of a trait to synchronise with the player's duration.
-    #: The referenced trait should be a Float representing time in seconds.
-    duration = Str(sync_value='to', sync_name='duration')
+    #: A ContextValue reference to a trait that will synchronize to the
+    #: duration of the video.  The value is a floating point time in
+    #: seconds.
+    duration = Instance(ContextValue, args=(), allow_none=False,
+                        sync_value='to')
 
-    #: The name of a trait to synchronise with the player's media status.
-    #: The referenced trait should be a MediaStatus.
-    media_status = Str(sync_value='to', sync_name='media_status')
+    #: A ContextValue reference to a trait that will synchronize to the
+    #: media status of the player.  The value is a valid MediaStatus string.
+    media_status = Instance(ContextValue, args=(), allow_none=False,
+                            sync_value='to')
 
-    #: The name of a trait to synchronise with the player's buffer status.
-    #: The referenced trait should be an Range(0, 100).
-    buffer = Str(sync_value='to', sync_name='buffer')
+    #: A ContextValue reference to a trait that will synchronize to the
+    #: buffering percentage of the playe.  The value is a number from 0 to
+    #: 100.
+    buffer = Instance(ContextValue, args=(), allow_none=False, sync_value='to')
 
-    #: The name of a trait to synchronise with the player's error state.
-    #: The referenced trait should be a Str.
-    video_error = Str(sync_value='to', sync_name='video_error')
+    #: A ContextValue reference to a trait that will synchronize to the
+    #: media status of the player.  The value is a string.
+    video_error = Instance(ContextValue, args=(), allow_none=False, sync_value='to')
 
-    #: The name of a trait to synchronise with the player's image function.
-    #: The referenced trait should be a Str.
-    image_func = Str(sync_value='both', sync_name='image_func')
+    #: The default image transformation function to apply to each frame in
+    #: the video, ContextValue reference to a trait that will synchronize to
+    #: the image transformation function, or None if no transformation is
+    #: needed.
+    image_func = CVType(Callable, sync_value='both')
 
-    #: The name of a trait to synchronise with the player's notify interval.
-    #: The referenced trait should be a Float representing time in seconds.
-    notify_interval = Str(sync_value='from', sync_name='notify_interval')
+    #: The default notification interval of the video player or a ContextValue
+    #: reference to a trait that will synchronize to the notification
+    #: interval. The value is a floating point time in seconds.
+    notify_interval = CVType(Float, sync_value='from')
 
     def _get_klass(self):
         """ Returns the editor class to be instantiated.
