@@ -12,6 +12,7 @@
 """
 
 from traits.api import Bool, Str, Event, Property
+from traits.observation.api import match
 
 from ..editor import Editor
 
@@ -47,6 +48,7 @@ class _ShellEditor(Editor):
         from pyface.python_shell import PythonShell
 
         locals = None
+        self._base_locals = None
         value = self.value
         if self.factory.share and isinstance(value, dict):
             locals = value
