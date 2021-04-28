@@ -116,7 +116,7 @@ class SimpleEditor(Editor):
                     page.linkClicked.disconnect(self._link_clicked)
             else:
                 # QTextBrowser clean-up
-                self.control.anchorClicked.connect(self._link_clicked)
+                self.control.anchorClicked.disconnect(self._link_clicked)
 
         super().dispose()
 
