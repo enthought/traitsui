@@ -56,6 +56,11 @@ class TestInteractions(unittest.TestCase):
         # then
         self.assertEqual(click_slot.call_count, 0)
 
+    def test_mouse_click_combobox_warns(self):
+        combo = None
+        with self.assertWarns(UserWarning):
+            _interaction_helpers.mouse_click_combobox(combo, 0, 0)
+
     def test_key_sequence(self):
         # test on different Qwidget objects
         textboxes = [QtGui.QLineEdit(), QtGui.QTextEdit()]
