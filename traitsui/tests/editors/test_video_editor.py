@@ -12,7 +12,7 @@ import unittest
 import pkg_resources
 
 from traits.api import Bool, Callable, File, Float, HasTraits, Range, Str
-from traitsui.api import Item, View
+from traitsui.api import ContextValue, Item, View
 from traitsui.editors.video_editor import MediaStatus, PlayerState, VideoEditor
 from traitsui.tests._tools import BaseTestMixin, create_ui, is_qt5
 
@@ -29,7 +29,7 @@ class MovieTheater(HasTraits):
     status = MediaStatus()
     buffer = Range(0, 100)
     muted = Bool(True)
-    volume = Range(0.0, 100.0, value=100.0)
+    volume = Range(0.0, 100.0)
     playback_rate = Float(1.0)
     image_func = Callable()
     notify_interval = Float(0.5)
@@ -52,17 +52,17 @@ class TestVideoEditor(BaseTestMixin, unittest.TestCase):
             Item(
                 'url',
                 editor=VideoEditor(
-                    state_name='state',
-                    position_name='position',
-                    duration_name='duration',
-                    video_error_name='error',
-                    media_status_name='status',
-                    buffer_name='buffer',
-                    muted_name='muted',
-                    volume_name='volume',
-                    playback_rate_name='playback_rate',
-                    image_func_name='image_func',
-                    notify_interval='notify_interval',
+                    state=ContextValue('state'),
+                    position=ContextValue('position'),
+                    duration=ContextValue('duration'),
+                    video_error=ContextValue('error'),
+                    media_status=ContextValue('status'),
+                    buffer=ContextValue('buffer'),
+                    muted=ContextValue('muted'),
+                    volume=ContextValue('volume'),
+                    playback_rate=ContextValue('playback_rate'),
+                    image_func=ContextValue('image_func'),
+                    notify_interval=ContextValue('notify_interval'),
                 ),
             ),
         )

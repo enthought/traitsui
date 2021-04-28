@@ -10,8 +10,9 @@
 
 """Traits UI 'display only' video editor."""
 
-from traits.api import Bool, Callable, Enum, Float, Property, Range, Str
+from traits.api import Bool, Callable, Enum, Float, Property, Range
 
+from traitsui.context_value import CVFloat, CVInt, CVStr, CVType
 from traitsui.basic_editor_factory import BasicEditorFactory
 from traitsui.toolkit import toolkit_object
 
@@ -39,66 +40,42 @@ class VideoEditor(BasicEditorFactory):
     #: doesn't match the aspect ratio of the video stream.
     aspect_ratio = AspectRatio()
 
-    #: The name of a trait to synchronise with the audio muted state of
-    #: the video.
-    muted_name = Str()
     #: True if the audio is muted, False otherwise
-    muted = Bool(sync_value='from', sync_name='muted_name')
+    muted = CVType(Bool(), default=False, sync_value='from')
 
-    #: The name of a trait to synchronise with the audio volume of
-    #: the video player.
-    volume_name = Str()
     #: Audio volume on a logarithmic scale
-    volume = Range(0.0, 100.0, 50.0,
-                   sync_value='from', sync_name='volume_name')
+    volume = CVType(Range(0.0, 100.0), default=75.0, sync_value='from')
 
-    #: The name of a trait to synchronise with the playback rate of
-    #: the video.
-    playback_rate_name = Str()
     #: The playback speed of the video. Negative values are allowed but may not
     #: be supported by the underlying implementation.
-    playback_rate = Float(sync_value='from', sync_name='playback_rate_name')
+    playback_rate = CVType(Float(), default=1.0, sync_value='from')
 
-    #: The name of a trait to synchronise with the player's state.
-    state_name = Str()
     #: The state (stopped, playing, paused) of the player
-    state = PlayerState(sync_value='both', sync_name='state_name')
+    state = CVType(PlayerState(), default='stopped', sync_value='both')
 
-    #: The name of a trait to synchronise with the player's position.
-    position_name = Str()
     #: The current position, in seconds, in the video.
-    position = Float(sync_value='both', sync_name='position_name')
+    position = CVType(Float(), default=0.0, sync_value='both')
 
-    #: The name of a trait to synchronise with the player's duration.
-    duration_name = Str()
     #: Duration of the loaded video in seconds
-    duration = Float(sync_value='to', sync_name='duration_name')
+    duration = CVFloat()
 
-    #: The name of a trait to synchronise with the player's media status.
-    media_status_name = Str()
     #: The status of the loaded video (see ``MediaStatus``)
-    media_status = MediaStatus(sync_value='to', sync_name='media_status_name')
+    media_status = CVType(MediaStatus())
 
-    #: The name of a trait to synchronise with the player's buffer status.
-    buffer_name = Str()
     #: An integer percentage representing how much of the player's buffer
     #: is filled.
-    buffer = Range(0, 100, sync_value='to', sync_name='buffer_name')
+    buffer = CVInt()
 
-    #: The name of a trait to synchronise with the player's error state.
-    video_error_name = Str()
     #: A string describing an error encountered by the player
-    video_error = Str(sync_value='to', sync_name='video_error_name')
+    video_error = CVStr()
 
-    #: The name of a trait to synchronise with the player's image function.
-    image_func_name = Str()
     #: Callable to apply to video frames. Takes ref to new frame and a size
     #: tuple. Must return a QImage and a numpy array.
-    image_func = Callable(sync_value='both', sync_name='image_func_name')
+    image_func = CVType(Callable(), sync_value='from')
 
     #: The name of a trait to synchronise with the player's notify interval.
     #: The referenced trait should be a Float representing time in seconds.
-    notify_interval = Str(sync_value='from', sync_name='notify_interval')
+    notify_interval = CVType(Float(), default=1.0, sync_value='both')
 
     def _get_klass(self):
         """ Returns the editor class to be instantiated.
