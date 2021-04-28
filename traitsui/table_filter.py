@@ -516,8 +516,8 @@ class RuleTableFilter(TableFilter):
     def _get_table_editor(self, names):
         """ Returns a table editor to use for editing the filter.
         """
-        from .api import TableEditor
-        from .editors.api import EnumEditor
+        from traitsui.api import TableEditor
+        from traitsui.editors.api import EnumEditor
 
         return TableEditor(
             columns=generic_table_filter_rule_columns,
