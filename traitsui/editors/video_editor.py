@@ -10,9 +10,9 @@
 
 """Traits UI 'display only' video editor."""
 
-from traits.api import Bool, Callable, Enum, Float, Property, Range
+from traits.api import Bool, Callable, Enum, Float, Instance, Property, Range
 
-from traitsui.context_value import CVFloat, CVInt, CVStr, CVType
+from traitsui.context_value import ContextValue, CVType
 from traitsui.basic_editor_factory import BasicEditorFactory
 from traitsui.toolkit import toolkit_object
 
@@ -57,17 +57,21 @@ class VideoEditor(BasicEditorFactory):
     position = CVType(Float(), default=0.0, sync_value='both')
 
     #: Duration of the loaded video in seconds
-    duration = CVFloat()
+    duration = Instance(ContextValue, args=('duration',),
+                        allow_none=False, sync_value='to')
 
     #: The status of the loaded video (see ``MediaStatus``)
-    media_status = CVType(MediaStatus())
+    media_status = Instance(ContextValue, args=('media_status',),
+                            allow_none=False, sync_value='to')
 
     #: An integer percentage representing how much of the player's buffer
     #: is filled.
-    buffer = CVInt()
+    buffer = Instance(ContextValue, args=('buffer',),
+                      allow_none=False, sync_value='to')
 
     #: A string describing an error encountered by the player
-    video_error = CVStr()
+    video_error = Instance(ContextValue, args=('video_error',),
+                           allow_none=False, sync_value='to')
 
     #: Callable to apply to video frames. Takes ref to new frame and a size
     #: tuple. Must return a QImage and a numpy array.
@@ -75,7 +79,7 @@ class VideoEditor(BasicEditorFactory):
 
     #: The name of a trait to synchronise with the player's notify interval.
     #: The referenced trait should be a Float representing time in seconds.
-    notify_interval = CVType(Float(), default=1.0, sync_value='both')
+    notify_interval = CVType(Float(), default=1.0, sync_value='from')
 
     def _get_klass(self):
         """ Returns the editor class to be instantiated.

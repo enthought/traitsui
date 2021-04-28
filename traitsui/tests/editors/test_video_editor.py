@@ -32,7 +32,6 @@ class MovieTheater(HasTraits):
     volume = Range(0.0, 100.0)
     playback_rate = Float(1.0)
     image_func = Callable()
-    notify_interval = Float(0.5)
 
 
 @unittest.skipIf(not is_qt5(), 'Requires Qt5')
@@ -62,7 +61,7 @@ class TestVideoEditor(BaseTestMixin, unittest.TestCase):
                     volume=ContextValue('volume'),
                     playback_rate=ContextValue('playback_rate'),
                     image_func=ContextValue('image_func'),
-                    notify_interval=ContextValue('notify_interval'),
+                    notify_interval=0.5,
                 ),
             ),
         )
