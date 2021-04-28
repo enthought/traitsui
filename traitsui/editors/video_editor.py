@@ -41,45 +41,45 @@ class VideoEditor(BasicEditorFactory):
     aspect_ratio = AspectRatio()
 
     #: True if the audio is muted, False otherwise
-    muted = CVType(Bool(), default=False, sync_value='from')
+    muted = CVType(Bool, default=False, sync_value='from')
 
     #: Audio volume on a logarithmic scale
     volume = CVType(Range(0.0, 100.0), default=75.0, sync_value='from')
 
     #: The playback speed of the video. Negative values are allowed but may not
     #: be supported by the underlying implementation.
-    playback_rate = CVType(Float(), default=1.0, sync_value='from')
+    playback_rate = CVType(Float, default=1.0, sync_value='from')
 
     #: The state (stopped, playing, paused) of the player
-    state = CVType(PlayerState(), default='stopped', sync_value='both')
+    state = CVType(PlayerState, default='stopped', sync_value='both')
 
     #: The current position, in seconds, in the video.
-    position = CVType(Float(), default=0.0, sync_value='both')
+    position = CVType(Float, default=0.0, sync_value='both')
 
     #: Duration of the loaded video in seconds
-    duration = Instance(ContextValue, args=('duration',),
+    duration = Instance(ContextValue, args=('',),
                         allow_none=False, sync_value='to')
 
     #: The status of the loaded video (see ``MediaStatus``)
-    media_status = Instance(ContextValue, args=('media_status',),
+    media_status = Instance(ContextValue, args=('',),
                             allow_none=False, sync_value='to')
 
     #: An integer percentage representing how much of the player's buffer
     #: is filled.
-    buffer = Instance(ContextValue, args=('buffer',),
+    buffer = Instance(ContextValue, args=('',),
                       allow_none=False, sync_value='to')
 
     #: A string describing an error encountered by the player
-    video_error = Instance(ContextValue, args=('video_error',),
+    video_error = Instance(ContextValue, args=('',),
                            allow_none=False, sync_value='to')
 
     #: Callable to apply to video frames. Takes ref to new frame and a size
     #: tuple. Must return a QImage and a numpy array.
-    image_func = CVType(Callable(), sync_value='from')
+    image_func = CVType(Callable, sync_value='from')
 
     #: The name of a trait to synchronise with the player's notify interval.
     #: The referenced trait should be a Float representing time in seconds.
-    notify_interval = CVType(Float(), default=1.0, sync_value='from')
+    notify_interval = CVType(Float, default=1.0, sync_value='from')
 
     def _get_klass(self):
         """ Returns the editor class to be instantiated.
