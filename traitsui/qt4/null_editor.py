@@ -14,11 +14,6 @@
 
 from pyface.qt import QtGui
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.null_editor file.
-from traitsui.editors.null_editor import NullEditor as ToolkitEditorFactory
-
 from .editor import Editor
 
 

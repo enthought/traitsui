@@ -77,8 +77,7 @@ class MyViewController(Controller):
         if (not self.allow_empty_string) and (value.strip() == ''):
             raise TraitError('Empty string not allowed.')
 
-        return super(MyViewController, self).setattr(info, object, traitname,
-                                                     value)
+        return super().setattr(info, object, traitname, value)
 
     #-- Event handlers -------------------------------------------------------
 

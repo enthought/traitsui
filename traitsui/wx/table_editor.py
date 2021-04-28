@@ -473,7 +473,7 @@ class TableEditor(Editor, BaseTableEditor):
         # Break any links needed to allow garbage collection:
         self.grid = self.model = self.toolbar = None
 
-        super(TableEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -1506,7 +1506,7 @@ class TableEditorToolbar(HasPrivateTraits):
     control = Any()
 
     def __init__(self, parent=None, **traits):
-        super(TableEditorToolbar, self).__init__(**traits)
+        super().__init__(**traits)
         editor = self.editor
         factory = editor.factory
         actions = []

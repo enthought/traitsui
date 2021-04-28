@@ -16,10 +16,7 @@ import wx
 
 from traits.api import TraitError
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.text_editor file.
-from traitsui.editors.text_editor import ToolkitEditorFactory, evaluate_trait
+from traitsui.editors.text_editor import evaluate_trait
 
 from .editor import Editor
 
@@ -178,7 +175,7 @@ class ReadonlyEditor(BaseReadonlyEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(ReadonlyEditor, self).init(parent)
+        super().init(parent)
 
         if self.factory.view is not None:
             control = self.control
@@ -215,7 +212,7 @@ class ReadonlyEditor(BaseReadonlyEditor):
             control.Unbind(wx.EVT_LEFT_DOWN)
             control.Unbind(wx.EVT_LEFT_UP)
 
-        super(ReadonlyEditor, self).dispose()
+        super().dispose()
 
     # -- Private Methods ------------------------------------------------------
 

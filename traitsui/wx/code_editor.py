@@ -16,14 +16,9 @@
 import wx
 import wx.stc as stc
 
-from traits.api import Str, List, Int, Event, Bool, TraitError, on_trait_change
+from traits.api import Str, List, Int, Event, Bool, TraitError, observe
 
 from traits.trait_base import SequenceTypes
-
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.code_editor file.
-from traitsui.editors.code_editor import ToolkitEditorFactory
 
 from pyface.api import PythonEditor
 
@@ -317,8 +312,8 @@ class SourceEditor(Editor):
         self.control.IndicatorSetForeground(2, self.squiggle_color)
         self.control.Refresh()
 
-    @on_trait_change("dim_lines, squiggle_lines")
-    def _style_document(self):
+    @observe("dim_lines, squiggle_lines")
+    def _style_document(self, event=None):
         """ Force the STC to fire a STC_STYLENEEDED event for the entire
             document.
         """
@@ -355,17 +350,17 @@ class SourceEditor(Editor):
 
             if line + 1 in self.dim_lines:
                 # Set styling mask to only style text bits, not indicator bits
-                self.control.StartStyling(position, 0x1F)
+                self.control.StartStyling(position)
                 self.control.SetStyling(style_length, self._dim_style_number)
             elif self.lexer == stc.STC_LEX_NULL:
-                self.control.StartStyling(position, 0x1F)
+                self.control.StartStyling(position)
                 self.control.SetStyling(style_length, stc.STC_STYLE_DEFAULT)
 
             if line + 1 in self.squiggle_lines:
-                self.control.StartStyling(position, stc.STC_INDIC2_MASK)
+                self.control.StartStyling(position)
                 self.control.SetStyling(style_length, stc.STC_INDIC2_MASK)
             else:
-                self.control.StartStyling(position, stc.STC_INDIC2_MASK)
+                self.control.StartStyling(position)
                 self.control.SetStyling(style_length, stc.STC_STYLE_DEFAULT)
 
     def error(self, excp):

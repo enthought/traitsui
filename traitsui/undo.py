@@ -15,6 +15,7 @@
 import collections.abc
 
 from traits.api import (
+    Bool,
     Event,
     HasPrivateTraits,
     HasStrictTraits,
@@ -25,6 +26,12 @@ from traits.api import (
     Property,
     Str,
     Trait,
+    cached_property,
+    observe,
+)
+from pyface.undo.api import (
+    AbstractCommand, CommandStack, ICommand, ICommandStack, IUndoManager,
+    UndoManager
 )
 
 
@@ -32,9 +39,24 @@ NumericTypes = (int, float, complex)
 SimpleTypes = (str, bytes) + NumericTypes
 
 
-class AbstractUndoItem(HasPrivateTraits):
+class AbstractUndoItem(AbstractCommand):
     """ Abstract base class for undo items.
+
+    This class is deprecated and will be removed in TraitsUI 8.  Any custom
+    subclasses of this class should either subclass from AbstractCommand, or
+    provide the ICommand interface.
     """
+
+    #: A simple default name.
+    name = "Edit"
+
+    def do(self):
+        """ Does nothing.
+        
+        All undo items log events after they have happened, so by default
+        they do not do anything when added to the history.
+        """
+        pass
 
     def undo(self):
         """ Undoes the change.
@@ -46,8 +68,21 @@ class AbstractUndoItem(HasPrivateTraits):
         """
         raise NotImplementedError
 
+    def merge(self, other):
+        """ Merges two undo items if possible.
+        """
+        import warnings
+        warnings.warn(
+            "'merge_undo' is deprecated and will be removed in TraitsUI 8, "
+            "use 'merge' instead",
+            DeprecationWarning,
+        )
+        return self.merge_undo(other)
+
     def merge_undo(self, undo_item):
         """ Merges two undo items if possible.
+
+        This method is deprecated.
         """
         return False
 
@@ -108,7 +143,7 @@ class UndoItem(AbstractUndoItem):
 
             raise_to_debug()
 
-    def merge_undo(self, undo_item):
+    def merge(self, undo_item):
         """ Merges two undo items if possible.
         """
         # Undo items are potentially mergeable only if they are of the same
@@ -123,7 +158,7 @@ class UndoItem(AbstractUndoItem):
             t1 = type(v1)
             if isinstance(v2, t1):
 
-                if isinstance(t1, str):
+                if isinstance(v1, str):
                     # Merge two undo items if they have new values which are
                     # strings which only differ by one character (corresponding
                     # to a single character insertion, deletion or replacement
@@ -175,6 +210,13 @@ class UndoItem(AbstractUndoItem):
                     self.new_value = v2
                     return True
         return False
+
+    def merge_undo(self, undo_item):
+        """ Merges two undo items if possible.
+
+        This is deprecated.
+        """
+        return self.merge(undo_item)
 
     def __repr__(self):
         """ Returns a "pretty print" form of the object.
@@ -236,7 +278,7 @@ class ListUndoItem(AbstractUndoItem):
 
             raise_to_debug()
 
-    def merge_undo(self, undo_item):
+    def merge(self, undo_item):
         """ Merges two undo items if possible.
         """
         # Discard undo items that are identical to us. This is to eliminate
@@ -264,6 +306,13 @@ class ListUndoItem(AbstractUndoItem):
                         return True
         return False
 
+    def merge_undo(self, undo_item):
+        """ Merges two undo items if possible.
+
+        This is deprecated.
+        """
+        return self.merge(undo_item)
+
     def __repr__(self):
         """ Returns a 'pretty print' form of the object.
         """
@@ -276,6 +325,40 @@ class ListUndoItem(AbstractUndoItem):
         )
 
 
+class _MultiUndoItem(AbstractCommand):
+    """ The _MultiUndoItem class is an internal command that unifies commands. """
+
+    name = "Edit"
+
+    #: The commands that make up this undo item.
+    commands = List(Instance(ICommand))
+
+    def push(self, command):
+        """ Append a command, merging if possible. """
+        if len(self.commands) > 0:
+            merged = self.commands[-1].merge(command)
+            if merged:
+                return
+
+        self.commands.append(command)
+
+    def merge(self, other):
+        """ Try and merge a command. """
+        return False
+
+    def redo(self):
+        """ Redo the sub-commands. """
+
+        for cmd in self.commands:
+            cmd.redo()
+
+    def undo(self):
+        """ Undo the sub-commands. """
+
+        for cmd in self.commands:
+            cmd.undo()
+
+
 class UndoHistory(HasStrictTraits):
     """ Manages a list of undoable changes.
     """
@@ -284,41 +367,45 @@ class UndoHistory(HasStrictTraits):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
-    #: List of accumulated undo changes
+    #: The undo manager for the history.
+    manager = Instance(IUndoManager, allow_none=False)
+
+    #: The command stack for the history.
+    stack = Instance(ICommandStack, allow_none=False)
+
+    #: List of accumulated undo changes.  Each item is a list of
+    #: AbstractUndoItems that should be done or undone as a group.
+    #: This trait should be considered private.
+    #: This trait is no longer used.
     history = List()
+
     #: The current position in the list
-    now = Int()
+    now = Property(Int, observe='stack._index')
+
     #: Fired when state changes to undoable
     undoable = Event(False)
+
     #: Fired when state changes to redoable
     redoable = Event(False)
+
     #: Can an action be undone?
-    can_undo = Property()
+    can_undo = Property(Bool, observe='_can_undo')
+
     #: Can an action be redone?
-    can_redo = Property()
+    can_redo = Property(Bool, observe='_can_redo')
+
+    _can_undo = Bool()
+
+    _can_redo = Bool()
 
     def add(self, undo_item, extend=False):
         """ Adds an UndoItem to the history.
         """
         if extend:
             self.extend(undo_item)
-            return
-
-        # Try to merge the new undo item with the previous item if allowed:
-        now = self.now
-        if now > 0:
-            previous = self.history[now - 1]
-            if (len(previous) == 1) and previous[0].merge_undo(undo_item):
-                self.history[now:] = []
-                return
-
-        old_len = len(self.history)
-        self.history[now:] = [[undo_item]]
-        self.now += 1
-        if self.now == 1:
-            self.undoable = True
-        if self.now <= old_len:
-            self.redoable = False
+        else:
+            self.manager.active_stack = self.stack
+            self.stack.push(undo_item)
 
     def extend(self, undo_item):
         """ Extends the undo history.
@@ -326,67 +413,78 @@ class UndoHistory(HasStrictTraits):
         If possible the method merges the new UndoItem with the last item in
         the history; otherwise, it appends the new item.
         """
-        if self.now > 0:
-            undo_list = self.history[self.now - 1]
-            if not undo_list[-1].merge_undo(undo_item):
-                undo_list.append(undo_item)
+        self.manager.active_stack = self.stack
+        # get the last command in the stack
+        # XXX this is using CommandStack internals that it should not
+        # XXX this should be re-architected to use the macro interface
+        # XXX it possibly should be removed altogether
+        entries = self.stack._stack
+        if len(entries) > 0:
+            command = entries[-1].command
+            if not isinstance(command, _MultiUndoItem):
+                command = _MultiUndoItem(commands=[command])
+                entries[-1].command = command
+        else:
+            command = _MultiUndoItem(commands=[])
+        command.push(undo_item)
 
     def undo(self):
         """ Undoes an operation.
         """
         if self.can_undo:
-            self.now -= 1
-            items = self.history[self.now]
-            for i in range(len(items) - 1, -1, -1):
-                items[i].undo()
-            if self.now == 0:
-                self.undoable = False
-            if self.now == (len(self.history) - 1):
-                self.redoable = True
+            self.manager.undo()
 
     def redo(self):
         """ Redoes an operation.
         """
         if self.can_redo:
-            self.now += 1
-            for item in self.history[self.now - 1]:
-                item.redo()
-            if self.now == 1:
-                self.undoable = True
-            if self.now == len(self.history):
-                self.redoable = False
+            self.manager.redo()
 
     def revert(self):
         """ Reverts all changes made so far and clears the history.
         """
-        history = self.history[: self.now]
+        # undo everything
+        self.manager.active_stack = self.stack
+        self.stack.undo(sequence_nr=-1)
         self.clear()
-        for i in range(len(history) - 1, -1, -1):
-            items = history[i]
-            for j in range(len(items) - 1, -1, -1):
-                items[j].undo()
 
     def clear(self):
         """ Clears the undo history.
         """
-        old_len = len(self.history)
-        old_now = self.now
-        self.now = 0
-        del self.history[:]
-        if old_now > 0:
-            self.undoable = False
-        if old_now < old_len:
-            self.redoable = False
+        self.manager.active_stack = self.stack
+        self.stack.clear()
+
+    @observe('manager.stack_updated')
+    def _observe_stack_updated(self, event):
+        """ Update undo/redo state. """
+        self._can_undo = (self.manager and self.manager.undo_name != "")
+        self._can_redo = (self.manager and self.manager.redo_name != "")
+
+    @observe('_can_undo')
+    def _observe_can_undo(self, event):
+        self.undoable = event.new
+
+    @observe('_can_redo')
+    def _observe_can_redo(self, event):
+        self.redoable = event.new
+
+    @cached_property
+    def _get_now(self):
+        return self.stack._index + 1
 
     def _get_can_undo(self):
-        """ Are there any undoable operations?
-        """
-        return self.now > 0
-
+        return self._can_undo
+        
     def _get_can_redo(self):
-        """ Are there any redoable operations?
-        """
-        return self.now < len(self.history)
+        return self._can_redo
+
+    def _manager_default(self):
+        manager = UndoManager()
+        return manager
+
+    def _stack_default(self):
+        stack = CommandStack(undo_manager=self.manager)
+        return stack
 
 
 class UndoHistoryUndoItem(AbstractUndoItem):

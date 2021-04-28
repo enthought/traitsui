@@ -35,14 +35,9 @@ from traits.api import (
     Event,
     Bool,
     TraitError,
-    on_trait_change,
+    observe,
 )
 from traits.trait_base import SequenceTypes
-
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.code_editor file.
-from traitsui.editors.code_editor import ToolkitEditorFactory
 
 from pyface.key_pressed_event import KeyPressedEvent
 
@@ -191,7 +186,7 @@ class SourceEditor(Editor):
         if not self.factory.auto_set:
             self._widget.code.focus_lost.disconnect(self.update_object)
 
-        super(SourceEditor, self).dispose()
+        super().dispose()
 
     def update_object(self):
         """ Handles the user entering input data in the edit control.
@@ -320,8 +315,8 @@ class SourceEditor(Editor):
     def _squiggle_color_changed(self):
         pass
 
-    @on_trait_change("dim_lines, squiggle_lines")
-    def _style_document(self):
+    @observe("dim_lines, squiggle_lines")
+    def _style_document(self, event):
         self._widget.set_warn_lines(self.squiggle_lines)
 
 

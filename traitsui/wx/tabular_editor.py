@@ -145,7 +145,7 @@ class wxListCtrl(wx.ListCtrl, TextEditMixin):
         # manage the reference count for the returned object, and it seems to be
         # gc'ed before they finish using it. So we store an object reference to
         # it to prevent it from going away too soon...
-        self._attr = attr = wx.ListItemAttr()
+        self._attr = attr = wx.ItemAttr()
         editor = self._editor
         object, name = editor.object, editor.name
 
@@ -427,7 +427,7 @@ class TabularEditor(Editor):
         self.on_trait_change(self._refresh, "adapter.+update", remove=True)
         self.on_trait_change(self._rebuild_all, "adapter.columns", remove=True)
 
-        super(TabularEditor, self).dispose()
+        super().dispose()
 
     def _update_changed(self, event):
         """ Handles the 'update' event being fired.
@@ -470,9 +470,7 @@ class TabularEditor(Editor):
         """
         self._update_visible = True
 
-        super(TabularEditor, self)._update_editor(
-            object, name, old_value, new_value
-        )
+        super()._update_editor(object, name, old_value, new_value)
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

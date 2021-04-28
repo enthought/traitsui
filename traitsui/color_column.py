@@ -28,7 +28,7 @@ class ColorColumn(ObjectColumn):
         """
         color_values = getattr(object, self.name + "_", None)
         if color_values is None:
-            tk_color = super(ColorColumn, self).get_cell_color(object)
+            tk_color = super().get_cell_color(object)
         elif isinstance(color_values, tuple):
             tk_color = self._as_int_rgb_tuple(color_values)
         else:

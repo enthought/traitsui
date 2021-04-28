@@ -12,14 +12,13 @@
     of objects, etc).
 """
 
-
+import warnings
 
 from pyface.ui_traits import Image
 from traits.api import Str, Bool, Property, List, Enum, Instance
 
-from ..basic_editor_factory import BasicEditorFactory
-
-from ..toolkit import toolkit_object
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.toolkit import toolkit_object
 
 
 class TabularEditor(BasicEditorFactory):
@@ -46,25 +45,26 @@ class TabularEditor(BasicEditorFactory):
     refresh = Str()
 
     #: Should the table update automatically when the table item's contents
-    #: change? Note that in order for this feature to work correctly, the editor
-    #: trait should be a list of objects derived from HasTraits. Also,
-    #: performance can be affected when very long lists are used, since enabling
-    #: this feature adds and removed Traits listeners to each item in the list.
+    #: change? Note that in order for this feature to work correctly, the
+    #: editor trait should be a list of objects derived from HasTraits. Also,
+    #: performance can be affected when very long lists are used, since
+    #: enabling this feature adds and removed Traits listeners to each item in
+    #: the list.
     auto_update = Bool(False)
 
     #: The optional extended name of the trait to synchronize the selection
     #: values with:
     selected = Str()
 
-    #: The optional extended name of the trait to synchronize the selection rows
-    #: with:
+    #: The optional extended name of the trait to synchronize the selection
+    #: rows with:
     selected_row = Str()
 
     #: Whether or not to allow selection.
     selectable = Bool(True)
 
-    #: The optional extended name of the trait to synchronize the activated value
-    #: with:
+    #: The optional extended name of the trait to synchronize the activated
+    #: value with:
     activated = Str()
 
     #: The optional extended name of the trait to synchronize the activated
@@ -103,8 +103,12 @@ class TabularEditor(BasicEditorFactory):
     #: trigger a scroll-to command. The data is an integer giving the column.
     scroll_to_column = Str()
 
-    #: Controls behavior of scroll to row
-    scroll_to_row_hint = Enum("center", "top", "bottom", "visible")
+    #: Deprecated: Controls behavior of scroll to row and scroll to column
+    scroll_to_row_hint = Property(Str, observe="scroll_to_position_hint")
+
+    #: (replacement of scroll_to_row_hint, but more clearly named)
+    #: Controls behavior of scroll to row and scroll to column
+    scroll_to_position_hint = Enum("visible", "center", "top", "bottom")
 
     #: Can the user edit the values?
     editable = Bool(True)
@@ -121,8 +125,8 @@ class TabularEditor(BasicEditorFactory):
     #: Should vertical lines be drawn between items?
     vertical_lines = Bool(True)
 
-    #: Should the columns automatically resize? Don't allow this when the amount
-    #: of data is large.
+    #: Should the columns automatically resize? Don't allow this when the
+    #: amount of data is large.
     auto_resize = Bool(False)
 
     #: Should the rows automatically resize (Qt4 only)? Don't allow
@@ -152,3 +156,19 @@ class TabularEditor(BasicEditorFactory):
         """ Returns the toolkit-specific editor class to be instantiated.
         """
         return toolkit_object("tabular_editor:TabularEditor")
+
+    def _get_scroll_to_row_hint(self):
+        warnings.warn(
+            "Use of scroll_to_row_hint trait is deprecated. "
+            "Use scroll_to_position_hint instead.",
+            DeprecationWarning,
+        )
+        return self.scroll_to_position_hint
+
+    def _set_scroll_to_row_hint(self, hint):
+        warnings.warn(
+            "Use of scroll_to_row_hint trait is deprecated. "
+            "Use scroll_to_position_hint instead.",
+            DeprecationWarning,
+        )
+        self.scroll_to_position_hint = hint

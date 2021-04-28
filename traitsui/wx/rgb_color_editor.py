@@ -67,4 +67,4 @@ class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
                 int(color[1] * 255.0),
                 int(color[2] * 255.0),
             )
-        return super(ToolkitEditorFactory, self).str_color(color)
+        return super().str_color(color)

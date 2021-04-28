@@ -11,11 +11,8 @@
 """ Defines the font editor factory for all traits user interface toolkits.
 """
 
-
-
-from ..editor_factory import EditorFactory
-
-from ..toolkit import toolkit_object
+from traitsui.editor_factory import EditorFactory
+from traitsui.toolkit import toolkit_object
 
 # -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -50,5 +47,5 @@ def FontEditor(*args, **traits):
         return toolkit_object("font_editor:ToolkitEditorFactory", True)(
             *args, **traits
         )
-    except Exception as e:
+    except Exception:
         return ToolkitEditorFactory(*args, **traits)

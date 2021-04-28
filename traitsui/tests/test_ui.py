@@ -60,7 +60,7 @@ class MaybeInvalidTrait(HasTraits):
 
     name = Str()
 
-    name_is_invalid = Property(depends_on="name")
+    name_is_invalid = Property(observe="name")
 
     traits_view = View(
         Item("name", invalid="name_is_invalid")
@@ -266,7 +266,7 @@ if is_qt():
     class CustomWidget(QtGui.QWidget):
 
         def __init__(self, editor, parent=None):
-            super(CustomWidget, self).__init__()
+            super().__init__()
             self._some_editor = editor
 
         def sizeHint(self):

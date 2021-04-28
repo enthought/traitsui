@@ -29,7 +29,7 @@ class CheckboxColumn(ObjectColumn):
     def __init__(self, **traits):
         """ Initializes the object.
         """
-        super(CheckboxColumn, self).__init__(**traits)
+        super().__init__(**traits)
 
         # force the renderer to be a checkbox renderer
         self.renderer = CheckboxRenderer()

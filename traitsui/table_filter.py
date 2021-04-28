@@ -28,7 +28,6 @@ from traits.api import (
 )
 
 from .editor_factory import EditorFactory
-from .editors.api import EnumEditor
 from .group import Group
 from .include import Include
 from .item import Item
@@ -254,7 +253,7 @@ class GenericTableFilterRule(HasPrivateTraits):
     ignored_traits = ["filter", "name_editor", "value_editor"]
 
     def __init__(self, **traits):
-        super(GenericTableFilterRule, self).__init__(**traits)
+        super().__init__(**traits)
         if self.name == "":
             names = list(self.filter._name_to_value.keys())
             if len(names) > 0:
@@ -284,7 +283,7 @@ class GenericTableFilterRule(HasPrivateTraits):
         """ Clones a new object from this one, optionally copying only a
         specified set of traits."""
         return (
-            super(GenericTableFilterRule, self)
+            super()
             .clone_traits(traits, memo, copy, **metadata)
             .trait_set(enabled=self.enabled, name=self.name)
         )
@@ -477,7 +476,7 @@ class RuleTableFilter(TableFilter):
         if len(ors) > 1:
             return " or ".join(["(%s)" % t for t in ors])
 
-        return super(RuleTableFilter, self).description()
+        return super().description()
 
     def edit_view(self, object):
         """ Return a view to use for editing the filter.
@@ -517,7 +516,8 @@ class RuleTableFilter(TableFilter):
     def _get_table_editor(self, names):
         """ Returns a table editor to use for editing the filter.
         """
-        from .api import TableEditor
+        from traitsui.api import TableEditor
+        from traitsui.editors.api import EnumEditor
 
         return TableEditor(
             columns=generic_table_filter_rule_columns,
@@ -603,6 +603,7 @@ class MenuTableFilter(RuleTableFilter):
         """ Returns a table editor to use for editing the filter.
         """
         from .api import TableEditor
+        from .editors.api import EnumEditor
 
         names = self._object.editable_traits()
         name_editor = EnumEditor(values=names)

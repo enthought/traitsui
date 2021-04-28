@@ -19,29 +19,9 @@ import wx
 
 from traits.api import TraitError, Any, Bool, Event, Str
 
-from traitsui.editor_factory import EditorFactory as BaseEditorFactory
-
 from .editor import Editor
 
 from .constants import WindowColor
-
-# -------------------------------------------------------------------------
-#  'EditorFactory' class
-#   Deprecated alias for traitsui.editor_factory.EditorFactory
-# -------------------------------------------------------------------------
-
-
-class EditorFactory(BaseEditorFactory):
-    """ Deprecated alias for traitsui.editor_factory.EditorFactory.
-    """
-
-    def __init__(self, *args, **kwds):
-        super(EditorFactory, self).__init__(*args, **kwds)
-        warnings.warn(
-            "DEPRECATED: Use traitsui.editor_factory."
-            ".EditorFactory instead.",
-            DeprecationWarning,
-        )
 
 
 class SimpleEditor(Editor):

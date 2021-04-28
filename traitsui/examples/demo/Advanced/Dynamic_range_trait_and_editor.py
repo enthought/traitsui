@@ -50,7 +50,7 @@ Notes:
 
 - As with most traits code and examples, observe how much of the code is
   'declarative' versus 'imperative'. Note also the use of properties and
-  'depends_on' metadata, as well as 'cached_property' and 'on_trait_change'
+  'observe' metadata, as well as 'cached_property' and 'on_trait_change'
   method decorators.
 
 - Try dragging the guest tabs around so that you can see multiple guests
@@ -70,7 +70,7 @@ from random \
 
 from traits.api \
     import HasPrivateTraits, Str, Enum, Range, List, Button, Instance, \
-    Property, cached_property, on_trait_change
+    Property, cached_property, observe
 
 from traitsui.api \
     import View, VGroup, HGroup, Item, ListEditor, spring
@@ -87,7 +87,7 @@ class Hotel(HasPrivateTraits):
     fuel_cost = Range(2.00, 10.00, 4.00)
 
     # The current minimum temparature allowed by the hotel:
-    min_temperature = Property(depends_on='season, fuel_cost')
+    min_temperature = Property(observe='season, fuel_cost')
 
     # The guests currently staying at the hotel:
     guests = List  # ( Instance( 'Guest' ) )
@@ -135,13 +135,19 @@ class Hotel(HasPrivateTraits):
                 min(int(60.00 / self.fuel_cost), 15))
 
     # Event handlers:
-    @on_trait_change('guests[]')
-    def _guests_modified(self, removed, added):
-        for guest in added:
-            guest.hotel = self
+    @observe('guests.items')
+    def _guests_modified(self, event):
+        # The entire guests list changed
+        if isinstance(event.object, Hotel):
+            for guest in event.new:
+                guest.hotel = self
+        # the contents of the guests list changed
+        else:
+            for guest in event.added:
+                guest.hotel = self
 
     def _add_guest_changed(self):
-        self.guests.append(Guest())
+        self.guests.append(Guest(hotel=self))
 
 #-- The Guest class ------------------------------------------------------
 
@@ -158,7 +164,7 @@ class Guest(HasPrivateTraits):
     plan = Enum('Flop house', 'Cheap', 'Cozy', 'Deluxe')
 
     # The maximum temperature allowed by the guest's plan:
-    max_temperature = Property(depends_on='plan')
+    max_temperature = Property(observe='plan')
 
     # The current room temperature as set by the guest:
     temperature = Range('hotel.min_temperature', 'max_temperature')

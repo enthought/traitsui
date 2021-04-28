@@ -11,21 +11,15 @@
 """ Defines the directory editor factory for all traits toolkit backends.
 """
 
+from traitsui.editors.file_editor import FileEditor
 
 
-from .file_editor import ToolkitEditorFactory as EditorFactory
-
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
-
-
-class ToolkitEditorFactory(EditorFactory):
+class DirectoryEditor(FileEditor):
     """ Editor factory for directory editors.
     """
 
     pass
 
 
-# Define the DirectoryEditor class
-DirectoryEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = DirectoryEditor

@@ -11,14 +11,12 @@
 """ Editor factory for scrubber-based integer or float value editors.
 """
 
-
-
 from pyface.ui_traits import Alignment
 from traits.api import Float, Property
 
-from ..basic_editor_factory import BasicEditorFactory
-from ..toolkit import toolkit_object
-from ..toolkit_traits import Color
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.toolkit import toolkit_object
+from traitsui.toolkit_traits import Color
 
 # -------------------------------------------------------------------------
 #  Create the editor factory object:

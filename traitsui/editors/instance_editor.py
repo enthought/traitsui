@@ -12,24 +12,15 @@
 toolkits.
 """
 
+from traits.api import Bool, Enum, List, Str, Type
+
+from traitsui.editor_factory import EditorFactory
+from traitsui.instance_choice import InstanceChoice, InstanceChoiceItem
+from traitsui.ui_traits import AView
+from traitsui.view import View, AKind
 
 
-from traits.api import Str, List, Enum, Str, Type, Bool
-
-from ..view import View, AKind
-
-from ..ui_traits import AView
-
-from ..instance_choice import InstanceChoice, InstanceChoiceItem
-
-from ..editor_factory import EditorFactory
-
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
-
-
-class ToolkitEditorFactory(EditorFactory):
+class InstanceEditor(EditorFactory):
     """ Editor factory for instance editors.
     """
 
@@ -40,8 +31,8 @@ class ToolkitEditorFactory(EditorFactory):
     #: List of items describing the types of selectable or editable instances
     values = List(InstanceChoiceItem)
 
-    #: Extended name of the context object trait containing the list of types of
-    #: selectable or editable instances
+    #: Extended name of the context object trait containing the list of types
+    #: of selectable or editable instances
     name = Str()
 
     #: Is the current value of the object trait editable (vs. merely
@@ -54,10 +45,10 @@ class ToolkitEditorFactory(EditorFactory):
     #: of possible object values is selectable):
     selectable = Bool(False)
 
-    #: Should the editor support drag and drop of objects to set the trait value
-    #: (a value of True forces the editor to allow drag and drop, while a value
-    #: of False only supports drag and drop if at least one item in the list of
-    #: possible objects supports drag and drop):
+    #: Should the editor support drag and drop of objects to set the trait
+    #: value (a value of True forces the editor to allow drag and drop, while
+    #: a value of False only supports drag and drop if at least one item in the
+    #: list of possible objects supports drag and drop):
     droppable = Bool(False)
 
     #: Should factory-created objects be cached?
@@ -69,8 +60,8 @@ class ToolkitEditorFactory(EditorFactory):
     #: Optional instance view to use
     view = AView
 
-    #: Extended name of the context object trait containing the view, or name of
-    #: the view, to use
+    #: Extended name of the context object trait containing the view, or name
+    #: of the view, to use
     view_name = Str()
 
     #: The ID to use with the view
@@ -98,5 +89,5 @@ class ToolkitEditorFactory(EditorFactory):
     )
 
 
-# Define the InstanceEditor class.
-InstanceEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = InstanceEditor

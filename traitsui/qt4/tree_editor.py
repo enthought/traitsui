@@ -258,7 +258,7 @@ class SimpleEditor(Editor):
 
             self._tree = None
 
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def expand_levels(self, nid, levels, expand=True):
         """ Expands from the specified node the specified number of sub-levels.
@@ -692,15 +692,6 @@ class SimpleEditor(Editor):
                 return node
         return None
 
-    def _node_for_class_name(self, class_name):
-        """ Returns the node and class associated with a specified class name.
-        """
-        for node in self.factory.nodes:
-            for klass in node.node_for:
-                if class_name == klass.__name__:
-                    return (node, klass)
-        return (None, None)
-
     def _update_icon(self, nid):
         """ Updates the icon for a specified node.
         """
@@ -1061,24 +1052,30 @@ class SimpleEditor(Editor):
         object = self._data[1]
         items = []
         add = node.get_add(object)
-        if len(add) > 0:
-            for klass in add:
-                prompt = False
-                if isinstance(klass, tuple):
+        # return early if there are no items to be added in the tree
+        if len(add) == 0:
+            return items
+
+        for klass in add:
+            prompt = False
+            factory = None
+            if isinstance(klass, tuple):
+                if len(klass) == 2:
                     klass, prompt = klass
-                add_node = self._node_for_class(klass)
-                if add_node is not None:
-                    class_name = klass.__name__
-                    name = add_node.get_name(object)
-                    if name == "":
-                        name = class_name
-                    items.append(
-                        Action(
-                            name=name,
-                            action="editor._menu_new_node('%s',%s)"
-                            % (class_name, prompt),
-                        )
-                    )
+                elif len(klass) == 3:
+                    klass, prompt, factory = klass
+            add_node = self._node_for_class(klass)
+            if add_node is None:
+                continue
+            class_name = klass.__name__
+            name = add_node.get_name(object)
+            if name == "":
+                name = class_name
+            if factory is None:
+                factory = klass
+            def perform_add(object):
+                self._menu_new_node(factory, prompt)
+            items.append(Action(name=name, on_perform=perform_add))
         return items
 
     # -------------------------------------------------------------------------
@@ -1317,13 +1314,12 @@ class SimpleEditor(Editor):
             else:
                 self._set_label(nid, col)
 
-    def _menu_new_node(self, class_name, prompt=False):
+    def _menu_new_node(self, factory, prompt=False):
         """ Adds a new object to the current node.
         """
         node, object, nid = self._data
         self._data = None
-        new_node, new_class = self._node_for_class_name(class_name)
-        new_object = new_class()
+        new_object = factory()
         if (not prompt) or new_object.edit_traits(
             parent=self.control, kind="livemodal"
         ).result:
@@ -1773,7 +1769,7 @@ class TreeItemDelegate(QtGui.QStyledItemDelegate):
 
         renderer = node.get_renderer(object, column=column)
         if renderer is None:
-            return super(TreeItemDelegate, self).sizeHint(option, index)
+            return super().sizeHint(option, index)
 
         size_context = (option, index)
         size = renderer.size(self.editor, node, column, instance, size_context)
@@ -1797,12 +1793,12 @@ class TreeItemDelegate(QtGui.QStyledItemDelegate):
         if renderer is None and self.editor.factory.word_wrap:
             renderer = DEFAULT_WRAP_RENDERER
         if renderer is None:
-            super(TreeItemDelegate, self).paint(painter, option, index)
+            super().paint(painter, option, index)
         else:
             if not renderer.handles_all:
                 # renderers background and selection highlights
                 # will also render icon and text if flags are set
-                super(TreeItemDelegate, self).paint(painter, option, index)
+                super().paint(painter, option, index)
             paint_context = (painter, option, index)
             size = renderer.paint(
                 self.editor, node, column, instance, paint_context
