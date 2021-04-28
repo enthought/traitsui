@@ -70,6 +70,7 @@ def mouse_click(func):
                 "Attempted to click on a non-existant or non-enabled control. "
                 "Nothing was performed."
             )
+            return
         wx.MilliSleep(delay)
         func(control=control, delay=delay, **kwargs)
     return mouse_click_handler
