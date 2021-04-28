@@ -45,6 +45,7 @@ Enhancements
 * Add 'IsVisible` query class for UI Tester (#1552)
 * Extend button editor to allow dynamically changing button image (#1566)
 * Support testing with simple FileEditor (without dialog) (#1571)
+* Qt VideoEditor (#745, #1609)
 
 Fixes
 ~~~~~
@@ -60,6 +61,7 @@ Fixes
 * Fix RGBColor hex int to tuple color conversion (#1554)
 * Make Scrollable group respect visible_when (#1555)
 * Use correct source_path in example (#1433)
+* Move EnumEditor import in table_filter into the methods that need it (#1616)
 
 Documentation
 ~~~~~~~~~~~~~
@@ -93,7 +95,8 @@ Test suite
 ~~~~~~~~~~
 
 * Refactor and extend tests for Qt HTMLEditor handling of opening links (#1465)
-8 Update new test_editor_error_msg (#1553)
+* Update new test_editor_error_msg (#1553)
+* Unskip "EnumEditor" tests that were failing earlier on windows (#1615)
 
 Maintenance and code organization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,6 +122,8 @@ Maintenance and code organization
 * Replace deprecated "wx.ListItemAttr" with "wx.ItemAttr" (#1602)
 * Adds "traitsui.toolkit.toolkit_object" to "traitsui.api" (#1603)
 * Import "TraitFactory" from "traits.api" (#1606)
+* Rename editor factory classes (#1610)
+* Cleanup imports in "traitsui.editors.*" (#1619)
 
 Removals
 ~~~~~~~~
@@ -127,6 +132,9 @@ Removals
 * remove traitsui.image submodule (#1595)
 * Remove Editor and EditorFactory factory methods on Toolkit objects (#1600)
 * Remove backwards compatibility toolkit factory imports (#1608)
+* Remove unused "Item.full_size" trait (#1613)
+* Remove code handling old/outdated versions of wx (#1614)
+* Remove unused editors_gen modules (#1626)
 
 Release 7.1.1
 -------------
