@@ -80,7 +80,8 @@ class VideoEditor(BasicEditorFactory):
 
     #: A ContextValue reference to a trait that will synchronize to the
     #: media status of the player.  The value is a string.
-    video_error = Instance(ContextValue, args=(), allow_none=False, sync_value='to')
+    video_error = Instance(ContextValue, args=(), allow_none=False,
+                           sync_value='to')
 
     #: The default image transformation function to apply to each frame in
     #: the video, ContextValue reference to a trait that will synchronize to
