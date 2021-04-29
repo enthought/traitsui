@@ -350,7 +350,7 @@ class ReadonlyColorEditor(BaseReadonlyEditor):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        # super(ReadonlyColorEditor, self).update_editor()
+        # super().update_editor()
         self.control.SetValue(self.string_value(self.value))
         set_color(self)
 

@@ -33,10 +33,7 @@ from traits.api import (
 )
 from traits.trait_base import user_name_for, xgetattr
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.list_editor file.
-from traitsui.editors.list_editor import ListItemProxy, ToolkitEditorFactory
+from traitsui.editors.list_editor import ListItemProxy
 
 from .editor import Editor
 from .helper import IconButton
@@ -162,7 +159,7 @@ class SimpleEditor(Editor):
             self.update_editor_item, extended_name + "_items?", remove=True
         )
 
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -633,7 +630,7 @@ class NotebookEditor(Editor):
         )
         self.close_all()
 
-        super(NotebookEditor, self).dispose()
+        super().dispose()
 
     def update_page_name(self, object, name, old, new):
         """ Handles the trait defining a particular page's name being changed.

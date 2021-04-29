@@ -15,11 +15,6 @@
 
 import wx
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.drop_editor file.
-from traitsui.editors.drop_editor import ToolkitEditorFactory
-
 from pyface.wx.drag_and_drop import PythonDropTarget, clipboard
 
 from .text_editor import SimpleEditor as Editor
@@ -49,7 +44,7 @@ class SimpleEditor(Editor):
             )
             self.set_tooltip()
         else:
-            super(SimpleEditor, self).init(parent)
+            super().init(parent)
         self.control.SetBackgroundColour(self.ok_color)
         self.control.SetDropTarget(PythonDropTarget(self))
 

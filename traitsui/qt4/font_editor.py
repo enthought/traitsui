@@ -122,7 +122,7 @@ class SimpleFontEditor(BaseSimpleEditor):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        super(SimpleFontEditor, self).update_editor()
+        super().update_editor()
         set_font(self)
 
     def string_value(self, font):
@@ -246,7 +246,7 @@ class TextFontEditor(BaseTextEditor):
         """ Updates the editor when the object trait changes external to the
             editor.
         """
-        super(TextFontEditor, self).update_editor()
+        super().update_editor()
         set_font(self)
 
     def string_value(self, font):
@@ -265,7 +265,7 @@ class ReadonlyFontEditor(BaseReadonlyEditor):
         """ Updates the editor when the object trait changes external to the
             editor.
         """
-        super(ReadonlyFontEditor, self).update_editor()
+        super().update_editor()
         set_font(self)
 
     def string_value(self, font):

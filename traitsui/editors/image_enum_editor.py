@@ -12,24 +12,16 @@
 toolkits.
 """
 
-
-
-import sys
-
 from os import getcwd
-
 from os.path import join, dirname, exists
+import sys
 
 from traits.api import Module, Type, Str, observe
 
-from .enum_editor import ToolkitEditorFactory as EditorFactory
-
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
+from traitsui.editors.enum_editor import EnumEditor
 
 
-class ToolkitEditorFactory(EditorFactory):
+class ImageEnumEditor(EnumEditor):
     """ Editor factory for image enumeration editors.
     """
 
@@ -55,7 +47,7 @@ class ToolkitEditorFactory(EditorFactory):
         """ Performs any initialization needed after all constructor traits
             have been set.
         """
-        super(ToolkitEditorFactory, self).init()
+        super().init()
         self._update_path()
 
     @observe("path, klass, module")
@@ -86,5 +78,5 @@ class ToolkitEditorFactory(EditorFactory):
             self._image_path = join(dirname(self.module.__file__), "images")
 
 
-# Define the ImageEnumEditor class.
-ImageEnumEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = ImageEnumEditor

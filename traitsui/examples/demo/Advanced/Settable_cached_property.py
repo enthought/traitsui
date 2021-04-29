@@ -82,8 +82,8 @@ class SettableCachedProperty(HasTraits):
 
     a = Range(1, 10)
     b = Range(1, 10)
-    c = Property(Int, depends_on=['a', 'b'])
-    d = Property(depends_on='c')
+    c = Property(Int, observe=['a', 'b'])
+    d = Property(observe='c')
 
     view = View(
         Item('a'),

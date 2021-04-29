@@ -11,6 +11,7 @@ Editors
 - :github-demo:`ButtonEditor <Standard_Editors/tests/test_ButtonEditor_simple_demo.py>`
 - :github-demo:`CheckListEditor <Standard_Editors/tests/test_CheckListEditor_simple_demo.py>`
 - :github-demo:`EnumEditor <Standard_Editors/tests/test_EnumEditor_demo.py>`
+- :github-demo:`FileEditor <Standard_Editors/tests/test_FileEditor_demo.py>`
 - :github-demo:`InstanceEditor <Standard_Editors/tests/test_InstanceEditor_demo.py>`
 - :github-demo:`ListEditor <Standard_Editors/tests/test_ListEditor_demo.py>`
 - :github-demo:`ListEditor (notebook) <Advanced/tests/test_List_editor_notebook_selection_demo.py>`

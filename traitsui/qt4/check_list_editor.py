@@ -32,11 +32,6 @@ from pyface.qt import QtCore, QtGui
 
 from traits.api import Any, Callable, List, Str, TraitError, Tuple
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.check_list_editor file.
-from traitsui.editors.check_list_editor import ToolkitEditorFactory
-
 from .editor_factory import TextEditor as BaseTextEditor
 
 from .editor import EditorWithList
@@ -44,11 +39,6 @@ from .editor import EditorWithList
 
 
 logger = logging.getLogger(__name__)
-
-
-# default formatting function (would import from string, but not in Python 3)
-capitalize = lambda s: s.capitalize()
-
 
 # -------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -74,7 +64,7 @@ class SimpleEditor(EditorWithList):
             widget.
         """
         self.create_control(parent)
-        super(SimpleEditor, self).init(parent)
+        super().init(parent)
 
     def create_control(self, parent):
         """ Creates the initial editor control.
@@ -95,7 +85,7 @@ class SimpleEditor(EditorWithList):
         """
         sv = self.string_value
         if (len(values) > 0) and isinstance(values[0], str):
-            values = [(x, sv(x, capitalize)) for x in values]
+            values = [(x, sv(x, str.capitalize)) for x in values]
         self.values = valid_values = [x[0] for x in values]
         self.names = [x[1] for x in values]
 

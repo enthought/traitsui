@@ -11,14 +11,11 @@
 """ Editor that displays an interactive Python shell.
 """
 
-
 from traits.api import Bool, Str, Event, Property
 
-from ..editor import Editor
-
-from ..basic_editor_factory import BasicEditorFactory
-
-from ..toolkit import toolkit_object
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.editor import Editor
+from traitsui.toolkit import toolkit_object
 
 
 class _ShellEditor(Editor):
@@ -139,7 +136,7 @@ class _ShellEditor(Editor):
         if self._base_locals is None:
             self.object.observe(self.update_any, remove=True, dispatch="ui")
 
-        super(_ShellEditor, self).dispose()
+        super().dispose()
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
@@ -173,10 +170,8 @@ class _ShellEditor(Editor):
         self._shell.execute_command(command, hidden=False)
 
 
-# Editor factory for shell editors.
-
-
-class ToolkitEditorFactory(BasicEditorFactory):
+class ShellEditor(BasicEditorFactory):
+    """ Editor factory for shell editors. """
 
     #: The editor class to be instantiated.
     klass = Property()
@@ -198,5 +193,5 @@ class ToolkitEditorFactory(BasicEditorFactory):
         return toolkit_object("shell_editor:_ShellEditor")
 
 
-# Define the ShellEditor
-ShellEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = ShellEditor

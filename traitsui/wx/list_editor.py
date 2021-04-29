@@ -140,7 +140,7 @@ class SimpleEditor(Editor):
         )
         self._dispose_items()
 
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -612,7 +612,7 @@ class NotebookEditor(Editor):
         )
         self.close_all()
 
-        super(NotebookEditor, self).dispose()
+        super().dispose()
 
     def add_controls(self, controls):
         """ Adds a group of new DockControls to the view.
@@ -763,9 +763,7 @@ class DockableListElement(DockableViewElement):
         """ Closes a DockControl.
         """
         if abort:
-            return super(DockableListElement, self).close_dock_control(
-                dock_control, False
-            )
+            return super().close_dock_control(dock_control, False)
 
         view_object = self.ui.context["object"]
         for i, value in enumerate(self.editor._uis):

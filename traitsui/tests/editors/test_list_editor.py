@@ -231,7 +231,6 @@ class TestSimpleListEditor(unittest.TestCase):
             self.assertEqual(len(obj.dirs), 1)
 
         shutil.rmtree(temp_dir)
-        
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])

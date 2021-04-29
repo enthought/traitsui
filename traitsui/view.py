@@ -24,6 +24,7 @@ from traits.api import (
     Float,
     Instance,
     List,
+    PrefixList,
     Str,
     Trait,
 )
@@ -52,8 +53,6 @@ from .group import Group
 from .item import Item
 
 from .include import Include
-
-from .helper import PrefixList
 
 # -------------------------------------------------------------------------
 #  Trait definitions:

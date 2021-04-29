@@ -7,6 +7,7 @@
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 # Thanks for using Enthought open source!
+import warnings
 
 import wx
 
@@ -64,7 +65,11 @@ def mouse_click(func):
         delay : int
             Time delay (in ms) in which click will be performed.
         """
-        if not control.IsEnabled():
+        if (not control) or (not control.IsEnabled()):
+            warnings.warn(
+                "Attempted to click on a non-existant or non-enabled control. "
+                "Nothing was performed."
+            )
             return
         wx.MilliSleep(delay)
         func(control=control, delay=delay, **kwargs)

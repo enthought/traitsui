@@ -42,7 +42,7 @@ class TextEditor(HasPrivateTraits):
     text = Str()
 
     # The current length of the text being edited:
-    length = Property(depends_on='text')
+    length = Property(observe='text')
 
     # The current time:
     time = Str()
@@ -69,7 +69,7 @@ class TextEditor(HasPrivateTraits):
 
     def _time_default(self):
         thread = Thread(target=self._clock)
-        thread.setDaemon(True)
+        thread.daemon = True
         thread.start()
 
         return ''

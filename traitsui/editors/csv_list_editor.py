@@ -18,8 +18,8 @@ It allows the user to edit the list in a text field, using commas
 from traits.api import Str, Int, Float, Enum, Range, Bool, TraitError, Either
 from traits.trait_handlers import RangeTypes
 
-from .text_editor import TextEditor
-from ..helper import enum_values_changed
+from traitsui.editors.text_editor import TextEditor
+from traitsui.helper import enum_values_changed
 
 
 def _eval_list_str(s, sep=",", item_eval=None, ignore_trailing_sep=True):

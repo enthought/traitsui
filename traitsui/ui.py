@@ -32,6 +32,7 @@ from traits.api import (
     observe,
     property_depends_on,
 )
+from traits.observation.api import trait
 
 from traits.trait_base import traits_home, is_str
 

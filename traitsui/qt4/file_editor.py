@@ -25,10 +25,6 @@ from os.path import abspath, splitext, isfile, exists
 from pyface.qt import QtCore, QtGui, is_qt5
 from traits.api import Any, Callable, List, Event, File, Str, TraitError, Tuple
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.file_editor file.
-from traitsui.editors.file_editor import ToolkitEditorFactory
 from .editor import Editor
 from .text_editor import SimpleEditor as SimpleTextEditor
 from .helper import IconButton
@@ -301,7 +297,7 @@ class _TreeView(QtGui.QTreeView):
     """
 
     def __init__(self, editor):
-        super(_TreeView, self).__init__()
+        super().__init__()
         self._editor = editor
 
     def event(self, event):
@@ -315,7 +311,7 @@ class _TreeView(QtGui.QTreeView):
 
             return True
 
-        return super(_TreeView, self).event(event)
+        return super().event(event)
 
     def keyPressEvent(self, keyevent):
         key = keyevent.key()
@@ -327,5 +323,5 @@ class _TreeView(QtGui.QTreeView):
     def currentChanged(self, current, previous):
         """ Reimplemented to tell the editor when the current index has changed.
         """
-        super(_TreeView, self).currentChanged(current, previous)
+        super().currentChanged(current, previous)
         self._editor.update_object(current)

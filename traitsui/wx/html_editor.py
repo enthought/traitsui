@@ -21,11 +21,6 @@ import wx.html as wh
 
 from traits.api import Str
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.html_editor file.
-from traitsui.editors.html_editor import ToolkitEditorFactory
-
 from .editor import Editor
 
 

@@ -165,16 +165,16 @@ class FileInfo(MFileDialogModel):
     """
 
     #: The size of the file:
-    size = Property(depends_on="file_name")
+    size = Property(observe="file_name")
 
     #: Last file access time:
-    atime = Property(depends_on="file_name")
+    atime = Property(observe="file_name")
 
     #: List file modification time:
-    mtime = Property(depends_on="file_name")
+    mtime = Property(observe="file_name")
 
     #: File creation time (or last metadata change time):
-    ctime = Property(depends_on="file_name")
+    ctime = Property(observe="file_name")
 
     # -- Traits View Definitions ----------------------------------------------
 
@@ -231,7 +231,7 @@ class TextInfo(MFileDialogModel):
     """
 
     #: The file's text content:
-    text = Property(depends_on="file_name")
+    text = Property(observe="file_name")
 
     # -- Traits View Definitions ----------------------------------------------
 
@@ -264,13 +264,13 @@ class ImageInfo(MFileDialogModel):
     """
 
     #: The ImageResource object for the current file:
-    image = Property(depends_on="file_name")
+    image = Property(observe="file_name")
 
     #: The width of the current image:
-    width = Property(depends_on="image")
+    width = Property(observe="image")
 
     #: The height of the current image:
-    height = Property(depends_on="image")
+    height = Property(observe="image")
 
     # -- Traits View Definitions ----------------------------------------------
 
@@ -479,10 +479,10 @@ class OpenFileDialog(Handler):
     is_save_file = Bool(False)
 
     #: Is the currently specified file name valid?
-    is_valid_file = Property(depends_on="file_name")
+    is_valid_file = Property(observe="file_name")
 
     #: Can a directory be created now?
-    can_create_dir = Property(depends_on="file_name")
+    can_create_dir = Property(observe="file_name")
 
     #: The OK, Cancel and create directory buttons:
     ok = Button("OK")

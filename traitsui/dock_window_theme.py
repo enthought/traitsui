@@ -63,10 +63,10 @@ class DockWindowTheme(HasPrivateTraits):
     horizontal_drag = ATheme
 
     #: The bitmap for the 'tab_inactive_edge' image:
-    tab_inactive_edge_bitmap = Property(depends_on="tab_inactive_edge")
+    tab_inactive_edge_bitmap = Property(observe="tab_inactive_edge")
 
     #: The bitmap for the 'tab_hover_edge' image:
-    tab_hover_edge_bitmap = Property(depends_on="tab_hover_edge")
+    tab_hover_edge_bitmap = Property(observe="tab_hover_edge")
 
     # -- Property Implementations ---------------------------------------------
 

@@ -16,11 +16,6 @@ import wx
 
 from traits.api import Any
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.image_enum_editor file.
-from traitsui.editors.image_enum_editor import ToolkitEditorFactory
-
 from .editor import Editor
 
 from .enum_editor import BaseEditor as BaseEnumEditor
@@ -82,7 +77,7 @@ class SimpleEditor(ReadonlyEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(SimpleEditor, self).init(parent)
+        super().init(parent)
         self.control.Selected(True)
         self.control.Handler(self.popup_editor)
         self.set_tooltip()
@@ -110,7 +105,7 @@ class CustomEditor(BaseEnumEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(CustomEditor, self).init(parent)
+        super().init(parent)
 
         # Create the panel to hold the ImageControl buttons:
         self.control = TraitsUIPanel(parent, -1)

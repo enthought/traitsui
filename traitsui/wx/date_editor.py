@@ -121,7 +121,7 @@ class wxMouseBoxCalendarCtrl(wx.adv.CalendarCtrl):
     """
 
     def __init__(self, *args, **kwargs):
-        super(wxMouseBoxCalendarCtrl, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.selecting = False
         self.box_selected = []
@@ -272,7 +272,7 @@ class MultiCalendarCtrl(wx.Panel):
         *args,
         **kwargs
     ):
-        super(MultiCalendarCtrl, self).__init__(parent, ID, *args, **kwargs)
+        super().__init__(parent, ID, *args, **kwargs)
 
         self.sizer = wx.BoxSizer()
         self.SetSizer(self.sizer)
