@@ -28,7 +28,9 @@ from pyface.qt import QtCore, QtGui
 
 from pyface.api import ImageResource
 
-from traits.api import Str, Any, Bool, Dict, Instance, List, TraitError
+from traits.api import (
+    Any, Bool, Callable, Dict, Instance, List, Str, TraitError
+)
 from traits.trait_base import user_name_for, xgetattr
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
