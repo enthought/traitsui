@@ -11,32 +11,21 @@
 """ Defines the file editor factory for all traits toolkit backends.
 """
 
+from traits.api import Bool, File, Int, List, Str
 
-
-from traits.api import List, Str, Bool, Int, Str, File
-
-# CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
-# to avoid circular imports, as this EditorFactory will be part of
-# traits.ui.api as well.
-from ..view import View
-
-from ..group import Group
-
-from .text_editor import ToolkitEditorFactory as EditorFactory
+from traitsui.editors.text_editor import TextEditor
+from traitsui.group import Group
+from traitsui.view import View
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
 # -------------------------------------------------------------------------
 
-# Wildcard filter:
+#: Wildcard filter:
 filter_trait = List(Str)
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorFactory):
+class FileEditor(TextEditor):
     """ Editor factory for file editors.
     """
 
@@ -47,7 +36,8 @@ class ToolkitEditorFactory(EditorFactory):
     #: Wildcard filter to apply to the file dialog:
     filter = filter_trait
 
-    #: Optional extended trait name of the trait containing the list of filters:
+    #: Optional extended trait name of the trait containing the list of
+    #: filters:
     filter_name = Str()
 
     #: Should file extension be truncated?
@@ -106,5 +96,5 @@ class ToolkitEditorFactory(EditorFactory):
     extras = Group()
 
 
-# Define the FileEditor class.
-FileEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = FileEditor

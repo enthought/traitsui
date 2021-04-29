@@ -57,7 +57,7 @@ class QtView(View):
         scrollable=None,
         args=None,
     ):
-        ui = super(QtView, self).ui(
+        ui = super().ui(
             context, parent, kind, view_elements, handler, id, scrollable, args
         )
 

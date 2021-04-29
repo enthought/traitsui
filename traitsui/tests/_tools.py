@@ -49,6 +49,18 @@ def is_qt():
     return ETSConfig.toolkit.startswith(ToolkitName.qt.name)
 
 
+def is_qt5():
+    """ Return true if the toolkit backend is Qt5.
+    """
+    if not is_qt():
+        return False
+
+    # Only AFTER confirming Qt's availability...
+    # We lean on Pyface here since the check is complicated.
+    import pyface.qt
+    return pyface.qt.is_qt5
+
+
 def is_null():
     """ Return true if the toolkit backend is null.
     """

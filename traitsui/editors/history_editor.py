@@ -12,13 +12,10 @@
     of previously entered values.
 """
 
-
-
 from traits.api import Int, Bool
 
-from ..basic_editor_factory import BasicEditorFactory
-
-from ..toolkit import toolkit_object
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.toolkit import toolkit_object
 
 # Define callable which returns the 'klass' value (i.e. the editor to use in
 # the EditorFactory.

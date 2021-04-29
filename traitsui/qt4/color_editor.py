@@ -118,7 +118,7 @@ class SimpleColorEditor(BaseSimpleEditor):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        super(SimpleColorEditor, self).update_editor()
+        super().update_editor()
         set_color(self)
 
     def string_value(self, color):
@@ -143,7 +143,7 @@ class CustomColorEditor(Editor):
         if getattr(self, "_simple_field", None) is not None:
             self._simple_field.dispose()
             self._simple_field = None
-        super(CustomColorEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -179,7 +179,7 @@ class TextColorEditor(BaseTextEditor):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        super(TextColorEditor, self).update_editor()
+        super().update_editor()
         set_color(self)
 
     def string_value(self, color):
@@ -204,7 +204,7 @@ class ReadonlyColorEditor(BaseReadonlyEditor):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        super(ReadonlyColorEditor, self).update_editor()
+        super().update_editor()
         set_color(self)
 
     def string_value(self, color):

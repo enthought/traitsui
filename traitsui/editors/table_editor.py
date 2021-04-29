@@ -11,8 +11,6 @@
 """ Defines the table editor factory for all traits user interface toolkits.
 """
 
-
-
 from traits.api import (
     Int,
     Float,
@@ -30,16 +28,15 @@ from traits.api import (
     observe,
 )
 
-from ..editor_factory import EditorFactory
-from ..handler import Handler
-from ..helper import Orientation
-from ..item import Item
-from ..table_filter import TableFilter
-from ..toolkit_traits import Color, Font
-from ..ui_traits import AView
-from ..view import View
-from .enum_editor import EnumEditor
-
+from traitsui.editor_factory import EditorFactory
+from traitsui.editors.enum_editor import EnumEditor
+from traitsui.handler import Handler
+from traitsui.helper import Orientation
+from traitsui.item import Item
+from traitsui.table_filter import TableFilter
+from traitsui.toolkit_traits import Color, Font
+from traitsui.ui_traits import AView
+from traitsui.view import View
 
 # The filter used to indicate that the user wants to customize the current
 # filter
@@ -53,7 +50,7 @@ customize_filter = TableFilter(name="Customize...")
 BoolOrCallable = Trait(False, Bool, Callable)
 
 
-class ToolkitEditorFactory(EditorFactory):
+class TableEditor(EditorFactory):
     """ Editor factory for table editors.
     """
 
@@ -73,11 +70,12 @@ class ToolkitEditorFactory(EditorFactory):
     #: The desired number of visible rows in the table
     rows = Int()
 
-    #: The optional extended name of the trait used to specify an external filter
-    #: for the table data. The value of the trait must either be an instance of
-    #: TableEditor, a callable that accepts one argument (a table row) and
-    #: returns True or False to indicate whether the specified object passes the
-    #: filter or not, or **None** to indicate that no filter is to be applied:
+    #: The optional extended name of the trait used to specify an external
+    #: filter for the table data. The value of the trait must either be an
+    #: instance of TableEditor, a callable that accepts one argument
+    #: (a table row) and returns True or False to indicate whether the
+    #: specified object passes the filter or not, or **None** to indicate that
+    #: no filter is to be applied:
     filter_name = Str()
 
     #: Initial filter that should be applied to the table
@@ -220,7 +218,8 @@ class ToolkitEditorFactory(EditorFactory):
     #: Color to use for text in labels
     label_color = Color(default=None, allow_none=True)
 
-    #: Color to use for label backgrounds. Some Qt styles (eg. MacOS) ignore this.
+    #: Color to use for label backgrounds. Some Qt styles (eg. MacOS) ignore
+    #: this.
     label_bg_color = Color(default=None, allow_none=True)
 
     #: Background color of selected item.  Does not work on Qt.
@@ -242,8 +241,8 @@ class ToolkitEditorFactory(EditorFactory):
     #: currently passing the table filter are synced with:
     filtered_indices = Str()
 
-    #: The selection mode of the table. The meaning of the various values are as
-    #: follows:
+    #: The selection mode of the table. The meaning of the various values are
+    #: as follows:
     #:
     #: row
     #:   Entire rows are selected. At most one row can be selected at once.
@@ -271,9 +270,9 @@ class ToolkitEditorFactory(EditorFactory):
     selected_indices = Str()
 
     #: The optional extended trait name of the trait that should be assigned
-    #: an ( object, column ) tuple when a table cell is clicked on (Note: If you
-    #: want to receive repeated clicks on the same cell, make sure the trait is
-    #: defined as an Event):
+    #: an ( object, column ) tuple when a table cell is clicked on (Note: If
+    #: you want to receive repeated clicks on the same cell, make sure the
+    #: trait is defined as an Event):
     click = Str()
 
     #: The optional extended trait name of the trait that should be assigned
@@ -392,9 +391,7 @@ class ToolkitEditorFactory(EditorFactory):
 
         """
         self.editable = False
-        return super(ToolkitEditorFactory, self).readonly_editor(
-            ui, object, name, description, parent
-        )
+        return super().readonly_editor(ui, object, name, description, parent)
 
     # -------------------------------------------------------------------------
     #  Event handlers:
@@ -418,8 +415,8 @@ class ToolkitEditorFactory(EditorFactory):
             self._filter_editor.values = values
 
 
-# Define the TableEditor class
-TableEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = TableEditor
 
 # -------------------------------------------------------------------------
 #  Base class for toolkit-specific editors

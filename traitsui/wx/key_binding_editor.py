@@ -18,13 +18,6 @@ import wx
 
 from traits.api import Bool, Event
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.key_binding_editor file.
-from traitsui.editors.key_binding_editor import (
-    KeyBindingEditor as ToolkitEditorFactory,
-)
-
 from pyface.wx.dialog import confirmation
 
 from .editor import Editor
@@ -121,7 +114,7 @@ class KeyBindingCtrl(wx.Window):
         size=wx.DefaultSize,
     ):
 
-        super(KeyBindingCtrl, self).__init__(
+        super().__init__(
             parent, wid, pos, size, style=wx.CLIP_CHILDREN | wx.WANTS_CHARS
         )
         # Save the reference to the controlling editor object:

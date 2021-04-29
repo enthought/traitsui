@@ -28,7 +28,7 @@ class HasFooView(HasDynamicViews):
 
             Extended to declare our dynamic foo view.
         """
-        super(HasFooView, self).__init__(*args, **traits)
+        super().__init__(*args, **traits)
 
         # Declare and add our dynamic view:
         declaration = DynamicView(

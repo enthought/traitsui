@@ -58,7 +58,7 @@ class _HistoryEditor(Editor):
         self.history.dispose()
         self.history = None
 
-        super(_HistoryEditor, self).dispose()
+        super().dispose()
 
     @observe("history:value")
     def _value_changed(self, event):

@@ -29,7 +29,6 @@ from traitsui.tests._tools import (
     create_ui,
     is_wx,
     is_qt,
-    press_ok_button,
     process_cascade_events,
     requires_toolkit,
     reraise_exceptions,
@@ -744,9 +743,7 @@ class TestListStrEditorSelection(BaseTestMixin, unittest.TestCase):
     @requires_toolkit([ToolkitName.qt])
     def test_selection_listener_disconnected(self):
         """ Check that selection listeners get correctly disconnected """
-        from pyface.api import GUI
         from pyface.qt.QtGui import QApplication, QItemSelectionModel
-        from pyface.ui.qt4.util.event_loop_helper import EventLoopHelper
         from pyface.ui.qt4.util.testing import event_loop
 
         obj = ListStrEditorWithSelectedIndex(values=["value1", "value2"])
@@ -755,7 +752,6 @@ class TestListStrEditorSelection(BaseTestMixin, unittest.TestCase):
             qt_app = QApplication.instance()
             if qt_app is None:
                 qt_app = QApplication([])
-            helper = EventLoopHelper(gui=GUI(), qt_app=qt_app)
 
             # open the UI and run until the dialog is closed
             with create_ui(obj, dict(view=single_select_item_view)) as ui:

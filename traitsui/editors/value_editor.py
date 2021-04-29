@@ -11,19 +11,14 @@
 """ Defines the tree-based Python value editor and the value editor factory.
 """
 
-
-
 from traits.api import Bool, Instance, Int
 
-from .tree_editor import TreeEditor
-from ..view import View
-from ..item import Item
-
-from ..value_tree import RootNode, value_tree_nodes
-
-from ..editor_factory import EditorFactory
-
-from ..editor import Editor
+from traitsui.editor import Editor
+from traitsui.editor_factory import EditorFactory
+from traitsui.editors.tree_editor import TreeEditor
+from traitsui.item import Item
+from traitsui.value_tree import RootNode, value_tree_nodes
+from traitsui.view import View
 
 # -------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -78,7 +73,7 @@ class _ValueEditor(Editor):
         """
         self._ui.dispose()
 
-        super(_ValueEditor, self).dispose()
+        super().dispose()
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
@@ -86,7 +81,7 @@ class _ValueEditor(Editor):
         return self._ui.get_error_controls()
 
 
-class ToolkitEditorFactory(EditorFactory):
+class ValueEditor(EditorFactory):
     """ Editor factory for tree-based value editors.
     """
 
@@ -98,5 +93,5 @@ class ToolkitEditorFactory(EditorFactory):
     auto_open = Int(2)
 
 
-# Define the ValueEditor class.
-ValueEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = ValueEditor

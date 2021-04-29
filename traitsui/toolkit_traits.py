@@ -8,8 +8,7 @@
 #
 # Thanks for using Enthought open source!
 
-# XXX eventually should replace with traits.api
-from traits.trait_factory import TraitFactory
+from traits.api import TraitFactory
 
 from .toolkit import toolkit
 

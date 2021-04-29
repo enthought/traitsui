@@ -23,22 +23,16 @@
 #
 # ------------------------------------------------------------------------------
 
-""" Defines the editor factory for multi-selection enumerations, for all traits toolkit
-backends.
+""" Defines the editor factory for multi-selection enumerations, for all traits
+toolkit backends.
 """
-
-
 
 from traits.api import Range
 
-from ..editor_factory import EditorWithListFactory
-
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
+from traitsui.editor_factory import EditorWithListFactory
 
 
-class ToolkitEditorFactory(EditorWithListFactory):
+class CheckListEditor(EditorWithListFactory):
     """ Editor factory for checklists.
     """
 
@@ -50,5 +44,5 @@ class ToolkitEditorFactory(EditorWithListFactory):
     cols = Range(1, 20)
 
 
-# Define the CheckListEditor class
-CheckListEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = CheckListEditor

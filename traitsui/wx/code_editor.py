@@ -20,11 +20,6 @@ from traits.api import Str, List, Int, Event, Bool, TraitError, observe
 
 from traits.trait_base import SequenceTypes
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.code_editor file.
-from traitsui.editors.code_editor import ToolkitEditorFactory
-
 from pyface.api import PythonEditor
 
 from pyface.wx.python_stc import faces

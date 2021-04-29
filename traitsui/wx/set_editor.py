@@ -18,11 +18,6 @@ import wx
 
 from traits.api import Property
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.set_editor file.
-from traitsui.editors.set_editor import ToolkitEditorFactory
-
 from traitsui.helper import enum_values_changed
 
 from .editor import Editor
@@ -283,7 +278,7 @@ class SimpleEditor(Editor):
             self.update_editor, self.extended_name + "_items?", remove=True
         )
 
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.

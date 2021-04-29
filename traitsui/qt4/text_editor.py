@@ -27,10 +27,7 @@ from pyface.qt import QtCore, QtGui
 
 from traits.api import Any, Callable, List, TraitError, Tuple
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.text_editor file.
-from traitsui.editors.text_editor import evaluate_trait, ToolkitEditorFactory
+from traitsui.editors.text_editor import evaluate_trait
 
 from .editor import Editor
 
@@ -219,7 +216,7 @@ class ReadonlyEditor(BaseReadonlyEditor):
     """
 
     def init(self, parent):
-        super(ReadonlyEditor, self).init(parent)
+        super().init(parent)
 
         if self.factory.readonly_allow_selection:
             flags = (

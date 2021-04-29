@@ -11,21 +11,19 @@
 """ Defines the tree editor factory for all traits user interface toolkits.
 """
 
-
-
 from traits.api import Any, Dict, Bool, Tuple, Int, List, Instance, Str, Enum
 
-from ..menu import Action
-from ..tree_node import TreeNode
-from ..dock_window_theme import DockWindowTheme
-from ..editor_factory import EditorFactory
-from ..helper import Orientation
+from traitsui.dock_window_theme import DockWindowTheme
+from traitsui.editor_factory import EditorFactory
+from traitsui.helper import Orientation
+from traitsui.menu import Action
+from traitsui.tree_node import TreeNode
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
 # -------------------------------------------------------------------------
 
-# Size of each tree node icon
+#: Size of each tree node icon
 IconSize = Tuple((16, 16), Int, Int)
 
 
@@ -62,12 +60,7 @@ RenameAction = Action(
 )
 
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
-
-
-class ToolkitEditorFactory(EditorFactory):
+class TreeEditor(EditorFactory):
     """ Editor factory for tree editors.
     """
 
@@ -149,23 +142,23 @@ class ToolkitEditorFactory(EditorFactory):
     click = Str()
 
     #: The optional extended trait name of the trait that should be assigned
-    #: a node object when a tree node is double-clicked on (Note: if you want to
-    #: receive repeated double-clicks on the same node, make sure the trait is
-    #: defined as an Event):
+    #: a node object when a tree node is double-clicked on (Note: if you want
+    #: to receive repeated double-clicks on the same node, make sure the trait
+    #: is defined as an Event):
     dclick = Str()
 
     #: The optional extended trait name of the trait event that is fired
     #: whenever the application wishes to veto a tree action in progress (e.g.
     #: double-clicking a non-leaf tree node normally opens or closes the node,
     #: but if you are handling the double-click event in your program, you may
-    #: wish to veto the open or close operation). Be sure to fire the veto event
-    #: in the event handler triggered by the operation (e.g. the 'dclick' event
-    #: handler.
+    #: wish to veto the open or close operation). Be sure to fire the veto
+    #: event in the event handler triggered by the operation (e.g. the 'dclick'
+    #: event handler.
     veto = Str()
 
-    #: The optional extended trait name of the trait event that is fired when the
-    #: application wishes the currently visible portion of the tree widget to
-    #: repaint itself.
+    #: The optional extended trait name of the trait event that is fired when
+    #: the application wishes the currently visible portion of the tree widget
+    #: to repaint itself.
     refresh = Str()
 
     #: Mode for lines connecting tree nodes
@@ -186,9 +179,10 @@ class ToolkitEditorFactory(EditorFactory):
     expands_on_dclick = Bool(True)
 
     #: Whether the labels should be wrapped around, if not an ellipsis is shown
-    #: This works only in the qt backend and if there is only one column in tree
+    #: This works only in the qt backend and if there is only one column in
+    #: tree
     word_wrap = Bool(False)
 
 
-#: Define the TreeEditor class.
-TreeEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = TreeEditor

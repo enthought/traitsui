@@ -15,7 +15,7 @@ import datetime
 
 from traits.api import Datetime, Str
 
-from ..editor_factory import EditorFactory
+from traitsui.editor_factory import EditorFactory
 
 
 class DatetimeEditor(EditorFactory):

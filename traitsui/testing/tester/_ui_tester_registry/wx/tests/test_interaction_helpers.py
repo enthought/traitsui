@@ -62,6 +62,11 @@ class TestInteractions(unittest.TestCase):
         # then
         self.assertEqual(handler.call_count, 0)
 
+    def test_mouse_click_None_warns(self):
+        control = None
+        with self.assertWarns(UserWarning):
+            _interaction_helpers.mouse_click_button(control=control, delay=0)
+
     def test_key_sequence(self):
         # The insertion point is moved to the end
         textbox = wx.TextCtrl(self.frame)

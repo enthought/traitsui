@@ -334,7 +334,7 @@ class ChildFocusOverride(wx.EvtHandler):
 
     def __init__(self, window):
         self.window = window
-        super(ChildFocusOverride, self).__init__()
+        super().__init__()
 
         # Make self the event handler for the window.
         window.PushEventHandler(self)
@@ -524,7 +524,7 @@ class PopupControl(HasPrivateTraits):
     def __init__(self, **traits):
         """ Initializes the object.
         """
-        super(PopupControl, self).__init__(**traits)
+        super().__init__(**traits)
 
         style = wx.SIMPLE_BORDER
         if self.resizable:
@@ -640,7 +640,7 @@ class Slider(wx.Slider):
     """
 
     def __init__(self, *args, **kw):
-        super(Slider, self).__init__(*args, **kw)
+        super().__init__(*args, **kw)
 
         self.Bind(wx.EVT_ERASE_BACKGROUND, self._erase_background)
 

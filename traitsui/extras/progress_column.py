@@ -36,7 +36,7 @@ class ProgressColumn(ObjectColumn):
     text_visible = Bool(True)
 
     def __init__(self, **traits):
-        super(ProgressColumn, self).__init__(**traits)
+        super().__init__(**traits)
 
         from traitsui.toolkit import toolkit_object
         ProgressRenderer = toolkit_object(
