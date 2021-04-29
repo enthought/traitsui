@@ -239,8 +239,7 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
         # Smoke test to check init and dispose do not fail.
         model = HTMLModel()
         view = get_view(base_url_name="")
-        with reraise_exceptions(), \
-                create_ui(model, dict(view=view)):
+        with self.tester.create_ui(model, dict(view=view)):
             pass
 
     def test_base_url_changed(self):
@@ -248,11 +247,10 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
         # fails because sync_value is unhooked in the base class.
         model = HTMLModel()
         view = get_view(base_url_name="model_base_url")
-        with reraise_exceptions():
-            with create_ui(model, dict(view=view)):
-                pass
-            # It is okay to modify base_url after the UI is closed
-            model.model_base_url = "/new_dir"
+        with self.tester.create_ui(model, dict(view=view)):
+            pass
+        # It is okay to modify base_url after the UI is closed
+        model.model_base_url = "/new_dir"
 
     @requires_toolkit([ToolkitName.qt])
     def test_open_internal_link(self):
