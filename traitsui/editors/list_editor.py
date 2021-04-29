@@ -100,7 +100,7 @@ class ToolkitEditorFactory(EditorFactory):
     show_notebook_menu = Bool(False)
 
     #: Factory callable that will be called to create the new element to add to
-    #: this list.  If None, the default value for the trait of interest is used.
+    #: this list. If None, the default value for the trait of interest is used.
     default_factory = Callable()
 
     # -- Notebook Specific Traits ---------------------------------------------

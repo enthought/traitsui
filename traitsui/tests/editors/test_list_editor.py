@@ -210,7 +210,7 @@ class TestSimpleListEditor(unittest.TestCase):
     def test_default_factory(self):
         temp_dir = tempfile.mkdtemp()
 
-        def test_callable():    
+        def test_callable():
             return temp_dir
 
         class Foo(HasStrictTraits):
