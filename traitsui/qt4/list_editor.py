@@ -54,10 +54,6 @@ class SimpleEditor(Editor):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
-    #: Factory callable that will be called to create the new element to add to
-    #: this list.  If None, the default value for the trait of interest is used.
-    default_factory = Callable()
-
     #: The kind of editor to create for each list item
     kind = Str()
 
@@ -316,8 +312,8 @@ class SimpleEditor(Editor):
         list, index = self.get_info()
         index += offset
         item_trait = self._trait_handler.item_trait
-        if self.default_factory:
-            value = self.default_factory()
+        if self.factory.default_factory:
+            value = self.factory.default_factory()
         else:
             value = item_trait.default_value_for(self.object, self.name)
         try:
