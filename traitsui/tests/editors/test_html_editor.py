@@ -15,10 +15,8 @@ from traits.api import HasTraits, Str
 from traitsui.api import HTMLEditor, Item, View
 from traitsui.tests._tools import (
     BaseTestMixin,
-    create_ui,
     is_qt,
     requires_toolkit,
-    reraise_exceptions,
     ToolkitName,
 )
 from traitsui.testing.api import MouseClick, TargetRegistry, UITester
