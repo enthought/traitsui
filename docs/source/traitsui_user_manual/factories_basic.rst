@@ -63,47 +63,8 @@ The following code generates the editors shown in Figure 21.
 
 .. rubric:: Example 14: Demonstration of array editors
 
-::
-
-    # array_editor.py -- Example of using array editors
-
-    import numpy as np
-
-    from traits.api import Array, HasPrivateTraits
-    from traitsui.api import ArrayEditor, Item, View
-    from traitsui.menu import NoButtons
-
-    class ArrayEditorTest(HasPrivateTraits):
-
-        three = Array(np.int, (3,3))
-
-        four = Array(
-            np.float, (4, 4), editor=ArrayEditor(width=-50),
-        )
-
-        view = View(
-            Item('three', label='3x3 Integer'),
-            '_',
-            Item(
-                'three',
-                label='Integer Read-only',
-                style='readonly',
-            ),
-            '_',
-            Item('four', label='4x4 Float'),
-            '_',
-            Item(
-                'four',
-                label='Float Read-only',
-                style='readonly',
-            ),
-            buttons=NoButtons,
-            resizable=True,
-        )
-
-
-    if __name__ == '__main__':
-        ArrayEditorTest().configure_traits()
+.. literalinclude:: examples/array_editor.py
+   :start-at: array_editor.py
 
 BooleanEditor()
 ```````````````
