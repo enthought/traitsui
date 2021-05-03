@@ -33,35 +33,8 @@ Consider the following script and the window it creates:
 
 .. rubric:: Example 12: Using default trait editors
 
-::
-
-    # default_trait_editors.py -- Example of using default
-    # trait editors
-
-    from traits.api import Bool, HasTraits, Range, Str
-    from traitsui.api import Item, View
-
-    class Adult(HasTraits):
-        first_name = Str()
-        last_name = Str()
-        age = Range(21, 99)
-        registered_voter = Bool()
-
-        traits_view = View(
-            Item(name='first_name'),
-            Item(name='last_name'),
-            Item(name='age'),
-            Item(name='registered_voter'),
-        )
-
-    alice = Adult(
-       first_name='Alice',
-       last_name='Smith',
-       age=42,
-       registered_voter=True,
-    )
-
-    alice.configure_traits()
+.. literalinclude:: examples/default_trait_editors.py
+   :start-at: default_trait_editors.py
 
 .. figure::  images/ui_for_ex12.jpg
    :alt: UI showing text boxes for names, slider for Age, and checkbox for voter
@@ -337,37 +310,8 @@ example, consider the following script:
 
 .. rubric:: Example 13: Using editor styles at various levels
 
-::
-
-    # mixed_styles.py -- Example of using editor styles at
-    # various levels
-
-    from traits.api import Enum, HasTraits, Str
-    from traitsui.api import Group, Item, View
-
-    class MixedStyles(HasTraits):
-       first_name = Str()
-       last_name = Str()
-
-       department = Enum("Business", "Research", "Admin")
-       position_type = Enum("Full-Time", "Part-Time", "Contract")
-
-       traits_view = View(
-           Group(
-               Item(name='first_name'),
-               Item(name='last_name'),
-               Group(
-                   Item(name='department'),
-                   Item(name='position_type', style='custom'),
-                   style='simple',
-               ),
-           ),
-           title='Mixed Styles',
-           style='readonly',
-       )
-
-    ms = MixedStyles(first_name='Sam', last_name='Smith')
-    ms.configure_traits()
+.. literalinclude:: examples/mixed_styles.py
+   :start-at: mixed_styles.py
 
 Notice how the editor styles are set for each attribute:
 
