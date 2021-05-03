@@ -26,7 +26,7 @@ Notes on upgrading
   complete list, see PRs in the "Removals" section below.  These were all
   generally unused / deprecated for sometime. Also, importing directly from
   ``traitsui.editors`` has been deprecated. Please update imports to import
-  directly from :mod:`traitsui.editors.api`.
+  directly from :mod:`traitsui.api` or :mod:`traitsui.editors.api`.
 
 Detailed changes
 ~~~~~~~~~~~~~~~~
