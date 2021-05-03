@@ -4,7 +4,7 @@ Traits UI Changelog
 Release 7.2.0
 -------------
 TraitsUI 7.2.0 is a minor release which includes numerous bug fixes,
-documentation imporvements, code maintenance changes, and enhancements.
+documentation improvements, code maintenance changes, and enhancements.
 
 Highlights of this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -19,11 +19,11 @@ Highlights of this release
 Notes on upgrading
 ~~~~~~~~~~~~~~~~~~
 
-* This release of TraitsUI now depends on traits 6.1+. Deprecated code /
+* This release of TraitsUI now depends on Traits 6.1+. Also, deprecated code /
   modules have been removed. Namely, the :mod:`traitsui.image <traitsui.image>`
-  module which was moved to ``pyface.image``, ``editors-gen`` modules, Editor
+  module which was moved to ``pyface.image``, ``editors_gen`` modules, Editor
   and EditorFactory factory methods on Toolkit objects, and more.  For a
-  complete list see PRs in the "Removals" section below.  These were all
+  complete list, see PRs in the "Removals" section below.  These were all
   generally unused / deprecated for sometime. Also, importing directly from
   ``traitsui.editors`` has been deprecated. Please update imports to import
   directly from :mod:`traitsui.editors.api`.
