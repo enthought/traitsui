@@ -43,6 +43,7 @@ __extras_require__ = {
     "test": [
         # Dependencies for running test suites.
         "packaging",
+        "numpy"
     ],
 }
 
