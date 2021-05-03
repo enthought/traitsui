@@ -28,19 +28,11 @@ class ArrayEditorTest(HasPrivateTraits):
     view = View(
         Item('three', label='3x3 Integer'),
         '_',
-        Item(
-            'three',
-            label='Integer Read-only',
-            style='readonly',
-        ),
+        Item('three', label='Integer Read-only', style='readonly'),
         '_',
         Item('four', label='4x4 Float'),
         '_',
-        Item(
-            'four',
-            label='Float Read-only',
-            style='readonly',
-        ),
+        Item('four', label='Float Read-only', style='readonly'),
         buttons=NoButtons,
         resizable=True,
     )
