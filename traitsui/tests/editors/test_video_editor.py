@@ -9,6 +9,10 @@
 # Thanks for using Enthought open source!
 import unittest
 
+try:
+    import numpy as np  # noqa: F401
+except ImportError:
+    raise unittest.SkipTest("Can't import NumPy: skipping")
 import pkg_resources
 
 from traits.api import Bool, Callable, File, Float, HasTraits, Range, Str

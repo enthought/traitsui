@@ -9,9 +9,6 @@
 # Thanks for using Enthought open source!
 
 """Traits UI 'display only' video editor."""
-
-import numpy as np
-
 from pyface.qt.QtCore import QPoint, Qt, QUrl, Signal
 from pyface.qt.QtGui import QImage, QPainter, QPalette, QSizePolicy
 from pyface.qt.QtMultimedia import (QAbstractVideoBuffer,
@@ -58,6 +55,7 @@ class ImageWidget(QVideoWidget):
     """ Paints a QImage to the window body. """
 
     def __init__(self, parent=None, image_func=None):
+        import numpy as np
         super().__init__(parent)
         self.image = QImage()
         self._np_image = np.zeros(shape=(0, 0, 4))
