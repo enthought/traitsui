@@ -514,33 +514,8 @@ tags, and then strips out the tags.
 
 .. rubric:: Example 15: Enumeration editor with mapped values
 
-::
-
-    # enum_editor.py -- Example of using an enumeration editor
-    from traits.api import Enum, HasTraits
-    from traitsui.api import EnumEditor
-
-    Class EnumExample(HasTraits):
-        priority = Enum(
-            'Medium', 'Highest', 'High', 'Low', 'Lowest',
-        )
-
-        view = View(
-            Item(
-                name='priority',
-                editor=EnumEditor(
-                    values={
-                        'Highest': '1:Highest',
-                        'High': '2:High',
-                        'Medium': '3:Medium',
-                        'Low': '4:Low',
-                        'Lowest': '5:Lowest',
-                    },
-                ),
-            ),
-        )
-
-    EnumExample().configure_traits()
+.. literalinclude:: examples/enum_editor.py
+   :start-at: enum_editor.py
 
 The enumeration editor strips the characters up to and including the colon. It
 assumes that all the items have the colon in the same position; therefore, if
