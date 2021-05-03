@@ -18,6 +18,7 @@ import wx.lib.scrolledpanel as wxsp
 
 from traits.api import (
     Any, Bool, cached_property, Instance, Property, Str, TraitError
+)
 from traits.trait_base import user_name_for, xgetattr
 
 from traitsui.ui_traits import Image, convert_bitmap
