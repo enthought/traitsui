@@ -10,7 +10,7 @@
 import unittest
 
 try:
-    import numpy as np
+    import numpy as np  # noqa: F401
 except ImportError:
     raise unittest.SkipTest("Can't import NumPy: skipping")
 import pkg_resources
