@@ -5,23 +5,28 @@ Release 7.2.0
 -------------
 TraitsUI 7.2.0 is a minor release which includes numerous bug fixes,
 documentation imporvements, code maintenance changes, and enhancements.
-Of particular note is the start of the migration process from using
-``on_trait_change`` to using the new Traits ``observe`` framework. As a result,
-TraitsUI now requires Traits >= 6.1.
 
 Highlights of this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-*  The migration from ``on_trait_change`` to ``observe`` is underway
+* The migration from ``on_trait_change`` to ``observe`` is underway. As a
+  result, TraitsUI now requires Traits >= 6.1.
+* New display-only VideoEditor (currently only on Qt backend).
 * Exapnsion of features for the new ``UITester`` including the ability to
-  inspect UI object visibility / enabledness.
-* 
+  inspect UI object visibility / enabledness. Also documentation for testing
+  has been updated.
 
 Notes on upgrading
 ~~~~~~~~~~~~~~~~~~
 
-*  This release of TraitsUI now depends on traits 6.1+.
-
+* This release of TraitsUI now depends on traits 6.1+. Deprecated code /
+  modules have been removed. Namely, the :mod:`traitsui.image <traitsui.image>`
+  module which was moved to ``pyface.image``, ``editors-gen`` modules, Editor
+  and EditorFactory factory methods on Toolkit objects, and more.  For a
+  complete list see PRs in the "Removals" section below.  These were all
+  generally unused / deprecated for sometime. Also, importing directly from
+  ``traitsui.editors`` has been deprecated. Please update imports to import
+  directly from :mod:`traitsui.editors.api`.
 
 Detailed changes
 ~~~~~~~~~~~~~~~~
@@ -33,9 +38,6 @@ Thanks to:
 * Mark Dickinson
 * Rahul Poruri
 * Corran Webster
-
-Note that the following list is not exhaustive. Many more PRs references have
-been omitted.
 
 Enhancements
 ~~~~~~~~~~~~
