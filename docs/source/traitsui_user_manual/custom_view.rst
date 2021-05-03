@@ -103,32 +103,36 @@ pages that a user must navigate sequentially.
 
 ::
 
-  # wizard.py ---Example of a traits-based wizard UI
+    # wizard.py ---Example of a traits-based wizard UI
 
-  from traits.api import HasTraits, Str
-  from traitsui.api import Item, View, VGroup
+    from traits.api import HasTraits, Str
+    from traitsui.api import Item, View, VGroup
 
-  class Person(HasTraits):
-      first_name = Str()
-      last_name = Str()
+    class Person(HasTraits):
+        first_name = Str()
+        last_name = Str()
 
-      company = Str()
-      position = Str()
+        company = Str()
+        position = Str()
 
-      view = View(
-          VGroup(
-              Item("first_name"),
-              Item("last_name")
-          ),
-          VGroup(
-              Item("company"),
-              Item("position")
-          )
-      )
+        view = View(
+            VGroup(
+                Item("first_name"),
+                Item("last_name")
+            ),
+            VGroup(
+                Item("company"),
+                Item("position")
+            ),
+        )
 
-  person = Person(first_name='Postman', last_name='Pat', company="Enthought",
-                  position="Software Developer")
-  person.configure_traits(kind='wizard')
+    person = Person(
+        first_name='Postman',
+        last_name='Pat',
+        company="Enthought",
+        position="Software Developer",
+    )
+    person.configure_traits(kind='wizard')
 
 
 leads to the following 2 modal dialogs:
@@ -197,7 +201,7 @@ Consider the following variation on Example 3:
 ::
 
     # configure_traits_view_buttons.py -- Sample code to demonstrate
-    #                                     configure_traits()
+    # configure_traits()
 
     from traits.api import HasTraits, Str, Int
     from traitsui.api import View, Item
@@ -211,10 +215,12 @@ Consider the following variation on Example 3:
         employee_number = Str()
         salary = Int()
 
-    view1 = View(Item(name = 'first_name'),
-                 Item(name = 'last_name'),
-                 Item(name = 'department'),
-                 buttons = [OKButton, CancelButton])
+    view1 = View(
+        Item(name = 'first_name'),
+        Item(name = 'last_name'),
+        Item(name = 'department'),
+        buttons=[OKButton, CancelButton],
+    )
 
     sam = SimpleEmployee()
     sam.configure_traits(view=view1)
@@ -266,7 +272,9 @@ effect would be exactly the same::
 
     from traitsui.menu import OKCancelButtons
 
-                 buttons = OKCancelButtons
+        ...
+        buttons=OKCancelButtons,
+    )
 
 .. index:: NoButtons
 

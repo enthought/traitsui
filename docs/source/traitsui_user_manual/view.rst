@@ -22,8 +22,8 @@ object:
 ::
 
     # configure_traits.py -- Sample code to demonstrate
-    #                        configure_traits()
-    from traits.api import HasTraits, Str, Int
+    # configure_traits()
+    from traits.api import HasTraits, Int, Str
     import traitsui
 
     class SimpleEmployee(HasTraits):
@@ -75,10 +75,10 @@ View object and passing it to the configure_traits() method:
 ::
 
     # configure_traits_view.py -- Sample code to demonstrate
-    #                             configure_traits()
+    # configure_traits()
 
-    from traits.api import HasTraits, Str, Int
-    from traitsui.api import View, Item
+    from traits.api import HasTraits, Int, Str
+    from traitsui.api import Item, View
     import traitsui
 
     class SimpleEmployee(HasTraits):
@@ -88,9 +88,11 @@ View object and passing it to the configure_traits() method:
         employee_number = Str()
         salary = Int()
 
-    view1 = View(Item(name = 'first_name'),
-                 Item(name = 'last_name'),
-                 Item(name = 'department'))
+    view1 = View(
+        Item(name='first_name'),
+        Item(name='last_name'),
+        Item(name='department'),
+    )
 
     sam = SimpleEmployee()
     sam.configure_traits(view=view1)
@@ -350,9 +352,9 @@ Consider the following enhancement to Example 2:
 ::
 
     # configure_traits_view_group.py -- Sample code to demonstrate
-    #                                   configure_traits()
-    from traits.api import HasTraits, Str, Int
-    from traitsui.api import View, Item, Group
+    # configure_traits()
+    from traits.api import HasTraits, Int, Str
+    from traitsui.api import Group, Item, View
     import traitsui
 
     class SimpleEmployee(HasTraits):
@@ -363,11 +365,15 @@ Consider the following enhancement to Example 2:
         employee_number = Str()
         salary = Int()
 
-    view1 = View(Group(Item(name = 'first_name'),
-                       Item(name = 'last_name'),
-                       Item(name = 'department'),
-                       label = 'Personnel profile',
-                       show_border = True))
+    view1 = View(
+        Group(
+            Item(name='first_name'),
+            Item(name='last_name'),
+            Item(name='department'),
+            label='Personnel profile',
+            show_border=True,
+        ),
+    )
 
     sam = SimpleEmployee()
     sam.configure_traits(view=view1)

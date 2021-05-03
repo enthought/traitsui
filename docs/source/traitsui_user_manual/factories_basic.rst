@@ -68,31 +68,38 @@ The following code generates the editors shown in Figure 21.
     # array_editor.py -- Example of using array editors
 
     import numpy as np
-    from traits.api import HasPrivateTraits, Array
-    from traitsui.api \
-        import View, ArrayEditor, Item
+
+    from traits.api import Array, HasPrivateTraits
+    from traitsui.api import ArrayEditor, Item, View
     from traitsui.menu import NoButtons
 
-    class ArrayEditorTest ( HasPrivateTraits ):
+    class ArrayEditorTest(HasPrivateTraits):
 
         three = Array(np.int, (3,3))
-        four  = Array(np.float,
-                      (4,4),
-                      editor = ArrayEditor(width = -50))
 
-        view = View( Item('three', label='3x3 Integer'),
-                     '_',
-                     Item('three',
-                          label='Integer Read-only',
-                          style='readonly'),
-                     '_',
-                     Item('four', label='4x4 Float'),
-                     '_',
-                     Item('four',
-                          label='Float Read-only',
-                          style='readonly'),
-                     buttons   = NoButtons,
-                     resizable = True )
+        four = Array(
+            np.float, (4, 4), editor=ArrayEditor(width=-50),
+        )
+
+        view = View(
+            Item('three', label='3x3 Integer'),
+            '_',
+            Item(
+                'three',
+                label='Integer Read-only',
+                style='readonly',
+            ),
+            '_',
+            Item('four', label='4x4 Float'),
+            '_',
+            Item(
+                'four',
+                label='Float Read-only',
+                style='readonly',
+            ),
+            buttons=NoButtons,
+            resizable=True,
+        )
 
 
     if __name__ == '__main__':
@@ -549,23 +556,28 @@ tags, and then strips out the tags.
 ::
 
     # enum_editor.py -- Example of using an enumeration editor
-    from traits.api import HasTraits, Enum
+    from traits.api import Enum, HasTraits
     from traitsui.api import EnumEditor
 
     Class EnumExample(HasTraits):
-        priority = Enum('Medium', 'Highest',
-                                  'High',
-                                  'Medium',
-                                  'Low',
-                                  'Lowest')
+        priority = Enum(
+            'Medium', 'Highest', 'High', 'Low', 'Lowest',
+        )
 
-        view = View( Item(name='priority',
-                          editor=EnumEditor(values={
-                              'Highest' : '1:Highest',
-                              'High'    : '2:High',
-                              'Medium'  : '3:Medium',
-                              'Low'     : '4:Low',
-                              'Lowest'  : '5:Lowest', })))
+        view = View(
+            Item(
+                name='priority',
+                editor=EnumEditor(
+                    values={
+                        'Highest': '1:Highest',
+                        'High': '2:High',
+                        'Medium': '3:Medium',
+                        'Low': '4:Low',
+                        'Lowest': '5:Lowest',
+                    },
+                ),
+            ),
+        )
 
     EnumExample().configure_traits()
 
@@ -907,32 +919,27 @@ Example 16: Instance editor with instance selection
 ::
 
     # instance_editor_selection.py -- Example of an instance editor
-    #                                 with instance selection
+    # with instance selection
 
-    from traits.api    \
-        import HasStrictTraits, Int, Instance, List, Regex, Str
-    from traitsui.api \
-        import View, Item, InstanceEditor
+    from traits.api import HasStrictTraits, Instance, Int, List, Regex, Str
+    from traitsui.api import InstanceEditor, Item, View
 
     class Person(HasStrictTraits):
         name = Str()
         age = Int()
-        phone = Regex(
-            value = '000-0000',
-            regex = '\d\d\d[-]\d\d\d\d',
-        )
+        phone = Regex(value='000-0000', regex='\d\d\d[-]\d\d\d\d')
 
         traits_view = View('name', 'age', 'phone')
 
     people = [
-      Person(name= 'Dave', age=39, phone='555-1212'),
+      Person(name='Dave', age=39, phone='555-1212'),
       Person(name='Mike', age=28, phone='555-3526'),
       Person(name='Joe', age=34, phone='555-6943'),
       Person(name='Tom', age=22, phone='555-7586'),
       Person(name='Dick', age=63, phone='555-3895'),
       Person(name='Harry' age=46, phone='555-3285'),
       Person(name='Sally', age=43, phone='555-8797'),
-      Person(name='Fields', age=31, phone='555-3547')
+      Person(name='Fields', age=31, phone='555-3547'),
     ]
 
     class Team(HasStrictTraits):
@@ -947,19 +954,19 @@ Example 16: Instance editor with instance selection
             Item(
                 'captain',
                 label='Team Captain',
-                editor = InstanceEditor(
-                    name = 'roster',
-                    editable = True),
-                    style = 'custom',
+                editor=InstanceEditor(
+                    name='roster',
+                    editable=True),
+                    style='custom',
                 ),
-            buttons = ['OK']
+            buttons=['OK'],
         )
 
     if __name__ == '__main__':
         team = Team(
-            name = 'Vultures',
-            captain = people[0],
-            roster  = people
+            name='Vultures',
+            captain=people[0],
+            roster=people,
         )
         team.configure_traits()
 

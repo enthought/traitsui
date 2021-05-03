@@ -430,7 +430,7 @@ argument)::
             #created
         else:
             #code to be executed only when 'foo' changes after
-            #window initialization}
+            #window initialization
 
         #code to be executed in either case
 
@@ -445,11 +445,10 @@ overridden setattr() method and user interface notification method.
 ::
 
     # handler_override.py -- Example of a Handler that overrides
-    #                        setattr(), and that has a user interface
-    #                        notification method
+    # setattr(), and that has a user interface notification method
 
-    from traits.api import HasTraits, Bool
-    from traitsui.api import View, Handler
+    from traits.api import Bool, HasTraits
+    from traitsui.api import Handler, View
 
     class TC_Handler(Handler):
 
@@ -467,10 +466,14 @@ overridden setattr() method and user interface notification method.
         b3 = Bool()
         _updated = Bool(False)
 
-    view1 = View('b1', 'b2', 'b3',
-                 title="Alter Title",
-                 handler=TC_Handler(),
-                 buttons = ['OK', 'Cancel'])
+    view1 = View(
+        'b1',
+        'b2',
+        'b3',
+        title="Alter Title",
+        handler=TC_Handler(),
+        buttons=['OK', 'Cancel'],
+    )
 
     tc = TestClass()
     tc.configure_traits(view=view1)
@@ -508,8 +511,7 @@ the logic for the window. To create the action:
    UIInfo object.
 #. Create an Action instance using the name of the new method, e.g.::
 
-        recalc = Action(name = "Recalculate",
-                        action = "do_recalc")
+        recalc = Action(name="Recalculate", action="do_recalc")
 
 .. _custom-command-buttons:
 
@@ -523,9 +525,11 @@ along with any standard buttons you specify.
 #. Define the handler method and action, as described in :ref:`actions`.
 #. Include the new Action in the **buttons** attribute for the View::
 
-    View ( #view contents,
-           # ...,
-           buttons = [ OKButton, CancelButton, recalc ])
+    View(
+        # view contents,
+        # ...,
+        buttons=[OKButton, CancelButton, recalc],
+    )
 
 .. _menus-and-menu-bars:
 
@@ -545,11 +549,13 @@ make it into a menu option.
 These steps can be executed all at once when the View is created, as in the
 following code::
 
-    View ( #view contents,
-           # ...,
-           menubar = MenuBar(
-              Menu( my_action,
-                    name = 'My Special Menu')))
+    View(
+        # view contents,
+        # ...,
+        menubar=MenuBar(
+            Menu(my_action, name='My Special Menu'),
+        ),
+    )
 
 .. _toolbars:
 
@@ -568,10 +574,12 @@ except that toolbars do not contain menus; they directly contain actions.
 
     From pyface.api import ImageResource
 
-    recalc = Action(name = "Recalculate",
-                    action = "do_recalc",
-                    toolip = "Recalculate the results",
-                    image = ImageResource("recalc.png"))
+    recalc = Action(
+        name="Recalculate",
+        action="do_recalc",
+        toolip="Recalculate the results",
+        image=ImageResource("recalc.png"),
+    )
 
 2. If the View does not already include a ToolBar, create one and assign it to
    the View's **toolbar** attribute.
@@ -580,9 +588,11 @@ except that toolbars do not contain menus; they directly contain actions.
 As with a MenuBar, these steps can be executed all at once when the View is
 created, as in the following code::
 
-    View ( #view contents,
-           # ...,
-           toolbar = ToolBar(my_action))
+    View(
+       # view contents,
+       # ...,
+       toolbar=ToolBar(my_action),
+    )
 
 
 .. _undo_redo:

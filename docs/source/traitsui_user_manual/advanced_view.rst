@@ -66,7 +66,7 @@ variation on Example 3:
 ::
 
     # default_traits_view.py -- Sample code to demonstrate the use of
-    #                           'traits_view'
+    # 'traits_view'
     from traits.api import HasTraits, Str, Int
     from traitsui.api import View, Item, Group
     import traitsui
@@ -79,11 +79,15 @@ variation on Example 3:
         employee_number = Str()
         salary = Int()
 
-        traits_view = View(Group(Item(name = 'first_name'),
-                                 Item(name = 'last_name'),
-                                 Item(name = 'department'),
-                                 label = 'Personnel profile',
-                                 show_border = True))
+        traits_view = View(
+            Group(
+                Item(name='first_name'),
+                Item(name='last_name'),
+                Item(name='department'),
+                label='Personnel profile',
+                show_border=True,
+            ),
+        )
 
     sam = SimpleEmployee2()
     sam.configure_traits()
@@ -118,7 +122,7 @@ example above would be implemented as follows:
 ::
 
     # default_traits_view2.py -- Sample code to demonstrate the use of
-    #                            'default_traits_view'
+    # 'default_traits_view'
     from traits.api import HasTraits, Str, Int
     from traitsui.api import View, Item, Group
     import traitsui
@@ -132,11 +136,15 @@ example above would be implemented as follows:
         salary = Int()
 
         def default_traits_view(self):
-            return View(Group(Item(name = 'first_name'),
-                              Item(name = 'last_name'),
-                              Item(name = 'department'),
-                              label = 'Personnel profile',
-                              show_border = True))
+            return View(
+                Group(
+                    Item(name='first_name'),
+                    Item(name='last_name'),
+                    Item(name='department'),
+                    label='Personnel profile',
+                    show_border=True,
+                ),
+            )
 
     sam = SimpleEmployee2()
     sam.configure_traits()
@@ -168,7 +176,7 @@ this by simply adding a second View attribute:
 ::
 
     # multiple_views.py -- Sample code to demonstrate the use of
-    #                      multiple views
+    # multiple views
     from traits.api import HasTraits, Str, Int
     from traitsui.api import View, Item, Group
     import traitsui
@@ -181,20 +189,27 @@ this by simply adding a second View attribute:
         employee_number = Str()
         salary = Int()
 
-        traits_view = View(Group(Item(name = 'first_name'),
-                                 Item(name = 'last_name'),
-                                 Item(name = 'department'),
-                                 label = 'Personnel profile',
-                                 show_border = True))
+        traits_view = View(
+            Group(
+                Item(name='first_name'),
+                Item(name='last_name'),
+                Item(name='department'),
+                label='Personnel profile',
+                show_border=True,
+            ),
+        )
 
-        all_view = View(Group(Item(name = 'first_name'),
-                              Item(name = 'last_name'),
-                              Item(name = 'department'),
-                              Item(name = 'employee_number'),
-                              Item(name = 'salary'),
-                              label = 'Personnel database ' +
-                                      'entry',
-                              show_border = True))
+        all_view = View(
+            Group(
+                Item(name='first_name'),
+                Item(name='last_name'),
+                Item(name='department'),
+                Item(name='employee_number'),
+                Item(name='salary'),
+                label='Personnel database entry',
+                show_border=True,
+            ),
+        )
 
     sam = SimpleEmployee3()
     sam.configure_traits()
@@ -240,9 +255,15 @@ UI, you can define a named View wherever you can define a variable or class
 attribute. [7]_ A View can even be defined in-line as a function or method
 argument, for example::
 
-    object.configure_traits(view=View(Group(Item(name='a'),
-                                            Item(name='b'),
-                                            Item(name='c')))
+    object.configure_traits(
+        view=View(
+            Group(
+                Item(name='a'),
+                Item(name='b'),
+                Item(name='c'),
+            ),
+        ),
+    )
 
 However, this approach is apt to obfuscate the code unless the View is very
 simple.
@@ -390,7 +411,7 @@ example shows:
 ::
 
     # multi_object_view.py -- Sample code to show multi-object view
-    #                         with context
+    # with context
 
     from traits.api import HasTraits, Str, Int, Bool
     from traitsui.api import View, Group, Item
@@ -424,18 +445,23 @@ example shows:
         title = 'House Comparison'
     )
     # A pair of houses to demonstrate the View
-    house1 = House(address='4743 Dudley Lane',
-                   bedrooms=3,
-                   pool=False,
-                   price=150000)
-    house2 = House(address='11604 Autumn Ridge',
-                   bedrooms=3,
-                   pool=True,
-                   price=200000)
+    house1 = House(
+        address='4743 Dudley Lane',
+        bedrooms=3,
+        pool=False,
+        price=150000,
+    )
+    house2 = House(
+        address='11604 Autumn Ridge',
+        bedrooms=3,
+        pool=True,
+        price=200000,
+    )
 
     # ...And the actual display command
-    house1.configure_traits(view=comp_view, context={'h1':house1,
-                                                     'h2':house2})
+    house1.configure_traits(
+        view=comp_view, context={'h1':house1, 'h2':house2},
+    )
 
 .. FIXME: This is a bit assymmetrical. Can we clean it up without complicating
    the example overly?
@@ -505,21 +531,21 @@ the following two definitions, taken together, are equivalent to the third:
 ::
 
     # This fragment...
-    my_view = View(Group(Item('a'),
-                         Item('b')),
-                   Include('my_group'))
+    my_view = View(
+        Group(Item('a'), Item('b')),
+        Include('my_group'),
+    )
 
     # ...plus this fragment...
-    my_group = Group(Item('c'),
-                     Item('d'),
-                     Item('e'))
+    my_group = Group(
+        Item('c'), Item('d'), Item('e'),
+    )
 
     #...are equivalent to this:
-    my_view = View(Group(Item('a'),
-                         Item('b')),
-                   Group(Item('c'),
-                         Item('d'),
-                         Item('e'))
+    my_view = View(
+        Group(Item('a'), Item('b')),
+        Group(Item('c'), Item('d'), Item('e')),
+    )
 
 This opens an interesting possibility when a View is part of a model class: any
 Include objects belonging to that View can be defined differently for different
