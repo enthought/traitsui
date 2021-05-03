@@ -12,12 +12,15 @@ TraitsUI now requires Traits >= 6.1.
 Highlights of this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+*  The migration from ``on_trait_change`` to ``observe`` is underway
+* Exapnsion of features for the new ``UITester`` including the ability to
+  inspect UI object visibility / enabledness.
 * 
 
 Notes on upgrading
 ~~~~~~~~~~~~~~~~~~
 
-*  
+*  This release of TraitsUI now depends on traits 6.1+.
 
 
 Detailed changes
@@ -90,6 +93,7 @@ Build and continuous integration
 * Add GitHub Actions workflow for testing ets-demo (#1496)
 * Use EDM 3.2.3 instead of EDM 3.2.1 (#1548)
 * Drop support for PyQt < 4.3.2 (#1607)
+* Remove CI test against Traits 6.0 (#1637)
 
 Test suite
 ~~~~~~~~~~
@@ -110,7 +114,7 @@ Maintenance and code organization
 * Formal editor interface for tooltips (#1493
 * Add instance choice classes to traitsui.api (#1495)
 * Undo/Redo cleanup (#1510
-* start on_trait_change to observe migration (#1519, #1520, #1523, #1525, #1545)
+* start on_trait_change to observe migration (#1519, #1520, #1523, #1525, #1545, #1622)
 * Refactor TreeEditor _new_actions and _menu_new_node to avoid hacky eval (#1524)
 * Refactor _add_items method of _GroupPanel object (#1549)
 * Add new trait to eventually replace scroll_to_row_hint (#1560)
