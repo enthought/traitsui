@@ -72,30 +72,8 @@ View object and passing it to the configure_traits() method:
 
 .. rubric:: Example 2: Using configure_traits() with a View object
 
-::
-
-    # configure_traits_view.py -- Sample code to demonstrate
-    # configure_traits()
-
-    from traits.api import HasTraits, Int, Str
-    from traitsui.api import Item, View
-    import traitsui
-
-    class SimpleEmployee(HasTraits):
-        first_name = Str()
-        last_name = Str()
-        department = Str()
-        employee_number = Str()
-        salary = Int()
-
-    view1 = View(
-        Item(name='first_name'),
-        Item(name='last_name'),
-        Item(name='department'),
-    )
-
-    sam = SimpleEmployee()
-    sam.configure_traits(view=view1)
+.. literalinclude:: examples/configure_traits_view.py
+   :start-at: configure_traits_view.py
 
 The resulting window has the desired appearance:
 
