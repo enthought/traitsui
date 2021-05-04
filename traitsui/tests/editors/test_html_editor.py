@@ -12,13 +12,13 @@ import unittest
 from unittest import mock
 
 try:
-    from pyface.qt import QtWebkit
+    from pyface.qt import QtWebkit  # noqa: F401
     NO_WEBKIT_OR_WEBENGINE = False
-except:
+except ImportError:
     try:
-        from pyface.qt import QtWebEngine
+        from pyface.qt import QtWebEngine  # noqa: F401
         NO_WEBKIT_OR_WEBENGINE = False
-    except:
+    except ImportError:
         NO_WEBKIT_OR_WEBENGINE = True
 from traits.api import HasTraits, Str
 from traitsui.api import HTMLEditor, Item, View
