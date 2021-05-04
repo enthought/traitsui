@@ -12,18 +12,20 @@
 """
 
 from traits.api import (
-    HasTraits,
-    BaseTraitHandler,
-    Range,
-    Str,
     Any,
-    Int,
-    Instance,
-    Property,
+    BaseTraitHandler,
     Bool,
     Callable,
+    Dict,
     Enum,
+    HasTraits,
+    Instance,
+    Int,
+    List,
+    Property,
     PrototypedFrom,
+    Range,
+    Str, 
 )
 
 from traitsui.editor_factory import EditorFactory
@@ -87,6 +89,14 @@ class ListEditor(EditorFactory):
     #: Factory callable that will be called to create the new element to add to
     #: this list. If None, the default value for the trait of interest is used.
     default_factory = Callable()
+
+    #: List of positional arguments to be passed to the default factory
+    #: callable when creating new elements
+    default_args = List()
+
+    #: Dictionary of keyword arguments to be passed to the default factory
+    #: callable when creating new elements
+    default_kwargs = Dict()
 
     # -- Notebook Specific Traits ---------------------------------------------
 

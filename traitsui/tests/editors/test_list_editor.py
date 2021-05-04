@@ -232,6 +232,37 @@ class TestSimpleListEditor(unittest.TestCase):
 
         shutil.rmtree(temp_dir)
 
+    def test_default_factory_with_args(self):
+        class Foo(HasStrictTraits):
+            bar = Int()
+            baz = Str()
+
+        def test_callable(bar, baz=''):
+            return Foo(bar=bar, baz=baz)
+
+        class TestFoo(HasStrictTraits):
+            foos = List(Foo)
+            view = View(
+                Item(
+                    "foos",
+                    editor=ListEditor(
+                        default_factory=test_callable,
+                        default_args=[7],
+                        default_kwargs={'baz': "python"}
+                    )
+                )
+            )
+
+        obj = TestFoo()
+        tester = UITester()
+        with tester.create_ui(obj) as ui:
+            foos_list_editor = tester.find_by_name(ui, "foos")
+            # should not raise error (see above test_add_item_fails)
+            foos_list_editor._target.add_empty()
+            self.assertEqual(len(obj.foos), 1)
+            self.assertEqual(obj.foos[0].bar, 7)
+            self.assertEqual(obj.foos[0].baz, "python")
+
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestNotebookListEditor(unittest.TestCase):
