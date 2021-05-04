@@ -25,7 +25,7 @@ from traits.api import (
     Property,
     PrototypedFrom,
     Range,
-    Str, 
+    Str,
 )
 
 from traitsui.editor_factory import EditorFactory
