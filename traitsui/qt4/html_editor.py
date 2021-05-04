@@ -127,7 +127,7 @@ class SimpleEditor(Editor):
         text = self.str_value
         if self.factory.format_text:
             text = self.factory.parse_text(text)
-        if self.base_url:
+        if self.base_url and HAS_WEB_VIEW:
             url = self.base_url
             if not url.endswith("/"):
                 url += "/"
