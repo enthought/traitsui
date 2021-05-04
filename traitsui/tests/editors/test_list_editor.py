@@ -10,7 +10,11 @@
 
 import unittest
 
-from traits.api import HasStrictTraits, Instance, Int, List, Str
+from pyface.toolkit import toolkit_object
+from traits.api import (
+    Directory, HasStrictTraits, Instance, Int, List, Str, TraitError
+)
+
 from traitsui.api import Item, ListEditor, View
 from traitsui.testing.api import (
     DisplayedText,
@@ -25,6 +29,10 @@ from traitsui.testing.api import (
 from traitsui.tests._tools import (
     requires_toolkit,
     ToolkitName,
+)
+
+ModalDialogTester = toolkit_object(
+    "util.modal_dialog_tester:ModalDialogTester"
 )
 
 
@@ -169,6 +177,34 @@ class TestSimpleListEditor(unittest.TestCase):
             people_list = tester.find_by_name(ui, "people")
             with self.assertRaises(IndexError):
                 people_list.locate(Index(10))
+
+    # regression test for enthought/traitsui#1154
+    @requires_toolkit([ToolkitName.qt])
+    def test_add_item_fails(self):
+
+        class Foo(HasStrictTraits):
+            dirs = List(Directory(exists=True))
+
+        obj = Foo()
+        tester = UITester(auto_process_events=False)
+        with tester.create_ui(obj) as ui:
+            dirs_list_editor = tester.find_by_name(ui, "dirs")
+
+            def trigger_error():
+                try:
+                    dirs_list_editor._target.add_empty()
+                except TraitError:
+                    return False
+                return True
+
+            mdtester = ModalDialogTester(trigger_error)
+            mdtester.open_and_run(lambda x: x.close())
+            # we want an error dialog to open, but don't want to raise a
+            # TraitError and crash the full application
+            self.assertTrue(mdtester.dialog_was_opened)
+            self.assertTrue(mdtester.result)
+
+            self.assertEqual(len(obj.dirs), 0)
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
