@@ -16,7 +16,7 @@ except ImportError:
 import pkg_resources
 
 from traits.api import Bool, Callable, File, Float, HasTraits, Range, Str
-from traitsui.api import Item, View
+from traitsui.api import ContextValue, Item, View
 from traitsui.editors.video_editor import MediaStatus, PlayerState, VideoEditor
 from traitsui.tests._tools import BaseTestMixin, create_ui, is_qt5
 
@@ -33,10 +33,9 @@ class MovieTheater(HasTraits):
     status = MediaStatus()
     buffer = Range(0, 100)
     muted = Bool(True)
-    volume = Range(0.0, 100.0, value=100.0)
+    volume = Range(0.0, 100.0)
     playback_rate = Float(1.0)
     image_func = Callable()
-    notify_interval = Float(0.5)
 
 
 @unittest.skipIf(not is_qt5(), 'Requires Qt5')
@@ -50,25 +49,30 @@ class TestVideoEditor(BaseTestMixin, unittest.TestCase):
 
     def test_video_editor_basics(self):
         obj = MovieTheater()
+
+        # Test an editor with trait syncronizations
         view = View(
             Item(
                 'url',
                 editor=VideoEditor(
-                    state='state',
-                    position='position',
-                    duration='duration',
-                    video_error='error',
-                    media_status='status',
-                    buffer='buffer',
-                    muted='muted',
-                    volume='volume',
-                    playback_rate='playback_rate',
-                    image_func='image_func',
-                    notify_interval='notify_interval',
+                    state=ContextValue('state'),
+                    position=ContextValue('position'),
+                    duration=ContextValue('duration'),
+                    video_error=ContextValue('error'),
+                    media_status=ContextValue('status'),
+                    buffer=ContextValue('buffer'),
+                    muted=ContextValue('muted'),
+                    volume=ContextValue('volume'),
+                    playback_rate=ContextValue('playback_rate'),
+                    image_func=ContextValue('image_func'),
+                    notify_interval=0.5,
                 ),
             ),
         )
+        with create_ui(obj, {'view': view}):
+            pass
 
-        # This should not fail.
+        # And an editor with no synced traits
+        view = View(Item('url', editor=VideoEditor()))
         with create_ui(obj, {'view': view}):
             pass
