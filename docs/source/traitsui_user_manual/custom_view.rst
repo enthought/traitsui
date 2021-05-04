@@ -208,9 +208,9 @@ from traitsui.menu and assigned to the buttons attribute:
 
 .. index:: OKCancelsButtons, ModalButtons, LiveButtons
 
-* OKCancelButtons = ``[OKButton, CancelButton ]``
-* ModalButtons = ``[ ApplyButton, RevertButton, OKButton, CancelButton, HelpButton ]``
-* LiveButtons = ``[ UndoButton, RevertButton, OKButton, CancelButton, HelpButton ]``
+* OKCancelButtons = ``[OKButton, CancelButton]``
+* ModalButtons = ``[ApplyButton, RevertButton, OKButton, CancelButton, HelpButton]``
+* LiveButtons = ``[UndoButton, RevertButton, OKButton, CancelButton, HelpButton]``
 
 Thus, one could rewrite the lines in Example 4 as follows, and the
 effect would be exactly the same::

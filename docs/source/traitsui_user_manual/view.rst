@@ -21,10 +21,9 @@ object:
 
 ::
 
-    # configure_traits.py -- Sample code to demonstrate
-    # configure_traits()
+    # configure_traits.py -- Sample code to demonstrate configure_traits()
     from traits.api import HasTraits, Int, Str
-    import traitsui
+
 
     class SimpleEmployee(HasTraits):
         first_name = Str()
@@ -33,6 +32,7 @@ object:
 
         employee_number = Str()
         salary = Int()
+
 
     sam = SimpleEmployee()
     sam.configure_traits()

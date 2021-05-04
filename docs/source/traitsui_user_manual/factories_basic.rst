@@ -98,7 +98,7 @@ text input in place of that value. For example, to create a Boolean editor that
 accepts only yes and no as appropriate text values, you might use the following
 expression::
 
-    editor=BooleanEditor(mapping={"yes":True, "no":False})
+    editor=BooleanEditor(mapping={"yes": True, "no": False})
 
 Note that in this case, the strings True and False would *not* be acceptable as
 text input.
