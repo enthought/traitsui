@@ -128,71 +128,8 @@ with associated key bindings, and a button that invokes the key binding editor.
 
 .. rubric:: Example 17: Code editor with key binding editor
 
-::
-
-    # key_bindings.py -- Example of a code editor with a
-    #                    key bindings editor
-
-    from traits.api \
-        import Button, Code, HasPrivateTraits, Str
-    from traitsui.api \
-        import View, Item, Group, Handler, CodeEditor
-    from traitsui.key_bindings \
-        import KeyBinding, KeyBindings
-
-    key_bindings = KeyBindings(
-        KeyBinding( binding1    = 'Ctrl-s',
-                    description = 'Save to a file',
-                    method_name = 'save_file' ),
-        KeyBinding( binding1    = 'Ctrl-r',
-                    description = 'Run script',
-                    method_name = 'run_script' ),
-        KeyBinding( binding1    = 'Ctrl-k',
-                    description = 'Edit key bindings',
-                    method_name = 'edit_bindings' )
-    )
-
-    # TraitsUI Handler class for bound methods
-    class CodeHandler ( Handler ):
-
-        def save_file ( self, info ):
-            info.object.status = "save file"
-
-        def run_script ( self, info ):
-            info.object.status = "run script"
-
-        def edit_bindings ( self, info ):
-            info.object.status = "edit bindings"
-            key_bindings.edit_traits()
-
-    class KBCodeExample ( HasPrivateTraits ):
-
-        code = Code()
-        status = Str()
-        kb    = Button(label='Edit Key Bindings')
-
-        view = View( Group (
-                     Item( 'code',
-                           style     = 'custom',
-                           resizable = True ),
-                     Item('status', style='readonly'),
-                     'kb',
-                     orientation = 'vertical',
-                     show_labels = False,
-                     ),
-                   id = 'KBCodeExample',
-                   key_bindings = key_bindings,
-                   title = 'Code Editor With Key Bindings',
-                   resizable = True,
-
-                   handler   = CodeHandler() )
-
-        def _kb_fired( self, event ):
-            key_bindings.edit_traits()
-
-
-    if __name__ == '__main__':
-        KBCodeExample().configure_traits()
+.. literalinclude:: examples/key_bindings.py
+   :start-at: key_bindings.py
 
 .. _tableeditor:
 
@@ -742,200 +679,8 @@ The following example shows the code that produces the editor shown in Figure
 
 .. rubric:: Example 18: Code for example tree editor
 
-::
-
-    # tree_editor.py -- Example of a tree editor
-
-    from traits.api \
-        import HasTraits, Str, Regex, List, Instance
-    from traitsui.api \
-        import TreeEditor, TreeNode, View, Item, VSplit, \
-               HGroup, Handler, Group
-    from traitsui.menu \
-        import Menu, Action, Separator
-    from traitsui.wx.tree_editor \
-        import NewAction, CopyAction, CutAction, \
-               PasteAction, DeleteAction, RenameAction
-
-    # DATA CLASSES
-
-    class Employee ( HasTraits ):
-        name  = Str( '<unknown>' )
-        title = Str()
-        phone = Regex( regex = r'\d\d\d-\d\d\d\d' )
-
-        def default_title ( self ):
-            self.title = 'Senior Engineer'
-
-    class Department ( HasTraits ):
-        name      = Str( '<unknown>' )
-        employees = List( Employee )
-
-
-    class Company ( HasTraits ):
-        name        = Str( '<unknown>' )
-        departments = List( Department )
-        employees   = List( Employee )
-
-    class Owner ( HasTraits ):
-        name    = Str( '<unknown>' )
-        company = Instance( Company )
-
-    # INSTANCES
-
-    jason = Employee(
-         name  = 'Jason',
-         title = 'Engineer',
-         phone = '536-1057' )
-
-    mike = Employee(
-         name  = 'Mike',
-         title = 'Sr. Marketing Analyst',
-         phone = '536-1057' )
-
-    dave = Employee(
-         name  = 'Dave',
-         title = 'Sr. Engineer',
-         phone = '536-1057' )
-
-    susan = Employee(
-         name  = 'Susan',
-         title = 'Engineer',
-         phone = '536-1057' )
-
-    betty = Employee(
-         name  = 'Betty',
-         title = 'Marketing Analyst' )
-
-    owner = Owner(
-        name    = 'wile',
-        company = Company(
-            name = 'Acme Labs, Inc.',
-            departments = [
-                Department(
-                    name = 'Marketing',
-                    employees = [ mike, betty ]
-                ),
-                Department(
-                    name = 'Engineering',
-                    employees = [ dave, susan, jason ]
-                )
-            ],
-            employees = [ dave, susan, mike, betty, jason ]
-        )
-    )
-
-    # View for objects that aren't edited
-    no_view = View()
-
-    # Actions used by tree editor context menu
-
-    def_title_action = Action(name='Default title',
-                              action = 'object.default')
-
-    dept_action = Action(
-        name='Department',
-        action='handler.employee_department(editor,object)')
-
-    # View used by tree editor
-    employee_view = View(
-        VSplit(
-            HGroup( '3', 'name' ),
-            HGroup( '9', 'title' ),
-            HGroup( 'phone' ),
-            id = 'vsplit' ),
-        id = 'traits.doc.example.treeeditor',
-        dock = 'vertical' )
-
-    class TreeHandler ( Handler ):
-
-        def employee_department ( self, editor, object ):
-            dept = editor.get_parent( object )
-            print '%s works in the %s department.' %\
-                ( object.name, dept.name )
-
-    # Tree editor
-    tree_editor = TreeEditor(
-        nodes = [
-            TreeNode( node_for  = [ Company ],
-                      auto_open = True,
-                      children  = '',
-                      label     = 'name',
-                      view      = View( Group('name',
-                                       orientation='vertical',
-                                       show_left=True )) ),
-            TreeNode( node_for  = [ Company ],
-                      auto_open = True,
-                      children  = 'departments',
-                      label     = '=Departments',
-                      view      = no_view,
-                      add       = [ Department ] ),
-            TreeNode( node_for  = [ Company ],
-                      auto_open = True,
-                      children  = 'employees',
-                      label     = '=Employees',
-                      view      = no_view,
-                      add       = [ Employee ] ),
-            TreeNode( node_for  = [ Department ],
-                      auto_open = True,
-                      children  = 'employees',
-                      label     = 'name',
-                      menu      = Menu( NewAction,
-                                        Separator(),
-                                        DeleteAction,
-                                        Separator(),
-                                        RenameAction,
-                                        Separator(),
-                                        CopyAction,
-                                        CutAction,
-                                        PasteAction ),
-                      view      = View( Group ('name',
-                                       orientation='vertical',
-                                       show_left=True )),
-                      add       = [ Employee ] ),
-            TreeNode( node_for  = [ Employee ],
-                      auto_open = True,
-                      label     = 'name',
-                      menu=Menu( NewAction,
-                                 Separator(),
-                                 def_title_action,
-                                 dept_action,
-                                 Separator(),
-                                 CopyAction,
-                                 CutAction,
-                                 PasteAction,
-                                 Separator(),
-                                 DeleteAction,
-                                 Separator(),
-                                 RenameAction ),
-                      view = employee_view )
-        ]
-    )
-
-    # The main view
-    view = View(
-               Group(
-                   Item(
-                        name = 'company',
-                        id = 'company',
-                        editor = tree_editor,
-                        resizable = True ),
-                    orientation = 'vertical',
-                    show_labels = True,
-                    show_left = True, ),
-                title = 'Company Structure',
-                id = \
-                 'traitsui.tests.tree_editor_test',
-                dock = 'horizontal',
-                drop_class = HasTraits,
-                handler = TreeHandler(),
-                buttons = [ 'Undo', 'OK', 'Cancel' ],
-                resizable = True,
-                width = .3,
-                height = .3 )
-
-    if __name__ == '__main__':
-        owner.configure_traits( view = view )
+.. literalinclude:: examples/tree_editor.py
+   :start-at: tree_editor.py
 
 .. _defining-nodes:
 
@@ -963,13 +708,19 @@ To define a node type without children, set the **children** attribute of
 TreeNode to the empty string. In Example 16, the following lines define the node
 type for the node that displays the company name, with no children::
 
-        TreeNode( node_for  = [ Company ],
-                  auto_open = True,
-                  children  = '',
-                  label     = 'name',
-                  view      = View( Group('name',
-                                   orientation='vertical',
-                                   show_left=True )) ),
+    TreeNode(
+        node_for=[Company],
+        auto_open=True,
+        children='',
+        label='name',
+        view=View(
+            Group(
+                'name',
+                orientation='vertical',
+                show_left=True,
+            ),
+        ),
+    )
 
 .. _a-node-type-with-children:
 
@@ -985,12 +736,14 @@ trait attribute of Company.
 
 ::
 
-        TreeNode( node_for  = [ Company ],
-                  auto_open = True,
-                  children  = 'departments',
-                  label     = '=Departments',
-                  view      = no_view,
-                  add       = [ Department ] ),
+    TreeNode(
+        node_for=[Company],
+        auto_open=True,
+        children='departments',
+        label='=Departments',
+        view=no_view,
+        add=[Department],
+    )
 
 .. _setting-the-label-of-a-tree-node:
 
@@ -1031,23 +784,31 @@ containing Action objects for the menu commands. In Example 16, the following
 lines define the node type for employees, including a shortcut menu for employee
 nodes::
 
-        TreeNode( node_for  = [ Department ],
-                  auto_open = True,
-                  children  = 'employees',
-                  label     = 'name',
-                  menu      = Menu( NewAction,
-                                    Separator(),
-                                    DeleteAction,
-                                    Separator(),
-                                    RenameAction,
-                                    Separator(),
-                                    CopyAction,
-                                    CutAction,
-                                    PasteAction ),
-                  view      = View( Group ('name',
-                                   orientation='vertical',
-                                   show_left=True )),
-                  add       = [ Employee ] ),
+    TreeNode(
+        node_for=[Department],
+        auto_open=True,
+        children='employees',
+        label='name',
+        menu=Menu(
+            NewAction,
+            Separator(),
+            DeleteAction,
+            Separator(),
+            RenameAction,
+            Separator(),
+            CopyAction,
+            CutAction,
+            PasteAction,
+        ),
+        view=View(
+            Group(
+                'name',
+                orientation='vertical',
+                show_left=True,
+            ),
+        ),
+        add=[Employee],
+    ),
 
 .. _allowing-the-hierarchy-to-be-modified:
 
@@ -1177,18 +938,20 @@ following:
 
    For example::
 
-        shared_tree_1 = TreeEditor(shared_editor = True,
-                                   editor = my_shared_editor_pane,
-                                   nodes = [ TreeNode( # ...
-                                                     )
-                                           ]
-                                   )
-        shared_tree_2 = TreeEditor(shared_editor = True,
-                                   editor = my_shared_editor_pane,
-                                   nodes = [ TreeNode( # ...
-                                                      )
-                                           ]
-                                   )
+        shared_tree_1 = TreeEditor(
+            shared_editor=True,
+            editor=my_shared_editor_pane,
+            nodes=[
+              TreeNode(...),
+            ],
+        )
+        shared_tree_2 = TreeEditor(
+            shared_editor=True,
+            editor=my_shared_editor_pane,
+            nodes=[
+                TreeNode(...),
+            ],
+        )
 
 .. _tree-defining-the-format:
 

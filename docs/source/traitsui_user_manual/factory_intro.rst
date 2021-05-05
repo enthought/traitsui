@@ -33,32 +33,8 @@ Consider the following script and the window it creates:
 
 .. rubric:: Example 12: Using default trait editors
 
-::
-
-    # default_trait_editors.py -- Example of using default
-    #                             trait editors
-
-    from traits.api import HasTraits, Str, Range, Bool
-    from traitsui.api import View, Item
-
-    class Adult(HasTraits):
-        first_name = Str()
-        last_name = Str()
-        age = Range(21,99)
-        registered_voter = Bool()
-
-
-        traits_view = View(Item(name='first_name'),
-                           Item(name='last_name'),
-                           Item(name='age'),
-                           Item(name='registered_voter'))
-
-    alice = Adult(first_name='Alice',
-                  last_name='Smith',
-                  age=42,
-                  registered_voter=True)
-
-    alice.configure_traits()
+.. literalinclude:: examples/default_trait_editors.py
+   :start-at: default_trait_editors.py
 
 .. figure::  images/ui_for_ex12.jpg
    :alt: UI showing text boxes for names, slider for Age, and checkbox for voter
@@ -180,7 +156,12 @@ selecting elements from a specified set; the contents of this set must, of
 course, be known to the editor. This sort of initialization is usually performed
 by means of one or more keyword arguments to the editor factory, for example::
 
-    Item(name='my_list',editor=CheckListEditor(values=["opt1","opt2","opt3"]))
+    Item(
+        name='my_list',
+        editor=CheckListEditor(
+            values=["opt1","opt2","opt3"],
+        ),
+    )
 
 The descriptions of trait editor factories in
 :ref:`the-predefined-trait-editor-factories` include a list of required and
@@ -329,34 +310,8 @@ example, consider the following script:
 
 .. rubric:: Example 13: Using editor styles at various levels
 
-::
-
-    # mixed_styles.py -- Example of using editor styles at
-    #                    various levels
-
-    from traits.api import HasTraits, Str, Enum
-    from traitsui.api import View, Group, Item
-
-    class MixedStyles(HasTraits):
-       first_name = Str()
-       last_name = Str()
-
-       department = Enum("Business", "Research", "Admin")
-       position_type = Enum("Full-Time",
-                            "Part-Time",
-                            "Contract")
-
-       traits_view = View(Group(Item(name='first_name'),
-                                Item(name='last_name'),
-                                Group(Item(name='department'),
-                                      Item(name='position_type',
-                                           style='custom'),
-                                      style='simple')),
-                          title='Mixed Styles',
-                          style='readonly')
-
-    ms = MixedStyles(first_name='Sam', last_name='Smith')
-    ms.configure_traits()
+.. literalinclude:: examples/mixed_styles.py
+   :start-at: mixed_styles.py
 
 Notice how the editor styles are set for each attribute:
 
