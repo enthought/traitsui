@@ -1048,6 +1048,34 @@ For example, the default editor for Range(low=0, high=1500) has
 
     View(Item('my_range', editor=DefaultOverride(high_label='Max'))
 
+VideoEditor()
+`````````````
+
+VideoEditor() is a display-only video editor. Note that this editor is only
+available on Qt at the moment. Please see :ref:`TraitsUI Demos <traitsui-demo>`
+for a demo.
+
+.. note:: Depending on your operating system, you might have to install
+    external codecs to get the VideoEditor working.
+
+    On Windows, you will need to install DirectShow filters (such as those
+    available in the K-Lite Codec Pack) in order to play most video formats
+    when using EDM to install Qt5. This is because the EDM build of Qt5 is
+    built to use
+    `DirectShow <https://docs.microsoft.com/en-us/windows/win32/directshow/supported-formats-in-directshow>`_,
+    not `WMF <https://docs.microsoft.com/en-us/windows/win32/medfound/supported-media-formats-in-media-foundation>`_.
+
+    On MacOS, the video editor will work as expected as long as the video format
+    is `supported <https://developer.apple.com/documentation/coremedia/1564239-video_codec_constants?language=objc>`_
+    by the `AVFoundation <https://developer.apple.com/av-foundation/>`_.
+
+    On Linux, `GStreamer <https://gstreamer.freedesktop.org/>`_ needs to be installed.
+
+    See the `Qt Multimedia Backends Wiki <https://wiki.qt.io/Qt_5.13_Multimedia_Backends>`_
+    page for full information.
+
+.. note:: The VideoEditor is new and still under active development. As such,
+    the API of the editor might change in future releases.
 
 .. _extra-trait-editor-factories:
 
