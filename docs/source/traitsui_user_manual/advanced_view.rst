@@ -93,35 +93,8 @@ example above would be implemented as follows:
 
 .. rubric:: Example 5b: Building a default View object with default_traits_view()
 
-::
-
-    # default_traits_view2.py -- Sample code to demonstrate the use of
-    # 'default_traits_view'
-    from traits.api import HasTraits, Str, Int
-    from traitsui.api import View, Item, Group
-    import traitsui
-
-    class SimpleEmployee2(HasTraits):
-        first_name = Str()
-        last_name = Str()
-        department = Str()
-
-        employee_number = Str()
-        salary = Int()
-
-        def default_traits_view(self):
-            return View(
-                Group(
-                    Item(name='first_name'),
-                    Item(name='last_name'),
-                    Item(name='department'),
-                    label='Personnel profile',
-                    show_border=True,
-                ),
-            )
-
-    sam = SimpleEmployee2()
-    sam.configure_traits()
+.. literalinclude:: examples/default_traits_view2.py
+   :start-at: default_traits_view2.py
 
 This pattern can be useful for situations where the layout of GUI elements
 depends on the state of the object. For instance, to populate the values of a
