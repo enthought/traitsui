@@ -9,10 +9,11 @@
 # Thanks for using Enthought open source!
 
 """
-VideoEditor
+Demonstrates a 'display only' video editor for Qt5+.
 
-Demonstrates a 'display only' video editor for Qt5+
+Please refer to the `VideoEditor API docs`_ for further information.
 
+.. _VideoEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.video_editor.html#traitsui.editors.video_editor.VideoEditor
 """
 import numpy as np
 from PIL import Image
