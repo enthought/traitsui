@@ -309,9 +309,10 @@ class SimpleEditor(Editor):
         list, index = self.get_info()
         index += offset
         item_trait = self._trait_handler.item_trait
-        if self.factory.default_factory:
-            value = self.factory.default_factory(
-                *self.factory.default_args, **self.factory.default_kwargs
+        if self.factory.item_factory:
+            value = self.factory.item_factory(
+                *self.factory.item_factory_args,
+                **self.factory.item_factory_kwargs
             )
         else:
             value = item_trait.default_value_for(self.object, self.name)

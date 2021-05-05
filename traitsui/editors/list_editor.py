@@ -86,17 +86,17 @@ class ListEditor(EditorFactory):
     #: Show a right-click context menu for the notebook tabs?  (Qt only)
     show_notebook_menu = Bool(False)
 
-    #: Factory callable that will be called to create the new element to add to
-    #: this list. If None, the default value for the trait of interest is used.
-    default_factory = Callable()
+    #: Factory that will be called to create and add a new element to this
+    #: list. If None, the default value for the trait of interest is used.
+    item_factory = Callable()
 
     #: List of positional arguments to be passed to the default factory
     #: callable when creating new elements
-    default_args = List()
+    item_factory_args = Tuple()
 
     #: Dictionary of keyword arguments to be passed to the default factory
     #: callable when creating new elements
-    default_kwargs = Dict()
+    item_factory_kwargs = Dict()
 
     # -- Notebook Specific Traits ---------------------------------------------
 

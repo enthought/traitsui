@@ -247,7 +247,7 @@ class TestSimpleListEditor(unittest.TestCase):
                     "foos",
                     editor=ListEditor(
                         default_factory=test_callable,
-                        default_args=[7],
+                        default_args=(7,),
                         default_kwargs={'baz': "python"}
                     )
                 )
