@@ -7,7 +7,8 @@
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 # Thanks for using Enthought open source!
-
+import shutil
+import tempfile
 import unittest
 
 from pyface.toolkit import toolkit_object
@@ -205,6 +206,62 @@ class TestSimpleListEditor(unittest.TestCase):
             self.assertTrue(mdtester.result)
 
             self.assertEqual(len(obj.dirs), 0)
+
+    def test_default_factory(self):
+        temp_dir = tempfile.mkdtemp()
+
+        def test_callable():
+            return temp_dir
+
+        class Foo(HasStrictTraits):
+            dirs = List(Directory(exists=True))
+            view = View(
+                Item(
+                    "dirs",
+                    editor=ListEditor(item_factory=test_callable)
+                )
+            )
+
+        obj = Foo()
+        tester = UITester()
+        with tester.create_ui(obj) as ui:
+            dirs_list_editor = tester.find_by_name(ui, "dirs")
+            # should not raise error (see above test_add_item_fails)
+            dirs_list_editor._target.add_empty()
+            self.assertEqual(len(obj.dirs), 1)
+
+        shutil.rmtree(temp_dir)
+
+    def test_default_factory_with_args(self):
+        class Foo(HasStrictTraits):
+            bar = Int()
+            baz = Str()
+
+        def test_callable(bar, baz=''):
+            return Foo(bar=bar, baz=baz)
+
+        class TestFoo(HasStrictTraits):
+            foos = List(Foo)
+            view = View(
+                Item(
+                    "foos",
+                    editor=ListEditor(
+                        item_factory=test_callable,
+                        item_factory_args=(7,),
+                        item_factory_kwargs={'baz': "python"}
+                    )
+                )
+            )
+
+        obj = TestFoo()
+        tester = UITester()
+        with tester.create_ui(obj) as ui:
+            foos_list_editor = tester.find_by_name(ui, "foos")
+            # should not raise error (see above test_add_item_fails)
+            foos_list_editor._target.add_empty()
+            self.assertEqual(len(obj.foos), 1)
+            self.assertEqual(obj.foos[0].bar, 7)
+            self.assertEqual(obj.foos[0].baz, "python")
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])

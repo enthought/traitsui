@@ -12,18 +12,20 @@
 """
 
 from traits.api import (
-    HasTraits,
-    BaseTraitHandler,
-    Range,
-    Str,
     Any,
-    Int,
-    Instance,
-    Property,
+    BaseTraitHandler,
     Bool,
     Callable,
+    Dict,
     Enum,
+    HasTraits,
+    Instance,
+    Int,
+    Property,
     PrototypedFrom,
+    Range,
+    Str,
+    Tuple,
 )
 
 from traitsui.editor_factory import EditorFactory
@@ -83,6 +85,18 @@ class ListEditor(EditorFactory):
 
     #: Show a right-click context menu for the notebook tabs?  (Qt only)
     show_notebook_menu = Bool(False)
+
+    #: Factory that will be called to create and add a new element to this
+    #: list. If None, the default value for the trait of interest is used.
+    item_factory = Callable()
+
+    #: Tuple of positional arguments to be passed to the default factory
+    #: callable when creating new elements
+    item_factory_args = Tuple()
+
+    #: Dictionary of keyword arguments to be passed to the default factory
+    #: callable when creating new elements
+    item_factory_kwargs = Dict()
 
     # -- Notebook Specific Traits ---------------------------------------------
 
