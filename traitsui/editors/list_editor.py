@@ -21,11 +21,11 @@ from traits.api import (
     HasTraits,
     Instance,
     Int,
-    List,
     Property,
     PrototypedFrom,
     Range,
     Str,
+    Tuple,
 )
 
 from traitsui.editor_factory import EditorFactory
