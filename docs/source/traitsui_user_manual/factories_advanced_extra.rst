@@ -1295,9 +1295,10 @@ for a demo.
 .. note:: Depending on your operating system, you might have to install
     external codecs to get the VideoEditor working.
 
-    On Windows, you will need to install the
-    `K-Lite Codec Pack<https://codecguide.com/about_kl.htm>` if you are using EDM
-    to install Qt5. This is because the EDM build of Qt5 is built to use
+    On Windows, you will need to install DirectShow filters (such as those
+    available in the K-Lite Codec Pack) in order to play most video formats
+    when using EDM to install Qt5. This is because the EDM build of Qt5 is
+    built to use
     `DirectShow <https://docs.microsoft.com/en-us/windows/win32/directshow/supported-formats-in-directshow>`_,
     not `WMF <https://docs.microsoft.com/en-us/windows/win32/medfound/supported-media-formats-in-media-foundation>`_.
 
