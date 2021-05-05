@@ -218,7 +218,7 @@ class TestSimpleListEditor(unittest.TestCase):
             view = View(
                 Item(
                     "dirs",
-                    editor=ListEditor(default_factory=test_callable)
+                    editor=ListEditor(item_factory=test_callable)
                 )
             )
 
@@ -246,9 +246,9 @@ class TestSimpleListEditor(unittest.TestCase):
                 Item(
                     "foos",
                     editor=ListEditor(
-                        default_factory=test_callable,
-                        default_args=(7,),
-                        default_kwargs={'baz': "python"}
+                        item_factory=test_callable,
+                        item_factory_args=(7,),
+                        item_factory_kwargs={'baz': "python"}
                     )
                 )
             )
