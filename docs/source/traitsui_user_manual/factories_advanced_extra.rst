@@ -1311,6 +1311,9 @@ for a demo.
     See the `Qt Multimedia Backends Wiki <https://wiki.qt.io/Qt_5.13_Multimedia_Backends>`_
     page for full information.
 
+.. note:: The VideoEditor is new and still under active development. As such,
+    the API of the editor might change in future releases.
+
 .. _extra-trait-editor-factories:
 
 "Extra" Trait Editor Factories
