@@ -11,6 +11,15 @@
 import unittest
 from unittest import mock
 
+try:
+    from pyface.qt import QtWebkit  # noqa: F401
+    NO_WEBKIT_OR_WEBENGINE = False
+except ImportError:
+    try:
+        from pyface.qt import QtWebEngine  # noqa: F401
+        NO_WEBKIT_OR_WEBENGINE = False
+    except ImportError:
+        NO_WEBKIT_OR_WEBENGINE = True
 from traits.api import HasTraits, Str
 from traitsui.api import HTMLEditor, Item, View
 from traitsui.tests._tools import (
@@ -223,6 +232,9 @@ def get_custom_ui_tester():
 
 # Run this against wx as well once enthought/traitsui#752 is fixed.
 @requires_toolkit([ToolkitName.qt])
+@unittest.skipIf(
+    NO_WEBKIT_OR_WEBENGINE, "Tests require either QtWebKit or QtWebEngine"
+)
 class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
     """ Test HTMLEditor """
 
