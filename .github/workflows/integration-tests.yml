@@ -30,7 +30,7 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
       - name: Install Swig 3.0.12
         # Dependencies include enable, which has known issue with swig 4.0
-        # seeenthought/enable#360
+        # see enthought/enable#360
         run: sudo apt-get install swig=3.0.12
         if: startsWith(matrix.os, 'ubuntu')
       - name: Install Python packages and dependencies
