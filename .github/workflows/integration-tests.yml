@@ -12,7 +12,9 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        # Note that Ubuntu 20 cannot be used because its SWIG version is 4.0
+        # (enthought/enable#360)
+        os: [ubuntu-18.04]
         toolkit: ['pyside2']
         # Dependencies include chaco/enable, whose installation fails
         # on Python 3.8 and 3.9
@@ -28,10 +30,8 @@ jobs:
       - name: Install Qt dependencies for Linux
         uses: ./.github/actions/apt-get-qt-deps
         if: startsWith(matrix.os, 'ubuntu')
-      - name: Install Swig 3.0.12
-        # Dependencies include enable, which has known issue with swig 4.0
-        # see enthought/enable#360
-        run: sudo apt-get install swig=3.0.12
+      - name: Install Swig
+        run: sudo apt-get install swig
         if: startsWith(matrix.os, 'ubuntu')
       - name: Install Python packages and dependencies
         run: |
