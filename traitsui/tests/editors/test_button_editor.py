@@ -106,6 +106,8 @@ class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
     def test_simple_button_editor(self):
         self.check_button_text_update(simple_view)
 
+    # this currently fails on wx, see enthought/traitsui#1654
+    @requires_toolkit([ToolkitName.qt])
     def test_custom_button_editor(self):
         self.check_button_text_update(custom_view)
 
