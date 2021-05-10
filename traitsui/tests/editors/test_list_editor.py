@@ -207,6 +207,8 @@ class TestSimpleListEditor(unittest.TestCase):
 
             self.assertEqual(len(obj.dirs), 0)
 
+    # this test hits a problem on wx, see issue enthought/traitsui#1653
+    @requires_toolkit([ToolkitName.qt])
     def test_default_factory(self):
         temp_dir = tempfile.mkdtemp()
 
