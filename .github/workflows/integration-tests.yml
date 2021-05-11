@@ -4,9 +4,9 @@
 
 name: Integration tests
 
-on: pull_request
-  #schedule:
-  #  - cron:  '0 0 * * 4'
+on:
+  schedule:
+    - cron:  '0 0 * * 4'
 
 jobs:
   test:
