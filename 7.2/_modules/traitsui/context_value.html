@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.context_value &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.context_value</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.context_value</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines some helper classes and traits used to define &#39;bindable&#39; editor</span>
+<span class="sd">values.  These classes and associated traits are designed to simplify</span>
+<span class="sd">writing editors by allowing the editor factory to specify a context value</span>
+<span class="sd">instance for attributes and have the value on the editor be synchronized</span>
+<span class="sd">with the corresponsing value rom the context.</span>
+
+<span class="sd">The factory should look something like this::</span>
+
+<span class="sd">    class MyEditorFactory(EditorFactory):</span>
+
+<span class="sd">        #: The minimum value.</span>
+<span class="sd">        minimum = CVInt</span>
+
+<span class="sd">        #: The suffix for the data.</span>
+<span class="sd">        suffix = CVType(Str)</span>
+
+<span class="sd">The editor class needs to have traits which correspond to the context value</span>
+<span class="sd">traits, and should be able to react to changes to them::</span>
+
+<span class="sd">    class MyEditor(Editor):</span>
+
+<span class="sd">        #: The minimum value.</span>
+<span class="sd">        minimum = Int()</span>
+
+<span class="sd">        #: The suffix for the data.</span>
+<span class="sd">        suffix = Str()</span>
+
+<span class="sd">This can then be used in views, with values either as constants or as</span>
+<span class="sd">instances of :class:`ContextValue` (abbreviated as ``CV``)::</span>
+
+<span class="sd">    class MyObject(HasTraits):</span>
+
+<span class="sd">        #: An important value.</span>
+<span class="sd">        my_value = Str()</span>
+
+<span class="sd">        #: The minimum value.</span>
+<span class="sd">        my_minimum = Int(10)</span>
+
+<span class="sd">        traits_view = View(</span>
+<span class="sd">            Item(</span>
+<span class="sd">                &#39;my_value&#39;,</span>
+<span class="sd">                editor=MyEditorFactory(</span>
+<span class="sd">                    minimum=CV(&#39;my_minimum&#39;),</span>
+<span class="sd">                    suffix=&#39;...&#39;,</span>
+<span class="sd">                ),</span>
+<span class="sd">            )</span>
+<span class="sd">        )</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">HasStrictTraits</span><span class="p">,</span> <span class="n">Instance</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Either</span>
+
+
+<div class="viewcode-block" id="ContextValue"><a class="viewcode-back" href="../../api/traitsui.context_value.html#traitsui.context_value.ContextValue">[docs]</a><span class="k">class</span> <span class="nc">ContextValue</span><span class="p">(</span><span class="n">HasStrictTraits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Defines the name of a context value that can be bound to an editor</span>
+
+<span class="sd">    Resolution of the name follows the same rules as for context values in</span>
+<span class="sd">    Item objects: if there is no dot in it then it is treated as an</span>
+<span class="sd">    attribute of the &#39;object&#39; context value, other wise the first part</span>
+<span class="sd">    specifies the object in the context and the rest are dotted attribute</span>
+<span class="sd">    look-ups.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: The extended trait name of the value that can be bound to the editor</span>
+    <span class="c1">#: (e.g. &#39;selection&#39; or &#39;handler.selection&#39;):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1"># ------------------------------------------------------------------------</span>
+    <span class="c1"># object Interface</span>
+    <span class="c1"># ------------------------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span></div>
+
+
+<span class="c1">#: Define a shorthand name for a ContextValue:</span>
+<span class="n">CV</span> <span class="o">=</span> <span class="n">ContextValue</span>
+
+
+<span class="c1"># Trait definitions useful in defining bindable editor traits ---------------</span>
+
+
+<div class="viewcode-block" id="CVType"><a class="viewcode-back" href="../../api/traitsui.context_value.html#traitsui.context_value.CVType">[docs]</a><span class="k">def</span> <span class="nf">CVType</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="o">**</span><span class="n">metadata</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Factory that creates a union of a trait type and a ContextValue trait.</span>
+
+<span class="sd">    This also sets up one-way synchronization to the editor if no</span>
+<span class="sd">    other synchronization is specified.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    type : trait type</span>
+<span class="sd">        The trait type that is expected for constant values.</span>
+<span class="sd">    **metadata</span>
+<span class="sd">        Additional metadata for the trait.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    cv_type_trait : trait</span>
+<span class="sd">        A trait which can either hold a constant of the specified</span>
+<span class="sd">        type or an instance of the ContextValue class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">metadata</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;sync_value&quot;</span><span class="p">,</span> <span class="s2">&quot;to&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Either</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">InstanceOfContextValue</span><span class="p">,</span> <span class="o">**</span><span class="n">metadata</span><span class="p">)</span></div>
+
+
+<span class="c1">#: Shorthand for an Instance of ContextValue trait.</span>
+<span class="n">InstanceOfContextValue</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">ContextValue</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1">#: Int or Context value trait</span>
+<span class="n">CVInt</span> <span class="o">=</span> <span class="n">CVType</span><span class="p">(</span><span class="n">Int</span><span class="p">)</span>
+
+<span class="c1">#: Float or Context value trait</span>
+<span class="n">CVFloat</span> <span class="o">=</span> <span class="n">CVType</span><span class="p">(</span><span class="n">Float</span><span class="p">)</span>
+
+<span class="c1">#: Str or Context value trait</span>
+<span class="n">CVStr</span> <span class="o">=</span> <span class="n">CVType</span><span class="p">(</span><span class="n">Str</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,939 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editor &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.editor</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.editor</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines the abstract Editor class, which represents an editing control for</span>
+<span class="sd">    an object trait in a Traits-based user interface.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Bool</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">HasPrivateTraits</span><span class="p">,</span>
+    <span class="n">HasTraits</span><span class="p">,</span>
+    <span class="n">Instance</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Property</span><span class="p">,</span>
+    <span class="n">ReadOnly</span><span class="p">,</span>
+    <span class="n">Set</span><span class="p">,</span>
+    <span class="n">Str</span><span class="p">,</span>
+    <span class="n">TraitError</span><span class="p">,</span>
+    <span class="n">TraitListEvent</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">Undefined</span><span class="p">,</span>
+    <span class="n">cached_property</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">traits.trait_base</span> <span class="kn">import</span> <span class="n">not_none</span><span class="p">,</span> <span class="n">xgetattr</span><span class="p">,</span> <span class="n">xsetattr</span>
+
+<span class="kn">from</span> <span class="nn">.editor_factory</span> <span class="kn">import</span> <span class="n">EditorFactory</span>
+
+<span class="kn">from</span> <span class="nn">.context_value</span> <span class="kn">import</span> <span class="n">ContextValue</span>
+
+<span class="kn">from</span> <span class="nn">.undo</span> <span class="kn">import</span> <span class="n">UndoItem</span>
+
+<span class="kn">from</span> <span class="nn">.item</span> <span class="kn">import</span> <span class="n">Item</span>
+
+<span class="c1"># Reference to an EditorFactory object</span>
+<span class="n">factory_trait</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">EditorFactory</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Editor"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor">[docs]</a><span class="k">class</span> <span class="nc">Editor</span><span class="p">(</span><span class="n">HasPrivateTraits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Represents an editing control for an object trait in a Traits-based</span>
+<span class="sd">        user interface.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: The UI (user interface) this editor is part of:</span>
+    <span class="n">ui</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;traitsui.ui.UI&quot;</span><span class="p">,</span> <span class="n">clean_up</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Full name of the object the editor is editing (e.g.</span>
+    <span class="c1">#: &#39;object.link1.link2&#39;):</span>
+    <span class="n">object_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="s2">&quot;object&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: The object this editor is editing (e.g. object.link1.link2):</span>
+    <span class="nb">object</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">,</span> <span class="n">clean_up</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: The name of the trait this editor is editing (e.g. &#39;value&#39;):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">ReadOnly</span><span class="p">()</span>
+
+    <span class="c1">#: The context object the editor is editing (e.g. object):</span>
+    <span class="n">context_object</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="c1">#: The extended name of the object trait being edited. That is,</span>
+    <span class="c1">#: &#39;object_name.name&#39; minus the context object name at the beginning. For</span>
+    <span class="c1">#: example: &#39;link1.link2.value&#39;:</span>
+    <span class="n">extended_name</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="c1">#: Original value of object.name (e.g. object.link1.link2.value):</span>
+    <span class="n">old_value</span> <span class="o">=</span> <span class="n">Any</span><span class="p">(</span><span class="n">clean_up</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Text description of the object trait being edited:</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">ReadOnly</span><span class="p">()</span>
+
+    <span class="c1">#: The Item object used to create this editor:</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">Item</span><span class="p">,</span> <span class="p">(),</span> <span class="n">clean_up</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: The GUI widget defined by this editor:</span>
+    <span class="n">control</span> <span class="o">=</span> <span class="n">Any</span><span class="p">(</span><span class="n">clean_up</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: The GUI label (if any) defined by this editor:</span>
+    <span class="n">label_control</span> <span class="o">=</span> <span class="n">Any</span><span class="p">(</span><span class="n">clean_up</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Is the underlying GUI widget enabled?</span>
+    <span class="n">enabled</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Is the underlying GUI widget visible?</span>
+    <span class="n">visible</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Is the underlying GUI widget scrollable?</span>
+    <span class="n">scrollable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: The EditorFactory used to create this editor:</span>
+    <span class="n">factory</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">EditorFactory</span><span class="p">,</span> <span class="n">clean_up</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Is the editor updating the object.name value?</span>
+    <span class="n">updating</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Current value for object.name:</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="c1">#: Current value of object trait as a string:</span>
+    <span class="n">str_value</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="c1">#: The trait the editor is editing (not its value, but the trait itself):</span>
+    <span class="n">value_trait</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="c1">#: The current editor invalid state status:</span>
+    <span class="n">invalid</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># -- private trait definitions ------------------------------------------</span>
+
+    <span class="c1">#: A set to track values being updated to prevent infinite recursion.</span>
+    <span class="n">_no_trait_update</span> <span class="o">=</span> <span class="n">Set</span><span class="p">(</span><span class="n">Str</span><span class="p">)</span>
+
+    <span class="c1">#: A list of all values synchronized to.</span>
+    <span class="n">_user_to</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">Tuple</span><span class="p">(</span><span class="n">Any</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">))</span>
+
+    <span class="c1">#: A list of all values synchronized from.</span>
+    <span class="n">_user_from</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">Tuple</span><span class="p">(</span><span class="n">Str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">))</span>
+
+    <span class="c1"># ------------------------------------------------------------------------</span>
+    <span class="c1"># Editor interface</span>
+    <span class="c1"># ------------------------------------------------------------------------</span>
+
+    <span class="c1"># -- Abstract methods ---------------------------------------------------</span>
+
+<div class="viewcode-block" id="Editor.init"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create and initialize the underlying toolkit widget.</span>
+
+<span class="sd">        This method must be overriden by subclasses.  Implementations must</span>
+<span class="sd">        ensure that the :attr:`control` trait is set to an appropriate</span>
+<span class="sd">        toolkit object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        parent : toolkit control</span>
+<span class="sd">            The parent toolkit object of the editor&#39;s toolkit objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;This method must be overriden.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Editor.update_editor"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.update_editor">[docs]</a>    <span class="k">def</span> <span class="nf">update_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Updates the editor when the value changes externally to the editor.</span>
+
+<span class="sd">        This should normally be overridden in a subclass.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Editor.error"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.error">[docs]</a>    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">excp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles an error that occurs while setting the object&#39;s trait value.</span>
+
+<span class="sd">        This should normally be overridden in a subclass.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        excp : Exception</span>
+<span class="sd">            The exception which occurred.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Editor.set_focus"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.set_focus">[docs]</a>    <span class="k">def</span> <span class="nf">set_focus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Assigns focus to the editor&#39;s underlying toolkit widget.</span>
+
+<span class="sd">        This method must be overriden by subclasses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;This method must be overriden.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Editor.set_tooltip_text"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.set_tooltip_text">[docs]</a>    <span class="k">def</span> <span class="nf">set_tooltip_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the tooltip for a toolkit control to the provided text.</span>
+
+<span class="sd">        This method must be overriden by subclasses.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        text : str</span>
+<span class="sd">            The text to use for the tooltip.</span>
+<span class="sd">        control : toolkit control</span>
+<span class="sd">            The toolkit control that is having the tooltip set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;This method must be overriden.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Editor.string_value"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.string_value">[docs]</a>    <span class="k">def</span> <span class="nf">string_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">format_func</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the text representation of a specified object trait value.</span>
+
+<span class="sd">        This simply delegates to the factory&#39;s `string_value` method.</span>
+<span class="sd">        Sub-classes may choose to override the default implementation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : any</span>
+<span class="sd">            The value being edited.</span>
+<span class="sd">        format_func : callable or None</span>
+<span class="sd">            A function that takes a value and returns a string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">string_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">format_func</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Editor.restore_prefs"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.restore_prefs">[docs]</a>    <span class="k">def</span> <span class="nf">restore_prefs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Restores saved user preference information for the editor.</span>
+
+<span class="sd">        Editors with state may choose to override this. It will only be used</span>
+<span class="sd">        if the editor has an `id` value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        prefs : dict</span>
+<span class="sd">            A dictionary of preference values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Editor.save_prefs"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.save_prefs">[docs]</a>    <span class="k">def</span> <span class="nf">save_prefs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns any user preference information for the editor.</span>
+
+<span class="sd">        Editors with state may choose to override this. It will only be used</span>
+<span class="sd">        if the editor has an `id` value.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        prefs : dict or None</span>
+<span class="sd">            A dictionary of preference values, or None if no preferences to</span>
+<span class="sd">            be saved.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+    <span class="c1"># -- Editor life-cycle methods ------------------------------------------</span>
+
+<div class="viewcode-block" id="Editor.prepare"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.prepare">[docs]</a>    <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Finish setting up the editor.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        parent : toolkit control</span>
+<span class="sd">            The parent toolkit object of the editor&#39;s toolkit objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extended_name</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">context_object</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_update_editor</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dispatch</span><span class="o">=</span><span class="s2">&quot;ui&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sync_values</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_editor</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Editor.dispose"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.dispose">[docs]</a>    <span class="k">def</span> <span class="nf">dispose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Disposes of the contents of an editor.</span>
+
+<span class="sd">        This disconnects any synchronised values and resets references</span>
+<span class="sd">        to other objects.</span>
+
+<span class="sd">        Subclasses may chose to override this method to perform additional</span>
+<span class="sd">        clean-up.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extended_name</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">context_object</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_update_editor</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">handler</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_from</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">handler</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_to</span><span class="p">:</span>
+            <span class="nb">object</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Break linkages to references we no longer need:</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trait_names</span><span class="p">(</span><span class="n">clean_up</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+    <span class="c1"># -- Undo/redo methods --------------------------------------------------</span>
+
+<div class="viewcode-block" id="Editor.log_change"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.log_change">[docs]</a>    <span class="k">def</span> <span class="nf">log_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">undo_factory</span><span class="p">,</span> <span class="o">*</span><span class="n">undo_args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Logs a change made in the editor with undo/redo history.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        undo_factory : callable</span>
+<span class="sd">            Callable that creates an undo item.  Often self.get_undo_item.</span>
+<span class="sd">        *undo_args</span>
+<span class="sd">            Any arguments to pass to the undo factory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ui</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span>
+
+        <span class="c1"># Create an undo history entry if we are maintaining a history:</span>
+        <span class="n">undoable</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">_undoable</span>
+        <span class="k">if</span> <span class="n">undoable</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">history</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">history</span>
+            <span class="k">if</span> <span class="n">history</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">undo_factory</span><span class="p">(</span><span class="o">*</span><span class="n">undo_args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">undoable</span> <span class="o">==</span> <span class="n">history</span><span class="o">.</span><span class="n">now</span><span class="p">:</span>
+                        <span class="c1"># Create a new undo transaction:</span>
+                        <span class="n">history</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Extend the most recent undo transaction:</span>
+                        <span class="n">history</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Editor.get_undo_item"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.get_undo_item">[docs]</a>    <span class="k">def</span> <span class="nf">get_undo_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">old_value</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Creates an undo history entry.</span>
+
+<span class="sd">        Can be overridden in a subclass for special value types.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        object : HasTraits instance</span>
+<span class="sd">            The object being modified.</span>
+<span class="sd">        name : str</span>
+<span class="sd">            The name of the trait that is to be changed.</span>
+<span class="sd">        old_value : any</span>
+<span class="sd">            The original value of the trait.</span>
+<span class="sd">        new_value : any</span>
+<span class="sd">            The new value of the trait.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">UndoItem</span><span class="p">(</span>
+            <span class="nb">object</span><span class="o">=</span><span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">old_value</span><span class="o">=</span><span class="n">old_value</span><span class="p">,</span> <span class="n">new_value</span><span class="o">=</span><span class="n">new_value</span>
+        <span class="p">)</span></div>
+
+    <span class="c1"># -- Trait synchronization code -----------------------------------------</span>
+
+<div class="viewcode-block" id="Editor.sync_value"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.sync_value">[docs]</a>    <span class="k">def</span> <span class="nf">sync_value</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">user_name</span><span class="p">,</span>
+        <span class="n">editor_name</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
+        <span class="n">is_list</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">is_event</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Synchronize an editor trait and a user object trait.</span>
+
+<span class="sd">        Also sets the initial value of the editor trait from the</span>
+<span class="sd">        user object trait (for modes &#39;from&#39; and &#39;both&#39;), and the initial</span>
+<span class="sd">        value of the user object trait from the editor trait (for mode</span>
+<span class="sd">        &#39;to&#39;), as long as the relevant traits are not events.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user_name : str</span>
+<span class="sd">            The name of the trait to be used on the user object. If empty, no</span>
+<span class="sd">            synchronization will be set up.</span>
+<span class="sd">        editor_name : str</span>
+<span class="sd">            The name of the relevant editor trait.</span>
+<span class="sd">        mode : str, optional; one of &#39;to&#39;, &#39;from&#39; or &#39;both&#39;</span>
+<span class="sd">            The direction of synchronization. &#39;from&#39; means that trait changes</span>
+<span class="sd">            in the user object should be propagated to the editor. &#39;to&#39; means</span>
+<span class="sd">            that trait changes in the editor should be propagated to the user</span>
+<span class="sd">            object. &#39;both&#39; means changes should be propagated in both</span>
+<span class="sd">            directions. The default is &#39;both&#39;.</span>
+<span class="sd">        is_list : bool, optional</span>
+<span class="sd">            If true, synchronization for item events will be set up in</span>
+<span class="sd">            addition to the synchronization for the object itself.</span>
+<span class="sd">            The default is False.</span>
+<span class="sd">        is_event : bool, optional</span>
+<span class="sd">            If true, this method won&#39;t attempt to initialize the user</span>
+<span class="sd">            object or editor trait values. The default is False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">user_name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">user_name</span><span class="p">,</span> <span class="n">editor_name</span><span class="p">)</span>
+
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">user_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">user_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_object</span>
+            <span class="n">xuser_name</span> <span class="o">=</span> <span class="n">user_name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">user_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="n">xuser_name</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="n">user_name</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;from&quot;</span><span class="p">,</span> <span class="s2">&quot;both&quot;</span><span class="p">}:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bind_from</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">user_object</span><span class="p">,</span> <span class="n">xuser_name</span><span class="p">,</span> <span class="n">editor_name</span><span class="p">,</span> <span class="n">is_list</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_event</span><span class="p">:</span>
+                <span class="c1"># initialize editor value from user value</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">raise_to_debug</span><span class="p">():</span>
+                    <span class="n">user_value</span> <span class="o">=</span> <span class="n">xgetattr</span><span class="p">(</span><span class="n">user_object</span><span class="p">,</span> <span class="n">xuser_name</span><span class="p">)</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">editor_name</span><span class="p">,</span> <span class="n">user_value</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;to&quot;</span><span class="p">,</span> <span class="s2">&quot;both&quot;</span><span class="p">}:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bind_to</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">user_object</span><span class="p">,</span> <span class="n">xuser_name</span><span class="p">,</span> <span class="n">editor_name</span><span class="p">,</span> <span class="n">is_list</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;to&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_event</span><span class="p">:</span>
+                <span class="c1"># initialize user value from editor value</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">raise_to_debug</span><span class="p">():</span>
+                    <span class="n">editor_value</span> <span class="o">=</span> <span class="n">xgetattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">editor_name</span><span class="p">)</span>
+                    <span class="n">xsetattr</span><span class="p">(</span><span class="n">user_object</span><span class="p">,</span> <span class="n">xuser_name</span><span class="p">,</span> <span class="n">editor_value</span><span class="p">)</span></div>
+
+    <span class="c1"># -- Utility methods -----------------------------------------------------</span>
+
+<div class="viewcode-block" id="Editor.parse_extended_name"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.parse_extended_name">[docs]</a>    <span class="k">def</span> <span class="nf">parse_extended_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Extract the object, name and a getter from an extended name</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            The extended name to parse.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        object, name, getter : any, str, callable</span>
+<span class="sd">            The object from the context, the (extended) name of the</span>
+<span class="sd">            attributes holding the value, and a callable which gets the</span>
+<span class="sd">            current value from the context.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">base_name</span><span class="p">,</span> <span class="n">__</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+            <span class="nb">object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">base_name</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">base_name</span>
+            <span class="nb">object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_object</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">partial</span><span class="p">(</span><span class="n">xgetattr</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Editor.set_tooltip"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.set_tooltip">[docs]</a>    <span class="k">def</span> <span class="nf">set_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the tooltip for a specified toolkit control.</span>
+
+<span class="sd">        This uses the tooltip_text method to get the text to use.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        control : optional toolkit control</span>
+<span class="sd">            The toolkit control that is having the tooltip set.  If None</span>
+<span class="sd">            then the editor&#39;s control is used.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tooltip_set : bool</span>
+<span class="sd">            Whether or not a tooltip value could be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tooltip_text</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">text</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">control</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">control</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_tooltip_text</span><span class="p">(</span><span class="n">control</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Editor.tooltip_text"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.tooltip_text">[docs]</a>    <span class="k">def</span> <span class="nf">tooltip_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get the text for a tooltip, checking various sources.</span>
+
+<span class="sd">        This checks for text from, in order:</span>
+
+<span class="sd">        - the editor&#39;s description trait</span>
+<span class="sd">        - the base trait&#39;s &#39;tooltip&#39; metadata</span>
+<span class="sd">        - the base trait&#39;s &#39;desc&#39; metadata</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        text : str or None</span>
+<span class="sd">            The text for the tooltip, or None if no suitable text can</span>
+<span class="sd">            be found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span>
+
+        <span class="n">base_trait</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">base_trait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">text</span> <span class="o">=</span> <span class="n">base_trait</span><span class="o">.</span><span class="n">tooltip</span>
+        <span class="k">if</span> <span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">text</span>
+
+        <span class="n">text</span> <span class="o">=</span> <span class="n">base_trait</span><span class="o">.</span><span class="n">desc</span>
+        <span class="k">if</span> <span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Specifies &quot;</span> <span class="o">+</span> <span class="n">text</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+    <span class="c1"># -- Utility context managers --------------------------------------------</span>
+
+<div class="viewcode-block" id="Editor.no_trait_update"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.no_trait_update">[docs]</a>    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">no_trait_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Context manager that blocks updates from the named trait. &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_no_trait_update</span><span class="p">:</span>
+            <span class="k">yield</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_no_trait_update</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_no_trait_update</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Editor.raise_to_debug"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.raise_to_debug">[docs]</a>    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">raise_to_debug</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Context manager that uses raise to debug to raise exceptions. &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">raise_to_debug</span>
+
+            <span class="n">raise_to_debug</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Editor.updating_value"><a class="viewcode-back" href="../../api/traitsui.editor.html#traitsui.editor.Editor.updating_value">[docs]</a>    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">updating_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Context manager to handle updating value. &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">updating</span><span class="p">:</span>
+            <span class="k">yield</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">updating</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updating</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+    <span class="c1"># ------------------------------------------------------------------------</span>
+    <span class="c1"># object interface</span>
+    <span class="c1"># ------------------------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initializes the editor object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">traits</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">old_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">ctrait</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">base_trait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ctrait</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;event&quot;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;spring&quot;</span><span class="p">:</span>
+                <span class="c1"># Getting the attribute will fail for &#39;Event&#39; traits:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">old_value</span> <span class="o">=</span> <span class="n">Undefined</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span>
+
+        <span class="c1"># Synchronize the application invalid state status with the editor&#39;s:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">invalid</span><span class="p">,</span> <span class="s2">&quot;invalid&quot;</span><span class="p">,</span> <span class="s2">&quot;from&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ------------------------------------------------------------------------</span>
+    <span class="c1"># private methods</span>
+    <span class="c1"># ------------------------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">_update_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">old_value</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Performs updates when the object trait changes.</span>
+
+<span class="sd">        This is designed to be used as a trait listener.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># If background threads have modified the trait the editor is bound to,</span>
+        <span class="c1"># their trait notifications are queued to the UI thread. It is possible</span>
+        <span class="c1"># that by the time the UI thread dispatches these events, the UI the</span>
+        <span class="c1"># editor is part of has already been closed. So we need to check if we</span>
+        <span class="c1"># are still bound to a live UI, and if not, exit immediately:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># If the notification is for an object different than the one actually</span>
+        <span class="c1"># being edited, it is due to editing an item of the form:</span>
+        <span class="c1"># object.link1.link2.name, where one of the &#39;link&#39; objects may have</span>
+        <span class="c1"># been modified. In this case, we need to rebind the current object</span>
+        <span class="c1"># being edited:</span>
+        <span class="k">if</span> <span class="nb">object</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">get_extended_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object_name</span><span class="p">)</span>
+
+        <span class="c1"># If the editor has gone away for some reason, disconnect and exit:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">control</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">context_object</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_update_editor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">extended_name</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Log the change that was made (as long as the Item is not readonly</span>
+        <span class="c1"># or it is not for an event):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">style</span> <span class="o">!=</span> <span class="s2">&quot;readonly&quot;</span>
+            <span class="ow">and</span> <span class="nb">object</span><span class="o">.</span><span class="n">base_trait</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s2">&quot;event&quot;</span>
+        <span class="p">):</span>
+            <span class="c1"># Indicate that the contents of the UI have been changed:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">modified</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">updating</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log_change</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">get_undo_item</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">old_value</span><span class="p">,</span> <span class="n">new_value</span>
+                <span class="p">)</span>
+
+        <span class="c1"># If the change was not caused by the editor itself:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">updating</span><span class="p">:</span>
+            <span class="c1"># Update the editor control to reflect the current object state:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_editor</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_sync_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initialize and synchronize editor and factory traits</span>
+
+<span class="sd">        Initializes and synchronizes (as needed) editor traits with the</span>
+<span class="sd">        value of corresponding factory traits.  The name of the factory</span>
+<span class="sd">        trait and the editor trait must match and the factory trait needs</span>
+<span class="sd">        to have ``sync_value`` metadata set.  The strategy followed is:</span>
+
+<span class="sd">        - for each factory trait with ``sync_value`` metadata:</span>
+
+<span class="sd">          1.  if the value is a :class:`ContextValue` instance then</span>
+<span class="sd">              call :meth:`sync_value` with the ``name`` from the</span>
+<span class="sd">              context value.</span>
+<span class="sd">          2.  if the trait has ``sync_name`` metadata, look at the</span>
+<span class="sd">              referenced trait value and if it is a non-empty string</span>
+<span class="sd">              then use this value as the name of the value in the</span>
+<span class="sd">              context.</span>
+<span class="sd">          3.  otherwise initialize the current value of the factory</span>
+<span class="sd">              trait to the corresponding value of the editor.</span>
+
+<span class="sd">        - synchronization mode in cases 1 and 2 is taken from the</span>
+<span class="sd">          ``sync_value`` metadata of the editor trait first and then</span>
+<span class="sd">          the ``sync_value`` metadata of the factory trait if that is</span>
+<span class="sd">          empty.</span>
+
+<span class="sd">        - if the value is a container type, then the `is_list` metadata</span>
+<span class="sd">          is set to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">factory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factory</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">trait</span> <span class="ow">in</span> <span class="n">factory</span><span class="o">.</span><span class="n">traits</span><span class="p">(</span><span class="n">sync_value</span><span class="o">=</span><span class="n">not_none</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">self_trait</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">self_trait</span><span class="o">.</span><span class="n">sync_value</span><span class="p">:</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="n">self_trait</span><span class="o">.</span><span class="n">sync_value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="n">trait</span><span class="o">.</span><span class="n">sync_value</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ContextValue</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sync_value</span><span class="p">(</span>
+                    <span class="n">value</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">name</span><span class="p">,</span>
+                    <span class="n">mode</span><span class="p">,</span>
+                    <span class="nb">bool</span><span class="p">(</span><span class="n">self_trait</span><span class="o">.</span><span class="n">is_list</span><span class="p">),</span>
+                    <span class="n">self_trait</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">trait</span><span class="o">.</span><span class="n">sync_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">trait</span><span class="o">.</span><span class="n">sync_name</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span>
+            <span class="p">):</span>
+                <span class="c1"># Note: this is implemented as a stepping stone from things</span>
+                <span class="c1"># like ``low_name`` and ``high_name`` to using context values.</span>
+                <span class="n">sync_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">trait</span><span class="o">.</span><span class="n">sync_name</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sync_value</span><span class="p">(</span>
+                    <span class="n">sync_name</span><span class="p">,</span>
+                    <span class="n">name</span><span class="p">,</span>
+                    <span class="n">mode</span><span class="p">,</span>
+                    <span class="nb">bool</span><span class="p">(</span><span class="n">self_trait</span><span class="o">.</span><span class="n">is_list</span><span class="p">),</span>
+                    <span class="n">self_trait</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mode</span> <span class="o">!=</span> <span class="s2">&quot;to&quot;</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">Undefined</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_bind_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">user_object</span><span class="p">,</span> <span class="n">xuser_name</span><span class="p">,</span> <span class="n">editor_name</span><span class="p">,</span> <span class="n">is_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Bind trait change handlers from a user object to the editor.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            The key to use to guard against recursive updates.</span>
+<span class="sd">        user_object : object</span>
+<span class="sd">            The object in the TraitsUI context that is being bound.</span>
+<span class="sd">        xuser_name: : str</span>
+<span class="sd">            The extended name of the trait to be used on the user object.</span>
+<span class="sd">        editor_name : str</span>
+<span class="sd">            The name of the relevant editor trait.</span>
+<span class="sd">        is_list : bool, optional</span>
+<span class="sd">            If true, synchronization for item events will be set up in</span>
+<span class="sd">            addition to the synchronization for the object itself.</span>
+<span class="sd">            The default is False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">user_trait_modified</span><span class="p">(</span><span class="n">new</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_no_trait_update</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_trait_update</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">raise_to_debug</span><span class="p">():</span>
+                    <span class="n">xsetattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">editor_name</span><span class="p">,</span> <span class="n">new</span><span class="p">)</span>
+
+        <span class="n">user_object</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span><span class="n">user_trait_modified</span><span class="p">,</span> <span class="n">xuser_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_user_to</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">user_object</span><span class="p">,</span> <span class="n">xuser_name</span><span class="p">,</span> <span class="n">user_trait_modified</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">is_list</span><span class="p">:</span>
+
+            <span class="k">def</span> <span class="nf">user_list_modified</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">TraitListEvent</span><span class="p">)</span>
+                    <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_no_trait_update</span>
+                <span class="p">):</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_trait_update</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">raise_to_debug</span><span class="p">():</span>
+                        <span class="n">n</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">index</span>
+                        <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">editor_name</span><span class="p">)[</span>
+                            <span class="n">n</span><span class="p">:</span><span class="n">n</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">removed</span><span class="p">)</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">added</span>
+
+            <span class="n">items</span> <span class="o">=</span> <span class="n">xuser_name</span> <span class="o">+</span> <span class="s2">&quot;_items&quot;</span>
+            <span class="n">user_object</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span><span class="n">user_list_modified</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_user_to</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">user_object</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">user_list_modified</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_bind_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">user_object</span><span class="p">,</span> <span class="n">xuser_name</span><span class="p">,</span> <span class="n">editor_name</span><span class="p">,</span> <span class="n">is_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Bind trait change handlers from a user object to the editor.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            The key to use to guard against recursive updates.</span>
+<span class="sd">        user_object : object</span>
+<span class="sd">            The object in the TraitsUI context that is being bound.</span>
+<span class="sd">        xuser_name: : str</span>
+<span class="sd">            The extended name of the trait to be used on the user object.</span>
+<span class="sd">        editor_name : str</span>
+<span class="sd">            The name of the relevant editor trait.</span>
+<span class="sd">        is_list : bool, optional</span>
+<span class="sd">            If true, synchronization for item events will be set up in</span>
+<span class="sd">            addition to the synchronization for the object itself.</span>
+<span class="sd">            The default is False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">editor_trait_modified</span><span class="p">(</span><span class="n">new</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_no_trait_update</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_trait_update</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">raise_to_debug</span><span class="p">():</span>
+                    <span class="n">xsetattr</span><span class="p">(</span><span class="n">user_object</span><span class="p">,</span> <span class="n">xuser_name</span><span class="p">,</span> <span class="n">new</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span><span class="n">editor_trait_modified</span><span class="p">,</span> <span class="n">editor_name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_user_from</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">editor_name</span><span class="p">,</span> <span class="n">editor_trait_modified</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">is_list</span><span class="p">:</span>
+
+            <span class="k">def</span> <span class="nf">editor_list_modified</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_no_trait_update</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_trait_update</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">raise_to_debug</span><span class="p">():</span>
+                        <span class="n">n</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">index</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="n">xgetattr</span><span class="p">(</span><span class="n">user_object</span><span class="p">,</span> <span class="n">xuser_name</span><span class="p">)</span>
+                        <span class="n">value</span><span class="p">[</span><span class="n">n</span><span class="p">:</span><span class="n">n</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">removed</span><span class="p">)]</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">added</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span><span class="n">editor_list_modified</span><span class="p">,</span> <span class="n">editor_name</span> <span class="o">+</span> <span class="s2">&quot;_items&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_user_from</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">editor_name</span> <span class="o">+</span> <span class="s2">&quot;_items&quot;</span><span class="p">,</span> <span class="n">editor_list_modified</span><span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Set the value of the trait the editor is editing.</span>
+
+<span class="sd">        This calls the appropriate setattr method on the handler to perform</span>
+<span class="sd">        the actual change.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">updating_value</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">handler</span>
+                <span class="n">obj_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_name</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">method</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="nb">getattr</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">_setattr&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">obj_name</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_setattr&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="s2">&quot;setattr&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">TraitError</span> <span class="k">as</span> <span class="n">excp</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">excp</span><span class="p">)</span>
+                <span class="k">raise</span>
+
+    <span class="c1"># -- Traits property getters and setters --------------------------------</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">_get_context_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the context object the editor is using</span>
+
+<span class="sd">        In some cases a proxy object is edited rather than an object directly</span>
+<span class="sd">        in the context, in which case we return ``self.object``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">object_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_name</span>
+        <span class="n">context_key</span> <span class="o">=</span> <span class="n">object_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">object_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">context_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">context</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">context_key</span><span class="p">]</span>
+
+        <span class="c1"># This handles the case of a &#39;ListItemProxy&#39;, which is not in the</span>
+        <span class="c1"># ui.context, but is the editor &#39;object&#39;:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">_get_extended_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the extended trait name being edited.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_get_value_trait</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the trait the editor is editing (Property implementation).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the value of the trait the editor is editing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Set the value of the trait the editor is editing.</span>
+
+<span class="sd">        Dispatches via the TraitsUI Undo/Redo mechanisms to make change</span>
+<span class="sd">        reversible, if desired.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">do_undoable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__set_value</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_str_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the text representation of the object trait.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">string_value</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

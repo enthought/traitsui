@@ -1,0 +1,674 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.item &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.item</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.item</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines the Item class, which is used to represent a single item within</span>
+<span class="sd">    a Traits-based user interface.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Bool</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Constant</span><span class="p">,</span>
+    <span class="n">Delegate</span><span class="p">,</span>
+    <span class="n">Float</span><span class="p">,</span>
+    <span class="n">Instance</span><span class="p">,</span>
+    <span class="n">Range</span><span class="p">,</span>
+    <span class="n">Str</span><span class="p">,</span>
+    <span class="n">Undefined</span><span class="p">,</span>
+    <span class="n">Dict</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">traits.trait_base</span> <span class="kn">import</span> <span class="n">user_name_for</span>
+
+<span class="kn">from</span> <span class="nn">.view_element</span> <span class="kn">import</span> <span class="n">ViewSubElement</span>
+
+<span class="kn">from</span> <span class="nn">.ui_traits</span> <span class="kn">import</span> <span class="n">ContainerDelegate</span><span class="p">,</span> <span class="n">EditorStyle</span>
+
+<span class="kn">from</span> <span class="nn">.editor_factory</span> <span class="kn">import</span> <span class="n">EditorFactory</span>
+
+
+
+<span class="c1"># Pattern of all digits:</span>
+<span class="n">all_digits</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d+&quot;</span><span class="p">)</span>
+
+<span class="c1"># Pattern for finding size infomation embedded in an item description:</span>
+<span class="n">size_pat</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(.*)&lt;(.*)&gt;(.*)$&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+
+<span class="c1"># Pattern for finding tooltip infomation embedded in an item description:</span>
+<span class="n">tooltip_pat</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(.*)`(.*)`(.*)$&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Trait definitions:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1"># Reference to an EditorFactory:</span>
+<span class="n">ItemEditor</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">EditorFactory</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Amount of padding to add around an item:</span>
+<span class="n">Padding</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;amount of padding to add around item&quot;</span><span class="p">)</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;Item&#39; class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="Item"><a class="viewcode-back" href="../../api/traitsui.item.html#traitsui.item.Item">[docs]</a><span class="k">class</span> <span class="nc">Item</span><span class="p">(</span><span class="n">ViewSubElement</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An element in a Traits-based user interface.</span>
+
+<span class="sd">    Magic:</span>
+
+<span class="sd">    - Items are rendered as layout elements if :attr:`name` is set to</span>
+<span class="sd">      special values:</span>
+
+<span class="sd">      * ``name=&#39;&#39;``, the item is rendered as a static label</span>
+
+<span class="sd">      * ``name=&#39;_&#39;``, the item is rendered as a separator</span>
+
+<span class="sd">      * ``name=&#39; &#39;``, the item is rendered as a 5 pixel spacer</span>
+
+<span class="sd">      * ``name=&#39;23&#39;`` (any number), the item is rendered as a spacer of</span>
+<span class="sd">        the size specified (number of pixels)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># FIXME: all the logic for the name = &#39;&#39;, &#39;_&#39;, &#39; &#39;, &#39;23&#39; magic is in</span>
+    <span class="c1"># _GroupPanel._add_items in qt/ui_panel.py, which is a very unlikely place</span>
+    <span class="c1"># to look for it. Ideally, that logic should be in this class.</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: A unique identifier for the item. If not set, it defaults to the value</span>
+    <span class="c1">#: of **name**.</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: User interface label for the item in the GUI. If this attribute is not</span>
+    <span class="c1">#: set, the label is the value of **name** with slight modifications:</span>
+    <span class="c1">#: underscores are replaced by spaces, and the first letter is capitalized.</span>
+    <span class="c1">#: If an item&#39;s **name** is not specified, its label is displayed as</span>
+    <span class="c1">#: static text, without any editor widget.</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Name of the trait the item is editing:</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Style-sheet to apply to item / group (Qt only)</span>
+    <span class="n">style_sheet</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Help text describing the purpose of the item. The built-in help handler</span>
+    <span class="c1">#: displays this text in a pop-up window if the user clicks the widget&#39;s</span>
+    <span class="c1">#: label. View-level help displays the help text for all items in a view.</span>
+    <span class="c1">#: If this attribute is not set, the built-in help handler generates a</span>
+    <span class="c1">#: description based on the trait definition.</span>
+    <span class="n">help</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The HasTraits object whose trait attribute the item is editing:</span>
+    <span class="nb">object</span> <span class="o">=</span> <span class="n">ContainerDelegate</span>
+
+    <span class="c1">#: Presentation style for the item:</span>
+    <span class="n">style</span> <span class="o">=</span> <span class="n">ContainerDelegate</span>
+
+    <span class="c1">#: Docking style for the item:</span>
+    <span class="n">dock</span> <span class="o">=</span> <span class="n">ContainerDelegate</span>
+
+    <span class="c1">#: Image to display on notebook tabs:</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">ContainerDelegate</span>
+
+    <span class="c1">#: Category of elements dragged from view:</span>
+    <span class="n">export</span> <span class="o">=</span> <span class="n">ContainerDelegate</span>
+
+    <span class="c1">#: Should a label be displayed for the item?</span>
+    <span class="n">show_label</span> <span class="o">=</span> <span class="n">Delegate</span><span class="p">(</span><span class="s2">&quot;container&quot;</span><span class="p">,</span> <span class="s2">&quot;show_labels&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Editor to use for the item:</span>
+    <span class="n">editor</span> <span class="o">=</span> <span class="n">ItemEditor</span>
+
+    <span class="c1">#: Additional editor traits to be set if default traits editor to be used:</span>
+    <span class="n">editor_args</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">()</span>
+
+    <span class="c1">#: Should the item use extra space along its Group&#39;s non-layout axis? If set to</span>
+    <span class="c1">#: True, the widget expands to fill any extra space that is available in the</span>
+    <span class="c1">#: display. If set to True for more than one item in the same View, any extra</span>
+    <span class="c1">#: space is divided between them. If set to False, the widget uses only</span>
+    <span class="c1">#: whatever space it is explicitly (or implicitly) assigned. The default</span>
+    <span class="c1">#: value of Undefined means that the use (or non-use) of extra space will be</span>
+    <span class="c1">#: determined by the editor associated with the item.</span>
+    <span class="n">resizable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="n">Undefined</span><span class="p">)</span>
+
+    <span class="c1">#: Should the item use extra space along its Group&#39;s layout axis? For</span>
+    <span class="c1">#: example, it a vertical group, should an item expand vertically to use</span>
+    <span class="c1">#: any extra space available in the group?</span>
+    <span class="n">springy</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Should the item&#39;s label use emphasized text? If the label is not shown,</span>
+    <span class="c1">#: this attribute is ignored.</span>
+    <span class="n">emphasized</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Should the item receive focus initially?</span>
+    <span class="n">has_focus</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Pre-condition for including the item in the display. If the expression</span>
+    <span class="c1">#: evaluates to False, the item is not defined in the display. Conditions</span>
+    <span class="c1">#: for **defined_when** are evaluated only once, when the display is first</span>
+    <span class="c1">#: constructed. Use this attribute for conditions based on attributes that</span>
+    <span class="c1">#: vary from object to object, but that do not change over time. For example,</span>
+    <span class="c1">#: displaying a &#39;maiden_name&#39; item only for female employees in a company</span>
+    <span class="c1">#: database.</span>
+    <span class="n">defined_when</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Pre-condition for showing the item. If the expression evaluates to False,</span>
+    <span class="c1">#: the widget is not visible (and disappears if it was previously visible).</span>
+    <span class="c1">#: If the value evaluates to True, the widget becomes visible. All</span>
+    <span class="c1">#: **visible_when** conditions are checked each time that any trait value</span>
+    <span class="c1">#: on an object in the UI&#39;s context is changed. Therefore, you can use</span>
+    <span class="c1">#: **visible_when** conditions to hide or show widgets in response to user</span>
+    <span class="c1">#: input. Be aware that this only applies to traits in the UI&#39;s context. As</span>
+    <span class="c1">#: a result, changes to nested traits that don&#39;t also change a trait on</span>
+    <span class="c1">#: some object in the context may not trigger the expression to be checked.</span>
+    <span class="c1">#: Additionally, the expression needs to be a valid python expression given</span>
+    <span class="c1">#: the context. i.e. eval(visible_when, globals=globals(), locals=context)</span>
+    <span class="c1">#: should succeed.</span>
+    <span class="n">visible_when</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Pre-condition for enabling the item. If the expression evaluates to False,</span>
+    <span class="c1">#: the widget is disabled, that is, it does not accept input. All</span>
+    <span class="c1">#: **enabled_when** conditions are checked each time that any trait value</span>
+    <span class="c1">#: on an object in the UI&#39;s context is changed. Therefore, you can use</span>
+    <span class="c1">#: **enabled_when** conditions to enable or disable widgets in response to</span>
+    <span class="c1">#: user input. Be aware that this only applies to traits in the UI&#39;s</span>
+    <span class="c1">#: context. As a result, changes to nested traits that don&#39;t also change a</span>
+    <span class="c1">#: trait on some object in the context may not trigger the expression to be</span>
+    <span class="c1">#: checked. Additionally, the expression needs to be a valid python</span>
+    <span class="c1">#: expression given the context. i.e.</span>
+    <span class="c1">#: eval(enabled_when, globals=globals(), locals=context) should succeed.</span>
+    <span class="n">enabled_when</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Amount of extra space, in pixels, to add around the item. Values must be</span>
+    <span class="c1">#: integers between -15 and 15. Use negative values to subtract from the</span>
+    <span class="c1">#: default spacing.</span>
+    <span class="n">padding</span> <span class="o">=</span> <span class="n">Padding</span>
+
+    <span class="c1">#: Tooltip to display over the item, when the mouse pointer is left idle</span>
+    <span class="c1">#: over the widget. Make this text as concise as possible; use the **help**</span>
+    <span class="c1">#: attribute to provide more detailed information.</span>
+    <span class="n">tooltip</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: A Callable to use for formatting the contents of the item. This function</span>
+    <span class="c1">#: or method is called to create the string representation of the trait value</span>
+    <span class="c1">#: to be edited. If the widget does not use a string representation, this</span>
+    <span class="c1">#: attribute is ignored.</span>
+    <span class="n">format_func</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">()</span>
+
+    <span class="c1">#: Python format string to use for formatting the contents of the item.</span>
+    <span class="c1">#: The format string is applied to the string representation of the trait</span>
+    <span class="c1">#: value before it is displayed in the widget. This attribute is ignored if</span>
+    <span class="c1">#: the widget does not use a string representation, or if the</span>
+    <span class="c1">#: **format_func** is set.</span>
+    <span class="n">format_str</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Requested width of the editor (in pixels or fraction of available width).</span>
+    <span class="c1">#: For pixel values (i.e. values not in the range from 0.0 to 1.0), the</span>
+    <span class="c1">#: actual displayed width is at least the maximum of **width** and the</span>
+    <span class="c1">#: optimal width of the widget as calculated by the GUI toolkit. Specify a</span>
+    <span class="c1">#: negative value to ignore the toolkit&#39;s optimal width. For example, use</span>
+    <span class="c1">#: -50 to force a width of 50 pixels. The default value of -1 ensures that</span>
+    <span class="c1">#: the toolkit&#39;s optimal width is used.</span>
+    <span class="c1">#:</span>
+    <span class="c1">#: A value in the range from 0.0 to 1.0 specifies the fraction of the</span>
+    <span class="c1">#: available width to assign to the editor. Note that the value is not an</span>
+    <span class="c1">#: absolute value, but is relative to other item&#39;s whose **width** is also</span>
+    <span class="c1">#: in the 0.0 to 1.0 range. For example, if you have two item&#39;s with a width</span>
+    <span class="c1">#: of 0.1, and one item with a width of 0.2, the first two items will each</span>
+    <span class="c1">#: receive 25% of the available width, while the third item will receive</span>
+    <span class="c1">#: 50% of the available width. The available width is the total width of the</span>
+    <span class="c1">#: view minus the width of any item&#39;s with fixed pixel sizes (i.e. width</span>
+    <span class="c1">#: values not in the 0.0 to 1.0 range).</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="c1">#: Requested height of the editor (in pixels or fraction of available</span>
+    <span class="c1">#: height). For pixel values (i.e. values not in the range from 0.0 to 1.0),</span>
+    <span class="c1">#: the actual displayed height is at least the maximum of **height** and the</span>
+    <span class="c1">#: optimal height of the widget as calculated by the GUI toolkit. Specify a</span>
+    <span class="c1">#: negative value to ignore the toolkit&#39;s optimal height. For example, use</span>
+    <span class="c1">#: -50 to force a height of 50 pixels. The default value of -1 ensures that</span>
+    <span class="c1">#: the toolkit&#39;s optimal height is used.</span>
+    <span class="c1">#:</span>
+    <span class="c1">#: A value in the range from 0.0 to 1.0 specifies the fraction of the</span>
+    <span class="c1">#: available height to assign to the editor. Note that the value is not an</span>
+    <span class="c1">#: absolute value, but is relative to other item&#39;s whose **height** is also</span>
+    <span class="c1">#: in the 0.0 to 1.0 range. For example, if you have two item&#39;s with a height</span>
+    <span class="c1">#: of 0.1, and one item with a height of 0.2, the first two items will each</span>
+    <span class="c1">#: receive 25% of the available height, while the third item will receive</span>
+    <span class="c1">#: 50% of the available height. The available height is the total height of</span>
+    <span class="c1">#: the view minus the height of any item&#39;s with fixed pixel sizes (i.e.</span>
+    <span class="c1">#: height values not in the 0.0 to 1.0 range).</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="c1">#: The extended trait name of the trait containing the item&#39;s invalid state</span>
+    <span class="c1">#: status (passed through to the item&#39;s editor):</span>
+    <span class="n">invalid</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initializes the item object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">traits</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;The argument to Item must be a string of the &quot;</span>
+                <span class="s2">&quot;form: [id:][object.[object.]*][name][&#39;[&#39;label&#39;]&#39;]`tooltip`&quot;</span>
+                <span class="s2">&quot;[&lt;width[,height]&gt;][#^][$|@|*|~|;style]&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">value</span><span class="p">,</span> <span class="n">empty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_label</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">empty</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_label</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_style</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_size</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_tooltip</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_option</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;resizable&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_option</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;^&quot;</span><span class="p">,</span> <span class="s2">&quot;emphasized&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="o">.</span><span class="n">find</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split</span><span class="p">(</span><span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="o">.</span><span class="n">rfind</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="Item.is_includable"><a class="viewcode-back" href="../../api/traitsui.item.html#traitsui.item.Item.is_includable">[docs]</a>    <span class="k">def</span> <span class="nf">is_includable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a Boolean indicating whether the object is replaceable by an</span>
+<span class="sd">            Include object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="Item.is_spacer"><a class="viewcode-back" href="../../api/traitsui.item.html#traitsui.item.Item.is_spacer">[docs]</a>    <span class="k">def</span> <span class="nf">is_spacer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns True if the item represents a spacer or separator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="p">(</span><span class="n">all_digits</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Item.get_help"><a class="viewcode-back" href="../../api/traitsui.item.html#traitsui.item.Item.get_help">[docs]</a>    <span class="k">def</span> <span class="nf">get_help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Gets the help text associated with the Item in a specified UI.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Return &#39;None&#39; if the Item is a separator or spacer:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_spacer</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># Otherwise, it must be a trait Item:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span>
+
+        <span class="nb">object</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object_</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span> <span class="n">ui</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">base_trait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">get_help</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Item.get_label"><a class="viewcode-back" href="../../api/traitsui.item.html#traitsui.item.Item.get_label">[docs]</a>    <span class="k">def</span> <span class="nf">get_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Gets the label to use for a specified Item.</span>
+
+<span class="sd">        If not specified, the label is set as the name of the</span>
+<span class="sd">        corresponding trait, replacing &#39;_&#39; with &#39; &#39;, and capitalizing</span>
+<span class="sd">        the first letter (see :func:`user_name_for`). This is called</span>
+<span class="sd">        the *user name*.</span>
+
+<span class="sd">        Magic:</span>
+
+<span class="sd">        - if attr:`item.label` is specified, and it begins with &#39;...&#39;,</span>
+<span class="sd">          the final label is the user name followed by the item label</span>
+<span class="sd">        - if attr:`item.label` is specified, and it ends with &#39;...&#39;,</span>
+<span class="sd">          the final label is the item label followed by the user name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Return &#39;None&#39; if the Item is a separator or spacer:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_spacer</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">label</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="nb">object</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object_</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span> <span class="n">ui</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+        <span class="n">trait</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">base_trait</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">user_name_for</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">tlabel</span> <span class="o">=</span> <span class="n">trait</span><span class="o">.</span><span class="n">label</span>
+        <span class="k">if</span> <span class="n">tlabel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">label</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tlabel</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">tlabel</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;...&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">label</span> <span class="o">+</span> <span class="n">tlabel</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+            <span class="k">if</span> <span class="n">tlabel</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span> <span class="o">==</span> <span class="s2">&quot;...&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">tlabel</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">label</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
+            <span class="k">return</span> <span class="n">tlabel</span>
+
+        <span class="k">return</span> <span class="n">tlabel</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Item.get_id"><a class="viewcode-back" href="../../api/traitsui.item.html#traitsui.item.Item.get_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns an ID used to identify the item.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div>
+
+    <span class="k">def</span> <span class="nf">_parse_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Parses a &#39;&lt;width,height&gt;&#39; value from the string definition.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">size_pat</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_float</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_float</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[:</span><span class="n">col</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_float</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:])</span>
+
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">_parse_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Parses a *tooltip* value from the string definition.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">tooltip_pat</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tooltip</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">_set_float</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets a specified trait to a specified string converted to a float.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a &quot;pretty print&quot; version of the Item.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repr_options</span><span class="p">(</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="s2">&quot;show_label&quot;</span><span class="p">,</span> <span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="s2">&quot;height&quot;</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Item( &#39;</span><span class="si">%s</span><span class="s2">&#39; )&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">return</span> <span class="s2">&quot;Item( &#39;</span><span class="si">%s</span><span class="s2">&#39;</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_indent</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;      &quot;</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;UItem&#39; class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="UItem"><a class="viewcode-back" href="../../api/traitsui.item.html#traitsui.item.UItem">[docs]</a><span class="k">class</span> <span class="nc">UItem</span><span class="p">(</span><span class="n">Item</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An Item that has no label.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">show_label</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;Custom&#39; class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="Custom"><a class="viewcode-back" href="../../api/traitsui.item.html#traitsui.item.Custom">[docs]</a><span class="k">class</span> <span class="nc">Custom</span><span class="p">(</span><span class="n">Item</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An Item using a &#39;custom&#39; style.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">style</span> <span class="o">=</span> <span class="n">EditorStyle</span><span class="p">(</span><span class="s2">&quot;custom&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;UCustom&#39; class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="UCustom"><a class="viewcode-back" href="../../api/traitsui.item.html#traitsui.item.UCustom">[docs]</a><span class="k">class</span> <span class="nc">UCustom</span><span class="p">(</span><span class="n">Custom</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An Item using a &#39;custom&#39; style with no label.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">show_label</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;Readonly&#39; class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="Readonly"><a class="viewcode-back" href="../../api/traitsui.item.html#traitsui.item.Readonly">[docs]</a><span class="k">class</span> <span class="nc">Readonly</span><span class="p">(</span><span class="n">Item</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An Item using a &#39;readonly&#39; style.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">style</span> <span class="o">=</span> <span class="n">EditorStyle</span><span class="p">(</span><span class="s2">&quot;readonly&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;UReadonly&#39; class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="UReadonly"><a class="viewcode-back" href="../../api/traitsui.item.html#traitsui.item.UReadonly">[docs]</a><span class="k">class</span> <span class="nc">UReadonly</span><span class="p">(</span><span class="n">Readonly</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An Item using a &#39;readonly&#39; style with no label.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">show_label</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;Label&#39; class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="Label"><a class="viewcode-back" href="../../api/traitsui.item.html#traitsui.item.Label">[docs]</a><span class="k">class</span> <span class="nc">Label</span><span class="p">(</span><span class="n">Item</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An item that is a label.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">)</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;Heading&#39; class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="Heading"><a class="viewcode-back" href="../../api/traitsui.item.html#traitsui.item.Heading">[docs]</a><span class="k">class</span> <span class="nc">Heading</span><span class="p">(</span><span class="n">Label</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An item that is a fancy label.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: Override the &#39;style&#39; trait to default to the fancy &#39;custom&#39; style:</span>
+    <span class="n">style</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="s2">&quot;custom&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;Spring&#39; class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="Spring"><a class="viewcode-back" href="../../api/traitsui.item.html#traitsui.item.Spring">[docs]</a><span class="k">class</span> <span class="nc">Spring</span><span class="p">(</span><span class="n">Item</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An item that is a layout &quot;spring&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Name of the trait the item is editing</span>
+    <span class="c1">#: Just a dummy trait that exists on all HasTraits objects. It&#39;s an Event,</span>
+    <span class="c1">#: so it won&#39;t cause Traits UI to add any synchronization, and because it</span>
+    <span class="c1">#: already exists, it won&#39;t force the addition of a new trait with a bogus</span>
+    <span class="c1">#: name.</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;trait_modified&quot;</span>
+
+    <span class="c1">#: Should a label be displayed?</span>
+    <span class="n">show_label</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Editor to use for the item</span>
+    <span class="n">editor</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;traitsui.api.NullEditor&quot;</span><span class="p">,</span> <span class="p">())</span>
+
+    <span class="c1">#: Should the item use extra space along its Group&#39;s layout orientation?</span>
+    <span class="n">springy</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<span class="c1"># A pre-defined spring for convenience</span>
+<span class="n">spring</span> <span class="o">=</span> <span class="n">Spring</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

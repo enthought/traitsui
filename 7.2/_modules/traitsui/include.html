@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.include &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.include</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.include</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines the Include class, which is used to represent a substitutable</span>
+<span class="sd">    element within a user interface View.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Str</span>
+
+<span class="kn">from</span> <span class="nn">.view_element</span> <span class="kn">import</span> <span class="n">ViewSubElement</span>
+
+
+<div class="viewcode-block" id="Include"><a class="viewcode-back" href="../../api/traitsui.include.html#traitsui.include.Include">[docs]</a><span class="k">class</span> <span class="nc">Include</span><span class="p">(</span><span class="n">ViewSubElement</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A substitutable user interface element, i.e., a placeholder in a view</span>
+<span class="sd">    definition.</span>
+
+<span class="sd">    When a view object constructs an attribute-editing window, any Include</span>
+<span class="sd">    objects within the view definition are replaced with a group or item</span>
+<span class="sd">    defined elsewhere in the object&#39;s inheritance tree, based on matching of the</span>
+<span class="sd">    name of the element. If no matching element is found, the Include object</span>
+<span class="sd">    is ignored.</span>
+
+<span class="sd">    An Include object can reference a group or item attribute on a parent class</span>
+<span class="sd">    or on a subclass. For example, the following class contains a view</span>
+<span class="sd">    definition that provides for the possibility that a subclass might add</span>
+<span class="sd">    &quot;extra&quot; attributes in the middle of the view::</span>
+
+<span class="sd">        class Person(HasTraits):</span>
+<span class="sd">            name = Str()</span>
+<span class="sd">            age = Int()</span>
+<span class="sd">            person_view = View(&#39;name&#39;, Include(&#39;extra&#39;), &#39;age&#39;, kind=&#39;modal&#39;)</span>
+
+<span class="sd">    If you directly create an instance of Person, and edit its attributes,</span>
+<span class="sd">    the Include object is ignored.</span>
+
+<span class="sd">    The following class extends Person, and defines a group of &quot;extra&quot;</span>
+<span class="sd">    attributes to add to the view defined on Person::</span>
+
+<span class="sd">        class LocatedPerson(Person):</span>
+<span class="sd">            street = Str()</span>
+<span class="sd">            city = Str()</span>
+<span class="sd">            state = Str()</span>
+<span class="sd">            zip = Int()</span>
+<span class="sd">            extra = Group(&#39;street&#39;, &#39;city&#39;, &#39;state&#39;, &#39;zip&#39;)</span>
+
+<span class="sd">    The attribute-editing window for an instance of LocatedPerson displays</span>
+<span class="sd">    editors for these extra attributes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: The name of the substitutable content</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initializes the Include object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">traits</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a &quot;pretty print&quot; version of the Include object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">%s</span><span class="s2">&gt;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Add support for locating a nested GUI element &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../../index.html" >
+    <link rel="up" title="Testing TraitsUI Applications" href="../../testing.html" >
+    <link rel="next" title="Limitations on automated GUI testing" href="../discussions/automated_vs_manual_test.html" >
+    <link rel="prev" title="Add support for performing actions or inspecting states" href="add_new_interaction.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" >TraitsUI 7.2 User Manual</a></li>
+          <li class="active"><a href="../../testing.html" accesskey="U">Testing TraitsUI Applications</a></li>
+  
+    <li><a href="#">Add support for locating a nested GUI element</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="../discussions/automated_vs_manual_test.html" title="Limitations on automated GUI testing"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="add_new_interaction.html" title="Add support for performing actions or inspecting states"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <div class="section" id="add-support-for-locating-a-nested-gui-element">
+<span id="testing-add-new-location"></span><h1>Add support for locating a nested GUI element<a class="headerlink" href="#add-support-for-locating-a-nested-gui-element" title="Permalink to this headline">¶</a></h1>
+<p>Support for <a class="reference internal" href="../../../api/traitsui.testing.tester.ui_wrapper.html#traitsui.testing.tester.ui_wrapper.UIWrapper.locate" title="traitsui.testing.tester.ui_wrapper.UIWrapper.locate"><code class="xref py py-func docutils literal notranslate"><span class="pre">locate()</span></code></a> can be extended by registering additional
+location type and resolution logic via <a class="reference internal" href="../../../api/traitsui.testing.tester.target_registry.html#traitsui.testing.tester.target_registry.TargetRegistry.register_location" title="traitsui.testing.tester.target_registry.TargetRegistry.register_location"><code class="xref py py-class docutils literal notranslate"><span class="pre">register_location</span></code></a> on
+a <a class="reference internal" href="../../../api/traitsui.testing.tester.target_registry.html#traitsui.testing.tester.target_registry.TargetRegistry" title="traitsui.testing.tester.target_registry.TargetRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetRegistry</span></code></a>.</p>
+<p>Suppose we have a custom UI editor that contains some buttons. The objective of
+a test is to click a specific button with a given label. We will therefore need
+to locate the button with the given label before a mouse click can be
+performed.</p>
+<p>The test code we wanted to achieve looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">container</span> <span class="o">=</span> <span class="n">UITester</span><span class="p">()</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span> <span class="s2">&quot;some_container&quot;</span><span class="p">)</span>
+<span class="n">button_wrapper</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">locate</span><span class="p">(</span><span class="n">LabelledButton</span><span class="p">(</span><span class="s2">&quot;OK&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="section" id="define-the-location-type">
+<h2>Define the location type<a class="headerlink" href="#define-the-location-type" title="Permalink to this headline">¶</a></h2>
+<p>We can define the new <code class="docutils literal notranslate"><span class="pre">LabelledButton</span></code> location type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LabelledButton</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39; Locator for locating a push button by label.&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="identify-the-target">
+<h2>Identify the target<a class="headerlink" href="#identify-the-target" title="Permalink to this headline">¶</a></h2>
+<p>Next, we need to know which object implements the GUI component. This is where
+implementation details start to come in (see
+<a class="reference internal" href="../discussions/target_interaction_location.html#testing-target-is-protected"><span class="std std-ref">Why is Target protected?</span></a>). We can inspect the object being wrapped:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">container</span><span class="o">.</span><span class="n">_target</span>
+<span class="go">&lt;package.ui.qt.shiny_panel.ShinyPanel object at 0x7f940a3f10b8&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">button_wrapper</span><span class="o">.</span><span class="n">_target</span>
+<span class="go">&lt;package.ui.qt.shiny_button.ShinyButton object at 0x7fbcc3a63438&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="implement-a-solver">
+<h2>Implement a solver<a class="headerlink" href="#implement-a-solver" title="Permalink to this headline">¶</a></h2>
+<p>Say <code class="docutils literal notranslate"><span class="pre">ShinyPanel</span></code> keeps track of the buttons with a dictionary called
+<code class="docutils literal notranslate"><span class="pre">_buttons</span></code> where the names of the buttons are the keys of the dictionary.
+Then the logic to retrieving a button from a
+label can be written like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_button</span><span class="p">(</span><span class="n">wrapper</span><span class="p">,</span> <span class="n">location</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns a ShinyButton from a UIWrapper wrapping ShinyPanel.&quot;&quot;&quot;</span>
+    <span class="c1"># wrapper is an instance of UIWrapper</span>
+    <span class="c1"># location is an instance of LabelledButton</span>
+    <span class="k">return</span> <span class="n">wrapper</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">_buttons</span><span class="p">[</span><span class="n">location</span><span class="o">.</span><span class="n">label</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The solvers can then be registered for the container UI target:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">registry</span> <span class="o">=</span> <span class="n">TargetRegistry</span><span class="p">()</span>
+<span class="n">registry</span><span class="o">.</span><span class="n">register_location</span><span class="p">(</span>
+    <span class="n">target_class</span><span class="o">=</span><span class="n">ShinyPanel</span><span class="p">,</span>
+    <span class="n">locator_class</span><span class="o">=</span><span class="n">LabelledButton</span><span class="p">,</span>
+    <span class="n">solver</span><span class="o">=</span><span class="n">get_button</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Similar to <a class="reference internal" href="../../../api/traitsui.testing.tester.target_registry.html#traitsui.testing.tester.target_registry.TargetRegistry.register_interaction" title="traitsui.testing.tester.target_registry.TargetRegistry.register_interaction"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_interaction()</span></code></a>, the signature of
+<code class="docutils literal notranslate"><span class="pre">get_button</span></code> is required by the <a class="reference internal" href="../../../api/traitsui.testing.tester.target_registry.html#traitsui.testing.tester.target_registry.TargetRegistry.register_location" title="traitsui.testing.tester.target_registry.TargetRegistry.register_location"><code class="xref py py-class docutils literal notranslate"><span class="pre">register_location</span></code></a>
+method. By setting the <code class="docutils literal notranslate"><span class="pre">target_class</span></code> and <code class="docutils literal notranslate"><span class="pre">locator_class</span></code>, we restrict the
+types of <code class="docutils literal notranslate"><span class="pre">wrapper._target</span></code> and <code class="docutils literal notranslate"><span class="pre">location</span></code> received by <code class="docutils literal notranslate"><span class="pre">get_button</span></code>
+respectively.</p>
+</div>
+<div class="section" id="apply-it">
+<h2>Apply it<a class="headerlink" href="#apply-it" title="Permalink to this headline">¶</a></h2>
+<p>Finally, we can use this registry with <a class="reference internal" href="../../../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester" title="traitsui.testing.tester.ui_tester.UITester"><code class="xref py py-class docutils literal notranslate"><span class="pre">UITester</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tester</span> <span class="o">=</span> <span class="n">UITester</span><span class="p">(</span><span class="n">registries</span><span class="o">=</span><span class="p">[</span><span class="n">custom_registry</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>If we have also added a custom <code class="docutils literal notranslate"><span class="pre">ManyMouseClick</span></code> interaction (see section
+<a class="reference internal" href="add_new_interaction.html#testing-add-new-interaction"><span class="std std-ref">Add support for performing actions or inspecting states</span></a>), we can write test code like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">container</span> <span class="o">=</span> <span class="n">UITester</span><span class="p">()</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span> <span class="s2">&quot;some_container&quot;</span><span class="p">)</span>
+<span class="n">button_wrapper</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">locate</span><span class="p">(</span><span class="n">LabelledButton</span><span class="p">(</span><span class="s2">&quot;OK&quot;</span><span class="p">))</span>
+<span class="n">button_wrapper</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="n">ManyMouseClick</span><span class="p">(</span><span class="n">n_times</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>where both <code class="docutils literal notranslate"><span class="pre">LabelledButton</span></code> and <code class="docutils literal notranslate"><span class="pre">ManyMouseClick</span></code> are custom objects.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Add support for locating a nested GUI element</a><ul>
+<li><a class="reference internal" href="#define-the-location-type">Define the location type</a></li>
+<li><a class="reference internal" href="#identify-the-target">Identify the target</a></li>
+<li><a class="reference internal" href="#implement-a-solver">Implement a solver</a></li>
+<li><a class="reference internal" href="#apply-it">Apply it</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="add_new_interaction.html"
+                        title="previous chapter">Add support for performing actions or inspecting states</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../discussions/automated_vs_manual_test.html"
+                        title="next chapter">Limitations on automated GUI testing</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../../../_sources/traitsui_user_manual/testing/howtos/add_new_location.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

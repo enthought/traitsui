@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.message &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.message</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.message</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Displays a message to the user as a modal window.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">HasPrivateTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Float</span>
+
+<span class="kn">from</span> <span class="nn">.view</span> <span class="kn">import</span> <span class="n">View</span>
+
+<span class="kn">from</span> <span class="nn">.group</span> <span class="kn">import</span> <span class="n">HGroup</span>
+
+<span class="kn">from</span> <span class="nn">.item</span> <span class="kn">import</span> <span class="n">Item</span><span class="p">,</span> <span class="n">spring</span>
+
+<span class="kn">from</span> <span class="nn">pyface.timer.api</span> <span class="kn">import</span> <span class="n">do_after</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;Message&#39; class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="Message"><a class="viewcode-back" href="../../api/traitsui.message.html#traitsui.message.Message">[docs]</a><span class="k">class</span> <span class="nc">Message</span><span class="p">(</span><span class="n">HasPrivateTraits</span><span class="p">):</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: The message to be displayed</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Displays a user specified message:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="message"><a class="viewcode-back" href="../../api/traitsui.message.html#traitsui.message.message">[docs]</a><span class="k">def</span> <span class="nf">message</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Message&quot;</span><span class="p">,</span> <span class="n">buttons</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;OK&quot;</span><span class="p">],</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Displays a message to the user as a model window with the specified</span>
+<span class="sd">    title and buttons.</span>
+
+<span class="sd">    If *buttons* is not specified, a single **OK** button is used, which is</span>
+<span class="sd">    appropriate for notifications, where no further action or decision on the</span>
+<span class="sd">    user&#39;s part is required.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">)</span>
+    <span class="n">ui</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">edit_traits</span><span class="p">(</span>
+        <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
+        <span class="n">view</span><span class="o">=</span><span class="n">View</span><span class="p">(</span>
+            <span class="p">[</span><span class="s2">&quot;message~&quot;</span><span class="p">,</span> <span class="s2">&quot;|&lt;&gt;&quot;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">buttons</span><span class="o">=</span><span class="n">buttons</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;modal&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">ui</span><span class="o">.</span><span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="error"><a class="viewcode-back" href="../../api/traitsui.message.html#traitsui.message.error">[docs]</a><span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Message&quot;</span><span class="p">,</span> <span class="n">buttons</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;OK&quot;</span><span class="p">,</span> <span class="s2">&quot;Cancel&quot;</span><span class="p">],</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Displays a message to the user as a modal window with the specified</span>
+<span class="sd">    title and buttons.</span>
+
+<span class="sd">    If *buttons* is not specified, **OK** and **Cancel** buttons are used,</span>
+<span class="sd">    which is appropriate for confirmations, where the user must decide whether</span>
+<span class="sd">    to proceed. Be sure to word the message so that it is clear that clicking</span>
+<span class="sd">    **OK** continues the operation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">)</span>
+    <span class="n">ui</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">edit_traits</span><span class="p">(</span>
+        <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
+        <span class="n">view</span><span class="o">=</span><span class="n">View</span><span class="p">(</span>
+            <span class="p">[</span><span class="s2">&quot;message~&quot;</span><span class="p">,</span> <span class="s2">&quot;|&lt;&gt;&quot;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">buttons</span><span class="o">=</span><span class="n">buttons</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;modal&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">ui</span><span class="o">.</span><span class="n">result</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;AutoCloseMessage&#39; class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="AutoCloseMessage"><a class="viewcode-back" href="../../api/traitsui.message.html#traitsui.message.AutoCloseMessage">[docs]</a><span class="k">class</span> <span class="nc">AutoCloseMessage</span><span class="p">(</span><span class="n">HasPrivateTraits</span><span class="p">):</span>
+
+    <span class="c1">#: The message to be shown:</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="s2">&quot;Please wait&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: The time (in seconds) to show the message:</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AutoCloseMessage.show"><a class="viewcode-back" href="../../api/traitsui.message.html#traitsui.message.AutoCloseMessage.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Display the wait message for a limited duration.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+            <span class="n">HGroup</span><span class="p">(</span>
+                <span class="n">spring</span><span class="p">,</span>
+                <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;readonly&quot;</span><span class="p">),</span>
+                <span class="n">spring</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">do_after</span><span class="p">(</span>
+            <span class="nb">int</span><span class="p">(</span><span class="mf">1000.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">edit_traits</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">)</span><span class="o">.</span><span class="n">dispose</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Displays a user specified message that closes automatically after a</span>
+<span class="c1">#  specified time interval:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="auto_close_message"><a class="viewcode-back" href="../../api/traitsui.message.html#traitsui.message.auto_close_message">[docs]</a><span class="k">def</span> <span class="nf">auto_close_message</span><span class="p">(</span>
+    <span class="n">message</span><span class="o">=</span><span class="s2">&quot;Please wait&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Please wait&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Displays a message to the user as a modal window with no buttons. The</span>
+<span class="sd">        window closes automatically after a specified time interval (specified</span>
+<span class="sd">        in seconds).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">AutoCloseMessage</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">)</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

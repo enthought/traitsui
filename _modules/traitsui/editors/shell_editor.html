@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editors.shell_editor &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../../index.html" >
+    <link rel="up" title="Module code" href="../../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.editors.shell_editor</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.editors.shell_editor</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Editor that displays an interactive Python shell.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">Property</span>
+
+<span class="kn">from</span> <span class="nn">traitsui.basic_editor_factory</span> <span class="kn">import</span> <span class="n">BasicEditorFactory</span>
+<span class="kn">from</span> <span class="nn">traitsui.editor</span> <span class="kn">import</span> <span class="n">Editor</span>
+<span class="kn">from</span> <span class="nn">traitsui.toolkit</span> <span class="kn">import</span> <span class="n">toolkit_object</span>
+
+
+<span class="k">class</span> <span class="nc">_ShellEditor</span><span class="p">(</span><span class="n">Editor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Base class for an editor that displays an interactive Python shell.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: An event fired to execute a command in the shell.</span>
+    <span class="n">command_to_execute</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+
+    <span class="c1">#: An event fired whenver the user executes a command in the shell:</span>
+    <span class="n">command_executed</span> <span class="o">=</span> <span class="n">Event</span><span class="p">(</span><span class="n">Bool</span><span class="p">)</span>
+
+    <span class="c1">#: Is the shell editor is scrollable? This value overrides the default.</span>
+    <span class="n">scrollable</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># &#39;Editor&#39; Interface</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Finishes initializing the editor by creating the underlying toolkit</span>
+<span class="sd">            widget.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Moving the import here, since PythonShell is implemented in the</span>
+        <span class="c1"># Pyface backend packages, and we want to delay loading this toolkit</span>
+        <span class="c1"># specific class until this editor is actually used.</span>
+        <span class="kn">from</span> <span class="nn">pyface.python_shell</span> <span class="kn">import</span> <span class="n">PythonShell</span>
+
+        <span class="nb">locals</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">share</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="nb">locals</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="o">=</span> <span class="n">PythonShell</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="nb">locals</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">control</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">control</span>
+        <span class="k">if</span> <span class="nb">locals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span>
+            <span class="n">shell</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+            <span class="n">shell</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_object</span><span class="p">,</span> <span class="s2">&quot;command_executed&quot;</span><span class="p">,</span> <span class="n">dispatch</span><span class="o">=</span><span class="s2">&quot;ui&quot;</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="nb">object</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_any</span><span class="p">,</span> <span class="n">dispatch</span><span class="o">=</span><span class="s2">&quot;ui&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_base_locals</span> <span class="o">=</span> <span class="nb">locals</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shell</span><span class="o">.</span><span class="n">interpreter</span><span class="p">()</span><span class="o">.</span><span class="n">locals</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="nb">locals</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Synchronize any editor events:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync_value</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">command_to_execute</span><span class="p">,</span> <span class="s2">&quot;command_to_execute&quot;</span><span class="p">,</span> <span class="s2">&quot;from&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync_value</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">command_executed</span><span class="p">,</span> <span class="s2">&quot;command_executed&quot;</span><span class="p">,</span> <span class="s2">&quot;to&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_tooltip</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">update_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles the user entering input data in the edit control.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">locals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shell</span><span class="o">.</span><span class="n">interpreter</span><span class="p">()</span><span class="o">.</span><span class="n">locals</span>
+        <span class="n">base_locals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_locals</span>
+        <span class="k">if</span> <span class="n">base_locals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">object</span><span class="o">.</span><span class="n">trait_names</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="nb">setattr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">locals</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">locals</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">base_locals</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">dic</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">locals</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">command_executed</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">update_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Updates the editor when the object trait changes externally to the</span>
+<span class="sd">            editor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">share</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_shell</span><span class="o">.</span><span class="n">interpreter</span><span class="p">()</span><span class="o">.</span><span class="n">locals</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">locals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shell</span><span class="o">.</span><span class="n">interpreter</span><span class="p">()</span><span class="o">.</span><span class="n">locals</span>
+            <span class="n">base_locals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_locals</span>
+            <span class="k">if</span> <span class="n">base_locals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">object</span><span class="o">.</span><span class="n">trait_names</span><span class="p">():</span>
+                    <span class="nb">locals</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+                <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dic</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="nb">locals</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">update_any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Updates the editor when the object trait changes externally to the</span>
+<span class="sd">            editor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">locals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shell</span><span class="o">.</span><span class="n">interpreter</span><span class="p">()</span><span class="o">.</span><span class="n">locals</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_locals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">locals</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span>
+
+    <span class="k">def</span> <span class="nf">dispose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Disposes of the contents of an editor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shell</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_object</span><span class="p">,</span> <span class="s2">&quot;command_executed&quot;</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_locals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_any</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">dispose</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">restore_prefs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Restores any saved user preference information associated with the</span>
+<span class="sd">            editor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">shell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shell</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">history</span> <span class="o">=</span> <span class="n">prefs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;history&quot;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">history_index</span> <span class="o">=</span> <span class="n">prefs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;history_index&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">shell</span><span class="o">.</span><span class="n">set_history</span><span class="p">(</span><span class="n">history</span><span class="p">,</span> <span class="n">history_index</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">save_prefs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns any user preference information associated with the editor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">history</span><span class="p">,</span> <span class="n">history_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shell</span><span class="o">.</span><span class="n">get_history</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;history&quot;</span><span class="p">:</span> <span class="n">history</span><span class="p">,</span> <span class="s2">&quot;history_index&quot;</span><span class="p">:</span> <span class="n">history_index</span><span class="p">}</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Private Interface</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1"># Trait change handlers --------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">_command_to_execute_fired</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles the &#39;command_to_execute&#39; trait being fired.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Show the command. A &#39;hidden&#39; command should be executed directly on</span>
+        <span class="c1"># the namespace trait!</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shell</span><span class="o">.</span><span class="n">execute_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">hidden</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ShellEditor"><a class="viewcode-back" href="../../../api/traitsui.editors.shell_editor.html#traitsui.editors.shell_editor.ShellEditor">[docs]</a><span class="k">class</span> <span class="nc">ShellEditor</span><span class="p">(</span><span class="n">BasicEditorFactory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Editor factory for shell editors. &quot;&quot;&quot;</span>
+
+    <span class="c1">#: The editor class to be instantiated.</span>
+    <span class="n">klass</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="c1">#: Should the shell interpreter use the object value&#39;s dictionary?</span>
+    <span class="n">share</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Extended trait name of the object event trait which triggers a command</span>
+    <span class="c1">#: execution in the shell when fired.</span>
+    <span class="n">command_to_execute</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Extended trait name of the object event trait which is fired when a</span>
+    <span class="c1">#: command is executed.</span>
+    <span class="n">command_executed</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_get_klass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the toolkit-specific editor class to be used in the UI.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;shell_editor:_ShellEditor&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># This alias is deprecated and will be removed in TraitsUI 8.</span>
+<span class="n">ToolkitEditorFactory</span> <span class="o">=</span> <span class="n">ShellEditor</span>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

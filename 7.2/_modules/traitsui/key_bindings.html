@@ -1,0 +1,457 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.key_bindings &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.key_bindings</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.key_bindings</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines KeyBinding and KeyBindings classes, which manage the mapping of</span>
+<span class="sd">    keystroke events into method calls on controller objects that are supplied</span>
+<span class="sd">    by the application.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Event</span><span class="p">,</span>
+    <span class="n">HasPrivateTraits</span><span class="p">,</span>
+    <span class="n">HasStrictTraits</span><span class="p">,</span>
+    <span class="n">Instance</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Property</span><span class="p">,</span>
+    <span class="n">Str</span><span class="p">,</span>
+    <span class="n">cached_property</span><span class="p">,</span>
+    <span class="n">observe</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">.api</span> <span class="kn">import</span> <span class="n">HGroup</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="n">KeyBindingEditor</span><span class="p">,</span> <span class="n">ListEditor</span><span class="p">,</span> <span class="n">View</span><span class="p">,</span> <span class="n">toolkit</span>
+
+<span class="kn">from</span> <span class="nn">traits.trait_base</span> <span class="kn">import</span> <span class="n">SequenceTypes</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Key binding trait definition:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1"># Trait definition for key bindings</span>
+<span class="n">Binding</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="n">event</span><span class="o">=</span><span class="s2">&quot;binding&quot;</span><span class="p">,</span> <span class="n">editor</span><span class="o">=</span><span class="n">KeyBindingEditor</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="KeyBinding"><a class="viewcode-back" href="../../api/traitsui.key_bindings.html#traitsui.key_bindings.KeyBinding">[docs]</a><span class="k">class</span> <span class="nc">KeyBinding</span><span class="p">(</span><span class="n">HasStrictTraits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Binds one or two keystrokes to a method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: First key binding</span>
+    <span class="n">binding1</span> <span class="o">=</span> <span class="n">Binding</span>
+
+    <span class="c1">#: Second key binding</span>
+    <span class="n">binding2</span> <span class="o">=</span> <span class="n">Binding</span>
+
+    <span class="c1">#: Description of what application function the method performs</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Name of controller method the key is bound to</span>
+    <span class="n">method_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: KeyBindings object that &quot;owns&quot; the KeyBinding</span>
+    <span class="n">owner</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;KeyBindings&quot;</span><span class="p">)</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Traits view definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="n">traits_view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+        <span class="n">HGroup</span><span class="p">(</span>
+            <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;binding1&quot;</span><span class="p">),</span>
+            <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;binding2&quot;</span><span class="p">),</span>
+            <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;readonly&quot;</span><span class="p">),</span>
+            <span class="n">show_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_binding_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">binding_modified</span> <span class="o">=</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="KeyBindings"><a class="viewcode-back" href="../../api/traitsui.key_bindings.html#traitsui.key_bindings.KeyBindings">[docs]</a><span class="k">class</span> <span class="nc">KeyBindings</span><span class="p">(</span><span class="n">HasPrivateTraits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A set of key bindings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Set of defined key bindings (redefined dynamically)</span>
+    <span class="n">bindings</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">KeyBinding</span><span class="p">)</span>
+
+    <span class="c1">#: Optional prefix to add to each method name</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Optional suffix to add to each method name</span>
+    <span class="n">suffix</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1"># -- Private Traits -------------------------------------------------------</span>
+
+    <span class="c1">#: The (optional) list of controllers associated with this KeyBindings</span>
+    <span class="c1">#: object. The controllers may also be provided with the &#39;do&#39; method:</span>
+    <span class="n">controllers</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">transient</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: The &#39;parent&#39; KeyBindings object of this one (if any):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;KeyBindings&quot;</span><span class="p">,</span> <span class="n">transient</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: The root of the KeyBindings tree this object is part of:</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">Property</span><span class="p">(</span><span class="n">observe</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: The child KeyBindings of this object (if any):</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">transient</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Event fired when one of the contained KeyBinding objects is changed</span>
+    <span class="n">binding_modified</span> <span class="o">=</span> <span class="n">Event</span><span class="p">(</span><span class="n">KeyBinding</span><span class="p">)</span>
+
+    <span class="c1">#: Control that currently has the focus (if any)</span>
+    <span class="n">focus_owner</span> <span class="o">=</span> <span class="n">Any</span><span class="p">(</span><span class="n">transient</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Traits view definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="n">traits_view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">Item</span><span class="p">(</span>
+                <span class="s2">&quot;bindings&quot;</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="s2">&quot;custom&quot;</span><span class="p">,</span>
+                <span class="n">show_label</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">editor</span><span class="o">=</span><span class="n">ListEditor</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;custom&quot;</span><span class="p">),</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;|{Click on an entry field, then press the key to &quot;</span>
+            <span class="s2">&quot;assign. Double-click a field to clear it.}&lt;&gt;&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Update Key Bindings&quot;</span><span class="p">,</span>
+        <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;livemodal&quot;</span><span class="p">,</span>
+        <span class="n">resizable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+        <span class="n">height</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">bindings</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">traits</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bindings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bindings</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">SequenceTypes</span><span class="p">):</span>
+            <span class="n">bindings</span> <span class="o">=</span> <span class="n">bindings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bindings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;bindings&quot;</span><span class="p">,</span> <span class="n">List</span><span class="p">(</span><span class="n">KeyBinding</span><span class="p">,</span> <span class="n">minlen</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;list&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bindings</span> <span class="o">=</span> <span class="p">[</span><span class="n">binding</span><span class="o">.</span><span class="n">trait_set</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">binding</span> <span class="ow">in</span> <span class="n">bindings</span><span class="p">]</span>
+
+<div class="viewcode-block" id="KeyBindings.do"><a class="viewcode-back" href="../../api/traitsui.key_bindings.html#traitsui.key_bindings.KeyBindings.do">[docs]</a>    <span class="k">def</span> <span class="nf">do</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">controllers</span><span class="o">=</span><span class="p">[],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Processes a keyboard event.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">controllers</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">controllers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">controllers</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">controllers</span><span class="p">,</span> <span class="n">SequenceTypes</span><span class="p">):</span>
+            <span class="n">controllers</span> <span class="o">=</span> <span class="p">[</span><span class="n">controllers</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">controllers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">controllers</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_do</span><span class="p">(</span>
+            <span class="n">toolkit</span><span class="p">()</span><span class="o">.</span><span class="n">key_event_to_name</span><span class="p">(</span><span class="n">event</span><span class="p">),</span>
+            <span class="n">controllers</span><span class="p">,</span>
+            <span class="n">args</span><span class="p">,</span>
+            <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;recursive&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="KeyBindings.merge"><a class="viewcode-back" href="../../api/traitsui.key_bindings.html#traitsui.key_bindings.KeyBindings.merge">[docs]</a>    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_bindings</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Merges another set of key bindings into this set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">binding_dic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">binding</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bindings</span><span class="p">:</span>
+            <span class="n">binding_dic</span><span class="p">[</span><span class="n">binding</span><span class="o">.</span><span class="n">method_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">binding</span>
+
+        <span class="k">for</span> <span class="n">binding</span> <span class="ow">in</span> <span class="n">key_bindings</span><span class="o">.</span><span class="n">bindings</span><span class="p">:</span>
+            <span class="n">binding2</span> <span class="o">=</span> <span class="n">binding_dic</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">binding</span><span class="o">.</span><span class="n">method_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">binding2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">binding2</span><span class="o">.</span><span class="n">binding1</span> <span class="o">=</span> <span class="n">binding</span><span class="o">.</span><span class="n">binding1</span>
+                <span class="n">binding2</span><span class="o">.</span><span class="n">binding2</span> <span class="o">=</span> <span class="n">binding</span><span class="o">.</span><span class="n">binding2</span></div>
+
+<div class="viewcode-block" id="KeyBindings.clone"><a class="viewcode-back" href="../../api/traitsui.key_bindings.html#traitsui.key_bindings.KeyBindings.clone">[docs]</a>    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a clone of the KeyBindings object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">bindings</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">)</span><span class="o">.</span><span class="n">trait_set</span><span class="p">(</span>
+            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">trait_get</span><span class="p">(</span><span class="s2">&quot;prefix&quot;</span><span class="p">,</span> <span class="s2">&quot;suffix&quot;</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="KeyBindings.dispose"><a class="viewcode-back" href="../../api/traitsui.key_bindings.html#traitsui.key_bindings.KeyBindings.dispose">[docs]</a>    <span class="k">def</span> <span class="nf">dispose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Dispose of the object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">controllers</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">bindings</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">focus_owner</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="KeyBindings.edit"><a class="viewcode-back" href="../../api/traitsui.key_bindings.html#traitsui.key_bindings.KeyBindings.edit">[docs]</a>    <span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Edits a possibly hierarchical set of KeyBindings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bindings</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">_get_bindings</span><span class="p">([])))</span>
+        <span class="n">bindings</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%s%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">binding1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:],</span> <span class="n">x</span><span class="o">.</span><span class="n">binding1</span><span class="p">))</span>
+        <span class="n">KeyBindings</span><span class="p">(</span><span class="n">bindings</span><span class="p">)</span><span class="o">.</span><span class="n">edit_traits</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="KeyBindings.key_binding_for"><a class="viewcode-back" href="../../api/traitsui.key_bindings.html#traitsui.key_bindings.KeyBindings.key_binding_for">[docs]</a>    <span class="k">def</span> <span class="nf">key_binding_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding</span><span class="p">,</span> <span class="n">key_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the current binding for a specified key (if any).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">key_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">a_binding</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bindings</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">a_binding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">binding</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+                    <span class="p">(</span><span class="n">key_name</span> <span class="o">==</span> <span class="n">a_binding</span><span class="o">.</span><span class="n">binding1</span><span class="p">)</span>
+                    <span class="ow">or</span> <span class="p">(</span><span class="n">key_name</span> <span class="o">==</span> <span class="n">a_binding</span><span class="o">.</span><span class="n">binding2</span><span class="p">)</span>
+                <span class="p">):</span>
+                    <span class="k">return</span> <span class="n">a_binding</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+    <span class="c1"># -- Property Implementations ---------------------------------------------</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">_get_root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">while</span> <span class="n">root</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">parent</span>
+
+        <span class="k">return</span> <span class="n">root</span>
+
+    <span class="c1"># -- Event Handlers -------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">_binding_modified_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles a binding being changed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">binding1</span> <span class="o">=</span> <span class="n">binding</span><span class="o">.</span><span class="n">binding1</span>
+        <span class="n">binding2</span> <span class="o">=</span> <span class="n">binding</span><span class="o">.</span><span class="n">binding2</span>
+        <span class="k">for</span> <span class="n">a_binding</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bindings</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">binding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">a_binding</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">binding1</span> <span class="o">==</span> <span class="n">a_binding</span><span class="o">.</span><span class="n">binding1</span><span class="p">:</span>
+                    <span class="n">a_binding</span><span class="o">.</span><span class="n">binding1</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">if</span> <span class="n">binding1</span> <span class="o">==</span> <span class="n">a_binding</span><span class="o">.</span><span class="n">binding2</span><span class="p">:</span>
+                    <span class="n">a_binding</span><span class="o">.</span><span class="n">binding2</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">if</span> <span class="n">binding2</span> <span class="o">==</span> <span class="n">a_binding</span><span class="o">.</span><span class="n">binding1</span><span class="p">:</span>
+                    <span class="n">a_binding</span><span class="o">.</span><span class="n">binding1</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">if</span> <span class="n">binding2</span> <span class="o">==</span> <span class="n">a_binding</span><span class="o">.</span><span class="n">binding2</span><span class="p">:</span>
+                    <span class="n">a_binding</span><span class="o">.</span><span class="n">binding2</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_focus_owner_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles the focus owner being changed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">old</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">old</span><span class="o">.</span><span class="n">border_size</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="nd">@observe</span><span class="p">(</span><span class="s2">&quot;children.items&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_children_modified</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles child KeyBindings being added to the object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># the full children list is changed</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">KeyBindings</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">new</span><span class="p">:</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="c1"># the contents of the children list are changed</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">added</span><span class="p">:</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span>
+
+    <span class="c1"># -- object Method Overrides ----------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Restores the state of a previously pickled object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;bindings&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;bindings&quot;</span><span class="p">,</span> <span class="n">List</span><span class="p">(</span><span class="n">KeyBinding</span><span class="p">,</span> <span class="n">minlen</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="n">n</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bindings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bindings</span><span class="p">[:]</span>
+
+    <span class="c1"># -- Private Methods ------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">_get_bindings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bindings</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns all of the bindings of this object and all of its children.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bindings</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bindings</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="n">child</span><span class="o">.</span><span class="n">_get_bindings</span><span class="p">(</span><span class="n">bindings</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">bindings</span>
+
+    <span class="k">def</span> <span class="nf">_do</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_name</span><span class="p">,</span> <span class="n">controllers</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">recursive</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Process the specified key for the specified set of controllers for</span>
+<span class="sd">            this KeyBindings object and all of its children.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Search through our own bindings for a match:</span>
+        <span class="k">for</span> <span class="n">binding</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bindings</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">key_name</span> <span class="o">==</span> <span class="n">binding</span><span class="o">.</span><span class="n">binding1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+                <span class="n">key_name</span> <span class="o">==</span> <span class="n">binding</span><span class="o">.</span><span class="n">binding2</span>
+            <span class="p">):</span>
+                <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span>
+                    <span class="n">binding</span><span class="o">.</span><span class="n">method_name</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">controller</span> <span class="ow">in</span> <span class="n">controllers</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">controllers</span><span class="p">:</span>
+                    <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+                            <span class="k">return</span> <span class="kc">True</span>
+
+                <span class="k">if</span> <span class="n">binding</span><span class="o">.</span><span class="n">method_name</span> <span class="o">==</span> <span class="s2">&quot;edit_bindings&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">edit</span><span class="p">()</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># If recursive, continue searching through a children&#39;s bindings:</span>
+        <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">_do</span><span class="p">(</span><span class="n">key_name</span><span class="p">,</span> <span class="n">controllers</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">recursive</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># Indicate no one processed the key:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

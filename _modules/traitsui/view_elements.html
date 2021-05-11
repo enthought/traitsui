@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.view_elements &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.view_elements</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.view_elements</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Define the ViewElements class, which is used to define a (typically</span>
+<span class="sd">    class-based) hierarchical name space of related ViewElement objects.</span>
+
+<span class="sd">    Normally there is a ViewElements object associated with each Traits-based</span>
+<span class="sd">    class, which contains all of the ViewElement objects associated with the</span>
+<span class="sd">    class. The ViewElements object is also linked to the ViewElements objects</span>
+<span class="sd">    of its associated class&#39;s parent classes.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">HasStrictTraits</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">TraitError</span>
+
+<span class="kn">from</span> <span class="nn">.view_element</span> <span class="kn">import</span> <span class="n">ViewElement</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Trait definitions:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1"># Trait for contents of a ViewElements object</span>
+<span class="n">content_trait</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">ViewElement</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ViewElements"><a class="viewcode-back" href="../../api/traitsui.view_elements.html#traitsui.view_elements.ViewElements">[docs]</a><span class="k">class</span> <span class="nc">ViewElements</span><span class="p">(</span><span class="n">HasStrictTraits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Defines a hierarchical name space of related ViewElement objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Dictionary containing the named ViewElement items</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content_trait</span>
+
+<div class="viewcode-block" id="ViewElements.find"><a class="viewcode-back" href="../../api/traitsui.view_elements.html#traitsui.view_elements.ViewElements.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">stack</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Finds a specified ViewElement within the specified (optional) search</span>
+<span class="sd">            context.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Assume search starts from the beginning the of the search order:</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># If a stack was specified, see if there is a matching entry in the</span>
+        <span class="c1"># stack already:</span>
+        <span class="k">if</span> <span class="n">stack</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ssi</span> <span class="ow">in</span> <span class="n">stack</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">ssi</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+                    <span class="c1"># Match found, resume search at next ViewElements object</span>
+                    <span class="c1"># in the search order:</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="n">ssi</span><span class="o">.</span><span class="n">context</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="k">break</span>
+
+        <span class="c1"># Search for a matching name starting at the specified ViewElements</span>
+        <span class="c1"># object in the search order:</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">ves</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_search_order</span><span class="p">()[</span><span class="n">i</span><span class="p">:]):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">ves</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Match found. If there is a stack, push matching name and</span>
+                <span class="c1"># ViewElements context onto it:</span>
+                <span class="k">if</span> <span class="n">stack</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">stack</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">SearchStackItem</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">)]</span>
+
+                <span class="c1"># Return the ViewElement object that matched the name:</span>
+                <span class="k">return</span> <span class="n">result</span>
+
+        <span class="c1"># Indicate no match was found:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="ViewElements.filter_by"><a class="viewcode-back" href="../../api/traitsui.view_elements.html#traitsui.view_elements.ViewElements.filter_by">[docs]</a>    <span class="k">def</span> <span class="nf">filter_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a sorted list of all names accessible from the ViewElements</span>
+<span class="sd">            object that are of a specified (ViewElement) type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">klass</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">view</span>
+
+            <span class="n">klass</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">View</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Add each item in the search order which is of the right class and</span>
+        <span class="c1"># which is not already in the result list:</span>
+        <span class="k">for</span> <span class="n">ves</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_search_order</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">ve</span> <span class="ow">in</span> <span class="n">ves</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ve</span><span class="p">,</span> <span class="n">klass</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">result</span><span class="p">):</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># Sort the resulting list of names:</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="c1"># Return the result:</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="nf">_parents__changed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_search_order</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_parents_items_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_search_order</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_get_search_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_order</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_search_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mro</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_order</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Compute the Python &#39;C3&#39; algorithm used to determine a class&#39;s &#39;mro&#39;</span>
+    <span class="c1">#  and apply it to the &#39;parents&#39; of the ViewElements to determine the</span>
+    <span class="c1">#  correct search order:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">_mro</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span>
+            <span class="p">[[</span><span class="bp">self</span><span class="p">]]</span>
+            <span class="o">+</span> <span class="p">[</span><span class="n">parent</span><span class="o">.</span><span class="n">_get_search_order</span><span class="p">()[:]</span> <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parents</span><span class="p">]</span>
+            <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">parents</span><span class="p">[:]]</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seqs</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># Remove any empty sequences from the list:</span>
+            <span class="n">seqs</span> <span class="o">=</span> <span class="p">[</span><span class="n">seq</span> <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">seqs</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seqs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">result</span>
+
+            <span class="c1"># Find merge candidates among the sequence heads:</span>
+            <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">seqs</span><span class="p">:</span>
+                <span class="n">candidate</span> <span class="o">=</span> <span class="n">seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">seqs</span> <span class="k">if</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TraitError</span><span class="p">(</span><span class="s2">&quot;Inconsistent ViewElements hierarchy&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Add the candidate to the result:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+
+            <span class="c1"># Then remove the candidate:</span>
+            <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">seqs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">candidate</span><span class="p">:</span>
+                    <span class="k">del</span> <span class="n">seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a &quot;pretty print&quot; version of the ViewElements object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Define forward reference traits:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="n">ViewElements</span><span class="o">.</span><span class="n">add_class_trait</span><span class="p">(</span><span class="s2">&quot;parents&quot;</span><span class="p">,</span> <span class="n">List</span><span class="p">(</span><span class="n">ViewElements</span><span class="p">))</span>
+<span class="n">ViewElements</span><span class="o">.</span><span class="n">add_class_trait</span><span class="p">(</span><span class="s2">&quot;_search_order&quot;</span><span class="p">,</span> <span class="n">Any</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SearchStackItem"><a class="viewcode-back" href="../../api/traitsui.view_elements.html#traitsui.view_elements.SearchStackItem">[docs]</a><span class="k">class</span> <span class="nc">SearchStackItem</span><span class="p">(</span><span class="n">HasStrictTraits</span><span class="p">):</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Name that was looked up</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Index into the &#39;mro&#39; list of ViewElements that the ID was found in</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,741 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.handler &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.handler</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.handler</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines the Handler class used to manage and control the editing process in</span>
+<span class="sd">    a Traits-based user interface.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># avoid deprecation warning</span>
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">getfullargspec</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">HasPrivateTraits</span><span class="p">,</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Instance</span>
+
+<span class="kn">from</span> <span class="nn">.toolkit</span> <span class="kn">import</span> <span class="n">toolkit</span>
+<span class="kn">from</span> <span class="nn">.help</span> <span class="kn">import</span> <span class="n">on_help_call</span>
+<span class="kn">from</span> <span class="nn">.view_element</span> <span class="kn">import</span> <span class="n">ViewElement</span>
+<span class="kn">from</span> <span class="nn">.helper</span> <span class="kn">import</span> <span class="n">user_name_for</span>
+<span class="kn">from</span> <span class="nn">.ui_info</span> <span class="kn">import</span> <span class="n">UIInfo</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Closes a DockControl (if allowed by the associated traits UI Handler):</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="close_dock_control"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.close_dock_control">[docs]</a><span class="k">def</span> <span class="nf">close_dock_control</span><span class="p">(</span><span class="n">dock_control</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Closes a DockControl (if allowed by the associated Traits UI Handler).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Retrieve the traits UI object set when we created the DockControl:</span>
+    <span class="n">ui</span> <span class="o">=</span> <span class="n">dock_control</span><span class="o">.</span><span class="n">data</span>
+
+    <span class="c1"># Ask the traits UI handler if it is OK to close the window:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ui</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">ui</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="c1"># If not, tell the DockWindow not to close it:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># Otherwise, clean up and close the traits UI:</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">dispose</span><span class="p">()</span>
+
+    <span class="c1"># And tell the DockWindow to remove the DockControl:</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="Handler"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler">[docs]</a><span class="k">class</span> <span class="nc">Handler</span><span class="p">(</span><span class="n">HasPrivateTraits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Provides access to and control over the run-time workings of a</span>
+<span class="sd">    Traits-based user interface.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Handler.init_info"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.init_info">[docs]</a>    <span class="k">def</span> <span class="nf">init_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Informs the handler what the UIInfo object for a View will be.</span>
+
+<span class="sd">            This method is called before the UI for the View has been</span>
+<span class="sd">            constructed. It is provided so that the handler can save the</span>
+<span class="sd">            reference to the UIInfo object in case it exposes viewable traits</span>
+<span class="sd">            whose values are properties that depend upon items in the context</span>
+<span class="sd">            being edited.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Handler.init"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initializes the controls of a user interface.</span>
+
+<span class="sd">        This method is called after all user interface elements have been</span>
+<span class="sd">        created, but before the user interface is displayed. Override this</span>
+<span class="sd">        method to customize the user interface before it is displayed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        info : UIInfo object</span>
+<span class="sd">            The UIInfo object associated with the view</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        initialized : bool</span>
+<span class="sd">            A Boolean, indicating whether the user interface was successfully</span>
+<span class="sd">            initialized. A True value indicates that the UI can be displayed;</span>
+<span class="sd">            a False value indicates that the display operation should be</span>
+<span class="sd">            cancelled. The default implementation returns True without taking</span>
+<span class="sd">            any other action.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Handler.position"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.position">[docs]</a>    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Positions a dialog-based user interface on the display.</span>
+
+<span class="sd">        This method is called after the user interface is initialized (by</span>
+<span class="sd">        calling init()), but before the user interface is displayed. Override</span>
+<span class="sd">        this method to position the window on the display device. The default</span>
+<span class="sd">        implementation calls the position() method of the current toolkit.</span>
+
+<span class="sd">        Usually, you do not need to override this method, because you can</span>
+<span class="sd">        control the window&#39;s placement using the **x** and **y** attributes</span>
+<span class="sd">        of the View object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        info : UIInfo object</span>
+<span class="sd">            The UIInfo object associated with the window</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">toolkit</span><span class="p">()</span><span class="o">.</span><span class="n">position</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Handler.close"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">is_ok</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles the user attempting to close a dialog-based user interface.</span>
+
+<span class="sd">        This method is called when the user attempts to close a window, by</span>
+<span class="sd">        clicking an **OK** or **Cancel** button, or clicking a Close control</span>
+<span class="sd">        on the window). It is called before the window is actually destroyed.</span>
+<span class="sd">        Override this method to perform any checks before closing a window.</span>
+
+<span class="sd">        While Traits UI handles &quot;OK&quot; and &quot;Cancel&quot; events automatically, you</span>
+<span class="sd">        can use the value of the *is_ok* parameter to implement additional</span>
+<span class="sd">        behavior.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        info : UIInfo object</span>
+<span class="sd">            The UIInfo object associated with the view</span>
+<span class="sd">        is_ok : Boolean</span>
+<span class="sd">            Indicates whether the user confirmed the changes (such as by</span>
+<span class="sd">            clicking **OK**.)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        allow_close : bool</span>
+<span class="sd">            A Boolean, indicating whether the window should be allowed to</span>
+<span class="sd">            close.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Handler.closed"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.closed">[docs]</a>    <span class="k">def</span> <span class="nf">closed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">is_ok</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles a dialog-based user interface being closed by the user.</span>
+
+<span class="sd">        This method is called *after* the window is destroyed. Override this</span>
+<span class="sd">        method to perform any clean-up tasks needed by the application.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        info : UIInfo object</span>
+<span class="sd">            The UIInfo object associated with the view</span>
+<span class="sd">        is_ok : Boolean</span>
+<span class="sd">            Indicates whether the user confirmed the changes (such as by</span>
+<span class="sd">            clicking **OK**.)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Handler.revert"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.revert">[docs]</a>    <span class="k">def</span> <span class="nf">revert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles the **Revert** button being clicked.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Handler.apply"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles the **Apply** button being clicked.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Handler.show_help"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.show_help">[docs]</a>    <span class="k">def</span> <span class="nf">show_help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Shows the help associated with the view.</span>
+
+<span class="sd">        This method is called when the user clicks a **Help** button in a</span>
+<span class="sd">        Traits user interface. The method calls the global help handler, which</span>
+<span class="sd">        might be the default help handler, or might be a custom help handler.</span>
+<span class="sd">        See **traitsui.help** for details about the setting the</span>
+<span class="sd">        global help handler.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        info : UIInfo object</span>
+<span class="sd">            The UIInfo object associated with the view</span>
+<span class="sd">        control : UI control</span>
+<span class="sd">            The control that invokes the help dialog box</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">control</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">control</span>
+        <span class="n">on_help_call</span><span class="p">()(</span><span class="n">info</span><span class="p">,</span> <span class="n">control</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Handler.perform"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.perform">[docs]</a>    <span class="k">def</span> <span class="nf">perform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Perform computation for an action.</span>
+
+<span class="sd">        The default method looks for a method matching ``action.action`` and</span>
+<span class="sd">        calls it (sniffing the signature to determine how to call it for</span>
+<span class="sd">        historical reasons).  If this is not found, then it calls the</span>
+<span class="sd">        :py:meth:`~traitsui.menu.Action.perform` method of the action.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        info : UIInfo instance</span>
+<span class="sd">            The UIInfo assicated with the view, if available.</span>
+<span class="sd">        action : Action instance</span>
+<span class="sd">            The Action that the user invoked.</span>
+<span class="sd">        event : ActionEvent instance</span>
+<span class="sd">            The ActionEvent associated with the user action.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        If overriding in a subclass, the method needs to ensure that any</span>
+<span class="sd">        standard menu action items that are needed (eg. &quot;Close&quot;, &quot;Undo&quot;,</span>
+<span class="sd">        &quot;Redo&quot;, &quot;Help&quot;, etc.) get dispatched correctly.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">action</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">method_name</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">action</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;_</span><span class="si">{}</span><span class="s2">_clicked&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
+        <span class="k">for</span> <span class="nb">object</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_perform_handlers</span><span class="p">(</span><span class="n">info</span><span class="p">):</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># call the action method</span>
+                <span class="n">specification</span> <span class="o">=</span> <span class="n">getfullargspec</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">specification</span><span class="o">.</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">method</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">method</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+                <span class="c1"># and we are done</span>
+                <span class="k">return</span>
+
+        <span class="c1"># otherwise, call the perform method of the action</span>
+        <span class="n">specification</span> <span class="o">=</span> <span class="n">getfullargspec</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">perform</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">specification</span><span class="o">.</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">action</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">action</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Handler.get_perform_handlers"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.get_perform_handlers">[docs]</a>    <span class="k">def</span> <span class="nf">get_perform_handlers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a list of objects which can handle actions.</span>
+
+<span class="sd">        This method may be overridden by sub-classes to return a more relevant</span>
+<span class="sd">        set of objects.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        info : UIInfo instance or None</span>
+<span class="sd">            The UIInfo associated with the view, or None.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        handlers : list</span>
+<span class="sd">            A list of objects that may potentially have action methods on them.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">handlers</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">additional_objects</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">]</span>
+            <span class="n">handlers</span> <span class="o">+=</span> <span class="p">[</span>
+                <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">additional_objects</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">context</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">handlers</span></div>
+
+<div class="viewcode-block" id="Handler.setattr"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.setattr">[docs]</a>    <span class="k">def</span> <span class="nf">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles the user setting a specified object trait&#39;s value.</span>
+
+<span class="sd">        This method is called when an editor attempts to set a new value for</span>
+<span class="sd">        a specified object trait attribute. Use this method to control what</span>
+<span class="sd">        happens when a trait editor tries to set an attribute value. For</span>
+<span class="sd">        example, you can use this method to record a history of changes, in</span>
+<span class="sd">        order to implement an &quot;undo&quot; mechanism. No result is returned. The</span>
+<span class="sd">        default implementation simply calls the built-in setattr() function.</span>
+<span class="sd">        If you override this method, make sure that it actually sets the</span>
+<span class="sd">        attribute, either by calling the parent method or by setting the</span>
+<span class="sd">        attribute directly</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        info : UIInfo instance</span>
+<span class="sd">            The UIInfo for the current UI</span>
+<span class="sd">        object : object</span>
+<span class="sd">            The object whose attribute is being set</span>
+<span class="sd">        name : string</span>
+<span class="sd">            The name of the attribute being set</span>
+<span class="sd">        value</span>
+<span class="sd">            The value to which the attribute is being set</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Handler.trait_view_for"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.trait_view_for">[docs]</a>    <span class="k">def</span> <span class="nf">trait_view_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">object_name</span><span class="p">,</span> <span class="n">trait_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Gets a specified View object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># If a view element was passed instead of a name or None, return it:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">ViewElement</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">view</span>
+
+        <span class="c1"># Generate a series of possible view or method names of the form:</span>
+        <span class="c1"># - &#39;view&#39;</span>
+        <span class="c1">#   trait_view_for_&#39;view&#39;( object )</span>
+        <span class="c1"># - &#39;class_view&#39;</span>
+        <span class="c1">#   trait_view_for_&#39;class_view&#39;( object )</span>
+        <span class="c1"># - &#39;object_name_view&#39;</span>
+        <span class="c1">#   trait_view_for_&#39;object_name_view&#39;( object )</span>
+        <span class="c1"># - &#39;object_name_class_view&#39;</span>
+        <span class="c1">#   trait_view_for_&#39;object_name_class_view&#39;( object )</span>
+        <span class="c1"># where &#39;class&#39; is the class name of &#39;object&#39;, &#39;object&#39; is the object</span>
+        <span class="c1">#       name, and &#39;name&#39; is the trait name. It returns the first view</span>
+        <span class="c1">#       or method result which is defined on the handler:</span>
+        <span class="n">klass</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">cname</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">object_name</span><span class="p">,</span> <span class="n">trait_name</span><span class="p">)</span>
+        <span class="n">aview</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">view</span><span class="p">:</span>
+            <span class="n">aview</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">view</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cname</span><span class="p">,</span> <span class="n">klass</span><span class="p">,</span> <span class="n">aview</span><span class="p">),</span>
+            <span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cname</span><span class="p">,</span> <span class="n">aview</span><span class="p">),</span>
+            <span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">aview</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">view</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trait_view</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">result</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;trait_view_for_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">result</span>
+
+        <span class="c1"># If nothing is defined on the handler, return either the requested</span>
+        <span class="c1"># view on the object itself, or the object&#39;s default view:</span>
+        <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">trait_view</span><span class="p">(</span><span class="n">view</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">object</span><span class="o">.</span><span class="n">trait_view</span><span class="p">()</span></div>
+
+    <span class="c1"># -- &#39;DockWindowHandler&#39; interface implementation -------------------------</span>
+
+<div class="viewcode-block" id="Handler.can_drop"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.can_drop">[docs]</a>    <span class="k">def</span> <span class="nf">can_drop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Can the specified object be inserted into the view?</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">pyface.dock.api</span> <span class="kn">import</span> <span class="n">DockControl</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">DockControl</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_import</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="n">export</span><span class="p">)</span>
+
+        <span class="n">drop_class</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">drop_class</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">drop_class</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">drop_class</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Handler.can_import"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.can_import">[docs]</a>    <span class="k">def</span> <span class="nf">can_import</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">category</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">category</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">imports</span></div>
+
+<div class="viewcode-block" id="Handler.dock_control_for"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.dock_control_for">[docs]</a>    <span class="k">def</span> <span class="nf">dock_control_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the DockControl object for a specified object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">pyface.dock.api</span> <span class="kn">import</span> <span class="n">IDockable</span><span class="p">,</span> <span class="n">DockControl</span>
+        <span class="kn">from</span> <span class="nn">.dockable_view_element</span> <span class="kn">import</span> <span class="n">DockableViewElement</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">label</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">user_name_for</span><span class="p">(</span><span class="nb">object</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="n">image</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">export</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">DockControl</span><span class="p">):</span>
+            <span class="n">dock_control</span> <span class="o">=</span> <span class="nb">object</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">dock_control</span><span class="o">.</span><span class="n">image</span>
+            <span class="n">export</span> <span class="o">=</span> <span class="n">dock_control</span><span class="o">.</span><span class="n">export</span>
+            <span class="n">dockable</span> <span class="o">=</span> <span class="n">dock_control</span><span class="o">.</span><span class="n">dockable</span>
+            <span class="n">close</span> <span class="o">=</span> <span class="n">dockable</span><span class="o">.</span><span class="n">dockable_should_close</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">close</span><span class="p">:</span>
+                <span class="n">dock_control</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="n">control</span> <span class="o">=</span> <span class="n">dockable</span><span class="o">.</span><span class="n">dockable_get_control</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+            <span class="c1"># If DockControl was closed, then reset it to point to the new</span>
+            <span class="c1"># control:</span>
+            <span class="k">if</span> <span class="n">close</span><span class="p">:</span>
+                <span class="n">dock_control</span><span class="o">.</span><span class="n">trait_set</span><span class="p">(</span>
+                    <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">parent</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">style</span>
+                <span class="p">)</span>
+                <span class="n">dockable</span><span class="o">.</span><span class="n">dockable_init_dockcontrol</span><span class="p">(</span><span class="n">dock_control</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">dock_control</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">IDockable</span><span class="p">):</span>
+            <span class="n">dockable</span> <span class="o">=</span> <span class="nb">object</span>
+            <span class="n">control</span> <span class="o">=</span> <span class="n">dockable</span><span class="o">.</span><span class="n">dockable_get_control</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ui</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">get_dockable_ui</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+            <span class="n">dockable</span> <span class="o">=</span> <span class="n">DockableViewElement</span><span class="p">(</span><span class="n">ui</span><span class="o">=</span><span class="n">ui</span><span class="p">)</span>
+            <span class="n">export</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">export</span>
+            <span class="n">control</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">control</span>
+
+        <span class="n">dc</span> <span class="o">=</span> <span class="n">DockControl</span><span class="p">(</span>
+            <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">export</span><span class="o">=</span><span class="n">export</span><span class="p">,</span>
+            <span class="n">style</span><span class="o">=</span><span class="n">parent</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">style</span><span class="p">,</span>
+            <span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span>
+            <span class="n">closeable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">dockable</span><span class="o">.</span><span class="n">dockable_init_dockcontrol</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dc</span></div>
+
+<div class="viewcode-block" id="Handler.open_view_for"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.open_view_for">[docs]</a>    <span class="k">def</span> <span class="nf">open_view_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="n">use_mouse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Creates a new view of a specified control.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">pyface.dock.api</span> <span class="kn">import</span> <span class="n">DockWindowShell</span>
+
+        <span class="n">DockWindowShell</span><span class="p">(</span><span class="n">control</span><span class="p">,</span> <span class="n">use_mouse</span><span class="o">=</span><span class="n">use_mouse</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Handler.dock_window_empty"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.dock_window_empty">[docs]</a>    <span class="k">def</span> <span class="nf">dock_window_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dock_window</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles a DockWindow becoming empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">dock_window</span><span class="o">.</span><span class="n">auto_close</span><span class="p">:</span>
+            <span class="n">dock_window</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">GetParent</span><span class="o">.</span><span class="n">Destroy</span><span class="p">()</span></div>
+
+    <span class="c1"># -- HasTraits overrides: -------------------------------------------------</span>
+
+<div class="viewcode-block" id="Handler.edit_traits"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.edit_traits">[docs]</a>    <span class="k">def</span> <span class="nf">edit_traits</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">view</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">kind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">context</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">handler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">scrollable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">args</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Edits the object&#39;s traits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span>
+
+        <span class="k">if</span> <span class="n">handler</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">handler</span> <span class="o">=</span> <span class="bp">self</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trait_view</span><span class="p">(</span><span class="n">view</span><span class="p">)</span><span class="o">.</span><span class="n">ui</span><span class="p">(</span>
+            <span class="n">context</span><span class="p">,</span>
+            <span class="n">parent</span><span class="p">,</span>
+            <span class="n">kind</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trait_view_elements</span><span class="p">(),</span>
+            <span class="n">handler</span><span class="p">,</span>
+            <span class="nb">id</span><span class="p">,</span>
+            <span class="n">scrollable</span><span class="p">,</span>
+            <span class="n">args</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Handler.configure_traits"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Handler.configure_traits">[docs]</a>    <span class="k">def</span> <span class="nf">configure_traits</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">view</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">kind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">edit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">context</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">handler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">scrollable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">args</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Configures the object&#39;s traits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">(</span>
+            <span class="n">filename</span><span class="p">,</span>
+            <span class="n">view</span><span class="p">,</span>
+            <span class="n">kind</span><span class="p">,</span>
+            <span class="n">edit</span><span class="p">,</span>
+            <span class="n">context</span><span class="p">,</span>
+            <span class="n">handler</span> <span class="ow">or</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="nb">id</span><span class="p">,</span>
+            <span class="n">scrollable</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">args</span>
+        <span class="p">)</span></div>
+
+    <span class="c1"># -- Private Methods: -----------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">_on_undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles an &quot;Undo&quot; change request.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">history</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">undo</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_on_redo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles a &quot;Redo&quot; change request.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">history</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">redo</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_on_revert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles a &quot;Revert all changes&quot; request.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">history</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">revert</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">revert</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_on_close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles a &quot;Close&quot; request.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Default handler:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="n">_default_handler</span> <span class="o">=</span> <span class="n">Handler</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="default_handler"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.default_handler">[docs]</a><span class="k">def</span> <span class="nf">default_handler</span><span class="p">(</span><span class="n">handler</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns the global default handler.</span>
+
+<span class="sd">    If *handler* is an instance of Handler, this function sets it as the</span>
+<span class="sd">    global default handler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">_default_handler</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">Handler</span><span class="p">):</span>
+        <span class="n">_default_handler</span> <span class="o">=</span> <span class="n">handler</span>
+    <span class="k">return</span> <span class="n">_default_handler</span></div>
+
+
+<div class="viewcode-block" id="Controller"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Controller">[docs]</a><span class="k">class</span> <span class="nc">Controller</span><span class="p">(</span><span class="n">Handler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Defines a handler class which provides a view and controller for a</span>
+<span class="sd">        specified model.</span>
+
+<span class="sd">        This class is used when implementing a standard MVC-based design. The</span>
+<span class="sd">        **model** trait contains most, if not all, of the data being viewed,</span>
+<span class="sd">        and can be referenced in a Controller instance&#39;s View definition using</span>
+<span class="sd">        unadorned trait names. (e.g., ``Item(&#39;name&#39;)``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -- Trait Definitions ----------------------------------------------------</span>
+
+    <span class="c1">#: The model this handler defines a view and controller for</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">)</span>
+
+    <span class="c1">#: The Info object associated with the controller</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">UIInfo</span><span class="p">)</span>
+
+    <span class="c1"># -- HasTraits Method Overrides -------------------------------------------</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">metadata</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initializes the object and sets the model (if supplied).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+
+<div class="viewcode-block" id="Controller.trait_context"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Controller.trait_context">[docs]</a>    <span class="k">def</span> <span class="nf">trait_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the default context to use for editing or configuring</span>
+<span class="sd">            traits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;object&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;controller&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;handler&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="p">}</span></div>
+
+    <span class="c1"># -- Handler Method Overrides ---------------------------------------------</span>
+
+<div class="viewcode-block" id="Controller.get_perform_handlers"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Controller.get_perform_handlers">[docs]</a>    <span class="k">def</span> <span class="nf">get_perform_handlers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a list of objects which can handle actions.</span>
+
+<span class="sd">        By default this returns the Controller instance and the model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        info : UIInfo instance or None</span>
+<span class="sd">            The UIInfo associated with the view, or None.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        handlers : list</span>
+<span class="sd">            A list of objects that may potentially have action methods on them.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Controller.init_info"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.Controller.init_info">[docs]</a>    <span class="k">def</span> <span class="nf">init_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Informs the handler what the UIInfo object for a View will be.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="n">info</span></div></div>
+
+
+<div class="viewcode-block" id="ModelView"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.ModelView">[docs]</a><span class="k">class</span> <span class="nc">ModelView</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Defines a handler class which provides a view and controller for a</span>
+<span class="sd">        specified model.</span>
+
+<span class="sd">        This class is useful when creating a variant of the standard MVC-based</span>
+<span class="sd">        design. A subclass of ModelView reformulates a number of traits on</span>
+<span class="sd">        its **model** object as properties on the ModelView subclass itself,</span>
+<span class="sd">        usually in order to convert them into a more user-friendly format. In</span>
+<span class="sd">        this design, the ModelView subclass supplies not only the view and</span>
+<span class="sd">        the controller, but also, in effect, the model (as a set of properties</span>
+<span class="sd">        wrapped around the original model). Because of this, the ModelView</span>
+<span class="sd">        context dictionary specifies the ModelView instance itself as the</span>
+<span class="sd">        special *object* value, and assigns the original model object as the</span>
+<span class="sd">        *model* value. Thus, the traits of the ModelView object can be</span>
+<span class="sd">        referenced in its View definition using unadorned trait names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -- HasTraits Method Overrides -------------------------------------------</span>
+
+<div class="viewcode-block" id="ModelView.trait_context"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.ModelView.trait_context">[docs]</a>    <span class="k">def</span> <span class="nf">trait_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the default context to use for editing or configuring</span>
+<span class="sd">            traits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;object&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;handler&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">}</span></div></div>
+
+
+<div class="viewcode-block" id="ViewHandler"><a class="viewcode-back" href="../../api/traitsui.handler.html#traitsui.handler.ViewHandler">[docs]</a><span class="k">class</span> <span class="nc">ViewHandler</span><span class="p">(</span><span class="n">Handler</span><span class="p">):</span>
+
+    <span class="k">pass</span></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,607 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.view &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.view</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.view</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines the View class used to represent the structural content of a</span>
+<span class="sd">    Traits-based user interface.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+
+<span class="kn">from</span> <span class="nn">pyface.ui_traits</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Bool</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Enum</span><span class="p">,</span>
+    <span class="n">Event</span><span class="p">,</span>
+    <span class="n">Float</span><span class="p">,</span>
+    <span class="n">Instance</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">PrefixList</span><span class="p">,</span>
+    <span class="n">Str</span><span class="p">,</span>
+    <span class="n">Trait</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">.view_element</span> <span class="kn">import</span> <span class="n">ViewElement</span><span class="p">,</span> <span class="n">ViewSubElement</span>
+
+<span class="kn">from</span> <span class="nn">.ui</span> <span class="kn">import</span> <span class="n">UI</span>
+
+<span class="kn">from</span> <span class="nn">.ui_traits</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AButton</span><span class="p">,</span>
+    <span class="n">AnObject</span><span class="p">,</span>
+    <span class="n">Buttons</span><span class="p">,</span>
+    <span class="n">DockStyle</span><span class="p">,</span>
+    <span class="n">EditorStyle</span><span class="p">,</span>
+    <span class="n">ExportType</span><span class="p">,</span>
+    <span class="n">HelpId</span><span class="p">,</span>
+    <span class="n">Image</span><span class="p">,</span>
+    <span class="n">SequenceTypes</span><span class="p">,</span>
+    <span class="n">ViewStatus</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">.handler</span> <span class="kn">import</span> <span class="n">Handler</span><span class="p">,</span> <span class="n">default_handler</span>
+
+<span class="kn">from</span> <span class="nn">.group</span> <span class="kn">import</span> <span class="n">Group</span>
+
+<span class="kn">from</span> <span class="nn">.item</span> <span class="kn">import</span> <span class="n">Item</span>
+
+<span class="kn">from</span> <span class="nn">.include</span> <span class="kn">import</span> <span class="n">Include</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Trait definitions:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1"># Name of the view trait:</span>
+<span class="n">AnId</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the name of the view&quot;</span><span class="p">)</span>
+
+<span class="c1"># Contents of the view trait (i.e., a single Group object):</span>
+<span class="n">Content</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">Group</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the content of the view&quot;</span><span class="p">)</span>
+
+<span class="c1"># An optional model/view factory for converting the model into a viewable</span>
+<span class="c1"># &#39;model_view&#39; object</span>
+<span class="n">AModelView</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">(</span>
+    <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the factory function for converting a model &quot;</span>
+    <span class="s2">&quot;into a model/view object&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Reference to a Handler object trait:</span>
+<span class="n">AHandler</span> <span class="o">=</span> <span class="n">Any</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the handler for the view&quot;</span><span class="p">)</span>
+
+<span class="c1"># Dialog window title trait:</span>
+<span class="n">ATitle</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the window title for the view&quot;</span><span class="p">)</span>
+
+<span class="c1"># User interface &#39;kind&#39; trait. The values have the following meanings:</span>
+<span class="c1">#</span>
+<span class="c1"># * &#39;panel&#39;: An embeddable panel. This type of window is intended to be used as</span>
+<span class="c1">#   part of a larger interface.</span>
+<span class="c1"># * &#39;subpanel&#39;: An embeddable panel that does not display command buttons,</span>
+<span class="c1">#   even if the View specifies them.</span>
+<span class="c1"># * &#39;modal&#39;: A modal dialog box that operates on a clone of the object until</span>
+<span class="c1">#   the user commits the change.</span>
+<span class="c1"># * &#39;nonmodal&#39;:  A nonmodal dialog box that operates on a clone of the object</span>
+<span class="c1">#   until the user commits the change</span>
+<span class="c1"># * &#39;live&#39;: A nonmodal dialog box that immediately updates the object.</span>
+<span class="c1"># * &#39;livemodal&#39;: A modal dialog box that immediately updates the object.</span>
+<span class="c1"># * &#39;popup&#39;: A temporary, frameless popup dialog that immediately updates the</span>
+<span class="c1">#   object and is active only while the mouse pointer is in the dialog.</span>
+<span class="c1"># * &#39;info&#39;: A temporary, frameless popup dialog that immediately updates the</span>
+<span class="c1">#   object and is active only while the dialog is still over the invoking</span>
+<span class="c1">#   control.</span>
+<span class="c1"># * &#39;wizard&#39;: A wizard modal dialog box. A wizard contains a sequence of</span>
+<span class="c1">#   pages, which can be accessed by clicking **Next** and **Back** buttons.</span>
+<span class="c1">#   Changes to attribute values are applied only when the user clicks the</span>
+<span class="c1">#   **Finish** button on the last page.</span>
+<span class="n">AKind</span> <span class="o">=</span> <span class="n">PrefixList</span><span class="p">(</span>
+    <span class="p">(</span>
+        <span class="s2">&quot;panel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;subpanel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;nonmodal&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;livemodal&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;live&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;popup&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;popover&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;wizard&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">default_value</span><span class="o">=</span><span class="s1">&#39;live&#39;</span><span class="p">,</span>
+    <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the kind of view window to create&quot;</span><span class="p">,</span>
+    <span class="n">cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Apply changes handler:</span>
+<span class="n">OnApply</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">(</span>
+    <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the routine to call when modal changes are applied &quot;</span> <span class="s2">&quot;or reverted&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Is the dialog window resizable?</span>
+<span class="n">IsResizable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;whether dialog can be resized or not&quot;</span><span class="p">)</span>
+
+<span class="c1"># Is the view scrollable?</span>
+<span class="n">IsScrollable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;whether view should be scrollable or not&quot;</span><span class="p">)</span>
+
+<span class="c1"># The valid categories of imported elements that can be dragged into the view:</span>
+<span class="n">ImportTypes</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span>
+    <span class="n">Str</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the categories of elements that can be &quot;</span> <span class="s2">&quot;dragged into the view&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># The view position and size traits:</span>
+<span class="n">Width</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="o">-</span><span class="mf">1e6</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the width of the view window&quot;</span><span class="p">)</span>
+<span class="n">Height</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="o">-</span><span class="mf">1e6</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the height of the view window&quot;</span><span class="p">)</span>
+<span class="n">XCoordinate</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="o">-</span><span class="mf">1e6</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the x coordinate of the view window&quot;</span><span class="p">)</span>
+<span class="n">YCoordinate</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="o">-</span><span class="mf">1e6</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the y coordinate of the view window&quot;</span><span class="p">)</span>
+
+<span class="c1"># The result that should be returned if the user clicks the window or dialog</span>
+<span class="c1"># close button or icon</span>
+<span class="n">CloseResult</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span>
+    <span class="kc">None</span><span class="p">,</span>
+    <span class="kc">True</span><span class="p">,</span>
+    <span class="kc">False</span><span class="p">,</span>
+    <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the result to return when the user clicks the &quot;</span>
+    <span class="s2">&quot;window or dialog close button or icon&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># The KeyBindings trait:</span>
+<span class="n">AKeyBindings</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span>
+    <span class="s2">&quot;traitsui.key_bindings.KeyBindings&quot;</span><span class="p">,</span>
+    <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the global key bindings for the view&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="View"><a class="viewcode-back" href="../../api/traitsui.view.html#traitsui.view.View">[docs]</a><span class="k">class</span> <span class="nc">View</span><span class="p">(</span><span class="n">ViewElement</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A Traits-based user interface for one or more objects.</span>
+
+<span class="sd">        The attributes of the View object determine the contents and layout of</span>
+<span class="sd">        an attribute-editing window. A View object contains a set of Group,</span>
+<span class="sd">        Item, and Include objects. A View object can be an attribute of an</span>
+<span class="sd">        object derived from HasTraits, or it can be a standalone object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: A unique identifier for the view:</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">AnId</span>
+
+    <span class="c1">#: The top-level Group object for the view:</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">Content</span>
+
+    <span class="c1">#: The menu bar for the view. Usually requires a custom **handler**:</span>
+    <span class="n">menubar</span> <span class="o">=</span> <span class="n">Any</span>  <span class="c1"># Instance( pyface.action.MenuBarManager )</span>
+
+    <span class="c1">#: The toolbar for the view. Usually requires a custom **handler**:</span>
+    <span class="n">toolbar</span> <span class="o">=</span> <span class="n">Any</span>  <span class="c1"># Instance( pyface.action.ToolBarManager )</span>
+
+    <span class="c1">#: Status bar items to add to the view&#39;s status bar. The value can be:</span>
+    <span class="c1">#:</span>
+    <span class="c1">#:   - **None**: No status bar for the view (the default).</span>
+    <span class="c1">#:   - string: Same as [ StatusItem( name = string ) ].</span>
+    <span class="c1">#:   - StatusItem: Same as [ StatusItem ].</span>
+    <span class="c1">#:   - [ [StatusItem|string], ... ]: Create a status bar with one field for</span>
+    <span class="c1">#:     each StatusItem in the list (or tuple). The status bar fields are</span>
+    <span class="c1">#:     defined from left to right in the order specified. A string value is</span>
+    <span class="c1">#:     converted to: StatusItem( name = string ):</span>
+    <span class="n">statusbar</span> <span class="o">=</span> <span class="n">ViewStatus</span>
+
+    <span class="c1">#: List of button actions to add to the view. The **traitsui.menu**</span>
+    <span class="c1">#: module defines standard buttons, such as **OKButton**, and standard sets</span>
+    <span class="c1">#: of buttons, such as **ModalButtons**, which can be used to define a value</span>
+    <span class="c1">#: for this attribute. This value can also be a list of button name strings,</span>
+    <span class="c1">#: such as ``[&#39;OK&#39;, &#39;Cancel&#39;, &#39;Help&#39;]``. If set to the empty list, the</span>
+    <span class="c1">#: view contains a default set of buttons (equivalent to **LiveButtons**:</span>
+    <span class="c1">#: Undo/Redo, Revert, OK, Cancel, Help). To suppress buttons in the view,</span>
+    <span class="c1">#: use the **NoButtons** variable, defined in **traitsui.menu**.</span>
+    <span class="n">buttons</span> <span class="o">=</span> <span class="n">Buttons</span>
+
+    <span class="c1">#: The default button to activate when Enter is pressed. If not specified,</span>
+    <span class="c1">#: pressing Enter will not activate any button.</span>
+    <span class="n">default_button</span> <span class="o">=</span> <span class="n">AButton</span>
+
+    <span class="c1">#: The set of global key bindings for the view. Each time a key is pressed</span>
+    <span class="c1">#: while the view has keyboard focus, the key is checked to see if it is one</span>
+    <span class="c1">#: of the keys recognized by the KeyBindings object. If it is, the matching</span>
+    <span class="c1">#: KeyBinding&#39;s method name is checked to see if it is defined on any of the</span>
+    <span class="c1">#: object&#39;s in the view&#39;s context. If it is, the method is invoked. If the</span>
+    <span class="c1">#: result of the method is **False**, then the search continues with the</span>
+    <span class="c1">#: next object in the context. If any invoked method returns a non-False</span>
+    <span class="c1">#: value, processing stops and the key is marked as having been handled. If</span>
+    <span class="c1">#: all invoked methods return **False**, or no matching KeyBinding object is</span>
+    <span class="c1">#: found, the key is processed normally. If the view has a non-empty *id*</span>
+    <span class="c1">#: trait, the contents of the **KeyBindings** object will be saved as part</span>
+    <span class="c1">#: of the view&#39;s persistent data:</span>
+    <span class="n">key_bindings</span> <span class="o">=</span> <span class="n">AKeyBindings</span>
+
+    <span class="c1">#: The Handler object that provides GUI logic for handling events in the</span>
+    <span class="c1">#: window. Set this attribute only if you are using a custom Handler. If</span>
+    <span class="c1">#: not set, the default Traits UI Handler is used.</span>
+    <span class="n">handler</span> <span class="o">=</span> <span class="n">AHandler</span>
+
+    <span class="c1">#: The factory function for converting a model into a model/view object:</span>
+    <span class="n">model_view</span> <span class="o">=</span> <span class="n">AModelView</span>
+
+    <span class="c1">#: Title for the view, displayed in the title bar when the view appears as a</span>
+    <span class="c1">#: secondary window (i.e., dialog or wizard). If not specified, &quot;Edit</span>
+    <span class="c1">#: properties&quot; is used as the title.</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">ATitle</span>
+
+    <span class="c1">#: The name of the icon to display in the dialog window title bar:</span>
+    <span class="n">icon</span> <span class="o">=</span> <span class="n">Image</span>
+
+    <span class="c1">#: The kind of user interface to create:</span>
+    <span class="n">kind</span> <span class="o">=</span> <span class="n">AKind</span>
+
+    <span class="c1">#: The default object being edited:</span>
+    <span class="nb">object</span> <span class="o">=</span> <span class="n">AnObject</span>
+
+    <span class="c1">#: The default editor style of elements in the view:</span>
+    <span class="n">style</span> <span class="o">=</span> <span class="n">EditorStyle</span>
+
+    <span class="c1">#: The default docking style to use for sub-groups of the view. The following</span>
+    <span class="c1">#: values are possible:</span>
+    <span class="c1">#:</span>
+    <span class="c1">#: * &#39;fixed&#39;: No rearrangement of sub-groups is allowed.</span>
+    <span class="c1">#: * &#39;horizontal&#39;: Moveable elements have a visual &quot;handle&quot; to the left by</span>
+    <span class="c1">#:   which the element can be dragged.</span>
+    <span class="c1">#: * &#39;vertical&#39;: Moveable elements have a visual &quot;handle&quot; above them by</span>
+    <span class="c1">#:   which the element can be dragged.</span>
+    <span class="c1">#: * &#39;tabbed&#39;: Moveable elements appear as tabbed pages, which can be</span>
+    <span class="c1">#:   arranged within the window or &quot;stacked&quot; so that only one appears at</span>
+    <span class="c1">#:   at a time.</span>
+    <span class="n">dock</span> <span class="o">=</span> <span class="n">DockStyle</span>
+
+    <span class="c1">#: The image to display on notebook tabs:</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span>
+
+    <span class="c1">#: Called when modal changes are applied or reverted:</span>
+    <span class="n">on_apply</span> <span class="o">=</span> <span class="n">OnApply</span>
+
+    <span class="c1">#: Can the user resize the window?</span>
+    <span class="n">resizable</span> <span class="o">=</span> <span class="n">IsResizable</span>
+
+    <span class="c1">#: Can the user scroll the view? If set to True, window-level scroll bars</span>
+    <span class="c1">#: appear whenever the window is too small to show all of its contents at</span>
+    <span class="c1">#: one time. If set to False, the window does not scroll, but individual</span>
+    <span class="c1">#: widgets might still contain scroll bars.</span>
+    <span class="n">scrollable</span> <span class="o">=</span> <span class="n">IsScrollable</span>
+
+    <span class="c1">#: The category of exported elements:</span>
+    <span class="n">export</span> <span class="o">=</span> <span class="n">ExportType</span>
+
+    <span class="c1">#: The valid categories of imported elements:</span>
+    <span class="n">imports</span> <span class="o">=</span> <span class="n">ImportTypes</span>
+
+    <span class="c1">#: External help context identifier, which can be used by a custom help</span>
+    <span class="c1">#: handler. This attribute is ignored by the default help handler.</span>
+    <span class="n">help_id</span> <span class="o">=</span> <span class="n">HelpId</span>
+
+    <span class="c1">#: Requested x-coordinate (horizontal position) for the view window. This</span>
+    <span class="c1">#: attribute can be specified in the following ways:</span>
+    <span class="c1">#:</span>
+    <span class="c1">#: * A positive integer: indicates the number of pixels from the left edge</span>
+    <span class="c1">#:   of the screen to the left edge of the window.</span>
+    <span class="c1">#: * A negative integer: indicates the number of pixels from the right edge</span>
+    <span class="c1">#:   of the screen to the right edge of the window.</span>
+    <span class="c1">#: * A floating point value between 0 and 1: indicates the fraction of the</span>
+    <span class="c1">#:   total screen width between the left edge of the screen and the left edge</span>
+    <span class="c1">#:   of the window.</span>
+    <span class="c1">#: * A floating point value between -1 and 0: indicates the fraction of the</span>
+    <span class="c1">#:   total screen width between the right edge of the screen and the right</span>
+    <span class="c1">#:   edge of the window.</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">XCoordinate</span>
+
+    <span class="c1">#: Requested y-coordinate (vertical position) for the view window. This</span>
+    <span class="c1">#: attribute behaves exactly like the **x** attribute, except that its value</span>
+    <span class="c1">#: indicates the position of the top or bottom of the view window relative</span>
+    <span class="c1">#: to the top or bottom of the screen.</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">YCoordinate</span>
+
+    <span class="c1">#: Requested width for the view window, as an (integer) number of pixels, or</span>
+    <span class="c1">#: as a (floating point) fraction of the screen width.</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">Width</span>
+
+    <span class="c1">#: Requested height for the view window, as an (integer) number of pixels, or</span>
+    <span class="c1">#: as a (floating point) fraction of the screen height.</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">Height</span>
+
+    <span class="c1">#: Class of dropped objects that can be added:</span>
+    <span class="n">drop_class</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: Event when the view has been updated:</span>
+    <span class="n">updated</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+
+    <span class="c1">#: What result should be returned if the user clicks the window or dialog</span>
+    <span class="c1">#: close button or icon?</span>
+    <span class="n">close_result</span> <span class="o">=</span> <span class="n">CloseResult</span>
+
+    <span class="c1">#: Note: Group objects delegate their &#39;object&#39; and &#39;style&#39; traits to the</span>
+    <span class="c1">#: View</span>
+
+    <span class="c1"># -- Deprecated Traits (DO NOT USE) ---------------------------------------</span>
+
+    <span class="n">ok</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">cancel</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">undo</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">redo</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">apply</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">revert</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">help</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initializes the object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ViewElement</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_content</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">)</span>
+
+<div class="viewcode-block" id="View.set_content"><a class="viewcode-back" href="../../api/traitsui.view.html#traitsui.view.View.set_content">[docs]</a>    <span class="k">def</span> <span class="nf">set_content</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the content of a view.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">accum</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ViewSubElement</span><span class="p">):</span>
+                <span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">SequenceTypes</span><span class="p">:</span>
+                <span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span><span class="o">*</span><span class="n">value</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="p">(</span><span class="n">value</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="o">==</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="c1"># Convert string to an Include value:</span>
+                <span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Include</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+
+        <span class="c1"># If there are any &#39;Item&#39; objects in the content, wrap the content in a</span>
+        <span class="c1"># Group:</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Item</span><span class="p">):</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="p">[</span><span class="n">Group</span><span class="p">(</span><span class="o">*</span><span class="n">content</span><span class="p">)]</span>
+                <span class="k">break</span>
+
+        <span class="c1"># Wrap all of the content up into a Group and save it as our content:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">content</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="View.ui"><a class="viewcode-back" href="../../api/traitsui.view.html#traitsui.view.View.ui">[docs]</a>    <span class="k">def</span> <span class="nf">ui</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">context</span><span class="p">,</span>
+        <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">kind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">view_elements</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">handler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">scrollable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Creates a **UI** object, which generates the actual GUI window or</span>
+<span class="sd">        panel from a set of view elements.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        context : object or dictionary</span>
+<span class="sd">            A single object or a dictionary of string/object pairs, whose trait</span>
+<span class="sd">            attributes are to be edited. If not specified, the current object is</span>
+<span class="sd">            used.</span>
+<span class="sd">        parent : window component</span>
+<span class="sd">            The window parent of the View object&#39;s window</span>
+<span class="sd">        kind : string</span>
+<span class="sd">            The kind of window to create. See the **AKind** trait for details.</span>
+<span class="sd">            If *kind* is unspecified or None, the **kind** attribute of the</span>
+<span class="sd">            View object is used.</span>
+<span class="sd">        view_elements : ViewElements object</span>
+<span class="sd">            The set of Group, Item, and Include objects contained in the view.</span>
+<span class="sd">            Do not use this parameter when calling this method directly.</span>
+<span class="sd">        handler : Handler object</span>
+<span class="sd">            A handler object used for event handling in the dialog box. If</span>
+<span class="sd">            None, the default handler for Traits UI is used.</span>
+<span class="sd">        id : string</span>
+<span class="sd">            A unique ID for persisting preferences about this user interface,</span>
+<span class="sd">            such as size and position. If not specified, no user preferences</span>
+<span class="sd">            are saved.</span>
+<span class="sd">        scrollable : Boolean</span>
+<span class="sd">            Indicates whether the dialog box should be scrollable. When set to</span>
+<span class="sd">            True, scroll bars appear on the dialog box if it is not large enough</span>
+<span class="sd">            to display all of the items in the view at one time.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">handler</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="ow">or</span> <span class="n">default_handler</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">Handler</span><span class="p">):</span>
+            <span class="n">handler</span> <span class="o">=</span> <span class="n">handler</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">args</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">handler</span><span class="o">.</span><span class="n">trait_set</span><span class="p">(</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">trait_context</span><span class="p">()</span>
+
+        <span class="n">context</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;handler&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;handler&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_view</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_view</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">])</span>
+
+        <span class="n">self_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">if</span> <span class="n">self_id</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">id</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">self_id</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">id</span> <span class="o">=</span> <span class="n">self_id</span>
+
+        <span class="k">if</span> <span class="n">scrollable</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">scrollable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scrollable</span>
+
+        <span class="n">ui</span> <span class="o">=</span> <span class="n">UI</span><span class="p">(</span>
+            <span class="n">view</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">handler</span><span class="o">=</span><span class="n">handler</span><span class="p">,</span>
+            <span class="n">view_elements</span><span class="o">=</span><span class="n">view_elements</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+            <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+            <span class="n">scrollable</span><span class="o">=</span><span class="n">scrollable</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">kind</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span>
+
+        <span class="n">ui</span><span class="o">.</span><span class="n">ui</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ui</span></div>
+
+<div class="viewcode-block" id="View.replace_include"><a class="viewcode-back" href="../../api/traitsui.view.html#traitsui.view.View.replace_include">[docs]</a>    <span class="k">def</span> <span class="nf">replace_include</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_elements</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Replaces any items that have an ID with an Include object with</span>
+<span class="sd">            the same ID, and puts the object with the ID into the specified</span>
+<span class="sd">            ViewElements object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">replace_include</span><span class="p">(</span><span class="n">view_elements</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a &quot;pretty print&quot; version of the View.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;()&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;( </span><span class="si">%s</span><span class="s2"> )&quot;</span> <span class="o">%</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">content</span><span class="p">]</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

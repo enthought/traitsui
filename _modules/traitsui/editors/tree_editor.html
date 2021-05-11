@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editors.tree_editor &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../../index.html" >
+    <link rel="up" title="Module code" href="../../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.editors.tree_editor</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.editors.tree_editor</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines the tree editor factory for all traits user interface toolkits.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Instance</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Enum</span>
+
+<span class="kn">from</span> <span class="nn">traitsui.dock_window_theme</span> <span class="kn">import</span> <span class="n">DockWindowTheme</span>
+<span class="kn">from</span> <span class="nn">traitsui.editor_factory</span> <span class="kn">import</span> <span class="n">EditorFactory</span>
+<span class="kn">from</span> <span class="nn">traitsui.helper</span> <span class="kn">import</span> <span class="n">Orientation</span>
+<span class="kn">from</span> <span class="nn">traitsui.menu</span> <span class="kn">import</span> <span class="n">Action</span>
+<span class="kn">from</span> <span class="nn">traitsui.tree_node</span> <span class="kn">import</span> <span class="n">TreeNode</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Trait definitions:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1">#: Size of each tree node icon</span>
+<span class="n">IconSize</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">((</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Int</span><span class="p">)</span>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  The core tree node menu actions:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<span class="n">NewAction</span> <span class="o">=</span> <span class="s2">&quot;NewAction&quot;</span>
+<span class="n">CopyAction</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Copy&quot;</span><span class="p">,</span>
+    <span class="n">action</span><span class="o">=</span><span class="s2">&quot;editor._menu_copy_node&quot;</span><span class="p">,</span>
+    <span class="n">enabled_when</span><span class="o">=</span><span class="s2">&quot;editor._is_copyable(object)&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">CutAction</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Cut&quot;</span><span class="p">,</span>
+    <span class="n">action</span><span class="o">=</span><span class="s2">&quot;editor._menu_cut_node&quot;</span><span class="p">,</span>
+    <span class="n">enabled_when</span><span class="o">=</span><span class="s2">&quot;editor._is_cutable(object)&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">PasteAction</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Paste&quot;</span><span class="p">,</span>
+    <span class="n">action</span><span class="o">=</span><span class="s2">&quot;editor._menu_paste_node&quot;</span><span class="p">,</span>
+    <span class="n">enabled_when</span><span class="o">=</span><span class="s2">&quot;editor._is_pasteable(object)&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">DeleteAction</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Delete&quot;</span><span class="p">,</span>
+    <span class="n">action</span><span class="o">=</span><span class="s2">&quot;editor._menu_delete_node&quot;</span><span class="p">,</span>
+    <span class="n">enabled_when</span><span class="o">=</span><span class="s2">&quot;editor._is_deletable(object)&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">RenameAction</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Rename&quot;</span><span class="p">,</span>
+    <span class="n">action</span><span class="o">=</span><span class="s2">&quot;editor._menu_rename_node&quot;</span><span class="p">,</span>
+    <span class="n">enabled_when</span><span class="o">=</span><span class="s2">&quot;editor._is_renameable(object)&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="TreeEditor"><a class="viewcode-back" href="../../../api/traitsui.editors.tree_editor.html#traitsui.editors.tree_editor.TreeEditor">[docs]</a><span class="k">class</span> <span class="nc">TreeEditor</span><span class="p">(</span><span class="n">EditorFactory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Editor factory for tree editors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Supported TreeNode objects</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">TreeNode</span><span class="p">)</span>
+
+    <span class="c1">#: Mapping from TreeNode tuples to MultiTreeNodes</span>
+    <span class="n">multi_nodes</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">()</span>
+
+    <span class="c1">#: The column header labels if any.</span>
+    <span class="n">column_headers</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">Str</span><span class="p">)</span>
+
+    <span class="c1">#: Are the individual nodes editable?</span>
+    <span class="n">editable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Selection mode.</span>
+    <span class="n">selection_mode</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;single&quot;</span><span class="p">,</span> <span class="s2">&quot;extended&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Is the editor shared across trees?</span>
+    <span class="n">shared_editor</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Reference to a shared object editor</span>
+    <span class="n">editor</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">EditorFactory</span><span class="p">)</span>
+
+    <span class="c1"># FIXME: Implemented only in wx backend.</span>
+    <span class="c1">#: The DockWindow graphical theme</span>
+    <span class="n">dock_theme</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">DockWindowTheme</span><span class="p">)</span>
+
+    <span class="c1">#: Show icons for tree nodes?</span>
+    <span class="n">show_icons</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Hide the tree root node?</span>
+    <span class="n">hide_root</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Layout orientation of the tree and the editor</span>
+    <span class="n">orientation</span> <span class="o">=</span> <span class="n">Orientation</span>
+
+    <span class="c1">#: Number of tree levels (down from the root) that should be automatically</span>
+    <span class="c1">#: opened</span>
+    <span class="n">auto_open</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
+
+    <span class="c1">#: Size of the tree node icons</span>
+    <span class="n">icon_size</span> <span class="o">=</span> <span class="n">IconSize</span>
+
+    <span class="c1">#: Called when a node is selected</span>
+    <span class="n">on_select</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: Called when a node is clicked</span>
+    <span class="n">on_click</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: Called when a node is double-clicked</span>
+    <span class="n">on_dclick</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: Called when a node is activated</span>
+    <span class="n">on_activated</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: Call when the mouse hovers over a node</span>
+    <span class="n">on_hover</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: The optional extended trait name of the trait to synchronize with the</span>
+    <span class="c1">#: editor&#39;s current selection:</span>
+    <span class="n">selected</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The optional extended trait name of the trait that should be assigned</span>
+    <span class="c1">#: a node object when a tree node is activated, by double-clicking or</span>
+    <span class="c1">#: pressing the Enter key when a node has focus (Note: if you want to</span>
+    <span class="c1">#: receive repeated activated events on the same node, make sure the trait</span>
+    <span class="c1">#: is defined as an Event):</span>
+    <span class="n">activated</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The optional extended trait name of the trait that should be assigned</span>
+    <span class="c1">#: a node object when a tree node is clicked on (Note: If you want to</span>
+    <span class="c1">#: receive repeated clicks on the same node, make sure the trait is defined</span>
+    <span class="c1">#: as an Event):</span>
+    <span class="n">click</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The optional extended trait name of the trait that should be assigned</span>
+    <span class="c1">#: a node object when a tree node is double-clicked on (Note: if you want</span>
+    <span class="c1">#: to receive repeated double-clicks on the same node, make sure the trait</span>
+    <span class="c1">#: is defined as an Event):</span>
+    <span class="n">dclick</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The optional extended trait name of the trait event that is fired</span>
+    <span class="c1">#: whenever the application wishes to veto a tree action in progress (e.g.</span>
+    <span class="c1">#: double-clicking a non-leaf tree node normally opens or closes the node,</span>
+    <span class="c1">#: but if you are handling the double-click event in your program, you may</span>
+    <span class="c1">#: wish to veto the open or close operation). Be sure to fire the veto</span>
+    <span class="c1">#: event in the event handler triggered by the operation (e.g. the &#39;dclick&#39;</span>
+    <span class="c1">#: event handler.</span>
+    <span class="n">veto</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The optional extended trait name of the trait event that is fired when</span>
+    <span class="c1">#: the application wishes the currently visible portion of the tree widget</span>
+    <span class="c1">#: to repaint itself.</span>
+    <span class="n">refresh</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Mode for lines connecting tree nodes</span>
+    <span class="c1">#:</span>
+    <span class="c1">#: * &#39;appearance&#39;: Show lines only when they look good.</span>
+    <span class="c1">#: * &#39;on&#39;: Always show lines.</span>
+    <span class="c1">#: * &#39;off&#39;: Don&#39;t show lines.</span>
+    <span class="n">lines_mode</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;appearance&quot;</span><span class="p">,</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="s2">&quot;off&quot;</span><span class="p">)</span>
+
+    <span class="c1"># FIXME: Document as unimplemented or wx specific.</span>
+    <span class="c1">#: Whether to alternate row colors or not.</span>
+    <span class="n">alternating_row_colors</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Any extra vertical padding to add.</span>
+    <span class="n">vertical_padding</span> <span class="o">=</span> <span class="n">Int</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1">#: Whether or not to expand on a double-click.</span>
+    <span class="n">expands_on_dclick</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Whether the labels should be wrapped around, if not an ellipsis is shown</span>
+    <span class="c1">#: This works only in the qt backend and if there is only one column in</span>
+    <span class="c1">#: tree</span>
+    <span class="n">word_wrap</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<span class="c1"># This alias is deprecated and will be removed in TraitsUI 8.</span>
+<span class="n">ToolkitEditorFactory</span> <span class="o">=</span> <span class="n">TreeEditor</span>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

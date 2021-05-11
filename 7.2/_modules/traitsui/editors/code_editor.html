@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editors.code_editor &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../../index.html" >
+    <link rel="up" title="Module code" href="../../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.editors.code_editor</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.editors.code_editor</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines the code editor factory for all traits toolkit backends,</span>
+<span class="sd">useful for tools such as debuggers.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Instance</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">Bool</span>
+
+<span class="kn">from</span> <span class="nn">traitsui.editor_factory</span> <span class="kn">import</span> <span class="n">EditorFactory</span>
+<span class="kn">from</span> <span class="nn">traitsui.toolkit_traits</span> <span class="kn">import</span> <span class="n">Color</span>
+
+
+<div class="viewcode-block" id="CodeEditor"><a class="viewcode-back" href="../../../api/traitsui.editors.code_editor.html#traitsui.editors.code_editor.CodeEditor">[docs]</a><span class="k">class</span> <span class="nc">CodeEditor</span><span class="p">(</span><span class="n">EditorFactory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Editor factory for code editors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Object trait containing list of line numbers to mark (optional)</span>
+    <span class="n">mark_lines</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Background color for marking lines</span>
+    <span class="n">mark_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="mh">0xECE9D8</span><span class="p">)</span>
+
+    <span class="c1">#: Object trait containing the currently selected line (optional)</span>
+    <span class="n">selected_line</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Object trait containing the currently selected text (optional)</span>
+    <span class="n">selected_text</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Object trait containing the currently selected text start position</span>
+    <span class="c1">#: (optional)</span>
+    <span class="n">selected_start_pos</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Object trait containing the currently selected text end position</span>
+    <span class="c1">#: (optional)</span>
+    <span class="n">selected_end_pos</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Background color for selected lines</span>
+    <span class="n">selected_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="mh">0xA4FFFF</span><span class="p">)</span>
+
+    <span class="c1">#: Where should the search toolbar be placed?</span>
+    <span class="n">search</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Background color for lines that match the current search</span>
+    <span class="n">search_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="mh">0xFFFF94</span><span class="p">)</span>
+
+    <span class="c1">#: Current line</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Current column</span>
+    <span class="n">column</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Should code folding be enabled?</span>
+    <span class="n">foldable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Should line numbers be displayed in the margin?</span>
+    <span class="n">show_line_numbers</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Is user input set on every change?</span>
+    <span class="n">auto_set</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Should the editor auto-scroll when a new **selected_line** value is set?</span>
+    <span class="n">auto_scroll</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Optional key bindings associated with the editor</span>
+    <span class="n">key_bindings</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;traitsui.key_bindings.KeyBindings&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Calltip clicked event</span>
+    <span class="n">calltip_clicked</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The lexer to use. Default is &#39;python&#39;; &#39;null&#39; indicates no lexing.</span>
+    <span class="n">lexer</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="s2">&quot;python&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Object trait containing the list of line numbers to dim (optional)</span>
+    <span class="n">dim_lines</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Object trait to dim lines to. Can be of form #rrggbb or a color spec. If</span>
+    <span class="c1">#: not specified, dark grey is used.</span>
+    <span class="n">dim_color</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Object trait containing the list of line numbers to put squiggles under</span>
+    <span class="c1">#: (optional)</span>
+    <span class="n">squiggle_lines</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Object trait for the color of squiggles. If not specified, red is used.</span>
+    <span class="n">squiggle_color</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span></div>
+
+
+<span class="c1"># This alias is deprecated and will be removed in TraitsUI 8.</span>
+<span class="n">ToolkitEditorFactory</span> <span class="o">=</span> <span class="n">CodeEditor</span>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

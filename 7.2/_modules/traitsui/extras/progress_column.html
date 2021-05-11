@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.extras.progress_column &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../../index.html" >
+    <link rel="up" title="Module code" href="../../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.extras.progress_column</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.extras.progress_column</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; A column class for for the TableEditor that displays progress bars. &quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Str</span>
+
+<span class="kn">from</span> <span class="nn">traitsui.table_column</span> <span class="kn">import</span> <span class="n">ObjectColumn</span>
+
+
+<div class="viewcode-block" id="ProgressColumn"><a class="viewcode-back" href="../../../api/traitsui.extras.progress_column.html#traitsui.extras.progress_column.ProgressColumn">[docs]</a><span class="k">class</span> <span class="nc">ProgressColumn</span><span class="p">(</span><span class="n">ObjectColumn</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A column which displays trait values as a progress bar</span>
+
+<span class="sd">    Progress values must be an integer value between the maximum and minimum</span>
+<span class="sd">    values.  By default it is assumed to be a percentage.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: Format string to apply to column values.</span>
+    <span class="nb">format</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s%%</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: The minimum value for a progress bar.</span>
+    <span class="n">minimum</span> <span class="o">=</span> <span class="n">Int</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1">#: The maximum value for a progress bar.</span>
+    <span class="n">maximum</span> <span class="o">=</span> <span class="n">Int</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+
+    <span class="c1">#: Whether or not to display the text with the progress bar.</span>
+    <span class="c1">#: This may not display with some progress bar styles, eg. on OS X.</span>
+    <span class="n">text_visible</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">traits</span><span class="p">)</span>
+
+        <span class="kn">from</span> <span class="nn">traitsui.toolkit</span> <span class="kn">import</span> <span class="n">toolkit_object</span>
+        <span class="n">ProgressRenderer</span> <span class="o">=</span> <span class="n">toolkit_object</span><span class="p">(</span>
+            <span class="s1">&#39;extra.progress_renderer:ProgressRenderer&#39;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">renderer</span> <span class="o">=</span> <span class="n">ProgressRenderer</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ProgressColumn.is_editable"><a class="viewcode-back" href="../../../api/traitsui.extras.progress_column.html#traitsui.extras.progress_column.ProgressColumn.is_editable">[docs]</a>    <span class="k">def</span> <span class="nf">is_editable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the column is editable for a specified object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Progress columns are always read-only</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="ProgressColumn.get_minimum"><a class="viewcode-back" href="../../../api/traitsui.extras.progress_column.html#traitsui.extras.progress_column.ProgressColumn.get_minimum">[docs]</a>    <span class="k">def</span> <span class="nf">get_minimum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">minimum</span></div>
+
+<div class="viewcode-block" id="ProgressColumn.get_maximum"><a class="viewcode-back" href="../../../api/traitsui.extras.progress_column.html#traitsui.extras.progress_column.ProgressColumn.get_maximum">[docs]</a>    <span class="k">def</span> <span class="nf">get_maximum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">maximum</span></div>
+
+<div class="viewcode-block" id="ProgressColumn.get_text_visible"><a class="viewcode-back" href="../../../api/traitsui.extras.progress_column.html#traitsui.extras.progress_column.ProgressColumn.get_text_visible">[docs]</a>    <span class="k">def</span> <span class="nf">get_text_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Whether or not to display text in column.</span>
+
+<span class="sd">        Note, may not render on some platforms (eg. OS X) due to</span>
+<span class="sd">        the rendering style.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_visible</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.menu &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.menu</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.menu</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines the standard menu bar for use with Traits UI windows and panels,</span>
+<span class="sd">    and standard actions and buttons.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Str</span>
+
+<span class="c1"># Import and rename the needed Pyface elements:</span>
+<span class="kn">from</span> <span class="nn">pyface.action.api</span> <span class="kn">import</span> <span class="n">ToolBarManager</span> <span class="k">as</span> <span class="n">ToolBar</span>
+<span class="kn">from</span> <span class="nn">pyface.action.api</span> <span class="kn">import</span> <span class="n">MenuBarManager</span> <span class="k">as</span> <span class="n">MenuBar</span>
+<span class="kn">from</span> <span class="nn">pyface.action.api</span> <span class="kn">import</span> <span class="n">MenuManager</span> <span class="k">as</span> <span class="n">Menu</span>
+<span class="kn">from</span> <span class="nn">pyface.action.api</span> <span class="kn">import</span> <span class="n">Group</span> <span class="k">as</span> <span class="n">ActionGroup</span>
+<span class="kn">from</span> <span class="nn">pyface.action.api</span> <span class="kn">import</span> <span class="n">Action</span> <span class="k">as</span> <span class="n">PyFaceAction</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;Action&#39; class (extends the core pyface Action class):</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="Action"><a class="viewcode-back" href="../../api/traitsui.menu.html#traitsui.menu.Action">[docs]</a><span class="k">class</span> <span class="nc">Action</span><span class="p">(</span><span class="n">PyFaceAction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An action on a menu bar in a Traits UI window or panel.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Pre-condition for showing the action. If the expression evaluates to</span>
+    <span class="c1">#: False, the action is not visible (and disappears if it was previously</span>
+    <span class="c1">#: visible). If the value evaluates to True, the action becomes visible.</span>
+    <span class="c1">#: All **visible_when** conditions are checked each time that any trait</span>
+    <span class="c1">#: value on an object in the UI&#39;s context is changed. Therefore, you can</span>
+    <span class="c1">#: use **visible_when** conditions to hide or show actions in response to</span>
+    <span class="c1">#: user input. Be aware that this only applies to traits in the UI&#39;s</span>
+    <span class="c1">#: context. As a result, changes to nested traits that don&#39;t also change a</span>
+    <span class="c1">#: trait on some object in the context may not trigger the expression to be</span>
+    <span class="c1">#: checked. Additionally, the expression needs to be a valid python</span>
+    <span class="c1">#: expression given the context. i.e.</span>
+    <span class="c1">#: eval(visible_when, globals=globals(), locals=context) should succeed.</span>
+    <span class="n">visible_when</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Pre-condition for enabling the action. If the expression evaluates to</span>
+    <span class="c1">#: False, the action is disabled, that is, it cannot be selected. All</span>
+    <span class="c1">#: **enabled_when** conditions are checked each time that any trait value</span>
+    <span class="c1">#: on an object in the UI&#39;s context is changed. Therefore, you can use</span>
+    <span class="c1">#: **enabled_when** conditions to enable or disable actions in response to</span>
+    <span class="c1">#: user input. Be aware that this only applies to traits in the UI&#39;s</span>
+    <span class="c1">#: context. As a result, changes to nested traits that don&#39;t also change a</span>
+    <span class="c1">#: trait on some object in the context may not trigger the expression to be</span>
+    <span class="c1">#: checked. Additionally, the expression needs to be a valid python</span>
+    <span class="c1">#: expression given the context. i.e.</span>
+    <span class="c1">#: eval(visible_when, globals=globals(), locals=context) should succeed.</span>
+    <span class="n">enabled_when</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Boolean expression indicating when the action is displayed with a check</span>
+    <span class="c1">#: mark beside it. This attribute applies only to actions that are included</span>
+    <span class="c1">#: in menus.</span>
+    <span class="n">checked_when</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Pre-condition for including the action in the menu bar or toolbar. If</span>
+    <span class="c1">#: the expression evaluates to False, the action is not defined in the</span>
+    <span class="c1">#: display. Conditions for **defined_when** are evaluated only once, when</span>
+    <span class="c1">#: the display is first constructed.</span>
+    <span class="n">defined_when</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The method to call to perform the action, on the Handler for the window.</span>
+    <span class="c1">#: The method must accept a single parameter, which is a UIInfo object.</span>
+    <span class="c1">#: Because Actions are associated with Views rather than Handlers, you must</span>
+    <span class="c1">#: ensure that the Handler object for a particular window has a method with</span>
+    <span class="c1">#: the correct name, for each Action defined on the View for that window.</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Standard actions and menu bar definitions:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1">#: Menu separator</span>
+<span class="n">Separator</span> <span class="o">=</span> <span class="n">ActionGroup</span>
+
+<span class="c1">#: The standard &quot;close window&quot; action</span>
+<span class="n">CloseAction</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Close&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;_on_close&quot;</span><span class="p">)</span>
+
+<span class="c1">#: The standard &quot;undo last change&quot; action</span>
+<span class="n">UndoAction</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Undo&quot;</span><span class="p">,</span>
+    <span class="n">action</span><span class="o">=</span><span class="s2">&quot;_on_undo&quot;</span><span class="p">,</span>
+    <span class="n">defined_when</span><span class="o">=</span><span class="s2">&quot;ui.history is not None&quot;</span><span class="p">,</span>
+    <span class="n">enabled_when</span><span class="o">=</span><span class="s2">&quot;ui.history.can_undo&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1">#: The standard &quot;redo last undo&quot; action</span>
+<span class="n">RedoAction</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Redo&quot;</span><span class="p">,</span>
+    <span class="n">action</span><span class="o">=</span><span class="s2">&quot;_on_redo&quot;</span><span class="p">,</span>
+    <span class="n">defined_when</span><span class="o">=</span><span class="s2">&quot;ui.history is not None&quot;</span><span class="p">,</span>
+    <span class="n">enabled_when</span><span class="o">=</span><span class="s2">&quot;ui.history.can_redo&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1">#: The standard &quot;revert all changes&quot; action</span>
+<span class="n">RevertAction</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Revert&quot;</span><span class="p">,</span>
+    <span class="n">action</span><span class="o">=</span><span class="s2">&quot;_on_revert&quot;</span><span class="p">,</span>
+    <span class="n">defined_when</span><span class="o">=</span><span class="s2">&quot;ui.history is not None&quot;</span><span class="p">,</span>
+    <span class="n">enabled_when</span><span class="o">=</span><span class="s2">&quot;ui.history.can_undo&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1">#: The standard &quot;show help&quot; action</span>
+<span class="n">HelpAction</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Help&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;show_help&quot;</span><span class="p">)</span>
+
+<span class="c1">#: The standard Traits UI menu bar</span>
+<span class="n">StandardMenuBar</span> <span class="o">=</span> <span class="n">MenuBar</span><span class="p">(</span>
+    <span class="n">Menu</span><span class="p">(</span><span class="n">CloseAction</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;File&quot;</span><span class="p">),</span>
+    <span class="n">Menu</span><span class="p">(</span><span class="n">UndoAction</span><span class="p">,</span> <span class="n">RedoAction</span><span class="p">,</span> <span class="n">RevertAction</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Edit&quot;</span><span class="p">),</span>
+    <span class="n">Menu</span><span class="p">(</span><span class="n">HelpAction</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Help&quot;</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Standard buttons (i.e. actions):</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="n">NoButton</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+<span class="c1">#: Appears as two buttons: **Undo** and **Redo**. When **Undo** is clicked, the</span>
+<span class="c1">#: most recent change to the data is cancelled, restoring the previous value.</span>
+<span class="c1">#: **Redo** cancels the most recent &quot;undo&quot; operation.</span>
+<span class="n">UndoButton</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Undo&quot;</span><span class="p">)</span>
+
+<span class="c1">#: When the user clicks the **Revert** button, all changes made in the window</span>
+<span class="c1">#: are cancelled and the original values are restored. If the changes have been</span>
+<span class="c1">#: applied to the model (because the user clicked **Apply** or because the</span>
+<span class="c1">#: window is live), the model data is restored as well. The window remains</span>
+<span class="c1">#: open.</span>
+<span class="n">RevertButton</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Revert&quot;</span><span class="p">)</span>
+
+<span class="c1">#: When the user clicks the **Apply** button, all changes made in the window are</span>
+<span class="c1">#: applied to the model. This option is meaningful only for modal windows.</span>
+<span class="n">ApplyButton</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Apply&quot;</span><span class="p">)</span>
+
+<span class="c1">#: When the user clicks the **OK** button, all changes made in the window are</span>
+<span class="c1">#: applied to the model, and the window is closed.</span>
+<span class="n">OKButton</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;OK&quot;</span><span class="p">)</span>
+
+<span class="c1">#: When the user clicks the **Cancel** button, all changes made in the window</span>
+<span class="c1">#: are discarded; if the window is live, the model is restored to the values it</span>
+<span class="c1">#: held before the window was opened. The window is then closed.</span>
+<span class="n">CancelButton</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Cancel&quot;</span><span class="p">)</span>
+
+<span class="c1">#: When the user clicks the **Help** button, the current help handler is</span>
+<span class="c1">#: invoked. If the default help handler is used, a pop-up window is displayed,</span>
+<span class="c1">#: which contains the **help** text for the top-level Group (if any), and for</span>
+<span class="c1">#: the items in the view. If the default help handler has been overridden,</span>
+<span class="c1">#: the action is determined by the custom help handler. See</span>
+<span class="c1">#: **traitsui.help**.</span>
+<span class="n">HelpButton</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Help&quot;</span><span class="p">)</span>
+
+<span class="n">OKCancelButtons</span> <span class="o">=</span> <span class="p">[</span><span class="n">OKButton</span><span class="p">,</span> <span class="n">CancelButton</span><span class="p">]</span>
+<span class="n">ModalButtons</span> <span class="o">=</span> <span class="p">[</span><span class="n">ApplyButton</span><span class="p">,</span> <span class="n">RevertButton</span><span class="p">,</span> <span class="n">OKButton</span><span class="p">,</span> <span class="n">CancelButton</span><span class="p">,</span> <span class="n">HelpButton</span><span class="p">]</span>
+<span class="n">LiveButtons</span> <span class="o">=</span> <span class="p">[</span><span class="n">UndoButton</span><span class="p">,</span> <span class="n">RevertButton</span><span class="p">,</span> <span class="n">OKButton</span><span class="p">,</span> <span class="n">CancelButton</span><span class="p">,</span> <span class="n">HelpButton</span><span class="p">]</span>
+
+<span class="c1">#: The window has no command buttons</span>
+<span class="n">NoButtons</span> <span class="o">=</span> <span class="p">[</span><span class="n">NoButton</span><span class="p">]</span>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

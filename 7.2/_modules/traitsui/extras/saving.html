@@ -1,0 +1,388 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.extras.saving &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../../index.html" >
+    <link rel="up" title="Module code" href="../../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.extras.saving</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.extras.saving</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Provides a lightweight framework that removes some of the drudge work</span>
+<span class="sd">    involved with implementing user-friendly saving behavior in a Traits</span>
+<span class="sd">    UI application.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="c1"># ETS imports</span>
+<span class="kn">from</span> <span class="nn">pyface.api</span> <span class="kn">import</span> <span class="n">FileDialog</span><span class="p">,</span> <span class="n">confirm</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">YES</span><span class="p">,</span> <span class="n">CANCEL</span>
+<span class="kn">from</span> <span class="nn">pyface.timer.api</span> <span class="kn">import</span> <span class="n">Timer</span>
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">HasTraits</span><span class="p">,</span>
+    <span class="n">Str</span><span class="p">,</span>
+    <span class="n">Bool</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Int</span><span class="p">,</span>
+    <span class="n">Instance</span><span class="p">,</span>
+    <span class="n">observe</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..api</span> <span class="kn">import</span> <span class="n">Handler</span>
+
+
+<div class="viewcode-block" id="CanSaveMixin"><a class="viewcode-back" href="../../../api/traitsui.extras.saving.html#traitsui.extras.saving.CanSaveMixin">[docs]</a><span class="k">class</span> <span class="nc">CanSaveMixin</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A mixin-class for objects that wish to support GUI saving via a</span>
+<span class="sd">        SaveHandler. It is the responsiblity of the child class to manage</span>
+<span class="sd">        its dirty flag, which describes whether its information has changed</span>
+<span class="sd">        since its last save.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+    <span class="n">dirty</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># -----------------------------------------------------------------</span>
+    <span class="c1">#  object interface</span>
+    <span class="c1"># -----------------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; We don&#39;t want to pickle the filepath because this can change,</span>
+<span class="sd">            obviously, if the user moves around the pickled file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;filepath&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;dirty&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">state</span>
+
+    <span class="c1"># -----------------------------------------------------------------</span>
+    <span class="c1">#  CanSaveMixin interface</span>
+    <span class="c1"># -----------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="CanSaveMixin.validate"><a class="viewcode-back" href="../../../api/traitsui.extras.saving.html#traitsui.extras.saving.CanSaveMixin.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the information in the object is valid to be saved</span>
+<span class="sd">            in tuple form. The first item is the validation state (boolean) and</span>
+<span class="sd">            the second item is the message to display if the object did not</span>
+<span class="sd">            validate.</span>
+
+<span class="sd">            By default, an object always validates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CanSaveMixin.save"><a class="viewcode-back" href="../../../api/traitsui.extras.saving.html#traitsui.extras.saving.CanSaveMixin.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Saves the object to the path specified by its &#39;filepath&#39; trait. This</span>
+<span class="sd">            method should also reset the dirty flag on this object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+
+
+<div class="viewcode-block" id="SaveHandler"><a class="viewcode-back" href="../../../api/traitsui.extras.saving.html#traitsui.extras.saving.SaveHandler">[docs]</a><span class="k">class</span> <span class="nc">SaveHandler</span><span class="p">(</span><span class="n">Handler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A Handler that facilates adding saving to a Traits UI application.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: The object which is to be saved (subclass of CanSaveMixin). It is assigned</span>
+    <span class="c1">#: to info.object in the &#39;init&#39; method, which in many cases is what you want.</span>
+    <span class="c1">#: If not, override that method to set it to something else.</span>
+    <span class="n">saveObject</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: The type of files to show in the save dialogs</span>
+    <span class="n">wildcard</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="s2">&quot;All files (*.*)|*.*&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: The option extension which should appear at the end of all filenames. If</span>
+    <span class="c1">#: the user does not explicitly specifiy it, it is appended to the filename.</span>
+    <span class="n">extension</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: This message to display when the Handler requests a save</span>
+    <span class="n">savePromptMessage</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="s2">&quot;Would you like to save?&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Whether to prompt for a save on exit if the save object is dirty</span>
+    <span class="n">promptOnExit</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Whether to allow the user to override a validation failure through a</span>
+    <span class="c1">#: confirmation dialog. By default, validation errors cannot be overriden.</span>
+    <span class="n">allowValidationBypass</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Whether to automatically save after a certain amount of time has passed</span>
+    <span class="c1">#: since the last save</span>
+    <span class="n">autosave</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Number of seconds between each autosave. Default is 5 minutes.</span>
+    <span class="n">autosaveInterval</span> <span class="o">=</span> <span class="n">Int</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+
+    <span class="c1">#: If it is possible to override validation failures, this specifies whether</span>
+    <span class="c1">#: autosave will do so. If False and a validation errors occurs, no save</span>
+    <span class="c1">#: will occur.</span>
+    <span class="n">autosaveValidationBypass</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Protected traits</span>
+    <span class="n">_timer</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">Timer</span><span class="p">)</span>
+
+    <span class="c1"># -----------------------------------------------------------------</span>
+    <span class="c1">#  Handler interface</span>
+    <span class="c1"># -----------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="SaveHandler.init"><a class="viewcode-back" href="../../../api/traitsui.extras.saving.html#traitsui.extras.saving.SaveHandler.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Set the default save object (the object being handled). Also,</span>
+<span class="sd">            perform a questionable hack by which we remove the handled</span>
+<span class="sd">            object from the keybinding&#39;s controllers. This means that a</span>
+<span class="sd">            keybinding to &#39;save&#39; only calls this object, not the object</span>
+<span class="sd">            being edited as well. (For reasons unclear, the KeyBinding handler</span>
+<span class="sd">            API is radically different from the Action API, which is the reason</span>
+<span class="sd">            that this problem exists. Keybindings are a UI concept--they should</span>
+<span class="sd">            *not* call the model by default.)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">keybindings</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">key_bindings</span>
+        <span class="k">if</span> <span class="n">keybindings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">keybindings</span><span class="o">.</span><span class="n">controllers</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">saveObject</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">object</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="SaveHandler.close"><a class="viewcode-back" href="../../../api/traitsui.extras.saving.html#traitsui.extras.saving.SaveHandler.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">is_ok</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Called when the user requests to close the interface. Returns a</span>
+<span class="sd">            boolean indicating whether the window should be allowed to close.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">promptOnExit</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">promptForSave</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="SaveHandler.closed"><a class="viewcode-back" href="../../../api/traitsui.extras.saving.html#traitsui.extras.saving.SaveHandler.closed">[docs]</a>    <span class="k">def</span> <span class="nf">closed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">is_ok</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Called after the window is destroyed. Makes sure that the autosave</span>
+<span class="sd">            timer is stopped.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">Stop</span><span class="p">()</span></div>
+
+    <span class="c1"># -----------------------------------------------------------------</span>
+    <span class="c1">#  SaveHandler interface</span>
+    <span class="c1"># -----------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="SaveHandler.exit"><a class="viewcode-back" href="../../../api/traitsui.extras.saving.html#traitsui.extras.saving.SaveHandler.exit">[docs]</a>    <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Closes the UI unless a save prompt is cancelled. Provided for</span>
+<span class="sd">            convenience to be used with a Menu action.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">dispose</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SaveHandler.save"><a class="viewcode-back" href="../../../api/traitsui.extras.saving.html#traitsui.extras.saving.SaveHandler.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Saves the object to its current filepath. If this is not specified,</span>
+<span class="sd">            opens a dialog to select this path. Returns whether the save</span>
+<span class="sd">            actually occurred.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">saveObject</span><span class="o">.</span><span class="n">filepath</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">saveAs</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validateAndSave</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SaveHandler.saveAs"><a class="viewcode-back" href="../../../api/traitsui.extras.saving.html#traitsui.extras.saving.SaveHandler.saveAs">[docs]</a>    <span class="k">def</span> <span class="nf">saveAs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Saves the object to a new path, and sets this as the &#39;filepath&#39; on</span>
+<span class="sd">            the object. Returns whether the save actually occurred.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fileDialog</span> <span class="o">=</span> <span class="n">FileDialog</span><span class="p">(</span>
+            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;save as&quot;</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Save As&quot;</span><span class="p">,</span>
+            <span class="n">wildcard</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wildcard</span><span class="p">,</span>
+            <span class="n">parent</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">control</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">fileDialog</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">fileDialog</span><span class="o">.</span><span class="n">path</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">fileDialog</span><span class="o">.</span><span class="n">return_code</span> <span class="o">==</span> <span class="n">CANCEL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">extLen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extension</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">extLen</span>
+                <span class="ow">and</span> <span class="n">fileDialog</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="n">extLen</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:]</span> <span class="o">!=</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">extension</span>
+            <span class="p">):</span>
+                <span class="n">fileDialog</span><span class="o">.</span><span class="n">path</span> <span class="o">+=</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">extension</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">saveObject</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">fileDialog</span><span class="o">.</span><span class="n">path</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validateAndSave</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SaveHandler.promptForSave"><a class="viewcode-back" href="../../../api/traitsui.extras.saving.html#traitsui.extras.saving.SaveHandler.promptForSave">[docs]</a>    <span class="k">def</span> <span class="nf">promptForSave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">cancel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Prompts the user to save the object, if appropriate. Returns whether</span>
+<span class="sd">            the user canceled the action that invoked this prompt.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">saveObject</span><span class="o">.</span><span class="n">dirty</span><span class="p">:</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="n">confirm</span><span class="p">(</span>
+                <span class="n">info</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">control</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">savePromptMessage</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Save now?&quot;</span><span class="p">,</span>
+                <span class="n">cancel</span><span class="o">=</span><span class="n">cancel</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">code</span> <span class="o">==</span> <span class="n">CANCEL</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">elif</span> <span class="n">code</span> <span class="o">==</span> <span class="n">YES</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">info</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">promptForSave</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">cancel</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="k">def</span> <span class="nf">_autosave</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Called by the timer when an autosave should take place.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">saveObject</span><span class="o">.</span><span class="n">dirty</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">saveObject</span><span class="o">.</span><span class="n">filepath</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">success</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">saveObject</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">success</span> <span class="ow">or</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">allowValidationBypass</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">autosaveValidationBypass</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">saveObject</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="nd">@observe</span><span class="p">(</span><span class="s2">&quot;autosave, autosaveInterval, saveObject&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_configure_timer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Creates, replaces, or destroys the autosave timer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">Stop</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autosave</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">saveObject</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">autosaveInterval</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_autosave</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_validateAndSave</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Try to save to the current filepath. Returns whether whether the</span>
+<span class="sd">            validation was successful/overridden (and the object saved).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">success</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">saveObject</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">saveObject</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Validation error&quot;</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">allowValidationBypass</span>
+                <span class="ow">and</span> <span class="n">confirm</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span> <span class="o">==</span> <span class="n">YES</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">saveObject</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+                <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">success</span></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
