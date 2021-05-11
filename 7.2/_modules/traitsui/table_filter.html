@@ -1,0 +1,779 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.table_filter &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.table_filter</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.table_filter</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines the filter object used to filter items displayed in a table editor.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Bool</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Enum</span><span class="p">,</span>
+    <span class="n">Event</span><span class="p">,</span>
+    <span class="n">Expression</span><span class="p">,</span>
+    <span class="n">HasPrivateTraits</span><span class="p">,</span>
+    <span class="n">Instance</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Str</span><span class="p">,</span>
+    <span class="n">Trait</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">.editor_factory</span> <span class="kn">import</span> <span class="n">EditorFactory</span>
+<span class="kn">from</span> <span class="nn">.group</span> <span class="kn">import</span> <span class="n">Group</span>
+<span class="kn">from</span> <span class="nn">.include</span> <span class="kn">import</span> <span class="n">Include</span>
+<span class="kn">from</span> <span class="nn">.item</span> <span class="kn">import</span> <span class="n">Item</span>
+<span class="kn">from</span> <span class="nn">.menu</span> <span class="kn">import</span> <span class="n">Action</span>
+<span class="kn">from</span> <span class="nn">.table_column</span> <span class="kn">import</span> <span class="n">ObjectColumn</span>
+<span class="kn">from</span> <span class="nn">.view</span> <span class="kn">import</span> <span class="n">View</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Trait definitions:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="n">GenericTableFilterRuleOperation</span> <span class="o">=</span> <span class="n">Trait</span><span class="p">(</span>
+    <span class="s2">&quot;=&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;=&quot;</span><span class="p">:</span> <span class="s2">&quot;eq&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;&lt;&gt;&quot;</span><span class="p">:</span> <span class="s2">&quot;ne&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;&lt;&quot;</span><span class="p">:</span> <span class="s2">&quot;lt&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;&lt;=&quot;</span><span class="p">:</span> <span class="s2">&quot;le&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;&gt;&quot;</span><span class="p">:</span> <span class="s2">&quot;gt&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;&gt;=&quot;</span><span class="p">:</span> <span class="s2">&quot;ge&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;contains&quot;</span><span class="p">:</span> <span class="s2">&quot;contains&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;starts with&quot;</span><span class="p">:</span> <span class="s2">&quot;starts_with&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ends with&quot;</span><span class="p">:</span> <span class="s2">&quot;ends_with&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="TableFilter"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.TableFilter">[docs]</a><span class="k">class</span> <span class="nc">TableFilter</span><span class="p">(</span><span class="n">HasPrivateTraits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Filter for items displayed in a table.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: UI name of this filter (so the user can identify it in the UI)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="s2">&quot;Default filter&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Default name that can be automatically overridden</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="s2">&quot;Default filter&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: A user-readable description of what kind of object satisfies the filter</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="s2">&quot;All items&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: A callable function that returns whether the passed object is allowed</span>
+    <span class="c1">#: by the filter</span>
+    <span class="n">allowed</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">(</span><span class="k">lambda</span> <span class="nb">object</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="n">transient</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Is the filter a template (i.e., non-deletable, non-editable)?</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Class constants:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Traits that are ignored by the _anytrait_changed() handler</span>
+    <span class="n">ignored_traits</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;_name&quot;</span><span class="p">,</span> <span class="s2">&quot;template&quot;</span><span class="p">,</span> <span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Traits view definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="n">traits_view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+        <span class="s2">&quot;name{Filter name}&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_&quot;</span><span class="p">,</span>
+        <span class="n">Include</span><span class="p">(</span><span class="s2">&quot;filter_view&quot;</span><span class="p">),</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Edit Filter&quot;</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+        <span class="n">buttons</span><span class="o">=</span><span class="p">[</span>
+            <span class="s2">&quot;OK&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Cancel&quot;</span><span class="p">,</span>
+            <span class="n">Action</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Help&quot;</span><span class="p">,</span>
+                <span class="n">action</span><span class="o">=</span><span class="s2">&quot;show_help&quot;</span><span class="p">,</span>
+                <span class="n">defined_when</span><span class="o">=</span><span class="s2">&quot;ui.view_elements.content[&#39;filter_view&#39;]&quot;</span>
+                <span class="s2">&quot;.help_id != &#39;&#39;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">],</span>
+    <span class="p">)</span>
+
+    <span class="n">searchable_view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">[</span><span class="n">Include</span><span class="p">(</span><span class="s2">&quot;search_view&quot;</span><span class="p">),</span> <span class="s2">&quot;|[]&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;handler.status~&quot;</span><span class="p">,</span> <span class="s2">&quot;|[]&lt;&gt;&quot;</span><span class="p">],</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;handler.find_next`Find the next matching item`&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;handler.find_previous`Find the previous matching item`&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;handler.select`Select all matching items`&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;handler.OK`Exit search`&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-&lt;&gt;&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;|&lt;&gt;&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Search for&quot;</span><span class="p">,</span>
+        <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;livemodal&quot;</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">search_view</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="n">Include</span><span class="p">(</span><span class="s2">&quot;filter_view&quot;</span><span class="p">))</span>
+
+    <span class="n">filter_view</span> <span class="o">=</span> <span class="n">Group</span><span class="p">()</span>
+
+<div class="viewcode-block" id="TableFilter.filter"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.TableFilter.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether a specified object meets the filter or search</span>
+<span class="sd">        criteria.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">allowed</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TableFilter.description"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.TableFilter.description">[docs]</a>    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a user-readable description of what kind of object</span>
+<span class="sd">        satisfies the filter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span></div>
+
+<div class="viewcode-block" id="TableFilter.edit"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.TableFilter.edit">[docs]</a>    <span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Edits the contents of the filter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">edit_traits</span><span class="p">(</span><span class="n">view</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edit_view</span><span class="p">(</span><span class="nb">object</span><span class="p">),</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;livemodal&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TableFilter.edit_view"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.TableFilter.edit_view">[docs]</a>    <span class="k">def</span> <span class="nf">edit_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a view to use for editing the filter.</span>
+
+<span class="sd">        The &#39;&#39;object&#39;&#39; parameter is a sample object for the table that the</span>
+<span class="sd">        filter will be applied to. It is supplied in case the filter needs to</span>
+<span class="sd">        extract data or metadata from the object. If the table is empty, the</span>
+<span class="sd">        &#39;&#39;object&#39;&#39; argument is None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  &#39;object&#39; interface:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Event handlers:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">_anytrait_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignored_traits</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="EvalTableFilter"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.EvalTableFilter">[docs]</a><span class="k">class</span> <span class="nc">EvalTableFilter</span><span class="p">(</span><span class="n">TableFilter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A table filter based on evaluating an expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Override the standard **name** trait</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Default evaluation filter&quot;</span>
+
+    <span class="c1">#: Python expression which will be applied to each table item</span>
+    <span class="n">expression</span> <span class="o">=</span> <span class="n">Expression</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Traits view definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="n">filter_view</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="s2">&quot;expression&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EvalTableFilter.filter"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.EvalTableFilter.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether a specified object meets the filter or search</span>
+<span class="sd">        criteria.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_traits</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_traits</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">trait_names</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expression_</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span> <span class="nb">object</span><span class="o">.</span><span class="n">trait_get</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_traits</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="EvalTableFilter.description"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.EvalTableFilter.description">[docs]</a>    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a user readable description of what kind of object</span>
+<span class="sd">            satisfies the filter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expression</span></div></div>
+
+
+<div class="viewcode-block" id="GenericTableFilterRule"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRule">[docs]</a><span class="k">class</span> <span class="nc">GenericTableFilterRule</span><span class="p">(</span><span class="n">HasPrivateTraits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A general rule used by a table filter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Filter this rule is part of</span>
+    <span class="nb">filter</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;RuleTableFilter&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Is this rule enabled?</span>
+    <span class="n">enabled</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Is this rule an &#39;and&#39; rule or an &#39;or&#39; rule?</span>
+    <span class="n">and_or</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="s2">&quot;or&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: EnumEditor used to edit the **name** trait:</span>
+    <span class="n">name_editor</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">EditorFactory</span><span class="p">)</span>
+
+    <span class="c1">#: Name of the object trait that this rule applies to</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Operation to be applied in the rule</span>
+    <span class="n">operation</span> <span class="o">=</span> <span class="n">GenericTableFilterRuleOperation</span>
+
+    <span class="c1">#: Editor used to edit the **value** trait</span>
+    <span class="n">value_editor</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">EditorFactory</span><span class="p">)</span>
+
+    <span class="c1">#: Value to use in the operation when applying the rule to an object</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Class constants:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Traits that are ignored by the _anytrait_changed() handler</span>
+    <span class="n">ignored_traits</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;filter&quot;</span><span class="p">,</span> <span class="s2">&quot;name_editor&quot;</span><span class="p">,</span> <span class="s2">&quot;value_editor&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">traits</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">_name_to_value</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">names</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_name_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles a change to the value of the **name** trait.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">filter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">filter</span><span class="o">.</span><span class="n">_object</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="nb">filter</span><span class="o">.</span><span class="n">_name_to_value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value_editor</span> <span class="o">=</span> <span class="nb">filter</span><span class="o">.</span><span class="n">_object</span><span class="o">.</span><span class="n">base_trait</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">get_editor</span><span class="p">()</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Event handlers:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">_anytrait_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignored_traits</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">modified</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;enabled&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="GenericTableFilterRule.clone_traits"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRule.clone_traits">[docs]</a>    <span class="k">def</span> <span class="nf">clone_traits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">traits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">memo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">metadata</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Clones a new object from this one, optionally copying only a</span>
+<span class="sd">        specified set of traits.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="nb">super</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">clone_traits</span><span class="p">(</span><span class="n">traits</span><span class="p">,</span> <span class="n">memo</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="o">**</span><span class="n">metadata</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">trait_set</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">enabled</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="GenericTableFilterRule.description"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRule.description">[docs]</a>    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a description of the filter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">operation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GenericTableFilterRule.is_true"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRule.is_true">[docs]</a>    <span class="k">def</span> <span class="nf">is_true</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the rule is true for a specified object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">value1</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">type1</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">value1</span><span class="p">)</span>
+            <span class="n">value2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value2</span><span class="p">,</span> <span class="n">type1</span><span class="p">):</span>
+                <span class="n">value2</span> <span class="o">=</span> <span class="n">type1</span><span class="p">(</span><span class="n">value2</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">operation_</span><span class="p">)(</span><span class="n">value1</span><span class="p">,</span> <span class="n">value2</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Implemenations of the various rule operations:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="GenericTableFilterRule.eq"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRule.eq">[docs]</a>    <span class="k">def</span> <span class="nf">eq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value1</span><span class="p">,</span> <span class="n">value2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value1</span> <span class="o">==</span> <span class="n">value2</span></div>
+
+<div class="viewcode-block" id="GenericTableFilterRule.ne"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRule.ne">[docs]</a>    <span class="k">def</span> <span class="nf">ne</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value1</span><span class="p">,</span> <span class="n">value2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value1</span> <span class="o">!=</span> <span class="n">value2</span></div>
+
+<div class="viewcode-block" id="GenericTableFilterRule.lt"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRule.lt">[docs]</a>    <span class="k">def</span> <span class="nf">lt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value1</span><span class="p">,</span> <span class="n">value2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value1</span> <span class="o">&lt;</span> <span class="n">value2</span></div>
+
+<div class="viewcode-block" id="GenericTableFilterRule.le"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRule.le">[docs]</a>    <span class="k">def</span> <span class="nf">le</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value1</span><span class="p">,</span> <span class="n">value2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value1</span> <span class="o">&lt;=</span> <span class="n">value2</span></div>
+
+<div class="viewcode-block" id="GenericTableFilterRule.gt"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRule.gt">[docs]</a>    <span class="k">def</span> <span class="nf">gt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value1</span><span class="p">,</span> <span class="n">value2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value1</span> <span class="o">&gt;</span> <span class="n">value2</span></div>
+
+<div class="viewcode-block" id="GenericTableFilterRule.ge"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRule.ge">[docs]</a>    <span class="k">def</span> <span class="nf">ge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value1</span><span class="p">,</span> <span class="n">value2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value1</span> <span class="o">&gt;=</span> <span class="n">value2</span></div>
+
+<div class="viewcode-block" id="GenericTableFilterRule.contains"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRule.contains">[docs]</a>    <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value1</span><span class="p">,</span> <span class="n">value2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">value2</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="o">&gt;=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="GenericTableFilterRule.starts_with"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRule.starts_with">[docs]</a>    <span class="k">def</span> <span class="nf">starts_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value1</span><span class="p">,</span> <span class="n">value2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value1</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">value2</span><span class="p">)]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">value2</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GenericTableFilterRule.ends_with"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRule.ends_with">[docs]</a>    <span class="k">def</span> <span class="nf">ends_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value1</span><span class="p">,</span> <span class="n">value2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value1</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">value2</span><span class="p">)</span> <span class="p">:]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">value2</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="GenericTableFilterRuleEnabledColumn"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRuleEnabledColumn">[docs]</a><span class="k">class</span> <span class="nc">GenericTableFilterRuleEnabledColumn</span><span class="p">(</span><span class="n">ObjectColumn</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Table column that indicates whether a filter rule is enabled.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GenericTableFilterRuleEnabledColumn.get_value"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRuleEnabledColumn.get_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the traits editor of the column for a specified object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="s2">&quot;enabled&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">object</span><span class="o">.</span><span class="n">enabled</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\N{HEAVY CHECK MARK}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="GenericTableFilterRuleAndOrColumn"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRuleAndOrColumn">[docs]</a><span class="k">class</span> <span class="nc">GenericTableFilterRuleAndOrColumn</span><span class="p">(</span><span class="n">ObjectColumn</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Table column that displays whether a filter rule is conjoining (&#39;and&#39;)</span>
+<span class="sd">        or disjoining (&#39;or&#39;).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GenericTableFilterRuleAndOrColumn.get_value"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRuleAndOrColumn.get_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the traits editor of the column for a specified object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">object</span><span class="o">.</span><span class="n">and_or</span> <span class="o">==</span> <span class="s2">&quot;or&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;or&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="GenericTableFilterRuleNameColumn"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRuleNameColumn">[docs]</a><span class="k">class</span> <span class="nc">GenericTableFilterRuleNameColumn</span><span class="p">(</span><span class="n">ObjectColumn</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Table column for the name of an object trait.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GenericTableFilterRuleNameColumn.get_editor"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRuleNameColumn.get_editor">[docs]</a>    <span class="k">def</span> <span class="nf">get_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the traits editor of the column for a specified object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">name_editor</span></div></div>
+
+
+<div class="viewcode-block" id="GenericTableFilterRuleValueColumn"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRuleValueColumn">[docs]</a><span class="k">class</span> <span class="nc">GenericTableFilterRuleValueColumn</span><span class="p">(</span><span class="n">ObjectColumn</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Table column for the value of an object trait.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GenericTableFilterRuleValueColumn.get_editor"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.GenericTableFilterRuleValueColumn.get_editor">[docs]</a>    <span class="k">def</span> <span class="nf">get_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the traits editor of the column for a specified object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">value_editor</span></div></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Defines the columns to display in the generic filter rule table:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1"># Columns to display in the table for generic filter rules.</span>
+<span class="n">generic_table_filter_rule_columns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">GenericTableFilterRuleAndOrColumn</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;and_or&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">),</span>
+    <span class="n">GenericTableFilterRuleNameColumn</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
+    <span class="n">ObjectColumn</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;operation&quot;</span><span class="p">),</span>
+    <span class="n">GenericTableFilterRuleValueColumn</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">),</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="RuleTableFilter"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.RuleTableFilter">[docs]</a><span class="k">class</span> <span class="nc">RuleTableFilter</span><span class="p">(</span><span class="n">TableFilter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A table filter based on rules.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Overrides the default **name** trait</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Default rule-based filter&quot;</span>
+
+    <span class="c1">#: List of the filter rules to be applied</span>
+    <span class="n">rules</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">GenericTableFilterRule</span><span class="p">)</span>
+
+    <span class="c1">#: Event fired when the contents of the filter have changed</span>
+    <span class="n">modified</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+
+    <span class="c1">#: Persistence ID of the view</span>
+    <span class="n">view_id</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="s2">&quot;traitsui.table_filter.RuleTableFilter&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Sample object that the filter will apply to</span>
+    <span class="n">_object</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: Map of trait names and default values</span>
+    <span class="n">_name_to_value</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Traits view definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="n">error_view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+        <span class="n">Item</span><span class="p">(</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;A menu or rule based filter can only be created for &quot;</span>
+            <span class="s2">&quot;tables with at least one entry&quot;</span>
+        <span class="p">),</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Error Creating Filter&quot;</span><span class="p">,</span>
+        <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;livemodal&quot;</span><span class="p">,</span>
+        <span class="n">close_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">buttons</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Cancel&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="RuleTableFilter.filter"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.RuleTableFilter.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether a specified object meets the filter or search</span>
+<span class="sd">        criteria.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">is_first</span> <span class="o">=</span> <span class="n">is_true</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rule</span><span class="o">.</span><span class="n">and_or</span> <span class="o">==</span> <span class="s2">&quot;or&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">is_true</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_first</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+                <span class="n">is_true</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">is_true</span><span class="p">:</span>
+                <span class="n">is_true</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">is_true</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+            <span class="n">is_first</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">is_true</span></div>
+
+<div class="viewcode-block" id="RuleTableFilter.description"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.RuleTableFilter.description">[docs]</a>    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a user-readable description of the kind of object that</span>
+<span class="sd">            satisfies the filter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ands</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">rule</span><span class="o">.</span><span class="n">and_or</span> <span class="o">==</span> <span class="s2">&quot;or&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ands</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">ors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; and &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ands</span><span class="p">))</span>
+                        <span class="n">ands</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">ands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">description</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ands</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; and &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ands</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ors</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot; or &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;(</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ors</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">description</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RuleTableFilter.edit_view"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.RuleTableFilter.edit_view">[docs]</a>    <span class="k">def</span> <span class="nf">edit_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a view to use for editing the filter.</span>
+
+<span class="sd">        The &#39;&#39;object&#39;&#39; parameter is a sample object for the table that the</span>
+<span class="sd">        filter will be applied to. It is supplied in case the filter needs to</span>
+<span class="sd">        extract data or metadata from the object. If the table is empty, the</span>
+<span class="sd">        &#39;&#39;object&#39;&#39; argument is None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_object</span> <span class="o">=</span> <span class="nb">object</span>
+        <span class="k">if</span> <span class="nb">object</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">edit_traits</span><span class="p">(</span><span class="n">view</span><span class="o">=</span><span class="s2">&quot;error_view&quot;</span><span class="p">)</span>
+
+        <span class="n">names</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">editable_traits</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name_to_value</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">View</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">[</span><span class="s2">&quot;name{Filter name}&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">],</span>
+                <span class="p">[</span>
+                    <span class="n">Item</span><span class="p">(</span>
+                        <span class="s2">&quot;rules&quot;</span><span class="p">,</span>
+                        <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;rules_table&quot;</span><span class="p">,</span>
+                        <span class="n">editor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_table_editor</span><span class="p">(</span><span class="n">names</span><span class="p">),</span>
+                    <span class="p">),</span>
+                    <span class="s2">&quot;|&lt;&gt;&quot;</span><span class="p">,</span>
+                <span class="p">],</span>
+            <span class="p">],</span>
+            <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">view_id</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Edit Filter&quot;</span><span class="p">,</span>
+            <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;livemodal&quot;</span><span class="p">,</span>
+            <span class="n">resizable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">buttons</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;OK&quot;</span><span class="p">,</span> <span class="s2">&quot;Cancel&quot;</span><span class="p">],</span>
+            <span class="n">width</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+            <span class="n">height</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_table_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a table editor to use for editing the filter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">TableEditor</span>
+        <span class="kn">from</span> <span class="nn">traitsui.editors.api</span> <span class="kn">import</span> <span class="n">EnumEditor</span>
+
+        <span class="k">return</span> <span class="n">TableEditor</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="n">generic_table_filter_rule_columns</span><span class="p">,</span>
+            <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span>
+            <span class="n">deletable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">sortable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">configurable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">auto_size</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">auto_add</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">row_factory</span><span class="o">=</span><span class="n">GenericTableFilterRule</span><span class="p">,</span>
+            <span class="n">row_factory_kw</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;filter&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="p">,</span>
+                <span class="s2">&quot;name_editor&quot;</span><span class="p">:</span> <span class="n">EnumEditor</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">names</span><span class="p">),</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the state to be pickled.</span>
+
+<span class="sd">        This definition overrides **object**.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;_object&quot;</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="k">del</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;_object&quot;</span><span class="p">]</span>
+            <span class="k">del</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;_name_to_value&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">dict</span>
+
+    <span class="k">def</span> <span class="nf">_rules_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rules</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles a change to the **rules** trait.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">:</span>
+            <span class="n">rule</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="bp">self</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Defines the columns to display in the menu filter rule table:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1"># Columns to display in the table for menu filters.</span>
+<span class="n">menu_table_filter_rule_columns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">GenericTableFilterRuleEnabledColumn</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;enabled&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="n">GenericTableFilterRuleNameColumn</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
+    <span class="n">ObjectColumn</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;operation&quot;</span><span class="p">),</span>
+    <span class="n">GenericTableFilterRuleValueColumn</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">),</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="MenuTableFilter"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.MenuTableFilter">[docs]</a><span class="k">class</span> <span class="nc">MenuTableFilter</span><span class="p">(</span><span class="n">RuleTableFilter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A table filter based on a menu of rules.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Overrides the default **name** trait</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Default menu-based filter&quot;</span>
+
+    <span class="c1">#: Overrides the persistence ID of the view</span>
+    <span class="n">view_id</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="s2">&quot;traitsui.table_filter.MenuTableFilter&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MenuTableFilter.filter"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.MenuTableFilter.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether a specified object meets the filter or search</span>
+<span class="sd">        criteria.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rule</span><span class="o">.</span><span class="n">enabled</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">rule</span><span class="o">.</span><span class="n">is_true</span><span class="p">(</span><span class="nb">object</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="MenuTableFilter.description"><a class="viewcode-back" href="../../api/traitsui.table_filter.html#traitsui.table_filter.MenuTableFilter.description">[docs]</a>    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a user8readable description of what kind of object</span>
+<span class="sd">            satisfies the filter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot; and &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">rule</span><span class="o">.</span><span class="n">description</span><span class="p">()</span> <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rules</span> <span class="k">if</span> <span class="n">rule</span><span class="o">.</span><span class="n">enabled</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">return</span> <span class="s2">&quot;All items&quot;</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_table_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a table editor to use for editing the filter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.api</span> <span class="kn">import</span> <span class="n">TableEditor</span>
+        <span class="kn">from</span> <span class="nn">.editors.api</span> <span class="kn">import</span> <span class="n">EnumEditor</span>
+
+        <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_object</span><span class="o">.</span><span class="n">editable_traits</span><span class="p">()</span>
+        <span class="n">name_editor</span> <span class="o">=</span> <span class="n">EnumEditor</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rules</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">GenericTableFilterRule</span><span class="p">(</span>
+                    <span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">name_editor</span><span class="o">=</span><span class="n">name_editor</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">trait_set</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span>
+            <span class="p">]</span>
+            <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">:</span>
+                <span class="n">rule</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="n">TableEditor</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="n">menu_table_filter_rule_columns</span><span class="p">,</span>
+            <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span>
+            <span class="n">deletable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">sortable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">configurable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">auto_size</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">auto_add</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">row_factory</span><span class="o">=</span><span class="n">GenericTableFilterRule</span><span class="p">,</span>
+            <span class="n">row_factory_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;filter&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;name_editor&quot;</span><span class="p">:</span> <span class="n">name_editor</span><span class="p">},</span>
+        <span class="p">)</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Define some standard template filters:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="n">EvalFilterTemplate</span> <span class="o">=</span> <span class="n">EvalTableFilter</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Evaluation filter template&quot;</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="n">RuleFilterTemplate</span> <span class="o">=</span> <span class="n">RuleTableFilter</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Rule-based filter template&quot;</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="n">MenuFilterTemplate</span> <span class="o">=</span> <span class="n">MenuTableFilter</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Menu-based filter template&quot;</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

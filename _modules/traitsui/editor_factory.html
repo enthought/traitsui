@@ -1,0 +1,433 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editor_factory &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.editor_factory</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.editor_factory</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines the abstract EditorFactory class, which represents a factory for</span>
+<span class="sd">    creating the Editor objects used in a Traits-based user interface.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">HasPrivateTraits</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Str</span><span class="p">,</span>
+    <span class="n">Bool</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Property</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">.toolkit</span> <span class="kn">import</span> <span class="n">toolkit_object</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;EditorFactory&#39; abstract base class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="EditorFactory"><a class="viewcode-back" href="../../api/traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory">[docs]</a><span class="k">class</span> <span class="nc">EditorFactory</span><span class="p">(</span><span class="n">HasPrivateTraits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Represents a factory for creating the Editor objects in a Traits-based</span>
+<span class="sd">        user interface.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Function to use for string formatting</span>
+    <span class="n">format_func</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">()</span>
+
+    <span class="c1">#: Format string to use for formatting (used if **format_func** not set).</span>
+    <span class="n">format_str</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Is the editor being used to create table grid cells?</span>
+    <span class="n">is_grid_cell</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Are created editors initially enabled?</span>
+    <span class="n">enabled</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: The extended trait name of the trait containing editor invalid state</span>
+    <span class="c1">#: status:</span>
+    <span class="n">invalid</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Text aligment to use in most readonly editors</span>
+    <span class="c1">#: Possible values: left, right, top, bottom, just, vcenter, hcenter,</span>
+    <span class="c1">#: center</span>
+    <span class="c1">#: Example: left,vcenter</span>
+    <span class="n">text_alignment</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The editor class to use for &#39;simple&#39; style views.</span>
+    <span class="n">simple_editor_class</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="c1">#: The editor class to use for &#39;custom&#39; style views.</span>
+    <span class="n">custom_editor_class</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="c1">#: The editor class to use for &#39;text&#39; style views.</span>
+    <span class="n">text_editor_class</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="c1">#: The editor class to use for &#39;readonly&#39; style views.</span>
+    <span class="n">readonly_editor_class</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initializes the factory object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">HasPrivateTraits</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EditorFactory.init"><a class="viewcode-back" href="../../api/traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Performs any initialization needed after all constructor traits</span>
+<span class="sd">            have been set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="EditorFactory.named_value"><a class="viewcode-back" href="../../api/traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory.named_value">[docs]</a>    <span class="k">def</span> <span class="nf">named_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ui</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the value of a specified extended name of the form: name or</span>
+<span class="sd">            context_object_name.name[.name...]:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># fixme: This will produce incorrect values if the actual Item the</span>
+            <span class="c1"># factory is being used with does not use the default object=&#39;name&#39;</span>
+            <span class="c1"># value, and the specified &#39;name&#39; does not contain a &#39;.&#39;. The</span>
+            <span class="c1"># solution will probably involve providing the Item as an argument,</span>
+            <span class="c1"># but it is currently not available at the time this method needs</span>
+            <span class="c1"># to be called...</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;object&quot;</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">value</span></div>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Methods that generate backend toolkit-specific editors.</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="EditorFactory.simple_editor"><a class="viewcode-back" href="../../api/traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory.simple_editor">[docs]</a>    <span class="k">def</span> <span class="nf">simple_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Generates an editor using the &quot;simple&quot; style.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">simple_editor_class</span><span class="p">(</span>
+            <span class="n">parent</span><span class="p">,</span>
+            <span class="n">factory</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">ui</span><span class="o">=</span><span class="n">ui</span><span class="p">,</span>
+            <span class="nb">object</span><span class="o">=</span><span class="nb">object</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="EditorFactory.custom_editor"><a class="viewcode-back" href="../../api/traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory.custom_editor">[docs]</a>    <span class="k">def</span> <span class="nf">custom_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Generates an editor using the &quot;custom&quot; style.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_editor_class</span><span class="p">(</span>
+            <span class="n">parent</span><span class="p">,</span>
+            <span class="n">factory</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">ui</span><span class="o">=</span><span class="n">ui</span><span class="p">,</span>
+            <span class="nb">object</span><span class="o">=</span><span class="nb">object</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="EditorFactory.text_editor"><a class="viewcode-back" href="../../api/traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory.text_editor">[docs]</a>    <span class="k">def</span> <span class="nf">text_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Generates an editor using the &quot;text&quot; style.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_editor_class</span><span class="p">(</span>
+            <span class="n">parent</span><span class="p">,</span>
+            <span class="n">factory</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">ui</span><span class="o">=</span><span class="n">ui</span><span class="p">,</span>
+            <span class="nb">object</span><span class="o">=</span><span class="nb">object</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="EditorFactory.readonly_editor"><a class="viewcode-back" href="../../api/traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory.readonly_editor">[docs]</a>    <span class="k">def</span> <span class="nf">readonly_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Generates an &quot;editor&quot; that is read-only.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">readonly_editor_class</span><span class="p">(</span>
+            <span class="n">parent</span><span class="p">,</span>
+            <span class="n">factory</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">ui</span><span class="o">=</span><span class="n">ui</span><span class="p">,</span>
+            <span class="nb">object</span><span class="o">=</span><span class="nb">object</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Private methods</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_toolkit_editor</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">class_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the editor by name class_name in the backend package.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">editor_factory_modules</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">factory_class</span><span class="o">.</span><span class="vm">__module__</span>
+            <span class="k">for</span> <span class="n">factory_class</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">mro</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">factory_class</span><span class="p">,</span> <span class="n">EditorFactory</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">editor_module</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">editor_factory_modules</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">editor_module_name</span> <span class="o">=</span> <span class="n">editor_module</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">object_ref</span> <span class="o">=</span> <span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">editor_module_name</span><span class="p">,</span> <span class="n">class_name</span><span class="p">])</span>
+                <span class="k">return</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="n">object_ref</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Can&#39;t import toolkit_object &#39;</span><span class="si">{}</span><span class="s2">&#39;: </span><span class="si">{}</span><span class="s2">&quot;</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">object_ref</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">editor_factory_modules</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="EditorFactory.string_value"><a class="viewcode-back" href="../../api/traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory.string_value">[docs]</a>    <span class="k">def</span> <span class="nf">string_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">format_func</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the text representation of a specified object trait value.</span>
+
+<span class="sd">        If the **format_func** attribute is set on the editor factory, then</span>
+<span class="sd">        this method calls that function to do the formatting.  If the</span>
+<span class="sd">        **format_str** attribute is set on the editor factory, then this</span>
+<span class="sd">        method uses that string for formatting. If neither attribute is</span>
+<span class="sd">        set, then this method just calls the appropriate text type to format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_func</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_str</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_str</span> <span class="o">%</span> <span class="n">value</span>
+
+        <span class="k">if</span> <span class="n">format_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">format_func</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Property getters</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">_get_simple_editor_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the editor class to use for &quot;simple&quot; style views.</span>
+<span class="sd">        The default implementation tries to import the SimpleEditor class in</span>
+<span class="sd">        the editor file in the backend package, and if such a class is not to</span>
+<span class="sd">        found it returns the SimpleEditor class defined in editor_factory</span>
+<span class="sd">        module in the backend package.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">SimpleEditor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_toolkit_editor</span><span class="p">(</span><span class="s2">&quot;SimpleEditor&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Can&#39;t import SimpleEditor for </span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+            <span class="n">SimpleEditor</span> <span class="o">=</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;editor_factory:SimpleEditor&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">SimpleEditor</span>
+
+    <span class="k">def</span> <span class="nf">_get_custom_editor_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the editor class to use for &quot;custom&quot; style views.</span>
+<span class="sd">        The default implementation tries to import the CustomEditor class in</span>
+<span class="sd">        the editor file in the backend package, and if such a class is not to</span>
+<span class="sd">        found it returns simple_editor_class.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">CustomEditor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_toolkit_editor</span><span class="p">(</span><span class="s2">&quot;CustomEditor&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Can&#39;t import CustomEditor for </span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+            <span class="n">CustomEditor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">simple_editor_class</span>
+        <span class="k">return</span> <span class="n">CustomEditor</span>
+
+    <span class="k">def</span> <span class="nf">_get_text_editor_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the editor class to use for &quot;text&quot; style views.</span>
+<span class="sd">        The default implementation tries to import the TextEditor class in the</span>
+<span class="sd">        editor file in the backend package, and if such a class is not found</span>
+<span class="sd">        it returns the TextEditor class declared in the editor_factory module</span>
+<span class="sd">        in the backend package.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">TextEditor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_toolkit_editor</span><span class="p">(</span><span class="s2">&quot;TextEditor&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Can&#39;t import TextEditor for </span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+            <span class="n">TextEditor</span> <span class="o">=</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;editor_factory:TextEditor&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">TextEditor</span>
+
+    <span class="k">def</span> <span class="nf">_get_readonly_editor_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the editor class to use for &quot;readonly&quot; style views.</span>
+<span class="sd">        The default implementation tries to import the ReadonlyEditor class in</span>
+<span class="sd">        the editor file in the backend package, and if such a class is not</span>
+<span class="sd">        found it returns the ReadonlyEditor class declared in the</span>
+<span class="sd">        editor_factory module in the backend package.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ReadonlyEditor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_toolkit_editor</span><span class="p">(</span><span class="s2">&quot;ReadonlyEditor&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Can&#39;t import ReadonlyEditor for </span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+            <span class="n">ReadonlyEditor</span> <span class="o">=</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;editor_factory:ReadonlyEditor&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ReadonlyEditor</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;EditorWithListFactory&#39; abstract base class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="EditorWithListFactory"><a class="viewcode-back" href="../../api/traitsui.editor_factory.html#traitsui.editor_factory.EditorWithListFactory">[docs]</a><span class="k">class</span> <span class="nc">EditorWithListFactory</span><span class="p">(</span><span class="n">EditorFactory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Base class for factories of editors for objects that contain lists.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Values to enumerate (can be a list, tuple, dict, or a CTrait or</span>
+    <span class="c1">#: TraitHandler that is &quot;mapped&quot;):</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: Extended name of the trait on **object** containing the enumeration data</span>
+    <span class="nb">object</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="s2">&quot;object&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Name of the trait on &#39;object&#39; containing the enumeration data</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

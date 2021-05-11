@@ -1,0 +1,528 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editors.csv_list_editor &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../../index.html" >
+    <link rel="up" title="Module code" href="../../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.editors.csv_list_editor</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.editors.csv_list_editor</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot;This modules defines CSVListEditor.</span>
+
+<span class="sd">A CSVListEditor provides an editor for lists of simple data types.</span>
+<span class="sd">It allows the user to edit the list in a text field, using commas</span>
+<span class="sd">(or optionally some other character) to separate the elements.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">Range</span><span class="p">,</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">TraitError</span><span class="p">,</span> <span class="n">Either</span>
+<span class="kn">from</span> <span class="nn">traits.trait_handlers</span> <span class="kn">import</span> <span class="n">RangeTypes</span>
+
+<span class="kn">from</span> <span class="nn">traitsui.editors.text_editor</span> <span class="kn">import</span> <span class="n">TextEditor</span>
+<span class="kn">from</span> <span class="nn">traitsui.helper</span> <span class="kn">import</span> <span class="n">enum_values_changed</span>
+
+
+<span class="k">def</span> <span class="nf">_eval_list_str</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">item_eval</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ignore_trailing_sep</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a string into a list.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s : str</span>
+<span class="sd">        The string to be converted.</span>
+<span class="sd">    sep : str or None</span>
+<span class="sd">        `sep` is the text separator of list items.  If `sep` is None,</span>
+<span class="sd">        each contiguous stretch of whitespace is a separator.</span>
+<span class="sd">    item_eval : callable or None</span>
+<span class="sd">        `item_eval` is used to evaluate the list elements.  If `item_eval`</span>
+<span class="sd">        is None, the list will be a list substrings of `s`.</span>
+<span class="sd">    ignore_trailing_sep : bool</span>
+<span class="sd">        If `ignore_trailing_sep` is False, it is an error to have a separator</span>
+<span class="sd">        at the end of the list (i.e. &#39;foo, bar,&#39; is invalid).</span>
+<span class="sd">        If `ignore_trailing_sep` is True, a separator at the end of the</span>
+<span class="sd">        string `s` is ignored.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    values : list</span>
+<span class="sd">        List of converted values from the string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">item_eval</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">item_eval</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">sep</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">ignore_trailing_sep</span> <span class="ow">and</span> <span class="n">s</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">sep</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">[:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">sep</span><span class="p">)]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">item_eval</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">values</span>
+
+
+<span class="k">def</span> <span class="nf">_format_list_str</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">item_format</span><span class="o">=</span><span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a list to a string.</span>
+
+<span class="sd">    Each item in the list `values` is converted to a string with the</span>
+<span class="sd">    function `item_format`, and these are joined with `sep` plus a space.</span>
+<span class="sd">    If `sep` is None, a single space is used to join the items.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    values : list</span>
+<span class="sd">        The list of values to be represented as a string.</span>
+<span class="sd">    sep : str</span>
+<span class="sd">        String used to join the items.  A space is also added after</span>
+<span class="sd">        `sep`.</span>
+<span class="sd">    item_format : callable</span>
+<span class="sd">        Converts its single argument to a string.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    s : str</span>
+<span class="sd">        The result of converting the list to a string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sep</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">joiner</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">joiner</span> <span class="o">=</span> <span class="n">sep</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">joiner</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">item_format</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">values</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+
+<span class="k">def</span> <span class="nf">_validate_range_value</span><span class="p">(</span><span class="n">range_object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Validate a Range value.</span>
+
+<span class="sd">    This function is used by the CSVListEditor to validate a value</span>
+<span class="sd">    when editing a list of ranges where the Range is dynamic (that</span>
+<span class="sd">    is, one or both of the &#39;low&#39; and &#39;high&#39; values are strings that</span>
+<span class="sd">    refer to other traits in `object`.</span>
+
+<span class="sd">    The function implements the same validation logic as in the method</span>
+<span class="sd">    traits.trait_types.BaseRange._set(), but does not call the</span>
+<span class="sd">    set_value() method; instead it simply returns the valid value.</span>
+<span class="sd">    If the value is not valid, range_object.error(...) is called.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    range_object : instance of traits.trait_types.Range</span>
+
+<span class="sd">    object : instance of HasTraits</span>
+<span class="sd">        This is the HasTraits object that holds the traits</span>
+<span class="sd">        to which the one or both of range_object.low and</span>
+<span class="sd">        range_object.high refer.</span>
+
+<span class="sd">    name : str</span>
+<span class="sd">        The name of the List trait in `object`.</span>
+
+<span class="sd">    value : object (e.g. int, float, str)</span>
+<span class="sd">        The value to be validated.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    value : object</span>
+<span class="sd">        The validated value.  It might not be the same</span>
+<span class="sd">        type as the input argument (e.g. if the range type</span>
+<span class="sd">        is float and the input value is an int, the return</span>
+<span class="sd">        value will be a float).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">low</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">range_object</span><span class="o">.</span><span class="n">_low</span><span class="p">)</span>
+    <span class="n">high</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">range_object</span><span class="o">.</span><span class="n">_high</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">low</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">high</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">RangeTypes</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">new_value</span> <span class="o">=</span> <span class="n">range_object</span><span class="o">.</span><span class="n">_typed_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
+
+        <span class="n">satisfies_low</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">low</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="n">low</span> <span class="o">&lt;</span> <span class="n">new_value</span>
+            <span class="ow">or</span> <span class="p">((</span><span class="ow">not</span> <span class="n">range_object</span><span class="o">.</span><span class="n">_exclude_low</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">low</span> <span class="o">==</span> <span class="n">new_value</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="n">satisfies_high</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">high</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="n">high</span> <span class="o">&gt;</span> <span class="n">new_value</span>
+            <span class="ow">or</span> <span class="p">((</span><span class="ow">not</span> <span class="n">range_object</span><span class="o">.</span><span class="n">_exclude_high</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">high</span> <span class="o">==</span> <span class="n">new_value</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">satisfies_low</span> <span class="ow">and</span> <span class="n">satisfies_high</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+    <span class="c1"># Note: this is the only explicit use of &#39;object&#39; and &#39;name&#39;.</span>
+    <span class="n">range_object</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_prepare_method</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Unbound implementation of the prepare editor method to add a</span>
+<span class="sd">    change notification hook in the items of the list before calling</span>
+<span class="sd">    the parent prepare method of the parent class.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">extended_name</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">context_object</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_update_editor</span><span class="p">,</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;[]&quot;</span><span class="p">,</span> <span class="n">dispatch</span><span class="o">=</span><span class="s2">&quot;ui&quot;</span>
+        <span class="p">)</span>
+    <span class="nb">super</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">prepare</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_dispose_method</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Unbound implementation of the dispose editor method to remove</span>
+<span class="sd">    the change notification hook in the items of the list before calling</span>
+<span class="sd">    the parent dispose method of the parent class.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ui</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">extended_name</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">context_object</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_update_editor</span><span class="p">,</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;[]&quot;</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="nb">super</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">dispose</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="CSVListEditor"><a class="viewcode-back" href="../../../api/traitsui.editors.csv_list_editor.html#traitsui.editors.csv_list_editor.CSVListEditor">[docs]</a><span class="k">class</span> <span class="nc">CSVListEditor</span><span class="p">(</span><span class="n">TextEditor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A text editor for a List.</span>
+
+<span class="sd">    This editor provides a single line of input text of comma separated</span>
+<span class="sd">    values.  (Actually, the default separator is a comma, but this can</span>
+<span class="sd">    changed.)  The editor can only be used with List traits whose inner</span>
+<span class="sd">    trait is one of Int, Float, Str, Enum, or Range.</span>
+
+<span class="sd">    The &#39;simple&#39;, &#39;text&#39;, &#39;custom&#39; and readonly styles are based on</span>
+<span class="sd">    TextEditor. The &#39;readonly&#39; style provides the same formatting in the</span>
+<span class="sd">    text field as the other editors, but the user cannot change the value.</span>
+
+<span class="sd">    Like other Traits editors, the background of the text field will turn</span>
+<span class="sd">    red if the user enters an incorrectly formatted list or if the values</span>
+<span class="sd">    do not match the type of the inner trait.  This validation only occurs</span>
+<span class="sd">    while editing the text field.  If, for example, the inner trait is</span>
+<span class="sd">    Range(low=&#39;lower&#39;, high=&#39;upper&#39;), a change in &#39;upper&#39; will not trigger</span>
+<span class="sd">    the validation code of the editor.</span>
+
+<span class="sd">    The editor removes whitespace of entered items with strip(), so for</span>
+<span class="sd">    Str types, the editor should not be used if whitespace at the beginning</span>
+<span class="sd">    or end of the string must be preserved.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sep : str or None, optional</span>
+<span class="sd">        The separator of the values in the list.  If None, each contiguous</span>
+<span class="sd">        sequence of whitespace is a separator.</span>
+<span class="sd">        Default is &#39;,&#39;.</span>
+
+<span class="sd">    ignore_trailing_sep : bool, optional</span>
+<span class="sd">        If this is False, a line containing a trailing separator is invalid.</span>
+<span class="sd">        Default is True.</span>
+
+<span class="sd">    auto_set : bool</span>
+<span class="sd">        If True, then every keystroke sets the value of the trait.</span>
+
+<span class="sd">    enter_set : bool</span>
+<span class="sd">        If True, the user input sets the value when the Enter key is pressed.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    The following will display a window containing a single input field.</span>
+<span class="sd">    Entering, say, &#39;0, .5, 1&#39; in this field will result in the list</span>
+<span class="sd">    x = [0.0, 0.5, 1.0].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: The separator of the element in the list.</span>
+    <span class="n">sep</span> <span class="o">=</span> <span class="n">Either</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: If False, it is an error to have a trailing separator.</span>
+    <span class="n">ignore_trailing_sep</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Include some of the TextEditor API:</span>
+
+    <span class="c1">#: Is user input set on every keystroke?</span>
+    <span class="n">auto_set</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Is user input set when the Enter key is pressed?</span>
+    <span class="n">enter_set</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_funcs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create the evalution and formatting functions for the editor.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        object : instance of HasTraits</span>
+<span class="sd">            This is the object that has the List trait for which we are</span>
+<span class="sd">            creating an editor.</span>
+
+<span class="sd">        name : str</span>
+<span class="sd">            Name of the List trait on `object`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        evaluate, fmt_func : callable, callable</span>
+<span class="sd">            The functions for converting a string to a list (`evaluate`)</span>
+<span class="sd">            and a list to a string (`fmt_func`).  These are the functions</span>
+<span class="sd">            that are ultimately given as the keyword arguments &#39;evaluate&#39;</span>
+<span class="sd">            and &#39;format_func&#39; of the TextEditor that will be generated by</span>
+<span class="sd">            the CSVListEditor editor factory functions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="c1"># Get the list of inner traits.  Only a single inner trait is allowed.</span>
+        <span class="n">it_list</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">trait</span><span class="o">.</span><span class="n">inner_traits</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">it_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TraitError</span><span class="p">(</span>
+                <span class="s2">&quot;Only one inner trait may be specified when &quot;</span>
+                <span class="s2">&quot;using a CSVListEditor.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># `it` is the single inner trait.  This will be an instance of</span>
+        <span class="c1"># traits.traits.CTrait.</span>
+        <span class="n">it</span> <span class="o">=</span> <span class="n">it_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># The following &#39;if&#39; statement figures out the appropriate evaluation</span>
+        <span class="c1"># function (evaluate) and formatting function (fmt_func) for the</span>
+        <span class="c1"># given inner trait.</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">it</span><span class="o">.</span><span class="n">is_trait_type</span><span class="p">(</span><span class="n">Int</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">it</span><span class="o">.</span><span class="n">is_trait_type</span><span class="p">(</span><span class="n">Float</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">it</span><span class="o">.</span><span class="n">is_trait_type</span><span class="p">(</span><span class="n">Str</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">evaluate</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">_eval_list_str</span><span class="p">(</span>
+                <span class="n">s</span><span class="p">,</span>
+                <span class="n">sep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span>
+                <span class="n">item_eval</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">trait_type</span><span class="o">.</span><span class="n">evaluate</span><span class="p">,</span>
+                <span class="n">ignore_trailing_sep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ignore_trailing_sep</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">fmt_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">vals</span><span class="p">:</span> <span class="n">_format_list_str</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">it</span><span class="o">.</span><span class="n">is_trait_type</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+            <span class="n">values</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">inverse_mapping</span> <span class="o">=</span> <span class="n">enum_values_changed</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+            <span class="n">evaluate</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">_eval_list_str</span><span class="p">(</span>
+                <span class="n">s</span><span class="p">,</span>
+                <span class="n">sep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span>
+                <span class="n">item_eval</span><span class="o">=</span><span class="n">mapping</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">,</span>
+                <span class="n">ignore_trailing_sep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ignore_trailing_sep</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">fmt_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">vals</span><span class="p">:</span> <span class="n">_format_list_str</span><span class="p">(</span>
+                <span class="n">vals</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="n">item_format</span><span class="o">=</span><span class="n">inverse_mapping</span><span class="o">.</span><span class="fm">__getitem__</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">it</span><span class="o">.</span><span class="n">is_trait_type</span><span class="p">(</span><span class="n">Range</span><span class="p">):</span>
+            <span class="c1"># Get the type of the values from the default value.</span>
+            <span class="c1"># range_object will be an instance of traits.trait_types.Range.</span>
+            <span class="n">range_object</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">handler</span>
+            <span class="k">if</span> <span class="n">range_object</span><span class="o">.</span><span class="n">default_value_type</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="c1"># range_object.default_value is callable.</span>
+                <span class="n">defval</span> <span class="o">=</span> <span class="n">range_object</span><span class="o">.</span><span class="n">default_value</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># range_object.default_value *is* the default value.</span>
+                <span class="n">defval</span> <span class="o">=</span> <span class="n">range_object</span><span class="o">.</span><span class="n">default_value</span>
+            <span class="n">typ</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">defval</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">range_object</span><span class="o">.</span><span class="n">validate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># This will be the case for dynamic ranges.</span>
+                <span class="n">item_eval</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">_validate_range_value</span><span class="p">(</span>
+                    <span class="n">range_object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">typ</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Static ranges have a validate method.</span>
+                <span class="n">item_eval</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">range_object</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span>
+                    <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">typ</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="n">evaluate</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">_eval_list_str</span><span class="p">(</span>
+                <span class="n">s</span><span class="p">,</span>
+                <span class="n">sep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span>
+                <span class="n">item_eval</span><span class="o">=</span><span class="n">item_eval</span><span class="p">,</span>
+                <span class="n">ignore_trailing_sep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ignore_trailing_sep</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">fmt_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">vals</span><span class="p">:</span> <span class="n">_format_list_str</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TraitError</span><span class="p">(</span>
+                <span class="s2">&quot;To use a CSVListEditor, the inner trait of the &quot;</span>
+                <span class="s2">&quot;List must be Int, Float, Range, Str or Enum.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">evaluate</span><span class="p">,</span> <span class="n">fmt_func</span>
+
+<div class="viewcode-block" id="CSVListEditor.simple_editor"><a class="viewcode-back" href="../../../api/traitsui.editors.csv_list_editor.html#traitsui.editors.csv_list_editor.CSVListEditor.simple_editor">[docs]</a>    <span class="k">def</span> <span class="nf">simple_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Generates an editor using the &quot;simple&quot; style.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_funcs</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">simple_editor_class</span><span class="p">(</span>
+            <span class="n">parent</span><span class="p">,</span>
+            <span class="n">factory</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">ui</span><span class="o">=</span><span class="n">ui</span><span class="p">,</span>
+            <span class="nb">object</span><span class="o">=</span><span class="nb">object</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="CSVListEditor.custom_editor"><a class="viewcode-back" href="../../../api/traitsui.editors.csv_list_editor.html#traitsui.editors.csv_list_editor.CSVListEditor.custom_editor">[docs]</a>    <span class="k">def</span> <span class="nf">custom_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Generates an editor using the &quot;custom&quot; style.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_funcs</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_editor_class</span><span class="p">(</span>
+            <span class="n">parent</span><span class="p">,</span>
+            <span class="n">factory</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">ui</span><span class="o">=</span><span class="n">ui</span><span class="p">,</span>
+            <span class="nb">object</span><span class="o">=</span><span class="nb">object</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="CSVListEditor.text_editor"><a class="viewcode-back" href="../../../api/traitsui.editors.csv_list_editor.html#traitsui.editors.csv_list_editor.CSVListEditor.text_editor">[docs]</a>    <span class="k">def</span> <span class="nf">text_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Generates an editor using the &quot;text&quot; style.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_funcs</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_editor_class</span><span class="p">(</span>
+            <span class="n">parent</span><span class="p">,</span>
+            <span class="n">factory</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">ui</span><span class="o">=</span><span class="n">ui</span><span class="p">,</span>
+            <span class="nb">object</span><span class="o">=</span><span class="nb">object</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="CSVListEditor.readonly_editor"><a class="viewcode-back" href="../../../api/traitsui.editors.csv_list_editor.html#traitsui.editors.csv_list_editor.CSVListEditor.readonly_editor">[docs]</a>    <span class="k">def</span> <span class="nf">readonly_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Generates an &quot;editor&quot; that is read-only.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_funcs</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">readonly_editor_class</span><span class="p">(</span>
+            <span class="n">parent</span><span class="p">,</span>
+            <span class="n">factory</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">ui</span><span class="o">=</span><span class="n">ui</span><span class="p">,</span>
+            <span class="nb">object</span><span class="o">=</span><span class="nb">object</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

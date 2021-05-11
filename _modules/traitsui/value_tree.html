@@ -1,0 +1,724 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.value_tree &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.value_tree</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.value_tree</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines tree node classes and editors for various types of values.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
+
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">FunctionType</span><span class="p">,</span> <span class="n">MethodType</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Bool</span><span class="p">,</span>
+    <span class="n">HasPrivateTraits</span><span class="p">,</span>
+    <span class="n">HasTraits</span><span class="p">,</span>
+    <span class="n">Instance</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Str</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">.tree_node</span> <span class="kn">import</span> <span class="n">ObjectTreeNode</span><span class="p">,</span> <span class="n">TreeNode</span><span class="p">,</span> <span class="n">TreeNodeObject</span>
+
+<span class="kn">from</span> <span class="nn">.editors.tree_editor</span> <span class="kn">import</span> <span class="n">TreeEditor</span>
+
+
+<div class="viewcode-block" id="SingleValueTreeNodeObject"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.SingleValueTreeNodeObject">[docs]</a><span class="k">class</span> <span class="nc">SingleValueTreeNodeObject</span><span class="p">(</span><span class="n">TreeNodeObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for objects of types that have a single value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: The parent of this node</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">TreeNodeObject</span><span class="p">)</span>
+
+    <span class="c1">#: Name of the value</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: User-specified override of the default label</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The value itself</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: Is the value readonly?</span>
+    <span class="n">readonly</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SingleValueTreeNodeObject.tno_allows_children"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.SingleValueTreeNodeObject.tno_allows_children">[docs]</a>    <span class="k">def</span> <span class="nf">tno_allows_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether this object can have children (False for this</span>
+<span class="sd">        class).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="SingleValueTreeNodeObject.tno_has_children"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.SingleValueTreeNodeObject.tno_has_children">[docs]</a>    <span class="k">def</span> <span class="nf">tno_has_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the object has children (False for this class).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="SingleValueTreeNodeObject.tno_can_rename"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.SingleValueTreeNodeObject.tno_can_rename">[docs]</a>    <span class="k">def</span> <span class="nf">tno_can_rename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the object&#39;s children can be renamed (False for</span>
+<span class="sd">        this class).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="SingleValueTreeNodeObject.tno_can_copy"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.SingleValueTreeNodeObject.tno_can_copy">[docs]</a>    <span class="k">def</span> <span class="nf">tno_can_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the object&#39;s children can be copied (True for this</span>
+<span class="sd">        class).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="SingleValueTreeNodeObject.tno_can_delete"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.SingleValueTreeNodeObject.tno_can_delete">[docs]</a>    <span class="k">def</span> <span class="nf">tno_can_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the object&#39;s children can be deleted (False for</span>
+<span class="sd">        this class).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="SingleValueTreeNodeObject.tno_can_insert"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.SingleValueTreeNodeObject.tno_can_insert">[docs]</a>    <span class="k">def</span> <span class="nf">tno_can_insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the object&#39;s children can be inserted (False,</span>
+<span class="sd">        meaning children are appended, for this class).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="SingleValueTreeNodeObject.tno_get_icon"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.SingleValueTreeNodeObject.tno_get_icon">[docs]</a>    <span class="k">def</span> <span class="nf">tno_get_icon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">is_expanded</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the icon for a specified object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;@icons:</span><span class="si">%s</span><span class="s2">_node&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SingleValueTreeNodeObject.tno_set_label"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.SingleValueTreeNodeObject.tno_set_label">[docs]</a>    <span class="k">def</span> <span class="nf">tno_set_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the label for a specified object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="s2">&quot;?&quot;</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span></div>
+
+<div class="viewcode-block" id="SingleValueTreeNodeObject.tno_get_label"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.SingleValueTreeNodeObject.tno_get_label">[docs]</a>    <span class="k">def</span> <span class="nf">tno_get_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Gets the label to display for a specified object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SingleValueTreeNodeObject.format_value"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.SingleValueTreeNodeObject.format_value">[docs]</a>    <span class="k">def</span> <span class="nf">format_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the formatted version of the value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SingleValueTreeNodeObject.node_for"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.SingleValueTreeNodeObject.node_for">[docs]</a>    <span class="k">def</span> <span class="nf">node_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the correct node type for a specified value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="nb">type</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">basic_types</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">OtherNode</span>
+            <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">ClassNode</span>
+
+            <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;__class__&quot;</span><span class="p">):</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">ObjectNode</span>
+
+        <span class="k">return</span> <span class="n">node</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">readonly</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="MultiValueTreeNodeObject"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.MultiValueTreeNodeObject">[docs]</a><span class="k">class</span> <span class="nc">MultiValueTreeNodeObject</span><span class="p">(</span><span class="n">SingleValueTreeNodeObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for objects of types that have multiple values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MultiValueTreeNodeObject.tno_allows_children"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.MultiValueTreeNodeObject.tno_allows_children">[docs]</a>    <span class="k">def</span> <span class="nf">tno_allows_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether this object can have children (True for this class).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="MultiValueTreeNodeObject.tno_has_children"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.MultiValueTreeNodeObject.tno_has_children">[docs]</a>    <span class="k">def</span> <span class="nf">tno_has_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the object has children (True for this class).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+
+
+<div class="viewcode-block" id="StringNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.StringNode">[docs]</a><span class="k">class</span> <span class="nc">StringNode</span><span class="p">(</span><span class="n">SingleValueTreeNodeObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for strings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="StringNode.format_value"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.StringNode.format_value">[docs]</a>    <span class="k">def</span> <span class="nf">format_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the formatted version of the value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">80</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">...</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">value</span><span class="p">[:</span><span class="mi">42</span><span class="p">],</span> <span class="n">value</span><span class="p">[</span><span class="o">-</span><span class="mi">35</span><span class="p">:])</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> [</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="NoneNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.NoneNode">[docs]</a><span class="k">class</span> <span class="nc">NoneNode</span><span class="p">(</span><span class="n">SingleValueTreeNodeObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for None values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="BoolNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.BoolNode">[docs]</a><span class="k">class</span> <span class="nc">BoolNode</span><span class="p">(</span><span class="n">SingleValueTreeNodeObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for Boolean values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="IntNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.IntNode">[docs]</a><span class="k">class</span> <span class="nc">IntNode</span><span class="p">(</span><span class="n">SingleValueTreeNodeObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for integer values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="FloatNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.FloatNode">[docs]</a><span class="k">class</span> <span class="nc">FloatNode</span><span class="p">(</span><span class="n">SingleValueTreeNodeObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for floating point values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="ComplexNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.ComplexNode">[docs]</a><span class="k">class</span> <span class="nc">ComplexNode</span><span class="p">(</span><span class="n">SingleValueTreeNodeObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for complex number values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="OtherNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.OtherNode">[docs]</a><span class="k">class</span> <span class="nc">OtherNode</span><span class="p">(</span><span class="n">SingleValueTreeNodeObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for single-value types for which there is not another</span>
+<span class="sd">    node type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="TupleNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.TupleNode">[docs]</a><span class="k">class</span> <span class="nc">TupleNode</span><span class="p">(</span><span class="n">MultiValueTreeNodeObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for tuples.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TupleNode.format_value"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.TupleNode.format_value">[docs]</a>    <span class="k">def</span> <span class="nf">format_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the formatted version of the value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Tuple(</span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TupleNode.tno_has_children"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.TupleNode.tno_has_children">[docs]</a>    <span class="k">def</span> <span class="nf">tno_has_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the object has children, based on the length of</span>
+<span class="sd">            the tuple.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="TupleNode.tno_get_children"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.TupleNode.tno_get_children">[docs]</a>    <span class="k">def</span> <span class="nf">tno_get_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Gets the object&#39;s children.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">node_for</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_for</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="p">[</span><span class="n">node_for</span><span class="p">(</span><span class="s2">&quot;[</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">value</span><span class="p">[:</span><span class="mi">250</span><span class="p">])]</span>
+                <span class="o">+</span> <span class="p">[</span><span class="n">StringNode</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
+                <span class="o">+</span> <span class="p">[</span><span class="n">node_for</span><span class="p">(</span><span class="s2">&quot;[</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="o">-</span><span class="mi">250</span><span class="p">:])]</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">node_for</span><span class="p">(</span><span class="s2">&quot;[</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">value</span><span class="p">)]</span></div></div>
+
+
+<div class="viewcode-block" id="ListNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.ListNode">[docs]</a><span class="k">class</span> <span class="nc">ListNode</span><span class="p">(</span><span class="n">TupleNode</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for lists.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ListNode.format_value"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.ListNode.format_value">[docs]</a>    <span class="k">def</span> <span class="nf">format_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the formatted version of the value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;List(</span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListNode.tno_can_delete"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.ListNode.tno_can_delete">[docs]</a>    <span class="k">def</span> <span class="nf">tno_can_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the object&#39;s children can be deleted.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">readonly</span></div>
+
+<div class="viewcode-block" id="ListNode.tno_can_insert"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.ListNode.tno_can_insert">[docs]</a>    <span class="k">def</span> <span class="nf">tno_can_insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the object&#39;s children can be inserted (vs.</span>
+<span class="sd">        appended).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">readonly</span></div></div>
+
+
+<div class="viewcode-block" id="SetNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.SetNode">[docs]</a><span class="k">class</span> <span class="nc">SetNode</span><span class="p">(</span><span class="n">ListNode</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for sets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SetNode.format_value"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.SetNode.format_value">[docs]</a>    <span class="k">def</span> <span class="nf">format_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the formatted version of the value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Set(</span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ArrayNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.ArrayNode">[docs]</a><span class="k">class</span> <span class="nc">ArrayNode</span><span class="p">(</span><span class="n">TupleNode</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for arrays.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ArrayNode.format_value"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.ArrayNode.format_value">[docs]</a>    <span class="k">def</span> <span class="nf">format_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the formatted version of the value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Array(</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="DictNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.DictNode">[docs]</a><span class="k">class</span> <span class="nc">DictNode</span><span class="p">(</span><span class="n">TupleNode</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for dictionaries.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DictNode.format_value"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.DictNode.format_value">[docs]</a>    <span class="k">def</span> <span class="nf">format_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the formatted version of the value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Dict(</span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DictNode.tno_get_children"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.DictNode.tno_get_children">[docs]</a>    <span class="k">def</span> <span class="nf">tno_get_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Gets the object&#39;s children.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">node_for</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_for</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[(</span><span class="nb">repr</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+        <span class="n">items</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="p">[</span><span class="n">node_for</span><span class="p">(</span><span class="s2">&quot;[</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">items</span><span class="p">[:</span><span class="mi">250</span><span class="p">]]</span>
+                <span class="o">+</span> <span class="p">[</span><span class="n">StringNode</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
+                <span class="o">+</span> <span class="p">[</span><span class="n">node_for</span><span class="p">(</span><span class="s2">&quot;[</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">items</span><span class="p">[</span><span class="o">-</span><span class="mi">250</span><span class="p">:]]</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">node_for</span><span class="p">(</span><span class="s2">&quot;[</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">items</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="DictNode.tno_can_delete"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.DictNode.tno_can_delete">[docs]</a>    <span class="k">def</span> <span class="nf">tno_can_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the object&#39;s children can be deleted.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">readonly</span></div></div>
+
+
+<div class="viewcode-block" id="FunctionNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.FunctionNode">[docs]</a><span class="k">class</span> <span class="nc">FunctionNode</span><span class="p">(</span><span class="n">SingleValueTreeNodeObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for functions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FunctionNode.format_value"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.FunctionNode.format_value">[docs]</a>    <span class="k">def</span> <span class="nf">format_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the formatted version of the value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Function </span><span class="si">%s</span><span class="s2">()&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;MethodNode&#39; class:</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="MethodNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.MethodNode">[docs]</a><span class="k">class</span> <span class="nc">MethodNode</span><span class="p">(</span><span class="n">MultiValueTreeNodeObject</span><span class="p">):</span>
+<div class="viewcode-block" id="MethodNode.format_value"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.MethodNode.format_value">[docs]</a>    <span class="k">def</span> <span class="nf">format_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the formatted version of the value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;B&quot;</span>
+        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="vm">__self__</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;Unb&quot;</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">ound method </span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">()&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="nb">type</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">.</span><span class="vm">__self__</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">.</span><span class="vm">__func__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="MethodNode.tno_has_children"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.MethodNode.tno_has_children">[docs]</a>    <span class="k">def</span> <span class="nf">tno_has_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the object has children.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="vm">__func__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="MethodNode.tno_get_children"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.MethodNode.tno_get_children">[docs]</a>    <span class="k">def</span> <span class="nf">tno_get_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Gets the object&#39;s children.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">node_for</span><span class="p">(</span><span class="s2">&quot;Object&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="vm">__self__</span><span class="p">)]</span></div></div>
+
+
+<div class="viewcode-block" id="ObjectNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.ObjectNode">[docs]</a><span class="k">class</span> <span class="nc">ObjectNode</span><span class="p">(</span><span class="n">MultiValueTreeNodeObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ObjectNode.format_value"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.ObjectNode.format_value">[docs]</a>    <span class="k">def</span> <span class="nf">format_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the formatted version of the value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">klass</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">klass</span> <span class="o">=</span> <span class="s2">&quot;???&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">(0x</span><span class="si">%08X</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="nb">id</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="ObjectNode.tno_has_children"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.ObjectNode.tno_has_children">[docs]</a>    <span class="k">def</span> <span class="nf">tno_has_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the object has children.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="ObjectNode.tno_get_children"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.ObjectNode.tno_get_children">[docs]</a>    <span class="k">def</span> <span class="nf">tno_get_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Gets the object&#39;s children.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+        <span class="n">items</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">node_for</span><span class="p">(</span><span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">items</span><span class="p">]</span></div></div>
+
+
+<div class="viewcode-block" id="ClassNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.ClassNode">[docs]</a><span class="k">class</span> <span class="nc">ClassNode</span><span class="p">(</span><span class="n">ObjectNode</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for classes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ClassNode.format_value"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.ClassNode.format_value">[docs]</a>    <span class="k">def</span> <span class="nf">format_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the formatted version of the value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="vm">__name__</span></div></div>
+
+
+<div class="viewcode-block" id="TraitsNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.TraitsNode">[docs]</a><span class="k">class</span> <span class="nc">TraitsNode</span><span class="p">(</span><span class="n">ObjectNode</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A tree node for traits.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TraitsNode.tno_has_children"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.TraitsNode.tno_has_children">[docs]</a>    <span class="k">def</span> <span class="nf">tno_has_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the object has children.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_names</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="TraitsNode.tno_get_children"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.TraitsNode.tno_get_children">[docs]</a>    <span class="k">def</span> <span class="nf">tno_get_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Gets the object&#39;s children.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_names</span><span class="p">())</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">node_for</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_for</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">item_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;&lt;unknown&gt;&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">excp</span><span class="p">:</span>
+                <span class="n">item_value</span> <span class="o">=</span> <span class="s2">&quot;&lt;</span><span class="si">%s</span><span class="s2">&gt;&quot;</span> <span class="o">%</span> <span class="n">excp</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_for</span><span class="p">(</span><span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="n">item_value</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">nodes</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Gets the names of all defined traits or attributes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">trait_names</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">!=</span> <span class="s2">&quot;event&quot;</span><span class="p">):</span>
+            <span class="n">names</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">names</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">names</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+<div class="viewcode-block" id="TraitsNode.tno_when_children_replaced"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.TraitsNode.tno_when_children_replaced">[docs]</a>    <span class="k">def</span> <span class="nf">tno_when_children_replaced</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">listener</span><span class="p">,</span> <span class="n">remove</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets up or removes a listener for children being replaced on a</span>
+<span class="sd">        specified object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listener</span> <span class="o">=</span> <span class="n">listener</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">on_trait_change</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_children_replaced</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="n">remove</span><span class="p">,</span> <span class="n">dispatch</span><span class="o">=</span><span class="s2">&quot;ui&quot;</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_children_replaced</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listener</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TraitsNode.tno_when_children_changed"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.TraitsNode.tno_when_children_changed">[docs]</a>    <span class="k">def</span> <span class="nf">tno_when_children_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">listener</span><span class="p">,</span> <span class="n">remove</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets up or removes a listener for children being changed on a</span>
+<span class="sd">        specified object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="RootNode"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.RootNode">[docs]</a><span class="k">class</span> <span class="nc">RootNode</span><span class="p">(</span><span class="n">MultiValueTreeNodeObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A root node.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RootNode.format_value"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.RootNode.format_value">[docs]</a>    <span class="k">def</span> <span class="nf">format_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the formatted version of the value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="RootNode.tno_get_children"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.RootNode.tno_get_children">[docs]</a>    <span class="k">def</span> <span class="nf">tno_get_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Gets the object&#39;s children.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">node_for</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)]</span></div></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Define the mapping of object types to nodes:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="n">_basic_types</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="basic_types"><a class="viewcode-back" href="../../api/traitsui.value_tree.html#traitsui.value_tree.basic_types">[docs]</a><span class="k">def</span> <span class="nf">basic_types</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">_basic_types</span>
+
+    <span class="k">if</span> <span class="n">_basic_types</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Create the mapping of object types to nodes:</span>
+        <span class="n">_basic_types</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="n">NoneNode</span><span class="p">),</span>
+            <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">StringNode</span><span class="p">),</span>
+            <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">StringNode</span><span class="p">),</span>
+            <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">BoolNode</span><span class="p">),</span>
+            <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">IntNode</span><span class="p">),</span>
+            <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">FloatNode</span><span class="p">),</span>
+            <span class="p">(</span><span class="nb">complex</span><span class="p">,</span> <span class="n">ComplexNode</span><span class="p">),</span>
+            <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="n">TupleNode</span><span class="p">),</span>
+            <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">ListNode</span><span class="p">),</span>
+            <span class="p">(</span><span class="nb">set</span><span class="p">,</span> <span class="n">SetNode</span><span class="p">),</span>
+            <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">DictNode</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">FunctionType</span><span class="p">,</span> <span class="n">FunctionNode</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">MethodType</span><span class="p">,</span> <span class="n">MethodNode</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">HasTraits</span><span class="p">,</span> <span class="n">TraitsNode</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+
+            <span class="n">_basic_types</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="nb">type</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])),</span> <span class="n">ArrayNode</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">_basic_types</span></div>
+
+
+<span class="k">class</span> <span class="nc">_ValueTree</span><span class="p">(</span><span class="n">HasPrivateTraits</span><span class="p">):</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: List of arbitrary Python values contained in the tree:</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">SingleValueTreeNodeObject</span><span class="p">)</span>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Defines the value tree editor(s):</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1"># Nodes in a value tree:</span>
+<span class="n">value_tree_nodes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">ObjectTreeNode</span><span class="p">(</span>
+        <span class="n">node_for</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">NoneNode</span><span class="p">,</span>
+            <span class="n">StringNode</span><span class="p">,</span>
+            <span class="n">BoolNode</span><span class="p">,</span>
+            <span class="n">IntNode</span><span class="p">,</span>
+            <span class="n">FloatNode</span><span class="p">,</span>
+            <span class="n">ComplexNode</span><span class="p">,</span>
+            <span class="n">OtherNode</span><span class="p">,</span>
+            <span class="n">TupleNode</span><span class="p">,</span>
+            <span class="n">ListNode</span><span class="p">,</span>
+            <span class="n">ArrayNode</span><span class="p">,</span>
+            <span class="n">DictNode</span><span class="p">,</span>
+            <span class="n">SetNode</span><span class="p">,</span>
+            <span class="n">FunctionNode</span><span class="p">,</span>
+            <span class="n">MethodNode</span><span class="p">,</span>
+            <span class="n">ObjectNode</span><span class="p">,</span>
+            <span class="n">TraitsNode</span><span class="p">,</span>
+            <span class="n">RootNode</span><span class="p">,</span>
+            <span class="n">ClassNode</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+<span class="p">]</span>
+
+<span class="c1"># Editor for a value tree:</span>
+<span class="n">value_tree_editor</span> <span class="o">=</span> <span class="n">TreeEditor</span><span class="p">(</span>
+    <span class="n">auto_open</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">hide_root</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">editable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodes</span><span class="o">=</span><span class="n">value_tree_nodes</span>
+<span class="p">)</span>
+
+<span class="c1"># Editor for a value tree with a root:</span>
+<span class="n">value_tree_editor_with_root</span> <span class="o">=</span> <span class="n">TreeEditor</span><span class="p">(</span>
+    <span class="n">auto_open</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">editable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">nodes</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">ObjectTreeNode</span><span class="p">(</span>
+            <span class="n">node_for</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">NoneNode</span><span class="p">,</span>
+                <span class="n">StringNode</span><span class="p">,</span>
+                <span class="n">BoolNode</span><span class="p">,</span>
+                <span class="n">IntNode</span><span class="p">,</span>
+                <span class="n">FloatNode</span><span class="p">,</span>
+                <span class="n">ComplexNode</span><span class="p">,</span>
+                <span class="n">OtherNode</span><span class="p">,</span>
+                <span class="n">TupleNode</span><span class="p">,</span>
+                <span class="n">ListNode</span><span class="p">,</span>
+                <span class="n">ArrayNode</span><span class="p">,</span>
+                <span class="n">DictNode</span><span class="p">,</span>
+                <span class="n">SetNode</span><span class="p">,</span>
+                <span class="n">FunctionNode</span><span class="p">,</span>
+                <span class="n">MethodNode</span><span class="p">,</span>
+                <span class="n">ObjectNode</span><span class="p">,</span>
+                <span class="n">TraitsNode</span><span class="p">,</span>
+                <span class="n">RootNode</span><span class="p">,</span>
+                <span class="n">ClassNode</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">),</span>
+        <span class="n">TreeNode</span><span class="p">(</span>
+            <span class="n">node_for</span><span class="o">=</span><span class="p">[</span><span class="n">_ValueTree</span><span class="p">],</span>
+            <span class="n">auto_open</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">children</span><span class="o">=</span><span class="s2">&quot;values&quot;</span><span class="p">,</span>
+            <span class="n">move</span><span class="o">=</span><span class="p">[</span><span class="n">SingleValueTreeNodeObject</span><span class="p">],</span>
+            <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;=Values&quot;</span><span class="p">,</span>
+            <span class="n">icon_group</span><span class="o">=</span><span class="s2">&quot;traits_node&quot;</span><span class="p">,</span>
+            <span class="n">icon_open</span><span class="o">=</span><span class="s2">&quot;traits_node&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Defines a &#39;ValueTree&#39; trait:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1"># Trait for a value tree:</span>
+<span class="n">ValueTree</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">_ValueTree</span><span class="p">,</span> <span class="p">(),</span> <span class="n">editor</span><span class="o">=</span><span class="n">value_tree_editor_with_root</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editors.range_editor &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../../index.html" >
+    <link rel="up" title="Module code" href="../../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.editors.range_editor</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.editors.range_editor</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines the range editor factory for all traits user interface toolkits.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">CodeType</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Bool</span><span class="p">,</span>
+    <span class="n">CTrait</span><span class="p">,</span>
+    <span class="n">Enum</span><span class="p">,</span>
+    <span class="n">Int</span><span class="p">,</span>
+    <span class="n">Property</span><span class="p">,</span>
+    <span class="n">Range</span><span class="p">,</span>
+    <span class="n">Str</span><span class="p">,</span>
+    <span class="n">Undefined</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="kn">from</span> <span class="nn">traitsui.editor_factory</span> <span class="kn">import</span> <span class="n">EditorFactory</span>
+<span class="kn">from</span> <span class="nn">traitsui.toolkit</span> <span class="kn">import</span> <span class="n">toolkit_object</span>
+<span class="kn">from</span> <span class="nn">traitsui.view</span> <span class="kn">import</span> <span class="n">View</span>
+
+
+<div class="viewcode-block" id="RangeEditor"><a class="viewcode-back" href="../../../api/traitsui.editors.range_editor.html#traitsui.editors.range_editor.RangeEditor">[docs]</a><span class="k">class</span> <span class="nc">RangeEditor</span><span class="p">(</span><span class="n">EditorFactory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Editor factory for range editors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Number of columns when displayed as an enumeration</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+    <span class="c1">#: Is user input set on every keystroke?</span>
+    <span class="n">auto_set</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Is user input set when the Enter key is pressed?</span>
+    <span class="n">enter_set</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Label for the low end of the range</span>
+    <span class="n">low_label</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Label for the high end of the range</span>
+    <span class="n">high_label</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: FIXME: This is supported only in the wx backend so far.</span>
+    <span class="c1">#: The width of the low and high labels</span>
+    <span class="n">label_width</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
+
+    <span class="c1">#: The name of an [object.]trait that defines the low value for the range</span>
+    <span class="n">low_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The name of an [object.]trait that defines the high value for the range</span>
+    <span class="n">high_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Formatting string used to format value and labels</span>
+    <span class="nb">format</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Is the range for floating pointer numbers (vs. integers)?</span>
+    <span class="n">is_float</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="n">Undefined</span><span class="p">)</span>
+
+    <span class="c1">#: Function to evaluate floats/ints when they are assigned to an object</span>
+    <span class="c1">#: trait</span>
+    <span class="n">evaluate</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: The object trait containing the function used to evaluate floats/ints</span>
+    <span class="n">evaluate_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Low end of range</span>
+    <span class="n">low</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="c1">#: High end of range</span>
+    <span class="n">high</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="c1">#: Display mode to use</span>
+    <span class="n">mode</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span>
+        <span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="s2">&quot;slider&quot;</span><span class="p">,</span> <span class="s2">&quot;xslider&quot;</span><span class="p">,</span> <span class="s2">&quot;spinner&quot;</span><span class="p">,</span> <span class="s2">&quot;enum&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;logslider&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Traits view definition:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="n">traits_view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">[</span><span class="s2">&quot;low&quot;</span><span class="p">,</span> <span class="s2">&quot;high&quot;</span><span class="p">,</span> <span class="s2">&quot;|[Range]&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;low_label</span><span class="si">{Low}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;high_label</span><span class="si">{High}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;|[Range Labels]&quot;</span><span class="p">],</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;auto_set{Set automatically}&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;enter_set{Set on enter key pressed}&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;is_float{Is floating point range}&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-[Options]&gt;&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;cols&quot;</span><span class="p">,</span> <span class="s2">&quot;|[Number of columns for integer custom style]&lt;&gt;&quot;</span><span class="p">],</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="RangeEditor.init"><a class="viewcode-back" href="../../../api/traitsui.editors.range_editor.html#traitsui.editors.range_editor.RangeEditor.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Performs any initialization needed after all constructor traits</span>
+<span class="sd">            have been set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">CTrait</span><span class="p">):</span>
+                <span class="n">handler</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">handler</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">low_name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">handler</span><span class="o">.</span><span class="n">_low</span><span class="p">,</span> <span class="n">CodeType</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">low</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">handler</span><span class="o">.</span><span class="n">_low</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">low</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">_low</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">high_name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">handler</span><span class="o">.</span><span class="n">_low</span><span class="p">,</span> <span class="n">CodeType</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">high</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">handler</span><span class="o">.</span><span class="n">_high</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">high</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">_high</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">low</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">low_name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">low</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">high</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">high_name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">high</span> <span class="o">=</span> <span class="mf">1.0</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_low</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_low</span>
+
+    <span class="k">def</span> <span class="nf">_set_low</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">low</span><span class="p">):</span>
+        <span class="n">old_low</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_low</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_low</span> <span class="o">=</span> <span class="n">low</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cast</span><span class="p">(</span><span class="n">low</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span> <span class="ow">is</span> <span class="n">Undefined</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">low_label</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">low_label</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">old_low</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">low_label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">low</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_high</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_high</span>
+
+    <span class="k">def</span> <span class="nf">_set_high</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
+        <span class="n">old_high</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_high</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_high</span> <span class="o">=</span> <span class="n">high</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cast</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span> <span class="ow">is</span> <span class="n">Undefined</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">high</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">high_label</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">high_label</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">old_high</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">high_label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_cast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="c1"># -- Private Methods ------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">_get_low_high</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the low and high values used to determine the initial range.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">low</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">low</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">high</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">low</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">low_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="n">low</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">low_name</span><span class="p">,</span> <span class="n">ui</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span> <span class="ow">is</span> <span class="n">Undefined</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">high</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">high_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="n">high</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">high_name</span><span class="p">,</span> <span class="n">ui</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span> <span class="ow">is</span> <span class="n">Undefined</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">high</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span> <span class="ow">is</span> <span class="n">Undefined</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span><span class="p">)</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Property getters.</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="k">def</span> <span class="nf">_get_simple_editor_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the editor class to use for a simple style.</span>
+
+<span class="sd">        The type of editor depends on the type and extent of the range being</span>
+<span class="sd">        edited:</span>
+
+<span class="sd">        * One end of range is unspecified: RangeTextEditor</span>
+<span class="sd">        * **mode** is specified and not &#39;auto&#39;: editor corresponding to</span>
+<span class="sd">          **mode**</span>
+<span class="sd">        * Floating point range with extent &gt; 100: LargeRangeSliderEditor</span>
+<span class="sd">        * Integer range or floating point range with extent &lt;= 100:</span>
+<span class="sd">          SimpleSliderEditor</span>
+<span class="sd">        * All other cases: SimpleSpinEditor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">is_float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_low_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_high_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">low</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">high</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;range_editor:RangeTextEditor&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_float</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1000000000</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;range_editor:RangeTextEditor&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;range_editor:SimpleEditorMap&quot;</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">is_float</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;range_editor:LargeRangeSliderEditor&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">is_float</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;range_editor:SimpleSliderEditor&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;range_editor:SimpleSpinEditor&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_custom_editor_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Creates a custom style of range editor</span>
+
+<span class="sd">        The type of editor depends on the type and extent of the range being</span>
+<span class="sd">        edited:</span>
+
+<span class="sd">        * One end of range is unspecified: RangeTextEditor</span>
+<span class="sd">        * **mode** is specified and not &#39;auto&#39;: editor corresponding to</span>
+<span class="sd">          **mode**</span>
+<span class="sd">        * Floating point range: Same as &quot;simple&quot; style</span>
+<span class="sd">        * Integer range with extent &gt; 15: Same as &quot;simple&quot; style</span>
+<span class="sd">        * Integer range with extent &lt;= 15: CustomEnumEditor</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">is_float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_low_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_high_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">low</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">high</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;range_editor:RangeTextEditor&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;range_editor:CustomEditorMap&quot;</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">is_float</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">15</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">simple_editor_class</span>
+
+        <span class="k">return</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;range_editor:CustomEnumEditor&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_text_editor_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the editor class to use for a text style.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;range_editor:RangeTextEditor&quot;</span><span class="p">)</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  &#39;Editor&#39; factory methods:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="RangeEditor.simple_editor"><a class="viewcode-back" href="../../../api/traitsui.editors.range_editor.html#traitsui.editors.range_editor.RangeEditor.simple_editor">[docs]</a>    <span class="k">def</span> <span class="nf">simple_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Generates an editor using the &quot;simple&quot; style.</span>
+<span class="sd">        Overridden to set the values of the _low_value, _high_value and</span>
+<span class="sd">        is_float traits.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_low_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_high_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_low_high</span><span class="p">(</span>
+            <span class="n">ui</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">simple_editor</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RangeEditor.custom_editor"><a class="viewcode-back" href="../../../api/traitsui.editors.range_editor.html#traitsui.editors.range_editor.RangeEditor.custom_editor">[docs]</a>    <span class="k">def</span> <span class="nf">custom_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Generates an editor using the &quot;custom&quot; style.</span>
+<span class="sd">        Overridden to set the values of the _low_value, _high_value and</span>
+<span class="sd">        is_float traits.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_low_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_high_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_low_high</span><span class="p">(</span>
+            <span class="n">ui</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">custom_editor</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># This alias is deprecated and will be removed in TraitsUI 8.</span>
+<span class="n">ToolkitEditorFactory</span> <span class="o">=</span> <span class="n">RangeEditor</span>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

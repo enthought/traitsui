@@ -1,0 +1,492 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.list_str_adapter &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.list_str_adapter</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.list_str_adapter</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot;  Defines adapter interfaces for use with the ListStrEditor.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Bool</span><span class="p">,</span>
+    <span class="n">Enum</span><span class="p">,</span>
+    <span class="n">Event</span><span class="p">,</span>
+    <span class="n">HasPrivateTraits</span><span class="p">,</span>
+    <span class="n">Int</span><span class="p">,</span>
+    <span class="n">Interface</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Str</span><span class="p">,</span>
+    <span class="n">observe</span><span class="p">,</span>
+    <span class="n">provides</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.toolkit_traits</span> <span class="kn">import</span> <span class="n">Color</span>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;IListStrAdapter&#39; interface:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="IListStrAdapter"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.IListStrAdapter">[docs]</a><span class="k">class</span> <span class="nc">IListStrAdapter</span><span class="p">(</span><span class="n">Interface</span><span class="p">):</span>
+
+    <span class="c1">#: The index of the current item being adapted.</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
+
+    <span class="c1">#: Current item being adapted.</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: The current value (if any).</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: Does the adapter know how to handle the current *item* or not?</span>
+    <span class="n">accepts</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">()</span>
+
+    <span class="c1">#: Does the value of *accepts* depend only upon the type of *item*?</span>
+    <span class="n">is_cacheable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">()</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;AnIListStrAdapter&#39; class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="AnIListStrAdapter"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.AnIListStrAdapter">[docs]</a><span class="nd">@provides</span><span class="p">(</span><span class="n">IListStrAdapter</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">AnIListStrAdapter</span><span class="p">(</span><span class="n">HasPrivateTraits</span><span class="p">):</span>
+
+    <span class="c1"># Implementation of the IListStrAdapter Interface ------------------------</span>
+
+    <span class="c1">#: The index of the current item being adapted.</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
+
+    <span class="c1">#: Current item being adapted.</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: The current value (if any).</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: Does the adapter know how to handle the current *item* or not?</span>
+    <span class="n">accepts</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Does the value of *accepts* depend only upon the type of *item*?</span>
+    <span class="n">is_cacheable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;ListStrAdapter&#39; class:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="ListStrAdapter"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter">[docs]</a><span class="k">class</span> <span class="nc">ListStrAdapter</span><span class="p">(</span><span class="n">HasPrivateTraits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; The base class for adapting list items to values that can be edited</span>
+<span class="sd">        by a ListStrEditor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Trait Definitions ------------------------------------------------------</span>
+
+    <span class="c1">#: Specifies the default value for a new list item.</span>
+    <span class="n">default_value</span> <span class="o">=</span> <span class="n">Any</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Specifies the default text for a new list item.</span>
+    <span class="n">default_text</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The default text color for even list items.</span>
+    <span class="n">even_text_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: The default text color for odd list items.</span>
+    <span class="n">odd_text_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: The default text color for list items.</span>
+    <span class="n">text_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: The default background color for even list items.</span>
+    <span class="n">even_bg_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: The default background color for odd list items.</span>
+    <span class="n">odd_bg_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: The default background color for list items.</span>
+    <span class="n">bg_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: The name of the default image to use for list items.</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">Str</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Can the text value of each list item be edited.</span>
+    <span class="n">can_edit</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Specifies where a dropped item should be placed in the list relative to</span>
+    <span class="c1">#: the item it is dropped on.</span>
+    <span class="n">dropped</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;after&quot;</span><span class="p">,</span> <span class="s2">&quot;before&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: The index of the current item being adapter.</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
+
+    <span class="c1">#: The current item being adapted.</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: The current value (if any).</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: List of optional delegated adapters.</span>
+    <span class="n">adapters</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">IListStrAdapter</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># -- Private Trait Definitions --------------------------------------------</span>
+
+    <span class="c1">#: Cache of attribute handlers.</span>
+    <span class="n">cache</span> <span class="o">=</span> <span class="n">Any</span><span class="p">({})</span>
+
+    <span class="c1">#: Event fired when the cache is flushed.</span>
+    <span class="n">cache_flushed</span> <span class="o">=</span> <span class="n">Event</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># -- Adapter methods that are sensitive to item type ----------------------</span>
+
+<div class="viewcode-block" id="ListStrAdapter.get_can_edit"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.get_can_edit">[docs]</a>    <span class="k">def</span> <span class="nf">get_can_edit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the user can edit a specified *object.trait[index]*</span>
+<span class="sd">            list item. A True result indicates the value can be edited, while</span>
+<span class="sd">            a False result indicates that it cannot be edited.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result_for</span><span class="p">(</span><span class="s2">&quot;get_can_edit&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.get_drag"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.get_drag">[docs]</a>    <span class="k">def</span> <span class="nf">get_drag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the &#39;drag&#39; value for a specified *object.trait[index]*</span>
+<span class="sd">            list item. A result of *None* means that the item cannot be</span>
+<span class="sd">            dragged.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result_for</span><span class="p">(</span><span class="s2">&quot;get_drag&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.get_can_drop"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.get_can_drop">[docs]</a>    <span class="k">def</span> <span class="nf">get_can_drop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the specified *value* can be dropped on the</span>
+<span class="sd">            specified *object.trait[index]* list item. A value of **True**</span>
+<span class="sd">            means the *value* can be dropped; and a value of **False**</span>
+<span class="sd">            indicates that it cannot be dropped.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result_for</span><span class="p">(</span><span class="s2">&quot;get_can_drop&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.get_dropped"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.get_dropped">[docs]</a>    <span class="k">def</span> <span class="nf">get_dropped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns how to handle a specified *value* being dropped on a</span>
+<span class="sd">            specified *object.trait[index]* list item. The possible return</span>
+<span class="sd">            values are:</span>
+
+<span class="sd">            &#39;before&#39;</span>
+<span class="sd">                Insert the specified *value* before the dropped on item.</span>
+<span class="sd">            &#39;after&#39;</span>
+<span class="sd">                Insert the specified *value* after the dropped on item.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result_for</span><span class="p">(</span><span class="s2">&quot;get_dropped&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.get_text_color"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.get_text_color">[docs]</a>    <span class="k">def</span> <span class="nf">get_text_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the text color for a specified *object.trait[index]* list</span>
+<span class="sd">            item. A result of None means use the default list item text color.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result_for</span><span class="p">(</span><span class="s2">&quot;get_text_color&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.get_bg_color"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.get_bg_color">[docs]</a>    <span class="k">def</span> <span class="nf">get_bg_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the background color for a specified *object.trait[index]*</span>
+<span class="sd">            list item. A result of None means use the default list item</span>
+<span class="sd">            background color.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result_for</span><span class="p">(</span><span class="s2">&quot;get_bg_color&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.get_image"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.get_image">[docs]</a>    <span class="k">def</span> <span class="nf">get_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the name of the image to use for a specified</span>
+<span class="sd">            *object.trait[index]* list item. A result of None means no image</span>
+<span class="sd">            should be used. Otherwise, the result should either be the name of</span>
+<span class="sd">            the image, or an ImageResource item specifying the image to use.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result_for</span><span class="p">(</span><span class="s2">&quot;get_image&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.get_item"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.get_item">[docs]</a>    <span class="k">def</span> <span class="nf">get_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the value of the *object.trait[index]* list item.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result_for</span><span class="p">(</span><span class="s2">&quot;get_item&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.get_text"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.get_text">[docs]</a>    <span class="k">def</span> <span class="nf">get_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the text to display for a specified *object.trait[index]*</span>
+<span class="sd">            list item.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result_for</span><span class="p">(</span><span class="s2">&quot;get_text&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
+
+    <span class="c1"># -- Adapter methods that are not sensitive to item type ------------------</span>
+
+<div class="viewcode-block" id="ListStrAdapter.len"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.len">[docs]</a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the number of items in the specified *object.trait* list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Sometimes, during shutdown, the object has been set to None.</span>
+        <span class="k">if</span> <span class="nb">object</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.get_default_value"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.get_default_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a new default value for the specified *object.trait* list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_value</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.get_default_text"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.get_default_text">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the default text for the specified *object.trait* list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_text</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.get_default_image"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.get_default_image">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the default image for the specified *object.trait* list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.get_default_bg_color"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.get_default_bg_color">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_bg_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the default background color for the specified</span>
+<span class="sd">            *object.trait* list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bg_color</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.get_default_text_color"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.get_default_text_color">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_text_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the default text color for the specified *object.trait*</span>
+<span class="sd">            list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_text_color</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.set_text"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.set_text">[docs]</a>    <span class="k">def</span> <span class="nf">set_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the text for a specified *object.trait[index]* list item to</span>
+<span class="sd">            *text*.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">getattr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">)[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">text</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.delete"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Deletes the specified *object.trait[index]* list item.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">del</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">)[</span><span class="n">index</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ListStrAdapter.insert"><a class="viewcode-back" href="../../api/traitsui.list_str_adapter.html#traitsui.list_str_adapter.ListStrAdapter.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Inserts a new value at the specified *object.trait[index]* list</span>
+<span class="sd">            index.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">getattr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">)[</span><span class="n">index</span><span class="p">:</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span></div>
+
+    <span class="c1"># -- Private Adapter Implementation Methods -------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">_get_can_edit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_edit</span>
+
+    <span class="k">def</span> <span class="nf">_get_drag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_can_drop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_dropped</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropped</span>
+
+    <span class="k">def</span> <span class="nf">_get_text_color</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">even_text_color_</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_color_</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">odd_text_color</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_color_</span>
+
+    <span class="k">def</span> <span class="nf">_get_bg_color</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">even_bg_color_</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">bg_color_</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">odd_bg_color</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">bg_color_</span>
+
+    <span class="k">def</span> <span class="nf">_get_image</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span>
+
+    <span class="k">def</span> <span class="nf">_get_item</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span>
+
+    <span class="k">def</span> <span class="nf">_get_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="c1"># -- Private Methods ------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">_result_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns/Sets the value of the specified *name* attribute for the</span>
+<span class="sd">            specified *object.trait[index]* list item.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">item</span> <span class="o">=</span> <span class="n">item</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">item</span> <span class="o">=</span> <span class="n">item</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+        <span class="n">item_class</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">item_class</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">handler</span><span class="p">()</span>
+
+        <span class="n">trait_name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span>
+
+        <span class="k">for</span> <span class="n">adapter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapters</span><span class="p">:</span>
+            <span class="n">adapter</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="n">adapter</span><span class="o">.</span><span class="n">item</span> <span class="o">=</span> <span class="n">item</span>
+            <span class="n">adapter</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">if</span> <span class="n">adapter</span><span class="o">.</span><span class="n">accepts</span> <span class="ow">and</span> <span class="p">(</span><span class="n">adapter</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="n">trait_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">handler</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span>
+                    <span class="n">adapter</span><span class="o">.</span><span class="n">trait_set</span><span class="p">(</span>
+                        <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+                    <span class="p">),</span>
+                    <span class="n">trait_name</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">adapter</span><span class="o">.</span><span class="n">is_cacheable</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+                <span class="k">return</span> <span class="n">handler</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">klass</span> <span class="ow">in</span> <span class="n">item_class</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+                <span class="n">cname</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">klass</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">trait_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="n">cname</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">handler</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cname</span><span class="p">)</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">handler</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">handler</span>
+        <span class="k">return</span> <span class="n">handler</span><span class="p">()</span>
+
+    <span class="nd">@observe</span><span class="p">(</span><span class="s2">&quot;adapters.items.+update&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_flush_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Flushes the cache when any trait on any adapter changes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache_flushed</span> <span class="o">=</span> <span class="kc">True</span></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

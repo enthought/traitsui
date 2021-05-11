@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.null.color_trait &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../../index.html" >
+    <link rel="up" title="Module code" href="../../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.null.color_trait</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.null.color_trait</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Trait definition for a null-based (i.e., no UI) color.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Trait</span><span class="p">,</span> <span class="n">TraitError</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Convert a number into a wxColour object:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="convert_to_color"><a class="viewcode-back" href="../../../api/traitsui.null.color_trait.html#traitsui.null.color_trait.convert_to_color">[docs]</a><span class="k">def</span> <span class="nf">convert_to_color</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Converts a number into a wxColour object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFF</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="n">value</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">)</span>
+
+    <span class="k">raise</span> <span class="n">TraitError</span></div>
+
+
+<span class="n">convert_to_color</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;an integer which in hex is of the form 0xRRGGBB, &quot;</span>
+    <span class="s2">&quot;where RR is red, GG is green, and BB is blue&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Standard colors:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="n">standard_colors</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;aquamarine&quot;</span><span class="p">:</span> <span class="mh">0x70DB93</span><span class="p">,</span>
+    <span class="s2">&quot;black&quot;</span><span class="p">:</span> <span class="mh">0x000000</span><span class="p">,</span>
+    <span class="s2">&quot;blue&quot;</span><span class="p">:</span> <span class="mh">0x0000FF</span><span class="p">,</span>
+    <span class="s2">&quot;blue violet&quot;</span><span class="p">:</span> <span class="mh">0x9F5F9F</span><span class="p">,</span>
+    <span class="s2">&quot;brown&quot;</span><span class="p">:</span> <span class="mh">0xA52A2A</span><span class="p">,</span>
+    <span class="s2">&quot;cadet blue&quot;</span><span class="p">:</span> <span class="mh">0x5F9F9F</span><span class="p">,</span>
+    <span class="s2">&quot;coral&quot;</span><span class="p">:</span> <span class="mh">0xFF7F00</span><span class="p">,</span>
+    <span class="s2">&quot;cornflower blue&quot;</span><span class="p">:</span> <span class="mh">0x42426F</span><span class="p">,</span>
+    <span class="s2">&quot;cyan&quot;</span><span class="p">:</span> <span class="mh">0x00FFFF</span><span class="p">,</span>
+    <span class="s2">&quot;dark grey&quot;</span><span class="p">:</span> <span class="mh">0x2F2F2F</span><span class="p">,</span>
+    <span class="s2">&quot;dark green&quot;</span><span class="p">:</span> <span class="mh">0x2F4F2F</span><span class="p">,</span>
+    <span class="s2">&quot;dark olive green&quot;</span><span class="p">:</span> <span class="mh">0x4F4F2F</span><span class="p">,</span>
+    <span class="s2">&quot;dark orchid&quot;</span><span class="p">:</span> <span class="mh">0x9932CC</span><span class="p">,</span>
+    <span class="s2">&quot;dark slate blue&quot;</span><span class="p">:</span> <span class="mh">0x6B238E</span><span class="p">,</span>
+    <span class="s2">&quot;dark slate grey&quot;</span><span class="p">:</span> <span class="mh">0x2F4F4F</span><span class="p">,</span>
+    <span class="s2">&quot;dark turquoise&quot;</span><span class="p">:</span> <span class="mh">0x7093DB</span><span class="p">,</span>
+    <span class="s2">&quot;dim grey&quot;</span><span class="p">:</span> <span class="mh">0x545454</span><span class="p">,</span>
+    <span class="s2">&quot;firebrick&quot;</span><span class="p">:</span> <span class="mh">0x8E2323</span><span class="p">,</span>
+    <span class="s2">&quot;forest green&quot;</span><span class="p">:</span> <span class="mh">0x238E23</span><span class="p">,</span>
+    <span class="s2">&quot;gold&quot;</span><span class="p">:</span> <span class="mh">0xCC7F32</span><span class="p">,</span>
+    <span class="s2">&quot;goldenrod&quot;</span><span class="p">:</span> <span class="mh">0xDBDB70</span><span class="p">,</span>
+    <span class="s2">&quot;grey&quot;</span><span class="p">:</span> <span class="mh">0x808080</span><span class="p">,</span>
+    <span class="s2">&quot;green&quot;</span><span class="p">:</span> <span class="mh">0x00FF00</span><span class="p">,</span>
+    <span class="s2">&quot;green yellow&quot;</span><span class="p">:</span> <span class="mh">0x93DB70</span><span class="p">,</span>
+    <span class="s2">&quot;indian red&quot;</span><span class="p">:</span> <span class="mh">0x4F2F2F</span><span class="p">,</span>
+    <span class="s2">&quot;khaki&quot;</span><span class="p">:</span> <span class="mh">0x9F9F5F</span><span class="p">,</span>
+    <span class="s2">&quot;light blue&quot;</span><span class="p">:</span> <span class="mh">0xBFD8D8</span><span class="p">,</span>
+    <span class="s2">&quot;light grey&quot;</span><span class="p">:</span> <span class="mh">0xC0C0C0</span><span class="p">,</span>
+    <span class="s2">&quot;light steel&quot;</span><span class="p">:</span> <span class="mh">0x000000</span><span class="p">,</span>
+    <span class="s2">&quot;blue&quot;</span><span class="p">:</span> <span class="mh">0x0000FF</span><span class="p">,</span>
+    <span class="s2">&quot;lime green&quot;</span><span class="p">:</span> <span class="mh">0x32CC32</span><span class="p">,</span>
+    <span class="s2">&quot;magenta&quot;</span><span class="p">:</span> <span class="mh">0xFF00FF</span><span class="p">,</span>
+    <span class="s2">&quot;maroon&quot;</span><span class="p">:</span> <span class="mh">0x8E236B</span><span class="p">,</span>
+    <span class="s2">&quot;medium aquamarine&quot;</span><span class="p">:</span> <span class="mh">0x32CC99</span><span class="p">,</span>
+    <span class="s2">&quot;medium blue&quot;</span><span class="p">:</span> <span class="mh">0x3232CC</span><span class="p">,</span>
+    <span class="s2">&quot;medium forest green&quot;</span><span class="p">:</span> <span class="mh">0x6B8E23</span><span class="p">,</span>
+    <span class="s2">&quot;medium goldenrod&quot;</span><span class="p">:</span> <span class="mh">0xEAEAAD</span><span class="p">,</span>
+    <span class="s2">&quot;medium orchid&quot;</span><span class="p">:</span> <span class="mh">0x9370DB</span><span class="p">,</span>
+    <span class="s2">&quot;medium sea green&quot;</span><span class="p">:</span> <span class="mh">0x426F42</span><span class="p">,</span>
+    <span class="s2">&quot;medium slate blue&quot;</span><span class="p">:</span> <span class="mh">0x7F00FF</span><span class="p">,</span>
+    <span class="s2">&quot;medium spring green&quot;</span><span class="p">:</span> <span class="mh">0x7FFF00</span><span class="p">,</span>
+    <span class="s2">&quot;medium turquoise&quot;</span><span class="p">:</span> <span class="mh">0x70DBDB</span><span class="p">,</span>
+    <span class="s2">&quot;medium violet red&quot;</span><span class="p">:</span> <span class="mh">0xDB7093</span><span class="p">,</span>
+    <span class="s2">&quot;midnight blue&quot;</span><span class="p">:</span> <span class="mh">0x2F2F4F</span><span class="p">,</span>
+    <span class="s2">&quot;navy&quot;</span><span class="p">:</span> <span class="mh">0x23238E</span><span class="p">,</span>
+    <span class="s2">&quot;orange&quot;</span><span class="p">:</span> <span class="mh">0xCC3232</span><span class="p">,</span>
+    <span class="s2">&quot;orange red&quot;</span><span class="p">:</span> <span class="mh">0xFF007F</span><span class="p">,</span>
+    <span class="s2">&quot;orchid&quot;</span><span class="p">:</span> <span class="mh">0xDB70DB</span><span class="p">,</span>
+    <span class="s2">&quot;pale green&quot;</span><span class="p">:</span> <span class="mh">0x8FBC8F</span><span class="p">,</span>
+    <span class="s2">&quot;pink&quot;</span><span class="p">:</span> <span class="mh">0xBC8FEA</span><span class="p">,</span>
+    <span class="s2">&quot;plum&quot;</span><span class="p">:</span> <span class="mh">0xEAADEA</span><span class="p">,</span>
+    <span class="s2">&quot;purple&quot;</span><span class="p">:</span> <span class="mh">0xB000FF</span><span class="p">,</span>
+    <span class="s2">&quot;red&quot;</span><span class="p">:</span> <span class="mh">0xFF0000</span><span class="p">,</span>
+    <span class="s2">&quot;salmon&quot;</span><span class="p">:</span> <span class="mh">0x6F4242</span><span class="p">,</span>
+    <span class="s2">&quot;sea green&quot;</span><span class="p">:</span> <span class="mh">0x238E6B</span><span class="p">,</span>
+    <span class="s2">&quot;sienna&quot;</span><span class="p">:</span> <span class="mh">0x8E6B23</span><span class="p">,</span>
+    <span class="s2">&quot;sky blue&quot;</span><span class="p">:</span> <span class="mh">0x3299CC</span><span class="p">,</span>
+    <span class="s2">&quot;slate blue&quot;</span><span class="p">:</span> <span class="mh">0x007FFF</span><span class="p">,</span>
+    <span class="s2">&quot;spring green&quot;</span><span class="p">:</span> <span class="mh">0x00FF7F</span><span class="p">,</span>
+    <span class="s2">&quot;steel blue&quot;</span><span class="p">:</span> <span class="mh">0x236B8E</span><span class="p">,</span>
+    <span class="s2">&quot;tan&quot;</span><span class="p">:</span> <span class="mh">0xDB9370</span><span class="p">,</span>
+    <span class="s2">&quot;thistle&quot;</span><span class="p">:</span> <span class="mh">0xD8BFD8</span><span class="p">,</span>
+    <span class="s2">&quot;turquoise&quot;</span><span class="p">:</span> <span class="mh">0xADEAEA</span><span class="p">,</span>
+    <span class="s2">&quot;violet&quot;</span><span class="p">:</span> <span class="mh">0x4F2F4F</span><span class="p">,</span>
+    <span class="s2">&quot;violet red&quot;</span><span class="p">:</span> <span class="mh">0xCC3299</span><span class="p">,</span>
+    <span class="s2">&quot;wheat&quot;</span><span class="p">:</span> <span class="mh">0xD8D8BF</span><span class="p">,</span>
+    <span class="s2">&quot;white&quot;</span><span class="p">:</span> <span class="mh">0xFFFFFF</span><span class="p">,</span>
+    <span class="s2">&quot;yellow&quot;</span><span class="p">:</span> <span class="mh">0xFFFF00</span><span class="p">,</span>
+    <span class="s2">&quot;yellow green&quot;</span><span class="p">:</span> <span class="mh">0x99CC32</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Define &#39;null&#39; specific color traits:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1">### Note: Declare the editor to be a function which returns the ColorEditor</span>
+<span class="c1"># class from traits ui to avoid circular import issues. For backwards</span>
+<span class="c1"># compatibility with previous Traits versions, the &#39;editors&#39; folder in Traits</span>
+<span class="c1"># project declares &#39;from api import *&#39; in its __init__.py. The &#39;api&#39; in turn</span>
+<span class="c1"># can contain classes that have a Color trait which lead to this file getting</span>
+<span class="c1"># imported. This leads to a circular import when declaring a Color trait.</span>
+
+
+<div class="viewcode-block" id="get_color_editor"><a class="viewcode-back" href="../../../api/traitsui.null.color_trait.html#traitsui.null.color_trait.get_color_editor">[docs]</a><span class="k">def</span> <span class="nf">get_color_editor</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">..api</span> <span class="kn">import</span> <span class="n">ColorEditor</span>
+
+    <span class="k">return</span> <span class="n">ColorEditor</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">)</span></div>
+
+
+<span class="c1"># Color traits</span>
+<span class="n">NullColor</span> <span class="o">=</span> <span class="n">Trait</span><span class="p">(</span>
+    <span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">convert_to_color</span><span class="p">,</span> <span class="n">standard_colors</span><span class="p">,</span> <span class="n">editor</span><span class="o">=</span><span class="n">get_color_editor</span>
+<span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

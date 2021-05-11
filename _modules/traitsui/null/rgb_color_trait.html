@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.null.rgb_color_trait &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../../index.html" >
+    <link rel="up" title="Module code" href="../../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.null.rgb_color_trait</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.null.rgb_color_trait</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Trait definitions for an RGB-based color, which is a tuple of the form</span>
+<span class="sd">    (*red*, *green*, *blue*), where *red*, *green* and *blue* are floats in the</span>
+<span class="sd">    range from 0.0 to 1.0.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Trait</span><span class="p">,</span> <span class="n">TraitError</span>
+
+<span class="kn">from</span> <span class="nn">traits.trait_base</span> <span class="kn">import</span> <span class="n">SequenceTypes</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Convert a number into an RGB tuple:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="range_check"><a class="viewcode-back" href="../../../api/traitsui.null.rgb_color_trait.html#traitsui.null.rgb_color_trait.range_check">[docs]</a><span class="k">def</span> <span class="nf">range_check</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Checks that *value* can be converted to a value in the range 0.0 to 1.0.</span>
+
+<span class="sd">    If so, it returns the floating point value; otherwise, it raises a TraitError.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">raise</span> <span class="n">TraitError</span></div>
+
+
+<div class="viewcode-block" id="convert_to_color"><a class="viewcode-back" href="../../../api/traitsui.null.rgb_color_trait.html#traitsui.null.rgb_color_trait.convert_to_color">[docs]</a><span class="k">def</span> <span class="nf">convert_to_color</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Converts a tuple or an integer to an RGB color value, or raises a</span>
+<span class="sd">    TraitError if that is not possible.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">SequenceTypes</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">range_check</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="n">range_check</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="n">range_check</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">num</span> <span class="o">/</span> <span class="mh">0x10000</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span>
+            <span class="p">((</span><span class="n">num</span> <span class="o">//</span> <span class="mh">0x100</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">num</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">raise</span> <span class="n">TraitError</span></div>
+
+
+<span class="n">convert_to_color</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;a tuple of the form (r,g,b), where r, g, and b &quot;</span>
+    <span class="s2">&quot;are floats in the range from 0.0 to 1.0, or an integer which in hex is of &quot;</span>
+    <span class="s2">&quot;the form 0xRRGGBB, where RR is red, GG is green, and BB is blue&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Standard colors:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1"># RGB versions of standard colors</span>
+<span class="n">rgb_standard_colors</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;aquamarine&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.439216</span><span class="p">,</span> <span class="mf">0.858824</span><span class="p">,</span> <span class="mf">0.576471</span><span class="p">),</span>
+    <span class="s2">&quot;black&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="s2">&quot;blue&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="s2">&quot;blue violet&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.623529</span><span class="p">,</span> <span class="mf">0.372549</span><span class="p">,</span> <span class="mf">0.623529</span><span class="p">),</span>
+    <span class="s2">&quot;brown&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.647059</span><span class="p">,</span> <span class="mf">0.164706</span><span class="p">,</span> <span class="mf">0.164706</span><span class="p">),</span>
+    <span class="s2">&quot;cadet blue&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.372549</span><span class="p">,</span> <span class="mf">0.623529</span><span class="p">,</span> <span class="mf">0.623529</span><span class="p">),</span>
+    <span class="s2">&quot;coral&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.498039</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="s2">&quot;cornflower blue&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.258824</span><span class="p">,</span> <span class="mf">0.258824</span><span class="p">,</span> <span class="mf">0.435294</span><span class="p">),</span>
+    <span class="s2">&quot;cyan&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="s2">&quot;dark grey&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.184314</span><span class="p">,</span> <span class="mf">0.184314</span><span class="p">,</span> <span class="mf">0.184314</span><span class="p">),</span>
+    <span class="s2">&quot;dark green&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.184314</span><span class="p">,</span> <span class="mf">0.309804</span><span class="p">,</span> <span class="mf">0.184314</span><span class="p">),</span>
+    <span class="s2">&quot;dark olive green&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.309804</span><span class="p">,</span> <span class="mf">0.309804</span><span class="p">,</span> <span class="mf">0.184314</span><span class="p">),</span>
+    <span class="s2">&quot;dark orchid&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.196078</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+    <span class="s2">&quot;dark slate blue&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.419608</span><span class="p">,</span> <span class="mf">0.137255</span><span class="p">,</span> <span class="mf">0.556863</span><span class="p">),</span>
+    <span class="s2">&quot;dark slate grey&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.184314</span><span class="p">,</span> <span class="mf">0.309804</span><span class="p">,</span> <span class="mf">0.309804</span><span class="p">),</span>
+    <span class="s2">&quot;dark turquoise&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.439216</span><span class="p">,</span> <span class="mf">0.576471</span><span class="p">,</span> <span class="mf">0.858824</span><span class="p">),</span>
+    <span class="s2">&quot;dim grey&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.329412</span><span class="p">,</span> <span class="mf">0.329412</span><span class="p">,</span> <span class="mf">0.329412</span><span class="p">),</span>
+    <span class="s2">&quot;firebrick&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.556863</span><span class="p">,</span> <span class="mf">0.137255</span><span class="p">,</span> <span class="mf">0.137255</span><span class="p">),</span>
+    <span class="s2">&quot;forest green&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.137255</span><span class="p">,</span> <span class="mf">0.556863</span><span class="p">,</span> <span class="mf">0.137255</span><span class="p">),</span>
+    <span class="s2">&quot;gold&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.498039</span><span class="p">,</span> <span class="mf">0.196078</span><span class="p">),</span>
+    <span class="s2">&quot;goldenrod&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.858824</span><span class="p">,</span> <span class="mf">0.858824</span><span class="p">,</span> <span class="mf">0.439216</span><span class="p">),</span>
+    <span class="s2">&quot;grey&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.501961</span><span class="p">,</span> <span class="mf">0.501961</span><span class="p">,</span> <span class="mf">0.501961</span><span class="p">),</span>
+    <span class="s2">&quot;green&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="s2">&quot;green yellow&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.576471</span><span class="p">,</span> <span class="mf">0.858824</span><span class="p">,</span> <span class="mf">0.439216</span><span class="p">),</span>
+    <span class="s2">&quot;indian red&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.309804</span><span class="p">,</span> <span class="mf">0.184314</span><span class="p">,</span> <span class="mf">0.184314</span><span class="p">),</span>
+    <span class="s2">&quot;khaki&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.623529</span><span class="p">,</span> <span class="mf">0.623529</span><span class="p">,</span> <span class="mf">0.372549</span><span class="p">),</span>
+    <span class="s2">&quot;light blue&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.74902</span><span class="p">,</span> <span class="mf">0.847059</span><span class="p">,</span> <span class="mf">0.847059</span><span class="p">),</span>
+    <span class="s2">&quot;light grey&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.752941</span><span class="p">,</span> <span class="mf">0.752941</span><span class="p">,</span> <span class="mf">0.752941</span><span class="p">),</span>
+    <span class="s2">&quot;light steel&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="s2">&quot;blue&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="s2">&quot;lime green&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.196078</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.196078</span><span class="p">),</span>
+    <span class="s2">&quot;magenta&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="s2">&quot;maroon&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.556863</span><span class="p">,</span> <span class="mf">0.137255</span><span class="p">,</span> <span class="mf">0.419608</span><span class="p">),</span>
+    <span class="s2">&quot;medium aquamarine&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.196078</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">),</span>
+    <span class="s2">&quot;medium blue&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.196078</span><span class="p">,</span> <span class="mf">0.196078</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+    <span class="s2">&quot;medium forest green&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.419608</span><span class="p">,</span> <span class="mf">0.556863</span><span class="p">,</span> <span class="mf">0.137255</span><span class="p">),</span>
+    <span class="s2">&quot;medium goldenrod&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.917647</span><span class="p">,</span> <span class="mf">0.917647</span><span class="p">,</span> <span class="mf">0.678431</span><span class="p">),</span>
+    <span class="s2">&quot;medium orchid&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.576471</span><span class="p">,</span> <span class="mf">0.439216</span><span class="p">,</span> <span class="mf">0.858824</span><span class="p">),</span>
+    <span class="s2">&quot;medium sea green&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.258824</span><span class="p">,</span> <span class="mf">0.435294</span><span class="p">,</span> <span class="mf">0.258824</span><span class="p">),</span>
+    <span class="s2">&quot;medium slate blue&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.498039</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="s2">&quot;medium spring green&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.498039</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="s2">&quot;medium turquoise&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.439216</span><span class="p">,</span> <span class="mf">0.858824</span><span class="p">,</span> <span class="mf">0.858824</span><span class="p">),</span>
+    <span class="s2">&quot;medium violet red&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.858824</span><span class="p">,</span> <span class="mf">0.439216</span><span class="p">,</span> <span class="mf">0.576471</span><span class="p">),</span>
+    <span class="s2">&quot;midnight blue&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.184314</span><span class="p">,</span> <span class="mf">0.184314</span><span class="p">,</span> <span class="mf">0.309804</span><span class="p">),</span>
+    <span class="s2">&quot;navy&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.137255</span><span class="p">,</span> <span class="mf">0.137255</span><span class="p">,</span> <span class="mf">0.556863</span><span class="p">),</span>
+    <span class="s2">&quot;orange&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.196078</span><span class="p">,</span> <span class="mf">0.196078</span><span class="p">),</span>
+    <span class="s2">&quot;orange red&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.498039</span><span class="p">),</span>
+    <span class="s2">&quot;orchid&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.858824</span><span class="p">,</span> <span class="mf">0.439216</span><span class="p">,</span> <span class="mf">0.858824</span><span class="p">),</span>
+    <span class="s2">&quot;pale green&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.560784</span><span class="p">,</span> <span class="mf">0.737255</span><span class="p">,</span> <span class="mf">0.560784</span><span class="p">),</span>
+    <span class="s2">&quot;pink&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.737255</span><span class="p">,</span> <span class="mf">0.560784</span><span class="p">,</span> <span class="mf">0.917647</span><span class="p">),</span>
+    <span class="s2">&quot;plum&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.917647</span><span class="p">,</span> <span class="mf">0.678431</span><span class="p">,</span> <span class="mf">0.917647</span><span class="p">),</span>
+    <span class="s2">&quot;purple&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.690196</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="s2">&quot;red&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="s2">&quot;salmon&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.435294</span><span class="p">,</span> <span class="mf">0.258824</span><span class="p">,</span> <span class="mf">0.258824</span><span class="p">),</span>
+    <span class="s2">&quot;sea green&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.137255</span><span class="p">,</span> <span class="mf">0.556863</span><span class="p">,</span> <span class="mf">0.419608</span><span class="p">),</span>
+    <span class="s2">&quot;sienna&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.556863</span><span class="p">,</span> <span class="mf">0.419608</span><span class="p">,</span> <span class="mf">0.137255</span><span class="p">),</span>
+    <span class="s2">&quot;sky blue&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.196078</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+    <span class="s2">&quot;slate blue&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.498039</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="s2">&quot;spring green&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.498039</span><span class="p">),</span>
+    <span class="s2">&quot;steel blue&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.137255</span><span class="p">,</span> <span class="mf">0.419608</span><span class="p">,</span> <span class="mf">0.556863</span><span class="p">),</span>
+    <span class="s2">&quot;tan&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.858824</span><span class="p">,</span> <span class="mf">0.576471</span><span class="p">,</span> <span class="mf">0.439216</span><span class="p">),</span>
+    <span class="s2">&quot;thistle&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.847059</span><span class="p">,</span> <span class="mf">0.74902</span><span class="p">,</span> <span class="mf">0.847059</span><span class="p">),</span>
+    <span class="s2">&quot;turquoise&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.678431</span><span class="p">,</span> <span class="mf">0.917647</span><span class="p">,</span> <span class="mf">0.917647</span><span class="p">),</span>
+    <span class="s2">&quot;violet&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.309804</span><span class="p">,</span> <span class="mf">0.184314</span><span class="p">,</span> <span class="mf">0.309804</span><span class="p">),</span>
+    <span class="s2">&quot;violet red&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.196078</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">),</span>
+    <span class="s2">&quot;wheat&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.847059</span><span class="p">,</span> <span class="mf">0.847059</span><span class="p">,</span> <span class="mf">0.74902</span><span class="p">),</span>
+    <span class="s2">&quot;white&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="s2">&quot;yellow&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="s2">&quot;yellow green&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.196078</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Define &#39;null&#39; specific color trait:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1">### Note: Declare the editor to be a function which returns the RGBColorEditor</span>
+<span class="c1"># class from traits ui to avoid circular import issues. For backwards</span>
+<span class="c1"># compatibility with previous Traits versions, the &#39;editors&#39; folder in Traits</span>
+<span class="c1"># project declares &#39;from api import *&#39; in its __init__.py. The &#39;api&#39; in turn</span>
+<span class="c1"># can contain classes that have a RGBColor trait which lead to this file getting</span>
+<span class="c1"># imported. This will lead to a circular import when declaring a RGBColor</span>
+<span class="c1"># trait.</span>
+
+
+<div class="viewcode-block" id="get_rgb_color_editor"><a class="viewcode-back" href="../../../api/traitsui.null.rgb_color_trait.html#traitsui.null.rgb_color_trait.get_rgb_color_editor">[docs]</a><span class="k">def</span> <span class="nf">get_rgb_color_editor</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">..editors.rgb_color_editor</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">ToolkitEditorFactory</span> <span class="k">as</span> <span class="n">RGBColorEditor</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">RGBColorEditor</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">)</span></div>
+
+
+<span class="c1"># Trait whose value must be an RGB color</span>
+<span class="n">RGBColor</span> <span class="o">=</span> <span class="n">Trait</span><span class="p">(</span>
+    <span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">convert_to_color</span><span class="p">,</span> <span class="n">rgb_standard_colors</span><span class="p">,</span> <span class="n">editor</span><span class="o">=</span><span class="n">get_rgb_color_editor</span>
+<span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

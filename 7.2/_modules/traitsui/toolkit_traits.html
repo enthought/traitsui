@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.toolkit_traits &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.toolkit_traits</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.toolkit_traits</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">TraitFactory</span>
+
+<span class="kn">from</span> <span class="nn">.toolkit</span> <span class="kn">import</span> <span class="n">toolkit</span>
+
+
+<div class="viewcode-block" id="ColorTrait"><a class="viewcode-back" href="../../api/traitsui.toolkit_traits.html#traitsui.toolkit_traits.ColorTrait">[docs]</a><span class="k">def</span> <span class="nf">ColorTrait</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns a trait whose value is a GUI toolkit-specific color.</span>
+
+<span class="sd">    A number of different values are accepted for setting the value, including:</span>
+
+<span class="sd">    * tuples of the form (r, g, b) and (r, g, b, a)</span>
+<span class="sd">    * strings which match standard color names</span>
+<span class="sd">    * strings of the form &quot;(r, g, b)&quot; and &quot;(r, g, b, a)&quot;</span>
+<span class="sd">    * integers whose hex value is of the form 0xRRGGBB</span>
+<span class="sd">    * toolkit-specific color classes</span>
+
+<span class="sd">    Tuple values are expected to be in the range 0 to 255.</span>
+
+<span class="sd">    Exact behaviour (eg. precisely what values are accepted, and what the</span>
+<span class="sd">    &quot;standard&quot; color names are) is toolkit-dependent.</span>
+
+<span class="sd">    The default value is white.  The default editor is a ColorEditor.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    default: color</span>
+<span class="sd">        The default color for the trait.</span>
+<span class="sd">    allow_none: bool</span>
+<span class="sd">        Whether to allow None as a value.</span>
+<span class="sd">    **metadata</span>
+<span class="sd">        Trait metadata to be passed through.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">toolkit</span><span class="p">()</span><span class="o">.</span><span class="n">color_trait</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RGBColorTrait"><a class="viewcode-back" href="../../api/traitsui.toolkit_traits.html#traitsui.toolkit_traits.RGBColorTrait">[docs]</a><span class="k">def</span> <span class="nf">RGBColorTrait</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns a trait whose value is a RGB tuple with values from 0 to 1.</span>
+
+<span class="sd">    A number of different values are accepted for setting the value, including:</span>
+
+<span class="sd">    * tuples of the form (r, g, b) with values from 0.0 to 1.0</span>
+<span class="sd">    * strings which match standard color names</span>
+<span class="sd">    * integers whose hex value is of the form 0xRRGGBB</span>
+
+<span class="sd">    The default value is (1.0, 1.0, 1.0).  The default editor is a</span>
+<span class="sd">    RGBColorEditor.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    **metadata</span>
+<span class="sd">        Trait metadata to be passed through.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">toolkit</span><span class="p">()</span><span class="o">.</span><span class="n">rgb_color_trait</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FontTrait"><a class="viewcode-back" href="../../api/traitsui.toolkit_traits.html#traitsui.toolkit_traits.FontTrait">[docs]</a><span class="k">def</span> <span class="nf">FontTrait</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns a trait whose value is a GUI toolkit-specific font.</span>
+
+<span class="sd">    This trait accepts either a toolkit-specific font object, or a string</span>
+<span class="sd">    containing a font description.  The string description can contain:</span>
+
+<span class="sd">    * a font name or family.  The following generic names are understood:</span>
+<span class="sd">      &quot;default&quot;, &quot;decorative&quot;, &quot;roman&quot;, &quot;script&quot;, &quot;swiss&quot;, and &quot;modern&quot;.</span>
+<span class="sd">    * a size, in points.</span>
+<span class="sd">    * a style, which is one of: &quot;slant&quot; or &quot;italic&quot;</span>
+<span class="sd">    * a weight, which is one of: &quot;light&quot; or &quot;bold&quot;</span>
+<span class="sd">    * whether the font is underlined, indicated by the inclusion of</span>
+<span class="sd">      &quot;underlined&quot;.</span>
+
+<span class="sd">    Where values aren&#39;t supplied, the application defaults will be used</span>
+<span class="sd">    instead.</span>
+
+<span class="sd">    The default value is the application default font, which is toolkit</span>
+<span class="sd">    and platform dependent.  The default editor is FontEditor.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    **metadata</span>
+<span class="sd">        Trait metadata to be passed through.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">toolkit</span><span class="p">()</span><span class="o">.</span><span class="n">font_trait</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">)</span></div>
+
+
+<span class="n">Color</span> <span class="o">=</span> <span class="n">TraitFactory</span><span class="p">(</span><span class="n">ColorTrait</span><span class="p">)</span>
+
+<span class="n">RGBColor</span> <span class="o">=</span> <span class="n">TraitFactory</span><span class="p">(</span><span class="n">RGBColorTrait</span><span class="p">)</span>
+
+<span class="n">Font</span> <span class="o">=</span> <span class="n">TraitFactory</span><span class="p">(</span><span class="n">FontTrait</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editors.list_editor &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../../index.html" >
+    <link rel="up" title="Module code" href="../../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.editors.list_editor</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.editors.list_editor</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines the list editor factory for the traits user interface toolkits..</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">BaseTraitHandler</span><span class="p">,</span>
+    <span class="n">Bool</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">Enum</span><span class="p">,</span>
+    <span class="n">HasTraits</span><span class="p">,</span>
+    <span class="n">Instance</span><span class="p">,</span>
+    <span class="n">Int</span><span class="p">,</span>
+    <span class="n">Property</span><span class="p">,</span>
+    <span class="n">PrototypedFrom</span><span class="p">,</span>
+    <span class="n">Range</span><span class="p">,</span>
+    <span class="n">Str</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">traitsui.editor_factory</span> <span class="kn">import</span> <span class="n">EditorFactory</span>
+<span class="kn">from</span> <span class="nn">traitsui.helper</span> <span class="kn">import</span> <span class="n">DockStyle</span>
+<span class="kn">from</span> <span class="nn">traitsui.item</span> <span class="kn">import</span> <span class="n">Item</span>
+<span class="kn">from</span> <span class="nn">traitsui.toolkit</span> <span class="kn">import</span> <span class="n">toolkit_object</span>
+<span class="kn">from</span> <span class="nn">traitsui.ui_traits</span> <span class="kn">import</span> <span class="n">style_trait</span><span class="p">,</span> <span class="n">AView</span>
+<span class="kn">from</span> <span class="nn">traitsui.view</span> <span class="kn">import</span> <span class="n">View</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Trait definitions:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1">#: Trait whose value is a BaseTraitHandler object</span>
+<span class="n">handler_trait</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">BaseTraitHandler</span><span class="p">)</span>
+
+<span class="c1">#: The visible number of rows displayed</span>
+<span class="n">rows_trait</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the number of list rows to display&quot;</span><span class="p">)</span>
+
+<span class="c1">#: The visible number of columns displayed</span>
+<span class="n">columns_trait</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the number of list columns to display&quot;</span><span class="p">)</span>
+
+<span class="n">editor_trait</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">EditorFactory</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ListEditor"><a class="viewcode-back" href="../../../api/traitsui.editors.list_editor.html#traitsui.editors.list_editor.ListEditor">[docs]</a><span class="k">class</span> <span class="nc">ListEditor</span><span class="p">(</span><span class="n">EditorFactory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Editor factory for list editors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: The editor to use for each list item:</span>
+    <span class="n">editor</span> <span class="o">=</span> <span class="n">editor_trait</span>
+
+    <span class="c1">#: Can the list be reorganized, or have items added and deleted.</span>
+    <span class="n">mutable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Should the scrollbars be displayed if the list is too long.</span>
+    <span class="n">scrollable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">sync_value</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: The style of editor to use for each item:</span>
+    <span class="n">style</span> <span class="o">=</span> <span class="n">style_trait</span>
+
+    <span class="c1">#: The trait handler for each list item:</span>
+    <span class="n">trait_handler</span> <span class="o">=</span> <span class="n">handler_trait</span>
+
+    <span class="c1">#: The number of list rows to display:</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">rows_trait</span>
+
+    <span class="c1">#: The number of list columns to create:</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="n">columns_trait</span>
+
+    <span class="c1">#: Use a notebook for a custom view?</span>
+    <span class="n">use_notebook</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Show a right-click context menu for the notebook tabs?  (Qt only)</span>
+    <span class="n">show_notebook_menu</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Factory that will be called to create and add a new element to this</span>
+    <span class="c1">#: list. If None, the default value for the trait of interest is used.</span>
+    <span class="n">item_factory</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">()</span>
+
+    <span class="c1">#: Tuple of positional arguments to be passed to the default factory</span>
+    <span class="c1">#: callable when creating new elements</span>
+    <span class="n">item_factory_args</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">()</span>
+
+    <span class="c1">#: Dictionary of keyword arguments to be passed to the default factory</span>
+    <span class="c1">#: callable when creating new elements</span>
+    <span class="n">item_factory_kwargs</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">()</span>
+
+    <span class="c1"># -- Notebook Specific Traits ---------------------------------------------</span>
+
+    <span class="c1">#: Are notebook items deletable?</span>
+    <span class="n">deletable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: The extended name of the trait on each page object which should be used</span>
+    <span class="c1">#: to determine whether or not an individual page should be deletable.</span>
+    <span class="n">deletable_trait</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: FIXME: Currently, this trait is used only in the wx backend.</span>
+    <span class="c1">#: The DockWindow graphical theme</span>
+    <span class="n">dock_theme</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: FIXME: Currently, this trait is used only in the wx backend.</span>
+    <span class="c1">#: Dock page style to use for each DockControl:</span>
+    <span class="n">dock_style</span> <span class="o">=</span> <span class="n">DockStyle</span>
+
+    <span class="c1">#: Export class for each item in a notebook:</span>
+    <span class="n">export</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Name of the view to use in notebook mode:</span>
+    <span class="n">view</span> <span class="o">=</span> <span class="n">AView</span>
+
+    <span class="c1">#: The type of UI to construct (&#39;panel&#39;, &#39;subpanel&#39;, etc)</span>
+    <span class="n">ui_kind</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;subpanel&quot;</span><span class="p">,</span> <span class="s2">&quot;panel&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: A factory function that can be used to define that actual object to be</span>
+    <span class="c1">#: edited (i.e. view_object = factory( object )):</span>
+    <span class="n">factory</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">()</span>
+
+    <span class="c1">#: Extended name to use for each notebook page. It can be either the actual</span>
+    <span class="c1">#: name or the name of an attribute on the object in the form:</span>
+    <span class="c1">#: &#39;.name[.name...]&#39;</span>
+    <span class="n">page_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Name of the [object.]trait[.trait...] to synchronize notebook page</span>
+    <span class="c1">#: selection with:</span>
+    <span class="n">selected</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Traits view definition:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="n">traits_view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">[</span><span class="s2">&quot;use_notebook{Use a notebook in a custom view}&quot;</span><span class="p">,</span> <span class="s2">&quot;|[Style]&quot;</span><span class="p">],</span>
+            <span class="p">[</span>
+                <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;page_name&quot;</span><span class="p">,</span> <span class="n">enabled_when</span><span class="o">=</span><span class="s2">&quot;object.use_notebook&quot;</span><span class="p">),</span>
+                <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;view&quot;</span><span class="p">,</span> <span class="n">enabled_when</span><span class="o">=</span><span class="s2">&quot;object.use_notebook&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;|[Notebook options]&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="p">[</span>
+                <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;rows&quot;</span><span class="p">,</span> <span class="n">enabled_when</span><span class="o">=</span><span class="s2">&quot;not object.use_notebook&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;|[Number of list rows to display]&lt;&gt;&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  &#39;Editor&#39; factory methods:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">_get_custom_editor_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_notebook</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;list_editor:NotebookEditor&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">toolkit_object</span><span class="p">(</span><span class="s2">&quot;list_editor:CustomEditor&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  &#39;ListItemProxy&#39; class:</span>
+<span class="c1">#   This class is used to update the list editors when the object changes</span>
+<span class="c1">#   external to the editor.</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="ListItemProxy"><a class="viewcode-back" href="../../../api/traitsui.editors.list_editor.html#traitsui.editors.list_editor.ListItemProxy">[docs]</a><span class="k">class</span> <span class="nc">ListItemProxy</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
+
+    <span class="c1">#: The list proxy:</span>
+    <span class="nb">list</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="c1">#: The item proxies index into the original list:</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
+
+    <span class="c1">#: Delegate all other traits to the original object:</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">PrototypedFrom</span><span class="p">(</span><span class="s2">&quot;_zzz_object&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Define all of the private internal use values (the funny names are an</span>
+    <span class="c1">#: attempt to avoid name collisions with delegated trait names):</span>
+    <span class="n">_zzz_inited</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+    <span class="n">_zzz_object</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+    <span class="n">_zzz_name</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_zzz_inited</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_zzz_object</span> <span class="o">=</span> <span class="nb">object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_zzz_name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
+
+        <span class="k">if</span> <span class="n">trait</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">trait</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_zzz_inited</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_zzz_object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zzz_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old_value</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zzz_inited</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span></div>
+
+
+<span class="c1"># This alias is deprecated and will be removed in TraitsUI 8.</span>
+<span class="n">ToolkitEditorFactory</span> <span class="o">=</span> <span class="n">ListEditor</span>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

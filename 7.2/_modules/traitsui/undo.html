@@ -1,0 +1,650 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.undo &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="search" title="Search" href="../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../index.html" >
+    <link rel="up" title="Module code" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.undo</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.undo</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines the manager for Undo and Redo history for Traits user interface</span>
+<span class="sd">    support.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">collections.abc</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Bool</span><span class="p">,</span>
+    <span class="n">Event</span><span class="p">,</span>
+    <span class="n">HasPrivateTraits</span><span class="p">,</span>
+    <span class="n">HasStrictTraits</span><span class="p">,</span>
+    <span class="n">HasTraits</span><span class="p">,</span>
+    <span class="n">Instance</span><span class="p">,</span>
+    <span class="n">Int</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Property</span><span class="p">,</span>
+    <span class="n">Str</span><span class="p">,</span>
+    <span class="n">Trait</span><span class="p">,</span>
+    <span class="n">cached_property</span><span class="p">,</span>
+    <span class="n">observe</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pyface.undo.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AbstractCommand</span><span class="p">,</span> <span class="n">CommandStack</span><span class="p">,</span> <span class="n">ICommand</span><span class="p">,</span> <span class="n">ICommandStack</span><span class="p">,</span> <span class="n">IUndoManager</span><span class="p">,</span>
+    <span class="n">UndoManager</span>
+<span class="p">)</span>
+
+
+<span class="n">NumericTypes</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)</span>
+<span class="n">SimpleTypes</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">+</span> <span class="n">NumericTypes</span>
+
+
+<div class="viewcode-block" id="AbstractUndoItem"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.AbstractUndoItem">[docs]</a><span class="k">class</span> <span class="nc">AbstractUndoItem</span><span class="p">(</span><span class="n">AbstractCommand</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Abstract base class for undo items.</span>
+
+<span class="sd">    This class is deprecated and will be removed in TraitsUI 8.  Any custom</span>
+<span class="sd">    subclasses of this class should either subclass from AbstractCommand, or</span>
+<span class="sd">    provide the ICommand interface.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: A simple default name.</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Edit&quot;</span>
+
+<div class="viewcode-block" id="AbstractUndoItem.do"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.AbstractUndoItem.do">[docs]</a>    <span class="k">def</span> <span class="nf">do</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Does nothing.</span>
+<span class="sd">        </span>
+<span class="sd">        All undo items log events after they have happened, so by default</span>
+<span class="sd">        they do not do anything when added to the history.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="AbstractUndoItem.undo"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.AbstractUndoItem.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Undoes the change.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="AbstractUndoItem.redo"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.AbstractUndoItem.redo">[docs]</a>    <span class="k">def</span> <span class="nf">redo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Re-does the change.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="AbstractUndoItem.merge"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.AbstractUndoItem.merge">[docs]</a>    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Merges two undo items if possible.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">warnings</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;&#39;merge_undo&#39; is deprecated and will be removed in TraitsUI 8, &quot;</span>
+            <span class="s2">&quot;use &#39;merge&#39; instead&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge_undo</span><span class="p">(</span><span class="n">other</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AbstractUndoItem.merge_undo"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.AbstractUndoItem.merge_undo">[docs]</a>    <span class="k">def</span> <span class="nf">merge_undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">undo_item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Merges two undo items if possible.</span>
+
+<span class="sd">        This method is deprecated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span></div></div>
+
+
+<div class="viewcode-block" id="UndoItem"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoItem">[docs]</a><span class="k">class</span> <span class="nc">UndoItem</span><span class="p">(</span><span class="n">AbstractUndoItem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A change to an object trait, which can be undone.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Object the change occurred on</span>
+    <span class="nb">object</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">)</span>
+
+    <span class="c1">#: Name of the trait that changed</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Old value of the changed trait</span>
+    <span class="n">old_value</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="c1">#: New value of the changed trait</span>
+    <span class="n">new_value</span> <span class="o">=</span> <span class="n">Property</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_get_old_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_old_value</span>
+
+    <span class="k">def</span> <span class="nf">_set_old_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_old_value</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">_get_new_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new_value</span>
+
+    <span class="k">def</span> <span class="nf">_set_new_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_new_value</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="UndoItem.undo"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoItem.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Undoes the change.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">raise_to_debug</span>
+
+            <span class="n">raise_to_debug</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="UndoItem.redo"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoItem.redo">[docs]</a>    <span class="k">def</span> <span class="nf">redo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Re-does the change.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">raise_to_debug</span>
+
+            <span class="n">raise_to_debug</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="UndoItem.merge"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoItem.merge">[docs]</a>    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">undo_item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Merges two undo items if possible.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Undo items are potentially mergeable only if they are of the same</span>
+        <span class="c1"># class and refer to the same object trait, so check that first:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">undo_item</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="ow">is</span> <span class="n">undo_item</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">undo_item</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">v1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_value</span>
+            <span class="n">v2</span> <span class="o">=</span> <span class="n">undo_item</span><span class="o">.</span><span class="n">new_value</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">t1</span><span class="p">):</span>
+
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="c1"># Merge two undo items if they have new values which are</span>
+                    <span class="c1"># strings which only differ by one character (corresponding</span>
+                    <span class="c1"># to a single character insertion, deletion or replacement</span>
+                    <span class="c1"># operation in a text editor):</span>
+                    <span class="n">n1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
+                    <span class="n">n2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">n1</span> <span class="o">-</span> <span class="n">n2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="kc">False</span>
+                    <span class="n">n</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">)</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+                        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="n">n2</span> <span class="o">&lt;=</span> <span class="n">n1</span><span class="p">):]</span> <span class="o">==</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="n">n2</span> <span class="o">&gt;=</span> <span class="n">n1</span><span class="p">):]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">new_value</span> <span class="o">=</span> <span class="n">v2</span>
+                        <span class="k">return</span> <span class="kc">True</span>
+
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+                    <span class="c1"># Merge sequence types only if a single element has changed</span>
+                    <span class="c1"># from the &#39;original&#39; value, and the element type is a</span>
+                    <span class="c1"># simple Python type:</span>
+                    <span class="n">v1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_value</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+                        <span class="c1"># Note: wxColour says it&#39;s a sequence type, but it</span>
+                        <span class="c1"># doesn&#39;t support &#39;len&#39;, so we handle the exception</span>
+                        <span class="c1"># just in case other classes have similar behavior:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">v2</span><span class="p">):</span>
+                                <span class="n">diffs</span> <span class="o">=</span> <span class="mi">0</span>
+                                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">v1</span><span class="p">):</span>
+                                    <span class="n">titem</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                                    <span class="n">item2</span> <span class="o">=</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                                    <span class="k">if</span> <span class="p">(</span>
+                                        <span class="p">(</span><span class="n">titem</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">SimpleTypes</span><span class="p">)</span>
+                                        <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item2</span><span class="p">,</span> <span class="n">titem</span><span class="p">))</span>
+                                        <span class="ow">or</span> <span class="p">(</span><span class="n">item</span> <span class="o">!=</span> <span class="n">item2</span><span class="p">)</span>
+                                    <span class="p">):</span>
+                                        <span class="n">diffs</span> <span class="o">+=</span> <span class="mi">1</span>
+                                        <span class="k">if</span> <span class="n">diffs</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                                            <span class="k">return</span> <span class="kc">False</span>
+                                <span class="k">if</span> <span class="n">diffs</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                                    <span class="k">return</span> <span class="kc">False</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">new_value</span> <span class="o">=</span> <span class="n">v2</span>
+                                <span class="k">return</span> <span class="kc">True</span>
+                        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                            <span class="k">pass</span>
+
+                <span class="k">elif</span> <span class="n">t1</span> <span class="ow">in</span> <span class="n">NumericTypes</span><span class="p">:</span>
+                    <span class="c1"># Always merge simple numeric trait changes:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">new_value</span> <span class="o">=</span> <span class="n">v2</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="UndoItem.merge_undo"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoItem.merge_undo">[docs]</a>    <span class="k">def</span> <span class="nf">merge_undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">undo_item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Merges two undo items if possible.</span>
+
+<span class="sd">        This is deprecated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">undo_item</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a &quot;pretty print&quot; form of the object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">cn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">return</span> <span class="s2">&quot;undo( </span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2"> = </span><span class="si">%s</span><span class="s2"> )</span><span class="se">\n</span><span class="s2">redo( </span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2"> = </span><span class="si">%s</span><span class="s2"> )&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">cn</span><span class="p">,</span>
+            <span class="n">n</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">old_value</span><span class="p">,</span>
+            <span class="n">cn</span><span class="p">,</span>
+            <span class="n">n</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_value</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ListUndoItem"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.ListUndoItem">[docs]</a><span class="k">class</span> <span class="nc">ListUndoItem</span><span class="p">(</span><span class="n">AbstractUndoItem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A change to a list, which can be undone.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: Object that the change occurred on</span>
+    <span class="nb">object</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">)</span>
+
+    <span class="c1">#: Name of the trait that changed</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Starting index</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
+
+    <span class="c1">#: Items added to the list</span>
+    <span class="n">added</span> <span class="o">=</span> <span class="n">List</span><span class="p">()</span>
+
+    <span class="c1">#: Items removed from the list</span>
+    <span class="n">removed</span> <span class="o">=</span> <span class="n">List</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ListUndoItem.undo"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.ListUndoItem.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Undoes the change.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">list</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="nb">list</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">added</span><span class="p">))]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">removed</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">raise_to_debug</span>
+
+            <span class="n">raise_to_debug</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ListUndoItem.redo"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.ListUndoItem.redo">[docs]</a>    <span class="k">def</span> <span class="nf">redo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Re-does the change.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">list</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="nb">list</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">removed</span><span class="p">))]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">added</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">raise_to_debug</span>
+
+            <span class="n">raise_to_debug</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ListUndoItem.merge"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.ListUndoItem.merge">[docs]</a>    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">undo_item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Merges two undo items if possible.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Discard undo items that are identical to us. This is to eliminate</span>
+        <span class="c1"># the same undo item being created by multiple listeners monitoring the</span>
+        <span class="c1"># same list for changes:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">undo_item</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="ow">is</span> <span class="n">undo_item</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">undo_item</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">==</span> <span class="n">undo_item</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">added</span> <span class="o">=</span> <span class="n">undo_item</span><span class="o">.</span><span class="n">added</span>
+            <span class="n">removed</span> <span class="o">=</span> <span class="n">undo_item</span><span class="o">.</span><span class="n">removed</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">added</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">added</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">removed</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">removed</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">added</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">added</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">removed</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">removed</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                            <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="ListUndoItem.merge_undo"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.ListUndoItem.merge_undo">[docs]</a>    <span class="k">def</span> <span class="nf">merge_undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">undo_item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Merges two undo items if possible.</span>
+
+<span class="sd">        This is deprecated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">undo_item</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a &#39;pretty print&#39; form of the object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;undo( </span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">[</span><span class="si">%d</span><span class="s2">:</span><span class="si">%d</span><span class="s2">] = </span><span class="si">%s</span><span class="s2"> )&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">removed</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">added</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<span class="k">class</span> <span class="nc">_MultiUndoItem</span><span class="p">(</span><span class="n">AbstractCommand</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; The _MultiUndoItem class is an internal command that unifies commands. &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Edit&quot;</span>
+
+    <span class="c1">#: The commands that make up this undo item.</span>
+    <span class="n">commands</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">Instance</span><span class="p">(</span><span class="n">ICommand</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Append a command, merging if possible. &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">merged</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">merged</span><span class="p">:</span>
+                <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Try and merge a command. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">redo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Redo the sub-commands. &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="p">:</span>
+            <span class="n">cmd</span><span class="o">.</span><span class="n">redo</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Undo the sub-commands. &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="p">:</span>
+            <span class="n">cmd</span><span class="o">.</span><span class="n">undo</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="UndoHistory"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoHistory">[docs]</a><span class="k">class</span> <span class="nc">UndoHistory</span><span class="p">(</span><span class="n">HasStrictTraits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Manages a list of undoable changes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: The undo manager for the history.</span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">IUndoManager</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: The command stack for the history.</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">ICommandStack</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: List of accumulated undo changes.  Each item is a list of</span>
+    <span class="c1">#: AbstractUndoItems that should be done or undone as a group.</span>
+    <span class="c1">#: This trait should be considered private.</span>
+    <span class="c1">#: This trait is no longer used.</span>
+    <span class="n">history</span> <span class="o">=</span> <span class="n">List</span><span class="p">()</span>
+
+    <span class="c1">#: The current position in the list</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="n">Property</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">observe</span><span class="o">=</span><span class="s1">&#39;stack._index&#39;</span><span class="p">)</span>
+
+    <span class="c1">#: Fired when state changes to undoable</span>
+    <span class="n">undoable</span> <span class="o">=</span> <span class="n">Event</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Fired when state changes to redoable</span>
+    <span class="n">redoable</span> <span class="o">=</span> <span class="n">Event</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Can an action be undone?</span>
+    <span class="n">can_undo</span> <span class="o">=</span> <span class="n">Property</span><span class="p">(</span><span class="n">Bool</span><span class="p">,</span> <span class="n">observe</span><span class="o">=</span><span class="s1">&#39;_can_undo&#39;</span><span class="p">)</span>
+
+    <span class="c1">#: Can an action be redone?</span>
+    <span class="n">can_redo</span> <span class="o">=</span> <span class="n">Property</span><span class="p">(</span><span class="n">Bool</span><span class="p">,</span> <span class="n">observe</span><span class="o">=</span><span class="s1">&#39;_can_redo&#39;</span><span class="p">)</span>
+
+    <span class="n">_can_undo</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">()</span>
+
+    <span class="n">_can_redo</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">()</span>
+
+<div class="viewcode-block" id="UndoHistory.add"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoHistory.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">undo_item</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Adds an UndoItem to the history.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">extend</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">undo_item</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">active_stack</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">undo_item</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UndoHistory.extend"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoHistory.extend">[docs]</a>    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">undo_item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Extends the undo history.</span>
+
+<span class="sd">        If possible the method merges the new UndoItem with the last item in</span>
+<span class="sd">        the history; otherwise, it appends the new item.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">active_stack</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span>
+        <span class="c1"># get the last command in the stack</span>
+        <span class="c1"># XXX this is using CommandStack internals that it should not</span>
+        <span class="c1"># XXX this should be re-architected to use the macro interface</span>
+        <span class="c1"># XXX it possibly should be removed altogether</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">_stack</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="n">entries</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">command</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">_MultiUndoItem</span><span class="p">):</span>
+                <span class="n">command</span> <span class="o">=</span> <span class="n">_MultiUndoItem</span><span class="p">(</span><span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="n">command</span><span class="p">])</span>
+                <span class="n">entries</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="n">command</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="n">_MultiUndoItem</span><span class="p">(</span><span class="n">commands</span><span class="o">=</span><span class="p">[])</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">undo_item</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UndoHistory.undo"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoHistory.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Undoes an operation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_undo</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">undo</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="UndoHistory.redo"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoHistory.redo">[docs]</a>    <span class="k">def</span> <span class="nf">redo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Redoes an operation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_redo</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">redo</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="UndoHistory.revert"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoHistory.revert">[docs]</a>    <span class="k">def</span> <span class="nf">revert</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Reverts all changes made so far and clears the history.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># undo everything</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">active_stack</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">undo</span><span class="p">(</span><span class="n">sequence_nr</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="UndoHistory.clear"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoHistory.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Clears the undo history.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">active_stack</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+    <span class="nd">@observe</span><span class="p">(</span><span class="s1">&#39;manager.stack_updated&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_observe_stack_updated</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Update undo/redo state. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_can_undo</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">undo_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_can_redo</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">redo_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="nd">@observe</span><span class="p">(</span><span class="s1">&#39;_can_undo&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_observe_can_undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">undoable</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">new</span>
+
+    <span class="nd">@observe</span><span class="p">(</span><span class="s1">&#39;_can_redo&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_observe_can_redo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">redoable</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">new</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">_get_now</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">_get_can_undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_can_undo</span>
+        
+    <span class="k">def</span> <span class="nf">_get_can_redo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_can_redo</span>
+
+    <span class="k">def</span> <span class="nf">_manager_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">manager</span> <span class="o">=</span> <span class="n">UndoManager</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">manager</span>
+
+    <span class="k">def</span> <span class="nf">_stack_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="n">CommandStack</span><span class="p">(</span><span class="n">undo_manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">stack</span></div>
+
+
+<div class="viewcode-block" id="UndoHistoryUndoItem"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoHistoryUndoItem">[docs]</a><span class="k">class</span> <span class="nc">UndoHistoryUndoItem</span><span class="p">(</span><span class="n">AbstractUndoItem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An undo item for the undo history.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: The undo history to undo or redo</span>
+    <span class="n">history</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">UndoHistory</span><span class="p">)</span>
+
+<div class="viewcode-block" id="UndoHistoryUndoItem.undo"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoHistoryUndoItem.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Undoes the change.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">history</span><span class="o">.</span><span class="n">now</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">items</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">undo</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="UndoHistoryUndoItem.redo"><a class="viewcode-back" href="../../api/traitsui.undo.html#traitsui.undo.UndoHistoryUndoItem.redo">[docs]</a>    <span class="k">def</span> <span class="nf">redo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Re-does the change.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">history</span><span class="o">.</span><span class="n">now</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">redo</span><span class="p">()</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

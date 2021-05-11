@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.testing.tester.ui_tester &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../../../index.html" >
+    <link rel="up" title="Module code" href="../../../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../../../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.testing.tester.ui_tester</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.testing.tester.ui_tester</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Define top-level object(s) to support testing TraitsUI applications.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">contextlib</span>
+
+<span class="kn">from</span> <span class="nn">traitsui.testing._gui</span> <span class="kn">import</span> <span class="n">process_cascade_events</span>
+<span class="kn">from</span> <span class="nn">traitsui.testing._exception_handling</span> <span class="kn">import</span> <span class="n">reraise_exceptions</span>
+<span class="kn">from</span> <span class="nn">traitsui.testing.tester._ui_tester_registry.default_registry</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_default_registries</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">traitsui.testing.tester.ui_wrapper</span> <span class="kn">import</span> <span class="n">UIWrapper</span>
+
+
+<div class="viewcode-block" id="UITester"><a class="viewcode-back" href="../../../../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester">[docs]</a><span class="k">class</span> <span class="nc">UITester</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; UITester assists testing of GUI applications developed using TraitsUI.</span>
+
+<span class="sd">    See :ref:`testing-traitsui-applications` Section in the User Manual for</span>
+<span class="sd">    further details.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    registries : list of TargetRegistry, optional</span>
+<span class="sd">        Registries of interaction for different targets, in the order</span>
+<span class="sd">        of decreasing priority. If provided, a shallow copy will be made.</span>
+<span class="sd">        Additional registries are appended to the list to provide</span>
+<span class="sd">        builtin support for TraitsUI UI and editors.</span>
+<span class="sd">    delay : int, optional</span>
+<span class="sd">        Time delay (in ms) in which actions by the tester are performed. Note</span>
+<span class="sd">        it is propagated through to created child wrappers. The delay allows</span>
+<span class="sd">        visual confirmation test code is working as desired. Defaults to 0.</span>
+<span class="sd">    auto_process_events : bool, optional</span>
+<span class="sd">        Whether to process (cascade) GUI events automatically. Default is True.</span>
+<span class="sd">        For tests that launch a modal dialog and rely on a recurring timer to</span>
+<span class="sd">        poll if the dialog is closed, it may be necessary to set this flag to</span>
+<span class="sd">        false in order to avoid deadlocks. Note that this is propagated</span>
+<span class="sd">        through to created child wrappers.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    delay : int</span>
+<span class="sd">        Time delay (in ms) in which actions by the tester are performed. Note</span>
+<span class="sd">        it is propagated through to created child wrappers. The delay allows</span>
+<span class="sd">        visual confirmation test code is working as desired.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">registries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">auto_process_events</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">registries</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_registries</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_registries</span> <span class="o">=</span> <span class="n">registries</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># These registries contribute the support for TraitsUI UI and editors.</span>
+        <span class="c1"># The find_by_name/find_by_id methods in this class also depend on</span>
+        <span class="c1"># one of these registries.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_registries</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">get_default_registries</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_auto_process_events</span> <span class="o">=</span> <span class="n">auto_process_events</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">auto_process_events</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Flag to indicate whether to process (cascade) GUI events</span>
+<span class="sd">        automatically. This is propagated through to</span>
+<span class="sd">        :class:`~traitsui.testing.tester.ui_wrapper.UIWrapper` instances</span>
+<span class="sd">        created from this tester.</span>
+
+<span class="sd">        This value can only be set at instantiation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># No mutations post-init are allowed because UIWrapper created prior to</span>
+        <span class="c1"># the mutation will not respect the new value, and so it would be</span>
+        <span class="c1"># confusing if this attribute was allowed to be mutated.</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auto_process_events</span>
+
+<div class="viewcode-block" id="UITester.create_ui"><a class="viewcode-back" href="../../../../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester.create_ui">[docs]</a>    <span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
+    <span class="k">def</span> <span class="nf">create_ui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">ui_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Context manager to create a UI and dispose it upon exit.</span>
+
+<span class="sd">        This method does not modify the states of the :class:`UITester` and is</span>
+<span class="sd">        not a requirement for using other methods on the tester.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        object : HasTraits</span>
+<span class="sd">            An instance of HasTraits for which a GUI will be created.</span>
+<span class="sd">        ui_kwargs : dict or None, optional</span>
+<span class="sd">            Keyword arguments to be provided to ``HasTraits.edit_traits``.</span>
+<span class="sd">            Default is to call ``edit_traits`` with no additional keyword</span>
+<span class="sd">            arguments.</span>
+
+<span class="sd">        Yields</span>
+<span class="sd">        ------</span>
+<span class="sd">        ui : traitsui.ui.UI</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">ui_kwargs</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">ui_kwargs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">ui_kwargs</span>
+        <span class="n">ui</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">edit_traits</span><span class="p">(</span><span class="o">**</span><span class="n">ui_kwargs</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">ui</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">reraise_exceptions</span><span class="p">():</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auto_process_events</span><span class="p">:</span>
+                    <span class="c1"># At the end of a test, there may be events to be</span>
+                    <span class="c1"># processed. If dispose happens first, those events will be</span>
+                    <span class="c1"># processed after various editor states are removed,</span>
+                    <span class="c1"># causing errors. But if we are asked not to process</span>
+                    <span class="c1"># events, then don&#39;t.</span>
+                    <span class="n">process_cascade_events</span><span class="p">()</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">ui</span><span class="o">.</span><span class="n">dispose</span><span class="p">()</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="c1"># dispose is not atomic and may push more events to the</span>
+                    <span class="c1"># event queue. Flush those too unless we are asked not to.</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auto_process_events</span><span class="p">:</span>
+                        <span class="n">process_cascade_events</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="UITester.find_by_name"><a class="viewcode-back" href="../../../../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester.find_by_name">[docs]</a>    <span class="k">def</span> <span class="nf">find_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Find the TraitsUI editor with the given name and return a new</span>
+<span class="sd">        ``UIWrapper`` object for further interactions with the editor.</span>
+
+<span class="sd">        ``name`` is typically a value defined on</span>
+<span class="sd">        :attr:`traitsui.item.Item.name`. This name is passed onto</span>
+<span class="sd">        :func:`traitsui.ui.UI.get_editors`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ui : traitsui.ui.UI</span>
+<span class="sd">            The UI created, e.g. by ``create_ui``.</span>
+<span class="sd">        name : str</span>
+<span class="sd">            A single name for retrieving a target on a UI.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        wrapper : UIWrapper</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_wrapper</span><span class="p">(</span><span class="n">ui</span><span class="p">)</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UITester.find_by_id"><a class="viewcode-back" href="../../../../api/traitsui.testing.tester.ui_tester.html#traitsui.testing.tester.ui_tester.UITester.find_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">find_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Find the TraitsUI editor with the given identifier and return a new</span>
+<span class="sd">        ``UIWrapper`` object for further interactions with the editor.</span>
+
+<span class="sd">        ``id`` is typically a value defined on :attr:`traitsui.item.Item.id`</span>
+<span class="sd">        or :attr:`traitsui.group.Group.id`. This provides a shortcut to locate</span>
+<span class="sd">        a very nested editor in a view.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ui : traitsui.ui.UI</span>
+<span class="sd">            The UI created, e.g. by ``create_ui``.</span>
+<span class="sd">        id : str</span>
+<span class="sd">            Id for finding an item in the UI.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        wrapper : UIWrapper</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_wrapper</span><span class="p">(</span><span class="n">ui</span><span class="p">)</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a new UIWrapper wrapping the given traitsui.ui.UI.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ui : traitsui.ui.UI</span>
+<span class="sd">            The UI created, e.g. by ``create_ui``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        wrapper : UIWrapper</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">UIWrapper</span><span class="p">(</span>
+            <span class="n">target</span><span class="o">=</span><span class="n">ui</span><span class="p">,</span>
+            <span class="n">registries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_registries</span><span class="p">,</span>
+            <span class="n">delay</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">,</span>
+            <span class="n">auto_process_events</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_auto_process_events</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,719 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editors.table_editor &mdash; TraitsUI 7 Documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '7.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../../../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="search" title="Search" href="../../../search.html" >
+    <link rel="top" title="TraitsUI 7 Documentation" href="../../../index.html" >
+    <link rel="up" title="Module code" href="../../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">TraitsUI 7 Documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li>
+  
+    <li><a href="#">traitsui.editors.table_editor</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body" role="main">
+            
+  <h1>Source code for traitsui.editors.table_editor</h1><div class="highlight"><pre>
+<span></span><span class="c1"># (C) Copyright 2004-2021 Enthought, Inc., Austin, TX</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># This software is provided without warranty under the terms of the BSD</span>
+<span class="c1"># license included in LICENSE.txt and may be redistributed only under</span>
+<span class="c1"># the conditions described in the aforementioned license. The license</span>
+<span class="c1"># is also available online at http://www.enthought.com/licenses/BSD.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Thanks for using Enthought open source!</span>
+
+<span class="sd">&quot;&quot;&quot; Defines the table editor factory for all traits user interface toolkits.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Int</span><span class="p">,</span>
+    <span class="n">Float</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Instance</span><span class="p">,</span>
+    <span class="n">Str</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">Enum</span><span class="p">,</span>
+    <span class="n">Bool</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Range</span><span class="p">,</span>
+    <span class="n">Trait</span><span class="p">,</span>
+    <span class="n">observe</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">traitsui.editor_factory</span> <span class="kn">import</span> <span class="n">EditorFactory</span>
+<span class="kn">from</span> <span class="nn">traitsui.editors.enum_editor</span> <span class="kn">import</span> <span class="n">EnumEditor</span>
+<span class="kn">from</span> <span class="nn">traitsui.handler</span> <span class="kn">import</span> <span class="n">Handler</span>
+<span class="kn">from</span> <span class="nn">traitsui.helper</span> <span class="kn">import</span> <span class="n">Orientation</span>
+<span class="kn">from</span> <span class="nn">traitsui.item</span> <span class="kn">import</span> <span class="n">Item</span>
+<span class="kn">from</span> <span class="nn">traitsui.table_filter</span> <span class="kn">import</span> <span class="n">TableFilter</span>
+<span class="kn">from</span> <span class="nn">traitsui.toolkit_traits</span> <span class="kn">import</span> <span class="n">Color</span><span class="p">,</span> <span class="n">Font</span>
+<span class="kn">from</span> <span class="nn">traitsui.ui_traits</span> <span class="kn">import</span> <span class="n">AView</span>
+<span class="kn">from</span> <span class="nn">traitsui.view</span> <span class="kn">import</span> <span class="n">View</span>
+
+<span class="c1"># The filter used to indicate that the user wants to customize the current</span>
+<span class="c1"># filter</span>
+<span class="n">customize_filter</span> <span class="o">=</span> <span class="n">TableFilter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Customize...&quot;</span><span class="p">)</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Trait definitions:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+<span class="c1"># A trait whose value can be True, False, or a callable function</span>
+<span class="n">BoolOrCallable</span> <span class="o">=</span> <span class="n">Trait</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">Callable</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="TableEditor"><a class="viewcode-back" href="../../../api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.TableEditor">[docs]</a><span class="k">class</span> <span class="nc">TableEditor</span><span class="p">(</span><span class="n">EditorFactory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Editor factory for table editors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Trait definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: List of initial table column descriptors</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;traitsui.table_column.TableColumn&quot;</span><span class="p">))</span>
+
+    <span class="c1">#: List of other table column descriptors (not initially displayed)</span>
+    <span class="n">other_columns</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;traitsui.table_column.TableColumn&quot;</span><span class="p">))</span>
+
+    <span class="c1">#: The object trait containing the list of column descriptors</span>
+    <span class="n">columns_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The desired number of visible rows in the table</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">Int</span><span class="p">()</span>
+
+    <span class="c1">#: The optional extended name of the trait used to specify an external</span>
+    <span class="c1">#: filter for the table data. The value of the trait must either be an</span>
+    <span class="c1">#: instance of TableEditor, a callable that accepts one argument</span>
+    <span class="c1">#: (a table row) and returns True or False to indicate whether the</span>
+    <span class="c1">#: specified object passes the filter or not, or **None** to indicate that</span>
+    <span class="c1">#: no filter is to be applied:</span>
+    <span class="n">filter_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Initial filter that should be applied to the table</span>
+    <span class="nb">filter</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;traitsui.table_filter.TableFilter&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: List of available filters that can be applied to the table</span>
+    <span class="n">filters</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;traitsui.table_filter.TableFilter&quot;</span><span class="p">))</span>
+
+    <span class="c1">#: The optional extended trait name of the trait used to notify that the</span>
+    <span class="c1">#: filter has changed and the displayed objects should be updated.</span>
+    <span class="c1">#: It should be an Event.</span>
+    <span class="n">update_filter_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Filter object used to allow a user to search the table.</span>
+    <span class="c1">#: NOTE: If left as None, the table will not be searchable.</span>
+    <span class="n">search</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;traitsui.table_filter.TableFilter&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Default context menu to display when any cell is right-clicked</span>
+    <span class="n">menu</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;traitsui.menu.Menu&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: Default trait name containg menu</span>
+    <span class="n">menu_name</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Are objects deletable from the table?</span>
+    <span class="n">deletable</span> <span class="o">=</span> <span class="n">BoolOrCallable</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Is the table editable?</span>
+    <span class="n">editable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Should the editor become active after the first click</span>
+    <span class="n">edit_on_first_click</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Can the user reorder the items in the table?</span>
+    <span class="n">reorderable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Can the user configure the table columns?</span>
+    <span class="n">configurable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Should the cells of the table automatically size to the optimal size?</span>
+    <span class="n">auto_size</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Mirrors the Qt QSizePolicy.Policy attribute, for horizontal and vertical</span>
+    <span class="c1">#: dimensions.  For these to be useful, set auto_size to False.  If these</span>
+    <span class="c1">#: are None, then the table size policy will not be set in that dimension</span>
+    <span class="c1">#: (for backwards compatibility).</span>
+    <span class="n">h_size_policy</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;preferred&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fixed&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;minimum&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;maximum&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;expanding&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;minimum_expanding&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ignored&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">v_size_policy</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;preferred&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fixed&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;minimum&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;maximum&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;expanding&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;minimum_expanding&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ignored&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1">#: Should a new row automatically be added to the end of the table to allow</span>
+    <span class="c1">#: the user to create new entries? If True, **row_factory** must be set.</span>
+    <span class="n">auto_add</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Should the table items be presented in reverse order?</span>
+    <span class="n">reverse</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: The DockWindow graphical theme:</span>
+    <span class="n">dock_theme</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: View to use when editing table items.</span>
+    <span class="c1">#: NOTE: If not specified, the table items are not editable in a separate</span>
+    <span class="c1">#: pane of the editor.</span>
+    <span class="n">edit_view</span> <span class="o">=</span> <span class="n">AView</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+    <span class="c1">#: The handler to apply to **edit_view**</span>
+    <span class="n">edit_view_handler</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">Handler</span><span class="p">)</span>
+
+    <span class="c1">#: Width to use for the edit view</span>
+    <span class="n">edit_view_width</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="c1">#: Height to use for the edit view</span>
+    <span class="n">edit_view_height</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="c1">#: Layout orientation of the table and its associated editor pane. This</span>
+    <span class="c1">#: attribute applies only if **edit_view** is not &#39; &#39;.</span>
+    <span class="n">orientation</span> <span class="o">=</span> <span class="n">Orientation</span>
+
+    <span class="c1">#: Is the table sortable by clicking on the column headers?</span>
+    <span class="n">sortable</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Does sorting affect the model (vs. just the view)?</span>
+    <span class="n">sort_model</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Should grid lines be shown on the table?</span>
+    <span class="n">show_lines</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Should the toolbar be displayed? (Note that False will override settings</span>
+    <span class="c1">#: such as &#39;configurable&#39;, etc., and is a quick way to prevent the toolbar</span>
+    <span class="c1">#: from being displayed; but True will not cause a toolbar to appear if one</span>
+    <span class="c1">#: would not otherwise have been displayed)</span>
+    <span class="n">show_toolbar</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: The vertical scroll increment for the table:</span>
+    <span class="n">scroll_dy</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+
+    <span class="c1">#: Grid line color.  Does not work on Qt.</span>
+    <span class="n">line_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="mh">0xC4C0A9</span><span class="p">)</span>
+
+    <span class="c1">#: Show column labels?</span>
+    <span class="n">show_column_labels</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Show row labels?</span>
+    <span class="n">show_row_labels</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Font to use for text in cells</span>
+    <span class="n">cell_font</span> <span class="o">=</span> <span class="n">Font</span>
+
+    <span class="c1">#: Color to use for text in cells</span>
+    <span class="n">cell_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Color to use for cell backgrounds</span>
+    <span class="n">cell_bg_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Color to use for read-only cell backgrounds</span>
+    <span class="n">cell_read_only_bg_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Whether to even-odd alternate the background color. Qt only.</span>
+    <span class="n">alternate_bg_color</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: Font to use for text in labels</span>
+    <span class="n">label_font</span> <span class="o">=</span> <span class="n">Font</span>
+
+    <span class="c1">#: Color to use for text in labels</span>
+    <span class="n">label_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Color to use for label backgrounds. Some Qt styles (eg. MacOS) ignore</span>
+    <span class="c1">#: this.</span>
+    <span class="n">label_bg_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Background color of selected item.  Does not work on Qt.</span>
+    <span class="n">selection_bg_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Color of selected text.  Does not work on Qt.</span>
+    <span class="n">selection_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#: Height (in pixels) of column labels</span>
+    <span class="n">column_label_height</span> <span class="o">=</span> <span class="n">Int</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span>
+
+    <span class="c1">#: Width (in pixels) of row labels</span>
+    <span class="n">row_label_width</span> <span class="o">=</span> <span class="n">Int</span><span class="p">(</span><span class="mi">82</span><span class="p">)</span>
+
+    <span class="c1">#: The initial height of each row (&lt;= 0 means use default value):</span>
+    <span class="n">row_height</span> <span class="o">=</span> <span class="n">Int</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1">#: The optional extended name of the trait that the indices of the items</span>
+    <span class="c1">#: currently passing the table filter are synced with:</span>
+    <span class="n">filtered_indices</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The selection mode of the table. The meaning of the various values are</span>
+    <span class="c1">#: as follows:</span>
+    <span class="c1">#:</span>
+    <span class="c1">#: row</span>
+    <span class="c1">#:   Entire rows are selected. At most one row can be selected at once.</span>
+    <span class="c1">#:   This is the default.</span>
+    <span class="c1">#: rows</span>
+    <span class="c1">#:   Entire rows are selected. More than one row can be selected at once.</span>
+    <span class="c1">#: column</span>
+    <span class="c1">#:   Entire columns are selected. At most one column can be selected at</span>
+    <span class="c1">#:   once.</span>
+    <span class="c1">#: columns</span>
+    <span class="c1">#:   Entire columns are selected. More than one column can be selected at</span>
+    <span class="c1">#:   once.</span>
+    <span class="c1">#: cell</span>
+    <span class="c1">#:   Single cells are selected. Only one cell can be selected at once.</span>
+    <span class="c1">#: cells</span>
+    <span class="c1">#:   Single cells are selected. More than one cell can be selected at once.</span>
+    <span class="n">selection_mode</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;row&quot;</span><span class="p">,</span> <span class="s2">&quot;rows&quot;</span><span class="p">,</span> <span class="s2">&quot;column&quot;</span><span class="p">,</span> <span class="s2">&quot;columns&quot;</span><span class="p">,</span> <span class="s2">&quot;cell&quot;</span><span class="p">,</span> <span class="s2">&quot;cells&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: The optional extended name of the trait that the current selection is</span>
+    <span class="c1">#: synced with:</span>
+    <span class="n">selected</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The optional extended trait name of the trait that the indices of the</span>
+    <span class="c1">#: current selection are synced with:</span>
+    <span class="n">selected_indices</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The optional extended trait name of the trait that should be assigned</span>
+    <span class="c1">#: an ( object, column ) tuple when a table cell is clicked on (Note: If</span>
+    <span class="c1">#: you want to receive repeated clicks on the same cell, make sure the</span>
+    <span class="c1">#: trait is defined as an Event):</span>
+    <span class="n">click</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: The optional extended trait name of the trait that should be assigned</span>
+    <span class="c1">#: an ( object, column ) tuple when a table cell is double-clicked on</span>
+    <span class="c1">#: (Note: if you want to receive repeated double-clicks on the same cell,</span>
+    <span class="c1">#: make sure the trait is defined as an Event):</span>
+    <span class="n">dclick</span> <span class="o">=</span> <span class="n">Str</span><span class="p">()</span>
+
+    <span class="c1">#: Called when a table item is selected</span>
+    <span class="n">on_select</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: Called when a table item is double clicked</span>
+    <span class="n">on_dclick</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: A factory to generate new rows.</span>
+    <span class="c1">#: NOTE: If None, then the user will not be able to add new rows to the</span>
+    <span class="c1">#: table. If not None, then it must be a callable that accepts</span>
+    <span class="c1">#: **row_factory_args** and **row_factory_kw** and returns a new object</span>
+    <span class="c1">#: that can be added to the table.</span>
+    <span class="n">row_factory</span> <span class="o">=</span> <span class="n">Any</span><span class="p">()</span>
+
+    <span class="c1">#: Arguments to pass to the **row_factory** callable when a new row is</span>
+    <span class="c1">#: created</span>
+    <span class="n">row_factory_args</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">()</span>
+
+    <span class="c1">#: Keyword arguments to pass to the **row_factory** callable when a new row</span>
+    <span class="c1">#: is created</span>
+    <span class="n">row_factory_kw</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">()</span>
+
+    <span class="c1">#: Hooks for replacing parts of the implementation.</span>
+    <span class="n">table_view_factory</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">()</span>
+    <span class="n">source_model_factory</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">()</span>
+    <span class="n">model_factory</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">()</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Traits view definitions:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="n">traits_view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="s2">&quot;{Initial columns}@&quot;</span><span class="p">,</span>
+            <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span> <span class="n">resizable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="s2">&quot;{Other columns}@&quot;</span><span class="p">,</span>
+            <span class="n">Item</span><span class="p">(</span><span class="s2">&quot;other_columns&quot;</span><span class="p">,</span> <span class="n">resizable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="s2">&quot;|</span><span class="si">{Columns}</span><span class="s2">&lt;&gt;&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="p">[</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;deletable{Are items deletable?}&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;9&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;editable{Are items editable?}&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;9&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-[Item Options]&gt;&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;show_column_labels{Show column labels?}&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;9&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;configurable{Are columns user configurable?}&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;9&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;auto_size{Should columns auto size?}&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-[Column Options]&gt;&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;sortable{Are columns sortable?}&quot;</span><span class="p">,</span>
+                <span class="n">Item</span><span class="p">(</span>
+                    <span class="s2">&quot;sort_model{Does sorting affect the model?}&quot;</span><span class="p">,</span>
+                    <span class="n">enabled_when</span><span class="o">=</span><span class="s2">&quot;sortable&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;-[Sorting Options]&gt;&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="p">[</span>
+                <span class="p">[</span><span class="s2">&quot;show_lines{Show grid lines?}&quot;</span><span class="p">,</span> <span class="s2">&quot;|&gt;&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;line_color{Grid line color}@&quot;</span><span class="p">,</span> <span class="s2">&quot;|&lt;&gt;&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;|[Grid Line Options]&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;|</span><span class="si">{Options}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="p">[</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;cell_color{Text color}@&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;cell_bg_color{Background color}@&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;cell_read_only_bg_color{Read only color}@&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;|[Cell Colors]&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;cell_font&quot;</span><span class="p">,</span> <span class="s2">&quot;|[Cell Font]&lt;&gt;&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;|</span><span class="si">{Cell}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="p">[</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;label_color{Text color}@&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;label_bg_color{Background color}@&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;|[Label Colors]&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;label_font@&quot;</span><span class="p">,</span> <span class="s2">&quot;|[Label Font]&lt;&gt;&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;|</span><span class="si">{Label}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="p">[</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;selection_color{Text color}@&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;selection_bg_color{Background color}@&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;|[Selection Colors]&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;|</span><span class="si">{Selection}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="n">height</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  &#39;Editor&#39; factory methods:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="TableEditor.readonly_editor"><a class="viewcode-back" href="../../../api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.TableEditor.readonly_editor">[docs]</a>    <span class="k">def</span> <span class="nf">readonly_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ui</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Generates an &quot;editor&quot; that is read-only.</span>
+<span class="sd">        Overridden to set the value of the editable trait to False before</span>
+<span class="sd">        generating the editor.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">editable</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">readonly_editor</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Event handlers:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="nd">@observe</span><span class="p">(</span><span class="s2">&quot;filters.items&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_update_filter_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handles the set of filters associated with the editor&#39;s factory</span>
+<span class="sd">            being changed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="kc">None</span><span class="p">:</span> <span class="s2">&quot;000:No filter&quot;</span><span class="p">}</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="nb">filter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">filter</span><span class="o">.</span><span class="n">template</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">values</span><span class="p">[</span><span class="nb">filter</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%03d</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">filter</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">values</span><span class="p">[</span><span class="n">customize_filter</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%03d</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">customize_filter</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_editor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_filter_editor</span> <span class="o">=</span> <span class="n">EnumEditor</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_filter_editor</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">values</span></div>
+
+
+<span class="c1"># This alias is deprecated and will be removed in TraitsUI 8.</span>
+<span class="n">ToolkitEditorFactory</span> <span class="o">=</span> <span class="n">TableEditor</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Base class for toolkit-specific editors</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="BaseTableEditor"><a class="viewcode-back" href="../../../api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.BaseTableEditor">[docs]</a><span class="k">class</span> <span class="nc">BaseTableEditor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Base class for toolkit-specific editors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Interface for toolkit-specific editors:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="BaseTableEditor.set_menu_context"><a class="viewcode-back" href="../../../api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.BaseTableEditor.set_menu_context">[docs]</a>    <span class="k">def</span> <span class="nf">set_menu_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Call before creating a context menu for a cell, then set self as the</span>
+<span class="sd">           controller for the menu.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_menu_context</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;selection&quot;</span><span class="p">:</span> <span class="n">selection</span><span class="p">,</span>
+            <span class="s2">&quot;object&quot;</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
+            <span class="s2">&quot;column&quot;</span><span class="p">:</span> <span class="n">column</span><span class="p">,</span>
+            <span class="s2">&quot;editor&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="s2">&quot;info&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">info</span><span class="p">,</span>
+            <span class="s2">&quot;handler&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">handler</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  pyface.action &#39;controller&#39; interface implementation:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="BaseTableEditor.add_to_menu"><a class="viewcode-back" href="../../../api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.BaseTableEditor.add_to_menu">[docs]</a>    <span class="k">def</span> <span class="nf">add_to_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">menu_item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Adds a menu item to the menu bar being constructed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">menu_item</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">action</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval_when</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">enabled_when</span><span class="p">,</span> <span class="n">menu_item</span><span class="p">,</span> <span class="s2">&quot;enabled&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval_when</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">checked_when</span><span class="p">,</span> <span class="n">menu_item</span><span class="p">,</span> <span class="s2">&quot;checked&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseTableEditor.add_to_toolbar"><a class="viewcode-back" href="../../../api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.BaseTableEditor.add_to_toolbar">[docs]</a>    <span class="k">def</span> <span class="nf">add_to_toolbar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toolbar_item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Adds a toolbar item to the toolbar being constructed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_to_menu</span><span class="p">(</span><span class="n">toolbar_item</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseTableEditor.can_add_to_menu"><a class="viewcode-back" href="../../../api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.BaseTableEditor.can_add_to_menu">[docs]</a>    <span class="k">def</span> <span class="nf">can_add_to_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the action should be defined in the user interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">defined_when</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">eval</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">defined_when</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_menu_context</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">visible_when</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">eval</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">visible_when</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_menu_context</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseTableEditor.can_add_to_toolbar"><a class="viewcode-back" href="../../../api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.BaseTableEditor.can_add_to_toolbar">[docs]</a>    <span class="k">def</span> <span class="nf">can_add_to_toolbar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns whether the toolbar action should be defined in the user</span>
+<span class="sd">            interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_add_to_menu</span><span class="p">(</span><span class="n">action</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseTableEditor.perform"><a class="viewcode-back" href="../../../api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.BaseTableEditor.perform">[docs]</a>    <span class="k">def</span> <span class="nf">perform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">action_event</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Performs the action described by a specified Action object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">do_undoable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_perform</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_perform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="n">method_name</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">action</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">info</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">handler</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_menu_context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_menu_context</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">selection</span> <span class="o">=</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;selection&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">method_name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">method_name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">method_name</span> <span class="o">+=</span> <span class="s2">&quot;()&quot;</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nb">eval</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span> <span class="n">context</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="c1"># fixme: Should the exception be logged somewhere?</span>
+                <span class="k">pass</span>
+            <span class="k">return</span>
+
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">method</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">selection</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">on_perform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">action</span><span class="o">.</span><span class="n">on_perform</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">action</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#  Menu support methods:</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="BaseTableEditor.eval_when"><a class="viewcode-back" href="../../../api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.BaseTableEditor.eval_when">[docs]</a>    <span class="k">def</span> <span class="nf">eval_when</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Evaluates a condition within a defined context and sets a specified</span>
+<span class="sd">        object trait based on the result, which is assumed to be a Boolean.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">condition</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_menu_context</span><span class="p">))</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">trait</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#  Helper class for toolkit-specific editors to implement &#39;reversed&#39; option:</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="ReversedList"><a class="viewcode-back" href="../../../api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.ReversedList">[docs]</a><span class="k">class</span> <span class="nc">ReversedList</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A list whose order is the reverse of its input.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">list</span> <span class="o">=</span> <span class="nb">list</span>
+
+<div class="viewcode-block" id="ReversedList.insert"><a class="viewcode-back" href="../../../api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.ReversedList.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Inserts a value at a specified index in the list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">(</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ReversedList.index"><a class="viewcode-back" href="../../../api/traitsui.editors.table_editor.html#traitsui.editors.table_editor.ReversedList.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the index of the first occurrence of the specified value in</span>
+<span class="sd">            the list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="p">[:]</span>
+        <span class="nb">list</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the length of the list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the value at a specified index in the list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">(</span><span class="n">index</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">__setslice__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets a slice of a list to the contents of a specified sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">__setslice__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">values</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Deletes the item at a specified index.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the &quot;reversed&quot; value for a specified index.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="o">-</span> <span class="n">index</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="p">)</span> <span class="o">-</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">return</span> <span class="n">index</span></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2020, Enthought
+      </li>
+      <li>
+      Last updated on May 11, 2021.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
