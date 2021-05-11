@@ -99,6 +99,7 @@ Build and continuous integration
 * Use EDM 3.2.3 instead of EDM 3.2.1 (#1548)
 * Drop support for PyQt < 4.3.2 (#1607)
 * Remove CI test against Traits 6.0 (#1637)
+* explicitly install swig 3.0.12 for cron job (#1652)
 
 Test suite
 ~~~~~~~~~~
@@ -109,6 +110,7 @@ Test suite
 * skip video editor test without numpy / move numpy import to when it is needed
   / list numpy as test dependency (#1639)
 * skip test if no QtWebkit or QtWebEngine (#1649)
+* skip a couple wx test failures (#1656)
 
 Maintenance and code organization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
