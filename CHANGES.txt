@@ -101,6 +101,7 @@ Build and continuous integration
 * Drop support for PyQt < 4.3.2 (#1607)
 * Remove CI test against Traits 6.0 (#1637)
 * explicitly install swig 3.0.12 for cron job (#1652)
+* Explicitly require traits 6.2 and pyface 7.2 (#1666)
 
 Test suite
 ~~~~~~~~~~
