@@ -19,7 +19,7 @@ Highlights of this release
 Notes on upgrading
 ~~~~~~~~~~~~~~~~~~
 
-* This release of TraitsUI now depends on Traits 6.2+ and pyface 7.2+. Also,
+* This release of TraitsUI now depends on Traits 6.2+ and pyface 7.3+. Also,
   deprecated code / modules have been removed. Namely, the
   :mod:`traitsui.image <traitsui.image>` module which was moved to
   ``pyface.image``, ``editors_gen`` modules, Editor and EditorFactory factory
