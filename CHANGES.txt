@@ -10,7 +10,7 @@ Highlights of this release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * The migration from ``on_trait_change`` to ``observe`` is underway. As a
-  result, TraitsUI now requires Traits >= 6.1.
+  result, TraitsUI now requires Traits >= 6.2.
 * New display-only VideoEditor (currently only on Qt backend).
 * Exapnsion of features for the new ``UITester`` including the ability to
   inspect UI object visibility / enabledness. Also documentation for testing
@@ -19,14 +19,15 @@ Highlights of this release
 Notes on upgrading
 ~~~~~~~~~~~~~~~~~~
 
-* This release of TraitsUI now depends on Traits 6.1+. Also, deprecated code /
-  modules have been removed. Namely, the :mod:`traitsui.image <traitsui.image>`
-  module which was moved to ``pyface.image``, ``editors_gen`` modules, Editor
-  and EditorFactory factory methods on Toolkit objects, and more.  For a
-  complete list, see PRs in the "Removals" section below.  These were all
-  generally unused / deprecated for sometime. Also, importing directly from
-  ``traitsui.editors`` has been deprecated. Please update imports to import
-  directly from :mod:`traitsui.api` or :mod:`traitsui.editors.api`.
+* This release of TraitsUI now depends on Traits 6.2+ and pyface 7.2+. Also,
+  deprecated code / modules have been removed. Namely, the
+  :mod:`traitsui.image <traitsui.image>` module which was moved to
+  ``pyface.image``, ``editors_gen`` modules, Editor and EditorFactory factory
+  methods on Toolkit objects, and more.  For a complete list, see PRs in the
+  "Removals" section below.  These were all generally unused / deprecated for
+  sometime. Also, importing directly from ``traitsui.editors`` has been
+  deprecated. Please update imports to import directly from :mod:`traitsui.api`
+  or :mod:`traitsui.editors.api`.
 
 Detailed changes
 ~~~~~~~~~~~~~~~~
@@ -100,6 +101,7 @@ Build and continuous integration
 * Drop support for PyQt < 4.3.2 (#1607)
 * Remove CI test against Traits 6.0 (#1637)
 * explicitly install swig 3.0.12 for cron job (#1652)
+* Explicitly require traits 6.2 and pyface 7.2 (#1666)
 
 Test suite
 ~~~~~~~~~~
@@ -123,7 +125,7 @@ Maintenance and code organization
 * Remove clause that deviates from PEP8 backward compatibility convention in the testing package (#1481)
 * Formal editor interface for tooltips (#1493
 * Add instance choice classes to traitsui.api (#1495)
-* Undo/Redo cleanup (#1510
+* Undo/Redo cleanup (#1510)
 * start on_trait_change to observe migration (#1519, #1520, #1523, #1525, #1545, #1622, #1644)
 * Refactor TreeEditor _new_actions and _menu_new_node to avoid hacky eval (#1524)
 * Refactor _add_items method of _GroupPanel object (#1549)
