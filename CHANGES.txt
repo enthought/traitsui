@@ -8,7 +8,7 @@ Traits 6.2+ and Pyface 7.3+.
 
 Build and continuous integration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-* Explicitly require traits 6.2 and pyface 7.2 (#1666)
+* Explicitly require traits 6.2 and pyface 7.3 (#1666, #1668)
 
 Release 7.2.0
 -------------
