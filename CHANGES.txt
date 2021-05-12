@@ -1,6 +1,15 @@
 Traits UI Changelog
 ===================
 
+Release 7.2.1
+-------------
+TraitsUI 7.2.1 is a bugfix release which updates TraitsUI to explicitly require
+Traits 6.2+ and Pyface 7.3+.
+
+Build and continuous integration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* Explicitly require traits 6.2 and pyface 7.2 (#1666)
+
 Release 7.2.0
 -------------
 TraitsUI 7.2.0 is a minor release which includes numerous bug fixes,
@@ -101,7 +110,6 @@ Build and continuous integration
 * Drop support for PyQt < 4.3.2 (#1607)
 * Remove CI test against Traits 6.0 (#1637)
 * explicitly install swig 3.0.12 for cron job (#1652)
-* Explicitly require traits 6.2 and pyface 7.2 (#1666)
 
 Test suite
 ~~~~~~~~~~
