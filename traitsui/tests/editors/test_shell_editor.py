@@ -51,26 +51,24 @@ class TestShellEditor(BaseTestMixin, unittest.TestCase):
     def tearDown(self):
         BaseTestMixin.tearDown(self)
 
-    def test_no_share_dict(self):
+    def smoke_test(self, locals_type, share):
         shell_test = ShellTest()
         tester = UITester()
-        with tester.create_ui(shell_test, dict(view=get_dict_view())):
-            pass
+        if locals_type == "str":
+            with tester.create_ui(shell_test, dict(view=get_str_view(share))):
+                pass
+        else:
+            with tester.create_ui(shell_test, dict(view=get_dict_view(share))):
+                pass
+
+    def test_no_share_dict(self):
+        self.smoke_test("dict", False)
 
     def test_share_dict(self):
-        shell_test = ShellTest()
-        tester = UITester()
-        with tester.create_ui(shell_test, dict(view=get_dict_view(True))):
-            pass
+        self.smoke_test("dict", True)
 
     def test_no_share_str(self):
-        shell_test = ShellTest()
-        tester = UITester()
-        with tester.create_ui(shell_test, dict(view=get_str_view())):
-            pass
+        self.smoke_test("str", False)
 
     def test_share_str(self):
-        shell_test = ShellTest()
-        tester = UITester()
-        with tester.create_ui(shell_test, dict(view=get_str_view(True))):
-            pass
+        self.smoke_test("str", True)
