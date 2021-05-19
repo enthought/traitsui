@@ -12,35 +12,28 @@
 """
 
 from traits.api import (
-    HasTraits,
-    BaseTraitHandler,
-    Range,
-    Str,
     Any,
-    Int,
-    Instance,
-    Property,
+    BaseTraitHandler,
     Bool,
     Callable,
+    Dict,
     Enum,
+    HasTraits,
+    Instance,
+    Int,
+    Property,
     PrototypedFrom,
+    Range,
+    Str,
+    Tuple,
 )
 
-# CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
-# to avoid circular imports, as this EditorFactory will be part of
-# traits.ui.api as well.
-from ..view import View
-
-from ..item import Item
-
-from ..ui_traits import style_trait, AView
-
-from ..editor_factory import EditorFactory
-
-from ..toolkit import toolkit_object
-
-# Currently, this traits is used only for the wx backend.
-from ..helper import DockStyle
+from traitsui.editor_factory import EditorFactory
+from traitsui.helper import DockStyle
+from traitsui.item import Item
+from traitsui.toolkit import toolkit_object
+from traitsui.ui_traits import style_trait, AView
+from traitsui.view import View
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
@@ -92,6 +85,18 @@ class ListEditor(EditorFactory):
 
     #: Show a right-click context menu for the notebook tabs?  (Qt only)
     show_notebook_menu = Bool(False)
+
+    #: Factory that will be called to create and add a new element to this
+    #: list. If None, the default value for the trait of interest is used.
+    item_factory = Callable()
+
+    #: Tuple of positional arguments to be passed to the default factory
+    #: callable when creating new elements
+    item_factory_args = Tuple()
+
+    #: Dictionary of keyword arguments to be passed to the default factory
+    #: callable when creating new elements
+    item_factory_kwargs = Dict()
 
     # -- Notebook Specific Traits ---------------------------------------------
 

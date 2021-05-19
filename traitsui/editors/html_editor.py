@@ -14,9 +14,8 @@
 
 from traits.api import Bool, Str
 
-from ..basic_editor_factory import BasicEditorFactory
-
-from ..toolkit import toolkit_object
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.toolkit import toolkit_object
 
 # Callable that returns the editor to use in the UI.
 

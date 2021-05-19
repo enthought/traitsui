@@ -21,10 +21,9 @@ object:
 
 ::
 
-    # configure_traits.py -- Sample code to demonstrate
-    #                        configure_traits()
-    from traits.api import HasTraits, Str, Int
-    import traitsui
+    # configure_traits.py -- Sample code to demonstrate configure_traits()
+    from traits.api import HasTraits, Int, Str
+
 
     class SimpleEmployee(HasTraits):
         first_name = Str()
@@ -33,6 +32,7 @@ object:
 
         employee_number = Str()
         salary = Int()
+
 
     sam = SimpleEmployee()
     sam.configure_traits()
@@ -72,28 +72,8 @@ View object and passing it to the configure_traits() method:
 
 .. rubric:: Example 2: Using configure_traits() with a View object
 
-::
-
-    # configure_traits_view.py -- Sample code to demonstrate
-    #                             configure_traits()
-
-    from traits.api import HasTraits, Str, Int
-    from traitsui.api import View, Item
-    import traitsui
-
-    class SimpleEmployee(HasTraits):
-        first_name = Str()
-        last_name = Str()
-        department = Str()
-        employee_number = Str()
-        salary = Int()
-
-    view1 = View(Item(name = 'first_name'),
-                 Item(name = 'last_name'),
-                 Item(name = 'department'))
-
-    sam = SimpleEmployee()
-    sam.configure_traits(view=view1)
+.. literalinclude:: examples/configure_traits_view.py
+   :start-at: configure_traits_view.py
 
 The resulting window has the desired appearance:
 
@@ -347,30 +327,8 @@ Consider the following enhancement to Example 2:
 
 .. rubric:: Example 3: Using configure_traits() with a View and a Group object
 
-::
-
-    # configure_traits_view_group.py -- Sample code to demonstrate
-    #                                   configure_traits()
-    from traits.api import HasTraits, Str, Int
-    from traitsui.api import View, Item, Group
-    import traitsui
-
-    class SimpleEmployee(HasTraits):
-        first_name = Str()
-        last_name = Str()
-        department = Str()
-
-        employee_number = Str()
-        salary = Int()
-
-    view1 = View(Group(Item(name = 'first_name'),
-                       Item(name = 'last_name'),
-                       Item(name = 'department'),
-                       label = 'Personnel profile',
-                       show_border = True))
-
-    sam = SimpleEmployee()
-    sam.configure_traits(view=view1)
+.. literalinclude:: examples/configure_traits_view_group.py
+   :start-at: configure_traits_view_group.py
 
 The resulting window shows the same widgets as before, but they are now enclosed
 in a visible border with a text label:

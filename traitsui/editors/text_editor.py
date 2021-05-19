@@ -13,16 +13,10 @@
 
 from traits.api import Dict, Str, Any, Bool
 
-# CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
-# to avoid circular imports, as this EditorFactory will be part of
-# traits.ui.api as well.
-from ..view import View
-
-from ..group import Group
-
-from ..ui_traits import AView
-
-from ..editor_factory import EditorFactory
+from traitsui.editor_factory import EditorFactory
+from traitsui.group import Group
+from traitsui.ui_traits import AView
+from traitsui.view import View
 
 # -------------------------------------------------------------------------
 #  Define a simple identity mapping:

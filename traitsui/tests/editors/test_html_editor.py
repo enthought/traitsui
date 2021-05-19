@@ -11,14 +11,21 @@
 import unittest
 from unittest import mock
 
+try:
+    from pyface.qt import QtWebkit  # noqa: F401
+    NO_WEBKIT_OR_WEBENGINE = False
+except ImportError:
+    try:
+        from pyface.qt import QtWebEngine  # noqa: F401
+        NO_WEBKIT_OR_WEBENGINE = False
+    except ImportError:
+        NO_WEBKIT_OR_WEBENGINE = True
 from traits.api import HasTraits, Str
 from traitsui.api import HTMLEditor, Item, View
 from traitsui.tests._tools import (
     BaseTestMixin,
-    create_ui,
     is_qt,
     requires_toolkit,
-    reraise_exceptions,
     ToolkitName,
 )
 from traitsui.testing.api import MouseClick, TargetRegistry, UITester
@@ -225,6 +232,9 @@ def get_custom_ui_tester():
 
 # Run this against wx as well once enthought/traitsui#752 is fixed.
 @requires_toolkit([ToolkitName.qt])
+@unittest.skipIf(
+    NO_WEBKIT_OR_WEBENGINE, "Tests require either QtWebKit or QtWebEngine"
+)
 class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
     """ Test HTMLEditor """
 
@@ -239,8 +249,7 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
         # Smoke test to check init and dispose do not fail.
         model = HTMLModel()
         view = get_view(base_url_name="")
-        with reraise_exceptions(), \
-                create_ui(model, dict(view=view)):
+        with self.tester.create_ui(model, dict(view=view)):
             pass
 
     def test_base_url_changed(self):
@@ -248,11 +257,10 @@ class TestHTMLEditor(BaseTestMixin, unittest.TestCase):
         # fails because sync_value is unhooked in the base class.
         model = HTMLModel()
         view = get_view(base_url_name="model_base_url")
-        with reraise_exceptions():
-            with create_ui(model, dict(view=view)):
-                pass
-            # It is okay to modify base_url after the UI is closed
-            model.model_base_url = "/new_dir"
+        with self.tester.create_ui(model, dict(view=view)):
+            pass
+        # It is okay to modify base_url after the UI is closed
+        model.model_base_url = "/new_dir"
 
     @requires_toolkit([ToolkitName.qt])
     def test_open_internal_link(self):

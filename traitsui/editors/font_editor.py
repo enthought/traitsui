@@ -11,9 +11,8 @@
 """ Defines the font editor factory for all traits user interface toolkits.
 """
 
-from ..editor_factory import EditorFactory
-
-from ..toolkit import toolkit_object
+from traitsui.editor_factory import EditorFactory
+from traitsui.toolkit import toolkit_object
 
 # -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:

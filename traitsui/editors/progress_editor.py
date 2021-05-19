@@ -13,7 +13,7 @@
 
 from traits.api import Int, Bool, Str
 
-from ..editor_factory import EditorFactory
+from traitsui.editor_factory import EditorFactory
 
 
 class ProgressEditor(EditorFactory):

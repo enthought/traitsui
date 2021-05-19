@@ -101,35 +101,8 @@ pages that a user must navigate sequentially.
 
 .. rubric:: Example 3.1: Displaying a view the "wizard" style
 
-::
-
-  # wizard.py ---Example of a traits-based wizard UI
-
-  from traits.api import HasTraits, Str
-  from traitsui.api import Item, View, VGroup
-
-  class Person(HasTraits):
-      first_name = Str()
-      last_name = Str()
-
-      company = Str()
-      position = Str()
-
-      view = View(
-          VGroup(
-              Item("first_name"),
-              Item("last_name")
-          ),
-          VGroup(
-              Item("company"),
-              Item("position")
-          )
-      )
-
-  person = Person(first_name='Postman', last_name='Pat', company="Enthought",
-                  position="Software Developer")
-  person.configure_traits(kind='wizard')
-
+.. literalinclude:: examples/wizard.py
+   :start-at: wizard.py
 
 leads to the following 2 modal dialogs:
 
@@ -194,30 +167,8 @@ Consider the following variation on Example 3:
 
 .. rubric:: Example 4: Using a View object with buttons
 
-::
-
-    # configure_traits_view_buttons.py -- Sample code to demonstrate
-    #                                     configure_traits()
-
-    from traits.api import HasTraits, Str, Int
-    from traitsui.api import View, Item
-    from traitsui.menu import OKButton, CancelButton
-
-    class SimpleEmployee(HasTraits):
-        first_name = Str()
-        last_name = Str()
-        department = Str()
-
-        employee_number = Str()
-        salary = Int()
-
-    view1 = View(Item(name = 'first_name'),
-                 Item(name = 'last_name'),
-                 Item(name = 'department'),
-                 buttons = [OKButton, CancelButton])
-
-    sam = SimpleEmployee()
-    sam.configure_traits(view=view1)
+.. literalinclude:: examples/configure_traits_view_buttons.py
+   :start-at: configure_traits_view_buttons.py
 
 The resulting window has the same content as before, but now two buttons are
 displayed at the bottom: :guilabel:`OK` and :guilabel:`Cancel`:
@@ -257,16 +208,18 @@ from traitsui.menu and assigned to the buttons attribute:
 
 .. index:: OKCancelsButtons, ModalButtons, LiveButtons
 
-* OKCancelButtons = ``[OKButton, CancelButton ]``
-* ModalButtons = ``[ ApplyButton, RevertButton, OKButton, CancelButton, HelpButton ]``
-* LiveButtons = ``[ UndoButton, RevertButton, OKButton, CancelButton, HelpButton ]``
+* OKCancelButtons = ``[OKButton, CancelButton]``
+* ModalButtons = ``[ApplyButton, RevertButton, OKButton, CancelButton, HelpButton]``
+* LiveButtons = ``[UndoButton, RevertButton, OKButton, CancelButton, HelpButton]``
 
 Thus, one could rewrite the lines in Example 4 as follows, and the
 effect would be exactly the same::
 
     from traitsui.menu import OKCancelButtons
 
-                 buttons = OKCancelButtons
+        ...
+        buttons=OKCancelButtons,
+    )
 
 .. index:: NoButtons
 

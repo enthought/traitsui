@@ -15,6 +15,15 @@ import unittest
 
 from pyface.toolkit import toolkit_object
 from pyface.constant import OK
+try:
+    from pyface.qt import QtWebkit  # noqa: F401
+    NO_WEBKIT_OR_WEBENGINE = False
+except ImportError:
+    try:
+        from pyface.qt import QtWebEngine  # noqa: F401
+        NO_WEBKIT_OR_WEBENGINE = False
+    except ImportError:
+        NO_WEBKIT_OR_WEBENGINE = True
 from traits.api import HasTraits, Int
 from traitsui.api import HelpButton, HGroup, Item, spring, VGroup, View
 from traitsui.testing.api import MouseClick, UITester
@@ -28,7 +37,6 @@ from traitsui.tests._tools import (
 ModalDialogTester = toolkit_object(
     "util.modal_dialog_tester:ModalDialogTester"
 )
-no_modal_dialog_tester = ModalDialogTester.__name__ == "Unimplemented"
 
 
 class ObjectWithNumber(HasTraits):
@@ -78,7 +86,9 @@ class TestUIPanel(BaseTestMixin, unittest.TestCase):
 
     # Regression test for enthought/traitsui#1538
     @requires_toolkit([ToolkitName.qt])
-    @unittest.skipIf(no_modal_dialog_tester, "ModalDialogTester unavailable")
+    @unittest.skipIf(
+        NO_WEBKIT_OR_WEBENGINE, "Tests require either QtWebKit or QtWebEngine"
+    )
     def test_show_help(self):
 
         # This help window is not actually modal, when opened it will be the

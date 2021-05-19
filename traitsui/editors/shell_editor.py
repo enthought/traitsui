@@ -14,11 +14,9 @@
 from traits.api import Bool, Str, Event, Property
 from traits.observation.api import match
 
-from ..editor import Editor
-
-from ..basic_editor_factory import BasicEditorFactory
-
-from ..toolkit import toolkit_object
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.editor import Editor
+from traitsui.toolkit import toolkit_object
 
 
 class _ShellEditor(Editor):
@@ -58,7 +56,7 @@ class _ShellEditor(Editor):
         if locals is None:
             object = self.object
             shell.bind("self", object)
-            shell.observe(
+            shell.on_trait_change(
                 self.update_object, "command_executed", dispatch="ui"
             )
             if not isinstance(value, dict):
@@ -126,15 +124,15 @@ class _ShellEditor(Editor):
                 for name, value in dic.items():
                     locals[name] = value
 
-    def update_any(self, event):
+    def update_any(self, object, name, old, new):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         locals = self._shell.interpreter().locals
         if self._base_locals is None:
-            locals[event.name] = event.new
+            locals[name] = new
         else:
-            self.value[event.name] = event.new
+            self.value[name] = new
 
     def dispose(self):
         """ Disposes of the contents of an editor.

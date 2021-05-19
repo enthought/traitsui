@@ -28,7 +28,6 @@ from traits.api import (
 )
 
 from .editor_factory import EditorFactory
-from .editors.api import EnumEditor
 from .group import Group
 from .include import Include
 from .item import Item
@@ -517,7 +516,8 @@ class RuleTableFilter(TableFilter):
     def _get_table_editor(self, names):
         """ Returns a table editor to use for editing the filter.
         """
-        from .api import TableEditor
+        from traitsui.api import TableEditor
+        from traitsui.editors.api import EnumEditor
 
         return TableEditor(
             columns=generic_table_filter_rule_columns,
@@ -603,6 +603,7 @@ class MenuTableFilter(RuleTableFilter):
         """ Returns a table editor to use for editing the filter.
         """
         from .api import TableEditor
+        from .editors.api import EnumEditor
 
         names = self._object.editable_traits()
         name_editor = EnumEditor(values=names)

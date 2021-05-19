@@ -11,9 +11,9 @@
 """ Defines the set editor factory for all traits user interface toolkits.
 """
 
-from ..editor_factory import EditorWithListFactory
-
 from traits.api import Bool, Str
+
+from traitsui.editor_factory import EditorWithListFactory
 
 
 class SetEditor(EditorWithListFactory):

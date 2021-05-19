@@ -63,40 +63,8 @@ The following code generates the editors shown in Figure 21.
 
 .. rubric:: Example 14: Demonstration of array editors
 
-::
-
-    # array_editor.py -- Example of using array editors
-
-    import numpy as np
-    from traits.api import HasPrivateTraits, Array
-    from traitsui.api \
-        import View, ArrayEditor, Item
-    from traitsui.menu import NoButtons
-
-    class ArrayEditorTest ( HasPrivateTraits ):
-
-        three = Array(np.int, (3,3))
-        four  = Array(np.float,
-                      (4,4),
-                      editor = ArrayEditor(width = -50))
-
-        view = View( Item('three', label='3x3 Integer'),
-                     '_',
-                     Item('three',
-                          label='Integer Read-only',
-                          style='readonly'),
-                     '_',
-                     Item('four', label='4x4 Float'),
-                     '_',
-                     Item('four',
-                          label='Float Read-only',
-                          style='readonly'),
-                     buttons   = NoButtons,
-                     resizable = True )
-
-
-    if __name__ == '__main__':
-        ArrayEditorTest().configure_traits()
+.. literalinclude:: examples/array_editor.py
+   :start-at: array_editor.py
 
 BooleanEditor()
 ```````````````
@@ -130,7 +98,7 @@ text input in place of that value. For example, to create a Boolean editor that
 accepts only yes and no as appropriate text values, you might use the following
 expression::
 
-    editor=BooleanEditor(mapping={"yes":True, "no":False})
+    editor=BooleanEditor(mapping={"yes": True, "no": False})
 
 Note that in this case, the strings True and False would *not* be acceptable as
 text input.
@@ -546,28 +514,8 @@ tags, and then strips out the tags.
 
 .. rubric:: Example 15: Enumeration editor with mapped values
 
-::
-
-    # enum_editor.py -- Example of using an enumeration editor
-    from traits.api import HasTraits, Enum
-    from traitsui.api import EnumEditor
-
-    Class EnumExample(HasTraits):
-        priority = Enum('Medium', 'Highest',
-                                  'High',
-                                  'Medium',
-                                  'Low',
-                                  'Lowest')
-
-        view = View( Item(name='priority',
-                          editor=EnumEditor(values={
-                              'Highest' : '1:Highest',
-                              'High'    : '2:High',
-                              'Medium'  : '3:Medium',
-                              'Low'     : '4:Low',
-                              'Lowest'  : '5:Lowest', })))
-
-    EnumExample().configure_traits()
+.. literalinclude:: examples/enum_editor.py
+   :start-at: enum_editor.py
 
 The enumeration editor strips the characters up to and including the colon. It
 assumes that all the items have the colon in the same position; therefore, if
@@ -904,64 +852,8 @@ pick a captain and edit that person's information.
 
 Example 16: Instance editor with instance selection
 
-::
-
-    # instance_editor_selection.py -- Example of an instance editor
-    #                                 with instance selection
-
-    from traits.api    \
-        import HasStrictTraits, Int, Instance, List, Regex, Str
-    from traitsui.api \
-        import View, Item, InstanceEditor
-
-    class Person(HasStrictTraits):
-        name = Str()
-        age = Int()
-        phone = Regex(
-            value = '000-0000',
-            regex = '\d\d\d[-]\d\d\d\d',
-        )
-
-        traits_view = View('name', 'age', 'phone')
-
-    people = [
-      Person(name= 'Dave', age=39, phone='555-1212'),
-      Person(name='Mike', age=28, phone='555-3526'),
-      Person(name='Joe', age=34, phone='555-6943'),
-      Person(name='Tom', age=22, phone='555-7586'),
-      Person(name='Dick', age=63, phone='555-3895'),
-      Person(name='Harry' age=46, phone='555-3285'),
-      Person(name='Sally', age=43, phone='555-8797'),
-      Person(name='Fields', age=31, phone='555-3547')
-    ]
-
-    class Team(HasStrictTraits):
-
-        name = Str()
-        captain = Instance(Person)
-        roster = List(Person)
-
-        traits_view = View(
-            Item('name'),
-            Item('_'),
-            Item(
-                'captain',
-                label='Team Captain',
-                editor = InstanceEditor(
-                    name = 'roster',
-                    editable = True),
-                    style = 'custom',
-                ),
-            buttons = ['OK']
-        )
-
-    if __name__ == '__main__':
-        team = Team(
-            name = 'Vultures',
-            captain = people[0],
-            roster  = people
-        )
-        team.configure_traits()
+.. literalinclude:: examples/instance_editor_selection.py
+   :start-at: instance_editor_selection.py
 
 .. figure:: images/ui_for_ex16.png
    :alt: Dialog box for a "team", with drop-list selection for "Team Captain"
