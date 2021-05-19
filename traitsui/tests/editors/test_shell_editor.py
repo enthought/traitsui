@@ -24,6 +24,7 @@ class ShellTest(HasTraits):
     locals_str = Str()
     locals_dict = Dict(Str, Any)
 
+
 def get_str_view(share=False):
     return View(
         Item(
@@ -40,6 +41,7 @@ def get_dict_view(share=False):
             editor=ShellEditor(share=share),
         )
     )
+
 
 class TestShellEditor(BaseTestMixin, unittest.TestCase):
 
