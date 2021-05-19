@@ -127,10 +127,11 @@ class _ShellEditor(Editor):
                 for name, value in dic.items():
                     locals[name] = value
 
-    def update_any(self, object, name, old, new):
+    def update_any(self, event):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
+        name, new = event.name, event.new
         locals = self._shell.interpreter().locals
         if self._base_locals is None:
             locals[name] = new
