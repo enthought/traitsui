@@ -52,17 +52,20 @@ class _ShellEditor(Editor):
             locals = value
         self._shell = shell = PythonShell(parent)
         self.control = shell.control
-        shell.interpreter().locals = locals
+        if locals:
+            for item in locals.items():
+                shell.bind(*item)
         if locals is None:
             object = self.object
             shell.bind("self", object)
-            shell.on_trait_change(
+            shell.observe(
                 self.update_object, "command_executed", dispatch="ui"
             )
             if not isinstance(value, dict):
+                self._any_trait_observer = lambda name, ctrait: True
                 object.observe(
                     self.update_any,
-                    match(lambda name, ctrait: True),
+                    match(self._any_trait_observer),
                     dispatch="ui"
                 )
             else:
@@ -144,7 +147,7 @@ class _ShellEditor(Editor):
             if self._base_locals is None:
                 self.object.observe(
                     self.update_any,
-                    match(lambda name, ctrait: True),
+                    match(self._any_trait_observer),
                     remove=True,
                     dispatch="ui"
                 )
