@@ -12,6 +12,7 @@
 """
 
 from traits.api import Bool, Str, Event, Property
+from traits.observation.api import match
 
 from traitsui.basic_editor_factory import BasicEditorFactory
 from traitsui.editor import Editor
@@ -45,19 +46,28 @@ class _ShellEditor(Editor):
         from pyface.python_shell import PythonShell
 
         locals = None
+        self._base_locals = None
         value = self.value
         if self.factory.share and isinstance(value, dict):
             locals = value
-        self._shell = shell = PythonShell(parent, locals=locals)
+        self._shell = shell = PythonShell(parent)
         self.control = shell.control
+        if locals:
+            for item in locals.items():
+                shell.bind(*item)
         if locals is None:
             object = self.object
             shell.bind("self", object)
-            shell.on_trait_change(
+            shell.observe(
                 self.update_object, "command_executed", dispatch="ui"
             )
             if not isinstance(value, dict):
-                object.on_trait_change(self.update_any, dispatch="ui")
+                self._any_trait_observer = lambda name, ctrait: True
+                object.observe(
+                    self.update_any,
+                    match(self._any_trait_observer),
+                    dispatch="ui"
+                )
             else:
                 self._base_locals = locals = {}
                 for name in self._shell.interpreter().locals.keys():
@@ -117,10 +127,11 @@ class _ShellEditor(Editor):
                 for name, value in dic.items():
                     locals[name] = value
 
-    def update_any(self, object, name, old, new):
+    def update_any(self, event):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
+        name, new = event.name, event.new
         locals = self._shell.interpreter().locals
         if self._base_locals is None:
             locals[name] = new
@@ -130,11 +141,17 @@ class _ShellEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        self._shell.on_trait_change(
-            self.update_object, "command_executed", remove=True
-        )
-        if self._base_locals is None:
-            self.object.on_trait_change(self.update_any, remove=True)
+        if not (self.factory.share and isinstance(self.value, dict)):
+            self._shell.observe(
+                self.update_object, "command_executed", remove=True, dispatch="ui"
+            )
+            if self._base_locals is None:
+                self.object.observe(
+                    self.update_any,
+                    match(self._any_trait_observer),
+                    remove=True,
+                    dispatch="ui"
+                )
 
         super().dispose()
 
