@@ -343,7 +343,6 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
                 editor=RangeEditor(format_func=num_to_time)
             )
         )
-        model.configure_traits(view=view)
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             float_value_field = tester.find_by_name(ui, "float_value")
