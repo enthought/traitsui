@@ -1,0 +1,1 @@
+Add RangeEditor support for format_func (#1684)
