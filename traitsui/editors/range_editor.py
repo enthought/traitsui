@@ -301,7 +301,7 @@ class RangeEditor(EditorFactory):
             return self.format_func(value)
 
         if self.format != "":
-            return self.format_str % value
+            return self.format % value
 
         if format_func is not None:
             return format_func(value)
