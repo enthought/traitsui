@@ -350,3 +350,19 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(
                 float_value_text.inspect(DisplayedText()), "00:00.1"
             )
+
+    def test_format(self):
+        model = RangeModel()
+        view = View(
+            Item(
+                "float_value",
+                editor=RangeEditor(format="%s:%s")
+            )
+        )
+        tester = UITester()
+        with tester.create_ui(model, dict(view=view)) as ui:
+            float_value_field = tester.find_by_name(ui, "float_value")
+            float_value_text = float_value_field.locate(Textbox())
+            self.assertEqual(
+                float_value_text.inspect(DisplayedText()), "0.1:0.1"
+            )
