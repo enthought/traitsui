@@ -284,6 +284,30 @@ class RangeEditor(EditorFactory):
         )
         return super().custom_editor(ui, object, name, description, parent)
 
+    def string_value(self, value, format_func=None):
+        """ Returns the text representation of a specified object trait value.
+
+        If the **format_func** attribute is set on the editor factory, then
+        this method calls that function to do the formatting.  If the
+        **format** attribute is set on the editor factory, then this
+        method uses that string for formatting. If neither attribute is
+        set, then this method just calls the appropriate text type to format.
+
+        This is slightly modified for the base EditorFactory inplementation to
+        use this class' ``format`` trait, as opposed to the ``format_str``
+        trait defined on the base class.
+        """
+        if self.format_func is not None:
+            return self.format_func(value)
+
+        if self.format != "":
+            return self.format_str % value
+
+        if format_func is not None:
+            return format_func(value)
+
+        return str(value)
+
 
 # This alias is deprecated and will be removed in TraitsUI 8.
 ToolkitEditorFactory = RangeEditor
