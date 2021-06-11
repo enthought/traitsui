@@ -111,7 +111,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         try:
             if not (self.low <= fvalue <= self.high):
                 fvalue = self.low
-            fvalue_text = self.format % fvalue
+            fvalue_text = self.factory.string_value(fvalue)
         except:
             fvalue_text = ""
             fvalue = self.low
@@ -153,11 +153,11 @@ class SimpleSliderEditor(BaseRangeEditor):
 
         low_label = factory.low_label
         if factory.low_name != "":
-            low_label = self.format % self.low
+            low_label = self.factory.string_value(self.low)
 
         high_label = factory.high_label
         if factory.high_name != "":
-            high_label = self.format % self.high
+            high_label = self.factory.string_value(self.high)
 
         self._label_lo.setText(low_label)
         self._label_hi.setText(high_label)
@@ -171,7 +171,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         """ Handles the user changing the current slider value.
         """
         value = self._convert_from_slider(pos)
-        self.control.text.setText(self.format % value)
+        self.control.text.setText(self.factory.string_value(value))
         try:
             self.value = value
         except Exception as exc:
@@ -221,7 +221,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         low = self.low
         high = self.high
         try:
-            text = self.format % value
+            text = self.factory.string_value(value)
             1 / (low <= value <= high)
         except:
             text = ""
@@ -250,7 +250,7 @@ class SimpleSliderEditor(BaseRangeEditor):
                 self.value = int(low)
 
         if self._label_lo is not None:
-            self._label_lo.setText(self.format % low)
+            self._label_lo.setText(self.factory.string_value(low))
             self.update_editor()
 
     def _high_changed(self, high):
@@ -261,7 +261,7 @@ class SimpleSliderEditor(BaseRangeEditor):
                 self.value = int(high)
 
         if self._label_hi is not None:
-            self._label_hi.setText(self.format % high)
+            self._label_hi.setText(self.factory.string_value(high))
             self.update_editor()
 
     def _convert_to_slider(self, value):
