@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        toolkit: ['pyqt', 'pyqt5', 'pyside2']
+        toolkit: ['pyqt5', 'pyside2']
         include:
           - os: ubuntu-latest
             toolkit: 'null'
