@@ -1,0 +1,1 @@
+Stop testing against pyqt4 on CI (#1686)
