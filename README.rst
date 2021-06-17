@@ -75,9 +75,8 @@ If you want to run traitsui, you must also install:
 
 You will also need one of the following backends:
 
-- PyQt
 - wxPython
-- PySide
+- PySide2
 - PyQt5
 
 Backends have additional dependencies and there are optional dependencies on
