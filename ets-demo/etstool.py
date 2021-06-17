@@ -60,7 +60,7 @@ using::
     python etstool.py test_all
 
 Currently supported runtime values are ``3.6``, and currently
-supported toolkits are ``null``, ``pyqt``, ``pyqt5``, ``pyside2`` and ``wx``.
+supported toolkits are ``null``, ``pyqt5``, ``pyside2`` and ``wx``.
 Not all combinations of toolkits and runtimes will work, but the tasks will
 fail with a clear error if that is the case.
 
@@ -90,7 +90,7 @@ from contextlib import contextmanager
 import click
 
 supported_combinations = {
-    '3.6': {'pyside2', 'pyqt', 'pyqt5', 'wx', 'null'},
+    '3.6': {'pyside2', 'pyqt5', 'wx', 'null'},
 }
 
 # Default Python version to use in the comamnds below if none is specified.
@@ -119,10 +119,6 @@ extra_dependencies = {
     'pyside2': {
         "pygments",
     },
-    'pyqt': {
-        'pyqt<4.12',  # FIXME: build 1 of 4.12.1 appears to be bad
-        'pygments',
-    },
     'pyqt5': {
         'pyqt5',
         'pygments',
@@ -138,7 +134,6 @@ doc_dependencies = {}
 
 environment_vars = {
     'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
-    "pyqt": {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyqt'},
     'pyqt5': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt5"},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},

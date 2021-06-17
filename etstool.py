@@ -52,7 +52,7 @@ using::
     python etstool.py test_all
 
 Currently supported runtime values are ``3.6``, and currently
-supported toolkits are ``null``, ``pyqt``, ``pyqt5``, ``pyside`` and ``wx``.
+supported toolkits are ``null``, ``pyqt5``, ``pyside2`` and ``wx``.
 Not all combinations of toolkits and runtimes will work, but the tasks will
 fail with a clear error if that is the case.
 
@@ -103,7 +103,7 @@ from tempfile import mkdtemp
 import click
 
 supported_combinations = {
-    '3.6': {'pyside2', 'pyqt', 'pyqt5', 'wx', 'null'},
+    '3.6': {'pyside2', 'pyqt5', 'wx', 'null'},
 }
 
 # Default Python version to use in the comamnds below if none is specified.
@@ -131,10 +131,6 @@ source_dependencies = {
 extra_dependencies = {
     # XXX once pyside2 is available in EDM, we will want it here
     'pyside2': {
-        'pygments',
-    },
-    'pyqt': {
-        'pyqt<4.12',  # FIXME: build 1 of 4.12.1 appears to be bad
         'pygments',
     },
     'pyqt5': {
@@ -187,7 +183,6 @@ doc_ignore = {
 
 environment_vars = {
     'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
-    'pyqt': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt"},
     'pyqt5': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt5"},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
