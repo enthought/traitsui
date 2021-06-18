@@ -18,10 +18,6 @@ import wx
 from pyface.wx.drag_and_drop import PythonDropTarget
 from traits.api import HasTraits, Instance, Property
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.instance_editor file.
-from traitsui.editors.instance_editor import ToolkitEditorFactory
 from traitsui.ui_traits import AView
 from traitsui.helper import user_name_for
 from traitsui.handler import Handler
@@ -199,7 +195,7 @@ class CustomEditor(Editor):
                 self.rebuild_items, "values_items", remove=True
             )
 
-        super(CustomEditor, self).dispose()
+        super().dispose()
 
     def create_editor(self, parent, sizer):
         """ Creates the editor control.
@@ -502,7 +498,7 @@ class SimpleEditor(CustomEditor):
             self._dialog_ui.dispose()
             self._dialog_ui = None
 
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def edit_instance(self, event):
         """ Edit the contents of the object trait when the user clicks the

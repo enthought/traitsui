@@ -12,8 +12,9 @@
 """
 
 from traits.api import Str
-from ..editor_factory import EditorFactory
-from ..ui_traits import AView
+
+from traitsui.editor_factory import EditorFactory
+from traitsui.ui_traits import AView
 
 
 class TimeEditor(EditorFactory):

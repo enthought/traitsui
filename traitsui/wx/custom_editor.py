@@ -15,11 +15,6 @@ based custom control.
 
 import wx
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.custom_editor file.
-from traitsui.editors.custom_editor import ToolkitEditorFactory
-
 from .editor import Editor
 
 # -------------------------------------------------------------------------

@@ -60,7 +60,7 @@ if __name__ == "__main__":
                         resizable=True)
 
         def __init__(self):
-            super(Test, self).__init__()
+            super().__init__()
             axes = self.figure.add_subplot(111)
             t = linspace(0, 2*pi, 200)
             axes.plot(sin(t)*(1+0.5*cos(11*t)), cos(t)*(1+0.5*cos(11*t)))

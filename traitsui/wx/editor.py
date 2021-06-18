@@ -209,7 +209,7 @@ class EditorWithList(Editor):
             self._list_updated, self.list_name + "[]", remove=True
         )
 
-        super(EditorWithList, self).dispose()
+        super().dispose()
 
     def _list_updated(self):
         """ Handles the monitored trait being updated.
@@ -254,4 +254,4 @@ class EditorFromView(Editor):
         """
         self._ui.dispose()
 
-        super(EditorFromView, self).dispose()
+        super().dispose()

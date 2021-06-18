@@ -13,10 +13,10 @@
 
 from traits.api import Int, Bool, Str
 
-from ..editor_factory import EditorFactory
+from traitsui.editor_factory import EditorFactory
 
 
-class ToolkitEditorFactory(EditorFactory):
+class ProgressEditor(EditorFactory):
     """ Editor factory for code editors.
     """
 
@@ -55,5 +55,5 @@ class ToolkitEditorFactory(EditorFactory):
     show_percent = Bool(False)
 
 
-# Define the Code Editor class.
-ProgressEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = ProgressEditor

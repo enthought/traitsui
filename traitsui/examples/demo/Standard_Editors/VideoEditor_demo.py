@@ -9,10 +9,11 @@
 # Thanks for using Enthought open source!
 
 """
-VideoEditor
+Demonstrates a 'display only' video editor for Qt5+.
 
-Demonstrates a 'display only' video editor for Qt5+
+Please refer to the `VideoEditor API docs`_ for further information.
 
+.. _VideoEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.video_editor.html#traitsui.editors.video_editor.VideoEditor
 """
 import numpy as np
 from PIL import Image
@@ -20,7 +21,7 @@ from pyface.qt.QtGui import QImage
 from traits.api import (
     Bool, Button, Callable, Float, HasTraits, Range, Str, observe
 )
-from traitsui.api import ButtonEditor, HGroup, Item, UItem, View
+from traitsui.api import ButtonEditor, ContextValue, HGroup, Item, UItem, View
 from traitsui.editors.video_editor import MediaStatus, PlayerState, VideoEditor
 
 
@@ -120,16 +121,17 @@ class VideoEditorDemo(HasTraits):
         UItem(
             'video_url',
             editor=VideoEditor(
-                state='state',
-                position='position',
-                duration='duration',
-                video_error='error',
-                media_status='status',
-                buffer='buffer',
-                muted='muted',
-                volume='volume',
-                playback_rate='playback_rate',
-                image_func='image_func'
+                state=ContextValue('state'),
+                position=ContextValue('position'),
+                duration=ContextValue('duration'),
+                video_error=ContextValue('error'),
+                media_status=ContextValue('status'),
+                buffer=ContextValue('buffer'),
+                muted=ContextValue('muted'),
+                volume=ContextValue('volume'),
+                playback_rate=ContextValue('playback_rate'),
+                image_func=ContextValue('image_func'),
+                notify_interval=0.5,
             ),
         ),
         HGroup(

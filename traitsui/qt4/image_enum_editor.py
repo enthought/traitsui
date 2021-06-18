@@ -15,11 +15,6 @@
 
 from pyface.qt import QtCore, QtGui, is_qt5
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.image_enum_editor file.
-from traitsui.editors.image_enum_editor import ToolkitEditorFactory
-
 from .editor import Editor
 from .enum_editor import BaseEditor as BaseEnumEditor
 from .enum_editor import SimpleEditor as SimpleEnumEditor
@@ -50,7 +45,7 @@ class ReadonlyEditor(BaseEditor, BaseEnumEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(ReadonlyEditor, self).init(parent)
+        super().init(parent)
 
         self.control = QtGui.QLabel()
         self.control.setPixmap(self.get_pixmap(self.str_value))
@@ -296,7 +291,7 @@ class ImageEnumModel(QtCore.QAbstractTableModel):
     def __init__(self, editor, parent):
         """ Reimplemented to store the editor.
         """
-        super(ImageEnumModel, self).__init__(parent)
+        super().__init__(parent)
         self._editor = editor
 
     def rowCount(self, mi):

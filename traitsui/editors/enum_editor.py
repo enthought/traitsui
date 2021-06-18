@@ -15,28 +15,23 @@ traits user interface toolkits.
 import os
 import sys
 
-from ..editor_factory import EditorWithListFactory
-
 from traits.api import Any, Range, Enum, Bool
 
-from ..toolkit import toolkit_object
+from traitsui.editor_factory import EditorWithListFactory
+from traitsui.toolkit import toolkit_object
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
 # -------------------------------------------------------------------------
 
-# Supported display modes for a custom style editor
+#: Supported display modes for a custom style editor
 Mode = Enum("radio", "list")
 
-# Supported display modes for a custom style editor
+#: Supported display modes for a custom style editor
 CompletionMode = Enum("inline", "popup")
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorWithListFactory):
+class EnumEditor(EditorWithListFactory):
     """ Editor factory for enumeration editors.
     """
 
@@ -82,8 +77,8 @@ class ToolkitEditorFactory(EditorWithListFactory):
                     raise_exceptions=True,
                 )
         except:
-            return super(ToolkitEditorFactory, self)._get_custom_editor_class()
+            return super()._get_custom_editor_class()
 
 
-# Define the EnumEditor class.
-EnumEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = EnumEditor

@@ -28,13 +28,12 @@ from pyface.qt import QtCore, QtGui
 
 from pyface.api import ImageResource
 
-from traits.api import Str, Any, Bool, Dict, Instance, List
+from traits.api import (
+    Any, Bool, Callable, Dict, Instance, List, Str, TraitError
+)
 from traits.trait_base import user_name_for, xgetattr
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.list_editor file.
-from traitsui.editors.list_editor import ListItemProxy, ToolkitEditorFactory
+from traitsui.editors.list_editor import ListItemProxy
 
 from .editor import Editor
 from .helper import IconButton
@@ -160,7 +159,7 @@ class SimpleEditor(Editor):
             self.update_editor_item, extended_name + "_items?", remove=True
         )
 
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -310,8 +309,20 @@ class SimpleEditor(Editor):
         list, index = self.get_info()
         index += offset
         item_trait = self._trait_handler.item_trait
-        value = item_trait.default_value_for(self.object, self.name)
-        self.value = list[:index] + [value] + list[index:]
+        if self.factory.item_factory:
+            value = self.factory.item_factory(
+                *self.factory.item_factory_args,
+                **self.factory.item_factory_kwargs
+            )
+        else:
+            value = item_trait.default_value_for(self.object, self.name)
+        try:
+            self.value = list[:index] + [value] + list[index:]
+        # if the default new item is invalid, we just don't add it to the list.
+        # traits will still give an error message, but we don't want to crash
+        except TraitError:
+            from traitsui.api import raise_to_debug
+            raise_to_debug()
         self.update_editor()
 
     def add_before(self):
@@ -622,7 +633,7 @@ class NotebookEditor(Editor):
         )
         self.close_all()
 
-        super(NotebookEditor, self).dispose()
+        super().dispose()
 
     def update_page_name(self, object, name, old, new):
         """ Handles the trait defining a particular page's name being changed.

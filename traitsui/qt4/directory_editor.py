@@ -22,11 +22,6 @@
 
 from pyface.qt import QtGui
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.custom_editor file.
-from traitsui.editors.directory_editor import ToolkitEditorFactory
-
 from .file_editor import (
     SimpleEditor as SimpleFileEditor,
     CustomEditor as CustomFileEditor,
@@ -56,7 +51,7 @@ class CustomEditor(CustomFileEditor):
     """
 
     def init(self, parent):
-        super(CustomEditor, self).init(parent)
+        super().init(parent)
         self._model.setNameFilterDisables(True)
         self._model.setNameFilters([""])
 

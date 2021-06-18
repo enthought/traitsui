@@ -25,21 +25,13 @@ from traits.api import (
     Undefined,
 )
 
-# CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
-# to avoid circular imports, as this EditorFactory will be part of
-# traits.ui.api as well.
-from ..view import View
 
-from ..editor_factory import EditorFactory
-
-from ..toolkit import toolkit_object
-
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
+from traitsui.editor_factory import EditorFactory
+from traitsui.toolkit import toolkit_object
+from traitsui.view import View
 
 
-class ToolkitEditorFactory(EditorFactory):
+class RangeEditor(EditorFactory):
     """ Editor factory for range editors.
     """
 
@@ -279,9 +271,7 @@ class ToolkitEditorFactory(EditorFactory):
         self._low_value, self._high_value, self.is_float = self._get_low_high(
             ui
         )
-        return super(RangeEditor, self).simple_editor(
-            ui, object, name, description, parent
-        )
+        return super().simple_editor(ui, object, name, description, parent)
 
     def custom_editor(self, ui, object, name, description, parent):
         """ Generates an editor using the "custom" style.
@@ -292,10 +282,8 @@ class ToolkitEditorFactory(EditorFactory):
         self._low_value, self._high_value, self.is_float = self._get_low_high(
             ui
         )
-        return super(RangeEditor, self).custom_editor(
-            ui, object, name, description, parent
-        )
+        return super().custom_editor(ui, object, name, description, parent)
 
 
-# Define the RangeEditor class
-RangeEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = RangeEditor

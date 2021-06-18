@@ -65,7 +65,7 @@ class ThreadDemo(HasTraits):
     )
 
     def __init__(self, **traits):
-        super(HasTraits, self).__init__(**traits)
+        super().__init__(**traits)
 
         # Set up the notification handler for the 'Create Thread' button so
         # that it is run on a new thread:

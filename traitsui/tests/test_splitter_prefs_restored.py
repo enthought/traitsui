@@ -28,7 +28,7 @@ class TmpClass(Handler):
     bb = Int(100)
 
     def init(self, ui_info):
-        super(TmpClass, self).init(ui_info)
+        super().init(ui_info)
         self.save_prefs(ui_info)
 
     def reset_prefs(self, ui_info):

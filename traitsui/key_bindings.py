@@ -106,7 +106,7 @@ class KeyBindings(HasPrivateTraits):
     parent = Instance("KeyBindings", transient=True)
 
     #: The root of the KeyBindings tree this object is part of:
-    root = Property(depends_on="parent")
+    root = Property(observe="parent")
 
     #: The child KeyBindings of this object (if any):
     children = List(transient=True)
@@ -140,7 +140,7 @@ class KeyBindings(HasPrivateTraits):
     )
 
     def __init__(self, *bindings, **traits):
-        super(KeyBindings, self).__init__(**traits)
+        super().__init__(**traits)
 
         if (len(bindings) == 1) and isinstance(bindings[0], SequenceTypes):
             bindings = bindings[0]

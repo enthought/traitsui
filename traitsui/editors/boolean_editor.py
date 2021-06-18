@@ -12,13 +12,8 @@
 """
 from traits.api import Dict, Str, Any
 
-# CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
-# to avoid circular imports, as this EditorFactory will be part of
-# traits.ui.api as well.
-
-from ..view import View
-
-from .text_editor import ToolkitEditorFactory as EditorFactory
+from traitsui.editors.text_editor import TextEditor
+from traitsui.view import View
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
@@ -42,12 +37,8 @@ mapping_trait = Dict(
     },
 )
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorFactory):
+class BooleanEditor(TextEditor):
     """ Editor factory for Boolean editors.
     """
 
@@ -79,5 +70,5 @@ class ToolkitEditorFactory(EditorFactory):
         return self.simple_editor_class
 
 
-# Define the BooleanEditor class
-BooleanEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = BooleanEditor

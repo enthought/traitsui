@@ -32,18 +32,9 @@ from pyface.qt import QtCore, QtGui
 
 from traits.api import Bool, Property
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.enum_editor file.
-from traitsui.editors.enum_editor import ToolkitEditorFactory
 from traitsui.helper import enum_values_changed
 from .constants import OKColor, ErrorColor
 from .editor import Editor
-
-
-# default formatting function (would import from string, but not in Python 3)
-capitalize = lambda s: s.capitalize()
-
 
 completion_mode_map = {
     "popup": QtGui.QCompleter.PopupCompletion,
@@ -123,7 +114,7 @@ class BaseEditor(Editor):
                 self._values_changed, "values", remove=True, dispatch="ui"
             )
 
-        super(BaseEditor, self).dispose()
+        super().dispose()
 
     # -------------------------------------------------------------------------
     #  Private interface
@@ -168,7 +159,7 @@ class SimpleEditor(BaseEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(SimpleEditor, self).init(parent)
+        super().init(parent)
 
         self.control = control = self.create_combo_box()
         control.addItems(self.names)
@@ -229,9 +220,7 @@ class SimpleEditor(BaseEditor):
         self.update_editor()
 
     def set_size_policy(self, direction, resizable, springy, stretch):
-        super(SimpleEditor, self).set_size_policy(
-            direction, resizable, springy, stretch
-        )
+        super().set_size_policy(direction, resizable, springy, stretch)
 
         if (direction == QtGui.QBoxLayout.LeftToRight and springy) or (
             direction != QtGui.QBoxLayout.LeftToRight and resizable
@@ -323,7 +312,7 @@ class RadioEditor(BaseEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(RadioEditor, self).init(parent)
+        super().init(parent)
 
         self.control = QtGui.QWidget()
         layout = QtGui.QGridLayout(self.control)
@@ -409,7 +398,7 @@ class RadioEditor(BaseEditor):
     def create_button(self, name):
         """ Returns the QAbstractButton used for the radio button.
         """
-        label = self.string_value(name, capitalize)
+        label = self.string_value(name, str.capitalize)
         return QtGui.QRadioButton(label)
 
     #  Signal handlers -------------------------------------------------------
@@ -436,7 +425,7 @@ class ListEditor(BaseEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super(ListEditor, self).init(parent)
+        super().init(parent)
 
         self.control = QtGui.QListWidget()
         self.control.currentTextChanged.connect(self.update_object)

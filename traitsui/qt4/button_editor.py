@@ -25,13 +25,9 @@
 
 
 from pyface.qt import QtCore, QtGui
+from pyface.api import Image
 
-from traits.api import Str, List, Str, on_trait_change
-
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.button_editor file.
-from traitsui.editors.button_editor import ToolkitEditorFactory
+from traits.api import Str, List, Str, observe, on_trait_change
 
 from .editor import Editor
 
@@ -99,7 +95,7 @@ class SimpleEditor(Editor):
 
         if self.control is not None:
             self.control.clicked.disconnect(self.update_object)
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def _label_changed(self, label):
         self.control.setText(self.string_value(label))
@@ -146,6 +142,8 @@ class SimpleEditor(Editor):
 class CustomEditor(SimpleEditor):
     """ Custom style editor for a button, which can contain an image.
     """
+    #: The button image
+    image = Image()
 
     #: The mapping of button styles to Qt classes.
     _STYLE_MAP = {
@@ -173,8 +171,14 @@ class CustomEditor(SimpleEditor):
             self.control.setIcon(factory.image.create_icon())
 
         self.sync_value(self.factory.label_value, "label", "from")
+        self.sync_value(self.factory.image_value, "image", "from")
         self.control.clicked.connect(self.update_object)
         self.set_tooltip()
+
+    @observe("image")
+    def _image_updated(self, event):
+        image = event.new
+        self.control.setIcon(image.create_icon())
 
     def dispose(self):
         """ Disposes of the contents of an editor.

@@ -203,10 +203,6 @@ SEARCHER.skip_file_if(
     os.path.join(TUTORIALS, "view_standalone.py"),
     lambda: True, "Require wx and is blocking.",
 )
-SEARCHER.skip_file_if(
-    os.path.join(TUTORIALS, "wizard.py"),
-    is_qt, "Failing on Qt, see enthought/traitsui#773",
-)
 
 # Validate configuration.
 SEARCHER.validate()

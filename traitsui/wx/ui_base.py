@@ -125,7 +125,7 @@ class BaseDialog(_BasePanel):
 
                 set_text = self._set_status_text(control, i)
                 name = item.name
-                set_text(ui.get_extended_value(name))
+                control.SetStatusText(ui.get_extended_value(name), i)
                 col = name.find(".")
                 object = "object"
                 if col >= 0:

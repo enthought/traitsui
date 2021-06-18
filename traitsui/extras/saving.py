@@ -47,7 +47,7 @@ class CanSaveMixin(HasTraits):
         """ We don't want to pickle the filepath because this can change,
             obviously, if the user moves around the pickled file.
         """
-        state = super(CanSaveMixin, self).__getstate__()
+        state = super().__getstate__()
         del state["filepath"]
         del state["dirty"]
         return state

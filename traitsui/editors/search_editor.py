@@ -13,8 +13,9 @@
 """
 
 from traits.api import Bool, Property, Str
-from ..toolkit import toolkit_object
-from ..basic_editor_factory import BasicEditorFactory
+
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.toolkit import toolkit_object
 
 
 class SearchEditor(BasicEditorFactory):

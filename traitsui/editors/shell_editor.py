@@ -12,12 +12,11 @@
 """
 
 from traits.api import Bool, Str, Event, Property
+from traits.observation.api import match
 
-from ..editor import Editor
-
-from ..basic_editor_factory import BasicEditorFactory
-
-from ..toolkit import toolkit_object
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.editor import Editor
+from traitsui.toolkit import toolkit_object
 
 
 class _ShellEditor(Editor):
@@ -47,11 +46,15 @@ class _ShellEditor(Editor):
         from pyface.python_shell import PythonShell
 
         locals = None
+        self._base_locals = None
         value = self.value
         if self.factory.share and isinstance(value, dict):
             locals = value
-        self._shell = shell = PythonShell(parent, locals=locals)
+        self._shell = shell = PythonShell(parent)
         self.control = shell.control
+        if locals:
+            for item in locals.items():
+                shell.bind(*item)
         if locals is None:
             object = self.object
             shell.bind("self", object)
@@ -59,7 +62,12 @@ class _ShellEditor(Editor):
                 self.update_object, "command_executed", dispatch="ui"
             )
             if not isinstance(value, dict):
-                object.observe(self.update_any, dispatch="ui")
+                self._any_trait_observer = lambda name, ctrait: True
+                object.observe(
+                    self.update_any,
+                    match(self._any_trait_observer),
+                    dispatch="ui"
+                )
             else:
                 self._base_locals = locals = {}
                 for name in self._shell.interpreter().locals.keys():
@@ -123,22 +131,29 @@ class _ShellEditor(Editor):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
+        name, new = event.name, event.new
         locals = self._shell.interpreter().locals
         if self._base_locals is None:
-            locals[event.name] = event.new
+            locals[name] = new
         else:
-            self.value[event.name] = event.new
+            self.value[name] = new
 
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        self._shell.observe(
-            self.update_object, "command_executed", remove=True, dispatch="ui"
-        )
-        if self._base_locals is None:
-            self.object.observe(self.update_any, remove=True, dispatch="ui")
+        if not (self.factory.share and isinstance(self.value, dict)):
+            self._shell.observe(
+                self.update_object, "command_executed", remove=True, dispatch="ui"
+            )
+            if self._base_locals is None:
+                self.object.observe(
+                    self.update_any,
+                    match(self._any_trait_observer),
+                    remove=True,
+                    dispatch="ui"
+                )
 
-        super(_ShellEditor, self).dispose()
+        super().dispose()
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
@@ -172,10 +187,8 @@ class _ShellEditor(Editor):
         self._shell.execute_command(command, hidden=False)
 
 
-# Editor factory for shell editors.
-
-
-class ToolkitEditorFactory(BasicEditorFactory):
+class ShellEditor(BasicEditorFactory):
+    """ Editor factory for shell editors. """
 
     #: The editor class to be instantiated.
     klass = Property()
@@ -197,5 +210,5 @@ class ToolkitEditorFactory(BasicEditorFactory):
         return toolkit_object("shell_editor:_ShellEditor")
 
 
-# Define the ShellEditor
-ShellEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = ShellEditor

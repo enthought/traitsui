@@ -39,11 +39,17 @@ from traitsui.helper import compute_column_widths
 from .editor import Editor
 from .tabular_model import TabularModel
 
+SCROLL_TO_POSITION_HINT_MAP = {
+    "center": QtGui.QTableView.PositionAtCenter,
+    "top": QtGui.QTableView.PositionAtTop,
+    "bottom": QtGui.QTableView.PositionAtBottom,
+    "visible": QtGui.QTableView.EnsureVisible,
+}
 
 
 class HeaderEventFilter(QtCore.QObject):
     def __init__(self, editor):
-        super(HeaderEventFilter, self).__init__()
+        super().__init__()
         self.editor = editor
 
     def eventFilter(self, obj, event):
@@ -267,7 +273,7 @@ class TabularEditor(Editor):
 
         self.adapter.cleanup()
 
-        super(TabularEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -507,18 +513,12 @@ class TabularEditor(Editor):
                 # Once selected, scroll to the column
                 self.scroll_to_column = selected_column
 
-    scroll_to_row_hint_map = {
-        "center": QtGui.QTableView.PositionAtCenter,
-        "top": QtGui.QTableView.PositionAtTop,
-        "bottom": QtGui.QTableView.PositionAtBottom,
-        "visible": QtGui.QTableView.EnsureVisible,
-    }
-
     def _scroll_to_row_changed(self, row):
         """ Scroll to the given row.
         """
-        scroll_hint = self.scroll_to_row_hint_map.get(
-            self.factory.scroll_to_row_hint, self.control.PositionAtCenter
+        scroll_hint = SCROLL_TO_POSITION_HINT_MAP.get(
+            self.factory.scroll_to_position_hint,
+            self.control.EnsureVisible
         )
         self.control.scrollTo(
             self.model.index(row, max(self.selected_column, 0)), scroll_hint
@@ -527,8 +527,9 @@ class TabularEditor(Editor):
     def _scroll_to_column_changed(self, column):
         """ Scroll to the given column.
         """
-        scroll_hint = self.scroll_to_row_hint_map.get(
-            self.factory.scroll_to_row_hint, self.control.PositionAtCenter
+        scroll_hint = SCROLL_TO_POSITION_HINT_MAP.get(
+            self.factory.scroll_to_position_hint,
+            self.control.EnsureVisible
         )
         self.control.scrollTo(
             self.model.index(max(self.selected_row, 0), column), scroll_hint
@@ -858,7 +859,7 @@ class _TableView(QtGui.QTableView):
             space be known, we have to wait until the UI that contains this
             table gives it its initial size.
         """
-        super(_TableView, self).resizeEvent(event)
+        super().resizeEvent(event)
 
         parent = self.parent()
         if (
@@ -876,7 +877,7 @@ class _TableView(QtGui.QTableView):
         editor = self._editor
         if editor.factory.auto_resize:
             # Use the default implementation.
-            return super(_TableView, self).sizeHintForColumn(column)
+            return super().sizeHintForColumn(column)
 
         width = editor.adapter.get_width(editor.object, editor.name, column)
         if width > 1:
@@ -894,7 +895,7 @@ class _TableView(QtGui.QTableView):
         adapter = editor.adapter
         if editor.factory.auto_resize:
             # Use the default implementation.
-            return super(_TableView, self).resizeColumnsToContents()
+            return super().resizeColumnsToContents()
 
         available_space = self.viewport().width()
         requested = []

@@ -15,25 +15,14 @@ import numpy
 
 from traits.api import Bool, HasTraits, Int, Float, Instance, TraitError
 
-from ..editor import Editor
-
-from ..editor_factory import EditorFactory
-
-# CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
-# to avoid circular imports, as this EditorFactory will be part of
-# traits.ui.api as well.
-from ..view import View
-
-from ..group import Group
-
-from ..item import Item
-
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
+from traitsui.editor import Editor
+from traitsui.editor_factory import EditorFactory
+from traitsui.group import Group
+from traitsui.item import Item
+from traitsui.view import View
 
 
-class ToolkitEditorFactory(EditorFactory):
+class ArrayEditor(EditorFactory):
     """ Editor factory for array editors.
     """
 
@@ -204,7 +193,7 @@ class SimpleEditor(Editor):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
-    # Is the editor read-only?
+    #: Is the editor read-only?
     readonly = Bool(False)
 
     def init(self, parent):
@@ -247,5 +236,5 @@ class SimpleEditor(Editor):
         self._busy = False
 
 
-# Define the ArrayEditor class
-ArrayEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = ArrayEditor

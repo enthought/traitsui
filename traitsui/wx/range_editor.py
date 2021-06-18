@@ -19,11 +19,6 @@ from math import log10
 
 from traits.api import TraitError, Str, Float, Any, Bool
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.range_editor file.
-from traitsui.editors.range_editor import ToolkitEditorFactory
-
 from .editor_factory import TextEditor
 
 from .editor import Editor
@@ -249,7 +244,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         if self._error is None:
             self._error = True
             self.ui.errors += 1
-            super(SimpleSliderEditor, self).error(excp)
+            super().error(excp)
         self.set_error_state(True)
 
     def update_editor(self):
@@ -561,7 +556,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         if self._error is None:
             self._error = True
             self.ui.errors += 1
-            super(LargeRangeSliderEditor, self).error(excp)
+            super().error(excp)
         self.set_error_state(True)
 
     def update_editor(self):
@@ -742,8 +737,6 @@ class SimpleSpinEditor(BaseRangeEditor):
             parent, -1, self.str_value, min=low, max=high, initial=self.value
         )
         parent.Bind(wx.EVT_SPINCTRL, self.update_object, id=self.control.GetId())
-        if wx.VERSION < (3, 0):
-            parent.Bind(wx.EVT_TEXT, self.update_object, id=self.control.GetId())
         self.set_tooltip()
 
     def update_object(self, event):
@@ -889,7 +882,7 @@ class RangeTextEditor(TextEditor):
         if self._error is None:
             self._error = True
             self.ui.errors += 1
-            super(RangeTextEditor, self).error(excp)
+            super().error(excp)
         self.set_error_state(True)
 
     def _low_changed(self, low):
@@ -928,7 +921,7 @@ def CustomEnumEditor(
     if factory._enum is None:
         import traitsui.editors.enum_editor as enum_editor
 
-        factory._enum = enum_editor.ToolkitEditorFactory(
+        factory._enum = enum_editor.EnumEditor(
             values=list(range(factory.low, factory.high + 1)),
             cols=factory.cols,
         )

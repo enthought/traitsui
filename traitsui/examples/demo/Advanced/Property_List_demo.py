@@ -16,7 +16,7 @@ interface, such as with the **TableEditor**.
 Most of the demo is just the machinery to set up the example. The key thing to
 note is the declaration of the *people* trait:
 
-    people = Property( List, depends_on = 'ticker' )
+    people = Property( List, observe = 'ticker' )
 
 In this case, by defining the **Property** as having a value of type
 **List**, you are ensuring that the computed value of the property will be
@@ -25,7 +25,7 @@ value is indeed a list, also guarantees that it will be converted to a
 **TraitListObject**, which is necessary for correct interaction with various
 Traits UI editors in a user interface.
 
-Note also the use of the *depends_on* metadata to trigger a trait property
+Note also the use of the *observe* metadata to trigger a trait property
 change whenever the *ticker* trait changes (in this case, it is changed
 every three seconds by a background thread).
 
@@ -69,7 +69,7 @@ class PropertyListDemo(HasPrivateTraits):
     ticker = Event()
 
     # The property being display in the TableEditor:
-    people = Property(List, depends_on='ticker')
+    people = Property(List, observe='ticker')
 
     # Tiny hack to allow starting the background thread easily:
     begin = Int()
@@ -119,7 +119,7 @@ class PropertyListDemo(HasPrivateTraits):
         """ Starts the background thread running.
         """
         thread = Thread(target=self._timer)
-        thread.setDaemon(True)
+        thread.daemon = True
         thread.start()
 
         return 0

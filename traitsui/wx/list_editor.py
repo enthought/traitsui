@@ -16,7 +16,9 @@ import wx
 
 import wx.lib.scrolledpanel as wxsp
 
-from traits.api import Str, Any, Instance, Property, Bool, cached_property
+from traits.api import (
+    Any, Bool, cached_property, Instance, Property, Str, TraitError
+)
 from traits.trait_base import user_name_for, xgetattr
 
 from traitsui.ui_traits import Image, convert_bitmap
@@ -139,7 +141,7 @@ class SimpleEditor(Editor):
         )
         self._dispose_items()
 
-        super(SimpleEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -343,8 +345,20 @@ class SimpleEditor(Editor):
         list, index = self.get_info()
         index += offset
         item_trait = self._trait_handler.item_trait
-        value = item_trait.default_value_for(self.object, self.name)
-        self.value = list[:index] + [value] + list[index:]
+        if self.factory.item_factory:
+            value = self.factory.item_factory(
+                *self.factory.item_factory_args,
+                **self.factory.item_factory_kwargs
+            )
+        else:
+            value = item_trait.default_value_for(self.object, self.name)
+        try:
+            self.value = list[:index] + [value] + list[index:]
+        # if the default new item is invalid, we just don't add it to the list.
+        # traits will still give an error message, but we don't want to crash
+        except TraitError:
+            from traitsui.api import raise_to_debug
+            raise_to_debug()
         wx.CallAfter(self.update_editor)
 
     def add_before(self):
@@ -602,7 +616,7 @@ class NotebookEditor(Editor):
         )
         self.close_all()
 
-        super(NotebookEditor, self).dispose()
+        super().dispose()
 
     def add_controls(self, controls):
         """ Adds a group of new DockControls to the view.
@@ -753,9 +767,7 @@ class DockableListElement(DockableViewElement):
         """ Closes a DockControl.
         """
         if abort:
-            return super(DockableListElement, self).close_dock_control(
-                dock_control, False
-            )
+            return super().close_dock_control(dock_control, False)
 
         view_object = self.ui.context["object"]
         for i, value in enumerate(self.editor._uis):

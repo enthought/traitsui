@@ -14,9 +14,8 @@
 from pyface.ui_traits import Image
 from traits.api import Bool, Property
 
-from ..basic_editor_factory import BasicEditorFactory
-
-from ..toolkit import toolkit_object
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.toolkit import toolkit_object
 
 # -------------------------------------------------------------------------
 #  'ImageEditor' editor factory class:

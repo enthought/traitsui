@@ -13,16 +13,11 @@
 
 from traits.api import Callable, Tuple, Property
 
-from ..basic_editor_factory import BasicEditorFactory
-
-from ..toolkit import toolkit_object
-
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.toolkit import toolkit_object
 
 
-class ToolkitEditorFactory(BasicEditorFactory):
+class CustomEditor(BasicEditorFactory):
     """ Editor factory for custom editors.
     """
 
@@ -39,7 +34,7 @@ class ToolkitEditorFactory(BasicEditorFactory):
         if len(args) >= 1:
             self.factory = args[0]
             self.args = args[1:]
-        super(ToolkitEditorFactory, self).__init__(**traits)
+        super().__init__(**traits)
 
     # -------------------------------------------------------------------------
     #  Property getters
@@ -50,5 +45,5 @@ class ToolkitEditorFactory(BasicEditorFactory):
         return toolkit_object("custom_editor:CustomEditor")
 
 
-# Define the CustomEditor class.
-CustomEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = CustomEditor

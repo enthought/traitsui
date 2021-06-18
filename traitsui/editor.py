@@ -523,7 +523,7 @@ class Editor(HasPrivateTraits):
     def __init__(self, parent, **traits):
         """ Initializes the editor object.
         """
-        super(HasPrivateTraits, self).__init__(**traits)
+        super().__init__(**traits)
         try:
             self.old_value = getattr(self.object, self.name)
         except AttributeError:
@@ -646,7 +646,7 @@ class Editor(HasPrivateTraits):
                     bool(self_trait.is_list),
                     self_trait.type == "event",
                 )
-            elif value is not Undefined:
+            elif mode != "to" and value is not Undefined:
                 setattr(self, name, value)
 
     def _bind_from(self, key, user_object, xuser_name, editor_name, is_list):

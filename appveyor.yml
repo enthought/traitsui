@@ -14,8 +14,6 @@ environment:
 
   matrix:
     - RUNTIME: '3.6'
-      TOOLKIT: "pyqt"
-    - RUNTIME: '3.6'
       TOOLKIT: "pyqt5"
 
 matrix:

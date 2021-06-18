@@ -135,7 +135,7 @@ class Person(HasTraits):
 
     # surname is displayed in qt-only row label:
     surname = Property(fget=lambda self: self.name.split()[-1],
-                       depends_on='name')
+                       observe='name')
 
 
 # -- MarriedPerson Class Definition ---------------------------------------

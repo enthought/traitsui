@@ -84,19 +84,19 @@ class SampleHandler(Handler):
         self.click_performed = True
 
     def _on_undo(self, info):
-        super(SampleHandler, self)._on_undo(info)
+        super()._on_undo(info)
         self.undo_performed = True
 
     def _on_redo(self, info):
-        super(SampleHandler, self)._on_redo(info)
+        super()._on_redo(info)
         self.redo_performed = True
 
     def _on_revert(self, info):
-        super(SampleHandler, self)._on_revert(info)
+        super()._on_revert(info)
         self.revert_performed = True
 
     def _on_close(self, info):
-        super(SampleHandler, self)._on_close(info)
+        super()._on_close(info)
         self.close_performed = True
 
 

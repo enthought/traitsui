@@ -37,6 +37,7 @@ Standard Editors
 - :github-demo:`TitleEditor <Standard_Editors/TitleEditor_demo.py>`
 - :github-demo:`TreeEditor <Standard_Editors/TreeEditor_demo.py>`
 - :github-demo:`TupleEditor <Standard_Editors/TupleEditor_demo.py>`
+- :github-demo:`VideoEditor <Standard_Editors/VideoEditor_demo.py>`
 
 Advanced Demos
 --------------

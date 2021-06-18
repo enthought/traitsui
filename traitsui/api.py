@@ -173,6 +173,7 @@ Toolkit Object
 --------------
 
 - :func:`~.toolkit`
+- :func:`~.toolkit_object`
 
 Custom Traits
 -------------
@@ -397,7 +398,7 @@ from .instance_choice import (
     InstanceFactoryChoice,
 )
 
-from .toolkit import toolkit
+from .toolkit import toolkit, toolkit_object
 
 from .toolkit_traits import (
     Color,
