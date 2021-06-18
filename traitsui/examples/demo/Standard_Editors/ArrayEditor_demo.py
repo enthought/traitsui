@@ -8,7 +8,7 @@
 #
 # Thanks for using Enthought open source!
 
-# array_editor.py -- Example of using array editors
+"""Demo of the ArrayEditor"""
 
 import numpy as np
 
