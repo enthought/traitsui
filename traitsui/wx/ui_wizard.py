@@ -18,7 +18,7 @@
 import wx
 import wx.adv as wz
 
-from traits.api import Str, Either
+from traits.api import Str, Union
 
 from .constants import DefaultTitle
 from .helper import restore_window, save_window, GroupEditor
@@ -29,7 +29,7 @@ from .ui_panel import fill_panel_for_group
 # -------------------------------------------------------------------------
 
 # Trait that allows only None or a string value
-none_str_trait = Either(None, Str, default="")
+none_str_trait = Union(None, Str, default_value="")
 
 
 def ui_wizard(ui, parent):

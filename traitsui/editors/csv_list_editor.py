@@ -15,7 +15,7 @@ It allows the user to edit the list in a text field, using commas
 (or optionally some other character) to separate the elements.
 """
 
-from traits.api import Str, Int, Float, Enum, Range, Bool, TraitError, Either
+from traits.api import Str, Int, Float, Enum, Range, Bool, TraitError, Union
 from traits.trait_handlers import RangeTypes
 
 from traitsui.editors.text_editor import TextEditor
@@ -231,7 +231,7 @@ class CSVListEditor(TextEditor):
     """
 
     #: The separator of the element in the list.
-    sep = Either(None, Str, default=",")
+    sep = Union(None, Str, default_value=",")
 
     #: If False, it is an error to have a trailing separator.
     ignore_trailing_sep = Bool(True)

@@ -12,7 +12,7 @@
 """
 
 from pyface.ui_traits import Image
-from traits.api import Str, Range, Enum, Property, Either
+from traits.api import Str, Range, Enum, Property, Union
 
 from traitsui.editor_factory import EditorFactory
 from traitsui.ui_traits import AView
@@ -40,7 +40,7 @@ class ButtonEditor(EditorFactory):
     #: values.  If this is set, then the value, label, and label_value traits
     #: are ignored; instead, they will be set from this list.  When this button
     #: is clicked, the value set will be the one selected from the drop-down.
-    values_trait = Either(None, Str)
+    values_trait = Union(None, Str)
 
     #: (Optional) Image to display on the button
     image = Image

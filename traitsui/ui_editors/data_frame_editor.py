@@ -19,7 +19,7 @@ from traits.api import (
     Property,
     Str,
     Tuple,
-    Either,
+    Union,
 )
 
 from traitsui.basic_editor_factory import BasicEditorFactory
@@ -59,10 +59,10 @@ class DataFrameAdapter(TabularAdapter):
     format = Property()
 
     #: The format for each element, or a mapping column ID to format.
-    _formats = Either(Str, Dict, default="%s")
+    _formats = Union(Str, Dict, default_value="%s")
 
     #: The font for each element, or a mapping column ID to font.
-    _fonts = Either(Font, Dict, default="Courier 10")
+    _fonts = Union(Font, Dict, default_value="Courier 10")
 
     def _get_index_alignment(self):
         import numpy as np
@@ -308,13 +308,13 @@ class DataFrameEditor(BasicEditorFactory):
     show_titles = Bool(True)
 
     #: Optional list of either column ID or pairs of (column title, column ID).
-    columns = List(Either(Str, Tuple(Str, Str)))
+    columns = List(Union(Str, Tuple(Str, Str)))
 
     #: The format for each element, or a mapping column ID to format.
-    formats = Either(Str, Dict, default="%s")
+    formats = Union(Str, Dict, default_value="%s")
 
     #: The font for each element, or a mapping column ID to font.
-    fonts = Either(Font, Dict, default="Courier 10")
+    fonts = Union(Font, Dict, default_value="Courier 10")
 
     #: The optional extended name of the trait to synchronize the selection
     #: values with:
