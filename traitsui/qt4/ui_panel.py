@@ -352,9 +352,9 @@ def _size_hint_wrapper(f, ui):
         size = f()
         if ui.view is not None:
             if ui.view.width > 0:
-                size.setWidth(ui.view.width)
+                size.setWidth(int(ui.view.width))
             if ui.view.height > 0:
-                size.setHeight(ui.view.height)
+                size.setHeight(int(ui.view.height))
         return size
 
     return sizeHint
