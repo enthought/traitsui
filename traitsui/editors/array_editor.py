@@ -72,7 +72,7 @@ class ArrayStructure(HasTraits):
         # Determine the correct trait type to use for each element:
         trait = Float()
 
-        if object.dtype.type == "i":
+        if object.dtype.kind == "i":
             trait = Int()
 
         if len(object.shape) == 1:
