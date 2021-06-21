@@ -91,8 +91,6 @@ class SimpleSliderEditor(BaseRangeEditor):
         if not factory.high_name:
             self.high = factory.high
 
-        self.format = factory.format
-
         self.evaluate = factory.evaluate
         self.sync_value(factory.evaluate_name, "evaluate", "from")
 

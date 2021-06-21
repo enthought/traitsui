@@ -10,6 +10,7 @@
 
 """ Defines the range editor factory for all traits user interface toolkits.
 """
+import warnings
 
 from types import CodeType
 
@@ -64,8 +65,11 @@ class RangeEditor(EditorFactory):
     #: The name of an [object.]trait that defines the high value for the range
     high_name = Str()
 
-    #: Formatting string used to format value and labels
-    format = Str("%s")
+    # set format_str default
+    format_str = Str("%s")
+
+    #: Deprecated: Formatting string used to format value and labels
+    format = Property(Str, observe='format_str')
 
     #: Is the range for floating pointer numbers (vs. integers)?
     is_float = Bool(Undefined)
@@ -194,6 +198,23 @@ class RangeEditor(EditorFactory):
     # -------------------------------------------------------------------------
     #  Property getters.
     # -------------------------------------------------------------------------
+
+    def _get_format(self):
+        warnings.warn(
+            "Use of format trait is deprecated. Use format_str instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.format_str
+
+    def _set_format(self, format_string):
+        warnings.warn(
+            "Use of format trait is deprecated. Use format_str instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        self.format_str = format_string
+
     def _get_simple_editor_class(self):
         """ Returns the editor class to use for a simple style.
 
@@ -283,30 +304,6 @@ class RangeEditor(EditorFactory):
             ui
         )
         return super().custom_editor(ui, object, name, description, parent)
-
-    def string_value(self, value, format_func=None):
-        """ Returns the text representation of a specified object trait value.
-
-        If the **format_func** attribute is set on the editor factory, then
-        this method calls that function to do the formatting.  If the
-        **format** attribute is set on the editor factory, then this
-        method uses that string for formatting. If neither attribute is
-        set, then this method just calls the appropriate text type to format.
-
-        This is slightly modified for the base EditorFactory inplementation to
-        use this class' ``format`` trait, as opposed to the ``format_str``
-        trait defined on the base class.
-        """
-        if self.format_func is not None:
-            return self.format_func(value)
-
-        if self.format != "":
-            return self.format % value
-
-        if format_func is not None:
-            return format_func(value)
-
-        return str(value)
 
 
 # This alias is deprecated and will be removed in TraitsUI 8.

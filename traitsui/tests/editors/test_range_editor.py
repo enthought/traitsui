@@ -352,13 +352,16 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             )
 
     def test_format(self):
+        # format trait has been deprecated in favor of format_str. However,
+        # behavior should be unchanged.
         model = RangeModel()
-        view = View(
-            Item(
-                "float_value",
-                editor=RangeEditor(format="%s ...")
+        with self.assertWarns(DeprecationWarning):
+            view = View(
+                Item(
+                    "float_value",
+                    editor=RangeEditor(format="%s ...")
+                )
             )
-        )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             float_value_field = tester.find_by_name(ui, "float_value")
