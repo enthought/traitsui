@@ -58,6 +58,8 @@ class ArrayStructure(HasTraits):
         # Save the reference to the editor:
         self.editor = editor
 
+        super().__init__()
+        
         # Set up the field width for each item:
         width = editor.factory.width
 
