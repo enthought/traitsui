@@ -74,7 +74,7 @@ class SimpleSliderEditor(BaseRangeEditor):
     #: High value for the slider range
     high = Any()
 
-    #: Formatting string used to format value and labels
+    #: Deprecated: This trait is no longer used.  
     format = Str()
 
     #: Flag indicating that the UI is in the process of being updated
