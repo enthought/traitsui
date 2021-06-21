@@ -59,7 +59,7 @@ class ArrayStructure(HasTraits):
         self.editor = editor
 
         super().__init__()
-        
+
         # Set up the field width for each item:
         width = editor.factory.width
 
