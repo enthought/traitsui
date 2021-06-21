@@ -122,6 +122,8 @@ class TupleStructure(HasTraits):
         # Save the reference to the editor:
         self.editor = editor
 
+        super().__init__()
+
         # Get the tuple we are mirroring:
         object = editor.value
 
