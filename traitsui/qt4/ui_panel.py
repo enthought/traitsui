@@ -28,7 +28,7 @@ import re
 
 from pyface.qt import QtCore, QtGui
 
-from traits.api import Any, Instance, Undefined
+from traits.api import Any, HasPrivateTraits, Instance, Undefined
 from traits.observation.api import match
 
 from traitsui.api import Group
@@ -1259,6 +1259,10 @@ class GroupEditor(Editor):
     def __init__(self, **traits):
         """ Initialise the object.
         """
+        # We intentionally don't want to call Editor.__init__ here as
+        # GroupEditor does its own thing. However, we still want Traits
+        # machinery to be set up properly.
+        HasPrivateTraits.__init__(self, **traits)
         self.trait_set(**traits)
 
 
