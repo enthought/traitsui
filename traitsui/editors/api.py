@@ -59,6 +59,16 @@ is the preferred module for imports.
 - :attr:`~.TupleEditor`
 - :attr:`~.ValueEditor`
 
+Tree Editor Actions / Traits
+----------------------------
+- :attr:`~.CopyAction`
+- :attr:`~.CutAction`
+- :attr:`~.DeleteAction`
+- :attr:`~.IconSize`
+- :attr:`~.NewAction`
+- :attr:`~.PasteAction`
+- :attr:`~.RenameAction`
+
 """
 
 from ..toolkit import toolkit
@@ -124,3 +134,13 @@ from .scrubber_editor import ScrubberEditor
 from .tabular_editor import TabularEditor
 from .progress_editor import ProgressEditor
 from .search_editor import SearchEditor
+
+from traitsui.editors.tree_editor import (
+    CopyAction,
+    CutAction,
+    DeleteAction,
+    IconSize,
+    NewAction,
+    PasteAction,
+    RenameAction,
+)
