@@ -100,7 +100,7 @@ def position_window(window, width=None, height=None, parent=None):
 
     if parent is None:
         # Center the popup on the screen.
-        window.move(int((screen_dx - width) / 2), int((screen_dy - height) / 2))
+        window.move((screen_dx - width) // 2, (screen_dy - height) // 2)
         return
 
     # Calculate the desired size of the popup control:

@@ -36,7 +36,7 @@ class TmpClass(Handler):
         """
         control = getattr(ui_info, "h_split").control
         width = control.width()
-        control.moveSplitter(int(width / 2), 1)
+        control.moveSplitter(width // 2, 1)
 
     def restore_prefs(self, ui_info):
         """ Apply the last saved ui preferences.
