@@ -103,6 +103,9 @@ class _Panel(BasePanel):
         """Initialise the object.
         """
         self.ui = ui
+
+        super().__init__()
+
         history = ui.history
         view = ui.view
 
