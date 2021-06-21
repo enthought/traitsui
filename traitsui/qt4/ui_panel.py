@@ -1262,7 +1262,7 @@ class GroupEditor(Editor):
     def __init__(self, **traits):
         """ Initialise the object.
         """
-        super().__init__(**traits)
+        self.trait_set(**traits)
 
 
 class SplitterGroupEditor(GroupEditor):
