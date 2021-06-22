@@ -109,7 +109,7 @@ class SimpleSliderEditor(BaseRangeEditor):
             fvalue = self.low
         else:
             try:
-                fvalue_text = self.factory.string_value(fvalue)
+                fvalue_text = self.string_value(fvalue)
             except (ValueError, TypeError) as e:
                 fvalue_text = ""
 
@@ -155,11 +155,11 @@ class SimpleSliderEditor(BaseRangeEditor):
 
         low_label = factory.low_label
         if factory.low_name != "":
-            low_label = self.factory.string_value(self.low)
+            low_label = self.string_value(self.low)
 
         high_label = factory.high_label
         if factory.high_name != "":
-            high_label = self.factory.string_value(self.high)
+            high_label = self.string_value(self.high)
 
         self._label_lo.SetLabel(low_label)
         self._label_hi.SetLabel(high_label)
@@ -189,7 +189,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         ):
             try:
                 self.ui_changing = True
-                self.control.text.SetValue(self.factory.string_value(value))
+                self.control.text.SetValue(self.string_value(value))
                 self.value = value
             except TraitError:
                 pass
@@ -251,7 +251,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         """
         value = self.value
         try:
-            text = self.factory.string_value(value)
+            text = self.string_value(value)
             1 // (self.low <= value <= self.high)
         except:
             text = ""
@@ -294,7 +294,7 @@ class SimpleSliderEditor(BaseRangeEditor):
                 self.value = int(low)
 
         if self._label_lo is not None:
-            self._label_lo.SetLabel(self.factory.string_value(low))
+            self._label_lo.SetLabel(self.string_value(low))
             self.update_editor()
 
     def _high_changed(self, high):
@@ -305,7 +305,7 @@ class SimpleSliderEditor(BaseRangeEditor):
                 self.value = int(high)
 
         if self._label_hi is not None:
-            self._label_hi.SetLabel(self.factory.string_value(high))
+            self._label_hi.SetLabel(self.string_value(high))
             self.update_editor()
 
 
