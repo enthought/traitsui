@@ -19,23 +19,11 @@ jobs:
   test-with-edm:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [windows-latest]
         toolkit: ['pyqt5', 'pyside2']
-        include:
-          - os: ubuntu-latest
-            toolkit: 'null'
     runs-on: ${{ matrix.os }}
-    env:
-      # Set root directory, mainly for Windows, so that the EDM Python
-      # environment lives in the same drive as the cloned source. Otherwise
-      # 'pip install' raises an error while trying to compute
-      # relative path between the site-packages and the source directory.
-      EDM_ROOT_DIRECTORY: ${{ github.workspace }}/.edm
     steps:
       - uses: actions/checkout@v2
-      - name: Install Qt dependencies for Linux
-        uses: ./.github/actions/apt-get-qt-deps
-        if: startsWith(matrix.os, 'ubuntu') && matrix.toolkit != 'wx' && matrix.toolkit != 'null'
       - name: Cache EDM packages
         uses: actions/cache@v2
         with:
