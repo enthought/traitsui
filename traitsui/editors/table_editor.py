@@ -222,10 +222,10 @@ class TableEditor(EditorFactory):
     #: this.
     label_bg_color = Color(default=None, allow_none=True)
 
-    #: Background color of selected item.  Does not work on Qt.
+    #: Background color of selected item.
     selection_bg_color = Color(default=None, allow_none=True)
 
-    #: Color of selected text.  Does not work on Qt.
+    #: Color of selected text.
     selection_color = Color(default=None, allow_none=True)
 
     #: Height (in pixels) of column labels
