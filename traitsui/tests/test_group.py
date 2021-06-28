@@ -17,7 +17,6 @@ from traitsui.testing.api import KeyClick, UITester
 
 
 class Foo(HasTraits):
-
     a = Int
     b = Float
     
@@ -37,6 +36,33 @@ class Foo(HasTraits):
                 ),
                 label='Tab #2',
                 visible_when='True',
+                id="second_tab"
+            ),
+            id="tabbed_group"
+        )
+    )
+
+
+class Bar(HasTraits):
+    a = Int
+    b = Float
+    
+    view = View(
+        Tabbed(
+            VGroup(
+                HGroup(
+                    Item('a')
+                ),
+                label='Tab #1',
+                enabled_when='object.b != 0.0',
+                id="first_tab"
+            ),
+            VGroup(
+                HGroup(
+                    Item('b')
+                ),
+                label='Tab #2',
+                enabled_when='True',
                 id="second_tab"
             ),
             id="tabbed_group"
@@ -64,3 +90,25 @@ class TestTabbed(unittest.TestCase):
             b_field.perform(KeyClick("Enter"))
 
             self.assertEqual(q_tab_widget.count(), 2)
+
+    def test_enabled_when(self):
+        bar = Bar()
+        tester = UITester()
+
+        with tester.create_ui(bar) as ui:
+            tabbed_fold_group_editor = tester.find_by_id(
+                ui, "tabbed_group"
+            )._target
+            q_tab_widget = tabbed_fold_group_editor.container
+            # both tabs exist
+            self.assertEqual(q_tab_widget.count(), 2)
+            # but first is disabled
+            self.assertFalse(q_tab_widget.isTabEnabled(0))
+
+            # change b to != 0.0 so Tab #1 is enabled
+            b_field = tester.find_by_name(ui, 'b')
+            b_field.perform(KeyClick("1"))
+            b_field.perform(KeyClick("Enter"))
+
+            self.assertEqual(q_tab_widget.count(), 2)
+            self.assertTrue(q_tab_widget.isTabEnabled(0))
