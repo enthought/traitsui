@@ -104,7 +104,7 @@ class TestTabbed(unittest.TestCase):
             self.assertEqual(q_tab_widget.count(), 2)
             self.assertTrue(q_tab_widget.isTabEnabled(0))
 
-class TestFold(unittest.TestCase):
+class TestVFold(unittest.TestCase):
 
     def test_visible_when(self):
         fold_visible = Foo()
