@@ -14,6 +14,7 @@ from traits.api import Float, HasTraits, Int
 
 from traitsui.api import Item, Tabbed, VFold, VGroup, View
 from traitsui.testing.api import KeyClick, UITester
+from traitsui.tests._tools import requires_toolkit, ToolkitName
 
 
 class Foo(HasTraits):
@@ -62,6 +63,7 @@ def get_view(group_type, enabled_visible):
 class TestTabbed(unittest.TestCase):
 
     # regression test for enthought/tratsui#758
+    @requires_toolkit([ToolkitName.qt])
     def test_visible_when(self):
         tabbed_visible = Foo()
         view = get_view(Tabbed, "visible")
@@ -83,6 +85,7 @@ class TestTabbed(unittest.TestCase):
             self.assertEqual(q_tab_widget.count(), 2)
 
     # regression test for enthought/tratsui#758
+    @requires_toolkit([ToolkitName.qt])
     def test_enabled_when(self):
         tabbed_enabled = Foo()
         view = get_view(Tabbed, "enabled")
@@ -109,6 +112,7 @@ class TestTabbed(unittest.TestCase):
 class TestVFold(unittest.TestCase):
 
     # regression test for enthought/tratsui#758
+    @requires_toolkit([ToolkitName.qt])
     def test_visible_when(self):
         fold_visible = Foo()
         view = get_view(VFold, "visible")
@@ -130,6 +134,7 @@ class TestVFold(unittest.TestCase):
             self.assertEqual(q_tool_box.count(), 2)
 
     # regression test for enthought/tratsui#758
+    @requires_toolkit([ToolkitName.qt])
     def test_enabled_when(self):
         fold_enabled = Foo()
         view = get_view(VFold, "enabled")
