@@ -28,7 +28,7 @@ import re
 
 from pyface.qt import QtCore, QtGui
 
-from traits.api import Any, HasPrivateTraits, Instance, Undefined, List, Property
+from traits.api import Any, HasPrivateTraits, Instance, Undefined, List
 from traits.observation.api import match
 
 from traitsui.api import Group
@@ -293,7 +293,14 @@ def panel(ui):
     return panel
 
 
-def _fill_panel(panel, content, ui, item_handler=None, _visible_when_groups=None, _enabled_when_groups=None):
+def _fill_panel(
+    panel,
+    content,
+    ui,
+    item_handler=None,
+    _visible_when_groups=None,
+    _enabled_when_groups=None
+):
     """Fill a page based container panel with content.
     """
     active = 0
@@ -1321,14 +1328,6 @@ class TabbedFoldGroupEditor(GroupEditor):
     
     _visible_when_groups = List()
     _enabled_when_groups = List()
-    #silly_list = List()
-    #nicer_list = Property(List, observe="silly_list")
-
-    # def _get_nicer_list(self):
-    #     return [
-    #         #getattr(self.ui.info, gid[0]) for gid in self.silly_list
-    #         (*gid, getattr(self.ui.info, gid[0])) for gid in self.silly_list
-    #     ]
 
     def __init__(self, **traits):
         """ Initialise the object.
