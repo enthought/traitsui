@@ -179,7 +179,7 @@ class TestFold(unittest.TestCase):
                 ui, "folded_group"
             )._target
             q_tab_widget = tabbed_fold_group_editor.container
-            # only Tab#2 is available at first
+            # only Fold #2 is available at first
             self.assertEqual(q_tab_widget.count(), 1)
 
             # change b to != 0.0 so Fold #1 is visible
@@ -198,12 +198,12 @@ class TestFold(unittest.TestCase):
                 ui, "folded_group"
             )._target
             q_tab_widget = tabbed_fold_group_editor.container
-            # both tabs exist
+            # both folds exist
             self.assertEqual(q_tab_widget.count(), 2)
             # but first is disabled
             self.assertFalse(q_tab_widget.isItemEnabled(0))
 
-            # change b to != 0.0 so fold #1 is enabled
+            # change b to != 0.0 so Fold #1 is enabled
             b_field = tester.find_by_name(ui, 'b')
             b_field.perform(KeyClick("1"))
             b_field.perform(KeyClick("Enter"))
