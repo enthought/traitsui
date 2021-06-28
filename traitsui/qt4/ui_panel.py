@@ -1360,7 +1360,10 @@ class TabbedFoldGroupEditor(GroupEditor):
         elif isinstance(self.container, QtGui.QToolBox):
             method_to_call_name = "setItemEnabled"
         else:
-            raise
+            raise TypeError(
+                "container of a TabbedFoldGroupEditor must be either a "
+                "QTabWidget or a QToolBox"
+            )
 
         for when, widget, idx in conditions:
             method_to_call = getattr(self.container, method_to_call_name)
@@ -1385,7 +1388,10 @@ class TabbedFoldGroupEditor(GroupEditor):
         elif isinstance(self.container, QtGui.QToolBox):
             tab_or_item = "Item"
         else:
-            raise
+            raise TypeError(
+                "container of a TabbedFoldGroupEditor must be either a "
+                "QTabWidget or a QToolBox"
+            )
 
         for when, idx, widget, label in conditions:
 
