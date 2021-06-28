@@ -28,8 +28,7 @@ import re
 
 from pyface.qt import QtCore, QtGui
 
-from traits.api import Any, HasPrivateTraits, Instance, Undefined, List
-from traits.observation.api import match
+from traits.api import Any, HasPrivateTraits, Instance, List, Undefined
 
 from traitsui.api import Group
 
