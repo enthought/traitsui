@@ -29,6 +29,7 @@ import re
 from pyface.qt import QtCore, QtGui
 
 from traits.api import Any, HasPrivateTraits, Instance, List, Undefined
+from traits.observation.api import match
 
 from traitsui.api import Group
 
@@ -312,6 +313,7 @@ def _fill_panel(
         if isinstance(item, Group):
             if item.selected:
                 active = index
+
             gp = _GroupPanel(item, ui, suppress_label=True)
             page = gp.control
             sub_page = gp.sub_control
