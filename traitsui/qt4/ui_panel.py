@@ -341,9 +341,9 @@ def _fill_panel(panel, content, ui, item_handler=None, _visible_when_groups=None
             idx = panel.addItem(new, page_name)
 
         if item.visible_when and (_visible_when_groups is not None):
-            _visible_when_groups.append((item.visible_when, new, idx))
+            _visible_when_groups.append((item.visible_when, idx, new, page_name))
         if item.enabled_when and (_enabled_when_groups is not None):
-            _enabled_when_groups.append((item.enabled_when, new, idx))
+            _enabled_when_groups.append((item.enabled_when, idx, new, page_name))
 
     panel.setCurrentIndex(active)
 
@@ -1348,14 +1348,13 @@ class TabbedFoldGroupEditor(GroupEditor):
         controlled by a 'visible_when' or 'enabled_when' expression.
         """
         self._evaluate_enabled_condition(self._enabled_when_groups)
-        #self._evaluate_visible_condition(self._visible_when_groups, "visible")
+        self._evaluate_visible_condition(self._visible_when_groups)
 
     def _evaluate_enabled_condition(self, conditions):
         """Evaluates a list of (eval, widget) pairs and calls the
         appropriate method on the widget to toggle whether it is
         enabled as needed.
         """
-        print("_evaluate_enabled_condition")
         context = self.ui._get_context(self.ui.context)
 
         if isinstance(self.container, QtGui.QTabWidget):
@@ -1376,12 +1375,45 @@ class TabbedFoldGroupEditor(GroupEditor):
 
                 raise_to_debug()
 
-    def _evaluate_visible_condition(self, conditions, kind):
+    def _evaluate_visible_condition(self, conditions):
         """Evaluates a list of (eval, widget) pairs and calls the
         appropriate method on the tab widget to toggle whether it is
         visible as needed.
         """
-        pass
+        context = self.ui._get_context(self.ui.context)
+
+        if isinstance(self.container, QtGui.QTabWidget):
+            tab_or_item = "Tab"
+        elif isinstance(self.container, QtGui.QToolBox):
+            tab_or_item = "Item"
+        else:
+            raise
+
+        for when, idx, widget, label in conditions:
+
+            try:
+                cond_value = eval(when, globals(), context)
+                if cond_value:
+                    method_to_call_name = "insert" + tab_or_item
+                    method_to_call = getattr(
+                        self.container, method_to_call_name
+                    )
+                    # check that the tab for this widget is not already showing
+                    if self.container.indexOf(widget) == -1:
+                        method_to_call(idx, widget, label)
+                else:
+                    method_to_call_name = "remove" + tab_or_item
+                    method_to_call = getattr(
+                        self.container, method_to_call_name
+                    )
+                    # check that the tab for this widget is already showing
+                    if self.container.indexOf(widget) != -1:
+                        method_to_call(idx)
+            except Exception:
+                # catch errors in the validate_when expression
+                from traitsui.api import raise_to_debug
+
+                raise_to_debug()
 
 
     # -- UI preference save/restore interface ---------------------------------
