@@ -1342,7 +1342,7 @@ class TabbedFoldGroupEditor(GroupEditor):
             self._when()
 
     def _when(self):
-        """Set the visible and enabled states of all tabs in the editor as
+        """Set all tabs in the editor to be enabled/visible as
         controlled by a 'visible_when' or 'enabled_when' expression.
         """
         self._evaluate_enabled_condition(self._enabled_when_groups)
