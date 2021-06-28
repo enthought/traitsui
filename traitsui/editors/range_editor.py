@@ -65,10 +65,11 @@ class RangeEditor(EditorFactory):
     #: The name of an [object.]trait that defines the high value for the range
     high_name = Str()
 
-    # set format_str default
+    #: Formatting string used to format value and labels
     format_str = Str("%s")
 
-    #: Deprecated: Formatting string used to format value and labels
+    #: Deprecated: Please use ``format_str`` instead.
+    #: Formatting string used to format value and labels.
     format = Property(Str, observe='format_str')
 
     #: Is the range for floating pointer numbers (vs. integers)?
