@@ -80,7 +80,7 @@ class SimpleSliderEditor(BaseRangeEditor):
     #: High value for the slider range
     high = Any()
 
-    #: Deprecated: This trait is no longer used.
+    #: Deprecated: This trait is no longer used. See enthought/traitsui#1704
     format = Str()
 
     def init(self, parent):

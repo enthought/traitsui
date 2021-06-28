@@ -69,6 +69,7 @@ class RangeEditor(EditorFactory):
     format_str = Str("%s")
 
     #: Deprecated: Please use ``format_str`` instead.
+    #: See enthought/traitsui#1704
     #: Formatting string used to format value and labels.
     format = Property(Str, observe='format_str')
 
