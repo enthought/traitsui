@@ -12,7 +12,7 @@ import unittest
 
 from traits.api import Float, HasTraits, Int
 
-from traitsui.api import HGroup, Item, Tabbed, VFold, VGroup, View
+from traitsui.api import Item, Tabbed, VFold, VGroup, View
 from traitsui.testing.api import KeyClick, UITester
 
 
@@ -26,17 +26,13 @@ def get_view(group_type, enabled_visible):
         return View(
             group_type(
                 VGroup(
-                    HGroup(
-                        Item('a')
-                    ),
+                    Item('a'),
                     label='Fold #1',
                     enabled_when='object.b != 0.0',
                     id="first_fold"
                 ),
                 VGroup(
-                    HGroup(
-                        Item('b')
-                    ),
+                    Item('b'),
                     label='Fold #2',
                     id="second_fold"
                 ),
@@ -47,17 +43,13 @@ def get_view(group_type, enabled_visible):
         return View(
             group_type(
                 VGroup(
-                    HGroup(
-                        Item('a')
-                    ),
+                    Item('a'),
                     label='Fold #1',
                     visible_when='object.b != 0.0',
                     id="first_fold"
                 ),
                 VGroup(
-                    HGroup(
-                        Item('b')
-                    ),
+                    Item('b'),
                     label='Fold #2',
                     id="second_fold"
                 ),
