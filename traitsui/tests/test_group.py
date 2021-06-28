@@ -59,7 +59,6 @@ def get_view(group_type, enabled_visible):
         )
 
 
-
 class TestTabbed(unittest.TestCase):
 
     # regression test for enthought/tratsui#758
@@ -108,6 +107,7 @@ class TestTabbed(unittest.TestCase):
 
             self.assertEqual(q_tab_widget.count(), 2)
             self.assertTrue(q_tab_widget.isTabEnabled(0))
+
 
 class TestVFold(unittest.TestCase):
 
