@@ -1365,7 +1365,7 @@ class TabbedFoldGroupEditor(GroupEditor):
                 "QTabWidget or a QToolBox"
             )
 
-        for when, widget, idx in conditions:
+        for when, idx, widget, label in conditions:
             method_to_call = getattr(self.container, method_to_call_name)
             try:
                 cond_value = eval(when, globals(), context)
