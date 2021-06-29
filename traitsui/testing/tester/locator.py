@@ -20,7 +20,7 @@ applied.
 class Cell:
     """ A locator for locating a target uniquely specified by a row index and a
     column index.
-    
+
     Attributes
     ----------
     row : int

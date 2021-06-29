@@ -216,7 +216,10 @@ def mouse_click_object(control, delay):
 @mouse_click
 def mouse_click_cell_in_grid(control, cell, delay):
     click_event = _create_grid_event(
-        wx.grid.wxEVT_GRID_CELL_LEFT_CLICK, control, row=cell.row, col=cell.column
+        wx.grid.wxEVT_GRID_CELL_LEFT_CLICK,
+        control,
+        row=cell.row,
+        col=cell.column
     )
     control.ProcessWindowEvent(click_event)
 

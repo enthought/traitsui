@@ -1,13 +1,12 @@
-#  Copyright (c) 2005-2020, Enthought, Inc.
-#  All rights reserved.
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Thanks for using Enthought open source!
-#
+# Thanks for using Enthought open source!
 
 from traitsui.qt4.table_editor import SimpleEditor
 
@@ -24,8 +23,7 @@ from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
     BaseSourceWithLocation
 )
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
-    _interaction_helpers,
-    _registry_helper
+    _interaction_helpers
 )
 
 
@@ -38,10 +36,17 @@ class _SimpleEditorWithCell(BaseSourceWithLocation):
         (KeyClick, lambda wrapper, interaction: wrapper._target._key_click(
             key=interaction.key,
             delay=wrapper.delay,)),
-        (KeySequence, lambda wrapper, interaction: wrapper._target._key_sequence(
-            sequence=interaction.sequence,
-            delay=wrapper.delay,)),
-        (DisplayedText, lambda wrapper, _: wrapper._target._get_displayed_text()),
+        (
+            KeySequence,
+            lambda wrapper, interaction: wrapper._target._key_sequence(
+                sequence=interaction.sequence,
+                delay=wrapper.delay,
+            )
+        ),
+        (
+            DisplayedText,
+            lambda wrapper, _: wrapper._target._get_displayed_text()
+        ),
         (MouseDClick, lambda wrapper, _: wrapper._target._mouse_dclick(
             delay=wrapper.delay,)),
     ]
@@ -51,7 +56,9 @@ class _SimpleEditorWithCell(BaseSourceWithLocation):
         return dict(
             model=table_view.model(),
             view=table_view,
-            index=table_view.model().index(self.location.row, self.location.column),
+            index=table_view.model().index(
+                self.location.row, self.location.column
+            ),
         )
 
     def _mouse_click(self, delay=0):

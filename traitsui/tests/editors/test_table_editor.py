@@ -29,7 +29,6 @@ from traitsui.testing.api import (
     KeySequence,
     KeyClick,
     MouseClick,
-    Selected,
     UITester,
 )
 
@@ -330,7 +329,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(object_list, dict(view=select_row_view)) as ui:
             # click the first cell in the 6th row to select the row
-            tester.find_by_name(ui, "values").locate(Cell(5,0)).perform(MouseClick())
+            row6_cell = tester.find_by_name(ui, "values").locate(Cell(5, 0))
+            row6_cell.perform(MouseClick())
 
             editor = ui.get_editors("values")[0]
             if is_qt():
@@ -366,7 +366,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         object_list.selected_index = 5
 
         tester = UITester()
-        with tester.create_ui(object_list, dict(view=select_row_index_view)) as ui:
+        with tester.create_ui(object_list, dict(view=select_row_index_view)) \
+                as ui:
             editor = ui.get_editors("values")[0]
             if is_qt():
                 selected = editor.selected_indices
@@ -400,9 +401,11 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         )
 
         tester = UITester()
-        with tester.create_ui(object_list, dict(view=select_column_view)) as ui:
+        with tester.create_ui(object_list, dict(view=select_column_view)) \
+                as ui:
             # click a cell in the first column (the "value" column)
-            tester.find_by_name(ui, "values").locate(Cell(0,0)).perform(MouseClick())
+            first_cell = tester.find_by_name(ui, "values").locate(Cell(0, 0))
+            first_cell.perform(MouseClick())
 
             editor = ui.get_editors("values")[0]
             if is_qt():
@@ -421,7 +424,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         object_list.selected_columns = ["value", "other_value"]
 
         tester = UITester()
-        with tester.create_ui(object_list, dict(view=select_columns_view)) as ui:
+        with tester.create_ui(object_list, dict(view=select_columns_view)) \
+                as ui:
             editor = ui.get_editors("values")[0]
             if is_qt():
                 selected = editor.selected
@@ -440,7 +444,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(object_list, dict(view=view)) as ui:
             # click a cell in the index 1 column
-            tester.find_by_name(ui, "values").locate(Cell(0,1)).perform(MouseClick())
+            col1_cell = tester.find_by_name(ui, "values").locate(Cell(0, 1))
+            col1_cell.perform(MouseClick())
 
             editor = ui.get_editors("values")[0]
             if is_qt():
@@ -478,7 +483,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(object_list, dict(view=select_cell_view)) as ui:
             # click the cell at (5,0)
-            tester.find_by_name(ui, "values").locate(Cell(5,0)).perform(MouseClick())
+            cell_5_0 = tester.find_by_name(ui, "values").locate(Cell(5, 0))
+            cell_5_0.perform(MouseClick())
 
             editor = ui.get_editors("values")[0]
             if is_qt():
@@ -586,10 +592,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
             cell.perform(MouseClick())
             cell.perform(KeySequence("123"))
-            #cell.perform(KeyClick("Esc"))  # exit edit mode, did not revert
+            # cell.perform(KeyClick("Esc"))  # exit edit mode, did not revert
 
             self.assertEqual(object_list.values[0].other_value, 123)
-
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cells(self):
@@ -626,7 +631,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(object_list, dict(view=view)) as ui:
             # click the cell at (5,1)
-            tester.find_by_name(ui, "values").locate(Cell(5,1)).perform(MouseClick())
+            cell_5_1 = tester.find_by_name(ui, "values").locate(Cell(5, 1))
+            cell_5_1.perform(MouseClick())
             editor = ui.get_editors("values")[0]
             if is_qt():
                 selected = editor.selected_indices
@@ -675,7 +681,7 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
         tester = UITester()
-        with tester.create_ui(object_list, dict(view=progress_view)) as ui:
+        with tester.create_ui(object_list, dict(view=progress_view)):
             pass
 
     @requires_toolkit([ToolkitName.qt])
