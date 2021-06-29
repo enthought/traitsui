@@ -185,7 +185,7 @@ def mouse_click_item_view(model, view, index, delay):
         Model from which QModelIndex will be obtained
     view : QAbstractItemView
         View from which the widget identified by the index will be
-        found and key sequence be performed.
+        found and mouse click be performed.
     index : QModelIndex
 
     Raises
@@ -215,7 +215,7 @@ def mouse_dclick_item_view(model, view, index, delay):
         Model from which QModelIndex will be obtained
     view : QAbstractItemView
         View from which the widget identified by the index will be
-        found and key sequence be performed.
+        found and mouse double click be performed.
     index : QModelIndex
 
     Raises
@@ -236,7 +236,7 @@ def mouse_dclick_item_view(model, view, index, delay):
 
 
 def key_sequence_item_view(model, view, index, sequence, delay=0):
-    """ Perform mouse click on the given QAbstractItemModel (model) and
+    """ Perform Key Sequence on the given QAbstractItemModel (model) and
     QAbstractItemView (view) with the given row and column.
 
     Parameters
