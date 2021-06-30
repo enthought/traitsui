@@ -15,9 +15,7 @@ from traitsui.api import DirectoryEditor, Item, View
 from traitsui.testing.api import DisplayedText, KeyClick, KeySequence, UITester
 from traitsui.tests._tools import (
     BaseTestMixin,
-    create_ui,
     requires_toolkit,
-    reraise_exceptions,
     ToolkitName,
 )
 
