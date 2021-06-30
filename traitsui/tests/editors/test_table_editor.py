@@ -29,6 +29,7 @@ from traitsui.testing.api import (
     KeySequence,
     KeyClick,
     MouseClick,
+    Selected,
     UITester,
 )
 
@@ -327,14 +328,10 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(object_list, dict(view=select_row_view)) as ui:
             # click the first cell in the 6th row to select the row
-            row6_cell = tester.find_by_name(ui, "values").locate(Cell(5, 0))
+            values_table = tester.find_by_name(ui, "values")
+            row6_cell = values_table.locate(Cell(5, 0))
             row6_cell.perform(MouseClick())
-
-            editor = ui.get_editors("values")[0]
-            if is_qt():
-                selected = editor.selected
-            elif is_wx():
-                selected = editor.selected_row
+            selected = values_table.inspect(Selected())
 
         self.assertIs(selected, object_list.values[5])
         self.assertIs(object_list.selected, selected)
@@ -347,11 +344,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
         tester = UITester()
         with tester.create_ui(object_list, dict(view=select_rows_view)) as ui:
-            editor = ui.get_editors("values")[0]
-            if is_qt():
-                selected = editor.selected
-            elif is_wx():
-                selected = editor.selected_rows
+            values_table = tester.find_by_name(ui, "values")
+            selected = values_table.inspect(Selected())
 
         self.assertEqual(selected, object_list.values[5:7])
 
