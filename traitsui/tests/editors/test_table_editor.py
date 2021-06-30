@@ -23,10 +23,12 @@ from traitsui.tests._tools import (
 )
 from traitsui.testing.api import (
     Cell,
+    Disabled,
     DisplayedText,
     KeySequence,
     KeyClick,
     MouseClick,
+    MouseDClick,
     Selected,
     UITester,
 )
@@ -283,6 +285,24 @@ select_cell_indices_view = View(
             ],
             selection_mode="cells",
             selected_indices="selected_cell_indices",
+        ),
+    ),
+    buttons=["OK"],
+)
+
+edit_on_first_click_false_view = View(
+    Item(
+        "values",
+        show_label=False,
+        editor=TableEditor(
+            sortable=False,
+            columns=[
+                ObjectColumn(name="value"),
+                ObjectColumn(name="other_value"),
+            ],
+            selection_mode="row",
+            selected="selected",
+            edit_on_first_click=False
         ),
     ),
     buttons=["OK"],
@@ -605,3 +625,23 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             editor.set_menu_context(None, None, None)
             editor.perform(action)
         mock_function.assert_called_once()
+
+    def test_edit_on_first_click_false(self):
+        object_list = ObjectListWithSelection(
+            values=[ListItem(value=str(i ** 2)) for i in range(10)]
+        )
+        tester = UITester()
+        with tester.create_ui(
+                object_list,
+                dict(view=edit_on_first_click_false_view)
+        ) as ui:
+            wrapper = tester.find_by_name(ui, "values").locate(Cell(5, 0))
+            # single click will not activate edit mode
+            wrapper.perform(MouseClick())
+            with self.assertRaises(Disabled):
+                wrapper.perform(KeySequence("abc"))
+
+            # double click will activate edit mode
+            wrapper.perform(MouseDClick())
+            wrapper.perform(KeySequence("abc"))
+            self.assertEqual(object_list.values[5].value, "abc")
