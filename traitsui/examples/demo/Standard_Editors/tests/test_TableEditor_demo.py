@@ -13,6 +13,7 @@ import unittest
 from traitsui.testing.api import (
     Cell, KeyClick, KeySequence, MouseClick, UITester
 )
+from traitsui.tests._tools import requires_toolkit, ToolkitName
 
 #: Filename of the demo script
 FILENAME = "TableEditor_demo.py"
@@ -23,6 +24,7 @@ DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 
 class TestTableEditorDemo(unittest.TestCase):
 
+    @requires_toolkit([ToolkitName.qt])
     def test_list_editor_demo(self):
         demo = runpy.run_path(DEMO_PATH)["demo"]
 
