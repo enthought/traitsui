@@ -358,11 +358,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(object_list, dict(view=select_row_index_view)) \
                 as ui:
-            editor = ui.get_editors("values")[0]
-            if is_qt():
-                selected = editor.selected_indices
-            elif is_wx():
-                selected = editor.selected_row_index
+            editor = tester.find_by_name(ui, "values")._target
+            selected = editor.selected_indices
 
         self.assertEqual(selected, 5)
 
