@@ -30,6 +30,7 @@ from traits.api import (
     Int,
     List,
     NO_COMPARE,
+    observe,
     Property,
     TraitListEvent,
 )
@@ -71,6 +72,9 @@ class TabularEditor(Editor):
 
     #: The event fired when a simple repaint is needed:
     refresh = Event()
+
+    #: The event fired when a recompute of column widths is needed
+    update_column_widths = Event()
 
     #: The current set of selected items (which one is used depends upon the
     #: initial state of the editor factory 'multi_select' trait):
@@ -534,6 +538,10 @@ class TabularEditor(Editor):
         self.control.scrollTo(
             self.model.index(max(self.selected_row, 0), column), scroll_hint
         )
+
+    @observe("update_column_widths", post_init=True)
+    def _resize_columns_on_event(self, event):
+        self.control.resizeColumnsToContents()
 
     # -- Table Control Event Handlers -----------------------------------------
 
