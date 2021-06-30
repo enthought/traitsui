@@ -32,8 +32,8 @@ class TestTableEditorDemo(unittest.TestCase):
         with tester.create_ui(demo) as ui:
             employees_table = tester.find_by_name(ui, "employees")
 
-            # clicking a cell enters edit mode and selcts full text
-            cell_21 = employees_table.locate(Cell(2,1))
+            # clicking a cell enters edit mode and selects full text
+            cell_21 = employees_table.locate(Cell(2, 1))
             cell_21.perform(MouseClick())
             cell_21.perform(KeySequence("Jones"))
             cell_21.perform(KeyClick("Enter"))
@@ -41,7 +41,7 @@ class TestTableEditorDemo(unittest.TestCase):
             self.assertEqual(demo.employees[0].last_name, 'Jones')
 
             # third column corresponds to Full Name property
-            cell_32 = employees_table.locate(Cell(3,2))
+            cell_32 = employees_table.locate(Cell(3, 2))
             cell_32.perform(MouseClick())
 
 
