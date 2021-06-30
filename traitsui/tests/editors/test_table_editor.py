@@ -356,7 +356,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(object_list, dict(view=select_row_index_view)) \
                 as ui:
-            editor = tester.find_by_name(ui, "values")._target
+            values_table = tester.find_by_name(ui, "values")
+            values_table.locate(Cell(5, 0)).perform(MouseClick())
+            editor = values_table._target
             selected = editor.selected_indices
 
         self.assertEqual(selected, 5)
@@ -458,35 +460,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
         self.assertEqual(selected, (object_list.values[5], "value"))
         self.assertEqual(selected, object_list.selected_cell)
-
-    def test_table_editor_select_row_index_with_tester(self):
-        object_list = ObjectListWithSelection(
-            values=[ListItem(value=str(i ** 2)) for i in range(10)]
-        )
-        view = View(
-            Item(
-                "values",
-                show_label=False,
-                editor=TableEditor(
-                    sortable=False,      # switch off sorting by first column
-                    columns=[
-                        ObjectColumn(name="value"),
-                        ObjectColumn(name="other_value"),
-                    ],
-                    selection_mode="row",
-                    selected="selected",
-                ),
-            ),
-        )
-        tester = UITester()
-        with tester.create_ui(object_list, dict(view=view)) as ui:
-            wrapper = tester.find_by_name(ui, "values")
-
-            wrapper.locate(Cell(5, 0)).perform(MouseClick())
-            self.assertEqual(object_list.selected.value, str(5 ** 2))
-
-            wrapper.locate(Cell(6, 0)).perform(MouseClick())
-            self.assertEqual(object_list.selected.value, str(6 ** 2))
 
     def test_table_editor_modify_cell_with_tester(self):
         object_list = ObjectListWithSelection(
