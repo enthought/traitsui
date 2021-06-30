@@ -29,6 +29,9 @@ Interactions (for getting GUI states)
 - :class:`~.DisplayedText`
 - :class:`~.IsChecked`
 - :class:`~.IsEnabled`
+- :class:`~.IsVisible`
+- :class:`~.Selected`
+- :class:`~.SelectedIndices`
 - :class:`~.SelectedText`
 
 Locations (for locating GUI elements)
@@ -75,6 +78,7 @@ from .tester.query import (
     IsEnabled,
     IsVisible,
     Selected,
+    SelectedIndices,
     SelectedText
 )
 

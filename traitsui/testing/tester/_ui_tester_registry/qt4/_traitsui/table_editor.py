@@ -18,6 +18,7 @@ from traitsui.testing.api import (
     KeyClick,
     KeySequence,
     Selected,
+    SelectedIndices,
 )
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
     BaseSourceWithLocation
@@ -108,4 +109,9 @@ def register(registry):
         target_class=SimpleEditor,
         interaction_class=Selected,
         handler=lambda wrapper, _: wrapper._target.selected
+    )
+    registry.register_interaction(
+        target_class=SimpleEditor,
+        interaction_class=SelectedIndices,
+        handler=lambda wrapper, _: wrapper._target.selected_indices
     )

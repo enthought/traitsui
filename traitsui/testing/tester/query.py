@@ -26,6 +26,20 @@ class Selected:
     pass
 
 
+class SelectedIndices:
+    """ An object representing an interaction to obtain the indices of objects
+    which are currently selected.
+
+    Implementations should return either a list of indicies of the selected
+    objects, a single index of a lone selected object, or -1 if nothing is
+    selected.
+
+    Note that an index could be an integer, or it could be a tuple e.g.
+    corresponding to a specific cell at some (row, column) in a table.
+    """
+    pass
+
+
 class SelectedText:
     """ An object representing an interaction to obtain the displayed (echoed)
     plain text which is currently selected.

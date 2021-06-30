@@ -30,6 +30,7 @@ from traitsui.testing.api import (
     MouseClick,
     MouseDClick,
     Selected,
+    SelectedIndices,
     UITester,
 )
 
@@ -378,8 +379,7 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
                 as ui:
             values_table = tester.find_by_name(ui, "values")
             values_table.locate(Cell(5, 0)).perform(MouseClick())
-            editor = values_table._target
-            selected = editor.selected_indices
+            selected = values_table.inspect(SelectedIndices())
 
         self.assertEqual(selected, 5)
 
@@ -392,8 +392,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         view = select_row_indices_view
         tester = UITester()
         with tester.create_ui(object_list, dict(view=view)) as ui:
-            editor = tester.find_by_name(ui, "values")._target
-            selected = editor.selected_indices
+            values_table = tester.find_by_name(ui, "values")
+            selected = values_table.inspect(SelectedIndices())
 
         self.assertEqual(selected, [5, 7, 8])
 
@@ -410,8 +410,7 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             first_cell = values_table.locate(Cell(0, 0))
             first_cell.perform(MouseClick())
 
-            editor = values_table._target
-            selected = editor.selected
+            selected = values_table.inspect(Selected())
 
         self.assertEqual(selected, "value")
         self.assertEqual(selected, object_list.selected_column)
@@ -425,8 +424,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(object_list, dict(view=select_columns_view)) \
                 as ui:
-            editor = tester.find_by_name(ui, "values")._target
-            selected = editor.selected
+            values_table = tester.find_by_name(ui, "values")
+            selected = values_table.inspect(Selected())
 
         self.assertEqual(selected, ["value", "other_value"])
 
@@ -443,8 +442,7 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             col1_cell = values_table.locate(Cell(0, 1))
             col1_cell.perform(MouseClick())
 
-            editor = values_table._target
-            selected = editor.selected_indices
+            selected = values_table.inspect(SelectedIndices())
 
         self.assertEqual(selected, 1)
         self.assertEqual(selected, object_list.selected_index)
@@ -458,8 +456,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         view = select_column_indices_view
         tester = UITester()
         with tester.create_ui(object_list, dict(view=view)) as ui:
-            editor = tester.find_by_name(ui, "values")._target
-            selected = editor.selected_indices
+            values_table = tester.find_by_name(ui, "values")
+            selected = values_table.inspect(SelectedIndices())
 
         self.assertEqual(selected, [0, 1])
 
@@ -475,8 +473,7 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             cell_5_0 = values_table.locate(Cell(5, 0))
             cell_5_0.perform(MouseClick())
 
-            editor = values_table._target
-            selected = editor.selected
+            selected = values_table.inspect(Selected())
 
         self.assertEqual(selected, (object_list.values[5], "value"))
         self.assertEqual(selected, object_list.selected_cell)
@@ -546,8 +543,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
         tester = UITester()
         with tester.create_ui(object_list, dict(view=select_cells_view)) as ui:
-            editor = tester.find_by_name(ui, "values")._target
-            selected = editor.selected
+            values_table = tester.find_by_name(ui, "values")
+            selected = values_table.inspect(Selected())
 
         self.assertEqual(selected, [
             (object_list.values[5], "value"),
@@ -567,8 +564,7 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             values_table = tester.find_by_name(ui, "values")
             cell_5_1 = values_table.locate(Cell(5, 1))
             cell_5_1.perform(MouseClick())
-            editor = values_table._target
-            selected = editor.selected_indices
+            selected = values_table.inspect(SelectedIndices())
 
         self.assertEqual(selected, (5, 1))
         self.assertEqual(selected, object_list.selected_cell_index)
@@ -582,8 +578,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         view = select_cell_indices_view
         tester = UITester()
         with tester.create_ui(object_list, dict(view=view)) as ui:
-            editor = tester.find_by_name(ui, "values")._target
-            selected = editor.selected_indices
+            values_table = tester.find_by_name(ui, "values")
+            selected = values_table.inspect(SelectedIndices())
 
         self.assertEqual(selected, [(5, 0), (6, 1), (8, 0)])
 
