@@ -18,8 +18,6 @@ from traitsui.api import (
 )
 from traitsui.tests._tools import (
     BaseTestMixin,
-    is_qt,
-    is_wx,
     requires_toolkit,
     ToolkitName,
 )
@@ -570,11 +568,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
         tester = UITester()
         with tester.create_ui(object_list, dict(view=select_cells_view)) as ui:
-            editor = ui.get_editors("values")[0]
-            if is_qt():
-                selected = editor.selected
-            elif is_wx():
-                selected = editor.selected_cells
+            editor = tester.find_by_name(ui, "values")._target
+            selected = editor.selected
 
         self.assertEqual(selected, [
             (object_list.values[5], "value"),
@@ -591,13 +586,11 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(object_list, dict(view=view)) as ui:
             # click the cell at (5,1)
-            cell_5_1 = tester.find_by_name(ui, "values").locate(Cell(5, 1))
+            values_table = tester.find_by_name(ui, "values")
+            cell_5_1 = values_table.locate(Cell(5, 1))
             cell_5_1.perform(MouseClick())
-            editor = ui.get_editors("values")[0]
-            if is_qt():
-                selected = editor.selected_indices
-            elif is_wx():
-                selected = editor.selected_cell_index
+            editor = values_table._target
+            selected = editor.selected_indices
 
         self.assertEqual(selected, (5, 1))
         self.assertEqual(selected, object_list.selected_cell_index)
