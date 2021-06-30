@@ -465,23 +465,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
-        view = View(
-            Item(
-                "values",
-                show_label=False,
-                editor=TableEditor(
-                    sortable=False,      # switch off sorting by first column
-                    columns=[
-                        ObjectColumn(name="value"),
-                        ObjectColumn(name="other_value"),
-                    ],
-                    selection_mode="row",
-                    selected="selected",
-                ),
-            ),
-        )
         tester = UITester()
-        with tester.create_ui(object_list, dict(view=view)) as ui:
+        with tester.create_ui(object_list, dict(view=select_row_view)) as ui:
             wrapper = tester.find_by_name(ui, "values").locate(Cell(5, 0))
             wrapper.perform(MouseClick())             # activate edit mode
             wrapper.perform(KeySequence("abc"))
