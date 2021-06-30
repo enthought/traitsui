@@ -554,7 +554,7 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
             cell.perform(MouseClick())
             cell.perform(KeySequence("123"))
-            # cell.perform(KeyClick("Esc"))  # exit edit mode, did not revert
+            cell.perform(KeyClick("Esc"))  # exit edit mode, did not revert
 
             self.assertEqual(object_list.values[0].other_value, 123)
 
