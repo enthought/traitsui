@@ -372,11 +372,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         view = select_row_indices_view
         tester = UITester()
         with tester.create_ui(object_list, dict(view=view)) as ui:
-            editor = ui.get_editors("values")[0]
-            if is_qt():
-                selected = editor.selected_indices
-            elif is_wx():
-                selected = editor.selected_row_indices
+            editor = tester.find_by_name(ui, "values")._target
+            selected = editor.selected_indices
 
         self.assertEqual(selected, [5, 7, 8])
 
@@ -388,15 +385,13 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(object_list, dict(view=select_column_view)) \
                 as ui:
+            values_table = tester.find_by_name(ui, "values")
             # click a cell in the first column (the "value" column)
-            first_cell = tester.find_by_name(ui, "values").locate(Cell(0, 0))
+            first_cell = values_table.locate(Cell(0, 0))
             first_cell.perform(MouseClick())
 
-            editor = ui.get_editors("values")[0]
-            if is_qt():
-                selected = editor.selected
-            elif is_wx():
-                selected = editor.selected_column
+            editor = values_table._target
+            selected = editor.selected
 
         self.assertEqual(selected, "value")
         self.assertEqual(selected, object_list.selected_column)
@@ -410,11 +405,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(object_list, dict(view=select_columns_view)) \
                 as ui:
-            editor = ui.get_editors("values")[0]
-            if is_qt():
-                selected = editor.selected
-            elif is_wx():
-                selected = editor.selected_columns
+            editor = tester.find_by_name(ui, "values")._target
+            selected = editor.selected
 
         self.assertEqual(selected, ["value", "other_value"])
 
@@ -427,14 +419,12 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(object_list, dict(view=view)) as ui:
             # click a cell in the index 1 column
-            col1_cell = tester.find_by_name(ui, "values").locate(Cell(0, 1))
+            values_table = tester.find_by_name(ui, "values")
+            col1_cell = values_table.locate(Cell(0, 1))
             col1_cell.perform(MouseClick())
 
-            editor = ui.get_editors("values")[0]
-            if is_qt():
-                selected = editor.selected_indices
-            elif is_wx():
-                selected = editor.selected_column_index
+            editor = values_table._target
+            selected = editor.selected_indices
 
         self.assertEqual(selected, 1)
         self.assertEqual(selected, object_list.selected_index)
@@ -448,11 +438,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         view = select_column_indices_view
         tester = UITester()
         with tester.create_ui(object_list, dict(view=view)) as ui:
-            editor = ui.get_editors("values")[0]
-            if is_qt():
-                selected = editor.selected_indices
-            elif is_wx():
-                selected = editor.selected_column_indices
+            editor = tester.find_by_name(ui, "values")._target
+            selected = editor.selected_indices
 
         self.assertEqual(selected, [0, 1])
 
@@ -464,14 +451,12 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         tester = UITester()
         with tester.create_ui(object_list, dict(view=select_cell_view)) as ui:
             # click the cell at (5,0)
-            cell_5_0 = tester.find_by_name(ui, "values").locate(Cell(5, 0))
+            values_table = tester.find_by_name(ui, "values")
+            cell_5_0 = values_table.locate(Cell(5, 0))
             cell_5_0.perform(MouseClick())
 
-            editor = ui.get_editors("values")[0]
-            if is_qt():
-                selected = editor.selected
-            elif is_wx():
-                selected = editor.selected_cell
+            editor = values_table._target
+            selected = editor.selected
 
         self.assertEqual(selected, (object_list.values[5], "value"))
         self.assertEqual(selected, object_list.selected_cell)
@@ -626,11 +611,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         view = select_cell_indices_view
         tester = UITester()
         with tester.create_ui(object_list, dict(view=view)) as ui:
-            editor = ui.get_editors("values")[0]
-            if is_qt():
-                selected = editor.selected_indices
-            elif is_wx():
-                selected = editor.selected_cell_indices
+            editor = tester.find_by_name(ui, "values")._target
+            selected = editor.selected_indices
 
         self.assertEqual(selected, [(5, 0), (6, 1), (8, 0)])
 
@@ -668,7 +650,7 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
         tester = UITester()
         with tester.create_ui(object_list, dict(view=simple_view)) as ui:
-            editor = ui.get_editors("values")[0]
+            editor = tester.find_by_name(ui, "values")._target
             editor.set_menu_context(None, None, None)
             editor.perform(action)
         mock_function.assert_called_once()
