@@ -290,6 +290,7 @@ select_cell_indices_view = View(
 )
 
 
+@requires_toolkit([ToolkitName.qt])
 class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
     def setUp(self):
@@ -298,7 +299,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
     def tearDown(self):
         BaseTestMixin.tearDown(self)
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -307,7 +307,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         with tester.create_ui(object_list, dict(view=simple_view)):
             pass
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_filtered_table_editor(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(other_value=i ** 2) for i in range(10)]
@@ -320,7 +319,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             self.assertIsNotNone(filter)
             self.assertEqual(num_filtered_indices, 7)
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_row(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -341,7 +339,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         self.assertIs(selected, object_list.values[5])
         self.assertIs(object_list.selected, selected)
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_rows(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -358,7 +355,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
         self.assertEqual(selected, object_list.values[5:7])
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_row_index(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -376,7 +372,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
         self.assertEqual(selected, 5)
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_row_indices(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -394,7 +389,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
         self.assertEqual(selected, [5, 7, 8])
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_column(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -416,7 +410,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         self.assertEqual(selected, "value")
         self.assertEqual(selected, object_list.selected_column)
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_columns(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -434,7 +427,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
         self.assertEqual(selected, ["value", "other_value"])
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_column_index(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -456,7 +448,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         self.assertEqual(selected, 1)
         self.assertEqual(selected, object_list.selected_index)
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_column_indices(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -474,7 +465,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
         self.assertEqual(selected, [0, 1])
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cell(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -495,7 +485,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         self.assertEqual(selected, (object_list.values[5], "value"))
         self.assertEqual(selected, object_list.selected_cell)
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_row_index_with_tester(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -525,7 +514,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             wrapper.locate(Cell(6, 0)).perform(MouseClick())
             self.assertEqual(object_list.selected.value, str(6 ** 2))
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_modify_cell_with_tester(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -564,7 +552,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             wrapper.perform(KeySequence("12"))  # now ok
             self.assertEqual(object_list.selected.other_value, 12)
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_check_display_with_tester(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(other_value=0)]
@@ -581,7 +568,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             actual = wrapper.inspect(DisplayedText())
             self.assertEqual(actual, "123")
 
-    @requires_toolkit([ToolkitName.qt])
     def test_table_editor_escape_retain_edit(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(other_value=0)]
@@ -596,7 +582,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
             self.assertEqual(object_list.values[0].other_value, 123)
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cells(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -621,7 +606,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             (object_list.values[8], "value"),
         ])
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cell_index(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -642,7 +626,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         self.assertEqual(selected, (5, 1))
         self.assertEqual(selected, object_list.selected_cell_index)
 
-    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cell_indices(self):
         object_list = ObjectListWithSelection(
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
@@ -660,7 +643,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
         self.assertEqual(selected, [(5, 0), (6, 1), (8, 0)])
 
-    @requires_toolkit([ToolkitName.qt])
     def test_progress_column(self):
         from traitsui.extras.progress_column import ProgressColumn
 
@@ -684,7 +666,6 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         with tester.create_ui(object_list, dict(view=progress_view)):
             pass
 
-    @requires_toolkit([ToolkitName.qt])
     def test_on_perform_action(self):
         # A test for issue #741, where actions with an on_perform function set
         # would get called twice
