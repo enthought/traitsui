@@ -63,7 +63,6 @@ class TreeNode:
         self.column = column
 
 
-
 class Slider:
     """ A locator for locating a nested slider widget within a UI.
     """

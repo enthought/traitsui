@@ -28,6 +28,7 @@ from traitsui.testing.tester._ui_tester_registry._traitsui_ui import (
     register_traitsui_ui_solvers,
 )
 
+
 class _SimpleEditorWithTreeNode(BaseSourceWithLocation):
     source_class = SimpleEditor
     locator_class = TreeNode
