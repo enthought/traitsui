@@ -70,16 +70,16 @@ class _SimpleEditorWithTreeNode(BaseSourceWithLocation):
         )
 
     def _get_model_view_index(self):
-        tree_view = self.source._tree
+        tree_widget = self.source._tree
         i_column = self.location.column
         i_rows = iter(self.location.row)
-        item = tree_view.topLevelItem(next(i_rows))
+        item = tree_widget.topLevelItem(next(i_rows))
         for i_row in i_rows:
             item = item.child(i_row)
-        q_model_index = tree_view.indexFromItem(item, i_column)
+        q_model_index = tree_widget.indexFromItem(item, i_column)
         return dict(
-            model=tree_view.model(),
-            view=tree_view,
+            model=tree_widget.model(),
+            view=tree_widget,
             index=q_model_index,
         )
 
