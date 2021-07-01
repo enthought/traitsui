@@ -54,15 +54,8 @@ class TargetById:
 
 
 class TreeNode:
-    """ A locator for locating a target uniquely specified by a row index and a
-    column index.
-
-    Attributes
-    ----------
-    row : int
-        0-based index
-    column : int
-        0-based index
+    """ A locator for locating a target in a Tree uniquely specified by a row
+    and a column.
     """
 
     def __init__(self, row, column):
