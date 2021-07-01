@@ -27,6 +27,16 @@ class MouseClick:
     pass
 
 
+class MouseDClick:
+    """ An object representing the user double clicking a mouse button.
+    Currently the left mouse button is assumed.
+    In most circumstances, a widget can still be clicked on even if it is
+    disabled. Therefore unlike key events, if the widget is disabled,
+    implementations should not raise an exception.
+    """
+    pass
+
+
 class KeySequence:
     """ An object representing the user typing a sequence of keys.
 

@@ -22,6 +22,7 @@ Interactions (for changing GUI states)
 - :class:`~.KeyClick`
 - :class:`~.KeySequence`
 - :class:`~.MouseClick`
+- :class:`~.MouseDClick`
 
 Interactions (for getting GUI states)
 -------------------------------------
@@ -39,6 +40,8 @@ Locations (for locating GUI elements)
 - :class:`~.TargetById`
 - :class:`~.TargetByName`
 - :class:`~.Textbox`
+- :class:`~.TreeNode`
+- :class:`~.SelectedText`
 
 Advanced usage
 --------------
@@ -63,6 +66,7 @@ from .tester.ui_tester import UITester
 # Interactions (for changing GUI states)
 from .tester.command import (
     MouseClick,
+    MouseDClick,
     KeyClick,
     KeySequence
 )
@@ -82,6 +86,7 @@ from .tester.locator import (
     TargetById,
     TargetByName,
     Textbox,
+    TreeNode,
     Slider
 )
 
