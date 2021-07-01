@@ -21,6 +21,7 @@ from traitsui.testing.tester._ui_tester_registry.qt4._traitsui import (
     list_editor,
     range_editor,
     text_editor,
+    tree_editor,
     ui_base,
 )
 from ._control_widget_registry import get_widget_registry
@@ -72,6 +73,9 @@ def get_default_registries():
 
     # Editor Factory
     editor_factory.register(registry)
+
+    # TreeEditor
+    tree_editor.register(registry)
 
     # The more general registry goes after the more specific registry.
     return [

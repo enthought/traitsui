@@ -10,8 +10,16 @@
 #
 
 from traitsui.qt4.tree_editor import SimpleEditor
-from traitsui.testing.tester.qt4 import helpers
-from traitsui.testing.tester import command, locator, registry_helper, query
+
+
+from traitsui.testing.tester.command import (
+    MouseClick, MouseDClick, KeyClick, KeySequence
+)
+from traitsui.testing.tester.locator import TreeNode
+from traitsui.testing.tester.query import DisplayedText
+from traitsui.testing.tester._ui_tester_registry.qt4 import (
+    _interaction_helpers
+)
 
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
     BaseSourceWithLocation
@@ -22,21 +30,24 @@ from traitsui.testing.tester._ui_tester_registry._traitsui_ui import (
 
 class _SimpleEditorWithTreeNode(BaseSourceWithLocation):
     source_class = SimpleEditor
-    locator_class = locator.TreeNode
+    locator_class = TreeNode
     handlers = [
-        (command.MouseClick, lambda wrapper, interaction: _mouse_click(delay=wrapper.delay)),
-        (command.KeySequence,
-            lambda wrapper, action: _key_sequence(
+        (MouseClick, lambda wrapper, _: wrapper._target._mouse_click(
+            delay=wrapper.delay)),
+        (MouseDClick, lambda wrapper, _: wrapper._target._mouse_dclick(
+            delay=wrapper.delay)),
+        (KeySequence,
+            lambda wrapper, action: wrapper._target._key_sequence(
                 sequence=action.sequence,
                 delay=wrapper.delay,
             )),
-        (command.KeyClick,
-            lambda wrapper, action: _key_press(
+        (KeyClick,
+            lambda wrapper, action: wrapper._target._key_press(
                 key=action.key,
                 delay=wrapper.delay,
             )),
-        (query.DisplayedText,
-            lambda wrapper, _:  _get_displayed_text()),
+        (DisplayedText,
+            lambda wrapper, _:  wrapper._target._get_displayed_text()),
     ]
 
     @classmethod
@@ -73,33 +84,33 @@ class _SimpleEditorWithTreeNode(BaseSourceWithLocation):
         )
 
     def _mouse_click(self, delay=0):
-        helpers.mouse_click_item_view(
+        _interaction_helpers.mouse_click_item_view(
             **self._get_model_view_index(),
             delay=delay,
         )
 
     def _mouse_dclick(self, delay=0):
-        helpers.mouse_dclick_item_view(
+        _interaction_helpers.mouse_dclick_item_view(
             **self._get_model_view_index(),
             delay=delay,
         )
 
     def _key_press(self, key, delay=0):
-        helpers.key_press_item_view(
+        _interaction_helpers.key_press_item_view(
             **self._get_model_view_index(),
             key=key,
             delay=delay,
         )
 
     def _key_sequence(self, sequence, delay=0):
-        helpers.key_sequence_item_view(
+        _interaction_helpers.key_sequence_item_view(
             **self._get_model_view_index(),
             sequence=sequence,
             delay=delay,
         )
 
     def _get_displayed_text(self):
-        return helpers.get_display_text_item_view(
+        return _interaction_helpers.get_display_text_item_view(
             **self._get_model_view_index(),
         )
 
