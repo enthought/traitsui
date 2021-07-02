@@ -12,9 +12,7 @@ jobs:
   test:
     strategy:
       matrix:
-        # Note that Ubuntu 20 cannot be used because its SWIG version is 4.0
-        # (enthought/enable#360)
-        os: [ubuntu-18.04]
+        os: [ubuntu-latest]
         toolkit: ['pyside2']
         # Dependencies include chaco/enable, whose installation fails
         # on Python 3.8 and 3.9
