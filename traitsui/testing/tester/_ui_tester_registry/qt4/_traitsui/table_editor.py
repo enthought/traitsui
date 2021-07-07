@@ -10,13 +10,15 @@
 
 from traitsui.qt4.table_editor import SimpleEditor
 
-from traitsui.testing.api import (
-    Cell,
-    DisplayedText,
+from traitsui.testing.tester.command import (
     MouseClick,
     MouseDClick,
     KeyClick,
     KeySequence,
+)
+from traitsui.testing.tester.locator import Cell
+from traitsui.testing.tester.query import (
+    DisplayedText,
     Selected,
     SelectedIndices,
 )
