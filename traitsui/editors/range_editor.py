@@ -10,6 +10,7 @@
 
 """ Defines the range editor factory for all traits user interface toolkits.
 """
+import warnings
 
 from types import CodeType
 
@@ -65,7 +66,12 @@ class RangeEditor(EditorFactory):
     high_name = Str()
 
     #: Formatting string used to format value and labels
-    format = Str("%s")
+    format_str = Str("%s")
+
+    #: Deprecated: Please use ``format_str`` instead.
+    #: See enthought/traitsui#1704
+    #: Formatting string used to format value and labels.
+    format = Property(Str, observe='format_str')
 
     #: Is the range for floating pointer numbers (vs. integers)?
     is_float = Bool(Undefined)
@@ -194,6 +200,23 @@ class RangeEditor(EditorFactory):
     # -------------------------------------------------------------------------
     #  Property getters.
     # -------------------------------------------------------------------------
+
+    def _get_format(self):
+        warnings.warn(
+            "Use of format trait is deprecated. Use format_str instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.format_str
+
+    def _set_format(self, format_string):
+        warnings.warn(
+            "Use of format trait is deprecated. Use format_str instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        self.format_str = format_string
+
     def _get_simple_editor_class(self):
         """ Returns the editor class to use for a simple style.
 
