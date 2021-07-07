@@ -55,10 +55,7 @@ class ArrayStructure(HasTraits):
     def __init__(self, editor):
         """ Initializes the object.
         """
-        # Save the reference to the editor:
-        self.editor = editor
-
-        super().__init__()
+        super().__init__(editor=editor)
 
         # Set up the field width for each item:
         width = editor.factory.width

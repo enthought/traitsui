@@ -102,9 +102,7 @@ class _Panel(BasePanel):
     def __init__(self, ui, parent, is_subpanel):
         """Initialise the object.
         """
-        self.ui = ui
-
-        super().__init__()
+        super().__init__(ui=ui)
 
         history = ui.history
         view = ui.view

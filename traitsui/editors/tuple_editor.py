@@ -113,16 +113,13 @@ class TupleStructure(HasTraits):
     def __init__(self, editor):
         """ Initializes the object.
         """
+        super().__init__(editor=editor)
+
         factory = editor.factory
         types = factory.types
         labels = factory.labels
         editors = factory.editors
         cols = factory.cols
-
-        # Save the reference to the editor:
-        self.editor = editor
-
-        super().__init__()
 
         # Get the tuple we are mirroring:
         object = editor.value
