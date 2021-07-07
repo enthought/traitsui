@@ -22,6 +22,7 @@ Interactions (for changing GUI states)
 - :class:`~.KeyClick`
 - :class:`~.KeySequence`
 - :class:`~.MouseClick`
+- :class:`~.MouseDClick`
 
 Interactions (for getting GUI states)
 -------------------------------------
@@ -37,6 +38,7 @@ Interactions (for getting GUI states)
 Locations (for locating GUI elements)
 -------------------------------------
 
+- :class:`~.Cell`
 - :class:`~.Index`
 - :class:`~.Slider`
 - :class:`~.TargetById`
