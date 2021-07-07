@@ -352,8 +352,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             row6_cell.perform(MouseClick())
             selected = values_table.inspect(Selected())
 
-        self.assertIs(selected, object_list.values[5])
-        self.assertIs(object_list.selected, selected)
+        self.assertEqual(selected, [object_list.values[5]])
+        self.assertIs(selected[0], object_list.values[5])
+        self.assertIs(object_list.selected, selected[0])
 
     def test_table_editor_select_rows(self):
         object_list = ObjectListWithSelection(
@@ -412,8 +413,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
             selected = values_table.inspect(Selected())
 
-        self.assertEqual(selected, "value")
-        self.assertEqual(selected, object_list.selected_column)
+        self.assertEqual(selected, ["value"])
+        self.assertIs(selected[0], "value")
+        self.assertIs(selected[0], object_list.selected_column)
 
     def test_table_editor_select_columns(self):
         object_list = ObjectListWithSelection(
@@ -474,8 +476,8 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
             selected = values_table.inspect(Selected())
 
-        self.assertEqual(selected, (object_list.values[5], "value"))
-        self.assertEqual(selected, object_list.selected_cell)
+        self.assertEqual(selected, [(object_list.values[5], "value")])
+        self.assertIs(selected[0], object_list.selected_cell)
 
     def test_table_editor_modify_cell_with_tester(self):
         object_list = ObjectListWithSelection(

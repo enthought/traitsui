@@ -30,6 +30,17 @@ from traitsui.testing.tester._ui_tester_registry.qt4 import (
 )
 
 
+def _query_table_editor_selected(wrapper, interaction):
+    selected = wrapper._target.selected
+    if not isinstance(selected, list):
+        if selected is None:
+            return []
+        else:
+            return [selected]
+    else:
+        return selected
+
+
 def _query_table_editor_selected_indices(wrapper, interaction):
     selected_indices = wrapper._target.selected_indices
     if not isinstance(selected_indices, list):
@@ -39,6 +50,7 @@ def _query_table_editor_selected_indices(wrapper, interaction):
             return [selected_indices]
     else:
         return selected_indices
+
 
 class _SimpleEditorWithCell(BaseSourceWithLocation):
     source_class = SimpleEditor
@@ -120,7 +132,7 @@ def register(registry):
     registry.register_interaction(
         target_class=SimpleEditor,
         interaction_class=Selected,
-        handler=lambda wrapper, _: wrapper._target.selected
+        handler=_query_table_editor_selected
     )
     registry.register_interaction(
         target_class=SimpleEditor,
