@@ -172,6 +172,7 @@ ci_dependencies = {
 doc_dependencies = {
     "sphinx",
     "enthought_sphinx_theme",
+    "pyface",
 }
 
 #: Paths to ignore in Sphinx-apidoc
