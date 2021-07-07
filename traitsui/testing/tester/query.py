@@ -17,10 +17,10 @@ without incurring side-effects.
 
 
 class Selected:
-    """ Represents an interaction to obtain the currently selected object.
+    """ Represents an interaction to obtain the currently selected object(s).
 
-    Implementations should return the selected object, or list of objects if
-    multiple are selected, or None if nothing is selected.
+    Implementations should return a list of selected objects, or an empty list
+    if nothing is selected.
     """
     pass
 
@@ -32,8 +32,10 @@ class SelectedIndices:
     Implementations should return a list of indicies of the selected
     objects or an empty list if nothing is selected.
 
-    Note that an index could be an integer, or it could be a tuple e.g.
-    corresponding to a specific cell at some (row, column) in a table.
+    Note that an index could be an integer (e.g. when selecting from a list or
+    enumerataion, or selecting entire rows or columns of a table), or it could
+    be a tuple (e.g. corresponding to a specific cell at some (row, column) in
+    a table).
     """
     pass
 
