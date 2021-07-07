@@ -30,6 +30,16 @@ from traitsui.testing.tester._ui_tester_registry.qt4 import (
 )
 
 
+def _query_table_editor_selected_indices(wrapper, interaction):
+    selected_indices = wrapper._target.selected_indices
+    if not isinstance(selected_indices, list):
+        if selected_indices == -1:
+            return []
+        else:
+            return [selected_indices]
+    else:
+        return selected_indices
+
 class _SimpleEditorWithCell(BaseSourceWithLocation):
     source_class = SimpleEditor
     locator_class = Cell
@@ -115,5 +125,5 @@ def register(registry):
     registry.register_interaction(
         target_class=SimpleEditor,
         interaction_class=SelectedIndices,
-        handler=lambda wrapper, _: wrapper._target.selected_indices
+        handler=_query_table_editor_selected_indices
     )

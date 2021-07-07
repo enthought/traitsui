@@ -381,7 +381,7 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             values_table.locate(Cell(5, 0)).perform(MouseClick())
             selected = values_table.inspect(SelectedIndices())
 
-        self.assertEqual(selected, 5)
+        self.assertEqual(selected, [5])
 
     def test_table_editor_select_row_indices(self):
         object_list = ObjectListWithSelection(
@@ -444,8 +444,7 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
             selected = values_table.inspect(SelectedIndices())
 
-        self.assertEqual(selected, 1)
-        self.assertEqual(selected, object_list.selected_index)
+        self.assertEqual(selected, [1])
 
     def test_table_editor_select_column_indices(self):
         object_list = ObjectListWithSelection(
@@ -566,8 +565,7 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             cell_5_1.perform(MouseClick())
             selected = values_table.inspect(SelectedIndices())
 
-        self.assertEqual(selected, (5, 1))
-        self.assertEqual(selected, object_list.selected_cell_index)
+        self.assertEqual(selected, [(5, 1)])
 
     def test_table_editor_select_cell_indices(self):
         object_list = ObjectListWithSelection(
