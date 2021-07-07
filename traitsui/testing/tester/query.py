@@ -17,8 +17,7 @@ without incurring side-effects.
 
 
 class Selected:
-    """ An object representing an interaction to obtain the object which is
-    currently selected.
+    """ Represents an interaction to obtain the currently selected object.
 
     Implementations should return the selected object, or None if nothing is
     selected.
@@ -27,8 +26,8 @@ class Selected:
 
 
 class SelectedIndices:
-    """ An object representing an interaction to obtain the indices of objects
-    which are currently selected.
+    """ Represents an interaction to obtain the indices of the currently
+    selected objects.
 
     Implementations should return either a list of indicies of the selected
     objects, a single index of a lone selected object, or -1 if nothing is
