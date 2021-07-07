@@ -13,6 +13,7 @@ from traitsui.testing.tester._ui_tester_registry.wx._traitsui import (
     boolean_editor,
     button_editor,
     check_list_editor,
+    directory_editor,
     editor_factory,
     enum_editor,
     file_editor,
@@ -45,6 +46,9 @@ def get_default_registries():
 
     # CheckListEditor
     check_list_editor.register(registry)
+
+    # DirectoryEditor
+    directory_editor.register(registry)
 
     # EnumEditor
     enum_editor.register(registry)
