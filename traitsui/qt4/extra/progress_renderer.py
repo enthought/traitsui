@@ -42,8 +42,9 @@ class ProgressRenderer(TableDelegate):
 
         # Draw it
         style = QtGui.QApplication.instance().style()
+        painter.save()
         painter.translate(option.rect.left(), option.rect.top())
         style.drawControl(
             QtGui.QStyle.CE_ProgressBar, progress_bar_option, painter
         )
-        painter.resetTransform()
+        painter.restore()
