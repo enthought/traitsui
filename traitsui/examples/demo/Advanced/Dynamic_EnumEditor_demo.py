@@ -57,7 +57,7 @@ Notes:
 """
 
 
-from traits.api import Enum, HasPrivateTraits, List, Constant
+from traits.api import Enum, HasPrivateTraits, Instance, List
 
 from traitsui.api import (
     View, Item, VGroup, HSplit, EnumEditor, CheckListEditor
@@ -97,7 +97,7 @@ class OrderMenu(HasPrivateTraits):
     entree = Enum(values='capabilities.available')
 
     # Reference to the restaurant's current entree capabilities:
-    capabilities = Constant(kitchen_capabilities)
+    capabilities = Instance(kitchen_capabilities, args=())
 
     # The user interface view:
     view = View(
