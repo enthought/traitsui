@@ -97,7 +97,10 @@ class OrderMenu(HasPrivateTraits):
     entree = Enum(values='capabilities.available')
 
     # Reference to the restaurant's current entree capabilities:
-    capabilities = Instance(kitchen_capabilities, args=())
+    capabilities = Instance(KitchenCapabilities)
+
+    def _capabilities_default(self):
+        return kitchen_capabilities
 
     # The user interface view:
     view = View(
