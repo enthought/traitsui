@@ -28,6 +28,7 @@
 from pyface.qt import QtCore, QtGui
 
 from traits.api import HasTraits, Instance, Property
+from traits.observation.api import trait
 
 from traitsui.ui_traits import AView
 from traitsui.helper import user_name_for
@@ -187,7 +188,7 @@ class CustomEditor(Editor):
             # combobox. This change was added to fix enthought/traitsui#1641
             value.object.observe(
                 self.rebuild_items,
-                value.name_trait,
+                trait(value.name_trait, optional=True),
                 dispatch="ui"
             )
             items.append(value)
