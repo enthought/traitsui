@@ -6,6 +6,8 @@ name: Test with PyPI
 on:
   schedule:
     - cron:  '0 3 * * 4'
+  # Make it possible to manually trigger the workflow
+  workflow_dispatch:
 
 jobs:
   # Tests against Qt/Python packages from PyPI
