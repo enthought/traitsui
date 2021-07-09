@@ -41,7 +41,7 @@ jobs:
           run: python -m unittest discover -v traitsui
           working-directory: ${{ runner.temp }}
 
-  notify-on-failure:
+  notify-on-qt-failure:
     needs: pip-qt
     if: failure()
     runs-on: ubuntu-latest
@@ -55,7 +55,7 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
 
-  notify-on-success:
+  notify-on-qt-success:
     needs: pip-qt
     if: success()
     runs-on: ubuntu-latest
@@ -105,7 +105,7 @@ jobs:
           run: python -m unittest discover -v traitsui
           working-directory: ${{ runner.temp }}
 
-  notify-on-failure:
+  notify-on-wx-failure:
     needs: pip-wx
     if: failure()
     runs-on: ubuntu-latest
@@ -119,7 +119,7 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
 
-  notify-on-success:
+  notify-on-wx-success:
     needs: pip-wx
     if: success()
     runs-on: ubuntu-latest
