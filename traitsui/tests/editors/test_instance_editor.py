@@ -177,7 +177,8 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             text = instance.inspect(SelectedText())
             self.assertEqual(text, obj.inst.name)
 
-    def test_custom_editor_with_selection_change_option_name(self):
+    # A regression test for issue enthought/traitsui#1725
+    def test_custom_editor_with_selection_change_option_name(self):     
         obj = ObjectWithList()
         tester = UITester()
         with tester.create_ui(obj, {'view': selection_view}) as ui:
