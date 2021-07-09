@@ -183,6 +183,13 @@ class CustomEditor(Editor):
         for value in values:
             if not isinstance(value, InstanceChoiceItem):
                 value = adapter(object=value)
+            # rebuild_items when an item's name changes so it is reflected by
+            # combobox. This change was added to fix enthought/traitsui#1641
+            value.object.observe(
+                self.rebuild_items,
+                value.name_trait,
+                dispatch="ui"
+            )
             items.append(value)
 
         self._items = items
