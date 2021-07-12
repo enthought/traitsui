@@ -272,6 +272,21 @@ class SimpleEditor(Editor):
                 for cnid in self._nodes_for(nid):
                     self.expand_levels(cnid, levels - 1)
 
+    def expand_all(self):
+        """ Expands all expandable nodes in the tree.
+
+        Warning: If the Tree contains a large number of items, this function
+        will be very slow.
+        """
+        iterator = QtGui.QTreeWidgetItemIterator(self._tree)
+        while iterator.value():
+            item = iterator.value()
+            expanded, node, object = self._get_node_data(item)
+            if self._has_children(node, object):
+                self._expand_node(item)
+                item.setExpanded(True)
+            iterator += 1
+
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
