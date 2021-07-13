@@ -146,10 +146,10 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             # test that the current object is None
             self.assertIsNone(obj.inst)
 
-            # test that the displayed text is correct
+            # test that the displayed text is empty
             instance = tester.find_by_name(ui, "inst")
             text = instance.inspect(SelectedText())
-            self.assertEqual(text, obj.inst_list[0].name)
+            self.assertEqual(text, '')
 
             # test that changing selection works
             instance.locate(Index(1)).perform(MouseClick())
@@ -185,16 +185,12 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             # test that the current object is None
             self.assertIsNone(obj.inst)
 
-            # test that the displayed text is correct
-            instance = tester.find_by_name(ui, "inst")
-            text = instance.inspect(SelectedText())
-            self.assertEqual(text, obj.inst_list[0].name)
-
             # actually select the first item
+            instance = tester.find_by_name(ui, "inst")
             instance.locate(Index(0)).perform(MouseClick())
             self.assertIs(obj.inst, obj.inst_list[0])
 
-            # test that the displayed text is still correct after change
+            # test that the displayed text is correct after change
             name_txt = instance.find_by_name("name")
             for _ in range(3):
                 name_txt.perform(KeyClick("Backspace"))
