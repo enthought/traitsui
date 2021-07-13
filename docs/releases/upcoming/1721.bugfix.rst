@@ -1,0 +1,1 @@
+Fix ProgressColumn bars overlapping with PyQt5 and PySide2 (#1721)

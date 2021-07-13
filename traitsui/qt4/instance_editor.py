@@ -28,6 +28,7 @@
 from pyface.qt import QtCore, QtGui
 
 from traits.api import HasTraits, Instance, Property
+from traits.observation.api import trait
 
 from traitsui.ui_traits import AView
 from traitsui.helper import user_name_for
@@ -183,6 +184,13 @@ class CustomEditor(Editor):
         for value in values:
             if not isinstance(value, InstanceChoiceItem):
                 value = adapter(object=value)
+            # rebuild_items when an item's name changes so it is reflected by
+            # combobox. This change was added to fix enthought/traitsui#1641
+            value.object.observe(
+                self.rebuild_items,
+                trait(value.name_trait, optional=True),
+                dispatch="ui"
+            )
             items.append(value)
 
         self._items = items

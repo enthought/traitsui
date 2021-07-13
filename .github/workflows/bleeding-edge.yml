@@ -5,6 +5,8 @@ name: ETS from source
 on:
   schedule:
     - cron:  '0 0 * * 4'
+  # Make it possible to manually trigger the workflow
+  workflow_dispatch:
 
 jobs:
   test:

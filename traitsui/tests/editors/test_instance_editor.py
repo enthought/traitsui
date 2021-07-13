@@ -45,7 +45,11 @@ class EditedInstance(HasTraits):
 class NamedInstance(HasTraits):
     name = Str()
     value = Str()
-    traits_view = View(Item("value"), buttons=["OK"])
+    traits_view = View(
+        Item("name"),
+        Item("value"),
+        buttons=["OK"]
+    )
 
 
 class ObjectWithInstance(HasTraits):
@@ -172,6 +176,32 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             instance = tester.find_by_name(ui, "inst")
             text = instance.inspect(SelectedText())
             self.assertEqual(text, obj.inst.name)
+
+    # A regression test for issue enthought/traitsui#1725
+    def test_custom_editor_with_selection_change_option_name(self):
+        obj = ObjectWithList()
+        tester = UITester()
+        with tester.create_ui(obj, {'view': selection_view}) as ui:
+            # test that the current object is None
+            self.assertIsNone(obj.inst)
+
+            # test that the displayed text is correct
+            instance = tester.find_by_name(ui, "inst")
+            text = instance.inspect(SelectedText())
+            self.assertEqual(text, obj.inst_list[0].name)
+
+            # actually select the first item
+            instance.locate(Index(0)).perform(MouseClick())
+            self.assertIs(obj.inst, obj.inst_list[0])
+
+            # test that the displayed text is still correct after change
+            name_txt = instance.find_by_name("name")
+            for _ in range(3):
+                name_txt.perform(KeyClick("Backspace"))
+            name_txt.perform(KeySequence("Something New"))
+            text = instance.inspect(SelectedText())
+            self.assertEqual(text, "Something New")
+            self.assertEqual("Something New", obj.inst_list[0].name)
 
     def test_custom_editor_resynch_editor(self):
         edited_inst = EditedInstance(value='hello')
