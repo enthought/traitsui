@@ -53,7 +53,7 @@ jobs:
           status: FAILED
           color: danger
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_ACTION_SECRET }}
 
   notify-on-qt-success:
     needs: pip-qt
@@ -67,7 +67,7 @@ jobs:
           status: SUCCESS
           color: good
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_ACTION_SECRET }}
 
   # Tests against wxPython from PyPI
   # On OSX:
@@ -117,7 +117,7 @@ jobs:
           status: FAILED
           color: danger
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_ACTION_SECRET }}
 
   notify-on-wx-success:
     needs: pip-wx
@@ -131,4 +131,4 @@ jobs:
           status: SUCCESS
           color: good
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_ACTION_SECRET }}
