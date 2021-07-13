@@ -41,34 +41,6 @@ jobs:
           run: python -m unittest discover -v traitsui
           working-directory: ${{ runner.temp }}
 
-  notify-on-qt-failure:
-    needs: pip-qt
-    if: failure()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Notify Slack channel on failure
-        uses: voxmedia/github-action-slack-notify-build@v1
-        with:
-          channel_id: ${{ secrets.ETS_BOTS_SLACK_CHANNEL_ID }}
-          status: FAILED
-          color: danger
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_ACTION_SECRET }}
-
-  notify-on-qt-success:
-    needs: pip-qt
-    if: success()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Notify Slack channel on success
-        uses: voxmedia/github-action-slack-notify-build@v1
-        with:
-          channel_id: ${{ secrets.ETS_BOTS_SLACK_CHANNEL_ID }}
-          status: SUCCESS
-          color: good
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_ACTION_SECRET }}
-
   # Tests against wxPython from PyPI
   # On OSX:
   #   - wxPython complains about 'This program needs access to the screen'.
@@ -105,8 +77,8 @@ jobs:
           run: python -m unittest discover -v traitsui
           working-directory: ${{ runner.temp }}
 
-  notify-on-wx-failure:
-    needs: pip-wx
+  notify-on-failure:
+    needs: [pip-qt, pip-wx]
     if: failure()
     runs-on: ubuntu-latest
     steps:
@@ -119,8 +91,8 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_ACTION_SECRET }}
 
-  notify-on-wx-success:
-    needs: pip-wx
+  notify-on-success:
+    needs: [pip-qt, pip-wx]
     if: success()
     runs-on: ubuntu-latest
     steps:
