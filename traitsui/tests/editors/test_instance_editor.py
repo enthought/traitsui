@@ -369,7 +369,7 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             text = instance.inspect(SelectedText())
             self.assertEqual(text, obj.inst_list[1].name)
 
-            # test resetting selection to None 
+            # test resetting selection to None
             reset_to_none_button = tester.find_by_name(ui, "reset_to_none")
             reset_to_none_button.perform(MouseClick())
             self.assertIsNone(obj.inst)
