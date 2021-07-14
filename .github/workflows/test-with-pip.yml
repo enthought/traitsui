@@ -76,3 +76,31 @@ jobs:
         with:
           run: python -m unittest discover -v traitsui
           working-directory: ${{ runner.temp }}
+
+  notify-on-failure:
+    needs: [pip-qt, pip-wx]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack channel on failure
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: ${{ secrets.ETS_BOTS_SLACK_CHANNEL_ID }}
+          status: FAILED
+          color: danger
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_ACTION_SECRET }}
+
+  notify-on-success:
+    needs: [pip-qt, pip-wx]
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack channel on success
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: ${{ secrets.ETS_BOTS_SLACK_CHANNEL_ID }}
+          status: SUCCESS
+          color: good
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_ACTION_SECRET }}
