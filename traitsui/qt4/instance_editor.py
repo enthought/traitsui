@@ -221,7 +221,7 @@ class CustomEditor(Editor):
             # Otherwise, current value is no longer valid, set combobox empty
             try:
                 self.value = None
-                choice.setCurrentIndex(name)
+                choice.setCurrentIndex(-1)
             except:
                 pass
 
