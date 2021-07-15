@@ -409,7 +409,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             float_value_field = tester.find_by_name(ui, "float_value")
             for _ in range(3):
                 float_value_field.perform(KeyClick("Backspace"))
-            
+
             # set a value out of the range [0.0, 1]
             float_value_field.perform(KeySequence("2.0"))
             float_value_field.perform(KeyClick("Enter"))
