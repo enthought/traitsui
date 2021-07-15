@@ -721,6 +721,10 @@ class RangeTextEditor(TextEditor):
         self.sync_value(factory.low_name, "low", "from")
         self.sync_value(factory.high_name, "high", "from")
 
+        # force value to start in range
+        if not (self.low <= self.value <= self.high):
+            self.value = self.low
+
     def update_object(self):
         """ Handles the user entering input data in the edit control.
         """
