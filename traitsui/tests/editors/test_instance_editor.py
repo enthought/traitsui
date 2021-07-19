@@ -419,10 +419,10 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
         obj_with_list = ObjectWithList()
         tester = UITester()
 
-        with tester.create_ui(obj, {'view': non_editable_droppable_view}) as ui:
+        with tester.create_ui(obj, {'view': non_editable_droppable_view}):
             pass
 
         with tester.create_ui(
             obj_with_list, {'view': non_editable_droppable_selectable_view}
-        ) as ui:
+        ):
             pass
