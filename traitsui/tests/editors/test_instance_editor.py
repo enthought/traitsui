@@ -97,6 +97,29 @@ none_view = View(
     Item('change_options'),
     buttons=["OK"],
 )
+non_editable_droppable_view = View(
+    Item(
+        "inst",
+        editor=InstanceEditor(
+            editable=False,
+            droppable=True
+        ),
+        style='custom',
+    ),
+    buttons=["OK"],
+)
+non_editable_droppable_selectable_view = View(
+    Item(
+        "inst",
+        editor=InstanceEditor(
+            name='inst_list',
+            editable=False,
+            droppable=True
+        ),
+        style='custom',
+    ),
+    buttons=["OK"],
+)
 modal_view = View(
     Item("inst", style="simple", editor=InstanceEditor(kind="modal"))
 )
@@ -389,3 +412,17 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             self.assertIsNone(obj.inst)
             text = instance.inspect(SelectedText())
             self.assertEqual(text, '')
+
+    # regression test for enthought/traitsui#1478
+    def test_droppable(self):
+        obj = ObjectWithInstance()
+        obj_with_list = ObjectWithList()
+        tester = UITester()
+
+        with tester.create_ui(obj, {'view': non_editable_droppable_view}) as ui:
+            pass
+
+        with tester.create_ui(
+            obj_with_list, {'view': non_editable_droppable_selectable_view}
+        ) as ui:
+            pass
