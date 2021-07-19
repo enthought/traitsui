@@ -1,0 +1,1 @@
+Add an expand_all method to TreeEditor (#1726)
