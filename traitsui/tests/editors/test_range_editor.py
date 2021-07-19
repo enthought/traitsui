@@ -394,3 +394,24 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(
                 float_value_text.inspect(DisplayedText()), "0.2 ..."
             )
+
+    # regression test for enthought/traitsui#737
+    def test_set_text_out_of_range(self):
+        model = RangeModel()
+        view = View(
+            Item(
+                'float_value',
+                editor=RangeEditor(mode='text', low=0.0, high=1)
+            ),
+        )
+        tester = UITester()
+        with tester.create_ui(model, dict(view=view)) as ui:
+            float_value_field = tester.find_by_name(ui, "float_value")
+            for _ in range(3):
+                float_value_field.perform(KeyClick("Backspace"))
+
+            # set a value out of the range [0.0, 1]
+            float_value_field.perform(KeySequence("2.0"))
+            float_value_field.perform(KeyClick("Enter"))
+
+            self.assertTrue(0.0 <= model.float_value <= 1)

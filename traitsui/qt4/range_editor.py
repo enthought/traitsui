@@ -693,6 +693,12 @@ class RangeTextEditor(TextEditor):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
+    #: Low value for the slider range
+    low = Any()
+
+    #: High value for the slider range
+    high = Any()
+
     #: Function to evaluate floats/ints
     evaluate = Any()
 
@@ -701,8 +707,23 @@ class RangeTextEditor(TextEditor):
             widget.
         """
         TextEditor.init(self, parent)
-        self.evaluate = self.factory.evaluate
-        self.sync_value(self.factory.evaluate_name, "evaluate", "from")
+
+        factory = self.factory
+        if not factory.low_name:
+            self.low = factory.low
+
+        if not factory.high_name:
+            self.high = factory.high
+
+        self.evaluate = factory.evaluate
+        self.sync_value(factory.evaluate_name, "evaluate", "from")
+
+        self.sync_value(factory.low_name, "low", "from")
+        self.sync_value(factory.high_name, "high", "from")
+
+        # force value to start in range
+        if not (self.low <= self.value <= self.high):
+            self.value = self.low
 
     def update_object(self):
         """ Handles the user entering input data in the edit control.
@@ -711,8 +732,14 @@ class RangeTextEditor(TextEditor):
             value = eval(str(self.control.text()))
             if self.evaluate is not None:
                 value = self.evaluate(value)
-            self.value = value
-            col = OKColor
+
+            if not (self.low <= value <= self.high):
+                value = self.low
+                col = ErrorColor
+            else:
+                col = OKColor
+
+            self.value = value  
         except Exception:
             col = ErrorColor
 
