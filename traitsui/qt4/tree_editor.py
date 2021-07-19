@@ -278,6 +278,8 @@ class SimpleEditor(Editor):
         Warning: If the Tree contains a large number of items, this function
         will be very slow.
         """
+        # For more info on the QtGui.QTreeWidgetItemIterator object,
+        # see https://doc.qt.io/qt-5/qtreewidgetitemiterator.html
         iterator = QtGui.QTreeWidgetItemIterator(self._tree)
         while iterator.value():
             item = iterator.value()
