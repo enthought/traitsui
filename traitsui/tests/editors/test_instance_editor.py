@@ -11,7 +11,7 @@
 import unittest
 
 from pyface.toolkit import toolkit_object
-from traits.api import HasTraits, Instance, List, Str, String
+from traits.api import Button, HasTraits, Instance, List, observe, Str, String
 from traitsui.api import InstanceEditor, Item, View
 from traitsui.tests._tools import (
     BaseTestMixin,
@@ -59,12 +59,22 @@ class ObjectWithInstance(HasTraits):
 class ObjectWithList(HasTraits):
     inst_list = List(Instance(NamedInstance))
     inst = Instance(NamedInstance, args=())
+    reset_to_none = Button()
+    change_options = Button()
 
     def _inst_list_default(self):
         return [
             NamedInstance(name=value, value=value)
             for value in ['one', 'two', 'three']
         ]
+
+    @observe('reset_to_none')
+    def _reset_inst_to_none(self, event):
+        self.inst = None
+
+    @observe('change_options')
+    def _modify_inst_list(self, event):
+        self.inst_list = [NamedInstance(name='one', value='one')]
 
 
 simple_view = View(Item("inst"), buttons=["OK"])
@@ -75,6 +85,16 @@ selection_view = View(
         editor=InstanceEditor(name='inst_list'),
         style='custom',
     ),
+    buttons=["OK"],
+)
+none_view = View(
+    Item(
+        "inst",
+        editor=InstanceEditor(name='inst_list'),
+        style='custom',
+    ),
+    Item('reset_to_none'),
+    Item('change_options'),
     buttons=["OK"],
 )
 modal_view = View(
@@ -146,10 +166,10 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             # test that the current object is None
             self.assertIsNone(obj.inst)
 
-            # test that the displayed text is correct
+            # test that the displayed text is empty
             instance = tester.find_by_name(ui, "inst")
             text = instance.inspect(SelectedText())
-            self.assertEqual(text, obj.inst_list[0].name)
+            self.assertEqual(text, '')
 
             # test that changing selection works
             instance.locate(Index(1)).perform(MouseClick())
@@ -185,16 +205,12 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             # test that the current object is None
             self.assertIsNone(obj.inst)
 
-            # test that the displayed text is correct
-            instance = tester.find_by_name(ui, "inst")
-            text = instance.inspect(SelectedText())
-            self.assertEqual(text, obj.inst_list[0].name)
-
             # actually select the first item
+            instance = tester.find_by_name(ui, "inst")
             instance.locate(Index(0)).perform(MouseClick())
             self.assertIs(obj.inst, obj.inst_list[0])
 
-            # test that the displayed text is still correct after change
+            # test that the displayed text is correct after change
             name_txt = instance.find_by_name("name")
             for _ in range(3):
                 name_txt.perform(KeyClick("Backspace"))
@@ -333,3 +349,43 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             something_ui.locate(Index(1)).perform(MouseClick())
 
             self.assertTrue(ok_button.inspect(IsEnabled()))
+
+    # regression test for enthought/traitsui#1134
+    def test_none_selected(self):
+        obj = ObjectWithList()
+        tester = UITester()
+        with tester.create_ui(obj, {'view': none_view}) as ui:
+            # test that the current object is None
+            self.assertIsNone(obj.inst)
+
+            # test that the displayed text is empty to start
+            instance = tester.find_by_name(ui, "inst")
+            text = instance.inspect(SelectedText())
+            self.assertEqual(text, '')
+
+            # test that changing selection works and displayed text is correct
+            instance.locate(Index(1)).perform(MouseClick())
+            self.assertIs(obj.inst, obj.inst_list[1])
+            text = instance.inspect(SelectedText())
+            self.assertEqual(text, obj.inst_list[1].name)
+
+            # test resetting selection to None
+            reset_to_none_button = tester.find_by_name(ui, "reset_to_none")
+            reset_to_none_button.perform(MouseClick())
+            self.assertIsNone(obj.inst)
+            text = instance.inspect(SelectedText())
+            self.assertEqual(text, '')
+
+            # change selection again
+            instance.locate(Index(1)).perform(MouseClick())
+            self.assertIs(obj.inst, obj.inst_list[1])
+            text = instance.inspect(SelectedText())
+            self.assertEqual(text, obj.inst_list[1].name)
+
+            # test modifying list of selectable options returns current object
+            # to None
+            change_options_button = tester.find_by_name(ui, "change_options")
+            change_options_button.perform(MouseClick())
+            self.assertIsNone(obj.inst)
+            text = instance.inspect(SelectedText())
+            self.assertEqual(text, '')

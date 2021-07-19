@@ -218,9 +218,10 @@ class CustomEditor(Editor):
         if name >= 0:
             choice.setCurrentIndex(name)
         else:
-            # Otherwise, current value is no longer valid, try to discard it:
+            # Otherwise, current value is no longer valid, set combobox empty
             try:
                 self.value = None
+                choice.setCurrentIndex(-1)
             except:
                 pass
 
@@ -275,17 +276,21 @@ class CustomEditor(Editor):
         # Update the selector (if any):
         choice = self._choice
         item = self.item_for(self.value)
-        if (choice is not None) and (item is not None):
-            name = item.get_name(self.value)
-            if self._object_cache is not None:
-                idx = choice.findText(name)
-                if idx < 0:
-                    idx = choice.count()
-                    choice.addItem(name)
+        if choice is not None:
+            if item is not None:
+                name = item.get_name(self.value)
+                if self._object_cache is not None:
+                    idx = choice.findText(name)
+                    if idx < 0:
+                        idx = choice.count()
+                        choice.addItem(name)
 
-                choice.setCurrentIndex(idx)
+                    choice.setCurrentIndex(idx)
+                else:
+                    choice.setText(name)
             else:
-                choice.setText(name)
+                choice.setCurrentIndex(-1)
+
 
     def resynch_editor(self):
         """ Resynchronizes the contents of the editor when the object trait
