@@ -122,10 +122,6 @@ class CustomEditor(Editor):
             self._choice.setReadOnly(True)
             self.set_tooltip(self._choice)
 
-            self.factory.observe(
-                self.rebuild_items, "values.items", dispatch="ui"
-            )
-
         orientation = OrientationMap[factory.orientation]
         if orientation is None:
             orientation = self.orientation
@@ -372,9 +368,15 @@ class CustomEditor(Editor):
                     dispatch="ui"
                 )
 
-            self.factory.observe(
-                self.rebuild_items, "values.items", remove=True, dispatch="ui"
-            )
+            # _choice can also be a QLineEdit in which case we never set up
+            # this observer.
+            if isinstance(self._choice, QtGui.QComboBox):
+                self.factory.observe(
+                    self.rebuild_items,
+                    "values.items",
+                    remove=True,
+                    dispatch="ui"
+                )
 
         super().dispose()
 
