@@ -276,7 +276,6 @@ class Handler(HasPrivateTraits):
             The value to which the attribute is being set
 
         """
-        print(object, name, value)
         setattr(object, name, value)
 
     def trait_view_for(self, info, view, object, object_name, trait_name):

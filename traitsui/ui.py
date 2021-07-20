@@ -653,9 +653,7 @@ class UI(HasPrivateTraits):
                 self._undoable = self.history.now
 
             action(*args, **kw)
-            print('yooooooooo')
         finally:
-            print('finally!')
             if undoable == -1:
                 self._undoable = -1
 

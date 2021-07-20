@@ -140,7 +140,6 @@ class SimpleSliderEditor(BaseRangeEditor):
             self._label_hi.setMinimumWidth(factory.label_width)
 
         self.control.text = text = QtGui.QLineEdit(fvalue_text)
-        print('connecting to editingFinished')
         text.editingFinished.connect(self.update_object_on_enter)
 
         # The default size is a bit too big and probably doesn't need to grow.
