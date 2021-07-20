@@ -140,6 +140,7 @@ class SimpleSliderEditor(BaseRangeEditor):
             self._label_hi.setMinimumWidth(factory.label_width)
 
         self.control.text = text = QtGui.QLineEdit(fvalue_text)
+        print('connecting to editingFinished')
         text.editingFinished.connect(self.update_object_on_enter)
 
         # The default size is a bit too big and probably doesn't need to grow.
@@ -204,7 +205,13 @@ class SimpleSliderEditor(BaseRangeEditor):
             if not self.factory.is_float:
                 value = int(value)
 
-            self.value = value
+            # If setting the value yields an error, the resulting error dialog
+            # stealing focus could trigger another editingFinished signal
+            blocked = self.control.text.blockSignals(True)
+            try:
+                self.value = value
+            finally:
+                self.control.text.blockSignals(blocked)
             blocked = self.control.slider.blockSignals(True)
             try:
                 self.control.slider.setValue(
@@ -230,7 +237,6 @@ class SimpleSliderEditor(BaseRangeEditor):
             value = low
 
         ivalue = self._convert_to_slider(value)
-
         self.control.text.setText(text)
 
         blocked = self.control.slider.blockSignals(True)

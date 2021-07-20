@@ -741,6 +741,7 @@ class Editor(HasPrivateTraits):
         This calls the appropriate setattr method on the handler to perform
         the actual change.
         """
+        print('__set_value')
         with self.updating_value():
             try:
                 handler = self.ui.handler
@@ -751,10 +752,14 @@ class Editor(HasPrivateTraits):
                     or getattr(handler, "%s_setattr" % name, None)
                     or getattr(handler, "setattr")
                 )
+                print(method, self.object, name, value)
                 method(self.ui.info, self.object, name, value)
+                print('yooooo')
             except TraitError as excp:
                 self.error(excp)
+                print('not dead yet!!!!!')
                 raise
+                print('probably dead')
 
     # -- Traits property getters and setters --------------------------------
 
@@ -796,6 +801,7 @@ class Editor(HasPrivateTraits):
         Dispatches via the TraitsUI Undo/Redo mechanisms to make change
         reversible, if desired.
         """
+        print('_set_value')
         if self.ui and self.name != "None":
             self.ui.do_undoable(self.__set_value, value)
 
