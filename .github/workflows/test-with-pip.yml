@@ -9,6 +9,9 @@ on:
   # Make it possible to manually trigger the workflow
   workflow_dispatch:
 
+env:
+  PYTHONUNBUFFERED: 1
+
 jobs:
   # Tests against Qt/Python packages from PyPI
   pip-qt:

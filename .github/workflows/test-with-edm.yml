@@ -12,6 +12,13 @@ on: pull_request
 
 env:
   INSTALL_EDM_VERSION: 3.2.3
+  PYTHONUNBUFFERED: 1
+
+concurrency:
+  # This should have the effect of cancelling CI runs for
+  # existing commits when a new commit is pushed to the PR.
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
 
 jobs:
 
