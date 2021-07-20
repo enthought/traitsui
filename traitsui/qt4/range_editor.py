@@ -169,9 +169,13 @@ class SimpleSliderEditor(BaseRangeEditor):
         """ Handles the user changing the current slider value.
         """
         value = self._convert_from_slider(pos)
-        self.control.text.setText(self.string_value(value))
         try:
             self.value = value
+            blocked = self.control.text.blockSignals(True)
+            try:
+                self.control.text.setText(self.string_value(value))
+            finally:
+                self.control.text.blockSignals(blocked)
         except Exception as exc:
             from traitsui.api import raise_to_debug
 
