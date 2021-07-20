@@ -1,0 +1,1 @@
+Fix droppable instance editor (#1733)
