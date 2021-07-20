@@ -11,8 +11,9 @@
 import unittest
 
 from pyface.api import GUI
-from traits.api import Bool, HasTraits, Instance, List, Str
+from traits.api import Bool, Button, HasTraits, Instance, List, Str
 from traitsui.api import (
+    Handler,
     Item,
     ObjectTreeNode,
     TreeEditor,
@@ -20,6 +21,7 @@ from traitsui.api import (
     TreeNodeObject,
     View,
 )
+from traitsui.testing.api import MouseClick, UITester
 
 from traitsui.tests._tools import (
     BaseTestMixin,
@@ -49,6 +51,12 @@ class Bogus(HasTraits):
         return BogusWrap(bogus_list=[Bogus()])
 
 
+class BogusHandler(Handler):
+    def object_expand_all_changed(self, info):
+        editor = info.ui.get_editors('bogus')[0]
+        editor.expand_all()
+
+
 class BogusTreeView(HasTraits):
     """ A traitsui view visualizing Bogus objects as trees. """
 
@@ -60,9 +68,12 @@ class BogusTreeView(HasTraits):
 
     nodes = List(TreeNode)
 
+    expand_all = Button()
+
     def _nodes_default(self):
         return [
-            TreeNode(node_for=[Bogus], children="bogus_list", label="=Bogus")
+            TreeNode(node_for=[Bogus], children="bogus_list", label="=Bogus"),
+            TreeNode(node_for=[BogusWrap], label='name')
         ]
 
     def default_traits_view(self):
@@ -74,7 +85,10 @@ class BogusTreeView(HasTraits):
         )
 
         traits_view = View(
-            Item(name="bogus", id="engine", editor=tree_editor), buttons=["OK"]
+            Item(name="bogus", id="engine", editor=tree_editor),
+            Item('expand_all'),
+            buttons=["OK"],
+            handler=BogusHandler(),
         )
 
         return traits_view
@@ -294,3 +308,13 @@ class TestTreeView(BaseTestMixin, unittest.TestCase):
         tree_editor_view = BogusTreeView(bogus=bogus, word_wrap=True)
         with create_ui(tree_editor_view):
             pass
+
+    # regression test for enthought/traitsui#1726
+    @requires_toolkit([ToolkitName.qt])
+    def test_expand_all(self):
+        bogus = Bogus(bogus_list=[BogusWrap()])
+        tree_editor_view = BogusTreeView(bogus=bogus)
+        tester = UITester()
+        with tester.create_ui(tree_editor_view) as ui:
+            expand_all_button = tester.find_by_name(ui, "expand_all")
+            expand_all_button.perform(MouseClick())
