@@ -102,7 +102,7 @@ non_editable_droppable_view = View(
         "inst",
         editor=InstanceEditor(
             editable=False,
-            droppable=True
+            droppable=True,
         ),
         style='custom',
     ),
@@ -114,7 +114,7 @@ non_editable_droppable_selectable_view = View(
         editor=InstanceEditor(
             name='inst_list',
             editable=False,
-            droppable=True
+            droppable=True,
         ),
         style='custom',
     ),
