@@ -21,7 +21,7 @@ from io import open
 # together with information from the version control system, and then injected
 # into the package source.
 MAJOR = 7
-MINOR = 2
+MINOR = 3
 MICRO = 0
 PRERELEASE = ""
 IS_RELEASED = False
@@ -347,6 +347,7 @@ if __name__ == "__main__":
                 'images/*',
                 'wx/images/*',
                 'qt4/images/*',
+                'testing/data/*',
             ]),
         packages=find_packages(),
         entry_points={

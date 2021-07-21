@@ -12,10 +12,9 @@
 # serve to show the default value.
 
 
-from io import open
 import os
 
-base_path = os.path.dirname(__file__)
+from traitsui import __version__ as version
 
 # If your extensions are in another directory, add it here. If the directory
 # is relative to the documentation root, use os.path.abspath to make it
@@ -49,26 +48,6 @@ master_doc = 'index'
 # General substitutions.
 project = 'traitsui'
 copyright = '2008-2020, Enthought'
-
-# The default replacements for |version| and |release|, also used in various
-# other places throughout the built documents.
-#
-# Pull from the actual release number without imports
-d = {}
-try:
-    version_path = os.path.join(base_path, '..', '..', 'traitsui', '_version.py')
-    with open(version_path, 'r', encoding='utf8') as fp:
-        exec(compile(fp.read(), version_path, 'exec'), d)
-    release = d['version']
-    version = '.'.join(d['version'].split('.', 2)[:2])
-
-except IOError as ioe:
-    import warnings
-    msg = '''_version.py seems to be missing!
-            Please run
-            $ python setup.py develop
-            to generate this file!'''
-    warnings.warn(RuntimeWarning(msg.format(ioe)))
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -111,7 +90,7 @@ pygments_style = 'sphinx'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "TraitsUI {} User Manual".format(version.split('.')[0])
+html_title = "TraitsUI {} Documentation".format(version.split('.')[0])
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None

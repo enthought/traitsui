@@ -12,13 +12,10 @@
     HTML-formatted text, but do not modify it.
 """
 
-
-
 from traits.api import Bool, Str
 
-from ..basic_editor_factory import BasicEditorFactory
-
-from ..toolkit import toolkit_object
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.toolkit import toolkit_object
 
 # Callable that returns the editor to use in the UI.
 
@@ -128,7 +125,7 @@ class ToolkitEditorFactory(BasicEditorFactory):
         line = lines[i]
         m = self.indent(line)
         kind = line[m]
-        result = ["<li>" + line[m + 1 :].strip()]
+        result = ["<li>" + line[m + 1:].strip()]
         n = len(lines)
         j = i + 1
         while j < n:
@@ -139,7 +136,7 @@ class ToolkitEditorFactory(BasicEditorFactory):
             if k == m:
                 if line[k] != kind:
                     break
-                result.append("<li>" + line[k + 1 :].strip())
+                result.append("<li>" + line[k + 1:].strip())
                 j += 1
             elif line[k] in "-*":
                 j, line = self.parse_list(lines, j)

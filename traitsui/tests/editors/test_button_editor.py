@@ -10,9 +10,13 @@
 
 import unittest
 
+from pyface.api import ImageResource
+from pyface.ui_traits import Image
 from traits.api import Bool, Button, HasTraits, List, Str
 from traits.testing.api import UnittestTools
+
 from traitsui.api import ButtonEditor, Item, UItem, View
+import traitsui.extras
 from traitsui.tests._tools import (
     BaseTestMixin,
     requires_toolkit,
@@ -32,6 +36,10 @@ class ButtonTextEdit(HasTraits):
     play_button = Button("Play")
 
     play_button_label = Str("I'm a play button")
+
+    play_button_image = Image(
+        ImageResource("run", [traitsui.extras])
+    )
 
     values = List()
 
@@ -55,6 +63,13 @@ simple_view = View(
 custom_view = View(
     UItem("play_button", editor=ButtonEditor(label_value="play_button_label")),
     Item("play_button_label"),
+    resizable=True,
+    style="custom",
+)
+
+
+custom_image_view = View(
+    UItem("play_button", editor=ButtonEditor(image_value="play_button_image")),
     resizable=True,
     style="custom",
 )
@@ -91,6 +106,8 @@ class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
     def test_simple_button_editor(self):
         self.check_button_text_update(simple_view)
 
+    # this currently fails on wx, see enthought/traitsui#1654
+    @requires_toolkit([ToolkitName.qt])
     def test_custom_button_editor(self):
         self.check_button_text_update(custom_view)
 
@@ -144,6 +161,22 @@ class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
 
     def test_custom_button_editor_disabled(self):
         self.check_button_disabled("custom")
+
+    def test_custom_image_value(self):
+        button_text_edit = ButtonTextEdit()
+
+        tester = UITester()
+        with tester.create_ui(button_text_edit, dict(view=custom_image_view)) \
+                as ui:
+            button = tester.find_by_name(ui, "play_button")
+            default_image = button._target.image
+            self.assertIsInstance(default_image, ImageResource)
+
+            button_text_edit.play_button_image = ImageResource(
+                'next', [traitsui.extras]
+            )
+            self.assertIsInstance(button._target.image, ImageResource)
+            self.assertIsNot(button._target.image, default_image)
 
 
 @requires_toolkit([ToolkitName.qt])

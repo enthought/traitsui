@@ -41,7 +41,7 @@ class FileEditorDemo(HasTraits):
 
     # Display specification (one Item per editor style):
     file_group = Group(
-        Item('file_name', style='simple', label='Simple'),
+        Item('file_name', style='simple', label='Simple', id='simple_file'),
         Item('_'),
         Item('file_name', style='custom', label='Custom'),
         Item('_'),

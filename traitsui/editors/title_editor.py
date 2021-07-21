@@ -11,14 +11,13 @@
 """ Defines the title editor factory for all traits toolkit backends.
 """
 
-
-
 from traits.api import Bool
-from ..editor_factory import EditorFactory
-from ..toolkit import toolkit_object
+
+from traitsui.editor_factory import EditorFactory
+from traitsui.toolkit import toolkit_object
 
 
-class ToolkitEditorFactory(EditorFactory):
+class TitleEditor(EditorFactory):
     """ Editor factory for Title editors.
     """
 
@@ -26,17 +25,15 @@ class ToolkitEditorFactory(EditorFactory):
 
     def _get_simple_editor_class(self):
         """ Returns the editor class to use for "simple" style views.
-        The default implementation tries to import the SimpleEditor class in the
-        editor file in the backend package, and if such a class is not to found
-        it returns the SimpleEditor class defined in editor_factory module in
-        the backend package.
+        The default implementation tries to import the SimpleEditor class in
+        the editor file in the backend package, and if such a class is not to
+        found it returns the SimpleEditor class defined in editor_factory
+        module in the backend package.
 
         """
         SimpleEditor = toolkit_object("title_editor:SimpleEditor")
         return SimpleEditor
 
 
-# -------------------------------------------------------------------------
-#  Create the editor factory object:
-# -------------------------------------------------------------------------
-TitleEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = TitleEditor

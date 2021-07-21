@@ -19,7 +19,7 @@ from traits.api import (
     Property,
     Str,
     Tuple,
-    Either,
+    Union,
 )
 
 from traitsui.basic_editor_factory import BasicEditorFactory
@@ -59,10 +59,10 @@ class DataFrameAdapter(TabularAdapter):
     format = Property()
 
     #: The format for each element, or a mapping column ID to format.
-    _formats = Either(Str, Dict, default="%s")
+    _formats = Union(Str, Dict, default_value="%s")
 
     #: The font for each element, or a mapping column ID to font.
-    _fonts = Either(Font, Dict, default="Courier 10")
+    _fonts = Union(Font, Dict, default_value="Courier 10")
 
     def _get_index_alignment(self):
         import numpy as np
@@ -226,7 +226,9 @@ class _DataFrameEditor(UIEditor):
                     scroll_to_row=self._target_name(
                         self.factory.scroll_to_row
                     ),  # noqa
-                    scroll_to_row_hint=self.factory.scroll_to_row_hint,
+                    scroll_to_position_hint=(
+                        self.factory.scroll_to_position_hint
+                    ),
                     scroll_to_column=self._target_name(
                         self.factory.scroll_to_column
                     ),  # noqa
@@ -306,13 +308,13 @@ class DataFrameEditor(BasicEditorFactory):
     show_titles = Bool(True)
 
     #: Optional list of either column ID or pairs of (column title, column ID).
-    columns = List(Either(Str, Tuple(Str, Str)))
+    columns = List(Union(Str, Tuple(Str, Str)))
 
     #: The format for each element, or a mapping column ID to format.
-    formats = Either(Str, Dict, default="%s")
+    formats = Union(Str, Dict, default_value="%s")
 
     #: The font for each element, or a mapping column ID to font.
-    fonts = Either(Font, Dict, default="Courier 10")
+    fonts = Union(Font, Dict, default_value="Courier 10")
 
     #: The optional extended name of the trait to synchronize the selection
     #: values with:
@@ -348,8 +350,12 @@ class DataFrameEditor(BasicEditorFactory):
     #: trigger a scroll-to command. The data is an integer giving the row.
     scroll_to_row = Str()
 
-    #: Controls behavior of scroll to row
-    scroll_to_row_hint = Enum("center", "top", "bottom", "visible")
+    #: Deprecated: Controls behavior of scroll to row and scroll to column
+    scroll_to_row_hint = Property(Str, observe="scroll_to_position_hint")
+
+    #: (replacement of scroll_to_row_hint, but more clearly named)
+    #: Controls behavior of scroll to row and scroll to column
+    scroll_to_position_hint = Enum("visible", "center", "top", "bottom")
 
     #: The optional extended name of the Event trait that should be used to
     #: trigger a scroll-to command. The data is an integer giving the column.
@@ -395,3 +401,19 @@ class DataFrameEditor(BasicEditorFactory):
         """ The class used to construct editor objects.
         """
         return toolkit_object("data_frame_editor:_DataFrameEditor")
+    
+    def _get_scroll_to_row_hint(self):
+        warnings.warn(
+            "Use of scroll_to_row_hint trait is deprecated. "
+            "Use scroll_to_position_hint instead.",
+            DeprecationWarning,
+        )
+        return self.scroll_to_position_hint
+    
+    def _set_scroll_to_row_hint(self, hint):
+        warnings.warn(
+            "Use of scroll_to_row_hint trait is deprecated. "
+            "Use scroll_to_position_hint instead.",
+            DeprecationWarning,
+        )
+        self.scroll_to_position_hint = hint

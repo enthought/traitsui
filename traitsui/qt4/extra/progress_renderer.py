@@ -42,6 +42,12 @@ class ProgressRenderer(TableDelegate):
 
         # Draw it
         style = QtGui.QApplication.instance().style()
+        # save painter state, translate painter to cell location, and then
+        # restore painter state after drawing to solve enthought/traitsui#964
+        # ref: https://forum.qt.io/topic/105375/qitemdelegate-for-drawing-progress-bar-working-but-won-t-move-off-origin  # noqa: E501
+        painter.save()
+        painter.translate(option.rect.left(), option.rect.top())
         style.drawControl(
             QtGui.QStyle.CE_ProgressBar, progress_bar_option, painter
         )
+        painter.restore()

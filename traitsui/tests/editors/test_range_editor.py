@@ -320,3 +320,98 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             displayed = text.inspect(DisplayedText())
             self.assertEqual(model.float_value, 10.0)
             self.assertEqual(displayed, str(model.float_value))
+
+    def test_format_func(self):
+
+        def num_to_time(num):
+            minutes = int(num / 60)
+            if minutes < 10:
+                minutes_str = '0' + str(minutes)
+            else:
+                minutes_str = str(minutes)
+            seconds = num % 60
+            if seconds < 10:
+                seconds_str = '0' + str(seconds)
+            else:
+                seconds_str = str(seconds)
+            return minutes_str + ':' + seconds_str
+
+        model = RangeModel()
+        view = View(
+            Item(
+                "float_value",
+                editor=RangeEditor(format_func=num_to_time)
+            )
+        )
+        tester = UITester()
+        with tester.create_ui(model, dict(view=view)) as ui:
+            float_value_field = tester.find_by_name(ui, "float_value")
+            float_value_text = float_value_field.locate(Textbox())
+            self.assertEqual(
+                float_value_text.inspect(DisplayedText()), "00:00.1"
+            )
+
+    def test_editor_factory_format(self):
+        """
+        format trait on RangeEditor editor factory has been deprecated in
+        favor of format_str. However, behavior should be unchanged.
+        """
+        model = RangeModel()
+        with self.assertWarns(DeprecationWarning):
+            view = View(
+                Item(
+                    "float_value",
+                    editor=RangeEditor(format="%s ...")
+                )
+            )
+        tester = UITester()
+        with tester.create_ui(model, dict(view=view)) as ui:
+            float_value_field = tester.find_by_name(ui, "float_value")
+            float_value_text = float_value_field.locate(Textbox())
+            self.assertEqual(
+                float_value_text.inspect(DisplayedText()), "0.1 ..."
+            )
+
+    def test_editor_format(self):
+        """
+        The format trait on an Editor instance previously potentially
+        could override the factory. Now that is not the case.
+        """
+        model = RangeModel()
+        with self.assertWarns(DeprecationWarning):
+            view = View(
+                Item(
+                    "float_value",
+                    editor=RangeEditor(format="%s ...")
+                )
+            )
+        tester = UITester()
+        with tester.create_ui(model, dict(view=view)) as ui:
+            float_value_field = tester.find_by_name(ui, "float_value")
+            float_value_field._target.format = "%s +++"
+            model.float_value = 0.2
+            float_value_text = float_value_field.locate(Textbox())
+            self.assertEqual(
+                float_value_text.inspect(DisplayedText()), "0.2 ..."
+            )
+
+    # regression test for enthought/traitsui#737
+    def test_set_text_out_of_range(self):
+        model = RangeModel()
+        view = View(
+            Item(
+                'float_value',
+                editor=RangeEditor(mode='text', low=0.0, high=1)
+            ),
+        )
+        tester = UITester()
+        with tester.create_ui(model, dict(view=view)) as ui:
+            float_value_field = tester.find_by_name(ui, "float_value")
+            for _ in range(3):
+                float_value_field.perform(KeyClick("Backspace"))
+
+            # set a value out of the range [0.0, 1]
+            float_value_field.perform(KeySequence("2.0"))
+            float_value_field.perform(KeyClick("Enter"))
+
+            self.assertTrue(0.0 <= model.float_value <= 1)

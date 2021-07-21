@@ -76,25 +76,10 @@ class Editor(UIEditor):
         dlg.ShowModal()
         dlg.Destroy()
 
-    def set_tooltip(self, control=None):
+    def set_tooltip_text(self, control, text):
         """ Sets the tooltip for a specified control.
         """
-        desc = self.description
-        if desc == "":
-            desc = self.object.base_trait(self.name).tooltip
-            if desc is None:
-                desc = self.object.base_trait(self.name).desc
-                if desc is None:
-                    return False
-
-                desc = "Specifies " + desc
-
-        if control is None:
-            control = self.control
-
-        control.SetToolTip(desc)
-
-        return True
+        control.SetToolTip(text)
 
     def _enabled_changed(self, enabled):
         """ Handles the **enabled** state of the editor being changed.
@@ -224,7 +209,7 @@ class EditorWithList(Editor):
             self._list_updated, self.list_name + "[]", remove=True
         )
 
-        super(EditorWithList, self).dispose()
+        super().dispose()
 
     def _list_updated(self):
         """ Handles the monitored trait being updated.
@@ -269,4 +254,4 @@ class EditorFromView(Editor):
         """
         self._ui.dispose()
 
-        super(EditorFromView, self).dispose()
+        super().dispose()

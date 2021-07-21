@@ -11,7 +11,6 @@
 import contextlib
 import unittest
 
-from pyface.gui import GUI
 from traits.api import Event, HasTraits, Instance, Int, List, Str
 from traits.testing.api import UnittestTools
 
@@ -353,6 +352,7 @@ class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
             self.assertEqual(sorted(get_selected_rows(editor)), [1, 2])
             self.assertEqual(sorted(report.selected_rows), [1, 2])
 
+    @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_selected_reacts_to_model_changes(self):
         with self.report_and_editor(get_view()) as (report, editor):
             people = report.people
@@ -376,6 +376,7 @@ class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
             self.assertIsNone(report.selected)
             self.assertEqual(report.selected_row, -1)
 
+    @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_event_synchronization(self):
         with self.report_and_editor(get_view()) as (report, editor):
             with self.assertTraitChanges(editor, "refresh", count=1):
@@ -389,6 +390,7 @@ class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
             with self.assertTraitChanges(editor, "update", count=1):
                 report.update = True
 
+    @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_adapter_columns_changes(self):
         # Regression test for enthought/traitsui#894
         with reraise_exceptions(), \
@@ -405,6 +407,7 @@ class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
             editor.adapter.columns = [("Name", "name")]
             process_cascade_events()
 
+    @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_view_column_resized_attribute_error_workaround(self):
         # This tests the workaround which checks if `factory` is None before
         # using it while resizing the columns.
@@ -417,8 +420,8 @@ class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
     @contextlib.contextmanager
     def report_and_editor(self, view):
         """
-        Context manager to temporarily create and clean up a Report model object
-        and the corresponding TabularEditor.
+        Context manager to temporarily create and clean up a Report model
+        object and the corresponding TabularEditor.
         """
         report = Report(
             people=[

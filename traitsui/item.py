@@ -151,12 +151,6 @@ class Item(ViewSubElement):
     #: any extra space available in the group?
     springy = Bool(False)
 
-    #: Should the item use any extra space along its Group's non-layout
-    #: orientation? For example, in a vertical group, should an item expand
-    #: horizontally to the full width of the group? If left to the default value
-    #: of Undefined, the decision will be left up to the associated item editor.
-    full_size = Bool(Undefined)
-
     #: Should the item's label use emphasized text? If the label is not shown,
     #: this attribute is ignored.
     emphasized = Bool(False)
@@ -177,15 +171,27 @@ class Item(ViewSubElement):
     #: the widget is not visible (and disappears if it was previously visible).
     #: If the value evaluates to True, the widget becomes visible. All
     #: **visible_when** conditions are checked each time that any trait value
-    #: is edited in the display. Therefore, you can use **visible_when**
-    #: conditions to hide or show widgets in response to user input.
+    #: on an object in the UI's context is changed. Therefore, you can use
+    #: **visible_when** conditions to hide or show widgets in response to user
+    #: input. Be aware that this only applies to traits in the UI's context. As
+    #: a result, changes to nested traits that don't also change a trait on
+    #: some object in the context may not trigger the expression to be checked.
+    #: Additionally, the expression needs to be a valid python expression given
+    #: the context. i.e. eval(visible_when, globals=globals(), locals=context)
+    #: should succeed.
     visible_when = Str()
 
     #: Pre-condition for enabling the item. If the expression evaluates to False,
     #: the widget is disabled, that is, it does not accept input. All
     #: **enabled_when** conditions are checked each time that any trait value
-    #: is edited in the display. Therefore, you can use **enabled_when**
-    #: conditions to enable or disable widgets in response to user input.
+    #: on an object in the UI's context is changed. Therefore, you can use
+    #: **enabled_when** conditions to enable or disable widgets in response to
+    #: user input. Be aware that this only applies to traits in the UI's
+    #: context. As a result, changes to nested traits that don't also change a
+    #: trait on some object in the context may not trigger the expression to be
+    #: checked. Additionally, the expression needs to be a valid python
+    #: expression given the context. i.e.
+    #: eval(enabled_when, globals=globals(), locals=context) should succeed.
     enabled_when = Str()
 
     #: Amount of extra space, in pixels, to add around the item. Values must be
@@ -256,7 +262,7 @@ class Item(ViewSubElement):
     def __init__(self, value=None, **traits):
         """ Initializes the item object.
         """
-        super(Item, self).__init__(**traits)
+        super().__init__(**traits)
 
         if value is None:
             return
@@ -484,7 +490,7 @@ class Label(Item):
     """
 
     def __init__(self, label, **traits):
-        super(Label, self).__init__(label=label, **traits)
+        super().__init__(label=label, **traits)
 
 
 # -------------------------------------------------------------------------

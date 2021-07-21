@@ -5,6 +5,8 @@
 name: Integration tests
 
 on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
   schedule:
     - cron:  '0 0 * * 4'
 
@@ -17,7 +19,7 @@ jobs:
         # Dependencies include chaco/enable, whose installation fails
         # on Python 3.8 and 3.9
         python-version: [3.6]
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Check out
         uses: actions/checkout@v2
@@ -27,6 +29,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install Qt dependencies for Linux
         uses: ./.github/actions/apt-get-qt-deps
+        if: startsWith(matrix.os, 'ubuntu')
+      - name: Install Swig
+        run: sudo apt-get install swig
         if: startsWith(matrix.os, 'ubuntu')
       - name: Install Python packages and dependencies
         run: |
@@ -38,3 +43,31 @@ jobs:
         with:
           run: python -m unittest discover -v ${{ github.workspace }}/integrationtests
           working-directory: ${{ runner.temp }}
+
+  notify-on-failure:
+    needs: test
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack channel on failure
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: ${{ secrets.ETS_BOTS_SLACK_CHANNEL_ID }}
+          status: FAILED
+          color: danger
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_ACTION_SECRET }}
+
+  notify-on-success:
+    needs: test
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack channel on success
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: ${{ secrets.ETS_BOTS_SLACK_CHANNEL_ID }}
+          status: SUCCESS
+          color: good
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_ACTION_SECRET }}

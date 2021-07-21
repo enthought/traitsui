@@ -27,7 +27,7 @@ Please refer to the `CompoundEditor API docs`_ for further information.
 # Issue related to the demo warning: enthought/traitsui#945
 
 
-from traits.api import Either, Enum, HasTraits, Range
+from traits.api import Enum, HasTraits, Range, Union
 
 from traitsui.api import Item, Group, View
 
@@ -37,14 +37,9 @@ class CompoundEditorDemo(HasTraits):
     """ Defines the main CompoundEditor demo class.
     """
 
-    # Define a compund trait to view:
-    # Note: In Traits 6.1 a new Trait type `Union` has been added, which is
-    # recommended over `Either`:
-    # compound_trait = Union(
-    #     Range(1, 6), Enum('a', 'b', 'c', 'd', 'e', 'f'), default_value=1
-    # )
-    compound_trait = Either(
-        Range(1, 6), Enum('a', 'b', 'c', 'd', 'e', 'f'), default=1
+    # Define a compound trait to view:
+    compound_trait = Union(
+        Range(1, 6), Enum('a', 'b', 'c', 'd', 'e', 'f'), default_value=1
     )
 
     # Display specification (one Item per editor style):

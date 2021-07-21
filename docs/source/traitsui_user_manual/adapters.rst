@@ -208,8 +208,10 @@ such a structure might look like this::
             return bool(self.value)
 
         def tno_get_children(self, node):
-            return [DictNode(parent=self, label=key, value=value)
-                    for key, value in sorted(self.value.items())]
+            return [
+                DictNode(parent=self, label=key, value=value)
+                for key, value in sorted(self.value.items())
+            ]
 
 and so forth.  There is additional work if you want to be able to modify
 the structure of the tree, for example.  In addition to defining the
@@ -360,9 +362,11 @@ Say instead that you have a list of :py:class:`Person` objects, with
 display in the table. Then you could use the following
 :py:attr:`~TabularAdapter.columns` value instead::
 
-    columns = [('Name', 'name'),
-               ('Age', 'age'),
-               ('Weight', 'weight')]
+    columns = [
+        ('Name', 'name'),
+        ('Age', 'age'),
+        ('Weight', 'weight'),
+    ]
 
 In this case, the *column ids* are the names of the traits you want to display
 in each column.

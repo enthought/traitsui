@@ -14,6 +14,10 @@ implementations for testing various GUI elements.
 
 import inspect
 
+
+from traitsui.testing.tester._abstract_target_registry import (
+    AbstractTargetRegistry,
+)
 from traitsui.testing.tester.exceptions import (
     InteractionNotSupported,
     LocationNotSupported,
@@ -75,7 +79,7 @@ class _TargetToKeyRegistry:
         return set(self._target_to_key_to_value.get(target_class, []))
 
 
-class TargetRegistry:
+class TargetRegistry(AbstractTargetRegistry):
     """ An object for registering interaction and location resolution logic
     for different UI target types.
 
@@ -85,7 +89,8 @@ class TargetRegistry:
     ``register_location`` supports extending ``UIWrapper.locate`` for a given
     UI target type and location type.
 
-    See :ref:`advanced-testing` Section in the User Manual for further details.
+    See :ref:`testing-how-extension-works` in the User Manual for further
+    details.
     """
 
     def __init__(self):
@@ -135,22 +140,20 @@ class TargetRegistry:
             value=handler,
         )
 
-    def get_handler(self, target_class, interaction_class):
-        """ Return a callable for handling an interaction for a given target
-        type.
+    def _get_handler(self, target, interaction):
+        """ Return a callable for handling an interaction for a given target.
 
         Parameters
         ----------
-        target_class : subclass of type
-            The type of a UI target being operated on.
-        interaction_class : subclass of type
-            Any class.
+        target : any
+            The UI target being operated on.
+        interaction : any
+            Any interaction object.
 
         Returns
         -------
         handler : callable(UIWrapper, interaction) -> any
-            The function to handle the particular interaction on a target.
-            ``interaction`` should be an instance of ``interaction_class``.
+            The function to handle the given interaction on a target.
 
         Raises
         ------
@@ -159,32 +162,34 @@ class TargetRegistry:
             by this registry.
         """
         return self._interaction_registry.get_value(
-            target_class=target_class,
-            key=interaction_class,
+            target_class=target.__class__,
+            key=interaction.__class__,
         )
 
-    def get_interactions(self, target_class):
-        """ Returns all the interactions supported for the given target type.
+    def _get_interactions(self, target):
+        """ Returns all the interactions supported for the given target.
 
         Parameters
         ----------
-        target_class : subclass of type
-            The type of a UI target being operated on.
+        target : any
+            The UI target for which supported interactions are queried.
 
         Returns
         -------
         interaction_classes : set
             Supported interaction types for the given target type.
         """
-        return self._interaction_registry.get_keys(target_class=target_class)
+        return self._interaction_registry.get_keys(
+            target_class=target.__class__
+        )
 
-    def get_interaction_doc(self, target_class, interaction_class):
-        """ Return the documentation for the given target and locator type.
+    def _get_interaction_doc(self, target, interaction_class):
+        """ Return the documentation for the given target and interaction type.
 
         Parameters
         ----------
-        target_class : subclass of type
-            The type of a UI target being operated on.
+        target : any
+            The UI target for which the interaction will be applied.
         interaction_class : subclass of type
             Any class.
 
@@ -199,7 +204,7 @@ class TargetRegistry:
             by this registry.
         """
         self._interaction_registry.get_value(
-            target_class=target_class,
+            target_class=target.__class__,
             key=interaction_class,
         )
         # This maybe configurable in the future via register_interaction
@@ -231,16 +236,16 @@ class TargetRegistry:
             value=solver,
         )
 
-    def get_solver(self, target_class, locator_class):
+    def _get_solver(self, target, location):
         """ Return a callable registered for resolving a location for the
-        given target type and locator type.
+        given target and location.
 
         Parameters
         ----------
-        target_class : subclass of type
-            The type of a UI target being operated on.
-        locator_class : subclass of type
-            Any class.
+        target : any
+            The UI target being operated on.
+        location : subclass of type
+            The location to be resolved on the target.
 
         Raises
         ------
@@ -248,32 +253,32 @@ class TargetRegistry:
             If the given locator and target types are not supported.
         """
         return self._location_registry.get_value(
-            target_class=target_class,
-            key=locator_class,
+            target_class=target.__class__,
+            key=location.__class__,
         )
 
-    def get_locations(self, target_class):
-        """ Returns all the location types supported for the given target type.
+    def _get_locations(self, target):
+        """ Returns all the location types supported for the given target.
 
         Parameters
         ----------
-        target_class : subclass of type
-            The type of a UI target being operated on.
+        target : any
+            The UI target for which supported location types are queried.
 
         Returns
         -------
         locators_classes : set
             Supported locator types for the given target type.
         """
-        return self._location_registry.get_keys(target_class=target_class)
+        return self._location_registry.get_keys(target_class=target.__class__)
 
-    def get_location_doc(self, target_class, locator_class):
+    def _get_location_doc(self, target, locator_class):
         """ Return the documentation for the given target and locator type.
 
         Parameters
         ----------
-        target_class : subclass of type
-            The type of a UI target being operated on.
+        target : any
+            The UI target being operated on.
         locator_class : subclass of type
             Any class.
 
@@ -287,7 +292,7 @@ class TargetRegistry:
             If the given locator and target types are not supported.
         """
         self._location_registry.get_value(
-            target_class=target_class,
+            target_class=target.__class__,
             key=locator_class,
         )
         # This maybe configurable in the future via register_location

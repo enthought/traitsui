@@ -133,7 +133,7 @@ class _ModalDialog(BaseDialog):
                         enabled=apply,
                         default=default,
                     )
-                    ui.on_trait_change(
+                    ui.observe(
                         self._on_applyable, "modified", dispatch="ui"
                     )
 
@@ -155,7 +155,7 @@ class _ModalDialog(BaseDialog):
                         self.control.accept,
                         default=default,
                     )
-                    ui.on_trait_change(self._on_error, "errors", dispatch="ui")
+                    ui.observe(self._on_error, "errors", dispatch="ui")
 
                 elif self.is_button(button, "Cancel"):
                     self.add_button(
@@ -191,7 +191,7 @@ class _ModalDialog(BaseDialog):
     def close(self, rc=True):
         """Close the dialog and set the given return code.
         """
-        super(_ModalDialog, self).close(rc)
+        super().close(rc)
 
         self.apply = self.revert = self.help = None
 
@@ -242,9 +242,10 @@ class _ModalDialog(BaseDialog):
         ui.handler.apply(ui.info)
         ui.modified = False
 
-    def _on_applyable(self, state):
+    def _on_applyable(self, event):
         """Handles a change to the "modified" state of the user interface .
         """
+        state = event.new
         self.apply.setEnabled(state)
 
     def _on_revert(self):

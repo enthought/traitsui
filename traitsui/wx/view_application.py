@@ -123,9 +123,9 @@ class ViewApplication(wx.App):
         self.args = args
 
         if redirect_filename.strip() != "":
-            super(ViewApplication, self).__init__(1, redirect_filename)
+            super().__init__(1, redirect_filename)
         else:
-            super(ViewApplication, self).__init__(0)
+            super().__init__(0)
 
         # Start the event loop in an IPython-conforming manner.
         try:

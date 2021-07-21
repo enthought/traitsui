@@ -10,6 +10,9 @@
 
 """ API for traitsui.editors subpackage.
 
+Note that the following are also available from :mod:`traitsui.api`, which
+is the preferred module for imports.
+
 - :attr:`~.ArrayEditor`
 - :attr:`~.BooleanEditor`
 - :attr:`~.ButtonEditor`
@@ -55,6 +58,16 @@
 - :attr:`~.TreeEditor`
 - :attr:`~.TupleEditor`
 - :attr:`~.ValueEditor`
+
+Tree Editor Actions / Traits
+----------------------------
+- :attr:`~.CopyAction`
+- :attr:`~.CutAction`
+- :attr:`~.DeleteAction`
+- :attr:`~.IconSize`
+- :attr:`~.NewAction`
+- :attr:`~.PasteAction`
+- :attr:`~.RenameAction`
 
 """
 
@@ -121,3 +134,13 @@ from .scrubber_editor import ScrubberEditor
 from .tabular_editor import TabularEditor
 from .progress_editor import ProgressEditor
 from .search_editor import SearchEditor
+
+from traitsui.editors.tree_editor import (
+    CopyAction,
+    CutAction,
+    DeleteAction,
+    IconSize,
+    NewAction,
+    PasteAction,
+    RenameAction,
+)

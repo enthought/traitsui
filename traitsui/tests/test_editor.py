@@ -10,7 +10,10 @@
 
 import unittest
 
-from traits.api import Any, Bool, Event, Float, HasTraits, Int, List, Undefined
+from pyface.toolkit import toolkit_object
+from traits.api import (
+    Any, Bool, Event, Float, HasTraits, Int, List, Range, Undefined
+)
 from traits.trait_base import xgetattr
 
 from traitsui.context_value import ContextValue, CVFloat, CVInt
@@ -18,9 +21,22 @@ from traitsui.editor import Editor
 from traitsui.editor_factory import EditorFactory
 from traitsui.handler import default_handler
 from traitsui.ui import UI
-from traitsui.tests._tools import (
-    BaseTestMixin, GuiTestAssistant, no_gui_test_assistant
+from traitsui.testing.api import (
+    KeyClick, KeySequence, Textbox, UITester
 )
+from traitsui.tests._tools import (
+    BaseTestMixin,
+    GuiTestAssistant,
+    is_mac_os,
+    no_gui_test_assistant,
+    requires_toolkit,
+    ToolkitName,
+)
+
+ModalDialogTester = toolkit_object(
+    "util.modal_dialog_tester:ModalDialogTester"
+)
+no_modal_dialog_tester = ModalDialogTester.__name__ == "Unimplemented"
 
 
 class FakeControl(HasTraits):
@@ -35,6 +51,9 @@ class FakeControl(HasTraits):
 
     #: An event which also can be fired.
     control_event = Event()
+
+    #: The tooltip text for the control.
+    tooltip = Any()
 
 
 class StubEditorFactory(EditorFactory):
@@ -97,6 +116,7 @@ class StubEditor(Editor):
             self.control.on_trait_change(self.update_object, "control_event")
         else:
             self.control.on_trait_change(self.update_object, "control_value")
+        self.set_tooltip()
 
     def dispose(self):
         if self.is_event:
@@ -107,7 +127,7 @@ class StubEditor(Editor):
             self.control.on_trait_change(
                 self.update_object, "control_value", remove=True
             )
-        super(StubEditor, self).dispose()
+        super().dispose()
 
     def update_editor(self):
         if self.is_event:
@@ -124,6 +144,9 @@ class StubEditor(Editor):
                 finally:
                     self._no_update = False
 
+    def set_tooltip_text(self, control, text):
+        control.tooltip = text
+
     def set_focus(self, parent):
         pass
 
@@ -137,8 +160,14 @@ class UserObject(HasTraits):
     #: An auxiliary user value
     user_auxiliary = Any(10)
 
-    #: An list user value
+    #: A list user value
     user_list = List(["one", "two", "three"])
+
+    #: A trait with desc metadata.
+    user_desc = Any("test", desc="a trait with desc metadata")
+
+    #: A trait with tooltip metadata.
+    user_tooltip = Any("test", tooltip="a tooltip")
 
     #: An event user value
     user_event = Event()
@@ -153,6 +182,7 @@ def create_editor(
         name="user_value",
         factory=None,
         is_event=False,
+        description="",
 ):
     if context is None:
         user_object = UserObject()
@@ -176,6 +206,7 @@ def create_editor(
         name=name,
         factory=factory,
         object=user_object,
+        description=description,
     )
     return editor
 
@@ -408,6 +439,110 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         self.assertEqual(value, "other_test")
 
         editor.dispose()
+
+    def test_tooltip_default(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context)
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            self.assertIsNone(editor.control.tooltip)
+
+            tooltip_text = editor.tooltip_text()
+            self.assertIsNone(tooltip_text)
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertFalse(set_tooltip_result)
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_from_description(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, description="a tooltip")
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            self.assertEqual(editor.control.tooltip, "a tooltip")
+
+            tooltip_text = editor.tooltip_text()
+            self.assertEqual(tooltip_text, "a tooltip")
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertTrue(set_tooltip_result)
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_text_with_tooltip(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, name='user_tooltip')
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            self.assertEqual(editor.control.tooltip, "a tooltip")
+
+            tooltip_text = editor.tooltip_text()
+            self.assertEqual(tooltip_text, "a tooltip")
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertTrue(set_tooltip_result)
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_text_with_desc(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, name='user_desc')
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            self.assertEqual(
+                editor.control.tooltip,
+                "Specifies a trait with desc metadata",
+            )
+
+            tooltip_text = editor.tooltip_text()
+            self.assertEqual(
+                tooltip_text,
+                "Specifies a trait with desc metadata",
+            )
+
+            set_tooltip_result = editor.set_tooltip()
+            self.assertTrue(set_tooltip_result)
+        except Exception:
+            editor.dispose()
+            raise
+
+    def test_tooltip_other_control(self):
+        context = {
+            "object": UserObject(),
+        }
+        editor = create_editor(context=context, description="a tooltip")
+        editor.prepare(None)
+
+        # test tooltip text
+        try:
+            other_control = FakeControl()
+            set_tooltip_result = editor.set_tooltip(other_control)
+
+            self.assertTrue(set_tooltip_result)
+            self.assertEqual(other_control.tooltip, "a tooltip")
+        except Exception:
+            editor.dispose()
+            raise
 
     # Test synchronizing built-in trait values between factory
     # and editor.
@@ -798,3 +933,55 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
 
         with self.assertTraitDoesNotChange(user_object, "user_auxiliary"):
             editor.auxiliary_value = 14
+
+    # regression test for enthought/traitsui#1543
+    @requires_toolkit([ToolkitName.qt])
+    @unittest.skipIf(no_modal_dialog_tester, "ModalDialogTester unavailable")
+    @unittest.skipIf(
+        is_mac_os,
+        "There is a separate issue on OSX. See enthought/traitsui#1550"
+    )
+    def test_editor_error_msg(self):
+        from pyface.qt import QtCore, QtGui
+
+        class Foo(HasTraits):
+            x = Range(low=0.0, high=1.0, value=0.5, exclude_low=True)
+
+        foo = Foo()
+        tester = UITester(auto_process_events=False)
+        with tester.create_ui(foo) as ui:
+
+            x_range = tester.find_by_name(ui, "x")
+            x_range_textbox = x_range.locate(Textbox())
+
+            for _ in range(3):
+                x_range_textbox.perform(KeyClick('Backspace'))
+
+            x_range_textbox.perform(KeySequence('0.0'))
+
+            def trigger_error():
+                x_range_textbox.perform(KeyClick('Enter'))
+
+            def check_and_close(mdtester):
+                try:
+                    with mdtester.capture_error():
+                        self.assertTrue(
+                            mdtester.has_widget(
+                                text="The 'x' trait of a Foo instance must be "
+                                     "0.0 < a floating point number <= 1.0, "
+                                     "but a value of 0.0 <class 'float'> was "
+                                     "specified.",
+                                type_=QtGui.QMessageBox,
+                            )
+                        )
+                        self.assertEqual(
+                            mdtester.get_dialog_widget().textFormat(),
+                            QtCore.Qt.PlainText
+                        )
+                finally:
+                    mdtester.close(accept=True)
+                    self.assertTrue(mdtester.dialog_was_opened)
+
+            mdtester = ModalDialogTester(trigger_error)
+            mdtester.open_and_run(check_and_close)
+            self.assertTrue(mdtester.dialog_was_opened)

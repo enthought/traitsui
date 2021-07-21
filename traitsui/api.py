@@ -143,6 +143,7 @@ Table UI
 --------
 
 - :class:`~.TabularAdapter`
+- :attr:`~.TableEditor`
 
 Table column types:
 
@@ -159,10 +160,20 @@ Table filter types:
 - :class:`~.RuleTableFilter`
 - :class:`~.TableFilter`
 
+Instance UI
+-----------
+
+- :class:`~.InstanceChoice`
+- :class:`~.InstanceChoiceItem`
+- :class:`~.InstanceDropChoice`
+- :attr:`~.InstanceEditor`
+- :class:`~.InstanceFactoryChoice`
+
 Toolkit Object
 --------------
 
 - :func:`~.toolkit`
+- :func:`~.toolkit_object`
 
 Custom Traits
 -------------
@@ -191,6 +202,7 @@ Tree UI
 - :class:`~.ITreeNodeAdapter`
 - :class:`~.MultiTreeNode`
 - :class:`~.ObjectTreeNode`
+- :attr:`~.TreeEditor`
 - :class:`~.TreeNode`
 - :class:`~.TreeNodeObject`
 
@@ -379,7 +391,14 @@ from .table_filter import (
 
 from .tabular_adapter import TabularAdapter
 
-from .toolkit import toolkit
+from .instance_choice import (
+    InstanceChoice,
+    InstanceChoiceItem,
+    InstanceDropChoice,
+    InstanceFactoryChoice,
+)
+
+from .toolkit import toolkit, toolkit_object
 
 from .toolkit_traits import (
     Color,

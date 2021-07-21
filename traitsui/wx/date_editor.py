@@ -31,11 +31,6 @@ from traitsui.wx.text_editor import ReadonlyEditor as TextReadonlyEditor
 logger = logging.getLogger(__name__)
 
 
-# ------------------------------------------------------------------------------
-# --  Simple Editor
-# ------------------------------------------------------------------------------
-
-
 class SimpleEditor(Editor):
     """
     Simple Traits UI date editor.  Shows a text box, and a date-picker widget.
@@ -94,9 +89,6 @@ class SimpleEditor(Editor):
         return
 
 
-# -- end SimpleEditor definition -----------------------------------------------
-
-
 # ------------------------------------------------------------------------------
 # --  Custom Editor
 # ------------------------------------------------------------------------------
@@ -129,7 +121,7 @@ class wxMouseBoxCalendarCtrl(wx.adv.CalendarCtrl):
     """
 
     def __init__(self, *args, **kwargs):
-        super(wxMouseBoxCalendarCtrl, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.selecting = False
         self.box_selected = []
@@ -253,8 +245,6 @@ class wxMouseBoxCalendarCtrl(wx.adv.CalendarCtrl):
         gc.SetBrush(brush)
         gc.DrawRectangle(x, y, w, h)
 
-# -- end wxMouseBoxCalendarCtrl ------------------------------------------------
-
 
 class MultiCalendarCtrl(wx.Panel):
     """
@@ -282,7 +272,7 @@ class MultiCalendarCtrl(wx.Panel):
         *args,
         **kwargs
     ):
-        super(MultiCalendarCtrl, self).__init__(parent, ID, *args, **kwargs)
+        super().__init__(parent, ID, *args, **kwargs)
 
         self.sizer = wx.BoxSizer()
         self.SetSizer(self.sizer)
@@ -782,9 +772,6 @@ class MultiCalendarCtrl(wx.Panel):
         self.selected_list_changed()
 
 
-# -- end CalendarCtrl ----------------------------------------------------------
-
-
 class CustomEditor(Editor):
     """
     Show multiple months with MultiCalendarCtrl. Allow multi-select.
@@ -847,24 +834,11 @@ class CustomEditor(Editor):
         return
 
 
-# -- end CustomEditor definition -----------------------------------------------
-
-
-# ------------------------------------------------------------------------------
-# --  Text Editor
-# ------------------------------------------------------------------------------
 # TODO: Write me.  Possibly use TextEditor as a model to show a string
 # representation of the date, and have enter-set do a date evaluation.
 class TextEditor(SimpleEditor):
     pass
 
-
-# -- end TextEditor definition -------------------------------------------------
-
-
-# ------------------------------------------------------------------------------
-# --  Readonly Editor
-# ------------------------------------------------------------------------------
 
 
 class ReadonlyEditor(TextReadonlyEditor):
@@ -876,8 +850,3 @@ class ReadonlyEditor(TextReadonlyEditor):
             return self.factory.message
         else:
             return self.value.strftime(self.factory.strftime)
-
-
-# -- end ReadonlyEditor definition ---------------------------------------------
-
-# -- eof -----------------------------------------------------------------------

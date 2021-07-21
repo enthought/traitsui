@@ -11,10 +11,10 @@
 """ A Traits UI editor that wraps a WX calendar panel.
 """
 
-
 from traits.trait_types import Bool, Instance, Int, Enum, Str
-from ..ui_traits import AView
-from ..editor_factory import EditorFactory
+
+from traitsui.editor_factory import EditorFactory
+from traitsui.ui_traits import AView
 
 
 class CellFormat(object):

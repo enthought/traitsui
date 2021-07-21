@@ -22,6 +22,9 @@ from traitsui.tests._tools import (
     requires_toolkit,
     ToolkitName,
 )
+from traitsui.testing.tester._abstract_target_registry import (
+    AbstractTargetRegistry,
+)
 from traitsui.testing.tester.exceptions import (
     InteractionNotSupported,
     LocationNotSupported,
@@ -54,17 +57,55 @@ def example_ui_wrapper(**kwargs):
     return UIWrapper(**values)
 
 
-class StubRegistry:
+class StubRegistry(AbstractTargetRegistry):
+    """ A stub implementation of the AbstractTargetRegistry for testing
+    """
 
-    def __init__(self, handler=None, solver=None):
+    def __init__(
+            self,
+            handler=None,
+            solver=None,
+            supported_interaction_classes=(),
+            supported_locator_classes=(),
+            interaction_doc="",
+            location_doc="",
+            ):
         self.handler = handler
         self.solver = solver
+        self.supported_interaction_classes = supported_interaction_classes
+        self.supported_locator_classes = supported_locator_classes
+        self.interaction_doc = interaction_doc
+        self.location_doc = location_doc
 
-    def get_handler(self, target_class, interaction_class):
+    def _get_handler(self, target, interaction):
+        if interaction.__class__ not in self.supported_interaction_classes:
+            raise InteractionNotSupported(
+                target_class=target.__class__,
+                interaction_class=interaction.__class__,
+                supported=list(self.supported_interaction_classes),
+            )
         return self.handler
 
-    def get_solver(self, target_class, locator_class):
+    def _get_interactions(self, target):
+        return set(self.supported_interaction_classes)
+
+    def _get_interaction_doc(self, target, interaction_class):
+        return self.interaction_doc
+
+    def _get_solver(self, target, location):
+        if location.__class__ not in self.supported_locator_classes:
+            raise LocationNotSupported(
+                target_class=target.__class__,
+                locator_class=location.__class__,
+                supported=list(self.supported_locator_classes),
+            )
         return self.solver
+
+    def _get_locations(self, target):
+        return set(self.supported_locator_classes)
+
+    def _get_location_doc(self, target, locator_class):
+        return self.location_doc
 
 
 # Use of perform/inspect requires the GUI event loop
@@ -76,13 +117,19 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
     def test_registry_priority(self):
         # If two registries have a handler for the same target and interaction
         # types, the first register is used.
-        registry1 = StubRegistry(handler=lambda w, l: 1)
-        registry2 = StubRegistry(handler=lambda w, l: 2)
+        registry1 = StubRegistry(
+            handler=lambda w, l: 1,
+            supported_interaction_classes=[str],
+        )
+        registry2 = StubRegistry(
+            handler=lambda w, l: 2,
+            supported_interaction_classes=[str],
+        )
 
         wrapper = example_ui_wrapper(
             registries=[registry2, registry1],
         )
-        value = wrapper.inspect(None)
+        value = wrapper.inspect("some string")
 
         self.assertEqual(value, 2)
 
@@ -90,7 +137,7 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
         wrapper = example_ui_wrapper(
             registries=[registry1, registry2]
         )
-        value = wrapper.inspect(None)
+        value = wrapper.inspect("some other string")
 
         self.assertEqual(value, 1)
 
@@ -98,22 +145,17 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
         # If the first registry says it can't handle the interaction, the next
         # registry is tried.
 
-        class EmptyRegistry:
-            def get_handler(self, target_class, interaction_class):
-                raise InteractionNotSupported(
-                    target_class=None,
-                    interaction_class=None,
-                    supported=[],
-                )
-
-        registry1 = EmptyRegistry()
+        registry1 = StubRegistry()
         registry2_handler = mock.Mock()
-        registry2 = StubRegistry(handler=registry2_handler)
+        registry2 = StubRegistry(
+            handler=registry2_handler,
+            supported_interaction_classes=[int],
+        )
 
         wrapper = example_ui_wrapper(
             registries=[registry1, registry2],
         )
-        wrapper.perform(None)
+        wrapper.perform(123)
 
         self.assertEqual(registry2_handler.call_count, 1)
 
@@ -122,26 +164,11 @@ class TestUIWrapperInteractionRegistries(unittest.TestCase):
         # exception raised provide information on what actions are
         # supported.
 
-        class EmptyRegistry1:
-
-            def get_handler(self, target_class, interaction_class):
-                raise InteractionNotSupported(
-                    target_class=None,
-                    interaction_class=None,
-                    supported=[int],
-                )
-
-        class EmptyRegistry2:
-
-            def get_handler(self, target_class, interaction_class):
-                raise InteractionNotSupported(
-                    target_class=None,
-                    interaction_class=None,
-                    supported=[float],
-                )
-
         wrapper = example_ui_wrapper(
-            registries=[EmptyRegistry1(), EmptyRegistry2()],
+            registries=[
+                StubRegistry(supported_interaction_classes=[int]),
+                StubRegistry(supported_interaction_classes=[float]),
+            ],
         )
         with self.assertRaises(InteractionNotSupported) as exception_context:
             wrapper.perform(None)
@@ -158,47 +185,47 @@ class TestUIWrapperLocationRegistry(unittest.TestCase):
     """ Test the use of registries with locate. """
 
     def test_location_registry_priority(self):
-
-        registry1 = StubRegistry(solver=lambda w, l: 1)
-        registry2 = StubRegistry(solver=lambda w, l: 2)
+        registry1 = StubRegistry(
+            solver=lambda w, l: 1,
+            supported_locator_classes=[str],
+        )
+        registry2 = StubRegistry(
+            solver=lambda w, l: 2,
+            supported_locator_classes=[str],
+        )
 
         wrapper = example_ui_wrapper(
             registries=[registry2, registry1],
         )
-        wrapper = wrapper.locate(None)
+        new_wrapper = wrapper.locate("some string")
 
-        self.assertEqual(wrapper._target, 2)
+        self.assertEqual(new_wrapper._target, 2)
 
         # swap the order
         wrapper = example_ui_wrapper(
             registries=[registry1, registry2],
         )
-        wrapper = wrapper.locate(None)
+        new_wrapper = wrapper.locate("some other string")
 
-        self.assertEqual(wrapper._target, 1)
+        self.assertEqual(new_wrapper._target, 1)
 
     def test_location_registry_selection(self):
         # If the first registry says it can't handle the interaction, the next
         # registry is tried.
 
-        class EmptyRegistry:
-            def get_solver(self, target_class, locator_class):
-                raise LocationNotSupported(
-                    target_class=None,
-                    locator_class=None,
-                    supported=[],
-                )
-
         def solver2(wrapper, location):
             return 2
 
-        registry1 = EmptyRegistry()
-        registry2 = StubRegistry(solver=solver2)
+        registry1 = StubRegistry()
+        registry2 = StubRegistry(
+            solver=solver2,
+            supported_locator_classes=[str],
+        )
 
         wrapper = example_ui_wrapper(
             registries=[registry1, registry2],
         )
-        new_wrapper = wrapper.locate(None)
+        new_wrapper = wrapper.locate("some string")
 
         self.assertEqual(new_wrapper._target, 2)
         self.assertEqual(
@@ -211,24 +238,11 @@ class TestUIWrapperLocationRegistry(unittest.TestCase):
         # exception raised provide information on what actions are
         # supported.
 
-        class EmptyRegistry1:
-            def get_solver(self, target_class, locator_class):
-                raise LocationNotSupported(
-                    target_class=None,
-                    locator_class=None,
-                    supported=[int],
-                )
-
-        class EmptyRegistry2:
-            def get_solver(self, target_class, locator_class):
-                raise LocationNotSupported(
-                    target_class=None,
-                    locator_class=None,
-                    supported=[float],
-                )
-
         wrapper = example_ui_wrapper(
-            registries=[EmptyRegistry1(), EmptyRegistry2()],
+            registries=[
+                StubRegistry(supported_locator_classes=[int]),
+                StubRegistry(supported_locator_classes=[float]),
+            ],
         )
         with self.assertRaises(LocationNotSupported) as exception_context:
             wrapper.locate(None)
@@ -301,42 +315,18 @@ class TestUIWrapperHelp(unittest.TestCase):
         # The first registry in the list has the highest priority
         # The last registry in the list has the least priority
 
-        class HighPriorityRegistry(TargetRegistry):
-            def get_interaction_doc(self, target_class, interaction_class):
-                return "Interaction: I get a higher priority."
-
-            def get_location_doc(self, target_class, interaction_class):
-                return "Location: I get a higher priority."
-
-        class LowPriorityRegistry(TargetRegistry):
-            def get_interaction_doc(self, target_class, interaction_class):
-                return "Interaction: I get a lower priority."
-
-            def get_location_doc(self, target_class, interaction_class):
-                return "Location: I get a lower priority."
-
-        high_priority_registry = HighPriorityRegistry()
-        high_priority_registry.register_interaction(
-            target_class=str,
-            interaction_class=float,
-            handler=mock.Mock(),
-        )
-        high_priority_registry.register_location(
-            target_class=str,
-            locator_class=str,
-            solver=mock.Mock(),
+        high_priority_registry = StubRegistry(
+            supported_locator_classes=[str],
+            supported_interaction_classes=[float],
+            interaction_doc="Interaction: I get a higher priority.",
+            location_doc="Location: I get a higher priority.",
         )
 
-        low_priority_registry = LowPriorityRegistry()
-        low_priority_registry.register_interaction(
-            target_class=str,
-            interaction_class=float,
-            handler=mock.Mock(),
-        )
-        low_priority_registry.register_location(
-            target_class=str,
-            locator_class=str,
-            solver=mock.Mock(),
+        low_priority_registry = StubRegistry(
+            supported_locator_classes=[str],
+            supported_interaction_classes=[float],
+            interaction_doc="Interaction: I get a lower priority.",
+            location_doc="Location: I get a lower priority.",
         )
 
         # Put higher priority registry first.
@@ -411,11 +401,16 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
             gui.set_trait_later(model, "number", 2)
 
         wrapper = example_ui_wrapper(
-            registries=[StubRegistry(handler=handler)],
+            registries=[
+                StubRegistry(
+                    handler=handler,
+                    supported_interaction_classes=[float],
+                ),
+            ],
         )
 
         with self.assertTraitChanges(model, "number"):
-            wrapper.perform(None)
+            wrapper.perform(2.123)
 
     def test_event_processed_prior_to_resolving_location(self):
         # Test GUI events are processed prior to resolving location
@@ -427,10 +422,15 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
             return model.number
 
         wrapper = example_ui_wrapper(
-            registries=[StubRegistry(solver=solver)],
+            registries=[
+                StubRegistry(
+                    solver=solver,
+                    supported_locator_classes=[float],
+                )
+            ],
         )
 
-        new_wrapper = wrapper.locate(None)
+        new_wrapper = wrapper.locate(4.567)
         self.assertEqual(new_wrapper._target, 2)
 
     def test_event_processed_with_exception_captured(self):
@@ -445,11 +445,15 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
             gui.invoke_later(raise_error)
 
         wrapper = example_ui_wrapper(
-            registries=[StubRegistry(handler=handler)],
+            registries=[
+                StubRegistry(
+                    handler=handler,
+                    supported_interaction_classes=[float],
+                ),
+            ],
         )
-
         with self.assertRaises(RuntimeError), self.assertLogs("traitsui"):
-            wrapper.perform(None)
+            wrapper.perform(1.234)
 
     def test_exception_not_in_gui(self):
         # Exceptions from code executed outside of the event loop are
@@ -459,11 +463,16 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
             raise ZeroDivisionError()
 
         wrapper = example_ui_wrapper(
-            registries=[StubRegistry(handler=handler)],
+            registries=[
+                StubRegistry(
+                    handler=handler,
+                    supported_interaction_classes=[float],
+                ),
+            ],
         )
 
         with self.assertRaises(ZeroDivisionError):
-            wrapper.perform(None)
+            wrapper.perform(9.99)
 
     def test_perform_event_processed_optional(self):
         # Allow event processing to be switched off.
@@ -474,13 +483,18 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
             gui.invoke_later(side_effect)
 
         wrapper = example_ui_wrapper(
-            registries=[StubRegistry(handler=handler)],
+            registries=[
+                StubRegistry(
+                    handler=handler,
+                    supported_interaction_classes=[float],
+                ),
+            ],
             auto_process_events=False,
         )
 
         # With auto_process_events set to False, events are not automatically
         # processed.
-        wrapper.perform(None)
+        wrapper.perform(12.345)
         self.addCleanup(process_cascade_events)
 
         self.assertEqual(side_effect.call_count, 0)
@@ -496,13 +510,18 @@ class TestUIWrapperEventProcessed(unittest.TestCase, UnittestTools):
             return 1
 
         wrapper = example_ui_wrapper(
-            registries=[StubRegistry(solver=solver)],
+            registries=[
+                StubRegistry(
+                    solver=solver,
+                    supported_locator_classes=[float],
+                ),
+            ],
             auto_process_events=False,
         )
 
         # With auto_process_events set to False, events are not automatically
         # processed.
-        new_wrapper = wrapper.locate(None)
+        new_wrapper = wrapper.locate(1.234)
 
         self.assertEqual(side_effect.call_count, 0)
         self.assertFalse(new_wrapper._auto_process_events)

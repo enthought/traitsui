@@ -11,10 +11,6 @@
 """
 Core API for traitsui.testing
 
-Functionalities exposed via this package are intended to be used by external
-projects and stability is maintained as much as possible. Imports from other
-packages and subpackages do NOT receive the same stability guarantee.
-
 Tester
 ------
 
@@ -76,6 +72,7 @@ from .tester.query import (
     DisplayedText,
     IsChecked,
     IsEnabled,
+    IsVisible,
     SelectedText
 )
 

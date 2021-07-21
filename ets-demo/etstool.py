@@ -60,7 +60,7 @@ using::
     python etstool.py test_all
 
 Currently supported runtime values are ``3.6``, and currently
-supported toolkits are ``null``, ``pyqt``, ``pyqt5``, ``pyside2`` and ``wx``.
+supported toolkits are ``null``, ``pyqt5``, ``pyside2`` and ``wx``.
 Not all combinations of toolkits and runtimes will work, but the tasks will
 fail with a clear error if that is the case.
 
@@ -90,7 +90,7 @@ from contextlib import contextmanager
 import click
 
 supported_combinations = {
-    '3.6': {'pyside2', 'pyqt', 'pyqt5', 'wx', 'null'},
+    '3.6': {'pyside2', 'pyqt5', 'wx', 'null'},
 }
 
 # Default Python version to use in the comamnds below if none is specified.
@@ -121,10 +121,6 @@ extra_dependencies = {
     # XXX once pyside2 is available in EDM, we will want it here
     'pyside2': {
         "pygments",
-    },
-    'pyqt': {
-        'pyqt<4.12',  # FIXME: build 1 of 4.12.1 appears to be bad
-        'pygments',
     },
     'pyqt5': {
         'pyqt5',
@@ -162,7 +158,6 @@ BUNDLE_NAME = f"etsdemo-{APP_BUNDLE_VERSION}.bundle"
 
 environment_vars = {
     'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
-    "pyqt": {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyqt'},
     'pyqt5': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt5"},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
@@ -226,7 +221,7 @@ def install(runtime, toolkit, environment, editable):
     # pip install pyside2, because we don't have it in EDM yet
     if toolkit == 'pyside2':
         commands.append(
-            "edm run -e {environment} -- pip install pyside2==5.11"
+            "edm run -e {environment} -- pip install pyside2"
         )
     elif toolkit == 'wx':
         if sys.platform != 'linux':
@@ -236,7 +231,7 @@ def install(runtime, toolkit, environment, editable):
         else:
             # XXX this is mainly for TravisCI workers; need a generic solution
             commands.append(
-                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-14.04 wxPython"   # noqa: E501
+                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04 wxPython"   # noqa: E501
             )
 
     click.echo("Creating environment '{environment}'".format(**parameters))

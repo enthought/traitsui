@@ -28,11 +28,6 @@ from .editor import Editor
 
 from pyface.heading_text import HeadingText
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.title_editor file.
-from ..editors.title_editor import TitleEditor
-
 
 class SimpleEditor(Editor):
     def init(self, parent):

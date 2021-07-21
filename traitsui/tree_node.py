@@ -29,7 +29,7 @@ from traits.api import (
     Property,
     Str,
     Supports,
-    Either,
+    Union,
     cached_property,
 )
 
@@ -98,7 +98,17 @@ class TreeNode(HasPrivateTraits):
     #: Automatically close sibling tree nodes?
     auto_close = Bool(False)
 
-    #: List of object classes than can be added or copied
+    #: List of object classes than can be added or copied. Elements of the list
+    #: can be either:
+    #: - the klass itself that can be added or copied
+    #: - 2-tuples of the form (klass, prompt) in which case klass is as above
+    #:   and prompt is a boolean indicating whether or not to prompt the user
+    #:   to specify trait values after instantiation when adding the object.
+    #: - 3-tuples of the form (klass, prompt, factory) in which case klass and
+    #:   prompt are as above.  factory is a callable that is expected to return
+    #:   an instance of klass.  Useful if klass has required traits. Otherwise
+    #:   added object is created by simply instantiating klass()
+    #:   ref: enthought/traits#1502
     add = List(Any)
 
     #: List of object classes that can be moved
@@ -108,16 +118,16 @@ class TreeNode(HasPrivateTraits):
     node_for = List(Any)
 
     #: Tuple of object classes that the node applies to
-    node_for_class = Property(depends_on="node_for")
+    node_for_class = Property(observe="node_for")
 
     #: List of object interfaces that the node applies to
-    node_for_interface = Property(depends_on="node_for")
+    node_for_interface = Property(observe="node_for")
 
     #: Function for formatting the label
     formatter = Callable()
 
     #: Functions for formatting the other columns.
-    column_formatters = List(Either(None, Callable))
+    column_formatters = List(Union(None, Callable))
 
     #: Function for formatting the tooltip
     tooltip_formatter = Callable()
@@ -174,7 +184,7 @@ class TreeNode(HasPrivateTraits):
     _listener_cache = Dict()
 
     def __init__(self, **traits):
-        super(TreeNode, self).__init__(**traits)
+        super().__init__(**traits)
         if self.icon_path == "":
             self.icon_path = get_resource_path()
 

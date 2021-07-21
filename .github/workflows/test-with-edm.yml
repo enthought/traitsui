@@ -1,0 +1,55 @@
+# This workflow targets stable released dependencies from EDM.
+# Note that some packages may not actually be installed from EDM but from
+# PyPI, see etstool.py implementations.
+
+# wxPython should be included but it isn't because the test suite is currently
+# failing on all platforms and GitHub Actions does not support allow-failure
+# yet (see actions/toolkit#399)
+
+name: Test with EDM
+
+on: pull_request
+
+env:
+  INSTALL_EDM_VERSION: 3.2.3
+
+jobs:
+
+  # Test against EDM packages on Windows and OSX
+  test-with-edm:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        toolkit: ['pyqt5', 'pyside2']
+        include:
+          - os: ubuntu-latest
+            toolkit: 'null'
+    runs-on: ${{ matrix.os }}
+    env:
+      # Set root directory, mainly for Windows, so that the EDM Python
+      # environment lives in the same drive as the cloned source. Otherwise
+      # 'pip install' raises an error while trying to compute
+      # relative path between the site-packages and the source directory.
+      EDM_ROOT_DIRECTORY: ${{ github.workspace }}/.edm
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Qt dependencies for Linux
+        uses: ./.github/actions/apt-get-qt-deps
+        if: startsWith(matrix.os, 'ubuntu') && matrix.toolkit != 'wx' && matrix.toolkit != 'null'
+      - name: Cache EDM packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache
+          key: ${{ runner.os }}-${{ matrix.toolkit }}-${{ hashFiles('etstool.py') }}
+      - name: Setup EDM
+        uses: enthought/setup-edm-action@v1
+        with:
+          edm-version: ${{ env.INSTALL_EDM_VERSION }}
+      - name: Install click to the default EDM environment
+        run: edm install -y wheel click coverage
+      - name: Install test environment
+        run: edm run -- python etstool.py install --toolkit=${{ matrix.toolkit }}
+      - name: Run tests
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: edm run -- python etstool.py test --toolkit=${{ matrix.toolkit }}

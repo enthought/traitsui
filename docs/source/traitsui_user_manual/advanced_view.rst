@@ -63,30 +63,8 @@ variation on Example 3:
 
 .. rubric:: Example 5: Using configure_traits() with a default View object
 
-::
-
-    # default_traits_view.py -- Sample code to demonstrate the use of
-    #                           'traits_view'
-    from traits.api import HasTraits, Str, Int
-    from traitsui.api import View, Item, Group
-    import traitsui
-
-    class SimpleEmployee2(HasTraits):
-        first_name = Str()
-        last_name = Str()
-        department = Str()
-
-        employee_number = Str()
-        salary = Int()
-
-        traits_view = View(Group(Item(name = 'first_name'),
-                                 Item(name = 'last_name'),
-                                 Item(name = 'department'),
-                                 label = 'Personnel profile',
-                                 show_border = True))
-
-    sam = SimpleEmployee2()
-    sam.configure_traits()
+.. literalinclude:: examples/default_traits_view.py
+   :start-at: default_traits_view.py
 
 In this example, configure_traits() no longer requires a *view* keyword
 argument; the **traits_view** attribute is used by default, resulting in the
@@ -115,31 +93,8 @@ example above would be implemented as follows:
 
 .. rubric:: Example 5b: Building a default View object with default_traits_view()
 
-::
-
-    # default_traits_view2.py -- Sample code to demonstrate the use of
-    #                            'default_traits_view'
-    from traits.api import HasTraits, Str, Int
-    from traitsui.api import View, Item, Group
-    import traitsui
-
-    class SimpleEmployee2(HasTraits):
-        first_name = Str()
-        last_name = Str()
-        department = Str()
-
-        employee_number = Str()
-        salary = Int()
-
-        def default_traits_view(self):
-            return View(Group(Item(name = 'first_name'),
-                              Item(name = 'last_name'),
-                              Item(name = 'department'),
-                              label = 'Personnel profile',
-                              show_border = True))
-
-    sam = SimpleEmployee2()
-    sam.configure_traits()
+.. literalinclude:: examples/default_traits_view2.py
+   :start-at: default_traits_view2.py
 
 This pattern can be useful for situations where the layout of GUI elements
 depends on the state of the object. For instance, to populate the values of a
@@ -165,40 +120,8 @@ this by simply adding a second View attribute:
 
 .. rubric:: Example 6: Defining multiple View objects in a HasTraits class
 
-::
-
-    # multiple_views.py -- Sample code to demonstrate the use of
-    #                      multiple views
-    from traits.api import HasTraits, Str, Int
-    from traitsui.api import View, Item, Group
-    import traitsui
-
-    class SimpleEmployee3(HasTraits):
-        first_name = Str()
-        last_name = Str()
-        department = Str()
-
-        employee_number = Str()
-        salary = Int()
-
-        traits_view = View(Group(Item(name = 'first_name'),
-                                 Item(name = 'last_name'),
-                                 Item(name = 'department'),
-                                 label = 'Personnel profile',
-                                 show_border = True))
-
-        all_view = View(Group(Item(name = 'first_name'),
-                              Item(name = 'last_name'),
-                              Item(name = 'department'),
-                              Item(name = 'employee_number'),
-                              Item(name = 'salary'),
-                              label = 'Personnel database ' +
-                                      'entry',
-                              show_border = True))
-
-    sam = SimpleEmployee3()
-    sam.configure_traits()
-    sam.configure_traits(view='all_view')
+.. literalinclude:: examples/multiple_views.py
+   :start-at: multiple_views.py
 
 .. index:: traits_view attribute, configure_traits(); view parameter
 
@@ -240,9 +163,15 @@ UI, you can define a named View wherever you can define a variable or class
 attribute. [7]_ A View can even be defined in-line as a function or method
 argument, for example::
 
-    object.configure_traits(view=View(Group(Item(name='a'),
-                                            Item(name='b'),
-                                            Item(name='c')))
+    object.configure_traits(
+        view=View(
+            Group(
+                Item(name='a'),
+                Item(name='b'),
+                Item(name='c'),
+            ),
+        ),
+    )
 
 However, this approach is apt to obfuscate the code unless the View is very
 simple.
@@ -349,7 +278,15 @@ instead of wrapping it in a dictionary.
 
 When the ui() method is called from configure_traits() or edit_traits() on a
 HasTraits object, the relevant object is the HasTraits object whose method was
-called. For this reason, you do not need to specify the *context* argument in
+called. 
+
+.. NOTE::
+
+   There are some situations in which you may want to override the default
+   context used for a particular HasTraits class. To do this, simpy override the
+   :py:meth:`~.traits.has_traits.HasTraits.trait_context` method on the object.
+
+For this reason, you do not need to specify the *context* argument in
 most calls to configure_traits() or edit_traits(). However, when you call the
 ui() method on a View object, you *must* specify the *context* parameter, so
 that the ui() method receives references to the objects whose trait attributes
@@ -379,55 +316,8 @@ example shows:
 
 .. rubric:: Example 7: Using a multi-object view with a context
 
-::
-
-    # multi_object_view.py -- Sample code to show multi-object view
-    #                         with context
-
-    from traits.api import HasTraits, Str, Int, Bool
-    from traitsui.api import View, Group, Item
-
-    # Sample class
-    class House(HasTraits):
-       address = Str()
-       bedrooms = Int()
-       pool = Bool()
-       price = Int()
-
-    # View object designed to display two objects of class 'House'
-    comp_view = View(
-        Group(
-            Group(
-                Item('h1.address', resizable=True),
-                Item('h1.bedrooms'),
-                Item('h1.pool'),
-                Item('h1.price'),
-                show_border=True
-            ),
-            Group(
-                Item('h2.address', resizable=True),
-                Item('h2.bedrooms'),
-                Item('h2.pool'),
-                Item('h2.price'),
-                show_border=True
-            ),
-            orientation = 'horizontal'
-        ),
-        title = 'House Comparison'
-    )
-    # A pair of houses to demonstrate the View
-    house1 = House(address='4743 Dudley Lane',
-                   bedrooms=3,
-                   pool=False,
-                   price=150000)
-    house2 = House(address='11604 Autumn Ridge',
-                   bedrooms=3,
-                   pool=True,
-                   price=200000)
-
-    # ...And the actual display command
-    house1.configure_traits(view=comp_view, context={'h1':house1,
-                                                     'h2':house2})
+.. literalinclude:: examples/multi_object_view.py
+   :start-at: multi_object_view.py
 
 .. FIXME: This is a bit assymmetrical. Can we clean it up without complicating
    the example overly?
@@ -497,21 +387,21 @@ the following two definitions, taken together, are equivalent to the third:
 ::
 
     # This fragment...
-    my_view = View(Group(Item('a'),
-                         Item('b')),
-                   Include('my_group'))
+    my_view = View(
+        Group(Item('a'), Item('b')),
+        Include('my_group'),
+    )
 
     # ...plus this fragment...
-    my_group = Group(Item('c'),
-                     Item('d'),
-                     Item('e'))
+    my_group = Group(
+        Item('c'), Item('d'), Item('e'),
+    )
 
     #...are equivalent to this:
-    my_view = View(Group(Item('a'),
-                         Item('b')),
-                   Group(Item('c'),
-                         Item('d'),
-                         Item('e'))
+    my_view = View(
+        Group(Item('a'), Item('b')),
+        Group(Item('c'), Item('d'), Item('e')),
+    )
 
 This opens an interesting possibility when a View is part of a model class: any
 Include objects belonging to that View can be defined differently for different

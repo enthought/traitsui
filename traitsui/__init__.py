@@ -14,12 +14,13 @@ try:
 except ImportError:
     __version__ = "not-built"
 
-__requires__ = ["traits>=6.0.0", "pyface>=7.1.0"]
+__requires__ = ["traits>=6.2.0", "pyface>=7.2.0"]
 __extras_require__ = {
     "wx": ["wxpython>=4", "numpy"],
     "pyqt": ["pyqt>=4.10", "pygments"],
     "pyqt5": ["pyqt5", "pygments"],
     "pyside2": ["pyside2", "shiboken2", "pygments"],
+    "docs": ["enthought-sphinx-theme", "sphinx"],
     "demo": [
         # to be deprecated, see enthought/traitsui#950
         "configobj", "docutils",
@@ -43,6 +44,7 @@ __extras_require__ = {
     "test": [
         # Dependencies for running test suites.
         "packaging",
+        "numpy"
     ],
 }
 

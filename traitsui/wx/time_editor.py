@@ -66,35 +66,15 @@ class SimpleEditor(Editor):
         return
 
 
-# -- end SimpleEditor definition ------------------------------------------
-
-
-# ------------------------------------------------------------------------------
-# --  Text Editor
-# ------------------------------------------------------------------------------
 # TODO: Write me.  Possibly use TextEditor as a model to show a string
 # representation of the time, and have enter-set do a time evaluation.
 class TextEditor(SimpleEditor):
     pass
 
 
-# -- end TextEditor definition -------------------------------------------------
-
-
-# ------------------------------------------------------------------------------
-# --  Custom Editor
-# ------------------------------------------------------------------------------
 # TODO: Write me.
 class CustomEditor(SimpleEditor):
     pass
-
-
-# -- end TextEditor definition -------------------------------------------------
-
-
-# ------------------------------------------------------------------------------
-# --  Readonly Editor
-# ------------------------------------------------------------------------------
 
 
 class ReadonlyEditor(TextReadonlyEditor):
@@ -106,9 +86,3 @@ class ReadonlyEditor(TextReadonlyEditor):
             return self.factory.message
         else:
             return self.value.strftime(self.factory.strftime)
-
-
-# -- end ReadonlyEditor definition ---------------------------------------------
-
-
-# -- eof -----------------------------------------------------------------------

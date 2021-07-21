@@ -27,7 +27,7 @@ from traits.api import (
     Int,
     Property,
     Str,
-    Either,
+    Union,
 )
 
 from traits.trait_base import user_name_for, xgetattr
@@ -68,7 +68,7 @@ class TableColumn(HasPrivateTraits):
     text_color = Color("black")
 
     #: Text font for this column:
-    text_font = Either(None, Font)
+    text_font = Union(None, Font)
 
     #: Cell background color for this column:
     cell_color = Color("white", allow_none=True)
@@ -591,7 +591,7 @@ class NumericColumn(ObjectColumn):
     def get_editor(self, object):
         """ Gets the editor for the column of a specified object row.
         """
-        return super(NumericColumn, self).get_editor(object)
+        return super().get_editor(object)
 
     def get_data_column(self, object):
         """ Gets the entire contents of the specified object column.

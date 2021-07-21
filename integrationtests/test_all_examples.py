@@ -25,6 +25,7 @@ from traits.api import HasTraits
 from traitsui.tests._tools import (
     BaseTestMixin,
     is_qt,
+    is_qt5,
     is_wx,
     process_cascade_events,
     requires_toolkit,
@@ -155,6 +156,12 @@ SOURCE_DIRS = [
 
 SEARCHER = ExampleSearcher(source_dirs=SOURCE_DIRS)
 SEARCHER.skip_file_if(
+    os.path.join(DEMO, "Advanced", "HDF5_tree_demo.py"),
+    lambda: sys.platform == "darwin",
+    "This example depends on PyTables which may be built to require CPUs with "
+    "a specific AVX version that is not supported on a paricular OSX host.",
+)
+SEARCHER.skip_file_if(
     os.path.join(DEMO, "Advanced", "Table_editor_with_progress_column.py"),
     is_wx, "ProgressRenderer is not implemented in wx.",
 )
@@ -184,16 +191,17 @@ SEARCHER.skip_file_if(
     "enable tries to import a missing constant. See enthought/enable#307",
 )
 SEARCHER.skip_file_if(
+    os.path.join(DEMO, "Standard_Editors", "VideoEditor_demo.py"),
+    lambda: not is_qt5(),
+    "Only supported on Qt5"
+)
+SEARCHER.skip_file_if(
     os.path.join(TUTORIALS, "view_multi_object.py"),
     lambda: True, "Require wx and is blocking.",
 )
 SEARCHER.skip_file_if(
     os.path.join(TUTORIALS, "view_standalone.py"),
     lambda: True, "Require wx and is blocking.",
-)
-SEARCHER.skip_file_if(
-    os.path.join(TUTORIALS, "wizard.py"),
-    is_qt, "Failing on Qt, see enthought/traitsui#773",
 )
 
 # Validate configuration.

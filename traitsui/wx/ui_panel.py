@@ -119,10 +119,14 @@ class Panel(BaseDialog):
         # Reset any existing history listeners:
         history = ui.history
         if history is not None:
-            history.on_trait_change(self._on_undoable, "undoable", remove=True)
-            history.on_trait_change(self._on_redoable, "redoable", remove=True)
-            history.on_trait_change(
-                self._on_revertable, "undoable", remove=True
+            history.observe(
+                self._on_undoable, "undoable", remove=True, dispatch="ui"
+            )
+            history.observe(
+                self._on_redoable, "redoable", remove=True, dispatch="ui"
+            )
+            history.observe(
+                self._on_revertable, "undoable", remove=True, dispatch="ui"
             )
 
         # Determine if we need any buttons or an 'undo' history:
@@ -191,17 +195,17 @@ class Panel(BaseDialog):
                     self.redo = self.add_button(
                         button, b_sizer, self._on_redo, False, "Redo"
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_undoable, "undoable", dispatch="ui"
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_redoable, "redoable", dispatch="ui"
                     )
                 elif self.is_button(button, "Revert"):
                     self.revert = self.add_button(
                         button, b_sizer, self._on_revert, False
                     )
-                    history.on_trait_change(
+                    history.observe(
                         self._on_revertable, "undoable", dispatch="ui"
                     )
                 elif self.is_button(button, "Help"):
@@ -213,19 +217,22 @@ class Panel(BaseDialog):
 
         cpanel.SetSizerAndFit(sw_sizer)
 
-    def _on_undoable(self, state):
+    def _on_undoable(self, event):
         """ Handles a change to the "undoable" state of the undo history.
         """
+        state = event.new
         self.undo.Enable(state)
 
-    def _on_redoable(self, state):
+    def _on_redoable(self, event):
         """ Handles a change to the "redoable" state of the undo history.
         """
+        state = event.new
         self.redo.Enable(state)
 
-    def _on_revertable(self, state):
+    def _on_revertable(self, event):
         """ Handles a change to the "revert" state.
         """
+        state = event.new
         self.revert.Enable(state)
 
     def add_toolbar(self, sizer):
@@ -392,8 +399,8 @@ def show_help(ui, button):
                 template.item_help
                 % (escape(item.get_label(ui)), escape(item.get_help(ui)))
             )
-    html = template.group_html % (header, "\n".join(fields))
-    HTMLHelpWindow(button, html, 0.25, 0.33)
+    html_content = template.group_html % (header, "\n".join(fields))
+    HTMLHelpWindow(button, html_content, 0.25, 0.33)
 
 
 def show_help_popup(event):
@@ -407,8 +414,8 @@ def show_help_popup(event):
     # of the object with the 'help' trait):
     help = getattr(control, "help", None)
     if help is not None:
-        html = template.item_html % (control.GetLabel(), help)
-        HTMLHelpWindow(control, html, 0.25, 0.13)
+        html_content = template.item_html % (control.GetLabel(), help)
+        HTMLHelpWindow(control, html_content, 0.25, 0.13)
 
 
 def fill_panel_for_group(
@@ -721,6 +728,33 @@ class FillPanel(object):
                         growable = 1
                 sizer.Add(sg_sizer, growable, style, 2)
 
+    def _label_when(self):
+        """Set the visible and enabled states of all labels as controlled by
+           a 'visible_when' or 'enabled_when' expression.
+        """
+        self._evaluate_label_condition(self._label_enabled_whens, "enabled")
+        self._evaluate_label_condition(self._label_visible_whens, "visible")
+
+    def _evaluate_label_condition(self, conditions, kind):
+        """Evaluates a list of (eval, widget) pairs and calls the appropriate
+           method on the label widget to toggle whether it is visible/enabled
+           as needed.
+        """
+        context = self.ui._get_context(self.ui.context)
+
+        method_dict = {"visible": "Show", "enabled": "Enable"}
+
+        for when, label in conditions:
+            method_to_call = getattr(label, method_dict[kind])
+            try:
+                cond_value = eval(when, globals(), context)
+                method_to_call(cond_value)
+            except Exception:
+                # catch errors in the validate_when expression
+                from traitsui.api import raise_to_debug
+
+                raise_to_debug()
+
     def add_items(self, content, panel, sizer):
         """ Adds a list of Item objects to the panel.
         """
@@ -735,6 +769,10 @@ class FillPanel(object):
         col = -1
         col_incr = 1
         self.label_flags = 0
+
+        self._label_enabled_whens = []
+        self._label_visible_whens = []
+
         show_labels = False
         for item in content:
             show_labels |= item.show_label
@@ -795,6 +833,11 @@ class FillPanel(object):
 
                     if item.emphasized:
                         self._add_emphasis(label)
+
+                    if item.visible_when:
+                        self._label_visible_whens.append((item.visible_when, label))
+                    if item.enabled_when:
+                        self._label_enabled_whens.append((item.enabled_when, label))
 
                 # Continue on to the next Item in the list:
                 continue
@@ -1026,6 +1069,10 @@ class FillPanel(object):
             # Save the reference to the label control (if any) in the editor:
             editor.label_control = label
 
+        if (len(self._label_enabled_whens) + len(self._label_visible_whens)) > 0:
+            for object in self.ui.context.values():
+                object.on_trait_change(lambda: self._label_when(), dispatch="ui")
+
         # If we created a grid sizer, add it to the original sizer:
         if item_sizer is not sizer:
             growable = 0
@@ -1145,7 +1192,7 @@ class HTMLHelpWindow(wx.Frame):
     """ Window for displaying Traits-based help text with HTML formatting.
     """
 
-    def __init__(self, parent, html, scale_dx, scale_dy):
+    def __init__(self, parent, html_content, scale_dx, scale_dy):
         """ Initializes the object.
         """
         wx.Frame.__init__(self, parent, -1, "Help", style=wx.SIMPLE_BORDER)
@@ -1155,7 +1202,7 @@ class HTMLHelpWindow(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         html_control = wh.HtmlWindow(self)
         html_control.SetBorders(2)
-        html_control.SetPage(html)
+        html_control.SetPage(html_content)
         sizer.Add(html_control, 1, wx.EXPAND)
         sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
         b_sizer = wx.BoxSizer(wx.HORIZONTAL)

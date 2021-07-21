@@ -11,15 +11,11 @@
 """ Traits UI editor factory for editing lists of strings.
 """
 
-
-
+from pyface.image_resource import ImageResource
 from traits.api import Any, Str, Enum, List, Bool, Instance, Property
 
-from ..basic_editor_factory import BasicEditorFactory
-
-from ..toolkit import toolkit_object
-
-from pyface.image_resource import ImageResource
+from traitsui.basic_editor_factory import BasicEditorFactory
+from traitsui.toolkit import toolkit_object
 
 # -------------------------------------------------------------------------
 #  'ListStrEditor' editor factory class:
@@ -43,8 +39,8 @@ class ListStrEditor(BasicEditorFactory):
     #: indices with:
     selected_index = Str()
 
-    #: The optional extended name of the trait to synchronize the activated value
-    #: with:
+    #: The optional extended name of the trait to synchronize the activated
+    #: value with:
     activated = Str()
 
     #: The optional extended name of the trait to synchronize the activated

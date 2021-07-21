@@ -26,11 +26,6 @@
 
 from pyface.qt import QtCore, QtGui
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.boolean_editor file.
-from traitsui.editors.boolean_editor import ToolkitEditorFactory
-
 from .editor import Editor
 
 # This needs to be imported in here for use by the editor factory for boolean

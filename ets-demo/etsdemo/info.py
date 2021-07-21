@@ -31,4 +31,5 @@ def info():
                 "icon": ICON,
             },
         ],
+        "default": True,
     }

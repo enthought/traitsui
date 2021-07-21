@@ -25,7 +25,7 @@ from traitsui.api import TextEditor
 class Person(HasTraits):
     name = Str()
 
-    invalid = Property(Bool, depends_on='name')
+    invalid = Property(Bool, observe='name')
 
     def _get_invalid(self):
         # Name is valid iff it doesn't consist entirely of whitespace.

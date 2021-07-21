@@ -16,7 +16,7 @@ import contextlib
 from traitsui.testing._gui import process_cascade_events
 from traitsui.testing._exception_handling import reraise_exceptions
 from traitsui.testing.tester._ui_tester_registry.default_registry import (
-    get_default_registry
+    get_default_registries
 )
 from traitsui.testing.tester.ui_wrapper import UIWrapper
 
@@ -32,7 +32,7 @@ class UITester:
     registries : list of TargetRegistry, optional
         Registries of interaction for different targets, in the order
         of decreasing priority. If provided, a shallow copy will be made.
-        A default registry is always appended to the list to provide
+        Additional registries are appended to the list to provide
         builtin support for TraitsUI UI and editors.
     delay : int, optional
         Time delay (in ms) in which actions by the tester are performed. Note
@@ -59,16 +59,33 @@ class UITester:
         else:
             self._registries = registries.copy()
 
-        # This registry contributes the support for TraitsUI UI and editors.
+        # These registries contribute the support for TraitsUI UI and editors.
         # The find_by_name/find_by_id methods in this class also depend on
-        # this registry.
-        self._registries.append(get_default_registry())
+        # one of these registries.
+        self._registries.extend(get_default_registries())
         self.delay = delay
         self._auto_process_events = auto_process_events
+
+    @property
+    def auto_process_events(self):
+        """ Flag to indicate whether to process (cascade) GUI events
+        automatically. This is propagated through to
+        :class:`~traitsui.testing.tester.ui_wrapper.UIWrapper` instances
+        created from this tester.
+
+        This value can only be set at instantiation.
+        """
+        # No mutations post-init are allowed because UIWrapper created prior to
+        # the mutation will not respect the new value, and so it would be
+        # confusing if this attribute was allowed to be mutated.
+        return self._auto_process_events
 
     @contextlib.contextmanager
     def create_ui(self, object, ui_kwargs=None):
         """ Context manager to create a UI and dispose it upon exit.
+
+        This method does not modify the states of the :class:`UITester` and is
+        not a requirement for using other methods on the tester.
 
         Parameters
         ----------
@@ -109,6 +126,10 @@ class UITester:
         """ Find the TraitsUI editor with the given name and return a new
         ``UIWrapper`` object for further interactions with the editor.
 
+        ``name`` is typically a value defined on
+        :attr:`traitsui.item.Item.name`. This name is passed onto
+        :func:`traitsui.ui.UI.get_editors`.
+
         Parameters
         ----------
         ui : traitsui.ui.UI
@@ -125,6 +146,10 @@ class UITester:
     def find_by_id(self, ui, id):
         """ Find the TraitsUI editor with the given identifier and return a new
         ``UIWrapper`` object for further interactions with the editor.
+
+        ``id`` is typically a value defined on :attr:`traitsui.item.Item.id`
+        or :attr:`traitsui.group.Group.id`. This provides a shortcut to locate
+        a very nested editor in a view.
 
         Parameters
         ----------

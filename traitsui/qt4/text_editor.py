@@ -27,10 +27,7 @@ from pyface.qt import QtCore, QtGui
 
 from traits.api import Any, Callable, List, TraitError, Tuple
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.text_editor file.
-from traitsui.editors.text_editor import evaluate_trait, ToolkitEditorFactory
+from traitsui.editors.text_editor import evaluate_trait
 
 from .editor import Editor
 
@@ -107,6 +104,10 @@ class SimpleEditor(Editor):
         if wtype is not QtGui.QTextEdit or QtCore.__version_info__ >= (5, 2):
             # setPlaceholderText is introduced to QTextEdit since Qt 5.2
             control.setPlaceholderText(placeholder)
+
+        if wtype is not QtGui.QTextEdit and QtCore.__version_info__ >= (5, 2):
+            # setClearButtonEnabled is introduced to QLineEdit since Qt 5.2
+            control.setClearButtonEnabled(self.factory.cancel_button)
 
         self.control = control
         # default horizontal policy is Expand, set this to Minimum
@@ -215,7 +216,7 @@ class ReadonlyEditor(BaseReadonlyEditor):
     """
 
     def init(self, parent):
-        super(ReadonlyEditor, self).init(parent)
+        super().init(parent)
 
         if self.factory.readonly_allow_selection:
             flags = (

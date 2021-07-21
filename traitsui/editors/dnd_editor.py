@@ -14,18 +14,12 @@
     drag source and a drop target.
 """
 
-
-
 from pyface.ui_traits import Image
 
-from ..editor_factory import EditorFactory
-
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
+from traitsui.editor_factory import EditorFactory
 
 
-class ToolkitEditorFactory(EditorFactory):
+class DNDEditor(EditorFactory):
     """ Editor factory for drag-and-drop editors.
     """
 
@@ -40,5 +34,5 @@ class ToolkitEditorFactory(EditorFactory):
     disabled_image = Image
 
 
-# Define the DNDEditor class.
-DNDEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = DNDEditor

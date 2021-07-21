@@ -11,60 +11,47 @@
 """ Defines the list editor factory for the traits user interface toolkits..
 """
 
-
-
 from traits.api import (
-    HasTraits,
-    BaseTraitHandler,
-    Range,
-    Str,
     Any,
-    Int,
-    Instance,
-    Property,
+    BaseTraitHandler,
     Bool,
     Callable,
+    Dict,
     Enum,
+    HasTraits,
+    Instance,
+    Int,
+    Property,
     PrototypedFrom,
+    Range,
+    Str,
+    Tuple,
 )
 
-# CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
-# to avoid circular imports, as this EditorFactory will be part of
-# traits.ui.api as well.
-from ..view import View
-
-from ..item import Item
-
-from ..ui_traits import style_trait, AView
-
-from ..editor_factory import EditorFactory
-
-from ..toolkit import toolkit_object
-
-# Currently, this traits is used only for the wx backend.
-from ..helper import DockStyle
+from traitsui.editor_factory import EditorFactory
+from traitsui.helper import DockStyle
+from traitsui.item import Item
+from traitsui.toolkit import toolkit_object
+from traitsui.ui_traits import style_trait, AView
+from traitsui.view import View
 
 # -------------------------------------------------------------------------
 #  Trait definitions:
 # -------------------------------------------------------------------------
 
-# Trait whose value is a BaseTraitHandler object
+#: Trait whose value is a BaseTraitHandler object
 handler_trait = Instance(BaseTraitHandler)
 
-# The visible number of rows displayed
+#: The visible number of rows displayed
 rows_trait = Range(1, 50, 5, desc="the number of list rows to display")
 
-# The visible number of columns displayed
+#: The visible number of columns displayed
 columns_trait = Range(1, 10, 1, desc="the number of list columns to display")
 
 editor_trait = Instance(EditorFactory)
 
-# -------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-# -------------------------------------------------------------------------
 
-
-class ToolkitEditorFactory(EditorFactory):
+class ListEditor(EditorFactory):
     """ Editor factory for list editors.
     """
 
@@ -98,6 +85,18 @@ class ToolkitEditorFactory(EditorFactory):
 
     #: Show a right-click context menu for the notebook tabs?  (Qt only)
     show_notebook_menu = Bool(False)
+
+    #: Factory that will be called to create and add a new element to this
+    #: list. If None, the default value for the trait of interest is used.
+    item_factory = Callable()
+
+    #: Tuple of positional arguments to be passed to the default factory
+    #: callable when creating new elements
+    item_factory_args = Tuple()
+
+    #: Dictionary of keyword arguments to be passed to the default factory
+    #: callable when creating new elements
+    item_factory_kwargs = Dict()
 
     # -- Notebook Specific Traits ---------------------------------------------
 
@@ -192,7 +191,7 @@ class ListItemProxy(HasTraits):
     _zzz_name = Any()
 
     def __init__(self, object, name, index, trait, value):
-        super(ListItemProxy, self).__init__()
+        super().__init__()
 
         self._zzz_inited = False
         self._zzz_object = object
@@ -213,5 +212,5 @@ class ListItemProxy(HasTraits):
             self.list[self.index] = new_value
 
 
-# Define the ListEditor class
-ListEditor = ToolkitEditorFactory
+# This alias is deprecated and will be removed in TraitsUI 8.
+ToolkitEditorFactory = ListEditor

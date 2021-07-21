@@ -430,7 +430,7 @@ argument)::
             #created
         else:
             #code to be executed only when 'foo' changes after
-            #window initialization}
+            #window initialization
 
         #code to be executed in either case
 
@@ -442,38 +442,8 @@ overridden setattr() method and user interface notification method.
 
 .. rubric:: Example 9: Using a Handler that reacts to trait changes
 
-::
-
-    # handler_override.py -- Example of a Handler that overrides
-    #                        setattr(), and that has a user interface
-    #                        notification method
-
-    from traits.api import HasTraits, Bool
-    from traitsui.api import View, Handler
-
-    class TC_Handler(Handler):
-
-        def setattr(self, info, object, name, value):
-            Handler.setattr(self, info, object, name, value)
-            info.object._updated = True
-
-        def object__updated_changed(self, info):
-            if info.initialized:
-                info.ui.title += "*"
-
-    class TestClass(HasTraits):
-        b1 = Bool()
-        b2 = Bool()
-        b3 = Bool()
-        _updated = Bool(False)
-
-    view1 = View('b1', 'b2', 'b3',
-                 title="Alter Title",
-                 handler=TC_Handler(),
-                 buttons = ['OK', 'Cancel'])
-
-    tc = TestClass()
-    tc.configure_traits(view=view1)
+.. literalinclude:: examples/handler_override.py
+   :start-at: handler_override.py
 
 .. image:: images/alter_title_before.png
    :alt: Dialog box with empty checkboxes and a title of "Alter Title"
@@ -508,8 +478,7 @@ the logic for the window. To create the action:
    UIInfo object.
 #. Create an Action instance using the name of the new method, e.g.::
 
-        recalc = Action(name = "Recalculate",
-                        action = "do_recalc")
+        recalc = Action(name="Recalculate", action="do_recalc")
 
 .. _custom-command-buttons:
 
@@ -523,9 +492,11 @@ along with any standard buttons you specify.
 #. Define the handler method and action, as described in :ref:`actions`.
 #. Include the new Action in the **buttons** attribute for the View::
 
-    View ( #view contents,
-           # ...,
-           buttons = [ OKButton, CancelButton, recalc ])
+    View(
+        # view contents,
+        # ...,
+        buttons=[OKButton, CancelButton, recalc],
+    )
 
 .. _menus-and-menu-bars:
 
@@ -545,11 +516,13 @@ make it into a menu option.
 These steps can be executed all at once when the View is created, as in the
 following code::
 
-    View ( #view contents,
-           # ...,
-           menubar = MenuBar(
-              Menu( my_action,
-                    name = 'My Special Menu')))
+    View(
+        # view contents,
+        # ...,
+        menubar=MenuBar(
+            Menu(my_action, name='My Special Menu'),
+        ),
+    )
 
 .. _toolbars:
 
@@ -568,10 +541,12 @@ except that toolbars do not contain menus; they directly contain actions.
 
     From pyface.api import ImageResource
 
-    recalc = Action(name = "Recalculate",
-                    action = "do_recalc",
-                    toolip = "Recalculate the results",
-                    image = ImageResource("recalc.png"))
+    recalc = Action(
+        name="Recalculate",
+        action="do_recalc",
+        toolip="Recalculate the results",
+        image=ImageResource("recalc.png"),
+    )
 
 2. If the View does not already include a ToolBar, create one and assign it to
    the View's **toolbar** attribute.
@@ -580,11 +555,46 @@ except that toolbars do not contain menus; they directly contain actions.
 As with a MenuBar, these steps can be executed all at once when the View is
 created, as in the following code::
 
-    View ( #view contents,
-           # ...,
-           toolbar = ToolBar(my_action))
+    View(
+       # view contents,
+       # ...,
+       toolbar=ToolBar(my_action),
+    )
+
+
+.. _undo_redo:
+
+Undo and Redo
+-------------
+
+TraitsUI provides basic undo/redo functionality via the |UI| object's history
+trait.  This is created automatically for |View| objects other than subpanels
+whenever the |View| has a menubar or an "Undo" or "Revert" button.  This
+system is largely independent of the
+`Pyface undo/redo functionality <https://docs.enthought.com/pyface/undo.html>`_,
+although that may change in the future.
+
+The primary hook into the undo/redo system is via the |do_undoable| method of
+the |UI| object, which calls the supplied callable while capturing all changes
+to traits that are being viewed while the callable is running.  Undo and redo
+actions then simply reset the values of all of those traits to the appropriate
+before or after values.  This works well for simple cases where traits are not
+heavily interdependent, but may break down in situations where there are
+complex dependencies.
+
+The |do_undoable| method is called when the value property of an |Editor| is
+set or when any |Action| is performed, including actions associated with
+complex editors that provide context menus.
+
 
 .. rubric:: Footnotes
 
 .. [11] Except those implemented via the **enabled_when**, **visible_when**,
    and **defined_when** attributes of Items and Groups.
+
+
+.. |Action| replace:: :py:class:`~traitsui.menu.Action`
+.. |Editor| replace:: :py:class:`~traitsui.editor.Editor`
+.. |UI| replace:: :py:class:`~traitsui.ui.UI`
+.. |View| replace:: :py:class:`~traitsui.view.View`
+.. |do_undoable| replace:: :py:meth:`~traitsui.ui.UI.do_undoable`

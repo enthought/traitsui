@@ -59,7 +59,7 @@ instances of :class:`ContextValue` (abbreviated as ``CV``)::
 """
 
 
-from traits.api import HasStrictTraits, Instance, Str, Int, Float, Either
+from traits.api import HasStrictTraits, Instance, Str, Int, Float, Union
 
 
 class ContextValue(HasStrictTraits):
@@ -81,7 +81,7 @@ class ContextValue(HasStrictTraits):
     # ------------------------------------------------------------------------
 
     def __init__(self, name):
-        super(ContextValue, self).__init__(name=name)
+        super().__init__(name=name)
 
 
 #: Define a shorthand name for a ContextValue:
@@ -111,7 +111,7 @@ def CVType(type, **metadata):
         type or an instance of the ContextValue class.
     """
     metadata.setdefault("sync_value", "to")
-    return Either(type, InstanceOfContextValue, **metadata)
+    return Union(type, InstanceOfContextValue, **metadata)
 
 
 #: Shorthand for an Instance of ContextValue trait.

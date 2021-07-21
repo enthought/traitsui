@@ -13,10 +13,7 @@
 """
 
 
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the
-# traitsui.editors.value_editor file.
-from traitsui.editors.value_editor import _ValueEditor, ToolkitEditorFactory
+from traitsui.editors.value_editor import _ValueEditor
 
 from .editor import Editor
 
