@@ -360,17 +360,17 @@ class CustomEditor(Editor):
             self._ui.dispose()
 
         if self._choice is not None:
-            if self._object is not None:
-                self._object.observe(
-                    self.rebuild_items,
-                    self._name + ".items",
-                    remove=True,
-                    dispatch="ui"
-                )
-
             # _choice can also be a QLineEdit in which case we never set up
             # this observer.
             if isinstance(self._choice, QtGui.QComboBox):
+                if self._object is not None:
+                    self._object.observe(
+                        self.rebuild_items,
+                        self._name + ".items",
+                        remove=True,
+                        dispatch="ui"
+                    )
+
                 self.factory.observe(
                     self.rebuild_items,
                     "values.items",
