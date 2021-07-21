@@ -122,11 +122,6 @@ class CustomEditor(Editor):
             self._choice.setReadOnly(True)
             self.set_tooltip(self._choice)
 
-        if droppable:
-            # Install EventFilter on control to handle DND events.
-            drop_event_filter = _DropEventFilter(self.control)
-            self.control.installEventFilter(drop_event_filter)
-
         orientation = OrientationMap[factory.orientation]
         if orientation is None:
             orientation = self.orientation
@@ -154,6 +149,11 @@ class CustomEditor(Editor):
             layout = QtGui.QBoxLayout(orientation, parent)
             layout.setContentsMargins(0, 0, 0, 0)
             self.create_editor(parent, layout)
+
+        if droppable:
+            # Install EventFilter on control to handle DND events.
+            drop_event_filter = _DropEventFilter(self.control)
+            self.control.installEventFilter(drop_event_filter)
 
         # Synchronize the 'view' to use:
         # fixme: A normal assignment can cause a crash (for unknown reasons) in
@@ -289,7 +289,10 @@ class CustomEditor(Editor):
                 else:
                     choice.setText(name)
             else:
-                choice.setCurrentIndex(-1)
+                # choice can also be a QLineEdit in which case we just leave
+                # text as empty
+                if isinstance(choice, QtGui.QComboBox):
+                    choice.setCurrentIndex(-1)
 
 
     def resynch_editor(self):
@@ -357,17 +360,23 @@ class CustomEditor(Editor):
             self._ui.dispose()
 
         if self._choice is not None:
-            if self._object is not None:
-                self._object.observe(
+            # _choice can also be a QLineEdit in which case we never set up
+            # this observer.
+            if isinstance(self._choice, QtGui.QComboBox):
+                if self._object is not None:
+                    self._object.observe(
+                        self.rebuild_items,
+                        self._name + ".items",
+                        remove=True,
+                        dispatch="ui"
+                    )
+
+                self.factory.observe(
                     self.rebuild_items,
-                    self._name + ".items",
+                    "values.items",
                     remove=True,
                     dispatch="ui"
                 )
-
-            self.factory.observe(
-                self.rebuild_items, "values.items", remove=True, dispatch="ui"
-            )
 
         super().dispose()
 
