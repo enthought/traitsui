@@ -8,7 +8,7 @@
 #
 # Thanks for using Enthought open source!
 
-# array_editor.py -- Example of using array editors
+"""Demo of the ArrayEditor"""
 
 import numpy as np
 
@@ -38,5 +38,7 @@ class ArrayEditorTest(HasPrivateTraits):
     )
 
 
+demo = ArrayEditorTest()
+
 if __name__ == '__main__':
-    ArrayEditorTest().configure_traits()
+    demo.configure_traits()
