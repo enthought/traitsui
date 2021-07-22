@@ -937,10 +937,6 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
     # regression test for enthought/traitsui#1543
     @requires_toolkit([ToolkitName.qt])
     @unittest.skipIf(no_modal_dialog_tester, "ModalDialogTester unavailable")
-    @unittest.skipIf(
-        is_mac_os,
-        "There is a separate issue on OSX. See enthought/traitsui#1550"
-    )
     def test_editor_error_msg(self):
         from pyface.qt import QtCore, QtGui
 
@@ -954,10 +950,8 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
             x_range = tester.find_by_name(ui, "x")
             x_range_textbox = x_range.locate(Textbox())
 
-            for _ in range(3):
-                x_range_textbox.perform(KeyClick('Backspace'))
-
-            x_range_textbox.perform(KeySequence('0.0'))
+            x_range_textbox.perform(KeyClick('Backspace'))
+            x_range_textbox.perform(KeySequence('0'))
 
             def trigger_error():
                 x_range_textbox.perform(KeyClick('Enter'))

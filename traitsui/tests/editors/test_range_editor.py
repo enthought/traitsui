@@ -428,6 +428,24 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
 
     # regression test for enthought/traitsui#1550
     @requires_toolkit([ToolkitName.qt])
+    def test_modify_out_of_range(self):
+        obj = RangeExcludeLow()
+        tester = UITester(auto_process_events=False)
+        with tester.create_ui(obj) as ui:
+            number_field = tester.find_by_name(ui, "x")
+            text = number_field.locate(Textbox())
+
+            # should not fail
+            def set_out_of_range():
+                text.perform(KeyClick("Backspace"))
+                text.perform(KeyClick("0"))
+                text.perform(KeyClick("Enter"))
+
+            mdtester = ModalDialogTester(set_out_of_range)
+            mdtester.open_and_run(lambda x: x.close(accept=True))
+
+    # regression test for enthought/traitsui#1550
+    @requires_toolkit([ToolkitName.qt])
     def test_modify_out_of_range_with_slider(self):
         obj = RangeExcludeLow()
         tester = UITester(auto_process_events=False)
