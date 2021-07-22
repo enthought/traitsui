@@ -11,7 +11,9 @@
 import platform
 import unittest
 
-from traits.api import HasTraits, Float, Int
+from pyface.constant import OK
+from pyface.toolkit import toolkit_object
+from traits.api import HasTraits, Float, Int, Range
 from traitsui.api import Item, RangeEditor, UItem, View
 from traitsui.testing.api import (
     DisplayedText,
@@ -27,6 +29,10 @@ from traitsui.tests._tools import (
     is_wx,
     requires_toolkit,
     ToolkitName,
+)
+
+ModalDialogTester = toolkit_object(
+    "util.modal_dialog_tester:ModalDialogTester"
 )
 
 is_windows = platform.system() == "Windows"
@@ -62,6 +68,10 @@ class RangeModel(HasTraits):
 
     value = Int(1)
     float_value = Float(0.1)
+
+
+class RangeExcludeLow(HasTraits):
+    x = Range(low=0.0, high=1.0, value=0.1, exclude_low=True)
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -415,3 +425,25 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             float_value_field.perform(KeyClick("Enter"))
 
             self.assertTrue(0.0 <= model.float_value <= 1)
+
+    # regression test for enthought/traitsui#1550
+    @requires_toolkit([ToolkitName.qt])
+    def test_modify_out_of_range_with_slider(self):
+        obj = RangeExcludeLow()
+        tester = UITester(auto_process_events=False)
+        with tester.create_ui(obj) as ui:
+            number_field = tester.find_by_name(ui, "x")
+            slider = number_field.locate(Slider())
+
+            # slider values are converted to a [0, 10000] scale.  A single
+            # step is a change of 100 on that scale and a page step is 1000.
+            # Our range in [0, 10] so these correspond to changes of .1 and 1.
+            # Note: when tested manually, the step size seen on OSX and Wx is
+            # different.
+
+            # should not fail
+            def move_slider_out_of_range():
+                slider.perform(KeyClick("Page Down"))
+
+            mdtester = ModalDialogTester(move_slider_out_of_range)
+            mdtester.open_and_run(lambda x: x.click_button(OK))
