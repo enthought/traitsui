@@ -27,7 +27,6 @@ from traitsui.testing.api import (
 from traitsui.tests._tools import (
     BaseTestMixin,
     GuiTestAssistant,
-    is_mac_os,
     no_gui_test_assistant,
     requires_toolkit,
     ToolkitName,
