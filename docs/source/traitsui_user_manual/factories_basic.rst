@@ -16,8 +16,8 @@ interfaces or that are designed to be used along with complex editors.
 .. NOTE:: Examples are toolkit-specific.
 
    The exact appearance of the editors depends on the underlying GUI toolkit.
-   The screenshots and descriptions in this chapter are based on wxWindows.
-   Another supported GUI toolkit is Qt, from TrollTech.
+   The screenshots and descriptions in this chapter contain a mix of both wx
+   and Qt.
 
 Rather than trying to memorize all the information in this chapter, you might
 skim it to get a general idea of the available trait editors and their

@@ -20,6 +20,7 @@ __extras_require__ = {
     "pyqt": ["pyqt>=4.10", "pygments"],
     "pyqt5": ["pyqt5", "pygments"],
     "pyside2": ["pyside2", "shiboken2", "pygments"],
+    "docs": ["enthought-sphinx-theme", "sphinx"],
     "demo": [
         # to be deprecated, see enthought/traitsui#950
         "configobj", "docutils",

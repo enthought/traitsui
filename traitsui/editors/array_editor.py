@@ -55,8 +55,7 @@ class ArrayStructure(HasTraits):
     def __init__(self, editor):
         """ Initializes the object.
         """
-        # Save the reference to the editor:
-        self.editor = editor
+        super().__init__(editor=editor)
 
         # Set up the field width for each item:
         width = editor.factory.width
@@ -72,7 +71,7 @@ class ArrayStructure(HasTraits):
         # Determine the correct trait type to use for each element:
         trait = Float()
 
-        if object.dtype.type == "i":
+        if object.dtype.kind == "i":
             trait = Int()
 
         if len(object.shape) == 1:

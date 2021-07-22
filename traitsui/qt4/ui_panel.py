@@ -28,7 +28,7 @@ import re
 
 from pyface.qt import QtCore, QtGui
 
-from traits.api import Any, Instance, Undefined
+from traits.api import Any, HasPrivateTraits, Instance, Undefined
 from traits.observation.api import match
 
 from traitsui.api import Group
@@ -102,7 +102,8 @@ class _Panel(BasePanel):
     def __init__(self, ui, parent, is_subpanel):
         """Initialise the object.
         """
-        self.ui = ui
+        super().__init__(ui=ui)
+
         history = ui.history
         view = ui.view
 
@@ -352,9 +353,9 @@ def _size_hint_wrapper(f, ui):
         size = f()
         if ui.view is not None:
             if ui.view.width > 0:
-                size.setWidth(ui.view.width)
+                size.setWidth(int(ui.view.width))
             if ui.view.height > 0:
-                size.setHeight(ui.view.height)
+                size.setHeight(int(ui.view.height))
         return size
 
     return sizeHint
@@ -1259,6 +1260,10 @@ class GroupEditor(Editor):
     def __init__(self, **traits):
         """ Initialise the object.
         """
+        # We intentionally don't want to call Editor.__init__ here as
+        # GroupEditor does its own thing. However, we still want Traits
+        # machinery to be set up properly.
+        HasPrivateTraits.__init__(self, **traits)
         self.trait_set(**traits)
 
 

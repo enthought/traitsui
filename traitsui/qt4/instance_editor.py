@@ -28,6 +28,7 @@
 from pyface.qt import QtCore, QtGui
 
 from traits.api import HasTraits, Instance, Property
+from traits.observation.api import trait
 
 from traitsui.ui_traits import AView
 from traitsui.helper import user_name_for
@@ -121,11 +122,6 @@ class CustomEditor(Editor):
             self._choice.setReadOnly(True)
             self.set_tooltip(self._choice)
 
-        if droppable:
-            # Install EventFilter on control to handle DND events.
-            drop_event_filter = _DropEventFilter(self.control)
-            self.control.installEventFilter(drop_event_filter)
-
         orientation = OrientationMap[factory.orientation]
         if orientation is None:
             orientation = self.orientation
@@ -153,6 +149,11 @@ class CustomEditor(Editor):
             layout = QtGui.QBoxLayout(orientation, parent)
             layout.setContentsMargins(0, 0, 0, 0)
             self.create_editor(parent, layout)
+
+        if droppable:
+            # Install EventFilter on control to handle DND events.
+            drop_event_filter = _DropEventFilter(self.control)
+            self.control.installEventFilter(drop_event_filter)
 
         # Synchronize the 'view' to use:
         # fixme: A normal assignment can cause a crash (for unknown reasons) in
@@ -183,6 +184,13 @@ class CustomEditor(Editor):
         for value in values:
             if not isinstance(value, InstanceChoiceItem):
                 value = adapter(object=value)
+            # rebuild_items when an item's name changes so it is reflected by
+            # combobox. This change was added to fix enthought/traitsui#1641
+            value.object.observe(
+                self.rebuild_items,
+                trait(value.name_trait, optional=True),
+                dispatch="ui"
+            )
             items.append(value)
 
         self._items = items
@@ -210,9 +218,10 @@ class CustomEditor(Editor):
         if name >= 0:
             choice.setCurrentIndex(name)
         else:
-            # Otherwise, current value is no longer valid, try to discard it:
+            # Otherwise, current value is no longer valid, set combobox empty
             try:
                 self.value = None
+                choice.setCurrentIndex(-1)
             except:
                 pass
 
@@ -267,17 +276,24 @@ class CustomEditor(Editor):
         # Update the selector (if any):
         choice = self._choice
         item = self.item_for(self.value)
-        if (choice is not None) and (item is not None):
-            name = item.get_name(self.value)
-            if self._object_cache is not None:
-                idx = choice.findText(name)
-                if idx < 0:
-                    idx = choice.count()
-                    choice.addItem(name)
+        if choice is not None:
+            if item is not None:
+                name = item.get_name(self.value)
+                if self._object_cache is not None:
+                    idx = choice.findText(name)
+                    if idx < 0:
+                        idx = choice.count()
+                        choice.addItem(name)
 
-                choice.setCurrentIndex(idx)
+                    choice.setCurrentIndex(idx)
+                else:
+                    choice.setText(name)
             else:
-                choice.setText(name)
+                # choice can also be a QLineEdit in which case we just leave
+                # text as empty
+                if isinstance(choice, QtGui.QComboBox):
+                    choice.setCurrentIndex(-1)
+
 
     def resynch_editor(self):
         """ Resynchronizes the contents of the editor when the object trait
@@ -344,17 +360,23 @@ class CustomEditor(Editor):
             self._ui.dispose()
 
         if self._choice is not None:
-            if self._object is not None:
-                self._object.observe(
+            # _choice can also be a QLineEdit in which case we never set up
+            # this observer.
+            if isinstance(self._choice, QtGui.QComboBox):
+                if self._object is not None:
+                    self._object.observe(
+                        self.rebuild_items,
+                        self._name + ".items",
+                        remove=True,
+                        dispatch="ui"
+                    )
+
+                self.factory.observe(
                     self.rebuild_items,
-                    self._name + ".items",
+                    "values.items",
                     remove=True,
                     dispatch="ui"
                 )
-
-            self.factory.observe(
-                self.rebuild_items, "values.items", remove=True, dispatch="ui"
-            )
 
         super().dispose()
 

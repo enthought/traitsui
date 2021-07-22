@@ -99,6 +99,9 @@ DEFAULT_RUNTIME = '3.6'
 # Default toolkit to use if none specified.
 DEFAULT_TOOLKIT = 'null'
 
+# Default repository to use (assuming enthought/ prefix) if none is specified.
+DEFAULT_REPOSITORY = 'free'
+
 # The main package name, also used to form the Python environment name.
 PACKAGE_NAME = "etsdemo"
 
@@ -132,12 +135,41 @@ runtime_dependencies = {}
 
 doc_dependencies = {}
 
+full_app_dependencies = {
+    # core app dependencies
+    'eam',
+    'etsdemo',
+    "pyqt5",
+    # packages contributing examples
+    'traitsui',
+    # dependencies needed for examples
+    "apptools",
+    "chaco",
+    "h5py",
+    "numpy",
+    "pandas",
+    "pygments",
+    "pytables",
+}
+
+APP_BUNDLE_VERSION = "1.0.0-1"
+
+BUNDLE_NAME = f"etsdemo-{APP_BUNDLE_VERSION}.bundle"
+
 environment_vars = {
     'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
     'pyqt5': {"ETS_TOOLKIT": "qt4", "QT_API": "pyqt5"},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
 }
+
+
+# Platforms supported for etsdemo EDM application.
+LINUX = "rh7-x86_64"
+MACOS = "osx-x86_64"
+WINDOWS = "win-x86_64"
+PLATFORMS = [LINUX, MACOS, WINDOWS]
+
 
 CONTEXT_SETTINGS = {
     "help_option_names": ["-h", "--help"],
@@ -317,6 +349,72 @@ def flake8(runtime, toolkit, environment):
     parameters = get_parameters(runtime, toolkit, environment)
     commands = ["edm run -e {environment} -- python -m flake8"]
     execute(commands, parameters)
+
+
+@cli.command(name="generate-bundles")
+def generate_bundles():
+    """ Generate application bundles for each supported platform.
+    """
+
+    for platform in PLATFORMS:
+        bundle_dir = os.path.join("bundle", platform)
+        if not os.path.exists(bundle_dir):
+            os.makedirs(bundle_dir)
+
+        bundle_file = os.path.join(
+            bundle_dir,
+            BUNDLE_NAME
+        )
+
+        click.echo("Generating bundle {}".format(bundle_file))
+
+        edm_command = [
+            "edm",
+            "bundle",
+            "generate",
+            "--bundle-format",
+            "2.0",
+            "--platform",
+            platform,
+            "--version",
+            DEFAULT_RUNTIME,
+            "--output-file",
+            bundle_file,
+        ] + sorted(full_app_dependencies)
+        try:
+            subprocess.check_call(edm_command)
+        except subprocess.CalledProcessError:
+            click.echo("Failed to generate bundle {}".format(bundle_file))
+
+
+@cli.command(name="upload-bundles")
+@click.option('--repository', default=DEFAULT_REPOSITORY)
+def upload_bundles(repository):
+    """ Upload the generated bundles """
+    BUNDLES = []
+    for platform in PLATFORMS:
+        bundle_dir = os.path.join("bundle", platform)
+        bundle_file = os.path.join(
+            bundle_dir,
+            BUNDLE_NAME
+        )
+        if os.path.exists(bundle_file):
+            BUNDLES.append((bundle_file, platform))
+
+    for bundle, platform in BUNDLES:
+        cmd = [
+            "hatcher",
+            "bundles",
+            "upload",
+            "enthought",
+            repository,
+            platform,
+            bundle
+        ]
+        try:
+            subprocess.check_call(cmd)
+        except subprocess.CalledProcessError:
+            click.echo("Failed to upload bundle {}".format(bundle))
 
 
 # ----------------------------------------------------------------------------

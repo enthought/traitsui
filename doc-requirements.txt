@@ -1,4 +1,0 @@
-# pip requirements for building the docs
-Sphinx
-pyface
-git+https://github.com/enthought/enthought-sphinx-theme.git#egg=enthought-sphinx-theme

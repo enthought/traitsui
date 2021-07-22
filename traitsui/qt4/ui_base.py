@@ -202,9 +202,9 @@ class _StickyDialog(QtGui.QDialog):
         size = QtGui.QDialog.sizeHint(self)
         view = self._ui.view
         if view.width > 0:
-            size.setWidth(view.width)
+            size.setWidth(int(view.width))
         if view.height > 0:
-            size.setHeight(view.height)
+            size.setHeight(int(view.height))
         return size
 
     def done(self, r):
