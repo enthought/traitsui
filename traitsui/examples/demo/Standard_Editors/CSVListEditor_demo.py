@@ -21,7 +21,7 @@ Please refer to the `CSVListEditor API docs`_ for further information.
 """
 
 from traits.api import (
-    HasTraits, List, Int, Float, Enum, Range, Str, Button, Property
+    HasTraits, List, Int, Float, Enum, Range, Str, Button, Property, observe
 )
 from traitsui.api import (
     View, Item, Label, Heading, VGroup, HGroup, UItem, spring, TextEditor,
@@ -153,12 +153,14 @@ class CSVListEditorDemo(HasTraits):
     def _get_list1str(self):
         return str(self.list1)
 
-    def _pop1_fired(self):
+    @observe("pop1")
+    def _pop_from_list1(self, event):
         if len(self.list1) > 0:
             x = self.list1.pop()
             print(x)
 
-    def _sort1_fired(self):
+    @observe('sort1')
+    def _sort_list1(self, event):
         self.list1.sort()
 
 

@@ -2,7 +2,7 @@
 
 from threading import Thread
 from time import sleep
-from traits.api import Button, HasTraits, Instance, Str
+from traits.api import Button, HasTraits, Instance, observe, Str
 from traitsui.api import View, Item
 
 
@@ -31,7 +31,8 @@ class Camera(HasTraits):
 
     view = View(Item('start_stop_capture', show_label=False))
 
-    def _start_stop_capture_fired(self):
+    @observe('start_stop_capture')
+    def _on_start_stop_capture(self, event):
         if self.capture_thread and self.capture_thread.isAlive():
             self.capture_thread.wants_abort = True
         else:
