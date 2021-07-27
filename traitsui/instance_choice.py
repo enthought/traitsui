@@ -12,6 +12,8 @@
     instance editor factory classes.
 """
 
+from abc import abstractmethod
+
 from traits.api import HasPrivateTraits, Str, Any, Dict, Tuple, Callable, Bool
 
 from .ui_traits import AView
@@ -19,7 +21,7 @@ from .ui_traits import AView
 from .helper import user_name_for
 
 
-class InstanceChoiceItem(HasPrivateTraits):
+class InstanceChoiceItem(ABCHasStrictTraits):
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -43,16 +45,18 @@ class InstanceChoiceItem(HasPrivateTraits):
         """ Returns the view associated with the object.
         """
         return self.view
-
+    
+    @abstractmethod
     def get_object(self):
         """ Returns the object associated with the item.
         """
-        raise NotImplementedError
-
+        pass
+    
+    @abstractmethod
     def is_compatible(self, object):
         """ Indicates whether a specified object is compatible with the item.
         """
-        raise NotImplementedError
+        pass
 
     def is_selectable(self):
         """ Indicates whether the item can be selected by the user.
