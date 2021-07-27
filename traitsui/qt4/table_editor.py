@@ -1374,7 +1374,8 @@ class TableFilterEditor(HasTraits):
         ]
         self.selected_template = self.templates[0]
 
-    def _add_button_fired(self):
+    @observe('add_button')
+    def _create_and_select_new_filter(self, event):
         """ Create a new filter based on the selected template and select it.
         """
         new_filter = self.selected_template.clone_traits()
@@ -1383,7 +1384,8 @@ class TableFilterEditor(HasTraits):
         self.filters.append(new_filter)
         self.selected_filter = new_filter
 
-    def _remove_button_fired(self):
+    @observe("remove_button")
+    def _delete_selected_filter(self, event):
         """ Delete the currently selected filter.
         """
         if self.selected_template == self.selected_filter:

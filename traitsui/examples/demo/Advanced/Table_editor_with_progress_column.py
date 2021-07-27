@@ -16,7 +16,7 @@ with qt backend.
 import random
 
 from pyface.api import GUI
-from traits.api import Button, HasTraits, Instance, Int, List, Str
+from traits.api import Button, HasTraits, Instance, Int, List, observe, Str
 from traitsui.api import ObjectColumn, TableEditor, UItem, View
 from traitsui.extras.progress_column import ProgressColumn
 
@@ -48,7 +48,8 @@ class JobManager(HasTraits):
         if any(job.percent_complete < 100 for job in self.jobs):
             GUI.invoke_after(100, self.process)
 
-    def _start_fired(self):
+    @observe('start')
+    def _populate_and_process(self, event):
         self.populate()
         GUI.invoke_after(1000, self.process)
 

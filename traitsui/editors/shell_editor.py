@@ -11,7 +11,7 @@
 """ Editor that displays an interactive Python shell.
 """
 
-from traits.api import Bool, Str, Event, Property
+from traits.api import Bool, Str, Event, Property, observe
 from traits.observation.api import match
 
 from traitsui.basic_editor_factory import BasicEditorFactory
@@ -179,11 +179,13 @@ class _ShellEditor(Editor):
 
     # Trait change handlers --------------------------------------------------
 
-    def _command_to_execute_fired(self, command):
+    @observe("command_to_execute")
+    def _execute_command(self, event):
         """ Handles the 'command_to_execute' trait being fired.
         """
         # Show the command. A 'hidden' command should be executed directly on
         # the namespace trait!
+        command = event.new
         self._shell.execute_command(command, hidden=False)
 
 
