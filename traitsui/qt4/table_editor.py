@@ -1374,7 +1374,7 @@ class TableFilterEditor(HasTraits):
         ]
         self.selected_template = self.templates[0]
 
-    @observe('_add_button')
+    @observe('add_button')
     def _create_and_select_new_filter(self, event):
         """ Create a new filter based on the selected template and select it.
         """
