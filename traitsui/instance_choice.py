@@ -14,7 +14,7 @@
 
 from abc import abstractmethod
 
-from traits.api import HasPrivateTraits, Str, Any, Dict, Tuple, Callable, Bool
+from traits.api import ABCHasStrictTraits, Str, Any, Dict, Tuple, Callable, Bool
 
 from .ui_traits import AView
 
