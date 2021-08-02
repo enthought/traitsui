@@ -14,7 +14,13 @@
 
 from abc import abstractmethod
 
-from traits.api import ABCHasStrictTraits, Str, Any, Dict, Tuple, Callable, Bool
+from traits.api import (ABCHasStrictTraits,
+                        Str,
+                        Any,
+                        Dict,
+                        Tuple,
+                        Callable,
+                        Bool)
 
 from .ui_traits import AView
 
@@ -45,13 +51,13 @@ class InstanceChoiceItem(ABCHasStrictTraits):
         """ Returns the view associated with the object.
         """
         return self.view
-    
+
     @abstractmethod
     def get_object(self):
         """ Returns the object associated with the item.
         """
         pass
-    
+
     @abstractmethod
     def is_compatible(self, object):
         """ Indicates whether a specified object is compatible with the item.
