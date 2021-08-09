@@ -2,12 +2,6 @@
 TraitsUI: Traits-capable windowing framework
 ============================================
 
-.. image:: https://travis-ci.org/enthought/traitsui.svg?branch=master
-   :target: https://travis-ci.org/enthought/traitsui
-
-.. image:: https://ci.appveyor.com/api/projects/status/n2qy8kcwh8ibi9g3/branch/master?svg=true
-   :target: https://ci.appveyor.com/project/EnthoughtOSS/traitsui/branch/master
-
 The TraitsUI project contains a toolkit-independent GUI abstraction layer,
 which is used to support the "visualization" features of the
 `Traits <http://github.com/enthought/traits>`__ package.
@@ -46,7 +40,7 @@ we can use TraitsUI to specify a and display a GUI view::
 
 which creates a GUI which looks like this:
 
-.. image:: https://raw.github.com/enthought/traitsui/master/README_example.png
+.. image:: https://raw.github.com/enthought/traitsui/main/README_example.png
 
 Important Links
 ---------------
