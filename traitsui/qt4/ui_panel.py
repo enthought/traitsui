@@ -1011,13 +1011,10 @@ class _GroupPanel(object):
 
         # See if the layout is a grid.
         if row >= 0:
-            # Move to the start of the next row if necessary.
+            # Move to the start of the row if necessary.
             if col > 0:
                 col = 0
-                row += 1
 
-            # Skip the row we are about to do.
-            row += 1
 
             # Allow for the columns.
             if show_labels:
