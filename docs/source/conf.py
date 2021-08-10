@@ -175,7 +175,7 @@ except ImportError as exc:
 
 # Useful aliases to avoid repeating long URLs.
 extlinks = {'github-demo': (
-    'https://github.com/enthought/traitsui/tree/main/traitsui/examples/demo/%s',
+    f'https://github.com/enthought/traitsui/tree/{version}/traitsui/examples/demo/%s',
     'github-demo')
 }
 
