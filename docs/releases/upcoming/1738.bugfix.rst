@@ -1,1 +1,1 @@
-Convert ``traitsui.instance_choice.InstanceChoiceItem`` into an instance of ``traits.api.ABCHasStrictTraits`` to avoid users from instanciating the object directly.
+Convert ``traitsui.instance_choice.InstanceChoiceItem`` into an instance of ``traits.api.ABCHasStrictTraits`` to avoid users from instantiating the object directly.
