@@ -1,6 +1,12 @@
 Traits UI Changelog
 ===================
 
+Release 7.2.2
+-------------
+The TraitsUI 7.2.2 bugfix release fixes an issue where context menu items on a
+``TreeEditor`` don't perform the expected action. Thanks to Pedro Rivotti for
+the contribution. (#1744)
+
 Release 7.2.1
 -------------
 TraitsUI 7.2.1 is a bugfix release which updates TraitsUI to explicitly require
