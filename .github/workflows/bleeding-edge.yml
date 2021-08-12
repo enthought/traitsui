@@ -1,4 +1,4 @@
-# This workflow installs dependencies from master
+# This workflow installs dependencies from main branch
 
 name: ETS from source
 

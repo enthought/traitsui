@@ -1256,9 +1256,12 @@ class SimpleEditor(Editor):
                 name = class_name
             if not factory:
                 factory = klass
-            def perform_add(object):
+            def perform_add(object, factory, prompt):
                 self._menu_new_node(factory, prompt)
-            items.append(Action(name=name, on_perform=perform_add))
+            on_perform = partial(
+                perform_add, factory=factory, prompt=prompt
+            )
+            items.append(Action(name=name, on_perform=on_perform))
         return items
 
     def _is_copyable(self, object):
