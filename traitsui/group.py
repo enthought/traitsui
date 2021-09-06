@@ -19,6 +19,7 @@ from traits.api import (
     Delegate,
     Float,
     Instance,
+    Int,
     List,
     Property,
     Range,
@@ -195,6 +196,9 @@ class Group(ViewSubElement):
     #: Requested height of the group (calculated from heights of contents)
     height = Property(Float, observe="content")
 
+    #: The number of sub-groups in the contents.
+    groups = Property(Int, observe="content.items")
+
     def __init__(self, *values, **traits):
         """ Initializes the group object.
         """
@@ -271,40 +275,100 @@ class Group(ViewSubElement):
                 view_elements.content[id] = item
             item.replace_include(view_elements)
 
+    def get_content(self, allow_groups=True):
+        """ Returns the contents of the Group within a specified context for
+        building a user interface.
+
+        This method assumes that there are no Include or False defined_when
+        clauses in the contetns of the group: if that is the case the group
+        should have been replaced by a ShadowGroup with the appropriate
+        content substituted, and the ShadowGroup's method will be called
+        instead.
+        """
+        # Make a copy of the content:
+        result = self.content[:]
+
+        # If result includes any Groups and they are not allowed,
+        # replace them:
+        if self.groups > 0:
+            if not allow_groups:
+                i = 0
+                while i < len(result):
+                    value = result[i]
+                    if isinstance(value, Group):
+                        items = value.get_content(False)
+                        result[i : i + 1] = items
+                        i += len(items)
+                    else:
+                        i += 1
+            elif (self.groups != len(result)) and (self.layout == "normal"):
+                # if we have a mix of groups and items, create groups around runs of
+                # items
+                items = []
+                content = []
+                for item in result:
+                    if isinstance(item, Group):
+                        self._flush_items(content, items)
+                        content.append(item)
+                    else:
+                        items.append(item)
+                self._flush_items(content, items)
+                result = content
+
+        # Return the resulting list of objects:
+        return result
+
     def get_shadow(self, ui):
         """ Returns a ShadowGroup object for the current Group object, which
         recursively resolves all embedded Include objects and which replaces
         each embedded Group object with a corresponding ShadowGroup.
         """
         content = []
-        groups = 0
         level = ui.push_level()
+        shadow_needed = False
         for value in self.content:
             # Recursively replace Include objects:
             while isinstance(value, Include):
                 value = ui.find(value)
+                shadow_needed = True
 
             # Convert Group objects to ShadowGroup objects, but include Item
             # objects as is (ignore any 'None' values caused by a failed
             # Include):
             if isinstance(value, Group):
                 if self._defined_when(ui, value):
-                    content.append(value.get_shadow(ui))
-                    groups += 1
+                    shadow_value = value.get_shadow(ui)
+                    content.append(shadow_value)
+                    shadow_needed |= isinstance(shadow_value, ShadowGroup)
+                else:
+                    shadow_needed = shadow_needed or (value.defined_when != "")
             elif isinstance(value, Item):
                 if self._defined_when(ui, value):
                     content.append(value)
+                else:
+                    shadow_needed = shadow_needed or (value.defined_when != "")
 
             ui.pop_level(level)
 
-        # Return the ShadowGroup:
-        return ShadowGroup(shadow=self, content=content, groups=groups)
+        if shadow_needed:
+            # Return the ShadowGroup:
+            return ShadowGroup(shadow=self, content=content)
+        else:
+            return self
 
     def set_container(self):
         """ Sets the correct container for the content.
         """
         for item in self.content:
             item.container = self
+
+    def get_id(self):
+        """ Returns an ID for the group.
+        """
+        if self.id != "":
+            return self.id
+
+        return ":".join([item.get_id() for item in self.get_content()])
 
     def _defined_when(self, ui, value):
         """ Should the object be defined in the user interface?
@@ -344,6 +408,24 @@ class Group(ViewSubElement):
         """ Handles a label being found in the string definition.
         """
         self.show_border = True
+
+    def _flush_items(self, content, items):
+        """ Creates a shadow sub-group for any items contained in a specified list.
+        """
+        if len(items) > 0:
+            content.append(
+                # Set shadow before hand to prevent delegation errors
+                ShadowGroup(shadow=self).trait_set(
+                    label="",
+                    show_border=False,
+                    content=items,
+                    show_labels=self.show_labels,
+                    show_left=self.show_left,
+                    springy=self.springy,
+                    orientation=self.orientation,
+                )
+            )
+            del items[:]
 
     def __repr__(self):
         """ Returns a "pretty print" version of the Group.
@@ -412,6 +494,10 @@ class Group(ViewSubElement):
             height = -1.0
 
         return height
+
+    @cached_property
+    def _get_groups(self):
+        return len([item for item in self.content if isinstance(item, Group)])
 
 
 class HGroup(Group):
@@ -557,9 +643,6 @@ class ShadowGroup(Group):
     #: Group object this is a "shadow" for
     shadow = ReadOnly()
 
-    #: Number of ShadowGroups in **content**
-    groups = ReadOnly()
-
     #: Name of the group
     id = ShadowDelegate
 
@@ -630,66 +713,18 @@ class ShadowGroup(Group):
     #: Style sheet for the panel
     style_sheet = ShadowDelegate
 
-    def get_content(self, allow_groups=True):
-        """ Returns the contents of the Group within a specified context for
-        building a user interface.
-
-        This method makes sure that all Group types are of the same type (i.e.,
-        Group or Item) and that all Include objects have been replaced by their
-        substituted values.
-        """
-        # Make a copy of the content:
-        result = self.content[:]
-
-        # If result includes any ShadowGroups and they are not allowed,
-        # replace them:
-        if self.groups != 0:
-            if not allow_groups:
-                i = 0
-                while i < len(result):
-                    value = result[i]
-                    if isinstance(value, ShadowGroup):
-                        items = value.get_content(False)
-                        result[i : i + 1] = items
-                        i += len(items)
-                    else:
-                        i += 1
-            elif (self.groups != len(result)) and (self.layout == "normal"):
-                items = []
-                content = []
-                for item in result:
-                    if isinstance(item, ShadowGroup):
-                        self._flush_items(content, items)
-                        content.append(item)
-                    else:
-                        items.append(item)
-                self._flush_items(content, items)
-                result = content
-
-        # Return the resulting list of objects:
-        return result
-
-    def get_id(self):
-        """ Returns an ID for the group.
-        """
-        if self.id != "":
-            return self.id
-
-        return ":".join([item.get_id() for item in self.get_content()])
-
     def set_container(self):
         """ Sets the correct container for the content.
         """
         pass
 
     def _flush_items(self, content, items):
-        """ Creates a sub-group for any items contained in a specified list.
+        """ Creates a shadow sub-group for any items contained in a specified list.
         """
         if len(items) > 0:
             content.append(
                 # Set shadow before hand to prevent delegation errors
                 ShadowGroup(shadow=self.shadow).trait_set(
-                    groups=0,
                     label="",
                     show_border=False,
                     content=items,
