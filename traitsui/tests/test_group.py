@@ -278,3 +278,167 @@ class TestGroup(BaseTestMixin, unittest.TestCase):
         self.assertEqual(result.groups, 0)
         ui.find.assert_called_once()
         ui.eval_when.assert_called_once()
+
+
+class TestShadowGroup(BaseTestMixin, unittest.TestCase):
+
+    def test_get_content_all_items(self):
+        """
+        Given a ShadowGroup with only Items
+        When get_content is called
+        Then it returns the list of Items
+        """
+        item_x = Item('x')
+        item_y = Item('y')
+        group = Group(item_x, item_y)
+        shadow_group = ShadowGroup(
+            shadow=group,
+            content=group.content,
+            groups=0,
+        )
+
+        result = shadow_group.get_content()
+
+        self.assertEqual(len(result), 2)
+        self.assertIs(result[0], item_x)
+        self.assertIs(result[1], item_y)
+
+    def test_get_content_all_subgroups_allow_groups(self):
+        """
+        Given a ShadowGroup with only Groups
+        When get_content is called with allow_groups
+        Then it returns the list of Groups
+        """
+        item_x = Item('x')
+        group_x = Group(item_x)
+        shadow_group_x = ShadowGroup(
+            shadow=group_x,
+            content=group_x.content,
+            groups=0,
+        )
+        item_y = Item('y')
+        group_y = Group(item_y)
+        shadow_group_y = ShadowGroup(
+            shadow=group_y,
+            content=group_y.content,
+            groups=0,
+        )
+        group = Group(group_x, group_y)
+        shadow_group = ShadowGroup(
+            shadow=group,
+            content=[shadow_group_x, shadow_group_y],
+            groups=2,
+        )
+
+        result = shadow_group.get_content()
+
+        self.assertEqual(len(result), 2)
+        self.assertIs(result[0], shadow_group_x)
+        self.assertIs(result[1], shadow_group_y)
+
+    def test_get_content_mixed_allow_groups(self):
+        """
+        Given a ShadowGroup with only Groups
+        When get_content is called with allow_groups
+        Then it assembles runs of items into groups
+        """
+        item_x = Item('x')
+        group_x = Group(item_x)
+        shadow_group_x = ShadowGroup(
+            shadow=group_x,
+            content=group_x.content,
+            groups=0,
+        )
+        item_y = Item('y')
+        group_y = Group(item_y)
+        shadow_group_y = ShadowGroup(
+            shadow=group_y,
+            content=group_y.content,
+            groups=0,
+        )
+        item_z = Item('z')
+        group = Group(group_x, item_z, group_y)
+        shadow_group = ShadowGroup(
+            shadow=group,
+            content=[shadow_group_x, item_z, shadow_group_y],
+            groups=2,
+        )
+
+        result = shadow_group.get_content()
+
+        self.assertEqual(len(result), 3)
+        self.assertIs(result[0], shadow_group_x)
+        self.assertIsInstance(result[1], ShadowGroup)
+        shadow_group_z = result[1]
+        self.assertIs(shadow_group_z.shadow, group)
+        self.assertEqual(len(shadow_group_z.content), 1)
+        self.assertIs(shadow_group_z.content[0], item_z)
+        self.assertIs(result[2], shadow_group_y)
+
+    def test_get_content_all_subgroups_allow_groups_false(self):
+        """
+        Given a ShadowGroup with only Groups
+        When get_content is called with allow_groups False
+        Then it returns the flattened list of items.
+        """
+        item_x = Item('x')
+        group_x = Group(item_x)
+        shadow_group_x = ShadowGroup(
+            shadow=group_x,
+            content=group_x.content,
+            groups=0,
+        )
+        item_y = Item('y')
+        group_y = Group(item_y)
+        shadow_group_y = ShadowGroup(
+            shadow=group_y,
+            content=group_y.content,
+            groups=0,
+        )
+        group = Group(group_x, group_y)
+        shadow_group = ShadowGroup(
+            shadow=group,
+            content=[shadow_group_x, shadow_group_y],
+            groups=2,
+        )
+
+        result = shadow_group.get_content(False)
+
+        self.assertEqual(len(result), 2)
+        self.assertIs(result[0], item_x)
+        self.assertIs(result[1], item_y)
+
+    def test_get_content_mixed_allow_groups(self):
+        """
+        Given a ShadowGroup with only Groups
+        When get_content is called with allow_groups
+        Then it returns the flattened list of items.
+        """
+        item_x = Item('x')
+        group_x = Group(item_x)
+        shadow_group_x = ShadowGroup(
+            shadow=group_x,
+            content=group_x.content,
+            groups=0,
+        )
+        item_y = Item('y')
+        group_y = Group(item_y)
+        shadow_group_y = ShadowGroup(
+            shadow=group_y,
+            content=group_y.content,
+            groups=0,
+        )
+        item_z = Item('z')
+        group = Group(group_x, item_z, group_y)
+        shadow_group = ShadowGroup(
+            shadow=group,
+            content=[shadow_group_x, item_z, shadow_group_y],
+            groups=2,
+        )
+
+        result = shadow_group.get_content(False)
+
+        self.assertEqual(len(result), 3)
+        self.assertIs(result[0], item_x)
+        self.assertIs(result[1], item_z)
+        self.assertIs(result[2], item_y)
