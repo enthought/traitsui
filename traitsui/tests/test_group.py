@@ -12,44 +12,12 @@
 Test cases for the UI object.
 """
 
-import contextlib
-from re import sub
 import unittest
 import unittest.mock
 
-from pyface.api import GUI
-from traits.api import Property
-from traits.has_traits import HasTraits, HasStrictTraits
-from traits.trait_types import Str, Int
-
-from traitsui.basic_editor_factory import BasicEditorFactory
-from traitsui.api import Group, Include, Item, spring, View
+from traitsui.api import Group, Include, Item
 from traitsui.group import ShadowGroup
-from traitsui.tests._tools import (
-    BaseTestMixin,
-    count_calls,
-    create_ui,
-    is_qt,
-    is_wx,
-    process_cascade_events,
-    requires_toolkit,
-    reraise_exceptions,
-    ToolkitName,
-)
-from traitsui.toolkit import toolkit, toolkit_object
-
-
-class BaseWithInclude(HasTraits):
-
-    x = Str()
-
-    traits_view = View(
-        Include('included_group'),
-    )
-
-class SubclassWithInclude(BaseWithInclude):
-
-    included_group = Group('x')
+from traitsui.tests._tools import BaseTestMixin
 
 
 class TestGroup(BaseTestMixin, unittest.TestCase):
@@ -231,7 +199,7 @@ class TestGroup(BaseTestMixin, unittest.TestCase):
         self.assertEqual(result.groups, 1)
         ui.find.assert_called_once()
 
-    def test_get_shadow_sub_group_defined_when_true(self):
+    def test_get_shadow_include_sub_group_defined_when_true(self):
         """
         Given a group with an include and the include resolves to a group
             that has defined_when evaluate to True
@@ -255,7 +223,7 @@ class TestGroup(BaseTestMixin, unittest.TestCase):
         ui.find.assert_called_once()
         ui.eval_when.assert_called_once()
 
-    def test_get_shadow_sub_group_defined_when_false(self):
+    def test_get_shadow_include_sub_group_defined_when_false(self):
         """
         Given a group with an include and the include resolves to a group
             that has defined_when evaluate to True
