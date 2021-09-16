@@ -26,6 +26,7 @@ from traits.api import (
     Event,
     Property,
     TraitListEvent,
+    Dict,
 )
 
 # FIXME: TabularEditor (the editor factory for tabular editors) is a proxy class
@@ -249,10 +250,10 @@ class TabularEditor(Editor):
     adapter = Instance(TabularAdapter)
 
     #: Dictionary mapping image names to wx.ImageList indices:
-    images = Any({})
+    images = Dict()
 
     #: Dictionary mapping ImageResource objects to wx.ImageList indices:
-    image_resources = Any({})
+    image_resources = Dict()
 
     #: An image being converted:
     image = Image

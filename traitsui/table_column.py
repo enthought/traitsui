@@ -19,6 +19,7 @@ from traits.api import (
     Bool,
     Callable,
     Constant,
+    Dict,
     Enum,
     Expression,
     Float,
@@ -458,7 +459,7 @@ class ExpressionColumn(ObjectColumn):
 
     #: The globals dictionary that should be passed to the expression
     #: evaluation:
-    globals = Any({})
+    globals = Dict()
 
     def get_raw_value(self, object):
         """ Gets the unformatted value of the column for a specified object.

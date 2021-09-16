@@ -18,6 +18,7 @@
 from traits.api import (
     Any,
     Bool,
+    Dict,
     Enum,
     Event,
     Float,
@@ -217,7 +218,7 @@ class TabularAdapter(HasPrivateTraits):
     # -- Private Trait Definitions --------------------------------------------
 
     #: Cache of attribute handlers.
-    cache = Any({})
+    cache = Dict()
 
     #: Event fired when the cache is flushed.
     cache_flushed = Event(update=True)

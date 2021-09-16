@@ -19,6 +19,7 @@ from pyface.qt import QtCore, QtGui, is_qt5
 from traits.api import (
     Any,
     Bool,
+    Dict,
     Event,
     Int,
     Instance,
@@ -81,10 +82,10 @@ class _ListStrEditor(Editor):
     adapter = Instance(ListStrAdapter)
 
     #: Dictionary mapping image names to QIcons
-    images = Any({})
+    images = Dict()
 
     #: Dictionary mapping ImageResource objects to QIcons
-    image_resources = Any({})
+    image_resources = Dict()
 
     #: The current number of item currently in the list:
     item_count = Property()
