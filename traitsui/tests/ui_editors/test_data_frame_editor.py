@@ -504,3 +504,10 @@ class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
         assert_array_equal(item_0_df.values, [[0, 1, 2]])
         assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
         self.assertEqual(item_0_df.index[0], 1)
+
+    def test_scroll_to_row_hint_warnings(self):
+        with self.assertWarns(DeprecationWarning):
+            dfe = DataFrameEditor(scroll_to_row_hint="center")
+
+        with self.assertWarns(DeprecationWarning):
+            dfe.scroll_to_row_hint
