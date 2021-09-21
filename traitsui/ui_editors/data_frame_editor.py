@@ -9,6 +9,7 @@
 # Thanks for using Enthought open source!
 
 import logging
+import warnings
 
 from traits.api import (
     Bool,
