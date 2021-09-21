@@ -356,6 +356,10 @@ if __name__ == "__main__":
                 'wx = traitsui.wx:toolkit',
                 'qt = traitsui.qt4:toolkit',
                 'null = traitsui.null:toolkit',
+                'ipywidgets = traitsui.ipywidgets:toolkit',
+            ],
+            'pyface.toolkits': [
+                'ipywidgets = traitsui.ipywidgets:toolkit',
             ],
             'etsdemo_data': [
                 'demo = traitsui.extras._demo_info:info',

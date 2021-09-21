@@ -766,9 +766,7 @@ class _GroupPanel(object):
         self._label_visible_whens = []
 
         # See if a label is needed.
-        show_labels = False
-        for item in content:
-            show_labels |= item.show_label
+        show_labels = any(item.show_label for item in content)
 
         # See if a grid layout is needed.
         if show_labels or columns > 1:
