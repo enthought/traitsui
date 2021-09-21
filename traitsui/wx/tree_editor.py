@@ -12,10 +12,11 @@
 """
 
 
-import os
-import wx
 import copy
+from functools import partial
+import os
 
+import wx
 
 try:
     from pyface.wx.drag_and_drop import PythonDropSource, PythonDropTarget

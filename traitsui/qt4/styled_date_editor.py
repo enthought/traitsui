@@ -95,7 +95,7 @@ class CustomEditor(DateCustomEditor):
     def _apply_style(self, style, dates):
         """ **style** is a CellFormat, **dates** is a list of datetime.date """
         for dt in dates:
-            self.set_unselected_style(style, date)
+            self.set_unselected_style(style, dt)
         return
 
     def _apply_styles(self, style_dict, date_dict):
@@ -115,4 +115,4 @@ class CustomEditor(DateCustomEditor):
     def _reset_formatting(self, dates):
         # Resets the text format on the given dates
         for dt in dates:
-            self.apply_unselected_style(date)
+            self.apply_unselected_style(dt)

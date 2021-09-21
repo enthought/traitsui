@@ -130,7 +130,7 @@ class MakeMenu:
                 handler = line[col + 1 :].strip()
                 if handler != "":
                     if self.indirect:
-                        self.indirect(cur_id, handler)
+                        self.indirect(None, handler)
                         handler = self.indirect
                     else:
                         try:
