@@ -24,6 +24,7 @@ from traits.api import (
     Event,
     TraitListEvent,
     Property,
+    Dict,
 )
 
 # FIXME: ListStrEditor is a proxy class defined here just for backward
@@ -146,11 +147,11 @@ class _ListStrEditor(Editor):
     #: The adapter from list items to editor values:
     adapter = Instance(ListStrAdapter)
 
-    #: Dictionaly mapping image names to wx.ImageList indices:
-    images = Any({})
+    #: Dictionary mapping image names to wx.ImageList indices:
+    images = Dict()
 
     #: Dictionary mapping ImageResource objects to wx.ImageList indices:
-    image_resources = Any({})
+    image_resources = Dict()
 
     #: The current number of item currently in the list:
     item_count = Property()

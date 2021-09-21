@@ -24,6 +24,7 @@ from traits.api import (
     Any,
     Bool,
     Callable,
+    Dict,
     Event,
     HasStrictTraits,
     Instance,
@@ -131,10 +132,10 @@ class TabularEditor(Editor):
     model = Instance(TabularModel)
 
     #: Dictionary mapping image names to QIcons
-    images = Any({})
+    images = Dict()
 
     #: Dictionary mapping ImageResource objects to QIcons
-    image_resources = Any({})
+    image_resources = Dict()
 
     #: An image being converted:
     image = Image

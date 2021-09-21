@@ -34,6 +34,7 @@ from traits.api import (
     Any,
     Bool,
     Button,
+    Dict,
     Event,
     List,
     HasTraits,
@@ -160,10 +161,10 @@ class TableEditor(Editor, BaseTableEditor):
     auto_size = Bool(False)
 
     #: Dictionary mapping image names to QIcons
-    images = Any({})
+    images = Dict()
 
     #: Dictionary mapping ImageResource objects to QIcons
-    image_resources = Any({})
+    image_resources = Dict()
 
     #: An image being converted:
     image = Image
