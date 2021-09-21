@@ -473,18 +473,26 @@ def test_all():
 @click.option(
     "--environment", default=None, help="Name of EDM environment to check."
 )
-def flake8(runtime, toolkit, environment):
+@click.option('--strict/--not-strict',
+    default=False,
+    help="Use strict configuration for flake8 [default: --not-strict]",
+)
+def flake8(runtime, toolkit, environment, strict):
     """ Run a flake8 check in a given environment.
 
     """
     parameters = get_parameters(runtime, toolkit, environment)
+    config=""
+    if strict:
+        config="--config=flake8_strict.cfg "
     targets = [
         "examples",
         "integrationtests",
         "traitsui",
     ]
     commands = [
-        "edm run -e {environment} -- python -m flake8 " + " ".join(targets)
+        "edm run -e {environment} -- python -m flake8 " + config
+        + " ".join(targets)
     ]
     execute(commands, parameters)
 
