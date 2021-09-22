@@ -1,14 +1,13 @@
+# (C) Copyright 2004-2021 Enthought, Inc., Austin, TX
+# All rights reserved.
 #
-#  Copyright (c) 2017, Enthought, Inc.
-#  All rights reserved.
+# This software is provided without warranty under the terms of the BSD
+# license included in LICENSE.txt and may be redistributed only under
+# the conditions described in the aforementioned license. The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#
+# Thanks for using Enthought open source!
+
 """
 Tasks for Test Runs
 ===================
@@ -473,18 +472,21 @@ def test_all():
 @click.option(
     "--environment", default=None, help="Name of EDM environment to check."
 )
-def flake8(runtime, toolkit, environment):
+@click.option(
+    '--strict/--not-strict',
+    default=False,
+    help="Use strict configuration for flake8 [default: --not-strict]",
+)
+def flake8(runtime, toolkit, environment, strict):
     """ Run a flake8 check in a given environment.
 
     """
     parameters = get_parameters(runtime, toolkit, environment)
-    targets = [
-        "examples",
-        "integrationtests",
-        "traitsui",
-    ]
+    config = ""
+    if strict:
+        config = "--config=flake8_strict.cfg "
     commands = [
-        "edm run -e {environment} -- python -m flake8 " + " ".join(targets)
+        "edm run -e {environment} -- python -m flake8 " + config,
     ]
     execute(commands, parameters)
 
