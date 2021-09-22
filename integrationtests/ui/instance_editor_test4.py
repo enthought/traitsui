@@ -8,9 +8,8 @@
 #
 # Thanks for using Enthought open source!
 
-from traits.api import *
-from traitsui.api import *
-from traitsui.instance_choice import InstanceChoice
+from traits.api import HasStrictTraits, Instance, Int, List, Regex, Str
+from traitsui.api import InstanceEditor, Item, View
 
 #-------------------------------------------------------------------------
 #  'Person' class:

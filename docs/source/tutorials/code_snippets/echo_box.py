@@ -1,6 +1,6 @@
 # echo_box.py
 
-from traits.api import *
+from traits.api import HasTraits, Str
 
 class EchoBox(HasTraits):
     input =  Str()

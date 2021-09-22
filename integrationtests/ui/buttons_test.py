@@ -8,14 +8,12 @@
 #
 # Thanks for using Enthought open source!
 
-from traits.api \
-    import *
+from traits.api import Int, Regex, Str
+from traitsui.api import (
+    Action, CancelButton, Group, Handler, LiveButtons, ModalButtons, OKButton,
+    View,
+)
 
-from traitsui.api \
-    import *
-
-from traitsui.menu \
-    import *
 
 #-------------------------------------------------------------------------
 #  'Person' class:

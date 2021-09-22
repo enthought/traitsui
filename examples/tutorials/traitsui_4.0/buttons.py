@@ -47,8 +47,8 @@ removed from the **View** class.
 
 #--<Imports>--------------------------------------------------------------
 
-from traits.api import *
-from traitsui.api import *
+from traits.api import Float, HasTraits, Property
+from traitsui.api import Item, View
 
 #--[Adder Class]----------------------------------------------------------
 
