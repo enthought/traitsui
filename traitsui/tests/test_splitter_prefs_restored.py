@@ -30,6 +30,7 @@ class TmpClass(Handler):
     def init(self, ui_info):
         super().init(ui_info)
         self.save_prefs(ui_info)
+        return True
 
     def reset_prefs(self, ui_info):
         """ Reset the split to be equally wide.

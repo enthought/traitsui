@@ -212,6 +212,7 @@ class DemoFileHandler(Handler):
         demo_file = info.object
         with _set_stdout(self):
             demo_file.init()
+        return True
 
     def closed(self, info, is_ok):
         """ Closes the view.
@@ -1057,6 +1058,7 @@ class Demo(ModelView):
         info.ui.title = self.title
         if self.model.has_children():
             self.selected_node = self.model.get_children()[0]
+        return True
 
     def _get__next_node(self):
         if self.selected_node is None:

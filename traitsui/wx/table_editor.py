@@ -1297,6 +1297,7 @@ class TableFilterEditor(Handler):
             self.filter = info.filter.factory.values[0]
         self._filter = self.filter
         self._filter_copy = self.filter.clone_traits()
+        return True
 
     def closed(self, info, is_ok):
         """ Handles a dialog-based user interface being closed by the user.
