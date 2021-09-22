@@ -10,9 +10,6 @@
 
 from datetime import date
 
-from traits.etsconfig.api import ETSConfig
-ETSConfig.toolkit = 'qt4'
-
 from traits.api import Date, Dict, HasTraits, List, observe
 from traitsui.api import View, Item, StyledDateEditor
 from traitsui.editors.styled_date_editor import CellFormat
