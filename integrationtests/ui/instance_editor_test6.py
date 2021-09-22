@@ -26,7 +26,7 @@ class Person(HasStrictTraits):
 
     name = Str()
     age = Int()
-    phone = Regex(value='000-0000', regex='\d\d\d[-]\d\d\d\d')
+    phone = Regex(value='000-0000', regex=r'\d\d\d[-]\d\d\d\d')
 
     #-------------------------------------------------------------------------
     #  Traits view definition:
