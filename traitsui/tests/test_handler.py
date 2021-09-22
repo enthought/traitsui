@@ -8,7 +8,7 @@
 #
 # Thanks for using Enthought open source!
 
-from unittest import TestCase
+from unittest import TestCase, skipIf
 
 from pyface.action.api import ActionEvent
 from traits.api import Any, HasTraits, Bool, TraitError
@@ -22,7 +22,7 @@ from traitsui.api import (
     UI,
     UndoAction,
 )
-from traitsui.tests._tools import BaseTestMixin
+from traitsui.tests._tools import BaseTestMixin, is_null
 
 
 class PyfaceAction(Action):
@@ -293,6 +293,7 @@ class TestHandler(BaseTestMixin, TestCase):
 
         self.assertTrue(handler.help_performed)
 
+    @skipIf(is_null(), "Null toolkit can't create UI")
     def test_handler_init_false(self):
         object = SampleObject()
         handler = SampleHandler(init_return_value=False)
@@ -300,6 +301,7 @@ class TestHandler(BaseTestMixin, TestCase):
         with self.assertRaises(TraitError):
             object.edit_traits(handler=handler)
 
+    @skipIf(is_null(), "Null toolkit can't create UI")
     def test_handler_init_none(self):
         object = SampleObject()
         handler = SampleHandler(init_return_value=None)
