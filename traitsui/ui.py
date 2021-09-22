@@ -406,7 +406,7 @@ class UI(HasPrivateTraits):
 
         # Invoke the handler's 'init' method, and abort if it indicates
         # failure:
-        if handler.init(info) == False:
+        if not handler.init(info):
             raise TraitError("User interface creation aborted")
 
         # For each Handler method whose name is of the form
