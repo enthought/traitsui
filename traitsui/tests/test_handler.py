@@ -11,7 +11,7 @@
 from unittest import TestCase
 
 from pyface.action.api import ActionEvent
-from traits.api import HasTraits, Bool
+from traits.api import Any, HasTraits, Bool, TraitError
 from traitsui.api import (
     Action,
     CloseAction,
@@ -64,6 +64,11 @@ class SampleHandler(Handler):
     close_performed = Bool()
 
     help_performed = Bool()
+
+    init_return_value = Any(True)
+
+    def init(self, info):
+        return self.init_return_value
 
     def action_handler(self):
         self.action_performed = True
@@ -287,3 +292,19 @@ class TestHandler(BaseTestMixin, TestCase):
         handler.perform(info, action, event)
 
         self.assertTrue(handler.help_performed)
+
+    def test_handler_init_false(self):
+        object = SampleObject()
+        handler = SampleHandler(init_return_value=False)
+
+        with self.assertRaises(TraitError):
+            object.edit_traits(handler=handler)
+
+    def test_handler_init_none(self):
+        object = SampleObject()
+        handler = SampleHandler(init_return_value=None)
+
+        with self.assertWarns(DeprecationWarning):
+            ui = object.edit_traits(handler=handler)
+
+        ui.dispose()
