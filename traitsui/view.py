@@ -41,7 +41,6 @@ from .ui_traits import (
     EditorStyle,
     ExportType,
     HelpId,
-    Image,
     SequenceTypes,
     ViewStatus,
 )

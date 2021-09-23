@@ -8,10 +8,8 @@
 #
 # Thanks for using Enthought open source!
 
-from traits.api import *
-from traitsui.api import *
-from traitsui.instance_choice \
-    import InstanceChoice, InstanceFactoryChoice
+from traits.api import HasStrictTraits, Instance, Int, List, Regex, Str
+from traitsui.api import InstanceEditor, InstanceFactoryChoice, Item, View
 
 #-------------------------------------------------------------------------
 #  'Person' class:
@@ -26,7 +24,7 @@ class Person(HasStrictTraits):
 
     name = Str()
     age = Int()
-    phone = Regex(value='000-0000', regex='\d\d\d[-]\d\d\d\d')
+    phone = Regex(value='000-0000', regex=r'\d\d\d[-]\d\d\d\d')
 
     #-------------------------------------------------------------------------
     #  Traits view definition:

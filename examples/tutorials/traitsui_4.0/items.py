@@ -84,15 +84,13 @@ model is set up.
 
 #--<Imports>--------------------------------------------------------------
 
-from traits.api \
-    import *
+from traits.api import (
+    Button, HasTraits, Instance, Int, List, Property, Str, cached_property,
+)
 
-from traitsui.api \
-    import *
-
-from traitsui.table_column \
-    import *
-from functools import reduce
+from traitsui.api import (
+    HGroup, Item, ModelView, ObjectColumn, TableEditor, View, VGroup,
+)
 
 #--[Player Class]---------------------------------------------------------
 
@@ -118,7 +116,7 @@ class Team(HasTraits):
     name = Str('<new team>')
 
     # The players on the team:
-    players = List(Player)
+    players = List(Instance(Player))
 
     # The number of players on the team:
     num_players = Property(observe='players')
@@ -139,7 +137,7 @@ class League(HasTraits):
     name = Str('<new league>')
 
     # The teams in the league:
-    teams = List(Team)
+    teams = List(Instance(Team))
 
 #--[LeagueModelView Class]-----------------------------------------------------
 
@@ -164,9 +162,7 @@ class LeagueModelView(ModelView):
     def _get_total_hits(self):
         """ Returns the total number of hits across all teams and players.
         """
-        return 0
-        return reduce(add, [reduce(add, [p.hits for p in t.players], 0)
-                            for t in self.model.teams], 0)
+        return sum(sum(p.hits for p in t.players) for t in self.model.teams)
 
     view = View(
         VGroup(

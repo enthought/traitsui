@@ -1,9 +1,8 @@
 # code_block1.py
 
-from traits.api import *
-from traitsui.api import *
+from traits.api import CInt, Enum, HasTraits
 
-class Camera( HasTraits ):
+class Camera(HasTraits):
    """ Camera object """
    gain = Enum(1, 2, 3,
       desc="the gain index of the camera",

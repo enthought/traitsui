@@ -8,8 +8,8 @@
 #
 # Thanks for using Enthought open source!
 
-from traits.api import *
-from traitsui.api import *
+from traits.api import HasTraits, List, Str
+from traitsui.api import Item, SetEditor, View
 
 
 class Team(HasTraits):

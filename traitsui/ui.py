@@ -14,6 +14,7 @@
 
 import shelve
 import os
+from warnings import warn
 
 from pyface.ui_traits import Image
 from traits.api import (
@@ -32,7 +33,6 @@ from traits.api import (
     observe,
     property_depends_on,
 )
-from traits.observation.api import trait
 
 from traits.trait_base import traits_home, is_str
 
@@ -407,8 +407,16 @@ class UI(HasPrivateTraits):
 
         # Invoke the handler's 'init' method, and abort if it indicates
         # failure:
-        if handler.init(info) == False:
+        started = handler.init(info)
+        if started is False:
             raise TraitError("User interface creation aborted")
+        elif not isinstance(started, bool):
+            warn(
+                "Handler.init() must return True or False, but instead "
+                f"returned {started}.  "
+                "This will become an error in a future release.",
+                DeprecationWarning,
+            )
 
         # For each Handler method whose name is of the form
         # 'object_name_changed', where 'object' is the name of an object in the

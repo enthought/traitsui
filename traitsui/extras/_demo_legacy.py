@@ -216,6 +216,7 @@ class DemoFileHandler(Handler):
         demo_file = info.object
         with _set_stdout(self):
             demo_file.init()
+        return True
 
     def closed(self, info, is_ok):
         """ Closes the view.
@@ -1008,6 +1009,7 @@ class Demo(ModelView):
 
     def init(self, info):
         info.ui.title = self.title
+        return True
 
     def _get__next_node(self):
         next = None

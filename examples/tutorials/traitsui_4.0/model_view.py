@@ -97,9 +97,10 @@ for an example of a related **Controller** based design.
 
 #--<Imports>--------------------------------------------------------------
 
-from traits.api import *
-from traitsui.api import *
-from traitsui.table_column import *
+from traits.api import (
+    HasTraits, Instance, List, Property, PrototypedFrom, Str,
+)
+from traitsui.api import Item, ModelView, ObjectColumn, TableEditor, View
 
 #--[Parent Class]---------------------------------------------------------
 
@@ -118,7 +119,7 @@ class Child(HasTraits):
     father = Instance(Parent)
 
     first_name = Str()
-    last_name = Delegate('father')
+    last_name = PrototypedFrom('father')
 
 #--[ChildModelView Class]-------------------------------------------------
 

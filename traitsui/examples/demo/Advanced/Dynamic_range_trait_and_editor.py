@@ -63,7 +63,6 @@ Notes:
 
 import logging
 import sys
-logging.basicConfig(stream=sys.stderr)
 
 from random \
     import choice
@@ -74,6 +73,8 @@ from traits.api \
 
 from traitsui.api \
     import View, VGroup, HGroup, Item, ListEditor, spring
+
+logging.basicConfig(stream=sys.stderr)
 
 #-- The Hotel class ------------------------------------------------------
 

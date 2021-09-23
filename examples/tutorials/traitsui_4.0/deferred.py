@@ -34,8 +34,8 @@ number of screen updates.
 
 #--<Imports>--------------------------------------------------------------
 
-from traits.api import *
-from traitsui.api import *
+from traits.api import Button, HasTraits, Int
+from traitsui.api import Item, View
 
 #--[Count Class]----------------------------------------------------------
 

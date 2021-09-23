@@ -29,11 +29,6 @@ from traits.api import (
     Dict,
 )
 
-# FIXME: TabularEditor (the editor factory for tabular editors) is a proxy class
-# defined here just for backward compatibility. The class has been moved to the
-# traitsui.editors.tabular_editor file.
-from traitsui.editors.tabular_editor import TabularEditor
-
 from traitsui.ui_traits import Image
 
 from traitsui.tabular_adapter import TabularAdapter

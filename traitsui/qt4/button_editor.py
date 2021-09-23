@@ -27,7 +27,7 @@
 from pyface.qt import QtCore, QtGui
 from pyface.api import Image
 
-from traits.api import Str, List, Str, observe, on_trait_change
+from traits.api import List, Str, observe, on_trait_change
 
 from .editor import Editor
 

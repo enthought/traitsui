@@ -59,6 +59,7 @@ class LEDDemoHandler(Handler):
     def init(self, info):
         self.info = info
         Thread(target=self._update_counter).start()
+        return True
 
     def closed(self, info, is_ok):
         self.running = False

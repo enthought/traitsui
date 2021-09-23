@@ -8,14 +8,12 @@
 #
 # Thanks for using Enthought open source!
 
-from traits.api \
-    import *
+from traits.api import Int, Regex, Str
+from traitsui.api import (
+    Action, CancelButton, Group, Handler, LiveButtons, ModalButtons, OKButton,
+    View,
+)
 
-from traitsui.api \
-    import *
-
-from traitsui.menu \
-    import *
 
 #-------------------------------------------------------------------------
 #  'Person' class:
@@ -30,7 +28,7 @@ class Person(Handler):
 
     name = Str()
     age = Int()
-    phone = Regex(value='000-0000', regex='\d\d\d[-]\d\d\d\d')
+    phone = Regex(value='000-0000', regex=r'\d\d\d[-]\d\d\d\d')
     notes = Str()
 
     #-------------------------------------------------------------------------

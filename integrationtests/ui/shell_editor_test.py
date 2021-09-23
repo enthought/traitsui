@@ -8,9 +8,8 @@
 #
 # Thanks for using Enthought open source!
 
-from traits.api import *
-from traitsui.api import *
-from traitsui.menu import *
+from traits.api import Dict, Float, HasPrivateTraits, Int, Str
+from traitsui.api import Item, ShellEditor, View
 
 #-------------------------------------------------------------------------
 #  'ShellTest' class:

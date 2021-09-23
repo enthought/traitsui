@@ -1,7 +1,7 @@
 # container.py
 
-from traits.api import *
-from traitsui.api import *
+from traits.api import CInt, Enum, HasTraits, Instance, String
+from traitsui.api import Item, View
 
 class Camera(HasTraits):
     """ Camera object """
@@ -14,10 +14,12 @@ class Camera(HasTraits):
         desc="the exposure time, in ms",
         label="Exposure", )
 
+
 class Display(HasTraits):
     string = String()
 
     view= View( Item('string', show_label=False, springy=True, style='custom' ))
+
 
 class Container(HasTraits):
     camera = Instance(Camera, ())
@@ -27,6 +29,7 @@ class Container(HasTraits):
                 Item('camera', style='custom', show_label=False, ),
                 Item('display', style='custom', show_label=False, ),
                )
+
 
 Container().configure_traits()
 

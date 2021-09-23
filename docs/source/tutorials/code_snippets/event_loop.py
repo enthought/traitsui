@@ -1,6 +1,6 @@
 # event_loop.py
 
-from traits.api import *
+from traits.api import HasTraits, Int
 from pyface.api import GUI
 
 class Counter(HasTraits):

@@ -8,10 +8,10 @@
 #
 # Thanks for using Enthought open source!
 
-from unittest import TestCase
+from unittest import TestCase, skipIf
 
 from pyface.action.api import ActionEvent
-from traits.api import HasTraits, Bool
+from traits.api import Any, HasTraits, Bool, TraitError
 from traitsui.api import (
     Action,
     CloseAction,
@@ -22,7 +22,7 @@ from traitsui.api import (
     UI,
     UndoAction,
 )
-from traitsui.tests._tools import BaseTestMixin
+from traitsui.tests._tools import BaseTestMixin, is_null
 
 
 class PyfaceAction(Action):
@@ -64,6 +64,11 @@ class SampleHandler(Handler):
     close_performed = Bool()
 
     help_performed = Bool()
+
+    init_return_value = Any(True)
+
+    def init(self, info):
+        return self.init_return_value
 
     def action_handler(self):
         self.action_performed = True
@@ -287,3 +292,21 @@ class TestHandler(BaseTestMixin, TestCase):
         handler.perform(info, action, event)
 
         self.assertTrue(handler.help_performed)
+
+    @skipIf(is_null(), "Null toolkit can't create UI")
+    def test_handler_init_false(self):
+        object = SampleObject()
+        handler = SampleHandler(init_return_value=False)
+
+        with self.assertRaises(TraitError):
+            object.edit_traits(handler=handler)
+
+    @skipIf(is_null(), "Null toolkit can't create UI")
+    def test_handler_init_none(self):
+        object = SampleObject()
+        handler = SampleHandler(init_return_value=None)
+
+        with self.assertWarns(DeprecationWarning):
+            ui = object.edit_traits(handler=handler)
+
+        ui.dispose()
