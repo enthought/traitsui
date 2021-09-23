@@ -3,6 +3,7 @@
 import wx
 
 import matplotlib
+
 # We want matplotlib to use a wxPython backend
 matplotlib.use('WXAgg')
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
@@ -13,9 +14,10 @@ from traits.api import Any, Instance
 from traitsui.wx.editor import Editor
 from traitsui.wx.basic_editor_factory import BasicEditorFactory
 
+
 class _MPLFigureEditor(Editor):
 
-    scrollable  = True
+    scrollable = True
 
     def init(self, parent):
         self.control = self._create_canvas(parent)
@@ -25,7 +27,7 @@ class _MPLFigureEditor(Editor):
         pass
 
     def _create_canvas(self, parent):
-        """ Create the MPL canvas. """
+        """Create the MPL canvas."""
         # The panel lets us add additional controls.
         panel = wx.Panel(parent, -1, style=wx.CLIP_CHILDREN)
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -37,6 +39,7 @@ class _MPLFigureEditor(Editor):
         sizer.Add(toolbar, 0, wx.EXPAND)
         self.value.canvas.SetMinSize((10, 10))
         return panel
+
 
 class MPLFigureEditor(BasicEditorFactory):
 
@@ -53,17 +56,20 @@ if __name__ == "__main__":
 
         figure = Instance(Figure, ())
 
-        view = View(Item('figure', editor=MPLFigureEditor(),
-                                show_label=False),
-                        width=400,
-                        height=300,
-                        resizable=True)
+        view = View(
+            Item('figure', editor=MPLFigureEditor(), show_label=False),
+            width=400,
+            height=300,
+            resizable=True,
+        )
 
         def __init__(self):
             super().__init__()
             axes = self.figure.add_subplot(111)
-            t = linspace(0, 2*pi, 200)
-            axes.plot(sin(t)*(1+0.5*cos(11*t)), cos(t)*(1+0.5*cos(11*t)))
+            t = linspace(0, 2 * pi, 200)
+            axes.plot(
+                sin(t) * (1 + 0.5 * cos(11 * t)),
+                cos(t) * (1 + 0.5 * cos(11 * t)),
+            )
 
     Test().configure_traits()
-

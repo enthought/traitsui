@@ -18,11 +18,10 @@ from pyface.qt import QtGui
 from .editor import Editor
 
 
-
 class _HistoryEditor(Editor):
-    """ Simple style text editor, which displays a text field and maintains a
-        history of previously entered values, the maximum number of which is
-        specified by the 'entries' trait of the HistoryEditor factory.
+    """Simple style text editor, which displays a text field and maintains a
+    history of previously entered values, the maximum number of which is
+    specified by the 'entries' trait of the HistoryEditor factory.
     """
 
     # -------------------------------------------------------------------------
@@ -30,8 +29,8 @@ class _HistoryEditor(Editor):
     # -------------------------------------------------------------------------
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = control = QtGui.QComboBox()
         control.setEditable(True)
@@ -48,14 +47,13 @@ class _HistoryEditor(Editor):
         self.set_tooltip()
 
     def update_object(self, text):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         if not self._no_update:
             self.value = str(text)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self._no_update = True
         self.control.setEditText(self.str_value)
@@ -64,8 +62,8 @@ class _HistoryEditor(Editor):
     # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the
-            editor.
+        """Restores any saved user preference information associated with the
+        editor.
         """
         history = prefs.get("history")
         if history:
@@ -78,8 +76,7 @@ class _HistoryEditor(Editor):
             self._no_update = False
 
     def save_prefs(self):
-        """ Returns any user preference information associated with the editor.
-        """
+        """Returns any user preference information associated with the editor."""
         history = [
             str(self.control.itemText(index))
             for index in range(self.control.count())
@@ -99,8 +96,8 @@ class _HistoryEditor(Editor):
     # -------------------------------------------------------------------------
 
     def _truncate(self, parent, start, end):
-        """ Handle items being added to the combo box. If there are too many,
-            remove items at the end.
+        """Handle items being added to the combo box. If there are too many,
+        remove items at the end.
         """
         diff = self.control.count() - self.factory.entries
         if diff > 0:

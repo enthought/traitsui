@@ -36,8 +36,10 @@ from traitsui.api import Action, Item, Menu, ObjectColumn, TableEditor, View
 class AffectsAverageColumn(ObjectColumn):
 
     # Define the context menu for the column:
-    menu = Menu(Action(name='Add', action='column.add(object)'),
-                Action(name='Sub', action='column.sub(object)'))
+    menu = Menu(
+        Action(name='Add', action='column.add(object)'),
+        Action(name='Sub', action='column.sub(object)'),
+    )
 
     # Right-align numeric values (override):
     horizontal_alignment = 'center'
@@ -51,13 +53,11 @@ class AffectsAverageColumn(ObjectColumn):
     # Action methods for the context menu items:
 
     def add(self, object):
-        """ Increment the affected player statistic.
-        """
+        """Increment the affected player statistic."""
         setattr(object, self.name, getattr(object, self.name) + 1)
 
     def sub(self, object):
-        """ Decrement the affected player statistic.
-        """
+        """Decrement the affected player statistic."""
         setattr(object, self.name, getattr(object, self.name) - 1)
 
 
@@ -81,9 +81,9 @@ player_editor = TableEditor(
             editable=False,
             width=0.09,
             horizontal_alignment='center',
-            format='%0.3f'
-        )
-    ]
+            format='%0.3f',
+        ),
+    ],
 )
 
 
@@ -102,17 +102,17 @@ class Player(HasStrictTraits):
     average = Property(Float)
 
     def _get_average(self):
-        """ Computes the player's batting average from the current statistics.
-        """
+        """Computes the player's batting average from the current statistics."""
         if self.at_bats == 0:
             return 0.0
 
-        return float(self.singles + self.doubles +
-                     self.triples + self.home_runs) / self.at_bats
+        return (
+            float(self.singles + self.doubles + self.triples + self.home_runs)
+            / self.at_bats
+        )
 
     def _affects_average_changed(self):
-        """ Handles an event that affects the player's batting average.
-        """
+        """Handles an event that affects the player's batting average."""
         self.at_bats += 1
 
 
@@ -127,13 +127,12 @@ class Team(HasStrictTraits):
         title='Baseball Scoring Demo',
         width=0.5,
         height=0.5,
-        resizable=True
+        resizable=True,
     )
 
 
 def random_player(name):
-    """ Generates and returns a random player.
-    """
+    """Generates and returns a random player."""
     p = Player(
         name=name,
         strike_outs=randint(0, 50),
@@ -141,12 +140,16 @@ def random_player(name):
         doubles=randint(0, 20),
         triples=randint(0, 5),
         home_runs=randint(0, 30),
-        walks=randint(0, 50)
+        walks=randint(0, 50),
     )
     return p.trait_set(
         at_bats=(
-            p.strike_outs + p.singles + p.doubles + p.triples + p.home_runs +
-            randint(100, 200)
+            p.strike_outs
+            + p.singles
+            + p.doubles
+            + p.triples
+            + p.home_runs
+            + randint(100, 200)
         )
     )
 
@@ -154,9 +157,17 @@ def random_player(name):
 # Create the demo:
 demo = Team(
     players=[
-        random_player(name) for name in [
-            'Dave', 'Mike', 'Joe', 'Tom', 'Dick', 'Harry', 'Dirk', 'Fields',
-            'Stretch'
+        random_player(name)
+        for name in [
+            'Dave',
+            'Mike',
+            'Joe',
+            'Tom',
+            'Dick',
+            'Harry',
+            'Dirk',
+            'Fields',
+            'Stretch',
         ]
     ]
 )

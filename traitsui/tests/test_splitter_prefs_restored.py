@@ -33,32 +33,27 @@ class TmpClass(Handler):
         return True
 
     def reset_prefs(self, ui_info):
-        """ Reset the split to be equally wide.
-        """
+        """Reset the split to be equally wide."""
         control = getattr(ui_info, "h_split").control
         width = control.width()
         control.moveSplitter(width // 2, 1)
 
     def restore_prefs(self, ui_info):
-        """ Apply the last saved ui preferences.
-        """
+        """Apply the last saved ui preferences."""
         ui_info.ui.set_prefs(self._prefs)
 
     def save_prefs(self, ui_info):
-        """ Save the current ui preferences.
-        """
+        """Save the current ui preferences."""
         self._prefs = ui_info.ui.get_prefs()
 
     def collapse_right(self, ui_info):
-        """ Collapse the split to the right.
-        """
+        """Collapse the split to the right."""
         control = getattr(ui_info, "h_split").control
         width = control.width()
         control.moveSplitter(width, 1)
 
     def collapse_left(self, ui_info):
-        """ Collapse the split to the left.
-        """
+        """Collapse the split to the left."""
         control = getattr(ui_info, "h_split").control
         control.moveSplitter(0, 1)
 
@@ -83,7 +78,6 @@ class TmpClass(Handler):
 
 
 class TestSplitterPrefsRestored(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -96,8 +90,7 @@ class TestSplitterPrefsRestored(BaseTestMixin, unittest.TestCase):
         splitter_keys = ("h_split", "structure")
 
         def _get_nattr(obj, attr_names=splitter_keys):
-            """ Utility function to get a value from a nested dict.
-            """
+            """Utility function to get a value from a nested dict."""
             if obj is None or len(attr_names) == 0:
                 return obj
             return _get_nattr(

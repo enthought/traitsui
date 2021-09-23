@@ -51,8 +51,7 @@ BoolOrCallable = Trait(False, Bool, Callable)
 
 
 class TableEditor(EditorFactory):
-    """ Editor factory for table editors.
-    """
+    """Editor factory for table editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -385,7 +384,7 @@ class TableEditor(EditorFactory):
     # -------------------------------------------------------------------------
 
     def readonly_editor(self, ui, object, name, description, parent):
-        """ Generates an "editor" that is read-only.
+        """Generates an "editor" that is read-only.
         Overridden to set the value of the editable trait to False before
         generating the editor.
 
@@ -399,8 +398,8 @@ class TableEditor(EditorFactory):
 
     @observe("filters.items")
     def _update_filter_editor(self, event):
-        """ Handles the set of filters associated with the editor's factory
-            being changed.
+        """Handles the set of filters associated with the editor's factory
+        being changed.
         """
         values = {None: "000:No filter"}
         i = 0
@@ -424,8 +423,7 @@ ToolkitEditorFactory = TableEditor
 
 
 class BaseTableEditor(object):
-    """ Base class for toolkit-specific editors.
-    """
+    """Base class for toolkit-specific editors."""
 
     # -------------------------------------------------------------------------
     #  Interface for toolkit-specific editors:
@@ -433,7 +431,7 @@ class BaseTableEditor(object):
 
     def set_menu_context(self, selection, object, column):
         """Call before creating a context menu for a cell, then set self as the
-           controller for the menu.
+        controller for the menu.
         """
         self._menu_context = {
             "selection": selection,
@@ -449,20 +447,17 @@ class BaseTableEditor(object):
     # -------------------------------------------------------------------------
 
     def add_to_menu(self, menu_item):
-        """ Adds a menu item to the menu bar being constructed.
-        """
+        """Adds a menu item to the menu bar being constructed."""
         action = menu_item.item.action
         self.eval_when(action.enabled_when, menu_item, "enabled")
         self.eval_when(action.checked_when, menu_item, "checked")
 
     def add_to_toolbar(self, toolbar_item):
-        """ Adds a toolbar item to the toolbar being constructed.
-        """
+        """Adds a toolbar item to the toolbar being constructed."""
         self.add_to_menu(toolbar_item)
 
     def can_add_to_menu(self, action):
-        """ Returns whether the action should be defined in the user interface.
-        """
+        """Returns whether the action should be defined in the user interface."""
         if action.defined_when != "":
             if not eval(action.defined_when, globals(), self._menu_context):
                 return False
@@ -474,14 +469,13 @@ class BaseTableEditor(object):
         return True
 
     def can_add_to_toolbar(self, action):
-        """ Returns whether the toolbar action should be defined in the user
-            interface.
+        """Returns whether the toolbar action should be defined in the user
+        interface.
         """
         return self.can_add_to_menu(action)
 
     def perform(self, action, action_event=None):
-        """ Performs the action described by a specified Action object.
-        """
+        """Performs the action described by a specified Action object."""
         self.ui.do_undoable(self._perform, action)
 
     def _perform(self, action):
@@ -518,7 +512,7 @@ class BaseTableEditor(object):
     # -------------------------------------------------------------------------
 
     def eval_when(self, condition, object, trait):
-        """ Evaluates a condition within a defined context and sets a specified
+        """Evaluates a condition within a defined context and sets a specified
         object trait based on the result, which is assumed to be a Boolean.
         """
         if condition != "":
@@ -532,20 +526,18 @@ class BaseTableEditor(object):
 
 
 class ReversedList(object):
-    """ A list whose order is the reverse of its input.
-    """
+    """A list whose order is the reverse of its input."""
 
     def __init__(self, list):
         self.list = list
 
     def insert(self, index, value):
-        """ Inserts a value at a specified index in the list.
-        """
+        """Inserts a value at a specified index in the list."""
         return self.list.insert(self._index(index - 1), value)
 
     def index(self, value):
-        """ Returns the index of the first occurrence of the specified value in
-            the list.
+        """Returns the index of the first occurrence of the specified value in
+        the list.
         """
         list = self.list[:]
         list.reverse()
@@ -553,28 +545,23 @@ class ReversedList(object):
         return list.index(value)
 
     def __len__(self):
-        """ Returns the length of the list.
-        """
+        """Returns the length of the list."""
         return len(self.list)
 
     def __getitem__(self, index):
-        """ Returns the value at a specified index in the list.
-        """
+        """Returns the value at a specified index in the list."""
         return self.list[self._index(index)]
 
     def __setslice__(self, i, j, values):
-        """ Sets a slice of a list to the contents of a specified sequence.
-        """
+        """Sets a slice of a list to the contents of a specified sequence."""
         return self.list.__setslice__(self._index(i), self._index(j), values)
 
     def __delitem__(self, index):
-        """ Deletes the item at a specified index.
-        """
+        """Deletes the item at a specified index."""
         return self.list.__delitem__(self._index(index))
 
     def _index(self, index):
-        """ Returns the "reversed" value for a specified index.
-        """
+        """Returns the "reversed" value for a specified index."""
         if index < 0:
             return -1 - index
 

@@ -50,7 +50,6 @@ class MyData(HasTraits):
 
 
 class TestColorColumn(BaseTestMixin, TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

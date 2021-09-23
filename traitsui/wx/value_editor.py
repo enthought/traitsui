@@ -19,16 +19,14 @@ from .editor import Editor
 
 
 class SimpleEditor(_ValueEditor, Editor):
-    """ Returns the editor to use for simple style views.
-    """
+    """Returns the editor to use for simple style views."""
 
     #: Override the value of the readonly trait.
     readonly = False
 
 
 class ReadonlyEditor(_ValueEditor, Editor):
-    """ Returns the editor to use for readonly style views.
-    """
+    """Returns the editor to use for readonly style views."""
 
     #: Override the value of the readonly trait.
     readonly = True

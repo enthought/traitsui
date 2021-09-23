@@ -24,10 +24,10 @@ class Team(HasTraits):
 
     captain_editor = EnumEditor(name='players', evaluate=evaluate_value)
 
-    view = View(Item('captain', editor=captain_editor),
-                '_',
-                'players@',
-                height=200)
+    view = View(
+        Item('captain', editor=captain_editor), '_', 'players@', height=200
+    )
+
 
 if __name__ == '__main__':
     team = Team()

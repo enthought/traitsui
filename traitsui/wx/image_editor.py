@@ -31,12 +31,11 @@ from .image_control import ImageControl
 
 
 class _ImageEditor(Editor):
-    """ Traits UI 'display only' image editor.
-    """
+    """Traits UI 'display only' image editor."""
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         image = self.factory.image
         if image is None:
@@ -47,8 +46,8 @@ class _ImageEditor(Editor):
         self.set_tooltip()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if self.factory.image is None:
             value = self.value

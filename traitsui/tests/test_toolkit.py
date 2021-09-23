@@ -19,7 +19,7 @@ from traitsui.tests._tools import BaseTestMixin
 
 @contextmanager
 def clear_toolkit():
-    """ If a toolkit has been selected, clear it, resetting on exit """
+    """If a toolkit has been selected, clear it, resetting on exit"""
     old_ETS_toolkit = ETSConfig._toolkit
     old_traitsui_toolkit = traitsui.toolkit._toolkit
     ETSConfig._toolkit = ""
@@ -32,7 +32,6 @@ def clear_toolkit():
 
 
 class TestToolkit(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

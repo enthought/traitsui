@@ -11,13 +11,13 @@
 from traitsui.testing.tester.command import MouseClick
 from traitsui.testing.tester.query import DisplayedText, IsChecked
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
-    _interaction_helpers
+    _interaction_helpers,
 )
 from traitsui.qt4.boolean_editor import ReadonlyEditor, SimpleEditor
 
 
 def register(registry):
-    """ Register solvers/handlers specific to qt Boolean Editors
+    """Register solvers/handlers specific to qt Boolean Editors
     for the given registry.
 
     If there are any conflicts, an error will occur.
@@ -31,13 +31,13 @@ def register(registry):
         interaction_class=MouseClick,
         handler=lambda wrapper, _: _interaction_helpers.mouse_click_qwidget(
             control=wrapper._target.control, delay=wrapper.delay
-        )
+        ),
     )
 
     registry.register_interaction(
         target_class=SimpleEditor,
         interaction_class=IsChecked,
-        handler=lambda wrapper, _: wrapper._target.control.isChecked()
+        handler=lambda wrapper, _: wrapper._target.control.isChecked(),
     )
 
     registry.register_interaction(
@@ -45,5 +45,5 @@ def register(registry):
         interaction_class=DisplayedText,
         handler=lambda wrapper, _: _interaction_helpers.displayed_text_qobject(
             widget=wrapper._target.control
-        )
+        ),
     )

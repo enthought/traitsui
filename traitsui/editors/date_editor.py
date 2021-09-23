@@ -18,7 +18,7 @@ from traitsui.ui_traits import AView
 
 
 class CellFormat(object):
-    """ Styling attributes for calendar widget cells.
+    """Styling attributes for calendar widget cells.
 
     Encapsulates some common visual attributes to set on the cells of a
     calendar widget.  All attributes default to None, which means that they
@@ -53,8 +53,7 @@ class CellFormat(object):
 
 
 class DateEditor(EditorFactory):
-    """ Editor factory for date/time editors.
-    """
+    """Editor factory for date/time editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

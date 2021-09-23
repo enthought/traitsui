@@ -41,35 +41,55 @@ class SpringDemo(HasTraits):
             '10',
             Label(label='Spring in a horizontal group moves widget right:'),
             '10',
-            HGroup(button, button,
-                   show_border=True,
-                   label='Left justified (no springs)'),
-            HGroup(spring, button, button,
-                   show_border=True,
-                   label='Right justified with a spring '
-                   'before any buttons'),
-            HGroup(button, spring, button,
-                   show_border=True,
-                   label='Left and right justified with a '
-                   'spring between buttons'),
-            HGroup(button, button, spring,
-                   button, button, spring,
-                   button, button,
-                   show_border=True,
-                   label='Left, center and right justified '
-                   'with springs after the 2nd and 4th '
-                   'buttons'),
+            HGroup(
+                button,
+                button,
+                show_border=True,
+                label='Left justified (no springs)',
+            ),
+            HGroup(
+                spring,
+                button,
+                button,
+                show_border=True,
+                label='Right justified with a spring ' 'before any buttons',
+            ),
+            HGroup(
+                button,
+                spring,
+                button,
+                show_border=True,
+                label='Left and right justified with a '
+                'spring between buttons',
+            ),
+            HGroup(
+                button,
+                button,
+                spring,
+                button,
+                button,
+                spring,
+                button,
+                button,
+                show_border=True,
+                label='Left, center and right justified '
+                'with springs after the 2nd and 4th '
+                'buttons',
+            ),
             spring,
-            Label('Spring in vertical group moves widget down '
-                  '(does not work on Wx backend).'),
-            button
+            Label(
+                'Spring in vertical group moves widget down '
+                '(does not work on Wx backend).'
+            ),
+            button,
         ),
         width=600,
         height=600,
         resizable=True,
         title='Spring Demo',
-        buttons=['OK']
+        buttons=['OK'],
     )
+
 
 demo = SpringDemo()
 

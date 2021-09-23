@@ -22,9 +22,7 @@ import colorsys
 import numpy as np
 
 from pyface.qt import QtCore, QtGui, qt_api
-from traits.api import (
-    Array, Float, HasTraits, Instance, Int, List, Str
-)
+from traits.api import Array, Float, HasTraits, Instance, Int, List, Str
 
 from traitsui.api import TreeEditor, TreeNode, UItem, View, RGBColor
 from traitsui.tree_node_renderer import AbstractTreeNodeRenderer
@@ -32,7 +30,7 @@ from traitsui.qt4.tree_editor import WordWrapRenderer
 
 
 class MyDataElement(HasTraits):
-    """ A node in a tree of data. """
+    """A node in a tree of data."""
 
     #: Some text to display.
     text = Str()
@@ -51,7 +49,7 @@ class MyDataElement(HasTraits):
 
 
 class MyData(HasTraits):
-    """ The root node for a tree of data. """
+    """The root node for a tree of data."""
 
     #: The name of the root node.
     name = Str('Rooty McRootface')
@@ -72,7 +70,7 @@ class MyData(HasTraits):
 
 
 class SparklineRenderer(AbstractTreeNodeRenderer):
-    """ Renderer that draws sparklines into a cell. """
+    """Renderer that draws sparklines into a cell."""
 
     #: This renderer handles all rendering.
     handles_all = True
@@ -91,14 +89,16 @@ class SparklineRenderer(AbstractTreeNodeRenderer):
         painter, option, index = paint_context
         data = self.get_data(object)
 
-        xs = np.linspace(0, option.rect.width(), len(data)) + option.rect.left()
-        ys = (data.max() - data)/self.y_scale + option.rect.top()
+        xs = (
+            np.linspace(0, option.rect.width(), len(data)) + option.rect.left()
+        )
+        ys = (data.max() - data) / self.y_scale + option.rect.top()
 
         height = option.rect.height()
         plot_height = ys.ptp()
         extra = height - plot_height
         if bool(option.displayAlignment & QtCore.Qt.AlignVCenter):
-            ys += extra/2
+            ys += extra / 2
         elif bool(option.displayAlignment & QtCore.Qt.Bottom):
             ys += extra
 
@@ -124,11 +124,11 @@ class SparklineRenderer(AbstractTreeNodeRenderer):
 
     def size(self, editor, node, column, object, size_context):
         data = self.get_data(object)
-        return (100, data.ptp()/self.y_scale + self.extra_space)
+        return (100, data.ptp() / self.y_scale + self.extra_space)
 
 
 class SparklineTreeNode(TreeNode):
-    """ A TreeNode that renders sparklines in column index 1 """
+    """A TreeNode that renders sparklines in column index 1"""
 
     #: static instance of SparklineRenderer
     #: (it has no state, so this is fine)
@@ -149,7 +149,7 @@ class SparklineTreeNode(TreeNode):
 
 
 class SparklineTreeView(HasTraits):
-    """ Class that views the data with sparklines. """
+    """Class that views the data with sparklines."""
 
     #: The root of the tree.
     root = Instance(MyData, args=())

@@ -13,7 +13,6 @@
 """
 
 
-
 from pyface.ui_traits import Image
 from traits.api import (
     Any,
@@ -155,12 +154,12 @@ AKeyBindings = Instance(
 
 
 class View(ViewElement):
-    """ A Traits-based user interface for one or more objects.
+    """A Traits-based user interface for one or more objects.
 
-        The attributes of the View object determine the contents and layout of
-        an attribute-editing window. A View object contains a set of Group,
-        Item, and Include objects. A View object can be an attribute of an
-        object derived from HasTraits, or it can be a standalone object.
+    The attributes of the View object determine the contents and layout of
+    an attribute-editing window. A View object contains a set of Group,
+    Item, and Include objects. A View object can be an attribute of an
+    object derived from HasTraits, or it can be a standalone object.
     """
 
     # -------------------------------------------------------------------------
@@ -334,14 +333,12 @@ class View(ViewElement):
     help = Bool(False)
 
     def __init__(self, *values, **traits):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         ViewElement.__init__(self, **traits)
         self.set_content(*values)
 
     def set_content(self, *values):
-        """ Sets the content of a view.
-        """
+        """Sets the content of a view."""
         content = []
         accum = []
         for value in values:
@@ -380,7 +377,7 @@ class View(ViewElement):
         scrollable=None,
         args=None,
     ):
-        """ Creates a **UI** object, which generates the actual GUI window or
+        """Creates a **UI** object, which generates the actual GUI window or
         panel from a set of view elements.
 
         Parameters
@@ -455,16 +452,15 @@ class View(ViewElement):
         return ui
 
     def replace_include(self, view_elements):
-        """ Replaces any items that have an ID with an Include object with
-            the same ID, and puts the object with the ID into the specified
-            ViewElements object.
+        """Replaces any items that have an ID with an Include object with
+        the same ID, and puts the object with the ID into the specified
+        ViewElements object.
         """
         if self.content is not None:
             self.content.replace_include(view_elements)
 
     def __repr__(self):
-        """ Returns a "pretty print" version of the View.
-        """
+        """Returns a "pretty print" version of the View."""
         if self.content is None:
             return "()"
         return "( %s )" % ", ".join(

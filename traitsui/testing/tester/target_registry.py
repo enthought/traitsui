@@ -25,14 +25,14 @@ from traitsui.testing.tester.exceptions import (
 
 
 class _TargetToKeyRegistry:
-    """ Perform the mapping from target to a key to a callable.
+    """Perform the mapping from target to a key to a callable.
 
     Internally this is a dict(type, dict(type, callable)), but expose a few
     methods for better error reporting.
     """
 
     def __init__(self, exception_maker):
-        """ Initializer
+        """Initializer
 
         Parameters
         ----------
@@ -65,7 +65,7 @@ class _TargetToKeyRegistry:
         return action_to_handler[key]
 
     def get_keys(self, target_class):
-        """ Return all the keys for the given target.
+        """Return all the keys for the given target.
 
         Parameters
         ----------
@@ -80,7 +80,7 @@ class _TargetToKeyRegistry:
 
 
 class TargetRegistry(AbstractTargetRegistry):
-    """ An object for registering interaction and location resolution logic
+    """An object for registering interaction and location resolution logic
     for different UI target types.
 
     ``register_interaction`` supports extending ``UIWrapper.perform`` and
@@ -116,7 +116,7 @@ class TargetRegistry(AbstractTargetRegistry):
         )
 
     def register_interaction(self, target_class, interaction_class, handler):
-        """ Register a handler for a given target type and interaction type.
+        """Register a handler for a given target type and interaction type.
 
         Parameters
         ----------
@@ -141,7 +141,7 @@ class TargetRegistry(AbstractTargetRegistry):
         )
 
     def _get_handler(self, target, interaction):
-        """ Return a callable for handling an interaction for a given target.
+        """Return a callable for handling an interaction for a given target.
 
         Parameters
         ----------
@@ -167,7 +167,7 @@ class TargetRegistry(AbstractTargetRegistry):
         )
 
     def _get_interactions(self, target):
-        """ Returns all the interactions supported for the given target.
+        """Returns all the interactions supported for the given target.
 
         Parameters
         ----------
@@ -184,7 +184,7 @@ class TargetRegistry(AbstractTargetRegistry):
         )
 
     def _get_interaction_doc(self, target, interaction_class):
-        """ Return the documentation for the given target and interaction type.
+        """Return the documentation for the given target and interaction type.
 
         Parameters
         ----------
@@ -211,7 +211,7 @@ class TargetRegistry(AbstractTargetRegistry):
         return inspect.getdoc(interaction_class)
 
     def register_location(self, target_class, locator_class, solver):
-        """ Register a solver for resolving the next UI target for the given
+        """Register a solver for resolving the next UI target for the given
         target type and locator type.
 
         Parameters
@@ -237,7 +237,7 @@ class TargetRegistry(AbstractTargetRegistry):
         )
 
     def _get_solver(self, target, location):
-        """ Return a callable registered for resolving a location for the
+        """Return a callable registered for resolving a location for the
         given target and location.
 
         Parameters
@@ -258,7 +258,7 @@ class TargetRegistry(AbstractTargetRegistry):
         )
 
     def _get_locations(self, target):
-        """ Returns all the location types supported for the given target.
+        """Returns all the location types supported for the given target.
 
         Parameters
         ----------
@@ -273,7 +273,7 @@ class TargetRegistry(AbstractTargetRegistry):
         return self._location_registry.get_keys(target_class=target.__class__)
 
     def _get_location_doc(self, target, locator_class):
-        """ Return the documentation for the given target and locator type.
+        """Return the documentation for the given target and locator type.
 
         Parameters
         ----------

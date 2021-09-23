@@ -29,10 +29,8 @@ from pyface.qt import QtGui
 from traits.api import Trait, TraitError
 
 
-
 def convert_to_color(object, name, value):
-    """ Converts a number into a QColor object.
-    """
+    """Converts a number into a QColor object."""
     # Try the toolkit agnostic format.
     try:
         tup = eval(value)
@@ -101,8 +99,7 @@ def get_color_editor(*args, **traits):
 
 
 def PyQtColor(default="white", allow_none=False, **metadata):
-    """ Defines PyQt-specific color traits.
-    """
+    """Defines PyQt-specific color traits."""
     if default is None:
         allow_none = True
 
@@ -113,7 +110,7 @@ def PyQtColor(default="white", allow_none=False, **metadata):
             standard_colors,
             convert_to_color,
             editor=get_color_editor,
-            **metadata
+            **metadata,
         )
 
     return Trait(
@@ -121,5 +118,5 @@ def PyQtColor(default="white", allow_none=False, **metadata):
         standard_colors,
         convert_to_color,
         editor=get_color_editor,
-        **metadata
+        **metadata,
     )

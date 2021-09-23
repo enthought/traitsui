@@ -23,8 +23,7 @@ from .editor import Editor
 
 
 class UIEditor(BaseUIEditor, Editor):
-    """ An editor that creates an embedded Traits UI.
-    """
+    """An editor that creates an embedded Traits UI."""
 
     pass
 

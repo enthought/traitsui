@@ -17,8 +17,8 @@ from .editor import Editor
 
 class SearchEditor(Editor):
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
 
         style = 0
@@ -45,17 +45,21 @@ class SearchEditor(Editor):
                 self.control.Unbind(wx.EVT_TEXT, handler=self.update_object)
 
             if self.factory.enter_set:
-                self.control.Unbind(wx.EVT_TEXT_ENTER, handler=self.update_object)
+                self.control.Unbind(
+                    wx.EVT_TEXT_ENTER, handler=self.update_object
+                )
 
-            self.control.Unbind(wx.EVT_SEARCHCTRL_SEARCH_BTN, handler=self.update_object)
-            self.control.Unbind(wx.EVT_SEARCHCTRL_CANCEL_BTN, handler=self.clear_text)
+            self.control.Unbind(
+                wx.EVT_SEARCHCTRL_SEARCH_BTN, handler=self.update_object
+            )
+            self.control.Unbind(
+                wx.EVT_SEARCHCTRL_CANCEL_BTN, handler=self.clear_text
+            )
 
         super().dispose()
 
-
     def update_object(self, event):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
 
         if not self._no_update:
             self.value = self.control.GetValue()
@@ -63,8 +67,7 @@ class SearchEditor(Editor):
                 setattr(self.object, self.factory.search_event_trait, True)
 
     def clear_text(self, event):
-        """ Handles the user pressing the cancel search button.
-        """
+        """Handles the user pressing the cancel search button."""
 
         if not self._no_update:
             self.control.SetValue("")
@@ -73,8 +76,8 @@ class SearchEditor(Editor):
                 setattr(self.object, self.factory.search_event_trait, True)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
 
         if self.control.GetValue() != self.value:

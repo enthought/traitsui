@@ -34,7 +34,7 @@ key_bindings = KeyBindings(
 
 
 class CodeHandler(Handler):
-    """ Handler class for bound methods. """
+    """Handler class for bound methods."""
 
     def save_file(self, info):
         info.object.status = "save file"

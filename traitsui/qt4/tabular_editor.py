@@ -13,7 +13,6 @@
 """
 
 
-
 from contextlib import contextmanager
 
 from pyface.qt import QtCore, QtGui, is_qt5
@@ -61,8 +60,8 @@ class HeaderEventFilter(QtCore.QObject):
 
 
 class TabularEditor(Editor):
-    """ A traits UI editor for editing tabular data (arrays, list of tuples,
-        lists of objects, etc).
+    """A traits UI editor for editing tabular data (arrays, list of tuples,
+    lists of objects, etc).
     """
 
     # -- Trait Definitions ----------------------------------------------------
@@ -149,8 +148,8 @@ class TabularEditor(Editor):
     # -------------------------------------------------------------------------
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         factory = self.factory
         adapter = self.adapter = factory.adapter
@@ -251,8 +250,7 @@ class TabularEditor(Editor):
         )
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         self.model.beginResetModel()
         self.model.endResetModel()
 
@@ -277,8 +275,8 @@ class TabularEditor(Editor):
         super().dispose()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if not self._no_update:
             self.model.beginResetModel()
@@ -293,13 +291,11 @@ class TabularEditor(Editor):
     # -------------------------------------------------------------------------
 
     def refresh_editor(self):
-        """ Requests the table view to redraw itself.
-        """
+        """Requests the table view to redraw itself."""
         self.control.viewport().update()
 
     def callx(self, func, *args, **kw):
-        """ Call a function without allowing the editor to update.
-        """
+        """Call a function without allowing the editor to update."""
         old = self._no_update
         self._no_update = True
         try:
@@ -308,8 +304,7 @@ class TabularEditor(Editor):
             self._no_update = old
 
     def setx(self, **keywords):
-        """ Set one or more attributes without allowing the editor to update.
-        """
+        """Set one or more attributes without allowing the editor to update."""
         old = self._no_notify
         self._no_notify = True
         try:
@@ -323,8 +318,8 @@ class TabularEditor(Editor):
     # -------------------------------------------------------------------------
 
     def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the
-            editor.
+        """Restores any saved user preference information associated with the
+        editor.
         """
         cws = prefs.get("cached_widths")
         num_columns = len(self.adapter.columns)
@@ -333,8 +328,7 @@ class TabularEditor(Editor):
                 self.control.setColumnWidth(column, cws[column])
 
     def save_prefs(self):
-        """ Returns any user preference information associated with the editor.
-        """
+        """Returns any user preference information associated with the editor."""
         widths = [
             self.control.columnWidth(column)
             for column in range(len(self.adapter.columns))
@@ -346,8 +340,7 @@ class TabularEditor(Editor):
     # -------------------------------------------------------------------------
 
     def _add_image(self, image_resource):
-        """ Adds a new image to the image map.
-        """
+        """Adds a new image to the image map."""
         image = image_resource.create_icon()
 
         self.image_resources[image_resource] = image
@@ -356,8 +349,7 @@ class TabularEditor(Editor):
         return image
 
     def _get_image(self, image):
-        """ Converts a user specified image to a QIcon.
-        """
+        """Converts a user specified image to a QIcon."""
         if isinstance(image, str):
             self.image = image
             image = self.image
@@ -371,8 +363,8 @@ class TabularEditor(Editor):
         return self.images.get(image)
 
     def _mouse_click(self, index, trait):
-        """ Generate a TabularEditorEvent event for a specified model index and
-            editor trait name.
+        """Generate a TabularEditorEvent event for a specified model index and
+        editor trait name.
         """
         event = TabularEditorEvent(
             editor=self, row=index.row(), column=index.column()
@@ -382,29 +374,30 @@ class TabularEditor(Editor):
     # -- Trait Event Handlers -------------------------------------------------
 
     def _clicked_changed(self):
-        """ When mouse is clicked on a specific cell, update the selected
-            indices first
+        """When mouse is clicked on a specific cell, update the selected
+        indices first
         """
         if not self.factory.multi_select:
             self.selected_row = self.clicked.row
             self.selected_column = self.clicked.column
 
     def _column_clicked_changed(self):
-        """ When column is clicked, update selected column first
-        """
+        """When column is clicked, update selected column first"""
         if not self.factory.multi_select:
             self.selected_column = self.column_clicked.column
 
     def _adapter_columns_updated(self):
-        """ Update the view when the adapter columns trait changes.
+        """Update the view when the adapter columns trait changes.
         Note that this change handler is added after the UI is instantiated,
         and removed when the UI is disposed.
         """
         # Invalidate internal state of the view related to the columns
         n_columns = len(self.adapter.columns)
-        if (self.control is not None
-                and self.control._user_widths is not None
-                and len(self.control._user_widths) != n_columns):
+        if (
+            self.control is not None
+            and self.control._user_widths is not None
+            and len(self.control._user_widths) != n_columns
+        ):
             self.control._user_widths = None
         self.update_editor()
 
@@ -462,11 +455,7 @@ class TabularEditor(Editor):
         except:
             pass
         else:
-            list_event = TraitListEvent(
-                index=0,
-                added=added,
-                removed=removed
-            )
+            list_event = TraitListEvent(index=0, added=added, removed=removed)
             self._multi_selected_rows_items_changed(list_event)
 
     def _multi_selected_rows_changed(self, selected_rows):
@@ -515,22 +504,18 @@ class TabularEditor(Editor):
                 self.scroll_to_column = selected_column
 
     def _scroll_to_row_changed(self, row):
-        """ Scroll to the given row.
-        """
+        """Scroll to the given row."""
         scroll_hint = SCROLL_TO_POSITION_HINT_MAP.get(
-            self.factory.scroll_to_position_hint,
-            self.control.EnsureVisible
+            self.factory.scroll_to_position_hint, self.control.EnsureVisible
         )
         self.control.scrollTo(
             self.model.index(row, max(self.selected_column, 0)), scroll_hint
         )
 
     def _scroll_to_column_changed(self, column):
-        """ Scroll to the given column.
-        """
+        """Scroll to the given column."""
         scroll_hint = SCROLL_TO_POSITION_HINT_MAP.get(
-            self.factory.scroll_to_position_hint,
-            self.control.EnsureVisible
+            self.factory.scroll_to_position_hint, self.control.EnsureVisible
         )
         self.control.scrollTo(
             self.model.index(max(self.selected_row, 0), column), scroll_hint
@@ -539,19 +524,16 @@ class TabularEditor(Editor):
     # -- Table Control Event Handlers -----------------------------------------
 
     def _on_activate(self, index):
-        """ Handle a cell being activated.
-        """
+        """Handle a cell being activated."""
         self.activated_row = row = index.row()
         self.activated = self.adapter.get_item(self.object, self.name, row)
 
     def _on_click(self, index):
-        """ Handle a cell being clicked.
-        """
+        """Handle a cell being clicked."""
         self._mouse_click(index, "clicked")
 
     def _on_dclick(self, index):
-        """ Handle a cell being double clicked.
-        """
+        """Handle a cell being double clicked."""
         self._mouse_click(index, "dclicked")
 
     def _on_column_click(self, column):
@@ -567,8 +549,7 @@ class TabularEditor(Editor):
         setattr(self, "column_right_clicked", event)
 
     def _on_row_selection(self, added, removed):
-        """ Handle the row selection being changed.
-        """
+        """Handle the row selection being changed."""
         self._no_update = True
         try:
             indexes = self.control.selectionModel().selectedRows()
@@ -584,8 +565,7 @@ class TabularEditor(Editor):
             self._no_update = False
 
     def _on_rows_selection(self, added, removed):
-        """ Handle the rows selection being changed.
-        """
+        """Handle the rows selection being changed."""
         self._no_update = True
         try:
             indexes = self.control.selectionModel().selectedRows()
@@ -672,21 +652,19 @@ class TabularEditorEvent(HasStrictTraits):
 
 
 class _ItemDelegate(QtGui.QStyledItemDelegate):
-    """ A QStyledItemDelegate which draws its owns gridlines so that we can
-        choose to draw only the horizontal or only the vertical gridlines if
-        appropriate.
+    """A QStyledItemDelegate which draws its owns gridlines so that we can
+    choose to draw only the horizontal or only the vertical gridlines if
+    appropriate.
     """
 
     def __init__(self, table_view):
-        """ Store which grid lines to draw.
-        """
+        """Store which grid lines to draw."""
         QtGui.QStyledItemDelegate.__init__(self, table_view)
         self._horizontal_lines = table_view._editor.factory.horizontal_lines
         self._vertical_lines = table_view._editor.factory.vertical_lines
 
     def paint(self, painter, option, index):
-        """ Overrident to draw gridlines.
-        """
+        """Overrident to draw gridlines."""
         QtGui.QStyledItemDelegate.paint(self, painter, option, index)
         painter.save()
 
@@ -707,12 +685,10 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
 
 
 class _TableView(QtGui.QTableView):
-    """ A QTableView configured to behave as expected by TraitsUI.
-    """
+    """A QTableView configured to behave as expected by TraitsUI."""
 
     def __init__(self, editor):
-        """ Initialise the object.
-        """
+        """Initialise the object."""
         QtGui.QTableView.__init__(self)
 
         self._user_widths = None
@@ -786,8 +762,7 @@ class _TableView(QtGui.QTableView):
         self.setDropIndicatorShown(True)
 
     def keyPressEvent(self, event):
-        """ Reimplemented to support edit, insert, and delete by keyboard.
-        """
+        """Reimplemented to support edit, insert, and delete by keyboard."""
         editor = self._editor
         factory = editor.factory
 
@@ -843,8 +818,7 @@ class _TableView(QtGui.QTableView):
             QtGui.QTableView.keyPressEvent(self, event)
 
     def sizeHint(self):
-        """ Reimplemented to define a reasonable size hint.
-        """
+        """Reimplemented to define a reasonable size hint."""
         sh = QtGui.QTableView.sizeHint(self)
 
         width = 0
@@ -855,25 +829,24 @@ class _TableView(QtGui.QTableView):
         return sh
 
     def resizeEvent(self, event):
-        """ Reimplemented to size the table columns when the size of the table
-            changes. Because the layout algorithm requires that the available
-            space be known, we have to wait until the UI that contains this
-            table gives it its initial size.
+        """Reimplemented to size the table columns when the size of the table
+        changes. Because the layout algorithm requires that the available
+        space be known, we have to wait until the UI that contains this
+        table gives it its initial size.
         """
         super().resizeEvent(event)
 
         parent = self.parent()
-        if (
-            parent
-            and (self.isVisible() or isinstance(parent, QtGui.QMainWindow))
+        if parent and (
+            self.isVisible() or isinstance(parent, QtGui.QMainWindow)
         ):
             self.resizeColumnsToContents()
 
     def sizeHintForColumn(self, column):
-        """ Reimplemented to support absolute width specification via
-            TabularAdapters and to avoid scanning all data to determine the size
-            hint. (TabularEditor, unlike TableEditor, is expected to handle very
-            large data sets.)
+        """Reimplemented to support absolute width specification via
+        TabularAdapters and to avoid scanning all data to determine the size
+        hint. (TabularEditor, unlike TableEditor, is expected to handle very
+        large data sets.)
         """
         editor = self._editor
         if editor.factory.auto_resize:
@@ -887,7 +860,7 @@ class _TableView(QtGui.QTableView):
             return self.horizontalHeader().sectionSizeHint(column)
 
     def resizeColumnsToContents(self):
-        """ Reimplemented to support proportional column width specifications.
+        """Reimplemented to support proportional column width specifications.
 
         The core part of the computation is carried out in
         :func:`traitsui.helpers.compute_column_widths`
@@ -916,7 +889,7 @@ class _TableView(QtGui.QTableView):
                 hheader.resizeSection(column, width)
 
     def columnResized(self, index, old, new):
-        """ Handle user-driven resizing of columns.
+        """Handle user-driven resizing of columns.
 
         This affects the column widths when not using auto-sizing.
         """
@@ -924,13 +897,15 @@ class _TableView(QtGui.QTableView):
             if self._user_widths is None:
                 self._user_widths = [None] * len(self._editor.adapter.columns)
             self._user_widths[index] = new
-            if (self._editor.factory is not None
-                    and not self._editor.factory.auto_resize):
+            if (
+                self._editor.factory is not None
+                and not self._editor.factory.auto_resize
+            ):
                 self.resizeColumnsToContents()
 
     @contextmanager
     def _resizing(self):
-        """ Context manager that guards against recursive column resizing. """
+        """Context manager that guards against recursive column resizing."""
         self._is_resizing = True
         try:
             yield

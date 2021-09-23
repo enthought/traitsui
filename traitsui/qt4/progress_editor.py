@@ -19,8 +19,7 @@ from pyface.ui.qt4.progress_dialog import ProgressDialog
 
 class _ProgressDialog(ProgressDialog):
     def close(self):
-        """ Overwritten to disable closing.
-        """
+        """Overwritten to disable closing."""
         pass
 
 
@@ -44,8 +43,8 @@ class SimpleEditor(Editor):
     # -- Editor interface ------------------------------------------------------
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = self.create_control(parent)
         factory = self.factory

@@ -13,7 +13,13 @@ import unittest
 
 from pyface.toolkit import toolkit_object
 from traits.api import (
-    Directory, HasStrictTraits, Instance, Int, List, Str, TraitError
+    Directory,
+    HasStrictTraits,
+    Instance,
+    Int,
+    List,
+    Str,
+    TraitError,
 )
 
 from traitsui.api import Item, ListEditor, View
@@ -25,7 +31,7 @@ from traitsui.testing.api import (
     LocationNotSupported,
     MouseClick,
     Textbox,
-    UITester
+    UITester,
 )
 from traitsui.tests._tools import (
     requires_toolkit,
@@ -45,11 +51,7 @@ class Person(HasStrictTraits):
     age = Int()
 
     # Traits view definition:
-    traits_view = View(
-        'name', 'age',
-        width=0.18,
-        buttons=['OK', 'Cancel']
-    )
+    traits_view = View('name', 'age', width=0.18, buttons=['OK', 'Cancel'])
 
 
 def get_people():
@@ -62,7 +64,7 @@ def get_people():
         Person(name='Dick', age=63),
         Person(name='Harry', age=46),
         Person(name='Sally', age=43),
-        Person(name='Fields', age=31)
+        Person(name='Fields', age=31),
     ]
 
 
@@ -84,7 +86,7 @@ class ListTraitTest(HasStrictTraits):
                 style=self.style,
                 editor=ListEditor(style=self.style, columns=self.num_columns),
             ),
-            resizable=True
+            resizable=True,
         )
         return view
 
@@ -104,7 +106,6 @@ notebook_view = View(
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestCustomListEditor(unittest.TestCase):
-
     def test_locate_element_and_edit(self):
         # varying the number of columns in the view tests the logic for
         # getting the correct nested ui
@@ -144,7 +145,6 @@ class TestCustomListEditor(unittest.TestCase):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSimpleListEditor(unittest.TestCase):
-
     def test_locate_element_and_edit(self):
         obj = ListTraitTest(people=get_people(), style="simple")
         tester = UITester()
@@ -182,7 +182,6 @@ class TestSimpleListEditor(unittest.TestCase):
     # regression test for enthought/traitsui#1154
     @requires_toolkit([ToolkitName.qt])
     def test_add_item_fails(self):
-
         class Foo(HasStrictTraits):
             dirs = List(Directory(exists=True))
 
@@ -218,10 +217,7 @@ class TestSimpleListEditor(unittest.TestCase):
         class Foo(HasStrictTraits):
             dirs = List(Directory(exists=True))
             view = View(
-                Item(
-                    "dirs",
-                    editor=ListEditor(item_factory=test_callable)
-                )
+                Item("dirs", editor=ListEditor(item_factory=test_callable))
             )
 
         obj = Foo()
@@ -250,8 +246,8 @@ class TestSimpleListEditor(unittest.TestCase):
                     editor=ListEditor(
                         item_factory=test_callable,
                         item_factory_args=(7,),
-                        item_factory_kwargs={'baz': "python"}
-                    )
+                        item_factory_kwargs={'baz': "python"},
+                    ),
                 )
             )
 
@@ -268,7 +264,6 @@ class TestSimpleListEditor(unittest.TestCase):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestNotebookListEditor(unittest.TestCase):
-
     def test_modify_person_name(self):
         phonebook = Phonebook(
             people=get_people(),
@@ -305,6 +300,6 @@ class TestNotebookListEditor(unittest.TestCase):
         tester = UITester()
         with tester.create_ui(phonebook, dict(view=notebook_view)) as ui:
             with self.assertRaises(IndexError):
-                tester.find_by_name(ui, "people").\
-                    locate(Index(0)).\
-                    perform(MouseClick())
+                tester.find_by_name(ui, "people").locate(Index(0)).perform(
+                    MouseClick()
+                )

@@ -18,7 +18,6 @@ from traits.api import Dict
 from .date_editor import CustomEditor as DateCustomEditor
 
 
-
 class CustomEditor(DateCustomEditor):
     def init(self, parent):
         if not self.factory.multi_select:
@@ -27,8 +26,8 @@ class CustomEditor(DateCustomEditor):
         super().init(parent)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         start_date, end_date = self.value
         if start_date is not None and end_date is not None:
@@ -42,8 +41,7 @@ class CustomEditor(DateCustomEditor):
             )
 
     def update_object(self, q_date):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         value = datetime.date(q_date.year(), q_date.month(), q_date.day())
         start_date, end_date = self.value
 

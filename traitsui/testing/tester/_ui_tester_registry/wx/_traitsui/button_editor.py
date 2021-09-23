@@ -17,7 +17,7 @@ from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 
 def mouse_click_ImageButton(wrapper, interaction):
-    """ Performs a mouce click on an pyface.ui.wx.ImageButton object.
+    """Performs a mouce click on an pyface.ui.wx.ImageButton object.
 
     Parameters
     ----------
@@ -35,18 +35,14 @@ def mouse_click_ImageButton(wrapper, interaction):
         return
     wx.MilliSleep(wrapper.delay)
 
-    left_down_event = wx.MouseEvent(
-        wx.wxEVT_LEFT_DOWN
-    )
-    left_up_event = wx.MouseEvent(
-        wx.wxEVT_LEFT_UP
-    )
+    left_down_event = wx.MouseEvent(wx.wxEVT_LEFT_DOWN)
+    left_up_event = wx.MouseEvent(wx.wxEVT_LEFT_UP)
     control.ProcessEvent(left_down_event)
     control.ProcessEvent(left_up_event)
 
 
 def register(registry):
-    """ Register solvers/handlers specific to wx Button Editors
+    """Register solvers/handlers specific to wx Button Editors
     for the given registry.
 
     If there are any conflicts, an error will occur.
@@ -59,24 +55,27 @@ def register(registry):
     registry.register_interaction(
         target_class=SimpleEditor,
         interaction_class=MouseClick,
-        handler=(lambda wrapper, _: _interaction_helpers.mouse_click_button(
-                 control=wrapper._target.control, delay=wrapper.delay))
+        handler=(
+            lambda wrapper, _: _interaction_helpers.mouse_click_button(
+                control=wrapper._target.control, delay=wrapper.delay
+            )
+        ),
     )
 
     registry.register_interaction(
         target_class=SimpleEditor,
         interaction_class=DisplayedText,
-        handler=lambda wrapper, _: wrapper._target.control.GetLabel()
+        handler=lambda wrapper, _: wrapper._target.control.GetLabel(),
     )
 
     registry.register_interaction(
         target_class=CustomEditor,
         interaction_class=MouseClick,
-        handler=mouse_click_ImageButton
+        handler=mouse_click_ImageButton,
     )
 
     registry.register_interaction(
         target_class=CustomEditor,
         interaction_class=DisplayedText,
-        handler=lambda wrapper, _: wrapper._target.control.GetLabel()
+        handler=lambda wrapper, _: wrapper._target.control.GetLabel(),
     )

@@ -22,7 +22,9 @@ class ArrayEditorTest(HasPrivateTraits):
     three = Array(np.int, (3, 3))
 
     four = Array(
-        np.float, (4, 4), editor=ArrayEditor(width=-50),
+        np.float,
+        (4, 4),
+        editor=ArrayEditor(width=-50),
     )
 
     view = View(

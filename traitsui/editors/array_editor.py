@@ -23,8 +23,7 @@ from traitsui.view import View
 
 
 class ArrayEditor(EditorFactory):
-    """ Editor factory for array editors.
-    """
+    """Editor factory for array editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -53,8 +52,7 @@ class ArrayStructure(HasTraits):
     view = Instance(View)
 
     def __init__(self, editor):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         super().__init__(editor=editor)
 
         # Set up the field width for each item:
@@ -157,8 +155,7 @@ class ArrayStructure(HasTraits):
         return View(Group(show_labels=False, *content))
 
     def _field_changed(self):
-        """ Updates the underlying array when any field changes value.
-        """
+        """Updates the underlying array when any field changes value."""
 
         if not self.editor._busy:
             # Get the array we are mirroring:
@@ -185,8 +182,7 @@ class ArrayStructure(HasTraits):
 
 
 class SimpleEditor(Editor):
-    """ Simple style of editor for arrays.
-    """
+    """Simple style of editor for arrays."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -196,8 +192,8 @@ class SimpleEditor(Editor):
     readonly = Bool(False)
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self._as = _as = ArrayStructure(self)
         ui = _as.view.ui(_as, parent, kind="subpanel")
@@ -205,8 +201,8 @@ class SimpleEditor(Editor):
         self.control = ui.control
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
 
         if not self._busy:
@@ -228,8 +224,7 @@ class SimpleEditor(Editor):
             self._busy = False
 
     def update_array(self, value):
-        """ Updates the array value associated with the editor.
-        """
+        """Updates the array value associated with the editor."""
         self._busy = True
         self.value = value
         self._busy = False

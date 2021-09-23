@@ -15,7 +15,7 @@ appropriately.
 
 
 def column_major_to_row_major(index, n, num_rows, num_cols):
-    """ Helper function to convert an index of a grid layout so that the
+    """Helper function to convert an index of a grid layout so that the
     index counts over the grid in the correct direction.
     In TraitsUI, grids are typically populated in row major order, however,
     the elements can be assigned to each entry in the grid so that when
@@ -87,8 +87,9 @@ def column_major_to_row_major(index, n, num_rows, num_cols):
         new_index = index - num_entries_grid1
         i2 = new_index % (num_rows - 1)
         j2 = new_index // (num_rows - 1)
-        return (num_cols - num_empty_entries_last_row)*(i2+1) + \
-            (i2 * num_empty_entries_last_row + j2)
+        return (num_cols - num_empty_entries_last_row) * (i2 + 1) + (
+            i2 * num_empty_entries_last_row + j2
+        )
     else:
         i = index % num_rows
         j = index // num_rows

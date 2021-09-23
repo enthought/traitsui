@@ -20,13 +20,12 @@ from traitsui.extras.has_dynamic_views import DynamicView, HasDynamicViews
 
 
 class HasFooView(HasDynamicViews):
-    """ A base class declaring the existence of the 'foo' dynamic view.
-    """
+    """A base class declaring the existence of the 'foo' dynamic view."""
 
     def __init__(self, *args, **traits):
-        """ Constructor.
+        """Constructor.
 
-            Extended to declare our dynamic foo view.
+        Extended to declare our dynamic foo view.
         """
         super().__init__(*args, **traits)
 
@@ -48,14 +47,12 @@ class HasFooView(HasDynamicViews):
 
 
 class MyInfoHandler(Handler):
-
     def object_first_changed(self, info):
         info.object.derived = info.object.first
 
 
 class BaseFoo(HasFooView):
-    """ A base class that puts some content in the 'foo' dynamic view.
-    """
+    """A base class that puts some content in the 'foo' dynamic view."""
 
     first = Str('My first name')
     last = Str('My last name')
@@ -65,14 +62,16 @@ class BaseFoo(HasFooView):
     derived = Str()
 
     ui_person = Group(
-        Item(label='On this tab, notice how the sub-handler keeps\n'
-             'the derived value equal to the first name.\n\n'
-             'On the next tab, change the selection in order to\n'
-             'control which tabs are visible when the ui is \n'
-             'displayed for the 2nd time.'
-             ),
+        Item(
+            label='On this tab, notice how the sub-handler keeps\n'
+            'the derived value equal to the first name.\n\n'
+            'On the next tab, change the selection in order to\n'
+            'control which tabs are visible when the ui is \n'
+            'displayed for the 2nd time.'
+        ),
         spring,
-        'first', 'last',
+        'first',
+        'last',
         spring,
         'derived',
         label='My Info',
@@ -83,17 +82,16 @@ class BaseFoo(HasFooView):
 
 
 class FatherInfoHandler(Handler):
-
     def object_father_first_name_changed(self, info):
         info.object.father_derived = info.object.father_first_name
 
 
 class DerivedFoo(BaseFoo):
-    """ A derived class that puts additional content in the 'foo' dynamic view.
-        Note that the additional content could also have been added via a traits
-        category contribution, or even dynamic manipulation of metadata on a UI
-        subelement.  The key is what the metadata represents when the view is
-        *created*
+    """A derived class that puts additional content in the 'foo' dynamic view.
+    Note that the additional content could also have been added via a traits
+    category contribution, or even dynamic manipulation of metadata on a UI
+    subelement.  The key is what the metadata represents when the view is
+    *created*
     """
 
     knows_mother = Bool(False)
@@ -147,21 +145,23 @@ class DerivedFoo(BaseFoo):
 
 
 class FooDemo(HasTraits):
-    """ Defines a class to run the demo.
-    """
+    """Defines a class to run the demo."""
 
     foo = Instance(DerivedFoo, ())
     configure = Button('Configure')
 
     view = View(
-        Label("Try configuring several times, each time changing the items "
-              "on the 'Parents?' tab."),
+        Label(
+            "Try configuring several times, each time changing the items "
+            "on the 'Parents?' tab."
+        ),
         '_',
-        HGroup(spring, Item('configure', show_label=False))
+        HGroup(spring, Item('configure', show_label=False)),
     )
 
     def _configure_changed(self):
         self.foo.configure_traits()
+
 
 # Create the demo:
 popup = FooDemo()

@@ -16,7 +16,7 @@ from traits.api import HasPrivateTraits, Instance, Constant, Bool
 
 
 class UIInfo(HasPrivateTraits):
-    """ Represents the object and editor content of an active Traits-based
+    """Represents the object and editor content of an active Traits-based
     user interface
     """
 
@@ -31,15 +31,14 @@ class UIInfo(HasPrivateTraits):
     initialized = Bool(False)
 
     def bind_context(self):
-        """ Binds all of the associated context objects as traits of the
-            object.
+        """Binds all of the associated context objects as traits of the
+        object.
         """
         for name, value in self.ui.context.items():
             self.bind(name, value)
 
     def bind(self, name, value, id=None):
-        """ Binds a name to a value if it is not already bound.
-        """
+        """Binds a name to a value if it is not already bound."""
         if id is None:
             id = name
 

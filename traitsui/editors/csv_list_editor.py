@@ -153,7 +153,7 @@ def _validate_range_value(range_object, object, name, value):
 
 
 def _prepare_method(cls, parent):
-    """ Unbound implementation of the prepare editor method to add a
+    """Unbound implementation of the prepare editor method to add a
     change notification hook in the items of the list before calling
     the parent prepare method of the parent class.
 
@@ -167,7 +167,7 @@ def _prepare_method(cls, parent):
 
 
 def _dispose_method(cls):
-    """ Unbound implementation of the dispose editor method to remove
+    """Unbound implementation of the dispose editor method to remove
     the change notification hook in the items of the list before calling
     the parent dispose method of the parent class.
 
@@ -342,8 +342,7 @@ class CSVListEditor(TextEditor):
         return evaluate, fmt_func
 
     def simple_editor(self, ui, object, name, description, parent):
-        """ Generates an editor using the "simple" style.
-        """
+        """Generates an editor using the "simple" style."""
         self.evaluate, self.format_func = self._funcs(object, name)
         return self.simple_editor_class(
             parent,
@@ -355,8 +354,7 @@ class CSVListEditor(TextEditor):
         )
 
     def custom_editor(self, ui, object, name, description, parent):
-        """ Generates an editor using the "custom" style.
-        """
+        """Generates an editor using the "custom" style."""
         self.evaluate, self.format_func = self._funcs(object, name)
         return self.custom_editor_class(
             parent,
@@ -368,8 +366,7 @@ class CSVListEditor(TextEditor):
         )
 
     def text_editor(self, ui, object, name, description, parent):
-        """ Generates an editor using the "text" style.
-        """
+        """Generates an editor using the "text" style."""
         self.evaluate, self.format_func = self._funcs(object, name)
         return self.text_editor_class(
             parent,
@@ -381,8 +378,7 @@ class CSVListEditor(TextEditor):
         )
 
     def readonly_editor(self, ui, object, name, description, parent):
-        """ Generates an "editor" that is read-only.
-        """
+        """Generates an "editor" that is read-only."""
         self.evaluate, self.format_func = self._funcs(object, name)
         return self.readonly_editor_class(
             parent,

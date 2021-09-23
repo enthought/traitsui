@@ -16,7 +16,7 @@ from traitsui.qt4.editor_factory import ReadonlyEditor, TextEditor
 
 
 def register(registry):
-    """ Register interactions for the given registry.
+    """Register interactions for the given registry.
 
     If there are any conflicts, an error will occur.
 
@@ -34,5 +34,5 @@ def register(registry):
     registry.register_interaction(
         target_class=ReadonlyEditor,
         interaction_class=DisplayedText,
-        handler=lambda wrapper, _: wrapper._target.control.text()
+        handler=lambda wrapper, _: wrapper._target.control.text(),
     )

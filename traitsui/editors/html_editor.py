@@ -39,8 +39,7 @@ list_template = """<%s>
 
 
 class ToolkitEditorFactory(BasicEditorFactory):
-    """ Editor factory for HTML editors.
-    """
+    """Editor factory for HTML editors."""
 
     # --------------------------------------------------------------------------
     #  Trait definitions:
@@ -59,8 +58,8 @@ class ToolkitEditorFactory(BasicEditorFactory):
     open_externally = Bool(False)
 
     def parse_text(self, text):
-        """ Parses the contents of a formatted text string into the
-            corresponding HTML.
+        """Parses the contents of a formatted text string into the
+        corresponding HTML.
         """
         text = text.replace("\r\n", "\n")
         lines = [("." + line).strip()[1:] for line in text.split("\n")]
@@ -96,8 +95,7 @@ class ToolkitEditorFactory(BasicEditorFactory):
         return "\n".join(paragraphs)
 
     def parse_block(self, lines, i):
-        """ Parses a code block.
-        """
+        """Parses a code block."""
         m = 1000
         n = len(lines)
         j = i
@@ -120,12 +118,11 @@ class ToolkitEditorFactory(BasicEditorFactory):
         return (j, block_template % "\n<br>".join(temp))
 
     def parse_list(self, lines, i):
-        """ Parses a list.
-        """
+        """Parses a list."""
         line = lines[i]
         m = self.indent(line)
         kind = line[m]
-        result = ["<li>" + line[m + 1:].strip()]
+        result = ["<li>" + line[m + 1 :].strip()]
         n = len(lines)
         j = i + 1
         while j < n:
@@ -136,7 +133,7 @@ class ToolkitEditorFactory(BasicEditorFactory):
             if k == m:
                 if line[k] != kind:
                     break
-                result.append("<li>" + line[k + 1:].strip())
+                result.append("<li>" + line[k + 1 :].strip())
                 j += 1
             elif line[k] in "-*":
                 j, line = self.parse_list(lines, j)
@@ -148,8 +145,7 @@ class ToolkitEditorFactory(BasicEditorFactory):
         return (j, list_template % (style, "\n".join(result), style))
 
     def indent(self, line):
-        """ Calculates the amount of white space at the beginning of a line.
-        """
+        """Calculates the amount of white space at the beginning of a line."""
         return len(line) - len((line + ".").strip()) + 1
 
 

@@ -13,13 +13,11 @@
 """
 
 
-
 from .toolkit import toolkit
 
 
 def default_show_help(info, control):
-    """ Default handler for showing the help associated with a view.
-    """
+    """Default handler for showing the help associated with a view."""
     toolkit().show_help(info.ui, control)
 
 
@@ -28,7 +26,7 @@ show_help = default_show_help
 
 
 def on_help_call(new_show_help=None):
-    """ Sets a new global help provider function.
+    """Sets a new global help provider function.
 
     The help provider function must have a signature of
     *function*(*info*, *control*), where *info* is a UIInfo object for the

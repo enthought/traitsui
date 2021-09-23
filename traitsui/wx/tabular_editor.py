@@ -58,8 +58,7 @@ alignment_map = {
 
 class TextEditMixin(listmix.TextEditMixin):
     def __init__(self, edit_labels):
-        """ edit_labels controls whether the first column is editable
-        """
+        """edit_labels controls whether the first column is editable"""
         self.edit_labels = edit_labels
         listmix.TextEditMixin.__init__(self)
 
@@ -71,8 +70,7 @@ class TextEditMixin(listmix.TextEditMixin):
 
 
 class wxListCtrl(wx.ListCtrl, TextEditMixin):
-    """ Subclass of wx.ListCtrl to provide correct virtual list behavior.
-    """
+    """Subclass of wx.ListCtrl to provide correct virtual list behavior."""
 
     def __init__(
         self,
@@ -135,8 +133,7 @@ class wxListCtrl(wx.ListCtrl, TextEditMixin):
         #                                row, col, text )
 
     def OnGetItemAttr(self, row):
-        """ Returns the display attributes to use for the specified list item.
-        """
+        """Returns the display attributes to use for the specified list item."""
         # fixme: There appears to be a bug in wx in that they do not correctly
         # manage the reference count for the returned object, and it seems to be
         # gc'ed before they finish using it. So we store an object reference to
@@ -160,8 +157,7 @@ class wxListCtrl(wx.ListCtrl, TextEditMixin):
         return attr
 
     def OnGetItemImage(self, row):
-        """ Returns the image index to use for the specified list item.
-        """
+        """Returns the image index to use for the specified list item."""
         editor = self._editor
         image = editor._get_image(
             editor.adapter.get_image(editor.object, editor.name, row, 0)
@@ -172,8 +168,7 @@ class wxListCtrl(wx.ListCtrl, TextEditMixin):
         return -1
 
     def OnGetItemColumnImage(self, row, column):
-        """ Returns the image index to use for the specified list item.
-        """
+        """Returns the image index to use for the specified list item."""
         editor = self._editor
         image = editor._get_image(
             editor.adapter.get_image(editor.object, editor.name, row, column)
@@ -184,15 +179,14 @@ class wxListCtrl(wx.ListCtrl, TextEditMixin):
         return -1
 
     def OnGetItemText(self, row, column):
-        """ Returns the text to use for the specified list item.
-        """
+        """Returns the text to use for the specified list item."""
         editor = self._editor
         return editor.adapter.get_text(editor.object, editor.name, row, column)
 
 
 class TabularEditor(Editor):
-    """ A traits UI editor for editing tabular data (arrays, list of tuples,
-        lists of objects, etc).
+    """A traits UI editor for editing tabular data (arrays, list of tuples,
+    lists of objects, etc).
     """
 
     # -- Trait Definitions ----------------------------------------------------
@@ -257,8 +251,8 @@ class TabularEditor(Editor):
     _update_visible = Bool(False)
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         factory = self.factory
 
@@ -300,14 +294,18 @@ class TabularEditor(Editor):
         # Set up the list control's event handlers:
         id = control.GetId()
         parent.Bind(wx.EVT_LIST_BEGIN_DRAG, self._begin_drag, id=id)
-        parent.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self._begin_label_edit, id=id)
+        parent.Bind(
+            wx.EVT_LIST_BEGIN_LABEL_EDIT, self._begin_label_edit, id=id
+        )
         parent.Bind(wx.EVT_LIST_END_LABEL_EDIT, self._end_label_edit, id=id)
         parent.Bind(wx.EVT_LIST_ITEM_SELECTED, self._item_selected, id=id)
         parent.Bind(wx.EVT_LIST_ITEM_DESELECTED, self._item_selected, id=id)
         parent.Bind(wx.EVT_LIST_KEY_DOWN, self._key_down, id=id)
         parent.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self._item_activated, id=id)
         parent.Bind(wx.EVT_LIST_COL_END_DRAG, self._size_modified, id=id)
-        parent.Bind(wx.EVT_LIST_COL_RIGHT_CLICK, self._column_right_clicked, id=id)
+        parent.Bind(
+            wx.EVT_LIST_COL_RIGHT_CLICK, self._column_right_clicked, id=id
+        )
         parent.Bind(wx.EVT_LIST_COL_CLICK, self._column_clicked, id=id)
         control.Bind(wx.EVT_LEFT_DOWN, self._left_down)
         control.Bind(wx.EVT_LEFT_DCLICK, self._left_dclick)
@@ -388,8 +386,7 @@ class TabularEditor(Editor):
         self.set_tooltip()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         # Remove all of the wx event handlers:
         control = self.control
         parent = control.GetParent()
@@ -426,8 +423,7 @@ class TabularEditor(Editor):
         super().dispose()
 
     def _update_changed(self, event):
-        """ Handles the 'update' event being fired.
-        """
+        """Handles the 'update' event being fired."""
         if event is True:
             self.update_editor()
         elif isinstance(event, int):
@@ -436,13 +432,11 @@ class TabularEditor(Editor):
             self._refresh_editor(event)
 
     def refresh_editor(self, item, name, old, new):
-        """ Handles a table item attribute being changed.
-        """
+        """Handles a table item attribute being changed."""
         self._refresh_editor(item)
 
     def _refresh_editor(self, item):
-        """ Handles a table item being changed.
-        """
+        """Handles a table item being changed."""
         adapter = self.adapter
         object, name = self.object, self.name
         agi = adapter.get_item
@@ -454,23 +448,22 @@ class TabularEditor(Editor):
         self.update_editor()
 
     def _refresh_row(self, row):
-        """ Updates the editor control when a specified table row changes.
-        """
+        """Updates the editor control when a specified table row changes."""
         self.control.RefreshRect(
             self.control.GetItemRect(row, wx.LIST_RECT_BOUNDS)
         )
 
     def _update_editor(self, object, name, old_value, new_value):
-        """ Performs updates when the object trait changes.
-            Overloads traitsui.editor.UIEditor
+        """Performs updates when the object trait changes.
+        Overloads traitsui.editor.UIEditor
         """
         self._update_visible = True
 
         super()._update_editor(object, name, old_value, new_value)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         control = self.control
         n = self.adapter.len(self.object, self.name)
@@ -505,9 +498,13 @@ class TabularEditor(Editor):
             return
 
         if 0 <= (row - top) < pn:
-            control.EnsureVisible(min(top + pn - 2, control.GetItemCount() - 1))
+            control.EnsureVisible(
+                min(top + pn - 2, control.GetItemCount() - 1)
+            )
         elif row < top:
-            control.EnsureVisible(min(row + pn - 1, control.GetItemCount() - 1))
+            control.EnsureVisible(
+                min(row + pn - 1, control.GetItemCount() - 1)
+            )
         else:
             control.EnsureVisible(row)
 
@@ -523,8 +520,7 @@ class TabularEditor(Editor):
     # -- Trait Event Handlers -------------------------------------------------
 
     def _selected_changed(self, selected):
-        """ Handles the editor's 'selected' trait being changed.
-        """
+        """Handles the editor's 'selected' trait being changed."""
         if not self._no_update:
             if selected is None:
                 for row in self._get_selected():
@@ -540,8 +536,7 @@ class TabularEditor(Editor):
                     pass
 
     def _selected_row_changed(self, old, new):
-        """ Handles the editor's 'selected_index' trait being changed.
-        """
+        """Handles the editor's 'selected_index' trait being changed."""
         if not self._no_update:
             if new < 0:
                 if old >= 0:
@@ -552,8 +547,7 @@ class TabularEditor(Editor):
                 )
 
     def _multi_selected_changed(self, selected):
-        """ Handles the editor's 'multi_selected' trait being changed.
-        """
+        """Handles the editor's 'multi_selected' trait being changed."""
         if not self._no_update:
             values = self.value
             try:
@@ -564,8 +558,7 @@ class TabularEditor(Editor):
                 pass
 
     def _multi_selected_items_changed(self, event):
-        """ Handles the editor's 'multi_selected' trait being modified.
-        """
+        """Handles the editor's 'multi_selected' trait being modified."""
         values = self.value
         try:
             self._multi_selected_rows_items_changed(
@@ -579,8 +572,7 @@ class TabularEditor(Editor):
             pass
 
     def _multi_selected_rows_changed(self, selected_rows):
-        """ Handles the editor's 'multi_selected_rows' trait being changed.
-        """
+        """Handles the editor's 'multi_selected_rows' trait being changed."""
         if not self._no_update:
             control = self.control
             selected = self._get_selected()
@@ -599,8 +591,7 @@ class TabularEditor(Editor):
                 control.SetItemState(row, 0, wx.LIST_STATE_SELECTED)
 
     def _multi_selected_rows_items_changed(self, event):
-        """ Handles the editor's 'multi_selected_rows' trait being modified.
-        """
+        """Handles the editor's 'multi_selected_rows' trait being modified."""
         control = self.control
 
         # Remove all items that are no longer selected:
@@ -619,28 +610,24 @@ class TabularEditor(Editor):
     # -- List Control Event Handlers ------------------------------------------
 
     def _left_down(self, event):
-        """ Handles the left mouse button being pressed.
-        """
+        """Handles the left mouse button being pressed."""
         self._mouse_click(event, "clicked")
 
     def _left_dclick(self, event):
-        """ Handles the left mouse button being double clicked.
-        """
+        """Handles the left mouse button being double clicked."""
         self._mouse_click(event, "dclicked")
 
     def _right_down(self, event):
-        """ Handles the right mouse button being pressed.
-        """
+        """Handles the right mouse button being pressed."""
         self._mouse_click(event, "right_clicked")
 
     def _right_dclick(self, event):
-        """ Handles the right mouse button being double clicked.
-        """
+        """Handles the right mouse button being double clicked."""
         self._mouse_click(event, "right_dclicked")
 
     def _begin_drag(self, event):
-        """ Handles the user beginning a drag operation with the left mouse
-            button.
+        """Handles the user beginning a drag operation with the left mouse
+        button.
         """
         if PythonDropSource is not None:
             adapter = self.adapter
@@ -685,16 +672,14 @@ class TabularEditor(Editor):
                 self._drag_local = False
 
     def _begin_label_edit(self, event):
-        """ Handles the user starting to edit an item label.
-        """
+        """Handles the user starting to edit an item label."""
         if not self.adapter.get_can_edit(
             self.object, self.name, event.GetIndex()
         ):
             event.Veto()
 
     def _end_label_edit(self, event):
-        """ Handles the user finishing editing an item label.
-        """
+        """Handles the user finishing editing an item label."""
         self.adapter.set_text(
             self.object,
             self.name,
@@ -705,8 +690,7 @@ class TabularEditor(Editor):
         self.row = event.GetIndex() + 1
 
     def _item_selected(self, event):
-        """ Handles an item being selected.
-        """
+        """Handles an item being selected."""
         self._no_update = True
         try:
             get_item = self.adapter.get_item
@@ -727,16 +711,14 @@ class TabularEditor(Editor):
             self._no_update = False
 
     def _item_activated(self, event):
-        """ Handles an item being activated (double-clicked or enter pressed).
-        """
+        """Handles an item being activated (double-clicked or enter pressed)."""
         self.activated_row = event.GetIndex()
         self.activated = self.adapter.get_item(
             self.object, self.name, self.activated_row
         )
 
     def _key_down(self, event):
-        """ Handles the user pressing a key in the list control.
-        """
+        """Handles the user pressing a key in the list control."""
         key = event.GetKeyCode()
         if key == wx.WXK_PAGEDOWN:
             self._append_new()
@@ -754,8 +736,7 @@ class TabularEditor(Editor):
             event.Skip()
 
     def _column_right_clicked(self, event):
-        """ Handles the user right-clicking a column header.
-        """
+        """Handles the user right-clicking a column header."""
         column = event.GetColumn()
         if (self._cached_widths is not None) and (
             0 <= column < len(self._cached_widths)
@@ -764,8 +745,7 @@ class TabularEditor(Editor):
             self._size_modified(event)
 
     def _column_clicked(self, event):
-        """ Handles the right mouse button being double clicked.
-        """
+        """Handles the right mouse button being double clicked."""
         editor_event = TabularEditorEvent(
             editor=self, row=0, column=event.GetColumn()
         )
@@ -774,8 +754,7 @@ class TabularEditor(Editor):
         event.Skip()
 
     def _size_modified(self, event):
-        """ Handles the size of the list control being changed.
-        """
+        """Handles the size of the list control being changed."""
         control = self.control
         n = control.GetColumnCount()
         if n == 1:
@@ -787,8 +766,7 @@ class TabularEditor(Editor):
         event.Skip()
 
     def _motion(self, event):
-        """ Handles the user moving the mouse.
-        """
+        """Handles the user moving the mouse."""
         x = event.GetX()
         column = self._get_column(x)
         row, flags = self.control.HitTest(wx.Point(x, event.GetY()))
@@ -809,8 +787,7 @@ class TabularEditor(Editor):
     # -- Drag and Drop Event Handlers -----------------------------------------
 
     def wx_dropped_on(self, x, y, data, drag_result):
-        """ Handles a Python object being dropped on the list control.
-        """
+        """Handles a Python object being dropped on the list control."""
         row, flags = self.control.HitTest(wx.Point(x, y))
 
         # If the user dropped it on an empty list, set the target as past the
@@ -846,8 +823,8 @@ class TabularEditor(Editor):
         return wx.DragNone
 
     def _wx_dropped_on(self, row, item):
-        """ Helper method for handling a single item dropped on the list
-            control.
+        """Helper method for handling a single item dropped on the list
+        control.
         """
         adapter = self.adapter
         object, name = self.object, self.name
@@ -874,8 +851,7 @@ class TabularEditor(Editor):
                 rows[i] += 1
 
     def wx_drag_over(self, x, y, data, drag_result):
-        """ Handles a Python object being dragged over the tree.
-        """
+        """Handles a Python object being dragged over the tree."""
         if isinstance(data, list):
             rc = wx.DragNone
             for item in data:
@@ -909,8 +885,8 @@ class TabularEditor(Editor):
     # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the
-            editor.
+        """Restores any saved user preference information associated with the
+        editor.
         """
         self._cached_widths = cws = prefs.get("cached_widths")
         if cws is not None:
@@ -920,8 +896,7 @@ class TabularEditor(Editor):
                     set_column_width(i, width)
 
     def save_prefs(self):
-        """ Returns any user preference information associated with the editor.
-        """
+        """Returns any user preference information associated with the editor."""
         cws = self._cached_widths
         if cws is not None:
             cws = [cw if cw is not None and cw >= 0 else None for cw in cws]
@@ -931,15 +906,13 @@ class TabularEditor(Editor):
     # -- Private Methods ------------------------------------------------------
 
     def _refresh(self):
-        """ Refreshes the contents of the editor's list control.
-        """
+        """Refreshes the contents of the editor's list control."""
         n = self.adapter.len(self.object, self.name)
         if n > 0:
             self.control.RefreshItems(0, n - 1)
 
     def _rebuild(self):
-        """ Rebuilds the contents of the editor's list control.
-        """
+        """Rebuilds the contents of the editor's list control."""
         control = self.control
         control.ClearAll()
         adapter, object, name = self.adapter, self.object, self.name
@@ -957,15 +930,14 @@ class TabularEditor(Editor):
         self._set_column_widths()
 
     def _rebuild_all(self):
-        """ Rebuilds the structure of the list control, then refreshes its
-            contents.
+        """Rebuilds the structure of the list control, then refreshes its
+        contents.
         """
         self._rebuild()
         self.update_editor()
 
     def _set_column_widths(self):
-        """ Set the column widths for the current set of columns.
-        """
+        """Set the column widths for the current set of columns."""
         control = self.control
         if control is None:
             return
@@ -1023,8 +995,7 @@ class TabularEditor(Editor):
         control.Thaw()
 
     def _add_image(self, image_resource):
-        """ Adds a new image to the wx.ImageList and its associated mapping.
-        """
+        """Adds a new image to the wx.ImageList and its associated mapping."""
         bitmap = image_resource.create_image().ConvertToBitmap()
 
         image_list = self._image_list
@@ -1041,8 +1012,7 @@ class TabularEditor(Editor):
         return row
 
     def _get_image(self, image):
-        """ Converts a user specified image to a wx.ListCtrl image index.
-        """
+        """Converts a user specified image to a wx.ListCtrl image index."""
         if isinstance(image, str):
             self.image = image
             image = self.image
@@ -1057,8 +1027,7 @@ class TabularEditor(Editor):
         return self.images.get(image)
 
     def _get_selected(self):
-        """ Returns a list of the rows of all currently selected list items.
-        """
+        """Returns a list of the rows of all currently selected list items."""
         selected = []
         item = -1
         control = self.control
@@ -1079,8 +1048,7 @@ class TabularEditor(Editor):
         return selected
 
     def _append_new(self):
-        """ Append a new item to the end of the list control.
-        """
+        """Append a new item to the end of the list control."""
         if "append" in self.factory.operations:
             adapter = self.adapter
             self.row = self.control.GetItemCount()
@@ -1093,8 +1061,7 @@ class TabularEditor(Editor):
             )
 
     def _insert_current(self):
-        """ Inserts a new item after the currently selected list control item.
-        """
+        """Inserts a new item after the currently selected list control item."""
         if "insert" in self.factory.operations:
             selected = self._get_selected()
             if len(selected) == 1:
@@ -1109,8 +1076,7 @@ class TabularEditor(Editor):
                 self.edit = True
 
     def _delete_current(self):
-        """ Deletes the currently selected items from the list control.
-        """
+        """Deletes the currently selected items from the list control."""
         if "delete" in self.factory.operations:
             selected = self._get_selected()
             if len(selected) == 0:
@@ -1130,8 +1096,7 @@ class TabularEditor(Editor):
                 self.multi_selected_rows = []
 
     def _move_up_current(self):
-        """ Moves the currently selected item up one line in the list control.
-        """
+        """Moves the currently selected item up one line in the list control."""
         if "move" in self.factory.operations:
             selected = self._get_selected()
             if len(selected) == 1:
@@ -1145,8 +1110,7 @@ class TabularEditor(Editor):
                     self.row = row - 1
 
     def _move_down_current(self):
-        """ Moves the currently selected item down one line in the list control.
-        """
+        """Moves the currently selected item down one line in the list control."""
         if "move" in self.factory.operations:
             selected = self._get_selected()
             if len(selected) == 1:
@@ -1160,16 +1124,14 @@ class TabularEditor(Editor):
                     self.row = row + 1
 
     def _edit_current(self):
-        """ Allows the user to edit the current item in the list control.
-        """
+        """Allows the user to edit the current item in the list control."""
         if "edit" in self.factory.operations and self.factory.editable_labels:
             selected = self._get_selected()
             if len(selected) == 1:
                 self.control.EditLabel(selected[0])
 
     def _get_column(self, x, translate=False):
-        """ Returns the column index corresponding to a specified x position.
-        """
+        """Returns the column index corresponding to a specified x position."""
         if x >= 0:
             control = self.control
             for i in range(control.GetColumnCount()):
@@ -1185,8 +1147,8 @@ class TabularEditor(Editor):
         return None
 
     def _mouse_click(self, event, trait):
-        """ Generate a TabularEditorEvent event for a specified mouse event and
-            editor trait name.
+        """Generate a TabularEditorEvent event for a specified mouse event and
+        editor trait name.
         """
         x = event.GetX()
         row, flags = self.control.HitTest(wx.Point(x, event.GetY()))

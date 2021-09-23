@@ -56,8 +56,7 @@ kind_must_have_parent = ("panel", "subpanel")
 
 
 class UI(HasPrivateTraits):
-    """ Information about the user interface for a View.
-    """
+    """Information about the user interface for a View."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -221,14 +220,12 @@ class UI(HasPrivateTraits):
     ]
 
     def traits_init(self):
-        """ Initializes the traits object.
-        """
+        """Initializes the traits object."""
         self.info = UIInfo(ui=self)
         self.handler.init_info(self.info)
 
     def ui(self, parent, kind):
-        """ Creates a user interface from the associated View template object.
-        """
+        """Creates a user interface from the associated View template object."""
         if (parent is None) and (kind in kind_must_have_parent):
             kind = "live"
         self.view.on_trait_change(
@@ -238,8 +235,7 @@ class UI(HasPrivateTraits):
         self.rebuild(self, parent)
 
     def dispose(self, result=None, abort=False):
-        """ Disposes of the contents of a user interface.
-        """
+        """Disposes of the contents of a user interface."""
         if self.parent is not None:
             self.parent.errors -= self.errors
 
@@ -256,8 +252,7 @@ class UI(HasPrivateTraits):
             self.finish()
 
     def recycle(self):
-        """ Recycles the user interface prior to rebuilding it.
-        """
+        """Recycles the user interface prior to rebuilding it."""
         # Reset all user interface editors:
         self.reset(destroy=False)
 
@@ -268,8 +263,7 @@ class UI(HasPrivateTraits):
         self.reset_traits(self.recyclable_traits)
 
     def finish(self):
-        """ Finishes disposing of a user interface.
-        """
+        """Finishes disposing of a user interface."""
         # Destroy the control early to silence cascade events when the UI
         # enters an inconsistent state.
         toolkit().destroy_control(self.control)
@@ -306,8 +300,7 @@ class UI(HasPrivateTraits):
         self.destroyed = True
 
     def reset(self, destroy=True):
-        """ Resets the contents of a user interface.
-        """
+        """Resets the contents of a user interface."""
         for editor in self._editors:
             if editor._ui is not None:
                 # Propagate result to enclosed ui objects:
@@ -332,8 +325,8 @@ class UI(HasPrivateTraits):
             dispatcher.remove()
 
     def find(self, include):
-        """ Finds the definition of the specified Include object in the current
-            user interface building context.
+        """Finds the definition of the specified Include object in the current
+        user interface building context.
         """
         context = self.context
         result = None
@@ -373,18 +366,16 @@ class UI(HasPrivateTraits):
         return result
 
     def push_level(self):
-        """ Returns the current search stack level.
-        """
+        """Returns the current search stack level."""
         return len(self._search)
 
     def pop_level(self, level):
-        """ Restores a previously pushed search stack level.
-        """
+        """Restores a previously pushed search stack level."""
         del self._search[: len(self._search) - level]
 
     def prepare_ui(self):
-        """ Performs all processing that occurs after the user interface is
-            created.
+        """Performs all processing that occurs after the user interface is
+        created.
         """
         # Invoke all of the editor 'name_defined' methods we've accumulated:
         info = self.info.trait_set(initialized=False)
@@ -433,7 +424,7 @@ class UI(HasPrivateTraits):
                     object = context.get(prefix[:col])
                     if object is not None:
                         method = getattr(handler, name)
-                        trait_name = prefix[col + 1:]
+                        trait_name = prefix[col + 1 :]
                         self._dispatchers.append(
                             Dispatcher(method, info, object, trait_name)
                         )
@@ -456,8 +447,7 @@ class UI(HasPrivateTraits):
         info.initialized = True
 
     def sync_view(self):
-        """ Synchronize context object traits with view editor traits.
-        """
+        """Synchronize context object traits with view editor traits."""
         for name, object in self.context.items():
             self._sync_view(name, object, "sync_to_view", "from")
             self._sync_view(name, object, "sync_from_view", "to")
@@ -493,8 +483,7 @@ class UI(HasPrivateTraits):
                     )
 
     def get_extended_value(self, name):
-        """ Gets the current value of a specified extended trait name.
-        """
+        """Gets the current value of a specified extended trait name."""
         names = name.split(".")
         if len(names) > 1:
             value = self.context[names[0]]
@@ -508,7 +497,7 @@ class UI(HasPrivateTraits):
         return value
 
     def restore_prefs(self):
-        """ Retrieves and restores any saved user preference information
+        """Retrieves and restores any saved user preference information
         associated with the UI.
         """
         id = self.id
@@ -525,8 +514,7 @@ class UI(HasPrivateTraits):
         return None
 
     def set_prefs(self, prefs):
-        """ Sets the values of user preferences for the UI.
-        """
+        """Sets the values of user preferences for the UI."""
         if isinstance(prefs, dict):
             info = self.info
             for name in self._names:
@@ -546,8 +534,7 @@ class UI(HasPrivateTraits):
         return None
 
     def save_prefs(self, prefs=None):
-        """ Saves any user preference information associated with the UI.
-        """
+        """Saves any user preference information associated with the UI."""
         if prefs is None:
             toolkit().save_window(self)
             return
@@ -560,8 +547,7 @@ class UI(HasPrivateTraits):
                 db.close()
 
     def get_prefs(self, prefs=None):
-        """ Gets the preferences to be saved for the user interface.
-        """
+        """Gets the preferences to be saved for the user interface."""
         ui_prefs = {}
         if prefs is not None:
             ui_prefs[""] = prefs
@@ -580,8 +566,7 @@ class UI(HasPrivateTraits):
         return ui_prefs
 
     def get_ui_db(self, mode="r"):
-        """ Returns a reference to the Traits UI preference database.
-        """
+        """Returns a reference to the Traits UI preference database."""
         try:
             return shelve.open(
                 os.path.join(traits_home(), "traits_ui"),
@@ -592,13 +577,12 @@ class UI(HasPrivateTraits):
             return None
 
     def get_editors(self, name):
-        """ Returns a list of editors for the given trait name.
-        """
+        """Returns a list of editors for the given trait name."""
         return [editor for editor in self._editors if editor.name == name]
 
     def get_error_controls(self):
-        """ Returns the list of editor error controls contained by the user
-            interface.
+        """Returns the list of editor error controls contained by the user
+        interface.
         """
         controls = []
         for editor in self._editors:
@@ -611,14 +595,14 @@ class UI(HasPrivateTraits):
         return controls
 
     def add_defined(self, method):
-        """ Adds a Handler method to the list of methods to be called once the
-            user interface has been constructed.
+        """Adds a Handler method to the list of methods to be called once the
+        user interface has been constructed.
         """
         self._defined.append(method)
 
     def add_visible(self, visible_when, editor):
-        """ Adds a conditionally enabled Editor object to the list of monitored
-            'visible_when' objects.
+        """Adds a conditionally enabled Editor object to the list of monitored
+        'visible_when' objects.
         """
         try:
             self._visible.append(
@@ -629,8 +613,8 @@ class UI(HasPrivateTraits):
             # fixme: Log an error here...
 
     def add_enabled(self, enabled_when, editor):
-        """ Adds a conditionally enabled Editor object to the list of monitored
-            'enabled_when' objects.
+        """Adds a conditionally enabled Editor object to the list of monitored
+        'enabled_when' objects.
         """
         try:
             self._enabled.append(
@@ -641,8 +625,8 @@ class UI(HasPrivateTraits):
             # fixme: Log an error here...
 
     def add_checked(self, checked_when, editor):
-        """ Adds a conditionally enabled (menu) Editor object to the list of
-            monitored 'checked_when' objects.
+        """Adds a conditionally enabled (menu) Editor object to the list of
+        monitored 'checked_when' objects.
         """
         try:
             self._checked.append(
@@ -653,8 +637,7 @@ class UI(HasPrivateTraits):
             # fixme: Log an error here...
 
     def do_undoable(self, action, *args, **kw):
-        """ Performs an action that can be undone.
-        """
+        """Performs an action that can be undone."""
         undoable = self._undoable
         try:
             if (undoable == -1) and (self.history is not None):
@@ -666,13 +649,11 @@ class UI(HasPrivateTraits):
                 self._undoable = -1
 
     def route_event(self, event):
-        """ Routes a "hooked" event to the correct handler method.
-        """
+        """Routes a "hooked" event to the correct handler method."""
         toolkit().route_event(self, event)
 
     def key_handler(self, event, skip=True):
-        """ Handles key events.
-        """
+        """Handles key events."""
         key_bindings = self.key_bindings
         handled = (key_bindings is not None) and key_bindings.do(
             event, [], self.info, recursive=(self.parent is None)
@@ -687,8 +668,7 @@ class UI(HasPrivateTraits):
         return handled
 
     def evaluate(self, function, *args, **kw_args):
-        """ Evaluates a specified function in the UI's **context**.
-        """
+        """Evaluates a specified function in the UI's **context**."""
         if function is None:
             return None
 
@@ -701,8 +681,8 @@ class UI(HasPrivateTraits):
         return eval(function, globals(), context)(*args, **kw_args)
 
     def eval_when(self, when, result=True):
-        """ Evaluates an expression in the UI's **context** and returns the
-            result.
+        """Evaluates an expression in the UI's **context** and returns the
+        result.
         """
         context = self._get_context(self.context)
         try:
@@ -717,8 +697,7 @@ class UI(HasPrivateTraits):
         return result
 
     def _get_context(self, context):
-        """ Gets the context to use for evaluating an expression.
-        """
+        """Gets the context to use for evaluating an expression."""
         name = "object"
         n = len(context)
         if (n == 2) and ("handler" in context):
@@ -740,14 +719,14 @@ class UI(HasPrivateTraits):
         return context2
 
     def _evaluate_when(self):
-        """ Set the 'visible', 'enabled', and 'checked' states for all Editors
-            controlled by a 'visible_when', 'enabled_when' or 'checked_when'
-            expression.
+        """Set the 'visible', 'enabled', and 'checked' states for all Editors
+        controlled by a 'visible_when', 'enabled_when' or 'checked_when'
+        expression.
         """
         self._do_evaluate_when(at_init=False)
 
     def _do_evaluate_when(self, at_init=False):
-        """ Set the 'visible', 'enabled', and 'checked' states for all Editors.
+        """Set the 'visible', 'enabled', and 'checked' states for all Editors.
 
         This function does the job of _evaluate_when. We define it here to
         work around the traits dispatching mechanism that automatically
@@ -762,7 +741,7 @@ class UI(HasPrivateTraits):
         self._evaluate_condition(self._checked, "checked", at_init)
 
     def _evaluate_condition(self, conditions, trait, at_init=False):
-        """ Evaluates a list of (eval, editor) pairs and sets a specified trait
+        """Evaluates a list of (eval, editor) pairs and sets a specified trait
         on each editor to reflect the Boolean value of the expression.
 
         1) All conditions are evaluated
@@ -830,7 +809,7 @@ class UI(HasPrivateTraits):
             setattr(editor, trait, True)
 
     def _get__groups(self):
-        """ Returns the top-level Groups for the view (after resolving
+        """Returns the top-level Groups for the view (after resolving
         Includes. (Implements the **_groups** property.)
         """
         if self._groups_cache is None:
@@ -910,8 +889,7 @@ class UI(HasPrivateTraits):
 
 class Dispatcher(object):
     def __init__(self, method, info, object, method_name):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         self.method = method
         self.info = info
         self.object = object
@@ -919,13 +897,11 @@ class Dispatcher(object):
         object.on_trait_change(self.dispatch, method_name, dispatch="ui")
 
     def dispatch(self):
-        """ Dispatches the method.
-        """
+        """Dispatches the method."""
         self.method(self.info)
 
     def remove(self):
-        """ Removes the dispatcher.
-        """
+        """Removes the dispatcher."""
         self.object.on_trait_change(
             self.dispatch, self.method_name, remove=True
         )

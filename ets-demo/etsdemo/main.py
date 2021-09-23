@@ -30,7 +30,7 @@ _THIS_PACKAGE, _ = __name__.split(".", 1)
 
 @contextlib.contextmanager
 def _set_logger(logger, level):
-    """ Context manager for setting logging.
+    """Context manager for setting logging.
 
     Parameters
     ----------
@@ -55,7 +55,7 @@ def _set_logger(logger, level):
 
 
 def _parse_command_line():
-    """ Parse command line arguments for the main function.
+    """Parse command line arguments for the main function.
 
     Returns
     -------
@@ -72,7 +72,8 @@ def _parse_command_line():
         default=logging.WARNING,
     )
     parser.add_argument(
-        '-v', '--verbose',
+        '-v',
+        '--verbose',
         help="Log information to console.",
         action="store_const",
         dest="log_level",
@@ -82,7 +83,7 @@ def _parse_command_line():
 
 
 def _create_demo(infos=None, title=_TITLE):
-    """ Create the demo object with everything setup ready to be launched.
+    """Create the demo object with everything setup ready to be launched.
 
     Parameters
     ----------
@@ -102,10 +103,7 @@ def _create_demo(infos=None, title=_TITLE):
     if infos is None:
         infos = get_responses()
 
-    resources = [
-        response_to_node(response)
-        for response in infos
-    ]
+    resources = [response_to_node(response) for response in infos]
     logger.info("Found %r resource(s).", len(resources))
     return Demo(
         title=title,
@@ -114,7 +112,7 @@ def _create_demo(infos=None, title=_TITLE):
 
 
 def main(infos=None, title=_TITLE):
-    """ Main function for launching the demo application.
+    """Main function for launching the demo application.
 
     Parameters
     ----------

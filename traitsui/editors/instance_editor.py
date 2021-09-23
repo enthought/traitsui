@@ -21,8 +21,7 @@ from traitsui.view import View, AKind
 
 
 class InstanceEditor(EditorFactory):
-    """ Editor factory for instance editors.
-    """
+    """Editor factory for instance editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

@@ -17,8 +17,7 @@ from traitsui.editor_factory import EditorWithListFactory
 
 
 class SetEditor(EditorWithListFactory):
-    """ Editor factory for editors for sets.
-    """
+    """Editor factory for editors for sets."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

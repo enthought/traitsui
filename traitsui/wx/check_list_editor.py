@@ -35,8 +35,7 @@ logger = logging.getLogger(__name__)
 
 
 class SimpleEditor(EditorWithList):
-    """ Simple style of editor for checklists, which displays a combo box.
-    """
+    """Simple style of editor for checklists, which displays a combo box."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -49,8 +48,8 @@ class SimpleEditor(EditorWithList):
     values = List()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.create_control(parent)
         super().init(parent)
@@ -61,16 +60,14 @@ class SimpleEditor(EditorWithList):
         super().dispose()
 
     def create_control(self, parent):
-        """ Creates the initial editor control.
-        """
+        """Creates the initial editor control."""
         self.control = wx.Choice(
             parent, -1, wx.Point(0, 0), wx.Size(100, 20), []
         )
         self.control.Bind(wx.EVT_CHOICE, self.update_object)
 
     def list_updated(self, values):
-        """ Handles updates to the list of legal checklist values.
-        """
+        """Handles updates to the list of legal checklist values."""
         sv = self.string_value
         if (len(values) > 0) and isinstance(values[0], str):
             values = [(x, sv(x, str.capitalize)) for x in values]
@@ -100,8 +97,7 @@ class SimpleEditor(EditorWithList):
         self.rebuild_editor()
 
     def rebuild_editor(self):
-        """ Rebuilds the editor after its definition is modified.
-        """
+        """Rebuilds the editor after its definition is modified."""
         control = self.control
         control.Clear()
         for name in self.names:
@@ -110,8 +106,7 @@ class SimpleEditor(EditorWithList):
         self.update_editor()
 
     def update_object(self, event):
-        """ Handles the user selecting a new value from the combo box.
-        """
+        """Handles the user selecting a new value from the combo box."""
         value = self.values[self.names.index(event.GetString())]
         if not isinstance(self.value, str):
             value = [value]
@@ -119,8 +114,8 @@ class SimpleEditor(EditorWithList):
         self.value = value
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         try:
             self.control.SetSelection(
@@ -136,19 +131,17 @@ class SimpleEditor(EditorWithList):
 
 
 class CustomEditor(SimpleEditor):
-    """ Custom style of editor for checklists, which displays a set of check
-        boxes.
+    """Custom style of editor for checklists, which displays a set of check
+    boxes.
     """
 
     def create_control(self, parent):
-        """ Creates the initial editor control.
-        """
+        """Creates the initial editor control."""
         # Create a panel to hold all of the check boxes
         self.control = panel = TraitsUIPanel(parent, -1)
 
     def rebuild_editor(self):
-        """ Rebuilds the editor after its definition is modified.
-        """
+        """Rebuilds the editor after its definition is modified."""
         panel = self.control
         panel.SetSizer(None)
         panel.DestroyChildren()
@@ -190,7 +183,9 @@ class CustomEditor(SimpleEditor):
                     control = wx.CheckBox(panel, -1, label)
                     control.value = value = values[index]
                     control.SetValue(value in cur_value)
-                    panel.Bind(wx.EVT_CHECKBOX, self.update_object, id=control.GetId())
+                    panel.Bind(
+                        wx.EVT_CHECKBOX, self.update_object, id=control.GetId()
+                    )
                     index += incr[j]
                     n -= 1
                 else:
@@ -217,8 +212,7 @@ class CustomEditor(SimpleEditor):
         panel.Refresh()
 
     def update_object(self, event):
-        """ Handles the user clicking one of the custom check boxes.
-        """
+        """Handles the user clicking one of the custom check boxes."""
         control = event.GetEventObject()
         cur_value = parse_value(self.value)
         if control.GetValue():
@@ -230,8 +224,8 @@ class CustomEditor(SimpleEditor):
         self.value = cur_value
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         new_values = parse_value(self.value)
         for control in self.control.GetChildren():
@@ -240,12 +234,10 @@ class CustomEditor(SimpleEditor):
 
 
 class TextEditor(BaseTextEditor):
-    """ Text style of editor for checklists, which displays a text field.
-    """
+    """Text style of editor for checklists, which displays a text field."""
 
     def update_object(self, event):
-        """ Handles the user changing the contents of the edit control.
-        """
+        """Handles the user changing the contents of the edit control."""
         try:
             value = self.control.GetValue()
             value = eval(value)
@@ -263,8 +255,7 @@ class TextEditor(BaseTextEditor):
 
 
 def parse_value(value):
-    """ Parses a value into a list.
-    """
+    """Parses a value into a list."""
     if value is None:
         return []
 

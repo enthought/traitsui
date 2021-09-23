@@ -19,8 +19,15 @@ from traitsui.toolkit import toolkit_object
 AspectRatio = Enum('keep', 'ignore', 'expand')
 PlayerState = Enum('stopped', 'playing', 'paused')
 MediaStatus = Enum(
-    'unknown', 'no_media', 'loading', 'loaded', 'stalled', 'buffering',
-    'buffered', 'end', 'invalid',
+    'unknown',
+    'no_media',
+    'loading',
+    'loaded',
+    'stalled',
+    'buffering',
+    'buffered',
+    'end',
+    'invalid',
 )
 
 
@@ -57,21 +64,25 @@ class VideoEditor(BasicEditorFactory):
     position = CVType(Float, default_value=0.0, sync_value='both')
 
     #: Duration of the loaded video in seconds
-    duration = Instance(ContextValue, args=('',),
-                        allow_none=False, sync_value='to')
+    duration = Instance(
+        ContextValue, args=('',), allow_none=False, sync_value='to'
+    )
 
     #: The status of the loaded video (see ``MediaStatus``)
-    media_status = Instance(ContextValue, args=('',),
-                            allow_none=False, sync_value='to')
+    media_status = Instance(
+        ContextValue, args=('',), allow_none=False, sync_value='to'
+    )
 
     #: An integer percentage representing how much of the player's buffer
     #: is filled.
-    buffer = Instance(ContextValue, args=('',),
-                      allow_none=False, sync_value='to')
+    buffer = Instance(
+        ContextValue, args=('',), allow_none=False, sync_value='to'
+    )
 
     #: A string describing an error encountered by the player
-    video_error = Instance(ContextValue, args=('',),
-                           allow_none=False, sync_value='to')
+    video_error = Instance(
+        ContextValue, args=('',), allow_none=False, sync_value='to'
+    )
 
     #: Callable to apply to video frames. Takes ref to new frame and a size
     #: tuple. Must return a QImage and a numpy array.
@@ -82,6 +93,5 @@ class VideoEditor(BasicEditorFactory):
     notify_interval = CVType(Float, default_value=1.0, sync_value='from')
 
     def _get_klass(self):
-        """ Returns the editor class to be instantiated.
-        """
+        """Returns the editor class to be instantiated."""
         return toolkit_object('video_editor:VideoEditor')

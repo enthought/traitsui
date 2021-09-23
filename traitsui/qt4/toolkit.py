@@ -24,7 +24,6 @@ the PyQt user interface toolkit.
 """
 
 
-
 # Make sure that importing from this backend is OK:
 from traitsui.toolkit import assert_toolkit_import
 
@@ -51,8 +50,8 @@ _QT_TRAITS_EVENT = QtCore.QEvent.Type(QtCore.QEvent.registerEventType())
 
 
 class _CallAfter(QtCore.QObject):
-    """ This class dispatches a handler so that it executes in the main GUI
-        thread (similar to the wx function).
+    """This class dispatches a handler so that it executes in the main GUI
+    thread (similar to the wx function).
     """
 
     # The list of pending calls.
@@ -62,8 +61,7 @@ class _CallAfter(QtCore.QObject):
     _calls_mutex = QtCore.QMutex()
 
     def __init__(self, handler, *args, **kwds):
-        """ Initialise the call.
-        """
+        """Initialise the call."""
         QtCore.QObject.__init__(self)
 
         # Save the details of the call.
@@ -86,8 +84,7 @@ class _CallAfter(QtCore.QObject):
         QtGui.QApplication.instance().postEvent(self, event)
 
     def event(self, event):
-        """ QObject event handler.
-        """
+        """QObject event handler."""
         if event.type() == _QT_TRAITS_EVENT:
             # Invoke the handler
             self._handler(*self._args, **self._kwds)
@@ -102,16 +99,15 @@ class _CallAfter(QtCore.QObject):
             return QtCore.QObject.event(self, event)
 
     def _finished(self):
-        """ Remove the call from the list, so it can be garbage collected.
-        """
+        """Remove the call from the list, so it can be garbage collected."""
         self._calls_mutex.lock()
         del self._calls[self._calls.index(self)]
         self._calls_mutex.unlock()
 
 
 def ui_handler(handler, *args, **kwds):
-    """ Handles UI notification handler requests that occur on a thread other
-        than the UI thread.
+    """Handles UI notification handler requests that occur on a thread other
+    than the UI thread.
     """
     _CallAfter(handler, *args, **kwds)
 
@@ -137,60 +133,59 @@ class _KeyEventHook(QtCore.QObject):
 
 
 class GUIToolkit(Toolkit):
-    """ Implementation class for PyQt toolkit.
-    """
+    """Implementation class for PyQt toolkit."""
 
     def ui_panel(self, ui, parent):
-        """ Creates a PyQt panel-based user interface using information
-            from the specified UI object.
+        """Creates a PyQt panel-based user interface using information
+        from the specified UI object.
         """
         from . import ui_panel
 
         ui_panel.ui_panel(ui, parent)
 
     def ui_subpanel(self, ui, parent):
-        """ Creates a PyQt subpanel-based user interface using information
-            from the specified UI object.
+        """Creates a PyQt subpanel-based user interface using information
+        from the specified UI object.
         """
         from . import ui_panel
 
         ui_panel.ui_subpanel(ui, parent)
 
     def ui_livemodal(self, ui, parent):
-        """ Creates a PyQt modal "live update" dialog user interface using
-            information from the specified UI object.
+        """Creates a PyQt modal "live update" dialog user interface using
+        information from the specified UI object.
         """
         from . import ui_live
 
         ui_live.ui_livemodal(ui, parent)
 
     def ui_live(self, ui, parent):
-        """ Creates a PyQt non-modal "live update" window user interface
-            using information from the specified UI object.
+        """Creates a PyQt non-modal "live update" window user interface
+        using information from the specified UI object.
         """
         from . import ui_live
 
         ui_live.ui_live(ui, parent)
 
     def ui_modal(self, ui, parent):
-        """ Creates a PyQt modal dialog user interface using information
-            from the specified UI object.
+        """Creates a PyQt modal dialog user interface using information
+        from the specified UI object.
         """
         from . import ui_modal
 
         ui_modal.ui_modal(ui, parent)
 
     def ui_nonmodal(self, ui, parent):
-        """ Creates a PyQt non-modal dialog user interface using
-            information from the specified UI object.
+        """Creates a PyQt non-modal dialog user interface using
+        information from the specified UI object.
         """
         from . import ui_modal
 
         ui_modal.ui_nonmodal(ui, parent)
 
     def ui_wizard(self, ui, parent):
-        """ Creates a PyQt wizard dialog user interface using information
-            from the specified UI object.
+        """Creates a PyQt wizard dialog user interface using information
+        from the specified UI object.
         """
         import ui_wizard
 
@@ -206,7 +201,7 @@ class GUIToolkit(Toolkit):
         scrollable=None,
         args=None,
     ):
-        """ Creates a PyQt modal dialog user interface that
+        """Creates a PyQt modal dialog user interface that
             runs as a complete application, using information from the
             specified View object.
 
@@ -244,8 +239,7 @@ class GUIToolkit(Toolkit):
         )
 
     def position(self, ui):
-        """ Positions the associated dialog window on the display.
-        """
+        """Positions the associated dialog window on the display."""
         view = ui.view
         window = ui.control
 
@@ -324,50 +318,44 @@ class GUIToolkit(Toolkit):
             window.setGeometry(max(0, x), max(0, y), width, height)
 
     def show_help(self, ui, control):
-        """ Shows a help window for a specified UI and control.
-        """
+        """Shows a help window for a specified UI and control."""
         from . import ui_panel
 
         ui_panel.show_help(ui, control)
 
     def save_window(self, ui):
-        """ Saves user preference information associated with a UI window.
-        """
+        """Saves user preference information associated with a UI window."""
         from . import helper
 
         helper.save_window(ui)
 
     def rebuild_ui(self, ui):
-        """ Rebuilds a UI after a change to the content of the UI.
-        """
+        """Rebuilds a UI after a change to the content of the UI."""
         if ui.control is not None:
             ui.recycle()
             ui.info.ui = ui
         ui.rebuild(ui, ui.parent)
 
     def set_title(self, ui):
-        """ Sets the title for the UI window.
-        """
+        """Sets the title for the UI window."""
         ui.control.setWindowTitle(ui.title)
 
     def set_icon(self, ui):
-        """ Sets the icon for the UI window.
-        """
+        """Sets the icon for the UI window."""
         from pyface.image_resource import ImageResource
 
         if isinstance(ui.icon, ImageResource):
             ui.control.setWindowIcon(ui.icon.create_icon())
 
     def key_event_to_name(self, event):
-        """ Converts a keystroke event into a corresponding key name.
-        """
+        """Converts a keystroke event into a corresponding key name."""
         from . import key_event_to_name
 
         return key_event_to_name.key_event_to_name(event)
 
     def hook_events(self, ui, control, events=None, handler=None):
-        """ Hooks all specified events for all controls in a UI so that they
-            can be routed to the correct event handler.
+        """Hooks all specified events for all controls in a UI so that they
+        can be routed to the correct event handler.
         """
         if events is None:
             # FIXME: Implement drag and drop events ala toolkit.py for wx
@@ -381,14 +369,13 @@ class GUIToolkit(Toolkit):
             control.installEventFilter(ui._key_event_hook)
 
     def skip_event(self, event):
-        """ Indicates that an event should continue to be processed by the
-            toolkit.
+        """Indicates that an event should continue to be processed by the
+        toolkit.
         """
         event.ignore()
 
     def destroy_control(self, control):
-        """ Destroys a specified GUI toolkit control.
-        """
+        """Destroys a specified GUI toolkit control."""
         # Block signals to prevent any editors from being updated (the control
         # will not be deleted immediately).
         control.blockSignals(True)
@@ -399,8 +386,8 @@ class GUIToolkit(Toolkit):
         control.deleteLater()
 
     def destroy_children(self, control):
-        """ Destroys all of the child controls of a specified GUI toolkit
-            control.
+        """Destroys all of the child controls of a specified GUI toolkit
+        control.
         """
         for w in control.children():
             # Only destroy widgets.
@@ -410,18 +397,18 @@ class GUIToolkit(Toolkit):
                 w.deleteLater()
 
     def image_size(self, image):
-        """ Returns a ( width, height ) tuple containing the size of a
-            specified toolkit image.
+        """Returns a ( width, height ) tuple containing the size of a
+        specified toolkit image.
         """
         return (image.width(), image.height())
 
     def constants(self):
-        """ Returns a dictionary of useful constants.
+        """Returns a dictionary of useful constants.
 
-            Currently, the dictionary should have the following key/value pairs:
+        Currently, the dictionary should have the following key/value pairs:
 
-            - 'WindowColor': the standard window background color in the toolkit
-              specific color format.
+        - 'WindowColor': the standard window background color in the toolkit
+          specific color format.
         """
         return {
             "WindowColor": QtGui.QApplication.palette().color(

@@ -18,17 +18,16 @@ from .editor import Editor
 
 
 class NullEditor(Editor):
-    """ A completely empty editor.
-    """
+    """A completely empty editor."""
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = QtGui.QWidget()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         pass

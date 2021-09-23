@@ -29,8 +29,8 @@ logger = logging.getLogger(__name__)
 
 
 class DelegatingHandler(Handler):
-    """ A handler that delegates the handling of events to a set of
-        sub-handlers.
+    """A handler that delegates the handling of events to a set of
+    sub-handlers.
     """
 
     # -- Public 'DelegatingHandler' Interface ---------------------------------
@@ -50,16 +50,16 @@ class DelegatingHandler(Handler):
     # -- Public Methods -------------------------------------------------------
 
     def closed(self, info, is_ok):
-        """ Handles the user interface being closed by the user.
+        """Handles the user interface being closed by the user.
 
-            This method is overridden here to unregister any dispatchers that
-            were set up in the *init()* method.
+        This method is overridden here to unregister any dispatchers that
+        were set up in the *init()* method.
         """
         for d in self._dispatchers:
             d.remove()
 
     def init(self, info):
-        """ Initializes the controls of a user interface.
+        """Initializes the controls of a user interface.
 
         This method is called after all user interface elements have been
         created, but before the user interface is displayed. Use this method to
@@ -103,7 +103,7 @@ class DelegatingHandler(Handler):
                                 "\tto method [%s] on handler[%s]", name, h
                             )
                             method = getattr(h, name)
-                            trait_name = prefix[col + 1:]
+                            trait_name = prefix[col + 1 :]
                             self._dispatchers.append(
                                 Dispatcher(method, info, object, trait_name)
                             )
@@ -143,8 +143,7 @@ class DelegatingHandler(Handler):
         return True
 
     def _create_delegate(self, h, name):
-        """ Quick fix for handler methods that are currently left out!
-        """
+        """Quick fix for handler methods that are currently left out!"""
 
         def delegate(*args, **kw):
             method = getattr(h, name)

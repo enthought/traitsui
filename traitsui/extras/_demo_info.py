@@ -16,7 +16,7 @@ import pkg_resources
 
 
 def info(request):
-    """ Return a configuration for contributing demo examples to the
+    """Return a configuration for contributing demo examples to the
     Demo application.
 
     Parameters

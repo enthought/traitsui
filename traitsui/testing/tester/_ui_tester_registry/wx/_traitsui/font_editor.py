@@ -15,7 +15,7 @@ from traitsui.wx.font_editor import TextFontEditor
 
 
 def register(registry):
-    """ Register interactions pertaining to (wx) FontEditor for the given
+    """Register interactions pertaining to (wx) FontEditor for the given
     registry.
 
     Parameters

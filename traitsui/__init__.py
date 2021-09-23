@@ -23,12 +23,13 @@ __extras_require__ = {
     "docs": ["enthought-sphinx-theme", "sphinx"],
     "demo": [
         # to be deprecated, see enthought/traitsui#950
-        "configobj", "docutils",
+        "configobj",
+        "docutils",
     ],
     "examples": [
         # Dependencies for examples
         "apptools",
-        "chaco",   # for a very simple example, see enthought/traitsui#1139
+        "chaco",  # for a very simple example, see enthought/traitsui#1139
         "h5py",
         "numpy",
         "pandas",
@@ -38,20 +39,20 @@ __extras_require__ = {
         # Optional dependencies for certain editors which may not be needed by
         # projects. If they are absent, ``traitsui.api``` should still be
         # importable and the relevant tests should be skipped.
-        "numpy",   # For ArrayEditor and DataFrameEditor
+        "numpy",  # For ArrayEditor and DataFrameEditor
         "pandas",  # For DataFrameEditor
     ],
     "test": [
         # Dependencies for running test suites.
         "packaging",
-        "numpy"
+        "numpy",
     ],
 }
 
 
 # ============================= Test Loader ==================================
 def load_tests(loader, standard_tests, pattern):
-    """ Custom test loading function that enables test filtering using regex
+    """Custom test loading function that enables test filtering using regex
     exclusion pattern.
 
     Parameters
@@ -76,6 +77,7 @@ def load_tests(loader, standard_tests, pattern):
 
     # Make sure the right toolkit is up and running before importing tests
     from traitsui.toolkit import toolkit
+
     toolkit()
 
     if ETSConfig.toolkit.startswith("qt"):

@@ -23,7 +23,6 @@ bill = Person()
 
 
 class TraitApp(wx.App):
-
     def __init__(self, object, view):
         self.object = object
         self.view = view

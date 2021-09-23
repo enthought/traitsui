@@ -32,8 +32,7 @@ CompletionMode = Enum("inline", "popup")
 
 
 class EnumEditor(EditorWithListFactory):
-    """ Editor factory for enumeration editors.
-    """
+    """Editor factory for enumeration editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -59,7 +58,7 @@ class EnumEditor(EditorWithListFactory):
     # -------------------------------------------------------------------------
 
     def _get_custom_editor_class(self):
-        """ Returns the editor class to use for "custom" style views.
+        """Returns the editor class to use for "custom" style views.
         Overridden to return the editor class for the specified mode.
         """
         editor_file_name = os.path.basename(

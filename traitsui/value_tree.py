@@ -32,8 +32,7 @@ from .editors.tree_editor import TreeEditor
 
 
 class SingleValueTreeNodeObject(TreeNodeObject):
-    """ A tree node for objects of types that have a single value.
-    """
+    """A tree node for objects of types that have a single value."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -55,55 +54,51 @@ class SingleValueTreeNodeObject(TreeNodeObject):
     readonly = Bool(False)
 
     def tno_allows_children(self, node):
-        """ Returns whether this object can have children (False for this
+        """Returns whether this object can have children (False for this
         class).
         """
         return False
 
     def tno_has_children(self, node):
-        """ Returns whether the object has children (False for this class).
-        """
+        """Returns whether the object has children (False for this class)."""
         return False
 
     def tno_can_rename(self, node):
-        """ Returns whether the object's children can be renamed (False for
+        """Returns whether the object's children can be renamed (False for
         this class).
         """
         return False
 
     def tno_can_copy(self, node):
-        """ Returns whether the object's children can be copied (True for this
+        """Returns whether the object's children can be copied (True for this
         class).
         """
         return True
 
     def tno_can_delete(self, node):
-        """ Returns whether the object's children can be deleted (False for
+        """Returns whether the object's children can be deleted (False for
         this class).
         """
         return False
 
     def tno_can_insert(self, node):
-        """ Returns whether the object's children can be inserted (False,
+        """Returns whether the object's children can be inserted (False,
         meaning children are appended, for this class).
         """
         return False
 
     def tno_get_icon(self, node, is_expanded):
-        """ Returns the icon for a specified object.
-        """
+        """Returns the icon for a specified object."""
         return "@icons:%s_node" % self.__class__.__name__[:-4].lower()
 
     def tno_set_label(self, node, label):
-        """ Sets the label for a specified object.
-        """
+        """Sets the label for a specified object."""
         if label == "?":
             label = ""
         self.label = label
 
     def tno_get_label(self, node):
-        """ Gets the label to display for a specified object.
-        """
+        """Gets the label to display for a specified object."""
         if self.label != "":
             return self.label
 
@@ -113,13 +108,11 @@ class SingleValueTreeNodeObject(TreeNodeObject):
         return "%s: %s" % (self.name, self.format_value(self.value))
 
     def format_value(self, value):
-        """ Returns the formatted version of the value.
-        """
+        """Returns the formatted version of the value."""
         return repr(value)
 
     def node_for(self, name, value):
-        """ Returns the correct node type for a specified value.
-        """
+        """Returns the correct node type for a specified value."""
         for type, node in basic_types():
             if isinstance(value, type):
                 break
@@ -137,27 +130,22 @@ class SingleValueTreeNodeObject(TreeNodeObject):
 
 
 class MultiValueTreeNodeObject(SingleValueTreeNodeObject):
-    """ A tree node for objects of types that have multiple values.
-    """
+    """A tree node for objects of types that have multiple values."""
 
     def tno_allows_children(self, node):
-        """ Returns whether this object can have children (True for this class).
-        """
+        """Returns whether this object can have children (True for this class)."""
         return True
 
     def tno_has_children(self, node):
-        """ Returns whether the object has children (True for this class).
-        """
+        """Returns whether the object has children (True for this class)."""
         return True
 
 
 class StringNode(SingleValueTreeNodeObject):
-    """ A tree node for strings.
-    """
+    """A tree node for strings."""
 
     def format_value(self, value):
-        """ Returns the formatted version of the value.
-        """
+        """Returns the formatted version of the value."""
         n = len(value)
         if len(value) > 80:
             value = "%s...%s" % (value[:42], value[-35:])
@@ -166,42 +154,37 @@ class StringNode(SingleValueTreeNodeObject):
 
 
 class NoneNode(SingleValueTreeNodeObject):
-    """ A tree node for None values.
-    """
+    """A tree node for None values."""
 
     pass
 
 
 class BoolNode(SingleValueTreeNodeObject):
-    """ A tree node for Boolean values.
-    """
+    """A tree node for Boolean values."""
 
     pass
 
 
 class IntNode(SingleValueTreeNodeObject):
-    """ A tree node for integer values.
-    """
+    """A tree node for integer values."""
 
     pass
 
 
 class FloatNode(SingleValueTreeNodeObject):
-    """ A tree node for floating point values.
-    """
+    """A tree node for floating point values."""
 
     pass
 
 
 class ComplexNode(SingleValueTreeNodeObject):
-    """ A tree node for complex number values.
-    """
+    """A tree node for complex number values."""
 
     pass
 
 
 class OtherNode(SingleValueTreeNodeObject):
-    """ A tree node for single-value types for which there is not another
+    """A tree node for single-value types for which there is not another
     node type.
     """
 
@@ -209,23 +192,20 @@ class OtherNode(SingleValueTreeNodeObject):
 
 
 class TupleNode(MultiValueTreeNodeObject):
-    """ A tree node for tuples.
-    """
+    """A tree node for tuples."""
 
     def format_value(self, value):
-        """ Returns the formatted version of the value.
-        """
+        """Returns the formatted version of the value."""
         return "Tuple(%d)" % len(value)
 
     def tno_has_children(self, node):
-        """ Returns whether the object has children, based on the length of
-            the tuple.
+        """Returns whether the object has children, based on the length of
+        the tuple.
         """
         return len(self.value) > 0
 
     def tno_get_children(self, node):
-        """ Gets the object's children.
-        """
+        """Gets the object's children."""
         node_for = self.node_for
         value = self.value
         if len(value) > 500:
@@ -239,58 +219,48 @@ class TupleNode(MultiValueTreeNodeObject):
 
 
 class ListNode(TupleNode):
-    """ A tree node for lists.
-    """
+    """A tree node for lists."""
 
     def format_value(self, value):
-        """ Returns the formatted version of the value.
-        """
+        """Returns the formatted version of the value."""
         return "List(%d)" % len(value)
 
     def tno_can_delete(self, node):
-        """ Returns whether the object's children can be deleted.
-        """
+        """Returns whether the object's children can be deleted."""
         return not self.readonly
 
     def tno_can_insert(self, node):
-        """ Returns whether the object's children can be inserted (vs.
+        """Returns whether the object's children can be inserted (vs.
         appended).
         """
         return not self.readonly
 
 
 class SetNode(ListNode):
-    """ A tree node for sets.
-    """
+    """A tree node for sets."""
 
     def format_value(self, value):
-        """ Returns the formatted version of the value.
-        """
+        """Returns the formatted version of the value."""
         return "Set(%d)" % len(value)
 
 
 class ArrayNode(TupleNode):
-    """ A tree node for arrays.
-    """
+    """A tree node for arrays."""
 
     def format_value(self, value):
-        """ Returns the formatted version of the value.
-        """
+        """Returns the formatted version of the value."""
         return "Array(%s)" % ",".join([str(n) for n in value.shape])
 
 
 class DictNode(TupleNode):
-    """ A tree node for dictionaries.
-    """
+    """A tree node for dictionaries."""
 
     def format_value(self, value):
-        """ Returns the formatted version of the value.
-        """
+        """Returns the formatted version of the value."""
         return "Dict(%d)" % len(value)
 
     def tno_get_children(self, node):
-        """ Gets the object's children.
-        """
+        """Gets the object's children."""
         node_for = self.node_for
         items = [(repr(k), v) for k, v in self.value.items()]
         items.sort(key=itemgetter(0))
@@ -304,18 +274,15 @@ class DictNode(TupleNode):
         return [node_for("[%s]" % k, v) for k, v in items]
 
     def tno_can_delete(self, node):
-        """ Returns whether the object's children can be deleted.
-        """
+        """Returns whether the object's children can be deleted."""
         return not self.readonly
 
 
 class FunctionNode(SingleValueTreeNodeObject):
-    """ A tree node for functions
-    """
+    """A tree node for functions"""
 
     def format_value(self, value):
-        """ Returns the formatted version of the value.
-        """
+        """Returns the formatted version of the value."""
         return "Function %s()" % (value.__name__)
 
 
@@ -326,8 +293,7 @@ class FunctionNode(SingleValueTreeNodeObject):
 
 class MethodNode(MultiValueTreeNodeObject):
     def format_value(self, value):
-        """ Returns the formatted version of the value.
-        """
+        """Returns the formatted version of the value."""
         type = "B"
         if value.__self__ is None:
             type = "Unb"
@@ -339,23 +305,19 @@ class MethodNode(MultiValueTreeNodeObject):
         )
 
     def tno_has_children(self, node):
-        """ Returns whether the object has children.
-        """
+        """Returns whether the object has children."""
         return self.value.__func__ is not None
 
     def tno_get_children(self, node):
-        """ Gets the object's children.
-        """
+        """Gets the object's children."""
         return [self.node_for("Object", self.value.__self__)]
 
 
 class ObjectNode(MultiValueTreeNodeObject):
-    """ A tree node for objects.
-    """
+    """A tree node for objects."""
 
     def format_value(self, value):
-        """ Returns the formatted version of the value.
-        """
+        """Returns the formatted version of the value."""
         try:
             klass = value.__class__.__name__
         except:
@@ -363,43 +325,36 @@ class ObjectNode(MultiValueTreeNodeObject):
         return "%s(0x%08X)" % (klass, id(value))
 
     def tno_has_children(self, node):
-        """ Returns whether the object has children.
-        """
+        """Returns whether the object has children."""
         try:
             return len(self.value.__dict__) > 0
         except:
             return False
 
     def tno_get_children(self, node):
-        """ Gets the object's children.
-        """
+        """Gets the object's children."""
         items = [(k, v) for k, v in self.value.__dict__.items()]
         items.sort(key=itemgetter(0))
         return [self.node_for("." + k, v) for k, v in items]
 
 
 class ClassNode(ObjectNode):
-    """ A tree node for classes.
-    """
+    """A tree node for classes."""
 
     def format_value(self, value):
-        """ Returns the formatted version of the value.
-        """
+        """Returns the formatted version of the value."""
         return value.__name__
 
 
 class TraitsNode(ObjectNode):
-    """ A tree node for traits.
-    """
+    """A tree node for traits."""
 
     def tno_has_children(self, node):
-        """ Returns whether the object has children.
-        """
+        """Returns whether the object has children."""
         return len(self._get_names()) > 0
 
     def tno_get_children(self, node):
-        """ Gets the object's children.
-        """
+        """Gets the object's children."""
         names = sorted(self._get_names())
         value = self.value
         node_for = self.node_for
@@ -414,8 +369,7 @@ class TraitsNode(ObjectNode):
         return nodes
 
     def _get_names(self):
-        """ Gets the names of all defined traits or attributes.
-        """
+        """Gets the names of all defined traits or attributes."""
         value = self.value
         names = {}
         for name in value.trait_names(type=lambda x: x != "event"):
@@ -425,7 +379,7 @@ class TraitsNode(ObjectNode):
         return list(names.keys())
 
     def tno_when_children_replaced(self, node, listener, remove):
-        """ Sets up or removes a listener for children being replaced on a
+        """Sets up or removes a listener for children being replaced on a
         specified object.
         """
         self._listener = listener
@@ -437,24 +391,21 @@ class TraitsNode(ObjectNode):
         self._listener(self)
 
     def tno_when_children_changed(self, node, listener, remove):
-        """ Sets up or removes a listener for children being changed on a
+        """Sets up or removes a listener for children being changed on a
         specified object.
         """
         pass
 
 
 class RootNode(MultiValueTreeNodeObject):
-    """ A root node.
-    """
+    """A root node."""
 
     def format_value(self, value):
-        """ Returns the formatted version of the value.
-        """
+        """Returns the formatted version of the value."""
         return ""
 
     def tno_get_children(self, node):
-        """ Gets the object's children.
-        """
+        """Gets the object's children."""
         return [self.node_for("", self.value)]
 
 

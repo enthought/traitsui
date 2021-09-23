@@ -36,8 +36,7 @@ from .helper import restore_window, save_window
 
 
 class ButtonEditor(Editor):
-    """ Editor for buttons.
-    """
+    """Editor for buttons."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -51,15 +50,13 @@ class ButtonEditor(Editor):
         HasPrivateTraits.__init__(self, **traits)
 
     def perform(self):
-        """ Handles the associated button being clicked.
-        """
+        """Handles the associated button being clicked."""
         handler = self.ui.handler
         self.ui.do_undoable(handler.perform, self.ui.info, self.action, None)
 
 
 class BasePanel(_BasePanel):
-    """Base class for Traits UI panels.
-    """
+    """Base class for Traits UI panels."""
 
     def add_button(
         self,
@@ -71,8 +68,7 @@ class BasePanel(_BasePanel):
         name=None,
         default=False,
     ):
-        """ Creates a button.
-        """
+        """Creates a button."""
         ui = self.ui
         if (action.defined_when != "") and (
             not ui.eval_when(action.defined_when)
@@ -106,20 +102,17 @@ class BasePanel(_BasePanel):
         return button
 
     def _on_undoable(self, event):
-        """Handles a change to the "undoable" state of the undo history
-        """
+        """Handles a change to the "undoable" state of the undo history"""
         state = event.new
         self.undo.setEnabled(state)
 
     def _on_redoable(self, event):
-        """Handles a change to the "redoable" state of the undo history.
-        """
+        """Handles a change to the "redoable" state of the undo history."""
         state = event.new
         self.redo.setEnabled(state)
 
     def _on_revertable(self, event):
-        """ Handles a change to the "revert" state.
-        """
+        """Handles a change to the "revert" state."""
         state = event.new
         self.revert.setEnabled(state)
 
@@ -197,8 +190,7 @@ class _StickyDialog(QtGui.QDialog):
         QtGui.QDialog.keyPressEvent(self, e)
 
     def sizeHint(self):
-        """Reimplemented to provide an appropriate size hint for the window.
-        """
+        """Reimplemented to provide an appropriate size hint for the window."""
         size = QtGui.QDialog.sizeHint(self)
         view = self._ui.view
         if view.width > 0:
@@ -339,8 +331,7 @@ class BaseDialog(BasePanel):
         self.ok.setEnabled(errors == 0)
 
     def _add_menubar(self):
-        """Adds a menu bar to the dialog.
-        """
+        """Adds a menu bar to the dialog."""
         menubar = self.ui.view.menubar
         if menubar is not None:
             self._last_group = self._last_parent = None
@@ -350,8 +341,7 @@ class BaseDialog(BasePanel):
             self._last_group = self._last_parent = None
 
     def _add_toolbar(self):
-        """ Adds a toolbar to the dialog.
-        """
+        """Adds a toolbar to the dialog."""
         toolbar = self.ui.view.toolbar
         if toolbar is not None:
             self._last_group = self._last_parent = None
@@ -361,8 +351,7 @@ class BaseDialog(BasePanel):
             self._last_group = self._last_parent = None
 
     def _add_statusbar(self):
-        """ Adds a statusbar to the dialog.
-        """
+        """Adds a statusbar to the dialog."""
         if self.ui.view.statusbar is not None:
             control = QtGui.QStatusBar()
             control.setSizeGripEnabled(self.ui.view.resizable)
@@ -397,8 +386,7 @@ class BaseDialog(BasePanel):
             self.ui._statusbar = listeners
 
     def _set_status_text(self, control):
-        """ Helper function for _add_statusbar.
-        """
+        """Helper function for _add_statusbar."""
 
         def set_status_text(event):
             text = event.new

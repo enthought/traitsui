@@ -28,7 +28,7 @@ from ._control_widget_registry import get_widget_registry
 
 
 def get_default_registries():
-    """ Creates the default registries for UITester that are wx specific.
+    """Creates the default registries for UITester that are wx specific.
 
     Returns
     -------

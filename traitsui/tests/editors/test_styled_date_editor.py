@@ -46,7 +46,6 @@ def get_example_model():
 # StyledDateEditor is currently only implemented for Qt
 @requires_toolkit([ToolkitName.qt])
 class TestStyledDateEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -66,6 +65,5 @@ class TestStyledDateEditor(BaseTestMixin, unittest.TestCase):
                 style="custom",
             )
         )
-        with reraise_exceptions(), \
-                create_ui(instance, dict(view=view)):
+        with reraise_exceptions(), create_ui(instance, dict(view=view)):
             pass

@@ -30,8 +30,7 @@ content_trait = Dict(str, ViewElement)
 
 
 class ViewElements(HasStrictTraits):
-    """ Defines a hierarchical name space of related ViewElement objects.
-    """
+    """Defines a hierarchical name space of related ViewElement objects."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -41,8 +40,8 @@ class ViewElements(HasStrictTraits):
     content = content_trait
 
     def find(self, name, stack=None):
-        """ Finds a specified ViewElement within the specified (optional) search
-            context.
+        """Finds a specified ViewElement within the specified (optional) search
+        context.
         """
         # Assume search starts from the beginning the of the search order:
         i = 0
@@ -74,8 +73,8 @@ class ViewElements(HasStrictTraits):
         return None
 
     def filter_by(self, klass=None):
-        """ Returns a sorted list of all names accessible from the ViewElements
-            object that are of a specified (ViewElement) type.
+        """Returns a sorted list of all names accessible from the ViewElements
+        object that are of a specified (ViewElement) type.
         """
         if klass is None:
             from . import view
@@ -145,8 +144,7 @@ class ViewElements(HasStrictTraits):
                     del seq[0]
 
     def __repr__(self):
-        """ Returns a "pretty print" version of the ViewElements object.
-        """
+        """Returns a "pretty print" version of the ViewElements object."""
         return self.content.__repr__()
 
 

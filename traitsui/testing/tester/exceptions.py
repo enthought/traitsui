@@ -13,18 +13,19 @@
 
 
 class TesterError(Exception):
-    """ Custom exception for UITester/UIWrapper. """
+    """Custom exception for UITester/UIWrapper."""
+
     pass
 
 
 class Disabled(TesterError):
-    """ Raised when a simulation fails because the widget is disabled.
-    """
+    """Raised when a simulation fails because the widget is disabled."""
+
     pass
 
 
 class InteractionNotSupported(TesterError):
-    """ Raised when an interaction is not supported by a wrapper.
+    """Raised when an interaction is not supported by a wrapper.
 
     Parameters
     ----------
@@ -51,7 +52,7 @@ class InteractionNotSupported(TesterError):
 
 
 class LocationNotSupported(TesterError):
-    """ Raised when attempt to resolve a location on a UI fails
+    """Raised when attempt to resolve a location on a UI fails
     because the location type is not supported.
     """
 

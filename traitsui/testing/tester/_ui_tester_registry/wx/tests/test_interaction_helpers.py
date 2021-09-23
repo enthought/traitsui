@@ -30,7 +30,6 @@ except ImportError:
 
 @requires_toolkit([ToolkitName.wx])
 class TestInteractions(unittest.TestCase):
-
     def setUp(self):
         self.frame = wx.Frame(None)
         self.frame.Show()
@@ -75,7 +74,8 @@ class TestInteractions(unittest.TestCase):
         textbox.Bind(wx.EVT_TEXT, handler)
 
         _interaction_helpers.key_sequence_text_ctrl(
-            textbox, command.KeySequence("abc"), 0)
+            textbox, command.KeySequence("abc"), 0
+        )
 
         self.assertEqual(textbox.GetValue(), "123abc")
         self.assertEqual(handler.call_count, 3)
@@ -120,7 +120,8 @@ class TestInteractions(unittest.TestCase):
 
         with self.assertRaises(Disabled):
             _interaction_helpers.key_sequence_text_ctrl(
-                textbox, command.KeySequence("abc"), 0)
+                textbox, command.KeySequence("abc"), 0
+            )
 
     def test_key_click(self):
         textbox = wx.TextCtrl(self.frame)
@@ -128,7 +129,8 @@ class TestInteractions(unittest.TestCase):
         textbox.Bind(wx.EVT_TEXT, handler)
 
         _interaction_helpers.key_click_text_entry(
-            textbox, command.KeyClick("A"), 0)
+            textbox, command.KeyClick("A"), 0
+        )
 
         self.assertEqual(textbox.Value, "A")
         self.assertEqual(handler.call_count, 1)
@@ -140,7 +142,8 @@ class TestInteractions(unittest.TestCase):
         textbox.Bind(wx.EVT_TEXT, handler)
 
         _interaction_helpers.key_click_text_entry(
-            textbox, command.KeyClick("Backspace"), 0)
+            textbox, command.KeyClick("Backspace"), 0
+        )
 
         self.assertEqual(textbox.Value, "")
         self.assertEqual(handler.call_count, 1)
@@ -157,7 +160,8 @@ class TestInteractions(unittest.TestCase):
         textbox.Bind(wx.EVT_TEXT, handler)
 
         _interaction_helpers.key_click_text_entry(
-            textbox, command.KeyClick("Backspace"), 0)
+            textbox, command.KeyClick("Backspace"), 0
+        )
 
         self.assertEqual(textbox.Value, "E")
         self.assertEqual(handler.call_count, 1)
@@ -171,9 +175,11 @@ class TestInteractions(unittest.TestCase):
         self.assertEqual(textbox.GetInsertionPoint(), 0)
 
         _interaction_helpers.key_click_text_entry(
-            textbox, command.KeyClick("End"), 0)
+            textbox, command.KeyClick("End"), 0
+        )
         _interaction_helpers.key_click_text_entry(
-            textbox, command.KeyClick("F"), 0)
+            textbox, command.KeyClick("F"), 0
+        )
 
         self.assertEqual(textbox.Value, "ABCDEF")
 
@@ -183,14 +189,16 @@ class TestInteractions(unittest.TestCase):
 
         with self.assertRaises(Disabled):
             _interaction_helpers.key_click_text_entry(
-                textbox, command.KeyClick("Enter"), 0)
+                textbox, command.KeyClick("Enter"), 0
+            )
 
     def test_key_click_slider_helpful_err(self):
         slider = wx.Slider()
         with self.assertRaises(ValueError) as exc:
             _interaction_helpers.key_click_slider(
-                slider, command.KeyClick("Enter"), 0)
+                slider, command.KeyClick("Enter"), 0
+            )
         self.assertIn(
             "['Down', 'Left', 'Page Down', 'Page Up', 'Right', 'Up']",
-            str(exc.exception)
+            str(exc.exception),
         )

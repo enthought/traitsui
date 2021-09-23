@@ -16,7 +16,7 @@ from traitsui.table_column import ObjectColumn
 
 
 class ProgressColumn(ObjectColumn):
-    """ A column which displays trait values as a progress bar
+    """A column which displays trait values as a progress bar
 
     Progress values must be an integer value between the maximum and minimum
     values.  By default it is assumed to be a percentage.
@@ -39,6 +39,7 @@ class ProgressColumn(ObjectColumn):
         super().__init__(**traits)
 
         from traitsui.toolkit import toolkit_object
+
         ProgressRenderer = toolkit_object(
             'extra.progress_renderer:ProgressRenderer'
         )
@@ -46,8 +47,7 @@ class ProgressColumn(ObjectColumn):
         self.renderer = ProgressRenderer()
 
     def is_editable(self, object):
-        """ Returns whether the column is editable for a specified object.
-        """
+        """Returns whether the column is editable for a specified object."""
         # Progress columns are always read-only
         return False
 
@@ -58,7 +58,7 @@ class ProgressColumn(ObjectColumn):
         return self.maximum
 
     def get_text_visible(self):
-        """ Whether or not to display text in column.
+        """Whether or not to display text in column.
 
         Note, may not render on some platforms (eg. OS X) due to
         the rendering style.

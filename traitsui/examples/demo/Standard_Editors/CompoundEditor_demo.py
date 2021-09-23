@@ -34,8 +34,7 @@ from traitsui.api import Item, Group, View
 
 # Define the demo class:
 class CompoundEditorDemo(HasTraits):
-    """ Defines the main CompoundEditor demo class.
-    """
+    """Defines the main CompoundEditor demo class."""
 
     # Define a compound trait to view:
     compound_trait = Union(
@@ -50,15 +49,12 @@ class CompoundEditorDemo(HasTraits):
         Item('_'),
         Item('compound_trait', style='text', label='Text'),
         Item('_'),
-        Item('compound_trait', style='readonly', label='ReadOnly')
+        Item('compound_trait', style='readonly', label='ReadOnly'),
     )
 
     # Demo view:
     traits_view = View(
-        comp_group,
-        title='CompoundEditor',
-        buttons=['OK'],
-        resizable=True
+        comp_group, title='CompoundEditor', buttons=['OK'], resizable=True
     )
 
 

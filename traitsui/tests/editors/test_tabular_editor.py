@@ -89,10 +89,10 @@ def get_view(multi_select=False):
 
 
 def get_selected_rows(editor):
-    """ Returns a list of all currently selected rows.
-    """
+    """Returns a list of all currently selected rows."""
     if is_wx():
         import wx
+
         # "item" in this context means "row number"
         item = -1
         selected = []
@@ -114,8 +114,7 @@ def get_selected_rows(editor):
 
 
 def set_selected_single(editor, row):
-    """ Selects a specified row in an editor with multi_select=False.
-    """
+    """Selects a specified row in an editor with multi_select=False."""
     if is_wx():
         editor.control.Select(row)
 
@@ -134,7 +133,7 @@ def set_selected_single(editor, row):
 
 
 def set_selected_multiple(editor, rows):
-    """ Clears old selection and selects specified rows in an editor
+    """Clears old selection and selects specified rows in an editor
     with multi_select=True.
     """
     if is_wx():
@@ -159,8 +158,7 @@ def set_selected_multiple(editor, rows):
 
 
 def clear_selection(editor):
-    """ Clears existing selection.
-    """
+    """Clears existing selection."""
     if is_wx():
         import wx
 
@@ -180,7 +178,6 @@ def clear_selection(editor):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -190,8 +187,10 @@ class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
     @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_tabular_editor_single_selection(self):
 
-        with reraise_exceptions(), \
-                self.report_and_editor(get_view()) as (report, editor):
+        with reraise_exceptions(), self.report_and_editor(get_view()) as (
+            report,
+            editor,
+        ):
             process_cascade_events()
             people = report.people
 
@@ -216,8 +215,10 @@ class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
     def test_tabular_editor_multi_selection(self):
         view = get_view(multi_select=True)
 
-        with reraise_exceptions(), \
-                self.report_and_editor(view) as (report, editor):
+        with reraise_exceptions(), self.report_and_editor(view) as (
+            report,
+            editor,
+        ):
             process_cascade_events()
             people = report.people
 
@@ -245,8 +246,10 @@ class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
     @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_tabular_editor_single_selection_changed(self):
 
-        with reraise_exceptions(), \
-                self.report_and_editor(get_view()) as (report, editor):
+        with reraise_exceptions(), self.report_and_editor(get_view()) as (
+            report,
+            editor,
+        ):
             process_cascade_events()
             people = report.people
 
@@ -282,8 +285,10 @@ class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
     def test_tabular_editor_multi_selection_changed(self):
         view = get_view(multi_select=True)
 
-        with reraise_exceptions(), \
-                self.report_and_editor(view) as (report, editor):
+        with reraise_exceptions(), self.report_and_editor(view) as (
+            report,
+            editor,
+        ):
             process_cascade_events()
             people = report.people
 
@@ -320,8 +325,10 @@ class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
     def test_tabular_editor_multi_selection_items_changed(self):
         view = get_view(multi_select=True)
 
-        with reraise_exceptions(), \
-                self.report_and_editor(view) as (report, editor):
+        with reraise_exceptions(), self.report_and_editor(view) as (
+            report,
+            editor,
+        ):
             process_cascade_events()
             people = report.people
 
@@ -393,12 +400,15 @@ class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
     @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
     def test_adapter_columns_changes(self):
         # Regression test for enthought/traitsui#894
-        with reraise_exceptions(), \
-                self.report_and_editor(get_view()) as (report, editor):
+        with reraise_exceptions(), self.report_and_editor(get_view()) as (
+            report,
+            editor,
+        ):
 
             # Reproduce the scenario when the column count is reduced.
             editor.adapter.columns = [
-                ("Name", "name"), ("Age", "age"),
+                ("Name", "name"),
+                ("Age", "age"),
             ]
             # Recalculating column widths take into account the user defined
             # widths, cached in the view. The cache should be invalidated
@@ -413,8 +423,10 @@ class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
         # using it while resizing the columns.
         # The resize event is processed after UI.dispose is called.
         # Maybe related to enthought/traits#431
-        with reraise_exceptions(), \
-                self.report_and_editor(get_view()) as (_, editor):
+        with reraise_exceptions(), self.report_and_editor(get_view()) as (
+            _,
+            editor,
+        ):
             editor.adapter.columns = [("Name", "name")]
 
     @contextlib.contextmanager
@@ -431,5 +443,5 @@ class TestTabularEditor(BaseTestMixin, UnittestTools, unittest.TestCase):
             ]
         )
         with create_ui(report, dict(view=view)) as ui:
-            editor, = ui.get_editors("people")
+            (editor,) = ui.get_editors("people")
             yield report, editor

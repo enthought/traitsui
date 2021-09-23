@@ -58,6 +58,5 @@ class ScrubberEditor(BasicEditorFactory):
     text_color = Color("black")
 
     def _get_klass(self):
-        """ Returns the toolkit-specific editor class to be instantiated.
-        """
+        """Returns the toolkit-specific editor class to be instantiated."""
         return toolkit_object("scrubber_editor:_ScrubberEditor")

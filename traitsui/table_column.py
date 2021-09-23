@@ -51,8 +51,7 @@ UndefinedLabel = "???"
 
 
 class TableColumn(HasPrivateTraits):
-    """ Represents a column in a table editor.
-    """
+    """Represents a column in a table editor."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -153,133 +152,119 @@ class TableColumn(HasPrivateTraits):
     # -------------------------------------------------------------------------
 
     def get_object(self, object):
-        """ Returns the actual object being edited.
-        """
+        """Returns the actual object being edited."""
         return object
 
     def get_label(self):
-        """ Gets the label of the column.
-        """
+        """Gets the label of the column."""
         return self.label
 
     def get_width(self):
-        """ Returns the width of the column.
-        """
+        """Returns the width of the column."""
         return self.width
 
     def get_edit_width(self, object):
-        """ Returns the edit width of the column.
-        """
+        """Returns the edit width of the column."""
         return self.edit_width
 
     def get_edit_height(self, object):
-        """ Returns the height of the column cell's row while it is being
-            edited.
+        """Returns the height of the column cell's row while it is being
+        edited.
         """
         return self.edit_height
 
     def get_type(self, object):
-        """ Gets the type of data for the column for a specified object.
-        """
+        """Gets the type of data for the column for a specified object."""
         return self.type
 
     def get_text_color(self, object):
-        """ Returns the text color for the column for a specified object.
-        """
+        """Returns the text color for the column for a specified object."""
         return self.text_color_
 
     def get_text_font(self, object):
-        """ Returns the text font for the column for a specified object.
-        """
+        """Returns the text font for the column for a specified object."""
         return self.text_font
 
     def get_cell_color(self, object):
-        """ Returns the cell background color for the column for a specified
-            object.
+        """Returns the cell background color for the column for a specified
+        object.
         """
         if self.is_editable(object):
             return self.cell_color_
         return self.read_only_cell_color_
 
     def get_graph_color(self, object):
-        """ Returns the cell background graph color for the column for a
-            specified object.
+        """Returns the cell background graph color for the column for a
+        specified object.
         """
         return self.graph_color_
 
     def get_horizontal_alignment(self, object):
-        """ Returns the horizontal alignment for the column for a specified
-            object.
+        """Returns the horizontal alignment for the column for a specified
+        object.
         """
         return self.horizontal_alignment
 
     def get_vertical_alignment(self, object):
-        """ Returns the vertical alignment for the column for a specified
-            object.
+        """Returns the vertical alignment for the column for a specified
+        object.
         """
         return self.vertical_alignment
 
     def get_image(self, object):
-        """ Returns the image to display for the column for a specified object.
-        """
+        """Returns the image to display for the column for a specified object."""
         return self.image
 
     def get_renderer(self, object):
-        """ Returns the renderer for the column of a specified object.
-        """
+        """Returns the renderer for the column of a specified object."""
         return self.renderer
 
     def is_editable(self, object):
-        """ Returns whether the column is editable for a specified object.
-        """
+        """Returns whether the column is editable for a specified object."""
         return self.editable
 
     def is_auto_editable(self, object):
-        """ Returns whether the column is automatically edited/viewed for a
-            specified object.
+        """Returns whether the column is automatically edited/viewed for a
+        specified object.
         """
         return self.auto_editable
 
     def is_droppable(self, object, value):
-        """ Returns whether a specified value is valid for dropping on the
-            column for a specified object.
+        """Returns whether a specified value is valid for dropping on the
+        column for a specified object.
         """
         return self.droppable
 
     def get_menu(self, object):
-        """ Returns the context menu to display when the user right-clicks on
-            the column for a specified object.
+        """Returns the context menu to display when the user right-clicks on
+        the column for a specified object.
         """
         return self.menu
 
     def get_tooltip(self, object):
-        """ Returns the tooltip to display when the user mouses over the column
-            for a specified object.
+        """Returns the tooltip to display when the user mouses over the column
+        for a specified object.
         """
         return self.tooltip
 
     def get_view(self, object):
-        """ Returns the view to display when clicking a non-editable cell.
-        """
+        """Returns the view to display when clicking a non-editable cell."""
         return self.view
 
     def get_maximum(self, object):
-        """ Returns the maximum value a numeric column can have.
-        """
+        """Returns the maximum value a numeric column can have."""
         return self.maximum
 
     def on_click(self, object):
-        """ Called when the user clicks on the column.
-        """
+        """Called when the user clicks on the column."""
         pass
 
     def on_dclick(self, object):
-        """ Called when the user clicks on the column.
-        """
+        """Called when the user clicks on the column."""
         pass
 
     def cmp(self, object1, object2):
-        """ Returns the result of comparing the column of two different objects.
+        """Returns the result of comparing the column of two different objects.
 
         This is deprecated.
         """
@@ -288,14 +273,12 @@ class TableColumn(HasPrivateTraits):
         )
 
     def __str__(self):
-        """ Returns the string representation of the table column.
-        """
+        """Returns the string representation of the table column."""
         return self.get_label()
 
 
 class ObjectColumn(TableColumn):
-    """ A column for editing objects.
-    """
+    """A column for editing objects."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -349,8 +332,7 @@ class ObjectColumn(TableColumn):
     )
 
     def _get_label(self):
-        """ Gets the label of the column.
-        """
+        """Gets the label of the column."""
         if self._label is not None:
             return self._label
         return user_name_for(self.name)
@@ -361,8 +343,7 @@ class ObjectColumn(TableColumn):
             self.trait_property_changed("label", old, label)
 
     def get_raw_value(self, object):
-        """ Gets the unformatted value of the column for a specified object.
-        """
+        """Gets the unformatted value of the column for a specified object."""
         try:
             return xgetattr(self.get_object(object), self.name)
         except Exception as e:
@@ -372,8 +353,7 @@ class ObjectColumn(TableColumn):
             return None
 
     def get_value(self, object):
-        """ Gets the formatted value of the column for a specified object.
-        """
+        """Gets the formatted value of the column for a specified object."""
         try:
             if self.format_func is not None:
                 return self.format_func(self.get_raw_value(object))
@@ -387,19 +367,16 @@ class ObjectColumn(TableColumn):
             return "Format!"
 
     def get_drag_value(self, object):
-        """Returns the drag value for the column.
-        """
+        """Returns the drag value for the column."""
         return self.get_raw_value(object)
 
     def set_value(self, object, value):
-        """ Sets the value of the column for a specified object.
-        """
+        """Sets the value of the column for a specified object."""
         target, name = self.target_name(object)
         setattr(target, name, value)
 
     def get_editor(self, object):
-        """ Gets the editor for the column of a specified object.
-        """
+        """Gets the editor for the column of a specified object."""
         if self.editor is not None:
             return self.editor
 
@@ -408,18 +385,16 @@ class ObjectColumn(TableColumn):
         return target.base_trait(name).get_editor()
 
     def get_style(self, object):
-        """ Gets the editor style for the column of a specified object.
-        """
+        """Gets the editor style for the column of a specified object."""
         return self.style
 
     def key(self, object):
-        """ Returns the value to use for sorting.
-        """
+        """Returns the value to use for sorting."""
         return self.get_raw_value(object)
 
     def is_droppable(self, object, value):
-        """ Returns whether a specified value is valid for dropping on the
-            column for a specified object.
+        """Returns whether a specified value is valid for dropping on the
+        column for a specified object.
         """
         if self.droppable:
             try:
@@ -432,8 +407,7 @@ class ObjectColumn(TableColumn):
         return False
 
     def target_name(self, object):
-        """ Returns the target object and name for the column.
-        """
+        """Returns the target object and name for the column."""
         object = self.get_object(object)
         name = self.name
         col = name.rfind(".")
@@ -444,8 +418,7 @@ class ObjectColumn(TableColumn):
 
 
 class ExpressionColumn(ObjectColumn):
-    """ A column for displaying computed values.
-    """
+    """A column for displaying computed values."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -462,8 +435,7 @@ class ExpressionColumn(ObjectColumn):
     globals = Dict()
 
     def get_raw_value(self, object):
-        """ Gets the unformatted value of the column for a specified object.
-        """
+        """Gets the unformatted value of the column for a specified object."""
         try:
             return eval(self.expression_, self.globals, {"object": object})
         except Exception:
@@ -475,8 +447,7 @@ class ExpressionColumn(ObjectColumn):
 
 
 class NumericColumn(ObjectColumn):
-    """ A column for editing Numeric arrays.
-    """
+    """A column for editing Numeric arrays."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -502,8 +473,7 @@ class NumericColumn(ObjectColumn):
     horizontal_alignment = "center"
 
     def _get_label(self):
-        """ Gets the label of the column.
-        """
+        """Gets the label of the column."""
         if self._label is not None:
             return self._label
         return self.name
@@ -514,27 +484,24 @@ class NumericColumn(ObjectColumn):
             self.trait_property_changed("label", old, label)
 
     def get_type(self, object):
-        """ Gets the type of data for the column for a specified object row.
-        """
+        """Gets the type of data for the column for a specified object row."""
         return self.type
 
     def get_text_color(self, object):
-        """ Returns the text color for the column for a specified object row.
-        """
+        """Returns the text color for the column for a specified object row."""
         if self._is_selected(object):
             return self.selected_text_color_
         return self.text_color_
 
     def get_text_font(self, object):
-        """ Returns the text font for the column for a specified object row.
-        """
+        """Returns the text font for the column for a specified object row."""
         if self._is_selected(object):
             return self.selected_text_font
         return self.text_font
 
     def get_cell_color(self, object):
-        """ Returns the cell background color for the column for a specified
-            object row.
+        """Returns the cell background color for the column for a specified
+        object row.
         """
         if self.is_editable(object):
             if self._is_selected(object):
@@ -543,37 +510,35 @@ class NumericColumn(ObjectColumn):
         return self.read_only_cell_color_
 
     def get_horizontal_alignment(self, object):
-        """ Returns the horizontal alignment for the column for a specified
-            object row.
+        """Returns the horizontal alignment for the column for a specified
+        object row.
         """
         return self.horizontal_alignment
 
     def get_vertical_alignment(self, object):
-        """ Returns the vertical alignment for the column for a specified
-            object row.
+        """Returns the vertical alignment for the column for a specified
+        object row.
         """
         return self.vertical_alignment
 
     def is_editable(self, object):
-        """ Returns whether the column is editable for a specified object row.
-        """
+        """Returns whether the column is editable for a specified object row."""
         return self.editable
 
     def is_droppable(self, object, row, value):
-        """ Returns whether a specified value is valid for dropping on the
-            column for a specified object row.
+        """Returns whether a specified value is valid for dropping on the
+        column for a specified object row.
         """
         return self.droppable
 
     def get_menu(self, object, row):
-        """ Returns the context menu to display when the user right-clicks on
-            the column for a specified object row.
+        """Returns the context menu to display when the user right-clicks on
+        the column for a specified object row.
         """
         return self.menu
 
     def get_value(self, object):
-        """ Gets the value of the column for a specified object row.
-        """
+        """Gets the value of the column for a specified object row."""
         try:
             value = getattr(object, self.name)
             try:
@@ -584,24 +549,20 @@ class NumericColumn(ObjectColumn):
             return "Undefined!"
 
     def set_value(self, object, row, value):
-        """ Sets the value of the column for a specified object row.
-        """
+        """Sets the value of the column for a specified object row."""
         column = self.get_data_column(object)
         column[row] = type(column[row])(value)
 
     def get_editor(self, object):
-        """ Gets the editor for the column of a specified object row.
-        """
+        """Gets the editor for the column of a specified object row."""
         return super().get_editor(object)
 
     def get_data_column(self, object):
-        """ Gets the entire contents of the specified object column.
-        """
+        """Gets the entire contents of the specified object column."""
         return getattr(object, self.name)
 
     def _is_selected(self, object):
-        """ Returns whether a specified object row is selected.
-        """
+        """Returns whether a specified object row is selected."""
         if (
             hasattr(object, "model_selection")
             and object.model_selection is not None
@@ -611,8 +572,7 @@ class NumericColumn(ObjectColumn):
 
 
 class ListColumn(TableColumn):
-    """ A column for editing lists.
-    """
+    """A column for editing lists."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -639,8 +599,7 @@ class ListColumn(TableColumn):
     )
 
     def _get_label(self):
-        """ Gets the label of the column.
-        """
+        """Gets the label of the column."""
         if self._label is not None:
             return self._label
         return "Column %d" % (self.index + 1)
@@ -651,21 +610,17 @@ class ListColumn(TableColumn):
             self.trait_property_changed("label", old, label)
 
     def get_value(self, object):
-        """ Gets the value of the column for a specified object.
-        """
+        """Gets the value of the column for a specified object."""
         return str(object[self.index])
 
     def set_value(self, object, value):
-        """ Sets the value of the column for a specified object.
-        """
+        """Sets the value of the column for a specified object."""
         object[self.index] = value
 
     def get_editor(self, object):
-        """ Gets the editor for the column of a specified object.
-        """
+        """Gets the editor for the column of a specified object."""
         return None
 
     def key(self, object):
-        """ Returns the value to use for sorting.
-        """
+        """Returns the value to use for sorting."""
         return object[self.index]

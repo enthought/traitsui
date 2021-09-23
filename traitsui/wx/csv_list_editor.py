@@ -22,21 +22,21 @@ from ..editors.csv_list_editor import _prepare_method, _dispose_method
 
 
 class SimpleEditor(WXSimpleEditor):
-    """ Simple Editor style for CSVListEditor. """
+    """Simple Editor style for CSVListEditor."""
 
     prepare = _prepare_method
     dispose = _dispose_method
 
 
 class CustomEditor(WXCustomEditor):
-    """ Custom Editor style for CSVListEditor. """
+    """Custom Editor style for CSVListEditor."""
 
     prepare = _prepare_method
     dispose = _dispose_method
 
 
 class ReadonlyEditor(WXReadonlyEditor):
-    """ Readonly Editor style for CSVListEditor. """
+    """Readonly Editor style for CSVListEditor."""
 
     prepare = _prepare_method
     dispose = _dispose_method

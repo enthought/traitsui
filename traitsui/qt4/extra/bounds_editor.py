@@ -17,7 +17,6 @@ from traitsui.qt4.editor import Editor
 from traitsui.qt4.extra.range_slider import RangeSlider
 
 
-
 class _BoundsEditor(Editor):
 
     evaluate = Any()
@@ -29,8 +28,8 @@ class _BoundsEditor(Editor):
     format = Str()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         factory = self.factory
         if not factory.low_name:

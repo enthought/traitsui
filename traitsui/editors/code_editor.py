@@ -19,8 +19,7 @@ from traitsui.toolkit_traits import Color
 
 
 class CodeEditor(EditorFactory):
-    """ Editor factory for code editors.
-    """
+    """Editor factory for code editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

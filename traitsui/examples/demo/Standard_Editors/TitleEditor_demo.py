@@ -43,7 +43,7 @@ class TitleEditorDemo(HasTraits):
         'Select a new title from the drop down list below',
         'This is the TitleEditor demonstration',
         'Acme Widgets Sales for Each Quarter',
-        'This is Not Intended to be a Real Application'
+        'This is Not Intended to be a Real Application',
     )
 
     # A user settable version of the title:
@@ -60,39 +60,42 @@ class TitleEditorDemo(HasTraits):
         VGroup(
             VGroup(
                 HGroup(
-                    Item('title',
-                         show_label=False,
-                         springy=True,
-                         editor=TitleEditor()
-                         )
+                    Item(
+                        'title',
+                        show_label=False,
+                        springy=True,
+                        editor=TitleEditor(),
+                    )
                 ),
                 Item('title'),
-                show_border=True
+                show_border=True,
             ),
             VGroup(
                 HGroup(
-                    Item('title_2',
-                         show_label=False,
-                         springy=True,
-                         editor=TitleEditor()
-                         )
+                    Item(
+                        'title_2',
+                        show_label=False,
+                        springy=True,
+                        editor=TitleEditor(),
+                    )
                 ),
                 Item('title_2', label='Title'),
-                show_border=True
+                show_border=True,
             ),
             VGroup(
                 HGroup(
-                    Item('title_3',
-                         show_label=False,
-                         springy=True,
-                         editor=TitleEditor()
-                         )
+                    Item(
+                        'title_3',
+                        show_label=False,
+                        springy=True,
+                        editor=TitleEditor(),
+                    )
                 ),
                 Item('value'),
-                show_border=True
-            )
+                show_border=True,
+            ),
         ),
-        width=0.4
+        width=0.4,
     )
 
     # -- Property Implementations ---------------------------------------------
@@ -100,16 +103,12 @@ class TitleEditorDemo(HasTraits):
     @cached_property
     def _get_title_3(self):
         if self.value >= 0:
-            return (
-                'The square root of {} is {}'.format(
-                    self.value, self.value ** 0.5
-                )
+            return 'The square root of {} is {}'.format(
+                self.value, self.value ** 0.5
             )
         else:
-            return (
-                'The square root of {} is {}i'.format(
-                    self.value, (-self.value) ** 0.5
-                )
+            return 'The square root of {} is {}i'.format(
+                self.value, (-self.value) ** 0.5
             )
 
 

@@ -12,11 +12,25 @@
 
 from traits.api import HasTraits, Instance, List, Str, Regex
 from traitsui.api import (
-    Action, Group, Handler, HGroup, Item, Menu, Separator, TreeEditor,
-    TreeNode, View, VSplit,
+    Action,
+    Group,
+    Handler,
+    HGroup,
+    Item,
+    Menu,
+    Separator,
+    TreeEditor,
+    TreeNode,
+    View,
+    VSplit,
 )
 from traitsui.editors.tree_editor import (
-    NewAction, CopyAction, CutAction, PasteAction, DeleteAction, RenameAction,
+    NewAction,
+    CopyAction,
+    CutAction,
+    PasteAction,
+    DeleteAction,
+    RenameAction,
 )
 
 
@@ -88,7 +102,6 @@ employee_view = View(
 
 
 class TreeHandler(Handler):
-
     def employee_department(self, editor, object):
         dept = editor.get_parent(object)
         print(f'{object.name} works in the {dept.name} department.')
@@ -176,8 +189,8 @@ view = View(
     handler=TreeHandler(),
     buttons=['Undo', 'OK', 'Cancel'],
     resizable=True,
-    width=.3,
-    height=.3,
+    width=0.3,
+    height=0.3,
 )
 
 if __name__ == '__main__':

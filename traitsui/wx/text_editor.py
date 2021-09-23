@@ -31,8 +31,7 @@ DownColor = wx.WHITE
 
 
 class SimpleEditor(Editor):
-    """ Simple style text editor, which displays a text field.
-    """
+    """Simple style text editor, which displays a text field."""
 
     #: Flag for window styles:
     base_style = 0
@@ -48,8 +47,8 @@ class SimpleEditor(Editor):
     evaluate = evaluate_trait
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         factory = self.factory
         style = self.base_style
@@ -70,7 +69,9 @@ class SimpleEditor(Editor):
             control = wx.TextCtrl(
                 parent, -1, self.str_value, style=style | wx.TE_PROCESS_ENTER
             )
-            parent.Bind(wx.EVT_TEXT_ENTER, self.update_object, id=control.GetId())
+            parent.Bind(
+                wx.EVT_TEXT_ENTER, self.update_object, id=control.GetId()
+            )
         else:
             control = wx.TextCtrl(parent, -1, self.str_value, style=style)
 
@@ -86,8 +87,7 @@ class SimpleEditor(Editor):
         self.set_tooltip()
 
     def update_object(self, event):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         if isinstance(event, wx.FocusEvent):
             # Ensure that the base class' focus event handlers are run, some
             # built-in behavior may break on some platforms otherwise.
@@ -107,8 +107,8 @@ class SimpleEditor(Editor):
                 pass
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         user_value = self._get_user_value()
         try:
@@ -128,8 +128,7 @@ class SimpleEditor(Editor):
             self.set_error_state(False)
 
     def _get_user_value(self):
-        """ Gets the actual value corresponding to what the user typed.
-        """
+        """Gets the actual value corresponding to what the user typed."""
         value = self.control.GetValue()
         try:
             value = self.evaluate(value)
@@ -145,8 +144,7 @@ class SimpleEditor(Editor):
         return ret
 
     def error(self, excp):
-        """ Handles an error that occurs while setting the object's trait value.
-        """
+        """Handles an error that occurs while setting the object's trait value."""
         if self._error is None:
             self._error = True
             self.ui.errors += 1
@@ -154,26 +152,23 @@ class SimpleEditor(Editor):
         self.set_error_state(True)
 
     def in_error_state(self):
-        """ Returns whether or not the editor is in an error state.
-        """
+        """Returns whether or not the editor is in an error state."""
         return self.invalid or self._error
 
 
 class CustomEditor(SimpleEditor):
-    """ Custom style of text editor, which displays a multi-line text field.
-    """
+    """Custom style of text editor, which displays a multi-line text field."""
 
     #: Flag for window style. This value overrides the default.
     base_style = wx.TE_MULTILINE
 
 
 class ReadonlyEditor(BaseReadonlyEditor):
-    """ Read-only style of text editor, which displays a read-only text field.
-    """
+    """Read-only style of text editor, which displays a read-only text field."""
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         super().init(parent)
 
@@ -185,8 +180,8 @@ class ReadonlyEditor(BaseReadonlyEditor):
             control.Bind(wx.EVT_LEFT_UP, self._left_up)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         control = self.control
         new_value = self.str_value
@@ -203,8 +198,7 @@ class ReadonlyEditor(BaseReadonlyEditor):
             control.SetLabel(new_value)
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         if self.factory.view is not None:
             control = self.control
             control.Unbind(wx.EVT_ENTER_WINDOW)

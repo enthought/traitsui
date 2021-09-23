@@ -35,14 +35,14 @@ def fake_configure_traits(instance):
 
 
 def mock_demo_launch():
-    """ Mock Demo.configure_traits so that we can open and then close the UI
+    """Mock Demo.configure_traits so that we can open and then close the UI
     for testing the main function.
     """
     return mock.patch.object(Demo, "configure_traits", fake_configure_traits)
 
 
 class TestMain(unittest.TestCase):
-    """ Test main function."""
+    """Test main function."""
 
     @require_gui
     def test_main(self):
@@ -50,12 +50,15 @@ class TestMain(unittest.TestCase):
         # In normal running situation, no loggings should be emitted
         argv = ["etsdemo"]
         mocked_io = io.StringIO()
-        with mock_iter_entry_points({}), \
-                mock_demo_launch(), \
-                mocked_io, \
-                mock.patch("sys.stdout", mocked_io), \
-                mock.patch("sys.stderr", mocked_io), \
-                mock.patch("sys.argv", argv):
+        with mock_iter_entry_points(
+            {}
+        ), mock_demo_launch(), mocked_io, mock.patch(
+            "sys.stdout", mocked_io
+        ), mock.patch(
+            "sys.stderr", mocked_io
+        ), mock.patch(
+            "sys.argv", argv
+        ):
             main_module.main()
             console_output = mocked_io.getvalue()
 
@@ -66,12 +69,15 @@ class TestMain(unittest.TestCase):
         # Test logging configuration with the main function.
         argv = ["etsdemo", "-v"]
         mocked_io = io.StringIO()
-        with mock_iter_entry_points({}), \
-                mock_demo_launch(), \
-                mocked_io, \
-                mock.patch("sys.stdout", mocked_io), \
-                mock.patch("sys.stderr", mocked_io), \
-                mock.patch("sys.argv", argv):
+        with mock_iter_entry_points(
+            {}
+        ), mock_demo_launch(), mocked_io, mock.patch(
+            "sys.stdout", mocked_io
+        ), mock.patch(
+            "sys.stderr", mocked_io
+        ), mock.patch(
+            "sys.argv", argv
+        ):
             main_module.main()
             console_output = mocked_io.getvalue()
 
@@ -79,7 +85,7 @@ class TestMain(unittest.TestCase):
 
 
 class TestCreateDemo(unittest.TestCase):
-    """ Test _create_demo """
+    """Test _create_demo"""
 
     def test_create_demo_default_entry_points(self):
         # This does not require GUI and it should not fail.
@@ -99,7 +105,7 @@ class TestCreateDemo(unittest.TestCase):
                     "version": 1,
                     "name": "Delicious Demo",
                     "root": temp_dir,
-                }
+                },
             ]
             demo = main_module._create_demo(infos)
         children = demo.model.get_children()

@@ -31,7 +31,6 @@ class Child(HasTraits):
 
 
 class TestRegression(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -39,8 +38,7 @@ class TestRegression(BaseTestMixin, unittest.TestCase):
         BaseTestMixin.tearDown(self)
 
     def test_editor_on_delegates_to_event(self):
-        """ Make sure that DelegatesTo on Events passes Editor creation.
-        """
+        """Make sure that DelegatesTo on Events passes Editor creation."""
         child = Child(parent=Parent())
         editor = Editor(
             None, factory=TextEditor(), object=child, name="button"
@@ -48,8 +46,7 @@ class TestRegression(BaseTestMixin, unittest.TestCase):
         self.assertIs(editor.old_value, Undefined)
 
     def test_attribute_error(self):
-        """ Make sure genuine AttributeErrors raise on Editor creation.
-        """
+        """Make sure genuine AttributeErrors raise on Editor creation."""
         self.assertRaises(
             AttributeError,
             Editor,

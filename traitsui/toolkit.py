@@ -32,7 +32,7 @@ _toolkit = None
 
 
 def assert_toolkit_import(names):
-    """ Raise an error if a toolkit with the given name should not be allowed
+    """Raise an error if a toolkit with the given name should not be allowed
     to be imported.
     """
     if ETSConfig.toolkit and ETSConfig.toolkit not in names:
@@ -43,7 +43,7 @@ def assert_toolkit_import(names):
 
 
 def toolkit_object(name, raise_exceptions=False):
-    """ Return the toolkit specific object with the given name.
+    """Return the toolkit specific object with the given name.
 
     Parameters
     ----------
@@ -78,7 +78,7 @@ def toolkit_object(name, raise_exceptions=False):
 
 
 def toolkit(*toolkits):
-    """ Selects and returns a low-level GUI toolkit.
+    """Selects and returns a low-level GUI toolkit.
 
     Use this function to get a reference to the current toolkit.
 
@@ -112,84 +112,83 @@ def toolkit(*toolkits):
 
 
 class Toolkit(Toolkit):
-    """ Abstract base class for GUI toolkits.
-    """
+    """Abstract base class for GUI toolkits."""
 
     def ui_panel(self, ui, parent):
-        """ Creates a GUI-toolkit-specific panel-based user interface using
-            information from the specified UI object.
+        """Creates a GUI-toolkit-specific panel-based user interface using
+        information from the specified UI object.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def ui_subpanel(self, ui, parent):
-        """ Creates a GUI-toolkit-specific subpanel-based user interface using
-            information from the specified UI object.
+        """Creates a GUI-toolkit-specific subpanel-based user interface using
+        information from the specified UI object.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def ui_livemodal(self, ui, parent):
-        """ Creates a GUI-toolkit-specific modal "live update" dialog user
-            interface using information from the specified UI object.
+        """Creates a GUI-toolkit-specific modal "live update" dialog user
+        interface using information from the specified UI object.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def ui_live(self, ui, parent):
-        """ Creates a GUI-toolkit-specific non-modal "live update" window user
-            interface using information from the specified UI object.
+        """Creates a GUI-toolkit-specific non-modal "live update" window user
+        interface using information from the specified UI object.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def ui_modal(self, ui, parent):
-        """ Creates a GUI-toolkit-specific modal dialog user interface using
-            information from the specified UI object.
+        """Creates a GUI-toolkit-specific modal dialog user interface using
+        information from the specified UI object.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def ui_nonmodal(self, ui, parent):
-        """ Creates a GUI-toolkit-specific non-modal dialog user interface using
-            information from the specified UI object.
+        """Creates a GUI-toolkit-specific non-modal dialog user interface using
+        information from the specified UI object.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def ui_popup(self, ui, parent):
-        """ Creates a GUI-toolkit-specific temporary "live update" popup dialog
-            user interface using information from the specified UI object.
+        """Creates a GUI-toolkit-specific temporary "live update" popup dialog
+        user interface using information from the specified UI object.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def ui_popover(self, ui, parent):
-        """ Creates a GUI-toolkit-specific temporary "live update" popup dialog
-            user interface using information from the specified UI object.
+        """Creates a GUI-toolkit-specific temporary "live update" popup dialog
+        user interface using information from the specified UI object.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def ui_info(self, ui, parent):
-        """ Creates a GUI-toolkit-specific temporary "live update" popup dialog
-            user interface using information from the specified UI object.
+        """Creates a GUI-toolkit-specific temporary "live update" popup dialog
+        user interface using information from the specified UI object.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def ui_wizard(self, ui, parent):
-        """ Creates a GUI-toolkit-specific wizard dialog user interface using
-            information from the specified UI object.
+        """Creates a GUI-toolkit-specific wizard dialog user interface using
+        information from the specified UI object.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
@@ -205,7 +204,7 @@ class Toolkit(Toolkit):
         scrollable=None,
         args=None,
     ):
-        """ Creates a GUI-toolkit-specific modal dialog user interface that
+        """Creates a GUI-toolkit-specific modal dialog user interface that
             runs as a complete application using information from the
             specified View object.
 
@@ -241,108 +240,99 @@ class Toolkit(Toolkit):
         )
 
     def position(self, ui):
-        """ Positions the associated dialog window on the display.
-        """
+        """Positions the associated dialog window on the display."""
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def show_help(self, ui, control):
-        """ Shows a Help window for a specified UI and control.
-        """
+        """Shows a Help window for a specified UI and control."""
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def set_title(self, ui):
-        """ Sets the title for the UI window.
-        """
+        """Sets the title for the UI window."""
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def set_icon(self, ui):
-        """ Sets the icon for the UI window.
-        """
+        """Sets the icon for the UI window."""
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def save_window(self, ui):
-        """ Saves user preference information associated with a UI window.
-        """
+        """Saves user preference information associated with a UI window."""
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def rebuild_ui(self, ui):
-        """ Rebuilds a UI after a change to the content of the UI.
-        """
+        """Rebuilds a UI after a change to the content of the UI."""
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def key_event_to_name(self, event):
-        """ Converts a keystroke event into a corresponding key name.
-        """
+        """Converts a keystroke event into a corresponding key name."""
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def hook_events(self, ui, control, events=None, handler=None):
-        """ Hooks all specified events for all controls in a UI so that they
-            can be routed to the correct event handler.
+        """Hooks all specified events for all controls in a UI so that they
+        can be routed to the correct event handler.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def route_event(self, ui, event):
-        """ Routes a "hooked" event to the corrent handler method.
-        """
+        """Routes a "hooked" event to the corrent handler method."""
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def skip_event(self, event):
-        """ Indicates that an event should continue to be processed by the
-            toolkit.
+        """Indicates that an event should continue to be processed by the
+        toolkit.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def destroy_control(self, control):
-        """ Destroys a specified GUI toolkit control.
-        """
+        """Destroys a specified GUI toolkit control."""
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def destroy_children(self, control):
-        """ Destroys all of the child controls of a specified GUI toolkit
-            control.
+        """Destroys all of the child controls of a specified GUI toolkit
+        control.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def image_size(self, image):
-        """ Returns a ( width, height ) tuple containing the size of a
-            specified toolkit image.
+        """Returns a ( width, height ) tuple containing the size of a
+        specified toolkit image.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)
         )
 
     def constants(self):
-        """ Returns a dictionary of useful constants.
+        """Returns a dictionary of useful constants.
 
-            Currently, the dictionary should have the following key/value
-            pairs:
+        Currently, the dictionary should have the following key/value
+        pairs:
 
-            - WindowColor': the standard window background color in the toolkit
-              specific color format.
+        - WindowColor': the standard window background color in the toolkit
+          specific color format.
         """
         raise NotImplementedError(
             not_implemented_message.format(ETSConfig.toolkit)

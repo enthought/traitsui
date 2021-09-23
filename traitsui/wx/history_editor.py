@@ -27,9 +27,9 @@ from .history_control import HistoryControl
 
 
 class _HistoryEditor(Editor):
-    """ Simple style text editor, which displays a text field and maintains a
-        history of previously entered values, the maximum number of which is
-        specified by the 'entries' trait of the HistoryEditor factory.
+    """Simple style text editor, which displays a text field and maintains a
+    history of previously entered values, the maximum number of which is
+    specified by the 'entries' trait of the HistoryEditor factory.
     """
 
     # -------------------------------------------------------------------------
@@ -40,8 +40,8 @@ class _HistoryEditor(Editor):
     history = Any()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.history = history = HistoryControl(
             value=self.value,
@@ -53,8 +53,7 @@ class _HistoryEditor(Editor):
         self.set_tooltip()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         self.history.dispose()
         self.history = None
 
@@ -62,8 +61,7 @@ class _HistoryEditor(Editor):
 
     @observe("history:value")
     def _value_changed(self, event):
-        """ Handles the history object's 'value' trait being changed.
-        """
+        """Handles the history object's 'value' trait being changed."""
         if not self._dont_update:
             history = self.history
             try:
@@ -76,8 +74,8 @@ class _HistoryEditor(Editor):
             do_later(self.trait_set, _dont_update=False)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if not self._dont_update:
             self._dont_update = True
@@ -86,21 +84,19 @@ class _HistoryEditor(Editor):
             self._dont_update = False
 
     def error(self, excp):
-        """ Handles an error that occurs while setting the object's trait value.
-        """
+        """Handles an error that occurs while setting the object's trait value."""
         pass
 
     # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the
-            editor.
+        """Restores any saved user preference information associated with the
+        editor.
         """
         self.history.history = prefs.get("history", [])[: self.factory.entries]
 
     def save_prefs(self):
-        """ Returns any user preference information associated with the editor.
-        """
+        """Returns any user preference information associated with the editor."""
         # If the view closed successfully, try to update the history with the
         # current value:
         if self.ui.result:

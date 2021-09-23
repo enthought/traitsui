@@ -53,11 +53,9 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 """
 
 
-
 import re
 
 from pyface.qt import QtGui
-
 
 
 help_pat = re.compile(r"(.*){(.*)}(.*)")
@@ -65,12 +63,10 @@ options_pat = re.compile(r"(.*)\[(.*)\](.*)")
 
 
 class MakeMenu:
-    """ Manages creation of menus.
-    """
+    """Manages creation of menus."""
 
     def __init__(self, desc, owner, popup=False, window=None):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         self.owner = owner
         if window is None:
             window = owner
@@ -88,8 +84,7 @@ class MakeMenu:
             window.setMenuBar(menu)
 
     def parse(self, menu, indent):
-        """ Recursively parses menu items from the description.
-        """
+        """Recursively parses menu items from the description."""
 
         while True:
 
@@ -201,8 +196,7 @@ class MakeMenu:
                 act.setStatusTip(help)
 
     def get_body(self, indent):
-        """ Returns the body of an inline method.
-        """
+        """Returns the body of an inline method."""
         result = []
         while self.index < len(self.desc):
             line = self.desc[self.index]
@@ -216,16 +210,14 @@ class MakeMenu:
         return "  pass"
 
     def get_action(self, name):
-        """ Returns the QAction associated with a specified name.
-        """
+        """Returns the QAction associated with a specified name."""
         if isinstance(name, str):
             return self.names[name]
 
         return name
 
     def checked(self, name, check=None):
-        """ Checks (or unchecks) a menu item specified by name.
-        """
+        """Checks (or unchecks) a menu item specified by name."""
         act = self.get_action(name)
 
         if check is None:
@@ -234,8 +226,7 @@ class MakeMenu:
         act.setChecked(check)
 
     def enabled(self, name, enable=None):
-        """ Enables (or disables) a menu item specified by name.
-        """
+        """Enables (or disables) a menu item specified by name."""
         act = self.get_action(name)
 
         if enable is None:
@@ -244,8 +235,7 @@ class MakeMenu:
         act.setEnabled(enable)
 
     def label(self, name, label=None):
-        """ Gets or sets the label for a menu item.
-        """
+        """Gets or sets the label for a menu item."""
         act = self.get_action(name)
 
         if label is None:
@@ -255,8 +245,7 @@ class MakeMenu:
 
 
 class MakeMenuItem:
-    """ A menu item for a menu managed by MakeMenu.
-    """
+    """A menu item for a menu managed by MakeMenu."""
 
     def __init__(self, menu, act):
         self.menu = menu
@@ -284,7 +273,7 @@ class MakeMenuItem:
 
 
 def option_check(test, string):
-    """ Determines whether a string contains any specified option characters,
+    """Determines whether a string contains any specified option characters,
     and removes them if it does.
     """
     result = []

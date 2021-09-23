@@ -39,9 +39,9 @@ from traitsui.api import Item, Group, View
 #  Classes:
 # -------------------------------------------------------------------------
 
+
 class SampleClass(HasTraits):
-    """ This Sample class is used to demonstrate the InstanceEditor demo.
-    """
+    """This Sample class is used to demonstrate the InstanceEditor demo."""
 
     # The actual attributes don't matter here; we just need an assortment
     # to demonstrate the InstanceEditor's capabilities.:
@@ -57,8 +57,7 @@ class SampleClass(HasTraits):
 
 
 class InstanceEditorDemo(HasTraits):
-    """ This class specifies the details of the InstanceEditor demo.
-    """
+    """This class specifies the details of the InstanceEditor demo."""
 
     # Create an Instance trait to view:
     sample_instance = Instance(SampleClass, ())
@@ -71,15 +70,12 @@ class InstanceEditorDemo(HasTraits):
         Item('_'),
         Item('sample_instance', style='text', label='Text'),
         Item('_'),
-        Item('sample_instance', style='readonly', label='ReadOnly')
+        Item('sample_instance', style='readonly', label='ReadOnly'),
     )
 
     # Demo View:
     traits_view = View(
-        inst_group,
-        title='InstanceEditor',
-        buttons=['OK'],
-        resizable=True
+        inst_group, title='InstanceEditor', buttons=['OK'], resizable=True
     )
 
 

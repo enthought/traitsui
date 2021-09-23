@@ -16,7 +16,7 @@ ICON = pkg_resources.resource_filename("etsdemo", "images/enthought-icon.png")
 
 
 def info():
-    """ Provides information to the "eam" package. """
+    """Provides information to the "eam" package."""
     return {
         "name": "ETS Demo",
         "description": "Application for browsing ETS examples and demos",

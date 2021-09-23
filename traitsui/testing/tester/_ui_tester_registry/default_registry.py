@@ -20,7 +20,7 @@ from traitsui.ui import UI
 
 
 def get_default_registries():
-    """ Creates a default registry for UITester that is toolkit specific.
+    """Creates a default registry for UITester that is toolkit specific.
 
     Returns
     -------
@@ -30,14 +30,15 @@ def get_default_registries():
     """
     # side-effect to determine current toolkit
     from pyface.toolkit import toolkit_object  # noqa
+
     if ETSConfig.toolkit == "null":
         registries = []
     else:
         toolkit = {'wx': 'wx', 'qt4': 'qt4', 'qt': 'qt4'}[ETSConfig.toolkit]
         this_package, _ = __name__.rsplit(".", 1)
         module = importlib.import_module(
-            ".default_registry",
-            this_package + '.' + toolkit)
+            ".default_registry", this_package + '.' + toolkit
+        )
         registries = module.get_default_registries()
 
     ui_registry = TargetRegistry()

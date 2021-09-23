@@ -67,6 +67,7 @@ class DialogWithToolbar(HasTraits):
 
 # ----- qt4 helper functions
 
+
 def _qt_trigger_action(container_class, ui):
     toolbar = ui.control.findChild(container_class)
     action = toolbar.actions()[0]
@@ -82,7 +83,6 @@ def _qt_click_button(ui):
 
 
 class TestActions(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -90,8 +90,7 @@ class TestActions(BaseTestMixin, unittest.TestCase):
         BaseTestMixin.tearDown(self)
 
     def _test_actions(self, trigger_action_func):
-        """Template test for wx, qt4, menu, and toolbar testing.
-        """
+        """Template test for wx, qt4, menu, and toolbar testing."""
         # Behavior: when clicking on a menu or toolbar action,
         # the corresponding function should be executed
 

@@ -30,15 +30,14 @@ from .text_editor import SimpleEditor as SimpleTextEditor
 from .helper import IconButton
 
 
-
 # Wildcard filter:
 filter_trait = List(Str)
 
 
 class SimpleEditor(SimpleTextEditor):
-    """ Simple style of file editor, consisting of a text field and a **Browse**
-        button that opens a file-selection dialog box. The user can also drag
-        and drop a file onto this control.
+    """Simple style of file editor, consisting of a text field and a **Browse**
+    button that opens a file-selection dialog box. The user can also drag
+    and drop a file onto this control.
     """
 
     #: List of tuple(signal, slot) to be removed in dispose.
@@ -47,8 +46,8 @@ class SimpleEditor(SimpleTextEditor):
     _connections_to_remove = List(Tuple(Any(), Callable()))
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = QtGui.QWidget()
         layout = QtGui.QHBoxLayout(self.control)
@@ -76,8 +75,7 @@ class SimpleEditor(SimpleTextEditor):
         self.set_tooltip(control)
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         while self._connections_to_remove:
             signal, handler = self._connections_to_remove.pop()
             signal.disconnect(handler)
@@ -89,8 +87,7 @@ class SimpleEditor(SimpleTextEditor):
         Editor.dispose(self)
 
     def update_object(self):
-        """ Handles the user changing the contents of the edit control.
-        """
+        """Handles the user changing the contents of the edit control."""
         if self.control is not None:
             file_name = str(self._file_name.text())
             try:
@@ -102,14 +99,13 @@ class SimpleEditor(SimpleTextEditor):
                 self._file_name.setText(self.value)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self._file_name.setText(self.str_value)
 
     def show_file_dialog(self):
-        """ Displays the pop-up file dialog.
-        """
+        """Displays the pop-up file dialog."""
         # We don't used the canned functions because we don't know how the
         # file name is to be used (ie. an existing one to be opened or a new
         # one to be created).
@@ -128,15 +124,13 @@ class SimpleEditor(SimpleTextEditor):
                 self.update_editor()
 
     def get_error_control(self):
-        """ Returns the editor's control for indicating error status.
-        """
+        """Returns the editor's control for indicating error status."""
         return self._file_name
 
     # -- Private Methods ------------------------------------------------------
 
     def _create_file_dialog(self):
-        """ Creates the correct type of file dialog.
-        """
+        """Creates the correct type of file dialog."""
         dlg = QtGui.QFileDialog(self.control)
         dlg.selectFile(self._file_name.text())
 
@@ -152,8 +146,7 @@ class SimpleEditor(SimpleTextEditor):
 
 
 class CustomEditor(SimpleTextEditor):
-    """ Custom style of file editor, consisting of a file system tree view.
-    """
+    """Custom style of file editor, consisting of a file system tree view."""
 
     #: Is the file editor scrollable? This value overrides the default.
     scrollable = True
@@ -171,8 +164,8 @@ class CustomEditor(SimpleTextEditor):
     dclick = Event()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         control = _TreeView(self)
         control.doubleClicked.connect(self._on_dclick)
@@ -230,8 +223,7 @@ class CustomEditor(SimpleTextEditor):
         header.setStretchLastSection(False)
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         self._model.beginResetModel()
         self._model.endResetModel()
 
@@ -242,8 +234,7 @@ class CustomEditor(SimpleTextEditor):
         Editor.dispose(self)
 
     def update_object(self, idx):
-        """ Handles the user changing the contents of the edit control.
-        """
+        """Handles the user changing the contents of the edit control."""
         if self.control is not None:
             path = str(self._model.filePath(idx))
 
@@ -254,8 +245,8 @@ class CustomEditor(SimpleTextEditor):
                 self.value = path
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if exists(self.str_value):
             index = self._model.index(abspath(self.str_value))
@@ -265,20 +256,17 @@ class CustomEditor(SimpleTextEditor):
     # -- Private Methods ------------------------------------------------------
 
     def _on_dclick(self, idx):
-        """ Handles the user double-clicking on a file name.
-        """
+        """Handles the user double-clicking on a file name."""
         self.dclick = str(self._model.filePath(idx))
 
     # Trait change handlers --------------------------------------------------
 
     def _filter_changed(self):
-        """ Handles the 'filter' trait being changed.
-        """
+        """Handles the 'filter' trait being changed."""
         self._model.setNameFilters(self.filter)
 
     def _root_path_changed(self):
-        """ Handles the 'root_path' trait being changed.
-        """
+        """Handles the 'root_path' trait being changed."""
         path = self.root_path
         if not path:
             path = QtCore.QDir.homePath()
@@ -286,14 +274,13 @@ class CustomEditor(SimpleTextEditor):
         self.control.setRootIndex(self._model.index(path))
 
     def _reload_changed(self):
-        """ Handles the 'reload' trait being changed.
-        """
+        """Handles the 'reload' trait being changed."""
         self._model.refresh()
 
 
 class _TreeView(QtGui.QTreeView):
-    """ This is an internal class needed because QAbstractItemView doesn't
-        provide a signal for when the current index changes.
+    """This is an internal class needed because QAbstractItemView doesn't
+    provide a signal for when the current index changes.
     """
 
     def __init__(self, editor):
@@ -321,7 +308,6 @@ class _TreeView(QtGui.QTreeView):
         QtGui.QTreeView.keyPressEvent(self, keyevent)
 
     def currentChanged(self, current, previous):
-        """ Reimplemented to tell the editor when the current index has changed.
-        """
+        """Reimplemented to tell the editor when the current index has changed."""
         super().currentChanged(current, previous)
         self._editor.update_object(current)

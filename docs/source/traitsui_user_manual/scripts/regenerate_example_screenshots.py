@@ -31,7 +31,7 @@ DEMO = pkg_resources.resource_filename("traitsui", "examples/demo")
 
 
 def _is_python_file(path):
-    """ Return true if the given path is (public) non-test Python file."""
+    """Return true if the given path is (public) non-test Python file."""
     _, basename = os.path.split(path)
     _, ext = os.path.splitext(basename)
     return (
@@ -42,7 +42,7 @@ def _is_python_file(path):
 
 
 def get_python_files(directory):
-    """ Report Python files to be run or to be skipped.
+    """Report Python files to be run or to be skipped.
 
     Returns
     -------
@@ -82,8 +82,7 @@ def replaced_configure_traits(
     screenshot_name=None,
     **args,
 ):
-    """ Mocked configure_traits to launch then close the GUI.
-    """
+    """Mocked configure_traits to launch then close the GUI."""
     ui_kwargs = dict(
         view=view,
         parent=None,
@@ -102,14 +101,14 @@ def replaced_configure_traits(
                 "source",
                 "traitsui_user_manual",
                 "images",
-                screenshot_name
+                screenshot_name,
             )
         )
 
 
 @contextlib.contextmanager
 def replace_configure_traits(screenshot_name):
-    """ Context manager to temporarily replace HasTraits.configure_traits
+    """Context manager to temporarily replace HasTraits.configure_traits
     with a mocked version such that GUI launched are closed soon after they
     are open.
     """
@@ -124,7 +123,7 @@ def replace_configure_traits(screenshot_name):
 
 
 def run_file(file_path):
-    """ Execute a given Python file.
+    """Execute a given Python file.
 
     Parameters
     ----------
@@ -140,8 +139,9 @@ def run_file(file_path):
         "__name__": "__main__",
         "__file__": file_path,
     }
-    with replace_configure_traits(screenshot_name), \
-            mock.patch("sys.argv", [file_path]):
+    with replace_configure_traits(screenshot_name), mock.patch(
+        "sys.argv", [file_path]
+    ):
         # Mock argv: Some example reads sys.argv to allow more arguments
         # But all examples should support being run without additional
         # arguments.

@@ -25,7 +25,6 @@
 """
 
 
-
 from pyface.qt import QtCore, QtGui, is_qt5
 from pyface.image_resource import ImageResource
 from pyface.timer.api import do_later
@@ -71,7 +70,6 @@ from .editor import Editor
 from .table_model import TableModel, SortFilterTableModel
 
 
-
 if is_qt5:
 
     def set_qheader_section_resize_mode(header):
@@ -85,9 +83,9 @@ else:
 
 
 class TableEditor(Editor, BaseTableEditor):
-    """ Editor that presents data in a table. Optionally, tables can have
-        a set of filters that reduce the set of data displayed, according to
-        their criteria.
+    """Editor that presents data in a table. Optionally, tables can have
+    a set of filters that reduce the set of data displayed, according to
+    their criteria.
     """
 
     # -------------------------------------------------------------------------
@@ -337,7 +335,7 @@ class TableEditor(Editor, BaseTableEditor):
         self._update_columns()
 
     def dispose(self):
-        """ Disposes of the contents of an editor."""
+        """Disposes of the contents of an editor."""
         self.model.beginResetModel()
         self.model.endResetModel()
 
@@ -393,16 +391,15 @@ class TableEditor(Editor, BaseTableEditor):
             self.table_view.setUpdatesEnabled(True)
 
     def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the
-            editor.
+        """Restores any saved user preference information associated with the
+        editor.
         """
         header = self.table_view.horizontalHeader()
         if header is not None and "column_state" in prefs:
             header.restoreState(prefs["column_state"])
 
     def save_prefs(self):
-        """ Returns any user preference information associated with the editor.
-        """
+        """Returns any user preference information associated with the editor."""
         prefs = {}
         header = self.table_view.horizontalHeader()
         if header is not None:
@@ -576,8 +573,7 @@ class TableEditor(Editor, BaseTableEditor):
             self.filter_summary = "%i of %i items" % (len(fi), num_items)
 
     def _add_image(self, image_resource):
-        """ Adds a new image to the image map.
-        """
+        """Adds a new image to the image map."""
         image = image_resource.create_icon()
 
         self.image_resources[image_resource] = image
@@ -586,8 +582,7 @@ class TableEditor(Editor, BaseTableEditor):
         return image
 
     def _get_image(self, image):
-        """ Converts a user specified image to a QIcon.
-        """
+        """Converts a user specified image to a QIcon."""
         if isinstance(image, str):
             self.image = image
             image = self.image
@@ -692,8 +687,7 @@ class TableEditor(Editor, BaseTableEditor):
             self.set_selection(self.selected, notify=False)
 
     def _update_filter_changed(self):
-        """ The filter has changed internally.
-        """
+        """The filter has changed internally."""
         self._filter_changed(self.filter, self.filter)
 
     # -- Event Handlers -------------------------------------------------------
@@ -848,11 +842,10 @@ ReadonlyEditor = TableEditor
 
 
 class TableDelegate(QtGui.QStyledItemDelegate):
-    """ A QStyledItemDelegate which fetches Traits UI editors.
-    """
+    """A QStyledItemDelegate which fetches Traits UI editors."""
 
     def createEditor(self, parent, option, index):
-        """ Reimplemented to return the editor for a given index."""
+        """Reimplemented to return the editor for a given index."""
 
         model = index.model()
         index = model.mapToSource(index)
@@ -895,8 +888,7 @@ class TableDelegate(QtGui.QStyledItemDelegate):
         return control
 
     def updateEditorGeometry(self, editor, option, index):
-        """ Update the editor's geometry.
-        """
+        """Update the editor's geometry."""
         editor.setGeometry(option.rect)
 
     def paint(self, painter, option, index):
@@ -1158,7 +1150,7 @@ class TableView(QtGui.QTableView):
             return requested_width
 
     def resizeColumnsToContents(self):
-        """ Support proportional column width specifications. """
+        """Support proportional column width specifications."""
 
         # TODO: The proportional size specification approach found in the
         # TableColumns is not entirely compatible with the ability to
@@ -1212,7 +1204,7 @@ class TableView(QtGui.QTableView):
         return super().closeEditor(control, hint)
 
     def _update_header_sizing(self):
-        """ Header section sizing can be done only after a valid model is set.
+        """Header section sizing can be done only after a valid model is set.
         Otherwise results in segfault with Qt5.
         """
         editor = self._editor
@@ -1268,8 +1260,7 @@ class TableView(QtGui.QTableView):
 
 
 class TableFilterEditor(HasTraits):
-    """ An editor that manages table filters.
-    """
+    """An editor that manages table filters."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -1377,8 +1368,7 @@ class TableFilterEditor(HasTraits):
 
     @observe('add_button')
     def _create_and_select_new_filter(self, event):
-        """ Create a new filter based on the selected template and select it.
-        """
+        """Create a new filter based on the selected template and select it."""
         new_filter = self.selected_template.clone_traits()
         new_filter.template = False
         new_filter.name = new_filter._name = "New filter"
@@ -1387,8 +1377,7 @@ class TableFilterEditor(HasTraits):
 
     @observe("remove_button")
     def _delete_selected_filter(self, event):
-        """ Delete the currently selected filter.
-        """
+        """Delete the currently selected filter."""
         if self.selected_template == self.selected_filter:
             self.selected_template = self.templates[0]
 
@@ -1401,8 +1390,8 @@ class TableFilterEditor(HasTraits):
 
     @observe("selected_filter:name")
     def _update_filter_list(self, event):
-        """ A hack to make the EnumEditor watching the list of filters refresh
-            their text when the name of the selected filter changes.
+        """A hack to make the EnumEditor watching the list of filters refresh
+        their text when the name of the selected filter changes.
         """
         filters = self.filters
         self.filters = []

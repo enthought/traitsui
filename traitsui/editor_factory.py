@@ -34,8 +34,8 @@ logger = logging.getLogger(__name__)
 
 
 class EditorFactory(HasPrivateTraits):
-    """ Represents a factory for creating the Editor objects in a Traits-based
-        user interface.
+    """Represents a factory for creating the Editor objects in a Traits-based
+    user interface.
     """
 
     # -------------------------------------------------------------------------
@@ -77,20 +77,19 @@ class EditorFactory(HasPrivateTraits):
     readonly_editor_class = Property()
 
     def __init__(self, *args, **traits):
-        """ Initializes the factory object.
-        """
+        """Initializes the factory object."""
         HasPrivateTraits.__init__(self, **traits)
         self.init(*args)
 
     def init(self):
-        """ Performs any initialization needed after all constructor traits
-            have been set.
+        """Performs any initialization needed after all constructor traits
+        have been set.
         """
         pass
 
     def named_value(self, name, ui):
-        """ Returns the value of a specified extended name of the form: name or
-            context_object_name.name[.name...]:
+        """Returns the value of a specified extended name of the form: name or
+        context_object_name.name[.name...]:
         """
         names = name.split(".")
 
@@ -114,8 +113,7 @@ class EditorFactory(HasPrivateTraits):
     # -------------------------------------------------------------------------
 
     def simple_editor(self, ui, object, name, description, parent):
-        """ Generates an editor using the "simple" style.
-        """
+        """Generates an editor using the "simple" style."""
         return self.simple_editor_class(
             parent,
             factory=self,
@@ -126,8 +124,7 @@ class EditorFactory(HasPrivateTraits):
         )
 
     def custom_editor(self, ui, object, name, description, parent):
-        """ Generates an editor using the "custom" style.
-        """
+        """Generates an editor using the "custom" style."""
         return self.custom_editor_class(
             parent,
             factory=self,
@@ -138,8 +135,7 @@ class EditorFactory(HasPrivateTraits):
         )
 
     def text_editor(self, ui, object, name, description, parent):
-        """ Generates an editor using the "text" style.
-        """
+        """Generates an editor using the "text" style."""
         return self.text_editor_class(
             parent,
             factory=self,
@@ -150,8 +146,7 @@ class EditorFactory(HasPrivateTraits):
         )
 
     def readonly_editor(self, ui, object, name, description, parent):
-        """ Generates an "editor" that is read-only.
-        """
+        """Generates an "editor" that is read-only."""
         return self.readonly_editor_class(
             parent,
             factory=self,
@@ -188,7 +183,7 @@ class EditorFactory(HasPrivateTraits):
         return None
 
     def string_value(self, value, format_func=None):
-        """ Returns the text representation of a specified object trait value.
+        """Returns the text representation of a specified object trait value.
 
         If the **format_func** attribute is set on the editor factory, then
         this method calls that function to do the formatting.  If the
@@ -212,7 +207,7 @@ class EditorFactory(HasPrivateTraits):
     # -------------------------------------------------------------------------
 
     def _get_simple_editor_class(self):
-        """ Returns the editor class to use for "simple" style views.
+        """Returns the editor class to use for "simple" style views.
         The default implementation tries to import the SimpleEditor class in
         the editor file in the backend package, and if such a class is not to
         found it returns the SimpleEditor class defined in editor_factory
@@ -228,7 +223,7 @@ class EditorFactory(HasPrivateTraits):
         return SimpleEditor
 
     def _get_custom_editor_class(self):
-        """ Returns the editor class to use for "custom" style views.
+        """Returns the editor class to use for "custom" style views.
         The default implementation tries to import the CustomEditor class in
         the editor file in the backend package, and if such a class is not to
         found it returns simple_editor_class.
@@ -243,7 +238,7 @@ class EditorFactory(HasPrivateTraits):
         return CustomEditor
 
     def _get_text_editor_class(self):
-        """ Returns the editor class to use for "text" style views.
+        """Returns the editor class to use for "text" style views.
         The default implementation tries to import the TextEditor class in the
         editor file in the backend package, and if such a class is not found
         it returns the TextEditor class declared in the editor_factory module
@@ -259,7 +254,7 @@ class EditorFactory(HasPrivateTraits):
         return TextEditor
 
     def _get_readonly_editor_class(self):
-        """ Returns the editor class to use for "readonly" style views.
+        """Returns the editor class to use for "readonly" style views.
         The default implementation tries to import the ReadonlyEditor class in
         the editor file in the backend package, and if such a class is not
         found it returns the ReadonlyEditor class declared in the
@@ -281,8 +276,7 @@ class EditorFactory(HasPrivateTraits):
 
 
 class EditorWithListFactory(EditorFactory):
-    """ Base class for factories of editors for objects that contain lists.
-    """
+    """Base class for factories of editors for objects that contain lists."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

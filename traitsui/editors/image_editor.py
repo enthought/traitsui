@@ -47,6 +47,5 @@ class ImageEditor(BasicEditorFactory):
     allow_clipping = Bool()
 
     def _get_klass(self):
-        """ Returns the editor class to be instantiated.
-        """
+        """Returns the editor class to be instantiated."""
         return toolkit_object("image_editor:_ImageEditor")

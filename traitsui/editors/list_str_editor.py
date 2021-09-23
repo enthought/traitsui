@@ -23,8 +23,7 @@ from traitsui.toolkit import toolkit_object
 
 
 class ListStrEditor(BasicEditorFactory):
-    """ Editor factory for list of string editors.
-    """
+    """Editor factory for list of string editors."""
 
     # -- Trait Definitions ----------------------------------------------------
 
@@ -102,6 +101,5 @@ class ListStrEditor(BasicEditorFactory):
     menu = Any()
 
     def _get_klass(self):
-        """ Returns the editor class to be created.
-        """
+        """Returns the editor class to be created."""
         return toolkit_object("list_str_editor:_ListStrEditor")

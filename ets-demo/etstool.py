@@ -191,9 +191,7 @@ def cli():
     help="Install main package in 'editable' mode?  [default: --not-editable]",
 )
 def install(runtime, toolkit, environment, editable):
-    """ Install project and dependencies into a clean EDM environment.
-
-    """
+    """Install project and dependencies into a clean EDM environment."""
     parameters = get_parameters(runtime, toolkit, environment)
     packages = ' '.join(
         dependencies
@@ -208,30 +206,32 @@ def install(runtime, toolkit, environment, editable):
 
     # edm commands to setup the development environment
     if sys.platform == 'linux':
-        commands = ["edm environments create {environment} --platform=rh6-x86_64 --force --version={runtime}"]  # noqa: E501
+        commands = [
+            "edm environments create {environment} --platform=rh6-x86_64 --force --version={runtime}"
+        ]  # noqa: E501
     else:
-        commands = ["edm environments create {environment} --force --version={runtime}"]  # noqa: E501
+        commands = [
+            "edm environments create {environment} --force --version={runtime}"
+        ]  # noqa: E501
 
-    commands.extend([
-        "edm install -y -e {environment} " + packages,
-        "edm run -e {environment} -- python setup.py clean --all",
-        install_here,
-    ])
+    commands.extend(
+        [
+            "edm install -y -e {environment} " + packages,
+            "edm run -e {environment} -- python setup.py clean --all",
+            install_here,
+        ]
+    )
 
     # pip install pyside2, because we don't have it in EDM yet
     if toolkit == 'pyside2':
-        commands.append(
-            "edm run -e {environment} -- pip install pyside2"
-        )
+        commands.append("edm run -e {environment} -- pip install pyside2")
     elif toolkit == 'wx':
         if sys.platform != 'linux':
-            commands.append(
-                "edm run -e {environment} -- pip install wxPython"
-            )
+            commands.append("edm run -e {environment} -- pip install wxPython")
         else:
             # XXX this is mainly for TravisCI workers; need a generic solution
             commands.append(
-                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04 wxPython"   # noqa: E501
+                "edm run -e {environment} -- pip install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04 wxPython"  # noqa: E501
             )
 
     click.echo("Creating environment '{environment}'".format(**parameters))
@@ -244,7 +244,7 @@ def install(runtime, toolkit, environment, editable):
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def shell(runtime, toolkit, environment):
-    """ Create a shell into the EDM development environment
+    """Create a shell into the EDM development environment
     (aka 'activate' it).
 
     """
@@ -260,9 +260,7 @@ def shell(runtime, toolkit, environment):
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def test(runtime, toolkit, environment):
-    """ Run the test suite in a given environment with the specified toolkit.
-
-    """
+    """Run the test suite in a given environment with the specified toolkit."""
     parameters = get_parameters(runtime, toolkit, environment)
     environ = environment_vars.get(toolkit, {}).copy()
     environ['PYTHONUNBUFFERED'] = "1"
@@ -271,8 +269,7 @@ def test(runtime, toolkit, environment):
         "python -m unittest discover -v " + PACKAGE_NAME,
     ]
     commands = [
-        "edm run -e {environment} -- " + command
-        for command in commands
+        "edm run -e {environment} -- " + command for command in commands
     ]
 
     # We run in a tempdir to avoid accidentally picking up wrong code from a
@@ -289,13 +286,12 @@ def test(runtime, toolkit, environment):
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def cleanup(runtime, toolkit, environment):
-    """ Remove a development environment.
-
-    """
+    """Remove a development environment."""
     parameters = get_parameters(runtime, toolkit, environment)
     commands = [
         "edm run -e {environment} -- python setup.py clean",
-        "edm environments remove {environment} --purge -y"]
+        "edm environments remove {environment} --purge -y",
+    ]
     click.echo("Cleaning up environment '{environment}'".format(**parameters))
     execute(commands, parameters)
     click.echo('Done cleanup')
@@ -305,9 +301,7 @@ def cleanup(runtime, toolkit, environment):
 @click.option('--runtime', default=DEFAULT_RUNTIME)
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
 def test_clean(runtime, toolkit):
-    """ Run tests in a clean environment, cleaning up afterwards
-
-    """
+    """Run tests in a clean environment, cleaning up afterwards"""
     args = ['--toolkit={}'.format(toolkit), '--runtime={}'.format(runtime)]
     try:
         install(args=args, standalone_mode=False)
@@ -318,15 +312,13 @@ def test_clean(runtime, toolkit):
 
 @cli.command()
 def test_all():
-    """ Run test_clean across all supported environment combinations.
-
-    """
+    """Run test_clean across all supported environment combinations."""
     failed_command = False
     for runtime, toolkits in supported_combinations.items():
         for toolkit in toolkits:
             args = [
                 '--toolkit={}'.format(toolkit),
-                '--runtime={}'.format(runtime)
+                '--runtime={}'.format(runtime),
             ]
             try:
                 test_clean(args, standalone_mode=True)
@@ -343,9 +335,7 @@ def test_all():
     "--environment", default=None, help="Name of EDM environment to check."
 )
 def flake8(runtime, toolkit, environment):
-    """ Run a flake8 check in a given environment.
-
-    """
+    """Run a flake8 check in a given environment."""
     parameters = get_parameters(runtime, toolkit, environment)
     commands = ["edm run -e {environment} -- python -m flake8"]
     execute(commands, parameters)
@@ -353,18 +343,14 @@ def flake8(runtime, toolkit, environment):
 
 @cli.command(name="generate-bundles")
 def generate_bundles():
-    """ Generate application bundles for each supported platform.
-    """
+    """Generate application bundles for each supported platform."""
 
     for platform in PLATFORMS:
         bundle_dir = os.path.join("bundle", platform)
         if not os.path.exists(bundle_dir):
             os.makedirs(bundle_dir)
 
-        bundle_file = os.path.join(
-            bundle_dir,
-            BUNDLE_NAME
-        )
+        bundle_file = os.path.join(bundle_dir, BUNDLE_NAME)
 
         click.echo("Generating bundle {}".format(bundle_file))
 
@@ -390,14 +376,11 @@ def generate_bundles():
 @cli.command(name="upload-bundles")
 @click.option('--repository', default=DEFAULT_REPOSITORY)
 def upload_bundles(repository):
-    """ Upload the generated bundles """
+    """Upload the generated bundles"""
     BUNDLES = []
     for platform in PLATFORMS:
         bundle_dir = os.path.join("bundle", platform)
-        bundle_file = os.path.join(
-            bundle_dir,
-            BUNDLE_NAME
-        )
+        bundle_file = os.path.join(bundle_dir, BUNDLE_NAME)
         if os.path.exists(bundle_file):
             BUNDLES.append((bundle_file, platform))
 
@@ -409,7 +392,7 @@ def upload_bundles(repository):
             "enthought",
             repository,
             platform,
-            bundle
+            bundle,
         ]
         try:
             subprocess.check_call(cmd)
@@ -421,27 +404,30 @@ def upload_bundles(repository):
 # Utility routines
 # ----------------------------------------------------------------------------
 
+
 def get_parameters(runtime, toolkit, environment):
-    """ Set up parameters dictionary for format() substitution """
+    """Set up parameters dictionary for format() substitution"""
     parameters = {
         'runtime': runtime,
         'toolkit': toolkit,
         'environment': environment,
     }
     if toolkit not in supported_combinations[runtime]:
-        msg = ("Python {runtime} and toolkit {toolkit} not supported by " +
-               "test environments")
+        msg = (
+            "Python {runtime} and toolkit {toolkit} not supported by "
+            + "test environments"
+        )
         raise RuntimeError(msg.format(**parameters))
     if environment is None:
-        parameters['environment'] = (
-            PACKAGE_NAME + '-test-{runtime}-{toolkit}'.format(**parameters)
-        )
+        parameters[
+            'environment'
+        ] = PACKAGE_NAME + '-test-{runtime}-{toolkit}'.format(**parameters)
     return parameters
 
 
 @contextmanager
 def do_in_tempdir(files=(), capture_files=()):
-    """ Create a temporary directory, cleaning up after done.
+    """Create a temporary directory, cleaning up after done.
 
     Creates the temporary directory, and changes into it.  On exit returns to
     original directory and removes temporary dir.
@@ -478,8 +464,9 @@ def execute(commands, parameters):
     for command in commands:
         click.echo("[EXECUTING] {}".format(command.format(**parameters)))
         try:
-            subprocess.check_call([arg.format(**parameters)
-                                   for arg in command.split()])
+            subprocess.check_call(
+                [arg.format(**parameters) for arg in command.split()]
+            )
         except subprocess.CalledProcessError as exc:
             click.echo(str(exc))
             sys.exit(1)

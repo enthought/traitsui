@@ -34,7 +34,7 @@ class Foo(HasTraits):
 
 
 def default_custom_view():
-    """ Default view of DateRangeEditor """
+    """Default view of DateRangeEditor"""
     view = View(
         Item(name="date_range", style="custom", editor=DateRangeEditor())
     )
@@ -42,7 +42,7 @@ def default_custom_view():
 
 
 def custom_view_allow_no_range():
-    """ DateRangeEditor with allow_no_selection set to True."""
+    """DateRangeEditor with allow_no_selection set to True."""
     view = View(
         Item(
             name="date_range",
@@ -54,7 +54,7 @@ def custom_view_allow_no_range():
 
 
 class TestDateRangeEditorGeneric(BaseTestMixin, unittest.TestCase):
-    """ Tests that are not GUI backend specific."""
+    """Tests that are not GUI backend specific."""
 
     def setUp(self):
         BaseTestMixin.setUp(self)
@@ -69,7 +69,6 @@ class TestDateRangeEditorGeneric(BaseTestMixin, unittest.TestCase):
 
 @requires_toolkit([ToolkitName.qt])
 class TestDateRangeEditorQt(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -228,7 +227,7 @@ class TestDateRangeEditorQt(BaseTestMixin, unittest.TestCase):
     def launch_editor(self, view_factory):
         foo = Foo()
         with create_ui(foo, dict(view=view_factory())) as ui:
-            editor, = ui._editors
+            (editor,) = ui._editors
             yield foo, editor
 
     def check_select_status(self, editor, date, selected):

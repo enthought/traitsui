@@ -35,20 +35,19 @@ LEDStyles = {
 
 
 class _LEDEditor(Editor):
-    """ Traits UI 'display only' LED numeric editor.
-    """
+    """Traits UI 'display only' LED numeric editor."""
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = LEDNumberCtrl(parent, -1)
         self.control.SetAlignment(LEDStyles[self.factory.alignment])
         self.set_tooltip()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self.control.SetValue(self.str_value)
 

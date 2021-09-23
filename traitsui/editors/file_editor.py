@@ -26,8 +26,7 @@ filter_trait = List(Str)
 
 
 class FileEditor(TextEditor):
-    """ Editor factory for file editors.
-    """
+    """Editor factory for file editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

@@ -25,21 +25,17 @@ class ObjectWithNumber(HasTraits):
 
 @requires_toolkit([ToolkitName.qt])
 class TestStickyDialog(unittest.TestCase):
-    """ Test _StickyDialog used by the UI's Qt backend.
-    """
+    """Test _StickyDialog used by the UI's Qt backend."""
 
     def test_sticky_dialog_with_parent(self):
         obj = ObjectWithNumber()
         obj2 = ObjectWithNumber()
         parent_view = View(Item("number"), title="Parent")
-        nested = View(
-            Item("number"),
-            resizable=True,
-            title="Nested"
-        )
+        nested = View(Item("number"), resizable=True, title="Nested")
         with create_ui(obj, dict(view=parent_view)) as ui:
             with create_ui(obj2, dict(parent=ui.control, view=nested)) as ui2:
                 from pyface.qt import QtCore
+
                 self.assertFalse(
                     ui2.control.windowFlags() & QtCore.Qt.WindowMaximized
                 )
