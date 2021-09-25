@@ -53,6 +53,16 @@ class TargetById:
         self.id = id
 
 
+class TreeNode:
+    """ A locator for locating a target in a Tree uniquely specified by a row
+    and a column.
+    """
+
+    def __init__(self, row, column):
+        self.row = row
+        self.column = column
+
+
 class Slider:
     """ A locator for locating a nested slider widget within a UI.
     """
