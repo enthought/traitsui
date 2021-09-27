@@ -63,16 +63,22 @@ class Hdf5FileNode(HasTraits):
     arrays = List(Hdf5ArrayNode)
     groups_and_arrays = List()
 
+
 # Recursively build tree, there is probably a better way of doing this.
 
 
 def _get_sub_arrays(group, h5file):
     """Return a list of all arrays immediately below a group in an HDF5 file."""
-    return [Hdf5ArrayNode(name=array._v_name,
-                          path=array._v_pathname,
-                          parent_path=array._v_parent._v_pathname)
-            for array in group if isinstance(array, (tb.Array, tb.Table))]  # More pythonic
-            # for array in h5file.iter_nodes(group, classname='Array')]  # Old call
+    return [
+        Hdf5ArrayNode(
+            name=array._v_name,
+            path=array._v_pathname,
+            parent_path=array._v_parent._v_pathname,
+        )
+        for array in group
+        if isinstance(array, (tb.Array, tb.Table))
+    ]  # More pythonic
+    # for array in h5file.iter_nodes(group, classname='Array')]  # Old call
 
 
 def _get_sub_groups(group, h5file):
@@ -82,13 +88,16 @@ def _get_sub_groups(group, h5file):
     for subgroup in h5file.iter_nodes(group, classname='Group'):
         subsubgroups = _get_sub_groups(subgroup, h5file)
         subsubarrays = _get_sub_arrays(subgroup, h5file)
-        subgroups.append(Hdf5GroupNode(name=subgroup._v_name,
-                                       path=subgroup._v_pathname,
-                                       parent_path=subgroup._v_parent._v_pathname,
-                                       groups=subsubgroups,
-                                       arrays=subsubarrays,
-                                       groups_and_arrays=subsubgroups + subsubarrays)
-                         )
+        subgroups.append(
+            Hdf5GroupNode(
+                name=subgroup._v_name,
+                path=subgroup._v_pathname,
+                parent_path=subgroup._v_parent._v_pathname,
+                groups=subsubgroups,
+                arrays=subsubarrays,
+                groups_and_arrays=subsubgroups + subsubarrays,
+            )
+        )
     return subgroups
 
 
@@ -98,12 +107,15 @@ def _hdf5_tree(filename):
     with tb.open_file(filename, 'r') as h5file:
         subgroups = _get_sub_groups(h5file.root, h5file)
         subarrays = _get_sub_arrays(h5file.root, h5file)
-    h5_tree = Hdf5FileNode(name=filename,
-                           groups=subgroups,
-                           arrays=subarrays,
-                           groups_and_arrays=subgroups + subarrays)
+    h5_tree = Hdf5FileNode(
+        name=filename,
+        groups=subgroups,
+        arrays=subarrays,
+        groups_and_arrays=subgroups + subarrays,
+    )
 
     return h5_tree
+
 
 # Get a tree editor
 
@@ -145,18 +157,19 @@ class ATree(HasTraits):
 
     traits_view = View(
         Group(
-            Item('h5_tree',
-                 editor=_hdf5_tree_editor(selected='node'),
-                 resizable=True,
-                 show_label=False,
-                 ),
+            Item(
+                'h5_tree',
+                editor=_hdf5_tree_editor(selected='node'),
+                resizable=True,
+                show_label=False,
+            ),
             orientation='vertical',
         ),
         title='HDF5 Tree Example',
         buttons=['Undo', 'OK', 'Cancel'],
         resizable=True,
-        width=.3,
-        height=.3
+        width=0.3,
+        height=0.3,
     )
 
     def _node_changed(self):
@@ -169,49 +182,83 @@ def make_test_datasets():
     import numpy as np
     import pandas as pd  # pandas uses pytables to store datasets in hdf5 format.
     from random import randrange
+
     n = 100
 
-    df = pd.DataFrame(dict([("int{0}".format(i), np.random.randint(0, 10, size=n))
-                            for i in range(5)]))
+    df = pd.DataFrame(
+        dict(
+            [
+                ("int{0}".format(i), np.random.randint(0, 10, size=n))
+                for i in range(5)
+            ]
+        )
+    )
 
     df['float'] = np.random.randn(n)
 
     for i in range(10):
-        df["object_1_{0}".format(i)] = ['%08x' % randrange(16**8) for _ in range(n)]
+        df["object_1_{0}".format(i)] = [
+            '%08x' % randrange(16 ** 8) for _ in range(n)
+        ]
 
     for i in range(7):
-        df["object_2_{0}".format(i)] = ['%15x' % randrange(16**15) for _ in range(n)]
+        df["object_2_{0}".format(i)] = [
+            '%15x' % randrange(16 ** 15) for _ in range(n)
+        ]
 
     df.info()
     df.to_hdf('test_fixed.h5', 'data', format='fixed')
     df.to_hdf('test_table_no_dc.h5', 'data', format='table')
     df.to_hdf('test_table_dc.h5', 'data', format='table', data_columns=True)
-    df.to_hdf('test_fixed_compressed.h5', 'data', format='fixed', complib='blosc', complevel=9)
+    df.to_hdf(
+        'test_fixed_compressed.h5',
+        'data',
+        format='fixed',
+        complib='blosc',
+        complevel=9,
+    )
 
     # h5py dataset
     time = np.arange(n)
     x = np.linspace(-7, 7, n)
-    axes_latlon = [('time', time), ('coordinate', np.array(['lat', 'lon'], dtype='S3'))]
-    axes_mag = [('time', time), ('direction', np.array(['x', 'y', 'z'], dtype='S1'))]
-    latlon = np.vstack((np.linspace(-0.0001, 0.00001, n) + 23.8,
-                        np.zeros(n) - 82.3)).T
-    mag_data = np.vstack((-(1 - np.tanh(x)**2) * np.sin(2 * x),
-                          -(1 - np.tanh(x)**2) * np.sin(2 * x),
-                          -(1 - np.tanh(x)**2))).T
-    datasets = axes_mag + axes_latlon + [('magnetic_3_axial', mag_data), ('latlon', latlon)]
+    axes_latlon = [
+        ('time', time),
+        ('coordinate', np.array(['lat', 'lon'], dtype='S3')),
+    ]
+    axes_mag = [
+        ('time', time),
+        ('direction', np.array(['x', 'y', 'z'], dtype='S1')),
+    ]
+    latlon = np.vstack(
+        (np.linspace(-0.0001, 0.00001, n) + 23.8, np.zeros(n) - 82.3)
+    ).T
+    mag_data = np.vstack(
+        (
+            -(1 - np.tanh(x) ** 2) * np.sin(2 * x),
+            -(1 - np.tanh(x) ** 2) * np.sin(2 * x),
+            -(1 - np.tanh(x) ** 2),
+        )
+    ).T
+    datasets = (
+        axes_mag
+        + axes_latlon
+        + [('magnetic_3_axial', mag_data), ('latlon', latlon)]
+    )
     with h5py.File(os.path.join(ROOT, 'test_h5pydata.h5'), "a") as h5file:
         h5group = h5file.require_group("run1_test1")
         for data_name, data in datasets:
-            h5group.require_dataset(name=data_name,
-                                    dtype=data.dtype,
-                                    shape=data.shape,
-                                    data=data,
-                                    # **options
-                                    )
+            h5group.require_dataset(
+                name=data_name,
+                dtype=data.dtype,
+                shape=data.shape,
+                data=data,
+                # **options
+            )
 
 
 def main():
     import sys
+
     filename = os.path.join(ROOT, 'test_fixed.h5')
     filename = os.path.join(ROOT, 'test_table_no_dc.h5')
     if len(sys.argv) > 1:

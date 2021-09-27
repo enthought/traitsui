@@ -25,6 +25,7 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
+
 try:
     from pyface.qt import QtCore
 except ImportError:
@@ -51,7 +52,6 @@ def get_view(adapter):
 
 @requires_toolkit([ToolkitName.qt])
 class TestTabularModel(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -62,9 +62,8 @@ class TestTabularModel(BaseTestMixin, unittest.TestCase):
         # Test dragging an item in the list and drop it below the last item
         obj = DummyHasTraits(names=["A", "B", "C", "D"])
         view = get_view(TabularAdapter(columns=["Name"]))
-        with reraise_exceptions(), \
-                create_ui(obj, dict(view=view)) as ui:
-            editor, = ui.get_editors("names")
+        with reraise_exceptions(), create_ui(obj, dict(view=view)) as ui:
+            (editor,) = ui.get_editors("names")
 
             model = editor.model
             # sanity check
@@ -77,12 +76,17 @@ class TestTabularModel(BaseTestMixin, unittest.TestCase):
 
             # when
             # dropped below the list, the "parent" is invalid.
-            parent = QtCore.QModelIndex()   # invalid index object
+            parent = QtCore.QModelIndex()  # invalid index object
             model.dropMimeData(mime_data, QtCore.Qt.MoveAction, -1, -1, parent)
 
             # then
             mime_data = model.mimeData(
-                [model.createIndex(i, 0) for i in range(model.rowCount(None),)]
+                [
+                    model.createIndex(i, 0)
+                    for i in range(
+                        model.rowCount(None),
+                    )
+                ]
             )
             content = mime_data.instance()
             self.assertEqual(content, ["A", "C", "D", "B"])
@@ -94,9 +98,8 @@ class TestTabularModel(BaseTestMixin, unittest.TestCase):
         obj = DummyHasTraits(names=["A", "B", "C", "D"])
         view = get_view(TabularAdapter(columns=["Name"]))
 
-        with reraise_exceptions(), \
-                create_ui(obj, dict(view=view)) as ui:
-            editor, = ui.get_editors("names")
+        with reraise_exceptions(), create_ui(obj, dict(view=view)) as ui:
+            (editor,) = ui.get_editors("names")
 
             model = editor.model
             # sanity check
@@ -114,7 +117,12 @@ class TestTabularModel(BaseTestMixin, unittest.TestCase):
 
             # then
             mime_data = model.mimeData(
-                [model.createIndex(i, 0) for i in range(model.rowCount(None),)]
+                [
+                    model.createIndex(i, 0)
+                    for i in range(
+                        model.rowCount(None),
+                    )
+                ]
             )
             content = mime_data.instance()
             self.assertEqual(content, ["B", "C", "A", "D"])
@@ -125,9 +133,8 @@ class TestTabularModel(BaseTestMixin, unittest.TestCase):
         obj = DummyHasTraits(names=["A", "B", "C"])
         view = get_view(TabularAdapter(columns=["Name"], can_drop=True))
 
-        with reraise_exceptions(), \
-                create_ui(obj, dict(view=view)) as ui:
-            editor, = ui.get_editors("names")
+        with reraise_exceptions(), create_ui(obj, dict(view=view)) as ui:
+            (editor,) = ui.get_editors("names")
 
             model = editor.model
             # sanity check
@@ -146,7 +153,12 @@ class TestTabularModel(BaseTestMixin, unittest.TestCase):
             # then
             self.assertEqual(model.rowCount(None), 4)
             mime_data = model.mimeData(
-                [model.createIndex(i, 0) for i in range(model.rowCount(None),)]
+                [
+                    model.createIndex(i, 0)
+                    for i in range(
+                        model.rowCount(None),
+                    )
+                ]
             )
             content = mime_data.instance()
             self.assertEqual(content, ["A", "B", "C", "A"])
@@ -158,9 +170,8 @@ class TestTabularModel(BaseTestMixin, unittest.TestCase):
         obj = DummyHasTraits(names=["A", "B", "C"])
         view = get_view(TabularAdapter(columns=["Name"]))
 
-        with reraise_exceptions(), \
-                create_ui(obj, dict(view=view)) as ui:
-            editor, = ui.get_editors("names")
+        with reraise_exceptions(), create_ui(obj, dict(view=view)) as ui:
+            (editor,) = ui.get_editors("names")
 
             model = editor.model
             # sanity check
@@ -172,7 +183,12 @@ class TestTabularModel(BaseTestMixin, unittest.TestCase):
 
             # then
             mime_data = model.mimeData(
-                [model.createIndex(i, 0) for i in range(model.rowCount(None),)]
+                [
+                    model.createIndex(i, 0)
+                    for i in range(
+                        model.rowCount(None),
+                    )
+                ]
             )
             content = mime_data.instance()
             self.assertEqual(content, ["A", "C", "B"])

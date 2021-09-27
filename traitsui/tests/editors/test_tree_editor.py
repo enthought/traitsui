@@ -33,13 +33,13 @@ from traitsui.tests._tools import (
 
 
 class BogusWrap(HasTraits):
-    """ A bogus class representing a bogus tree. """
+    """A bogus class representing a bogus tree."""
 
     name = Str("Totally bogus")
 
 
 class Bogus(HasTraits):
-    """ A bogus class representing a bogus tree. """
+    """A bogus class representing a bogus tree."""
 
     name = Str("Bogus")
 
@@ -58,7 +58,7 @@ class BogusHandler(Handler):
 
 
 class BogusTreeView(HasTraits):
-    """ A traitsui view visualizing Bogus objects as trees. """
+    """A traitsui view visualizing Bogus objects as trees."""
 
     bogus = Instance(Bogus)
 
@@ -73,7 +73,7 @@ class BogusTreeView(HasTraits):
     def _nodes_default(self):
         return [
             TreeNode(node_for=[Bogus], children="bogus_list", label="=Bogus"),
-            TreeNode(node_for=[BogusWrap], label='name')
+            TreeNode(node_for=[BogusWrap], label='name'),
         ]
 
     def default_traits_view(self):
@@ -95,7 +95,7 @@ class BogusTreeView(HasTraits):
 
 
 class BogusTreeNodeObject(TreeNodeObject):
-    """ A bogus tree node. """
+    """A bogus tree node."""
 
     name = Str("Bogus")
 
@@ -103,7 +103,7 @@ class BogusTreeNodeObject(TreeNodeObject):
 
 
 class BogusTreeNodeObjectView(HasTraits):
-    """ A traitsui view visualizing Bogus objects as trees. """
+    """A traitsui view visualizing Bogus objects as trees."""
 
     bogus = Instance(BogusTreeNodeObject)
 
@@ -133,7 +133,6 @@ class BogusTreeNodeObjectView(HasTraits):
 
 
 class TestTreeView(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -159,8 +158,9 @@ class TestTreeView(BaseTestMixin, unittest.TestCase):
         bogus_list = [Bogus()]
         object_view = BogusTreeView(bogus=Bogus(bogus_list=bogus_list))
         view = View(Item("bogus", id="tree", editor=tree_editor))
-        with reraise_exceptions(), \
-                create_ui(object_view, dict(view=view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_view, dict(view=view)
+        ) as ui:
             editor = ui.info.tree
             editor.selected = bogus_list[0]
             GUI.process_events()
@@ -168,7 +168,7 @@ class TestTreeView(BaseTestMixin, unittest.TestCase):
     def _test_tree_editor_releases_listeners(
         self, hide_root, nodes=None, trait="bogus_list", expected_listeners=1
     ):
-        """ The TreeEditor should release the listener to the root node's children
+        """The TreeEditor should release the listener to the root node's children
         when it's disposed of.
         """
 
@@ -190,7 +190,7 @@ class TestTreeView(BaseTestMixin, unittest.TestCase):
     def _test_tree_node_object_releases_listeners(
         self, hide_root, nodes=None, trait="bogus_list", expected_listeners=1
     ):
-        """ The TreeEditor should release the listener to the root node's children
+        """The TreeEditor should release the listener to the root node's children
         when it's disposed of.
         """
 

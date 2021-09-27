@@ -24,7 +24,6 @@ class TraitObject(HasTraits):
 
 
 class TestListStrAdapter(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

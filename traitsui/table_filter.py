@@ -12,7 +12,6 @@
 """
 
 
-
 from traits.api import (
     Any,
     Bool,
@@ -56,8 +55,7 @@ GenericTableFilterRuleOperation = Trait(
 
 
 class TableFilter(HasPrivateTraits):
-    """ Filter for items displayed in a table.
-    """
+    """Filter for items displayed in a table."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -131,24 +129,23 @@ class TableFilter(HasPrivateTraits):
     filter_view = Group()
 
     def filter(self, object):
-        """ Returns whether a specified object meets the filter or search
+        """Returns whether a specified object meets the filter or search
         criteria.
         """
         return self.allowed(object)
 
     def description(self):
-        """ Returns a user-readable description of what kind of object
+        """Returns a user-readable description of what kind of object
         satisfies the filter.
         """
         return self.desc
 
     def edit(self, object):
-        """ Edits the contents of the filter.
-        """
+        """Edits the contents of the filter."""
         return self.edit_traits(view=self.edit_view(object), kind="livemodal")
 
     def edit_view(self, object):
-        """ Return a view to use for editing the filter.
+        """Return a view to use for editing the filter.
 
         The ''object'' parameter is a sample object for the table that the
         filter will be applied to. It is supplied in case the filter needs to
@@ -176,8 +173,7 @@ class TableFilter(HasPrivateTraits):
 
 
 class EvalTableFilter(TableFilter):
-    """ A table filter based on evaluating an expression.
-    """
+    """A table filter based on evaluating an expression."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -196,26 +192,27 @@ class EvalTableFilter(TableFilter):
     filter_view = Group("expression")
 
     def filter(self, object):
-        """ Returns whether a specified object meets the filter or search
+        """Returns whether a specified object meets the filter or search
         criteria.
         """
         if self._traits is None:
             self._traits = object.trait_names()
         try:
-            return eval(self.expression_, globals(), object.trait_get(*self._traits))
+            return eval(
+                self.expression_, globals(), object.trait_get(*self._traits)
+            )
         except:
             return False
 
     def description(self):
-        """ Returns a user readable description of what kind of object
-            satisfies the filter.
+        """Returns a user readable description of what kind of object
+        satisfies the filter.
         """
         return self.expression
 
 
 class GenericTableFilterRule(HasPrivateTraits):
-    """ A general rule used by a table filter.
-    """
+    """A general rule used by a table filter."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -262,8 +259,7 @@ class GenericTableFilterRule(HasPrivateTraits):
                 self.enabled = False
 
     def _name_changed(self, name):
-        """ Handles a change to the value of the **name** trait.
-        """
+        """Handles a change to the value of the **name** trait."""
         filter = self.filter
         if (filter is not None) and (filter._object is not None):
             self.value = filter._name_to_value.get(name)
@@ -280,7 +276,7 @@ class GenericTableFilterRule(HasPrivateTraits):
                 self.enabled = True
 
     def clone_traits(self, traits=None, memo=None, copy=None, **metadata):
-        """ Clones a new object from this one, optionally copying only a
+        """Clones a new object from this one, optionally copying only a
         specified set of traits."""
         return (
             super()
@@ -289,13 +285,11 @@ class GenericTableFilterRule(HasPrivateTraits):
         )
 
     def description(self):
-        """ Returns a description of the filter.
-        """
+        """Returns a description of the filter."""
         return "%s %s %s" % (self.name, self.operation, self.value)
 
     def is_true(self, object):
-        """ Returns whether the rule is true for a specified object.
-        """
+        """Returns whether the rule is true for a specified object."""
         try:
             value1 = getattr(object, self.name)
             type1 = type(value1)
@@ -339,12 +333,10 @@ class GenericTableFilterRule(HasPrivateTraits):
 
 
 class GenericTableFilterRuleEnabledColumn(ObjectColumn):
-    """ Table column that indicates whether a filter rule is enabled.
-    """
+    """Table column that indicates whether a filter rule is enabled."""
 
     def get_value(self, object):
-        """ Returns the traits editor of the column for a specified object.
-        """
+        """Returns the traits editor of the column for a specified object."""
         if hasattr(object, "enabled") and object.enabled:
             return "\N{HEAVY CHECK MARK}"
         else:
@@ -352,35 +344,30 @@ class GenericTableFilterRuleEnabledColumn(ObjectColumn):
 
 
 class GenericTableFilterRuleAndOrColumn(ObjectColumn):
-    """ Table column that displays whether a filter rule is conjoining ('and')
-        or disjoining ('or').
+    """Table column that displays whether a filter rule is conjoining ('and')
+    or disjoining ('or').
     """
 
     def get_value(self, object):
-        """ Returns the traits editor of the column for a specified object.
-        """
+        """Returns the traits editor of the column for a specified object."""
         if object.and_or == "or":
             return "or"
         return ""
 
 
 class GenericTableFilterRuleNameColumn(ObjectColumn):
-    """ Table column for the name of an object trait.
-    """
+    """Table column for the name of an object trait."""
 
     def get_editor(self, object):
-        """ Returns the traits editor of the column for a specified object.
-        """
+        """Returns the traits editor of the column for a specified object."""
         return object.name_editor
 
 
 class GenericTableFilterRuleValueColumn(ObjectColumn):
-    """ Table column for the value of an object trait.
-    """
+    """Table column for the value of an object trait."""
 
     def get_editor(self, object):
-        """ Returns the traits editor of the column for a specified object.
-        """
+        """Returns the traits editor of the column for a specified object."""
         return object.value_editor
 
 
@@ -398,8 +385,7 @@ generic_table_filter_rule_columns = [
 
 
 class RuleTableFilter(TableFilter):
-    """ A table filter based on rules.
-    """
+    """A table filter based on rules."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -439,7 +425,7 @@ class RuleTableFilter(TableFilter):
     )
 
     def filter(self, object):
-        """ Returns whether a specified object meets the filter or search
+        """Returns whether a specified object meets the filter or search
         criteria.
         """
         is_first = is_true = True
@@ -454,8 +440,8 @@ class RuleTableFilter(TableFilter):
         return is_true
 
     def description(self):
-        """ Returns a user-readable description of the kind of object that
-            satisfies the filter.
+        """Returns a user-readable description of the kind of object that
+        satisfies the filter.
         """
         ors = []
         ands = []
@@ -479,7 +465,7 @@ class RuleTableFilter(TableFilter):
         return super().description()
 
     def edit_view(self, object):
-        """ Return a view to use for editing the filter.
+        """Return a view to use for editing the filter.
 
         The ''object'' parameter is a sample object for the table that the
         filter will be applied to. It is supplied in case the filter needs to
@@ -514,8 +500,7 @@ class RuleTableFilter(TableFilter):
         )
 
     def _get_table_editor(self, names):
-        """ Returns a table editor to use for editing the filter.
-        """
+        """Returns a table editor to use for editing the filter."""
         from traitsui.api import TableEditor
         from traitsui.editors.api import EnumEditor
 
@@ -535,7 +520,7 @@ class RuleTableFilter(TableFilter):
         )
 
     def __getstate__(self):
-        """ Returns the state to be pickled.
+        """Returns the state to be pickled.
 
         This definition overrides **object**.
         """
@@ -546,8 +531,7 @@ class RuleTableFilter(TableFilter):
         return dict
 
     def _rules_changed(self, rules):
-        """ Handles a change to the **rules** trait.
-        """
+        """Handles a change to the **rules** trait."""
         for rule in rules:
             rule.filter = self
 
@@ -566,8 +550,7 @@ menu_table_filter_rule_columns = [
 
 
 class MenuTableFilter(RuleTableFilter):
-    """ A table filter based on a menu of rules.
-    """
+    """A table filter based on a menu of rules."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -580,7 +563,7 @@ class MenuTableFilter(RuleTableFilter):
     view_id = Str("traitsui.table_filter.MenuTableFilter")
 
     def filter(self, object):
-        """ Returns whether a specified object meets the filter or search
+        """Returns whether a specified object meets the filter or search
         criteria.
         """
         for rule in self.rules:
@@ -589,8 +572,8 @@ class MenuTableFilter(RuleTableFilter):
         return True
 
     def description(self):
-        """ Returns a user8readable description of what kind of object
-            satisfies the filter.
+        """Returns a user8readable description of what kind of object
+        satisfies the filter.
         """
         result = " and ".join(
             [rule.description() for rule in self.rules if rule.enabled]
@@ -600,8 +583,7 @@ class MenuTableFilter(RuleTableFilter):
         return "All items"
 
     def _get_table_editor(self, names):
-        """ Returns a table editor to use for editing the filter.
-        """
+        """Returns a table editor to use for editing the filter."""
         from .api import TableEditor
         from .editors.api import EnumEditor
 

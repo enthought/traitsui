@@ -33,9 +33,8 @@ from .editor import Editor
 from traits.api import Instance, Property
 
 
-
 class SimpleEditor(Editor):
-    """ Simple style of editor for sets.
+    """Simple style of editor for sets.
 
     The editor displays two list boxes, with buttons for moving the selected
     items from left to right, or vice versa. If **can_move_all** on the factory
@@ -64,8 +63,8 @@ class SimpleEditor(Editor):
     scrollable = True
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = QtGui.QWidget()
         self.root_layout = QtGui.QGridLayout(self.control)
@@ -125,23 +124,19 @@ class SimpleEditor(Editor):
         )
 
     def _get_names(self):
-        """ Gets the current set of enumeration names.
-        """
+        """Gets the current set of enumeration names."""
         return self._names
 
     def _get_mapping(self):
-        """ Gets the current mapping.
-        """
+        """Gets the current mapping."""
         return self._mapping
 
     def _get_inverse_mapping(self):
-        """ Gets the current inverse mapping.
-        """
+        """Gets the current inverse mapping."""
         return self._inverse_mapping
 
     def _create_listbox(self, col, handler1, handler2, title):
-        """Creates a list box.
-        """
+        """Creates a list box."""
         # Add the column title in emphasized text:
         title_widget = QtGui.QLabel(title)
         font = QtGui.QFont(title_widget.font())
@@ -161,8 +156,7 @@ class SimpleEditor(Editor):
         return list
 
     def _create_button(self, label, layout, handler):
-        """ Creates a button.
-        """
+        """Creates a button."""
         button = QtGui.QPushButton(label)
         # The connection type is set to workaround Qt5 + MacOSX issue with
         # event dispatching. See enthought/traitsui#1308
@@ -171,23 +165,25 @@ class SimpleEditor(Editor):
         return button
 
     def values_changed(self):
-        """ Recomputes the cached data based on the underlying enumeration model
-            or the values of the factory.
+        """Recomputes the cached data based on the underlying enumeration model
+        or the values of the factory.
         """
-        self._names, self._mapping, self._inverse_mapping = enum_values_changed(
-            self._value(), self.string_value
-        )
+        (
+            self._names,
+            self._mapping,
+            self._inverse_mapping,
+        ) = enum_values_changed(self._value(), self.string_value)
 
     def _values_changed(self):
-        """ Handles the underlying object model's enumeration set or factory's
-            values being changed.
+        """Handles the underlying object model's enumeration set or factory's
+        values being changed.
         """
         self.values_changed()
         self.update_editor()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         # Check for any items having been deleted from the enumeration that are
         # still present in the object value:
@@ -254,8 +250,7 @@ class SimpleEditor(Editor):
         self._check_left_right()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         if self._object is not None:
             self._object.on_trait_change(
                 self._values_changed, self._name, remove=True
@@ -272,8 +267,7 @@ class SimpleEditor(Editor):
         super().dispose()
 
     def get_error_control(self):
-        """ Returns the editor's control for indicating error status.
-        """
+        """Returns the editor's control for indicating error status."""
         return [self._unused, self._used]
 
     def _on_value(self):
@@ -315,8 +309,7 @@ class SimpleEditor(Editor):
         self._move_item(1)
 
     def _transfer_all(self, list_from, list_to, values_from, values_to):
-        """ Transfers all items from one list to another.
-        """
+        """Transfers all items from one list to another."""
         values_from = values_from[:]
         values_to = values_to[:]
 
@@ -338,8 +331,7 @@ class SimpleEditor(Editor):
         return (values_from, values_to)
 
     def _transfer_items(self, list_from, list_to, values_from, values_to):
-        """ Transfers the selected item from one list to another.
-        """
+        """Transfers the selected item from one list to another."""
         values_from = values_from[:]
         values_to = values_to[:]
         index_from = max(self._get_first_selection(list_from), 0)
@@ -389,8 +381,7 @@ class SimpleEditor(Editor):
         return (values_from, values_to)
 
     def _move_item(self, direction):
-        """ Moves an item up or down within the "used" list.
-        """
+        """Moves an item up or down within the "used" list."""
         # Move the item up/down within the list:
         listbox = self._used
         index_from = self._get_first_selection(listbox)
@@ -413,8 +404,7 @@ class SimpleEditor(Editor):
         self.value = value[:index] + values + value[index + 2 :]
 
     def _check_up_down(self):
-        """ Sets the proper enabled state for the up and down buttons.
-        """
+        """Sets the proper enabled state for the up and down buttons."""
         if self.factory.ordered:
             selected = self._used.selectedItems()
             self._up.setEnabled(
@@ -426,8 +416,7 @@ class SimpleEditor(Editor):
             )
 
     def _check_left_right(self):
-        """ Sets the proper enabled state for the left and right buttons.
-        """
+        """Sets the proper enabled state for the left and right buttons."""
         self._use.setEnabled(
             self._unused.count() > 0
             and self._get_first_selection(self._unused) >= 0
@@ -452,8 +441,7 @@ class SimpleEditor(Editor):
     # -------------------------------------------------------------------------
 
     def _get_selected_strings(self, listbox):
-        """ Returns a list of the selected strings in the given *listbox*.
-        """
+        """Returns a list of the selected strings in the given *listbox*."""
         return [str(itm.text()) for itm in listbox.selectedItems()]
 
     # -------------------------------------------------------------------------
@@ -461,8 +449,7 @@ class SimpleEditor(Editor):
     # -------------------------------------------------------------------------
 
     def _get_first_selection(self, listbox):
-        """ Returns the index of the first (or only) selected item.
-        """
+        """Returns the index of the first (or only) selected item."""
         select_list = listbox.selectedItems()
         if len(select_list) == 0:
             return -1

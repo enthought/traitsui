@@ -24,8 +24,7 @@ editors_trait = List(EditorFactory)
 
 
 class CompoundEditor(EditorFactory):
-    """ Editor factory for compound editors.
-    """
+    """Editor factory for compound editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

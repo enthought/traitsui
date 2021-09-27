@@ -12,11 +12,12 @@
 """
 
 
-
 from .checkbox_column import CheckboxColumn
 from .edit_column import EditColumn
 from .has_dynamic_views import (
-    DynamicView, DynamicViewSubElement, HasDynamicViews
+    DynamicView,
+    DynamicViewSubElement,
+    HasDynamicViews,
 )
 from .progress_column import ProgressColumn
 from .saving import CanSaveMixin, SaveHandler

@@ -24,8 +24,7 @@ from traitsui.tests._tools import (
 
 
 class TupleEditor(HasTraits):
-    """Dialog containing a Tuple of two Int's.
-    """
+    """Dialog containing a Tuple of two Int's."""
 
     tup = Tuple(Int, Int, Str)
 
@@ -35,7 +34,6 @@ class TupleEditor(HasTraits):
 
 
 class TestTupleEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

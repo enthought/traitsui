@@ -41,7 +41,7 @@ from traitsui.api import View, Item, Handler, EnumEditor
 cities = {
     'GA': ['Athens', 'Atlanta', 'Macon', 'Marietta', 'Savannah'],
     'TX': ['Austin', 'Amarillo', 'Dallas', 'Houston', 'San Antonio', 'Waco'],
-    'OR': ['Albany', 'Eugene', 'Portland']
+    'OR': ['Albany', 'Eugene', 'Portland'],
 }
 
 
@@ -72,8 +72,7 @@ class AddressHandler(Handler):
 
 
 class Address(HasTraits):
-    """ Demo class for demonstrating dynamic redefinition of valid trait values.
-    """
+    """Demo class for demonstrating dynamic redefinition of valid trait values."""
 
     street_address = Str()
     state = Enum(list(cities.keys())[0], list(cities.keys()))
@@ -82,13 +81,14 @@ class Address(HasTraits):
     view = View(
         Item(name='street_address'),
         Item(name='state'),
-        Item(name='city',
-             editor=EnumEditor(name='handler.cities'),
-             ),
+        Item(
+            name='city',
+            editor=EnumEditor(name='handler.cities'),
+        ),
         title='Address Information',
         buttons=['OK'],
         resizable=True,
-        handler=AddressHandler
+        handler=AddressHandler,
     )
 
 

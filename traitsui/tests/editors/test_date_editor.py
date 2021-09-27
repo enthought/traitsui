@@ -68,7 +68,6 @@ def multi_select_selected_color_view():
 
 @requires_toolkit([ToolkitName.qt])
 class TestDateEditorCustomQt(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -129,7 +128,7 @@ class TestDateEditorCustomQt(BaseTestMixin, unittest.TestCase):
     def launch_editor(self, view_factory):
         foo = Foo()
         with create_ui(foo, dict(view=view_factory())) as ui:
-            editor, = ui._editors
+            (editor,) = ui._editors
             yield foo, editor
 
     def check_select_status(self, editor, date, selected):
@@ -183,11 +182,10 @@ class TestDateEditorCustomQt(BaseTestMixin, unittest.TestCase):
 # Run this test case against wx too once enthought/traitsui#752 is fixed.
 @requires_toolkit([ToolkitName.qt])
 class TestDateEditorInitDispose(unittest.TestCase):
-    """ Test the init and dispose of date editor."""
+    """Test the init and dispose of date editor."""
 
     def check_init_and_dispose(self, view):
-        with reraise_exceptions(), \
-                create_ui(Foo(), dict(view=view)):
+        with reraise_exceptions(), create_ui(Foo(), dict(view=view)):
             pass
 
     def test_simple_date_editor(self):

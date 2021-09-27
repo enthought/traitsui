@@ -28,11 +28,14 @@ from traitsui.api import View, Item, DateEditor, Group
 
 
 class DateEditorDemo(HasTraits):
-    """ Demo class to show Date editors. """
+    """Demo class to show Date editors."""
+
     single_date = Date()
     multi_date = List(Date)
-    info_string = Str('The editors for Traits Date objects.  Showing both '
-                      'the defaults, and one with alternate options.')
+    info_string = Str(
+        'The editors for Traits Date objects.  Showing both '
+        'the defaults, and one with alternate options.'
+    )
 
     multi_select_editor = DateEditor(
         allow_future=False,
@@ -54,35 +57,35 @@ class DateEditorDemo(HasTraits):
                 style='readonly',
                 editor=DateEditor(
                     strftime='You picked %B %d %Y',
-                    message='Click a date above.'
+                    message='Click a date above.',
                 ),
-                label='ReadOnly editor'
+                label='ReadOnly editor',
             ),
-            label='Default settings for editors'
+            label='Default settings for editors',
         ),
         Group(
             Item(
                 'multi_date',
                 editor=multi_select_editor,
                 style='custom',
-                label='Multi-select custom editor'
+                label='Multi-select custom editor',
             ),
             label='More customized editor: multi-select; disallow '
-                  'future; selection style; etc.'
+            'future; selection style; etc.',
         ),
-        resizable=True
+        resizable=True,
     )
 
     def _multi_date_changed(self):
-        """ Print each time the date value is changed in the editor. """
+        """Print each time the date value is changed in the editor."""
         print(self.multi_date)
 
     def _simple_date_changed(self):
-        """ Print each time the date value is changed in the editor. """
+        """Print each time the date value is changed in the editor."""
         print(self.simple_date, self.single_date)
 
     def _single_date_changed(self):
-        """ Print each time the date value is changed in the editor. """
+        """Print each time the date value is changed in the editor."""
         print(self.single_date)
 
 

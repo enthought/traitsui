@@ -1,4 +1,4 @@
-#--(LED Editor)-----------------------------------------------------------
+# --(LED Editor)-----------------------------------------------------------
 """
 LED Editor
 ==========
@@ -23,24 +23,19 @@ or a string value containing only characters that would be found in an interger
 or float value.
 """
 
-#--[Imports]--------------------------------------------------------------
+# --[Imports]--------------------------------------------------------------
 
-from threading \
-    import Thread
+from threading import Thread
 
-from time \
-    import sleep
+from time import sleep
 
-from traits.api \
-    import HasTraits, Instance, Int, Float, Bool
+from traits.api import HasTraits, Instance, Int, Float, Bool
 
-from traitsui.api \
-    import View, Item, HGroup, Handler, UIInfo, spring
+from traitsui.api import View, Item, HGroup, Handler, UIInfo, spring
 
-from traitsui.wx.extra.led_editor \
-    import LEDEditor
+from traitsui.wx.extra.led_editor import LEDEditor
 
-#--[LEDDemoHandler Class]-------------------------------------------------
+# --[LEDDemoHandler Class]-------------------------------------------------
 
 # Handler class for the LEDDemo class view:
 
@@ -64,16 +59,17 @@ class LEDDemoHandler(Handler):
     def closed(self, info, is_ok):
         self.running = False
         while self.alive:
-            sleep(.05)
+            sleep(0.05)
 
     def _update_counter(self):
         while self.running:
             self.info.object.counter1 += 1
-            self.info.object.counter2 += .001
-            sleep(.01)
+            self.info.object.counter2 += 0.001
+            sleep(0.01)
         self.alive = False
 
-#--[LEDDemo Class]--------------------------------------------------------
+
+# --[LEDDemo Class]--------------------------------------------------------
 
 # The main demo class:
 
@@ -88,57 +84,66 @@ class LEDDemo(HasTraits):
 
     # The traits view:
     view = View(
-        Item('counter1',
-             label='Left aligned',
-             editor=LEDEditor(alignment='left')
-             ),
-        Item('counter1',
-             label='Center aligned',
-             editor=LEDEditor(alignment='center')
-             ),
-        Item('counter1',
-             label='Right aligned',
-             editor=LEDEditor()  # default = 'right' aligned
-             ),
-        Item('counter2',
-             label='Float value',
-             editor=LEDEditor(format_str='%.3f')
-             ),
+        Item(
+            'counter1',
+            label='Left aligned',
+            editor=LEDEditor(alignment='left'),
+        ),
+        Item(
+            'counter1',
+            label='Center aligned',
+            editor=LEDEditor(alignment='center'),
+        ),
+        Item(
+            'counter1',
+            label='Right aligned',
+            editor=LEDEditor(),  # default = 'right' aligned
+        ),
+        Item(
+            'counter2',
+            label='Float value',
+            editor=LEDEditor(format_str='%.3f'),
+        ),
         '_',
         HGroup(
-            Item('counter1',
-                 label='Left',
-                 height=-40,
-                 width=120,
-                 editor=LEDEditor(alignment='left')
-                 ),
+            Item(
+                'counter1',
+                label='Left',
+                height=-40,
+                width=120,
+                editor=LEDEditor(alignment='left'),
+            ),
             spring,
-            Item('counter1',
-                 label='Center',
-                 height=-40,
-                 width=120,
-                 editor=LEDEditor(alignment='center')
-                 ),
+            Item(
+                'counter1',
+                label='Center',
+                height=-40,
+                width=120,
+                editor=LEDEditor(alignment='center'),
+            ),
             spring,
-            Item('counter1',
-                 label='Right',
-                 height=-40,
-                 width=120,
-                 editor=LEDEditor()  # default = 'right' aligned
-                 ),
+            Item(
+                'counter1',
+                label='Right',
+                height=-40,
+                width=120,
+                editor=LEDEditor(),  # default = 'right' aligned
+            ),
             spring,
-            Item('counter2',
-                 label='Float',
-                 height=-40,
-                 width=120,
-                 editor=LEDEditor(format_str='%.3f')
-                 )
+            Item(
+                'counter2',
+                label='Float',
+                height=-40,
+                width=120,
+                editor=LEDEditor(format_str='%.3f'),
+            ),
         ),
         title='LED Editor Demo',
         buttons=['OK'],
-        handler=LEDDemoHandler
+        handler=LEDDemoHandler,
     )
 
-#--<Example*>-------------------------------------------------------------
+
+# --<Example*>-------------------------------------------------------------
 
 demo = LEDDemo()

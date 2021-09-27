@@ -27,16 +27,14 @@ from traitsui.api import (
     InstanceEditor,
     Item,
     UItem,
-    View
+    View,
 )
 import traitsui.extras
 
 
 class ImageChoice(InstanceChoice):
     def get_view(self):
-        return View(
-            UItem('name', editor=ImageEditor(image=self.object))
-        )
+        return View(UItem('name', editor=ImageEditor(image=self.object)))
 
 
 class ButtonEditorDemo(HasTraits):
@@ -53,8 +51,8 @@ class ButtonEditorDemo(HasTraits):
             ImageResource("previous", [traitsui.extras]),
             ImageResource("next", [traitsui.extras]),
             ImageResource("parent", [traitsui.extras]),
-            ImageResource("reload", [traitsui.extras])
-        ]
+            ImageResource("reload", [traitsui.extras]),
+        ],
     )
 
     def _my_button_image_default(self):
@@ -67,19 +65,19 @@ class ButtonEditorDemo(HasTraits):
             editor=ButtonEditor(
                 label_value="my_button_label",
                 image_value="my_button_image",
-                orientation="horizontal"
-            )
+                orientation="horizontal",
+            ),
         ),
         Item("my_button_label"),
         Item(
             "my_button_image",
             editor=InstanceEditor(
-                name="my_button_image_options",
-                adapter=ImageChoice
+                name="my_button_image_options", adapter=ImageChoice
             ),
-            style="custom"
-        )
+            style="custom",
+        ),
     )
+
 
 # Create the demo:
 demo = ButtonEditorDemo()

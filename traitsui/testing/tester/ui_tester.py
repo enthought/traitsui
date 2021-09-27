@@ -16,13 +16,13 @@ import contextlib
 from traitsui.testing._gui import process_cascade_events
 from traitsui.testing._exception_handling import reraise_exceptions
 from traitsui.testing.tester._ui_tester_registry.default_registry import (
-    get_default_registries
+    get_default_registries,
 )
 from traitsui.testing.tester.ui_wrapper import UIWrapper
 
 
 class UITester:
-    """ UITester assists testing of GUI applications developed using TraitsUI.
+    """UITester assists testing of GUI applications developed using TraitsUI.
 
     See :ref:`testing-traitsui-applications` Section in the User Manual for
     further details.
@@ -68,7 +68,7 @@ class UITester:
 
     @property
     def auto_process_events(self):
-        """ Flag to indicate whether to process (cascade) GUI events
+        """Flag to indicate whether to process (cascade) GUI events
         automatically. This is propagated through to
         :class:`~traitsui.testing.tester.ui_wrapper.UIWrapper` instances
         created from this tester.
@@ -82,7 +82,7 @@ class UITester:
 
     @contextlib.contextmanager
     def create_ui(self, object, ui_kwargs=None):
-        """ Context manager to create a UI and dispose it upon exit.
+        """Context manager to create a UI and dispose it upon exit.
 
         This method does not modify the states of the :class:`UITester` and is
         not a requirement for using other methods on the tester.
@@ -123,7 +123,7 @@ class UITester:
                         process_cascade_events()
 
     def find_by_name(self, ui, name):
-        """ Find the TraitsUI editor with the given name and return a new
+        """Find the TraitsUI editor with the given name and return a new
         ``UIWrapper`` object for further interactions with the editor.
 
         ``name`` is typically a value defined on
@@ -144,7 +144,7 @@ class UITester:
         return self._get_wrapper(ui).find_by_name(name=name)
 
     def find_by_id(self, ui, id):
-        """ Find the TraitsUI editor with the given identifier and return a new
+        """Find the TraitsUI editor with the given identifier and return a new
         ``UIWrapper`` object for further interactions with the editor.
 
         ``id`` is typically a value defined on :attr:`traitsui.item.Item.id`
@@ -165,7 +165,7 @@ class UITester:
         return self._get_wrapper(ui).find_by_id(id=id)
 
     def _get_wrapper(self, ui):
-        """ Return a new UIWrapper wrapping the given traitsui.ui.UI.
+        """Return a new UIWrapper wrapping the given traitsui.ui.UI.
 
         Parameters
         ----------

@@ -71,7 +71,7 @@ is_released = {is_released}
 
 
 def read_module(module, package='traitsui'):
-    """ Read a simple .py file from traitsui in a safe way.
+    """Read a simple .py file from traitsui in a safe way.
 
     It would be simpler to import the file, but that can be problematic in an
     unknown system, so we exec the file instead and extract the variables.
@@ -81,7 +81,7 @@ def read_module(module, package='traitsui'):
     """
     base_dir = os.path.dirname(__file__)
     module_name = package + '.' + module
-    path = os.path.join(base_dir, package, module+'.py')
+    path = os.path.join(base_dir, package, module + '.py')
     with open(path, 'r', encoding='utf-8') as fp:
         code = compile(fp.read(), module_name, 'exec')
     context = {}
@@ -109,6 +109,7 @@ def _git_info():
         If Git is available, but the version command fails (most likely
         because there's no Git repository here).
     """
+
     def _minimal_ext_cmd(cmd):
         # construct minimal environment
         env = {}
@@ -121,7 +122,9 @@ def _git_info():
         env['LANG'] = 'C'
         env['LC_ALL'] = 'C'
         out = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, env=env,
+            cmd,
+            stdout=subprocess.PIPE,
+            env=env,
         ).communicate()[0]
         return out
 
@@ -308,7 +311,9 @@ if __name__ == "__main__":
         version=__version__,
         author='David C. Morrill, et. al.',
         author_email='dmorrill@enthought.com',
-        classifiers=[c.strip() for c in """\
+        classifiers=[
+            c.strip()
+            for c in """\
             Development Status :: 5 - Production/Stable
             Intended Audience :: Developers
             Intended Audience :: Science/Research
@@ -326,7 +331,9 @@ if __name__ == "__main__":
             Topic :: Scientific/Engineering
             Topic :: Software Development
             Topic :: Software Development :: Libraries
-            """.splitlines() if len(c.strip()) > 0],
+            """.splitlines()
+            if len(c.strip()) > 0
+        ],
         description='traitsui: traits-capable user interfaces',
         long_description=LONG_DESCRIPTION,
         long_description_content_type="text/x-rst",
@@ -348,7 +355,8 @@ if __name__ == "__main__":
                 'wx/images/*',
                 'qt4/images/*',
                 'testing/data/*',
-            ]),
+            ]
+        ),
         packages=find_packages(),
         entry_points={
             'traitsui.toolkits': [
@@ -359,7 +367,7 @@ if __name__ == "__main__":
             ],
             'etsdemo_data': [
                 'demo = traitsui.extras._demo_info:info',
-            ]
+            ],
         },
         platforms=["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
         python_requires=">=3.6",

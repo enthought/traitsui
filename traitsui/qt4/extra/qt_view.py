@@ -28,8 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 class QtView(View):
-    """ A View that allows the specification of Qt style sheets.
-    """
+    """A View that allows the specification of Qt style sheets."""
 
     #: An optional string containing a Qt style sheet.
     style_sheet = Str()

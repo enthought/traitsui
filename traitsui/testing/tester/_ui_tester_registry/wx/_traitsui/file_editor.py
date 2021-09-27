@@ -15,7 +15,7 @@ from traitsui.testing.tester._ui_tester_registry.wx._registry_helper import (
 
 
 def register(registry):
-    """ Register interactions for the given registry.
+    """Register interactions for the given registry.
 
     If there are any conflicts, an error will occur.
 

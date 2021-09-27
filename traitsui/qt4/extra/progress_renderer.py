@@ -18,15 +18,14 @@ from traitsui.qt4.table_editor import TableDelegate
 
 
 class ProgressRenderer(TableDelegate):
-    """ A renderer which displays a progress bar.
-    """
+    """A renderer which displays a progress bar."""
 
     # -------------------------------------------------------------------------
     #  QAbstractItemDelegate interface
     # -------------------------------------------------------------------------
 
     def paint(self, painter, option, index):
-        """ Paint the progressbar. """
+        """Paint the progressbar."""
         # Get the column and object
         column = index.model()._editor.columns[index.column()]
         obj = index.data(QtCore.Qt.UserRole)

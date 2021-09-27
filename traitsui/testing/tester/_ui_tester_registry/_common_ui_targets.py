@@ -17,7 +17,7 @@ any necessary traits, and then call the register method.
 
 
 class BaseSourceWithLocation:
-    """ Wrapper base class to hold locator information together with a source
+    """Wrapper base class to hold locator information together with a source
     (typically an editor).  This is useful for cases in which the location
     information is still necessary when performing actions such as a mouse
     click or key click.
@@ -55,7 +55,7 @@ class BaseSourceWithLocation:
 
     @classmethod
     def register(cls, registry):
-        """ Class method to register interactions on a
+        """Class method to register interactions on a
         _SourceWithLocation for the given registry. It is expected that this
         class method will be called by subclasses, and thus interactions would
         be registered to subclasses rather than the base class.
@@ -76,5 +76,5 @@ class BaseSourceWithLocation:
             registry.register_interaction(
                 target_class=cls,
                 interaction_class=interaction_class,
-                handler=handler
+                handler=handler,
             )

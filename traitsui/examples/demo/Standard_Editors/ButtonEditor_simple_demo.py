@@ -27,7 +27,7 @@ from traitsui.api import Item, View
 
 
 class ButtonEditorDemo(HasTraits):
-    """ Defines the main ButtonEditor demo class. """
+    """Defines the main ButtonEditor demo class."""
 
     # Define a Button trait:
     my_button_trait = Button('Click Me')
@@ -44,7 +44,7 @@ class ButtonEditorDemo(HasTraits):
         Item('click_counter', style='readonly'),
         title='ButtonEditor',
         buttons=['OK'],
-        resizable=True
+        resizable=True,
     )
 
 

@@ -30,7 +30,7 @@ class DirectoryModel(HasTraits):
 # Run this against wx too when enthought/traitsui#752 is also fixed.
 @requires_toolkit([ToolkitName.qt])
 class TestDirectoryEditor(BaseTestMixin, unittest.TestCase):
-    """ Test DirectoryEditor. """
+    """Test DirectoryEditor."""
 
     def setUp(self):
         BaseTestMixin.setUp(self)

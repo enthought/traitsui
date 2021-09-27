@@ -36,8 +36,7 @@ from .key_event_to_name import key_event_to_name
 
 
 class KeyBindingEditor(Editor):
-    """ An editor for modifying bindings of keys to controls.
-    """
+    """An editor for modifying bindings of keys to controls."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -53,14 +52,13 @@ class KeyBindingEditor(Editor):
     clear = Event()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = KeyBindingCtrl(self)
 
     def update_object(self, event):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         try:
             self.value = value = key_event_to_name(event)
             self._binding.text = value
@@ -68,21 +66,19 @@ class KeyBindingEditor(Editor):
             pass
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self.control.setText(self.value)
 
     def update_focus(self, has_focus):
-        """ Updates the current focus setting of the control.
-        """
+        """Updates the current focus setting of the control."""
         if has_focus:
             self._binding.border_size = 1
             self.object.owner.focus_owner = self._binding
 
     def _key_changed(self, event):
-        """ Handles a keyboard event.
-        """
+        """Handles a keyboard event."""
         binding = self.object
         key_name = key_event_to_name(event)
         cur_binding = binding.owner.key_binding_for(binding, key_name)
@@ -104,14 +100,12 @@ class KeyBindingEditor(Editor):
         self.value = key_name
 
     def _clear_changed(self):
-        """ Handles a clear field event.
-        """
+        """Handles a clear field event."""
         self.value = ""
 
 
 class KeyBindingCtrl(QtGui.QLabel):
-    """ PyQt control for editing key bindings.
-    """
+    """PyQt control for editing key bindings."""
 
     def __init__(self, editor, parent=None):
         super().__init__(parent)
@@ -132,15 +126,13 @@ class KeyBindingCtrl(QtGui.QLabel):
         editor.has_focus = False
 
     def keyPressEvent(self, event):
-        """ Handle keyboard keys being pressed.
-        """
+        """Handle keyboard keys being pressed."""
         # Ignore presses of the control and shift keys.
         if event.key() not in (QtCore.Qt.Key_Control, QtCore.Qt.Key_Shift):
             self.editor.key = event
 
     def paintEvent(self, event):
-        """ Updates the screen.
-        """
+        """Updates the screen."""
         QtGui.QLabel.paintEvent(self, event)
 
         w = self.width()
@@ -160,18 +152,15 @@ class KeyBindingCtrl(QtGui.QLabel):
         p.end()
 
     def focusInEvent(self, event):
-        """ Handles getting the focus.
-        """
+        """Handles getting the focus."""
         self.editor.has_focus = True
         self.update()
 
     def focusOutEvent(self, event):
-        """ Handles losing the focus.
-        """
+        """Handles losing the focus."""
         self.editor.has_focus = False
         self.update()
 
     def mouseDoubleClickEvent(self, event):
-        """ Handles the user double clicking the control to clear its contents.
-        """
+        """Handles the user double clicking the control to clear its contents."""
         self.editor.clear = True

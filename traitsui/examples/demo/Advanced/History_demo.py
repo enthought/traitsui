@@ -28,15 +28,13 @@ different demo, then reselecting this demo. Each field should have the same
 value it had when the demo was run the previous time.
 """
 
-#-- Imports --------------------------------------------------------------
+# -- Imports --------------------------------------------------------------
 
-from traits.api \
-    import HasTraits, Str, File, Directory
+from traits.api import HasTraits, Str, File, Directory
 
-from traitsui.api \
-    import View, Item, FileEditor, DirectoryEditor, HistoryEditor
+from traitsui.api import View, Item, FileEditor, DirectoryEditor, HistoryEditor
 
-#-- HistoryDemo Class ----------------------------------------------------
+# -- HistoryDemo Class ----------------------------------------------------
 
 
 class HistoryDemo(HasTraits):
@@ -46,29 +44,23 @@ class HistoryDemo(HasTraits):
     directory = Directory()
 
     view = View(
-        Item('name',
-             id='name',
-             editor=HistoryEditor(entries=5)
-             ),
-        Item('file',
-             id='file1',
-             editor=FileEditor(entries=10)
-             ),
-        Item('file',
-             id='file2',
-             editor=FileEditor(entries=10,
-                               filter=['All files (*.*)|*.*',
-                                       'Python files (*.py)|*.py'])
-             ),
-        Item('directory',
-             id='directory',
-             editor=DirectoryEditor(entries=10)
-             ),
+        Item('name', id='name', editor=HistoryEditor(entries=5)),
+        Item('file', id='file1', editor=FileEditor(entries=10)),
+        Item(
+            'file',
+            id='file2',
+            editor=FileEditor(
+                entries=10,
+                filter=['All files (*.*)|*.*', 'Python files (*.py)|*.py'],
+            ),
+        ),
+        Item('directory', id='directory', editor=DirectoryEditor(entries=10)),
         title='History Editor Demo',
         id='enthought.test.history_demo.HistoryDemo',
         width=0.33,
-        resizable=True
+        resizable=True,
     )
+
 
 # Create the demo:
 demo = HistoryDemo()

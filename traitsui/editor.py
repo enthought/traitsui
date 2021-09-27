@@ -49,8 +49,8 @@ factory_trait = Instance(EditorFactory)
 
 
 class Editor(HasPrivateTraits):
-    """ Represents an editing control for an object trait in a Traits-based
-        user interface.
+    """Represents an editing control for an object trait in a Traits-based
+    user interface.
     """
 
     #: The UI (user interface) this editor is part of:
@@ -134,7 +134,7 @@ class Editor(HasPrivateTraits):
     # -- Abstract methods ---------------------------------------------------
 
     def init(self, parent):
-        """ Create and initialize the underlying toolkit widget.
+        """Create and initialize the underlying toolkit widget.
 
         This method must be overriden by subclasses.  Implementations must
         ensure that the :attr:`control` trait is set to an appropriate
@@ -148,14 +148,14 @@ class Editor(HasPrivateTraits):
         raise NotImplementedError("This method must be overriden.")
 
     def update_editor(self):
-        """ Updates the editor when the value changes externally to the editor.
+        """Updates the editor when the value changes externally to the editor.
 
         This should normally be overridden in a subclass.
         """
         pass
 
     def error(self, excp):
-        """ Handles an error that occurs while setting the object's trait value.
+        """Handles an error that occurs while setting the object's trait value.
 
         This should normally be overridden in a subclass.
 
@@ -167,14 +167,14 @@ class Editor(HasPrivateTraits):
         pass
 
     def set_focus(self):
-        """ Assigns focus to the editor's underlying toolkit widget.
+        """Assigns focus to the editor's underlying toolkit widget.
 
         This method must be overriden by subclasses.
         """
         raise NotImplementedError("This method must be overriden.")
 
     def set_tooltip_text(self, control, text):
-        """ Sets the tooltip for a toolkit control to the provided text.
+        """Sets the tooltip for a toolkit control to the provided text.
 
         This method must be overriden by subclasses.
 
@@ -188,7 +188,7 @@ class Editor(HasPrivateTraits):
         raise NotImplementedError("This method must be overriden.")
 
     def string_value(self, value, format_func=None):
-        """ Returns the text representation of a specified object trait value.
+        """Returns the text representation of a specified object trait value.
 
         This simply delegates to the factory's `string_value` method.
         Sub-classes may choose to override the default implementation.
@@ -203,7 +203,7 @@ class Editor(HasPrivateTraits):
         return self.factory.string_value(value, format_func)
 
     def restore_prefs(self, prefs):
-        """ Restores saved user preference information for the editor.
+        """Restores saved user preference information for the editor.
 
         Editors with state may choose to override this. It will only be used
         if the editor has an `id` value.
@@ -216,7 +216,7 @@ class Editor(HasPrivateTraits):
         pass
 
     def save_prefs(self):
-        """ Returns any user preference information for the editor.
+        """Returns any user preference information for the editor.
 
         Editors with state may choose to override this. It will only be used
         if the editor has an `id` value.
@@ -232,7 +232,7 @@ class Editor(HasPrivateTraits):
     # -- Editor life-cycle methods ------------------------------------------
 
     def prepare(self, parent):
-        """ Finish setting up the editor.
+        """Finish setting up the editor.
 
         Parameters
         ----------
@@ -249,7 +249,7 @@ class Editor(HasPrivateTraits):
         self.update_editor()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
+        """Disposes of the contents of an editor.
 
         This disconnects any synchronised values and resets references
         to other objects.
@@ -279,7 +279,7 @@ class Editor(HasPrivateTraits):
     # -- Undo/redo methods --------------------------------------------------
 
     def log_change(self, undo_factory, *undo_args):
-        """ Logs a change made in the editor with undo/redo history.
+        """Logs a change made in the editor with undo/redo history.
 
         Parameters
         ----------
@@ -305,7 +305,7 @@ class Editor(HasPrivateTraits):
                         history.extend(item)
 
     def get_undo_item(self, object, name, old_value, new_value):
-        """ Creates an undo history entry.
+        """Creates an undo history entry.
 
         Can be overridden in a subclass for special value types.
 
@@ -334,7 +334,7 @@ class Editor(HasPrivateTraits):
         is_list=False,
         is_event=False,
     ):
-        """ Synchronize an editor trait and a user object trait.
+        """Synchronize an editor trait and a user object trait.
 
         Also sets the initial value of the editor trait from the
         user object trait (for modes 'from' and 'both'), and the initial
@@ -397,7 +397,7 @@ class Editor(HasPrivateTraits):
     # -- Utility methods -----------------------------------------------------
 
     def parse_extended_name(self, name):
-        """ Extract the object, name and a getter from an extended name
+        """Extract the object, name and a getter from an extended name
 
         Parameters
         ----------
@@ -421,7 +421,7 @@ class Editor(HasPrivateTraits):
         return (object, name, partial(xgetattr, object, name))
 
     def set_tooltip(self, control=None):
-        """ Sets the tooltip for a specified toolkit control.
+        """Sets the tooltip for a specified toolkit control.
 
         This uses the tooltip_text method to get the text to use.
 
@@ -448,7 +448,7 @@ class Editor(HasPrivateTraits):
         return True
 
     def tooltip_text(self):
-        """ Get the text for a tooltip, checking various sources.
+        """Get the text for a tooltip, checking various sources.
 
         This checks for text from, in order:
 
@@ -482,7 +482,7 @@ class Editor(HasPrivateTraits):
 
     @contextmanager
     def no_trait_update(self, name):
-        """ Context manager that blocks updates from the named trait. """
+        """Context manager that blocks updates from the named trait."""
         if name in self._no_trait_update:
             yield
             return
@@ -495,7 +495,7 @@ class Editor(HasPrivateTraits):
 
     @contextmanager
     def raise_to_debug(self):
-        """ Context manager that uses raise to debug to raise exceptions. """
+        """Context manager that uses raise to debug to raise exceptions."""
         try:
             yield
         except Exception:
@@ -505,7 +505,7 @@ class Editor(HasPrivateTraits):
 
     @contextmanager
     def updating_value(self):
-        """ Context manager to handle updating value. """
+        """Context manager to handle updating value."""
         if self.updating:
             yield
             return
@@ -521,8 +521,7 @@ class Editor(HasPrivateTraits):
     # ------------------------------------------------------------------------
 
     def __init__(self, parent, **traits):
-        """ Initializes the editor object.
-        """
+        """Initializes the editor object."""
         super().__init__(**traits)
         try:
             self.old_value = getattr(self.object, self.name)
@@ -542,7 +541,7 @@ class Editor(HasPrivateTraits):
     # ------------------------------------------------------------------------
 
     def _update_editor(self, object, name, old_value, new_value):
-        """ Performs updates when the object trait changes.
+        """Performs updates when the object trait changes.
 
         This is designed to be used as a trait listener.
         """
@@ -589,7 +588,7 @@ class Editor(HasPrivateTraits):
             self.update_editor()
 
     def _sync_values(self):
-        """ Initialize and synchronize editor and factory traits
+        """Initialize and synchronize editor and factory traits
 
         Initializes and synchronizes (as needed) editor traits with the
         value of corresponding factory traits.  The name of the factory
@@ -650,7 +649,7 @@ class Editor(HasPrivateTraits):
                 setattr(self, name, value)
 
     def _bind_from(self, key, user_object, xuser_name, editor_name, is_list):
-        """ Bind trait change handlers from a user object to the editor.
+        """Bind trait change handlers from a user object to the editor.
 
         Parameters
         ----------
@@ -686,7 +685,7 @@ class Editor(HasPrivateTraits):
                     with self.no_trait_update(key), self.raise_to_debug():
                         n = event.index
                         getattr(self, editor_name)[
-                            n:n + len(event.removed)
+                            n : n + len(event.removed)
                         ] = event.added
 
             items = xuser_name + "_items"
@@ -694,7 +693,7 @@ class Editor(HasPrivateTraits):
             self._user_to.append((user_object, items, user_list_modified))
 
     def _bind_to(self, key, user_object, xuser_name, editor_name, is_list):
-        """ Bind trait change handlers from a user object to the editor.
+        """Bind trait change handlers from a user object to the editor.
 
         Parameters
         ----------
@@ -728,7 +727,7 @@ class Editor(HasPrivateTraits):
                     with self.no_trait_update(key), self.raise_to_debug():
                         n = event.index
                         value = xgetattr(user_object, xuser_name)
-                        value[n:n + len(event.removed)] = event.added
+                        value[n : n + len(event.removed)] = event.added
 
             self.on_trait_change(editor_list_modified, editor_name + "_items")
             self._user_from.append(
@@ -736,7 +735,7 @@ class Editor(HasPrivateTraits):
             )
 
     def __set_value(self, value):
-        """ Set the value of the trait the editor is editing.
+        """Set the value of the trait the editor is editing.
 
         This calls the appropriate setattr method on the handler to perform
         the actual change.
@@ -760,7 +759,7 @@ class Editor(HasPrivateTraits):
 
     @cached_property
     def _get_context_object(self):
-        """ Returns the context object the editor is using
+        """Returns the context object the editor is using
 
         In some cases a proxy object is edited rather than an object directly
         in the context, in which case we return ``self.object``.
@@ -776,22 +775,19 @@ class Editor(HasPrivateTraits):
 
     @cached_property
     def _get_extended_name(self):
-        """ Returns the extended trait name being edited.
-        """
+        """Returns the extended trait name being edited."""
         return ("%s.%s" % (self.object_name, self.name)).split(".", 1)[1]
 
     def _get_value_trait(self):
-        """ Returns the trait the editor is editing (Property implementation).
-        """
+        """Returns the trait the editor is editing (Property implementation)."""
         return self.object.trait(self.name)
 
     def _get_value(self):
-        """ Returns the value of the trait the editor is editing.
-        """
+        """Returns the value of the trait the editor is editing."""
         return getattr(self.object, self.name, Undefined)
 
     def _set_value(self, value):
-        """ Set the value of the trait the editor is editing.
+        """Set the value of the trait the editor is editing.
 
         Dispatches via the TraitsUI Undo/Redo mechanisms to make change
         reversible, if desired.
@@ -800,6 +796,5 @@ class Editor(HasPrivateTraits):
             self.ui.do_undoable(self.__set_value, value)
 
     def _get_str_value(self):
-        """ Returns the text representation of the object trait.
-        """
+        """Returns the text representation of the object trait."""
         return self.string_value(getattr(self.object, self.name, Undefined))

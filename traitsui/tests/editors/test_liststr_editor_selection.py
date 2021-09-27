@@ -91,10 +91,10 @@ single_select_item_view = View(
 
 
 def get_selected_indices(editor):
-    """ Returns a list of the indices of all currently selected list items.
-    """
+    """Returns a list of the indices of all currently selected list items."""
     if is_wx():
         import wx
+
         # "item" in this context means "index of the item"
         item = -1
         selected = []
@@ -116,8 +116,7 @@ def get_selected_indices(editor):
 
 
 def set_selected_single(editor, index):
-    """ Selects a specified item in an editor with multi_select=False.
-    """
+    """Selects a specified item in an editor with multi_select=False."""
     if is_wx():
         editor.control.Select(index)
 
@@ -133,7 +132,7 @@ def set_selected_single(editor, index):
 
 
 def set_selected_multiple(editor, indices):
-    """ Clears old selection and selects specified items in an editor with
+    """Clears old selection and selects specified items in an editor with
     multi_select=True.
     """
     if is_wx():
@@ -155,8 +154,7 @@ def set_selected_multiple(editor, indices):
 
 
 def clear_selection(editor):
-    """ Clears existing selection.
-    """
+    """Clears existing selection."""
     if is_wx():
         import wx
 
@@ -175,8 +173,7 @@ def clear_selection(editor):
 
 
 def right_click_item(editor, index):
-    """ Right clicks on the specified item.
-    """
+    """Right clicks on the specified item."""
 
     if is_wx():
         import wx
@@ -191,6 +188,7 @@ def right_click_item(editor, index):
     elif is_qt():
         from pyface.qt import QtCore
         from pyface.qt.QtTest import QTest
+
         view = editor.list_view
         q_model_index = view.model().index(index, 0)
         view.scrollTo(q_model_index)
@@ -206,8 +204,7 @@ def right_click_item(editor, index):
 
 
 def right_click_center(editor):
-    """ Right click the middle of the widget.
-    """
+    """Right click the middle of the widget."""
 
     if is_wx():
         import wx
@@ -221,6 +218,7 @@ def right_click_center(editor):
     elif is_qt():
         from pyface.qt import QtCore
         from pyface.qt.QtTest import QTest
+
         view = editor.list_view
         rect = view.rect()
         QTest.mouseClick(
@@ -236,7 +234,6 @@ def right_click_center(editor):
 @unittest.skipIf(is_wx(), "Issue enthought/traitsui#752")
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestListStrEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -251,8 +248,9 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
             yield editor
 
     def test_list_str_editor_single_selection(self):
-        with reraise_exceptions(), \
-                self.setup_gui(ListStrModel(), get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListStrModel(), get_view()
+        ) as editor:
 
             if is_qt():  # No initial selection
                 self.assertEqual(editor.selected_index, -1)
@@ -282,8 +280,9 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
     def test_list_str_editor_multi_selection(self):
         view = get_view(multi_select=True)
 
-        with reraise_exceptions(), \
-                self.setup_gui(ListStrModel(), view) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListStrModel(), view
+        ) as editor:
 
             self.assertEqual(editor.multi_selected_indices, [])
             self.assertEqual(editor.multi_selected, [])
@@ -307,8 +306,9 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(editor.multi_selected, [])
 
     def test_list_str_editor_single_selection_changed(self):
-        with reraise_exceptions(), \
-                self.setup_gui(ListStrModel(), get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListStrModel(), get_view()
+        ) as editor:
 
             if is_qt():  # No initial selection
                 self.assertEqual(get_selected_indices(editor), [])
@@ -350,8 +350,9 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
     def test_list_str_editor_multi_selection_changed(self):
         view = get_view(multi_select=True)
 
-        with reraise_exceptions(), \
-                self.setup_gui(ListStrModel(), view) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListStrModel(), view
+        ) as editor:
 
             self.assertEqual(get_selected_indices(editor), [])
 
@@ -389,8 +390,9 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
     def test_list_str_editor_multi_selection_items_changed(self):
         view = get_view(multi_select=True)
 
-        with reraise_exceptions(), \
-                self.setup_gui(ListStrModel(), view) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListStrModel(), view
+        ) as editor:
 
             self.assertEqual(get_selected_indices(editor), [])
 
@@ -424,23 +426,26 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
         model = ListStrModel()
 
         # Without auto_add
-        with reraise_exceptions(), \
-                create_ui(model, dict(view=get_view())) as ui:
+        with reraise_exceptions(), create_ui(
+            model, dict(view=get_view())
+        ) as ui:
             process_cascade_events()
             editor = ui.get_editors("value")[0]
             self.assertEqual(editor.item_count, 3)
 
         # With auto_add
-        with reraise_exceptions(), \
-                create_ui(model, dict(view=get_view(auto_add=True))) as ui:
+        with reraise_exceptions(), create_ui(
+            model, dict(view=get_view(auto_add=True))
+        ) as ui:
             process_cascade_events()
             editor = ui.get_editors("value")[0]
             self.assertEqual(editor.item_count, 3)
 
     def test_list_str_editor_refresh_editor(self):
         # Smoke test for refresh_editor/refresh_
-        with reraise_exceptions(), \
-                self.setup_gui(ListStrModel(), get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListStrModel(), get_view()
+        ) as editor:
             if is_qt():
                 editor.refresh_editor()
             elif is_wx():
@@ -452,8 +457,7 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
         # QT editor uses selected items as the source of truth when updating
         model = ListStrModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(model, get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(model, get_view()) as editor:
 
             set_selected_single(editor, 0)
             process_cascade_events()
@@ -484,8 +488,7 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
         # WX editor uses selected indices as the source of truth when updating
         model = ListStrModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(model, get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(model, get_view()) as editor:
 
             set_selected_single(editor, 0)
             process_cascade_events()
@@ -517,8 +520,7 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
         model = ListStrModel()
         view = get_view(multi_select=True)
 
-        with reraise_exceptions(), \
-                self.setup_gui(model, view) as editor:
+        with reraise_exceptions(), self.setup_gui(model, view) as editor:
 
             set_selected_multiple(editor, [0])
             process_cascade_events()
@@ -550,8 +552,7 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
         model = ListStrModel()
         view = get_view(multi_select=True)
 
-        with reraise_exceptions(), \
-                self.setup_gui(model, view) as editor:
+        with reraise_exceptions(), self.setup_gui(model, view) as editor:
 
             set_selected_multiple(editor, [0])
             process_cascade_events()
@@ -585,8 +586,7 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
         def change_value(model, value):
             model.value = value
 
-        with reraise_exceptions(), \
-                self.setup_gui(model, get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(model, get_view()) as editor:
 
             set_selected_single(editor, 0)
             process_cascade_events()
@@ -605,8 +605,9 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
     # wx editor doesn't have a `setx` method
     @requires_toolkit([ToolkitName.qt])
     def test_list_str_editor_setx(self):
-        with reraise_exceptions(), \
-                self.setup_gui(ListStrModel(), get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListStrModel(), get_view()
+        ) as editor:
 
             set_selected_single(editor, 0)
             process_cascade_events()
@@ -630,14 +631,14 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
     def test_list_str_editor_horizontal_lines(self):
         # Smoke test for painting horizontal lines
         view = get_view(horizontal_lines=True)
-        with reraise_exceptions(), \
-                self.setup_gui(ListStrModel(), view):
+        with reraise_exceptions(), self.setup_gui(ListStrModel(), view):
             pass
 
     def test_list_str_editor_title(self):
         # Smoke test for adding a title
-        with reraise_exceptions(), \
-                self.setup_gui(ListStrModel(), get_view(title="testing")):
+        with reraise_exceptions(), self.setup_gui(
+            ListStrModel(), get_view(title="testing")
+        ):
             pass
 
     def test_list_str_editor_right_click(self):
@@ -652,8 +653,7 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
             right_clicked_index="object.right_clicked_index",
         )
 
-        with reraise_exceptions(), \
-                self.setup_gui(model, view) as editor:
+        with reraise_exceptions(), self.setup_gui(model, view) as editor:
 
             self.assertEqual(model.right_clicked, "")
             self.assertEqual(model.right_clicked_index, 0)
@@ -675,8 +675,7 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
             right_clicked="object.right_clicked",
             right_clicked_index="object.right_clicked_index",
         )
-        with reraise_exceptions(), \
-                self.setup_gui(model, view) as editor:
+        with reraise_exceptions(), self.setup_gui(model, view) as editor:
 
             self.assertEqual(model.right_clicked, "")
             self.assertEqual(model.right_clicked_index, 0)
@@ -689,7 +688,6 @@ class TestListStrEditor(BaseTestMixin, unittest.TestCase):
 
 
 class TestListStrEditorSelection(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -703,8 +701,9 @@ class TestListStrEditorSelection(BaseTestMixin, unittest.TestCase):
         obj = ListStrEditorWithSelectedIndex(
             values=["value1", "value2"], selected_index=1
         )
-        with reraise_exceptions(), \
-                create_ui(obj, dict(view=single_select_view)) as ui:
+        with reraise_exceptions(), create_ui(
+            obj, dict(view=single_select_view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             # the following is equivalent to setting the text in the text
             # control, then pressing OK
@@ -725,8 +724,9 @@ class TestListStrEditorSelection(BaseTestMixin, unittest.TestCase):
         obj = ListStrEditorWithSelectedIndex(
             values=["value1", "value2"], selected_indices=[1]
         )
-        with reraise_exceptions(), \
-                create_ui(obj, dict(view=multi_select_view)) as ui:
+        with reraise_exceptions(), create_ui(
+            obj, dict(view=multi_select_view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             # the following is equivalent to setting the text in the text
             # control, then pressing OK
@@ -742,7 +742,7 @@ class TestListStrEditorSelection(BaseTestMixin, unittest.TestCase):
 
     @requires_toolkit([ToolkitName.qt])
     def test_selection_listener_disconnected(self):
-        """ Check that selection listeners get correctly disconnected """
+        """Check that selection listeners get correctly disconnected"""
         from pyface.qt.QtGui import QApplication, QItemSelectionModel
         from pyface.ui.qt4.util.testing import event_loop
 
@@ -758,8 +758,9 @@ class TestListStrEditorSelection(BaseTestMixin, unittest.TestCase):
                 pass
 
             # now run again and change the selection
-            with create_ui(obj, dict(view=single_select_item_view)) as ui, \
-                    event_loop():
+            with create_ui(
+                obj, dict(view=single_select_item_view)
+            ) as ui, event_loop():
                 editor = ui.get_editors("values")[0]
 
                 list_view = editor.list_view

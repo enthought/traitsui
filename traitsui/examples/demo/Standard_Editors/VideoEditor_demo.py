@@ -19,20 +19,28 @@ import numpy as np
 from PIL import Image
 from pyface.qt.QtGui import QImage
 from traits.api import (
-    Bool, Button, Callable, Float, HasTraits, Range, Str, observe
+    Bool,
+    Button,
+    Callable,
+    Float,
+    HasTraits,
+    Range,
+    Str,
+    observe,
 )
 from traitsui.api import ButtonEditor, ContextValue, HGroup, Item, UItem, View
 from traitsui.editors.video_editor import MediaStatus, PlayerState, VideoEditor
 
 
 def QImage_from_np(image):
-    assert (np.max(image) <= 255)
+    assert np.max(image) <= 255
     image8 = image.astype(np.uint8, order='C', casting='unsafe')
     height, width, colors = image8.shape
     bytesPerLine = 4 * width
 
-    image = QImage(image8.data, width, height, bytesPerLine,
-                   QImage.Format_RGB32)
+    image = QImage(
+        image8.data, width, height, bytesPerLine, QImage.Format_RGB32
+    )
     return image
 
 
@@ -40,9 +48,11 @@ def np_from_QImage(qimage):
     # Creates a numpy array from a pyqt(5) QImage object
     width, height = qimage.width(), qimage.height()
     channels = qimage.pixelFormat().channelCount()
-    return np.array(
-        qimage.bits().asarray(width * height * channels)
-    ).reshape(height, width, channels).astype('u1')
+    return (
+        np.array(qimage.bits().asarray(width * height * channels))
+        .reshape(height, width, channels)
+        .astype('u1')
+    )
 
 
 def qimage_function(antialiasing=True):
@@ -51,6 +61,7 @@ def qimage_function(antialiasing=True):
         Turns an image function into a QImage function,
         bound within the viewing frames box.
         """
+
         def qimage_conv_func(image, box_dims):
             _np_image = image_func(np_from_QImage(image))
             pil_image = Image.fromarray(_np_image)
@@ -61,7 +72,9 @@ def qimage_function(antialiasing=True):
             _np_image = np.array(pil_image)
             image = QImage_from_np(_np_image)
             return image, _np_image
+
         return qimage_conv_func
+
     return antialias_func
 
 

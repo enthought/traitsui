@@ -93,13 +93,13 @@ class CustomEditor(DateCustomEditor):
     # ------------------------------------------------------------------------
 
     def _apply_style(self, style, dates):
-        """ **style** is a CellFormat, **dates** is a list of datetime.date """
+        """**style** is a CellFormat, **dates** is a list of datetime.date"""
         for dt in dates:
             self.set_unselected_style(style, dt)
         return
 
     def _apply_styles(self, style_dict, date_dict):
-        """ Applies the proper style out of style_dict to every (name,date_list)
+        """Applies the proper style out of style_dict to every (name,date_list)
         in date_dict.
         """
         if not style_dict or not date_dict:

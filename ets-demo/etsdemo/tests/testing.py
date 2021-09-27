@@ -15,11 +15,11 @@ import pkg_resources
 
 
 def require_gui(func):
-    """ Decorator for tests that require a non-null GUI toolkit.
-    """
+    """Decorator for tests that require a non-null GUI toolkit."""
     # Defer GUI import side-effect.
     # The toolkit is not resolved until we import pyface.api
     from pyface.api import GUI
+
     try:
         GUI()
     except NotImplementedError:
@@ -28,7 +28,7 @@ def require_gui(func):
 
 
 def create_iter_entry_points(fake_entry_points):
-    """ Return a new callable that mocks the interface of
+    """Return a new callable that mocks the interface of
     pkg_resources.iter_entry_points with the given entry point data.
 
     Currently the behaviour of a given non-None value for ``name`` is not
@@ -61,7 +61,7 @@ def create_iter_entry_points(fake_entry_points):
 
 
 def mock_iter_entry_points(fake_entry_points):
-    """ Mock pkg_resources.iter_entry_points with the given entry point data.
+    """Mock pkg_resources.iter_entry_points with the given entry point data.
 
     Currently the behaviour of a given non-None value for ``name`` is not
     supported.
@@ -72,6 +72,7 @@ def mock_iter_entry_points(fake_entry_points):
         Mapping from distribution names to entry point definitions.
     """
     return mock.patch.object(
-        pkg_resources, "iter_entry_points",
-        create_iter_entry_points(fake_entry_points)
+        pkg_resources,
+        "iter_entry_points",
+        create_iter_entry_points(fake_entry_points),
     )

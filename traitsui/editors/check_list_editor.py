@@ -33,8 +33,7 @@ from traitsui.editor_factory import EditorWithListFactory
 
 
 class CheckListEditor(EditorWithListFactory):
-    """ Editor factory for checklists.
-    """
+    """Editor factory for checklists."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

@@ -1,7 +1,7 @@
 #  Copyright (c) 2007, Enthought, Inc.
 #  License: BSD Style.
 
-#--(Extended Traits UI Item and Editor References)------------------------
+# --(Extended Traits UI Item and Editor References)------------------------
 """
 Extended Traits UI Item and Editor References
 =============================================
@@ -82,17 +82,30 @@ that the *team* trait is intialized to a valid value when a new **League**
 model is set up.
 """
 
-#--<Imports>--------------------------------------------------------------
+# --<Imports>--------------------------------------------------------------
 
 from traits.api import (
-    Button, HasTraits, Instance, Int, List, Property, Str, cached_property,
+    Button,
+    HasTraits,
+    Instance,
+    Int,
+    List,
+    Property,
+    Str,
+    cached_property,
 )
 
 from traitsui.api import (
-    HGroup, Item, ModelView, ObjectColumn, TableEditor, View, VGroup,
+    HGroup,
+    Item,
+    ModelView,
+    ObjectColumn,
+    TableEditor,
+    View,
+    VGroup,
 )
 
-#--[Player Class]---------------------------------------------------------
+# --[Player Class]---------------------------------------------------------
 
 # Define a baseball player:
 
@@ -105,7 +118,8 @@ class Player(HasTraits):
     # The number of hits the player made this season:
     hits = Int()
 
-#--[Team Class]-----------------------------------------------------------
+
+# --[Team Class]-----------------------------------------------------------
 
 # Define a baseball team:
 
@@ -122,11 +136,11 @@ class Team(HasTraits):
     num_players = Property(observe='players')
 
     def _get_num_players(self):
-        """ Implementation of the 'num_players' property.
-        """
+        """Implementation of the 'num_players' property."""
         return len(self.players)
 
-#--[League Class]---------------------------------------------------------
+
+# --[League Class]---------------------------------------------------------
 
 # Define a baseball league model:
 
@@ -139,7 +153,8 @@ class League(HasTraits):
     # The teams in the league:
     teams = List(Instance(Team))
 
-#--[LeagueModelView Class]-----------------------------------------------------
+
+# --[LeagueModelView Class]-----------------------------------------------------
 
 # Define a ModelView for a League model:
 
@@ -160,8 +175,7 @@ class LeagueModelView(ModelView):
 
     @cached_property
     def _get_total_hits(self):
-        """ Returns the total number of hits across all teams and players.
-        """
+        """Returns the total number of hits across all teams and players."""
         return sum(sum(p.hits for p in t.players) for t in self.model.teams)
 
     view = View(
@@ -169,101 +183,122 @@ class LeagueModelView(ModelView):
             HGroup(
                 Item('total_hits', style='readonly'),
                 label='League Statistics',
-                show_border=True
+                show_border=True,
             ),
             VGroup(
-                Item('model.teams',
-                     show_label=False,
-                     editor=TableEditor(
-                         columns=[ObjectColumn(name='name',
-                                               width=0.70),
-                                  ObjectColumn(name='num_players',
-                                               label='# Players',
-                                               editable=False,
-                                               width=0.29)],
-                         selected='object.team',
-                         auto_add=True,
-                         row_factory=Team,
-                         configurable=False,
-                         sortable=False)
-                     ),
+                Item(
+                    'model.teams',
+                    show_label=False,
+                    editor=TableEditor(
+                        columns=[
+                            ObjectColumn(name='name', width=0.70),
+                            ObjectColumn(
+                                name='num_players',
+                                label='# Players',
+                                editable=False,
+                                width=0.29,
+                            ),
+                        ],
+                        selected='object.team',
+                        auto_add=True,
+                        row_factory=Team,
+                        configurable=False,
+                        sortable=False,
+                    ),
+                ),
                 label='League Teams',
-                show_border=True
+                show_border=True,
             ),
             VGroup(
-                Item('object.team.players',  # <-- Extended Item name
-                     show_label=False,
-                     editor=TableEditor(
-                         columns=[ObjectColumn(name='name',
-                                               width=0.70),
-                                  ObjectColumn(name='hits',
-                                               editable=False,
-                                               width=0.29)],
-                         selected='object.player',
-                         auto_add=True,
-                         row_factory=Player,
-                         configurable=False,
-                         sortable=False)
-                     ),
+                Item(
+                    'object.team.players',  # <-- Extended Item name
+                    show_label=False,
+                    editor=TableEditor(
+                        columns=[
+                            ObjectColumn(name='name', width=0.70),
+                            ObjectColumn(
+                                name='hits', editable=False, width=0.29
+                            ),
+                        ],
+                        selected='object.player',
+                        auto_add=True,
+                        row_factory=Player,
+                        configurable=False,
+                        sortable=False,
+                    ),
+                ),
                 '_',
                 HGroup(
-                    Item('got_hit',
-                         show_label=False,
-                         enabled_when='player is not None'
-                         )
+                    Item(
+                        'got_hit',
+                        show_label=False,
+                        enabled_when='player is not None',
+                    )
                 ),
                 label='Team Players',
                 show_labels=False,
-                show_border=True
-            )
+                show_border=True,
+            ),
         ),
-        resizable=True
+        resizable=True,
     )
 
     def _model_changed(self, model):
-        """ Handles the 'league' model being initialized.
-        """
+        """Handles the 'league' model being initialized."""
         if len(model.teams) > 0:
             self.team = model.teams[0]
 
     def _got_hit_changed(self):
-        """ Handles the currently selected player making a hit.
-        """
+        """Handles the currently selected player making a hit."""
         self.player.hits += 1
 
     def _team_changed(self, team):
-        """ Handles a new team being selected.
-        """
+        """Handles a new team being selected."""
         if len(team.players) > 0:
             self.player = team.players[0]
         else:
             self.player = None
 
+
 # Function to add two numbers (used with 'reduce'):
 add = lambda a, b: a + b
 
-#--[Example*]-------------------------------------------------------------
+# --[Example*]-------------------------------------------------------------
 
 # Define some sample teams and players:
-blue_birds = Team(name='Blue Birds', players=[
-    Player(name='Mike Scott', hits=25),
-    Player(name='Willy Shofield', hits=37),
-    Player(name='Tony Barucci', hits=19)])
+blue_birds = Team(
+    name='Blue Birds',
+    players=[
+        Player(name='Mike Scott', hits=25),
+        Player(name='Willy Shofield', hits=37),
+        Player(name='Tony Barucci', hits=19),
+    ],
+)
 
-chicken_hawks = Team(name='Chicken Hawks', players=[
-    Player(name='Jimmy Domore', hits=34),
-    Player(name='Bill Janks', hits=16),
-    Player(name='Tim Saunders', hits=27)])
+chicken_hawks = Team(
+    name='Chicken Hawks',
+    players=[
+        Player(name='Jimmy Domore', hits=34),
+        Player(name='Bill Janks', hits=16),
+        Player(name='Tim Saunders', hits=27),
+    ],
+)
 
-eagles = Team(name='Eagles', players=[
-    Player(name='Joe Peppers', hits=33),
-    Player(name='Sam Alone', hits=12),
-    Player(name='Roger Clemson', hits=23)])
+eagles = Team(
+    name='Eagles',
+    players=[
+        Player(name='Joe Peppers', hits=33),
+        Player(name='Sam Alone', hits=12),
+        Player(name='Roger Clemson', hits=23),
+    ],
+)
 
 # Create a league and its corresponding model view:
 demo = LeagueModelView(
-    League(name='National Baseball Conference',
-           teams=[blue_birds, chicken_hawks, eagles])
+    League(
+        name='National Baseball Conference',
+        teams=[blue_birds, chicken_hawks, eagles],
+    )
 )
 
 

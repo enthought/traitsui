@@ -39,16 +39,15 @@ image_list = ['top left', 'top right', 'bottom left', 'bottom right']
 
 
 class Dummy(HasTraits):
-    """ Dummy class for ImageEnumEditor
-    """
+    """Dummy class for ImageEnumEditor"""
+
     x = Str()
 
     traits_view = View()
 
 
 class ImageEnumEditorDemo(HasTraits):
-    """ Defines the ImageEnumEditor demo class.
-    """
+    """Defines the ImageEnumEditor demo class."""
 
     # Define a trait to view:
     image_from_list = Enum(
@@ -58,8 +57,8 @@ class ImageEnumEditorDemo(HasTraits):
             prefix='@icons:',
             suffix='_origin',
             cols=4,
-            klass=Dummy
-        )
+            klass=Dummy,
+        ),
     )
 
     # Items are used to define the demo display, one Item per editor style:
@@ -70,15 +69,12 @@ class ImageEnumEditorDemo(HasTraits):
         Item('_'),
         Item('image_from_list', style='readonly', label='ReadOnly'),
         Item('_'),
-        Item('image_from_list', style='custom', label='Custom')
+        Item('image_from_list', style='custom', label='Custom'),
     )
 
     # Demo view:
     traits_view = View(
-        img_group,
-        title='ImageEnumEditor',
-        buttons=['OK'],
-        resizable=True
+        img_group, title='ImageEnumEditor', buttons=['OK'], resizable=True
     )
 
 

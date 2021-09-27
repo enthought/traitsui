@@ -12,7 +12,6 @@
 """
 
 
-
 import logging
 
 from pyface.qt import QtCore, QtGui
@@ -36,11 +35,10 @@ logger = logging.getLogger(__name__)
 
 
 class TabularModel(QtCore.QAbstractTableModel):
-    """ The model for tabular data."""
+    """The model for tabular data."""
 
     def __init__(self, editor, parent=None):
-        """ Initialise the object.
-        """
+        """Initialise the object."""
         QtCore.QAbstractTableModel.__init__(self, parent)
 
         self._editor = editor
@@ -50,8 +48,7 @@ class TabularModel(QtCore.QAbstractTableModel):
     # -------------------------------------------------------------------------
 
     def data(self, mi, role):
-        """ Reimplemented to return the data.
-        """
+        """Reimplemented to return the data."""
         editor = self._editor
         adapter = editor.adapter
         obj, name = editor.object, editor.name
@@ -103,8 +100,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         return None
 
     def setData(self, mi, value, role):
-        """ Reimplmented to allow for modification for the object trait.
-        """
+        """Reimplmented to allow for modification for the object trait."""
         if role != QtCore.Qt.EditRole:
             return False
 
@@ -117,8 +113,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         return True
 
     def flags(self, mi):
-        """ Reimplemented to set editable status and movable status.
-        """
+        """Reimplemented to set editable status and movable status."""
         editor = self._editor
         row = mi.row()
         column = mi.column()
@@ -160,8 +155,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         return flags
 
     def headerData(self, section, orientation, role):
-        """ Reimplemented to return the header data.
-        """
+        """Reimplemented to return the header data."""
         if role != QtCore.Qt.DisplayRole:
             return None
 
@@ -176,20 +170,18 @@ class TabularModel(QtCore.QAbstractTableModel):
         return label
 
     def rowCount(self, mi):
-        """ Reimplemented to return the number of rows.
-        """
+        """Reimplemented to return the number of rows."""
         editor = self._editor
         return editor.adapter.len(editor.object, editor.name)
 
     def columnCount(self, mi):
-        """ Reimplemented to return the number of columns.
-        """
+        """Reimplemented to return the number of columns."""
         editor = self._editor
         return len(editor.adapter.columns)
 
     def insertRow(self, row, parent=QtCore.QModelIndex(), obj=None):
-        """ Reimplemented to allow creation of new rows. Added an optional
-            arg to allow the insertion of an existing row object.
+        """Reimplemented to allow creation of new rows. Added an optional
+        arg to allow the insertion of an existing row object.
         """
         editor = self._editor
         adapter = editor.adapter
@@ -204,8 +196,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         return True
 
     def insertRows(self, row, count, parent=QtCore.QModelIndex()):
-        """ Reimplemented to allow creation of new items.
-        """
+        """Reimplemented to allow creation of new items."""
         editor = self._editor
         adapter = editor.adapter
 
@@ -219,8 +210,8 @@ class TabularModel(QtCore.QAbstractTableModel):
         return True
 
     def removeRows(self, row, count, parent=QtCore.QModelIndex()):
-        """ Reimplemented to allow row deletion, as well as reordering via drag
-            and drop.
+        """Reimplemented to allow row deletion, as well as reordering via drag
+        and drop.
         """
         editor = self._editor
         adapter = editor.adapter
@@ -237,8 +228,8 @@ class TabularModel(QtCore.QAbstractTableModel):
         return True
 
     def mimeTypes(self):
-        """ Reimplemented to expose our internal MIME type for drag and drop
-            operations.
+        """Reimplemented to expose our internal MIME type for drag and drop
+        operations.
         """
         return [
             tabular_mime_type,
@@ -247,8 +238,8 @@ class TabularModel(QtCore.QAbstractTableModel):
         ]
 
     def mimeData(self, indexes):
-        """ Reimplemented to generate MIME data containing the rows of the
-            current selection.
+        """Reimplemented to generate MIME data containing the rows of the
+        current selection.
         """
         rows = sorted({index.row() for index in indexes})
         items = [
@@ -265,8 +256,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         return mime_data
 
     def dropMimeData(self, mime_data, action, row, column, parent):
-        """ Reimplemented to allow items to be moved.
-        """
+        """Reimplemented to allow items to be moved."""
         if action == QtCore.Qt.IgnoreAction:
             return False
 
@@ -310,8 +300,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         return False
 
     def supportedDropActions(self):
-        """ Reimplemented to allow items to be moved.
-        """
+        """Reimplemented to allow items to be moved."""
         return QtCore.Qt.MoveAction | QtCore.Qt.CopyAction
 
     # -------------------------------------------------------------------------
@@ -319,7 +308,7 @@ class TabularModel(QtCore.QAbstractTableModel):
     # -------------------------------------------------------------------------
 
     def dropItem(self, item, row):
-        """ Handle a Python object being dropped onto a row """
+        """Handle a Python object being dropped onto a row"""
         editor = self._editor
         object = editor.object
         name = editor.name
@@ -332,13 +321,12 @@ class TabularModel(QtCore.QAbstractTableModel):
         adapter.insert(object, name, row, item)
 
     def moveRow(self, old_row, new_row):
-        """ Convenience method to move a single row.
-        """
+        """Convenience method to move a single row."""
         return self.moveRows([old_row], new_row)
 
     def moveRows(self, current_rows, new_row):
-        """ Moves a sequence of rows (provided as a list of row indexes) to a
-            new row.
+        """Moves a sequence of rows (provided as a list of row indexes) to a
+        new row.
         """
         editor = self._editor
 
@@ -347,7 +335,8 @@ class TabularModel(QtCore.QAbstractTableModel):
             # model. See ``QAbstractItemModel.checkIndex``` for Qt 5.11+
             # This is a last resort to prevent segmentation faults.
             logger.debug(
-                "Received invalid row %d. Adjusting to the last row.", new_row)
+                "Received invalid row %d. Adjusting to the last row.", new_row
+            )
             new_row = max(0, self.rowCount(None) - 1)
 
         # Sort rows in descending order so they can be removed without

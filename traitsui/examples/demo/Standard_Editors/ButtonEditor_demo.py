@@ -27,9 +27,9 @@ from traitsui.api import Item, View, Group, message
 #  Demo Class
 # -------------------------------------------------------------------------
 
+
 class ButtonEditorDemo(HasTraits):
-    """ This class specifies the details of the ButtonEditor demo.
-    """
+    """This class specifies the details of the ButtonEditor demo."""
 
     # To demonstrate any given Trait editor, an appropriate Trait is required.
     fire_event = Button('Click Me')
@@ -47,15 +47,12 @@ class ButtonEditorDemo(HasTraits):
         Item('_'),
         Item(label='[text style unavailable]'),
         Item('_'),
-        Item(label='[readonly style unavailable]')
+        Item(label='[readonly style unavailable]'),
     )
 
     # Demo view
     traits_view = View(
-        event_group,
-        title='ButtonEditor',
-        buttons=['OK'],
-        width=250
+        event_group, title='ButtonEditor', buttons=['OK'], width=250
     )
 
 

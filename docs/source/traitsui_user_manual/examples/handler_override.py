@@ -16,7 +16,6 @@ from traitsui.api import Handler, View
 
 
 class TC_Handler(Handler):
-
     def setattr(self, info, object, name, value):
         Handler.setattr(self, info, object, name, value)
         info.object._updated = True

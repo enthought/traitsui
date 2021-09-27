@@ -47,7 +47,7 @@ def get_view(can_move_all=True, ordered=False):
 
 
 def get_list_items(list_widget):
-    """ Return a list of strings from the list widget. """
+    """Return a list of strings from the list widget."""
     items = []
 
     if is_wx():
@@ -65,7 +65,7 @@ def get_list_items(list_widget):
 
 
 def click_on_item(editor, item_idx, in_used=False):
-    """ Simulate a click on an item in a specified list.
+    """Simulate a click on an item in a specified list.
 
     The function deselects all items in both used and unused lists, then
     selects an item at index item_idx either in the used list (if
@@ -111,7 +111,7 @@ def click_on_item(editor, item_idx, in_used=False):
 
 
 def double_click_on_item(editor, item_idx, in_used=False):
-    """ Simulate a double click on an item in a specified list.
+    """Simulate a double click on an item in a specified list.
 
     The function deselects all items in both used and unused lists, then
     selects an item at index item_idx either in the used list (if
@@ -158,7 +158,6 @@ def double_click_on_item(editor, item_idx, in_used=False):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSetEditorMapping(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -175,8 +174,7 @@ class TestSetEditorMapping(BaseTestMixin, unittest.TestCase):
             value = List()
 
         set_editor_factory = SetEditor(
-            values=[0, 1],
-            format_func=lambda v: str(bool(v)).upper()
+            values=[0, 1], format_func=lambda v: str(bool(v)).upper()
         )
         formatted_view = View(
             UItem(
@@ -186,22 +184,19 @@ class TestSetEditorMapping(BaseTestMixin, unittest.TestCase):
             )
         )
 
-        with reraise_exceptions(), \
-                self.setup_ui(IntListModel(), formatted_view) as editor:
+        with reraise_exceptions(), self.setup_ui(
+            IntListModel(), formatted_view
+        ) as editor:
 
             self.assertEqual(editor.names, ["FALSE", "TRUE"])
             self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
-            self.assertEqual(
-                editor.inverse_mapping, {0: "FALSE", 1: "TRUE"}
-            )
+            self.assertEqual(editor.inverse_mapping, {0: "FALSE", 1: "TRUE"})
 
             set_editor_factory.values = [1, 0]
 
             self.assertEqual(editor.names, ["TRUE", "FALSE"])
             self.assertEqual(editor.mapping, {"TRUE": 1, "FALSE": 0})
-            self.assertEqual(
-                editor.inverse_mapping, {1: "TRUE", 0: "FALSE"}
-            )
+            self.assertEqual(editor.inverse_mapping, {1: "TRUE", 0: "FALSE"})
 
     def test_simple_editor_mapping_name(self):
         class IntListModel(HasTraits):
@@ -220,27 +215,23 @@ class TestSetEditorMapping(BaseTestMixin, unittest.TestCase):
         )
         model = IntListModel()
 
-        with reraise_exceptions(), \
-                self.setup_ui(model, formatted_view) as editor:
+        with reraise_exceptions(), self.setup_ui(
+            model, formatted_view
+        ) as editor:
 
             self.assertEqual(editor.names, ["FALSE", "TRUE"])
             self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
-            self.assertEqual(
-                editor.inverse_mapping, {0: "FALSE", 1: "TRUE"}
-            )
+            self.assertEqual(editor.inverse_mapping, {0: "FALSE", 1: "TRUE"})
 
             model.possible_values = [1, 0]
 
             self.assertEqual(editor.names, ["TRUE", "FALSE"])
             self.assertEqual(editor.mapping, {"TRUE": 1, "FALSE": 0})
-            self.assertEqual(
-                editor.inverse_mapping, {1: "TRUE", 0: "FALSE"}
-            )
+            self.assertEqual(editor.inverse_mapping, {1: "TRUE", 0: "FALSE"})
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -255,8 +246,7 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
     def test_simple_set_editor_use_button(self):
         # Initiate with non-alphabetical list
         model = ListModel(value=["two", "one"])
-        with reraise_exceptions(), \
-                self.setup_gui(model, get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(model, get_view()) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             # Used list is sorted alphabetically
@@ -279,8 +269,9 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(editor._get_selected_strings(editor._used), [])
 
     def test_simple_set_editor_unuse_button(self):
-        with reraise_exceptions(), \
-                self.setup_gui(ListModel(), get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListModel(), get_view()
+        ) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             self.assertEqual(get_list_items(editor._used), ["one", "two"])
@@ -301,8 +292,9 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(get_list_items(editor._used), ["two"])
 
     def test_simple_set_editor_use_dclick(self):
-        with reraise_exceptions(), \
-                self.setup_gui(ListModel(), get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListModel(), get_view()
+        ) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             self.assertEqual(get_list_items(editor._used), ["one", "two"])
@@ -318,8 +310,9 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(editor._get_selected_strings(editor._used), [])
 
     def test_simple_set_editor_unuse_dclick(self):
-        with reraise_exceptions(), \
-                self.setup_gui(ListModel(), get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListModel(), get_view()
+        ) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             self.assertEqual(get_list_items(editor._used), ["one", "two"])
@@ -334,8 +327,9 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(get_list_items(editor._used), ["two"])
 
     def test_simple_set_editor_use_all(self):
-        with reraise_exceptions(), \
-                self.setup_gui(ListModel(), get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListModel(), get_view()
+        ) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             self.assertEqual(get_list_items(editor._used), ["one", "two"])
@@ -356,8 +350,9 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
             )
 
     def test_simple_set_editor_unuse_all(self):
-        with reraise_exceptions(), \
-                self.setup_gui(ListModel(), get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListModel(), get_view()
+        ) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             self.assertEqual(get_list_items(editor._used), ["one", "two"])
@@ -378,8 +373,9 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(get_list_items(editor._used), [])
 
     def test_simple_set_editor_move_up(self):
-        with reraise_exceptions(), \
-                self.setup_gui(ListModel(), get_view(ordered=True)) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListModel(), get_view(ordered=True)
+        ) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             self.assertEqual(get_list_items(editor._used), ["one", "two"])
@@ -397,8 +393,9 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(get_list_items(editor._used), ["two", "one"])
 
     def test_simple_set_editor_move_down(self):
-        with reraise_exceptions(), \
-                self.setup_gui(ListModel(), get_view(ordered=True)) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListModel(), get_view(ordered=True)
+        ) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             self.assertEqual(get_list_items(editor._used), ["one", "two"])
@@ -416,8 +413,9 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(get_list_items(editor._used), ["two", "one"])
 
     def test_simple_set_editor_use_all_button(self):
-        with reraise_exceptions(), \
-                self.setup_gui(ListModel(), get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListModel(), get_view()
+        ) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             self.assertEqual(get_list_items(editor._used), ["one", "two"])
@@ -438,8 +436,9 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
             )
 
     def test_simple_set_editor_unuse_all_button(self):
-        with reraise_exceptions(), \
-                self.setup_gui(ListModel(), get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListModel(), get_view()
+        ) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             self.assertEqual(get_list_items(editor._used), ["one", "two"])
@@ -460,8 +459,9 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(get_list_items(editor._used), [])
 
     def test_simple_set_editor_default_selection_unused(self):
-        with reraise_exceptions(), \
-                self.setup_gui(ListModel(), get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListModel(), get_view()
+        ) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             self.assertEqual(get_list_items(editor._used), ["one", "two"])
@@ -470,9 +470,7 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
             process_cascade_events()
 
             # Button inserts at the top
-            self.assertEqual(
-                get_list_items(editor._unused), ["three"]
-            )
+            self.assertEqual(get_list_items(editor._unused), ["three"])
             self.assertEqual(
                 get_list_items(editor._used), ["four", "one", "two"]
             )
@@ -481,12 +479,14 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
         # When all items are used, top used item is selected by default
         list_edit = ListModel(value=["one", "two", "three", "four"])
 
-        with reraise_exceptions(), \
-                self.setup_gui(list_edit, get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            list_edit, get_view()
+        ) as editor:
 
             self.assertEqual(get_list_items(editor._unused), [])
             self.assertEqual(
-                get_list_items(editor._used), ["four", "one", "three", "two"])
+                get_list_items(editor._used), ["four", "one", "three", "two"]
+            )
 
             click_button(editor._unuse)
             process_cascade_events()
@@ -499,11 +499,16 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
 
     def test_simple_set_editor_deleted_valid_values(self):
         editor_factory = SetEditor(values=["one", "two", "three", "four"])
-        view = View(UItem("value", editor=editor_factory, style="simple",))
+        view = View(
+            UItem(
+                "value",
+                editor=editor_factory,
+                style="simple",
+            )
+        )
         list_edit = ListModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(list_edit, view) as editor:
+        with reraise_exceptions(), self.setup_gui(list_edit, view) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             self.assertEqual(get_list_items(editor._used), ["one", "two"])
@@ -524,8 +529,9 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
     def test_simple_set_editor_use_ordered_selected(self):
         # Initiate with non-alphabetical list
         model = ListModel(value=["two", "one"])
-        with reraise_exceptions(), \
-                self.setup_gui(model, get_view(ordered=True)) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            model, get_view(ordered=True)
+        ) as editor:
 
             self.assertEqual(get_list_items(editor._unused), ["four", "three"])
             # Used list maintains the order
@@ -550,16 +556,16 @@ class TestSimpleSetEditor(BaseTestMixin, unittest.TestCase):
             )
 
     def test_simple_set_editor_unordeder_button_existence(self):
-        with reraise_exceptions(), \
-                self.setup_gui(ListModel(), get_view()) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            ListModel(), get_view()
+        ) as editor:
 
             self.assertIsNone(editor._up)
             self.assertIsNone(editor._down)
 
     def test_simple_set_editor_cant_move_all_button_existence(self):
         view = get_view(can_move_all=False)
-        with reraise_exceptions(), \
-                self.setup_gui(ListModel(), view) as editor:
+        with reraise_exceptions(), self.setup_gui(ListModel(), view) as editor:
 
             self.assertIsNone(editor._use_all)
             self.assertIsNone(editor._unuse_all)

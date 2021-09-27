@@ -29,7 +29,7 @@ ENTRY_POINT_GROUP = "etsdemo_data"
 
 
 def get_responses():
-    """ Load entry points and return the responses.
+    """Load entry points and return the responses.
 
     Version 1 response should have the following format:
     {
@@ -73,7 +73,7 @@ def get_responses():
 
 
 def response_to_node(response):
-    """ Convert a response to an instance of DemoTreeNodeObject
+    """Convert a response to an instance of DemoTreeNodeObject
 
     Parameters
     ----------
@@ -111,7 +111,7 @@ def response_to_node(response):
 
 
 class _Response(HasTraits):
-    """ Object for normalizing the validating responses returned by entry
+    """Object for normalizing the validating responses returned by entry
     points.
     """
 
@@ -125,8 +125,7 @@ class _Response(HasTraits):
     root = Directory(exists=True)
 
     def to_node(self):
-        """ Return an instance of DemoTreeNodeObject from this response.
-        """
+        """Return an instance of DemoTreeNodeObject from this response."""
         return DemoPath(
             nice_name=self.name,
             name=self.root,

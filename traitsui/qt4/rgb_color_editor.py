@@ -42,12 +42,10 @@ from .color_editor import ToolkitEditorFactory as BaseColorToolkitEditorFactory
 
 
 class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
-    """ PyQt editor factory for color editors.
-    """
+    """PyQt editor factory for color editors."""
 
     def to_qt4_color(self, editor):
-        """ Gets the PyQt color equivalent of the object trait.
-        """
+        """Gets the PyQt color equivalent of the object trait."""
         try:
             color = getattr(editor.object, editor.name + "_")
         except AttributeError:
@@ -59,13 +57,11 @@ class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
         return c
 
     def from_qt4_color(self, color):
-        """ Gets the application equivalent of a PyQt value.
-        """
+        """Gets the application equivalent of a PyQt value."""
         return (color.redF(), color.greenF(), color.blueF())
 
     def str_color(self, color):
-        """ Returns the text representation of a specified color value.
-        """
+        """Returns the text representation of a specified color value."""
         if type(color) in SequenceTypes:
             return "(%d,%d,%d)" % (
                 int(color[0] * 255.0),

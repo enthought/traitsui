@@ -33,7 +33,6 @@ if is_qt():
     from pyface.qt import QtCore
 
     class DummyQObject(QtCore.QObject):
-
         def __init__(self, max_n_events):
             super().__init__()
             self.max_n_events = max_n_events
@@ -62,7 +61,6 @@ if is_wx():
     NewEvent, EVT_SOME_NEW_EVENT = wx.lib.newevent.NewEvent()
 
     class DummyWxHandler(wx.EvtHandler):
-
         def __init__(self, max_n_events):
             super().__init__()
             self.max_n_events = max_n_events
@@ -80,7 +78,7 @@ if is_wx():
 
 
 class TestProcessEventsRepeated(unittest.TestCase):
-    """ Test process_events actually processes all events, including the events
+    """Test process_events actually processes all events, including the events
     posted by the processed events.
     """
 
@@ -160,7 +158,6 @@ class TestProcessEventsRepeated(unittest.TestCase):
 
     @requires_toolkit([ToolkitName.wx])
     def test_wx_process_events_process_all(self):
-
         def cleanup(wx_handler):
             # In case of test failure, always flush the GUI event queue.
             GUI.process_events()

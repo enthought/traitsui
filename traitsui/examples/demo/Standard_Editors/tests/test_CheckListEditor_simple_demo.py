@@ -30,7 +30,6 @@ DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 
 
 class TestCheckListEditorSimpleDemo(unittest.TestCase):
-
     def test_checklist_editor_simple_demo(self):
         demo = runpy.run_path(DEMO_PATH)["demo"]
 

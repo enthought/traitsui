@@ -29,7 +29,6 @@ DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 
 
 class TestListEditorDemo(unittest.TestCase):
-
     def test_list_editor_demo(self):
         demo = runpy.run_path(DEMO_PATH)["demo"]
 
@@ -43,7 +42,7 @@ class TestListEditorDemo(unittest.TestCase):
             item1.perform(KeyClick("Enter"))
             self.assertEqual(
                 demo.play_list,
-                ["The Merchant of Venice", "Othello", "MacBeth"]
+                ["The Merchant of Venice", "Othello", "MacBeth"],
             )
 
 

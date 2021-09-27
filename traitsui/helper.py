@@ -29,8 +29,7 @@ DockStyle = Enum("horizontal", "vertical", "tab", "fixed")
 
 
 def user_name_for(name):
-    """ Returns a "user-friendly" name for a specified trait.
-    """
+    """Returns a "user-friendly" name for a specified trait."""
     name = name.replace("_", " ")
     name = name[:1].upper() + name[1:]
     result = ""
@@ -44,12 +43,12 @@ def user_name_for(name):
 
 
 def commatize(value):
-    """ Formats a specified value as an integer string with embedded commas.
-        For example: commatize( 12345 ) returns "12,345".
+    """Formats a specified value as an integer string with embedded commas.
+    For example: commatize( 12345 ) returns "12,345".
     """
     s = str(abs(value))
     s = s.rjust(((len(s) + 2) / 3) * 3)
-    result = ",".join([s[i: i + 3] for i in range(0, len(s), 3)]).lstrip()
+    result = ",".join([s[i : i + 3] for i in range(0, len(s), 3)]).lstrip()
     if value >= 0:
         return result
 
@@ -57,8 +56,7 @@ def commatize(value):
 
 
 def enum_values_changed(values, strfunc=str):
-    """ Recomputes the mappings for a new set of enumeration values.
-    """
+    """Recomputes the mappings for a new set of enumeration values."""
 
     if isinstance(values, dict):
         data = [(strfunc(v), n) for n, v in values.items()]
@@ -92,7 +90,7 @@ def enum_values_changed(values, strfunc=str):
 
 
 def compute_column_widths(available_space, requested, min_widths, user_widths):
-    """ Distribute column space amongst columns based on requested space.
+    """Distribute column space amongst columns based on requested space.
 
     Widths requests can be specified as one of the following:
 

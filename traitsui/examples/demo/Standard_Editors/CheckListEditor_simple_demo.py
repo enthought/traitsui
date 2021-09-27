@@ -37,13 +37,12 @@ from traitsui.api import UItem, Group, View, CheckListEditor, Label
 
 
 class CheckListEditorDemo(HasTraits):
-    """ Define the main CheckListEditor simple demo class. """
+    """Define the main CheckListEditor simple demo class."""
 
     # Specify the strings to be displayed in the checklist:
     checklist = List(
         editor=CheckListEditor(
-            values=['one', 'two', 'three', 'four', 'five', 'six'],
-            cols=2
+            values=['one', 'two', 'three', 'four', 'five', 'six'], cols=2
         )
     )
 
@@ -52,9 +51,13 @@ class CheckListEditorDemo(HasTraits):
         '10',  # insert vertical space (10 empty pixels)
         Label('The custom style lets you select items from a checklist:'),
         UItem('checklist', style='custom', id="custom"),
-        '10', '_', '10',  # horizontal line with vertical space above and below
-        Label('The readonly style shows you which items are selected, '
-              'as a Python list:'),
+        '10',
+        '_',
+        '10',  # horizontal line with vertical space above and below
+        Label(
+            'The readonly style shows you which items are selected, '
+            'as a Python list:'
+        ),
         UItem('checklist', style='readonly', id="readonly"),
     )
 
@@ -62,7 +65,7 @@ class CheckListEditorDemo(HasTraits):
         checklist_group,
         title='CheckListEditor',
         buttons=['OK'],
-        resizable=True
+        resizable=True,
     )
 
 

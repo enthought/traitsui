@@ -27,7 +27,8 @@ from traitsui.tests._tools import (
 
 
 class InstanceWithDatetime(HasTraits):
-    """ Demo class to show Datetime editors. """
+    """Demo class to show Datetime editors."""
+
     date_time = Datetime()
 
 
@@ -52,7 +53,7 @@ def get_date_time_simple_view(editor_factory):
 @requires_toolkit([ToolkitName.qt])
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
 class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
-    """ Tests for DatetimeEditor using Qt. """
+    """Tests for DatetimeEditor using Qt."""
 
     def setUp(self):
         BaseTestMixin.setUp(self)
@@ -66,8 +67,7 @@ class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         view = get_date_time_simple_view(DatetimeEditor())
         date_time = datetime.datetime(2000, 1, 2, 1, 2, 3)
         instance = InstanceWithDatetime(date_time=date_time)
-        with reraise_exceptions(), \
-                self.launch_editor(instance, view):
+        with reraise_exceptions(), self.launch_editor(instance, view):
             pass
 
     def test_datetime_editor_simple_with_minimum_datetime(self):
@@ -78,8 +78,9 @@ class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         )
         view = get_date_time_simple_view(editor_factory)
         instance = InstanceWithDatetime()
-        with reraise_exceptions(), \
-                self.launch_editor(instance, view) as editor:
+        with reraise_exceptions(), self.launch_editor(
+            instance, view
+        ) as editor:
             q_minimum_datetime = editor.control.minimumDateTime()
             actual_minimum_datetime = to_datetime(q_minimum_datetime)
 
@@ -94,8 +95,9 @@ class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         )
         view = get_date_time_simple_view(editor_factory)
         instance = InstanceWithDatetime()
-        with reraise_exceptions(), \
-                self.launch_editor(instance, view) as editor:
+        with reraise_exceptions(), self.launch_editor(
+            instance, view
+        ) as editor:
             instance.date_time = datetime.datetime(1980, 1, 1)
 
             # does not seem needed to flush the event loop, but just in case.
@@ -114,8 +116,9 @@ class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         )
         view = get_date_time_simple_view(editor_factory)
         instance = InstanceWithDatetime()
-        with reraise_exceptions(), \
-                self.launch_editor(instance, view) as editor:
+        with reraise_exceptions(), self.launch_editor(
+            instance, view
+        ) as editor:
 
             # This value is in-range
             instance.date_time = datetime.datetime(2001, 1, 1)
@@ -142,8 +145,9 @@ class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         )
         view = get_date_time_simple_view(editor_factory)
         instance = InstanceWithDatetime()
-        with reraise_exceptions(), \
-                self.launch_editor(instance, view) as editor:
+        with reraise_exceptions(), self.launch_editor(
+            instance, view
+        ) as editor:
 
             # This value is in-range
             instance.date_time = datetime.datetime(2001, 1, 1)
@@ -170,8 +174,9 @@ class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         )
         view = get_date_time_simple_view(editor_factory)
         instance = InstanceWithDatetime()
-        with reraise_exceptions(), \
-                self.launch_editor(instance, view) as editor:
+        with reraise_exceptions(), self.launch_editor(
+            instance, view
+        ) as editor:
             q_maximum_datetime = editor.control.maximumDateTime()
 
             # does not seem needed to flush the event loop, but just in case.
@@ -188,8 +193,9 @@ class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         )
         view = get_date_time_simple_view(editor_factory)
         instance = InstanceWithDatetime()
-        with reraise_exceptions(), \
-                self.launch_editor(instance, view) as editor:
+        with reraise_exceptions(), self.launch_editor(
+            instance, view
+        ) as editor:
             # out-of-bound
             instance.date_time = datetime.datetime(2020, 1, 1)
 
@@ -209,8 +215,9 @@ class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         )
         view = get_date_time_simple_view(editor_factory)
         instance = InstanceWithDatetime()
-        with reraise_exceptions(), \
-                self.launch_editor(instance, view) as editor:
+        with reraise_exceptions(), self.launch_editor(
+            instance, view
+        ) as editor:
 
             # This value is in-range
             instance.date_time = datetime.datetime(1999, 1, 1)
@@ -235,8 +242,9 @@ class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         view = get_date_time_simple_view(editor_factory)
         init_datetime = datetime.datetime(1900, 1, 1)
         instance = InstanceWithDatetime(date_time=init_datetime)
-        with reraise_exceptions(), \
-                self.launch_editor(instance, view) as editor:
+        with reraise_exceptions(), self.launch_editor(
+            instance, view
+        ) as editor:
             # This value is too early and is not supported by Qt
             # But the editor should not crash
             new_value = datetime.datetime(1, 1, 1)
@@ -258,11 +266,13 @@ class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         view = get_date_time_simple_view(editor_factory)
         init_datetime = datetime.datetime(1900, 1, 1)
         instance = InstanceWithDatetime(date_time=init_datetime)
-        with reraise_exceptions(), \
-                self.launch_editor(instance, view) as editor:
+        with reraise_exceptions(), self.launch_editor(
+            instance, view
+        ) as editor:
             # the user set the datetime on the Qt widget to a value
             # too large for Python
             from pyface.qt.QtCore import QDateTime, QDate, QTime
+
             q_datetime = QDateTime(
                 QDate(datetime.MAXYEAR + 1, 1, 1), QTime(0, 0)
             )
@@ -276,5 +286,5 @@ class TestDatetimeEditorQt(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
     @contextlib.contextmanager
     def launch_editor(self, object, view):
         with create_ui(object, dict(view=view)) as ui:
-            editor, = ui._editors
+            (editor,) = ui._editors
             yield editor

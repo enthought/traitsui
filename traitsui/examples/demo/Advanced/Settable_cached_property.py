@@ -75,7 +75,7 @@ from math import sqrt
 from traits.api import HasTraits, Int, Range, Property, cached_property
 from traitsui.api import View, Item, RangeEditor
 
-#-- Demo Class -----------------------------------------------------------
+# -- Demo Class -----------------------------------------------------------
 
 
 class SettableCachedProperty(HasTraits):
@@ -89,19 +89,17 @@ class SettableCachedProperty(HasTraits):
         Item('a'),
         Item('b'),
         '_',
-        Item('c',
-             editor=RangeEditor(low=1, high=100, mode='slider')),
+        Item('c', editor=RangeEditor(low=1, high=100, mode='slider')),
         Item('c'),
         '_',
-        Item('d',
-             editor=RangeEditor(low=1, high=400, mode='slider')),
+        Item('d', editor=RangeEditor(low=1, high=400, mode='slider')),
         Item('d'),
-        width=0.3
+        width=0.3,
     )
 
     @cached_property
     def _get_c(self):
-        return (self.a * self.b)
+        return self.a * self.b
 
     def _set_c(self, value):
         self.a = int(sqrt(value))
@@ -109,9 +107,10 @@ class SettableCachedProperty(HasTraits):
 
     @cached_property
     def _get_d(self):
-        return (self.c + self.c)
+        return self.c + self.c
 
-#-- Run the demo ---------------------------------------------------------
+
+# -- Run the demo ---------------------------------------------------------
 
 # Create the demo:
 demo = SettableCachedProperty()

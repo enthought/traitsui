@@ -178,9 +178,9 @@ class HasDynamicViews(HasTraits):
     # -- Public Interface -------------------------------------------------------
 
     def trait_view(self, name=None, view_element=None):
-        """ Gets or sets a ViewElement associated with an object's class.
+        """Gets or sets a ViewElement associated with an object's class.
 
-            Extended here to build dynamic views and sub-elements.
+        Extended here to build dynamic views and sub-elements.
         """
 
         result = None
@@ -219,17 +219,17 @@ class HasDynamicViews(HasTraits):
     # -- Public Interface -------------------------------------------------------
 
     def declare_dynamic_view(self, declaration):
-        """ A convenience method to add a new dynamic view declaration to this
-            instance.
+        """A convenience method to add a new dynamic view declaration to this
+        instance.
         """
         self._dynamic_view_registry[declaration.name] = declaration
 
     # -- Protected Interface ----------------------------------------------------
 
     def _build_dynamic_sub_element(self, definition, sub_elements):
-        """ Returns the fully composed ViewSubElement from the sub-element
-            contributions to the dynamic sub-element identified by the
-            definition.
+        """Returns the fully composed ViewSubElement from the sub-element
+        contributions to the dynamic sub-element identified by the
+        definition.
         """
         logger.debug(
             "\tBuilding dynamic sub-element [%s] with elements [%s]",
@@ -240,11 +240,11 @@ class HasDynamicViews(HasTraits):
         return definition.klass(*sub_elements, **definition.keywords)
 
     def _build_dynamic_view(self, declaration, sub_elements, handler):
-        """ Returns a Traits View representing the specified dynamic view
-            composed out of the provided view sub-elements.
+        """Returns a Traits View representing the specified dynamic view
+        composed out of the provided view sub-elements.
 
-            Implemented as a separate method to allow implementors to override
-            the way in which the instantiated view is configured.
+        Implemented as a separate method to allow implementors to override
+        the way in which the instantiated view is configured.
         """
         logger.debug(
             "\tBuilding dynamic view [%s] with elements [%s]",
@@ -262,12 +262,11 @@ class HasDynamicViews(HasTraits):
             # Build the view out of the sub-elements:
             *sub_elements,
             # Include the declaration's keywords.
-            **declaration.keywords
+            **declaration.keywords,
         )
 
     def _compose_dynamic_sub_element(self, definition):
-        """ Returns a dynamic UI element composed from its contributed parts.
-        """
+        """Returns a dynamic UI element composed from its contributed parts."""
         logger.debug(
             "Composing dynamic sub-element named [%s] for [%s]",
             definition.name,
@@ -281,8 +280,7 @@ class HasDynamicViews(HasTraits):
         return self._build_dynamic_sub_element(definition, elements)
 
     def _compose_dynamic_view(self, name):
-        """ Returns a dynamic view composed from its contributed parts.
-        """
+        """Returns a dynamic view composed from its contributed parts."""
         logger.debug("Composing dynamic view [%s] for [%s]", name, self)
 
         # Retrieve the declaration of this dynamic view:
@@ -302,9 +300,9 @@ class HasDynamicViews(HasTraits):
         return self._build_dynamic_view(declaration, elements, handler)
 
     def _get_dynamic_elements(self, name):
-        """ Returns a list of the current elements meant to go into the
-            composition of a dynamic view or subelement with the specified
-            name.
+        """Returns a list of the current elements meant to go into the
+        composition of a dynamic view or subelement with the specified
+        name.
         """
 
         # Determine the metadata names used to find the sub-elements included
@@ -355,8 +353,8 @@ class HasDynamicViews(HasTraits):
         return elements
 
     def _get_dynamic_handlers(self, name, elements):
-        """ Return a list of the handlers associated with the current elements
-            meant to go into the dynamic view of the specified name.
+        """Return a list of the handlers associated with the current elements
+        meant to go into the dynamic view of the specified name.
         """
 
         # Determine the metadata name used to declare a handler:

@@ -15,7 +15,6 @@ from traitsui.tests._tools import BaseTestMixin, requires_toolkit, ToolkitName
 
 
 class TestNullToolkit(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -24,7 +23,7 @@ class TestNullToolkit(BaseTestMixin, unittest.TestCase):
 
     @requires_toolkit([ToolkitName.null])
     def test_configure_traits_error(self):
-        """ Verify that configure_traits fails with NotImplementedError. """
+        """Verify that configure_traits fails with NotImplementedError."""
 
         class Test(HasTraits):
             x = Int()

@@ -18,8 +18,8 @@ from .editor_factory import EditorFactory
 
 
 class BasicEditorFactory(EditorFactory):
-    """ Base class for editor factories that use the same class for creating
-        all editor styles.
+    """Base class for editor factories that use the same class for creating
+    all editor styles.
     """
 
     # -------------------------------------------------------------------------
@@ -34,28 +34,28 @@ class BasicEditorFactory(EditorFactory):
     # -------------------------------------------------------------------------
 
     def _get_simple_editor_class(self):
-        """ Returns the editor class to use for "simple" style views.
+        """Returns the editor class to use for "simple" style views.
         Overridden to return the value of the 'klass' trait.
 
         """
         return self.klass
 
     def _get_custom_editor_class(self):
-        """ Returns the editor class to use for "custom" style views.
+        """Returns the editor class to use for "custom" style views.
         Overridden to return the value of the 'klass' trait.
 
         """
         return self.klass
 
     def _get_text_editor_class(self):
-        """ Returns the editor class to use for "text" style views.
+        """Returns the editor class to use for "text" style views.
         Overridden to return the value of the 'klass' trait.
 
         """
         return self.klass
 
     def _get_readonly_editor_class(self):
-        """ Returns the editor class to use for "readonly" style views.
+        """Returns the editor class to use for "readonly" style views.
         Overridden to return the value of the 'klass' trait.
 
         """

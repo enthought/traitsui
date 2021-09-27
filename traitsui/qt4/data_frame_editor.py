@@ -16,6 +16,6 @@ from .ui_editor import UIEditor
 
 
 class _DataFrameEditor(BaseDataFrameEditor, UIEditor):
-    """ Qt Toolkit implementation of the DataFrameEditor """
+    """Qt Toolkit implementation of the DataFrameEditor"""
 
     pass

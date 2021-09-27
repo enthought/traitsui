@@ -49,8 +49,7 @@ logger = logging.getLogger(__name__)
 
 
 class TraitGridSelection(HasPrivateTraits):
-    """ Structure for holding specification information.
-    """
+    """Structure for holding specification information."""
 
     #: The selected object
     obj = Any()
@@ -60,8 +59,7 @@ class TraitGridSelection(HasPrivateTraits):
 
 
 class TableModel(GridModel):
-    """ Model for table data.
-    """
+    """Model for table data."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -86,8 +84,7 @@ class TableModel(GridModel):
     auto_add_row = Any()
 
     def __init__(self, **traits):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         super().__init__(**traits)
 
         # Attach trait handlers to the list object:
@@ -119,8 +116,7 @@ class TableModel(GridModel):
     # -- TableModel Interface -------------------------------------------------
 
     def dispose(self):
-        """ Disposes of the model when it is no longer needed.
-        """
+        """Disposes of the model when it is no longer needed."""
         editor = self.editor
         object = editor.context_object
         name = " " + editor.extended_name
@@ -145,26 +141,26 @@ class TableModel(GridModel):
         self.editor = None
 
     def get_filtered_items(self):
-        """ Returns all model items matching the current filter.
-        """
+        """Returns all model items matching the current filter."""
         return self.__filtered_items()
 
     def get_filtered_item(self, index=0):
-        """ Returns a single specified item from those items matching the
-            current filter.
+        """Returns a single specified item from those items matching the
+        current filter.
         """
         try:
             return self.__filtered_items()[index]
         except Exception:
             logger.exception(
                 "TableModel error: Request for invalid row %d out of %d",
-                index, len(self.__filtered_items())
+                index,
+                len(self.__filtered_items()),
             )
             return None
 
     def raw_index_of(self, row):
-        """ Returns the raw, unfiltered index corresponding to a specified
-            filtered index.
+        """Returns the raw, unfiltered index corresponding to a specified
+        filtered index.
         """
         if self._filtered_cache is None:
             return row
@@ -172,8 +168,7 @@ class TableModel(GridModel):
         return self.editor.filtered_indices[row]
 
     def insert_filtered_item_after(self, index, item):
-        """ Inserts an object after a specified filtered index.
-        """
+        """Inserts an object after a specified filtered index."""
         mapped_index = 0
         n = len(self.editor.filtered_indices)
         if index >= n:
@@ -189,8 +184,7 @@ class TableModel(GridModel):
         return (mapped_index, sorted)
 
     def delete_filtered_item_at(self, index):
-        """ Deletes the object at the specified filtered index.
-        """
+        """Deletes the object at the specified filtered index."""
         if index >= len(self.editor.filtered_indices):
             raise IndexError
 
@@ -202,15 +196,13 @@ class TableModel(GridModel):
         return (mapped_index, object)
 
     def update_columns(self):
-        """ Updates the table view when columns have been changed.
-        """
+        """Updates the table view when columns have been changed."""
         self._columns = None
         self.fire_structure_changed()
         self.editor.refresh()
 
     def no_column_sort(self):
-        """ Resets any sorting being performed on the underlying model.
-        """
+        """Resets any sorting being performed on the underlying model."""
         self._sorter = self._filtered_cache = None
         self.column_sorted = GridSortEvent(index=-1)
         # self.fire_structure_changed()
@@ -219,15 +211,13 @@ class TableModel(GridModel):
 
     @observe(trait("filter").match(lambda name, ctrait: True))
     def _filter_modified(self, event):
-        """ Handles the contents of the filter being changed.
-        """
+        """Handles the contents of the filter being changed."""
         self._filtered_cache = None
         self.fire_structure_changed()
         self.editor.filter_modified()
 
     def _click_changed(self, event):
-        """ Handles the grid firing a 'click' event.
-        """
+        """Handles the grid firing a 'click' event."""
         row, col = event
 
         # Fire the same event on the editor after mapping it to a model object
@@ -247,8 +237,7 @@ class TableModel(GridModel):
         column.on_click(object)
 
     def _dclick_changed(self, event):
-        """ Handles the grid firing a 'dclick' event.
-        """
+        """Handles the grid firing a 'dclick' event."""
         row, col = event
 
         # Fire the same event on the editor after mapping it to a model object
@@ -261,8 +250,7 @@ class TableModel(GridModel):
         column.on_dclick(object)
 
     def on_auto_add_row(self):
-        """ Handles the user modifying the current 'auto_add' mode row.
-        """
+        """Handles the user modifying the current 'auto_add' mode row."""
         object = self.auto_add_row
         object.on_trait_change(self.on_auto_add_row, remove=True)
 
@@ -277,31 +265,29 @@ class TableModel(GridModel):
     # -- GridModel Interface --------------------------------------------------
 
     def get_column_count(self):
-        """ Returns the number of columns for this table.
-        """
+        """Returns the number of columns for this table."""
         return len(self.__get_columns())
 
     def get_column_name(self, index):
-        """ Returns the label of the column specified by the (zero-based) index.
-        """
+        """Returns the label of the column specified by the (zero-based) index."""
         return self.__get_column(index).get_label()
 
     def get_column_size(self, index):
-        """ Returns the size in pixels of the column indexed by *index*.
-            A value of -1 or None means to use the default.
+        """Returns the size in pixels of the column indexed by *index*.
+        A value of -1 or None means to use the default.
         """
         return self.__get_column(index).get_width()
 
     def get_cols_drag_value(self, cols):
-        """ Returns the value to use when the specified columns are dragged or
-            copied and pasted. The parameter *cols* is a list of column indexes.
+        """Returns the value to use when the specified columns are dragged or
+        copied and pasted. The parameter *cols* is a list of column indexes.
         """
         return [self.__get_data_column(col) for col in cols]
 
     def get_cols_selection_value(self, cols):
-        """ Returns a list of TraitGridSelection objects containing the
-            objects corresponding to the grid rows and the traits corresponding
-            to the specified columns.
+        """Returns a list of TraitGridSelection objects containing the
+        objects corresponding to the grid rows and the traits corresponding
+        to the specified columns.
         """
         values = []
         for obj in self.__items(False):
@@ -316,8 +302,7 @@ class TableModel(GridModel):
         return values
 
     def sort_by_column(self, col, reverse=False):
-        """ Sorts the model data by the column indexed by *col*.
-        """
+        """Sorts the model data by the column indexed by *col*."""
         # Make sure we allow sorts by column:
         factory = self.editor.factory
         if not factory.sortable:
@@ -339,46 +324,43 @@ class TableModel(GridModel):
         self.column_sorted = GridSortEvent(index=col, reversed=reverse)
 
     def is_column_read_only(self, index):
-        """ Returns True if the column specified by the zero-based *index* is
-            read-only.
+        """Returns True if the column specified by the zero-based *index* is
+        read-only.
         """
         return not self.__get_column(index).editable
 
     def get_row_count(self):
-        """ Return the number of rows for this table.
-        """
+        """Return the number of rows for this table."""
         return len(self.__filtered_items())
 
     def get_row_name(self, index):
-        """ Return the name of the row specified by the (zero-based) *index*.
-        """
+        """Return the name of the row specified by the (zero-based) *index*."""
         return "<undefined>"
 
     def get_rows_drag_value(self, rows):
-        """ Returns the value to use when the specified rows are dragged or
-            copied and pasted. The parameter *rows* is a list of row indexes.
-            If there is only one row listed, then return the corresponding trait
-            object. If more than one row is listed, then return a list of objects.
+        """Returns the value to use when the specified rows are dragged or
+        copied and pasted. The parameter *rows* is a list of row indexes.
+        If there is only one row listed, then return the corresponding trait
+        object. If more than one row is listed, then return a list of objects.
         """
         items = self.__filtered_items()
         return [items[row] for row in rows]
 
     def get_rows_selection_value(self, rows):
-        """ Returns a list of TraitGridSelection objects containing the
-            object corresponding to the selected rows.
+        """Returns a list of TraitGridSelection objects containing the
+        object corresponding to the selected rows.
         """
         items = self.__filtered_items()
         return [TraitGridSelection(obj=items[row]) for row in rows]
 
     def is_row_read_only(self, index):
-        """ Returns True if the row specified by the zero-based *index* is
-            read-only.
+        """Returns True if the row specified by the zero-based *index* is
+        read-only.
         """
         return False
 
     def get_cell_editor(self, row, col):
-        """ Returns the editor for the specified cell.
-        """
+        """Returns the editor for the specified cell."""
 
         if self.editor is None:
             return None
@@ -404,33 +386,32 @@ class TableModel(GridModel):
         )
 
     def get_cell_renderer(self, row, col):
-        """ Returns the renderer for the specified cell.
-        """
+        """Returns the renderer for the specified cell."""
         return self.__get_column(col).get_renderer(self.get_filtered_item(row))
 
     def get_cell_drag_value(self, row, col):
-        """ Returns the value to use when the specified cell is dragged or
-            copied and pasted.
+        """Returns the value to use when the specified cell is dragged or
+        copied and pasted.
         """
         return self.__get_column(col).get_drag_value(
             self.get_filtered_item(row)
         )
 
     def get_cell_selection_value(self, row, col):
-        """ Returns a TraitGridSelection object specifying the data stored
-            in the table at (*row*, *col*).
+        """Returns a TraitGridSelection object specifying the data stored
+        in the table at (*row*, *col*).
         """
         return TraitGridSelection(
             obj=self.get_filtered_item(row), name=self.__get_column_name(col)
         )
 
     def resolve_selection(self, selection_list):
-        """ Returns a list of (row, col) grid-cell coordinates that
-            correspond to the objects in *selection_list*. For each coordinate,
-            if the row is -1, it indicates that the entire column is selected.
-            Likewise coordinates with a column of -1 indicate an entire row
-            that is selected. For the TableModel, the objects in
-            *selection_list* must be TraitGridSelection objects.
+        """Returns a list of (row, col) grid-cell coordinates that
+        correspond to the objects in *selection_list*. For each coordinate,
+        if the row is -1, it indicates that the entire column is selected.
+        Likewise coordinates with a column of -1 indicate an entire row
+        that is selected. For the TableModel, the objects in
+        *selection_list* must be TraitGridSelection objects.
         """
         items = self.__filtered_items()
         cells = []
@@ -453,8 +434,8 @@ class TableModel(GridModel):
         return cells
 
     def get_cell_context_menu(self, row, col):
-        """ Returns a Menu object that generates the appropriate context
-            menu for this cell.
+        """Returns a Menu object that generates the appropriate context
+        menu for this cell.
         """
         column = self.__get_column(col)
         menu = column.get_menu(self.get_filtered_item(row))
@@ -476,8 +457,7 @@ class TableModel(GridModel):
         return None
 
     def get_value(self, row, col):
-        """ Returns the value stored in the table at (*row*, *col*).
-        """
+        """Returns the value stored in the table at (*row*, *col*)."""
         object = self.get_filtered_item(row)
         if object is self.auto_add_row:
             return ""
@@ -499,73 +479,72 @@ class TableModel(GridModel):
         return value
 
     def is_valid_cell_value(self, row, col, value):
-        """ Tests whether *value* is valid for the cell at (*row*, *col*).
-        Returns True if value is acceptable, and False otherwise. """
+        """Tests whether *value* is valid for the cell at (*row*, *col*).
+        Returns True if value is acceptable, and False otherwise."""
         return self.__get_column(col).is_droppable(
             self.get_filtered_item(row), value
         )
 
     def is_cell_empty(self, row, col):
-        """ Returns True if the cell at (*row*, *col*) has a None value, and
-            False otherwise.
+        """Returns True if the cell at (*row*, *col*) has a None value, and
+        False otherwise.
         """
         return self.get_value(row, col) is None
 
     def is_cell_read_only(self, row, col):
-        """ Returns True if the cell at (*row*, *col*) is read-only, and False
-            otherwise.
+        """Returns True if the cell at (*row*, *col*) is read-only, and False
+        otherwise.
         """
         return not self.__get_column(col).is_editable(
             self.get_filtered_item(row)
         )
 
     def get_cell_bg_color(self, row, col):
-        """ Returns a wxColour object specifying the background color
-            of the specified cell.
+        """Returns a wxColour object specifying the background color
+        of the specified cell.
         """
         return self.__get_column(col).get_cell_color(
             self.get_filtered_item(row)
         )
 
     def get_cell_text_color(self, row, col):
-        """ Returns a wxColour object specifying the text color of the
-            specified cell.
+        """Returns a wxColour object specifying the text color of the
+        specified cell.
         """
         column = self.__get_column(col)
         item = self.get_filtered_item(row)
         return column.get_text_color(item)
 
     def get_cell_font(self, row, col):
-        """ Returns a wxFont object specifying the font of the specified cell.
-        """
+        """Returns a wxFont object specifying the font of the specified cell."""
         return self.__get_column(col).get_text_font(
             self.get_filtered_item(row)
         )
 
     def get_cell_halignment(self, row, col):
-        """ Returns a string specifying the horizontal alignment of the
-            specified cell.
+        """Returns a string specifying the horizontal alignment of the
+        specified cell.
 
-            Returns 'left' for left alignment, 'right' for right alignment,
-            or 'center' for center alignment.
+        Returns 'left' for left alignment, 'right' for right alignment,
+        or 'center' for center alignment.
         """
         return self.__get_column(col).get_horizontal_alignment(
             self.get_filtered_item(row)
         )
 
     def get_cell_valignment(self, row, col):
-        """ Returns a string specifying the vertical alignment of the
-            specified cell.
+        """Returns a string specifying the vertical alignment of the
+        specified cell.
 
-            Returns 'top' for top alignment, 'bottom' for bottom alignment,
-            or 'center' for center alignment.
+        Returns 'top' for top alignment, 'bottom' for bottom alignment,
+        or 'center' for center alignment.
         """
         return self.__get_column(col).get_vertical_alignment(
             self.get_filtered_item(row)
         )
 
     def _insert_rows(self, pos, num_rows):
-        """ Inserts *num_rows* at *pos*; fires an event only if a factory
+        """Inserts *num_rows* at *pos*; fires an event only if a factory
         method for new rows is defined or the model is not empty. Otherwise,
         it returns 0.
         """
@@ -590,8 +569,7 @@ class TableModel(GridModel):
         return count
 
     def _delete_rows(self, pos, num_rows):
-        """ Removes rows *pos* through *pos* + *num_rows* from the model.
-        """
+        """Removes rows *pos* through *pos* + *num_rows* from the model."""
         row_count = self.get_rows_count()
         if (pos + num_rows) > row_count:
             num_rows = row_count - pos
@@ -599,10 +577,10 @@ class TableModel(GridModel):
         return self._delete_rows_from_model(pos, num_rows)
 
     def _set_value(self, row, col, value):
-        """ Sets the value of the cell at (*row*, *col*) to *value*.
+        """Sets the value of the cell at (*row*, *col*) to *value*.
 
-            Raises a ValueError if the value is vetoed or the cell at
-            the specified position does not exist.
+        Raises a ValueError if the value is vetoed or the cell at
+        the specified position does not exist.
         """
         new_rows = 0
         column = self.__get_column(col)
@@ -627,8 +605,8 @@ class TableModel(GridModel):
         return new_rows
 
     def _move_column(self, frm, to):
-        """ Moves a specified **frm** column to before the specified **to**
-            column. Returns **True** if successful; **False** otherwise.
+        """Moves a specified **frm** column to before the specified **to**
+        column. Returns **True** if successful; **False** otherwise.
         """
         to_column = None
         if to < len(self.__get_columns()):
@@ -637,21 +615,19 @@ class TableModel(GridModel):
         return self.editor.move_column(self.__get_column(frm), to_column)
 
     def _set_data_on_row(self, row, column, value):
-        """ Sets the cell specified by (*row*, *col*) to *value, which
-            can be either a member of the row object, or a no-argument method
-            on that object.
+        """Sets the cell specified by (*row*, *col*) to *value, which
+        can be either a member of the row object, or a no-argument method
+        on that object.
         """
         column.set_value(row, value)
 
     def _insert_rows_into_model(self, pos, new_data):
-        """ Inserts the given new rows into the model.
-        """
+        """Inserts the given new rows into the model."""
         raw_pos = self.raw_index_of(pos)
         self.__items()[raw_pos:raw_pos] = new_data
 
     def _delete_rows_from_model(self, pos, num_rows):
-        """ Deletes the specified rows from the model.
-        """
+        """Deletes the specified rows from the model."""
         raw_rows = sorted(
             [self.raw_index_of(i) for i in range(pos, pos + num_rows)]
         )
@@ -663,16 +639,14 @@ class TableModel(GridModel):
         return num_rows
 
     def _on_data_changed(self):
-        """ Forces the grid to refresh when the underlying list changes.
-        """
+        """Forces the grid to refresh when the underlying list changes."""
         # Invalidate the current cache (if any):
         self._filtered_cache = None
 
         self.fire_structure_changed()
 
     def _mouse_cell_changed(self, new):
-        """ Handles the user mousing over a specified cell.
-        """
+        """Handles the user mousing over a specified cell."""
         row, col = new
         column = self.__get_column(col)
         object = self.get_filtered_item(row)
@@ -708,8 +682,8 @@ class TableModel(GridModel):
             )
 
     def _bounds_for(self, row, col):
-        """ Returns the coordinates and size of the specified cell in the form:
-            ( x, y, dx, dy ).
+        """Returns the coordinates and size of the specified cell in the form:
+        ( x, y, dx, dy ).
         """
         grid = self.editor.grid
         coords = wxg.GridCellCoords(row, col)
@@ -719,8 +693,7 @@ class TableModel(GridModel):
         return (x, y, dx, dy)
 
     def _sort_model(self):
-        """ Sorts the underlying model if that is what the user requested.
-        """
+        """Sorts the underlying model if that is what the user requested."""
         editor = self.editor
         sorted = editor.factory.sort_model and (self._sorter is not None)
         if sorted:
@@ -732,8 +705,7 @@ class TableModel(GridModel):
         return sorted
 
     def __items(self, ordered=True):
-        """ Returns the raw list of model objects.
-        """
+        """Returns the raw list of model objects."""
         result = self.editor.value
         if not isinstance(result, SequenceTypes):
             return [result]
@@ -744,8 +716,7 @@ class TableModel(GridModel):
         return result
 
     def __filtered_items(self):
-        """ Returns the list of all model objects that pass the current filter.
-        """
+        """Returns the list of all model objects that pass the current filter."""
         fc = self._filtered_cache
         if fc is None:
             items = self.__items()
@@ -777,8 +748,7 @@ class TableModel(GridModel):
         return fc
 
     def __get_data_column(self, col):
-        """ Returns a list of model data from the column indexed by *col*.
-        """
+        """Returns a list of model data from the column indexed by *col*."""
         column = self.__get_column(col)
         return [column.get_value(item) for item in self.__filtered_items()]
 

@@ -30,8 +30,10 @@ class Foo(HasTraits):
             style="custom",
             show_label=False,
             editor=StyledDateEditor(
-                dates_trait="dates",
-                styles_trait="styles")))
+                dates_trait="dates", styles_trait="styles"
+            ),
+        )
+    )
 
     def __init__(self, *args, **kw):
         HasTraits.__init__(self, *args, **kw)
@@ -41,15 +43,15 @@ class Foo(HasTraits):
         }
 
         self.fast_dates = [
-            date(
-                2010, 7, 4), date(
-                2010, 7, 3), date(
-                2010, 7, 2)]
+            date(2010, 7, 4),
+            date(2010, 7, 3),
+            date(2010, 7, 2),
+        ]
         self.slow_dates = [
-            date(
-                2010, 6, 28), date(
-                2010, 6, 27), date(
-                2010, 6, 24)]
+            date(2010, 6, 28),
+            date(2010, 6, 27),
+            date(2010, 6, 24),
+        ]
 
     @observe("fast_dates,slow_dates")
     def _update_dates_dict(self, event):

@@ -129,7 +129,6 @@ class SampleObject(HasTraits):
 
 
 class TestHandler(BaseTestMixin, TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

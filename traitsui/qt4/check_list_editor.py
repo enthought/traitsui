@@ -25,7 +25,6 @@ user interface toolkit.
 """
 
 
-
 import logging
 
 from pyface.qt import QtCore, QtGui
@@ -37,7 +36,6 @@ from .editor_factory import TextEditor as BaseTextEditor
 from .editor import EditorWithList
 
 
-
 logger = logging.getLogger(__name__)
 
 # -------------------------------------------------------------------------
@@ -46,8 +44,7 @@ logger = logging.getLogger(__name__)
 
 
 class SimpleEditor(EditorWithList):
-    """ Simple style of editor for checklists, which displays a combo box.
-    """
+    """Simple style of editor for checklists, which displays a combo box."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -60,29 +57,26 @@ class SimpleEditor(EditorWithList):
     values = List()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.create_control(parent)
         super().init(parent)
 
     def create_control(self, parent):
-        """ Creates the initial editor control.
-        """
+        """Creates the initial editor control."""
         self.control = QtGui.QComboBox()
         self.control.activated[int].connect(self.update_object)
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         if self.control is not None:
             self.control.activated[int].disconnect(self.update_object)
 
         super().dispose()
 
     def list_updated(self, values):
-        """ Handles updates to the list of legal checklist values.
-        """
+        """Handles updates to the list of legal checklist values."""
         sv = self.string_value
         if (len(values) > 0) and isinstance(values[0], str):
             values = [(x, sv(x, str.capitalize)) for x in values]
@@ -112,8 +106,7 @@ class SimpleEditor(EditorWithList):
         self.rebuild_editor()
 
     def rebuild_editor(self):
-        """ Rebuilds the editor after its definition is modified.
-        """
+        """Rebuilds the editor after its definition is modified."""
         control = self.control
         control.clear()
         for name in self.names:
@@ -121,16 +114,15 @@ class SimpleEditor(EditorWithList):
         self.update_editor()
 
     def update_object(self, index):
-        """ Handles the user selecting a new value from the combo box.
-        """
+        """Handles the user selecting a new value from the combo box."""
         value = self.values[index]
         if not isinstance(self.value, str):
             value = [value]
         self.value = value
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         try:
             self.control.setCurrentIndex(
@@ -141,8 +133,8 @@ class SimpleEditor(EditorWithList):
 
 
 class CustomEditor(SimpleEditor):
-    """ Custom style of editor for checklists, which displays a set of check
-        boxes.
+    """Custom style of editor for checklists, which displays a set of check
+    boxes.
     """
 
     #: List of tuple(signal, slot) to be disconnected while rebuilding the
@@ -150,15 +142,14 @@ class CustomEditor(SimpleEditor):
     _connections_to_rebuild = List(Tuple(Any, Callable))
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.create_control(parent)
         EditorWithList.init(self, parent)
 
     def create_control(self, parent):
-        """ Creates the initial editor control.
-        """
+        """Creates the initial editor control."""
         self.control = QtGui.QWidget()
         layout = QtGui.QGridLayout(self.control)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -167,8 +158,7 @@ class CustomEditor(SimpleEditor):
         self._mapper.mapped[str].connect(self.update_object)
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         while self._connections_to_rebuild:
             signal, handler = self._connections_to_rebuild.pop()
             signal.disconnect(handler)
@@ -182,8 +172,7 @@ class CustomEditor(SimpleEditor):
         EditorWithList.dispose(self)
 
     def rebuild_editor(self):
-        """ Rebuilds the editor after its definition is modified.
-        """
+        """Rebuilds the editor after its definition is modified."""
         while self._connections_to_rebuild:
             signal, handler = self._connections_to_rebuild.pop()
             signal.disconnect(handler)
@@ -239,8 +228,7 @@ class CustomEditor(SimpleEditor):
                     n -= 1
 
     def update_object(self, label):
-        """ Handles the user clicking one of the custom check boxes.
-        """
+        """Handles the user clicking one of the custom check boxes."""
         cb = self._mapper.mapping(label)
         cur_value = parse_value(self.value)
         if cb.checkState() == QtCore.Qt.Checked:
@@ -254,8 +242,8 @@ class CustomEditor(SimpleEditor):
         self.value = cur_value
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         new_values = parse_value(self.value)
         for cb in self.control.findChildren(QtGui.QCheckBox, None):
@@ -266,12 +254,10 @@ class CustomEditor(SimpleEditor):
 
 
 class TextEditor(BaseTextEditor):
-    """ Text style of editor for checklists, which displays a text field.
-    """
+    """Text style of editor for checklists, which displays a text field."""
 
     def update_object(self, event=None):
-        """ Handles the user changing the contents of the edit control.
-        """
+        """Handles the user changing the contents of the edit control."""
         try:
             value = str(self.control.text())
             value = eval(value)
@@ -289,8 +275,7 @@ class TextEditor(BaseTextEditor):
 
 
 def parse_value(value):
-    """ Parses a value into a list.
-    """
+    """Parses a value into a list."""
     if value is None:
         return []
     if not isinstance(value, str):

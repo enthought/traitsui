@@ -48,7 +48,6 @@ class CodeView(ModelView):
 
 
 class TestCodeEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -57,8 +56,7 @@ class TestCodeEditor(BaseTestMixin, unittest.TestCase):
 
     @requires_toolkit([ToolkitName.qt])
     def test_code_editor_show_line_numbers(self):
-        """ CodeEditor should honor the `show_line_numbers` setting
-        """
+        """CodeEditor should honor the `show_line_numbers` setting"""
 
         def is_line_numbers_visible(ui):
             from pyface import qt
@@ -78,8 +76,7 @@ class TestCodeEditor(BaseTestMixin, unittest.TestCase):
 
     @requires_toolkit([ToolkitName.qt])
     def test_code_editor_readonly(self):
-        """ Test readonly editor style for CodeEditor
-        """
+        """Test readonly editor style for CodeEditor"""
         from pyface import qt
 
         code_model = CodeModel()

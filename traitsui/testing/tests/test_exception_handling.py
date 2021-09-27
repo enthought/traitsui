@@ -22,10 +22,8 @@ from traitsui.testing._exception_handling import reraise_exceptions
 
 
 class TestExceptionHandling(unittest.TestCase):
-
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_error_from_gui_captured_and_raise(self):
-
         def raise_error_1():
             raise ZeroDivisionError()
 
@@ -38,8 +36,9 @@ class TestExceptionHandling(unittest.TestCase):
         #   - with Wx, the traceback is printed and the test passes.
         # With the context manager, the exception is always reraised.
         gui = GUI()
-        with self.assertRaises(RuntimeError) as exception_context, \
-                self.assertLogs("traitsui") as watcher:
+        with self.assertRaises(
+            RuntimeError
+        ) as exception_context, self.assertLogs("traitsui") as watcher:
             with reraise_exceptions():
                 gui.invoke_later(raise_error_1)
                 gui.invoke_later(raise_error_2)

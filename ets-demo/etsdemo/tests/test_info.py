@@ -16,7 +16,7 @@ import subprocess
 import unittest
 
 try:
-    import eam   # noqa: #F401
+    import eam  # noqa: #F401
 except ImportError:
     EAM_EXISTS = False
 else:
@@ -26,7 +26,6 @@ from etsdemo.info import info
 
 
 class TestInfoForEAM(unittest.TestCase):
-
     @unittest.skipUnless(EAM_EXISTS, "eam is not available.")
     def test_etsdemo_info(self):
         output = subprocess.check_output(
@@ -37,7 +36,7 @@ class TestInfoForEAM(unittest.TestCase):
 
     def test_etsdemo_icon_exists(self):
         metadata = info()
-        command, = metadata["commands"]
+        (command,) = metadata["commands"]
         icon = command["icon"]
         self.assertTrue(
             os.path.exists(icon), "Expected icon file to exist. Not found."

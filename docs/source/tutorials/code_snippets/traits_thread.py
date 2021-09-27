@@ -17,10 +17,11 @@ class CaptureThread(Thread):
         self.display.string = 'Camera started\n' + self.display.string
         n_img = 0
         while not self.wants_abort:
-            sleep(.5)
+            sleep(0.5)
             n_img += 1
-            self.display.string = ('%d image captured\n' % n_img
-                                   + self.display.string)
+            self.display.string = (
+                '%d image captured\n' % n_img + self.display.string
+            )
         self.display.string = 'Camera stopped\n' + self.display.string
 
 
@@ -51,6 +52,7 @@ class MainWindow(HasTraits):
         return Camera(display=self.display)
 
     view = View('display', 'camera', style="custom", resizable=True)
+
 
 if __name__ == '__main__':
     MainWindow().configure_traits()

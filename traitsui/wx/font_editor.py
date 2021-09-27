@@ -69,14 +69,13 @@ facenames = None
 
 
 class ToolkitEditorFactory(BaseToolkitEditorFactory):
-    """ wxPython editor factory for font editors.
-    """
+    """wxPython editor factory for font editors."""
 
     show_style = Bool(False)
     show_weight = Bool(False)
 
     def to_wx_font(self, editor):
-        """ Returns a wxFont object corresponding to a specified object's font
+        """Returns a wxFont object corresponding to a specified object's font
         trait.
         """
         font = editor.value
@@ -90,13 +89,11 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
         )
 
     def from_wx_font(self, font):
-        """ Gets the application equivalent of a wxPython Font value.
-        """
+        """Gets the application equivalent of a wxPython Font value."""
         return font
 
     def str_font(self, font):
-        """ Returns the text representation of the specified object trait value.
-        """
+        """Returns the text representation of the specified object trait value."""
         weight = {
             wx.FONTWEIGHT_LIGHT: " Light",
             wx.FONTWEIGHT_BOLD: " Bold",
@@ -113,8 +110,7 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
         )
 
     def all_facenames(self):
-        """ Returns a list of all available font facenames.
-        """
+        """Returns a list of all available font facenames."""
         global facenames
 
         if facenames is None:
@@ -128,14 +124,13 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
 
 
 class SimpleFontEditor(BaseSimpleEditor):
-    """ Simple style of font editor, which displays a text field that contains
-        a text representation of the font value (using that font if possible).
-        Clicking the field displays a font selection dialog box.
+    """Simple style of font editor, which displays a text field that contains
+    a text representation of the font value (using that font if possible).
+    Clicking the field displays a font selection dialog box.
     """
 
     def popup_editor(self, event):
-        """ Invokes the pop-up editor for an object trait.
-        """
+        """Invokes the pop-up editor for an object trait."""
         font_data = wx.FontData()
         font_data.SetInitialFont(self.factory.to_wx_font(self))
         dialog = wx.FontDialog(self.control, font_data)
@@ -148,29 +143,28 @@ class SimpleFontEditor(BaseSimpleEditor):
         dialog.Destroy()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         super().update_editor()
         set_font(self)
 
     def string_value(self, font):
-        """ Returns the text representation of a specified font value.
-        """
+        """Returns the text representation of a specified font value."""
         return self.factory.str_font(font)
 
 
 class CustomFontEditor(Editor):
-    """ Custom style of font editor, which displays the following:
+    """Custom style of font editor, which displays the following:
 
-        * A combo box containing all available type face names.
-        * A combo box containing the available type sizes.
-        * A combo box containing the available type styles
+    * A combo box containing all available type face names.
+    * A combo box containing the available type sizes.
+    * A combo box containing the available type styles
     """
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         # Create a panel to hold all of the buttons:
         self.control = panel = TraitsUIPanel(parent, -1)
@@ -197,14 +191,20 @@ class CustomFontEditor(Editor):
                 panel, -1, wx.Point(0, 0), wx.Size(-1, -1), Styles
             )
             sizer2.Add(self._style, 1, wx.EXPAND | wx.LEFT, 3)
-            panel.Bind(wx.EVT_CHOICE, self.update_object_parts, id=self._style.GetId())
+            panel.Bind(
+                wx.EVT_CHOICE, self.update_object_parts, id=self._style.GetId()
+            )
 
         if self.factory.show_weight:
             self._weight = wx.Choice(
                 panel, -1, wx.Point(0, 0), wx.Size(-1, -1), Weights
             )
             sizer2.Add(self._weight, 1, wx.EXPAND | wx.LEFT, 3)
-            panel.Bind(wx.EVT_CHOICE, self.update_object_parts, id=self._weight.GetId())
+            panel.Bind(
+                wx.EVT_CHOICE,
+                self.update_object_parts,
+                id=self._weight.GetId(),
+            )
 
         sizer.Add(sizer2, 0, wx.EXPAND)
 
@@ -214,8 +214,7 @@ class CustomFontEditor(Editor):
         self.set_tooltip()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         disconnect(self._facename, wx.EVT_CHOICE)
         disconnect(self._point_size, wx.EVT_CHOICE)
         if self.factory.show_style:
@@ -226,8 +225,7 @@ class CustomFontEditor(Editor):
         super().dispose()
 
     def update_object_parts(self, event):
-        """ Handles the user modifying one of the font components.
-        """
+        """Handles the user modifying one of the font components."""
         point_size = int(self._point_size.GetStringSelection())
         facename = self._facename.GetStringSelection()
 
@@ -245,8 +243,8 @@ class CustomFontEditor(Editor):
         self.value = self.factory.from_wx_font(font)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         font = self.factory.to_wx_font(self)
 
@@ -261,8 +259,7 @@ class CustomFontEditor(Editor):
             self._point_size.SetSelection(0)
 
     def string_value(self, font):
-        """ Returns the text representation of a specified font value.
-        """
+        """Returns the text representation of a specified font value."""
         return self.factory.str_font(font)
 
 
@@ -272,45 +269,42 @@ class CustomFontEditor(Editor):
 
 
 class TextFontEditor(BaseTextEditor):
-    """ Text style of font editor, which displays an editable text field
-        containing a text representation of the font value (using that font if
-        possible).
+    """Text style of font editor, which displays an editable text field
+    containing a text representation of the font value (using that font if
+    possible).
     """
 
     def update_object(self, event):
-        """ Handles the user changing the contents of the edit control.
-        """
+        """Handles the user changing the contents of the edit control."""
         self.value = self.control.GetValue()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes external to the
-            editor.
+        """Updates the editor when the object trait changes external to the
+        editor.
         """
         super().update_editor()
         set_font(self)
 
     def string_value(self, font):
-        """ Returns the text representation of a specified font value.
-        """
+        """Returns the text representation of a specified font value."""
         return self.factory.str_font(font)
 
 
 class ReadonlyFontEditor(BaseReadonlyEditor):
-    """ Read-only style of font editor, which displays a read-only text field
-        containing a text representation of the font value (using that font if
-        possible).
+    """Read-only style of font editor, which displays a read-only text field
+    containing a text representation of the font value (using that font if
+    possible).
     """
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes external to the
-            editor.
+        """Updates the editor when the object trait changes external to the
+        editor.
         """
         super().update_editor()
         set_font(self)
 
     def string_value(self, font):
-        """ Returns the text representation of a specified font value.
-        """
+        """Returns the text representation of a specified font value."""
         return self.factory.str_font(font)
 
 
@@ -320,27 +314,23 @@ class ReadonlyFontEditor(BaseReadonlyEditor):
 
 
 def set_font(editor):
-    """ Sets the editor control's font to match a specified font.
-    """
+    """Sets the editor control's font to match a specified font."""
     font = editor.factory.to_wx_font(editor)
     font.SetPointSize(min(10, font.GetPointSize()))
     editor.control.SetFont(font)
 
 
 class FontEnumerator(wx.FontEnumerator):
-    """ An enumeration of fonts.
-    """
+    """An enumeration of fonts."""
 
     def facenames(self):
-        """ Returns a list of all available font facenames.
-        """
+        """Returns a list of all available font facenames."""
         self._facenames = []
         self.EnumerateFacenames()
         return self._facenames
 
     def OnFacename(self, facename):
-        """ Adds a facename to the list of facenames.
-        """
+        """Adds a facename to the list of facenames."""
         self._facenames.append(facename)
         return True
 

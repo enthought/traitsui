@@ -36,8 +36,8 @@ from traitsui.file_dialog import open_file, MFileDialogModel
 
 # -- LineCountInfo Class --------------------------------------------------
 class LineCountInfo(MFileDialogModel):
-    """ Defines a file dialog extension that displays the number of text lines
-        in the currently selected file.
+    """Defines a file dialog extension that displays the number of text lines
+    in the currently selected file.
     """
 
     # The number of text lines in the currently selected file:
@@ -49,7 +49,7 @@ class LineCountInfo(MFileDialogModel):
         VGroup(
             Item('lines', style='readonly'),
             label='Line Count Info',
-            show_border=True
+            show_border=True,
         )
     )
 
@@ -69,7 +69,7 @@ class LineCountInfo(MFileDialogModel):
         if (data.find('\x00') >= 0) or (data.find('\xFF') >= 0):
             return 'File contains binary data...'
 
-        return ('{:n} lines'.format(len(data.splitlines())))
+        return '{:n} lines'.format(len(data.splitlines()))
 
 
 # -- FileDialogDemo Class -------------------------------------------------
@@ -92,16 +92,15 @@ class FileDialogDemo(HasTraits):
         HGroup(
             Item('open', show_label=False),
             '_',
-            Item('file_name', style='readonly', springy=True)
+            Item('file_name', style='readonly', springy=True),
         ),
-        width=0.5
+        width=0.5,
     )
 
     # -- Traits Event Handlers ------------------------------------------------
 
     def _open_changed(self):
-        """ Handles the user clicking the 'Open...' button.
-        """
+        """Handles the user clicking the 'Open...' button."""
         file_name = open_file(extensions=LineCountInfo(), id=demo_id)
         if file_name != '':
             self.file_name = file_name

@@ -25,8 +25,7 @@ from .editor import Editor
 
 
 class UIEditor(Editor):
-    """ An editor that creates an embedded Traits UI.
-    """
+    """An editor that creates an embedded Traits UI."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -36,15 +35,14 @@ class UIEditor(Editor):
     editor_ui = Instance(UI)
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.editor_ui = self.init_ui(parent).trait_set(parent=self.ui)
         self.control = self.editor_ui.control
 
     def init_ui(self, parent):
-        """ Creates the traits UI for the editor.
-        """
+        """Creates the traits UI for the editor."""
         return self.value.edit_traits(
             view=self.trait_view(),
             context={"object": self.value, "editor": self},
@@ -52,16 +50,15 @@ class UIEditor(Editor):
         )
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes external to the
-            editor.
+        """Updates the editor when the object trait changes external to the
+        editor.
         """
         # Do nothing, since the embedded traits UI should handle the updates
         # itself, without our meddling:
         pass
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         # Make sure the embedded traits UI is disposed of properly:
         if self.editor_ui is not None:
             self.editor_ui.dispose()
@@ -69,19 +66,17 @@ class UIEditor(Editor):
         super().dispose()
 
     def get_error_control(self):
-        """ Returns the editor's control for indicating error status.
-        """
+        """Returns the editor's control for indicating error status."""
         return self.editor_ui.get_error_controls()
 
     # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the
-            editor.
+        """Restores any saved user preference information associated with the
+        editor.
         """
         self.editor_ui.set_prefs(prefs)
 
     def save_prefs(self):
-        """ Returns any user preference information associated with the editor.
-        """
+        """Returns any user preference information associated with the editor."""
         return self.editor_ui.get_prefs()

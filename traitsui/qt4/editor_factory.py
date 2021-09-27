@@ -33,15 +33,15 @@ from .editor import Editor
 
 
 class SimpleEditor(Editor):
-    """ Base class for simple style editors, which displays a text field
+    """Base class for simple style editors, which displays a text field
     containing the text representation of the object trait value. Clicking in
     the text field displays an editor-specific dialog box for changing the
     value.
     """
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = _SimpleField(self)
         self.set_tooltip()
@@ -53,34 +53,31 @@ class SimpleEditor(Editor):
     # -------------------------------------------------------------------------
 
     def popup_editor(self):
-        """ Invokes the pop-up editor for an object trait.
-        """
+        """Invokes the pop-up editor for an object trait."""
         pass
 
 
 class TextEditor(Editor):
-    """ Base class for text style editors, which displays an editable text
+    """Base class for text style editors, which displays an editable text
     field, containing a text representation of the object trait value.
     """
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = QtGui.QLineEdit(self.str_value)
         self.control.editingFinished.connect(self.update_object)
         self.set_tooltip()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         if self.control is not None:
             self.control.editingFinished.disconnect(self.update_object)
         super().dispose()
 
     def update_object(self):
-        """ Handles the user changing the contents of the edit control.
-        """
+        """Handles the user changing the contents of the edit control."""
         if self.control is None:
             return
         try:
@@ -90,7 +87,7 @@ class TextEditor(Editor):
 
 
 class ReadonlyEditor(Editor):
-    """ Base class for read-only style editors, which displays a read-only text
+    """Base class for read-only style editors, which displays a read-only text
     field, containing a text representation of the object trait value.
     """
 
@@ -111,8 +108,8 @@ class ReadonlyEditor(Editor):
     }
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = QtGui.QLabel(self.str_value)
 
@@ -134,8 +131,8 @@ class ReadonlyEditor(Editor):
         self.set_tooltip()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self.control.setText(self.str_value)
 

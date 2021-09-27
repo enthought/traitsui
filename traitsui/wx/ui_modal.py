@@ -34,19 +34,17 @@ from traitsui.menu import (
 
 
 def ui_modal(ui, parent):
-    """ Creates a modal wxPython user interface for a specified UI object.
-    """
+    """Creates a modal wxPython user interface for a specified UI object."""
     _ui_dialog(ui, parent, BaseDialog.MODAL)
 
 
 def ui_nonmodal(ui, parent):
-    """ Creates a non-modal wxPython user interface for a specified UI object.
-    """
+    """Creates a non-modal wxPython user interface for a specified UI object."""
     _ui_dialog(ui, parent, BaseDialog.NONMODAL)
 
 
 def _ui_dialog(ui, parent, style):
-    """ Creates a wxPython dialog box for a specified UI object.
+    """Creates a wxPython dialog box for a specified UI object.
 
     Changes are not immediately applied to the underlying object. The user must
     click **Apply** or **OK** to apply changes. The user can revert changes by
@@ -59,8 +57,7 @@ def _ui_dialog(ui, parent, style):
 
 
 class ModalDialog(BaseDialog):
-    """ Modal dialog box for Traits-based user interfaces.
-    """
+    """Modal dialog box for Traits-based user interfaces."""
 
     def init(self, ui, parent, style):
         self.is_modal = style == self.MODAL
@@ -163,9 +160,7 @@ class ModalDialog(BaseDialog):
                     self.apply = self.add_button(
                         button, b_sizer, self._on_apply, apply, default=default
                     )
-                    ui.observe(
-                        self._on_applyable, "modified", dispatch="ui"
-                    )
+                    ui.observe(self._on_applyable, "modified", dispatch="ui")
 
                 elif self.is_button(button, "Revert"):
                     self.revert = self.add_button(
@@ -206,8 +201,7 @@ class ModalDialog(BaseDialog):
         window.SetSizerAndFit(sw_sizer)
 
     def close(self, rc=wx.ID_OK):
-        """ Closes the dialog window.
-        """
+        """Closes the dialog window."""
         ui = self.ui
         ui.result = rc == wx.ID_OK
         save_window(ui)
@@ -221,8 +215,7 @@ class ModalDialog(BaseDialog):
         self.ui = self.apply = self.revert = self.help = self.control = None
 
     def _copy_context(self, context):
-        """ Creates a copy of a *context* dictionary.
-        """
+        """Creates a copy of a *context* dictionary."""
         result = {}
         for name, value in context.items():
             if value is not None:
@@ -233,8 +226,7 @@ class ModalDialog(BaseDialog):
         return result
 
     def _apply_context(self, from_context, to_context):
-        """ Applies the traits in the *from_context* to the *to_context*.
-        """
+        """Applies the traits in the *from_context* to the *to_context*."""
         for name, value in from_context.items():
             if value is not None:
                 to_context[name].copy_traits(value)
@@ -247,36 +239,31 @@ class ModalDialog(BaseDialog):
                 on_apply()
 
     def _on_close_page(self, event):
-        """ Handles the user clicking the window/dialog "close" button/icon.
-        """
+        """Handles the user clicking the window/dialog "close" button/icon."""
         if self.ui.view.close_result:
             self._on_ok(event)
         else:
             self._on_cancel(event)
 
     def _on_ok(self, event=None):
-        """ Closes the window and saves changes (if allowed by the handler).
-        """
+        """Closes the window and saves changes (if allowed by the handler)."""
         if self.ui.handler.close(self.ui.info, True):
             self._apply_context(self.ui.context, self.ui._context)
             self.close(wx.ID_OK)
 
     def _on_cancel(self, event=None):
-        """ Closes the window and discards changes (if allowed by the handler).
-        """
+        """Closes the window and discards changes (if allowed by the handler)."""
         if self.ui.handler.close(self.ui.info, False):
             self._apply_context(self.ui._revert, self.ui._context)
             self.close(wx.ID_CANCEL)
 
     def _on_key(self, event):
-        """ Handles the user pressing the Escape key.
-        """
+        """Handles the user pressing the Escape key."""
         if event.GetKeyCode() == 0x1B:
             self._on_close_page(event)
 
     def _on_apply(self, event):
-        """ Handles a request to apply changes.
-        """
+        """Handles a request to apply changes."""
         ui = self.ui
         self._apply_context(ui.context, ui._context)
         if hasattr(self, "revert"):
@@ -285,8 +272,7 @@ class ModalDialog(BaseDialog):
         ui.modified = False
 
     def _on_revert(self, event):
-        """ Handles a request to revert changes.
-        """
+        """Handles a request to revert changes."""
         ui = self.ui
         self._apply_context(ui._revert, ui.context)
         self._apply_context(ui._revert, ui._context)
@@ -295,13 +281,11 @@ class ModalDialog(BaseDialog):
         ui.modified = False
 
     def _on_applyable(self, event):
-        """ Handles a change to the "modified" state of the user interface .
-        """
+        """Handles a change to the "modified" state of the user interface ."""
         state = event.new
         self.apply.Enable(state)
 
     def _on_error(self, event):
-        """ Handles editing errors.
-        """
+        """Handles editing errors."""
         errors = event.new
         self.ok.Enable(errors == 0)

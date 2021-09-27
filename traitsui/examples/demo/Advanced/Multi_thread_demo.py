@@ -48,17 +48,18 @@ class ThreadDemo(HasTraits):
             Item('thread_2', style='readonly'),
         ),
         '_',
-        Item('start', show_label=False,
-             enabled_when='running == 0'),
+        Item('start', show_label=False, enabled_when='running == 0'),
         resizable=True,
         width=250,
-        title='Monitoring threads'
+        title='Monitoring threads',
     )
 
     def _start_changed(self):
         for i in range(3):
-            Thread(target=self.counter,
-                   args=('thread_%d' % i, (i * 10 + 10) / 1000.0)).start()
+            Thread(
+                target=self.counter,
+                args=('thread_%d' % i, (i * 10 + 10) / 1000.0),
+            ).start()
 
     def counter(self, name, interval):
         self.running += 1
@@ -68,6 +69,7 @@ class ThreadDemo(HasTraits):
             count += 1
             sleep(interval)
         self.running -= 1
+
 
 # Create the demo:
 demo = ThreadDemo()

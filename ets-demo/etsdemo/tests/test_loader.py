@@ -53,7 +53,7 @@ GOOD_ENTRY_POINTS = {
 
 
 class TestResponseToNode(unittest.TestCase):
-    """ Test conversion from response to node. """
+    """Test conversion from response to node."""
 
     def test_good_response_to_node(self):
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -82,9 +82,10 @@ class TestResponseToNode(unittest.TestCase):
         self.assertEqual(resource.nice_name, "Amazing Demo")
         self.assertFalse(resource.has_children())
         self.assertIn(
-            "Unable to load data.", resource.description,
+            "Unable to load data.",
+            resource.description,
         )
-        log_content, = watcher.output
+        (log_content,) = watcher.output
         self.assertIn("TraitError", log_content)
 
     def test_bad_response_replaced(self):
@@ -95,11 +96,8 @@ class TestResponseToNode(unittest.TestCase):
 
         self.assertFalse(resource.has_children())
         self.assertEqual(resource.nice_name, "(Empty)")
-        self.assertIn(
-            "Unable to load data.",
-            resource.description
-        )
-        log_content, = watcher.output
+        self.assertIn("Unable to load data.", resource.description)
+        (log_content,) = watcher.output
         self.assertIn("KeyError", log_content)
 
     def test_bad_response_type_error(self):
@@ -116,11 +114,8 @@ class TestResponseToNode(unittest.TestCase):
 
                 self.assertFalse(resource.has_children())
                 self.assertEqual(resource.nice_name, "(Empty)")
-                self.assertIn(
-                    "Unable to load data.",
-                    resource.description
-                )
-                log_content, = watcher.output
+                self.assertIn("Unable to load data.", resource.description)
+                (log_content,) = watcher.output
                 self.assertIn("TypeError", log_content)
 
     def test_bad_response_missing_name(self):
@@ -134,7 +129,7 @@ class TestResponseToNode(unittest.TestCase):
 
             self.assertFalse(resource.has_children())
             self.assertEqual(resource.nice_name, "(Empty)")
-            log_content, = watcher.output
+            (log_content,) = watcher.output
             self.assertIn("KeyError: \'name\'", log_content)
 
     def test_bad_response_missing_version(self):
@@ -147,7 +142,7 @@ class TestResponseToNode(unittest.TestCase):
                 resource = response_to_node(response)
 
             self.assertFalse(resource.has_children())
-            log_content, = watcher.output
+            (log_content,) = watcher.output
             self.assertIn("KeyError: \'version\'", log_content)
 
     def test_bad_response_bad_version(self):
@@ -161,7 +156,7 @@ class TestResponseToNode(unittest.TestCase):
                 resource = response_to_node(response)
 
             self.assertFalse(resource.has_children())
-            log_content, = watcher.output
+            (log_content,) = watcher.output
             self.assertIn("TraitError", log_content)
 
     def test_bad_response_bad_name_type(self):
@@ -175,12 +170,12 @@ class TestResponseToNode(unittest.TestCase):
                 resource = response_to_node(response)
 
             self.assertFalse(resource.has_children())
-            log_content, = watcher.output
+            (log_content,) = watcher.output
             self.assertIn("TraitError", log_content)
 
 
 class TestGetResponse(unittest.TestCase):
-    """ Test the routine to obtain resources from entry points."""
+    """Test the routine to obtain resources from entry points."""
 
     def test_load_good_entry_points(self):
         with mock_iter_entry_points(GOOD_ENTRY_POINTS):
@@ -207,7 +202,7 @@ class TestGetResponse(unittest.TestCase):
                 resources = get_responses()
 
         self.assertEqual(len(resources), 1)
-        log_output, = watcher.output
+        (log_output,) = watcher.output
         self.assertIn("Failed to obtain data from", log_output)
 
     def test_load_import_error(self):
@@ -226,5 +221,5 @@ class TestGetResponse(unittest.TestCase):
                 resources = get_responses()
 
         self.assertEqual(len(resources), 1)
-        log_output, = watcher.output
+        (log_output,) = watcher.output
         self.assertIn("Failed to load entry point", log_output)

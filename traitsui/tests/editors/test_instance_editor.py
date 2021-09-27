@@ -28,7 +28,7 @@ from traitsui.testing.api import (
     MouseClick,
     SelectedText,
     TargetByName,
-    UITester
+    UITester,
 )
 
 ModalDialogTester = toolkit_object(
@@ -45,11 +45,7 @@ class EditedInstance(HasTraits):
 class NamedInstance(HasTraits):
     name = Str()
     value = Str()
-    traits_view = View(
-        Item("name"),
-        Item("value"),
-        buttons=["OK"]
-    )
+    traits_view = View(Item("name"), Item("value"), buttons=["OK"])
 
 
 class ObjectWithInstance(HasTraits):
@@ -135,11 +131,7 @@ class ObjectWithValidatedInstance(HasTraits):
     something = Instance(ValidatedEditedInstance, args=())
 
     traits_view = View(
-        Item(
-            'something',
-            editor=InstanceEditor(),
-            style='custom'
-        ),
+        Item('something', editor=InstanceEditor(), style='custom'),
         buttons=["OK", "Cancel"],
     )
 
@@ -157,7 +149,6 @@ class ObjectWithValidatedList(HasTraits):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -326,16 +317,10 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
 
             instance_editor_ui = something_ui._target._ui
             instance_editor_ui_parent = something_ui._target._ui.parent
-            self.assertNotEqual(
-                instance_editor_ui, ui
-            )
-            self.assertEqual(
-                instance_editor_ui_parent, ui
-            )
+            self.assertNotEqual(instance_editor_ui, ui)
+            self.assertEqual(instance_editor_ui_parent, ui)
 
-            self.assertEqual(
-                instance_editor_ui.errors, ui.errors
-            )
+            self.assertEqual(instance_editor_ui.errors, ui.errors)
             self.assertFalse(ok_button.inspect(IsEnabled()))
 
     def test_propagate_errors_switch_selection(self):
@@ -356,16 +341,10 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
 
             instance_editor_ui = something_ui._target._ui
             instance_editor_ui_parent = something_ui._target._ui.parent
-            self.assertNotEqual(
-                instance_editor_ui, ui
-            )
-            self.assertEqual(
-                instance_editor_ui_parent, ui
-            )
+            self.assertNotEqual(instance_editor_ui, ui)
+            self.assertEqual(instance_editor_ui_parent, ui)
 
-            self.assertEqual(
-                instance_editor_ui.errors, ui.errors
-            )
+            self.assertEqual(instance_editor_ui.errors, ui.errors)
             self.assertFalse(ok_button.inspect(IsEnabled()))
 
             # change to a different selected that is not in an error state

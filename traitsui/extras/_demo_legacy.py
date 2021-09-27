@@ -141,8 +141,8 @@ def extract_docstring_from_source(source):
     source_lines = source.splitlines()
 
     # Extract module docstring lines and recombine
-    docstring = eval("\n".join(source_lines[tstart[0] - 1: tend[0]]))
-    source_lines = source_lines[: tstart[0] - 1] + source_lines[tend[0]:]
+    docstring = eval("\n".join(source_lines[tstart[0] - 1 : tend[0]]))
+    source_lines = source_lines[: tstart[0] - 1] + source_lines[tend[0] :]
     source = "\n".join(source_lines)
     source = source.strip()
 
@@ -172,8 +172,7 @@ def parse_source(file_name):
 
 
 def _read_file(path, mode='r', encoding='utf8'):
-    """ Returns the contents of a specified text file.
-    """
+    """Returns the contents of a specified text file."""
     with open(path, mode, encoding=encoding) as fh:
         result = fh.read()
     return result
@@ -182,6 +181,7 @@ def _read_file(path, mode='r', encoding='utf8'):
 # -------------------------------------------------------------------------
 #  'DemoFileHandler' class:
 # -------------------------------------------------------------------------
+
 
 @contextlib.contextmanager
 def _set_stdout(std_out):
@@ -219,8 +219,7 @@ class DemoFileHandler(Handler):
         return True
 
     def closed(self, info, is_ok):
-        """ Closes the view.
-        """
+        """Closes the view."""
         demo_file = info.object
         if hasattr(demo_file, 'demo'):
             demo_file.demo = None
@@ -322,8 +321,7 @@ class DemoTreeNodeObject(TreeNodeObject):
     # -------------------------------------------------------------------------
 
     def tno_allows_children(self, node):
-        """ Returns whether chidren of this object are allowed or not.
-        """
+        """Returns whether chidren of this object are allowed or not."""
         return self.allows_children
 
     # -------------------------------------------------------------------------
@@ -331,8 +329,7 @@ class DemoTreeNodeObject(TreeNodeObject):
     # -------------------------------------------------------------------------
 
     def tno_has_children(self, node=None):
-        """ Returns whether or not the object has children.
-        """
+        """Returns whether or not the object has children."""
         if self._has_children is None:
             self._has_children = self.has_children()
 
@@ -343,8 +340,7 @@ class DemoTreeNodeObject(TreeNodeObject):
     # -------------------------------------------------------------------------
 
     def tno_get_children(self, node):
-        """ Gets the object's children.
-        """
+        """Gets the object's children."""
         if self._get_children is None:
             self._get_children = self.get_children()
 
@@ -355,8 +351,7 @@ class DemoTreeNodeObject(TreeNodeObject):
     # -------------------------------------------------------------------------
 
     def has_children(self, node):
-        """ Returns whether or not the object has children.
-        """
+        """Returns whether or not the object has children."""
         raise NotImplementedError
 
     # -------------------------------------------------------------------------
@@ -364,8 +359,7 @@ class DemoTreeNodeObject(TreeNodeObject):
     # -------------------------------------------------------------------------
 
     def get_children(self):
-        """ Gets the object's children.
-        """
+        """Gets the object's children."""
         raise NotImplementedError
 
 
@@ -436,13 +430,11 @@ class DemoFileBase(DemoTreeNodeObject):
     # -------------------------------------------------------------------------
 
     def has_children(self):
-        """ Returns whether or not the object has children.
-        """
+        """Returns whether or not the object has children."""
         return False
 
     def get_children(self):
-        """ Gets the demo file's children.
-        """
+        """Gets the demo file's children."""
         return []
 
 
@@ -465,8 +457,7 @@ class DemoFile(DemoFileBase):
         self.run_code()
 
     def run_code(self):
-        """ Runs the code associated with this demo file.
-        """
+        """Runs the code associated with this demo file."""
         try:
             # Get the execution context dictionary:
             locals = self.parent.init_dic
@@ -523,7 +514,6 @@ _image_template = """<html>
 
 
 class DemoContentFile(DemoFileBase):
-
     def init(self):
         super().init()
         file_str = _read_file(self.path)
@@ -531,15 +521,13 @@ class DemoContentFile(DemoFileBase):
 
 
 class DemoImageFile(DemoFileBase):
-
     def init(self):
         super().init()
         self.description = _image_template.format(self.css_filename, self.path)
 
 
 class DemoPath(DemoTreeNodeObject):
-    """ This class represents a directory.
-    """
+    """This class represents a directory."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -603,7 +591,7 @@ class DemoPath(DemoTreeNodeObject):
             ".png": DemoImageFile,
             ".py": DemoFile,
             ".rst": DemoContentFile,
-            ".txt": DemoContentFile
+            ".txt": DemoContentFile,
         }
 
     # -------------------------------------------------------------------------
@@ -677,8 +665,7 @@ class DemoPath(DemoTreeNodeObject):
     # -------------------------------------------------------------------------
 
     def has_children(self):
-        """ Returns whether or not the object has children.
-        """
+        """Returns whether or not the object has children."""
         path = self.path
         for name in listdir(path):
             cur_path = join(path, name)
@@ -699,8 +686,7 @@ class DemoPath(DemoTreeNodeObject):
     # -------------------------------------------------------------------------
 
     def get_children(self):
-        """ Gets the object's children.
-        """
+        """Gets the object's children."""
         if self.config_dict or self.config_filename:
             children = self.get_children_from_config()
         else:
@@ -711,8 +697,7 @@ class DemoPath(DemoTreeNodeObject):
     #  Gets the object's children based on the filesystem structure.
     # -------------------------------------------------------------------------
     def get_children_from_datastructure(self):
-        """ Gets the object's children based on the filesystem structure.
-        """
+        """Gets the object's children based on the filesystem structure."""
 
         dirs = []
         files = []
@@ -725,7 +710,7 @@ class DemoPath(DemoTreeNodeObject):
                         DemoPath(
                             parent=self,
                             name=name,
-                            css_filename=join('..', self.css_filename)
+                            css_filename=join('..', self.css_filename),
                         )
                     )
             elif self.use_files:
@@ -796,7 +781,8 @@ class DemoPath(DemoTreeNodeObject):
                         demoobj.nice_name = keyword
                         demoobj.config_dict = config_dict
                         demoobj.css_filename = os.path.join(
-                            "..", self.css_filename)
+                            "..", self.css_filename
+                        )
                         dirs.append(demoobj)
                     elif len(names) == 1:
                         try:
@@ -831,8 +817,7 @@ class DemoPath(DemoTreeNodeObject):
         return False
 
     def _handle_file(self, filename):
-        """ Process a file based on its extension.
-        """
+        """Process a file based on its extension."""
         _, ext = splitext(filename)
         file_factory = self._file_factory[ext]
         demo_file = file_factory(parent=self, name=filename)
@@ -882,17 +867,16 @@ demo_file_view = View(
                     "log",
                     style="readonly",
                     editor=CodeEditor(
-                        show_line_numbers=False,
-                        selected_color=0xFFFFFF
+                        show_line_numbers=False, selected_color=0xFFFFFF
                     ),
                     label="Output",
-                    show_label=False
+                    show_label=False,
                 ),
                 Item(
                     "locals",
                     editor=ShellEditor(share=True),
                     label="Shell",
-                    show_label=False
+                    show_label=False,
                 ),
                 UItem(
                     "demo",
@@ -932,23 +916,18 @@ demo_tree_editor = TreeEditor(
             view=demo_path_view,
         ),
         ObjectTreeNode(
-            node_for=[DemoFile],
-            label="nice_name",
-            view=demo_file_view
+            node_for=[DemoFile], label="nice_name", view=demo_file_view
         ),
         ObjectTreeNode(
             node_for=[DemoContentFile],
             label="nice_name",
-            view=demo_content_view
+            view=demo_content_view,
         ),
         ObjectTreeNode(
-            node_for=[DemoImageFile],
-            label="nice_name",
-            view=demo_content_view
+            node_for=[DemoImageFile], label="nice_name", view=demo_content_view
         ),
     ],
     selected='selected_node',
-
 )
 
 
@@ -974,7 +953,7 @@ parent_tool = Action(
     tooltip="Go to next file",
     action="do_parent",
     enabled_when="(selected_node is not None) and "
-                 "(object.selected_node.parent is not None)",
+    "(object.selected_node.parent is not None)",
 )
 
 
@@ -1079,7 +1058,7 @@ class Demo(ModelView):
 
 
 def _get_settings(css_path=None):
-    """ Helper function to make settings dictionary
+    """Helper function to make settings dictionary
     consumable by docutils
 
     Parameters
@@ -1101,7 +1080,7 @@ def _get_settings(css_path=None):
 
 
 def publish_html_str(rst_str, css_path=None):
-    """ Format RST string to html using `docutils` if available.
+    """Format RST string to html using `docutils` if available.
     Otherwise, return the input `rst_str`.
 
     Parameters
@@ -1122,13 +1101,13 @@ def publish_html_str(rst_str, css_path=None):
         return rst_str
 
     settings = _get_settings(css_path)
-    return publish_string(rst_str,
-                          writer_name='html',
-                          settings_overrides=settings)
+    return publish_string(
+        rst_str, writer_name='html', settings_overrides=settings
+    )
 
 
 def publish_html_file(rst_file_path, html_out_path, css_path=None):
-    """ Format reStructuredText in `rst_file_path` to html using `docutils`
+    """Format reStructuredText in `rst_file_path` to html using `docutils`
     if available. Otherwise, does nothing.
 
     Parameters
@@ -1150,10 +1129,12 @@ def publish_html_file(rst_file_path, html_out_path, css_path=None):
         return
 
     settings = _get_settings(css_path)
-    publish_file(source_path=rst_file_path,
-                 destination_path=html_out_path,
-                 writer_name='html',
-                 settings_overrides=settings)
+    publish_file(
+        source_path=rst_file_path,
+        destination_path=html_out_path,
+        writer_name='html',
+        settings_overrides=settings,
+    )
 
 
 # -------------------------------------------------------------------------

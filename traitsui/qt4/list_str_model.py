@@ -12,11 +12,9 @@
 """
 
 
-
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
-
 
 
 # MIME type for internal table drag/drop operations
@@ -24,12 +22,10 @@ mime_type = "traits-ui-list-str-editor"
 
 
 class ListStrModel(QtCore.QAbstractListModel):
-    """ A model for lists of strings.
-    """
+    """A model for lists of strings."""
 
     def __init__(self, editor, parent=None):
-        """ Initialise the object.
-        """
+        """Initialise the object."""
         QtCore.QAbstractListModel.__init__(self, parent)
 
         self._editor = editor
@@ -39,8 +35,7 @@ class ListStrModel(QtCore.QAbstractListModel):
     # -------------------------------------------------------------------------
 
     def rowCount(self, mi):
-        """ Reimplemented to return items in the list.
-        """
+        """Reimplemented to return items in the list."""
         editor = self._editor
         n = editor.adapter.len(editor.object, editor.name)
         if editor.factory.auto_add:
@@ -48,17 +43,14 @@ class ListStrModel(QtCore.QAbstractListModel):
         return n
 
     def data(self, mi, role):
-        """ Reimplemented to return the data.
-        """
+        """Reimplemented to return the data."""
         editor = self._editor
         adapter = editor.adapter
         index = mi.row()
 
         if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
             if editor.is_auto_add(index):
-                text = adapter.get_default_text(
-                    editor.object, editor.name
-                )
+                text = adapter.get_default_text(editor.object, editor.name)
             else:
                 text = adapter.get_text(editor.object, editor.name, index)
             if role == QtCore.Qt.DisplayRole and text == "":
@@ -68,9 +60,7 @@ class ListStrModel(QtCore.QAbstractListModel):
 
         elif role == QtCore.Qt.DecorationRole:
             if editor.is_auto_add(index):
-                image = adapter.get_default_image(
-                    editor.object, editor.name
-                )
+                image = adapter.get_default_image(editor.object, editor.name)
             else:
                 image = adapter.get_image(editor.object, editor.name, index)
             image = editor.get_image(image)
@@ -110,8 +100,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         return None
 
     def setData(self, mi, value, role):
-        """ Reimplmented to allow for modification of the object trait.
-        """
+        """Reimplmented to allow for modification of the object trait."""
         editor = self._editor
         if editor.is_auto_add(mi.row()):
             method = editor.adapter.insert
@@ -122,8 +111,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         return True
 
     def setItemData(self, mi, roles):
-        """ Reimplmented to reject all setItemData calls.
-        """
+        """Reimplmented to reject all setItemData calls."""
         # FIXME: This is a hack to prevent the QListView from clearing out the
         # old row after a move operation. (The QTableView doesn't do this, for
         # some reason). This behavior is not overridable so far as I can tell,
@@ -133,8 +121,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         return False
 
     def flags(self, mi):
-        """ Reimplemented to set editable status and movable status.
-        """
+        """Reimplemented to set editable status and movable status."""
         editor = self._editor
         index = mi.row()
 
@@ -158,8 +145,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         return flags
 
     def headerData(self, section, orientation, role):
-        """ Reimplemented to return title for vertical header data.
-        """
+        """Reimplemented to return title for vertical header data."""
         if (
             orientation != QtCore.Qt.Horizontal
             or role != QtCore.Qt.DisplayRole
@@ -169,8 +155,8 @@ class ListStrModel(QtCore.QAbstractListModel):
         return self._editor.title
 
     def insertRow(self, row, parent=QtCore.QModelIndex(), obj=None):
-        """ Reimplemented to allow creation of new rows. Added an optional
-            arg to allow the insertion of an existing row object.
+        """Reimplemented to allow creation of new rows. Added an optional
+        arg to allow the insertion of an existing row object.
         """
         editor = self._editor
         adapter = editor.adapter
@@ -185,8 +171,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         return True
 
     def insertRows(self, row, count, parent=QtCore.QModelIndex()):
-        """ Reimplemented to allow creation of new items.
-        """
+        """Reimplemented to allow creation of new items."""
         editor = self._editor
         adapter = editor.adapter
 
@@ -200,8 +185,8 @@ class ListStrModel(QtCore.QAbstractListModel):
         return True
 
     def removeRows(self, row, count, parent=QtCore.QModelIndex()):
-        """ Reimplemented to allow row deletion, as well as reordering via drag
-            and drop.
+        """Reimplemented to allow row deletion, as well as reordering via drag
+        and drop.
         """
         editor = self._editor
         adapter = editor.adapter
@@ -213,14 +198,14 @@ class ListStrModel(QtCore.QAbstractListModel):
         return True
 
     def mimeTypes(self):
-        """ Reimplemented to expose our internal MIME type for drag and drop
-            operations.
+        """Reimplemented to expose our internal MIME type for drag and drop
+        operations.
         """
         return [mime_type]
 
     def mimeData(self, indexes):
-        """ Reimplemented to generate MIME data containing the rows of the
-            current selection.
+        """Reimplemented to generate MIME data containing the rows of the
+        current selection.
         """
         mime_data = QtCore.QMimeData()
         rows = list({index.row() for index in indexes})
@@ -231,8 +216,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         return mime_data
 
     def dropMimeData(self, mime_data, action, row, column, parent):
-        """ Reimplemented to allow items to be moved.
-        """
+        """Reimplemented to allow items to be moved."""
         if action == QtCore.Qt.IgnoreAction:
             return False
 
@@ -245,8 +229,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         return True
 
     def supportedDropActions(self):
-        """ Reimplemented to allow items to be moved.
-        """
+        """Reimplemented to allow items to be moved."""
         return QtCore.Qt.MoveAction
 
     # -------------------------------------------------------------------------
@@ -254,13 +237,12 @@ class ListStrModel(QtCore.QAbstractListModel):
     # -------------------------------------------------------------------------
 
     def moveRow(self, old_row, new_row):
-        """ Convenience method to move a single row.
-        """
+        """Convenience method to move a single row."""
         return self.moveRows([old_row], new_row)
 
     def moveRows(self, current_rows, new_row):
-        """ Moves a sequence of rows (provided as a list of row indexes) to a
-            new row.
+        """Moves a sequence of rows (provided as a list of row indexes) to a
+        new row.
         """
         editor = self._editor
 

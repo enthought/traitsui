@@ -14,7 +14,12 @@ from unittest.mock import Mock
 from traits.api import HasTraits, Instance, Int, List, Str, Tuple
 
 from traitsui.api import (
-    Action, EvalTableFilter, Item, ObjectColumn, TableEditor, View,
+    Action,
+    EvalTableFilter,
+    Item,
+    ObjectColumn,
+    TableEditor,
+    View,
 )
 from traitsui.tests._tools import (
     BaseTestMixin,
@@ -29,7 +34,7 @@ from traitsui.tests._tools import (
 
 
 class ListItem(HasTraits):
-    """ Items to visualize in a table editor """
+    """Items to visualize in a table editor"""
 
     value = Str()
     other_value = Int()
@@ -273,7 +278,6 @@ select_cell_indices_view = View(
 
 
 class TestTableEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -286,8 +290,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
 
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=simple_view)):
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=simple_view)
+        ):
             process_cascade_events()
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -296,8 +301,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
 
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=filtered_view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=filtered_view)
+        ) as ui:
             process_cascade_events()
 
             filter = ui.get_editors("values")[0].filter
@@ -313,8 +319,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         )
         object_list.selected = object_list.values[5]
 
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=select_row_view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=select_row_view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
             if is_qt():
@@ -333,8 +340,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         )
         object_list.selections = object_list.values[5:7]
 
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=select_rows_view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=select_rows_view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
             if is_qt():
@@ -353,8 +361,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         )
         object_list.selected_index = 5
 
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=select_row_index_view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=select_row_index_view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
             if is_qt():
@@ -374,8 +383,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         object_list.selected_indices = [5, 7, 8]
 
         view = select_row_indices_view
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
             if is_qt():
@@ -394,8 +404,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         )
         object_list.selected_column = "value"
 
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=select_column_view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=select_column_view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
             if is_qt():
@@ -414,8 +425,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         )
         object_list.selected_columns = ["value", "other_value"]
 
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=select_columns_view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=select_columns_view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
             if is_qt():
@@ -435,8 +447,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         object_list.selected_index = 1
 
         view = select_column_index_view
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
             if is_qt():
@@ -456,8 +469,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         object_list.selected_indices = [0, 1]
 
         view = select_column_indices_view
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
             if is_qt():
@@ -476,8 +490,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         )
         object_list.selected_cell = (object_list.values[5], "value")
 
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=select_cell_view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=select_cell_view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
             if is_qt():
@@ -500,8 +515,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             (object_list.values[8], "value"),
         ]
 
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=select_cells_view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=select_cells_view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
             if is_qt():
@@ -511,11 +527,14 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
 
             process_cascade_events()
 
-        self.assertEqual(selected, [
-            (object_list.values[5], "value"),
-            (object_list.values[6], "other value"),
-            (object_list.values[8], "value"),
-        ])
+        self.assertEqual(
+            selected,
+            [
+                (object_list.values[5], "value"),
+                (object_list.values[6], "other value"),
+                (object_list.values[8], "value"),
+            ],
+        )
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_table_editor_select_cell_index(self):
@@ -525,8 +544,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         object_list.selected_cell_index = (5, 1)
 
         view = select_cell_index_view
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
             if is_qt():
@@ -546,8 +566,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         object_list.selected_cell_indices = [(5, 0), (6, 1), (8, 0)]
 
         view = select_cell_indices_view
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
             if is_qt():
@@ -580,8 +601,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
             values=[ListItem(value=str(i ** 2)) for i in range(10)]
         )
 
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=progress_view)):
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=progress_view)
+        ):
             process_cascade_events()
 
     @requires_toolkit([ToolkitName.qt])
@@ -594,8 +616,9 @@ class TestTableEditor(BaseTestMixin, unittest.TestCase):
         mock_function = Mock()
         action = Action(on_perform=mock_function)
 
-        with reraise_exceptions(), \
-                create_ui(object_list, dict(view=simple_view)) as ui:
+        with reraise_exceptions(), create_ui(
+            object_list, dict(view=simple_view)
+        ) as ui:
             editor = ui.get_editors("values")[0]
             process_cascade_events()
             editor.set_menu_context(None, None, None)

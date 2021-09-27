@@ -83,14 +83,15 @@ class UIWrapper:
     """
 
     def __init__(
-            self, target, *, registries, delay=0, auto_process_events=True):
+        self, target, *, registries, delay=0, auto_process_events=True
+    ):
         self._target = target
         self._registries = registries
         self._auto_process_events = auto_process_events
         self.delay = delay
 
     def help(self):
-        """ Print help messages.
+        """Print help messages.
         (This function is intended for interactive use.)
         """
         # mapping from interaction types to their documentation
@@ -133,9 +134,7 @@ class UIWrapper:
         for locator_type in sorted(location_to_doc, key=repr):
             print(repr(locator_type))
             print(
-                textwrap.indent(
-                    location_to_doc[locator_type], prefix="    "
-                )
+                textwrap.indent(location_to_doc[locator_type], prefix="    ")
             )
             print()
 
@@ -144,7 +143,7 @@ class UIWrapper:
             print()
 
     def locate(self, location):
-        """ Attempt to resolve the given location and return a new
+        """Attempt to resolve the given location and return a new
         UIWrapper.
 
         Parameters
@@ -175,7 +174,7 @@ class UIWrapper:
         )
 
     def find_by_name(self, name):
-        """ Find a target inside the current target using a name.
+        """Find a target inside the current target using a name.
 
         This is equivalent to calling ``locate(TargetByName(name=name))``.
 
@@ -201,7 +200,7 @@ class UIWrapper:
         return self.locate(locator.TargetByName(name=name))
 
     def find_by_id(self, id):
-        """ Find a target inside the current target using an id.
+        """Find a target inside the current target using an id.
 
         This is equivalent to calling ``locate(TargetById(id=id))``.
 
@@ -227,7 +226,7 @@ class UIWrapper:
         return self.locate(locator.TargetById(id=id))
 
     def perform(self, interaction):
-        """ Perform a user interaction that causes side effects.
+        """Perform a user interaction that causes side effects.
 
         Parameters
         ----------
@@ -248,7 +247,7 @@ class UIWrapper:
         self._perform_or_inspect(interaction)
 
     def inspect(self, interaction):
-        """ Return a value or values for inspection.
+        """Return a value or values for inspection.
 
         Parameters
         ----------
@@ -277,7 +276,7 @@ class UIWrapper:
     # Private methods #########################################################
 
     def _perform_or_inspect(self, interaction):
-        """ Perform a user interaction or a user inspection.
+        """Perform a user interaction or a user inspection.
 
         Parameters
         ----------
@@ -306,7 +305,8 @@ class UIWrapper:
                 continue
             else:
                 context = (
-                    _event_processed if self._auto_process_events
+                    _event_processed
+                    if self._auto_process_events
                     else _nullcontext
                 )
                 with context():
@@ -319,7 +319,7 @@ class UIWrapper:
         )
 
     def _get_next_target(self, location):
-        """ Return the next UI target from the given location.
+        """Return the next UI target from the given location.
 
         Parameters
         ----------
@@ -360,7 +360,7 @@ class UIWrapper:
 
 @contextmanager
 def _event_processed():
-    """ Context manager to ensure GUI events are processed upon entering
+    """Context manager to ensure GUI events are processed upon entering
     and exiting the context.
     """
     with _reraise_exceptions():
@@ -373,5 +373,5 @@ def _event_processed():
 
 @contextmanager
 def _nullcontext():
-    """ Equivalent to contextlib.nullcontext() in Python >= 3.7"""
+    """Equivalent to contextlib.nullcontext() in Python >= 3.7"""
     yield

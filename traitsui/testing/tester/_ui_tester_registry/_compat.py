@@ -14,7 +14,7 @@ normalizing differences among toolkits (Qt and Wx).
 
 
 def check_key_compat(key):
-    """ Check if the given key is a unicode character within the range of
+    """Check if the given key is a unicode character within the range of
     values currently supported for emulating key sequences on both Qt and Wx
     textboxes.
 

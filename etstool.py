@@ -158,7 +158,7 @@ extra_dependencies = {
     # Test dependencies also applied to installation from PYPI
     'test': {
         'packaging',
-    }
+    },
 }
 
 # Dependencies for CI jobs using this file.
@@ -198,6 +198,7 @@ NEWS_FRAGMENT_DIR = os.path.join(DOCS_DIR, "releases", "upcoming")
 # Location of the Changelog file.
 CHANGELOG_PATH = os.path.join(HERE, "CHANGES.txt")
 
+
 def normalize(name):
     return name.replace("_", "-")
 
@@ -225,9 +226,7 @@ def cli():
 )
 @click.option('--source/--no-source', default=False)
 def install(runtime, toolkit, environment, editable, source):
-    """ Install project and dependencies into a clean EDM environment.
-
-    """
+    """Install project and dependencies into a clean EDM environment."""
     parameters = get_parameters(runtime, toolkit, environment)
     packages = (
         dependencies
@@ -238,29 +237,30 @@ def install(runtime, toolkit, environment, editable, source):
         | ci_dependencies
     )
 
-
     # edm commands to setup the development environment
     if sys.platform == 'linux':
-        commands = ["edm environments create {environment} --platform=rh6-x86_64 --force --version={runtime}"]
+        commands = [
+            "edm environments create {environment} --platform=rh6-x86_64 --force --version={runtime}"
+        ]
     else:
-        commands = ["edm environments create {environment} --force --version={runtime}"]
+        commands = [
+            "edm environments create {environment} --force --version={runtime}"
+        ]
 
-    commands.extend([
-        "edm install -y -e {environment} " + " ".join(packages),
-        "edm run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
-        "edm run -e {environment} -- python setup.py clean --all",
-    ])
+    commands.extend(
+        [
+            "edm install -y -e {environment} " + " ".join(packages),
+            "edm run -e {environment} -- pip install --force-reinstall -r ci-src-requirements.txt --no-dependencies",
+            "edm run -e {environment} -- python setup.py clean --all",
+        ]
+    )
 
     # pip install pyqt5 and pyside2, because we don't have them in EDM yet
     if toolkit == 'pyside2':
-        commands.append(
-            "edm run -e {environment} -- pip install pyside2"
-        )
+        commands.append("edm run -e {environment} -- pip install pyside2")
     elif toolkit == 'wx':
         if sys.platform != 'linux':
-            commands.append(
-                "edm run -e {environment} -- pip install wxPython"
-            )
+            commands.append("edm run -e {environment} -- pip install wxPython")
         else:
             # XXX this is mainly for TravisCI workers; need a generic solution
             commands.append(
@@ -271,8 +271,12 @@ def install(runtime, toolkit, environment, editable, source):
     execute(commands, parameters)
 
     if source:
-        cmd_fmt = "edm plumbing remove-package --environment {environment} --force "
-        commands = [cmd_fmt+dependency for dependency in source_dependencies.keys()]
+        cmd_fmt = (
+            "edm plumbing remove-package --environment {environment} --force "
+        )
+        commands = [
+            cmd_fmt + dependency for dependency in source_dependencies.keys()
+        ]
         execute(commands, parameters)
         source_pkgs = source_dependencies.values()
         # Without the --no-dependencies flag such that new dependencies on
@@ -281,7 +285,9 @@ def install(runtime, toolkit, environment, editable, source):
             "python -m pip install --force-reinstall {pkg}".format(pkg=pkg)
             for pkg in source_pkgs
         ]
-        commands = ["edm run -e {environment} -- " + command for command in commands]
+        commands = [
+            "edm run -e {environment} -- " + command for command in commands
+        ]
         execute(commands, parameters)
 
     # Always install local source again with no dependencies
@@ -303,7 +309,7 @@ def install(runtime, toolkit, environment, editable, source):
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def shell(runtime, toolkit, environment):
-    """ Create a shell into the EDM development environment
+    """Create a shell into the EDM development environment
     (aka 'activate' it).
 
     """
@@ -319,9 +325,7 @@ def shell(runtime, toolkit, environment):
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def test(runtime, toolkit, environment):
-    """ Run the test suite in a given environment with the specified toolkit.
-
-    """
+    """Run the test suite in a given environment with the specified toolkit."""
     parameters = get_parameters(runtime, toolkit, environment)
     environ = environment_vars.get(toolkit, {}).copy()
     environ['PYTHONUNBUFFERED'] = "1"
@@ -351,13 +355,12 @@ def test(runtime, toolkit, environment):
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def cleanup(runtime, toolkit, environment):
-    """ Remove a development environment.
-
-    """
+    """Remove a development environment."""
     parameters = get_parameters(runtime, toolkit, environment)
     commands = [
         "edm run -e {environment} -- python setup.py clean",
-        "edm environments remove {environment} --purge -y"]
+        "edm environments remove {environment} --purge -y",
+    ]
     click.echo("Cleaning up environment '{environment}'".format(**parameters))
     execute(commands, parameters)
     click.echo('Done cleanup')
@@ -367,9 +370,7 @@ def cleanup(runtime, toolkit, environment):
 @click.option('--runtime', default=DEFAULT_RUNTIME)
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
 def test_clean(runtime, toolkit):
-    """ Run tests in a clean environment, cleaning up afterwards
-
-    """
+    """Run tests in a clean environment, cleaning up afterwards"""
     args = ['--toolkit={}'.format(toolkit), '--runtime={}'.format(runtime)]
     try:
         install(args=args, standalone_mode=False)
@@ -383,12 +384,9 @@ def test_clean(runtime, toolkit):
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def update(runtime, toolkit, environment):
-    """ Update/Reinstall package into environment.
-
-    """
+    """Update/Reinstall package into environment."""
     parameters = get_parameters(runtime, toolkit, environment)
-    commands = [
-        "edm run -e {environment} -- python setup.py install"]
+    commands = ["edm run -e {environment} -- python setup.py install"]
     click.echo("Re-installing in  '{environment}'".format(**parameters))
     execute(commands, parameters)
     click.echo('Done update')
@@ -399,17 +397,18 @@ def update(runtime, toolkit, environment):
 @click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def docs(runtime, toolkit, environment):
-    """ Autogenerate documentation
-
-    """
+    """Autogenerate documentation"""
     parameters = get_parameters(runtime, toolkit, environment)
     packages = ' '.join(doc_dependencies)
     ignore = " ".join(doc_ignore)
     commands = [
         "edm install -y -e {environment} " + packages,
     ]
-    click.echo("Installing documentation tools in  '{environment}'".format(
-        **parameters))
+    click.echo(
+        "Installing documentation tools in  '{environment}'".format(
+            **parameters
+        )
+    )
     execute(commands, parameters)
     click.echo('Done installing documentation tools')
 
@@ -424,9 +423,7 @@ def docs(runtime, toolkit, environment):
         "-e "
         "-M "
         "--no-toc "
-        "-o " + output_path
-        + " traitsui "
-        + ignore
+        "-o " + output_path + " traitsui " + ignore
     ]
     execute(commands, parameters)
     click.echo("Done regenerating API docs")
@@ -438,7 +435,9 @@ def docs(runtime, toolkit, environment):
         "source "
         "build/html"
     )
-    click.echo("Building documentation in  '{environment}'".format(**parameters))
+    click.echo(
+        "Building documentation in  '{environment}'".format(**parameters)
+    )
     try:
         execute([command], parameters)
     finally:
@@ -448,15 +447,13 @@ def docs(runtime, toolkit, environment):
 
 @cli.command()
 def test_all():
-    """ Run test_clean across all supported environment combinations.
-
-    """
+    """Run test_clean across all supported environment combinations."""
     failed_command = False
     for runtime, toolkits in supported_combinations.items():
         for toolkit in toolkits:
             args = [
                 '--toolkit={}'.format(toolkit),
-                '--runtime={}'.format(runtime)
+                '--runtime={}'.format(runtime),
             ]
             try:
                 test_clean(args, standalone_mode=True)
@@ -478,9 +475,7 @@ def test_all():
     help="Use strict configuration for flake8 [default: --not-strict]",
 )
 def flake8(runtime, toolkit, environment, strict):
-    """ Run a flake8 check in a given environment.
-
-    """
+    """Run a flake8 check in a given environment."""
     parameters = get_parameters(runtime, toolkit, environment)
     config = ""
     if strict:
@@ -494,7 +489,7 @@ def flake8(runtime, toolkit, environment, strict):
 @cli.group("changelog")
 @click.pass_context
 def changelog(ctx):
-    """ Group of commands related to creating changelog."""
+    """Group of commands related to creating changelog."""
 
     ctx.obj = {
         # Mapping from news fragment type to their description in
@@ -514,17 +509,15 @@ def changelog(ctx):
 @changelog.command("create")
 @click.pass_context
 def create_news_fragment(ctx):
-    """ Create a news fragment for your PR."""
+    """Create a news fragment for your PR."""
 
     pr_number = click.prompt('Please enter the PR number', type=int)
     type_ = click.prompt(
         "Choose a fragment type:",
-        type=click.Choice(ctx.obj["type_to_description"])
+        type=click.Choice(ctx.obj["type_to_description"]),
     )
 
-    filepath = os.path.join(
-        NEWS_FRAGMENT_DIR, f"{pr_number}.{type_}.rst"
-    )
+    filepath = os.path.join(NEWS_FRAGMENT_DIR, f"{pr_number}.{type_}.rst")
 
     if os.path.exists(filepath):
         click.echo("FAILED: File {} already exists.".format(filepath))
@@ -546,7 +539,7 @@ def create_news_fragment(ctx):
 @changelog.command("build")
 @click.pass_context
 def build_changelog(ctx):
-    """ Build Changelog created from all the news fragments."""
+    """Build Changelog created from all the news fragments."""
     # This is a rather simple first-cut generation of the changelog.
     # It removes the laborious concatenation, but the end results might
     # still require some tweaking.
@@ -582,9 +575,7 @@ def build_changelog(ctx):
     click.echo(f"Changelog is updated. Please review it at {CHANGELOG_PATH}")
 
     # Optionally clean up collected news fragments.
-    should_clean = click.confirm(
-        "Do you want to remove the news fragments?"
-    )
+    should_clean = click.confirm("Do you want to remove the news fragments?")
     if should_clean:
         for file_path in handled_file_paths:
             os.remove(file_path)
@@ -597,25 +588,35 @@ def build_changelog(ctx):
 
     click.echo("Done")
 
+
 # ----------------------------------------------------------------------------
 # Utility routines
 # ----------------------------------------------------------------------------
 
+
 def get_parameters(runtime, toolkit, environment):
-    """ Set up parameters dictionary for format() substitution """
-    parameters = {'runtime': runtime, 'toolkit': toolkit, 'environment': environment}
+    """Set up parameters dictionary for format() substitution"""
+    parameters = {
+        'runtime': runtime,
+        'toolkit': toolkit,
+        'environment': environment,
+    }
     if toolkit not in supported_combinations[runtime]:
-        msg = ("Python {runtime} and toolkit {toolkit} not supported by " +
-               "test environments")
+        msg = (
+            "Python {runtime} and toolkit {toolkit} not supported by "
+            + "test environments"
+        )
         raise RuntimeError(msg.format(**parameters))
     if environment is None:
-        parameters['environment'] = 'traitsui-test-{runtime}-{toolkit}'.format(**parameters)
+        parameters['environment'] = 'traitsui-test-{runtime}-{toolkit}'.format(
+            **parameters
+        )
     return parameters
 
 
 @contextmanager
 def do_in_tempdir(files=(), capture_files=()):
-    """ Create a temporary directory, cleaning up after done.
+    """Create a temporary directory, cleaning up after done.
 
     Creates the temporary directory, and changes into it.  On exit returns to
     original directory and removes temporary dir.
@@ -652,8 +653,9 @@ def execute(commands, parameters):
     for command in commands:
         click.echo("[EXECUTING] {}".format(command.format(**parameters)))
         try:
-            subprocess.check_call([arg.format(**parameters)
-                                   for arg in command.split()])
+            subprocess.check_call(
+                [arg.format(**parameters) for arg in command.split()]
+            )
         except subprocess.CalledProcessError as exc:
             click.echo(str(exc))
             sys.exit(1)

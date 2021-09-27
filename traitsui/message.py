@@ -42,7 +42,7 @@ class Message(HasPrivateTraits):
 
 
 def message(message="", title="Message", buttons=["OK"], parent=None):
-    """ Displays a message to the user as a model window with the specified
+    """Displays a message to the user as a model window with the specified
     title and buttons.
 
     If *buttons* is not specified, a single **OK** button is used, which is
@@ -60,7 +60,7 @@ def message(message="", title="Message", buttons=["OK"], parent=None):
 
 
 def error(message="", title="Message", buttons=["OK", "Cancel"], parent=None):
-    """ Displays a message to the user as a modal window with the specified
+    """Displays a message to the user as a modal window with the specified
     title and buttons.
 
     If *buttons* is not specified, **OK** and **Cancel** buttons are used,
@@ -92,8 +92,7 @@ class AutoCloseMessage(HasPrivateTraits):
     time = Float(2.0)
 
     def show(self, parent=None, title=""):
-        """ Display the wait message for a limited duration.
-        """
+        """Display the wait message for a limited duration."""
         view = View(
             HGroup(
                 spring,
@@ -118,9 +117,9 @@ class AutoCloseMessage(HasPrivateTraits):
 def auto_close_message(
     message="Please wait", time=2.0, title="Please wait", parent=None
 ):
-    """ Displays a message to the user as a modal window with no buttons. The
-        window closes automatically after a specified time interval (specified
-        in seconds).
+    """Displays a message to the user as a modal window with no buttons. The
+    window closes automatically after a specified time interval (specified
+    in seconds).
     """
     msg = AutoCloseMessage(message=message, time=time)
     msg.show(parent=parent, title=title)

@@ -26,7 +26,6 @@ class ObjectWithUITraits(HasStrictTraits):
 
 
 class TestUITraits(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -60,7 +59,6 @@ class TestUITraits(BaseTestMixin, unittest.TestCase):
 
 
 class TestStatusItem(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -85,7 +83,6 @@ class TestStatusItem(BaseTestMixin, unittest.TestCase):
 
 
 class TestViewStatus(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -97,6 +94,6 @@ class TestViewStatus(BaseTestMixin, unittest.TestCase):
 
         obj.view_status = "some_name"
         self.assertEqual(len(obj.view_status), 1)
-        status, = obj.view_status
+        (status,) = obj.view_status
         self.assertIsInstance(status, ui_traits.StatusItem)
         self.assertEqual(status.name, "some_name")

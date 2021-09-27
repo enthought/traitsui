@@ -1,4 +1,4 @@
-#--(Python Source Browser Example)----------------------------------------
+# --(Python Source Browser Example)----------------------------------------
 """
 This lesson shows a combination of the **DirectoryEditor**, the
 **TabularEditor** and the **CodeEditor** used together to create a very simple
@@ -35,42 +35,52 @@ thresholds. The column id is used simply to provide a name reference for the
 related trait and property definitions in the adapter class itself.
 """
 
-#--<Imports>--------------------------------------------------------------
+# --<Imports>--------------------------------------------------------------
 
 import traits
 import traitsui
 
 import wx
 
-from time \
-    import localtime, strftime
+from time import localtime, strftime
 
-from os \
-    import listdir
+from os import listdir
 
-from os.path \
-    import getsize, getmtime, isfile, join, splitext, basename, dirname
+from os.path import (
+    getsize,
+    getmtime,
+    isfile,
+    join,
+    splitext,
+    basename,
+    dirname,
+)
 
-from traits.api \
-    import HasPrivateTraits, Str, Float, List, Directory, File, Code, \
-    Instance, Property, cached_property
+from traits.api import (
+    HasPrivateTraits,
+    Str,
+    Float,
+    List,
+    Directory,
+    File,
+    Code,
+    Instance,
+    Property,
+    cached_property,
+)
 
-from traitsui.api \
-    import View, Item, HSplit, VSplit, TabularEditor
+from traitsui.api import View, Item, HSplit, VSplit, TabularEditor
 
-from traitsui.tabular_adapter \
-    import TabularAdapter
+from traitsui.tabular_adapter import TabularAdapter
 
-from pyface.image_resource \
-    import ImageResource
+from pyface.image_resource import ImageResource
 
-#--<Constants>------------------------------------------------------------
+# --<Constants>------------------------------------------------------------
 
 # Necessary because of the dynamic way in which the demos are loaded:
-search_path = [join(dirname(traitsui.api.__file__),
-                    'demo', 'Applications')]
+search_path = [join(dirname(traitsui.api.__file__), 'demo', 'Applications')]
 
-#--[FileInfo Class]-------------------------------------------------------
+# --[FileInfo Class]-------------------------------------------------------
 
 
 class FileInfo(HasPrivateTraits):
@@ -91,24 +101,25 @@ class FileInfo(HasPrivateTraits):
 
     @cached_property
     def _get_time(self):
-        return strftime('%I:%M:%S %p',
-                        localtime(getmtime(self.file_name)))
+        return strftime('%I:%M:%S %p', localtime(getmtime(self.file_name)))
 
     @cached_property
     def _get_date(self):
-        return strftime('%m/%d/%Y',
-                        localtime(getmtime(self.file_name)))
+        return strftime('%m/%d/%Y', localtime(getmtime(self.file_name)))
 
-#--[FileInfoAdapter Class]------------------------------------------------
+
+# --[FileInfoAdapter Class]------------------------------------------------
 
 
 class FileInfoAdapter(TabularAdapter):
 
-    columns = [('File Name', 'name'),
-               ('Size', 'size'),
-               ('', 'big'),
-               ('Time', 'time'),
-               ('Date', 'date')]
+    columns = [
+        ('File Name', 'name'),
+        ('Size', 'size'),
+        ('', 'big'),
+        ('Time', 'time'),
+        ('Date', 'date'),
+    ]
 
     even_bg_color = wx.Colour(201, 223, 241)
     font = 'Courier 10'
@@ -126,18 +137,21 @@ class FileInfoAdapter(TabularAdapter):
 
         return (None, 'blue_ball')[size > 16384]
 
-#--[Tabular Editor Definition]--------------------------------------------
+
+# --[Tabular Editor Definition]--------------------------------------------
 
 tabular_editor = TabularEditor(
     editable=False,
     selected='file_info',
     adapter=FileInfoAdapter(),
     operations=[],
-    images=[ImageResource('blue_ball', search_path=search_path),
-             ImageResource('red_ball', search_path=search_path)]
+    images=[
+        ImageResource('blue_ball', search_path=search_path),
+        ImageResource('red_ball', search_path=search_path),
+    ],
 )
 
-#--[PythonBrowser Class]--------------------------------------------------
+# --[PythonBrowser Class]--------------------------------------------------
 
 
 class PythonBrowser(HasPrivateTraits):
@@ -153,21 +167,23 @@ class PythonBrowser(HasPrivateTraits):
             VSplit(
                 Item('files', editor=tabular_editor),
                 Item('code', style='readonly'),
-                show_labels=False),
-            show_labels=False
+                show_labels=False,
+            ),
+            show_labels=False,
         ),
         resizable=True,
         width=0.75,
-        height=0.75
+        height=0.75,
     )
 
-    #-- Event Handlers -------------------------------------------------------
+    # -- Event Handlers -------------------------------------------------------
 
     def _dir_changed(self, dir):
-        self.files = [FileInfo(file_name=join(dir, name))
-                      for name in listdir(dir)
-                      if ((splitext(name)[1] == '.py') and
-                          isfile(join(dir, name)))]
+        self.files = [
+            FileInfo(file_name=join(dir, name))
+            for name in listdir(dir)
+            if ((splitext(name)[1] == '.py') and isfile(join(dir, name)))
+        ]
 
     def _file_info_changed(self, file_info):
         fh = None
@@ -180,6 +196,7 @@ class PythonBrowser(HasPrivateTraits):
         if fh is not None:
             fh.close()
 
-#--[Example*]-------------------------------------------------------------
+
+# --[Example*]-------------------------------------------------------------
 
 demo = PythonBrowser(dir=dirname(traits.api.__file__))

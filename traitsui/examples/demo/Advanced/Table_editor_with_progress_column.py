@@ -36,14 +36,14 @@ class JobManager(HasTraits):
 
     def populate(self):
         self.jobs = [
-            Job(name='job %02d' % i, percent_complete=0)
-            for i in range(1, 25)
+            Job(name='job %02d' % i, percent_complete=0) for i in range(1, 25)
         ]
 
     def process(self):
         for job in self.jobs:
             job.percent_complete = min(
-                job.percent_complete + random.randint(0, 3), 100)
+                job.percent_complete + random.randint(0, 3), 100
+            )
 
         if any(job.percent_complete < 100 for job in self.jobs):
             GUI.invoke_after(100, self.process)
@@ -61,7 +61,7 @@ class JobManager(HasTraits):
                     ObjectColumn(name='name'),
                     ProgressColumn(name='percent_complete'),
                 ]
-            )
+            ),
         ),
         UItem('start'),
         resizable=True,

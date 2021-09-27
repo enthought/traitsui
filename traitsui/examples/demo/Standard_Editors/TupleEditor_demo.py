@@ -34,8 +34,7 @@ from traitsui.api import Item, Group, View, Color
 
 # The main demo class:
 class TupleEditorDemo(HasTraits):
-    """ Defines the TupleEditor demo class.
-    """
+    """Defines the TupleEditor demo class."""
 
     # Define a trait to view:
     tuple = Tuple(Color, Range(1, 4), Str)
@@ -48,15 +47,12 @@ class TupleEditorDemo(HasTraits):
         Item('_'),
         Item('tuple', style='text', label='Text'),
         Item('_'),
-        Item('tuple', style='readonly', label='ReadOnly')
+        Item('tuple', style='readonly', label='ReadOnly'),
     )
 
     # Demo view
     traits_view = View(
-        tuple_group,
-        title='TupleEditor',
-        buttons=['OK'],
-        resizable=True
+        tuple_group, title='TupleEditor', buttons=['OK'], resizable=True
     )
 
 

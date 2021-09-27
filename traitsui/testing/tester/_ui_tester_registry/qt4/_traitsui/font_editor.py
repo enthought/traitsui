@@ -15,7 +15,7 @@ from traitsui.qt4.font_editor import TextFontEditor
 
 
 def register(registry):
-    """ Register interactions pertaining to (Qt) FontEditor for the given
+    """Register interactions pertaining to (Qt) FontEditor for the given
     registry.
 
     Parameters

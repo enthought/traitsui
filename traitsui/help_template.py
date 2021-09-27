@@ -74,8 +74,7 @@ GroupHelp = """
 
 
 class HelpTemplate(HasStrictTraits):
-    """ Contains HTML templates for displaying help.
-    """
+    """Contains HTML templates for displaying help."""
 
     item_html = Str(ItemHTML)  # Item popup help window HTML document
     group_html = Str(GroupHTML)  # Group help window HTML document
@@ -92,8 +91,7 @@ _help_template = HelpTemplate()
 
 
 def help_template(template=None):
-    """ Gets or sets the current HelpTemplate in use.
-    """
+    """Gets or sets the current HelpTemplate in use."""
     global _help_template
 
     if template is not None:

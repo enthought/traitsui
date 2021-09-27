@@ -15,7 +15,7 @@ from traits.etsconfig.api import ETSConfig
 
 
 def process_cascade_events():
-    """ Process all posted events, and attempt to process new events posted by
+    """Process all posted events, and attempt to process new events posted by
     the processed events.
 
     Cautions:
@@ -32,9 +32,11 @@ def process_cascade_events():
     """
     if ETSConfig.toolkit.startswith("qt"):
         from pyface.qt import QtCore
+
         event_loop = QtCore.QEventLoop()
         while event_loop.processEvents(QtCore.QEventLoop.AllEvents):
             pass
     else:
         from pyface.api import GUI
+
         GUI.process_events()

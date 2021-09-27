@@ -17,7 +17,7 @@ without incurring side-effects.
 
 
 class SelectedText:
-    """ An object representing an interaction to obtain the displayed (echoed)
+    """An object representing an interaction to obtain the displayed (echoed)
     plain text which is currently selected.
 
     E.g. For a Enum List, with one entry currently selected, the displayed
@@ -25,11 +25,12 @@ class SelectedText:
 
     Implementations should return a ``str``, or None if nothing is selected.
     """
+
     pass
 
 
 class DisplayedText:
-    """ An object representing an interaction to obtain the displayed (echoed)
+    """An object representing an interaction to obtain the displayed (echoed)
     plain text.
 
     E.g. For a textbox using a password styling, the displayed text should
@@ -37,31 +38,35 @@ class DisplayedText:
 
     Implementations should return a ``str``.
     """
+
     pass
 
 
 class IsChecked:
-    """ An object representing an interaction to obtain whether a checkable
+    """An object representing an interaction to obtain whether a checkable
     widget (e.g. checkbox) is checked or not.
 
     Implementations should return True if checked and False if not.
     """
+
     pass
 
 
 class IsEnabled:
-    """ An object representing an interaction to obtain whether a widget is
+    """An object representing an interaction to obtain whether a widget is
     enabled or not.
 
     Implementations should return True if enabled and False if not.
     """
+
     pass
 
 
 class IsVisible:
-    """ An object representing an interaction to obtain whether a widget is
+    """An object representing an interaction to obtain whether a widget is
     visible or not.
 
     Implementations should return True if visible and False if not.
     """
+
     pass

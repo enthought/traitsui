@@ -115,7 +115,8 @@ def write_version_file(version, git_revision):
     with open(VERSION_FILE, "w", encoding="utf-8") as version_file:
         version_file.write(
             VERSION_FILE_TEMPLATE.format(
-                version=version, git_revision=git_revision,
+                version=version,
+                git_revision=git_revision,
             )
         )
 
@@ -234,7 +235,7 @@ def resolve_version():
 
 
 def get_long_description():
-    """ Read long description from README.rst. """
+    """Read long description from README.rst."""
     with open("README.rst", "r", encoding="utf-8") as readme:
         return readme.read()
 
@@ -260,7 +261,9 @@ if __name__ == "__main__":
         url="https://github.com/enthought/traitsui",
         author="Enthought",
         author_email="info@enthought.com",
-        classifiers=[c.strip() for c in """\
+        classifiers=[
+            c.strip()
+            for c in """\
             Development Status :: 1 - Planning
             Intended Audience :: Developers
             Intended Audience :: Science/Research
@@ -277,7 +280,9 @@ if __name__ == "__main__":
             Programming Language :: Python :: 3.8
             Topic :: Scientific/Engineering
             Topic :: Software Development
-            """.splitlines() if len(c.strip()) > 0],
+            """.splitlines()
+            if len(c.strip()) > 0
+        ],
         description="Enthought Tool Suite Demo Application",
         long_description=get_long_description(),
         long_description_content_type="text/x-rst",

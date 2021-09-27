@@ -24,11 +24,7 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
-from traitsui.testing.api import (
-    Index,
-    MouseClick,
-    UITester
-)
+from traitsui.testing.api import Index, MouseClick, UITester
 
 
 class ListModel(HasTraits):
@@ -45,7 +41,7 @@ def get_view(style):
             ),
             style=style,
         ),
-        resizable=True
+        resizable=True,
     )
 
 
@@ -59,7 +55,7 @@ def get_view_custom_cols(cols):
             ),
             style="custom",
         ),
-        resizable=True
+        resizable=True,
     )
 
 
@@ -72,12 +68,12 @@ def get_mapped_view(style):
             ),
             style=style,
         ),
-        resizable=True
+        resizable=True,
     )
 
 
 def get_combobox_text(combobox):
-    """ Return the text given a combobox control. """
+    """Return the text given a combobox control."""
     if is_wx():
         return combobox.GetString(combobox.GetSelection())
 
@@ -89,8 +85,8 @@ def get_combobox_text(combobox):
 
 
 def set_combobox_index(editor, idx):
-    """ Set the choice index of a combobox control given editor and index
-    number. """
+    """Set the choice index of a combobox control given editor and index
+    number."""
     if is_wx():
         import wx
 
@@ -111,7 +107,7 @@ def set_combobox_index(editor, idx):
 
 
 def set_text_in_line_edit(line_edit, text):
-    """ Set text in text widget and complete editing. """
+    """Set text in text widget and complete editing."""
     if is_wx():
         import wx
 
@@ -129,7 +125,6 @@ def set_text_in_line_edit(line_edit, text):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestCheckListEditorMapping(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -155,8 +150,9 @@ class TestCheckListEditorMapping(BaseTestMixin, unittest.TestCase):
         )
         model = ListModel()
 
-        with reraise_exceptions(), \
-                self.setup_ui(model, formatted_view) as editor:
+        with reraise_exceptions(), self.setup_ui(
+            model, formatted_view
+        ) as editor:
 
             self.assertEqual(editor.names, ["ONE", "TWO"])
 
@@ -178,8 +174,9 @@ class TestCheckListEditorMapping(BaseTestMixin, unittest.TestCase):
         )
         model = ListModel()
 
-        with reraise_exceptions(), \
-                self.setup_ui(model, formatted_view) as editor:
+        with reraise_exceptions(), self.setup_ui(
+            model, formatted_view
+        ) as editor:
 
             # FIXME issue enthought/traitsui#841
             with self.assertRaises(AssertionError):
@@ -211,8 +208,9 @@ class TestCheckListEditorMapping(BaseTestMixin, unittest.TestCase):
         )
         model = ListModel()
 
-        with reraise_exceptions(), \
-                self.setup_ui(model, formatted_view) as editor:
+        with reraise_exceptions(), self.setup_ui(
+            model, formatted_view
+        ) as editor:
 
             self.assertEqual(editor.names, ["ONE", "TWO"])
 
@@ -238,8 +236,9 @@ class TestCheckListEditorMapping(BaseTestMixin, unittest.TestCase):
         )
         model = ListModel()
 
-        with reraise_exceptions(), \
-                self.setup_ui(model, formatted_view) as editor:
+        with reraise_exceptions(), self.setup_ui(
+            model, formatted_view
+        ) as editor:
 
             # FIXME issue enthought/traitsui#841
             with self.assertRaises(AssertionError):
@@ -339,7 +338,6 @@ class TestCheckListEditorMapping(BaseTestMixin, unittest.TestCase):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSimpleCheckListEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -356,8 +354,9 @@ class TestSimpleCheckListEditor(BaseTestMixin, unittest.TestCase):
     def test_simple_check_list_editor_text(self):
         list_edit = ListModel(value=["one"])
 
-        with reraise_exceptions(), \
-                self.setup_gui(list_edit, get_view("simple")) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            list_edit, get_view("simple")
+        ) as editor:
 
             self.assertEqual(get_combobox_text(editor.control), "One")
 
@@ -370,8 +369,7 @@ class TestSimpleCheckListEditor(BaseTestMixin, unittest.TestCase):
         view = get_mapped_view("simple")
         list_edit = ListModel(value=[1])
 
-        with reraise_exceptions(), \
-                self.setup_gui(list_edit, view) as editor:
+        with reraise_exceptions(), self.setup_gui(list_edit, view) as editor:
 
             # FIXME issue enthought/traitsui#841
             with self.assertRaises(AssertionError):
@@ -389,8 +387,9 @@ class TestSimpleCheckListEditor(BaseTestMixin, unittest.TestCase):
     def test_simple_check_list_editor_index(self):
         list_edit = ListModel(value=["one"])
 
-        with reraise_exceptions(), \
-                self.setup_gui(list_edit, get_view("simple")) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            list_edit, get_view("simple")
+        ) as editor:
 
             self.assertEqual(list_edit.value, ["one"])
 
@@ -407,8 +406,9 @@ class TestSimpleCheckListEditor(BaseTestMixin, unittest.TestCase):
     def test_simple_check_list_editor_invalid_current_values(self):
         list_edit = ListModel(value=[1, "two", "a", object(), "one"])
 
-        with reraise_exceptions(), \
-                self.setup_gui(list_edit, get_view("simple")):
+        with reraise_exceptions(), self.setup_gui(
+            list_edit, get_view("simple")
+        ):
 
             self.assertEqual(list_edit.value, ["two", "one"])
 
@@ -418,15 +418,15 @@ class TestSimpleCheckListEditor(BaseTestMixin, unittest.TestCase):
 
         str_edit = StrModel(value="alpha, \ttwo, beta,\n lambda, one")
 
-        with reraise_exceptions(), \
-                self.setup_gui(str_edit, get_view("simple")):
+        with reraise_exceptions(), self.setup_gui(
+            str_edit, get_view("simple")
+        ):
 
             self.assertEqual(str_edit.value, "two,one")
 
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestCustomCheckListEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -443,12 +443,13 @@ class TestCustomCheckListEditor(BaseTestMixin, unittest.TestCase):
     def test_custom_check_list_editor_button_update(self):
         list_edit = ListModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(list_edit, get_view("custom")) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            list_edit, get_view("custom")
+        ) as editor:
 
             self.assertEqual(
                 get_all_button_status(editor.control),
-                [False, False, False, False]
+                [False, False, False, False],
             )
 
             list_edit.value = ["two", "four"]
@@ -456,7 +457,7 @@ class TestCustomCheckListEditor(BaseTestMixin, unittest.TestCase):
 
             self.assertEqual(
                 get_all_button_status(editor.control),
-                [False, True, False, True]
+                [False, True, False, True],
             )
 
             list_edit.value = ["one", "four"]
@@ -464,7 +465,7 @@ class TestCustomCheckListEditor(BaseTestMixin, unittest.TestCase):
 
             self.assertEqual(
                 get_all_button_status(editor.control),
-                [True, False, False, True]
+                [True, False, False, True],
             )
 
     def test_custom_check_list_editor_click(self):
@@ -527,7 +528,6 @@ class TestCustomCheckListEditor(BaseTestMixin, unittest.TestCase):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestTextCheckListEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -545,8 +545,9 @@ class TestTextCheckListEditor(BaseTestMixin, unittest.TestCase):
     def test_text_check_list_object_list(self):
         list_edit = ListModel()
 
-        with reraise_exceptions(), \
-                self.setup_gui(list_edit, get_view("text")) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            list_edit, get_view("text")
+        ) as editor:
 
             self.assertEqual(list_edit.value, [])
 
@@ -561,8 +562,9 @@ class TestTextCheckListEditor(BaseTestMixin, unittest.TestCase):
 
         str_edit = StrModel(value="three, four")
 
-        with reraise_exceptions(), \
-                self.setup_gui(str_edit, get_view("text")) as editor:
+        with reraise_exceptions(), self.setup_gui(
+            str_edit, get_view("text")
+        ) as editor:
 
             self.assertEqual(str_edit.value, "three, four")
 

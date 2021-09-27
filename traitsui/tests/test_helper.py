@@ -15,7 +15,6 @@ from traitsui.tests._tools import BaseTestMixin
 
 
 class TestComputeColumnWidths(BaseTestMixin, TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

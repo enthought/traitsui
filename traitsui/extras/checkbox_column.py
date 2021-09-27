@@ -12,7 +12,6 @@
 """
 
 
-
 from traits.etsconfig.api import ETSConfig
 
 from ..table_column import ObjectColumn
@@ -27,24 +26,22 @@ else:
 
 class CheckboxColumn(ObjectColumn):
     def __init__(self, **traits):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         super().__init__(**traits)
 
         # force the renderer to be a checkbox renderer
         self.renderer = CheckboxRenderer()
 
     def get_cell_color(self, object):
-        """ Returns the cell background color for the column for a specified
-            object.
+        """Returns the cell background color for the column for a specified
+        object.
         """
 
         # Override the parent class to ALWAYS provide the standard color:
         return self.cell_color_
 
     def is_editable(self, object):
-        """ Returns whether the column is editable for a specified object.
-        """
+        """Returns whether the column is editable for a specified object."""
 
         # Although a checkbox column is always editable, we return this
         # to keep a standard editor from appearing. The editing is handled

@@ -17,8 +17,7 @@ from traitsui.editor_factory import EditorFactory
 
 
 class ProgressEditor(EditorFactory):
-    """ Editor factory for code editors.
-    """
+    """Editor factory for code editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

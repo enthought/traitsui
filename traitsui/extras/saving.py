@@ -30,10 +30,10 @@ from ..api import Handler
 
 
 class CanSaveMixin(HasTraits):
-    """ A mixin-class for objects that wish to support GUI saving via a
-        SaveHandler. It is the responsiblity of the child class to manage
-        its dirty flag, which describes whether its information has changed
-        since its last save.
+    """A mixin-class for objects that wish to support GUI saving via a
+    SaveHandler. It is the responsiblity of the child class to manage
+    its dirty flag, which describes whether its information has changed
+    since its last save.
     """
 
     filepath = Str()
@@ -44,8 +44,8 @@ class CanSaveMixin(HasTraits):
     # -----------------------------------------------------------------
 
     def __getstate__(self):
-        """ We don't want to pickle the filepath because this can change,
-            obviously, if the user moves around the pickled file.
+        """We don't want to pickle the filepath because this can change,
+        obviously, if the user moves around the pickled file.
         """
         state = super().__getstate__()
         del state["filepath"]
@@ -57,25 +57,24 @@ class CanSaveMixin(HasTraits):
     # -----------------------------------------------------------------
 
     def validate(self):
-        """ Returns whether the information in the object is valid to be saved
-            in tuple form. The first item is the validation state (boolean) and
-            the second item is the message to display if the object did not
-            validate.
+        """Returns whether the information in the object is valid to be saved
+        in tuple form. The first item is the validation state (boolean) and
+        the second item is the message to display if the object did not
+        validate.
 
-            By default, an object always validates.
+        By default, an object always validates.
         """
         return (True, "")
 
     def save(self):
-        """ Saves the object to the path specified by its 'filepath' trait. This
-            method should also reset the dirty flag on this object.
+        """Saves the object to the path specified by its 'filepath' trait. This
+        method should also reset the dirty flag on this object.
         """
         raise NotImplementedError
 
 
 class SaveHandler(Handler):
-    """ A Handler that facilates adding saving to a Traits UI application.
-    """
+    """A Handler that facilates adding saving to a Traits UI application."""
 
     #: The object which is to be saved (subclass of CanSaveMixin). It is assigned
     #: to info.object in the 'init' method, which in many cases is what you want.
@@ -119,14 +118,14 @@ class SaveHandler(Handler):
     # -----------------------------------------------------------------
 
     def init(self, info):
-        """ Set the default save object (the object being handled). Also,
-            perform a questionable hack by which we remove the handled
-            object from the keybinding's controllers. This means that a
-            keybinding to 'save' only calls this object, not the object
-            being edited as well. (For reasons unclear, the KeyBinding handler
-            API is radically different from the Action API, which is the reason
-            that this problem exists. Keybindings are a UI concept--they should
-            *not* call the model by default.)
+        """Set the default save object (the object being handled). Also,
+        perform a questionable hack by which we remove the handled
+        object from the keybinding's controllers. This means that a
+        keybinding to 'save' only calls this object, not the object
+        being edited as well. (For reasons unclear, the KeyBinding handler
+        API is radically different from the Action API, which is the reason
+        that this problem exists. Keybindings are a UI concept--they should
+        *not* call the model by default.)
         """
         keybindings = info.ui.key_bindings
         if keybindings is not None:
@@ -136,8 +135,8 @@ class SaveHandler(Handler):
         return True
 
     def close(self, info, is_ok):
-        """ Called when the user requests to close the interface. Returns a
-            boolean indicating whether the window should be allowed to close.
+        """Called when the user requests to close the interface. Returns a
+        boolean indicating whether the window should be allowed to close.
         """
         if self.promptOnExit:
             return self.promptForSave(info)
@@ -145,8 +144,8 @@ class SaveHandler(Handler):
             return True
 
     def closed(self, info, is_ok):
-        """ Called after the window is destroyed. Makes sure that the autosave
-            timer is stopped.
+        """Called after the window is destroyed. Makes sure that the autosave
+        timer is stopped.
         """
         if self._timer:
             self._timer.Stop()
@@ -156,16 +155,16 @@ class SaveHandler(Handler):
     # -----------------------------------------------------------------
 
     def exit(self, info):
-        """ Closes the UI unless a save prompt is cancelled. Provided for
-            convenience to be used with a Menu action.
+        """Closes the UI unless a save prompt is cancelled. Provided for
+        convenience to be used with a Menu action.
         """
         if self.close(info, True):
             info.ui.dispose()
 
     def save(self, info):
-        """ Saves the object to its current filepath. If this is not specified,
-            opens a dialog to select this path. Returns whether the save
-            actually occurred.
+        """Saves the object to its current filepath. If this is not specified,
+        opens a dialog to select this path. Returns whether the save
+        actually occurred.
         """
         if self.saveObject.filepath == "":
             return self.saveAs(info)
@@ -173,8 +172,8 @@ class SaveHandler(Handler):
             return self._validateAndSave()
 
     def saveAs(self, info):
-        """ Saves the object to a new path, and sets this as the 'filepath' on
-            the object. Returns whether the save actually occurred.
+        """Saves the object to a new path, and sets this as the 'filepath' on
+        the object. Returns whether the save actually occurred.
         """
         fileDialog = FileDialog(
             action="save as",
@@ -196,8 +195,8 @@ class SaveHandler(Handler):
             return self._validateAndSave()
 
     def promptForSave(self, info, cancel=True):
-        """ Prompts the user to save the object, if appropriate. Returns whether
-            the user canceled the action that invoked this prompt.
+        """Prompts the user to save the object, if appropriate. Returns whether
+        the user canceled the action that invoked this prompt.
         """
         if self.saveObject.dirty:
             code = confirm(
@@ -214,8 +213,7 @@ class SaveHandler(Handler):
         return True
 
     def _autosave(self):
-        """ Called by the timer when an autosave should take place.
-        """
+        """Called by the timer when an autosave should take place."""
         if self.saveObject.dirty and self.saveObject.filepath != "":
             success, message = self.saveObject.validate()
             if success or (
@@ -225,8 +223,7 @@ class SaveHandler(Handler):
 
     @observe("autosave, autosaveInterval, saveObject")
     def _configure_timer(self, event):
-        """ Creates, replaces, or destroys the autosave timer.
-        """
+        """Creates, replaces, or destroys the autosave timer."""
         if self._timer:
             self._timer.Stop()
         if self.autosave and self.saveObject:
@@ -235,8 +232,8 @@ class SaveHandler(Handler):
             self._timer = None
 
     def _validateAndSave(self):
-        """ Try to save to the current filepath. Returns whether whether the
-            validation was successful/overridden (and the object saved).
+        """Try to save to the current filepath. Returns whether whether the
+        validation was successful/overridden (and the object saved).
         """
         success, message = self.saveObject.validate()
         if success:

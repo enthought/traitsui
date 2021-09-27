@@ -145,8 +145,7 @@ key_map = {
 
 
 def key_event_to_name(event):
-    """ Converts a keystroke event into a corresponding key name.
-    """
+    """Converts a keystroke event into a corresponding key name."""
     key_code = event.key()
     modifiers = event.modifiers()
     if modifiers & QtCore.Qt.KeypadModifier:

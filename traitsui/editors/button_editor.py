@@ -20,8 +20,7 @@ from traitsui.view import View
 
 
 class ButtonEditor(EditorFactory):
-    """ Editor factory for buttons.
-    """
+    """Editor factory for buttons."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

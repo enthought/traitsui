@@ -18,10 +18,7 @@ from traitsui.tests._tools import (
     requires_toolkit,
     ToolkitName,
 )
-from traitsui.testing.api import (
-    MouseClick,
-    UITester
-)
+from traitsui.testing.api import MouseClick, UITester
 
 
 class ObjectWithFont(HasTraits):
@@ -30,7 +27,6 @@ class ObjectWithFont(HasTraits):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestFontEditor(unittest.TestCase):
-
     def test_create_and_dispose_text_style(self):
         # Setting focus on the widget and then disposing the widget
         # should not cause errors.

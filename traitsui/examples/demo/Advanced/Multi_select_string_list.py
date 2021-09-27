@@ -32,8 +32,7 @@ from traitsui.api import View, HGroup, UItem, TabularAdapter, TabularEditor
 
 
 class MultiSelectAdapter(TabularAdapter):
-    """ This adapter is used by both the left and right tables
-    """
+    """This adapter is used by both the left and right tables"""
 
     # Titles and column names for each column of a table.
     # In this example, each table has only one column.
@@ -51,8 +50,8 @@ class MultiSelectAdapter(TabularAdapter):
 
 
 class MultiSelect(HasPrivateTraits):
-    """ This is the class used to view two tables
-    """
+    """This is the class used to view two tables"""
+
     # FIXME (TraitsUI defect #14): When multi-select is done by keyboard
     # (shift+arrow), the 'selected' trait list does not update.
 
@@ -72,29 +71,37 @@ class MultiSelect(HasPrivateTraits):
                     selected='selected',
                     editable=False,
                     multi_select=True,
-                    adapter=MultiSelectAdapter()
-                )
+                    adapter=MultiSelectAdapter(),
+                ),
             ),
             UItem(
                 'selected',
                 editor=TabularEditor(
                     show_titles=True,
                     editable=False,
-                    adapter=MultiSelectAdapter()
-                )
-            )
+                    adapter=MultiSelectAdapter(),
+                ),
+            ),
         ),
         resizable=True,
         width=200,
-        height=300
+        height=300,
     )
 
 
 # Create the demo:
 demo = MultiSelect(
     choices=[
-        'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
-        'ten'
+        'one',
+        'two',
+        'three',
+        'four',
+        'five',
+        'six',
+        'seven',
+        'eight',
+        'nine',
+        'ten',
     ]
 )
 

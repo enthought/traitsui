@@ -17,7 +17,7 @@ SystemButtons = {"Undo", "Redo", "Apply", "Revert", "OK", "Cancel", "Help"}
 
 
 class BasePanel(ActionController):
-    """ Base class for Traits UI panels and dialog boxes.
+    """Base class for Traits UI panels and dialog boxes.
 
     Concrete subclasses of BasePanel are the Python-side owners of the
     top-level toolkit control for a UI.  They also implement the Pyface
@@ -31,13 +31,13 @@ class BasePanel(ActionController):
     ui = Instance("traitsui.ui.UI")
 
     def default_icon(self):
-        """ Return a default icon for a TraitsUI dialog. """
+        """Return a default icon for a TraitsUI dialog."""
         from pyface.image_resource import ImageResource
 
         return ImageResource("frame.png")
 
     def check_button(self, buttons, action):
-        """ Adds *action* to the system buttons list for this dialog, if it is
+        """Adds *action* to the system buttons list for this dialog, if it is
         not already in the list.
         """
         name = action.name
@@ -47,15 +47,13 @@ class BasePanel(ActionController):
         buttons.append(action)
 
     def is_button(self, action, name):
-        """ Returns whether a specified action button is a system button.
-        """
+        """Returns whether a specified action button is a system button."""
         if isinstance(action, str):
             return action == name
         return action.name == name
 
     def coerce_button(self, action):
-        """ Coerces a string to an Action if necessary.
-        """
+        """Coerces a string to an Action if necessary."""
         if isinstance(action, str):
             return Action(
                 name=action, action="" if action in SystemButtons else "?"
@@ -65,26 +63,22 @@ class BasePanel(ActionController):
     # Button handlers --------------------------------------------------------
 
     def _on_undo(self, event=None):
-        """ Handles an "Undo" change request.
-        """
+        """Handles an "Undo" change request."""
         self.ui.history.undo()
 
     def _on_redo(self, event=None):
-        """ Handles a "Redo" change request.
-        """
+        """Handles a "Redo" change request."""
         self.ui.history.redo()
 
     def _on_revert(self, event=None):
-        """ Handles a request to revert all changes.
-        """
+        """Handles a request to revert all changes."""
         ui = self.ui
         if ui.history is not None:
             ui.history.revert()
         ui.handler.revert(ui.info)
 
     def _on_help(self, event=None):
-        """ Handles the user clicking the Help button.
-        """
+        """Handles the user clicking the Help button."""
         self.ui.handler.show_help(self.ui.info)
 
     # ------------------------------------------------------------------------
@@ -92,7 +86,7 @@ class BasePanel(ActionController):
     # ------------------------------------------------------------------------
 
     def perform(self, action, event):
-        """ Dispatches the action to be handled by the handler.
+        """Dispatches the action to be handled by the handler.
 
         Parameters
         ----------
@@ -110,7 +104,7 @@ class BasePanel(ActionController):
         self.ui.do_undoable(handler.perform, self.ui.info, action, event)
 
     def add_to_menu(self, menu_item):
-        """ Adds a menu item to the menu bar being constructed.
+        """Adds a menu item to the menu bar being constructed.
 
         The bulk of the back-end work is done in Pyface.  This code is simply
         responsible for hooking up radio groups, checkboxes, and enabled
@@ -141,7 +135,7 @@ class BasePanel(ActionController):
             self.ui.add_checked(action.checked_when, menu_item)
 
     def add_to_toolbar(self, toolbar_item):
-        """ Adds a menu item to the menu bar being constructed.
+        """Adds a menu item to the menu bar being constructed.
 
         The bulk of the back-end work is done in Pyface.  This code is simply
         responsible for hooking up radio groups, checkboxes, and enabled
@@ -158,7 +152,7 @@ class BasePanel(ActionController):
         self.add_to_menu(toolbar_item)
 
     def can_add_to_menu(self, action):
-        """ Should the toolbar action be defined in the user interface.
+        """Should the toolbar action be defined in the user interface.
 
         This simply calls the analagous menu as logic and APIs are identical.
 
@@ -179,7 +173,7 @@ class BasePanel(ActionController):
         return self.ui.eval_when(action.defined_when)
 
     def can_add_to_toolbar(self, action):
-        """ Should the toolbar action be defined in the user interface.
+        """Should the toolbar action be defined in the user interface.
 
         This simply calls the analagous menu as logic and APIs are identical.
 

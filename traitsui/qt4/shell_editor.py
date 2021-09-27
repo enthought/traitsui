@@ -22,8 +22,7 @@ from .editor import Editor
 
 
 class _ShellEditor(BaseShellEditor, Editor):
-    """ Editor that displays an interactive Python shell.
-    """
+    """Editor that displays an interactive Python shell."""
 
     def init(self, parent):
         super().init(None)

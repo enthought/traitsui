@@ -20,8 +20,8 @@ from traitsui.qt4.table_editor import TableDelegate
 
 
 class CheckboxRenderer(TableDelegate):
-    """ A renderer which displays a checked-box for a True value and an
-        unchecked box for a false value.
+    """A renderer which displays a checked-box for a True value and an
+    unchecked box for a false value.
     """
 
     # -------------------------------------------------------------------------
@@ -29,8 +29,7 @@ class CheckboxRenderer(TableDelegate):
     # -------------------------------------------------------------------------
 
     def editorEvent(self, event, model, option, index):
-        """ Reimplemented to handle mouse button clicks.
-        """
+        """Reimplemented to handle mouse button clicks."""
         if (
             event.type() == QtCore.QEvent.MouseButtonRelease
             and event.button() == QtCore.Qt.LeftButton
@@ -44,8 +43,7 @@ class CheckboxRenderer(TableDelegate):
             return False
 
     def paint(self, painter, option, index):
-        """ Reimplemented to paint the checkbox.
-        """
+        """Reimplemented to paint the checkbox."""
         # Determine whether the checkbox is check or unchecked
         column = index.model()._editor.columns[index.column()]
         obj = index.data(QtCore.Qt.UserRole)
@@ -111,8 +109,7 @@ class CheckboxRenderer(TableDelegate):
         painter.restore()
 
     def sizeHint(self, option, index):
-        """ Reimplemented to provide size hint based on a checkbox
-        """
+        """Reimplemented to provide size hint based on a checkbox"""
         box = QtGui.QStyleOptionButton()
         style = QtGui.QApplication.instance().style()
         return style.sizeFromContents(

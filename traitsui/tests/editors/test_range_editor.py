@@ -20,7 +20,7 @@ from traitsui.testing.api import (
     Slider,
     TargetRegistry,
     Textbox,
-    UITester
+    UITester,
 )
 from traitsui.tests._tools import (
     BaseTestMixin,
@@ -33,7 +33,7 @@ is_windows = platform.system() == "Windows"
 
 
 def _register_simple_spin(registry):
-    """ Register interactions for the given registry for a SimpleSpinEditor.
+    """Register interactions for the given registry for a SimpleSpinEditor.
 
     If there are any conflicts, an error will occur.
 
@@ -47,7 +47,7 @@ def _register_simple_spin(registry):
         The registry being registered to.
     """
     from traitsui.testing.tester._ui_tester_registry.qt4 import (
-        _registry_helper
+        _registry_helper,
     )
     from traitsui.qt4.range_editor import SimpleSpinEditor
 
@@ -66,7 +66,6 @@ class RangeModel(HasTraits):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestRangeEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -80,9 +79,10 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             UItem(
                 "value",
                 editor=RangeEditor(
-                    low=1, high=3,
+                    low=1,
+                    high=3,
                     format_func=lambda v: "{:02d}".format(v),
-                    mode="enum"
+                    mode="enum",
                 ),
                 style=style,
             )
@@ -95,9 +95,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             # No formatting - simple strings
             self.assertEqual(editor.names[:3], ["1", "2", "3"])
             self.assertEqual(editor.mapping, {"1": 1, "2": 2, "3": 3})
-            self.assertEqual(
-                editor.inverse_mapping, {1: "1", 2: "2", 3: "3"}
-            )
+            self.assertEqual(editor.inverse_mapping, {1: "1", 2: "2", 3: "3"})
 
     def test_simple_editor_format_func(self):
         self.check_range_enum_editor_format_func("simple")
@@ -108,10 +106,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
     def check_slider_set_with_text_valid(self, mode):
         model = RangeModel()
         view = View(
-            Item(
-                "value",
-                editor=RangeEditor(low=1, high=12, mode=mode)
-            )
+            Item("value", editor=RangeEditor(low=1, high=12, mode=mode))
         )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
@@ -137,10 +132,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
     def test_range_text_editor_set_with_text_valid(self):
         model = RangeModel()
         view = View(
-            Item(
-                "value",
-                editor=RangeEditor(low=1, high=12, mode="text")
-            )
+            Item("value", editor=RangeEditor(low=1, high=12, mode="text"))
         )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
@@ -163,10 +155,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
     def test_simple_spin_editor_set_with_text_valid(self):
         model = RangeModel()
         view = View(
-            Item(
-                "value",
-                editor=RangeEditor(low=1, high=12, mode="spinner")
-            )
+            Item("value", editor=RangeEditor(low=1, high=12, mode="spinner"))
         )
         LOCAL_REGISTRY = TargetRegistry()
         _register_simple_spin(LOCAL_REGISTRY)
@@ -186,10 +175,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
     def check_slider_set_with_text_after_empty(self, mode):
         model = RangeModel()
         view = View(
-            Item(
-                "value",
-                editor=RangeEditor(low=1, high=12, mode=mode)
-            )
+            Item("value", editor=RangeEditor(low=1, high=12, mode=mode))
         )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
@@ -219,10 +205,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
     def test_range_text_editor_set_with_text_after_empty(self):
         model = RangeModel()
         view = View(
-            Item(
-                "value",
-                editor=RangeEditor(low=1, high=12, mode="text")
-            )
+            Item("value", editor=RangeEditor(low=1, high=12, mode="text"))
         )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
@@ -241,10 +224,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
     def test_simple_spin_editor_set_with_text_after_empty(self):
         model = RangeModel()
         view = View(
-            Item(
-                "value",
-                editor=RangeEditor(low=1, high=12, mode="spinner")
-            )
+            Item("value", editor=RangeEditor(low=1, high=12, mode="spinner"))
         )
         LOCAL_REGISTRY = TargetRegistry()
         _register_simple_spin(LOCAL_REGISTRY)
@@ -264,10 +244,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
     def check_modify_slider(self, mode):
         model = RangeModel(value=0)
         view = View(
-            Item(
-                "value",
-                editor=RangeEditor(low=0, high=10, mode=mode)
-            )
+            Item("value", editor=RangeEditor(low=0, high=10, mode=mode))
         )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
@@ -300,7 +277,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
         view = View(
             Item(
                 "float_value",
-                editor=RangeEditor(low=.1, high=1000000000, mode='logslider')
+                editor=RangeEditor(low=0.1, high=1000000000, mode='logslider'),
             )
         )
         tester = UITester()
@@ -322,7 +299,6 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(displayed, str(model.float_value))
 
     def test_format_func(self):
-
         def num_to_time(num):
             minutes = int(num / 60)
             if minutes < 10:
@@ -338,10 +314,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
 
         model = RangeModel()
         view = View(
-            Item(
-                "float_value",
-                editor=RangeEditor(format_func=num_to_time)
-            )
+            Item("float_value", editor=RangeEditor(format_func=num_to_time))
         )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
@@ -359,10 +332,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
         model = RangeModel()
         with self.assertWarns(DeprecationWarning):
             view = View(
-                Item(
-                    "float_value",
-                    editor=RangeEditor(format="%s ...")
-                )
+                Item("float_value", editor=RangeEditor(format="%s ..."))
             )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
@@ -380,10 +350,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
         model = RangeModel()
         with self.assertWarns(DeprecationWarning):
             view = View(
-                Item(
-                    "float_value",
-                    editor=RangeEditor(format="%s ...")
-                )
+                Item("float_value", editor=RangeEditor(format="%s ..."))
             )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
@@ -400,8 +367,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
         model = RangeModel()
         view = View(
             Item(
-                'float_value',
-                editor=RangeEditor(mode='text', low=0.0, high=1)
+                'float_value', editor=RangeEditor(mode='text', low=0.0, high=1)
             ),
         )
         tester = UITester()

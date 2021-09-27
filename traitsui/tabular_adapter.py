@@ -12,9 +12,6 @@
 """
 
 
-
-
-
 from traits.api import (
     Any,
     Bool,
@@ -99,8 +96,8 @@ class AnITabularAdapter(HasPrivateTraits):
 
 
 class TabularAdapter(HasPrivateTraits):
-    """ The base class for adapting list items to values that can be edited
-        by a TabularEditor.
+    """The base class for adapting list items to values that can be edited
+    by a TabularEditor.
     """
 
     # -- Public Trait Definitions ---------------------------------------------
@@ -246,14 +243,13 @@ class TabularAdapter(HasPrivateTraits):
     # -------------------------------------------------------------------------
 
     def cleanup(self):
-        """ Clean up the adapter to remove references to objects.
-        """
+        """Clean up the adapter to remove references to objects."""
         self.trait_setq(object=None, item=None, value=None)
 
     # -- Adapter methods that are sensitive to item type ----------------------
 
     def get_alignment(self, object, trait, column):
-        """ Returns the alignment style to use for a specified column.
+        """Returns the alignment style to use for a specified column.
 
         The possible values that can be returned are: ``'left'``, ``'center'``
         or ``'right'``. All table items share the same alignment for a
@@ -262,7 +258,7 @@ class TabularAdapter(HasPrivateTraits):
         return self._result_for("get_alignment", object, trait, 0, column)
 
     def get_width(self, object, trait, column):
-        """ Returns the width to use for a specified column.
+        """Returns the width to use for a specified column.
 
         If the value is <= 0, the column will have a *default* width, which is
         the same as specifying a width of 0.1.
@@ -291,7 +287,7 @@ class TabularAdapter(HasPrivateTraits):
         return self._result_for("get_width", object, trait, 0, column)
 
     def get_can_edit(self, object, trait, row):
-        """ Returns whether the user can edit a specified row.
+        """Returns whether the user can edit a specified row.
 
         A ``True`` result indicates that the value can be edited, while a
         ``False`` result indicates that it cannot.
@@ -299,7 +295,7 @@ class TabularAdapter(HasPrivateTraits):
         return self._result_for("get_can_edit", object, trait, row, 0)
 
     def get_drag(self, object, trait, row):
-        """ Returns the value to be *dragged* for a specified row.
+        """Returns the value to be *dragged* for a specified row.
 
         A result of ``None`` means that the item cannot be dragged. Note that
         the value returned does not have to be the actual row item. It can be
@@ -314,7 +310,7 @@ class TabularAdapter(HasPrivateTraits):
         return self._result_for("get_drag", object, trait, row, 0)
 
     def get_can_drop(self, object, trait, row, value):
-        """ Returns whether the specified ``value`` can be dropped on the specified row.
+        """Returns whether the specified ``value`` can be dropped on the specified row.
 
         A value of ``True`` means the ``value`` can be dropped; and a value of
         ``False`` indicates that it cannot be dropped.
@@ -328,7 +324,7 @@ class TabularAdapter(HasPrivateTraits):
         return self._result_for("get_can_drop", object, trait, row, 0, value)
 
     def get_dropped(self, object, trait, row, value):
-        """ Returns how to handle a specified ``value`` being dropped on a specified row.
+        """Returns how to handle a specified ``value`` being dropped on a specified row.
 
         The possible return values are:
 
@@ -342,7 +338,7 @@ class TabularAdapter(HasPrivateTraits):
         return self._result_for("get_dropped", object, trait, row, 0, value)
 
     def get_font(self, object, trait, row, column=0):
-        """ Returns the font to use for displaying a specified row or cell.
+        """Returns the font to use for displaying a specified row or cell.
 
         A result of ``None`` means use the default font; otherwise a toolkit
         font object should be returned. Note that all columns for the specified
@@ -351,7 +347,7 @@ class TabularAdapter(HasPrivateTraits):
         return self._result_for("get_font", object, trait, row, column)
 
     def get_text_color(self, object, trait, row, column=0):
-        """ Returns the text color to use for a specified row or cell.
+        """Returns the text color to use for a specified row or cell.
 
         A result of ``None`` means use the default text color; otherwise a
         toolkit-compatible color should be returned. Note that all columns for
@@ -360,7 +356,7 @@ class TabularAdapter(HasPrivateTraits):
         return self._result_for("get_text_color", object, trait, row, column)
 
     def get_bg_color(self, object, trait, row, column=0):
-        """ Returns the background color to use for a specified row or cell.
+        """Returns the background color to use for a specified row or cell.
 
         A result of ``None`` means use the default background color; otherwise
         a toolkit-compatible color should be returned. Note that all columns
@@ -370,7 +366,7 @@ class TabularAdapter(HasPrivateTraits):
         return self._result_for("get_bg_color", object, trait, row, column)
 
     def get_image(self, object, trait, row, column):
-        """ Returns the image to display for a specified cell.
+        """Returns the image to display for a specified cell.
 
         A result of ``None`` means no image will be displayed in the specified
         table cell. Otherwise the result should either be the name of the
@@ -386,7 +382,7 @@ class TabularAdapter(HasPrivateTraits):
         return self._result_for("get_image", object, trait, row, column)
 
     def get_format(self, object, trait, row, column):
-        """ Returns the Python formatting string to apply to the specified cell.
+        """Returns the Python formatting string to apply to the specified cell.
 
         The resulting of formatting with this string will be used as the text
         to display it in the table.
@@ -397,7 +393,7 @@ class TabularAdapter(HasPrivateTraits):
         return self._result_for("get_format", object, trait, row, column)
 
     def get_text(self, object, trait, row, column):
-        """ Returns a string containing the text to display for a specified cell.
+        """Returns a string containing the text to display for a specified cell.
 
         If the underlying data representation for a specified item is not a
         string, then it is your responsibility to convert it to one before
@@ -406,12 +402,11 @@ class TabularAdapter(HasPrivateTraits):
         return self._result_for("get_text", object, trait, row, column)
 
     def get_content(self, object, trait, row, column):
-        """ Returns the content to display for a specified cell.
-        """
+        """Returns the content to display for a specified cell."""
         return self._result_for("get_content", object, trait, row, column)
 
     def set_text(self, object, trait, row, column, text):
-        """ Sets the value for the specified cell.
+        """Sets the value for the specified cell.
 
         This method is called when the user completes an editing operation on a
         table cell.
@@ -424,7 +419,7 @@ class TabularAdapter(HasPrivateTraits):
         self._result_for("set_text", object, trait, row, column, text)
 
     def get_tooltip(self, object, trait, row, column):
-        """ Returns a string containing the tooltip to display for a specified cell.
+        """Returns a string containing the tooltip to display for a specified cell.
 
         You should return the empty string if you do not wish to display a
         tooltip.
@@ -432,19 +427,17 @@ class TabularAdapter(HasPrivateTraits):
         return self._result_for("get_tooltip", object, trait, row, column)
 
     def get_menu(self, object, trait, row, column):
-        """ Returns the context menu for a specified cell.
-        """
+        """Returns the context menu for a specified cell."""
         return self._result_for("get_menu", object, trait, row, column)
 
     def get_column_menu(self, object, trait, row, column):
-        """ Returns the context menu for a specified column.
-        """
+        """Returns the context menu for a specified column."""
         return self._result_for("get_column_menu", object, trait, row, column)
 
     # -- Adapter methods that are not sensitive to item type ------------------
 
     def get_item(self, object, trait, row):
-        """ Returns the specified row item.
+        """Returns the specified row item.
 
         The value returned should be the value that exists (or *logically*
         exists) at the specified ``row`` in your data. If your data is not
@@ -467,7 +460,7 @@ class TabularAdapter(HasPrivateTraits):
             return None
 
     def len(self, object, trait):
-        """ Returns the number of row items in the specified ``object.trait``.
+        """Returns the number of row items in the specified ``object.trait``.
 
         The result should be an integer greater than or equal to 0.
 
@@ -483,7 +476,7 @@ class TabularAdapter(HasPrivateTraits):
             return len(getattr(object, trait))
 
     def get_default_value(self, object, trait):
-        """ Returns a new default value for the specified ``object.trait`` list.
+        """Returns a new default value for the specified ``object.trait`` list.
 
         This method is called when *insert* or *append* operations are allowed
         and the user requests that a new item be added to the table. The result
@@ -496,7 +489,7 @@ class TabularAdapter(HasPrivateTraits):
         return self.default_value
 
     def delete(self, object, trait, row):
-        """ Deletes the specified row item.
+        """Deletes the specified row item.
 
         This method is only called if the *delete* operation is specified in
         the :py:class:`~traitsui.editors.tabular_editor.TabularEditor`
@@ -513,7 +506,7 @@ class TabularAdapter(HasPrivateTraits):
         del getattr(object, trait)[row]
 
     def insert(self, object, trait, row, value):
-        """ Inserts ``value`` at the specified ``object.trait[row]`` index.
+        """Inserts ``value`` at the specified ``object.trait[row]`` index.
 
         The specified ``value`` can be:
 
@@ -533,8 +526,7 @@ class TabularAdapter(HasPrivateTraits):
         getattr(object, trait)[row:row] = [value]
 
     def get_column(self, object, trait, index):
-        """ Returns the column id corresponding to a specified column index.
-        """
+        """Returns the column id corresponding to a specified column index."""
         self.object, self.name = object, trait
         return self.column_map[index]
 
@@ -666,8 +658,8 @@ class TabularAdapter(HasPrivateTraits):
     # -- Private Methods ------------------------------------------------------
 
     def _result_for(self, name, object, trait, row, column, value=None):
-        """ Returns/Sets the value of the specified *name* attribute for the
-            specified *object.trait[row].column* item.
+        """Returns/Sets the value of the specified *name* attribute for the
+        specified *object.trait[row].column* item.
         """
         self.object = object
         self.name = trait
@@ -739,8 +731,8 @@ class TabularAdapter(HasPrivateTraits):
         return handler()
 
     def _get_handler_for(self, name, prefix):
-        """ Returns the handler for a specified trait name (or None if not
-            found).
+        """Returns the handler for a specified trait name (or None if not
+        found).
         """
         if self.trait(name) is not None:
             if prefix == "get_":
@@ -752,8 +744,8 @@ class TabularAdapter(HasPrivateTraits):
 
     @observe("columns,adapters.items.+update")
     def _flush_cache(self, event):
-        """ Flushes the cache when the columns or any trait on any adapter
-            changes.
+        """Flushes the cache when the columns or any trait on any adapter
+        changes.
         """
         self.cache = {}
         self.cache_flushed = True

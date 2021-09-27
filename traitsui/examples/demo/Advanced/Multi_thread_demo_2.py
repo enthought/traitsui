@@ -30,7 +30,7 @@ from time import sleep
 from traits.api import HasTraits, Int, Button, List
 from traitsui.api import View, Item, ListEditor
 
-#-- The Counter objects used to keep track of the current count ----------
+# -- The Counter objects used to keep track of the current count ----------
 
 
 class Counter(HasTraits):
@@ -40,7 +40,8 @@ class Counter(HasTraits):
 
     view = View(Item('count', style='readonly'))
 
-#-- The main 'ThreadDemo' class ------------------------------------------
+
+# -- The main 'ThreadDemo' class ------------------------------------------
 
 
 class ThreadDemo(HasTraits):
@@ -54,14 +55,16 @@ class ThreadDemo(HasTraits):
     view = View(
         Item('create', show_label=False),
         '_',
-        Item('counters', style='custom',
-             show_label=False,
-             editor=ListEditor(use_notebook=True,
-                               dock_style='tab')),
+        Item(
+            'counters',
+            style='custom',
+            show_label=False,
+            editor=ListEditor(use_notebook=True, dock_style='tab'),
+        ),
         resizable=True,
         width=300,
         height=150,
-        title='Dynamic threads'
+        title='Dynamic threads',
     )
 
     def __init__(self, **traits):
@@ -72,8 +75,8 @@ class ThreadDemo(HasTraits):
         self.on_trait_change(self.count, 'create', dispatch='new')
 
     def count(self):
-        """ This method is dispatched on a new thread each time the
-            'Create Thread' button is pressed.
+        """This method is dispatched on a new thread each time the
+        'Create Thread' button is pressed.
         """
         counter = Counter()
         self.counters.append(counter)
@@ -81,6 +84,7 @@ class ThreadDemo(HasTraits):
             counter.count += 1
             sleep(0.030)
         self.counters.remove(counter)
+
 
 # Create the demo:
 demo = ThreadDemo()

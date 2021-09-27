@@ -34,12 +34,10 @@ from .constants import OKColor, ErrorColor
 
 
 class Editor(UIEditor):
-    """ Base class for PyQt editors for Traits-based UIs.
-    """
+    """Base class for PyQt editors for Traits-based UIs."""
 
     def clear_layout(self):
-        """ Delete the contents of a control's layout.
-        """
+        """Delete the contents of a control's layout."""
         layout = self.control.layout()
         while True:
             itm = layout.takeAt(0)
@@ -49,29 +47,26 @@ class Editor(UIEditor):
             itm.widget().setParent(None)
 
     def _control_changed(self, control):
-        """ Handles the **control** trait being set.
-        """
+        """Handles the **control** trait being set."""
         # FIXME: Check we actually make use of this.
         if control is not None:
             control._editor = self
 
     def set_focus(self):
-        """ Assigns focus to the editor's underlying toolkit widget.
-        """
+        """Assigns focus to the editor's underlying toolkit widget."""
         if self.control is not None:
             self.control.setFocus()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         new_value = self.str_value
         if self.control.text() != new_value:
             self.control.setText(new_value)
 
     def error(self, excp):
-        """ Handles an error that occurs while setting the object's trait value.
-        """
+        """Handles an error that occurs while setting the object's trait value."""
         # Make sure the control is a widget rather than a layout.
         if isinstance(self.control, QtGui.QLayout):
             control = self.control.parentWidget()
@@ -83,20 +78,18 @@ class Editor(UIEditor):
             self.description + " value error",
             str(excp),
             buttons=QtGui.QMessageBox.Ok,
-            parent=control
+            parent=control,
         )
         message_box.setTextFormat(QtCore.Qt.PlainText)
         message_box.setEscapeButton(QtGui.QMessageBox.Ok)
         message_box.exec_()
 
     def set_tooltip_text(self, control, text):
-        """ Sets the tooltip for a specified control.
-        """
+        """Sets the tooltip for a specified control."""
         control.setToolTip(text)
 
     def _enabled_changed(self, enabled):
-        """Handles the **enabled** state of the editor being changed.
-        """
+        """Handles the **enabled** state of the editor being changed."""
         if self.control is not None:
             self._enabled_changed_helper(self.control, enabled)
         if self.label_control is not None:
@@ -104,7 +97,7 @@ class Editor(UIEditor):
 
     def _enabled_changed_helper(self, control, enabled):
         """A helper that allows the control to be a layout and recursively
-           manages all its widgets.
+        manages all its widgets.
         """
         if isinstance(control, QtGui.QWidget):
             control.setEnabled(enabled)
@@ -116,8 +109,7 @@ class Editor(UIEditor):
                 )
 
     def _visible_changed(self, visible):
-        """Handles the **visible** state of the editor being changed.
-        """
+        """Handles the **visible** state of the editor being changed."""
         if self.label_control is not None:
             self.label_control.setVisible(visible)
         if self.control is None:
@@ -173,7 +165,7 @@ class Editor(UIEditor):
 
     def _visible_changed_helper(self, control, visible):
         """A helper that allows the control to be a layout and recursively
-           manages all its widgets.
+        manages all its widgets.
         """
         if isinstance(control, QtGui.QWidget):
             control.setVisible(visible)
@@ -185,18 +177,15 @@ class Editor(UIEditor):
                 )
 
     def get_error_control(self):
-        """ Returns the editor's control for indicating error status.
-        """
+        """Returns the editor's control for indicating error status."""
         return self.control
 
     def in_error_state(self):
-        """ Returns whether or not the editor is in an error state.
-        """
+        """Returns whether or not the editor is in an error state."""
         return False
 
     def set_error_state(self, state=None, control=None):
-        """ Sets the editor's current error state.
-        """
+        """Sets the editor's current error state."""
         if state is None:
             state = self.invalid
         state = state or self.in_error_state()
@@ -226,13 +215,11 @@ class Editor(UIEditor):
             item.setPalette(pal)
 
     def _invalid_changed(self, state):
-        """ Handles the editor's invalid state changing.
-        """
+        """Handles the editor's invalid state changing."""
         self.set_error_state()
 
     def perform(self, action, action_event=None):
-        """ Performs the action described by a specified Action object.
-        """
+        """Performs the action described by a specified Action object."""
         self.ui.do_undoable(self._perform, action)
 
     def _perform(self, action):
@@ -266,7 +253,7 @@ class Editor(UIEditor):
         action.perform(selection)
 
     def eval_when(self, condition, object, trait):
-        """ Evaluates a condition within a defined context, and sets a
+        """Evaluates a condition within a defined context, and sets a
         specified object trait based on the result, which is assumed to be a
         Boolean.
         """
@@ -282,15 +269,13 @@ class Editor(UIEditor):
             setattr(object, trait, value)
 
     def add_to_menu(self, menu_item):
-        """ Adds a menu item to the menu bar being constructed.
-        """
+        """Adds a menu item to the menu bar being constructed."""
         action = menu_item.item.action
         self.eval_when(action.enabled_when, menu_item, "enabled")
         self.eval_when(action.checked_when, menu_item, "checked")
 
     def can_add_to_menu(self, action):
-        """ Returns whether the action should be defined in the user interface.
-        """
+        """Returns whether the action should be defined in the user interface."""
         if action.defined_when != "":
 
             try:
@@ -319,7 +304,7 @@ class Editor(UIEditor):
     # TODO: move this method, it should be part of ui_panel or some other
     # place that is responsible for setting up the Qt layout.
     def set_size_policy(self, direction, resizable, springy, stretch):
-        """ Set the size policy of the editor's controller.
+        """Set the size policy of the editor's controller.
 
         Based on the "direction" of the group that contains this editor
         (VGroup or HGroup), set the stretch factor and the resizing
@@ -366,8 +351,7 @@ class Editor(UIEditor):
 
 
 class EditorWithList(Editor):
-    """ Editor for an object that contains a list.
-    """
+    """Editor for an object that contains a list."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -383,14 +367,15 @@ class EditorWithList(Editor):
     list_value = Callable()
 
     def init(self, parent):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         factory = self.factory
         name = factory.name
         if name != "":
-            self.list_object, self.list_name, self.list_value = self.parse_extended_name(
-                name
-            )
+            (
+                self.list_object,
+                self.list_name,
+                self.list_value,
+            ) = self.parse_extended_name(name)
         else:
             self.list_object, self.list_name = factory, "values"
             self.list_value = lambda: factory.values
@@ -405,8 +390,7 @@ class EditorWithList(Editor):
         self._list_updated()
 
     def dispose(self):
-        """ Disconnects the listeners set up by the constructor.
-        """
+        """Disconnects the listeners set up by the constructor."""
         self.list_object.on_trait_change(
             self._list_updated, self.list_name, remove=True
         )
@@ -417,23 +401,19 @@ class EditorWithList(Editor):
         super().dispose()
 
     def _list_updated(self):
-        """ Handles the monitored trait being updated.
-        """
+        """Handles the monitored trait being updated."""
         self.list_updated(self.list_value())
 
     def list_updated(self, values):
-        """ Handles the monitored list being updated.
-        """
+        """Handles the monitored list being updated."""
         raise NotImplementedError
 
 
 class EditorFromView(Editor):
-    """ An editor generated from a View object.
-    """
+    """An editor generated from a View object."""
 
     def init(self, parent):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         self._ui = ui = self.init_ui(parent)
         if ui.history is None:
             ui.history = self.ui.history
@@ -441,22 +421,21 @@ class EditorFromView(Editor):
         self.control = ui.control
 
     def init_ui(self, parent):
-        """ Creates and returns the traits UI defined by this editor.
-            (Must be overridden by a subclass).
+        """Creates and returns the traits UI defined by this editor.
+        (Must be overridden by a subclass).
         """
         raise NotImplementedError
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         # Normally nothing needs to be done here, since it should all be handled
         # by the editor's internally created traits UI:
         pass
 
     def dispose(self):
-        """ Disposes of the editor.
-        """
+        """Disposes of the editor."""
         self._ui.dispose()
 
         super().dispose()

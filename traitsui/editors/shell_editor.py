@@ -20,8 +20,7 @@ from traitsui.toolkit import toolkit_object
 
 
 class _ShellEditor(Editor):
-    """ Base class for an editor that displays an interactive Python shell.
-    """
+    """Base class for an editor that displays an interactive Python shell."""
 
     #: An event fired to execute a command in the shell.
     command_to_execute = Event()
@@ -37,8 +36,8 @@ class _ShellEditor(Editor):
     # -------------------------------------------------------------------------
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         # Moving the import here, since PythonShell is implemented in the
         # Pyface backend packages, and we want to delay loading this toolkit
@@ -66,7 +65,7 @@ class _ShellEditor(Editor):
                 object.observe(
                     self.update_any,
                     match(self._any_trait_observer),
-                    dispatch="ui"
+                    dispatch="ui",
                 )
             else:
                 self._base_locals = locals = {}
@@ -84,8 +83,7 @@ class _ShellEditor(Editor):
         self.set_tooltip()
 
     def update_object(self, event):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         locals = self._shell.interpreter().locals
         base_locals = self._base_locals
         if base_locals is None:
@@ -108,8 +106,8 @@ class _ShellEditor(Editor):
         self.command_executed = True
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if self.factory.share:
             value = self.value
@@ -128,8 +126,8 @@ class _ShellEditor(Editor):
                     locals[name] = value
 
     def update_any(self, event):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         name, new = event.name, event.new
         locals = self._shell.interpreter().locals
@@ -139,25 +137,27 @@ class _ShellEditor(Editor):
             self.value[name] = new
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         if not (self.factory.share and isinstance(self.value, dict)):
             self._shell.observe(
-                self.update_object, "command_executed", remove=True, dispatch="ui"
+                self.update_object,
+                "command_executed",
+                remove=True,
+                dispatch="ui",
             )
             if self._base_locals is None:
                 self.object.observe(
                     self.update_any,
                     match(self._any_trait_observer),
                     remove=True,
-                    dispatch="ui"
+                    dispatch="ui",
                 )
 
         super().dispose()
 
     def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the
-            editor.
+        """Restores any saved user preference information associated with the
+        editor.
         """
         shell = self._shell
         try:
@@ -168,8 +168,7 @@ class _ShellEditor(Editor):
             pass
 
     def save_prefs(self):
-        """ Returns any user preference information associated with the editor.
-        """
+        """Returns any user preference information associated with the editor."""
         history, history_index = self._shell.get_history()
         return {"history": history, "history_index": history_index}
 
@@ -181,8 +180,7 @@ class _ShellEditor(Editor):
 
     @observe("command_to_execute")
     def _execute_command(self, event):
-        """ Handles the 'command_to_execute' trait being fired.
-        """
+        """Handles the 'command_to_execute' trait being fired."""
         # Show the command. A 'hidden' command should be executed directly on
         # the namespace trait!
         command = event.new
@@ -190,7 +188,7 @@ class _ShellEditor(Editor):
 
 
 class ShellEditor(BasicEditorFactory):
-    """ Editor factory for shell editors. """
+    """Editor factory for shell editors."""
 
     #: The editor class to be instantiated.
     klass = Property()
@@ -207,8 +205,7 @@ class ShellEditor(BasicEditorFactory):
     command_executed = Str()
 
     def _get_klass(self):
-        """ Returns the toolkit-specific editor class to be used in the UI.
-        """
+        """Returns the toolkit-specific editor class to be used in the UI."""
         return toolkit_object("shell_editor:_ShellEditor")
 
 

@@ -33,7 +33,7 @@ from threading import Thread
 from traits.api import HasPrivateTraits, Str, Property
 from traitsui.api import View, Item, StatusItem, Label
 
-#-- The demo class -------------------------------------------------------
+# -- The demo class -------------------------------------------------------
 
 
 class TextEditor(HasPrivateTraits):
@@ -56,16 +56,18 @@ class TextEditor(HasPrivateTraits):
         width=0.4,
         height=0.4,
         resizable=True,
-        statusbar=[StatusItem(name='length', width=0.5),
-                   StatusItem(name='time', width=85)]
+        statusbar=[
+            StatusItem(name='length', width=0.5),
+            StatusItem(name='time', width=85),
+        ],
     )
 
-    #-- Property Implementations ---------------------------------------------
+    # -- Property Implementations ---------------------------------------------
 
     def _get_length(self):
-        return ('Length: %d characters' % len(self.text))
+        return 'Length: %d characters' % len(self.text)
 
-    #-- Default Trait Values -------------------------------------------------
+    # -- Default Trait Values -------------------------------------------------
 
     def _time_default(self):
         thread = Thread(target=self._clock)
@@ -74,14 +76,14 @@ class TextEditor(HasPrivateTraits):
 
         return ''
 
-    #-- Private Methods ------------------------------------------------------
+    # -- Private Methods ------------------------------------------------------
 
     def _clock(self):
-        """ Update the statusbar time once every second.
-        """
+        """Update the statusbar time once every second."""
         while True:
             self.time = strftime('%I:%M:%S %p')
             sleep(1.0)
+
 
 # Create the demo object:
 popup = TextEditor()

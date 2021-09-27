@@ -14,7 +14,7 @@ from .toolkit import toolkit
 
 
 def ColorTrait(*args, **traits):
-    """ Returns a trait whose value is a GUI toolkit-specific color.
+    """Returns a trait whose value is a GUI toolkit-specific color.
 
     A number of different values are accepted for setting the value, including:
 
@@ -44,7 +44,7 @@ def ColorTrait(*args, **traits):
 
 
 def RGBColorTrait(*args, **traits):
-    """ Returns a trait whose value is a RGB tuple with values from 0 to 1.
+    """Returns a trait whose value is a RGB tuple with values from 0 to 1.
 
     A number of different values are accepted for setting the value, including:
 
@@ -64,7 +64,7 @@ def RGBColorTrait(*args, **traits):
 
 
 def FontTrait(*args, **traits):
-    """ Returns a trait whose value is a GUI toolkit-specific font.
+    """Returns a trait whose value is a GUI toolkit-specific font.
 
     This trait accepts either a toolkit-specific font object, or a string
     containing a font description.  The string description can contain:

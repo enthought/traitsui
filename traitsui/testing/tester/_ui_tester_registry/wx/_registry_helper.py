@@ -12,17 +12,13 @@
 and location solvers for common Wx GUI components.
 """
 
-from traitsui.testing.tester.command import (
-    KeyClick,
-    KeySequence,
-    MouseClick
-)
+from traitsui.testing.tester.command import KeyClick, KeySequence, MouseClick
 from traitsui.testing.tester.query import DisplayedText
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 
 def register_editable_textbox_handlers(registry, target_class, widget_getter):
-    """ Register common interactions for an editable textbox (in Wx)
+    """Register common interactions for an editable textbox (in Wx)
 
     Parameters
     ----------
@@ -35,19 +31,31 @@ def register_editable_textbox_handlers(registry, target_class, widget_getter):
         A callable to return a wx.TextCtrl
     """
     handlers = [
-        (KeySequence,
-            (lambda wrapper, interaction:
-                _interaction_helpers.key_sequence_text_ctrl(
-                    widget_getter(wrapper), interaction, wrapper.delay))),
-        (KeyClick,
-            (lambda wrapper, interaction:
-                _interaction_helpers.key_click_text_entry(
-                    widget_getter(wrapper), interaction, wrapper.delay))),
-        (MouseClick,
-            (lambda wrapper, _: _interaction_helpers.mouse_click_object(
-                control=widget_getter(wrapper), delay=wrapper.delay))),
-        (DisplayedText,
-            lambda wrapper, _: widget_getter(wrapper).GetValue()),
+        (
+            KeySequence,
+            (
+                lambda wrapper, interaction: _interaction_helpers.key_sequence_text_ctrl(
+                    widget_getter(wrapper), interaction, wrapper.delay
+                )
+            ),
+        ),
+        (
+            KeyClick,
+            (
+                lambda wrapper, interaction: _interaction_helpers.key_click_text_entry(
+                    widget_getter(wrapper), interaction, wrapper.delay
+                )
+            ),
+        ),
+        (
+            MouseClick,
+            (
+                lambda wrapper, _: _interaction_helpers.mouse_click_object(
+                    control=widget_getter(wrapper), delay=wrapper.delay
+                )
+            ),
+        ),
+        (DisplayedText, lambda wrapper, _: widget_getter(wrapper).GetValue()),
     ]
     for interaction_class, handler in handlers:
         registry.register_interaction(

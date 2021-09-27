@@ -19,12 +19,12 @@ from traitsui.testing.tester.command import KeyClick
 from traitsui.testing.tester.locator import Slider, Textbox
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
     _interaction_helpers,
-    _registry_helper
+    _registry_helper,
 )
 
 
 class LocatedTextbox:
-    """ Wrapper class for a located Textbox in Qt.
+    """Wrapper class for a located Textbox in Qt.
 
     Parameters
     ----------
@@ -36,7 +36,7 @@ class LocatedTextbox:
 
     @classmethod
     def register(cls, registry):
-        """ Class method to register interactions on a LocatedTextbox for the
+        """Class method to register interactions on a LocatedTextbox for the
         given registry.
 
         If there are any conflicts, an error will occur.
@@ -54,7 +54,7 @@ class LocatedTextbox:
 
 
 class LocatedSlider:
-    """ Wrapper class for a located Slider in Qt.
+    """Wrapper class for a located Slider in Qt.
 
     Parameters
     ----------
@@ -66,7 +66,7 @@ class LocatedSlider:
 
     @classmethod
     def register(cls, registry):
-        """ Class method to register interactions on a LocatedSlider for the
+        """Class method to register interactions on a LocatedSlider for the
         given registry.
 
         If there are any conflicts, an error will occur.
@@ -79,14 +79,14 @@ class LocatedSlider:
         registry.register_interaction(
             target_class=cls,
             interaction_class=KeyClick,
-            handler=lambda wrapper, interaction:
-                _interaction_helpers.key_click_qslider(
-                    wrapper._target.slider, interaction, wrapper.delay)
+            handler=lambda wrapper, interaction: _interaction_helpers.key_click_qslider(
+                wrapper._target.slider, interaction, wrapper.delay
+            ),
         )
 
 
 def register(registry):
-    """ Register interactions for the given registry.
+    """Register interactions for the given registry.
 
     If there are any conflicts, an error will occur.
 
@@ -96,21 +96,25 @@ def register(registry):
         The registry being registered to.
     """
 
-    targets = [SimpleSliderEditor,
-               LogRangeSliderEditor,
-               LargeRangeSliderEditor]
+    targets = [
+        SimpleSliderEditor,
+        LogRangeSliderEditor,
+        LargeRangeSliderEditor,
+    ]
     for target_class in targets:
         registry.register_location(
             target_class=target_class,
             locator_class=Textbox,
             solver=lambda wrapper, _: LocatedTextbox(
-                textbox=wrapper._target.control.text),
+                textbox=wrapper._target.control.text
+            ),
         )
         registry.register_location(
             target_class=target_class,
             locator_class=Slider,
             solver=lambda wrapper, _: LocatedSlider(
-                slider=wrapper._target.control.slider),
+                slider=wrapper._target.control.slider
+            ),
         )
     _registry_helper.register_editable_textbox_handlers(
         registry=registry,

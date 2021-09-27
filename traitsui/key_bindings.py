@@ -39,8 +39,7 @@ Binding = Str(event="binding", editor=KeyBindingEditor())
 
 
 class KeyBinding(HasStrictTraits):
-    """ Binds one or two keystrokes to a method.
-    """
+    """Binds one or two keystrokes to a method."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -80,8 +79,7 @@ class KeyBinding(HasStrictTraits):
 
 
 class KeyBindings(HasPrivateTraits):
-    """ A set of key bindings.
-    """
+    """A set of key bindings."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -152,8 +150,7 @@ class KeyBindings(HasPrivateTraits):
         self.bindings = [binding.trait_set(owner=self) for binding in bindings]
 
     def do(self, event, controllers=[], *args, **kw):
-        """ Processes a keyboard event.
-        """
+        """Processes a keyboard event."""
         if isinstance(controllers, dict):
             controllers = list(controllers.values())
         elif not isinstance(controllers, SequenceTypes):
@@ -169,8 +166,7 @@ class KeyBindings(HasPrivateTraits):
         )
 
     def merge(self, key_bindings):
-        """ Merges another set of key bindings into this set.
-        """
+        """Merges another set of key bindings into this set."""
         binding_dic = {}
         for binding in self.bindings:
             binding_dic[binding.method_name] = binding
@@ -182,15 +178,13 @@ class KeyBindings(HasPrivateTraits):
                 binding2.binding2 = binding.binding2
 
     def clone(self, **traits):
-        """ Returns a clone of the KeyBindings object.
-        """
+        """Returns a clone of the KeyBindings object."""
         return self.__class__(*self.bindings, **traits).trait_set(
             **self.trait_get("prefix", "suffix")
         )
 
     def dispose(self):
-        """ Dispose of the object.
-        """
+        """Dispose of the object."""
         if self.parent is not None:
             self.parent.children.remove(self)
 
@@ -201,15 +195,13 @@ class KeyBindings(HasPrivateTraits):
         self.parent = self._root = self.focus_owner = None
 
     def edit(self):
-        """ Edits a possibly hierarchical set of KeyBindings.
-        """
+        """Edits a possibly hierarchical set of KeyBindings."""
         bindings = list(set(self.root._get_bindings([])))
         bindings.sort(key=lambda x: "%s%02d" % (x.binding1[-1:], x.binding1))
         KeyBindings(bindings).edit_traits()
 
     def key_binding_for(self, binding, key_name):
-        """ Returns the current binding for a specified key (if any).
-        """
+        """Returns the current binding for a specified key (if any)."""
         if key_name != "":
             for a_binding in self.bindings:
                 if (a_binding is not binding) and (
@@ -233,8 +225,7 @@ class KeyBindings(HasPrivateTraits):
     # -- Event Handlers -------------------------------------------------------
 
     def _binding_modified_changed(self, binding):
-        """ Handles a binding being changed.
-        """
+        """Handles a binding being changed."""
         binding1 = binding.binding1
         binding2 = binding.binding2
         for a_binding in self.bindings:
@@ -249,15 +240,13 @@ class KeyBindings(HasPrivateTraits):
                     a_binding.binding2 = ""
 
     def _focus_owner_changed(self, old, new):
-        """ Handles the focus owner being changed.
-        """
+        """Handles the focus owner being changed."""
         if old is not None:
             old.border_size = 0
 
     @observe("children.items")
     def _children_modified(self, event):
-        """ Handles child KeyBindings being added to the object.
-        """
+        """Handles child KeyBindings being added to the object."""
         # the full children list is changed
         if isinstance(event.object, KeyBindings):
             for item in event.new:
@@ -270,8 +259,7 @@ class KeyBindings(HasPrivateTraits):
     # -- object Method Overrides ----------------------------------------------
 
     def __setstate__(self, state):
-        """ Restores the state of a previously pickled object.
-        """
+        """Restores the state of a previously pickled object."""
         n = len(state["bindings"])
         self.add_trait("bindings", List(KeyBinding, minlen=n, maxlen=n))
         self.__dict__.update(state)
@@ -280,8 +268,7 @@ class KeyBindings(HasPrivateTraits):
     # -- Private Methods ------------------------------------------------------
 
     def _get_bindings(self, bindings):
-        """ Returns all of the bindings of this object and all of its children.
-        """
+        """Returns all of the bindings of this object and all of its children."""
         bindings.extend(self.bindings)
         for child in self.children:
             child._get_bindings(bindings)
@@ -289,8 +276,8 @@ class KeyBindings(HasPrivateTraits):
         return bindings
 
     def _do(self, key_name, controllers, args, recursive):
-        """ Process the specified key for the specified set of controllers for
-            this KeyBindings object and all of its children.
+        """Process the specified key for the specified set of controllers for
+        this KeyBindings object and all of its children.
         """
         # Search through our own bindings for a match:
         for binding in self.bindings:

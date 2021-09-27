@@ -12,22 +12,20 @@ from traitsui.testing.tester.command import MouseClick
 from traitsui.testing.tester.locator import Index
 from traitsui.testing.tester.query import SelectedText
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
-    BaseSourceWithLocation
+    BaseSourceWithLocation,
 )
 from traitsui.testing.tester._ui_tester_registry._traitsui_ui import (
     register_traitsui_ui_solvers,
 )
 from traitsui.testing.tester._ui_tester_registry.wx._interaction_helpers import (  # noqa
-    mouse_click_combobox_or_choice, mouse_click_button
+    mouse_click_combobox_or_choice,
+    mouse_click_button,
 )
-from traitsui.wx.instance_editor import (
-    CustomEditor,
-    SimpleEditor
-)
+from traitsui.wx.instance_editor import CustomEditor, SimpleEditor
 
 
 def _get_nested_ui_simple(target):
-    """ Obtains a nested UI within a Simple Instance Editor.
+    """Obtains a nested UI within a Simple Instance Editor.
 
     Parameters
     ----------
@@ -37,7 +35,7 @@ def _get_nested_ui_simple(target):
 
 
 def _get_nested_ui_custom(target):
-    """ Obtains a nested UI within a Custom Instance Editor.
+    """Obtains a nested UI within a Custom Instance Editor.
 
     Parameters
     ----------
@@ -47,7 +45,7 @@ def _get_nested_ui_custom(target):
 
 
 def _get_choice(target):
-    """ Obtains a nested choice within an Instance Editor.
+    """Obtains a nested choice within an Instance Editor.
 
     Parameters
     ----------
@@ -57,7 +55,7 @@ def _get_choice(target):
 
 
 def _click_choice_index(wrapper, _):
-    """ Perform a click on a choice based on the index. """
+    """Perform a click on a choice based on the index."""
     return mouse_click_combobox_or_choice(
         control=_get_choice(wrapper._target.source),
         index=wrapper._target.location.index,
@@ -66,14 +64,14 @@ def _click_choice_index(wrapper, _):
 
 
 def _get_choice_text(wrapper, _):
-    """ Get the currently displayed text of a choice. """
+    """Get the currently displayed text of a choice."""
     control = _get_choice(wrapper._target)
     return control.GetString(control.GetSelection())
 
 
 class _IndexedCustomEditor(BaseSourceWithLocation):
-    """ Wrapper class for CustomEditors with a selection.
-    """
+    """Wrapper class for CustomEditors with a selection."""
+
     source_class = CustomEditor
     locator_class = Index
     handlers = [
@@ -82,7 +80,7 @@ class _IndexedCustomEditor(BaseSourceWithLocation):
 
 
 def register(registry):
-    """ Register interactions for the given registry.
+    """Register interactions for the given registry.
 
     If there are any conflicts, an error will occur.
 
@@ -97,8 +95,9 @@ def register(registry):
         target_class=SimpleEditor,
         interaction_class=MouseClick,
         handler=lambda wrapper, _: mouse_click_button(
-            control=wrapper._target._button, delay=wrapper.delay,
-        )
+            control=wrapper._target._button,
+            delay=wrapper.delay,
+        ),
     )
     register_traitsui_ui_solvers(registry, SimpleEditor, _get_nested_ui_simple)
 

@@ -41,8 +41,7 @@ font_noise = ["pt", "point", "family"]
 
 
 def font_to_str(font):
-    """ Converts a wx.Font into a string description of itself.
-    """
+    """Converts a wx.Font into a string description of itself."""
     weight = {wx.FONTWEIGHT_LIGHT: " Light", wx.FONTWEIGHT_BOLD: " Bold"}.get(
         font.GetWeight(), ""
     )
@@ -62,8 +61,7 @@ def font_to_str(font):
 
 
 def create_traitsfont(value):
-    """ Create a TraitFont object from a string description.
-    """
+    """Create a TraitFont object from a string description."""
     if isinstance(value, wx.Font):
         value = font_to_str(value)
 
@@ -97,17 +95,14 @@ def create_traitsfont(value):
 
 
 class TraitsFont(wx.Font):
-    """ A Traits-specific wx.Font.
-    """
+    """A Traits-specific wx.Font."""
 
     def __reduce_ex__(self, protocol):
-        """ Returns the pickleable form of a TraitsFont object.
-        """
+        """Returns the pickleable form of a TraitsFont object."""
         return (create_traitsfont, (font_to_str(self),))
 
     def __str__(self):
-        """ Returns a printable form of the font.
-        """
+        """Returns a printable form of the font."""
         return font_to_str(self)
 
 
@@ -117,13 +112,13 @@ class TraitsFont(wx.Font):
 
 
 class TraitWXFont(TraitHandler):
-    """ Ensures that values assigned to a trait attribute are valid font
+    """Ensures that values assigned to a trait attribute are valid font
     descriptor strings; the value actually assigned is the corresponding
     TraitsFont.
     """
 
     def validate(self, object, name, value):
-        """ Validates that the value is a valid font descriptor string. If so,
+        """Validates that the value is a valid font descriptor string. If so,
         it returns the corresponding TraitsFont; otherwise, it raises a
         TraitError.
         """

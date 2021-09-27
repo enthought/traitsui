@@ -22,8 +22,7 @@ from traitsui.tests._tools import BaseTestMixin
 
 
 class DummyModel(HasStrictTraits):
-    """ Dummy model with children.
-    """
+    """Dummy model with children."""
 
     name = Str()
 
@@ -31,7 +30,6 @@ class DummyModel(HasStrictTraits):
 
 
 class TestTreeNode(BaseTestMixin, UnittestTools, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

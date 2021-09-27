@@ -22,20 +22,20 @@ _TRAITSUI_LOGGER = logging.getLogger("traitsui")
 
 
 def _serialize_exception(exc_type, value, tb):
-    """ Serialize exception and traceback for reporting.
+    """Serialize exception and traceback for reporting.
     This is such that the stack frame is not prevented from being garbage
     collected.
     """
     return (
         str(exc_type),
         str(value),
-        str("".join(traceback.format_exception(exc_type, value, tb)))
+        str("".join(traceback.format_exception(exc_type, value, tb))),
     )
 
 
 @contextmanager
 def reraise_exceptions(logger=_TRAITSUI_LOGGER):
-    """ Context manager to capture all exceptions occurred in the context and
+    """Context manager to capture all exceptions occurred in the context and
     then reraise a RuntimeError if there are any exceptions captured.
 
     Depending on the GUI toolkit backend, unexpected exceptions occurred in the
@@ -55,8 +55,7 @@ def reraise_exceptions(logger=_TRAITSUI_LOGGER):
         serialized = _serialize_exception(type, value, tb)
         serialized_exceptions.append(serialized)
         logger.error(
-            "Unexpected error captured in sys excepthook. \n%s",
-            serialized[-1]
+            "Unexpected error captured in sys excepthook. \n%s", serialized[-1]
         )
 
     sys.excepthook = excepthook

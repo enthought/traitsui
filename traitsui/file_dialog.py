@@ -13,7 +13,6 @@
 """
 
 
-
 from os import R_OK, W_OK, access, mkdir
 
 from os.path import (
@@ -88,8 +87,7 @@ MAX_SIZE = 16 * 1024 * 1024
 
 
 class IFileDialogModel(Interface):
-    """ Defines a model extension to a file dialog.
-    """
+    """Defines a model extension to a file dialog."""
 
     #: The name of the currently selected file:
     file_name = File()
@@ -101,8 +99,7 @@ class IFileDialogModel(Interface):
 
 
 class IFileDialogView(Interface):
-    """ Defines a visual extension to a file dialog.
-    """
+    """Defines a visual extension to a file dialog."""
 
     #: The view to display:
     view = AView
@@ -117,8 +114,8 @@ class IFileDialogView(Interface):
 
 
 class IFileDialogExtension(IFileDialogModel, IFileDialogView):
-    """ Defines a (convenience) union of the IFileDialogModel and
-        IFileDialogView interfaces.
+    """Defines a (convenience) union of the IFileDialogModel and
+    IFileDialogView interfaces.
     """
 
 
@@ -140,8 +137,7 @@ class MFileDialogModel(HasPrivateTraits):
 
 
 class MFileDialogView(HasPrivateTraits):
-    """ Defines a visual extension to a file dialog.
-    """
+    """Defines a visual extension to a file dialog."""
 
     #: The view to display:
     view = AView
@@ -155,14 +151,13 @@ default_view = MFileDialogView()
 
 
 class MFileDialogExtension(MFileDialogModel, MFileDialogView):
-    """ Defines a (convenience) union of the MFileDialogModel and
-        MFileDialogView mix-in classes.
+    """Defines a (convenience) union of the MFileDialogModel and
+    MFileDialogView mix-in classes.
     """
 
 
 class FileInfo(MFileDialogModel):
-    """ Defines a file dialog extension that display various file information.
-    """
+    """Defines a file dialog extension that display various file information."""
 
     #: The size of the file:
     size = Property(observe="file_name")
@@ -227,8 +222,7 @@ class FileInfo(MFileDialogModel):
 
 
 class TextInfo(MFileDialogModel):
-    """ Defines a file dialog extension that displays a file's contents as text.
-    """
+    """Defines a file dialog extension that displays a file's contents as text."""
 
     #: The file's text content:
     text = Property(observe="file_name")
@@ -259,8 +253,8 @@ class TextInfo(MFileDialogModel):
 
 
 class ImageInfo(MFileDialogModel):
-    """ Defines a file dialog extension that display an image file's dimensions
-        and content.
+    """Defines a file dialog extension that display an image file's dimensions
+    and content.
     """
 
     #: The ImageResource object for the current file:
@@ -319,8 +313,7 @@ class ImageInfo(MFileDialogModel):
 
 
 class CreateDirHandler(Handler):
-    """ Controller for the 'create new directory' popup.
-    """
+    """Controller for the 'create new directory' popup."""
 
     #: The name for the new directory to be created:
     dir_name = Str()
@@ -361,8 +354,7 @@ class CreateDirHandler(Handler):
     # -- Handler Event Handlers -----------------------------------------------
 
     def handler_ok_changed(self, info):
-        """ Handles the user clicking the OK button.
-        """
+        """Handles the user clicking the OK button."""
         dir = info.object.file_name
         if not isdir(dir):
             dir = dirname(dir)
@@ -386,14 +378,12 @@ class CreateDirHandler(Handler):
             )
 
     def handler_cancel_changed(self, info):
-        """ Handles the user clicking the Cancel button.
-        """
+        """Handles the user clicking the Cancel button."""
         info.ui.dispose(False)
 
 
 class FileExistsHandler(Handler):
-    """ Controller for the 'file already exists' popup.
-    """
+    """Controller for the 'file already exists' popup."""
 
     #: The current status message:
     message = Str()
@@ -427,21 +417,18 @@ class FileExistsHandler(Handler):
     # -- Handler Event Handlers -----------------------------------------------
 
     def handler_ok_changed(self, info):
-        """ Handles the user clicking the OK button.
-        """
+        """Handles the user clicking the OK button."""
         parent = info.ui.parent
         info.ui.dispose(True)
         parent.dispose(True)
 
     def handler_cancel_changed(self, info):
-        """ Handles the user clicking the Cancel button.
-        """
+        """Handles the user clicking the Cancel button."""
         info.ui.dispose(False)
 
 
 class OpenFileDialog(Handler):
-    """ Defines the model and handler for the open file dialog.
-    """
+    """Defines the model and handler for the open file dialog."""
 
     #: The starting and current file path:
     file_name = File()
@@ -492,8 +479,7 @@ class OpenFileDialog(Handler):
     # -- Handler Class Method Overrides ---------------------------------------
 
     def init_info(self, info):
-        """ Handles the UIInfo object being initialized during view start-up.
-        """
+        """Handles the UIInfo object being initialized during view start-up."""
         self.info = info
 
     # -- Property Implementations ---------------------------------------------
@@ -511,21 +497,18 @@ class OpenFileDialog(Handler):
     # -- Handler Event Handlers -----------------------------------------------
 
     def object_ok_changed(self, info):
-        """ Handles the user clicking the OK button.
-        """
+        """Handles the user clicking the OK button."""
         if self.is_save_file and exists(self.file_name):
             do_later(self._file_already_exists)
         else:
             info.ui.dispose(True)
 
     def object_cancel_changed(self, info):
-        """ Handles the user clicking the Cancel button.
-        """
+        """Handles the user clicking the Cancel button."""
         info.ui.dispose(False)
 
     def object_create_changed(self, info):
-        """ Handles the user clicking the create directory button.
-        """
+        """Handles the user clicking the create directory button."""
         if not isdir(self.file_name):
             self.file_name = dirname(self.file_name)
 
@@ -536,16 +519,14 @@ class OpenFileDialog(Handler):
     # -- Traits Event Handlers ------------------------------------------------
 
     def _dclick_changed(self):
-        """ Handles the user double-clicking a file name in the file tree view.
-        """
+        """Handles the user double-clicking a file name in the file tree view."""
         if self.is_valid_file:
             self.object_ok_changed(self.info)
 
     # -- Private Methods ------------------------------------------------------
 
     def open_file_view(self):
-        """ Returns the file dialog view to use.
-        """
+        """Returns the file dialog view to use."""
         # Set up the default file dialog view and size information:
         item = Item(
             "file_name",
@@ -661,8 +642,8 @@ class OpenFileDialog(Handler):
         )
 
     def _file_already_exists(self):
-        """ Handles prompting the user when the selected file already exists,
-            and the dialog is a 'save file' dialog.
+        """Handles prompting the user when the selected file already exists,
+        and the dialog is a 'save file' dialog.
         """
         feh = FileExistsHandler(
             message=(
@@ -683,8 +664,8 @@ class OpenFileDialog(Handler):
 
 
 def open_file(**traits):
-    """ Returns a file name to open or an empty string if the user cancels the
-        operation.
+    """Returns a file name to open or an empty string if the user cancels the
+    operation.
     """
     fd = OpenFileDialog(**traits)
     if fd.edit_traits(view="open_file_view").result:
@@ -694,10 +675,10 @@ def open_file(**traits):
 
 
 def save_file(**traits):
-    """ Returns a file name to save to or an empty string if the user cancels
-        the operation. In the case where the file selected already exists, the
-        user will be prompted if they want to overwrite the file before the
-        selected file name is returned.
+    """Returns a file name to save to or an empty string if the user cancels
+    the operation. In the case where the file selected already exists, the
+    user will be prompted if they want to overwrite the file before the
+    selected file name is returned.
     """
     traits.setdefault("title", "Save File")
     traits["is_save_file"] = True

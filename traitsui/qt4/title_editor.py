@@ -21,7 +21,6 @@
 # ------------------------------------------------------------------------------
 
 
-
 from pyface.qt import QtCore
 
 from .editor import Editor
@@ -31,8 +30,8 @@ from pyface.heading_text import HeadingText
 
 class SimpleEditor(Editor):
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self._control = HeadingText(None)
         self.control = self._control.control
@@ -45,8 +44,8 @@ class SimpleEditor(Editor):
         self.set_tooltip()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes external to the
-            editor.
+        """Updates the editor when the object trait changes external to the
+        editor.
         """
         self._control.text = self.str_value
 

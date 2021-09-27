@@ -31,7 +31,7 @@ from traitsui.testing.api import (
     KeySequence,
     MouseClick,
     SelectedText,
-    UITester
+    UITester,
 )
 
 
@@ -82,7 +82,6 @@ def get_radio_view(cols=1):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestEnumEditorMapping(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -101,7 +100,7 @@ class TestEnumEditorMapping(BaseTestMixin, unittest.TestCase):
         enum_editor_factory = EnumEditor(
             values=[0, 1],
             format_func=lambda v: str(bool(v)).upper(),
-            mode=mode
+            mode=mode,
         )
         formatted_view = View(
             UItem(
@@ -111,22 +110,19 @@ class TestEnumEditorMapping(BaseTestMixin, unittest.TestCase):
             )
         )
 
-        with reraise_exceptions(), \
-                self.setup_ui(IntEnumModel(), formatted_view) as editor:
+        with reraise_exceptions(), self.setup_ui(
+            IntEnumModel(), formatted_view
+        ) as editor:
 
             self.assertEqual(editor.names, ["FALSE", "TRUE"])
             self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
-            self.assertEqual(
-                editor.inverse_mapping, {0: "FALSE", 1: "TRUE"}
-            )
+            self.assertEqual(editor.inverse_mapping, {0: "FALSE", 1: "TRUE"})
 
             enum_editor_factory.values = [1, 0]
 
             self.assertEqual(editor.names, ["TRUE", "FALSE"])
             self.assertEqual(editor.mapping, {"TRUE": 1, "FALSE": 0})
-            self.assertEqual(
-                editor.inverse_mapping, {1: "TRUE", 0: "FALSE"}
-            )
+            self.assertEqual(editor.inverse_mapping, {1: "TRUE", 0: "FALSE"})
 
     def check_enum_mappings_name_change(self, style, mode):
         class IntEnumModel(HasTraits):
@@ -139,29 +135,26 @@ class TestEnumEditorMapping(BaseTestMixin, unittest.TestCase):
                 editor=EnumEditor(
                     name="object.possible_values",
                     format_func=lambda v: str(bool(v)).upper(),
-                    mode=mode
+                    mode=mode,
                 ),
                 style=style,
             )
         )
         model = IntEnumModel()
 
-        with reraise_exceptions(), \
-                self.setup_ui(model, formatted_view) as editor:
+        with reraise_exceptions(), self.setup_ui(
+            model, formatted_view
+        ) as editor:
 
             self.assertEqual(editor.names, ["FALSE", "TRUE"])
             self.assertEqual(editor.mapping, {"FALSE": 0, "TRUE": 1})
-            self.assertEqual(
-                editor.inverse_mapping, {0: "FALSE", 1: "TRUE"}
-            )
+            self.assertEqual(editor.inverse_mapping, {0: "FALSE", 1: "TRUE"})
 
             model.possible_values = [1, 0]
 
             self.assertEqual(editor.names, ["TRUE", "FALSE"])
             self.assertEqual(editor.mapping, {"TRUE": 1, "FALSE": 0})
-            self.assertEqual(
-                editor.inverse_mapping, {1: "TRUE", 0: "FALSE"}
-            )
+            self.assertEqual(editor.inverse_mapping, {1: "TRUE", 0: "FALSE"})
 
     def test_simple_editor_mapping_values(self):
         self.check_enum_mappings_value_change("simple", "radio")
@@ -198,7 +191,6 @@ class TestEnumEditorMapping(BaseTestMixin, unittest.TestCase):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSimpleEnumEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -340,7 +332,6 @@ class TestSimpleEnumEditor(BaseTestMixin, unittest.TestCase):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestRadioEnumEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -396,7 +387,6 @@ class TestRadioEnumEditor(BaseTestMixin, unittest.TestCase):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestListEnumEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
