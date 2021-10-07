@@ -48,7 +48,7 @@ class DatetimeInitDailog(HasTraits):
                                 minimum_datetime=MIN_DATE)))
 
 
-class TestLabels(BaseTestMixin, unittest.TestCase):
+class TestDatetimeEditor(BaseTestMixin, unittest.TestCase):
 
     def setUp(self):
         BaseTestMixin.setUp(self)
