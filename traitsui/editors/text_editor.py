@@ -78,7 +78,7 @@ class TextEditor(EditorFactory):
     view = AView
 
     #: In a read-only text editor, allow selection and copying of the text.
-    readonly_allow_selection = Bool(False)
+    readonly_allow_selection = Bool(True)
 
     #: Grayed-out placeholder text to be displayed when the editor is empty.
     placeholder = Str()
