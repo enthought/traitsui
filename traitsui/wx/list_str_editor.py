@@ -195,6 +195,7 @@ class _ListStrEditor(Editor):
         control.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self._right_clicked)
         control.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self._item_activated)
         control.Bind(wx.EVT_SIZE, self._size_modified)
+        control.Bind(wx.EVT_MOTION, self._motion)
 
         # Handle key events:
         control.Bind(wx.EVT_CHAR, self._key_pressed)
@@ -265,6 +266,7 @@ class _ListStrEditor(Editor):
             wx.EVT_LIST_ITEM_DESELECTED,
             wx.EVT_LIST_ITEM_RIGHT_CLICK,
             wx.EVT_LIST_ITEM_ACTIVATED,
+            wx.EVT_MOTION,
         )
 
         self.context_object.on_trait_change(
@@ -585,6 +587,23 @@ class _ListStrEditor(Editor):
         dx, dy = self.control.GetClientSize()
         self.control.SetColumnWidth(0, dx - 1)
         event.Skip()
+
+    def _motion(self, event):
+        """Handles the user moving the mouse."""
+        row, _ = self.control.HitTest(wx.Point(event.GetX(), event.GetY()))
+        if row != self._last_row:
+            self._last_row = row
+            if row == -1:
+                tooltip = ""
+            else:
+                tooltip = self.adapter.get_tooltip(
+                    self.object, self.name, row
+                )
+            if tooltip != self._last_tooltip:
+                self._last_tooltip = tooltip
+                wx.ToolTip.Enable(False)
+                wx.ToolTip.Enable(True)
+                self.control.SetToolTip(wx.ToolTip(tooltip))
 
     def _left_down(self, event):
         """Handles the user pressing the left mouse button."""
