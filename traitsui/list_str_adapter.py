@@ -210,6 +210,14 @@ class ListStrAdapter(HasPrivateTraits):
         """
         return self._result_for("get_text", object, trait, index)
 
+    def get_tooltip(self, object, trait, index):
+        """Returns a string containing the tooltip to display for a specified
+        *object.trait[index]* list item.
+
+        If the tooltip is an empty string, it won't be shown.
+        """
+        return self._result_for("get_tooltip", object, trait, index)
+
     # -- Adapter methods that are not sensitive to item type ------------------
 
     def len(self, object, trait):
@@ -294,6 +302,9 @@ class ListStrAdapter(HasPrivateTraits):
 
     def _get_text(self):
         return str(self.item)
+
+    def _get_tooltip(self):
+        return ""
 
     # -- Private Methods ------------------------------------------------------
 
