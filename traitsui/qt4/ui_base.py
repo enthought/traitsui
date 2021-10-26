@@ -143,12 +143,13 @@ class _StickyDialog(QtGui.QDialog):
         # the former (Window).
         flags = QtCore.Qt.Window
         if not ui.view.resizable:
-            flags = flags | QtCore.Qt.WindowSystemMenuHint
+            flags |= QtCore.Qt.WindowSystemMenuHint
             layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
         try:
-            flags = flags | QtCore.Qt.WindowCloseButtonHint
+            flags |= QtCore.Qt.WindowCloseButtonHint
             if ui.view.resizable:
-                flags = flags | (
+                # Cast to int to deal with strange bug on PyQt5 5.12.3
+                flags |= int(
                     QtCore.Qt.WindowMinimizeButtonHint
                     | QtCore.Qt.WindowMaximizeButtonHint
                 )
