@@ -148,7 +148,8 @@ class _StickyDialog(QtGui.QDialog):
         try:
             flags |= QtCore.Qt.WindowCloseButtonHint
             if ui.view.resizable:
-                # Cast to int to deal with strange bug on PyQt5 5.12.3
+                # Cast to int to deal with cast-to-int deprecation warning on
+                # PyQt5 5.12.3
                 flags |= int(
                     QtCore.Qt.WindowMinimizeButtonHint
                     | QtCore.Qt.WindowMaximizeButtonHint
