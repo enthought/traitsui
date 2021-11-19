@@ -13,6 +13,7 @@ from traitsui.wx.range_editor import (
     LogRangeSliderEditor,
     RangeTextEditor,
     SimpleSliderEditor,
+    SimpleSpinEditor
 )
 
 from traitsui.testing.tester.command import KeyClick
@@ -100,6 +101,8 @@ def register(registry):
         SimpleSliderEditor,
         LogRangeSliderEditor,
         LargeRangeSliderEditor,
+        SimpleSpinEditor,
+        RangeTextEditor
     ]
     for target_class in targets:
         registry.register_location(
@@ -109,6 +112,12 @@ def register(registry):
                 textbox=wrapper._target.control.text
             ),
         )
+        _registry_helper.register_editable_textbox_handlers(
+            registry=registry,
+            target_class=target_class,
+            widget_getter=lambda wrapper: wrapper._target.control.text,
+        )
+    for target_class in targets[:3]:
         registry.register_location(
             target_class=target_class,
             locator_class=Slider,
@@ -116,11 +125,6 @@ def register(registry):
                 slider=wrapper._target.control.slider
             ),
         )
-    _registry_helper.register_editable_textbox_handlers(
-        registry=registry,
-        target_class=RangeTextEditor,
-        widget_getter=lambda wrapper: wrapper._target.control,
-    )
 
     LocatedTextbox.register(registry)
 

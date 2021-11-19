@@ -67,22 +67,24 @@ class Editor(UIEditor):
 
     def error(self, excp):
         """Handles an error that occurs while setting the object's trait value."""
-        # Make sure the control is a widget rather than a layout.
-        if isinstance(self.control, QtGui.QLayout):
-            control = self.control.parentWidget()
-        else:
-            control = self.control
+        super().error(excp)
+        if self.factory.show_error_dialog:
+            # Make sure the control is a widget rather than a layout.
+            if isinstance(self.control, QtGui.QLayout):
+                control = self.control.parentWidget()
+            else:
+                control = self.control
 
-        message_box = QtGui.QMessageBox(
-            QtGui.QMessageBox.Information,
-            self.description + " value error",
-            str(excp),
-            buttons=QtGui.QMessageBox.Ok,
-            parent=control,
-        )
-        message_box.setTextFormat(QtCore.Qt.PlainText)
-        message_box.setEscapeButton(QtGui.QMessageBox.Ok)
-        message_box.exec_()
+            message_box = QtGui.QMessageBox(
+                QtGui.QMessageBox.Information,
+                self.description + " value error",
+                str(excp),
+                buttons=QtGui.QMessageBox.Ok,
+                parent=control,
+            )
+            message_box.setTextFormat(QtCore.Qt.PlainText)
+            message_box.setEscapeButton(QtGui.QMessageBox.Ok)
+            message_box.exec_()
 
     def set_tooltip_text(self, control, text):
         """Sets the tooltip for a specified control."""

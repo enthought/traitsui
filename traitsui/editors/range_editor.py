@@ -10,6 +10,7 @@
 
 """ Defines the range editor factory for all traits user interface toolkits.
 """
+import ast
 import warnings
 
 from types import CodeType
@@ -121,21 +122,15 @@ class RangeEditor(EditorFactory):
 
             if self.low_name == "":
                 if isinstance(handler._low, CodeType):
-                    self.low = eval(handler._low)
+                    self.low = ast.literal_eval(handler._low)
                 else:
                     self.low = handler._low
 
             if self.high_name == "":
                 if isinstance(handler._low, CodeType):
-                    self.high = eval(handler._high)
+                    self.high = ast.literal_eval(handler._high)
                 else:
                     self.high = handler._high
-        else:
-            if (self.low is None) and (self.low_name == ""):
-                self.low = 0.0
-
-            if (self.high is None) and (self.high_name == ""):
-                self.high = 1.0
 
     def _get_low(self):
         return self._low
@@ -217,9 +212,9 @@ class RangeEditor(EditorFactory):
         The type of editor depends on the type and extent of the range being
         edited:
 
-        * One end of range is unspecified: RangeTextEditor
         * **mode** is specified and not 'auto': editor corresponding to
           **mode**
+        * One end of range is unspecified: RangeTextEditor
         * Floating point range with extent > 100: LargeRangeSliderEditor
         * Integer range or floating point range with extent <= 100:
           SimpleSliderEditor
@@ -227,14 +222,14 @@ class RangeEditor(EditorFactory):
         """
         low, high, is_float = self._low_value, self._high_value, self.is_float
 
+        if self.mode != "auto":
+            return toolkit_object("range_editor:SimpleEditorMap")[self.mode]
+
         if (low is None) or (high is None):
             return toolkit_object("range_editor:RangeTextEditor")
 
         if (not is_float) and (abs(high - low) > 1000000000):
             return toolkit_object("range_editor:RangeTextEditor")
-
-        if self.mode != "auto":
-            return toolkit_object("range_editor:SimpleEditorMap")[self.mode]
 
         if is_float and (abs(high - low) > 100):
             return toolkit_object("range_editor:LargeRangeSliderEditor")
@@ -250,20 +245,20 @@ class RangeEditor(EditorFactory):
         The type of editor depends on the type and extent of the range being
         edited:
 
-        * One end of range is unspecified: RangeTextEditor
         * **mode** is specified and not 'auto': editor corresponding to
           **mode**
+        * One end of range is unspecified: RangeTextEditor
         * Floating point range: Same as "simple" style
         * Integer range with extent > 15: Same as "simple" style
         * Integer range with extent <= 15: CustomEnumEditor
 
         """
         low, high, is_float = self._low_value, self._high_value, self.is_float
-        if (low is None) or (high is None):
-            return toolkit_object("range_editor:RangeTextEditor")
-
         if self.mode != "auto":
             return toolkit_object("range_editor:CustomEditorMap")[self.mode]
+
+        if (low is None) or (high is None):
+            return toolkit_object("range_editor:RangeTextEditor")
 
         if is_float or (abs(high - low) > 15):
             return self.simple_editor_class
