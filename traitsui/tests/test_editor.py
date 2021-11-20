@@ -22,6 +22,7 @@ from traits.api import (
     Range,
     Undefined,
 )
+from traitsui.api import View, RangeEditor, Item
 from traits.trait_base import xgetattr
 
 from traitsui.context_value import ContextValue, CVFloat, CVInt
@@ -948,7 +949,14 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         from pyface.qt import QtCore, QtGui
 
         class Foo(HasTraits):
-            x = Range(low=0.0, high=1.0, value=0.5, exclude_low=True)
+            x = Range(low=0.0, high=1.0, value=0.5, exclude_low=True,
+                      enter_set=True, auto_set=False)
+            # TODO: Range must be modified to have a show_error_dialog too!
+            # TODO: Remove traits_view once the show_error_dialog attribute is added to Range.
+            traits_view = View(
+                Item("x", editor=RangeEditor(low=0.0, high=1.0, mode='slider',
+                                             enter_set=True, auto_set=False,
+                                             show_error_dialog=True)))
 
         foo = Foo()
         tester = UITester(auto_process_events=False)
