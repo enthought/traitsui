@@ -129,7 +129,8 @@ class TestRangeEditorDemo(unittest.TestCase):
             simple_float_slider.perform(KeyClick("Page Up"))
             self.assertEqual(demo.float_range, 1.000)
             simple_float_text = simple_float.locate(Textbox())
-            for _ in range(3):
+            displayed = simple_float_text.inspect(DisplayedText())
+            for _ in range(len(displayed) - 2):
                 simple_float_text.perform(KeyClick("Backspace"))
             simple_float_text.perform(KeyClick("5"))
             simple_float_text.perform(KeyClick("Enter"))
@@ -137,10 +138,10 @@ class TestRangeEditorDemo(unittest.TestCase):
 
             custom_float_slider = custom_float.locate(Slider())
             # after the trait is set to 1.5 above, the active range shown by
-            # the LargeRangeSliderEditor for the custom style is [0,11.500]
-            # so a page down is now a decrement of 1.15
+            # the LargeRangeSliderEditor for the custom style is [0,10.00]
+            # so a page down is now a decrement of 1.0
             custom_float_slider.perform(KeyClick("Page Down"))
-            self.assertEqual(round(demo.float_range, 2), 0.35)
+            self.assertEqual(round(demo.float_range, 2), 0.5)
             custom_float_text = custom_float.locate(Textbox())
             for _ in range(5):
                 custom_float_text.perform(KeyClick("Backspace"))

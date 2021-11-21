@@ -25,17 +25,16 @@ PyQt user interface toolkit.
 """
 
 
+import ast
 from math import log10
 
 from pyface.qt import QtCore, QtGui
 
 from traits.api import TraitError, Str, Float, Any, Bool
 
-from .editor_factory import TextEditor
-
 from .editor import Editor
 
-from .constants import OKColor, ErrorColor
+from .constants import OKColor
 
 from .helper import IconButton
 
@@ -62,31 +61,27 @@ class BaseRangeEditor(Editor):
             value = self.evaluate(value)
         Editor._set_value(self, value)
 
-
-class SimpleSliderEditor(BaseRangeEditor):
-    """Simple style of range editor that displays a slider and a text field.
-
-    The user can set a value either by moving the slider or by typing a value
-    in the text field.
-    """
-
-    # -------------------------------------------------------------------------
-    #  Trait definitions:
-    # -------------------------------------------------------------------------
-
-    #: Low value for the slider range
+    #: Low value for the range
     low = Any()
 
-    #: High value for the slider range
+    #: High value for the range
     high = Any()
 
     #: Deprecated: This trait is no longer used. See enthought/traitsui#1704
     format = Str()
 
+    #: Flag indicating that the UI is in the process of being updated
+    ui_changing = Bool(False)
+
     def init(self, parent):
         """Finishes initializing the editor by creating the underlying toolkit
         widget.
         """
+        self._init_with_factory_defaults()
+        self.control = self._make_control()
+        self._do_layout(self.control)
+
+    def _init_with_factory_defaults(self):
         factory = self.factory
         if not factory.low_name:
             self.low = factory.low
@@ -100,81 +95,59 @@ class SimpleSliderEditor(BaseRangeEditor):
         self.sync_value(factory.low_name, "low", "from")
         self.sync_value(factory.high_name, "high", "from")
 
-        self.control = QtGui.QWidget()
-        panel = QtGui.QHBoxLayout(self.control)
-        panel.setContentsMargins(0, 0, 0, 0)
+    def _make_control(self):
+        raise NotImplementedError
 
-        fvalue = self.value
+    def _do_layout(self, control):
+        raise NotImplementedError
+
+    def _clip(self, fvalue, low, high):
+        """Returns fvalue clipped between low and high"""
 
         try:
-            if not (self.low <= fvalue <= self.high):
-                fvalue = self.low
-            fvalue_text = self.string_value(fvalue)
+            if low is not None and fvalue < low:
+                return low
+            if high is not None and high < fvalue:
+                return high
         except:
-            fvalue_text = ""
-            fvalue = self.low
+            return low
+        return fvalue
 
-        ivalue = self._convert_to_slider(fvalue)
+    def _make_text_entry(self, fvalue_text):
 
-        self._label_lo = QtGui.QLabel()
-        self._label_lo.setAlignment(
-            QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
-        )
-        if factory.label_width > 0:
-            self._label_lo.setMinimumWidth(factory.label_width)
-        panel.addWidget(self._label_lo)
+        text = QtGui.QLineEdit(fvalue_text)
+        # text.installEventFilter(text)
+        if self.factory.enter_set:
+            text.returnPressed.connect(self.update_object_on_enter)
 
-        self.control.slider = slider = QtGui.QSlider(QtCore.Qt.Horizontal)
-        slider.setTracking(factory.auto_set)
-        slider.setMinimum(0)
-        slider.setMaximum(10000)
-        slider.setPageStep(1000)
-        slider.setSingleStep(100)
-        slider.setValue(ivalue)
-        slider.valueChanged.connect(self.update_object_on_scroll)
-        panel.addWidget(slider)
-
-        self._label_hi = QtGui.QLabel()
-        panel.addWidget(self._label_hi)
-        if factory.label_width > 0:
-            self._label_hi.setMinimumWidth(factory.label_width)
-
-        self.control.text = text = QtGui.QLineEdit(fvalue_text)
         text.editingFinished.connect(self.update_object_on_enter)
 
+        if self.factory.auto_set:
+            text.textChanged.connect(self.update_object_on_enter)
         # The default size is a bit too big and probably doesn't need to grow.
         sh = text.sizeHint()
         sh.setWidth(sh.width() // 2)
         text.setMaximumSize(sh)
-
-        panel.addWidget(text)
-
-        low_label = factory.low_label
-        if factory.low_name != "":
-            low_label = self.string_value(self.low)
-
-        high_label = factory.high_label
-        if factory.high_name != "":
-            high_label = self.string_value(self.high)
-
-        self._label_lo.setText(low_label)
-        self._label_hi.setText(high_label)
-
-        self.set_tooltip(slider)
-        self.set_tooltip(self._label_lo)
-        self.set_tooltip(self._label_hi)
         self.set_tooltip(text)
 
-    def update_object_on_scroll(self, pos):
-        """Handles the user changing the current slider value."""
-        value = self._convert_from_slider(pos)
-        self.control.text.setText(self.string_value(value))
-        try:
-            self.value = value
-        except Exception as exc:
-            from traitsui.api import raise_to_debug
+        return text
 
-            raise_to_debug()
+    def _validate(self, value):
+        if self.low is not None and value < self.low:
+            message = "The value ({}) must be larger than {}!"
+            raise ValueError(message.format(value, self.low))
+        if self.high is not None and value > self.high:
+            message = "The value ({}) must be smaller than {}!"
+            raise ValueError(message.format(value, self.high))
+        if not self.factory.is_float and isinstance(value, float):
+            message = "The value must be an integer, but a value of {} was specified."
+            raise ValueError(message.format(value))
+
+    def _set_color(self, color):
+        if self.control is not None:
+            pal = QtGui.QPalette(self.control.text.palette())
+            pal.setColor(QtGui.QPalette.Base, color)
+            self.control.text.setPalette(pal)
 
     def update_object_on_enter(self):
         """Handles the user pressing the Enter key in the text field."""
@@ -184,54 +157,49 @@ class SimpleSliderEditor(BaseRangeEditor):
             return
 
         try:
-            try:
-                value = eval(str(self.control.text.text()).strip())
-            except Exception as ex:
-                # The entered something that didn't eval as a number, (e.g.,
-                # 'foo') pretend it didn't happen
-                value = self.value
-                self.control.text.setText(str(value))
-                # for compound editor, value may be non-numeric
-                if not isinstance(value, (int, float)):
-                    return
-
-            if not self.factory.is_float:
-                value = int(value)
-
+            value = ast.literal_eval(self.control.text.text())
+            self._validate(value)
             self.value = value
-            blocked = self.control.slider.blockSignals(True)
-            try:
-                self.control.slider.setValue(
-                    self._convert_to_slider(self.value)
-                )
-            finally:
-                self.control.slider.blockSignals(blocked)
-        except TraitError as excp:
-            pass
+        except Exception as excp:
+            self.error(excp)
+            return
+
+        if not self.ui_changing:
+            self._set_slider(value)
+
+        self._set_color(OKColor)
+        if self._error is not None:
+            self._error = None
+            self.ui.errors -= 1
+
+    def error(self, excp):
+        """ Handles an error that occurs while setting the object's trait value.
+        """
+        if self._error is None:
+            self._error = True
+            self.ui.errors += 1
+            super().error(excp)
+        self.set_error_state(True)
 
     def update_editor(self):
         """Updates the editor when the object trait changes externally to the
         editor.
         """
-        value = self.value
-        low = self.low
-        high = self.high
-        try:
-            text = self.string_value(value)
-            1 / (low <= value <= high)
-        except:
-            text = ""
-            value = low
+        fvalue = self._clip(self.value, self.low, self.high)
+        text = self.string_value(fvalue)
 
-        ivalue = self._convert_to_slider(value)
-
+        self.ui_changing = True
         self.control.text.setText(text)
+        self.ui_changing = False
+        self._set_slider(fvalue)
 
-        blocked = self.control.slider.blockSignals(True)
-        try:
-            self.control.slider.setValue(ivalue)
-        finally:
-            self.control.slider.blockSignals(blocked)
+    def _set_slider(self, value):
+        """Updates the slider range controls."""
+        # Do nothing for non-sliders.
+
+    def _get_current_range(self):
+        low, high = self.low, self.high
+        return low, high
 
     def get_error_control(self):
         """Returns the editor's control for indicating error status."""
@@ -239,44 +207,137 @@ class SimpleSliderEditor(BaseRangeEditor):
 
     def _low_changed(self, low):
         if self.value < low:
-            if self.factory.is_float:
-                self.value = float(low)
-            else:
-                self.value = int(low)
-
-        if self._label_lo is not None:
-            self._label_lo.setText(self.string_value(low))
+            self.value = float(low) if self.factory.is_float else int(low)
+        if self.control is not None:
             self.update_editor()
 
     def _high_changed(self, high):
         if self.value > high:
-            if self.factory.is_float:
-                self.value = float(high)
-            else:
-                self.value = int(high)
-
-        if self._label_hi is not None:
-            self._label_hi.setText(self.string_value(high))
+            self.value = float(high) if self.factory.is_float else int(high)
+        if self.control is not None:
             self.update_editor()
+
+
+class SimpleSliderEditor(BaseRangeEditor):
+    """ Simple style of range editor that displays a slider and a text field.
+
+    The user can set a value either by moving the slider or by typing a value
+    in the text field.
+    """
+
+    # -------------------------------------------------------------------------
+    #  Trait definitions:  See BaseRangeEditor
+    # -------------------------------------------------------------------------
+
+    def _make_control(self):
+
+        low, high = self._get_current_range()
+        fvalue = self._clip(self.value, low, high)
+        fvalue_text = self.string_value(fvalue)
+
+        width = self._get_default_width()
+
+        control = QtGui.QWidget()
+        control.label_lo = self._make_label_low(low, width)
+        control.slider = self._make_slider(fvalue)
+        control.label_hi = self._make_label_high(high, width)
+        control.text = self._make_text_entry(fvalue_text)
+        return control
+
+    @staticmethod
+    def _do_layout(control):
+        layout = QtGui.QHBoxLayout(control)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(control.label_lo)
+        layout.addWidget(control.slider)
+        layout.addWidget(control.label_hi)
+        layout.addWidget(control.text)
+
+    def _get_default_width(self):
+        return self.factory.label_width
+
+    def _get_label_high(self, high):
+        if self.factory.high_name != "":
+            return self.string_value(high)
+        return self.factory.high_label
+
+    def _get_label_low(self, low):
+        if self.factory.low_name != "":
+            return self.string_value(low)
+        return self.factory.low_label
+
+    def _make_label_low(self, low, width):
+        low_label = self._get_label_low(low)
+        label_lo = QtGui.QLabel(low_label)
+        label_lo.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        if width > 0:
+            label_lo.setMinimumWidth(width)
+        self.set_tooltip(label_lo)
+
+        return label_lo
+
+    def _make_slider(self, fvalue):
+        ivalue = self._convert_to_slider(fvalue)
+        slider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        slider.setTracking(self.factory.auto_set)
+        slider.setMinimum(0)
+        slider.setMaximum(10000)
+        slider.setPageStep(1000)
+        slider.setSingleStep(100)
+        slider.setValue(ivalue)
+        slider.valueChanged.connect(self.update_object_on_scroll)
+        self.set_tooltip(slider)
+
+        return slider
+
+    def _make_label_high(self, high, width):
+        high_label = self._get_label_high(high)
+        label_hi = QtGui.QLabel(high_label)
+        if width > 0:
+            label_hi.setMinimumWidth(width)
+        self.set_tooltip(label_hi)
+
+        return label_hi
+
+    def update_object_on_scroll(self, pos):
+        """Handles the user changing the current slider value."""
+        value = self._convert_from_slider(pos)
+        try:
+            self.ui_changing = True
+            self.control.text.setText(self.string_value(value))
+            self.value = value
+        except TraitError:
+            pass
+        finally:
+            self.ui_changing = False
+
+    def _set_slider(self, value):
+        """Updates the slider range controls."""
+        low, high = self._get_current_range()
+        self.control.label_lo.setText(self.string_value(low))
+        self.control.label_hi.setText(self.string_value(high))
+        blocked = self.control.slider.blockSignals(True)
+        try:
+            ivalue = self._convert_to_slider(value)
+            self.control.slider.setValue(ivalue)
+        finally:
+            self.control.slider.blockSignals(blocked)
 
     def _convert_to_slider(self, value):
         """Returns the slider setting corresponding to the user-supplied value."""
-        if self.high > self.low:
-            ivalue = int(
-                (float(value - self.low) / (self.high - self.low)) * 10000.0
-            )
-        else:
-            ivalue = self.low
-
-            if ivalue is None:
-                ivalue = 0
-        return ivalue
+        low, high = self._get_current_range()
+        if high > low:
+            return int(float(value - low) / (high - low) * 10000.0)
+        if low is None:
+            return 0
+        return low
 
     def _convert_from_slider(self, ivalue):
         """Returns the float or integer value corresponding to the slider
         setting.
         """
-        value = self.low + ((float(ivalue) / 10000.0) * (self.high - self.low))
+        low, high = self._get_current_range()
+        value = low + ((float(ivalue) / 10000.0) * (high - low))
         if not self.factory.is_float:
             value = int(round(value))
         return value
@@ -289,448 +350,340 @@ class LogRangeSliderEditor(SimpleSliderEditor):
 
     def _convert_to_slider(self, value):
         """Returns the slider setting corresponding to the user-supplied value."""
-        value = max(value, self.low)
-        ivalue = int(
-            (log10(value) - log10(self.low))
-            / (log10(self.high) - log10(self.low))
-            * 10000.0
-        )
-        return ivalue
+        low, high = self._get_current_range()
+        value = max(value, low)
+        return int((log10(value) - log10(low)) / (log10(high) - log10(low)) * 10000.0)
 
     def _convert_from_slider(self, ivalue):
         """Returns the float or integer value corresponding to the slider
         setting.
         """
-        value = float(ivalue) / 10000.0 * (log10(self.high) - log10(self.low))
+        low, high = self._get_current_range()
+        value = float(ivalue) / 10000.0 * (log10(high) - log10(low))
         # Do this to handle floating point errors, where fvalue may exceed
         # self.high.
-        fvalue = min(self.low * 10 ** (value), self.high)
+        fvalue = min(low * 10 ** (value), high)
         if not self.factory.is_float:
             fvalue = int(round(fvalue))
         return fvalue
 
 
-class LargeRangeSliderEditor(BaseRangeEditor):
+class LargeRangeSliderEditor(SimpleSliderEditor):
     """A slider editor for large ranges.
 
-    The editor displays a slider and a text field. A subset of the total range
-    is displayed in the slider; arrow buttons at each end of the slider let
-    the user move the displayed range higher or lower.
+    The editor displays a slider and a text field. A subset of the total
+    range is displayed in the slider; arrow buttons at each end of the
+    slider let the user move the displayed range higher or lower.
     """
 
     # -------------------------------------------------------------------------
-    #  Trait definitions:
+    #  Trait definitions: See BaseRangeEditor
     # -------------------------------------------------------------------------
 
-    #: Low value for the slider range
-    low = Any(0)
-
-    #: High value for the slider range
-    high = Any(1)
-
-    #: Low end of displayed range
+    #: Low end of displayed slider range
     cur_low = Float()
 
-    #: High end of displayed range
+    #: High end of displayed slider range
     cur_high = Float()
-
-    #: Flag indicating that the UI is in the process of being updated
-    ui_changing = Bool(False)
 
     def init(self, parent):
         """Finishes initializing the editor by creating the underlying toolkit
         widget.
         """
-        factory = self.factory
+        self._init_with_factory_defaults()
+        self.init_current_range(self.value)
+        self.control = self._make_control(parent)
+        # Set-up the layout:
+        self._do_layout(self.control)
 
-        # Initialize using the factory range defaults:
-        self.low = factory.low
-        self.high = factory.high
-        self.evaluate = factory.evaluate
+    def _make_control(self, parent):
+        control = super()._make_control()
+        low, high = self._get_current_range()
 
-        # Hook up the traits to listen to the object.
-        self.sync_value(factory.low_name, "low", "from")
-        self.sync_value(factory.high_name, "high", "from")
-        self.sync_value(factory.evaluate_name, "evaluate", "from")
+        control.button_lo = self._make_button_low(low)
+        control.button_hi = self._make_button_high(high)
+        return control
 
-        self.init_range()
-        low = self.cur_low
-        high = self.cur_high
+    @staticmethod
+    def _do_layout(control):
+        layout = QtGui.QHBoxLayout(control)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(control.label_lo)
+        layout.addWidget(control.button_lo)
+        layout.addWidget(control.slider)
+        layout.addWidget(control.button_hi)
+        layout.addWidget(control.label_hi)
+        layout.addWidget(control.text)
 
-        self._set_format()
+    def _make_button_low(self, low):
+        button_lo = IconButton(QtGui.QStyle.SP_ArrowLeft, self.reduce_range)
+        button_lo.setEnabled(self.low is None or low != self.low)
+        return button_lo
 
-        self.control = QtGui.QWidget()
-        panel = QtGui.QHBoxLayout(self.control)
-        panel.setContentsMargins(0, 0, 0, 0)
+    def _make_button_high(self, high):
+        button_hi = IconButton(QtGui.QStyle.SP_ArrowRight, self.increase_range)
+        button_hi.setEnabled(self.high is None or high != self.high)
+        return button_hi
 
-        fvalue = self.value
-
-        try:
-            fvalue_text = self._format % fvalue
-            1 / (low <= fvalue <= high)
-        except:
-            fvalue_text = ""
-            fvalue = low
-
-        if high > low:
-            ivalue = int((float(fvalue - low) / (high - low)) * 10000)
-        else:
-            ivalue = low
-
-        # Lower limit label:
-        self.control.label_lo = label_lo = QtGui.QLabel()
-        label_lo.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        panel.addWidget(label_lo)
-
-        # Lower limit button:
-        self.control.button_lo = IconButton(
-            QtGui.QStyle.SP_ArrowLeft, self.reduce_range
-        )
-        panel.addWidget(self.control.button_lo)
-
-        # Slider:
-        self.control.slider = slider = QtGui.QSlider(QtCore.Qt.Horizontal)
-        slider.setTracking(factory.auto_set)
-        slider.setMinimum(0)
-        slider.setMaximum(10000)
-        slider.setPageStep(1000)
-        slider.setSingleStep(100)
-        slider.setValue(ivalue)
-        slider.valueChanged.connect(self.update_object_on_scroll)
-        panel.addWidget(slider)
-
-        # Upper limit button:
-        self.control.button_hi = IconButton(
-            QtGui.QStyle.SP_ArrowRight, self.increase_range
-        )
-        panel.addWidget(self.control.button_hi)
-
-        # Upper limit label:
-        self.control.label_hi = label_hi = QtGui.QLabel()
-        panel.addWidget(label_hi)
-
-        # Text entry:
-        self.control.text = text = QtGui.QLineEdit(fvalue_text)
-        text.editingFinished.connect(self.update_object_on_enter)
-
-        # The default size is a bit too big and probably doesn't need to grow.
-        sh = text.sizeHint()
-        sh.setWidth(sh.width() // 2)
-        text.setMaximumSize(sh)
-
-        panel.addWidget(text)
-
-        label_lo.setText(str(low))
-        label_hi.setText(str(high))
-        self.set_tooltip(slider)
-        self.set_tooltip(label_lo)
-        self.set_tooltip(label_hi)
-        self.set_tooltip(text)
-
-        # Update the ranges and button just in case.
-        self.update_range_ui()
-
-    def update_object_on_scroll(self, pos):
-        """Handles the user changing the current slider value."""
-        value = self.cur_low + (
-            (float(pos) / 10000.0) * (self.cur_high - self.cur_low)
-        )
-
-        self.control.text.setText(self._format % value)
-
-        if self.factory.is_float:
-            self.value = value
-        else:
-            self.value = int(value)
-
-    def update_object_on_enter(self):
-        """Handles the user pressing the Enter key in the text field."""
-        # It is possible the event is processed after the control is removed
-        # from the editor
-        if self.control is None:
-            return
-        try:
-            self.value = eval(str(self.control.text.text()).strip())
-        except TraitError as excp:
-            pass
-
-    def update_editor(self):
-        """Updates the editor when the object trait changes externally to the
-        editor.
-        """
-        value = self.value
-        low = self.low
-        high = self.high
-        try:
-            text = self._format % value
-            1 / (low <= value <= high)
-        except:
-            value = low
-        self.value = value
-
-        if not self.ui_changing:
-            self.init_range()
-            self.update_range_ui()
-
-    def update_range_ui(self):
+    def _set_slider(self, value):
         """Updates the slider range controls."""
-        low, high = self.cur_low, self.cur_high
-        value = self.value
-        self._set_format()
-        self.control.label_lo.setText(self._format % low)
-        self.control.label_hi.setText(self._format % high)
-
-        if high > low:
-            ivalue = int((float(value - low) / (high - low)) * 10000.0)
-        else:
-            ivalue = low
-
+        low, high = self._get_current_range()
+        if not low <= value <= high:
+            low, high = self.init_current_range(value)
+        ivalue = self._convert_to_slider(value)
         blocked = self.control.slider.blockSignals(True)
-        self.control.slider.setValue(ivalue)
-        self.control.slider.blockSignals(blocked)
+        try:
+            self.control.slider.setValue(ivalue)
+        finally:
+            self.control.slider.blockSignals(blocked)
 
-        text = self._format % self.value
-        self.control.text.setText(text)
-        self.control.button_lo.setEnabled(low != self.low)
-        self.control.button_hi.setEnabled(high != self.high)
+        fmt = self._get_format()
+        self.control.label_lo.setText(fmt % low)
+        self.control.label_hi.setText(fmt % high)
 
-    def init_range(self):
-        """Initializes the slider range controls."""
-        value = self.value
+        self.control.button_lo.setEnabled(self.low is None or low != self.low)
+        self.control.button_hi.setEnabled(self.high is None or high != self.high)
+
+    def init_current_range(self, value):
+        """Initializes the current slider range controls, cur_low and cur_high."""
         low, high = self.low, self.high
-        if (high is None) and (low is not None):
-            high = -low
 
-        mag = abs(value)
-        if mag <= 10.0:
-            cur_low = max(value - 10, low)
-            cur_high = min(value + 10, high)
-        else:
-            d = 0.5 * (10 ** int(log10(mag) + 1))
-            cur_low = max(low, value - d)
-            cur_high = min(high, value + d)
+        mag = max(abs(value), 1)
+        rounded_value = 10 ** int(log10(mag))
+        fact_hi, fact_lo = (10, 1) if value >= 0 else (-1, -10)
+        cur_low = rounded_value * fact_lo
+        cur_high = rounded_value * fact_hi
+        if mag <= 10:
+            if value >= 0:
+                cur_low *= -1
+            else:
+                cur_high *= -1
+
+        if low is not None and cur_low < low:
+            cur_low = low
+        if high is not None and high < cur_high:
+            cur_high = high
 
         self.cur_low, self.cur_high = cur_low, cur_high
+        return self.cur_low, self.cur_high
 
     def reduce_range(self):
         """Reduces the extent of the displayed range."""
-        low, high = self.low, self.high
-        if abs(self.cur_low) < 10:
-            self.cur_low = max(-10, low)
-            self.cur_high = min(10, high)
-        elif self.cur_low > 0:
-            self.cur_high = self.cur_low
-            self.cur_low = max(low, self.cur_low / 10)
-        else:
-            self.cur_high = self.cur_low
-            self.cur_low = max(low, self.cur_low * 10)
+        value = self.value
+        low = self.low
 
-        self.ui_changing = True
-        self.value = min(max(self.value, self.cur_low), self.cur_high)
-        self.ui_changing = False
-        self.update_range_ui()
+        old_cur_low = self.cur_low
+        if abs(self.cur_low) < 10:
+            value = value - 10
+            self.cur_low = max(-10, low) if low is not None else -10
+            if old_cur_low - self.cur_low > 9:
+                self.cur_high = old_cur_low
+        else:
+            fact = 0.1 if self.cur_low > 0 else 10
+            value = value * fact
+            new_cur_low = self.cur_low * fact
+            self.cur_low = max(low, new_cur_low) if low is not None else new_cur_low
+            if self.cur_low == new_cur_low:
+                self.cur_high = old_cur_low
+
+        value = min(max(value, self.cur_low), self.cur_high)
+
+        if self.factory.is_float is False:
+            value = int(value)
+        self.value = value
+        self.update_editor()
 
     def increase_range(self):
         """Increased the extent of the displayed range."""
-        low, high = self.low, self.high
+        value = self.value
+        high = self.high
+        old_cur_high = self.cur_high
         if abs(self.cur_high) < 10:
-            self.cur_low = max(-10, low)
-            self.cur_high = min(10, high)
-        elif self.cur_high > 0:
-            self.cur_low = self.cur_high
-            self.cur_high = min(high, self.cur_high * 10)
+            value = value + 10
+            self.cur_high = min(10, high) if high is not None else 10
+            if self.cur_high - old_cur_high > 9:
+                self.cur_low = old_cur_high
         else:
-            self.cur_low = self.cur_high
-            self.cur_high = min(high, self.cur_high / 10)
+            fact = 10 if self.cur_high > 0 else 0.1
+            value = value * fact
+            new_cur_high = self.cur_high * fact
+            self.cur_high = min(high, new_cur_high) if high is not None else new_cur_high
+            if self.cur_high == new_cur_high:
+                self.cur_low = old_cur_high
 
-        self.ui_changing = True
-        self.value = min(max(self.value, self.cur_low), self.cur_high)
-        self.ui_changing = False
-        self.update_range_ui()
+        value = min(max(value, self.cur_low), self.cur_high)
 
-    def _set_format(self):
-        self._format = "%d"
-        factory = self.factory
-        low, high = self.cur_low, self.cur_high
-        diff = high - low
-        if factory.is_float:
+        if self.factory.is_float is False:
+            value = int(value)
+
+        self.value = value
+        self.update_editor()
+
+    def _get_format(self):
+        if self.factory.is_float:
+            low, high = self._get_current_range()
+            diff = high - low
             if diff > 99999:
-                self._format = "%.2g"
+                return "%.2g"
             elif diff > 1:
-                self._format = "%%.%df" % max(0, 4 - int(log10(high - low)))
-            else:
-                self._format = "%.3f"
+                return "%%.%df" % max(0, 4 - int(log10(diff)))
+            return "%.3f"
+        return "%d"
 
-    def get_error_control(self):
-        """Returns the editor's control for indicating error status."""
-        return self.control.text
-
-    def _low_changed(self, low):
-        if self.control is not None:
-            if self.value < low:
-                if self.factory.is_float:
-                    self.value = float(low)
-                else:
-                    self.value = int(low)
-
-            self.update_editor()
-
-    def _high_changed(self, high):
-        if self.control is not None:
-            if self.value > high:
-                if self.factory.is_float:
-                    self.value = float(high)
-                else:
-                    self.value = int(high)
-
-            self.update_editor()
+    def _get_current_range(self):
+        return self.cur_low, self.cur_high
 
 
 class SimpleSpinEditor(BaseRangeEditor):
-    """A simple style of range editor that displays a spin box control."""
+    """A simple style of range editor that displays a spin box control.
 
-    # -------------------------------------------------------------------------
-    #  Trait definitions:
-    # -------------------------------------------------------------------------
+    The SimpleSpinEditor catches 3 different types of events that will increase/decrease
+    the value of the class:
+    1) Spin event generated by pushing the up/down spinbutton;
+    2) Key pressed event generated by pressing the arrow- or page-up/down of the keyboard.
+    3) Mouse wheel event generated by rolling the mouse wheel up or down.
 
-    # Low value for the slider range
-    low = Any()
+    In addition, there are some other functionalities:
 
-    # High value for the slider range
-    high = Any()
-
-    def init(self, parent):
-        """Finishes initializing the editor by creating the underlying toolkit
-        widget.
-        """
-        factory = self.factory
-        if not factory.low_name:
-            self.low = factory.low
-
-        if not factory.high_name:
-            self.high = factory.high
-
-        self.sync_value(factory.low_name, "low", "from")
-        self.sync_value(factory.high_name, "high", "from")
-        low = self.low
-        high = self.high
-
-        self.control = QtGui.QSpinBox()
-        self.control.setMinimum(low)
-        self.control.setMaximum(high)
-        self.control.setValue(self.value)
-        self.control.valueChanged.connect(self.update_object)
-        self.set_tooltip()
-
-    def update_object(self, value):
-        """Handles the user selecting a new value in the spin box."""
-        self._locked = True
-        try:
-            self.value = value
-        finally:
-            self._locked = False
-
-    def update_editor(self):
-        """Updates the editor when the object trait changes externally to the
-        editor.
-        """
-        if not self._locked:
-            blocked = self.control.blockSignals(True)
-            try:
-                self.control.setValue(int(self.value))
-            except Exception:
-                from traitsui.api import raise_to_debug
-
-                raise_to_debug()
-            finally:
-                self.control.blockSignals(blocked)
-
-    def _low_changed(self, low):
-        if self.value < low:
-            if self.factory.is_float:
-                self.value = float(low)
-            else:
-                self.value = int(low)
-
-        if self.control:
-            self.control.setMinimum(low)
-            self.control.setValue(int(self.value))
-
-    def _high_changed(self, high):
-        if self.value > high:
-            if self.factory.is_float:
-                self.value = float(high)
-            else:
-                self.value = int(high)
-
-        if self.control:
-            self.control.setMaximum(high)
-            self.control.setValue(int(self.value))
-
-
-class RangeTextEditor(TextEditor):
-    """Editor for ranges that displays a text field. If the user enters a
-    value that is outside the allowed range, the background of the field
-    changes color to indicate an error.
+    - ``Shift`` + arrow = 2 * increment        (or ``Shift`` + mouse wheel);
+    - ``Ctrl``  + arrow = 10 * increment       (or ``Ctrl`` + mouse wheel);
+    - ``Alt``   + arrow = 100 * increment      (or ``Alt`` + mouse wheel);
+    - Combinations of ``Shift``, ``Ctrl``, ``Alt`` increment the
+      step value by the product of the factors;
+    - ``PgUp`` & ``PgDn`` = 10 * increment * the product of the ``Shift``, ``Ctrl``, ``Alt``
+      factors;
     """
 
     # -------------------------------------------------------------------------
-    #  Trait definitions:
+    #  Trait definitions:  See BaseRangeEditor
     # -------------------------------------------------------------------------
 
-    #: Low value for the slider range
-    low = Any()
+    #: Step value for the spinner
+    step = Any(1)
 
-    #: High value for the slider range
-    high = Any()
+    def _make_control(self):
 
-    #: Function to evaluate floats/ints
-    evaluate = Any()
+        low, high = self._get_current_range()
+        fvalue = self._clip(self.value, low, high)
+        fvalue_text = self.string_value(fvalue)
 
-    def init(self, parent):
-        """Finishes initializing the editor by creating the underlying toolkit
-        widget.
-        """
-        TextEditor.init(self, parent)
+        spin_up_or_down = self._spin
 
-        factory = self.factory
-        if not factory.low_name:
-            self.low = factory.low
+        class Control(QtGui.QWidget):
+            def wheelEvent(self, event):
+                delta = event.angleDelta()
+                y = delta.y()
+                x = delta.x()
+                sign = 1 if x + y > 0 else -1
+                spin_up_or_down(sign)
 
-        if not factory.high_name:
-            self.high = factory.high
+            def keyPressEvent(self, event):
+                key = event.key()
+                scale = 1 if key in {QtCore.Qt.Key_Up, QtCore.Qt.Key_Down} else 10
+                if key in {QtCore.Qt.Key_Up, QtCore.Qt.Key_PageUp}:
+                    spin_up_or_down(scale)
+                elif key in {QtCore.Qt.Key_Down, QtCore.Qt.Key_PageDown}:
+                    spin_up_or_down(-scale)
 
-        self.evaluate = factory.evaluate
-        self.sync_value(factory.evaluate_name, "evaluate", "from")
+        control = Control()
+        control.text = self._make_text_entry(fvalue_text)
+        control.button_lo = self._make_button_low(fvalue)
+        control.button_hi = self._make_button_high(fvalue)
+        return control
 
-        self.sync_value(factory.low_name, "low", "from")
-        self.sync_value(factory.high_name, "high", "from")
+    @staticmethod
+    def _do_layout(control):
+        height = control.text.minimumSizeHint().height()
+        width = height // 2 - 1
+        control.button_lo.setFixedSize(width, width)
+        control.button_hi.setFixedSize(width, width)
 
-        # force value to start in range
-        if not (self.low <= self.value <= self.high):
-            self.value = self.low
+        layout = QtGui.QHBoxLayout(control)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(control.text)
+        vwidget = QtGui.QWidget()
+        vlayout = QtGui.QVBoxLayout(vwidget)
+        vlayout.setContentsMargins(0, 0, 0, 0)
+        vlayout.addWidget(control.button_hi)
+        vlayout.addWidget(control.button_lo)
+        layout.addWidget(vwidget)
+        # layout.addStretch(1)
+        # vwidget.resize(width, height)
 
-    def update_object(self):
-        """Handles the user entering input data in the edit control."""
-        try:
-            value = eval(str(self.control.text()))
-            if self.evaluate is not None:
-                value = self.evaluate(value)
+    def _make_button_low(self, value):
+        # icon = QtGui.QStyle.SP_ArrowDown
+        icon = QtGui.QStyle.SP_TitleBarUnshadeButton
+        button_lo = IconButton(icon, self.spin_down)
+        button_lo.setEnabled(self.low is None or self.low < value)
+        return button_lo
 
-            if not (self.low <= value <= self.high):
-                value = self.low
-                col = ErrorColor
-            else:
-                col = OKColor
+    def _make_button_high(self, value):
+        #icon = QtGui.QStyle.SP_ArrowUp
+        icon = QtGui.QStyle.SP_TitleBarShadeButton
+        button_hi = IconButton(icon, self.spin_up)
+        button_hi.setEnabled(self.high is None or value < self.high)
+        return button_hi
 
-            self.value = value
-        except Exception:
-            col = ErrorColor
+    def _spin(self, sign):
+        step = sign * self._get_modifier()
+        value = self.value
+        low, high = self._get_current_range()
 
-        if self.control is not None:
-            pal = QtGui.QPalette(self.control.palette())
-            pal.setColor(QtGui.QPalette.Base, col)
-            self.control.setPalette(pal)
+        value = self._clip(value + step, low, high)
+
+        if self.factory.is_float is False:
+            value = int(value)
+        self.value = value
+        self.update_editor()
+
+    def _get_modifier(self):
+        QModifiers = QtGui.QApplication.keyboardModifiers()
+        modifier = self.step
+        if (QModifiers & QtCore.Qt.ShiftModifier) == QtCore.Qt.ShiftModifier:
+            modifier = modifier * 2
+        if (QModifiers & QtCore.Qt.ControlModifier) == QtCore.Qt.ControlModifier:
+            modifier = modifier * 10
+        if (QModifiers & QtCore.Qt.AltModifier) == QtCore.Qt.AltModifier:
+            modifier = modifier * 100
+        return modifier
+
+    def spin_down(self):
+        """Reduces the value."""
+        self._spin(sign=-1)
+
+    def spin_up(self):
+        """Increases the value."""
+        self._spin(sign=1)
+
+    def _set_slider(self, value):
+        """Updates the spinbutton controls."""
+        low, high = self._get_current_range()
+        self.control.button_lo.setEnabled(low is None or low < value)
+        self.control.button_hi.setEnabled(high is None or value < high)
+
+
+class RangeTextEditor(BaseRangeEditor):
+    """Editor for ranges that displays a text field.
+
+    If the user enters a value that is outside the allowed range,
+    the background of the field changes color to indicate an error.
+    """
+
+    def _make_control(self):
+
+        low, high = self._get_current_range()
+        fvalue = self._clip(self.value, low, high)
+        fvalue_text = self.string_value(fvalue)
+
+        control = QtGui.QWidget()
+        control.text = self._make_text_entry(fvalue_text)
+        return control
+
+    @staticmethod
+    def _do_layout(control):
+        layout = QtGui.QHBoxLayout(control)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(control.text)
 
 
 # -------------------------------------------------------------------------

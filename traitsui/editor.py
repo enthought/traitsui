@@ -44,6 +44,7 @@ from .undo import UndoItem
 
 from .item import Item
 
+UNITTESTING = False
 # Reference to an EditorFactory object
 factory_trait = Instance(EditorFactory)
 
@@ -164,7 +165,8 @@ class Editor(HasPrivateTraits):
         excp : Exception
             The exception which occurred.
         """
-        pass
+        if UNITTESTING:
+            raise excp
 
     def set_focus(self):
         """Assigns focus to the editor's underlying toolkit widget.

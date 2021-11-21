@@ -8,6 +8,9 @@
 #
 # Thanks for using Enthought open source!
 
+# from traits.etsconfig.api import ETSConfig
+# ETSConfig.toolkit = 'wx'
+
 import platform
 import unittest
 
@@ -18,7 +21,6 @@ from traitsui.testing.api import (
     KeyClick,
     KeySequence,
     Slider,
-    TargetRegistry,
     Textbox,
     UITester,
 )
@@ -30,32 +32,6 @@ from traitsui.tests._tools import (
 )
 
 is_windows = platform.system() == "Windows"
-
-
-def _register_simple_spin(registry):
-    """Register interactions for the given registry for a SimpleSpinEditor.
-
-    If there are any conflicts, an error will occur.
-
-    This is kept separate from the below register function because the
-    SimpleSpinEditor is not yet implemented on wx.  This function can be used
-    with a local reigstry for tests.
-
-    Parameters
-    ----------
-    registry : TargetRegistry
-        The registry being registered to.
-    """
-    from traitsui.testing.tester._ui_tester_registry.qt4 import (
-        _registry_helper,
-    )
-    from traitsui.qt4.range_editor import SimpleSpinEditor
-
-    _registry_helper.register_editable_textbox_handlers(
-        registry=registry,
-        target_class=SimpleSpinEditor,
-        widget_getter=lambda wrapper: wrapper._target.control.lineEdit(),
-    )
 
 
 class RangeModel(HasTraits):
@@ -83,6 +59,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
                     high=3,
                     format_func=lambda v: "{:02d}".format(v),
                     mode="enum",
+                    show_error_dialog=False
                 ),
                 style=style,
             )
@@ -150,16 +127,14 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(model.value, 10)
             self.assertEqual(displayed, str(model.value))
 
-    # the tester support code is not yet implemented for Wx SimpleSpinEditor
-    @requires_toolkit([ToolkitName.qt])
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_simple_spin_editor_set_with_text_valid(self):
         model = RangeModel()
         view = View(
             Item("value", editor=RangeEditor(low=1, high=12, mode="spinner"))
         )
-        LOCAL_REGISTRY = TargetRegistry()
-        _register_simple_spin(LOCAL_REGISTRY)
-        tester = UITester(registries=[LOCAL_REGISTRY])
+
+        tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             # sanity check
             self.assertEqual(model.value, 1)
@@ -175,7 +150,7 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
     def check_slider_set_with_text_after_empty(self, mode):
         model = RangeModel()
         view = View(
-            Item("value", editor=RangeEditor(low=1, high=12, mode=mode))
+            Item("value", editor=RangeEditor(low=1, high=12, mode=mode, show_error_dialog=False))
         )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
@@ -199,13 +174,12 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
     def test_log_range_slider_editor_set_with_text_after_empty(self):
         return self.check_slider_set_with_text_after_empty(mode='logslider')
 
-    # on wx the text style editor gives an error whenever the textbox
-    # is empty, even if enter has not been pressed.
-    @requires_toolkit([ToolkitName.qt])
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_range_text_editor_set_with_text_after_empty(self):
         model = RangeModel()
         view = View(
-            Item("value", editor=RangeEditor(low=1, high=12, mode="text"))
+            Item("value", editor=RangeEditor(low=1, high=12, mode="text",
+                                             show_error_dialog=False))
         )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
@@ -219,16 +193,15 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
             self.assertEqual(model.value, 11)
             self.assertEqual(displayed, str(model.value))
 
-    # the tester support code is not yet implemented for Wx SimpleSpinEditor
-    @requires_toolkit([ToolkitName.qt])
+    @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_simple_spin_editor_set_with_text_after_empty(self):
         model = RangeModel()
         view = View(
-            Item("value", editor=RangeEditor(low=1, high=12, mode="spinner"))
+            Item("value", editor=RangeEditor(low=1, high=12, mode="spinner",
+                                             show_error_dialog=False))
         )
-        LOCAL_REGISTRY = TargetRegistry()
-        _register_simple_spin(LOCAL_REGISTRY)
-        tester = UITester(registries=[LOCAL_REGISTRY])
+
+        tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
             number_field_text = tester.find_by_name(ui, "value")
             number_field_text.perform(KeyClick("Right"))
@@ -314,7 +287,8 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
 
         model = RangeModel()
         view = View(
-            Item("float_value", editor=RangeEditor(format_func=num_to_time))
+            Item("float_value", editor=RangeEditor(format_func=num_to_time,
+                                                   show_error_dialog=False))
         )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
@@ -332,7 +306,8 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
         model = RangeModel()
         with self.assertWarns(DeprecationWarning):
             view = View(
-                Item("float_value", editor=RangeEditor(format="%s ..."))
+                Item("float_value", editor=RangeEditor(format="%s ...",
+                                                       show_error_dialog=False))
             )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
@@ -350,7 +325,8 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
         model = RangeModel()
         with self.assertWarns(DeprecationWarning):
             view = View(
-                Item("float_value", editor=RangeEditor(format="%s ..."))
+                Item("float_value", editor=RangeEditor(format="%s ...",
+                                                       show_error_dialog=False))
             )
         tester = UITester()
         with tester.create_ui(model, dict(view=view)) as ui:
@@ -367,7 +343,8 @@ class TestRangeEditor(BaseTestMixin, unittest.TestCase):
         model = RangeModel()
         view = View(
             Item(
-                'float_value', editor=RangeEditor(mode='text', low=0.0, high=1)
+                'float_value', editor=RangeEditor(mode='text', low=0.0, high=1,
+                                                  show_error_dialog=False)
             ),
         )
         tester = UITester()
