@@ -115,12 +115,17 @@ class BaseRangeEditor(Editor):
 
     def _make_text_entry(self, fvalue_text):
 
-        text = QtGui.QLineEdit(fvalue_text)
-        # text.installEventFilter(text)
-        if self.factory.enter_set:
-            text.returnPressed.connect(self.update_object_on_enter)
+        update_object_on_enter = self.update_object_on_enter
 
-        text.editingFinished.connect(self.update_object_on_enter)
+        class TextCtrl(QtGui.QLineEdit):
+            def focusOutEvent(self, event):
+                update_object_on_enter()
+
+        text = TextCtrl(fvalue_text)
+
+        if self.factory.enter_set:
+            # text.editingFinished.connect(self.update_object_on_enter)
+            text.returnPressed.connect(self.update_object_on_enter)
 
         if self.factory.auto_set:
             text.textChanged.connect(self.update_object_on_enter)
