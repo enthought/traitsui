@@ -13,6 +13,7 @@
 
 
 import ast
+from decimal import Decimal
 from math import log10
 
 import wx
@@ -97,13 +98,11 @@ class BaseRangeEditor(Editor):
     def _clip(self, fvalue, low, high):
         """Returns fvalue clipped between low and high"""
 
-        try:
-            if low is not None and fvalue < low:
-                return low
-            if high is not None and high < fvalue:
-                return high
-        except:
+        if low is not None and fvalue < low:
             return low
+        if high is not None and high < fvalue:
+            return high
+
         return fvalue
 
     def _make_text_entry(self, control, fvalue_text, size=wx.Size(56, 20)):
@@ -637,7 +636,7 @@ class SimpleSpinEditor(BaseRangeEditor):
     def _spin(self, step):
 
         low, high = self._get_current_range()
-        value = self._clip(self.value + step, low, high)
+        value = self._clip(Decimal(str(self.value)) + step, low, high)
 
         if self.factory.is_float is False:
             value = int(value)
@@ -646,13 +645,13 @@ class SimpleSpinEditor(BaseRangeEditor):
 
     def _get_modifier(self, event):
 
-        modifier = self.step
+        modifier = Decimal(str(self.step))
         if event.ShiftDown():
-            modifier = modifier * 2
+            modifier *= 2
         if event.ControlDown():
-            modifier = modifier * 10
+            modifier *= 10
         if event.AltDown():
-            modifier = modifier * 100
+            modifier *= 100
         return modifier
 
     def on_char(self, event):

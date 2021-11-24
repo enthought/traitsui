@@ -26,6 +26,7 @@ PyQt user interface toolkit.
 
 
 import ast
+from decimal import Decimal
 from math import log10
 
 from pyface.qt import QtCore, QtGui
@@ -104,13 +105,11 @@ class BaseRangeEditor(Editor):
     def _clip(self, fvalue, low, high):
         """Returns fvalue clipped between low and high"""
 
-        try:
-            if low is not None and fvalue < low:
-                return low
-            if high is not None and high < fvalue:
-                return high
-        except:
+        if low is not None and fvalue < low:
             return low
+        if high is not None and high < fvalue:
+            return high
+
         return fvalue
 
     def _make_text_entry(self, fvalue_text):
@@ -612,8 +611,6 @@ class SimpleSpinEditor(BaseRangeEditor):
         vlayout.addWidget(control.button_hi)
         vlayout.addWidget(control.button_lo)
         layout.addWidget(vwidget)
-        # layout.addStretch(1)
-        # vwidget.resize(width, height)
 
     def _make_button_low(self, value):
         # icon = QtGui.QStyle.SP_ArrowDown
@@ -623,7 +620,7 @@ class SimpleSpinEditor(BaseRangeEditor):
         return button_lo
 
     def _make_button_high(self, value):
-        #icon = QtGui.QStyle.SP_ArrowUp
+        # icon = QtGui.QStyle.SP_ArrowUp
         icon = QtGui.QStyle.SP_TitleBarShadeButton
         button_hi = IconButton(icon, self.spin_up)
         button_hi.setEnabled(self.high is None or value < self.high)
@@ -631,10 +628,9 @@ class SimpleSpinEditor(BaseRangeEditor):
 
     def _spin(self, sign):
         step = sign * self._get_modifier()
-        value = self.value
         low, high = self._get_current_range()
 
-        value = self._clip(value + step, low, high)
+        value = self._clip(Decimal(str(self.value)) + step, low, high)
 
         if self.factory.is_float is False:
             value = int(value)
@@ -643,13 +639,13 @@ class SimpleSpinEditor(BaseRangeEditor):
 
     def _get_modifier(self):
         QModifiers = QtGui.QApplication.keyboardModifiers()
-        modifier = self.step
+        modifier = Decimal(str(self.step))
         if (QModifiers & QtCore.Qt.ShiftModifier) == QtCore.Qt.ShiftModifier:
-            modifier = modifier * 2
+            modifier *= 2
         if (QModifiers & QtCore.Qt.ControlModifier) == QtCore.Qt.ControlModifier:
-            modifier = modifier * 10
+            modifier *= 10
         if (QModifiers & QtCore.Qt.AltModifier) == QtCore.Qt.AltModifier:
-            modifier = modifier * 100
+            modifier *= 100
         return modifier
 
     def spin_down(self):
