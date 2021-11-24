@@ -79,7 +79,7 @@ class BaseRangeEditor(Editor):
         widget.
         """
         self._init_with_factory_defaults()
-        self.control = self._make_control()
+        self.control = self._make_control(parent)
         self._do_layout(self.control)
 
     def _init_with_factory_defaults(self):
@@ -96,7 +96,7 @@ class BaseRangeEditor(Editor):
         self.sync_value(factory.low_name, "low", "from")
         self.sync_value(factory.high_name, "high", "from")
 
-    def _make_control(self):
+    def _make_control(self, parent):
         raise NotImplementedError
 
     def _do_layout(self, control):
@@ -112,15 +112,16 @@ class BaseRangeEditor(Editor):
 
         return fvalue
 
-    def _make_text_entry(self, fvalue_text):
+    def _make_text_entry(self, control, fvalue_text):
 
         update_object_on_enter = self.update_object_on_enter
 
         class TextCtrl(QtGui.QLineEdit):
             def focusOutEvent(self, event):
                 update_object_on_enter()
+                super(TextCtrl, self).focusOutEvent(event)
 
-        text = TextCtrl(fvalue_text)
+        text = TextCtrl(fvalue_text, control)
 
         if self.factory.enter_set:
             # text.editingFinished.connect(self.update_object_on_enter)
@@ -233,7 +234,7 @@ class SimpleSliderEditor(BaseRangeEditor):
     #  Trait definitions:  See BaseRangeEditor
     # -------------------------------------------------------------------------
 
-    def _make_control(self):
+    def _make_control(self, parent):
 
         low, high = self._get_current_range()
         fvalue = self._clip(self.value, low, high)
@@ -245,7 +246,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         control.label_lo = self._make_label_low(low, width)
         control.slider = self._make_slider(fvalue)
         control.label_hi = self._make_label_high(high, width)
-        control.text = self._make_text_entry(fvalue_text)
+        control.text = self._make_text_entry(control, fvalue_text)
         return control
 
     @staticmethod
@@ -401,7 +402,7 @@ class LargeRangeSliderEditor(SimpleSliderEditor):
         self._do_layout(self.control)
 
     def _make_control(self, parent):
-        control = super()._make_control()
+        control = super()._make_control(parent)
         low, high = self._get_current_range()
 
         control.button_lo = self._make_button_low(low)
@@ -565,7 +566,7 @@ class SimpleSpinEditor(BaseRangeEditor):
     #: Step value for the spinner
     step = Any(1)
 
-    def _make_control(self):
+    def _make_control(self, parent):
 
         low, high = self._get_current_range()
         fvalue = self._clip(self.value, low, high)
@@ -590,7 +591,7 @@ class SimpleSpinEditor(BaseRangeEditor):
                     spin_up_or_down(-scale)
 
         control = Control()
-        control.text = self._make_text_entry(fvalue_text)
+        control.text = self._make_text_entry(control, fvalue_text)
         control.button_lo = self._make_button_low(fvalue)
         control.button_hi = self._make_button_high(fvalue)
         return control
@@ -670,14 +671,14 @@ class RangeTextEditor(BaseRangeEditor):
     the background of the field changes color to indicate an error.
     """
 
-    def _make_control(self):
+    def _make_control(self, parent):
 
         low, high = self._get_current_range()
         fvalue = self._clip(self.value, low, high)
         fvalue_text = self.string_value(fvalue)
 
         control = QtGui.QWidget()
-        control.text = self._make_text_entry(fvalue_text)
+        control.text = self._make_text_entry(control, fvalue_text)
         return control
 
     @staticmethod
