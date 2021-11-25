@@ -112,7 +112,7 @@ class BaseRangeEditor(Editor):
 
         return fvalue
 
-    def _make_text_entry(self, control, fvalue_text):
+    def _make_text_entry(self, parent, fvalue_text):
 
         update_object_on_enter = self.update_object_on_enter
 
@@ -121,7 +121,7 @@ class BaseRangeEditor(Editor):
                 update_object_on_enter()
                 super(TextCtrl, self).focusOutEvent(event)
 
-        text = TextCtrl(fvalue_text, control)
+        text = TextCtrl(fvalue_text, parent)
 
         if self.factory.enter_set:
             # text.editingFinished.connect(self.update_object_on_enter)
@@ -243,10 +243,10 @@ class SimpleSliderEditor(BaseRangeEditor):
         width = self._get_default_width()
 
         control = QtGui.QWidget()
-        control.label_lo = self._make_label_low(low, width)
-        control.slider = self._make_slider(fvalue)
-        control.label_hi = self._make_label_high(high, width)
         control.text = self._make_text_entry(control, fvalue_text)
+        control.label_lo = self._make_label_low(control, low, width)
+        control.slider = self._make_slider(control, fvalue)
+        control.label_hi = self._make_label_high(control, high, width)
         return control
 
     @staticmethod
@@ -271,9 +271,9 @@ class SimpleSliderEditor(BaseRangeEditor):
             return self.string_value(low)
         return self.factory.low_label
 
-    def _make_label_low(self, low, width):
+    def _make_label_low(self, parent, low, width):
         low_label = self._get_label_low(low)
-        label_lo = QtGui.QLabel(low_label)
+        label_lo = QtGui.QLabel(low_label, parent)
         label_lo.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         if width > 0:
             label_lo.setMinimumWidth(width)
@@ -281,9 +281,9 @@ class SimpleSliderEditor(BaseRangeEditor):
 
         return label_lo
 
-    def _make_slider(self, fvalue):
+    def _make_slider(self, parent, fvalue):
         ivalue = self._convert_to_slider(fvalue)
-        slider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        slider = QtGui.QSlider(QtCore.Qt.Horizontal, parent)
         slider.setTracking(self.factory.auto_set)
         slider.setMinimum(0)
         slider.setMaximum(10000)
@@ -295,9 +295,9 @@ class SimpleSliderEditor(BaseRangeEditor):
 
         return slider
 
-    def _make_label_high(self, high, width):
+    def _make_label_high(self, parent, high, width):
         high_label = self._get_label_high(high)
-        label_hi = QtGui.QLabel(high_label)
+        label_hi = QtGui.QLabel(high_label, parent)
         if width > 0:
             label_hi.setMinimumWidth(width)
         self.set_tooltip(label_hi)
@@ -405,8 +405,8 @@ class LargeRangeSliderEditor(SimpleSliderEditor):
         control = super()._make_control(parent)
         low, high = self._get_current_range()
 
-        control.button_lo = self._make_button_low(low)
-        control.button_hi = self._make_button_high(high)
+        control.button_lo = self._make_button_low(control, low)
+        control.button_hi = self._make_button_high(control, high)
         return control
 
     @staticmethod
@@ -420,13 +420,15 @@ class LargeRangeSliderEditor(SimpleSliderEditor):
         layout.addWidget(control.label_hi)
         layout.addWidget(control.text)
 
-    def _make_button_low(self, low):
+    def _make_button_low(self, parent, low):
         button_lo = IconButton(QtGui.QStyle.SP_ArrowLeft, self.reduce_range)
+        button_lo.setParent(parent)
         button_lo.setEnabled(self.low is None or low != self.low)
         return button_lo
 
-    def _make_button_high(self, high):
+    def _make_button_high(self, parent, high):
         button_hi = IconButton(QtGui.QStyle.SP_ArrowRight, self.increase_range)
+        button_hi.setParent(parent)
         button_hi.setEnabled(self.high is None or high != self.high)
         return button_hi
 
@@ -592,8 +594,8 @@ class SimpleSpinEditor(BaseRangeEditor):
 
         control = Control()
         control.text = self._make_text_entry(control, fvalue_text)
-        control.button_lo = self._make_button_low(fvalue)
-        control.button_hi = self._make_button_high(fvalue)
+        control.button_lo = self._make_button_low(control, fvalue)
+        control.button_hi = self._make_button_high(control, fvalue)
         return control
 
     @staticmethod
@@ -613,17 +615,19 @@ class SimpleSpinEditor(BaseRangeEditor):
         vlayout.addWidget(control.button_lo)
         layout.addWidget(vwidget)
 
-    def _make_button_low(self, value):
+    def _make_button_low(self, parent, value):
         # icon = QtGui.QStyle.SP_ArrowDown
         icon = QtGui.QStyle.SP_TitleBarUnshadeButton
         button_lo = IconButton(icon, self.spin_down)
+        button_lo.setParent(parent)
         button_lo.setEnabled(self.low is None or self.low < value)
         return button_lo
 
-    def _make_button_high(self, value):
+    def _make_button_high(self, parent, value):
         # icon = QtGui.QStyle.SP_ArrowUp
         icon = QtGui.QStyle.SP_TitleBarShadeButton
         button_hi = IconButton(icon, self.spin_up)
+        button_hi.setParent(parent)
         button_hi.setEnabled(self.high is None or value < self.high)
         return button_hi
 

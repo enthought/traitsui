@@ -105,20 +105,20 @@ class BaseRangeEditor(Editor):
 
         return fvalue
 
-    def _make_text_entry(self, control, fvalue_text, size=wx.Size(56, 20)):
+    def _make_text_entry(self, parent, fvalue_text, size=wx.Size(56, 20)):
         if self.factory.enter_set:
-            text = wx.TextCtrl(control,
+            text = wx.TextCtrl(parent,
                                -1,
                                fvalue_text,
                                size=size,
                                style=wx.TE_PROCESS_ENTER)
-            control.Bind(wx.EVT_TEXT_ENTER, self.update_object_on_enter, id=text.GetId())
+            parent.Bind(wx.EVT_TEXT_ENTER, self.update_object_on_enter, id=text.GetId())
         else:
-            text = wx.TextCtrl(control, -1, fvalue_text, size=size)
+            text = wx.TextCtrl(parent, -1, fvalue_text, size=size)
 
         text.Bind(wx.EVT_KILL_FOCUS, self.update_object_on_enter)
         if self.factory.auto_set:
-            control.Bind(wx.EVT_TEXT, self.update_object_on_enter, id=text.GetId())
+            parent.Bind(wx.EVT_TEXT, self.update_object_on_enter, id=text.GetId())
         self.set_tooltip(text)
 
         return text
@@ -262,17 +262,17 @@ class SimpleSliderEditor(BaseRangeEditor):
             return self.string_value(low)
         return self.factory.low_label
 
-    def _make_label_low(self, control, low, size):
+    def _make_label_low(self, parent, low, size):
         low_label = self._get_label_low(low)
         style = wx.ALIGN_RIGHT | wx.ST_NO_AUTORESIZE
-        label_lo = wx.StaticText(control, -1, low_label, size=size, style=style)
+        label_lo = wx.StaticText(parent, -1, low_label, size=size, style=style)
         self.set_tooltip(label_lo)
 
         return label_lo
 
-    def _make_slider(self, control, fvalue):
+    def _make_slider(self, parent, fvalue):
         ivalue = self._convert_to_slider(fvalue)
-        slider = Slider(control,
+        slider = Slider(parent,
                         -1,
                         value=ivalue,
                         minValue=0,
@@ -288,9 +288,9 @@ class SimpleSliderEditor(BaseRangeEditor):
 
         return slider
 
-    def _make_label_high(self, control, high, size):
+    def _make_label_high(self, parent, high, size):
         high_label = self._get_label_high(high)
-        label_hi = wx.StaticText(control, -1, high_label, size=size)
+        label_hi = wx.StaticText(parent, -1, high_label, size=size)
         self.set_tooltip(label_hi)
         return label_hi
 
@@ -418,9 +418,9 @@ class LargeRangeSliderEditor(SimpleSliderEditor):
         sizer.Add(control.text, 0, wx.LEFT | wx.EXPAND, 4)
         control.SetSizerAndFit(sizer)
 
-    def _make_button_low(self, control, low):
+    def _make_button_low(self, parent, low):
         bmp = wx.ArtProvider.GetBitmap(wx.ART_GO_BACK, size=(15, 15))
-        button_lo = wx.BitmapButton(control,
+        button_lo = wx.BitmapButton(parent,
                                     -1,
                                     bitmap=bmp,
                                     size=(-1, 20),
@@ -430,10 +430,10 @@ class LargeRangeSliderEditor(SimpleSliderEditor):
         button_lo.Enable(self.low is None or low != self.low)
         return button_lo
 
-    def _make_button_high(self, control, high):
+    def _make_button_high(self, parent, high):
 
         bmp = wx.ArtProvider.GetBitmap(wx.ART_GO_FORWARD, size=(15, 15))
-        button_hi = wx.BitmapButton(control,
+        button_hi = wx.BitmapButton(parent,
                                     -1,
                                     bitmap=bmp,
                                     size=(-1, 20),
@@ -603,9 +603,9 @@ class SimpleSpinEditor(BaseRangeEditor):
         sizer.Add(spinctrl_sizer, 1, wx.RIGHT)
         control.SetSizerAndFit(sizer)
 
-    def _make_button_low(self, control, value):
+    def _make_button_low(self, parent, value):
         bmp = wx.ArtProvider.GetBitmap(wx.ART_GO_DOWN, size=(15, 10))
-        button_lo = wx.BitmapButton(control,
+        button_lo = wx.BitmapButton(parent,
                                     -1,
                                     bitmap=bmp,
                                     size=(15, 12),
@@ -617,10 +617,10 @@ class SimpleSpinEditor(BaseRangeEditor):
         button_lo.Enable(self.low is None or self.low < value)
         return button_lo
 
-    def _make_button_high(self, control, value):
+    def _make_button_high(self, parent, value):
 
         bmp = wx.ArtProvider.GetBitmap(wx.ART_GO_UP, size=(15, 10))
-        button_hi = wx.BitmapButton(control,
+        button_hi = wx.BitmapButton(parent,
                                     -1,
                                     bitmap=bmp,
                                     size=(15, 12),
