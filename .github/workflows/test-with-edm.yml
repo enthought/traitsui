@@ -11,7 +11,7 @@ name: Test with EDM
 on: pull_request
 
 env:
-  INSTALL_EDM_VERSION: 3.2.3
+  INSTALL_EDM_VERSION: 3.3.0
 
 jobs:
 
