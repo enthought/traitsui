@@ -12,6 +12,7 @@ on: pull_request
 
 env:
   INSTALL_EDM_VERSION: 3.2.3
+  QT_MAC_WANTS_LAYER: 1
 
 jobs:
 
