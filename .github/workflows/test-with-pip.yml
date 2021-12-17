@@ -15,6 +15,7 @@ jobs:
     env:
       # Enforce selection of toolkit
       ETS_TOOLKIT: qt
+      QT_MAC_WANTS_LAYER: 1
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
