@@ -15,7 +15,7 @@ from traitsui.table_column import ObjectColumn
 
 
 class ColorColumn(ObjectColumn):
-    """ Table column object for RGBColor traits. """
+    """Table column object for RGBColor traits."""
 
     #: For display by default.
     style = "readonly"
@@ -23,8 +23,8 @@ class ColorColumn(ObjectColumn):
     # -- ObjectColumn Overrides -----------------------------------------------
 
     def get_cell_color(self, object):
-        """ Returns the cell background color for the column for a specified
-            object.
+        """Returns the cell background color for the column for a specified
+        object.
         """
         color_values = getattr(object, self.name + "_", None)
         if color_values is None:
@@ -36,8 +36,7 @@ class ColorColumn(ObjectColumn):
         return tk_color
 
     def get_value(self, object):
-        """ Gets the value of the column for a specified object.
-        """
+        """Gets the value of the column for a specified object."""
         value = getattr(self.get_object(object), self.name, "")
         if isinstance(value, tuple):
             value = self._float_rgb_tuple_to_str(value)
@@ -48,10 +47,10 @@ class ColorColumn(ObjectColumn):
     # -- Private Methods ------------------------------------------------------
 
     def _as_int_rgb_tuple(self, color_values):
-        """ Returns object color as RGB integers. """
+        """Returns object color as RGB integers."""
         return tuple(int(255 * v + 0.5) for v in color_values)
 
     def _float_rgb_tuple_to_str(self, color_values):
-        """ Returns object color as RGB floats. """
+        """Returns object color as RGB floats."""
         csv = ", ".join("{:5.3f}".format(x) for x in color_values)
         return "({})".format(csv)

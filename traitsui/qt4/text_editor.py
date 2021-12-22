@@ -37,8 +37,7 @@ from .constants import OKColor
 
 
 class SimpleEditor(Editor):
-    """ Simple style text editor, which displays a text field.
-    """
+    """Simple style text editor, which displays a text field."""
 
     #: Flag for window styles:
     base_style = QtGui.QLineEdit
@@ -60,8 +59,8 @@ class SimpleEditor(Editor):
     _connections_to_remove = List(Tuple(Any, Callable))
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         factory = self.factory
         wtype = self.base_style
@@ -86,13 +85,15 @@ class SimpleEditor(Editor):
         if wtype == QtGui.QTextEdit:
             control.textChanged.connect(self.update_object)
             self._connections_to_remove.append(
-                (control.textChanged, self.update_object))
+                (control.textChanged, self.update_object)
+            )
         else:
             # QLineEdit
             if factory.auto_set and not factory.is_grid_cell:
                 control.textEdited.connect(self.update_object)
                 self._connections_to_remove.append(
-                    (control.textEdited, self.update_object))
+                    (control.textEdited, self.update_object)
+                )
             else:
                 control.editingFinished.connect(self.update_object)
                 self._connections_to_remove.append(
@@ -119,8 +120,7 @@ class SimpleEditor(Editor):
         self.set_tooltip()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         while self._connections_to_remove:
             signal, handler = self._connections_to_remove.pop()
             signal.disconnect(handler)
@@ -128,8 +128,7 @@ class SimpleEditor(Editor):
         super().dispose()
 
     def update_object(self):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         if (not self._no_update) and (self.control is not None):
             try:
                 self.value = self._get_user_value()
@@ -144,8 +143,8 @@ class SimpleEditor(Editor):
                 pass
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         user_value = self._get_user_value()
         try:
@@ -165,8 +164,7 @@ class SimpleEditor(Editor):
             self.set_error_state(False)
 
     def _get_user_value(self):
-        """ Gets the actual value corresponding to what the user typed.
-        """
+        """Gets the actual value corresponding to what the user typed."""
         try:
             value = self.control.text()
         except AttributeError:
@@ -188,8 +186,7 @@ class SimpleEditor(Editor):
         return ret
 
     def error(self, excp):
-        """ Handles an error that occurs while setting the object's trait value.
-        """
+        """Handles an error that occurs while setting the object's trait value."""
         if self._error is None:
             self._error = True
             self.ui.errors += 1
@@ -197,14 +194,12 @@ class SimpleEditor(Editor):
         self.set_error_state(True)
 
     def in_error_state(self):
-        """ Returns whether or not the editor is in an error state.
-        """
+        """Returns whether or not the editor is in an error state."""
         return self.invalid or self._error
 
 
 class CustomEditor(SimpleEditor):
-    """ Custom style of text editor, which displays a multi-line text field.
-    """
+    """Custom style of text editor, which displays a multi-line text field."""
 
     #: FIXME: The wx version exposes a wx constant.
     #: Flag for window style. This value overrides the default.
@@ -212,8 +207,7 @@ class CustomEditor(SimpleEditor):
 
 
 class ReadonlyEditor(BaseReadonlyEditor):
-    """ Read-only style of text editor, which displays a read-only text field.
-    """
+    """Read-only style of text editor, which displays a read-only text field."""
 
     def init(self, parent):
         super().init(parent)
@@ -226,8 +220,8 @@ class ReadonlyEditor(BaseReadonlyEditor):
             self.control.setTextInteractionFlags(flags)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         new_value = self.str_value
 

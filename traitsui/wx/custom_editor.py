@@ -23,12 +23,11 @@ from .editor import Editor
 
 
 class CustomEditor(Editor):
-    """ Wrapper for a custom editor control
-    """
+    """Wrapper for a custom editor control"""
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         factory = self.factory.factory
         if factory is not None:
@@ -45,7 +44,7 @@ class CustomEditor(Editor):
         self.set_tooltip()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         pass

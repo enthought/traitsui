@@ -40,7 +40,6 @@ class MovieTheater(HasTraits):
 
 @unittest.skipIf(not is_qt5(), 'Requires Qt5')
 class TestVideoEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

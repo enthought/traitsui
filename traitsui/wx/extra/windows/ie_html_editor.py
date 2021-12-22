@@ -43,8 +43,7 @@ RELATIVE_OBJECTS_PATTERN = re.compile(
 
 
 class _IEHTMLEditor(Editor):
-    """ Traits UI MS Internet Explorer editor.
-    """
+    """Traits UI MS Internet Explorer editor."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -87,8 +86,8 @@ class _IEHTMLEditor(Editor):
     html = Property()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = ie = iewin.IEHtmlWindow(
             parent, -1, style=wx.NO_FULL_REPAINT_ON_RESIZE
@@ -111,13 +110,15 @@ class _IEHTMLEditor(Editor):
 
         parent.Bind(iewin.EVT_StatusTextChange, ie, id=self._status_modified)
         parent.Bind(iewin.EVT_TitleChange, ie, id=self._title_modified)
-        parent.Bind(iewin.EVT_DocumentComplete, ie, id=self._page_loaded_modified)
+        parent.Bind(
+            iewin.EVT_DocumentComplete, ie, id=self._page_loaded_modified
+        )
         parent.Bind(iewin.EVT_NewWindow2, ie, id=self._new_window_modified)
         parent.Bind(iewin.EVT_BeforeNavigate2, ie, id=self._navigate_requested)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         value = self.str_value.strip()
 

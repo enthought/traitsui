@@ -12,7 +12,7 @@ from traitsui.testing.tester.locator import TargetById, TargetByName
 
 
 def _get_editor_by_name(ui, name):
-    """ Return a single Editor from an instance of traitsui.ui.UI with
+    """Return a single Editor from an instance of traitsui.ui.UI with
     a given extended name. Raise if zero or many editors are found.
 
     Parameters
@@ -36,14 +36,13 @@ def _get_editor_by_name(ui, name):
             "Found these: {!r}".format(name, all_names)
         )
     if len(editors) > 1:
-        raise ValueError(
-            "Found multiple editors with name {!r}.".format(name))
-    editor, = editors
+        raise ValueError("Found multiple editors with name {!r}.".format(name))
+    (editor,) = editors
     return editor
 
 
 def _get_editor_by_id(ui, id):
-    """ Return single Editor from an instance of traitsui.ui.UI with
+    """Return single Editor from an instance of traitsui.ui.UI with
     the given identifier.
 
     Parameters
@@ -63,13 +62,14 @@ def _get_editor_by_id(ui, id):
     except AttributeError:
         raise ValueError(
             "No editors found with id {!r}. Got these: {!r}".format(
-                id, ui._names)
+                id, ui._names
             )
+        )
     return editor
 
 
 def register_traitsui_ui_solvers(registry, target_class, traitsui_ui_getter):
-    """ Function to register solvers for obtaining nested targets inside a
+    """Function to register solvers for obtaining nested targets inside a
     traitsui.ui.UI inside a (parent) target.
 
     For example, an instance of TreeEditor may contain a nested

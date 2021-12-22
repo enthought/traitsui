@@ -20,9 +20,7 @@ from traitsui.testing.tester.exceptions import (
 
 
 class TestInteractionRegistry(unittest.TestCase):
-
     def test_registry_empty(self):
-
         class SpecificTarget:
             pass
 
@@ -92,7 +90,7 @@ class TestInteractionRegistry(unittest.TestCase):
         # then
         self.assertEqual(
             registry._get_interactions(SpecificEditor()),
-            {UserAction, UserAction2}
+            {UserAction, UserAction2},
         )
 
     def test_action_not_supported_report_supported_action(self):
@@ -154,9 +152,9 @@ class TestInteractionRegistry(unittest.TestCase):
             registry._get_interaction_doc(2.1, int)
 
     def test_get_default_interaction_doc(self):
-
         class Action:
             """Some action."""
+
             pass
 
         def handler(wrapper, interaction):
@@ -170,15 +168,14 @@ class TestInteractionRegistry(unittest.TestCase):
         )
 
         actual = registry._get_interaction_doc(
-            target=21.2, interaction_class=Action,
+            target=21.2,
+            interaction_class=Action,
         )
         self.assertEqual(actual, "Some action.")
 
 
 class TestLocationRegistry(unittest.TestCase):
-
     def test_location_registry_empty(self):
-
         class SpecificTarget:
             pass
 
@@ -197,24 +194,24 @@ class TestLocationRegistry(unittest.TestCase):
         )
 
     def test_register_location(self):
-
         def solver(wrapper, location):
             return 1
 
         registry = TargetRegistry()
         registry.register_location(
-            target_class=float, locator_class=str, solver=solver)
+            target_class=float, locator_class=str, solver=solver
+        )
 
         self.assertIs(registry._get_solver(2.1, "dummy"), solver)
 
     def test_register_location_report_existing(self):
-
         def solver(wrapper, location):
             return 1
 
         registry = TargetRegistry()
         registry.register_location(
-            target_class=float, locator_class=str, solver=solver)
+            target_class=float, locator_class=str, solver=solver
+        )
 
         with self.assertRaises(LocationNotSupported) as exception_context:
             registry._get_solver(3.4, None)
@@ -251,14 +248,13 @@ class TestLocationRegistry(unittest.TestCase):
 
         # then
         self.assertEqual(
-            registry._get_locations(SpecificEditor()),
-            {Locator1, Locator2}
+            registry._get_locations(SpecificEditor()), {Locator1, Locator2}
         )
 
     def test_get_location_help_default(self):
-
         class Locator:
-            """ Some default documentation."""
+            """Some default documentation."""
+
             pass
 
         registry = TargetRegistry()
@@ -269,7 +265,8 @@ class TestLocationRegistry(unittest.TestCase):
         )
 
         help_text = registry._get_location_doc(
-            target=2.345, locator_class=Locator,
+            target=2.345,
+            locator_class=Locator,
         )
         self.assertEqual(help_text, "Some default documentation.")
 

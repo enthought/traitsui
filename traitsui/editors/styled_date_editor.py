@@ -14,8 +14,7 @@ from traitsui.editors.date_editor import DateEditor
 
 
 class StyledDateEditor(DateEditor):
-    """ A DateEditor that can show sets of dates in different styles.
-    """
+    """A DateEditor that can show sets of dates in different styles."""
 
     #: The name of a dictionary on the object that maps names to groups
     #: (list/tuples) of datetime.date objects.  Each of these groups can be

@@ -97,8 +97,7 @@ key_map = {
 
 
 def key_event_to_name(event):
-    """ Converts a keystroke event into a corresponding key name.
-    """
+    """Converts a keystroke event into a corresponding key name."""
     key_code = event.GetKeyCode()
     if event.ControlDown() and (1 <= key_code <= 26):
         key = chr(key_code + 96)

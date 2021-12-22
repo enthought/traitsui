@@ -37,8 +37,8 @@ import traitsui.wx.constants
 
 
 def paint_parent(dc, window):
-    """ Recursively paint the parent's background if they have an associated
-        image slice.
+    """Recursively paint the parent's background if they have an associated
+    image slice.
     """
     parent = window.GetParent()
     slice = getattr(parent, "_image_slice", None)
@@ -127,8 +127,8 @@ class ImageSlice(HasPrivateTraits):
     # -- Public Methods -------------------------------------------------------
 
     def fill(self, dc, x, y, dx, dy, transparent=False):
-        """ 'Stretch fill' the specified region of a device context with the
-            sliced image.
+        """'Stretch fill' the specified region of a device context with the
+        sliced image.
         """
         # Create the source image dc:
         idc = wx.MemoryDC()
@@ -233,8 +233,7 @@ class ImageSlice(HasPrivateTraits):
     # -- Event Handlers -------------------------------------------------------
 
     def _image_changed(self, image):
-        """ Handles the 'image' trait being changed.
-        """
+        """Handles the 'image' trait being changed."""
         # Save the original bitmap as the transparent version:
         self.transparent_bitmap = (
             bitmap
@@ -263,8 +262,7 @@ class ImageSlice(HasPrivateTraits):
     # -- Private Methods ------------------------------------------------------
 
     def _analyze_bitmap(self):
-        """ Analyzes the bitmap.
-        """
+        """Analyzes the bitmap."""
         # Get the image data:
         threshold = self.threshold
         bitmap = self.opaque_bitmap
@@ -358,8 +356,8 @@ class ImageSlice(HasPrivateTraits):
             )
 
     def _fill(self, idc, ix, iy, idx, idy, dc, x, y, dx, dy):
-        """ Performs a stretch fill of a region of an image into a region of a
-            window device context.
+        """Performs a stretch fill of a region of an image into a region of a
+        window device context.
         """
         last_x, last_y = x + dx, y + dy
         while y < last_y:
@@ -372,8 +370,8 @@ class ImageSlice(HasPrivateTraits):
             y += ddy
 
     def _calculate_dxy(self, d, matches):
-        """ Calculate the size of all image slices for a specified set of
-            matches.
+        """Calculate the size of all image slices for a specified set of
+        matches.
         """
         if len(matches) == 1:
             d1, d2 = matches[0]
@@ -386,9 +384,9 @@ class ImageSlice(HasPrivateTraits):
         return (d - d2 - d4, [d1, d2, d3 - d1 - d2, d4, d - d3 - d4])
 
     def _find_best_borders(self, data):
-        """ Find the best set of image slice border sizes (e.g. for images with
-            rounded corners, there should exist a better set of borders than
-            the ones computed by the image slice algorithm.
+        """Find the best set of image slice border sizes (e.g. for images with
+        rounded corners, there should exist a better set of borders than
+        the ones computed by the image slice algorithm.
         """
         # Make sure the image size is worth bothering about:
         dx, dy = self.dx, self.dy
@@ -489,8 +487,8 @@ class ImageSlice(HasPrivateTraits):
         self.xbottom = min(self.bottom, dy - bottom - 1)
 
     def _find_best_color(self, data, x, y):
-        """ Find the best contrasting text color for a specified pixel
-            coordinate.
+        """Find the best contrasting text color for a specified pixel
+        coordinate.
         """
         r, g, b = data[y, x]
         h, l, s = rgb_to_hls(r / 255.0, g / 255.0, b / 255.0)
@@ -501,8 +499,8 @@ class ImageSlice(HasPrivateTraits):
         return text_color
 
     def _is_equal(self, data, x0, y0, x1, y1, dx, dy):
-        """ Determines if two identically sized regions of an image array are
-            'the same' (i.e. within some slight color variance of each other).
+        """Determines if two identically sized regions of an image array are
+        'the same' (i.e. within some slight color variance of each other).
         """
         return (
             abs(
@@ -521,8 +519,7 @@ image_slice_cache = {}
 
 
 def image_slice_for(image):
-    """ Returns a (possibly cached) ImageSlice.
-    """
+    """Returns a (possibly cached) ImageSlice."""
     global image_slice_cache
 
     result = image_slice_cache.get(image)

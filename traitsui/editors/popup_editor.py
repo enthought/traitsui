@@ -26,13 +26,11 @@ from traitsui.view import View
 
 class _PopupEditor(UIEditor):
     def init_ui(self, parent):
-        """ Creates the traits UI for the editor.
-        """
+        """Creates the traits UI for the editor."""
         return self.object.edit_traits(view=self.base_view(), parent=parent)
 
     def base_view(self):
-        """ Returns the View that allows the popup view to be displayed.
-        """
+        """Returns the View that allows the popup view to be displayed."""
         return View(
             Item(
                 self.name,
@@ -45,8 +43,7 @@ class _PopupEditor(UIEditor):
         )
 
     def popup_view(self):
-        """ Returns the popup View.
-        """
+        """Returns the popup View."""
         factory = self.factory
         item = Item(
             self.name,
@@ -94,6 +91,5 @@ class PopupEditor(BasicEditorFactory):
     width = Float(-1.0)
 
     def _get_klass(self):
-        """ The class used to construct editor objects.
-        """
+        """The class used to construct editor objects."""
         return toolkit_object("popup_editor:_PopupEditor")

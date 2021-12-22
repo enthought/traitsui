@@ -15,7 +15,7 @@ from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 
 def register(registry):
-    """ Register solvers/handlers specific to wx Button Editors
+    """Register solvers/handlers specific to wx Button Editors
     for the given registry.
 
     If there are any conflicts, an error will occur.
@@ -28,12 +28,15 @@ def register(registry):
     registry.register_interaction(
         target_class=ButtonEditor,
         interaction_class=MouseClick,
-        handler=(lambda wrapper, _: _interaction_helpers.mouse_click_button(
-                 control=wrapper._target.control, delay=wrapper.delay))
+        handler=(
+            lambda wrapper, _: _interaction_helpers.mouse_click_button(
+                control=wrapper._target.control, delay=wrapper.delay
+            )
+        ),
     )
 
     registry.register_interaction(
         target_class=ButtonEditor,
         interaction_class=DisplayedText,
-        handler=lambda wrapper, _: wrapper._target.control.GetLabel()
+        handler=lambda wrapper, _: wrapper._target.control.GetLabel(),
     )

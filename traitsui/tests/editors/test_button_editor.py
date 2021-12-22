@@ -23,12 +23,7 @@ from traitsui.tests._tools import (
     reraise_exceptions,
     ToolkitName,
 )
-from traitsui.testing.api import (
-    DisplayedText,
-    IsEnabled,
-    MouseClick,
-    UITester
-)
+from traitsui.testing.api import DisplayedText, IsEnabled, MouseClick, UITester
 
 
 class ButtonTextEdit(HasTraits):
@@ -37,9 +32,7 @@ class ButtonTextEdit(HasTraits):
 
     play_button_label = Str("I'm a play button")
 
-    play_button_image = Image(
-        ImageResource("run", [traitsui.extras])
-    )
+    play_button_image = Image(ImageResource("run", [traitsui.extras]))
 
     values = List()
 
@@ -77,7 +70,6 @@ custom_image_view = View(
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -119,7 +111,8 @@ class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
             button = tester.find_by_name(ui, "play_button")
 
             with self.assertTraitChanges(
-                    button_text_edit, "play_button", count=1):
+                button_text_edit, "play_button", count=1
+            ):
                 button.perform(MouseClick())
 
     def test_simple_button_editor_clicked(self):
@@ -147,13 +140,15 @@ class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
             self.assertFalse(button.inspect(IsEnabled()))
 
             with self.assertTraitDoesNotChange(
-                    button_text_edit, "play_button"):
+                button_text_edit, "play_button"
+            ):
                 button.perform(MouseClick())
 
             button_text_edit.button_enabled = True
             self.assertTrue(button.inspect(IsEnabled()))
             with self.assertTraitChanges(
-                    button_text_edit, "play_button", count=1):
+                button_text_edit, "play_button", count=1
+            ):
                 button.perform(MouseClick())
 
     def test_simple_button_editor_disabled(self):
@@ -166,8 +161,9 @@ class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
         button_text_edit = ButtonTextEdit()
 
         tester = UITester()
-        with tester.create_ui(button_text_edit, dict(view=custom_image_view)) \
-                as ui:
+        with tester.create_ui(
+            button_text_edit, dict(view=custom_image_view)
+        ) as ui:
             button = tester.find_by_name(ui, "play_button")
             default_image = button._target.image
             self.assertIsInstance(default_image, ImageResource)
@@ -181,7 +177,7 @@ class TestButtonEditor(BaseTestMixin, unittest.TestCase, UnittestTools):
 
 @requires_toolkit([ToolkitName.qt])
 class TestButtonEditorValuesTrait(BaseTestMixin, unittest.TestCase):
-    """ The values_trait is only supported by Qt.
+    """The values_trait is only supported by Qt.
 
     See discussion enthought/traitsui#879
     """

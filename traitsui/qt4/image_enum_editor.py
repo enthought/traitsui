@@ -23,12 +23,10 @@ from .helper import pixmap_cache
 
 
 class BaseEditor(object):
-    """ The base class for the different styles of ImageEnumEditor.
-    """
+    """The base class for the different styles of ImageEnumEditor."""
 
     def get_pixmap(self, name):
-        """ Get a pixmap representing a possible object traits value.
-        """
+        """Get a pixmap representing a possible object traits value."""
         if name is None:
             return None
         factory = self.factory
@@ -37,13 +35,13 @@ class BaseEditor(object):
 
 
 class ReadonlyEditor(BaseEditor, BaseEnumEditor):
-    """ Read-only style of image enumeration editor, which displays a single
-        static image representing the object trait's value.
+    """Read-only style of image enumeration editor, which displays a single
+    static image representing the object trait's value.
     """
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         super().init(parent)
 
@@ -52,25 +50,23 @@ class ReadonlyEditor(BaseEditor, BaseEnumEditor):
         self.set_tooltip()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self.control.setPixmap(self.get_pixmap(self.str_value))
 
     def rebuild_editor(self):
-        """ Rebuilds the contents of the editor whenever the original factory
-            object's **values** trait changes.
+        """Rebuilds the contents of the editor whenever the original factory
+        object's **values** trait changes.
         """
         pass
 
 
 class SimpleEditor(BaseEditor, SimpleEnumEditor):
-    """ Simple style of image enumeration editor, which displays a combo box.
-    """
+    """Simple style of image enumeration editor, which displays a combo box."""
 
     def create_combo_box(self):
-        """ Returns the QComboBox used for the editor control.
-        """
+        """Returns the QComboBox used for the editor control."""
         control = ImageEnumComboBox(self)
         control.setSizePolicy(
             QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum
@@ -82,8 +78,8 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
         super().dispose()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if self._no_enum_update == 0:
             self._no_enum_update += 1
@@ -100,23 +96,21 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
             self._no_enum_update -= 1
 
     def rebuild_editor(self):
-        """ Rebuilds the contents of the editor whenever the original factory
-            object's **values** trait changes.
+        """Rebuilds the contents of the editor whenever the original factory
+        object's **values** trait changes.
         """
         self.control.model().reset()
 
 
 class CustomEditor(BaseEditor, CustomEnumEditor):
-    """ Simple style of image enumeration editor, which displays a combo box.
-    """
+    """Simple style of image enumeration editor, which displays a combo box."""
 
     #: Is the button layout row-major or column-major? This value overrides the
     #: default.
     row_major = True
 
     def create_button(self, name):
-        """ Returns the QAbstractButton used for the radio button.
-        """
+        """Returns the QAbstractButton used for the radio button."""
         button = QtGui.QToolButton()
         button.setAutoExclusive(True)
         button.setCheckable(True)
@@ -134,13 +128,12 @@ class CustomEditor(BaseEditor, CustomEnumEditor):
 
 
 class ImageEnumComboBox(QtGui.QComboBox):
-    """ A combo box which displays images instead of text.
-    """
+    """A combo box which displays images instead of text."""
 
     def __init__(self, editor, parent=None):
-        """ Reimplemented to store the editor and set a delegate for drawing the
-            items in the popup menu. If there is more than one column, use a
-            TableView instead of ListView for the popup.
+        """Reimplemented to store the editor and set a delegate for drawing the
+        items in the popup menu. If there is more than one column, use a
+        TableView instead of ListView for the popup.
         """
         QtGui.QComboBox.__init__(self, parent)
         self._editor = editor
@@ -163,8 +156,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
             self.setItemDelegate(delegate)
 
     def _dispose(self):
-        """ Dispose objects on this widget. To be called by editors.
-        """
+        """Dispose objects on this widget. To be called by editors."""
         # Replace the model with the standard one.
         # After the editor has disposed itself, the widget may not have been
         # garbage collected and the model still reacts to events fired
@@ -175,8 +167,8 @@ class ImageEnumComboBox(QtGui.QComboBox):
         self.setModel(QtGui.QStandardItemModel())
 
     def paintEvent(self, event):
-        """ Reimplemented to draw the ComboBox frame and paint the image
-            centered in it.
+        """Reimplemented to draw the ComboBox frame and paint the image
+        centered in it.
         """
         painter = QtGui.QStylePainter(self)
         painter.setPen(self.palette().color(QtGui.QPalette.Text))
@@ -203,8 +195,8 @@ class ImageEnumComboBox(QtGui.QComboBox):
         painter.drawPixmap(target, pixmap)
 
     def sizeHint(self):
-        """ Reimplemented to set a size hint based on the size of the larget
-            image.
+        """Reimplemented to set a size hint based on the size of the larget
+        image.
         """
         size = QtCore.QSize()
         for name in self._editor.names:
@@ -220,8 +212,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
 
 class ImageEnumTablePopupView(QtGui.QTableView):
     def __init__(self, parent):
-        """ Configure the appearence of the table view.
-        """
+        """Configure the appearence of the table view."""
         QtGui.QTableView.__init__(self, parent)
         hheader = self.horizontalHeader()
         if is_qt5:
@@ -239,23 +230,19 @@ class ImageEnumTablePopupView(QtGui.QTableView):
 
 
 class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
-    """ An item delegate which draws only images.
-    """
+    """An item delegate which draws only images."""
 
     def __init__(self, editor, parent):
-        """ Reimplemented to store the editor.
-        """
+        """Reimplemented to store the editor."""
         QtGui.QStyledItemDelegate.__init__(self, parent)
         self._editor = editor
 
     def displayText(self, value, locale):
-        """ Reimplemented to display nothing.
-        """
+        """Reimplemented to display nothing."""
         return ""
 
     def paint(self, painter, option, mi):
-        """ Reimplemented to draw images.
-        """
+        """Reimplemented to draw images."""
         # Delegate to our superclass to draw the background
         QtGui.QStyledItemDelegate.paint(self, painter, option, mi)
 
@@ -272,8 +259,7 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
             painter.drawPixmap(target, pixmap)
 
     def sizeHint(self, option, mi):
-        """ Reimplemented to define a size hint based on the size of the pixmap.
-        """
+        """Reimplemented to define a size hint based on the size of the pixmap."""
         name = mi.data(QtCore.Qt.DisplayRole)
         pixmap = self._get_pixmap(name)
         if pixmap is None:
@@ -285,30 +271,25 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
 
 
 class ImageEnumModel(QtCore.QAbstractTableModel):
-    """ A table model for use with the 'simple' style ImageEnumEditor.
-    """
+    """A table model for use with the 'simple' style ImageEnumEditor."""
 
     def __init__(self, editor, parent):
-        """ Reimplemented to store the editor.
-        """
+        """Reimplemented to store the editor."""
         super().__init__(parent)
         self._editor = editor
 
     def rowCount(self, mi):
-        """ Reimplemented to return the number of rows.
-        """
+        """Reimplemented to return the number of rows."""
         cols = self._editor.factory.cols
         result = (len(self._editor.names) + cols - 1) / cols
         return result
 
     def columnCount(self, mi):
-        """ Reimplemented to return the number of columns.
-        """
+        """Reimplemented to return the number of columns."""
         return self._editor.factory.cols
 
     def data(self, mi, role):
-        """ Reimplemented to return the data.
-        """
+        """Reimplemented to return the data."""
         if role == QtCore.Qt.DisplayRole:
             index = mi.row() * self._editor.factory.cols + mi.column()
             if index < len(self._editor.names):

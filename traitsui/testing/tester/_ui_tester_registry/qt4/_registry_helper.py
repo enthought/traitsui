@@ -19,12 +19,12 @@ from traitsui.testing.tester.command import (
 )
 from traitsui.testing.tester.query import DisplayedText
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
-    _interaction_helpers
+    _interaction_helpers,
 )
 
 
 def register_editable_textbox_handlers(registry, target_class, widget_getter):
-    """ Register common interactions for an editable textbox (in Qt)
+    """Register common interactions for an editable textbox (in Qt)
 
     Parameters
     ----------
@@ -38,20 +38,36 @@ def register_editable_textbox_handlers(registry, target_class, widget_getter):
         or QTextEdit.
     """
     handlers = [
-        (KeySequence,
-            (lambda wrapper, interaction:
-                _interaction_helpers.key_sequence_textbox(
-                    widget_getter(wrapper), interaction, wrapper.delay))),
-        (KeyClick,
-            (lambda wrapper, interaction:
-                _interaction_helpers.key_click_qwidget(
-                    widget_getter(wrapper), interaction, wrapper.delay))),
-        (MouseClick,
-            (lambda wrapper, _: _interaction_helpers.mouse_click_qwidget(
-                widget_getter(wrapper), wrapper.delay))),
-        (DisplayedText,
+        (
+            KeySequence,
+            (
+                lambda wrapper, interaction: _interaction_helpers.key_sequence_textbox(
+                    widget_getter(wrapper), interaction, wrapper.delay
+                )
+            ),
+        ),
+        (
+            KeyClick,
+            (
+                lambda wrapper, interaction: _interaction_helpers.key_click_qwidget(
+                    widget_getter(wrapper), interaction, wrapper.delay
+                )
+            ),
+        ),
+        (
+            MouseClick,
+            (
+                lambda wrapper, _: _interaction_helpers.mouse_click_qwidget(
+                    widget_getter(wrapper), wrapper.delay
+                )
+            ),
+        ),
+        (
+            DisplayedText,
             lambda wrapper, _: _interaction_helpers.displayed_text_qobject(
-                widget_getter(wrapper))),
+                widget_getter(wrapper)
+            ),
+        ),
     ]
     for interaction_class, handler in handlers:
         registry.register_interaction(

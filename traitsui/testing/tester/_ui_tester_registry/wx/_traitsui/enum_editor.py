@@ -23,49 +23,57 @@ from traitsui.testing.tester.command import (
 from traitsui.testing.tester.locator import Index
 from traitsui.testing.tester.query import DisplayedText, SelectedText
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
-    BaseSourceWithLocation
+    BaseSourceWithLocation,
 )
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 from traitsui.testing.tester._ui_tester_registry._layout import (
-    column_major_to_row_major
+    column_major_to_row_major,
 )
 
 
 class _IndexedListEditor(BaseSourceWithLocation):
-    """ Wrapper class for EnumListEditor and Index.
-    """
+    """Wrapper class for EnumListEditor and Index."""
+
     source_class = ListEditor
     locator_class = Index
     handlers = [
-        (MouseClick,
-            (lambda wrapper, _:
-                _interaction_helpers.mouse_click_listbox(
+        (
+            MouseClick,
+            (
+                lambda wrapper, _: _interaction_helpers.mouse_click_listbox(
                     control=wrapper._target.source.control,
                     index=wrapper._target.location.index,
-                    delay=wrapper.delay))),
+                    delay=wrapper.delay,
+                )
+            ),
+        ),
     ]
 
 
 class _IndexedRadioEditor(BaseSourceWithLocation):
-    """ Wrapper class for EnumRadioEditor and Index.
-    """
+    """Wrapper class for EnumRadioEditor and Index."""
+
     source_class = RadioEditor
     locator_class = Index
     handlers = [
-        (MouseClick,
-            (lambda wrapper, _:
-                _interaction_helpers.mouse_click_radiobutton_child_in_panel(
+        (
+            MouseClick,
+            (
+                lambda wrapper, _: _interaction_helpers.mouse_click_radiobutton_child_in_panel(
                     control=wrapper._target.source.control,
                     index=convert_index(
                         source=wrapper._target.source,
-                        index=wrapper._target.location.index
+                        index=wrapper._target.location.index,
                     ),
-                    delay=wrapper.delay))),
+                    delay=wrapper.delay,
+                )
+            ),
+        ),
     ]
 
 
 def convert_index(source, index):
-    """ Helper function to convert an index for a GridSizer so that the
+    """Helper function to convert an index for a GridSizer so that the
     index counts over the grid in the correct direction.
     The grid is always populated in row major order, however, the elements
     are assigned to each entry in the grid so that when displayed they appear
@@ -92,22 +100,26 @@ def convert_index(source, index):
 
 
 class _IndexedSimpleEditor(BaseSourceWithLocation):
-    """ Wrapper class for Simple EnumEditor and Index.
-    """
+    """Wrapper class for Simple EnumEditor and Index."""
+
     source_class = SimpleEditor
     locator_class = Index
     handlers = [
-        (MouseClick,
-            (lambda wrapper, _:
-                _interaction_helpers.mouse_click_combobox_or_choice(
+        (
+            MouseClick,
+            (
+                lambda wrapper, _: _interaction_helpers.mouse_click_combobox_or_choice(
                     control=wrapper._target.source.control,
                     index=wrapper._target.location.index,
-                    delay=wrapper.delay))),
+                    delay=wrapper.delay,
+                )
+            ),
+        ),
     ]
 
 
 def simple_displayed_selected_text_handler(wrapper, interaction):
-    """ Handler function used to query DisplayedText for Simple Enum Editor.
+    """Handler function used to query DisplayedText for Simple Enum Editor.
     Note that depending on the factories evaluaute trait, the control for a
     Simple Enum Editor can either be a wx.ComboBox or a wx.Choice.
 
@@ -127,7 +139,7 @@ def simple_displayed_selected_text_handler(wrapper, interaction):
 
 
 def radio_selected_text_handler(wrapper, interaction):
-    """ Handler function used to query SelectedText for EnumRadioEditor.
+    """Handler function used to query SelectedText for EnumRadioEditor.
 
     Parameters
     ----------
@@ -145,7 +157,7 @@ def radio_selected_text_handler(wrapper, interaction):
 
 
 def register(registry):
-    """ Registry location and interaction handlers for EnumEditor.
+    """Registry location and interaction handlers for EnumEditor.
 
     Parameters
     ----------
@@ -156,27 +168,35 @@ def register(registry):
     _IndexedSimpleEditor.register(registry)
 
     simple_editor_text_handlers = [
-        (KeyClick,
-            (lambda wrapper, interaction:
-                _interaction_helpers.key_click_combobox(
+        (
+            KeyClick,
+            (
+                lambda wrapper, interaction: _interaction_helpers.key_click_combobox(
                     control=wrapper._target.control,
                     interaction=interaction,
-                    delay=wrapper.delay))),
-        (KeySequence,
-            (lambda wrapper, interaction:
-                _interaction_helpers.key_sequence_text_ctrl(
+                    delay=wrapper.delay,
+                )
+            ),
+        ),
+        (
+            KeySequence,
+            (
+                lambda wrapper, interaction: _interaction_helpers.key_sequence_text_ctrl(
                     control=wrapper._target.control,
                     interaction=interaction,
-                    delay=wrapper.delay))),
+                    delay=wrapper.delay,
+                )
+            ),
+        ),
         (DisplayedText, simple_displayed_selected_text_handler),
-        (SelectedText, simple_displayed_selected_text_handler)
+        (SelectedText, simple_displayed_selected_text_handler),
     ]
 
     for interaction_class, handler in simple_editor_text_handlers:
         registry.register_interaction(
             target_class=SimpleEditor,
             interaction_class=interaction_class,
-            handler=handler
+            handler=handler,
         )
 
     registry.register_interaction(
@@ -188,5 +208,6 @@ def register(registry):
         target_class=ListEditor,
         interaction_class=SelectedText,
         handler=lambda wrapper, _: wrapper._target.control.GetString(
-            wrapper._target.control.GetSelection()),
+            wrapper._target.control.GetSelection()
+        ),
     )

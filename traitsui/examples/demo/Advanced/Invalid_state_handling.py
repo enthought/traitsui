@@ -64,15 +64,21 @@ that when the kinetic energy drops below 50,000, the fields return to their
 normal color.
 """
 
-#-- Imports --------------------------------------------------------------
+# -- Imports --------------------------------------------------------------
 
-from traits.api \
-    import HasTraits, Range, Float, Bool, Str, Property, property_depends_on
+from traits.api import (
+    HasTraits,
+    Range,
+    Float,
+    Bool,
+    Str,
+    Property,
+    property_depends_on,
+)
 
-from traitsui.api \
-    import View, VGroup, Item
+from traitsui.api import View, VGroup, Item
 
-#-- System Class ---------------------------------------------------------
+# -- System Class ---------------------------------------------------------
 
 
 class System(HasTraits):
@@ -88,8 +94,8 @@ class System(HasTraits):
 
     # The current error status of the system:
     error = Property(
-        Bool,
-        sync_to_view='mass.invalid, velocity.invalid, status.invalid')
+        Bool, sync_to_view='mass.invalid, velocity.invalid, status.invalid'
+    )
 
     # The current status of the system:
     status = Property(Str)
@@ -99,19 +105,14 @@ class System(HasTraits):
             VGroup(
                 Item('mass'),
                 Item('velocity'),
-                Item('kinetic_energy',
-                     style='readonly',
-                     format_str='%.0f'
-                     ),
+                Item('kinetic_energy', style='readonly', format_str='%.0f'),
                 label='System',
-                show_border=True),
+                show_border=True,
+            ),
             VGroup(
-                Item('status',
-                     style='readonly',
-                     show_label=False
-                     ),
+                Item('status', style='readonly', show_label=False),
                 label='Status',
-                show_border=True
+                show_border=True,
             ),
         )
     )
@@ -122,7 +123,7 @@ class System(HasTraits):
 
     @property_depends_on('kinetic_energy')
     def _get_error(self):
-        return (self.kinetic_energy > 50000.0)
+        return self.kinetic_energy > 50000.0
 
     @property_depends_on('error')
     def _get_status(self):
@@ -131,7 +132,8 @@ class System(HasTraits):
 
         return ''
 
-#-- Create and run the demo ----------------------------------------------
+
+# -- Create and run the demo ----------------------------------------------
 
 # Create the demo:
 demo = System()

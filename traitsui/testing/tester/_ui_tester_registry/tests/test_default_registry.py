@@ -14,12 +14,11 @@ from traitsui.testing.tester._abstract_target_registry import (
     AbstractTargetRegistry,
 )
 from traitsui.testing.tester._ui_tester_registry.default_registry import (
-    get_default_registries
+    get_default_registries,
 )
 
 
 class TestDefaultRegistry(unittest.TestCase):
-
     def test_load_default_registries(self):
         registries = get_default_registries()
         for registry in registries:

@@ -20,8 +20,7 @@ from traitsui.toolkit import toolkit_object
 
 
 class ToolkitEditorFactory(EditorFactory):
-    """ Editor factory for font editors.
-    """
+    """Editor factory for font editors."""
 
     pass
 
@@ -31,7 +30,7 @@ class ToolkitEditorFactory(EditorFactory):
 # in traitsui.<toolkit>.font_editor, and if none is found, the
 # ToolkitEditorFactory declared here is returned.
 def FontEditor(*args, **traits):
-    r""" Returns an instance of the toolkit-specific editor factory declared in
+    r"""Returns an instance of the toolkit-specific editor factory declared in
     traitsui.<toolkit>.font_editor. If such an editor factory
     cannot be located, an instance of the abstract ToolkitEditorFactory
     declared in traitsui.editors.font_editor is returned.

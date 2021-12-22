@@ -13,7 +13,6 @@
 """
 
 
-
 import re
 
 from traits.api import (
@@ -36,7 +35,6 @@ from .view_element import ViewSubElement
 from .ui_traits import ContainerDelegate, EditorStyle
 
 from .editor_factory import EditorFactory
-
 
 
 # Pattern of all digits:
@@ -64,7 +62,7 @@ Padding = Range(-15, 15, 0, desc="amount of padding to add around item")
 
 
 class Item(ViewSubElement):
-    """ An element in a Traits-based user interface.
+    """An element in a Traits-based user interface.
 
     Magic:
 
@@ -260,8 +258,7 @@ class Item(ViewSubElement):
     invalid = Str()
 
     def __init__(self, value=None, **traits):
-        """ Initializes the item object.
-        """
+        """Initializes the item object."""
         super().__init__(**traits)
 
         if value is None:
@@ -290,14 +287,13 @@ class Item(ViewSubElement):
             self.name = value
 
     def is_includable(self):
-        """ Returns a Boolean indicating whether the object is replaceable by an
-            Include object.
+        """Returns a Boolean indicating whether the object is replaceable by an
+        Include object.
         """
         return self.id != ""
 
     def is_spacer(self):
-        """ Returns True if the item represents a spacer or separator.
-        """
+        """Returns True if the item represents a spacer or separator."""
         name = self.name.strip()
 
         return (
@@ -307,8 +303,7 @@ class Item(ViewSubElement):
         )
 
     def get_help(self, ui):
-        """ Gets the help text associated with the Item in a specified UI.
-        """
+        """Gets the help text associated with the Item in a specified UI."""
         # Return 'None' if the Item is a separator or spacer:
         if self.is_spacer():
             return None
@@ -322,7 +317,7 @@ class Item(ViewSubElement):
         return object.base_trait(self.name).get_help()
 
     def get_label(self, ui):
-        """ Gets the label to use for a specified Item.
+        """Gets the label to use for a specified Item.
 
         If not specified, the label is set as the name of the
         corresponding trait, replacing '_' with ' ', and capitalizing
@@ -364,16 +359,14 @@ class Item(ViewSubElement):
         return tlabel(object, name, label)
 
     def get_id(self):
-        """ Returns an ID used to identify the item.
-        """
+        """Returns an ID used to identify the item."""
         if self.id != "":
             return self.id
 
         return self.name
 
     def _parse_size(self, value):
-        """ Parses a '<width,height>' value from the string definition.
-        """
+        """Parses a '<width,height>' value from the string definition."""
         match = size_pat.match(value)
         if match is not None:
             data = match.group(2)
@@ -388,8 +381,7 @@ class Item(ViewSubElement):
         return value
 
     def _parse_tooltip(self, value):
-        """ Parses a *tooltip* value from the string definition.
-        """
+        """Parses a *tooltip* value from the string definition."""
         match = tooltip_pat.match(value)
         if match is not None:
             self.tooltip = match.group(2)
@@ -398,15 +390,13 @@ class Item(ViewSubElement):
         return value
 
     def _set_float(self, name, value):
-        """ Sets a specified trait to a specified string converted to a float.
-        """
+        """Sets a specified trait to a specified string converted to a float."""
         value = value.strip()
         if value != "":
             setattr(self, name, float(value))
 
     def __repr__(self):
-        """ Returns a "pretty print" version of the Item.
-        """
+        """Returns a "pretty print" version of the Item."""
 
         options = self._repr_options(
             "id", "object", "label", "style", "show_label", "width", "height"
@@ -426,8 +416,7 @@ class Item(ViewSubElement):
 
 
 class UItem(Item):
-    """ An Item that has no label.
-    """
+    """An Item that has no label."""
 
     show_label = Bool(False)
 
@@ -438,8 +427,7 @@ class UItem(Item):
 
 
 class Custom(Item):
-    """ An Item using a 'custom' style.
-    """
+    """An Item using a 'custom' style."""
 
     style = EditorStyle("custom")
 
@@ -450,8 +438,7 @@ class Custom(Item):
 
 
 class UCustom(Custom):
-    """ An Item using a 'custom' style with no label.
-    """
+    """An Item using a 'custom' style with no label."""
 
     show_label = Bool(False)
 
@@ -462,8 +449,7 @@ class UCustom(Custom):
 
 
 class Readonly(Item):
-    """ An Item using a 'readonly' style.
-    """
+    """An Item using a 'readonly' style."""
 
     style = EditorStyle("readonly")
 
@@ -474,8 +460,7 @@ class Readonly(Item):
 
 
 class UReadonly(Readonly):
-    """ An Item using a 'readonly' style with no label.
-    """
+    """An Item using a 'readonly' style with no label."""
 
     show_label = Bool(False)
 
@@ -486,8 +471,7 @@ class UReadonly(Readonly):
 
 
 class Label(Item):
-    """ An item that is a label.
-    """
+    """An item that is a label."""
 
     def __init__(self, label, **traits):
         super().__init__(label=label, **traits)
@@ -499,8 +483,7 @@ class Label(Item):
 
 
 class Heading(Label):
-    """ An item that is a fancy label.
-    """
+    """An item that is a fancy label."""
 
     #: Override the 'style' trait to default to the fancy 'custom' style:
     style = Constant("custom")
@@ -512,8 +495,7 @@ class Heading(Label):
 
 
 class Spring(Item):
-    """ An item that is a layout "spring".
-    """
+    """An item that is a layout "spring"."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

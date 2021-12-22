@@ -21,22 +21,21 @@ Please refer to the `ButtonEditor API docs`_ for further information.
 .. _ButtonEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.button_editor.html#traitsui.editors.button_editor.ButtonEditor
 """
 
-from traits.api import HasTraits, Button, Int
+from traits.api import HasTraits, Button, Int, observe
 
 from traitsui.api import Item, View
 
 
 class ButtonEditorDemo(HasTraits):
-    """ Defines the main ButtonEditor demo class. """
+    """Defines the main ButtonEditor demo class."""
 
     # Define a Button trait:
     my_button_trait = Button('Click Me')
     click_counter = Int(0)
 
     # When the button is clicked, do something.
-    # The listener method is named '_TraitName_fired', where
-    # 'TraitName' is the name of the button trait.
-    def _my_button_trait_fired(self):
+    @observe("my_button_trait")
+    def _increment_counter(self, event):
         self.click_counter += 1
 
     # Demo view:
@@ -45,7 +44,7 @@ class ButtonEditorDemo(HasTraits):
         Item('click_counter', style='readonly'),
         title='ButtonEditor',
         buttons=['OK'],
-        resizable=True
+        resizable=True,
     )
 
 

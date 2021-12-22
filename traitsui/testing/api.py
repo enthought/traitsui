@@ -61,11 +61,7 @@ Exceptions
 from .tester.ui_tester import UITester
 
 # Interactions (for changing GUI states)
-from .tester.command import (
-    MouseClick,
-    KeyClick,
-    KeySequence
-)
+from .tester.command import MouseClick, KeyClick, KeySequence
 
 # Interactions (for getting GUI states)
 from .tester.query import (
@@ -73,17 +69,11 @@ from .tester.query import (
     IsChecked,
     IsEnabled,
     IsVisible,
-    SelectedText
+    SelectedText,
 )
 
 # Locations (for locating GUI elements)
-from .tester.locator import (
-    Index,
-    TargetById,
-    TargetByName,
-    Textbox,
-    Slider
-)
+from .tester.locator import Index, TargetById, TargetByName, Textbox, Slider
 
 # Advanced usage
 from .tester.target_registry import TargetRegistry
@@ -93,5 +83,5 @@ from .tester.exceptions import (
     Disabled,
     InteractionNotSupported,
     LocationNotSupported,
-    TesterError
+    TesterError,
 )

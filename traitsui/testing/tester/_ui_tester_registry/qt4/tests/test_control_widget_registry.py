@@ -29,13 +29,13 @@ except ImportError:
     if is_qt():
         raise
 else:
-    from traitsui.testing.tester._ui_tester_registry.qt4._control_widget_registry import (   # noqa: E501
+    from traitsui.testing.tester._ui_tester_registry.qt4._control_widget_registry import (  # noqa: E501
         get_widget_registry,
     )
 
 
 class TargetWithControl:
-    """ An object holding a control attribute."""
+    """An object holding a control attribute."""
 
     def __init__(self, control):
         self.control = control
@@ -43,8 +43,7 @@ class TargetWithControl:
 
 @requires_toolkit([ToolkitName.qt])
 class TestQtControlWidgetRegistry(unittest.TestCase):
-    """ Test the interface of AbstractTargetRegistry for QWidget's registry
-    """
+    """Test the interface of AbstractTargetRegistry for QWidget's registry"""
 
     def setUp(self):
         self.widget = QtGui.QWidget()
@@ -73,7 +72,7 @@ class TestQtControlWidgetRegistry(unittest.TestCase):
     def test_get_interactions_good_target(self):
         self.assertEqual(
             self.registry._get_interactions(self.target),
-            set([IsEnabled, IsVisible])
+            set([IsEnabled, IsVisible]),
         )
 
     def test_get_interactions_bad_target(self):

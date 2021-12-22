@@ -43,7 +43,6 @@ class SimpleExample(HasTraits):
 
 
 class DummyCommand(AbstractCommand):
-
     def do(self):
         self.data = "do"
 
@@ -55,7 +54,6 @@ class DummyCommand(AbstractCommand):
 
 
 class LegacyUndoItem(AbstractUndoItem):
-
     def undo(self):
         pass
 
@@ -64,7 +62,6 @@ class LegacyUndoItem(AbstractUndoItem):
 
 
 class TestAbstractUndoItem(UnittestTools, unittest.TestCase):
-
     def test_merge_undo_deprecated(self):
         undo_item = LegacyUndoItem()
         other_item = LegacyUndoItem()
@@ -79,7 +76,6 @@ class TestAbstractUndoItem(UnittestTools, unittest.TestCase):
 
 
 class TestUndoItem(UnittestTools, unittest.TestCase):
-
     def test_undo(self):
         example = SimpleExample(value=11)
 
@@ -487,7 +483,6 @@ class TestUndoItem(UnittestTools, unittest.TestCase):
 
 
 class TestListUndoItem(UnittestTools, unittest.TestCase):
-
     def test_undo(self):
         example = SimpleExample(list_value=['foo', 'wombat', 'baz'])
 
@@ -553,7 +548,7 @@ class TestListUndoItem(UnittestTools, unittest.TestCase):
             name='list_value',
             index=1,
             added=[['wombat'], 'baz'],
-            removed=removed.copy()
+            removed=removed.copy(),
         )
         next_undo_item = ListUndoItem(
             object=example,
@@ -665,9 +660,8 @@ class TestListUndoItem(UnittestTools, unittest.TestCase):
 
 
 class TestUndoHistory(UnittestTools, unittest.TestCase):
-
     def _populate_history(self, history):
-        """ Add some simple hostory items. """
+        """Add some simple hostory items."""
         self._example = SimpleExample()
         history.add(
             UndoItem(
@@ -908,7 +902,9 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
 
         with self.assertTraitDoesNotChange(history, 'undoable'):
             with self.assertTraitChanges(history, 'redoable', count=1):
-                with self.assertTraitChanges(self._example, 'anytrait', count=1):  # noqa: E501
+                with self.assertTraitChanges(
+                    self._example, 'anytrait', count=1
+                ):  # noqa: E501
                     history.undo()
 
         self.assertEqual(history.now, 2)
@@ -923,7 +919,9 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
 
         with self.assertTraitDoesNotChange(history, 'redoable'):
             with self.assertTraitChanges(history, 'undoable', count=1):
-                with self.assertTraitChanges(self._example, 'anytrait', count=1):  # noqa: E501
+                with self.assertTraitChanges(
+                    self._example, 'anytrait', count=1
+                ):  # noqa: E501
                     history.undo()
 
         self.assertEqual(history.now, 0)
@@ -937,7 +935,9 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
 
         with self.assertTraitDoesNotChange(history, 'redoable'):
             with self.assertTraitDoesNotChange(history, 'undoable'):
-                with self.assertTraitChanges(self._example, 'anytrait', count=1):  # noqa: E501
+                with self.assertTraitChanges(
+                    self._example, 'anytrait', count=1
+                ):  # noqa: E501
                     history.undo()
 
         self.assertEqual(history.now, 1)
@@ -951,7 +951,9 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
 
         with self.assertTraitChanges(history, 'redoable', count=1):
             with self.assertTraitDoesNotChange(history, 'undoable'):
-                with self.assertTraitChanges(self._example, 'anytrait', count=1):  # noqa: E501
+                with self.assertTraitChanges(
+                    self._example, 'anytrait', count=1
+                ):  # noqa: E501
                     history.redo()
 
         self.assertEqual(history.now, 3)
@@ -966,7 +968,9 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
 
         with self.assertTraitDoesNotChange(history, 'redoable'):
             with self.assertTraitDoesNotChange(history, 'undoable'):
-                with self.assertTraitChanges(self._example, 'anytrait', count=1):  # noqa: E501
+                with self.assertTraitChanges(
+                    self._example, 'anytrait', count=1
+                ):  # noqa: E501
                     history.redo()
 
         self.assertEqual(history.now, 2)
@@ -982,7 +986,9 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
 
         with self.assertTraitDoesNotChange(history, 'redoable'):
             with self.assertTraitChanges(history, 'undoable', count=1):
-                with self.assertTraitChanges(self._example, 'anytrait', count=1):  # noqa: E501
+                with self.assertTraitChanges(
+                    self._example, 'anytrait', count=1
+                ):  # noqa: E501
                     history.redo()
 
         self.assertEqual(history.now, 1)
@@ -995,7 +1001,9 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
 
         with self.assertTraitChanges(history, 'redoable', count=2):
             with self.assertTraitChanges(history, 'undoable', count=1):
-                with self.assertTraitChanges(self._example, 'anytrait', count=3):  # noqa: E501
+                with self.assertTraitChanges(
+                    self._example, 'anytrait', count=3
+                ):  # noqa: E501
                     history.revert()
 
         self.assertEqual(history.now, 0)
@@ -1010,7 +1018,9 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
 
         with self.assertTraitChanges(history, 'redoable', count=1):
             with self.assertTraitChanges(history, 'undoable', count=1):
-                with self.assertTraitChanges(self._example, 'anytrait', count=1):  # noqa: E501
+                with self.assertTraitChanges(
+                    self._example, 'anytrait', count=1
+                ):  # noqa: E501
                     history.revert()
 
         self.assertEqual(history.now, 0)
@@ -1144,7 +1154,6 @@ class TestUndoHistory(UnittestTools, unittest.TestCase):
 
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
 class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
         GuiTestAssistant.setUp(self)
@@ -1153,8 +1162,9 @@ class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         GuiTestAssistant.tearDown(self)
         BaseTestMixin.tearDown(self)
 
-    def check_history(self, editor, expected_history_now,
-                      expected_history_length):
+    def check_history(
+        self, editor, expected_history_now, expected_history_length
+    ):
         # XXX this is testing private state
         return (
             editor.ui.history.now == expected_history_now
@@ -1185,21 +1195,31 @@ class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         self.undo(editor)
 
         # Expect 2 items in history and pointer at first item
-        self.assertEventuallyTrue(editor, "ui",
-                                  functools.partial(self.check_history,
-                                                    expected_history_now=1,
-                                                    expected_history_length=2),
-                                  timeout=5.0)
+        self.assertEventuallyTrue(
+            editor,
+            "ui",
+            functools.partial(
+                self.check_history,
+                expected_history_now=1,
+                expected_history_length=2,
+            ),
+            timeout=5.0,
+        )
 
         # Perform a REDO
         self.redo(editor)
 
         # Expect 2 items in history and pointer at second item
-        self.assertEventuallyTrue(editor, "ui",
-                                  functools.partial(self.check_history,
-                                                    expected_history_now=2,
-                                                    expected_history_length=2),
-                                  timeout=5.0)
+        self.assertEventuallyTrue(
+            editor,
+            "ui",
+            functools.partial(
+                self.check_history,
+                expected_history_now=2,
+                expected_history_length=2,
+            ),
+            timeout=5.0,
+        )
 
         # Enter 'three'
         with editor.updating_value():
@@ -1209,11 +1229,16 @@ class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         self.undo(editor)
 
         # Expect 3 items in history and pointer at second item
-        self.assertEventuallyTrue(editor, "ui",
-                                  functools.partial(self.check_history,
-                                                    expected_history_now=2,
-                                                    expected_history_length=3),
-                                  timeout=5.0)
+        self.assertEventuallyTrue(
+            editor,
+            "ui",
+            functools.partial(
+                self.check_history,
+                expected_history_now=2,
+                expected_history_length=3,
+            ),
+            timeout=5.0,
+        )
 
         # Enter 'four'
         with editor.updating_value():
@@ -1223,11 +1248,16 @@ class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         # Expect 3 items in history and pointer at second item
         # Note: Modifying the history after an UNDO, clears the future,
         # hence, we expect 3 items in the history, not 4
-        self.assertEventuallyTrue(editor, "ui",
-                                  functools.partial(self.check_history,
-                                                    expected_history_now=3,
-                                                    expected_history_length=3),
-                                  timeout=5.0)
+        self.assertEventuallyTrue(
+            editor,
+            "ui",
+            functools.partial(
+                self.check_history,
+                expected_history_now=3,
+                expected_history_length=3,
+            ),
+            timeout=5.0,
+        )
 
         # The following sequence after modifying the history had caused
         # the application to hang, verify it.
@@ -1238,8 +1268,13 @@ class TestEditorUndo(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         self.redo(editor)
 
         # Expect 3 items in history and pointer at second item
-        self.assertEventuallyTrue(editor, "ui",
-                                  functools.partial(self.check_history,
-                                                    expected_history_now=2,
-                                                    expected_history_length=3),
-                                  timeout=5.0)
+        self.assertEventuallyTrue(
+            editor,
+            "ui",
+            functools.partial(
+                self.check_history,
+                expected_history_now=2,
+                expected_history_length=3,
+            ),
+            timeout=5.0,
+        )

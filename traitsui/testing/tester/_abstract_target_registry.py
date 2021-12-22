@@ -18,13 +18,13 @@ import abc
 
 
 class AbstractTargetRegistry(abc.ABC):
-    """ Abstract base class which defines the registry interface expected
+    """Abstract base class which defines the registry interface expected
     by :class:`~traitsui.testing.tester.ui_wrapper.UIWrapper`.
     """
 
     @abc.abstractmethod
     def _get_handler(self, target, interaction):
-        """ Return a callable for handling an interaction for a given target.
+        """Return a callable for handling an interaction for a given target.
 
         This is a protected method expected to be implemented by a subclass.
 
@@ -49,7 +49,7 @@ class AbstractTargetRegistry(abc.ABC):
 
     @abc.abstractmethod
     def _get_interactions(self, target):
-        """ Returns all the interactions supported for the given target.
+        """Returns all the interactions supported for the given target.
 
         This is a protected method expected to be implemented by a subclass.
 
@@ -66,7 +66,7 @@ class AbstractTargetRegistry(abc.ABC):
 
     @abc.abstractmethod
     def _get_interaction_doc(self, target, interaction_class):
-        """ Return the documentation for the given target and interaction type.
+        """Return the documentation for the given target and interaction type.
 
         This is a protected method expected to be implemented by a subclass.
 
@@ -90,7 +90,7 @@ class AbstractTargetRegistry(abc.ABC):
 
     @abc.abstractmethod
     def _get_solver(self, target, location):
-        """ Return a callable registered for resolving a location for the
+        """Return a callable registered for resolving a location for the
         given target and location.
 
         This is a protected method expected to be implemented by a subclass.
@@ -110,7 +110,7 @@ class AbstractTargetRegistry(abc.ABC):
 
     @abc.abstractmethod
     def _get_locations(self, target):
-        """ Returns all the location types supported for the given target.
+        """Returns all the location types supported for the given target.
 
         This is a protected method expected to be implemented by a subclass.
 
@@ -127,7 +127,7 @@ class AbstractTargetRegistry(abc.ABC):
 
     @abc.abstractmethod
     def _get_location_doc(self, target, locator_class):
-        """ Return the documentation for the given target and locator type.
+        """Return the documentation for the given target and locator type.
 
         This is a protected method expected to be implemented by a subclass.
 

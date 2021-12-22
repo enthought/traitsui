@@ -52,13 +52,13 @@ class DataFrameEditorDemo(HasTraits):
                     'BoxOfficeRevenueInMillions': '%d',
                     'AcademyAwardNominations': '%d',
                     'AcademyAwardWins': '%d',
-                    'RottenTomatoesScore': '%.2f'
+                    'RottenTomatoesScore': '%.2f',
                 }
-            )
+            ),
         ),
         title="DataFrameEditor",
         resizable=True,
-        id='traitsui.demo.Applications.data_frame_editor_demo'
+        id='traitsui.demo.Applications.data_frame_editor_demo',
     )
 
 
@@ -72,7 +72,7 @@ lotrMovieData = np.array(
         [462.0, 675, 2932.0, 7, 1, 66.33333333],
         [169, 200, 1021.0, 3, 1, 64.0],
         [161, 217, 958.4, 3, 0, 75.0],
-        [144, 250, 956.0, 1, 0, 60.0]
+        [144, 250, 956.0, 1, 0, 60.0],
     ]
 )
 
@@ -82,8 +82,8 @@ col_names = [
     'BoxOfficeRevenueInMillions',
     'AcademyAwardNominations',
     'AcademyAwardWins',
-    'RottenTomatoesScore'
-            ]
+    'RottenTomatoesScore',
+]
 
 index_names = [
     'The Lord of the Rings Series',
@@ -93,7 +93,7 @@ index_names = [
     'The Hobbit Series',
     'The Unexpected Journey',
     'The Desolation of Smaug',
-    'The Battle of the Five Armies'
+    'The Battle of the Five Armies',
 ]
 
 # Create & run the demo

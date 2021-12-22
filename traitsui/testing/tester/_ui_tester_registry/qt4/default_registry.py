@@ -13,6 +13,7 @@ from traitsui.testing.tester._ui_tester_registry.qt4._traitsui import (
     boolean_editor,
     button_editor,
     check_list_editor,
+    directory_editor,
     editor_factory,
     enum_editor,
     file_editor,
@@ -27,7 +28,7 @@ from ._control_widget_registry import get_widget_registry
 
 
 def get_default_registries():
-    """ Creates the default registries for UITester that are qt specific.
+    """Creates the default registries for UITester that are qt specific.
 
     Returns
     -------
@@ -45,6 +46,9 @@ def get_default_registries():
 
     # CheckListEditor
     check_list_editor.register(registry)
+
+    # DirectoryEditor
+    directory_editor.register(registry)
 
     # EnumEditor
     enum_editor.register(registry)

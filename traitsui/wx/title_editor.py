@@ -35,8 +35,8 @@ class _TitleEditor(Editor):
     # -------------------------------------------------------------------------
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self._control = HeadingText(parent)
         self.control = self._control.control
@@ -47,8 +47,8 @@ class _TitleEditor(Editor):
     # -------------------------------------------------------------------------
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes external to the
-            editor.
+        """Updates the editor when the object trait changes external to the
+        editor.
         """
         self._control.text = self.str_value
 

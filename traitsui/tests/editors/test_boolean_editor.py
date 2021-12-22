@@ -19,7 +19,12 @@ from traitsui.tests._tools import (
 )
 
 from traitsui.testing.api import (
-    DisplayedText, IsChecked, KeyClick, KeySequence, MouseClick, UITester
+    DisplayedText,
+    IsChecked,
+    KeyClick,
+    KeySequence,
+    MouseClick,
+    UITester,
 )
 
 
@@ -32,7 +37,6 @@ class BoolModel(HasTraits):
 # BooleanEditor
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestBooleanEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

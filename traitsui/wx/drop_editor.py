@@ -27,7 +27,7 @@ from .constants import DropColor
 
 
 class SimpleEditor(Editor):
-    """ Simple style of drop editor, which displays a read-only text field that
+    """Simple style of drop editor, which displays a read-only text field that
     contains the string representation of the object trait's value.
     """
 
@@ -35,8 +35,8 @@ class SimpleEditor(Editor):
     ok_color = DropColor
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         if self.factory.readonly:
             self.control = wx.TextCtrl(
@@ -49,22 +49,19 @@ class SimpleEditor(Editor):
         self.control.SetDropTarget(PythonDropTarget(self))
 
     def string_value(self, value):
-        """ Returns the text representation of a specified object trait value.
-        """
+        """Returns the text representation of a specified object trait value."""
         if value is None:
             return ""
         return str(value)
 
     def error(self, excp):
-        """ Handles an error that occurs while setting the object's trait value.
-        """
+        """Handles an error that occurs while setting the object's trait value."""
         pass
 
     # ----- Drag and drop event handlers: -------------------------------------
 
     def wx_dropped_on(self, x, y, data, drag_result):
-        """ Handles a Python object being dropped on the tree.
-        """
+        """Handles a Python object being dropped on the tree."""
         klass = self.factory.klass
         value = data
         if self.factory.binding:
@@ -87,8 +84,7 @@ class SimpleEditor(Editor):
         return wx.DragNone
 
     def wx_drag_over(self, x, y, data, drag_result):
-        """ Handles a Python object being dragged over the tree.
-        """
+        """Handles a Python object being dragged over the tree."""
         if self.factory.binding:
             data = getattr(clipboard, "node", None)
         try:

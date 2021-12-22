@@ -24,8 +24,7 @@ from traitsui.view import View
 
 
 class _Identity(object):
-    """ A simple identity mapping.
-    """
+    """A simple identity mapping."""
 
     def __call__(self, value):
         return value
@@ -43,8 +42,7 @@ evaluate_trait = Any(_Identity())
 
 
 class TextEditor(EditorFactory):
-    """ Editor factory for text editors.
-    """
+    """Editor factory for text editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -80,7 +78,7 @@ class TextEditor(EditorFactory):
     view = AView
 
     #: In a read-only text editor, allow selection and copying of the text.
-    readonly_allow_selection = Bool(False)
+    readonly_allow_selection = Bool(True)
 
     #: Grayed-out placeholder text to be displayed when the editor is empty.
     placeholder = Str()

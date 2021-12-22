@@ -29,7 +29,7 @@ class Model(HasTraits):
 # Run this test against wx when enthought/traitsui#752 is fixed.
 @requires_toolkit([ToolkitName.qt])
 class TestDropEditor(BaseTestMixin, unittest.TestCase):
-    """ Test DropEditor. """
+    """Test DropEditor."""
 
     def setUp(self):
         BaseTestMixin.setUp(self)

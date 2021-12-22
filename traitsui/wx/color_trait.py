@@ -31,14 +31,14 @@ except:
 
 
 class W3CColourDatabase(object):
-    """ Proxy for the ColourDatabase which allows for finding W3C colors.
+    """Proxy for the ColourDatabase which allows for finding W3C colors.
 
-        This class is necessary because the wx 'green' is the W3C 'lime',
-        and we need some means to lookup the color names since wx has
-        only a few hardcoded.
+    This class is necessary because the wx 'green' is the W3C 'lime',
+    and we need some means to lookup the color names since wx has
+    only a few hardcoded.
 
-        This class is a proxy because AddColour expects a wx.ColourDatabase
-        instance, not an instance of a subclass
+    This class is a proxy because AddColour expects a wx.ColourDatabase
+    instance, not an instance of a subclass
     """
 
     _database = wx.ColourDatabase()
@@ -109,8 +109,7 @@ def tuple_to_wxcolor(tup):
 
 
 def convert_to_color(object, name, value):
-    """ Converts a number into a wxColour object.
-    """
+    """Converts a number into a wxColour object."""
     if isinstance(value, tuple):
         return tuple_to_wxcolor(value)
 
@@ -253,8 +252,7 @@ def get_color_editor(*args, **traits):
 
 
 def WxColor(default="white", allow_none=False, **metadata):
-    """ Defines wxPython-specific color traits.
-    """
+    """Defines wxPython-specific color traits."""
     if default is None:
         allow_none = True
 
@@ -265,7 +263,7 @@ def WxColor(default="white", allow_none=False, **metadata):
             standard_colors,
             convert_to_color,
             editor=get_color_editor,
-            **metadata
+            **metadata,
         )
 
     return Trait(
@@ -273,5 +271,5 @@ def WxColor(default="white", allow_none=False, **metadata):
         standard_colors,
         convert_to_color,
         editor=get_color_editor,
-        **metadata
+        **metadata,
     )

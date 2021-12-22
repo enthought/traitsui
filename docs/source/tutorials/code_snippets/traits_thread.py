@@ -2,7 +2,7 @@
 
 from threading import Thread
 from time import sleep
-from traits.api import Button, HasTraits, Instance, Str
+from traits.api import Button, HasTraits, Instance, observe, Str
 from traitsui.api import View, Item
 
 
@@ -17,10 +17,11 @@ class CaptureThread(Thread):
         self.display.string = 'Camera started\n' + self.display.string
         n_img = 0
         while not self.wants_abort:
-            sleep(.5)
+            sleep(0.5)
             n_img += 1
-            self.display.string = ('%d image captured\n' % n_img
-                                   + self.display.string)
+            self.display.string = (
+                '%d image captured\n' % n_img + self.display.string
+            )
         self.display.string = 'Camera stopped\n' + self.display.string
 
 
@@ -31,7 +32,8 @@ class Camera(HasTraits):
 
     view = View(Item('start_stop_capture', show_label=False))
 
-    def _start_stop_capture_fired(self):
+    @observe('start_stop_capture')
+    def _on_start_stop_capture(self, event):
         if self.capture_thread and self.capture_thread.isAlive():
             self.capture_thread.wants_abort = True
         else:
@@ -50,6 +52,7 @@ class MainWindow(HasTraits):
         return Camera(display=self.display)
 
     view = View('display', 'camera', style="custom", resizable=True)
+
 
 if __name__ == '__main__':
     MainWindow().configure_traits()

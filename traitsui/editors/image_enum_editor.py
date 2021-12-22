@@ -22,8 +22,7 @@ from traitsui.editors.enum_editor import EnumEditor
 
 
 class ImageEnumEditor(EnumEditor):
-    """ Editor factory for image enumeration editors.
-    """
+    """Editor factory for image enumeration editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -44,16 +43,15 @@ class ImageEnumEditor(EnumEditor):
     module = Module
 
     def init(self):
-        """ Performs any initialization needed after all constructor traits
-            have been set.
+        """Performs any initialization needed after all constructor traits
+        have been set.
         """
         super().init()
         self._update_path()
 
     @observe("path, klass, module")
     def _update_path(self, event=None):
-        """ Handles one of the items defining the path being updated.
-        """
+        """Handles one of the items defining the path being updated."""
         if self.path != "":
             self._image_path = self.path
         elif self.klass is not None:

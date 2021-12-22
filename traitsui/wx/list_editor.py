@@ -17,7 +17,13 @@ import wx
 import wx.lib.scrolledpanel as wxsp
 
 from traits.api import (
-    Any, Bool, cached_property, Instance, Property, Str, TraitError
+    Any,
+    Bool,
+    cached_property,
+    Instance,
+    Property,
+    Str,
+    TraitError,
 )
 from traits.trait_base import user_name_for, xgetattr
 
@@ -40,14 +46,13 @@ from .menu import MakeMenu
 from .image_control import ImageControl
 
 
-
 # -------------------------------------------------------------------------
 #  'SimpleEditor' class:
 # -------------------------------------------------------------------------
 
 
 class SimpleEditor(Editor):
-    """ Simple style of editor for lists, which displays a scrolling list box
+    """Simple style of editor for lists, which displays a scrolling list box
     with only one item visible at a time. A icon next to the list box displays
     a menu of operations on the list.
     """
@@ -101,8 +106,8 @@ class SimpleEditor(Editor):
     """
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         # Initialize the trait handler to use:
         trait_handler = self.factory.trait_handler
@@ -133,8 +138,7 @@ class SimpleEditor(Editor):
         self.set_tooltip()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         extended_name = self.extended_name.replace(".", ":")
         self.context_object.on_trait_change(
             self.update_editor_item, extended_name + "_items?", remove=True
@@ -144,8 +148,8 @@ class SimpleEditor(Editor):
         super().dispose()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         # Disconnect the editor from any control about to be destroyed:
         self._dispose_items()
@@ -257,7 +261,7 @@ class SimpleEditor(Editor):
         list_pane.GetParent().Layout()
 
     def update_editor_item(self, obj, name, event):
-        """ Updates the editor when an item in the object trait changes
+        """Updates the editor when an item in the object trait changes
         externally to the editor.
         """
         # If this is not a simple, single item update, rebuild entire editor:
@@ -274,8 +278,7 @@ class SimpleEditor(Editor):
                 break
 
     def empty_list(self):
-        """ Creates an empty list entry (so the user can add a new item).
-        """
+        """Creates an empty list entry (so the user can add a new item)."""
         control = ImageControl(
             self.control, self.bitmap, -1, self.popup_empty_menu
         )
@@ -286,8 +289,8 @@ class SimpleEditor(Editor):
         self.reload_sizer([(control, pcontrol)])
 
     def reload_sizer(self, controls, extra=0):
-        """ Reloads the layout from the specified list of ( button, proxy )
-            pairs.
+        """Reloads the layout from the specified list of ( button, proxy )
+        pairs.
         """
         sizer = self.control.GetSizer()
         for i in range(2 * len(controls) + extra):
@@ -302,22 +305,19 @@ class SimpleEditor(Editor):
         self.control.SetVirtualSize(sizer.GetMinSize())
 
     def get_info(self):
-        """ Returns the associated object list and current item index.
-        """
+        """Returns the associated object list and current item index."""
         proxy = self._cur_control.proxy
         return (proxy.list, proxy.index)
 
     def popup_empty_menu(self, control):
-        """ Displays the empty list editor popup menu.
-        """
+        """Displays the empty list editor popup menu."""
         self._cur_control = control
         menu = MakeMenu(self.empty_list_menu, self, True, self.control).menu
         self.control.PopupMenu(menu, control.GetPosition())
         menu.Destroy()
 
     def popup_menu(self, control):
-        """ Displays the list editor popup menu.
-        """
+        """Displays the list editor popup menu."""
         self._cur_control = control
         # Makes sure that any text that was entered get's added (Pressure
         # #145):
@@ -340,15 +340,14 @@ class SimpleEditor(Editor):
         menu.Destroy()
 
     def add_item(self, offset):
-        """ Adds a new value at the specified list index.
-        """
+        """Adds a new value at the specified list index."""
         list, index = self.get_info()
         index += offset
         item_trait = self._trait_handler.item_trait
         if self.factory.item_factory:
             value = self.factory.item_factory(
                 *self.factory.item_factory_args,
-                **self.factory.item_factory_kwargs
+                **self.factory.item_factory_kwargs,
             )
         else:
             value = item_trait.default_value_for(self.object, self.name)
@@ -358,35 +357,31 @@ class SimpleEditor(Editor):
         # traits will still give an error message, but we don't want to crash
         except TraitError:
             from traitsui.api import raise_to_debug
+
             raise_to_debug()
         wx.CallAfter(self.update_editor)
 
     def add_before(self):
-        """ Inserts a new item before the current item.
-        """
+        """Inserts a new item before the current item."""
         self.add_item(0)
 
     def add_after(self):
-        """ Inserts a new item after the current item.
-        """
+        """Inserts a new item after the current item."""
         self.add_item(1)
 
     def add_empty(self):
-        """ Adds a new item when the list is empty.
-        """
+        """Adds a new item when the list is empty."""
         list, index = self.get_info()
         self.add_item(0)
 
     def delete_item(self):
-        """ Delete the current item.
-        """
+        """Delete the current item."""
         list, index = self.get_info()
         self.value = list[:index] + list[index + 1 :]
         wx.CallAfter(self.update_editor)
 
     def move_up(self):
-        """ Move the current item up one in the list.
-        """
+        """Move the current item up one in the list."""
         list, index = self.get_info()
         self.value = (
             list[: index - 1]
@@ -396,8 +391,7 @@ class SimpleEditor(Editor):
         wx.CallAfter(self.update_editor)
 
     def move_down(self):
-        """ Moves the current item down one in the list.
-        """
+        """Moves the current item down one in the list."""
         list, index = self.get_info()
         self.value = (
             list[:index] + [list[index + 1], list[index]] + list[index + 2 :]
@@ -405,15 +399,13 @@ class SimpleEditor(Editor):
         wx.CallAfter(self.update_editor)
 
     def move_top(self):
-        """ Moves the current item to the top of the list.
-        """
+        """Moves the current item to the top of the list."""
         list, index = self.get_info()
         self.value = [list[index]] + list[:index] + list[index + 1 :]
         wx.CallAfter(self.update_editor)
 
     def move_bottom(self):
-        """ Moves the current item to the bottom of the list.
-        """
+        """Moves the current item to the bottom of the list."""
         list, index = self.get_info()
         self.value = list[:index] + list[index + 1 :] + [list[index]]
         wx.CallAfter(self.update_editor)
@@ -427,8 +419,7 @@ class SimpleEditor(Editor):
     # -- Private Methods ------------------------------------------------------
 
     def _dispose_items(self):
-        """ Disposes of each current list item.
-        """
+        """Disposes of each current list item."""
         for control in self.control.GetChildren():
             editor = getattr(control, "_editor", None)
             if editor is not None:
@@ -441,17 +432,16 @@ class SimpleEditor(Editor):
     # -- Trait initializers ----------------------------------------------------
 
     def _kind_default(self):
-        """ Returns a default value for the 'kind' trait.
-        """
+        """Returns a default value for the 'kind' trait."""
         return self.factory.style + "_editor"
 
     def _mutable_default(self):
-        """ Trait handler to set the mutable trait from the factory. """
+        """Trait handler to set the mutable trait from the factory."""
         return self.factory.mutable
 
 
 class CustomEditor(SimpleEditor):
-    """ Custom style of editor for lists, which displays the items as a series
+    """Custom style of editor for lists, which displays the items as a series
     of text fields. If the list is editable, an icon next to each item displays
     a menu of operations on the list.
     """
@@ -492,8 +482,8 @@ class ReadonlyEditor(CustomEditor):
 
 
 class NotebookEditor(Editor):
-    """ An editor for lists that displays the list as a "notebook" of tabbed
-        pages.
+    """An editor for lists that displays the list as a "notebook" of tabbed
+    pages.
     """
 
     # -------------------------------------------------------------------------
@@ -507,8 +497,8 @@ class NotebookEditor(Editor):
     selected = Any()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self._uis = []
 
@@ -533,8 +523,8 @@ class NotebookEditor(Editor):
         self.sync_value(self.factory.selected, "selected")
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         # Make sure the DockWindow is in a correct state:
         self._sizer.Reset(self.control)
@@ -558,8 +548,7 @@ class NotebookEditor(Editor):
             self.update_layout()
 
     def update_editor_item(self, event):
-        """ Handles an update to some subset of the trait's list.
-        """
+        """Handles an update to some subset of the trait's list."""
         # Make sure the DockWindow is in a correct state:
         self._sizer.Reset(self.control)
 
@@ -594,8 +583,7 @@ class NotebookEditor(Editor):
         self.update_layout()
 
     def close_all(self):
-        """ Closes all currently open notebook pages.
-        """
+        """Closes all currently open notebook pages."""
         page_name = self.factory.page_name[1:]
         for dock_control, object, view_object, monitoring in self._uis:
             if monitoring:
@@ -609,8 +597,7 @@ class NotebookEditor(Editor):
         self._pages = {}
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         self.context_object.on_trait_change(
             self.update_editor_item, self.name + "_items?", remove=True
         )
@@ -619,8 +606,7 @@ class NotebookEditor(Editor):
         super().dispose()
 
     def add_controls(self, controls):
-        """ Adds a group of new DockControls to the view.
-        """
+        """Adds a group of new DockControls to the view."""
         if len(controls) > 0:
             section = self.control.GetSizer().GetContents()
             if (len(section.contents) == 0) or (
@@ -635,14 +621,12 @@ class NotebookEditor(Editor):
             self._selected_changed(None, self.selected)
 
     def update_layout(self):
-        """ Updates the layout of the DockWindow.
-        """
+        """Updates the layout of the DockWindow."""
         self.control.Layout()
         self.control.Refresh()
 
     def update_page_name(self):
-        """ Handles the trait defining a particular page's name being changed.
-        """
+        """Handles the trait defining a particular page's name being changed."""
         changed = False
         for i, value in enumerate(self._uis):
             dock_control, user_object, view_object, monitoring = value
@@ -670,8 +654,7 @@ class NotebookEditor(Editor):
             self.update_layout()
 
     def _create_page(self, object):
-        """ Creates a DockControl for a specified object.
-        """
+        """Creates a DockControl for a specified object."""
         # Create the view for the object:
         view_object = object
         factory = self.factory
@@ -739,7 +722,7 @@ class NotebookEditor(Editor):
     #  the editor is changed.
     # -------------------------------------------------------------------------
     def _selected_changed(self, old, new):
-        """ Activates the corresponding dock window when the 'selected' trait
+        """Activates the corresponding dock window when the 'selected' trait
         of the editor is changed.
         """
         for i, value in enumerate(self._uis):
@@ -759,13 +742,11 @@ class DockableListElement(DockableViewElement):
     editor = Instance(NotebookEditor)
 
     def dockable_close(self, dock_control, force):
-        """ Returns whether it is OK to close the control.
-        """
+        """Returns whether it is OK to close the control."""
         return self.close_dock_control(dock_control, force)
 
     def close_dock_control(self, dock_control, abort):
-        """ Closes a DockControl.
-        """
+        """Closes a DockControl."""
         if abort:
             return super().close_dock_control(dock_control, False)
 
@@ -777,7 +758,7 @@ class DockableListElement(DockableViewElement):
         return False
 
     def dockable_tab_activated(self, dock_control, activated):
-        """ Handles a notebook tab being activated or deactivated.
+        """Handles a notebook tab being activated or deactivated.
         Sets the value of the editor's selected trait to the activated
         dock_control's object.
 

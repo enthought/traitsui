@@ -19,7 +19,7 @@ Please refer to the `ButtonEditor API docs`_ for further information.
 .. _ButtonEditor API docs: https://docs.enthought.com/traitsui/api/traitsui.editors.button_editor.html#traitsui.editors.button_editor.ButtonEditor
 """
 
-from traits.api import HasTraits, Button
+from traits.api import HasTraits, Button, observe
 from traitsui.api import Item, View, Group, message
 
 
@@ -27,14 +27,15 @@ from traitsui.api import Item, View, Group, message
 #  Demo Class
 # -------------------------------------------------------------------------
 
+
 class ButtonEditorDemo(HasTraits):
-    """ This class specifies the details of the ButtonEditor demo.
-    """
+    """This class specifies the details of the ButtonEditor demo."""
 
     # To demonstrate any given Trait editor, an appropriate Trait is required.
     fire_event = Button('Click Me')
 
-    def _fire_event_fired():
+    @observe('fire_event')
+    def _button_clicked_message(self, event):
         message("Button clicked!")
 
     # ButtonEditor display
@@ -46,15 +47,12 @@ class ButtonEditorDemo(HasTraits):
         Item('_'),
         Item(label='[text style unavailable]'),
         Item('_'),
-        Item(label='[readonly style unavailable]')
+        Item(label='[readonly style unavailable]'),
     )
 
     # Demo view
     traits_view = View(
-        event_group,
-        title='ButtonEditor',
-        buttons=['OK'],
-        width=250
+        event_group, title='ButtonEditor', buttons=['OK'], width=250
     )
 
 

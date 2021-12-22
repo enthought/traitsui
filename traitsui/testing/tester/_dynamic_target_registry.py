@@ -23,7 +23,7 @@ from traitsui.testing.tester.exceptions import (
 
 
 class DynamicTargetRegistry(AbstractTargetRegistry):
-    """ Registry to support testing targets that satisfy a given criterion.
+    """Registry to support testing targets that satisfy a given criterion.
 
     An instance of this registry can be used with ``UITester`` and
     ``UIWrapper`` such that all given interactions and handlers will be
@@ -63,7 +63,7 @@ class DynamicTargetRegistry(AbstractTargetRegistry):
         self.interaction_to_handler = interaction_to_handler
 
     def _get_handler(self, target, interaction):
-        """ Return a callable for handling an interaction for a given target.
+        """Return a callable for handling an interaction for a given target.
 
         This is an implementation for an abstract method.
 
@@ -94,7 +94,7 @@ class DynamicTargetRegistry(AbstractTargetRegistry):
         return self.interaction_to_handler[interaction.__class__]
 
     def _get_interactions(self, target):
-        """ Returns all the interactions supported for the given target.
+        """Returns all the interactions supported for the given target.
 
         This is an implementation for an abstract method.
 
@@ -113,7 +113,7 @@ class DynamicTargetRegistry(AbstractTargetRegistry):
         return set()
 
     def _get_interaction_doc(self, target, interaction_class):
-        """ Return the documentation for the given target and interaction type.
+        """Return the documentation for the given target and interaction type.
 
         This is an implementation for an abstract method.
 
@@ -143,7 +143,7 @@ class DynamicTargetRegistry(AbstractTargetRegistry):
         return inspect.getdoc(interaction_class)
 
     def _get_solver(self, target, location):
-        """ Return a callable registered for resolving a location for the
+        """Return a callable registered for resolving a location for the
         given target and location.
 
         This is an implementation for an abstract method.
@@ -167,7 +167,7 @@ class DynamicTargetRegistry(AbstractTargetRegistry):
         )
 
     def _get_locations(self, target):
-        """ Returns all the location types supported for the given target.
+        """Returns all the location types supported for the given target.
 
         This is an implementation for an abstract method.
 
@@ -184,7 +184,7 @@ class DynamicTargetRegistry(AbstractTargetRegistry):
         return set()
 
     def _get_location_doc(self, target, locator_class):
-        """ Return the documentation for the given target and locator type.
+        """Return the documentation for the given target and locator type.
 
         This is an implementation for an abstract method.
 

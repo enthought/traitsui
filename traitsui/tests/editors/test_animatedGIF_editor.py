@@ -36,7 +36,6 @@ class AnimatedGIF(HasTraits):
 
 @requires_toolkit([ToolkitName.wx])
 class TestAnimatedGIFEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -45,6 +44,7 @@ class TestAnimatedGIFEditor(BaseTestMixin, unittest.TestCase):
 
     def test_animated_gif_editor(self):
         from traitsui.wx.animated_gif_editor import AnimatedGIFEditor
+
         # Regression test for enthought/traitsui#1071
         obj1 = AnimatedGIF()
         view = View(

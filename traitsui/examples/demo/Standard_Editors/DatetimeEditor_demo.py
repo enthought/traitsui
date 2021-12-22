@@ -32,7 +32,8 @@ from traitsui.api import View, Item, Group
 
 
 class DateEditorDemo(HasTraits):
-    """ Demo class to show Datetime editors. """
+    """Demo class to show Datetime editors."""
+
     datetime = Datetime()
     info_string = Str('The editors for Traits Datetime objects.')
 
@@ -58,15 +59,13 @@ class DateEditorDemo(HasTraits):
     )
 
     def _datetime_changed(self):
-        """ Print each time the date value is changed in the editor. """
+        """Print each time the date value is changed in the editor."""
         print(self.datetime)
 
 
 # -- Set Up The Demo ------------------------------------------------------
 
-demo = DateEditorDemo(
-    datetime=datetime.datetime.now()
-)
+demo = DateEditorDemo(datetime=datetime.datetime.now())
 
 if __name__ == "__main__":
     demo.configure_traits()

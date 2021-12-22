@@ -18,7 +18,7 @@ from .helper import wrap_text_with_elision
 
 
 class WordWrapRenderer(AbstractTreeNodeRenderer):
-    """ A renderer that wraps the label text across multiple lines. """
+    """A renderer that wraps the label text across multiple lines."""
 
     #: The padding around the text.
     padding = HasBorder(0)
@@ -34,7 +34,7 @@ class WordWrapRenderer(AbstractTreeNodeRenderer):
     extra_space = Int(8)
 
     def paint(self, editor, node, column, object, paint_context):
-        """ Paint word-wrapped text with elision. """
+        """Paint word-wrapped text with elision."""
         painter, option, index = paint_context
 
         text = self.get_label(node, object, column)
@@ -69,7 +69,7 @@ class WordWrapRenderer(AbstractTreeNodeRenderer):
             painter.setPen(old_pen)
 
     def size(self, editor, node, column, object, size_context):
-        """ Return the preferred size for the word-wrapped text
+        """Return the preferred size for the word-wrapped text
 
         Parameters
         ----------

@@ -10,6 +10,7 @@
 
 """ Defines the range editor factory for all traits user interface toolkits.
 """
+import warnings
 
 from types import CodeType
 
@@ -32,8 +33,7 @@ from traitsui.view import View
 
 
 class RangeEditor(EditorFactory):
-    """ Editor factory for range editors.
-    """
+    """Editor factory for range editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -65,7 +65,12 @@ class RangeEditor(EditorFactory):
     high_name = Str()
 
     #: Formatting string used to format value and labels
-    format = Str("%s")
+    format_str = Str("%s")
+
+    #: Deprecated: Please use ``format_str`` instead.
+    #: See enthought/traitsui#1704
+    #: Formatting string used to format value and labels.
+    format = Property(Str, observe='format_str')
 
     #: Is the range for floating pointer numbers (vs. integers)?
     is_float = Bool(Undefined)
@@ -107,8 +112,8 @@ class RangeEditor(EditorFactory):
     )
 
     def init(self, handler=None):
-        """ Performs any initialization needed after all constructor traits
-            have been set.
+        """Performs any initialization needed after all constructor traits
+        have been set.
         """
         if handler is not None:
             if isinstance(handler, CTrait):
@@ -141,9 +146,7 @@ class RangeEditor(EditorFactory):
         if self.is_float is Undefined:
             self.is_float = isinstance(low, float)
 
-        if (self.low_label == "") or (
-            self.low_label == str(old_low)
-        ):
+        if (self.low_label == "") or (self.low_label == str(old_low)):
             self.low_label = str(low)
 
     def _get_high(self):
@@ -155,9 +158,7 @@ class RangeEditor(EditorFactory):
         if self.is_float is Undefined:
             self.is_float = isinstance(high, float)
 
-        if (self.high_label == "") or (
-            self.high_label == str(old_high)
-        ):
+        if (self.high_label == "") or (self.high_label == str(old_high)):
             self.high_label = str(high)
 
     def _cast(self, value):
@@ -172,8 +173,7 @@ class RangeEditor(EditorFactory):
     # -- Private Methods ------------------------------------------------------
 
     def _get_low_high(self, ui):
-        """ Returns the low and high values used to determine the initial range.
-        """
+        """Returns the low and high values used to determine the initial range."""
         low, high = self.low, self.high
 
         if (low is None) and (self.low_name != ""):
@@ -194,8 +194,25 @@ class RangeEditor(EditorFactory):
     # -------------------------------------------------------------------------
     #  Property getters.
     # -------------------------------------------------------------------------
+
+    def _get_format(self):
+        warnings.warn(
+            "Use of format trait is deprecated. Use format_str instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.format_str
+
+    def _set_format(self, format_string):
+        warnings.warn(
+            "Use of format trait is deprecated. Use format_str instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        self.format_str = format_string
+
     def _get_simple_editor_class(self):
-        """ Returns the editor class to use for a simple style.
+        """Returns the editor class to use for a simple style.
 
         The type of editor depends on the type and extent of the range being
         edited:
@@ -228,7 +245,7 @@ class RangeEditor(EditorFactory):
         return toolkit_object("range_editor:SimpleSpinEditor")
 
     def _get_custom_editor_class(self):
-        """ Creates a custom style of range editor
+        """Creates a custom style of range editor
 
         The type of editor depends on the type and extent of the range being
         edited:
@@ -254,8 +271,7 @@ class RangeEditor(EditorFactory):
         return toolkit_object("range_editor:CustomEnumEditor")
 
     def _get_text_editor_class(self):
-        """Returns the editor class to use for a text style.
-        """
+        """Returns the editor class to use for a text style."""
         return toolkit_object("range_editor:RangeTextEditor")
 
     # -------------------------------------------------------------------------
@@ -263,7 +279,7 @@ class RangeEditor(EditorFactory):
     # -------------------------------------------------------------------------
 
     def simple_editor(self, ui, object, name, description, parent):
-        """ Generates an editor using the "simple" style.
+        """Generates an editor using the "simple" style.
         Overridden to set the values of the _low_value, _high_value and
         is_float traits.
 
@@ -274,7 +290,7 @@ class RangeEditor(EditorFactory):
         return super().simple_editor(ui, object, name, description, parent)
 
     def custom_editor(self, ui, object, name, description, parent):
-        """ Generates an editor using the "custom" style.
+        """Generates an editor using the "custom" style.
         Overridden to set the values of the _low_value, _high_value and
         is_float traits.
 

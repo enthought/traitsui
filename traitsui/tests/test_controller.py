@@ -24,7 +24,7 @@ class FooModel(HasTraits):
 
 
 class FooController(Controller):
-    """ Test dialog that does nothing useful."""
+    """Test dialog that does nothing useful."""
 
     model = Instance(FooModel)
 
@@ -33,7 +33,6 @@ class FooController(Controller):
 
 
 class TestController(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

@@ -19,6 +19,7 @@ from pyface.qt import QtCore, QtGui, is_qt5
 from traits.api import (
     Any,
     Bool,
+    Dict,
     Event,
     Int,
     Instance,
@@ -36,8 +37,7 @@ from traitsui.menu import Menu
 
 
 class _ListStrEditor(Editor):
-    """ Traits UI editor for editing lists of strings.
-    """
+    """Traits UI editor for editing lists of strings."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -81,10 +81,10 @@ class _ListStrEditor(Editor):
     adapter = Instance(ListStrAdapter)
 
     #: Dictionary mapping image names to QIcons
-    images = Any({})
+    images = Dict()
 
     #: Dictionary mapping ImageResource objects to QIcons
-    image_resources = Any({})
+    image_resources = Dict()
 
     #: The current number of item currently in the list:
     item_count = Property()
@@ -97,8 +97,8 @@ class _ListStrEditor(Editor):
     # -------------------------------------------------------------------------
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         factory = self.factory
 
@@ -179,23 +179,20 @@ class _ListStrEditor(Editor):
             self._add_image(image_resource)
 
         # Refresh the editor whenever the adapter changes:
-        self.observe(
-            self.refresh_editor, "adapter.+update", dispatch="ui"
-        )
+        self.observe(self.refresh_editor, "adapter.+update", dispatch="ui")
 
         # Set the list control's tooltip:
         self.set_tooltip()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         self.model.beginResetModel()
         self.model.endResetModel()
         self.context_object.observe(
             self.update_editor,
             self.extended_name + ".items",
             remove=True,
-            dispatch="ui"
+            dispatch="ui",
         )
 
         self.observe(
@@ -210,8 +207,8 @@ class _ListStrEditor(Editor):
         super().dispose()
 
     def update_editor(self, event=None):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if not self._no_update:
             self.model.beginResetModel()
@@ -227,13 +224,11 @@ class _ListStrEditor(Editor):
     # -------------------------------------------------------------------------
 
     def refresh_editor(self, event=None):
-        """ Requests that the underlying list widget to redraw itself.
-        """
+        """Requests that the underlying list widget to redraw itself."""
         self.list_view.viewport().update()
 
     def callx(self, func, *args, **kw):
-        """ Call a function without allowing the editor to update.
-        """
+        """Call a function without allowing the editor to update."""
         old = self._no_update
         self._no_update = True
         try:
@@ -242,8 +237,7 @@ class _ListStrEditor(Editor):
             self._no_update = old
 
     def setx(self, **keywords):
-        """ Set one or more attributes without allowing the editor to update.
-        """
+        """Set one or more attributes without allowing the editor to update."""
         old = self._no_notify
         self._no_notify = True
         try:
@@ -253,8 +247,7 @@ class _ListStrEditor(Editor):
             self._no_notify = old
 
     def get_image(self, image):
-        """ Converts a user specified image to a QIcon.
-        """
+        """Converts a user specified image to a QIcon."""
         if isinstance(image, ImageResource):
             result = self.image_resources.get(image)
             if result is not None:
@@ -265,8 +258,8 @@ class _ListStrEditor(Editor):
         return self.images.get(image)
 
     def is_auto_add(self, index):
-        """ Returns whether or not the index is the special 'auto add' item at
-            the end of the list.
+        """Returns whether or not the index is the special 'auto add' item at
+        the end of the list.
         """
         return self.factory.auto_add and (
             index >= self.adapter.len(self.object, self.name)
@@ -277,8 +270,7 @@ class _ListStrEditor(Editor):
     # -------------------------------------------------------------------------
 
     def _add_image(self, image_resource):
-        """ Adds a new image to the image map.
-        """
+        """Adds a new image to the image map."""
         image = image_resource.create_icon()
 
         self.image_resources[image_resource] = image
@@ -294,8 +286,7 @@ class _ListStrEditor(Editor):
     # -- Trait Event Handlers -------------------------------------------------
 
     def _selected_changed(self, selected):
-        """ Handles the editor's 'selected' trait being changed.
-        """
+        """Handles the editor's 'selected' trait being changed."""
         if not self._no_update:
             try:
                 selected_index = self.value.index(selected)
@@ -305,8 +296,7 @@ class _ListStrEditor(Editor):
                 self._selected_index_changed(selected_index)
 
     def _selected_index_changed(self, selected_index):
-        """ Handles the editor's 'selected_index' trait being changed.
-        """
+        """Handles the editor's 'selected_index' trait being changed."""
         if not self._no_update:
             smodel = self.list_view.selectionModel()
             if selected_index == -1:
@@ -317,8 +307,7 @@ class _ListStrEditor(Editor):
                 self.list_view.scrollTo(mi)
 
     def _multi_selected_changed(self, selected):
-        """ Handles the editor's 'multi_selected' trait being changed.
-        """
+        """Handles the editor's 'multi_selected' trait being changed."""
         if not self._no_update:
             indices = []
             for item in selected:
@@ -329,8 +318,7 @@ class _ListStrEditor(Editor):
             self._multi_selected_indices_changed(indices)
 
     def _multi_selected_items_changed(self, event):
-        """ Handles the editor's 'multi_selected' trait being modified.
-        """
+        """Handles the editor's 'multi_selected' trait being modified."""
         if not self._no_update:
             try:
                 added = [self.value.index(item) for item in event.added]
@@ -338,16 +326,11 @@ class _ListStrEditor(Editor):
             except ValueError:
                 pass
             else:
-                event = TraitListEvent(
-                    index=0,
-                    added=added,
-                    removed=removed
-                )
+                event = TraitListEvent(index=0, added=added, removed=removed)
                 self._multi_selected_indices_items_changed(event)
 
     def _multi_selected_indices_changed(self, selected_indices):
-        """ Handles the editor's 'multi_selected_indices' trait being changed.
-        """
+        """Handles the editor's 'multi_selected_indices' trait being changed."""
         if not self._no_update:
             smodel = self.list_view.selectionModel()
             smodel.clearSelection()
@@ -360,8 +343,7 @@ class _ListStrEditor(Editor):
                 self.list_view.scrollTo(self.model.index(selected_indices[-1]))
 
     def _multi_selected_indices_items_changed(self, event):
-        """ Handles the editor's 'multi_selected_indices' trait being modified.
-        """
+        """Handles the editor's 'multi_selected_indices' trait being modified."""
         if not self._no_update:
             smodel = self.list_view.selectionModel()
             for selected_index in event.removed:
@@ -378,14 +360,12 @@ class _ListStrEditor(Editor):
     # -- List Control Event Handlers ------------------------------------------
 
     def _on_activate(self, mi):
-        """ Handle a cell being activated.
-        """
+        """Handle a cell being activated."""
         self.activated_index = index = mi.row()
         self.activated = self.adapter.get_item(self.object, self.name, index)
 
     def _on_mouse_right_click(self, point):
-        """ Handle a mouse right click event
-        """
+        """Handle a mouse right click event"""
         mi = self.list_view.indexAt(point)
         if mi.isValid():
             self.right_clicked_index = index = mi.row()
@@ -394,8 +374,7 @@ class _ListStrEditor(Editor):
             )
 
     def _on_row_selection(self, added, removed):
-        """ Handle the row selection being changed.
-        """
+        """Handle the row selection being changed."""
         self._no_update = True
         try:
             indices = self.list_view.selectionModel().selectedRows()
@@ -411,8 +390,7 @@ class _ListStrEditor(Editor):
             self._no_update = False
 
     def _on_rows_selection(self, added, removed):
-        """ Handle the rows selection being changed.
-        """
+        """Handle the rows selection being changed."""
         self._no_update = True
         try:
             indices = self.list_view.selectionModel().selectedRows()
@@ -458,19 +436,17 @@ class _ListStrEditor(Editor):
 
 
 class _ItemDelegate(QtGui.QStyledItemDelegate):
-    """ A QStyledItemDelegate which optionally draws horizontal gridlines.
-        (QListView does not support gridlines).
+    """A QStyledItemDelegate which optionally draws horizontal gridlines.
+    (QListView does not support gridlines).
     """
 
     def __init__(self, editor, parent=None):
-        """ Save the editor
-        """
+        """Save the editor"""
         QtGui.QStyledItemDelegate.__init__(self, parent)
         self._editor = editor
 
     def paint(self, painter, option, index):
-        """ Overrident to draw gridlines.
-        """
+        """Overrident to draw gridlines."""
         QtGui.QStyledItemDelegate.paint(self, painter, option, index)
         if self._editor.factory.horizontal_lines:
             painter.save()
@@ -482,12 +458,10 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
 
 
 class _ListView(QtGui.QListView):
-    """ A QListView configured to behave as expected by TraitsUI.
-    """
+    """A QListView configured to behave as expected by TraitsUI."""
 
     def __init__(self, editor):
-        """ Initialise the object.
-        """
+        """Initialise the object."""
         QtGui.QListView.__init__(self)
 
         self._editor = editor
@@ -519,20 +493,18 @@ class _ListView(QtGui.QListView):
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
     def _dispose(self):
-        """ Clean up states in this view.
-        """
+        """Clean up states in this view."""
         self.setModel(None)
 
     def mouseReleaseEvent(self, event):
-        """ Reimplemented to support listening to right clicked item."""
+        """Reimplemented to support listening to right clicked item."""
         if event.button() == QtCore.Qt.RightButton:
             event.accept()
             self._editor._on_mouse_right_click(event.pos())
         super().mouseReleaseEvent(event)
 
     def keyPressEvent(self, event):
-        """ Reimplemented to support edit, insert, and delete by keyboard.
-        """
+        """Reimplemented to support edit, insert, and delete by keyboard."""
         editor = self._editor
         factory = editor.factory
 

@@ -1,7 +1,7 @@
 #  Copyright (c) 2007, Enthought, Inc.
 #  License: BSD Style.
 
-#--(Deferred UI Notifications)--------------------------------------------
+# --(Deferred UI Notifications)--------------------------------------------
 """
 Deferred UI Notifications
 =========================
@@ -32,12 +32,12 @@ interface would previously have appeared to be unresponsive due to an excessive
 number of screen updates.
 """
 
-#--<Imports>--------------------------------------------------------------
+# --<Imports>--------------------------------------------------------------
 
-from traits.api import *
-from traitsui.api import *
+from traits.api import Button, HasTraits, Int
+from traitsui.api import Item, View
 
-#--[Count Class]----------------------------------------------------------
+# --[Count Class]----------------------------------------------------------
 
 
 class Count(HasTraits):
@@ -45,10 +45,7 @@ class Count(HasTraits):
     count = Int()
     go = Button('Count')
 
-    view = View(
-        Item('count', style='readonly'),
-        Item('go', show_label=False)
-    )
+    view = View(Item('count', style='readonly'), Item('go', show_label=False))
 
     def _go_changed(self):
         # Even though the 'count' trait (which is visible in the UI) is being
@@ -60,7 +57,8 @@ class Count(HasTraits):
         for i in range(10000):
             self.count += 1
 
-#--<Example*>-------------------------------------------------------------
+
+# --<Example*>-------------------------------------------------------------
 
 demo = Count()
 

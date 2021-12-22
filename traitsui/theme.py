@@ -48,8 +48,7 @@ class Theme(HasPrivateTraits):
     # -- Constructor ----------------------------------------------------------
 
     def __init__(self, image=None, **traits):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         if image is not None:
             self.image = image
 

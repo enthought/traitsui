@@ -26,9 +26,9 @@ from traitsui.api import Item, Group, View
 #  Demo Class
 # -------------------------------------------------------------------------
 
+
 class BooleanEditorDemo(HasTraits):
-    """ This class specifies the details of the BooleanEditor demo.
-    """
+    """This class specifies the details of the BooleanEditor demo."""
 
     # To demonstrate any given Trait editor, an appropriate Trait is required.
     boolean_trait = Bool()
@@ -43,15 +43,12 @@ class BooleanEditorDemo(HasTraits):
         Item('_'),
         Item(
             'boolean_trait', style='readonly', label='ReadOnly', id='readonly'
-        )
+        ),
     )
 
     # Demo view
     traits_view = View(
-        bool_group,
-        title='BooleanEditor',
-        buttons=['OK'],
-        width=300
+        bool_group, title='BooleanEditor', buttons=['OK'], width=300
     )
 
 

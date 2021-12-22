@@ -46,8 +46,7 @@ class ArrayViewAdapter(TabularAdapter):
         return self.item
 
     def get_item(self, object, trait, row):
-        """ Returns the value of the *object.trait[row]* item.
-        """
+        """Returns the value of the *object.trait[row]* item."""
         if self.is_2d:
             if self.transpose:
                 return getattr(object, trait)[:, row]
@@ -57,8 +56,7 @@ class ArrayViewAdapter(TabularAdapter):
         return getattr(object, trait)[row]
 
     def len(self, object, trait):
-        """ Returns the number of items in the specified *object.trait* list.
-        """
+        """Returns the number of items in the specified *object.trait* list."""
         if self.transpose:
             return getattr(object, trait).shape[1]
 
@@ -83,8 +81,7 @@ class _ArrayViewEditor(UIEditor):
     # -- Private Methods ------------------------------------------------------
 
     def _array_view(self):
-        """ Return the view used by the editor.
-        """
+        """Return the view used by the editor."""
         return View(
             Item(
                 "object.object." + self.name,
@@ -101,8 +98,7 @@ class _ArrayViewEditor(UIEditor):
         )
 
     def init_ui(self, parent):
-        """ Creates the Traits UI for displaying the array.
-        """
+        """Creates the Traits UI for displaying the array."""
         # Make sure that the value is an array of the correct shape:
         shape = self.value.shape
         len_shape = len(shape)
@@ -180,6 +176,5 @@ class ArrayViewEditor(BasicEditorFactory):
     font = Font("Courier 10")
 
     def _get_klass(self):
-        """ The class used to construct editor objects.
-        """
+        """The class used to construct editor objects."""
         return toolkit_object("array_view_editor:_ArrayViewEditor")

@@ -52,7 +52,7 @@ can specify the width of the text fields with the *width* parameter.
 This editor is only suitable for small arrays.  For editing large
 two-dimensional arrays use the ArrayViewEditor instead
 
-.. figure:: images/array_editors.png
+.. figure:: images/ArrayEditor_demo.png
    :alt: 3x3 integer; integer read-only; 4x4 float; float read-only
 
    Figure 21: Array editors
@@ -63,8 +63,8 @@ The following code generates the editors shown in Figure 21.
 
 .. rubric:: Example 14: Demonstration of array editors
 
-.. literalinclude:: examples/array_editor.py
-   :start-at: array_editor.py
+.. literalinclude:: ../../../traitsui/examples/demo/Standard_Editors/ArrayEditor_demo.py
+   :start-at: ArrayEditor
 
 BooleanEditor()
 ```````````````

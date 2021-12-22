@@ -14,17 +14,13 @@ to a Traits UI View.
 """
 
 # Imports:
-from os.path \
-    import join, dirname
+from os.path import join, dirname
 
-from traits.api \
-    import HasTraits, Str
+from traits.api import HasTraits, Str
 
-from traitsui.api \
-    import View, VGroup, Item, ImageEditor
+from traitsui.api import View, VGroup, Item, ImageEditor
 
-from pyface.image_resource \
-    import ImageResource
+from pyface.image_resource import ImageResource
 
 # Constants:
 
@@ -45,33 +41,40 @@ class Employee(HasTraits):
     view = View(
         VGroup(
             VGroup(
-                Item('name',
-                     show_label=False,
-                     editor=ImageEditor(
-                         image=ImageResource('info',
-                                             search_path=search_path)))
+                Item(
+                    'name',
+                    show_label=False,
+                    editor=ImageEditor(
+                        image=ImageResource('info', search_path=search_path)
+                    ),
+                )
             ),
             VGroup(
                 Item('name'),
                 Item('dept'),
                 Item('email'),
-                Item('picture',
-                     editor=ImageEditor(
-                         scale=True,
-                         preserve_aspect_ratio=True,
-                         allow_upscaling=True),
-                     springy=True),
-            )
+                Item(
+                    'picture',
+                    editor=ImageEditor(
+                        scale=True,
+                        preserve_aspect_ratio=True,
+                        allow_upscaling=True,
+                    ),
+                    springy=True,
+                ),
+            ),
         ),
-        resizable=True
+        resizable=True,
     )
 
+
 # Create the demo:
-popup = Employee(name='William Murchison',
-                 dept='Receiving',
-                 email='wmurchison@acme.com',
-                 picture=ImageResource('e-logo-rev',
-                                       search_path=search_path))
+popup = Employee(
+    name='William Murchison',
+    dept='Receiving',
+    email='wmurchison@acme.com',
+    picture=ImageResource('e-logo-rev', search_path=search_path),
+)
 
 # Run the demo (if invoked form the command line):
 if __name__ == '__main__':

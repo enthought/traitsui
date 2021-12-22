@@ -15,21 +15,19 @@ from pyface.qt import QtCore, QtGui
 from .editor import Editor
 
 
-
 class SearchWidget(QtGui.QLineEdit):
 
     # FIXME: This widget needs a search button and a cancel button like the
     #        wxWidgets SearchControl.
 
     def __init__(self, desc):
-        """ Store the descriptive text for the widget.
-        """
+        """Store the descriptive text for the widget."""
         super().__init__()
         self._desc = str(desc)
         self._set_descriptive_text()
 
     def focusInEvent(self, event):
-        """ Handles accepting focus.
+        """Handles accepting focus.
 
         If the text box contains the default description string, reset the text
         color and clear the box.
@@ -44,7 +42,7 @@ class SearchWidget(QtGui.QLineEdit):
         super().focusInEvent(event)
 
     def focusOutEvent(self, event):
-        """ Handles losing focus.
+        """Handles losing focus.
 
         When focus is lost, if the user had typed something, keep that text,
         otherwise replace it with the default description string.
@@ -55,8 +53,7 @@ class SearchWidget(QtGui.QLineEdit):
         super().focusOutEvent(event)
 
     def _set_descriptive_text(self):
-        """ Sets the greyed-out descriptive text.
-        """
+        """Sets the greyed-out descriptive text."""
         palette = QtGui.QApplication.instance().palette()
         palette.setColor(
             QtGui.QPalette.Text, palette.color(QtGui.QPalette.Dark)
@@ -68,8 +65,8 @@ class SearchWidget(QtGui.QLineEdit):
 
 class SearchEditor(Editor):
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         if QtCore.__version_info__ < (4, 7, 0):
             control = self.control = SearchWidget(self.factory.text)
@@ -83,16 +80,15 @@ class SearchEditor(Editor):
             control.editingFinished.connect(self.update_object)
 
     def update_object(self, event=None):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         if not self._no_update:
             self.value = str(self.control.text())
             if self.factory.search_event_trait != "":
                 setattr(self.object, self.factory.search_event_trait, True)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if str(self.control.text()) != self.value:
             self._no_update = True

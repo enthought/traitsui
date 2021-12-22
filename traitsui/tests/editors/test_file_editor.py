@@ -31,7 +31,7 @@ class FileModel(HasTraits):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestSimpleFileEditor(BaseTestMixin, unittest.TestCase):
-    """ Test FileEditor (simple style). """
+    """Test FileEditor (simple style)."""
 
     def setUp(self):
         BaseTestMixin.setUp(self)
@@ -104,7 +104,7 @@ class TestSimpleFileEditor(BaseTestMixin, unittest.TestCase):
 # Run this against wx too when enthought/traitsui#752 is also fixed.
 @requires_toolkit([ToolkitName.qt])
 class TestCustomFileEditor(BaseTestMixin, unittest.TestCase):
-    """ Test FileEditor (custom style). """
+    """Test FileEditor (custom style)."""
 
     def setUp(self):
         BaseTestMixin.setUp(self)

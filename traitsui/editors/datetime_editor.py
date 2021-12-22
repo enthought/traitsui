@@ -19,8 +19,8 @@ from traitsui.editor_factory import EditorFactory
 
 
 class DatetimeEditor(EditorFactory):
-    """ Editor factory for the datetime editor.
-    """
+    """Editor factory for the datetime editor."""
+
     # -------------------------------------------------------------------------
     #  Trait definitions:
     # -------------------------------------------------------------------------

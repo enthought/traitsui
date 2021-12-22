@@ -52,8 +52,7 @@ editor_trait = Instance(EditorFactory)
 
 
 class ListEditor(EditorFactory):
-    """ Editor factory for list editors.
-    """
+    """Editor factory for list editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

@@ -12,7 +12,6 @@
 """
 
 
-
 import datetime
 
 from pyface.qt import QtCore, QtGui
@@ -23,15 +22,12 @@ from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 from traitsui.editors.date_editor import CellFormat
 
 
-
-
 class SimpleEditor(Editor):
-    """ Simple Traits UI date editor that wraps QDateEdit.
-    """
+    """Simple Traits UI date editor that wraps QDateEdit."""
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = QtGui.QDateEdit()
         if hasattr(self.factory, "qt_date_format"):
@@ -71,14 +67,14 @@ class SimpleEditor(Editor):
         self.control.dateChanged.connect(self.update_object)
 
     def dispose(self):
-        """ Disposes of the contents of an editor."""
+        """Disposes of the contents of an editor."""
         if self.control is not None:
             self.control.dateChanged.disconnect(self.update_object)
         super().dispose()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         value = self.value
         if value:
@@ -86,14 +82,12 @@ class SimpleEditor(Editor):
             self.control.setDate(q_date)
 
     def update_object(self, q_date):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         self.value = datetime.date(q_date.year(), q_date.month(), q_date.day())
 
 
 class CustomEditor(Editor):
-    """ Custom Traits UI date editor that wraps QCalendarWidget.
-    """
+    """Custom Traits UI date editor that wraps QCalendarWidget."""
 
     #: Style used for when a date is unselected.
     #: Mapping from datetime.date to CellFormat
@@ -103,8 +97,8 @@ class CustomEditor(Editor):
     _selected = Set(Date)
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = QtGui.QCalendarWidget()
 
@@ -114,14 +108,14 @@ class CustomEditor(Editor):
         self.control.clicked.connect(self.update_object)
 
     def dispose(self):
-        """ Disposes of the contents of an editor."""
+        """Disposes of the contents of an editor."""
         if self.control is not None:
             self.control.clicked.disconnect(self.update_object)
         super().dispose()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         value = self.value
         if value:
@@ -135,8 +129,7 @@ class CustomEditor(Editor):
                 self._selected = set(value)
 
     def update_object(self, q_date):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         value = datetime.date(q_date.year(), q_date.month(), q_date.day())
         if self.factory.multi_select:
             if value in self.value:
@@ -158,7 +151,7 @@ class CustomEditor(Editor):
         self.apply_style(self.factory.selected_style, date)
 
     def set_unselected_style(self, style, date):
-        """ Set the style used for a date when it is not selected."""
+        """Set the style used for a date when it is not selected."""
         self._unselected_styles[date] = style
         if self.factory.multi_select:
             if date not in self.value:
@@ -167,14 +160,14 @@ class CustomEditor(Editor):
             self.apply_style(style, date)
 
     def apply_style(self, style, date):
-        """ Apply a given style to a given date."""
+        """Apply a given style to a given date."""
         qdt = QtCore.QDate(date)
         textformat = self.control.dateTextFormat(qdt)
         _apply_cellformat(style, textformat)
         self.control.setDateTextFormat(qdt, textformat)
 
     def apply_unselected_style(self, date):
-        """ Apply the style for when a date is unselected."""
+        """Apply the style for when a date is unselected."""
         # Resets the text format on the given dates
         textformat = QtGui.QTextCharFormat()
         if date in self._unselected_styles:
@@ -183,8 +176,7 @@ class CustomEditor(Editor):
         self.control.setDateTextFormat(qdt, textformat)
 
     def apply_unselected_style_to_all(self):
-        """ Make all the selected dates appear unselected.
-        """
+        """Make all the selected dates appear unselected."""
         for date in self._selected:
             self.apply_unselected_style(date)
 
@@ -195,12 +187,10 @@ class CustomEditor(Editor):
 
 
 class ReadonlyEditor(BaseReadonlyEditor):
-    """ Readonly Traits UI date editor that uses a QLabel for the view.
-    """
+    """Readonly Traits UI date editor that uses a QLabel for the view."""
 
     def _get_str_value(self):
-        """ Replace the default string value with our own date verision.
-        """
+        """Replace the default string value with our own date verision."""
         if not self.value:
             return self.factory.message
         else:
@@ -213,7 +203,7 @@ class ReadonlyEditor(BaseReadonlyEditor):
 
 
 def _apply_cellformat(cf, textformat):
-    """ Applies the formatting in the cellformat cf to the QTextCharFormat
+    """Applies the formatting in the cellformat cf to the QTextCharFormat
     object provided.
     """
     if cf.italics is not None:
@@ -237,7 +227,7 @@ def _apply_cellformat(cf, textformat):
 
 
 def _textformat_to_cellformat(textformat):
-    """ Convert QTextCharFormat to a CellFormat """
+    """Convert QTextCharFormat to a CellFormat"""
     bg_brush = textformat.background()
     fg_brush = textformat.foreground()
     return CellFormat(
@@ -250,7 +240,7 @@ def _textformat_to_cellformat(textformat):
 
 
 def _color_to_brush(color):
-    """ Returns a QBrush with the color specified in **color** """
+    """Returns a QBrush with the color specified in **color**"""
     brush = QtGui.QBrush()
     if isinstance(color, str) and hasattr(QtCore.Qt, color):
         col = getattr(QtCore.Qt, color)

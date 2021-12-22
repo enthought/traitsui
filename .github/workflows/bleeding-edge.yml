@@ -1,16 +1,19 @@
-# This workflow installs dependencies from master
+# This workflow installs dependencies from main branch
 
 name: ETS from source
 
 on:
   schedule:
     - cron:  '0 0 * * 4'
+  # Make it possible to manually trigger the workflow
+  workflow_dispatch:
 
 jobs:
   test:
     env:
       # Enforce selection of toolkit
       ETS_TOOLKIT: qt
+      QT_MAC_WANTS_LAYER: 1
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -40,3 +43,31 @@ jobs:
         with:
           run: python -m unittest discover -v traitsui
           working-directory: ${{ runner.temp }}
+
+  notify-on-failure:
+    needs: test
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack channel on failure
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: ${{ secrets.ETS_BOTS_SLACK_CHANNEL_ID }}
+          status: FAILED
+          color: danger
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_ACTION_SECRET }}
+
+  notify-on-success:
+    needs: test
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack channel on success
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: ${{ secrets.ETS_BOTS_SLACK_CHANNEL_ID }}
+          status: SUCCESS
+          color: good
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_ACTION_SECRET }}

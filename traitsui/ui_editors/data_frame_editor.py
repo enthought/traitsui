@@ -9,6 +9,7 @@
 # Thanks for using Enthought open source!
 
 import logging
+import warnings
 
 from traits.api import (
     Bool,
@@ -32,13 +33,11 @@ from traitsui.ui_editor import UIEditor
 from traitsui.view import View
 
 
-
 logger = logging.getLogger(__name__)
 
 
 class DataFrameAdapter(TabularAdapter):
-    """ Generic tabular adapter for data frames
-    """
+    """Generic tabular adapter for data frames"""
 
     #: The text to use for a generic entry.
     text = Property()
@@ -115,7 +114,7 @@ class DataFrameAdapter(TabularAdapter):
                 value,
                 self.column,
                 self.row,
-                exc_info=True
+                exc_info=True,
             )
 
     def _get_index_text(self):
@@ -129,15 +128,13 @@ class DataFrameAdapter(TabularAdapter):
             index.values[self.row] = value
         except Exception:
             logger.debug(
-                "User entered invalid value %r for index",
-                value,
-                exc_info=True
+                "User entered invalid value %r for index", value, exc_info=True
             )
 
     # ---- Adapter methods that are not sensitive to item type ----------------
 
     def get_item(self, object, trait, row):
-        """ Override the base implementation to work with DataFrames
+        """Override the base implementation to work with DataFrames
 
         This returns a dataframe with one row, rather than a series, since
         using a dataframe preserves dtypes.
@@ -146,7 +143,7 @@ class DataFrameAdapter(TabularAdapter):
         return getattr(object, trait).iloc[row : row + 1]
 
     def delete(self, object, trait, row):
-        """ Override the base implementation to work with DataFrames
+        """Override the base implementation to work with DataFrames
 
         Unavoidably does a copy of the data, setting the trait with the new
         value.
@@ -163,7 +160,7 @@ class DataFrameAdapter(TabularAdapter):
         setattr(object, trait, new_df)
 
     def insert(self, object, trait, row, value):
-        """ Override the base implementation to work with DataFrames
+        """Override the base implementation to work with DataFrames
 
         Unavoidably does a copy of the data, setting the trait with the new
         value.
@@ -181,7 +178,7 @@ class DataFrameAdapter(TabularAdapter):
 
 
 class _DataFrameEditor(UIEditor):
-    """ TraitsUI-based editor implementation for data frames """
+    """TraitsUI-based editor implementation for data frames"""
 
     #: Indicate that the editor is scrollable/resizable:
     scrollable = True
@@ -201,8 +198,7 @@ class _DataFrameEditor(UIEditor):
             return ""
 
     def _data_frame_view(self):
-        """ Return the view used by the editor.
-        """
+        """Return the view used by the editor."""
 
         return View(
             Item(
@@ -254,8 +250,7 @@ class _DataFrameEditor(UIEditor):
         )
 
     def init_ui(self, parent):
-        """ Creates the Traits UI for displaying the array.
-        """
+        """Creates the Traits UI for displaying the array."""
         factory = self.factory
         if factory.columns != []:
             columns = []
@@ -296,7 +291,7 @@ class _DataFrameEditor(UIEditor):
 
 
 class DataFrameEditor(BasicEditorFactory):
-    """ Editor factory for basic data frame editor """
+    """Editor factory for basic data frame editor"""
 
     #: The editor implementation class.
     klass = Property()
@@ -398,10 +393,9 @@ class DataFrameEditor(BasicEditorFactory):
     adapter = Instance(DataFrameAdapter)
 
     def _get_klass(self):
-        """ The class used to construct editor objects.
-        """
+        """The class used to construct editor objects."""
         return toolkit_object("data_frame_editor:_DataFrameEditor")
-    
+
     def _get_scroll_to_row_hint(self):
         warnings.warn(
             "Use of scroll_to_row_hint trait is deprecated. "
@@ -409,7 +403,7 @@ class DataFrameEditor(BasicEditorFactory):
             DeprecationWarning,
         )
         return self.scroll_to_position_hint
-    
+
     def _set_scroll_to_row_hint(self, hint):
         warnings.warn(
             "Use of scroll_to_row_hint trait is deprecated. "

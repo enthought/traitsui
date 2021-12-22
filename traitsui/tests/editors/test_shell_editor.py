@@ -45,7 +45,6 @@ def get_dict_view(share=False):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestShellEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

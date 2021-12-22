@@ -30,8 +30,8 @@ from pyface.dock.idockable import IDockable
 
 
 class DockableViewElement(HasPrivateTraits, IDockable):
-    """ Allows Traits UIs and Traits UI elements to be docked in external
-        Pyface DockWindow windows.
+    """Allows Traits UIs and Traits UI elements to be docked in external
+    Pyface DockWindow windows.
     """
 
     # -------------------------------------------------------------------------
@@ -50,8 +50,8 @@ class DockableViewElement(HasPrivateTraits, IDockable):
     # -- IDockable interface --------------------------------------------------
 
     def dockable_should_close(self):
-        """ Should the current DockControl be closed before creating the new
-            one?
+        """Should the current DockControl be closed before creating the new
+        one?
         """
         element = self.element
         if element is None:
@@ -86,8 +86,7 @@ class DockableViewElement(HasPrivateTraits, IDockable):
         return self.should_close or (self.element is None)
 
     def dockable_get_control(self, parent):
-        """ Gets a control that can be docked into a DockWindow.
-        """
+        """Gets a control that can be docked into a DockWindow."""
         # Create the new UI:
         ui = self._view.ui(
             self._context,
@@ -108,8 +107,7 @@ class DockableViewElement(HasPrivateTraits, IDockable):
         return ui.control
 
     def dockable_init_dockcontrol(self, dock_control):
-        """ Allows the object to override the default DockControl settings.
-        """
+        """Allows the object to override the default DockControl settings."""
         dockable = self
         if self.element is not None:
             dockable = DockableViewElement(
@@ -122,8 +120,7 @@ class DockableViewElement(HasPrivateTraits, IDockable):
         )
 
     def close_dock_control(self, dock_control, abort):
-        """ Handles the closing of a DockControl containing a Traits UI.
-        """
+        """Handles the closing of a DockControl containing a Traits UI."""
         ui = self.ui
 
         # Ask the traits UI handler if it is OK to close the window:

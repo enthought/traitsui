@@ -21,8 +21,8 @@ from traitsui.qt4.table_editor import TableDelegate
 
 
 class TableImageRenderer(TableDelegate):
-    """ A renderer which will display a cell-specific image in addition to some
-        text displayed in the same way the default renderer would.
+    """A renderer which will display a cell-specific image in addition to some
+    text displayed in the same way the default renderer would.
     """
 
     #: Should the image be scaled to the size of the cell
@@ -33,8 +33,8 @@ class TableImageRenderer(TableDelegate):
     # -------------------------------------------------------------------------
 
     def get_image_for_obj(self, value, row, col):
-        """ Return the image for the cell given the raw cell value and the row
-            and column numbers.
+        """Return the image for the cell given the raw cell value and the row
+        and column numbers.
         """
         return None
 
@@ -43,8 +43,7 @@ class TableImageRenderer(TableDelegate):
     # -------------------------------------------------------------------------
 
     def paint(self, painter, option, index):
-        """ Overriden to draw images.
-        """
+        """Overriden to draw images."""
         # First draw any text/background by delegating to our superclass
         QtGui.QStyledItemDelegate.paint(self, painter, option, index)
 
@@ -67,8 +66,8 @@ class TableImageRenderer(TableDelegate):
             painter.drawPixmap(target, image)
 
     def sizeHint(self, option, index):
-        """ Overriden to take image size into account when providing a size
-            hint.
+        """Overriden to take image size into account when providing a size
+        hint.
         """
         size = QtGui.QStyledItemDelegate.sizeHint(self, option, index)
 

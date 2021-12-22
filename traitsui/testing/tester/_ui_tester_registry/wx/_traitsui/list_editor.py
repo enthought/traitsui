@@ -11,36 +11,36 @@
 from traitsui.testing.tester.command import MouseClick
 from traitsui.testing.tester.locator import Index
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
-    BaseSourceWithLocation
+    BaseSourceWithLocation,
 )
 from traitsui.testing.tester._ui_tester_registry._traitsui_ui import (
     register_traitsui_ui_solvers,
 )
 from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
-from traitsui.wx.list_editor import (
-    CustomEditor,
-    NotebookEditor,
-    SimpleEditor
-)
+from traitsui.wx.list_editor import CustomEditor, NotebookEditor, SimpleEditor
 
 
 class _IndexedNotebookEditor(BaseSourceWithLocation):
-    """ Wrapper for a ListEditor (Notebook) with an index.
-    """
+    """Wrapper for a ListEditor (Notebook) with an index."""
+
     source_class = NotebookEditor
     locator_class = Index
     handlers = [
-        (MouseClick,
-            (lambda wrapper, _:
-                _interaction_helpers.mouse_click_notebook_tab_index(
+        (
+            MouseClick,
+            (
+                lambda wrapper, _: _interaction_helpers.mouse_click_notebook_tab_index(
                     control=wrapper._target.source.control,
                     index=wrapper._target.location.index,
-                    delay=wrapper.delay))),
+                    delay=wrapper.delay,
+                )
+            ),
+        ),
     ]
 
     @classmethod
     def register(cls, registry):
-        """ Class method to register interactions on a _IndexedNotebookEditor
+        """Class method to register interactions on a _IndexedNotebookEditor
         for the given registry.
 
         If there are any conflicts, an error will occur.
@@ -54,18 +54,18 @@ class _IndexedNotebookEditor(BaseSourceWithLocation):
         register_traitsui_ui_solvers(
             registry=registry,
             target_class=cls,
-            traitsui_ui_getter=lambda target: target._get_nested_ui()
+            traitsui_ui_getter=lambda target: target._get_nested_ui(),
         )
 
     def _get_nested_ui(self):
-        """ Method to get the nested ui corresponding to the List element at
+        """Method to get the nested ui corresponding to the List element at
         the given index.
         """
         return self.source._uis[self.location.index][0].dockable.ui
 
 
 def _get_next_target(list_editor, index):
-    """ Gets the target at a given index from a Custom List Editor.
+    """Gets the target at a given index from a Custom List Editor.
 
     Parameters
     ----------
@@ -84,14 +84,14 @@ def _get_next_target(list_editor, index):
     # item itself.  Thus, index is actually an index over the odd elements
     # of the list of children corresponding to items in the list we would
     # want to interact with
-    new_index = 2*index + 1
+    new_index = 2 * index + 1
     WindowList = list_editor.control.GetChildren()
     item = WindowList[new_index]
     return item._editor
 
 
 def register(registry):
-    """ Register interactions for the given registry.
+    """Register interactions for the given registry.
 
     If there are any conflicts, an error will occur.
 
@@ -108,7 +108,7 @@ def register(registry):
         locator_class=Index,
         solver=lambda wrapper, location: (
             _get_next_target(wrapper._target, location.index)
-        )
+        ),
     )
     # SimpleEditor
     registry.register_location(
@@ -116,5 +116,5 @@ def register(registry):
         locator_class=Index,
         solver=lambda wrapper, location: (
             _get_next_target(wrapper._target, location.index)
-        )
+        ),
     )

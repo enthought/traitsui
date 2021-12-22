@@ -14,7 +14,7 @@ from traitsui.editors.date_editor import DateEditor
 
 
 class DateRangeEditor(DateEditor):
-    """ Editor for a date range. The target value should be a tuple
+    """Editor for a date range. The target value should be a tuple
     containing two dates (start date, end date)
     """
 

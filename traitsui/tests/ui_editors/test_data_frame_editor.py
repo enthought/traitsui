@@ -100,7 +100,6 @@ def sample_text_data():
 
 
 class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -344,8 +343,9 @@ class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
             )
         )
         viewer = sample_data()
-        with reraise_exceptions(), \
-                create_ui(viewer, dict(view=alternate_adapter_view)):
+        with reraise_exceptions(), create_ui(
+            viewer, dict(view=alternate_adapter_view)
+        ):
             pass
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -363,22 +363,23 @@ class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_format_mapping(self):
         viewer = sample_data()
-        with reraise_exceptions(), \
-                create_ui(viewer, dict(view=format_mapping_view)):
+        with reraise_exceptions(), create_ui(
+            viewer, dict(view=format_mapping_view)
+        ):
             pass
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_font_mapping(self):
         viewer = sample_data()
-        with reraise_exceptions(), \
-                create_ui(viewer, dict(view=font_mapping_view)):
+        with reraise_exceptions(), create_ui(
+            viewer, dict(view=font_mapping_view)
+        ):
             pass
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_data_frame_editor_columns(self):
         viewer = sample_data()
-        with reraise_exceptions(), \
-                create_ui(viewer, dict(view=columns_view)):
+        with reraise_exceptions(), create_ui(viewer, dict(view=columns_view)):
             pass
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -393,7 +394,7 @@ class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
         df = DataFrame(
             DATA,
             index=["one", "two", "three", "four"],
-            columns=["X", "Y", "Z"]
+            columns=["X", "Y", "Z"],
         )
         viewer = DataFrameViewer(data=df)
         with reraise_exceptions(), create_ui(viewer):
@@ -411,7 +412,7 @@ class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
         df = DataFrame(
             DATA,
             index=["one", "two", "three", "four"],
-            columns=["X", "Y", "Z"]
+            columns=["X", "Y", "Z"],
         )
         viewer = DataFrameViewer(data=df)
         with reraise_exceptions(), create_ui(viewer):
@@ -423,8 +424,7 @@ class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
             Item("data", editor=DataFrameEditor(multi_select=True), width=400)
         )
         viewer = sample_data()
-        with reraise_exceptions(), \
-                create_ui(viewer, dict(view=view)):
+        with reraise_exceptions(), create_ui(viewer, dict(view=view)):
             pass
 
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
@@ -457,10 +457,9 @@ class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_set_index_text(self):
         viewer = sample_data()
-        columns = (
-            [('', 'index')] +
-            [(column, column) for column in viewer.data.columns]
-        )
+        columns = [('', 'index')] + [
+            (column, column) for column in viewer.data.columns
+        ]
         adapter = DataFrameAdapter(columns=columns)
 
         adapter.set_text(viewer, 'data', 0, 0, 'NewIndex')
@@ -474,10 +473,9 @@ class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_set_index_text_numeric(self):
         viewer = sample_data_numerical_index()
-        columns = (
-            [('', 'index')] +
-            [(column, column) for column in viewer.data.columns]
-        )
+        columns = [('', 'index')] + [
+            (column, column) for column in viewer.data.columns
+        ]
         adapter = DataFrameAdapter(columns=columns)
 
         adapter.set_text(viewer, 'data', 0, 0, 100)
@@ -491,10 +489,9 @@ class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
     @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
     def test_adapter_set_index_text_numeric_invalid(self):
         viewer = sample_data_numerical_index()
-        columns = (
-            [('', 'index')] +
-            [(column, column) for column in viewer.data.columns]
-        )
+        columns = [('', 'index')] + [
+            (column, column) for column in viewer.data.columns
+        ]
         adapter = DataFrameAdapter(columns=columns)
 
         adapter.set_text(viewer, 'data', 0, 0, 'invalid')
@@ -504,3 +501,10 @@ class TestDataFrameEditor(BaseTestMixin, unittest.TestCase):
         assert_array_equal(item_0_df.values, [[0, 1, 2]])
         assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
         self.assertEqual(item_0_df.index[0], 1)
+
+    def test_scroll_to_row_hint_warnings(self):
+        with self.assertWarns(DeprecationWarning):
+            dfe = DataFrameEditor(scroll_to_row_hint="center")
+
+        with self.assertWarns(DeprecationWarning):
+            dfe.scroll_to_row_hint

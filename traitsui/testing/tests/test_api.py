@@ -14,7 +14,6 @@ import unittest
 
 
 class TestApi(unittest.TestCase):
-
     def test_tester_import(self):
         from traitsui.testing.api import UITester  # noqa: F401
 

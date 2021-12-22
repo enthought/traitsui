@@ -22,8 +22,7 @@ from traitsui.toolkit import toolkit_object
 
 
 class TabularEditor(BasicEditorFactory):
-    """ Editor factory for tabular editors.
-    """
+    """Editor factory for tabular editors."""
 
     # -- Trait Definitions ----------------------------------------------------
 
@@ -153,8 +152,7 @@ class TabularEditor(BasicEditorFactory):
     images = List(Image)
 
     def _get_klass(self):
-        """ Returns the toolkit-specific editor class to be instantiated.
-        """
+        """Returns the toolkit-specific editor class to be instantiated."""
         return toolkit_object("tabular_editor:TabularEditor")
 
     def _get_scroll_to_row_hint(self):

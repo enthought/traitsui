@@ -21,8 +21,7 @@ from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
 
 class SimpleEditor(Editor):
-    """ Simple Traits UI time editor that wraps QDateTimeEdit.
-    """
+    """Simple Traits UI time editor that wraps QDateTimeEdit."""
 
     #: the earliest datetime allowed by the editor
     minimum_datetime = Datetime
@@ -31,28 +30,27 @@ class SimpleEditor(Editor):
     maximum_datetime = Datetime
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         # set min and max early, don't wait for editor sync
         self.minimum_datetime = self.factory.minimum_datetime
         self.maximum_datetime = self.factory.maximum_datetime
 
         self.control = QtGui.QDateTimeEdit()
-        self.control.dateTimeChanged.connect(self.update_object)
         self.update_minimum_datetime()
         self.update_maximum_datetime()
+        self.control.dateTimeChanged.connect(self.update_object)
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         if self.control is not None:
             self.control.dateTimeChanged.disconnect(self.update_object)
         super().dispose()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         value = self.value
         if value:
@@ -68,8 +66,7 @@ class SimpleEditor(Editor):
             self.value = value
 
     def update_object(self, q_datetime):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         try:
             if qt_api == 'pyside2':
                 self.value = q_datetime.toPython()
@@ -81,15 +78,17 @@ class SimpleEditor(Editor):
     @observe('minimum_datetime')
     def update_minimum_datetime(self, event=None):
         # sanity checking of values
-        if (self.minimum_datetime is not None
-                and self.maximum_datetime is not None
-                and self.minimum_datetime > self.maximum_datetime):
+        if (
+            self.minimum_datetime is not None
+            and self.maximum_datetime is not None
+            and self.minimum_datetime > self.maximum_datetime
+        ):
             self.maximum_datetime = self.minimum_datetime
 
         if self.control is not None:
             if self.minimum_datetime is not None:
                 self.control.setMinimumDateTime(
-                   QDateTime(self.minimum_datetime)
+                    QDateTime(self.minimum_datetime)
                 )
             else:
                 self.control.clearMinimumDateTime()
@@ -97,9 +96,11 @@ class SimpleEditor(Editor):
     @observe('maximum_datetime')
     def update_maximum_datetime(self, event=None):
         # sanity checking of values
-        if (self.minimum_datetime is not None
-                and self.maximum_datetime is not None
-                and self.minimum_datetime > self.maximum_datetime):
+        if (
+            self.minimum_datetime is not None
+            and self.maximum_datetime is not None
+            and self.minimum_datetime > self.maximum_datetime
+        ):
             self.minimum_datetime = self.maximum_datetime
 
         if self.control is not None:
@@ -112,12 +113,10 @@ class SimpleEditor(Editor):
 
 
 class ReadonlyEditor(BaseReadonlyEditor):
-    """ Readonly Traits UI time editor that uses a QLabel for the view.
-    """
+    """Readonly Traits UI time editor that uses a QLabel for the view."""
 
     def _get_str_value(self):
-        """ Replace the default string value with our own time version.
-        """
+        """Replace the default string value with our own time version."""
         if not self.value:
             return self.factory.message
         else:

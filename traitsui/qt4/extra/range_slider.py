@@ -12,14 +12,14 @@ from pyface.qt import QtGui, QtCore
 
 
 class RangeSlider(QtGui.QSlider):
-    """ A slider for ranges.
+    """A slider for ranges.
 
-        This class provides a dual-slider for ranges, where there is a defined
-        maximum and minimum, as is a normal slider, but instead of having a
-        single slider value, there are 2 slider values.
+    This class provides a dual-slider for ranges, where there is a defined
+    maximum and minimum, as is a normal slider, but instead of having a
+    single slider value, there are 2 slider values.
 
-        This class emits the same signals as the QSlider base class, with the
-        exception of valueChanged
+    This class emits the same signals as the QSlider base class, with the
+    exception of valueChanged
     """
 
     def __init__(self, *args):

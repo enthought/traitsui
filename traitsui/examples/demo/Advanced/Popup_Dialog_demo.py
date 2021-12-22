@@ -37,15 +37,13 @@ Notes:
   conflict).
 """
 
-#-- Imports --------------------------------------------------------------
+# -- Imports --------------------------------------------------------------
 
-from traits.api \
-    import HasPrivateTraits, Str, Int, Enum, Instance, Button
+from traits.api import HasPrivateTraits, Str, Int, Enum, Instance, Button
 
-from traitsui.api \
-    import View, HGroup, Item, Handler, UIInfo, spring
+from traitsui.api import View, HGroup, Item, Handler, UIInfo, spring
 
-#-- The PersonHandler class ----------------------------------------------
+# -- The PersonHandler class ----------------------------------------------
 
 
 class PersonHandler(Handler):
@@ -62,7 +60,7 @@ class PersonHandler(Handler):
             spring,
             Item('cancel', show_label=False),
         ),
-        kind='popup'
+        kind='popup',
     )
 
     # Event handlers:
@@ -76,7 +74,8 @@ class PersonHandler(Handler):
         object.gender = ['Male', 'Female'][object.gender == 'Male']
         self._ui.dispose()
 
-#-- The Person class -----------------------------------------------------
+
+# -- The Person class -----------------------------------------------------
 
 
 class Person(HasPrivateTraits):
@@ -92,10 +91,11 @@ class Person(HasPrivateTraits):
         Item('age'),
         Item('gender'),
         title='Button Popup Demo',
-        handler=PersonHandler
+        handler=PersonHandler,
     )
 
-#-- Create and run the demo ----------------------------------------------
+
+# -- Create and run the demo ----------------------------------------------
 
 # Create the demo:
 demo = Person(name='Mike Thomas', age=32)

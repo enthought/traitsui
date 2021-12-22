@@ -46,8 +46,8 @@ from .helper import IconButton
 
 
 class BaseRangeEditor(Editor):
-    """ The base class for Range editors. Using an evaluate trait, if specified,
-        when assigning numbers the object trait.
+    """The base class for Range editors. Using an evaluate trait, if specified,
+    when assigning numbers the object trait.
     """
 
     # -------------------------------------------------------------------------
@@ -64,7 +64,7 @@ class BaseRangeEditor(Editor):
 
 
 class SimpleSliderEditor(BaseRangeEditor):
-    """ Simple style of range editor that displays a slider and a text field.
+    """Simple style of range editor that displays a slider and a text field.
 
     The user can set a value either by moving the slider or by typing a value
     in the text field.
@@ -80,12 +80,12 @@ class SimpleSliderEditor(BaseRangeEditor):
     #: High value for the slider range
     high = Any()
 
-    #: Formatting string used to format value and labels
+    #: Deprecated: This trait is no longer used. See enthought/traitsui#1704
     format = Str()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         factory = self.factory
         if not factory.low_name:
@@ -93,8 +93,6 @@ class SimpleSliderEditor(BaseRangeEditor):
 
         if not factory.high_name:
             self.high = factory.high
-
-        self.format = factory.format
 
         self.evaluate = factory.evaluate
         self.sync_value(factory.evaluate_name, "evaluate", "from")
@@ -111,7 +109,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         try:
             if not (self.low <= fvalue <= self.high):
                 fvalue = self.low
-            fvalue_text = self.format % fvalue
+            fvalue_text = self.string_value(fvalue)
         except:
             fvalue_text = ""
             fvalue = self.low
@@ -153,11 +151,11 @@ class SimpleSliderEditor(BaseRangeEditor):
 
         low_label = factory.low_label
         if factory.low_name != "":
-            low_label = self.format % self.low
+            low_label = self.string_value(self.low)
 
         high_label = factory.high_label
         if factory.high_name != "":
-            high_label = self.format % self.high
+            high_label = self.string_value(self.high)
 
         self._label_lo.setText(low_label)
         self._label_hi.setText(high_label)
@@ -168,10 +166,9 @@ class SimpleSliderEditor(BaseRangeEditor):
         self.set_tooltip(text)
 
     def update_object_on_scroll(self, pos):
-        """ Handles the user changing the current slider value.
-        """
+        """Handles the user changing the current slider value."""
         value = self._convert_from_slider(pos)
-        self.control.text.setText(self.format % value)
+        self.control.text.setText(self.string_value(value))
         try:
             self.value = value
         except Exception as exc:
@@ -180,8 +177,7 @@ class SimpleSliderEditor(BaseRangeEditor):
             raise_to_debug()
 
     def update_object_on_enter(self):
-        """ Handles the user pressing the Enter key in the text field.
-        """
+        """Handles the user pressing the Enter key in the text field."""
         # It is possible the event is processed after the control is removed
         # from the editor
         if self.control is None:
@@ -214,14 +210,14 @@ class SimpleSliderEditor(BaseRangeEditor):
             pass
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         value = self.value
         low = self.low
         high = self.high
         try:
-            text = self.format % value
+            text = self.string_value(value)
             1 / (low <= value <= high)
         except:
             text = ""
@@ -238,8 +234,7 @@ class SimpleSliderEditor(BaseRangeEditor):
             self.control.slider.blockSignals(blocked)
 
     def get_error_control(self):
-        """ Returns the editor's control for indicating error status.
-        """
+        """Returns the editor's control for indicating error status."""
         return self.control.text
 
     def _low_changed(self, low):
@@ -250,7 +245,7 @@ class SimpleSliderEditor(BaseRangeEditor):
                 self.value = int(low)
 
         if self._label_lo is not None:
-            self._label_lo.setText(self.format % low)
+            self._label_lo.setText(self.string_value(low))
             self.update_editor()
 
     def _high_changed(self, high):
@@ -261,12 +256,11 @@ class SimpleSliderEditor(BaseRangeEditor):
                 self.value = int(high)
 
         if self._label_hi is not None:
-            self._label_hi.setText(self.format % high)
+            self._label_hi.setText(self.string_value(high))
             self.update_editor()
 
     def _convert_to_slider(self, value):
-        """ Returns the slider setting corresponding to the user-supplied value.
-        """
+        """Returns the slider setting corresponding to the user-supplied value."""
         if self.high > self.low:
             ivalue = int(
                 (float(value - self.low) / (self.high - self.low)) * 10000.0
@@ -279,7 +273,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         return ivalue
 
     def _convert_from_slider(self, ivalue):
-        """ Returns the float or integer value corresponding to the slider
+        """Returns the float or integer value corresponding to the slider
         setting.
         """
         value = self.low + ((float(ivalue) / 10000.0) * (self.high - self.low))
@@ -291,12 +285,10 @@ class SimpleSliderEditor(BaseRangeEditor):
 # -------------------------------------------------------------------------
 class LogRangeSliderEditor(SimpleSliderEditor):
     # -------------------------------------------------------------------------
-    """ A slider editor for log-spaced values
-    """
+    """A slider editor for log-spaced values"""
 
     def _convert_to_slider(self, value):
-        """ Returns the slider setting corresponding to the user-supplied value.
-        """
+        """Returns the slider setting corresponding to the user-supplied value."""
         value = max(value, self.low)
         ivalue = int(
             (log10(value) - log10(self.low))
@@ -306,7 +298,7 @@ class LogRangeSliderEditor(SimpleSliderEditor):
         return ivalue
 
     def _convert_from_slider(self, ivalue):
-        """ Returns the float or integer value corresponding to the slider
+        """Returns the float or integer value corresponding to the slider
         setting.
         """
         value = float(ivalue) / 10000.0 * (log10(self.high) - log10(self.low))
@@ -319,7 +311,7 @@ class LogRangeSliderEditor(SimpleSliderEditor):
 
 
 class LargeRangeSliderEditor(BaseRangeEditor):
-    """ A slider editor for large ranges.
+    """A slider editor for large ranges.
 
     The editor displays a slider and a text field. A subset of the total range
     is displayed in the slider; arrow buttons at each end of the slider let
@@ -346,8 +338,8 @@ class LargeRangeSliderEditor(BaseRangeEditor):
     ui_changing = Bool(False)
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         factory = self.factory
 
@@ -439,8 +431,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         self.update_range_ui()
 
     def update_object_on_scroll(self, pos):
-        """ Handles the user changing the current slider value.
-        """
+        """Handles the user changing the current slider value."""
         value = self.cur_low + (
             (float(pos) / 10000.0) * (self.cur_high - self.cur_low)
         )
@@ -453,8 +444,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             self.value = int(value)
 
     def update_object_on_enter(self):
-        """ Handles the user pressing the Enter key in the text field.
-        """
+        """Handles the user pressing the Enter key in the text field."""
         # It is possible the event is processed after the control is removed
         # from the editor
         if self.control is None:
@@ -465,8 +455,8 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             pass
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         value = self.value
         low = self.low
@@ -483,8 +473,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             self.update_range_ui()
 
     def update_range_ui(self):
-        """ Updates the slider range controls.
-        """
+        """Updates the slider range controls."""
         low, high = self.cur_low, self.cur_high
         value = self.value
         self._set_format()
@@ -506,8 +495,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         self.control.button_hi.setEnabled(high != self.high)
 
     def init_range(self):
-        """ Initializes the slider range controls.
-        """
+        """Initializes the slider range controls."""
         value = self.value
         low, high = self.low, self.high
         if (high is None) and (low is not None):
@@ -525,8 +513,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         self.cur_low, self.cur_high = cur_low, cur_high
 
     def reduce_range(self):
-        """ Reduces the extent of the displayed range.
-        """
+        """Reduces the extent of the displayed range."""
         low, high = self.low, self.high
         if abs(self.cur_low) < 10:
             self.cur_low = max(-10, low)
@@ -544,8 +531,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         self.update_range_ui()
 
     def increase_range(self):
-        """ Increased the extent of the displayed range.
-        """
+        """Increased the extent of the displayed range."""
         low, high = self.low, self.high
         if abs(self.cur_high) < 10:
             self.cur_low = max(-10, low)
@@ -576,8 +562,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
                 self._format = "%.3f"
 
     def get_error_control(self):
-        """ Returns the editor's control for indicating error status.
-        """
+        """Returns the editor's control for indicating error status."""
         return self.control.text
 
     def _low_changed(self, low):
@@ -602,8 +587,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
 
 
 class SimpleSpinEditor(BaseRangeEditor):
-    """ A simple style of range editor that displays a spin box control.
-    """
+    """A simple style of range editor that displays a spin box control."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -616,8 +600,8 @@ class SimpleSpinEditor(BaseRangeEditor):
     high = Any()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         factory = self.factory
         if not factory.low_name:
@@ -639,8 +623,7 @@ class SimpleSpinEditor(BaseRangeEditor):
         self.set_tooltip()
 
     def update_object(self, value):
-        """ Handles the user selecting a new value in the spin box.
-        """
+        """Handles the user selecting a new value in the spin box."""
         self._locked = True
         try:
             self.value = value
@@ -648,8 +631,8 @@ class SimpleSpinEditor(BaseRangeEditor):
             self._locked = False
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if not self._locked:
             blocked = self.control.blockSignals(True)
@@ -686,7 +669,7 @@ class SimpleSpinEditor(BaseRangeEditor):
 
 
 class RangeTextEditor(TextEditor):
-    """ Editor for ranges that displays a text field. If the user enters a
+    """Editor for ranges that displays a text field. If the user enters a
     value that is outside the allowed range, the background of the field
     changes color to indicate an error.
     """
@@ -695,26 +678,52 @@ class RangeTextEditor(TextEditor):
     #  Trait definitions:
     # -------------------------------------------------------------------------
 
+    #: Low value for the slider range
+    low = Any()
+
+    #: High value for the slider range
+    high = Any()
+
     #: Function to evaluate floats/ints
     evaluate = Any()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         TextEditor.init(self, parent)
-        self.evaluate = self.factory.evaluate
-        self.sync_value(self.factory.evaluate_name, "evaluate", "from")
+
+        factory = self.factory
+        if not factory.low_name:
+            self.low = factory.low
+
+        if not factory.high_name:
+            self.high = factory.high
+
+        self.evaluate = factory.evaluate
+        self.sync_value(factory.evaluate_name, "evaluate", "from")
+
+        self.sync_value(factory.low_name, "low", "from")
+        self.sync_value(factory.high_name, "high", "from")
+
+        # force value to start in range
+        if not (self.low <= self.value <= self.high):
+            self.value = self.low
 
     def update_object(self):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         try:
             value = eval(str(self.control.text()))
             if self.evaluate is not None:
                 value = self.evaluate(value)
+
+            if not (self.low <= value <= self.high):
+                value = self.low
+                col = ErrorColor
+            else:
+                col = OKColor
+
             self.value = value
-            col = OKColor
         except Exception:
             col = ErrorColor
 
@@ -729,9 +738,7 @@ class RangeTextEditor(TextEditor):
 # -------------------------------------------------------------------------
 
 
-def SimpleEnumEditor(
-    parent, factory, ui, object, name, description, **kwargs
-):
+def SimpleEnumEditor(parent, factory, ui, object, name, description, **kwargs):
     return CustomEnumEditor(
         parent, factory, ui, object, name, description, "simple"
     )
@@ -740,7 +747,7 @@ def SimpleEnumEditor(
 def CustomEnumEditor(
     parent, factory, ui, object, name, description, style="custom", **kwargs
 ):
-    """ Factory adapter that returns a enumeration editor of the specified
+    """Factory adapter that returns a enumeration editor of the specified
     style.
     """
     if factory._enum is None:

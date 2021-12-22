@@ -44,7 +44,6 @@ class ListOfFloatsWithCSVEditor(ModelView):
 
 
 class TestCSVEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
