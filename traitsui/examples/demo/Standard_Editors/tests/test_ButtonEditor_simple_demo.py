@@ -30,7 +30,6 @@ DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 
 
 class TestButtonEditorSimpleDemo(unittest.TestCase):
-
     def test_button_editor_simple_demo(self):
         demo = runpy.run_path(DEMO_PATH)["demo"]
 

@@ -21,7 +21,12 @@ import runpy
 import unittest
 
 from traitsui.testing.api import (
-    DisplayedText, IsChecked, KeyClick, KeySequence, MouseClick, UITester
+    DisplayedText,
+    IsChecked,
+    KeyClick,
+    KeySequence,
+    MouseClick,
+    UITester,
 )
 
 #: Filename of the demo script
@@ -32,7 +37,6 @@ DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 
 
 class TestBooleanEditorSimpleDemo(unittest.TestCase):
-
     def test_boolean_editor_simple_demo(self):
         demo = runpy.run_path(DEMO_PATH)["demo"]
 

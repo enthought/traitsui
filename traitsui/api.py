@@ -443,7 +443,7 @@ WindowColor = _constants.get("WindowColor", 0xFFFFFF)
 
 
 def raise_to_debug():
-    """ When we would otherwise silently swallow an exception, call this instead
+    """When we would otherwise silently swallow an exception, call this instead
     to allow people to set the TRAITS_DEBUG environment variable and get the
     exception.
     """

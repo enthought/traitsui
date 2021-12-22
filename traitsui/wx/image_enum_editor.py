@@ -34,13 +34,13 @@ from traitsui.wx import toolkit
 
 
 class ReadonlyEditor(Editor):
-    """ Read-only style of image enumeration editor, which displays a single
+    """Read-only style of image enumeration editor, which displays a single
     ImageControl, representing the object trait's value.
     """
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = ImageControl(
             parent,
@@ -53,8 +53,8 @@ class ReadonlyEditor(Editor):
         )
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self.control.Bitmap(
             bitmap_cache(
@@ -67,15 +67,15 @@ class ReadonlyEditor(Editor):
 
 
 class SimpleEditor(ReadonlyEditor):
-    """ Simple style of image enumeration editor, which displays an
+    """Simple style of image enumeration editor, which displays an
     ImageControl, representing the object trait's value. Clicking an image
     displays a dialog box for selecting an image corresponding to a different
     value.
     """
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         super().init(parent)
         self.control.Selected(True)
@@ -83,14 +83,14 @@ class SimpleEditor(ReadonlyEditor):
         self.set_tooltip()
 
     def popup_editor(self, control):
-        """ Handles the user clicking the ImageControl to display the pop-up
-            dialog.
+        """Handles the user clicking the ImageControl to display the pop-up
+        dialog.
         """
         ImageEnumDialog(self)
 
 
 class CustomEditor(BaseEnumEditor):
-    """ Custom style of image enumeration editor, which displays a grid of
+    """Custom style of image enumeration editor, which displays a grid of
     ImageControls. The user can click an image to select the corresponding
     value.
     """
@@ -102,8 +102,8 @@ class CustomEditor(BaseEnumEditor):
     update_handler = Any  # Callback to call when any button clicked
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         super().init(parent)
 
@@ -119,8 +119,7 @@ class CustomEditor(BaseEnumEditor):
         self._create_image_grid()
 
     def _create_image_grid(self):
-        """ Populates a specified window with a grid of image buttons.
-        """
+        """Populates a specified window with a grid of image buttons."""
         panel = self.control
 
         # Create the main sizer:
@@ -152,15 +151,14 @@ class CustomEditor(BaseEnumEditor):
         panel.SetSizerAndFit(sizer)
 
     def update_object(self, control):
-        """ Handles the user clicking on an ImageControl to set an object value.
-        """
+        """Handles the user clicking on an ImageControl to set an object value."""
         self.value = control.value
         if self.update_handler is not None:
             self.update_handler()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         value = self.value
         for control in self.control.GetChildren():
@@ -168,12 +166,10 @@ class CustomEditor(BaseEnumEditor):
 
 
 class ImageEnumDialog(wx.Frame):
-    """ Dialog box for selecting an ImageControl
-    """
+    """Dialog box for selecting an ImageControl"""
 
     def __init__(self, editor):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         wx.Frame.__init__(self, editor.control, -1, "", style=wx.SIMPLE_BORDER)
         self.SetBackgroundColour(WindowColor)
         self.Bind(wx.EVT_ACTIVATE, self._on_close_dialog)
@@ -201,14 +197,12 @@ class ImageEnumDialog(wx.Frame):
         self.Show()
 
     def _on_close_dialog(self, event):
-        """ Closes the dialog.
-        """
+        """Closes the dialog."""
         if not event.GetActive():
             self._close_dialog()
 
     def _close_dialog(self):
-        """ Closes the dialog.
-        """
+        """Closes the dialog."""
         if not self._closed:
             self._closed = True
             self.Destroy()

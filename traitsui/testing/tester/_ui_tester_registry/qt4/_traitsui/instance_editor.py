@@ -12,22 +12,20 @@ from traitsui.testing.tester.command import MouseClick
 from traitsui.testing.tester.locator import Index
 from traitsui.testing.tester.query import SelectedText
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
-    BaseSourceWithLocation
+    BaseSourceWithLocation,
 )
 from traitsui.testing.tester._ui_tester_registry.qt4._interaction_helpers import (  # noqa
-    mouse_click_combobox, mouse_click_qwidget
+    mouse_click_combobox,
+    mouse_click_qwidget,
 )
 from traitsui.testing.tester._ui_tester_registry._traitsui_ui import (
     register_traitsui_ui_solvers,
 )
-from traitsui.qt4.instance_editor import (
-    CustomEditor,
-    SimpleEditor
-)
+from traitsui.qt4.instance_editor import CustomEditor, SimpleEditor
 
 
 def _get_nested_ui_simple(target):
-    """ Obtains a nested UI within a Simple Instance Editor.
+    """Obtains a nested UI within a Simple Instance Editor.
 
     Parameters
     ----------
@@ -37,7 +35,7 @@ def _get_nested_ui_simple(target):
 
 
 def _get_nested_ui_custom(target):
-    """ Obtains a nested UI within a Custom Instance Editor.
+    """Obtains a nested UI within a Custom Instance Editor.
 
     Parameters
     ----------
@@ -47,7 +45,7 @@ def _get_nested_ui_custom(target):
 
 
 def _get_combobox(target):
-    """ Obtains a nested combobox within an Instance Editor.
+    """Obtains a nested combobox within an Instance Editor.
 
     Parameters
     ----------
@@ -69,8 +67,8 @@ def _get_combobox_text(wrapper, _):
 
 
 class _IndexedCustomEditor(BaseSourceWithLocation):
-    """ Wrapper class for CustomEditors with a selection.
-    """
+    """Wrapper class for CustomEditors with a selection."""
+
     source_class = CustomEditor
     locator_class = Index
     handlers = [
@@ -79,7 +77,7 @@ class _IndexedCustomEditor(BaseSourceWithLocation):
 
 
 def register(registry):
-    """ Register interactions for the given registry.
+    """Register interactions for the given registry.
 
     If there are any conflicts, an error will occur.
 
@@ -95,7 +93,7 @@ def register(registry):
         interaction_class=MouseClick,
         handler=lambda wrapper, _: (
             mouse_click_qwidget(wrapper._target._button, delay=wrapper.delay)
-        )
+        ),
     )
     register_traitsui_ui_solvers(registry, SimpleEditor, _get_nested_ui_simple)
 

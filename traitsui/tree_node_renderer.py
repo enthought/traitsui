@@ -14,7 +14,7 @@ from traits.api import ABCHasStrictTraits, Bool
 
 
 class AbstractTreeNodeRenderer(ABCHasStrictTraits):
-    """ Abstract base class for renderers of tree node items.
+    """Abstract base class for renderers of tree node items.
 
     This is currently only supported for Qt.
     """
@@ -30,7 +30,7 @@ class AbstractTreeNodeRenderer(ABCHasStrictTraits):
 
     @abstractmethod
     def paint(self, node, column, object, paint_context):
-        """ Render the node.
+        """Render the node.
 
         Parameters
         ----------
@@ -53,7 +53,7 @@ class AbstractTreeNodeRenderer(ABCHasStrictTraits):
 
     @abstractmethod
     def size(self, node, column, object, size_context):
-        """ Return the preferred size for the item
+        """Return the preferred size for the item
 
         Parameters
         ----------
@@ -73,7 +73,7 @@ class AbstractTreeNodeRenderer(ABCHasStrictTraits):
         raise NotImplementedError()
 
     def get_label(self, node, object, column=0):
-        """ Get the label associated with an item and column. """
+        """Get the label associated with an item and column."""
         if column == 0:
             return node.get_label(object)
         else:

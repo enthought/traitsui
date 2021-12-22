@@ -1,0 +1,1 @@
+Fix issue with incorrect items added via context menu in a TreeEditor.

@@ -10,8 +10,7 @@
 
 from traits.api import HasTraits, Str, List
 from traitsui.api import Group, Item, TableEditor, View
-from traitsui.table_column \
-    import ObjectColumn
+from traitsui.table_column import ObjectColumn
 
 
 class Word(HasTraits):
@@ -41,10 +40,11 @@ class Foo(HasTraits):
         return
 
     table_editor = TableEditor(
-        columns=[ObjectColumn(name='word')],
-        editable=True)
+        columns=[ObjectColumn(name='word')], editable=True
+    )
 
-    help = Str("""Type in the 'input' box before clicking the Parsed tab.
+    help = Str(
+        """Type in the 'input' box before clicking the Parsed tab.
 The first non-whitespace character will cause changes to the parsed trait
 and therefore changes to the table rows.  That is expected.
 
@@ -53,30 +53,39 @@ into one of the table cells.
 
 If you click the 'Parsed' tab, to view the table, and then the 'Inputs' tab
 the focus will stay with the 'input' box.
-""")
+"""
+    )
 
     traits_view = View(
-        Group(Item('help', style='readonly'),
-              Item('input'),
-              label='Input'),
-        Group(Item('parsed', editor=table_editor),
-              label='Parsed'),
+        Group(Item('help', style='readonly'), Item('input'), label='Input'),
+        Group(Item('parsed', editor=table_editor), label='Parsed'),
         dock='tab',
         resizable=True,
         width=320,
-        height=240
+        height=240,
     )
+
 
 if __name__ == '__main__':
 
     # simple test of the model
     foo = Foo()
     foo.input = 'these words in the list'
-    assert([word.word for word in foo.parsed] == [
-           'these', 'words', 'in', 'the', 'list'])
+    assert [word.word for word in foo.parsed] == [
+        'these',
+        'words',
+        'in',
+        'the',
+        'list',
+    ]
     foo.input = 'these dudes in the bar'
-    assert([word.word for word in foo.parsed] == [
-           'these', 'in', 'the', 'dudes', 'bar'])
+    assert [word.word for word in foo.parsed] == [
+        'these',
+        'in',
+        'the',
+        'dudes',
+        'bar',
+    ]
 
     foo.configure_traits(kind='modal')
     print(foo.input, [word.word for word in foo.parsed])

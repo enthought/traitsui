@@ -18,13 +18,12 @@ from traitsui.toolkit import toolkit_object
 
 
 class TitleEditor(EditorFactory):
-    """ Editor factory for Title editors.
-    """
+    """Editor factory for Title editors."""
 
     allow_selection = Bool(False)
 
     def _get_simple_editor_class(self):
-        """ Returns the editor class to use for "simple" style views.
+        """Returns the editor class to use for "simple" style views.
         The default implementation tries to import the SimpleEditor class in
         the editor file in the backend package, and if such a class is not to
         found it returns the SimpleEditor class defined in editor_factory

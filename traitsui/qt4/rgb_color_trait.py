@@ -25,10 +25,10 @@ from traitsui.qt4.color_trait import standard_colors
 
 
 def range_check(value):
-    """ Checks that *value* can be converted to a value in the range 0.0 to 1.0.
+    """Checks that *value* can be converted to a value in the range 0.0 to 1.0.
 
-        If so, it returns the floating point value; otherwise, it raises a
-        TraitError.
+    If so, it returns the floating point value; otherwise, it raises a
+    TraitError.
     """
     value = float(value)
     if 0.0 <= value <= 1.0:
@@ -37,8 +37,8 @@ def range_check(value):
 
 
 def convert_to_color(object, name, value):
-    """ Converts a tuple or an integer to an RGB color value, or raises a
-        TraitError if that is not possible.
+    """Converts a tuple or an integer to an RGB color value, or raises a
+    TraitError if that is not possible.
     """
     if isinstance(value, SequenceTypes) and len(value) == 3:
         return (

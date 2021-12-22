@@ -31,16 +31,15 @@ from traitsui.api import View, VGroup, HGroup, Item, Controller
 
 
 class MyModel(HasTraits):
-    """ Define a simple model containing a single string, 'myname'
-    """
+    """Define a simple model containing a single string, 'myname'"""
 
     # Simple model data:
     myname = Str()
 
 
 class MyViewController(Controller):
-    """ Define a combined controller/view class that validates that
-        MyModel.myname is consistent with the 'allow_empty_string' flag.
+    """Define a combined controller/view class that validates that
+    MyModel.myname is consistent with the 'allow_empty_string' flag.
     """
 
     # When False, the model.myname trait is not allowed to be empty:
@@ -53,25 +52,25 @@ class MyViewController(Controller):
     view = View(
         VGroup(
             HGroup(
-                Item('myname', springy=True), '10',
-                Item('controller.allow_empty_string', label='Allow Empty')
+                Item('myname', springy=True),
+                '10',
+                Item('controller.allow_empty_string', label='Allow Empty'),
             ),
-
             # Add an empty vertical group so the above items don't end up
             # centered vertically:
-            VGroup()
+            VGroup(),
         ),
-        resizable=True
+        resizable=True,
     )
 
-    #-- Handler Interface ----------------------------------------------------
+    # -- Handler Interface ----------------------------------------------------
 
     def myname_setattr(self, info, object, traitname, value):
-        """ Validate the request to change the named trait on object to the
-            specified value.  Validation errors raise TraitError, which by
-            default causes the editor's entry field to be shown in red.
-            (This is a specially named method <model trait name>_setattr,
-            which is available inside a Controller.)
+        """Validate the request to change the named trait on object to the
+        specified value.  Validation errors raise TraitError, which by
+        default causes the editor's entry field to be shown in red.
+        (This is a specially named method <model trait name>_setattr,
+        which is available inside a Controller.)
         """
         self.last_name = value
         if (not self.allow_empty_string) and (value.strip() == ''):
@@ -79,16 +78,17 @@ class MyViewController(Controller):
 
         return super().setattr(info, object, traitname, value)
 
-    #-- Event handlers -------------------------------------------------------
+    # -- Event handlers -------------------------------------------------------
 
     def controller_allow_empty_string_changed(self, info):
-        """ 'allow_empty_string' has changed, check the myname trait to ensure
-            that it is consistent with the current setting.
+        """'allow_empty_string' has changed, check the myname trait to ensure
+        that it is consistent with the current setting.
         """
         if (not self.allow_empty_string) and (self.model.myname == ''):
             self.model.myname = '?'
         else:
             self.model.myname = self.last_name
+
 
 # Create the model and (demo) view/controller:
 demo = MyViewController(MyModel())

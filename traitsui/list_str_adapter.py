@@ -14,6 +14,7 @@
 from traits.api import (
     Any,
     Bool,
+    Dict,
     Enum,
     Event,
     HasPrivateTraits,
@@ -82,8 +83,8 @@ class AnIListStrAdapter(HasPrivateTraits):
 
 
 class ListStrAdapter(HasPrivateTraits):
-    """ The base class for adapting list items to values that can be edited
-        by a ListStrEditor.
+    """The base class for adapting list items to values that can be edited
+    by a ListStrEditor.
     """
 
     # Trait Definitions ------------------------------------------------------
@@ -137,7 +138,7 @@ class ListStrAdapter(HasPrivateTraits):
     # -- Private Trait Definitions --------------------------------------------
 
     #: Cache of attribute handlers.
-    cache = Any({})
+    cache = Dict()
 
     #: Event fired when the cache is flushed.
     cache_flushed = Event(update=True)
@@ -145,76 +146,74 @@ class ListStrAdapter(HasPrivateTraits):
     # -- Adapter methods that are sensitive to item type ----------------------
 
     def get_can_edit(self, object, trait, index):
-        """ Returns whether the user can edit a specified *object.trait[index]*
-            list item. A True result indicates the value can be edited, while
-            a False result indicates that it cannot be edited.
+        """Returns whether the user can edit a specified *object.trait[index]*
+        list item. A True result indicates the value can be edited, while
+        a False result indicates that it cannot be edited.
         """
         return self._result_for("get_can_edit", object, trait, index)
 
     def get_drag(self, object, trait, index):
-        """ Returns the 'drag' value for a specified *object.trait[index]*
-            list item. A result of *None* means that the item cannot be
-            dragged.
+        """Returns the 'drag' value for a specified *object.trait[index]*
+        list item. A result of *None* means that the item cannot be
+        dragged.
         """
         return self._result_for("get_drag", object, trait, index)
 
     def get_can_drop(self, object, trait, index, value):
-        """ Returns whether the specified *value* can be dropped on the
-            specified *object.trait[index]* list item. A value of **True**
-            means the *value* can be dropped; and a value of **False**
-            indicates that it cannot be dropped.
+        """Returns whether the specified *value* can be dropped on the
+        specified *object.trait[index]* list item. A value of **True**
+        means the *value* can be dropped; and a value of **False**
+        indicates that it cannot be dropped.
         """
         return self._result_for("get_can_drop", object, trait, index, value)
 
     def get_dropped(self, object, trait, index, value):
-        """ Returns how to handle a specified *value* being dropped on a
-            specified *object.trait[index]* list item. The possible return
-            values are:
+        """Returns how to handle a specified *value* being dropped on a
+        specified *object.trait[index]* list item. The possible return
+        values are:
 
-            'before'
-                Insert the specified *value* before the dropped on item.
-            'after'
-                Insert the specified *value* after the dropped on item.
+        'before'
+            Insert the specified *value* before the dropped on item.
+        'after'
+            Insert the specified *value* after the dropped on item.
         """
         return self._result_for("get_dropped", object, trait, index, value)
 
     def get_text_color(self, object, trait, index):
-        """ Returns the text color for a specified *object.trait[index]* list
-            item. A result of None means use the default list item text color.
+        """Returns the text color for a specified *object.trait[index]* list
+        item. A result of None means use the default list item text color.
         """
         return self._result_for("get_text_color", object, trait, index)
 
     def get_bg_color(self, object, trait, index):
-        """ Returns the background color for a specified *object.trait[index]*
-            list item. A result of None means use the default list item
-            background color.
+        """Returns the background color for a specified *object.trait[index]*
+        list item. A result of None means use the default list item
+        background color.
         """
         return self._result_for("get_bg_color", object, trait, index)
 
     def get_image(self, object, trait, index):
-        """ Returns the name of the image to use for a specified
-            *object.trait[index]* list item. A result of None means no image
-            should be used. Otherwise, the result should either be the name of
-            the image, or an ImageResource item specifying the image to use.
+        """Returns the name of the image to use for a specified
+        *object.trait[index]* list item. A result of None means no image
+        should be used. Otherwise, the result should either be the name of
+        the image, or an ImageResource item specifying the image to use.
         """
         return self._result_for("get_image", object, trait, index)
 
     def get_item(self, object, trait, index):
-        """ Returns the value of the *object.trait[index]* list item.
-        """
+        """Returns the value of the *object.trait[index]* list item."""
         return self._result_for("get_item", object, trait, index)
 
     def get_text(self, object, trait, index):
-        """ Returns the text to display for a specified *object.trait[index]*
-            list item.
+        """Returns the text to display for a specified *object.trait[index]*
+        list item.
         """
         return self._result_for("get_text", object, trait, index)
 
     # -- Adapter methods that are not sensitive to item type ------------------
 
     def len(self, object, trait):
-        """ Returns the number of items in the specified *object.trait* list.
-        """
+        """Returns the number of items in the specified *object.trait* list."""
         # Sometimes, during shutdown, the object has been set to None.
         if object is None:
             return 0
@@ -222,46 +221,42 @@ class ListStrAdapter(HasPrivateTraits):
             return len(getattr(object, trait))
 
     def get_default_value(self, object, trait):
-        """ Returns a new default value for the specified *object.trait* list.
-        """
+        """Returns a new default value for the specified *object.trait* list."""
         return self.default_value
 
     def get_default_text(self, object, trait):
-        """ Returns the default text for the specified *object.trait* list.
-        """
+        """Returns the default text for the specified *object.trait* list."""
         return self.default_text
 
     def get_default_image(self, object, trait):
-        """ Returns the default image for the specified *object.trait* list.
-        """
+        """Returns the default image for the specified *object.trait* list."""
         return self.image
 
     def get_default_bg_color(self, object, trait):
-        """ Returns the default background color for the specified
-            *object.trait* list.
+        """Returns the default background color for the specified
+        *object.trait* list.
         """
         return self._get_bg_color()
 
     def get_default_text_color(self, object, trait):
-        """ Returns the default text color for the specified *object.trait*
-            list.
+        """Returns the default text color for the specified *object.trait*
+        list.
         """
         return self._get_text_color()
 
     def set_text(self, object, trait, index, text):
-        """ Sets the text for a specified *object.trait[index]* list item to
-            *text*.
+        """Sets the text for a specified *object.trait[index]* list item to
+        *text*.
         """
         getattr(object, trait)[index] = text
 
     def delete(self, object, trait, index):
-        """ Deletes the specified *object.trait[index]* list item.
-        """
+        """Deletes the specified *object.trait[index]* list item."""
         del getattr(object, trait)[index]
 
     def insert(self, object, trait, index, value):
-        """ Inserts a new value at the specified *object.trait[index]* list
-            index.
+        """Inserts a new value at the specified *object.trait[index]* list
+        index.
         """
         getattr(object, trait)[index:index] = [value]
 
@@ -303,8 +298,8 @@ class ListStrAdapter(HasPrivateTraits):
     # -- Private Methods ------------------------------------------------------
 
     def _result_for(self, name, object, trait, index, value=None):
-        """ Returns/Sets the value of the specified *name* attribute for the
-            specified *object.trait[index]* list item.
+        """Returns/Sets the value of the specified *name* attribute for the
+        specified *object.trait[index]* list item.
         """
         self.index = index
         self.value = value
@@ -352,7 +347,6 @@ class ListStrAdapter(HasPrivateTraits):
 
     @observe("adapters.items.+update")
     def _flush_cache(self, event):
-        """ Flushes the cache when any trait on any adapter changes.
-        """
+        """Flushes the cache when any trait on any adapter changes."""
         self.cache = {}
         self.cache_flushed = True

@@ -30,7 +30,12 @@ from traits.api import HasPrivateTraits, List, Str, Property, observe
 from traits.etsconfig.api import ETSConfig
 
 from traitsui.api import (
-    BasicEditorFactory, HGroup, Item, TabularAdapter, TabularEditor, View
+    BasicEditorFactory,
+    HGroup,
+    Item,
+    TabularAdapter,
+    TabularEditor,
+    View,
 )
 
 if ETSConfig.toolkit == 'wx':
@@ -76,11 +81,11 @@ class _StringListEditor(UIEditor):
                 selected='selected',
                 editable=False,
                 multi_select=True,
-                adapter=MultiSelectAdapter()
-            )
+                adapter=MultiSelectAdapter(),
+            ),
         ),
         id='string_list_editor',
-        resizable=True
+        resizable=True,
     )
 
     def init_ui(self, parent):
@@ -107,8 +112,8 @@ class StringListEditor(BasicEditorFactory):
 
 # -- Define the demo class ----------------------------------------------------
 class MultiSelect(HasPrivateTraits):
-    """ This class demonstrates using the StringListEditor to select a set
-        of string values from a set of choices.
+    """This class demonstrates using the StringListEditor to select a set
+    of string values from a set of choices.
     """
 
     # The list of choices to select from:
@@ -128,26 +133,34 @@ class MultiSelect(HasPrivateTraits):
             Item(
                 'selected',
                 show_label=False,
-                editor=StringListEditor(choices='choices')
+                editor=StringListEditor(choices='choices'),
             ),
             Item(
                 'result',
                 show_label=False,
-                editor=StringListEditor(choices='selected')
-            )
+                editor=StringListEditor(choices='selected'),
+            ),
         ),
         width=0.20,
-        height=0.25
+        height=0.25,
     )
 
 
 # Create the demo:
 demo = MultiSelect(
     choices=[
-        'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
-        'ten'
+        'one',
+        'two',
+        'three',
+        'four',
+        'five',
+        'six',
+        'seven',
+        'eight',
+        'nine',
+        'ten',
     ],
-    selected=['two', 'five', 'nine']
+    selected=['two', 'five', 'nine'],
 )
 
 # Run the demo (if invoked from the command line):

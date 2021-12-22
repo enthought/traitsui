@@ -22,7 +22,8 @@ from traitsui.api import View, Item, DateRangeEditor, Group
 
 
 class DateRangeEditorDemo(HasTraits):
-    """ Demo class to show DateRangeEditor. """
+    """Demo class to show DateRangeEditor."""
+
     date_range = Tuple(Date, Date)
 
     traits_view = View(
@@ -31,11 +32,11 @@ class DateRangeEditorDemo(HasTraits):
                 'date_range',
                 editor=DateRangeEditor(),
                 style='custom',
-                label='Date range'
+                label='Date range',
             ),
-            label='Date range'
+            label='Date range',
         ),
-        resizable=True
+        resizable=True,
     )
 
     def _date_range_changed(self):

@@ -37,8 +37,7 @@ from traitsui.tests._tools import (
 
 
 class NumberWithSpinnerEditor(HasTraits):
-    """Dialog containing a RangeEditor in 'spinner' mode for an Int.
-    """
+    """Dialog containing a RangeEditor in 'spinner' mode for an Int."""
 
     number = Int()
 
@@ -50,7 +49,6 @@ class NumberWithSpinnerEditor(HasTraits):
 
 
 class TestRangeEditorSpinner(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

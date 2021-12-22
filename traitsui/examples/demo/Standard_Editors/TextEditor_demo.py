@@ -33,8 +33,7 @@ from traitsui.api import Item, Group, View
 
 # The main demo class:
 class TextEditorDemo(HasTraits):
-    """ Defines the TextEditor demo class.
-    """
+    """Defines the TextEditor demo class."""
 
     # Define a trait for each of three TextEditor variants:
     string_trait = Str("sample string")
@@ -50,7 +49,7 @@ class TextEditorDemo(HasTraits):
         Item('string_trait', style='text', label='Text'),
         Item('_'),
         Item('string_trait', style='readonly', label='ReadOnly'),
-        label='String'
+        label='String',
     )
 
     # TextEditor display without multi-line capability (for an integer):
@@ -62,9 +61,12 @@ class TextEditorDemo(HasTraits):
         Item('int_trait', style='text', label='Text', id="text_int"),
         Item('_'),
         Item(
-            'int_trait', style='readonly', label='ReadOnly', id="readonly_int",
+            'int_trait',
+            style='readonly',
+            label='ReadOnly',
+            id="readonly_int",
         ),
-        label='Integer'
+        label='Integer',
     )
 
     # TextEditor display with secret typing capability (for Password traits):
@@ -76,7 +78,7 @@ class TextEditorDemo(HasTraits):
         Item('password', style='text', label='Text'),
         Item('_'),
         Item('password', style='readonly', label='ReadOnly'),
-        label='Password'
+        label='Password',
     )
 
     # The view includes one group per data type. These will be displayed
@@ -86,7 +88,7 @@ class TextEditorDemo(HasTraits):
         text_pass_group,
         text_int_group,
         title='TextEditor',
-        buttons=['OK']
+        buttons=['OK'],
     )
 
 

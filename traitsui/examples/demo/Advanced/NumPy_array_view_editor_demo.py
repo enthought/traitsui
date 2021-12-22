@@ -54,7 +54,7 @@ from traits.api import HasTraits, Array
 from traitsui.api import View, Item
 from traitsui.ui_editors.array_view_editor import ArrayViewEditor
 
-#-- ShowArray demo class -------------------------------------------------
+# -- ShowArray demo class -------------------------------------------------
 
 
 class ShowArray(HasTraits):
@@ -62,22 +62,25 @@ class ShowArray(HasTraits):
     data = Array
 
     view = View(
-        Item('data',
-             show_label=False,
-             editor=ArrayViewEditor(titles=['x', 'y', 'z'],
-                                    format='%.4f',
-                                    # Font fails with wx in OSX;
-                                    #   see traitsui issue #13:
-                                    # font   = 'Arial 8'
-                                    )
-             ),
+        Item(
+            'data',
+            show_label=False,
+            editor=ArrayViewEditor(
+                titles=['x', 'y', 'z'],
+                format='%.4f',
+                # Font fails with wx in OSX;
+                #   see traitsui issue #13:
+                # font   = 'Arial 8'
+            ),
+        ),
         title='Array Viewer',
         width=0.3,
         height=0.8,
-        resizable=True
+        resizable=True,
     )
 
-#-- Run the demo ---------------------------------------------------------
+
+# -- Run the demo ---------------------------------------------------------
 
 # Create the demo:
 demo = ShowArray(data=random((100000, 3)))

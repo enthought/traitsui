@@ -26,8 +26,7 @@ from traitsui.view import View
 
 
 class _ValueEditor(Editor):
-    """ Simple style of editor for values, which displays a tree.
-    """
+    """Simple style of editor for values, which displays a tree."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -43,8 +42,8 @@ class _ValueEditor(Editor):
     scrollable = True
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.update_editor()
         editor = TreeEditor(
@@ -63,27 +62,24 @@ class _ValueEditor(Editor):
         self.control = self._ui.control
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes external to the
-            editor.
+        """Updates the editor when the object trait changes external to the
+        editor.
         """
         self.root = RootNode(name="", value=self.value, readonly=self.readonly)
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         self._ui.dispose()
 
         super().dispose()
 
     def get_error_control(self):
-        """ Returns the editor's control for indicating error status.
-        """
+        """Returns the editor's control for indicating error status."""
         return self._ui.get_error_controls()
 
 
 class ValueEditor(EditorFactory):
-    """ Editor factory for tree-based value editors.
-    """
+    """Editor factory for tree-based value editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

@@ -13,7 +13,10 @@ from unittest import mock
 
 from pyface.api import GUI
 from traits.api import (
-    Button, Instance, HasTraits, Str,
+    Button,
+    Instance,
+    HasTraits,
+    Str,
 )
 from traitsui.api import Item, ModelView, View
 from traitsui.tests._tools import (
@@ -50,8 +53,7 @@ class SimpleApplication(ModelView):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUITesterCreateUI(unittest.TestCase):
-    """ Test UITester.create_ui
-    """
+    """Test UITester.create_ui"""
 
     def test_ui_disposed(self):
         tester = UITester()
@@ -66,8 +68,9 @@ class TestUITesterCreateUI(unittest.TestCase):
         order = Order()
         view = View(Item("submit_button"))
 
-        with self.assertRaises(RuntimeError), \
-                self.assertLogs("traitsui", level="ERROR"):
+        with self.assertRaises(RuntimeError), self.assertLogs(
+            "traitsui", level="ERROR"
+        ):
 
             with tester.create_ui(order, dict(view=view)) as ui:
 
@@ -99,7 +102,7 @@ class TestUITesterCreateUI(unittest.TestCase):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUITesterRegistry(unittest.TestCase):
-    """ Test maintaining registries."""
+    """Test maintaining registries."""
 
     def test_traitsui_registry_added(self):
         # Even if we have a custom registry list, the builtin TraitsUI
@@ -127,7 +130,7 @@ class TestUITesterRegistry(unittest.TestCase):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUITesterFindEditor(unittest.TestCase):
-    """ Test logic for finding a target."""
+    """Test logic for finding a target."""
 
     def test_interactor_found_if_editor_found(self):
         tester = UITester()
@@ -136,7 +139,7 @@ class TestUITesterFindEditor(unittest.TestCase):
             wrapper = tester.find_by_name(ui, "submit_button")
             self.assertIsInstance(wrapper, UIWrapper)
 
-            expected, = ui.get_editors("submit_button")
+            (expected,) = ui.get_editors("submit_button")
             self.assertEqual(wrapper._target, expected)
             self.assertEqual(
                 wrapper._registries,
@@ -152,7 +155,8 @@ class TestUITesterFindEditor(unittest.TestCase):
                 tester.find_by_name(ui, "submit_n_events")
 
         self.assertIn(
-            "No editors can be found", str(exception_context.exception),
+            "No editors can be found",
+            str(exception_context.exception),
         )
 
     def test_multiple_editors_found(self):
@@ -165,15 +169,16 @@ class TestUITesterFindEditor(unittest.TestCase):
                 tester.find_by_name(ui, "submit_button")
 
         self.assertIn(
-            "Found multiple editors", str(exception_context.exception),
+            "Found multiple editors",
+            str(exception_context.exception),
         )
 
     def test_delay_persisted(self):
-        tester = UITester(delay=.01)
+        tester = UITester(delay=0.01)
         view = View(Item("submit_button"))
         with tester.create_ui(Order(), dict(view=view)) as ui:
             wrapped = tester.find_by_name(ui, "submit_button")
-            self.assertEqual(wrapped.delay, .01)
+            self.assertEqual(wrapped.delay, 0.01)
 
     def test_find_by_id(self):
         tester = UITester(delay=123)
@@ -213,7 +218,7 @@ class TestUITesterFindEditor(unittest.TestCase):
 
 
 class TestUITesterGuiFree(unittest.TestCase):
-    """ Test GUI free interface on UITester."""
+    """Test GUI free interface on UITester."""
 
     def test_auto_process_events_readonly(self):
         # auto_process_events can be inspected, but it cannot be changed.

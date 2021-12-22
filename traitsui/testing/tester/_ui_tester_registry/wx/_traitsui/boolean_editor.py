@@ -15,7 +15,7 @@ from traitsui.testing.tester._ui_tester_registry.wx import _interaction_helpers
 
 
 def register(registry):
-    """ Register solvers/handlers specific to wx Boolean Editors
+    """Register solvers/handlers specific to wx Boolean Editors
     for the given registry.
 
     If there are any conflicts, an error will occur.
@@ -27,21 +27,23 @@ def register(registry):
     registry.register_interaction(
         target_class=SimpleEditor,
         interaction_class=MouseClick,
-        handler=(lambda wrapper, _: _interaction_helpers.mouse_click_checkbox(
-                 control=wrapper._target.control, delay=wrapper.delay))
+        handler=(
+            lambda wrapper, _: _interaction_helpers.mouse_click_checkbox(
+                control=wrapper._target.control, delay=wrapper.delay
+            )
+        ),
     )
 
     registry.register_interaction(
         target_class=SimpleEditor,
         interaction_class=IsChecked,
-        handler=lambda wrapper, _: wrapper._target.control.GetValue()
+        handler=lambda wrapper, _: wrapper._target.control.GetValue(),
     )
 
     registry.register_interaction(
         target_class=ReadonlyEditor,
         interaction_class=DisplayedText,
-        handler=lambda wrapper, _:
-            _interaction_helpers.readonly_textbox_displayed_text(
-                control=wrapper._target.control
-            )
+        handler=lambda wrapper, _: _interaction_helpers.readonly_textbox_displayed_text(
+            control=wrapper._target.control
+        ),
     )

@@ -19,8 +19,8 @@ from traitsui.toolkit import toolkit_object
 
 
 class SearchEditor(BasicEditorFactory):
-    """ A single line text widget that supports functionality common to native
-        search widgets.
+    """A single line text widget that supports functionality common to native
+    search widgets.
     """
 
     #: The editor class to be created:
@@ -46,6 +46,5 @@ class SearchEditor(BasicEditorFactory):
     search_event_trait = Str()
 
     def _get_klass(self):
-        """ Returns the toolkit-specific editor class to be instantiated.
-        """
+        """Returns the toolkit-specific editor class to be instantiated."""
         return toolkit_object("search_editor:SearchEditor")

@@ -48,7 +48,7 @@ player_editor = TableEditor(
             name='name',
             editable=False,
             width=0.24,
-            horizontal_alignment='left'
+            horizontal_alignment='left',
         ),
         PlayerColumn(name='at_bats', label='AB'),
         PlayerColumn(name='strike_outs', label='SO'),
@@ -58,12 +58,9 @@ player_editor = TableEditor(
         PlayerColumn(name='home_runs', label='HR'),
         PlayerColumn(name='walks', label='W'),
         PlayerColumn(
-            name='average',
-            label='Ave',
-            editable=False,
-            format='%0.3f'
-        )
-    ]
+            name='average', label='Ave', editable=False, format='%0.3f'
+        ),
+    ],
 )
 
 
@@ -82,13 +79,14 @@ class Player(HasStrictTraits):
     average = Property(Float)
 
     def _get_average(self):
-        """ Computes the player's batting average from the current statistics.
-        """
+        """Computes the player's batting average from the current statistics."""
         if self.at_bats == 0:
             return 0.0
 
-        return float(self.singles + self.doubles +
-                     self.triples + self.home_runs) / self.at_bats
+        return (
+            float(self.singles + self.doubles + self.triples + self.home_runs)
+            / self.at_bats
+        )
 
 
 class Team(HasStrictTraits):
@@ -104,13 +102,12 @@ class Team(HasStrictTraits):
         title='Baseball Team Roster Demo',
         width=0.5,
         height=0.5,
-        resizable=True
+        resizable=True,
     )
 
 
 def random_player(name):
-    """ Generates and returns a random player.
-    """
+    """Generates and returns a random player."""
     p = Player(
         name=name,
         strike_outs=randint(0, 50),
@@ -118,12 +115,16 @@ def random_player(name):
         doubles=randint(0, 20),
         triples=randint(0, 5),
         home_runs=randint(0, 30),
-        walks=randint(0, 50)
+        walks=randint(0, 50),
     )
     return p.trait_set(
         at_bats=(
-            p.strike_outs + p.singles + p.doubles + p.triples + p.home_runs +
-            randint(100, 200)
+            p.strike_outs
+            + p.singles
+            + p.doubles
+            + p.triples
+            + p.home_runs
+            + randint(100, 200)
         )
     )
 
@@ -131,9 +132,17 @@ def random_player(name):
 # Create the demo:
 demo = Team(
     players=[
-        random_player(name) for name in [
-            'Dave', 'Mike', 'Joe', 'Tom', 'Dick', 'Harry', 'Dirk', 'Fields',
-            'Stretch'
+        random_player(name)
+        for name in [
+            'Dave',
+            'Mike',
+            'Joe',
+            'Tom',
+            'Dick',
+            'Harry',
+            'Dirk',
+            'Fields',
+            'Stretch',
         ]
     ]
 )

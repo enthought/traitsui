@@ -25,21 +25,31 @@ This demo includes a simple Chaco plot for variety, but it is not a Chaco demo.
 """
 from numpy import linspace, pi, sin
 from traits.api import HasTraits, Instance, Str, Int
+
 # UItem is Unlabeled Item
-from traitsui.api import View, Item, UItem, HSplit, InstanceEditor, \
-    VGroup, HGroup
+from traitsui.api import (
+    View,
+    Item,
+    UItem,
+    HSplit,
+    InstanceEditor,
+    VGroup,
+    HGroup,
+)
 from chaco.api import Plot, AbstractPlotData, ArrayPlotData
 from enable.component_editor import ComponentEditor
 
 
 class InstanceUItem(UItem):
     """Convenience class for including an Instance in a View"""
+
     style = Str('custom')
     editor = Instance(InstanceEditor, ())
 
 
 class PlotView(HasTraits):
     """Defines a sub-view whose size we wish to explicitly control."""
+
     n = Int(123)
     data = Instance(AbstractPlotData)
     plot1 = Instance(Plot)
@@ -62,6 +72,7 @@ class PlotView(HasTraits):
 
 class VerticalBar(HasTraits):
     """Defines a sub-view whose size we wish to explicitly control."""
+
     a = Str('abcdefg')
     b = Int(123)
     view = View(
@@ -81,6 +92,7 @@ class BigView(HasTraits):
     their own views, the resizing becomes possible, because they are loaded
     as Items now.
     """
+
     bar = Instance(VerticalBar, ())
     plot = Instance(PlotView)
     view = View(
@@ -95,6 +107,7 @@ class BigView(HasTraits):
         ),
         resizable=True,
     )
+
 
 x = linspace(-2 * pi, 2 * pi, 100)
 pv = PlotView(data=ArrayPlotData(x=x, y1=sin(x)))

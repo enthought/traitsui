@@ -23,8 +23,7 @@ from .helper import restore_window
 
 
 class ButtonEditor(Editor):
-    """ Editor for buttons.
-    """
+    """Editor for buttons."""
 
     # Action associated with the button
     action = Instance(Action)
@@ -34,15 +33,13 @@ class ButtonEditor(Editor):
         HasPrivateTraits.__init__(self, **traits)
 
     def perform(self, event):
-        """ Handles the associated button being clicked.
-        """
+        """Handles the associated button being clicked."""
         handler = self.ui.handler
         self.ui.do_undoable(handler.perform, self.ui.info, self.action, event)
 
 
 class BaseDialog(_BasePanel):
-    """ Base class for Traits UI dialog boxes.
-    """
+    """Base class for Traits UI dialog boxes."""
 
     # The different dialog styles.
     NONMODAL = 0
@@ -91,14 +88,13 @@ class BaseDialog(_BasePanel):
             ui.control.Show()
 
     def default_icon(self):
-        """ Return a default icon for a TraitsUI dialog. """
+        """Return a default icon for a TraitsUI dialog."""
         from pyface.image_resource import ImageResource
 
         return ImageResource("frame.ico")
 
     def set_icon(self, icon=None):
-        """ Sets the frame's icon.
-        """
+        """Sets the frame's icon."""
         from pyface.image_resource import ImageResource
 
         if not isinstance(icon, ImageResource):
@@ -106,8 +102,7 @@ class BaseDialog(_BasePanel):
         self.control.SetIcon(icon.create_icon())
 
     def add_statusbar(self):
-        """ Adds a status bar to the dialog.
-        """
+        """Adds a status bar to the dialog."""
         ui = self.ui
         statusbar = ui.view.statusbar
         context = ui.context
@@ -147,8 +142,7 @@ class BaseDialog(_BasePanel):
         return set_status_text
 
     def add_menubar(self):
-        """ Adds a menu bar to the dialog.
-        """
+        """Adds a menu bar to the dialog."""
         menubar = self.ui.view.menubar
         if menubar is not None:
             self._last_group = self._last_parent = None
@@ -158,8 +152,7 @@ class BaseDialog(_BasePanel):
             self._last_group = self._last_parent = None
 
     def add_toolbar(self):
-        """ Adds a toolbar to the dialog.
-        """
+        """Adds a toolbar to the dialog."""
         toolbar = self.ui.view.toolbar
         if toolbar is not None:
             self._last_group = self._last_parent = None
@@ -177,8 +170,7 @@ class BaseDialog(_BasePanel):
         name=None,
         default=False,
     ):
-        """ Creates a button.
-        """
+        """Creates a button."""
         ui = self.ui
         if (action.defined_when != "") and (
             not ui.eval_when(action.defined_when)

@@ -61,8 +61,7 @@ RenameAction = Action(
 
 
 class TreeEditor(EditorFactory):
-    """ Editor factory for tree editors.
-    """
+    """Editor factory for tree editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

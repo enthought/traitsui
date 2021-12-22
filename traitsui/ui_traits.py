@@ -48,7 +48,8 @@ Orientation = PrefixList(("vertical", "horizontal"))
 
 # Styles for user interface elements:
 EditorStyle = style_trait = PrefixList(
-    ("simple", "custom", "text", "readonly"), cols=4)
+    ("simple", "custom", "text", "readonly"), cols=4
+)
 
 # Group layout trait:
 Layout = PrefixList(("normal", "split", "tabbed", "flow", "fold"))
@@ -114,8 +115,7 @@ class StatusItem(HasStrictTraits):
     width = Float(0.5)
 
     def __init__(self, value=None, **traits):
-        """ Initializes the item object.
-        """
+        """Initializes the item object."""
         super().__init__(**traits)
 
         if value is not None:
@@ -128,8 +128,8 @@ class StatusItem(HasStrictTraits):
 
 
 class ViewStatus(TraitType):
-    """ Defines a trait whose value must be a single StatusItem instance or a
-        list of StatusItem instances.
+    """Defines a trait whose value must be a single StatusItem instance or a
+    list of StatusItem instances.
     """
 
     #: Define the default value for the trait:
@@ -142,8 +142,7 @@ class ViewStatus(TraitType):
     )
 
     def validate(self, object, name, value):
-        """ Validates that a specified value is valid for this trait.
-        """
+        """Validates that a specified value is valid for this trait."""
         if isinstance(value, str):
             return [StatusItem(name=value)]
 
@@ -174,8 +173,7 @@ class ViewStatus(TraitType):
 
 
 def convert_theme(value, level=3):
-    """ Converts a specified value to a Theme if possible.
-    """
+    """Converts a specified value to a Theme if possible."""
     if not isinstance(value, str):
         return value
 
@@ -196,8 +194,8 @@ def convert_theme(value, level=3):
 
 
 class ATheme(TraitType):
-    """ Defines a trait whose value must be a traits UI Theme or a string that
-        can be converted to one.
+    """Defines a trait whose value must be a traits UI Theme or a string that
+    can be converted to one.
     """
 
     #: Define the default value for the trait:
@@ -207,7 +205,7 @@ class ATheme(TraitType):
     info_text = "a Theme or string that can be used to define one"
 
     def __init__(self, value=None, **metadata):
-        """ Creates an ATheme trait.
+        """Creates an ATheme trait.
 
         Parameters
         ----------
@@ -218,8 +216,7 @@ class ATheme(TraitType):
         super().__init__(convert_theme(value), **metadata)
 
     def validate(self, object, name, value):
-        """ Validates that a specified value is valid for this trait.
-        """
+        """Validates that a specified value is valid for this trait."""
         from .theme import Theme
 
         if value is None:

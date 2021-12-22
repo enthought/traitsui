@@ -12,7 +12,6 @@
 """
 
 
-
 from pyface.qt.QtGui import QFrame, QPainter, QPalette
 
 from pyface.image_resource import ImageResource
@@ -33,14 +32,14 @@ from .editor import Editor
 
 
 class QImageView(QFrame):
-    """ A custom QFrame that will paint a QPixmap as an image. The
+    """A custom QFrame that will paint a QPixmap as an image. The
     api is similar to QLabel, but with a few more options to control
     how the image scales.
 
     """
 
     def __init__(self, parent=None):
-        """ Initialize a QImageView.
+        """Initialize a QImageView.
 
         Parameters
         ----------
@@ -61,7 +60,7 @@ class QImageView(QFrame):
     # Private API
     # --------------------------------------------------------------------------
     def paintEvent(self, event):
-        """ A custom paint event handler which draws the image according
+        """A custom paint event handler which draws the image according
         to the current size constraints.
 
         """
@@ -124,7 +123,7 @@ class QImageView(QFrame):
     # Public API
     # --------------------------------------------------------------------------
     def sizeHint(self):
-        """ Returns a appropriate size hint for the image based on the
+        """Returns a appropriate size hint for the image based on the
         underlying QPixmap.
 
         """
@@ -134,7 +133,7 @@ class QImageView(QFrame):
         return super().sizeHint()
 
     def minimumSizeHint(self):
-        """ Returns a appropriate minimum size hint for the image based on the
+        """Returns a appropriate minimum size hint for the image based on the
         underlying QPixmap.
 
         """
@@ -148,13 +147,11 @@ class QImageView(QFrame):
         return super().sizeHint()
 
     def pixmap(self):
-        """ Returns the underlying pixmap for the image view.
-
-        """
+        """Returns the underlying pixmap for the image view."""
         return self._pixmap
 
     def setPixmap(self, pixmap):
-        """ Set the pixmap to use as the image in the widget.
+        """Set the pixmap to use as the image in the widget.
 
         Parameters
         ----------
@@ -166,14 +163,14 @@ class QImageView(QFrame):
         self.update()
 
     def scaledContents(self):
-        """ Returns whether or not the contents scale with the widget
+        """Returns whether or not the contents scale with the widget
         size.
 
         """
         return self._scaled_contents
 
     def setScaledContents(self, scaled):
-        """ Set whether the contents scale with the widget size.
+        """Set whether the contents scale with the widget size.
 
         Parameters
         ----------
@@ -187,14 +184,14 @@ class QImageView(QFrame):
         self.update()
 
     def allowUpscaling(self):
-        """ Returns whether or not the image can be scaled greater than
+        """Returns whether or not the image can be scaled greater than
         its natural size.
 
         """
         return self._allow_upscaling
 
     def setAllowUpscaling(self, allow):
-        """ Set whether or not to allow the image to be scaled beyond
+        """Set whether or not to allow the image to be scaled beyond
         its natural size.
 
         Parameters
@@ -210,14 +207,14 @@ class QImageView(QFrame):
         self.update()
 
     def preserveAspectRatio(self):
-        """ Returns whether or not the aspect ratio of the image is
+        """Returns whether or not the aspect ratio of the image is
         maintained during a resize.
 
         """
         return self._preserve_aspect_ratio
 
     def setPreserveAspectRatio(self, preserve):
-        """ Set whether or not to preserve the image aspect ratio.
+        """Set whether or not to preserve the image aspect ratio.
 
         Parameters
         ----------
@@ -231,13 +228,11 @@ class QImageView(QFrame):
         self.update()
 
     def allowClipping(self):
-        """ Returns whether or not the image should be clipped in the view.
-
-        """
+        """Returns whether or not the image should be clipped in the view."""
         return self._preserve_aspect_ratio
 
     def setAllowClipping(self, allow):
-        """ Set whether or not the image should be clipped in the view.
+        """Set whether or not the image should be clipped in the view.
 
         Parameters
         ----------
@@ -256,12 +251,11 @@ class QImageView(QFrame):
 
 
 class _ImageEditor(Editor):
-    """ Traits UI 'display only' image editor.
-    """
+    """Traits UI 'display only' image editor."""
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         image = self.factory.image
         if image is None:
@@ -277,8 +271,8 @@ class _ImageEditor(Editor):
         self.set_tooltip()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if self.factory.image is None:
             value = self.value

@@ -67,8 +67,7 @@ traits_path = None
 
 
 def bitmap_cache(name, standard_size, path=None):
-    """ Converts an image file name to a cached bitmap.
-    """
+    """Converts an image file name to a cached bitmap."""
     global app_path, traits_path
 
     if name[:1] == "@":
@@ -123,22 +122,20 @@ def bitmap_cache(name, standard_size, path=None):
 
 
 def choice_width(values):
-    """ Returns an appropriate width for a wxChoice widget based upon the list
-        of values it contains:
+    """Returns an appropriate width for a wxChoice widget based upon the list
+    of values it contains:
     """
     return max([len(x) for x in values]) * 6
 
 
 def save_window(ui):
-    """ Saves the user preference items for a specified UI.
-    """
+    """Saves the user preference items for a specified UI."""
     control = ui.control
     ui.save_prefs(control.GetPosition() + control.GetSize())
 
 
 def restore_window(ui, is_popup=False):
-    """ Restores the user preference items for a specified UI.
-    """
+    """Restores the user preference items for a specified UI."""
     prefs = ui.restore_prefs()
     if prefs is not None:
         x, y, dx, dy = prefs
@@ -161,11 +158,11 @@ def restore_window(ui, is_popup=False):
 
 
 def find_closest_display(x, y):
-    """ For a virtual screen position, find the closest display.
-        There are a few reasons to use this function:
-            * the number of displays changed
-            * the size of the displays changed
-            * the orientation of one or more displays changed.
+    """For a virtual screen position, find the closest display.
+    There are a few reasons to use this function:
+        * the number of displays changed
+        * the size of the displays changed
+        * the orientation of one or more displays changed.
     """
     closest = None
     for display_num in range(wx.Display.GetCount()):
@@ -188,8 +185,8 @@ def find_closest_display(x, y):
 
 
 def get_position_for_display(x, y, dx, dy, display):
-    """ calculates a valid position and size for a window to fit
-        inside a display
+    """calculates a valid position and size for a window to fit
+    inside a display
     """
     dis_x, dis_y, dis_w, dis_h = display.GetGeometry()
     dx = min(dx, dis_w)
@@ -209,8 +206,8 @@ def get_position_for_display(x, y, dx, dy, display):
 
 
 def position_window(window, width=None, height=None, parent=None):
-    """ Positions a window on the screen with a specified width and height so
-        that the window completely fits on the screen if possible.
+    """Positions a window on the screen with a specified width and height so
+    that the window completely fits on the screen if possible.
     """
     dx, dy = window.GetSize()
     width = width or dx
@@ -225,7 +222,7 @@ def position_window(window, width=None, height=None, parent=None):
             (SystemMetrics().screen_width - width) // 2,
             (SystemMetrics().screen_height - height) // 2,
             width,
-            height
+            height,
         )
         return
 
@@ -253,8 +250,7 @@ def position_window(window, width=None, height=None, parent=None):
 
 
 def top_level_window_for(control):
-    """ Returns the top-level window for a specified control.
-    """
+    """Returns the top-level window for a specified control."""
     parent = control.GetParent()
     while parent is not None:
         control = parent
@@ -264,16 +260,14 @@ def top_level_window_for(control):
 
 
 def disconnect(control, *events):
-    """ Disconnects a wx event handle from its associated control.
-    """
+    """Disconnects a wx event handle from its associated control."""
     id = control.GetId()
     for event in events:
         control.Unbind(event, id=id)
 
 
 def disconnect_no_id(control, *events):
-    """ Disconnects a wx event handle from its associated control.
-    """
+    """Disconnects a wx event handle from its associated control."""
     for event in events:
         control.Unbind(event)
 
@@ -286,8 +280,8 @@ def disconnect_no_id(control, *events):
 
 class TraitsUIPanel(wx.Panel):
     def __init__(self, parent, *args, **kw):
-        """ Creates a wx.Panel that correctly sets its background color to be
-            the same as its parents.
+        """Creates a wx.Panel that correctly sets its background color to be
+        the same as its parents.
         """
         bg_color = kw.pop("bg_color", None)
         wx.Panel.__init__(self, parent, *args, **kw)
@@ -302,15 +296,15 @@ class TraitsUIPanel(wx.Panel):
             self.SetBackgroundColour(attr.colBg)
 
     def OnChildFocus(self, event):
-        """ If the ChildFocusEvent contains one of the Panel's direct children,
-            then we will Skip it to let it pass up the widget hierarchy.
+        """If the ChildFocusEvent contains one of the Panel's direct children,
+        then we will Skip it to let it pass up the widget hierarchy.
 
-            Otherwise, we consume the event to make sure it doesn't go any
-            farther. This works around a problem in wx 2.8.8.1 where each Panel
-            in a nested hierarchy generates many events that might consume too
-            many resources. We do, however, let one event bubble up to the top
-            so that it may inform a top-level ScrolledPanel that a descendant
-            has acquired focus.
+        Otherwise, we consume the event to make sure it doesn't go any
+        farther. This works around a problem in wx 2.8.8.1 where each Panel
+        in a nested hierarchy generates many events that might consume too
+        many resources. We do, however, let one event bubble up to the top
+        so that it may inform a top-level ScrolledPanel that a descendant
+        has acquired focus.
         """
         if event.GetWindow() in self.GetChildren():
             event.Skip()
@@ -324,12 +318,13 @@ class TraitsUIPanel(wx.Panel):
 #  'ChildFocusOverride' class:
 # -------------------------------------------------------------------------
 
-class ChildFocusOverride(wx.EvtHandler):
-    """ Override the scroll-to-focus behaviour in wx 2.8.8's ScrolledWindow
-        C++ implementation for ScrolledPanel.
 
-        Instantiating this class with the ScrolledPanel will register the
-        new instance as the event handler for the panel.
+class ChildFocusOverride(wx.EvtHandler):
+    """Override the scroll-to-focus behaviour in wx 2.8.8's ScrolledWindow
+    C++ implementation for ScrolledPanel.
+
+    Instantiating this class with the ScrolledPanel will register the
+    new instance as the event handler for the panel.
     """
 
     def __init__(self, window):
@@ -376,11 +371,12 @@ class TraitsUIScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
 
     def Destroy(self):
         from traitsui.wx.toolkit import _popEventHandlers
+
         _popEventHandlers(self, ChildFocusOverride)
         super().Destroy()
 
     def OnChildFocus(self, event):
-        """ Handle a ChildFocusEvent.
+        """Handle a ChildFocusEvent.
 
         Returns a boolean so it can be used as a library call, too.
         """
@@ -389,9 +385,9 @@ class TraitsUIScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
         return True
 
     def ScrollChildIntoView(self, child):
-        """ Scrolls the panel such that the specified child window is in view.
-            This method overrides the original in the base class so that
-            nested subpanels are handled correctly.
+        """Scrolls the panel such that the specified child window is in view.
+        This method overrides the original in the base class so that
+        nested subpanels are handled correctly.
         """
         if child is None:
             return
@@ -472,8 +468,8 @@ handlers = (
 
 
 def init_wx_handlers(control, object, prefix=""):
-    """ Initializes a standard set of wx event handlers for a specified control
-        and object using a specified prefix.
+    """Initializes a standard set of wx event handlers for a specified control
+    and object using a specified prefix.
     """
     global handlers
 
@@ -485,8 +481,7 @@ def init_wx_handlers(control, object, prefix=""):
 
 class GroupEditor(Editor):
     def __init__(self, **traits):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         self.trait_set(**traits)
 
 
@@ -522,8 +517,7 @@ class PopupControl(HasPrivateTraits):
     # -- Public Methods -------------------------------------------------------
 
     def __init__(self, **traits):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         super().__init__(**traits)
 
         style = wx.SIMPLE_BORDER
@@ -537,31 +531,29 @@ class PopupControl(HasPrivateTraits):
         popup.Show()
 
     def create_control(self):
-        """ Creates the control.
+        """Creates the control.
 
-            Must be overridden by a subclass.
+        Must be overridden by a subclass.
         """
         raise NotImplementedError
 
     def dispose(self):
-        """ Called when the popup is being closed to allow any custom clean-up.
+        """Called when the popup is being closed to allow any custom clean-up.
 
-            Can be overridden by a subclass.
+        Can be overridden by a subclass.
         """
         pass
 
     # -- Event Handlers -------------------------------------------------------
 
     def _value_changed(self, value):
-        """ Handles the 'value' being changed.
-        """
+        """Handles the 'value' being changed."""
         do_later(self._close_popup)
 
     # -- Private Methods ------------------------------------------------------
 
     def _position_control(self):
-        """ Initializes the popup control's initial position and size.
-        """
+        """Initializes the popup control's initial position and size."""
         # Calculate the desired size of the popup control:
         px, cy = self.control.ClientToScreen(0, 0)
         cdx, cdy = self.control.GetSize()
@@ -584,14 +576,12 @@ class PopupControl(HasPrivateTraits):
         self.popup.SetSize(px, py, pdx, pdy)
 
     def _on_close_popup(self, event):
-        """ Closes the popup control when it is deactivated.
-        """
+        """Closes the popup control when it is deactivated."""
         if not event.GetActive():
             self._close_popup()
 
     def _close_popup(self):
-        """ Closes the dialog.
-        """
+        """Closes the dialog."""
         self.popup.Unbind(wx.EVT_ACTIVATE)
         self.dispose()
         self.closed = True
@@ -600,11 +590,11 @@ class PopupControl(HasPrivateTraits):
 
 
 class BufferDC(wx.MemoryDC):
-    """ An off-screen buffer class.
+    """An off-screen buffer class.
 
-        This class implements a off-screen output buffer. Data is meant to
-        be drawn in the buffer and then blitted directly to the output device
-        context.
+    This class implements a off-screen output buffer. Data is meant to
+    be drawn in the buffer and then blitted directly to the output device
+    context.
     """
 
     def __init__(self, dc, width=None, height=None):
@@ -625,8 +615,8 @@ class BufferDC(wx.MemoryDC):
         self.SetFont(dc.GetFont())
 
     def copy(self, x=0, y=0):
-        """ Performs the blit of the buffer contents to the specified device
-            context location.
+        """Performs the blit of the buffer contents to the specified device
+        context location.
         """
         self.dc.Blit(
             x, y, self.bitmap.GetWidth(), self.bitmap.GetHeight(), self, 0, 0
@@ -634,9 +624,9 @@ class BufferDC(wx.MemoryDC):
 
 
 class Slider(wx.Slider):
-    """ This is a 'fixed' version of the wx.Slider control which does not
-        erase its background, which can cause a lot of update flicker and is
-        completely unnecessary.
+    """This is a 'fixed' version of the wx.Slider control which does not
+    erase its background, which can cause a lot of update flicker and is
+    completely unnecessary.
     """
 
     def __init__(self, *args, **kw):

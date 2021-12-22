@@ -33,8 +33,7 @@ from traitsui.api import Item, Group, View
 
 
 class RangeEditorDemo(HasTraits):
-    """ Defines the RangeEditor demo class.
-    """
+    """Defines the RangeEditor demo class."""
 
     # Define a trait for each of four range variants:
     small_int_range = Range(1, 16)
@@ -48,14 +47,14 @@ class RangeEditorDemo(HasTraits):
             'small_int_range',
             style='simple',
             label='Simple',
-            id='simple_small'
+            id='simple_small',
         ),
         Item('_'),
         Item(
             'small_int_range',
             style='custom',
             label='Custom',
-            id='custom_small'
+            id='custom_small',
         ),
         Item('_'),
         Item('small_int_range', style='text', label='Text', id='text_small'),
@@ -64,9 +63,9 @@ class RangeEditorDemo(HasTraits):
             'small_int_range',
             style='readonly',
             label='ReadOnly',
-            id='readonly_small'
+            id='readonly_small',
         ),
-        label='Small Int'
+        label='Small Int',
     )
 
     # RangeEditor display for medium-width integer Range traits (17 to 100):
@@ -75,14 +74,14 @@ class RangeEditorDemo(HasTraits):
             'medium_int_range',
             style='simple',
             label='Simple',
-            id='simple_medium'
+            id='simple_medium',
         ),
         Item('_'),
         Item(
             'medium_int_range',
             style='custom',
             label='Custom',
-            id='custom_medium'
+            id='custom_medium',
         ),
         Item('_'),
         Item('medium_int_range', style='text', label='Text', id='text_medium'),
@@ -91,9 +90,9 @@ class RangeEditorDemo(HasTraits):
             'medium_int_range',
             style='readonly',
             label='ReadOnly',
-            id='readonly_medium'
+            id='readonly_medium',
         ),
-        label='Medium Int'
+        label='Medium Int',
     )
 
     # RangeEditor display for wide integer Range traits (> 100):
@@ -102,14 +101,14 @@ class RangeEditorDemo(HasTraits):
             'large_int_range',
             style='simple',
             label='Simple',
-            id='simple_large'
+            id='simple_large',
         ),
         Item('_'),
         Item(
             'large_int_range',
             style='custom',
             label='Custom',
-            id='custom_large'
+            id='custom_large',
         ),
         Item('_'),
         Item('large_int_range', style='text', label='Text', id='text_large'),
@@ -118,9 +117,9 @@ class RangeEditorDemo(HasTraits):
             'large_int_range',
             style='readonly',
             label='ReadOnly',
-            id='readonly_large'
+            id='readonly_large',
         ),
-        label='Large Int'
+        label='Large Int',
     )
 
     # RangeEditor display for float Range traits:
@@ -135,9 +134,9 @@ class RangeEditorDemo(HasTraits):
             'float_range',
             style='readonly',
             label='ReadOnly',
-            id='readonly_float'
+            id='readonly_float',
         ),
-        label='Float'
+        label='Float',
     )
 
     # The view includes one group per data type. These will be displayed
@@ -149,7 +148,7 @@ class RangeEditorDemo(HasTraits):
         float_range_group,
         title='RangeEditor',
         buttons=['OK'],
-        resizable=True
+        resizable=True,
     )
 
 

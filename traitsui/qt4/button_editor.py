@@ -27,14 +27,13 @@
 from pyface.qt import QtCore, QtGui
 from pyface.api import Image
 
-from traits.api import Str, List, Str, observe, on_trait_change
+from traits.api import List, Str, observe, on_trait_change
 
 from .editor import Editor
 
 
 class SimpleEditor(Editor):
-    """ Simple style editor for a button.
-    """
+    """Simple style editor for a button."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -50,8 +49,8 @@ class SimpleEditor(Editor):
     selected_item = Str()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         label = self.factory.label or self.item.get_label(self.ui)
 
@@ -78,13 +77,13 @@ class SimpleEditor(Editor):
         # widgets may not repaint properly in response to a button click.
         # See enthought/traitsui#1308
         self.control.clicked.connect(
-            self.update_object, type=QtCore.Qt.QueuedConnection,
+            self.update_object,
+            type=QtCore.Qt.QueuedConnection,
         )
         self.set_tooltip()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
 
         if self.factory.values_trait:
             self.object.observe(
@@ -116,8 +115,8 @@ class SimpleEditor(Editor):
         self.label = item_name
 
     def update_object(self):
-        """ Handles the user clicking the button by setting the factory value
-            on the object.
+        """Handles the user clicking the button by setting the factory value
+        on the object.
         """
         if self.control is None:
             return
@@ -133,15 +132,15 @@ class SimpleEditor(Editor):
             )
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         pass
 
 
 class CustomEditor(SimpleEditor):
-    """ Custom style editor for a button, which can contain an image.
-    """
+    """Custom style editor for a button, which can contain an image."""
+
     #: The button image
     image = Image()
 
@@ -153,8 +152,8 @@ class CustomEditor(SimpleEditor):
     }
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         # FIXME: We ignore orientation, width_padding and height_padding.
 
@@ -181,8 +180,7 @@ class CustomEditor(SimpleEditor):
         self.control.setIcon(image.create_icon())
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         if self.control is not None:
             self.control.clicked.disconnect(self.update_object)
 

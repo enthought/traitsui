@@ -13,14 +13,14 @@ from pyface.qt import QtCore, QtGui
 from pyface.qt.QtTest import QTest
 
 from traitsui.testing.tester._ui_tester_registry._compat import (
-    check_key_compat
+    check_key_compat,
 )
 from traitsui.testing.tester.exceptions import Disabled
 from traitsui.qt4.key_event_to_name import key_map as _KEY_MAP
 
 
 def key_click(widget, key, delay):
-    """ Performs a key click of the given key on the given widget after
+    """Performs a key click of the given key on the given widget after
     a delay.
 
     Parameters
@@ -40,7 +40,8 @@ def key_click(widget, key, delay):
         raise ValueError(
             "Unknown key {!r}. Expected one of these: {!r}".format(
                 key, sorted(mapping)
-            ))
+            )
+        )
     QTest.keyClick(
         widget,
         mapping[key],
@@ -50,7 +51,7 @@ def key_click(widget, key, delay):
 
 
 def check_q_model_index_valid(index):
-    """ Checks if a given QModelIndex is valid.
+    """Checks if a given QModelIndex is valid.
 
     Parameters
     ----------
@@ -66,7 +67,8 @@ def check_q_model_index_valid(index):
         column = index.column()
         raise LookupError(
             "Unabled to locate item with row {!r} and column {!r}.".format(
-                row, column,
+                row,
+                column,
             )
         )
 
@@ -75,7 +77,7 @@ def check_q_model_index_valid(index):
 
 
 def displayed_text_qobject(widget):
-    ''' Helper function to define handlers for various Qwidgets to handle
+    '''Helper function to define handlers for various Qwidgets to handle
     query.DisplayedText interactions.
 
     Parameters
@@ -99,7 +101,7 @@ def displayed_text_qobject(widget):
 
 
 def mouse_click_qwidget(control, delay):
-    """ Performs a mouce click on a Qt widget.
+    """Performs a mouce click on a Qt widget.
 
     Parameters
     ----------
@@ -125,7 +127,7 @@ def mouse_click_qwidget(control, delay):
 
 
 def mouse_click_tab_index(tab_widget, index, delay):
-    """ Performs a mouse click on a tab at an index in a QtGui.QTabWidget.
+    """Performs a mouse click on a tab at an index in a QtGui.QTabWidget.
 
     Parameters
     ----------
@@ -155,7 +157,7 @@ def mouse_click_tab_index(tab_widget, index, delay):
 
 
 def mouse_click_qlayout(layout, index, delay):
-    """ Performs a mouse click on a widget at an index in a QLayout.
+    """Performs a mouse click on a widget at an index in a QLayout.
 
     Parameters
     ----------
@@ -176,7 +178,7 @@ def mouse_click_qlayout(layout, index, delay):
 
 
 def mouse_click_item_view(model, view, index, delay):
-    """ Perform mouse click on the given QAbstractItemModel (model) and
+    """Perform mouse click on the given QAbstractItemModel (model) and
     QAbstractItemView (view) with the given row and column.
 
     Parameters
@@ -206,7 +208,7 @@ def mouse_click_item_view(model, view, index, delay):
 
 
 def mouse_click_combobox(combobox, index, delay):
-    """ Perform a mouse click on a QComboBox at a given index.
+    """Perform a mouse click on a QComboBox at a given index.
 
     Paramters
     ---------
@@ -228,9 +230,7 @@ def mouse_click_combobox(combobox, index, delay):
             delay=delay,
         )
         # Otherwise the click won't get registered.
-        key_click(
-            combobox.view().viewport(), key="Enter", delay=delay
-        )
+        key_click(combobox.view().viewport(), key="Enter", delay=delay)
     else:
         warnings.warn(
             "Attempted to click on a non-existant combobox. Nothing was "
@@ -239,7 +239,7 @@ def mouse_click_combobox(combobox, index, delay):
 
 
 def key_sequence_qwidget(control, interaction, delay):
-    """ Performs simulated typing of a sequence of keys on the given widget
+    """Performs simulated typing of a sequence of keys on the given widget
     after a delay.
 
     Parameters
@@ -264,7 +264,7 @@ def key_sequence_qwidget(control, interaction, delay):
 
 
 def key_sequence_textbox(control, interaction, delay):
-    """ Performs simulated typing of a sequence of keys on a widget that is
+    """Performs simulated typing of a sequence of keys on a widget that is
     a textbox. The keys are restricted to values also supported for testing
     wx.TextCtrl.
 
@@ -288,7 +288,7 @@ def key_sequence_textbox(control, interaction, delay):
 
 
 def key_click_qwidget(control, interaction, delay):
-    """ Performs simulated typing of a key on the given widget after a delay.
+    """Performs simulated typing of a key on the given widget after a delay.
 
     Parameters
     ----------
@@ -311,7 +311,7 @@ def key_click_qwidget(control, interaction, delay):
 
 
 def key_click_qslider(control, interaction, delay):
-    """ Performs simulated typing of a key on the given slider after a delay.
+    """Performs simulated typing of a key on the given slider after a delay.
     Only allowed keys are:
     "Left", "Right", "Up", "Down", "Page Up", "Page Down"
     Also, note that up related keys correspond to an increment on the slider,

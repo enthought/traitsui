@@ -100,22 +100,21 @@ For comparison purposes, the example also shows the same traits displayed using
 their default editors.
 """
 
-#-- Imports --------------------------------------------------------------
+# -- Imports --------------------------------------------------------------
 
-from traits.api \
-    import HasTraits, Range, Float
+from traits.api import HasTraits, Range, Float
 
-from traitsui.api \
-    import View, VGroup, HGroup, Item, ScrubberEditor, spring
+from traitsui.api import View, VGroup, HGroup, Item, ScrubberEditor, spring
 
 
-#-- Shared Item Definition ----------------------------------------
+# -- Shared Item Definition ----------------------------------------
 
 
 class TItem(Item):
     editor = ScrubberEditor()
 
-#-- ScrubberDemo Class ---------------------------------------------------
+
+# -- ScrubberDemo Class ---------------------------------------------------
 
 
 class ScrubberDemo(HasTraits):
@@ -132,20 +131,26 @@ class ScrubberDemo(HasTraits):
     view = View(
         HGroup(
             VGroup(
-                Item('simple_integer',
-                     editor=ScrubberEditor()),
-                Item('rollover_float',
-                     editor=ScrubberEditor(hover_color=0xFFFFFF,
-                                           active_color=0xA0CD9E)),
-                Item('bordered_unbounded',
-                     editor=ScrubberEditor(hover_color=0xFFFFFF,
-                                           active_color=0xA0CD9E,
-                                           border_color=0x808080)),
+                Item('simple_integer', editor=ScrubberEditor()),
+                Item(
+                    'rollover_float',
+                    editor=ScrubberEditor(
+                        hover_color=0xFFFFFF, active_color=0xA0CD9E
+                    ),
+                ),
+                Item(
+                    'bordered_unbounded',
+                    editor=ScrubberEditor(
+                        hover_color=0xFFFFFF,
+                        active_color=0xA0CD9E,
+                        border_color=0x808080,
+                    ),
+                ),
                 Item('dynamic_low', editor=ScrubberEditor()),
                 Item('dynamic_high', editor=ScrubberEditor()),
                 Item('dynamic_value', editor=ScrubberEditor()),
                 show_border=True,
-                label='Scrubber Editors'
+                label='Scrubber Editors',
             ),
             VGroup(
                 Item('simple_integer'),
@@ -155,14 +160,15 @@ class ScrubberDemo(HasTraits):
                 Item('dynamic_high'),
                 Item('dynamic_value'),
                 show_border=True,
-                label='Default Editors'
+                label='Default Editors',
             ),
-            spring
+            spring,
         ),
-        title='Scrubber Editor Demo'
+        title='Scrubber Editor Demo',
     )
 
-#-- Create and run the demo ----------------------------------------------
+
+# -- Create and run the demo ----------------------------------------------
 
 # Create the demo:
 demo = ScrubberDemo()

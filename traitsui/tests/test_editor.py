@@ -12,7 +12,15 @@ import unittest
 
 from pyface.toolkit import toolkit_object
 from traits.api import (
-    Any, Bool, Event, Float, HasTraits, Int, List, Range, Undefined
+    Any,
+    Bool,
+    Event,
+    Float,
+    HasTraits,
+    Int,
+    List,
+    Range,
+    Undefined,
 )
 from traits.trait_base import xgetattr
 
@@ -21,9 +29,7 @@ from traitsui.editor import Editor
 from traitsui.editor_factory import EditorFactory
 from traitsui.handler import default_handler
 from traitsui.ui import UI
-from traitsui.testing.api import (
-    KeyClick, KeySequence, Textbox, UITester
-)
+from traitsui.testing.api import KeyClick, KeySequence, Textbox, UITester
 from traitsui.tests._tools import (
     BaseTestMixin,
     GuiTestAssistant,
@@ -39,7 +45,7 @@ no_modal_dialog_tester = ModalDialogTester.__name__ == "Unimplemented"
 
 
 class FakeControl(HasTraits):
-    """ A pure Traits object that fakes being a control.
+    """A pure Traits object that fakes being a control.
 
     It can aither hold a value (mimicking a field), or have an event
     which is listened to (mimicking a button or similar control).
@@ -56,7 +62,7 @@ class FakeControl(HasTraits):
 
 
 class StubEditorFactory(EditorFactory):
-    """ A minimal editor factory
+    """A minimal editor factory
 
     This simply holds state that may or may not be copied to the
     editor.  No attempt is made to handle custom/readonly/etc.
@@ -83,7 +89,7 @@ class StubEditorFactory(EditorFactory):
 
 
 class StubEditor(Editor):
-    """ A minimal editor implementaton for a StubEditorFactory.
+    """A minimal editor implementaton for a StubEditorFactory.
 
     The editor creates a FakeControl instance as its control object
     and keeps values synchronized either to `control_value` or
@@ -151,7 +157,7 @@ class StubEditor(Editor):
 
 
 class UserObject(HasTraits):
-    """ A simple HasTraits class with a variety of state. """
+    """A simple HasTraits class with a variety of state."""
 
     #: The value being edited.
     user_value = Any("test")
@@ -176,12 +182,12 @@ class UserObject(HasTraits):
 
 
 def create_editor(
-        context=None,
-        object_name="object",
-        name="user_value",
-        factory=None,
-        is_event=False,
-        description="",
+    context=None,
+    object_name="object",
+    name="user_value",
+    factory=None,
+    is_event=False,
+    description="",
 ):
     if context is None:
         user_object = UserObject()
@@ -212,7 +218,6 @@ def create_editor(
 
 @unittest.skipIf(no_gui_test_assistant, "No GuiTestAssistant")
 class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
         GuiTestAssistant.setUp(self)
@@ -285,9 +290,7 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
     def test_context_object(self):
         user_object = UserObject(user_value="other_test")
         context = {"object": UserObject(), "other_object": user_object}
-        editor = create_editor(
-            context=context, object_name="other_object"
-        )
+        editor = create_editor(context=context, object_name="other_object")
 
         self.assertEqual(editor.old_value, "other_test")
         self.assertEqual(editor.name, "user_value")
@@ -811,7 +814,7 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         editor.auxiliary_value = 20
 
         with self.assertTraitChanges(
-                user_object.user_auxiliary, "user_value", count=1
+            user_object.user_auxiliary, "user_value", count=1
         ):
             editor.sync_value(
                 "object.user_auxiliary.user_value", "auxiliary_value", "to"
@@ -820,7 +823,7 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         self.assertEqual(user_object.user_auxiliary.user_value, 20)
 
         with self.assertTraitChanges(
-                user_object.user_auxiliary, "user_value", count=1
+            user_object.user_auxiliary, "user_value", count=1
         ):
             editor.auxiliary_value = 11
 
@@ -829,7 +832,7 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
         editor.dispose()
 
         with self.assertTraitDoesNotChange(
-                user_object.user_auxiliary, "user_value"
+            user_object.user_auxiliary, "user_value"
         ):
             editor.auxiliary_value = 12
 
@@ -961,15 +964,15 @@ class TestEditor(BaseTestMixin, GuiTestAssistant, unittest.TestCase):
                         self.assertTrue(
                             mdtester.has_widget(
                                 text="The 'x' trait of a Foo instance must be "
-                                     "0.0 < a floating point number <= 1.0, "
-                                     "but a value of 0.0 <class 'float'> was "
-                                     "specified.",
+                                "0.0 < a floating point number <= 1.0, "
+                                "but a value of 0.0 <class 'float'> was "
+                                "specified.",
                                 type_=QtGui.QMessageBox,
                             )
                         )
                         self.assertEqual(
                             mdtester.get_dialog_widget().textFormat(),
-                            QtCore.Qt.PlainText
+                            QtCore.Qt.PlainText,
                         )
                 finally:
                     mdtester.close(accept=True)

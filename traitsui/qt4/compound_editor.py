@@ -33,7 +33,7 @@ from .editor import Editor
 
 
 class CompoundEditor(Editor):
-    """ Editor for compound traits, which displays editors for each of the
+    """Editor for compound traits, which displays editors for each of the
     combined traits, in the appropriate style.
     """
 
@@ -45,8 +45,8 @@ class CompoundEditor(Editor):
     kind = Str()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = QtGui.QWidget()
         layout = QtGui.QVBoxLayout(self.control)
@@ -63,14 +63,13 @@ class CompoundEditor(Editor):
             editors.append(editor)
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         pass
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         for editor in self._editors:
             editor.dispose()
 

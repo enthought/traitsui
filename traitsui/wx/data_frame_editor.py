@@ -16,6 +16,6 @@ from .ui_editor import UIEditor
 
 
 class _DataFrameEditor(BaseDataFrameEditor, UIEditor):
-    """ Wx Toolkit implementation of the DataFrameEditor """
+    """Wx Toolkit implementation of the DataFrameEditor"""
 
     pass

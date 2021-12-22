@@ -27,7 +27,7 @@ from traitsui.testing.api import (
     KeySequence,
     MouseClick,
     SelectedText,
-    UITester
+    UITester,
 )
 
 #: Filename of the demo script
@@ -38,7 +38,6 @@ DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 
 
 class TestEnumEditorDemo(unittest.TestCase):
-
     def test_enum_editor_demo(self):
         demo = runpy.run_path(DEMO_PATH)["demo"]
 
@@ -83,8 +82,12 @@ class TestEnumEditorDemo(unittest.TestCase):
             displayed_readonly = readonly.inspect(DisplayedText())
 
             displayed_selected = [
-                displayed_simple, disp_simple_text, selected_radio,
-                selected_list, displayed_text, displayed_readonly
+                displayed_simple,
+                disp_simple_text,
+                selected_radio,
+                selected_list,
+                displayed_text,
+                displayed_readonly,
             ]
             for text in displayed_selected:
                 self.assertEqual(text, 'Foo')

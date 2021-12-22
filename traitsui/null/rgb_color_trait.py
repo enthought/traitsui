@@ -14,7 +14,6 @@
 """
 
 
-
 from traits.api import Trait, TraitError
 
 from traits.trait_base import SequenceTypes
@@ -25,7 +24,7 @@ from traits.trait_base import SequenceTypes
 
 
 def range_check(value):
-    """ Checks that *value* can be converted to a value in the range 0.0 to 1.0.
+    """Checks that *value* can be converted to a value in the range 0.0 to 1.0.
 
     If so, it returns the floating point value; otherwise, it raises a TraitError.
     """
@@ -36,7 +35,7 @@ def range_check(value):
 
 
 def convert_to_color(object, name, value):
-    """ Converts a tuple or an integer to an RGB color value, or raises a
+    """Converts a tuple or an integer to an RGB color value, or raises a
     TraitError if that is not possible.
     """
     if (type(value) in SequenceTypes) and (len(value) == 3):

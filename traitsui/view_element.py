@@ -35,11 +35,10 @@ label_pat2 = re.compile(r"^(.*){(.*)}(.*)$", re.MULTILINE | re.DOTALL)
 
 
 class ViewElement(HasPrivateTraits):
-    """ An element of a view.
-    """
+    """An element of a view."""
 
     def replace_include(self, view_elements):
-        """ Searches the current object's **content** attribute for objects that
+        """Searches the current object's **content** attribute for objects that
         have an **id** attribute, and replaces each one with an Include object
         with the same **id** value, and puts the replaced object into the
         specified ViewElements object.
@@ -52,14 +51,13 @@ class ViewElement(HasPrivateTraits):
         pass  # Normally overridden in a subclass
 
     def is_includable(self):
-        """ Returns whether the object is replacable by an Include object.
-        """
+        """Returns whether the object is replacable by an Include object."""
         return False  # Normally overridden in a subclass
 
 
 class DefaultViewElement(ViewElement):
-    """ A view element that can be used as a default value for traits whose
-        value is a view element.
+    """A view element that can be used as a default value for traits whose
+    value is a view element.
     """
 
     # -------------------------------------------------------------------------
@@ -98,8 +96,7 @@ Container = Instance(ViewElement, factory=DefaultViewElement)
 
 
 class ViewSubElement(ViewElement):
-    """ Abstract class representing elements that can be contained in a view.
-    """
+    """Abstract class representing elements that can be contained in a view."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -112,31 +109,28 @@ class ViewSubElement(ViewElement):
     help_id = HelpId
 
     def _split(self, name, value, char, finder, assign, result):
-        """ Splits a string at a specified character.
-        """
+        """Splits a string at a specified character."""
         col = finder(value, char)
         if col < 0:
             return value
 
-        items = (value[:col].strip(), value[col + 1:].strip())
+        items = (value[:col].strip(), value[col + 1 :].strip())
         if items[assign] != "":
             setattr(self, name, items[assign])
 
         return items[result]
 
     def _option(self, string, option, name, value):
-        """ Sets a object trait if a specified option string is found.
-        """
+        """Sets a object trait if a specified option string is found."""
         col = string.find(option)
         if col >= 0:
-            string = string[:col] + string[col + len(option):]
+            string = string[:col] + string[col + len(option) :]
             setattr(self, name, value)
 
         return string
 
     def _parse_style(self, value):
-        """ Parses any of the one-character forms of the **style** trait.
-        """
+        """Parses any of the one-character forms of the **style** trait."""
         value = self._option(value, "$", "style", "simple")
         value = self._option(value, "@", "style", "custom")
         value = self._option(value, "*", "style", "text")
@@ -146,8 +140,7 @@ class ViewSubElement(ViewElement):
         return value
 
     def _parse_label(self, value):
-        """ Parses a '[label]' value from the string definition.
-        """
+        """Parses a '[label]' value from the string definition."""
         match = label_pat.match(value)
         if match is not None:
             self._parsed_label()
@@ -163,21 +156,18 @@ class ViewSubElement(ViewElement):
         return (value, empty)
 
     def _parsed_label(self):
-        """ Handles a label being found in the string definition.
-        """
+        """Handles a label being found in the string definition."""
         pass
 
     def _repr_value(self, value, prefix="", suffix="", ignore=""):
-        """ Returns a "pretty print" version of a specified Item trait value.
-        """
+        """Returns a "pretty print" version of a specified Item trait value."""
         if value == ignore:
             return ""
 
         return "%s%s%s" % (prefix, value, suffix)
 
     def _repr_options(self, *names):
-        """ Returns a 'pretty print' version of a list of traits.
-        """
+        """Returns a 'pretty print' version of a list of traits."""
         result = []
         for name in names:
             value = getattr(self, name)
@@ -193,8 +183,7 @@ class ViewSubElement(ViewElement):
         return None
 
     def _indent(self, string, indent="    "):
-        """ Indents each line in a specified string by 4 spaces.
-        """
+        """Indents each line in a specified string by 4 spaces."""
         return "\n".join([indent + s for s in string.split("\n")])
 
 

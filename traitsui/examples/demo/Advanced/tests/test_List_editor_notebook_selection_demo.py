@@ -30,7 +30,6 @@ DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 
 
 class TestListEditorNotebookSelectionDemo(unittest.TestCase):
-
     def test_list_editor_notebook_selection_demo(self):
         demo = runpy.run_path(DEMO_PATH)["demo"]
 
@@ -49,5 +48,6 @@ class TestListEditorNotebookSelectionDemo(unittest.TestCase):
 # Run the test(s)
 unittest.TextTestRunner().run(
     unittest.TestLoader().loadTestsFromTestCase(
-        TestListEditorNotebookSelectionDemo)
+        TestListEditorNotebookSelectionDemo
+    )
 )

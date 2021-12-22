@@ -63,7 +63,7 @@ from traits.api import HasStrictTraits, Instance, Str, Int, Float, Union
 
 
 class ContextValue(HasStrictTraits):
-    """ Defines the name of a context value that can be bound to an editor
+    """Defines the name of a context value that can be bound to an editor
 
     Resolution of the name follows the same rules as for context values in
     Item objects: if there is no dot in it then it is treated as an
@@ -92,7 +92,7 @@ CV = ContextValue
 
 
 def CVType(type, **metadata):
-    """ Factory that creates a union of a trait type and a ContextValue trait.
+    """Factory that creates a union of a trait type and a ContextValue trait.
 
     This also sets up one-way synchronization to the editor if no
     other synchronization is specified.

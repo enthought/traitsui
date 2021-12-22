@@ -46,8 +46,7 @@ SELECTED_MARKER = 2
 
 
 class SourceEditor(Editor):
-    """ Editor for source code, which displays a Pyface PythonEditor.
-    """
+    """Editor for source code, which displays a Pyface PythonEditor."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -90,8 +89,8 @@ class SourceEditor(Editor):
     squiggle_color = Str()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         factory = self.factory
         self._editor = editor = PythonEditor(
@@ -195,14 +194,12 @@ class SourceEditor(Editor):
         self.set_tooltip()
 
     def wx_update_object(self, event):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         self.update_object()
         event.Skip()
 
     def update_object(self):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         if not self._locked:
             try:
                 value = self.control.GetText()
@@ -215,8 +212,8 @@ class SourceEditor(Editor):
                 pass
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self._locked = True
         new_value = self.value
@@ -242,8 +239,7 @@ class SourceEditor(Editor):
         self.calltip_clicked = True
 
     def _mark_lines_changed(self):
-        """ Handles the set of marked lines being changed.
-        """
+        """Handles the set of marked lines being changed."""
         lines = self.mark_lines
         control = self.control
         lc = control.GetLineCount()
@@ -259,8 +255,7 @@ class SourceEditor(Editor):
         self._mark_lines_changed()
 
     def _selected_line_changed(self):
-        """ Handles a change in which line is currently selected.
-        """
+        """Handles a change in which line is currently selected."""
         line = self.selected_line
         control = self.control
         line = max(1, min(control.GetLineCount(), line)) - 1
@@ -283,8 +278,7 @@ class SourceEditor(Editor):
             control.GotoPos(control.PositionFromLine(line) + column - 1)
 
     def _position_changed(self, event):
-        """ Handles the cursor position being changed.
-        """
+        """Handles the cursor position being changed."""
         control = self.control
         pos = control.GetCurrentPos()
         line = control.LineFromPosition(pos)
@@ -295,8 +289,7 @@ class SourceEditor(Editor):
         self.selected_text = control.GetSelectedText()
 
     def key_pressed(self, event):
-        """ Handles a key being pressed within the editor.
-        """
+        """Handles a key being pressed within the editor."""
         self.factory.key_bindings.do(
             event.event, self.ui.handler, self.ui.info
         )
@@ -314,16 +307,15 @@ class SourceEditor(Editor):
 
     @observe("dim_lines, squiggle_lines")
     def _style_document(self, event=None):
-        """ Force the STC to fire a STC_STYLENEEDED event for the entire
-            document.
+        """Force the STC to fire a STC_STYLENEEDED event for the entire
+        document.
         """
         self.control.ClearDocumentStyle()
         self.control.Colourise(0, -1)
         self.control.Refresh()
 
     def _style_needed(self, event):
-        """ Handles an STC request for styling for some area.
-        """
+        """Handles an STC request for styling for some area."""
         position = self.control.GetEndStyled()
         start_line = self.control.LineFromPosition(position)
         end = event.GetPosition()
@@ -364,14 +356,12 @@ class SourceEditor(Editor):
                 self.control.SetStyling(style_length, stc.STC_STYLE_DEFAULT)
 
     def error(self, excp):
-        """ Handles an error that occurs while setting the object's trait value.
-        """
+        """Handles an error that occurs while setting the object's trait value."""
         self.control.SetBackgroundColour(ErrorColor)
         self.control.Refresh()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         if self.control is not None:
             if self.factory.auto_set:
                 self._editor.on_trait_change(
@@ -397,8 +387,8 @@ class SourceEditor(Editor):
     # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the
-            editor.
+        """Restores any saved user preference information associated with the
+        editor.
         """
         if self.factory.key_bindings is not None:
             key_bindings = prefs.get("key_bindings")
@@ -406,8 +396,7 @@ class SourceEditor(Editor):
                 self.factory.key_bindings.merge(key_bindings)
 
     def save_prefs(self):
-        """ Returns any user preference information associated with the editor.
-        """
+        """Returns any user preference information associated with the editor."""
         return {"key_bindings": self.factory.key_bindings}
 
 

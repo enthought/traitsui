@@ -18,8 +18,7 @@ from traitsui.toolkit import toolkit_object
 
 
 class CustomEditor(BasicEditorFactory):
-    """ Editor factory for custom editors.
-    """
+    """Editor factory for custom editors."""
 
     #: Editor class to be instantiated.
     klass = Property()
@@ -40,8 +39,7 @@ class CustomEditor(BasicEditorFactory):
     #  Property getters
     # -------------------------------------------------------------------------
     def _get_klass(self):
-        """ Returns the editor class to be created.
-        """
+        """Returns the editor class to be created."""
         return toolkit_object("custom_editor:CustomEditor")
 
 

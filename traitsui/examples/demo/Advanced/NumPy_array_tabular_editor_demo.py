@@ -48,6 +48,7 @@ class ArrayAdapter(TabularAdapter):
 
         return None
 
+
 # -- ShowArray Class Definition -------------------------------------------
 
 
@@ -65,13 +66,13 @@ class ShowArray(HasTraits):
                 # Do not allow any kind of editing of the array:
                 editable=False,
                 operations=[],
-                drag_move=False
-            )
+                drag_move=False,
+            ),
         ),
         title='Array Viewer',
         width=0.3,
         height=0.8,
-        resizable=True
+        resizable=True,
     )
 
 

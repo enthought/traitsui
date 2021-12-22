@@ -25,7 +25,7 @@ from traitsui.api import Item, Group, View
 
 # Define the demo class:
 class ListEditorDemo(HasTraits):
-    """ Defines the main ListEditor demo class. """
+    """Defines the main ListEditor demo class."""
 
     # Define a List trait to display:
     play_list = List(Str, ["The Merchant of Venice", "Hamlet", "MacBeth"])
@@ -40,7 +40,7 @@ class ListEditorDemo(HasTraits):
         Item('_'),
         Item('play_list', style='text', label='Text', id='text'),
         Item('_'),
-        Item('play_list', style='readonly', label='ReadOnly', id='readonly')
+        Item('play_list', style='readonly', label='ReadOnly', id='readonly'),
     )
 
     # Demo view:
@@ -50,7 +50,7 @@ class ListEditorDemo(HasTraits):
         buttons=['OK'],
         height=600,
         width=400,
-        resizable=True
+        resizable=True,
     )
 
 

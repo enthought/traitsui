@@ -60,22 +60,20 @@ all_digits = re.compile(r"\d+")
 
 
 def ui_panel(ui, parent):
-    """Creates a panel-based PyQt user interface for a specified UI object.
-    """
+    """Creates a panel-based PyQt user interface for a specified UI object."""
     _ui_panel_for(ui, parent, False)
 
 
 def ui_subpanel(ui, parent):
     """Creates a subpanel-based PyQt user interface for a specified UI object.
-       A subpanel does not allow control buttons (other than those specified in
-       the UI object) and does not show headers for view titles.
+    A subpanel does not allow control buttons (other than those specified in
+    the UI object) and does not show headers for view titles.
     """
     _ui_panel_for(ui, parent, True)
 
 
 def _ui_panel_for(ui, parent, is_subpanel):
-    """Creates a panel-based PyQt user interface for a specified UI object.
-    """
+    """Creates a panel-based PyQt user interface for a specified UI object."""
     ui.control = control = _Panel(ui, parent, is_subpanel).control
 
     control._parent = parent
@@ -96,12 +94,10 @@ def _ui_panel_for(ui, parent, is_subpanel):
 
 
 class _Panel(BasePanel):
-    """PyQt user interface panel for Traits-based user interfaces.
-    """
+    """PyQt user interface panel for Traits-based user interfaces."""
 
     def __init__(self, ui, parent, is_subpanel):
-        """Initialise the object.
-        """
+        """Initialise the object."""
         super().__init__(ui=ui)
 
         history = ui.history
@@ -233,8 +229,7 @@ class _Panel(BasePanel):
         self.control.sizeHint = _size_hint_wrapper(self.control.sizeHint, ui)
 
     def _add_toolbar(self, parent):
-        """ Adds a toolbar to the `parent` (QtWindow)
-        """
+        """Adds a toolbar to the `parent` (QtWindow)"""
         if not isinstance(parent, QtGui.QMainWindow):
             # toolbar cannot be added to non-MainWindow widget
             return
@@ -249,7 +244,7 @@ class _Panel(BasePanel):
 
     def can_add_to_toolbar(self, action):
         """Returns whether the toolbar action should be defined in the user
-           interface.
+        interface.
         """
         if action.defined_when == "":
             return True
@@ -259,8 +254,8 @@ class _Panel(BasePanel):
 
 def panel(ui):
     """Creates a panel-based PyQt user interface for a specified UI object.
-       This function does not modify the UI object passed to it.  The object
-       returned may be either a widget, a layout or None.
+    This function does not modify the UI object passed to it.  The object
+    returned may be either a widget, a layout or None.
     """
     # Bind the context values to the 'info' object:
     ui.info.bind_context()
@@ -295,8 +290,7 @@ def panel(ui):
 
 
 def _fill_panel(panel, content, ui, item_handler=None):
-    """Fill a page based container panel with content.
-    """
+    """Fill a page based container panel with content."""
     active = 0
 
     for index, item in enumerate(content):
@@ -346,8 +340,7 @@ def _fill_panel(panel, content, ui, item_handler=None):
 
 
 def _size_hint_wrapper(f, ui):
-    """Wrap an existing sizeHint method with sizes from a UI object.
-    """
+    """Wrap an existing sizeHint method with sizes from a UI object."""
 
     def sizeHint():
         size = f()
@@ -362,8 +355,7 @@ def _size_hint_wrapper(f, ui):
 
 
 def show_help(ui, button):
-    """ Displays a help window for the specified UI's active Group.
-    """
+    """Displays a help window for the specified UI's active Group."""
     group = ui._groups[ui._active_group]
     template = help_template()
     if group.help != "":
@@ -385,8 +377,7 @@ def show_help(ui, button):
 
 
 def show_help_popup(event):
-    """ Displays a pop-up help window for a single trait.
-    """
+    """Displays a pop-up help window for a single trait."""
     control = event.GetEventObject()
     template = help_template()
 
@@ -400,23 +391,21 @@ def show_help_popup(event):
 
 
 class _GroupSplitter(QtGui.QSplitter):
-    """ A splitter for a Traits UI Group with layout='split'.
-    """
+    """A splitter for a Traits UI Group with layout='split'."""
 
     def __init__(self, group):
-        """ Store the group.
-        """
+        """Store the group."""
         QtGui.QSplitter.__init__(self)
         self._group = group
         self._initialized = False
 
     def resizeEvent(self, event):
-        """ Overridden to position the splitter based on the Group when the
-            application is initializing.
+        """Overridden to position the splitter based on the Group when the
+        application is initializing.
 
-            Because the splitter layout algorithm requires that the available
-            space be known, we have to wait until the UI that contains this
-            splitter gives it its initial size.
+        Because the splitter layout algorithm requires that the available
+        space be known, we have to wait until the UI that contains this
+        splitter gives it its initial size.
         """
         QtGui.QSplitter.resizeEvent(self, event)
 
@@ -430,16 +419,15 @@ class _GroupSplitter(QtGui.QSplitter):
             self._resize_items()
 
     def showEvent(self, event):
-        """ Wait for the show event to resize items if necessary.
-        """
+        """Wait for the show event to resize items if necessary."""
         QtGui.QSplitter.showEvent(self, event)
         if not self._initialized:
             self._initialized = True
             self._resize_items()
 
     def _resize_items(self):
-        """ Size the splitter based on the 'width' or 'height' attributes
-            of the Traits UI view elements.
+        """Size the splitter based on the 'width' or 'height' attributes
+        of the Traits UI view elements.
         """
         use_widths = self.orientation() == QtCore.Qt.Horizontal
 
@@ -493,12 +481,11 @@ class _GroupSplitter(QtGui.QSplitter):
 
 class _GroupPanel(object):
     """A sub-panel for a single group of items.  It may be either a layout or a
-       widget.
+    widget.
     """
 
     def __init__(self, group, ui, suppress_label=False):
-        """Initialise the object.
-        """
+        """Initialise the object."""
         # Get the contents of the group:
         content = group.get_content()
 
@@ -655,8 +642,7 @@ class _GroupPanel(object):
         self.sub_control = sub
 
     def _add_splitter_items(self, content, splitter):
-        """Adds a set of groups or items separated by splitter bars.
-        """
+        """Adds a set of groups or items separated by splitter bars."""
         for item in content:
 
             # Get a panel for the Item or Group.
@@ -683,8 +669,7 @@ class _GroupPanel(object):
                 splitter.addWidget(panel)
 
     def _setup_editor(self, group, editor):
-        """Setup the editor for a group.
-        """
+        """Setup the editor for a group."""
         if group.id != "":
             self.ui.info.bind(group.id, editor)
 
@@ -695,13 +680,12 @@ class _GroupPanel(object):
             self.ui.add_enabled(group.enabled_when, editor)
 
     def _add_page_item(self, item, layout):
-        """Adds a single Item to a page based panel.
-        """
+        """Adds a single Item to a page based panel."""
         self._add_items([item], layout)
 
     def _add_groups(self, content, outer):
         """Adds a list of Group objects to the panel, creating a layout if
-           needed.  Return the outermost layout.
+        needed.  Return the outermost layout.
         """
         # Use the existing layout if there is one.
         if outer is None:
@@ -724,15 +708,15 @@ class _GroupPanel(object):
 
     def _label_when(self):
         """Set the visible and enabled states of all labels as controlled by
-           a 'visible_when' or 'enabled_when' expression.
+        a 'visible_when' or 'enabled_when' expression.
         """
         self._evaluate_label_condition(self._label_enabled_whens, "enabled")
         self._evaluate_label_condition(self._label_visible_whens, "visible")
-    
+
     def _evaluate_label_condition(self, conditions, kind):
         """Evaluates a list of (eval, widget) pairs and calls the appropriate
-           method on the label widget to toggle whether it is visible/enabled
-           as needed.
+        method on the label widget to toggle whether it is visible/enabled
+        as needed.
         """
         context = self.ui._get_context(self.ui.context)
 
@@ -751,7 +735,7 @@ class _GroupPanel(object):
 
     def _add_items(self, content, outer=None):
         """Adds a list of Item objects, creating a layout if needed.  Return
-           the outermost layout.
+        the outermost layout.
         """
         # Get local references to various objects we need:
         ui = self.ui
@@ -816,12 +800,14 @@ class _GroupPanel(object):
             # Check if is a label:
             if name == "":
                 label = item.label
-                if label != "":  
+                if label != "":
                     self._add_label_item(item, inner, row, col, show_labels)
 
             # Check if it is a separator:
             elif name == "_":
-                self._add_separator_item(item, columns, inner, row, col, show_labels)
+                self._add_separator_item(
+                    item, columns, inner, row, col, show_labels
+                )
 
             # Check if it is a spacer:
             elif all_digits.match(name):
@@ -862,7 +848,9 @@ class _GroupPanel(object):
                         editor_factory.invalid = item.invalid
 
                 # Create the requested type of editor from the editor factory:
-                factory_method = getattr(editor_factory, item.style + "_editor")
+                factory_method = getattr(
+                    editor_factory, item.style + "_editor"
+                )
                 editor = factory_method(
                     ui, object, name, item.tooltip, None
                 ).trait_set(item=item, object_name=item.object)
@@ -906,7 +894,9 @@ class _GroupPanel(object):
                 item_width = item.width
                 item_height = item.height
                 if (item_width != -1) or (item_height != -1):
-                    is_horizontal = self.direction == QtGui.QBoxLayout.LeftToRight
+                    is_horizontal = (
+                        self.direction == QtGui.QBoxLayout.LeftToRight
+                    )
 
                     min_size = control.minimumSizeHint()
                     width = min_size.width()
@@ -981,9 +971,13 @@ class _GroupPanel(object):
                 if item.enabled_when != "":
                     ui.add_enabled(item.enabled_when, editor)
 
-        if (len(self._label_enabled_whens) + len(self._label_visible_whens)) > 0:
+        if (
+            len(self._label_enabled_whens) + len(self._label_visible_whens)
+        ) > 0:
             for object in self.ui.context.values():
-                object.on_trait_change(lambda: self._label_when(), dispatch="ui")
+                object.on_trait_change(
+                    lambda: self._label_when(), dispatch="ui"
+                )
             self._label_when()
 
         return outer
@@ -1011,13 +1005,9 @@ class _GroupPanel(object):
 
         # See if the layout is a grid.
         if row >= 0:
-            # Move to the start of the next row if necessary.
+            # Move to the start of the row if necessary.
             if col > 0:
                 col = 0
-                row += 1
-
-            # Skip the row we are about to do.
-            row += 1
 
             # Allow for the columns.
             if show_labels:
@@ -1057,7 +1047,7 @@ class _GroupPanel(object):
         self._add_widget(inner, spacer, row, col, show_labels)
 
     def _set_item_size_policy(self, editor, item, label, stretch):
-        """ Set size policy of an item and its label (if any).
+        """Set size policy of an item and its label (if any).
 
         How it is set:
 
@@ -1118,7 +1108,7 @@ class _GroupPanel(object):
         return stretch
 
     def _make_label_h_stretchable(self, label, stretch):
-        """ Set size policies of a QLabel to be stretchable horizontally.
+        """Set size policies of a QLabel to be stretchable horizontally.
 
         :attr:`stretch` is the stretch factor that Qt uses to distribute the
         total size to individual elements
@@ -1138,7 +1128,7 @@ class _GroupPanel(object):
         label_alignment=QtCore.Qt.AlignmentFlag(0),
     ):
         """Adds a widget to a layout taking into account the orientation and
-           the position of any labels.
+        the position of any labels.
         """
         # If the widget really is a widget then remove any margin so that it
         # fills the cell.
@@ -1239,8 +1229,7 @@ class _GroupPanel(object):
         return label_control
 
     def _add_emphasis(self, control):
-        """Adds emphasis to a specified control's font.
-        """
+        """Adds emphasis to a specified control's font."""
         # Set the foreground colour.
         pal = QtGui.QPalette(control.palette())
         pal.setColor(QtGui.QPalette.WindowText, QtGui.QColor(0, 0, 127))
@@ -1254,12 +1243,10 @@ class _GroupPanel(object):
 
 
 class GroupEditor(Editor):
-    """ A pseudo-editor that allows a group to be managed.
-    """
+    """A pseudo-editor that allows a group to be managed."""
 
     def __init__(self, **traits):
-        """ Initialise the object.
-        """
+        """Initialise the object."""
         # We intentionally don't want to call Editor.__init__ here as
         # GroupEditor does its own thing. However, we still want Traits
         # machinery to be set up properly.
@@ -1268,8 +1255,7 @@ class GroupEditor(Editor):
 
 
 class SplitterGroupEditor(GroupEditor):
-    """ A pseudo-editor that allows a group with a 'split' layout to be managed.
-    """
+    """A pseudo-editor that allows a group with a 'split' layout to be managed."""
 
     #: The QSplitter for the group
     splitter = Instance(_GroupSplitter)
@@ -1277,8 +1263,8 @@ class SplitterGroupEditor(GroupEditor):
     # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the
-            editor.
+        """Restores any saved user preference information associated with the
+        editor.
         """
         if isinstance(prefs, dict):
             structure = prefs.get("structure")
@@ -1289,14 +1275,13 @@ class SplitterGroupEditor(GroupEditor):
         self.splitter.restoreState(structure)
 
     def save_prefs(self):
-        """ Returns any user preference information associated with the editor.
-        """
+        """Returns any user preference information associated with the editor."""
         return {"structure": self.splitter.saveState().data()}
 
 
 class TabbedFoldGroupEditor(GroupEditor):
-    """ A pseudo-editor that allows a group with a 'tabbed' or 'fold' layout to
-        be managed.
+    """A pseudo-editor that allows a group with a 'tabbed' or 'fold' layout to
+    be managed.
     """
 
     #: The QTabWidget or QToolBox for the group
@@ -1305,8 +1290,8 @@ class TabbedFoldGroupEditor(GroupEditor):
     # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the
-            editor.
+        """Restores any saved user preference information associated with the
+        editor.
         """
         if isinstance(prefs, dict):
             current_index = prefs.get("current_index")
@@ -1316,8 +1301,7 @@ class TabbedFoldGroupEditor(GroupEditor):
         self.container.setCurrentIndex(int(current_index))
 
     def save_prefs(self):
-        """ Returns any user preference information associated with the editor.
-        """
+        """Returns any user preference information associated with the editor."""
         return {"current_index": str(self.container.currentIndex())}
 
 
@@ -1327,12 +1311,10 @@ class TabbedFoldGroupEditor(GroupEditor):
 
 
 class HTMLHelpWindow(QtGui.QDialog):
-    """ Window for displaying Traits-based help text with HTML formatting.
-    """
+    """Window for displaying Traits-based help text with HTML formatting."""
 
     def __init__(self, parent, html_content, scale_dx, scale_dy):
-        """ Initializes the object.
-        """
+        """Initializes the object."""
         # Local import to avoid a WebKit dependency when one isn't needed.
         from pyface.qt import QtWebKit
 
@@ -1368,8 +1350,7 @@ HeadingText = None
 
 
 def heading_text(*args, **kw):
-    """Create a Pyface HeadingText control.
-    """
+    """Create a Pyface HeadingText control."""
     global HeadingText
 
     if HeadingText is None:

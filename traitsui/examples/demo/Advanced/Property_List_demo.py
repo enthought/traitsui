@@ -42,8 +42,15 @@ from threading import Thread
 from time import sleep
 
 from traits.api import (
-    HasStrictTraits, HasPrivateTraits, Str, Int, Enum, List, Event, Property,
-    cached_property
+    HasStrictTraits,
+    HasPrivateTraits,
+    Str,
+    Int,
+    Enum,
+    List,
+    Event,
+    Property,
+    cached_property,
 )
 
 from traitsui.api import ObjectColumn, Item, TableEditor, View
@@ -51,8 +58,7 @@ from traitsui.api import ObjectColumn, Item, TableEditor, View
 
 # -- Person Class ---------------------------------------------------------
 class Person(HasStrictTraits):
-    """ Defines some sample data to display in the TableEditor.
-    """
+    """Defines some sample data to display in the TableEditor."""
 
     name = Str()
     age = Int()
@@ -61,9 +67,9 @@ class Person(HasStrictTraits):
 
 # -- PropertyListDemo Class -----------------------------------------------
 class PropertyListDemo(HasPrivateTraits):
-    """ Displays a random list of Person objects in a TableEditor that is
-        refreshed every 3 seconds by a background thread.
-     """
+    """Displays a random list of Person objects in a TableEditor that is
+    refreshed every 3 seconds by a background thread.
+    """
 
     # An event used to trigger a Property value update:
     ticker = Event()
@@ -84,40 +90,39 @@ class PropertyListDemo(HasPrivateTraits):
                 columns=[
                     ObjectColumn(name='name', editable=False, width=0.50),
                     ObjectColumn(name='age', editable=False, width=0.15),
-                    ObjectColumn(name='gender', editable=False, width=0.35)
+                    ObjectColumn(name='gender', editable=False, width=0.35),
                 ],
                 auto_size=False,
                 show_toolbar=False,
                 sortable=False,
-             )
-         ),
+            ),
+        ),
         title='Property List Demo',
         width=0.25,
         height=0.33,
-        resizable=True
+        resizable=True,
     )
 
     # -- Property Implementations ---------------------------------------------
     @cached_property
     def _get_people(self):
-        """ Returns the value for the 'people' property.
-        """
+        """Returns the value for the 'people' property."""
         return [
             Person(
-                name='%s %s' % (
+                name='%s %s'
+                % (
                     choice(['Tom', 'Dick', 'Harry', 'Alice', 'Lia', 'Vibha']),
-                    choice(['Thomas', 'Jones', 'Smith', 'Adams', 'Johnson'])
+                    choice(['Thomas', 'Jones', 'Smith', 'Adams', 'Johnson']),
                 ),
                 age=randint(21, 75),
-                gender=choice(['Male', 'Female'])
+                gender=choice(['Male', 'Female']),
             )
             for i in range(randint(10, 20))
         ]
 
     # -- Default Value Implementations ----------------------------------------
     def _begin_default(self):
-        """ Starts the background thread running.
-        """
+        """Starts the background thread running."""
         thread = Thread(target=self._timer)
         thread.daemon = True
         thread.start()
@@ -127,8 +132,7 @@ class PropertyListDemo(HasPrivateTraits):
     # -- Private Methods ------------------------------------------------------
 
     def _timer(self):
-        """ Triggers a property update every 3 seconds for 30 seconds.
-        """
+        """Triggers a property update every 3 seconds for 30 seconds."""
         for i in range(10):
             sleep(3)
             self.ticker = True

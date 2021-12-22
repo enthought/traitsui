@@ -28,7 +28,7 @@ base_path = join(dirname(__file__), 'images')
 files = [
     abspath(join(base_path, 'logo_64x64.gif')),
     abspath(join(base_path, 'logo_48x48.gif')),
-    abspath(join(base_path, 'logo_32x32.gif'))
+    abspath(join(base_path, 'logo_32x32.gif')),
 ]
 
 
@@ -44,20 +44,22 @@ class AnimatedGIFDemo(HasTraits):
     view = View(
         VGroup(
             HGroup(
-                Item('gif_file',
-                     editor=AnimatedGIFEditor(playing='playing'),
-                     show_label=False),
+                Item(
+                    'gif_file',
+                    editor=AnimatedGIFEditor(playing='playing'),
+                    show_label=False,
+                ),
                 Item('playing'),
             ),
             '_',
-            Item('gif_file',
-                 label='GIF File',
-                 editor=EnumEditor(values=files)
-                 )
+            Item(
+                'gif_file', label='GIF File', editor=EnumEditor(values=files)
+            ),
         ),
         title='Animated GIF Demo',
-        buttons=['OK']
+        buttons=['OK'],
     )
+
 
 # Create the demo:
 demo = AnimatedGIFDemo()

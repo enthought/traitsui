@@ -34,7 +34,7 @@ from traitsui.api import Item, Group, View
 
 # Define the demo class:
 class DirectoryEditorDemo(HasTraits):
-    """ Define the main DirectoryEditor demo class. """
+    """Define the main DirectoryEditor demo class."""
 
     # Define a Directory trait to view:
     dir_name = Directory()
@@ -47,7 +47,7 @@ class DirectoryEditorDemo(HasTraits):
         Item('_'),
         Item('dir_name', style='text', label='Text'),
         Item('_'),
-        Item('dir_name', style='readonly', label='ReadOnly')
+        Item('dir_name', style='readonly', label='ReadOnly'),
     )
 
     # Demo view:
@@ -57,7 +57,7 @@ class DirectoryEditorDemo(HasTraits):
         width=400,
         height=600,
         buttons=['OK'],
-        resizable=True
+        resizable=True,
     )
 
 

@@ -36,7 +36,7 @@ from traitsui.api import Item, Group, View, Font
 
 
 class FontEditorDemo(HasTraits):
-    """ Defines the main FontEditor demo class. """
+    """Defines the main FontEditor demo class."""
 
     # Define a Font trait to view:
     my_font_trait = Font()
@@ -49,15 +49,12 @@ class FontEditorDemo(HasTraits):
         Item('_'),
         Item('my_font_trait', style='text', label='Text'),
         Item('_'),
-        Item('my_font_trait', style='readonly', label='ReadOnly')
+        Item('my_font_trait', style='readonly', label='ReadOnly'),
     )
 
     # Demo view:
     traits_view = View(
-        font_group,
-        title='FontEditor',
-        buttons=['OK'],
-        resizable=True
+        font_group, title='FontEditor', buttons=['OK'], resizable=True
     )
 
 

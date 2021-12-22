@@ -12,34 +12,40 @@ from traitsui.qt4.check_list_editor import CustomEditor
 from traitsui.testing.tester.command import MouseClick
 from traitsui.testing.tester.locator import Index
 from traitsui.testing.tester._ui_tester_registry._common_ui_targets import (
-    BaseSourceWithLocation
+    BaseSourceWithLocation,
 )
 from traitsui.testing.tester._ui_tester_registry._layout import (
-    column_major_to_row_major
+    column_major_to_row_major,
 )
 from traitsui.testing.tester._ui_tester_registry.qt4 import (
-    _interaction_helpers
+    _interaction_helpers,
 )
 
 
 class _IndexedCustomCheckListEditor(BaseSourceWithLocation):
-    """ Wrapper for CheckListEditor + locator.Index """
+    """Wrapper for CheckListEditor + locator.Index"""
+
     source_class = CustomEditor
     locator_class = Index
     handlers = [
-        (MouseClick,
-            (lambda wrapper, _: _interaction_helpers.mouse_click_qlayout(
-                layout=wrapper._target.source.control.layout(),
-                index=convert_index(
+        (
+            MouseClick,
+            (
+                lambda wrapper, _: _interaction_helpers.mouse_click_qlayout(
                     layout=wrapper._target.source.control.layout(),
-                    index=wrapper._target.location.index,
-                ),
-                delay=wrapper.delay))),
+                    index=convert_index(
+                        layout=wrapper._target.source.control.layout(),
+                        index=wrapper._target.location.index,
+                    ),
+                    delay=wrapper.delay,
+                )
+            ),
+        ),
     ]
 
 
 def convert_index(layout, index):
-    """ Helper function to convert an index for a QGridLayout so that the
+    """Helper function to convert an index for a QGridLayout so that the
     index counts over the grid in the correct direction.
     The grid is always populated in row major order, but it is done so in
     such a way that the entries appear in column major order.
@@ -61,7 +67,7 @@ def convert_index(layout, index):
 
 
 def register(registry):
-    """ Register interactions for the given registry.
+    """Register interactions for the given registry.
 
     If there are any conflicts, an error will occur.
 

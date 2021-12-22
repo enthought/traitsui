@@ -45,39 +45,37 @@ from traitsui.api import Item, Group, View, Handler, Label
 
 
 class Spec(HasTraits):
-    """ An empty class from which all age-specific trait list classes are
-        derived.
+    """An empty class from which all age-specific trait list classes are
+    derived.
     """
+
     pass
 
 
 class ChildSpec(Spec):
-    """ Trait list for children (assigned to 'misc' for a Person when age < 18).
-    """
+    """Trait list for children (assigned to 'misc' for a Person when age < 18)."""
+
     legal_guardian = Str()
     school = Str()
     grade = Range(1, 12)
 
-    traits_view = View('legal_guardian',
-                       'school',
-                       'grade')
+    traits_view = View('legal_guardian', 'school', 'grade')
 
 
 class AdultSpec(Spec):
-    """ Trait list for adults (assigned to 'misc' for a Person when age >= 18).
-    """
+    """Trait list for adults (assigned to 'misc' for a Person when age >= 18)."""
 
     marital_status = Enum('single', 'married', 'divorced', 'widowed')
     registered_voter = Bool()
     military_service = Bool()
 
-    traits_view = View('marital_status',
-                       'registered_voter',
-                       'military_service')
+    traits_view = View(
+        'marital_status', 'registered_voter', 'military_service'
+    )
 
 
 class PersonHandler(Handler):
-    """ Handler class to perform restructuring action when conditions are met.
+    """Handler class to perform restructuring action when conditions are met.
     The restructuring consists of replacing a ChildSpec instance by an
     AdultSpec instance, or vice-versa. We would not need a handler to listen
     for a change in age, but we do need a Handler so that Traits UI will
@@ -86,17 +84,19 @@ class PersonHandler(Handler):
     """
 
     def object_age_changed(self, info):
-        if ((info.object.age >= 18) and
-                (not isinstance(info.object.misc, AdultSpec))):
+        if (info.object.age >= 18) and (
+            not isinstance(info.object.misc, AdultSpec)
+        ):
             info.object.misc = AdultSpec()
-        elif ((info.object.age < 18) and
-              (not isinstance(info.object.misc, ChildSpec))):
+        elif (info.object.age < 18) and (
+            not isinstance(info.object.misc, ChildSpec)
+        ):
             info.object.misc = ChildSpec()
 
 
 class Person(HasTraits):
-    """ Demo class for demonstrating dynamic interface restructuring.
-    """
+    """Demo class for demonstrating dynamic interface restructuring."""
+
     first_name = Str()
     last_name = Str()
     age = Range(0, 120)
@@ -108,17 +108,14 @@ class Person(HasTraits):
         Item(name='last_name'),
         Item(name='age'),
         label='General Info',
-        show_border=True
+        show_border=True,
     )
 
     # Interface for attributes that depend on the value of 'age':
     spec_group = Group(
-        Group(
-            Item(name='misc', style='custom'),
-            show_labels=False
-        ),
+        Group(Item(name='misc', style='custom'), show_labels=False),
         label='Additional Info',
-        show_border=True
+        show_border=True,
     )
 
     # A simple View is enough as long as the right handler is specified:
@@ -128,20 +125,20 @@ class Person(HasTraits):
             '10',
             Label("Using Instances and a Handler:"),
             '10',
-            spec_group
+            spec_group,
         ),
         title='Personal Information',
         buttons=['OK'],
         resizable=True,
         width=300,
-        handler=PersonHandler()
+        handler=PersonHandler(),
     )
 
+
 # Create the demo:
-demo = Person(first_name="Samuel",
-              last_name="Johnson",
-              age=18,
-              misc=AdultSpec())
+demo = Person(
+    first_name="Samuel", last_name="Johnson", age=18, misc=AdultSpec()
+)
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':

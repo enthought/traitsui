@@ -46,7 +46,6 @@ from .editor import Editor
 from .helper import pixmap_cache
 
 
-
 # Marker line constants:
 MARK_MARKER = 0  # Marks a marked line
 SEARCH_MARKER = 1  # Marks a line matching the current search
@@ -54,8 +53,7 @@ SELECTED_MARKER = 2  # Marks the currently selected line
 
 
 class SourceEditor(Editor):
-    """ Editor for source code which uses the advanced code widget.
-    """
+    """Editor for source code which uses the advanced code widget."""
 
     # -------------------------------------------------------------------------
     #  Pyface PythonEditor interface:
@@ -116,8 +114,8 @@ class SourceEditor(Editor):
     #  widget:
     # -------------------------------------------------------------------------
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self.control = QtGui.QWidget()
         layout = QtGui.QVBoxLayout(self.control)
@@ -179,8 +177,7 @@ class SourceEditor(Editor):
         self.set_tooltip()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         # Make sure that the editor does not try to update as the control is
         # being destroyed:
         if not self.factory.auto_set:
@@ -189,8 +186,7 @@ class SourceEditor(Editor):
         super().dispose()
 
     def update_object(self):
-        """ Handles the user entering input data in the edit control.
-        """
+        """Handles the user entering input data in the edit control."""
         if not self._locked:
             try:
                 value = str(self._widget.code.toPlainText())
@@ -201,8 +197,8 @@ class SourceEditor(Editor):
                 pass
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         self._locked = True
         new_value = self.value
@@ -221,15 +217,14 @@ class SourceEditor(Editor):
         self._locked = False
 
     def error(self, excp):
-        """ Handles an error that occurs while setting the object's trait value.
-        """
+        """Handles an error that occurs while setting the object's trait value."""
         pass
 
     # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the
-            editor.
+        """Restores any saved user preference information associated with the
+        editor.
         """
         if self.factory.key_bindings is not None:
             key_bindings = prefs.get("key_bindings")
@@ -237,13 +232,11 @@ class SourceEditor(Editor):
                 self.factory.key_bindings.merge(key_bindings)
 
     def save_prefs(self):
-        """ Returns any user preference information associated with the editor.
-        """
+        """Returns any user preference information associated with the editor."""
         return {"key_bindings": self.factory.key_bindings}
 
     def _mark_lines_changed(self):
-        """ Handles the set of marked lines being changed.
-        """
+        """Handles the set of marked lines being changed."""
         # FIXME: Not implemented at this time.
         return
 
@@ -251,9 +244,7 @@ class SourceEditor(Editor):
         self._mark_lines_changed()
 
     def _selection_changed(self):
-        self.selected_text = str(
-            self._widget.code.textCursor().selectedText()
-        )
+        self.selected_text = str(self._widget.code.textCursor().selectedText())
         start = self._widget.code.textCursor().selectionStart()
         end = self._widget.code.textCursor().selectionEnd()
 
@@ -264,8 +255,7 @@ class SourceEditor(Editor):
         self.selected_end_pos = end
 
     def _selected_line_changed(self):
-        """ Handles a change in which line is currently selected.
-        """
+        """Handles a change in which line is currently selected."""
         control = self._widget
         line = max(1, min(control.lines(), self.selected_line))
         _, column = control.get_line_column()
@@ -286,8 +276,7 @@ class SourceEditor(Editor):
             self._widget.set_line_column(line, column)
 
     def _position_changed(self):
-        """ Handles the cursor position being changed.
-        """
+        """Handles the cursor position being changed."""
         control = self._widget
         self._locked = True
         self.line, self.column = control.get_line_column()
@@ -297,8 +286,7 @@ class SourceEditor(Editor):
             self._widget.centerCursor()
 
     def _key_pressed_changed(self, event):
-        """ Handles a key being pressed within the editor.
-        """
+        """Handles a key being pressed within the editor."""
         key_bindings = self.factory.key_bindings
         if key_bindings:
             processed = key_bindings.do(

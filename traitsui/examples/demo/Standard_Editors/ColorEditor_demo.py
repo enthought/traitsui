@@ -35,7 +35,7 @@ from traitsui.api import Item, Group, View, Color
 
 # Demo class definition:
 class ColorEditorDemo(HasTraits):
-    """ Defines the main ColorEditor demo. """
+    """Defines the main ColorEditor demo."""
 
     # Define a Color trait to view:
     color_trait = Color()
@@ -48,15 +48,12 @@ class ColorEditorDemo(HasTraits):
         Item('_'),
         Item('color_trait', style='text', label='Text'),
         Item('_'),
-        Item('color_trait', style='readonly', label='ReadOnly')
+        Item('color_trait', style='readonly', label='ReadOnly'),
     )
 
     # Demo view
     traits_view = View(
-        color_group,
-        title='ColorEditor',
-        buttons=['OK'],
-        resizable=True
+        color_group, title='ColorEditor', buttons=['OK'], resizable=True
     )
 
 

@@ -22,8 +22,7 @@ from traitsui.basic_editor_factory import BasicEditorFactory
 
 
 class _AnimatedGIFEditor(Editor):
-    """ Editor that displays an animated GIF file.
-    """
+    """Editor that displays an animated GIF file."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -33,8 +32,8 @@ class _AnimatedGIFEditor(Editor):
     playing = Bool(True)
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         self._animate = Animation(self.value)
         self.control = GenericAnimationCtrl(parent, -1, self._animate)
@@ -43,8 +42,8 @@ class _AnimatedGIFEditor(Editor):
         self.set_tooltip()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if not self.playing:
             self.control.Stop()

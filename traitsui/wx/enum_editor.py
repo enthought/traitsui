@@ -36,8 +36,7 @@ from functools import reduce
 
 
 class BaseEditor(Editor):
-    """ Base class for enumeration editors.
-    """
+    """Base class for enumeration editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -53,8 +52,8 @@ class BaseEditor(Editor):
     inverse_mapping = Property()
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         factory = self.factory
         if factory.name != "":
@@ -73,44 +72,42 @@ class BaseEditor(Editor):
             )
 
     def _get_names(self):
-        """ Gets the current set of enumeration names.
-        """
+        """Gets the current set of enumeration names."""
         return self._names
 
     def _get_mapping(self):
-        """ Gets the current mapping.
-        """
+        """Gets the current mapping."""
         return self._mapping
 
     def _get_inverse_mapping(self):
-        """ Gets the current inverse mapping.
-        """
+        """Gets the current inverse mapping."""
         return self._inverse_mapping
 
     def rebuild_editor(self):
-        """ Rebuilds the contents of the editor whenever the original factory
-            object's **values** trait changes.
+        """Rebuilds the contents of the editor whenever the original factory
+        object's **values** trait changes.
         """
         raise NotImplementedError
 
     def values_changed(self):
-        """ Recomputes the cached data based on the underlying enumeration model
-            or the values of the factory.
+        """Recomputes the cached data based on the underlying enumeration model
+        or the values of the factory.
         """
-        self._names, self._mapping, self._inverse_mapping = enum_values_changed(
-            self._value(), self.string_value
-        )
+        (
+            self._names,
+            self._mapping,
+            self._inverse_mapping,
+        ) = enum_values_changed(self._value(), self.string_value)
 
     def _values_changed(self):
-        """ Handles the underlying object model's enumeration set or factory's
-            values being changed.
+        """Handles the underlying object model's enumeration set or factory's
+        values being changed.
         """
         self.values_changed()
         self.rebuild_editor()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         if self._object is not None:
             self._object.on_trait_change(
                 self._values_changed, " " + self._name, remove=True
@@ -129,12 +126,11 @@ class BaseEditor(Editor):
 
 
 class SimpleEditor(BaseEditor):
-    """ Simple style of enumeration editor, which displays a combo box.
-    """
+    """Simple style of enumeration editor, which displays a combo box."""
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         super().init(parent)
 
@@ -144,7 +140,9 @@ class SimpleEditor(BaseEditor):
             self.control = control = wx.Choice(
                 parent, -1, wx.Point(0, 0), wx.Size(-1, -1), self.names
             )
-            parent.Bind(wx.EVT_CHOICE, self.update_object, id=self.control.GetId())
+            parent.Bind(
+                wx.EVT_CHOICE, self.update_object, id=self.control.GetId()
+            )
         else:
             self.control = control = wx.ComboBox(
                 parent,
@@ -155,19 +153,24 @@ class SimpleEditor(BaseEditor):
                 self.names,
                 style=wx.CB_DROPDOWN,
             )
-            parent.Bind(wx.EVT_COMBOBOX, self.update_object, id=control.GetId())
-            parent.Bind(wx.EVT_TEXT_ENTER, self.update_text_object, id=control.GetId())
+            parent.Bind(
+                wx.EVT_COMBOBOX, self.update_object, id=control.GetId()
+            )
+            parent.Bind(
+                wx.EVT_TEXT_ENTER, self.update_text_object, id=control.GetId()
+            )
             control.Bind(wx.EVT_KILL_FOCUS, self.on_kill_focus)
 
             if (not factory.is_grid_cell) and factory.auto_set:
-                parent.Bind(wx.EVT_TEXT, self.update_text_object, id=control.GetId())
+                parent.Bind(
+                    wx.EVT_TEXT, self.update_text_object, id=control.GetId()
+                )
 
         self._no_enum_update = 0
         self.set_tooltip()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         disconnect(
             self.control, wx.EVT_COMBOBOX, wx.EVT_TEXT_ENTER, wx.EVT_TEXT
         )
@@ -177,8 +180,7 @@ class SimpleEditor(BaseEditor):
         super().dispose()
 
     def update_object(self, event):
-        """ Handles the user selecting a new value from the combo box.
-        """
+        """Handles the user selecting a new value from the combo box."""
         self._no_enum_update += 1
         try:
             new_value = self.mapping[event.GetString()]
@@ -204,8 +206,7 @@ class SimpleEditor(BaseEditor):
         self._no_enum_update -= 1
 
     def update_text_object(self, event):
-        """ Handles the user typing text into the combo box text entry field.
-        """
+        """Handles the user typing text into the combo box text entry field."""
         if self._no_enum_update == 0:
             value = self.control.GetValue()
             try:
@@ -227,14 +228,13 @@ class SimpleEditor(BaseEditor):
             self._no_enum_update -= 1
 
     def on_kill_focus(self, event):
-        """ Handles the control losing the keyboard focus.
-        """
+        """Handles the control losing the keyboard focus."""
         self.update_text_object(event)
         event.Skip()
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         if self._no_enum_update == 0:
             if self.factory.evaluate is None:
@@ -251,14 +251,13 @@ class SimpleEditor(BaseEditor):
                     pass
 
     def error(self, excp):
-        """ Handles an error that occurs while setting the object's trait value.
-        """
+        """Handles an error that occurs while setting the object's trait value."""
         self.control.SetBackgroundColour(ErrorColor)
         self.control.Refresh()
 
     def rebuild_editor(self):
-        """ Rebuilds the contents of the editor whenever the original factory
-            object's **values** trait changes.
+        """Rebuilds the contents of the editor whenever the original factory
+        object's **values** trait changes.
         """
         # Note: This code is unnecessarily complex due to a strange bug in
         # wxWidgets implementation of the wx.Combobox control that has strange
@@ -304,13 +303,13 @@ class SimpleEditor(BaseEditor):
 
 
 class RadioEditor(BaseEditor):
-    """ Enumeration editor, used for the "custom" style, that displays radio
-        buttons.
+    """Enumeration editor, used for the "custom" style, that displays radio
+    buttons.
     """
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         super().init(parent)
 
@@ -319,16 +318,15 @@ class RadioEditor(BaseEditor):
         self.rebuild_editor()
 
     def update_object(self, event):
-        """ Handles the user clicking one of the custom radio buttons.
-        """
+        """Handles the user clicking one of the custom radio buttons."""
         try:
             self.value = event.GetEventObject().value
         except:
             pass
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         value = self.value
         for button in self.control.GetChildren():
@@ -338,8 +336,8 @@ class RadioEditor(BaseEditor):
                 button.SetFocus()
 
     def rebuild_editor(self):
-        """ Rebuilds the contents of the editor whenever the original factory
-            object's **values** trait changes.
+        """Rebuilds the contents of the editor whenever the original factory
+        object's **values** trait changes.
         """
         # Clear any existing content:
         panel = self.control
@@ -385,7 +383,11 @@ class RadioEditor(BaseEditor):
                     control.value = mapping[name]
                     style = 0
                     control.SetValue(name == cur_name)
-                    panel.Bind(wx.EVT_RADIOBUTTON, self.update_object, id= control.GetId())
+                    panel.Bind(
+                        wx.EVT_RADIOBUTTON,
+                        self.update_object,
+                        id=control.GetId(),
+                    )
                     self.set_tooltip(control)
                     index += incr[j]
                     n -= 1
@@ -400,13 +402,13 @@ class RadioEditor(BaseEditor):
 
 
 class ListEditor(BaseEditor):
-    """ Enumeration editor, used for the "custom" style, that displays a list
-        box.
+    """Enumeration editor, used for the "custom" style, that displays a list
+    box.
     """
 
     def init(self, parent):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
+        """Finishes initializing the editor by creating the underlying toolkit
+        widget.
         """
         super().init(parent)
 
@@ -419,19 +421,19 @@ class ListEditor(BaseEditor):
             self.names,
             style=wx.LB_SINGLE | wx.LB_NEEDED_SB,
         )
-        parent.Bind(wx.EVT_LISTBOX, self.update_object, id=self.control.GetId())
+        parent.Bind(
+            wx.EVT_LISTBOX, self.update_object, id=self.control.GetId()
+        )
         self.set_tooltip()
 
     def dispose(self):
-        """ Disposes of the contents of an editor.
-        """
+        """Disposes of the contents of an editor."""
         disconnect(self.control, wx.EVT_LISTBOX)
 
         super().dispose()
 
     def update_object(self, event):
-        """ Handles the user selecting a list box item.
-        """
+        """Handles the user selecting a list box item."""
         if not self._ignore_update:
             value = self.control.GetStringSelection()
             try:
@@ -447,8 +449,8 @@ class ListEditor(BaseEditor):
                 pass
 
     def update_editor(self):
-        """ Updates the editor when the object trait changes externally to the
-            editor.
+        """Updates the editor when the object trait changes externally to the
+        editor.
         """
         control = self.control
         try:
@@ -459,8 +461,8 @@ class ListEditor(BaseEditor):
             pass
 
     def rebuild_editor(self):
-        """ Rebuilds the contents of the editor whenever the original factory
-            object's **values** trait changes.
+        """Rebuilds the contents of the editor whenever the original factory
+        object's **values** trait changes.
         """
         self._ignore_update = True
         self.control.Clear()

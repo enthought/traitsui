@@ -39,8 +39,7 @@ mapping_trait = Dict(
 
 
 class BooleanEditor(TextEditor):
-    """ Editor factory for Boolean editors.
-    """
+    """Editor factory for Boolean editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:
@@ -61,7 +60,7 @@ class BooleanEditor(TextEditor):
     # -------------------------------------------------------------------------
 
     def _get_custom_editor_class(self):
-        """ Returns the editor class to use for "custom" style views.
+        """Returns the editor class to use for "custom" style views.
         Overridden to return the simple_editor_class (instead of the
         CustomEditor class for the text editor's factory, which this class
         inherits from).

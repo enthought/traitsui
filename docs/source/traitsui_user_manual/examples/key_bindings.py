@@ -10,7 +10,7 @@
 
 # key_bindings.py -- Example of a code editor with a key bindings editor
 
-from traits.api import Button, Code, HasPrivateTraits, Str
+from traits.api import Button, Code, HasPrivateTraits, observe, Str
 from traitsui.api import Group, Handler, Item, View
 from traitsui.key_bindings import KeyBinding, KeyBindings
 
@@ -34,7 +34,7 @@ key_bindings = KeyBindings(
 
 
 class CodeHandler(Handler):
-    """ Handler class for bound methods. """
+    """Handler class for bound methods."""
 
     def save_file(self, info):
         info.object.status = "save file"
@@ -68,7 +68,8 @@ class KBCodeExample(HasPrivateTraits):
         handler=CodeHandler(),
     )
 
-    def _kb_fired(self, event):
+    @observe('kb')
+    def _edit_key_bindings(self, event):
         key_bindings.edit_traits()
 
 

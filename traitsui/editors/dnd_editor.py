@@ -20,8 +20,7 @@ from traitsui.editor_factory import EditorFactory
 
 
 class DNDEditor(EditorFactory):
-    """ Editor factory for drag-and-drop editors.
-    """
+    """Editor factory for drag-and-drop editors."""
 
     # -------------------------------------------------------------------------
     #  Trait definitions:

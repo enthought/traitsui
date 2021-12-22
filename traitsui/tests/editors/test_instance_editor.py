@@ -28,7 +28,7 @@ from traitsui.testing.api import (
     MouseClick,
     SelectedText,
     TargetByName,
-    UITester
+    UITester,
 )
 
 ModalDialogTester = toolkit_object(
@@ -45,11 +45,7 @@ class EditedInstance(HasTraits):
 class NamedInstance(HasTraits):
     name = Str()
     value = Str()
-    traits_view = View(
-        Item("name"),
-        Item("value"),
-        buttons=["OK"]
-    )
+    traits_view = View(Item("name"), Item("value"), buttons=["OK"])
 
 
 class ObjectWithInstance(HasTraits):
@@ -97,6 +93,29 @@ none_view = View(
     Item('change_options'),
     buttons=["OK"],
 )
+non_editable_droppable_view = View(
+    Item(
+        "inst",
+        editor=InstanceEditor(
+            editable=False,
+            droppable=True,
+        ),
+        style='custom',
+    ),
+    buttons=["OK"],
+)
+non_editable_droppable_selectable_view = View(
+    Item(
+        "inst",
+        editor=InstanceEditor(
+            name='inst_list',
+            editable=False,
+            droppable=True,
+        ),
+        style='custom',
+    ),
+    buttons=["OK"],
+)
 modal_view = View(
     Item("inst", style="simple", editor=InstanceEditor(kind="modal"))
 )
@@ -112,11 +131,7 @@ class ObjectWithValidatedInstance(HasTraits):
     something = Instance(ValidatedEditedInstance, args=())
 
     traits_view = View(
-        Item(
-            'something',
-            editor=InstanceEditor(),
-            style='custom'
-        ),
+        Item('something', editor=InstanceEditor(), style='custom'),
         buttons=["OK", "Cancel"],
     )
 
@@ -134,7 +149,6 @@ class ObjectWithValidatedList(HasTraits):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 
@@ -303,16 +317,10 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
 
             instance_editor_ui = something_ui._target._ui
             instance_editor_ui_parent = something_ui._target._ui.parent
-            self.assertNotEqual(
-                instance_editor_ui, ui
-            )
-            self.assertEqual(
-                instance_editor_ui_parent, ui
-            )
+            self.assertNotEqual(instance_editor_ui, ui)
+            self.assertEqual(instance_editor_ui_parent, ui)
 
-            self.assertEqual(
-                instance_editor_ui.errors, ui.errors
-            )
+            self.assertEqual(instance_editor_ui.errors, ui.errors)
             self.assertFalse(ok_button.inspect(IsEnabled()))
 
     def test_propagate_errors_switch_selection(self):
@@ -333,16 +341,10 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
 
             instance_editor_ui = something_ui._target._ui
             instance_editor_ui_parent = something_ui._target._ui.parent
-            self.assertNotEqual(
-                instance_editor_ui, ui
-            )
-            self.assertEqual(
-                instance_editor_ui_parent, ui
-            )
+            self.assertNotEqual(instance_editor_ui, ui)
+            self.assertEqual(instance_editor_ui_parent, ui)
 
-            self.assertEqual(
-                instance_editor_ui.errors, ui.errors
-            )
+            self.assertEqual(instance_editor_ui.errors, ui.errors)
             self.assertFalse(ok_button.inspect(IsEnabled()))
 
             # change to a different selected that is not in an error state
@@ -389,3 +391,17 @@ class TestInstanceEditor(BaseTestMixin, unittest.TestCase):
             self.assertIsNone(obj.inst)
             text = instance.inspect(SelectedText())
             self.assertEqual(text, '')
+
+    # regression test for enthought/traitsui#1478
+    def test_droppable(self):
+        obj = ObjectWithInstance()
+        obj_with_list = ObjectWithList()
+        tester = UITester()
+
+        with tester.create_ui(obj, {'view': non_editable_droppable_view}):
+            pass
+
+        with tester.create_ui(
+            obj_with_list, {'view': non_editable_droppable_selectable_view}
+        ):
+            pass

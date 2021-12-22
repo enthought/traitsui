@@ -11,12 +11,11 @@
 import unittest
 
 from traitsui.testing.tester._ui_tester_registry._layout import (
-    column_major_to_row_major
+    column_major_to_row_major,
 )
 
 
 class TestLayout(unittest.TestCase):
-
     def test_column_major_index_too_large(self):
         # Test when the index is too large for the total number of elements
         # The indices would look like:

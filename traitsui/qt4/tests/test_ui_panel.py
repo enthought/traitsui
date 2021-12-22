@@ -122,13 +122,13 @@ class ScrollableGroupVisibleWhen(HasTraits):
                     Item("bar"),
                     scrollable=True,
                     visible_when="enabled=='Yes'",
-                    id='bar_group'
+                    id='bar_group',
                 ),
                 VGroup(
                     Item("baz"),
                     scrollable=True,
                     visible_when="enabled=='No'",
-                    id='baz_group'
+                    id='baz_group',
                 ),
             ),
         )
@@ -227,7 +227,6 @@ class TestUIPanel(unittest.TestCase):
 
 @requires_toolkit([ToolkitName.qt])
 class TestPanelLayout(unittest.TestCase):
-
     def test_scrollable_group_typical(self):
         from pyface.qt import QtGui
 

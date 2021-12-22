@@ -25,8 +25,7 @@ from traitsui.api import Item, Group, View
 
 # The main demo class:
 class CodeEditorDemo(HasTraits):
-    """ Defines the CodeEditor demo class.
-    """
+    """Defines the CodeEditor demo class."""
 
     # Define a trait to view:
     code_sample = Code('import sys\n\nsys.print("hello world!")')
@@ -39,16 +38,12 @@ class CodeEditorDemo(HasTraits):
         Item('_'),
         Item('code_sample', style='text', label='Text'),
         Item('_'),
-        Item('code_sample', style='readonly', label='ReadOnly')
+        Item('code_sample', style='readonly', label='ReadOnly'),
     )
 
     # Demo view:
     traits_view = View(
-        code_group,
-        title='CodeEditor',
-        width=600,
-        height=600,
-        buttons=['OK']
+        code_group, title='CodeEditor', width=600, height=600, buttons=['OK']
     )
 
 

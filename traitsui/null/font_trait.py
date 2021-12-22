@@ -12,7 +12,6 @@
 """
 
 
-
 from traits.api import Trait, TraitHandler, TraitError
 
 # ------------------------------------------------------------------------------
@@ -38,14 +37,13 @@ font_noise = ["pt", "point", "family"]
 
 
 class TraitFont(TraitHandler):
-    """ Ensures that values assigned to a trait attribute are valid font
+    """Ensures that values assigned to a trait attribute are valid font
     descriptor strings; the value actually assigned is the corresponding
     canonical font descriptor string.
     """
 
     def validate(self, object, name, value):
-        """ Validates that the value is a valid font descriptor string.
-        """
+        """Validates that the value is a valid font descriptor string."""
         try:
             point_size = family = style = weight = underline = ""
             facename = [""]

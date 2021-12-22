@@ -15,12 +15,15 @@ import unittest
 
 from pyface.toolkit import toolkit_object
 from pyface.constant import OK
+
 try:
     from pyface.qt import QtWebkit  # noqa: F401
+
     NO_WEBKIT_OR_WEBENGINE = False
 except ImportError:
     try:
         from pyface.qt import QtWebEngine  # noqa: F401
+
         NO_WEBKIT_OR_WEBENGINE = False
     except ImportError:
         NO_WEBKIT_OR_WEBENGINE = True
@@ -59,7 +62,6 @@ class HelpPanel(HasTraits):
 
 @requires_toolkit([ToolkitName.qt, ToolkitName.wx])
 class TestUIPanel(BaseTestMixin, unittest.TestCase):
-
     def setUp(self):
         BaseTestMixin.setUp(self)
 

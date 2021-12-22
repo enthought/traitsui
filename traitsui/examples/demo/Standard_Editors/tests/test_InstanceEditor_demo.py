@@ -21,7 +21,11 @@ import runpy
 import unittest
 
 from traitsui.testing.api import (
-    DisplayedText, KeyClick, KeySequence, MouseClick, UITester
+    DisplayedText,
+    KeyClick,
+    KeySequence,
+    MouseClick,
+    UITester,
 )
 
 #: Filename of the demo script
@@ -32,7 +36,6 @@ DEMO_PATH = os.path.join(os.path.dirname(__file__), "..", FILENAME)
 
 
 class TestInstanceEditorDemo(unittest.TestCase):
-
     def test_instance_editor_demo(self):
         demo = runpy.run_path(DEMO_PATH)["demo"]
 
