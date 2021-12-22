@@ -1313,7 +1313,7 @@ class TabbedFoldGroupEditor(GroupEditor):
 
     #: The QTabWidget or QToolBox for the group
     container = Any()
-    
+
     _visible_when_groups = List()
     _enabled_when_groups = List()
 
@@ -1321,8 +1321,9 @@ class TabbedFoldGroupEditor(GroupEditor):
         """ Initialise the object.
         """
         super().__init__(**traits)
-        num_enabled_or_visible_whens = len(self._visible_when_groups) \
-                                       + len(self._enabled_when_groups)
+        num_enabled_or_visible_whens = (
+            len(self._visible_when_groups) + len(self._enabled_when_groups)
+        )
         if num_enabled_or_visible_whens > 0:
             for object in self.ui.context.values():
                 object.on_trait_change(
@@ -1407,7 +1408,6 @@ class TabbedFoldGroupEditor(GroupEditor):
                 from traitsui.api import raise_to_debug
 
                 raise_to_debug()
-
 
     # -- UI preference save/restore interface ---------------------------------
 
